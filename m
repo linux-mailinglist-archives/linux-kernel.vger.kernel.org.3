@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF534E24EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263164E24F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346650AbiCULE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S1345004AbiCULEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346602AbiCULDz (ORCPT
+        with ESMTP id S1346615AbiCULD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:03:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE329D4DE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:02:29 -0700 (PDT)
+        Mon, 21 Mar 2022 07:03:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412ED14B85C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:02:31 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647860548;
+        s=2020; t=1647860549;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=fRyAQrj5X8b3qtvkTVjf+JkcNhrIcho5k+KJpvlBlf0=;
-        b=epapMmQlSGKdch0VC8T42keRMe1y8ABr1IeLzkr+gizIQCCgnOL60nDiir1Gw5tub580IX
-        UKWGuq9QD5CI7KNTQAj5Z7Qsmj8hi6zHqMcp+YYFgHQBfBF1Zu/FxpA/ktCHTdXLvQQJvf
-        OeN+063Xh6Du4rBMKBmZLqx+JOOX4+ZUDwph4xCknR51YHqbr2wKuZBIhqhXoodA4OQRWQ
-        ZQJl4P6f/z96IpEo1c1MDKXNfVX25d65HvHMiVcuf1nsUKia1bAGQ8yyC9bVfb7agHpV8l
-        jwSgcL9tFub5iLm/v66dtbDGG2Tg0YebWFNi0U15IS2vBqDVGOq9XdsI1Qddjg==
+        bh=G4TekWzzwQgRg/dcb8odDFRMS0m7UxzUUoz5DOrcUuI=;
+        b=Z+qrIVMyjZvmSEq67nLBvdR1Ti7FrXn7UV9+3pZRfm2IW6Dq4CC9l10VtDRM3m+Ky/65uC
+        ieePwWnr2xoYrtZf/Pt2DOVzj1c/2qtmyDJnmh3P4p701E5vF+IQUEYNtuC6AXEwnBQPmC
+        YvbhDiorf29bsK+89JA9fGN2E9TBzUzyXvJRwnnQUrVOrQbbh47dEhhrlYQZJhc1E68Jqp
+        0f+Aq2PRtjDBinBnX2fN/iHXTbcyAHeRfA3hjgAnn53zbc/oets7wCW0zxTf3u2kx6yZAw
+        vkZ8D09+C78Q17UviZo+sePKCJmu3JodtDanQ9aIf7wVBKMXwB8JAd1i4Dhtzg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647860548;
+        s=2020e; t=1647860549;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=fRyAQrj5X8b3qtvkTVjf+JkcNhrIcho5k+KJpvlBlf0=;
-        b=qzIVXNj3fwPK6ivjxceys7oAf0Uc/epleLnN0RIivQOZfQ+HsdVhuk/xqnrM56Fn/Lg7fc
-        3TbHerdQyjWMc/AA==
+        bh=G4TekWzzwQgRg/dcb8odDFRMS0m7UxzUUoz5DOrcUuI=;
+        b=IzxHxfQHXqJULkFrFRLhw71ffxxgyLL/vj6/rjy5ZmW0kYWzwT8dPkbIR/znmeAfz+U8g/
+        GA2RI2jZMimzk6AA==
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] x86/irq for v5.18-rc1
+Subject: [GIT pull] x86/pasid for v5.18-rc1
 References: <164786042536.122591.4459156564791679956.tglx@xen13>
-Message-ID: <164786043041.122591.4693682080153649212.tglx@xen13>
+Message-ID: <164786043190.122591.9314646033947786445.tglx@xen13>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Mon, 21 Mar 2022 12:02:27 +0100 (CET)
+Date:   Mon, 21 Mar 2022 12:02:29 +0100 (CET)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -56,23 +56,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Linus,
 
-please pull the latest x86/irq branch from:
+please pull the latest x86/pasid branch from:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-irq-2022-03-=
-21
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-pasid-2022-0=
+3-21
 
-up to:  449972c67ea7: x86/PCI: Fix coding style in PIRQ table search functions
+up to:  83aa52ffed5d: Documentation/x86: Update documentation for SVA (Shared=
+ Virtual Addressing)
 
 
-X86 PCI interrupt updates:
+Reenable ENQCMD/PASID support:
 
- - Cleanup and robustify the PCI interrupt routing table handling
+ - Simplify the PASID handling to allocate the PASID once, associate it to
+   the mm of a process and free it on mm_exit(). The previous attempt of
+   refcounted PASIDs and dynamic alloc()/free() turned out to be error
+   prone and too complex. The PASID space is 20bits, so the case of
+   resource exhaustion is a pure academic concern.
 
- - Add support for Intel 82378ZB/82379AB, SiS85C497 PIRQ routers
+ - Populate the PASID MSR on demand via #GP to avoid racy updates via IPIs.
 
- - Fix the ALi M1487 router handling
+ - Reenable ENQCMD and let objtool check for the forbidden usage of ENQCMD
+   in the kernel.
 
- - Handle the IRT routing table format in AMI BIOSes correctly
+ - Update the documentation for Shared Virtual Addressing accordingly.
 
 
 Thanks,
@@ -80,693 +86,806 @@ Thanks,
 	tglx
 
 ------------------>
-Maciej W. Rozycki (11):
-      x86/PCI: Show the physical address of the $PIR table
-      x86/PCI: Include function number in $PIR table dump
-      x86/PCI: Also match function number in $PIR table
-      x86/PCI: Handle IRQ swizzling with PIRQ routers
-      x86/PCI: Add support for the Intel 82378ZB/82379AB (SIO/SIO.A) PIRQ rou=
-ter
-      x86/PCI: Disambiguate SiS85C503 PIRQ router code entities
-      x86/PCI: Add support for the SiS85C497 PIRQ router
-      x86/PCI: Handle PIRQ routing tables with no router device given
-      x86/PCI: Add $IRT PIRQ routing table support
-      x86/PCI: Fix ALi M1487 (IBC) PIRQ router link value interpretation
-      x86/PCI: Fix coding style in PIRQ table search functions
+Fenghua Yu (10):
+      iommu/sva: Rename CONFIG_IOMMU_SVA_LIB to CONFIG_IOMMU_SVA
+      mm: Change CONFIG option for mm->pasid field
+      iommu/ioasid: Introduce a helper to check for valid PASIDs
+      kernel/fork: Initialize mm's PASID
+      iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm e=
+xit
+      x86/fpu: Clear PASID when copying fpstate
+      x86/traps: Demand-populate PASID MSR via #GP
+      x86/cpufeatures: Re-enable ENQCMD
+      tools/objtool: Check for use of the ENQCMD instruction in the kernel
+      Documentation/x86: Update documentation for SVA (Shared Virtual Address=
+ing)
+
+Peter Zijlstra (1):
+      sched: Define and initialize a flag to identify valid PASID in the task
 
 
- arch/x86/include/asm/pci_x86.h |   8 +
- arch/x86/pci/irq.c             | 372 ++++++++++++++++++++++++++++++++++-----=
---
- 2 files changed, 315 insertions(+), 65 deletions(-)
+ Documentation/x86/sva.rst                       | 53 ++++++++++++++++++------
+ arch/x86/include/asm/disabled-features.h        |  7 +++-
+ arch/x86/kernel/fpu/core.c                      |  7 ++++
+ arch/x86/kernel/traps.c                         | 55 +++++++++++++++++++++++=
+++
+ drivers/iommu/Kconfig                           |  6 +--
+ drivers/iommu/Makefile                          |  2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c |  5 +--
+ drivers/iommu/intel/Kconfig                     |  2 +-
+ drivers/iommu/intel/iommu.c                     |  4 +-
+ drivers/iommu/intel/svm.c                       |  9 ----
+ drivers/iommu/ioasid.c                          | 39 ++----------------
+ drivers/iommu/iommu-sva-lib.c                   | 39 ++++++------------
+ drivers/iommu/iommu-sva-lib.h                   |  7 ++--
+ include/linux/ioasid.h                          | 21 +++++-----
+ include/linux/mm_types.h                        |  2 +-
+ include/linux/sched.h                           |  3 ++
+ include/linux/sched/mm.h                        | 26 ++++++++++++
+ kernel/fork.c                                   | 15 ++++---
+ mm/init-mm.c                                    |  4 ++
+ tools/objtool/arch/x86/decode.c                 | 11 ++++-
+ 20 files changed, 197 insertions(+), 120 deletions(-)
 
-diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
-index 490411dba438..7be45daaf31d 100644
---- a/arch/x86/include/asm/pci_x86.h
-+++ b/arch/x86/include/asm/pci_x86.h
-@@ -90,6 +90,14 @@ struct irq_routing_table {
- 	struct irq_info slots[0];
- } __attribute__((packed));
+diff --git a/Documentation/x86/sva.rst b/Documentation/x86/sva.rst
+index 076efd51ef1f..2e9b8b0f9a0f 100644
+--- a/Documentation/x86/sva.rst
++++ b/Documentation/x86/sva.rst
+@@ -104,18 +104,47 @@ The MSR must be configured on each logical CPU before a=
+ny application
+ thread can interact with a device. Threads that belong to the same
+ process share the same page tables, thus the same MSR value.
 =20
-+struct irt_routing_table {
-+	u32 signature;			/* IRT_SIGNATURE should be here */
-+	u8 size;			/* Number of entries provided */
-+	u8 used;			/* Number of entries actually used */
-+	u16 exclusive_irqs;		/* IRQs devoted exclusively to PCI usage */
-+	struct irq_info slots[0];
-+} __packed;
+-PASID is cleared when a process is created. The PASID allocation and MSR
+-programming may occur long after a process and its threads have been created.
+-One thread must call iommu_sva_bind_device() to allocate the PASID for the
+-process. If a thread uses ENQCMD without the MSR first being populated, a #GP
+-will be raised. The kernel will update the PASID MSR with the PASID for all
+-threads in the process. A single process PASID can be used simultaneously
+-with multiple devices since they all share the same address space.
+-
+-One thread can call iommu_sva_unbind_device() to free the allocated PASID.
+-The kernel will clear the PASID MSR for all threads belonging to the process.
+-
+-New threads inherit the MSR value from the parent.
++PASID Life Cycle Management
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
 +
- extern unsigned int pcibios_irq_mask;
-=20
- extern raw_spinlock_t pci_config_lock;
-diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
-index 97b63e35e152..9be158078f66 100644
---- a/arch/x86/pci/irq.c
-+++ b/arch/x86/pci/irq.c
-@@ -25,6 +25,8 @@
- #define PIRQ_SIGNATURE	(('$' << 0) + ('P' << 8) + ('I' << 16) + ('R' << 24))
- #define PIRQ_VERSION 0x0100
-=20
-+#define IRT_SIGNATURE	(('$' << 0) + ('I' << 8) + ('R' << 16) + ('T' << 24))
++PASID is initialized as INVALID_IOASID (-1) when a process is created.
 +
- static int broken_hp_bios_irq9;
- static int acer_tm360_irqrouting;
++Only processes that access SVA-capable devices need to have a PASID
++allocated. This allocation happens when a process opens/binds an SVA-capable
++device but finds no PASID for this process. Subsequent binds of the same, or
++other devices will share the same PASID.
++
++Although the PASID is allocated to the process by opening a device,
++it is not active in any of the threads of that process. It's loaded to the
++IA32_PASID MSR lazily when a thread tries to submit a work descriptor
++to a device using the ENQCMD.
++
++That first access will trigger a #GP fault because the IA32_PASID MSR
++has not been initialized with the PASID value assigned to the process
++when the device was opened. The Linux #GP handler notes that a PASID has
++been allocated for the process, and so initializes the IA32_PASID MSR
++and returns so that the ENQCMD instruction is re-executed.
++
++On fork(2) or exec(2) the PASID is removed from the process as it no
++longer has the same address space that it had when the device was opened.
++
++On clone(2) the new task shares the same address space, so will be
++able to use the PASID allocated to the process. The IA32_PASID is not
++preemptively initialized as the PASID value might not be allocated yet or
++the kernel does not know whether this thread is going to access the device
++and the cleared IA32_PASID MSR reduces context switch overhead by xstate
++init optimization. Since #GP faults have to be handled on any threads that
++were created before the PASID was assigned to the mm of the process, newly
++created threads might as well be treated in a consistent way.
++
++Due to complexity of freeing the PASID and clearing all IA32_PASID MSRs in
++all threads in unbind, free the PASID lazily only on mm exit.
++
++If a process does a close(2) of the device file descriptor and munmap(2)
++of the device MMIO portal, then the driver will unbind the device. The
++PASID is still marked VALID in the PASID_MSR for any threads in the
++process that accessed the device. But this is harmless as without the
++MMIO portal they cannot submit new work to the device.
 =20
-@@ -74,7 +76,7 @@ static inline struct irq_routing_table *pirq_check_routing_=
-table(u8 *addr)
- 	int i;
- 	u8 sum;
+ Relationships
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/=
+disabled-features.h
+index 8f28fafa98b3..1231d63f836d 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -56,8 +56,11 @@
+ # define DISABLE_PTI		(1 << (X86_FEATURE_PTI & 31))
+ #endif
 =20
--	rt =3D (struct irq_routing_table *) addr;
-+	rt =3D (struct irq_routing_table *)addr;
- 	if (rt->signature !=3D PIRQ_SIGNATURE ||
- 	    rt->version !=3D PIRQ_VERSION ||
- 	    rt->size % 16 ||
-@@ -84,35 +86,103 @@ static inline struct irq_routing_table *pirq_check_routi=
-ng_table(u8 *addr)
- 	for (i =3D 0; i < rt->size; i++)
- 		sum +=3D addr[i];
- 	if (!sum) {
--		DBG(KERN_DEBUG "PCI: Interrupt Routing Table found at 0x%p\n",
--			rt);
-+		DBG(KERN_DEBUG "PCI: Interrupt Routing Table found at 0x%lx\n",
-+		    __pa(rt));
- 		return rt;
- 	}
- 	return NULL;
+-/* Force disable because it's broken beyond repair */
+-#define DISABLE_ENQCMD		(1 << (X86_FEATURE_ENQCMD & 31))
++#ifdef CONFIG_INTEL_IOMMU_SVM
++# define DISABLE_ENQCMD		0
++#else
++# define DISABLE_ENQCMD		(1 << (X86_FEATURE_ENQCMD & 31))
++#endif
+=20
+ #ifdef CONFIG_X86_SGX
+ # define DISABLE_SGX	0
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 8dea01ffc5c1..19821f027cb3 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -612,6 +612,13 @@ int fpu_clone(struct task_struct *dst, unsigned long clo=
+ne_flags)
+ 		fpu_inherit_perms(dst_fpu);
+ 	fpregs_unlock();
+=20
++	/*
++	 * Children never inherit PASID state.
++	 * Force it to have its init value:
++	 */
++	if (use_xsave())
++		dst_fpu->fpstate->regs.xsave.header.xfeatures &=3D ~XFEATURE_MASK_PASID;
++
+ 	trace_x86_fpu_copy_src(src_fpu);
+ 	trace_x86_fpu_copy_dst(dst_fpu);
+=20
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index c9d566dcf89a..7ef00dee35be 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -39,6 +39,7 @@
+ #include <linux/io.h>
+ #include <linux/hardirq.h>
+ #include <linux/atomic.h>
++#include <linux/ioasid.h>
+=20
+ #include <asm/stacktrace.h>
+ #include <asm/processor.h>
+@@ -559,6 +560,57 @@ static bool fixup_iopl_exception(struct pt_regs *regs)
+ 	return true;
  }
 =20
 +/*
-+ * Handle the $IRT PCI IRQ Routing Table format used by AMI for its BCP
-+ * (BIOS Configuration Program) external tool meant for tweaking BIOS
-+ * structures without the need to rebuild it from sources.  The $IRT
-+ * format has been invented by AMI before Microsoft has come up with its
-+ * $PIR format and a $IRT table is therefore there in some systems that
-+ * lack a $PIR table.
-+ *
-+ * It uses the same PCI BIOS 2.1 format for interrupt routing entries
-+ * themselves but has a different simpler header prepended instead,
-+ * occupying 8 bytes, where a `$IRT' signature is followed by one byte
-+ * specifying the total number of interrupt routing entries allocated in
-+ * the table, then one byte specifying the actual number of entries used
-+ * (which the BCP tool can take advantage of when modifying the table),
-+ * and finally a 16-bit word giving the IRQs devoted exclusively to PCI.
-+ * Unlike with the $PIR table there is no alignment guarantee.
-+ *
-+ * Given the similarity of the two formats the $IRT one is trivial to
-+ * convert to the $PIR one, which we do here, except that obviously we
-+ * have no information as to the router device to use, but we can handle
-+ * it by matching PCI device IDs actually seen on the bus against ones
-+ * that our individual routers recognise.
-+ *
-+ * Reportedly there is another $IRT table format where a 16-bit word
-+ * follows the header instead that points to interrupt routing entries
-+ * in a $PIR table provided elsewhere.  In that case this code will not
-+ * be reached though as the $PIR table will have been chosen instead.
++ * The unprivileged ENQCMD instruction generates #GPs if the
++ * IA32_PASID MSR has not been populated.  If possible, populate
++ * the MSR from a PASID previously allocated to the mm.
 + */
-+static inline struct irq_routing_table *pirq_convert_irt_table(u8 *addr)
++static bool try_fixup_enqcmd_gp(void)
 +{
-+	struct irt_routing_table *ir;
-+	struct irq_routing_table *rt;
-+	u16 size;
-+	u8 sum;
-+	int i;
++#ifdef CONFIG_IOMMU_SVA
++	u32 pasid;
 +
-+	ir =3D (struct irt_routing_table *)addr;
-+	if (ir->signature !=3D IRT_SIGNATURE || !ir->used || ir->size < ir->used)
-+		return NULL;
++	/*
++	 * MSR_IA32_PASID is managed using XSAVE.  Directly
++	 * writing to the MSR is only possible when fpregs
++	 * are valid and the fpstate is not.  This is
++	 * guaranteed when handling a userspace exception
++	 * in *before* interrupts are re-enabled.
++	 */
++	lockdep_assert_irqs_disabled();
 +
-+	DBG(KERN_DEBUG "PCI: $IRT Interrupt Routing Table found at 0x%lx\n",
-+	    __pa(ir));
++	/*
++	 * Hardware without ENQCMD will not generate
++	 * #GPs that can be fixed up here.
++	 */
++	if (!cpu_feature_enabled(X86_FEATURE_ENQCMD))
++		return false;
 +
-+	size =3D sizeof(*rt) + ir->used * sizeof(rt->slots[0]);
-+	rt =3D kzalloc(size, GFP_KERNEL);
-+	if (!rt)
-+		return NULL;
++	pasid =3D current->mm->pasid;
 +
-+	rt->signature =3D PIRQ_SIGNATURE;
-+	rt->version =3D PIRQ_VERSION;
-+	rt->size =3D size;
-+	rt->exclusive_irqs =3D ir->exclusive_irqs;
-+	for (i =3D 0; i < ir->used; i++)
-+		rt->slots[i] =3D ir->slots[i];
++	/*
++	 * If the mm has not been allocated a
++	 * PASID, the #GP can not be fixed up.
++	 */
++	if (!pasid_valid(pasid))
++		return false;
 +
-+	addr =3D (u8 *)rt;
-+	sum =3D 0;
-+	for (i =3D 0; i < size; i++)
-+		sum +=3D addr[i];
-+	rt->checksum =3D -sum;
-=20
-+	return rt;
++	/*
++	 * Did this thread already have its PASID activated?
++	 * If so, the #GP must be from something else.
++	 */
++	if (current->pasid_activated)
++		return false;
++
++	wrmsrl(MSR_IA32_PASID, pasid | MSR_IA32_PASID_VALID);
++	current->pasid_activated =3D 1;
++
++	return true;
++#else
++	return false;
++#endif
 +}
++
+ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
+ {
+ 	char desc[sizeof(GPFSTR) + 50 + 2*sizeof(unsigned long) + 1] =3D GPFSTR;
+@@ -567,6 +619,9 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
+ 	unsigned long gp_addr;
+ 	int ret;
+=20
++	if (user_mode(regs) && try_fixup_enqcmd_gp())
++		return;
++
+ 	cond_local_irq_enable(regs);
+=20
+ 	if (static_cpu_has(X86_FEATURE_UMIP)) {
+diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+index 3eb68fa1b8cc..c79a0df090c0 100644
+--- a/drivers/iommu/Kconfig
++++ b/drivers/iommu/Kconfig
+@@ -144,8 +144,8 @@ config IOMMU_DMA
+ 	select IRQ_MSI_IOMMU
+ 	select NEED_SG_DMA_LENGTH
+=20
+-# Shared Virtual Addressing library
+-config IOMMU_SVA_LIB
++# Shared Virtual Addressing
++config IOMMU_SVA
+ 	bool
+ 	select IOASID
+=20
+@@ -379,7 +379,7 @@ config ARM_SMMU_V3
+ config ARM_SMMU_V3_SVA
+ 	bool "Shared Virtual Addressing support for the ARM SMMUv3"
+ 	depends on ARM_SMMU_V3
+-	select IOMMU_SVA_LIB
++	select IOMMU_SVA
+ 	select MMU_NOTIFIER
+ 	help
+ 	  Support for sharing process address spaces with devices using the
+diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
+index bc7f730edbb0..44475a9b3eea 100644
+--- a/drivers/iommu/Makefile
++++ b/drivers/iommu/Makefile
+@@ -27,6 +27,6 @@ obj-$(CONFIG_FSL_PAMU) +=3D fsl_pamu.o fsl_pamu_domain.o
+ obj-$(CONFIG_S390_IOMMU) +=3D s390-iommu.o
+ obj-$(CONFIG_HYPERV_IOMMU) +=3D hyperv-iommu.o
+ obj-$(CONFIG_VIRTIO_IOMMU) +=3D virtio-iommu.o
+-obj-$(CONFIG_IOMMU_SVA_LIB) +=3D iommu-sva-lib.o io-pgfault.o
++obj-$(CONFIG_IOMMU_SVA) +=3D iommu-sva-lib.o io-pgfault.o
+ obj-$(CONFIG_SPRD_IOMMU) +=3D sprd-iommu.o
+ obj-$(CONFIG_APPLE_DART) +=3D apple-dart.o
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/=
+arm/arm-smmu-v3/arm-smmu-v3-sva.c
+index a737ba5f727e..22ddd05bbdcd 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+@@ -340,14 +340,12 @@ __arm_smmu_sva_bind(struct device *dev, struct mm_struc=
+t *mm)
+ 	bond->smmu_mn =3D arm_smmu_mmu_notifier_get(smmu_domain, mm);
+ 	if (IS_ERR(bond->smmu_mn)) {
+ 		ret =3D PTR_ERR(bond->smmu_mn);
+-		goto err_free_pasid;
++		goto err_free_bond;
+ 	}
+=20
+ 	list_add(&bond->list, &master->bonds);
+ 	return &bond->sva;
+=20
+-err_free_pasid:
+-	iommu_sva_free_pasid(mm);
+ err_free_bond:
+ 	kfree(bond);
+ 	return ERR_PTR(ret);
+@@ -377,7 +375,6 @@ void arm_smmu_sva_unbind(struct iommu_sva *handle)
+ 	if (refcount_dec_and_test(&bond->refs)) {
+ 		list_del(&bond->list);
+ 		arm_smmu_mmu_notifier_put(bond->smmu_mn);
+-		iommu_sva_free_pasid(bond->mm);
+ 		kfree(bond);
+ 	}
+ 	mutex_unlock(&sva_lock);
+diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
+index 247d0f2d5fdf..39a06d245f12 100644
+--- a/drivers/iommu/intel/Kconfig
++++ b/drivers/iommu/intel/Kconfig
+@@ -52,7 +52,7 @@ config INTEL_IOMMU_SVM
+ 	select PCI_PRI
+ 	select MMU_NOTIFIER
+ 	select IOASID
+-	select IOMMU_SVA_LIB
++	select IOMMU_SVA
+ 	help
+ 	  Shared Virtual Memory (SVM) provides a facility for devices
+ 	  to access DMA resources through process address space by
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 92fea3fbbb11..ef03b2176bbd 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -4781,7 +4781,7 @@ static int aux_domain_add_dev(struct dmar_domain *domai=
+n,
+ link_failed:
+ 	spin_unlock_irqrestore(&device_domain_lock, flags);
+ 	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+-		ioasid_put(domain->default_pasid);
++		ioasid_free(domain->default_pasid);
+=20
+ 	return ret;
+ }
+@@ -4811,7 +4811,7 @@ static void aux_domain_remove_dev(struct dmar_domain *d=
+omain,
+ 	spin_unlock_irqrestore(&device_domain_lock, flags);
+=20
+ 	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+-		ioasid_put(domain->default_pasid);
++		ioasid_free(domain->default_pasid);
+ }
+=20
+ static int prepare_domain_attach_device(struct iommu_domain *domain,
+diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+index 5b5d69b04fcc..51ac2096b3da 100644
+--- a/drivers/iommu/intel/svm.c
++++ b/drivers/iommu/intel/svm.c
+@@ -514,11 +514,6 @@ static int intel_svm_alloc_pasid(struct device *dev, str=
+uct mm_struct *mm,
+ 	return iommu_sva_alloc_pasid(mm, PASID_MIN, max_pasid - 1);
+ }
+=20
+-static void intel_svm_free_pasid(struct mm_struct *mm)
+-{
+-	iommu_sva_free_pasid(mm);
+-}
+-
+ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
+ 					   struct device *dev,
+ 					   struct mm_struct *mm,
+@@ -662,8 +657,6 @@ static int intel_svm_unbind_mm(struct device *dev, u32 pa=
+sid)
+ 				kfree(svm);
+ 			}
+ 		}
+-		/* Drop a PASID reference and free it if no reference. */
+-		intel_svm_free_pasid(mm);
+ 	}
+ out:
+ 	return ret;
+@@ -1047,8 +1040,6 @@ struct iommu_sva *intel_svm_bind(struct device *dev, st=
+ruct mm_struct *mm, void
+ 	}
+=20
+ 	sva =3D intel_svm_bind_mm(iommu, dev, mm, flags);
+-	if (IS_ERR_OR_NULL(sva))
+-		intel_svm_free_pasid(mm);
+ 	mutex_unlock(&pasid_mutex);
+=20
+ 	return sva;
+diff --git a/drivers/iommu/ioasid.c b/drivers/iommu/ioasid.c
+index 06fee7416816..a786c034907c 100644
+--- a/drivers/iommu/ioasid.c
++++ b/drivers/iommu/ioasid.c
+@@ -2,7 +2,7 @@
+ /*
+  * I/O Address Space ID allocator. There is one global IOASID space, split i=
+nto
+  * subsets. Users create a subset with DECLARE_IOASID_SET, then allocate and
+- * free IOASIDs with ioasid_alloc and ioasid_put.
++ * free IOASIDs with ioasid_alloc() and ioasid_free().
+  */
+ #include <linux/ioasid.h>
+ #include <linux/module.h>
+@@ -15,7 +15,6 @@ struct ioasid_data {
+ 	struct ioasid_set *set;
+ 	void *private;
+ 	struct rcu_head rcu;
+-	refcount_t refs;
+ };
 =20
  /*
-  *  Search 0xf0000 -- 0xfffff for the PCI IRQ Routing Table.
-  */
--
- static struct irq_routing_table * __init pirq_find_routing_table(void)
- {
- 	u8 *addr;
- 	struct irq_routing_table *rt;
+@@ -315,7 +314,6 @@ ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t mi=
+n, ioasid_t max,
 =20
- 	if (pirq_table_addr) {
--		rt =3D pirq_check_routing_table((u8 *) __va(pirq_table_addr));
-+		rt =3D pirq_check_routing_table((u8 *)__va(pirq_table_addr));
- 		if (rt)
- 			return rt;
- 		printk(KERN_WARNING "PCI: PIRQ table NOT found at pirqaddr\n");
+ 	data->set =3D set;
+ 	data->private =3D private;
+-	refcount_set(&data->refs, 1);
+=20
+ 	/*
+ 	 * Custom allocator needs allocator data to perform platform specific
+@@ -348,35 +346,11 @@ ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t =
+min, ioasid_t max,
+ EXPORT_SYMBOL_GPL(ioasid_alloc);
+=20
+ /**
+- * ioasid_get - obtain a reference to the IOASID
+- * @ioasid: the ID to get
+- */
+-void ioasid_get(ioasid_t ioasid)
+-{
+-	struct ioasid_data *ioasid_data;
+-
+-	spin_lock(&ioasid_allocator_lock);
+-	ioasid_data =3D xa_load(&active_allocator->xa, ioasid);
+-	if (ioasid_data)
+-		refcount_inc(&ioasid_data->refs);
+-	else
+-		WARN_ON(1);
+-	spin_unlock(&ioasid_allocator_lock);
+-}
+-EXPORT_SYMBOL_GPL(ioasid_get);
+-
+-/**
+- * ioasid_put - Release a reference to an ioasid
++ * ioasid_free - Free an ioasid
+  * @ioasid: the ID to remove
+- *
+- * Put a reference to the IOASID, free it when the number of references drop=
+s to
+- * zero.
+- *
+- * Return: %true if the IOASID was freed, %false otherwise.
+  */
+-bool ioasid_put(ioasid_t ioasid)
++void ioasid_free(ioasid_t ioasid)
+ {
+-	bool free =3D false;
+ 	struct ioasid_data *ioasid_data;
+=20
+ 	spin_lock(&ioasid_allocator_lock);
+@@ -386,10 +360,6 @@ bool ioasid_put(ioasid_t ioasid)
+ 		goto exit_unlock;
  	}
--	for (addr =3D (u8 *) __va(0xf0000); addr < (u8 *) __va(0x100000); addr +=3D=
- 16) {
-+
-+	for (addr =3D (u8 *)__va(0xf0000); addr < (u8 *)__va(0x100000); addr +=3D 1=
-6) {
- 		rt =3D pirq_check_routing_table(addr);
- 		if (rt)
- 			return rt;
+=20
+-	free =3D refcount_dec_and_test(&ioasid_data->refs);
+-	if (!free)
+-		goto exit_unlock;
+-
+ 	active_allocator->ops->free(ioasid, active_allocator->ops->pdata);
+ 	/* Custom allocator needs additional steps to free the xa element */
+ 	if (active_allocator->flags & IOASID_ALLOCATOR_CUSTOM) {
+@@ -399,9 +369,8 @@ bool ioasid_put(ioasid_t ioasid)
+=20
+ exit_unlock:
+ 	spin_unlock(&ioasid_allocator_lock);
+-	return free;
+ }
+-EXPORT_SYMBOL_GPL(ioasid_put);
++EXPORT_SYMBOL_GPL(ioasid_free);
+=20
+ /**
+  * ioasid_find - Find IOASID data
+diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+index bd41405d34e9..106506143896 100644
+--- a/drivers/iommu/iommu-sva-lib.c
++++ b/drivers/iommu/iommu-sva-lib.c
+@@ -18,8 +18,7 @@ static DECLARE_IOASID_SET(iommu_sva_pasid);
+  *
+  * Try to allocate a PASID for this mm, or take a reference to the existing =
+one
+  * provided it fits within the [@min, @max] range. On success the PASID is
+- * available in mm->pasid, and must be released with iommu_sva_free_pasid().
+- * @min must be greater than 0, because 0 indicates an unused mm->pasid.
++ * available in mm->pasid and will be available for the lifetime of the mm.
+  *
+  * Returns 0 on success and < 0 on error.
+  */
+@@ -33,38 +32,24 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t =
+min, ioasid_t max)
+ 		return -EINVAL;
+=20
+ 	mutex_lock(&iommu_sva_lock);
+-	if (mm->pasid) {
+-		if (mm->pasid >=3D min && mm->pasid <=3D max)
+-			ioasid_get(mm->pasid);
+-		else
++	/* Is a PASID already associated with this mm? */
++	if (pasid_valid(mm->pasid)) {
++		if (mm->pasid < min || mm->pasid >=3D max)
+ 			ret =3D -EOVERFLOW;
+-	} else {
+-		pasid =3D ioasid_alloc(&iommu_sva_pasid, min, max, mm);
+-		if (pasid =3D=3D INVALID_IOASID)
+-			ret =3D -ENOMEM;
+-		else
+-			mm->pasid =3D pasid;
++		goto out;
  	}
 +
-+	for (addr =3D (u8 *)__va(0xf0000); addr < (u8 *)__va(0x100000); addr++) {
-+		rt =3D pirq_convert_irt_table(addr);
-+		if (rt)
-+			return rt;
-+	}
- 	return NULL;
++	pasid =3D ioasid_alloc(&iommu_sva_pasid, min, max, mm);
++	if (!pasid_valid(pasid))
++		ret =3D -ENOMEM;
++	else
++		mm_pasid_set(mm, pasid);
++out:
+ 	mutex_unlock(&iommu_sva_lock);
+ 	return ret;
  }
+ EXPORT_SYMBOL_GPL(iommu_sva_alloc_pasid);
 =20
-@@ -121,7 +191,6 @@ static struct irq_routing_table * __init pirq_find_routin=
-g_table(void)
-  *  bridges.  It's a gross hack, but since there are no other known
-  *  ways how to get a list of buses, we have to go this way.
-  */
+-/**
+- * iommu_sva_free_pasid - Release the mm's PASID
+- * @mm: the mm
+- *
+- * Drop one reference to a PASID allocated with iommu_sva_alloc_pasid()
+- */
+-void iommu_sva_free_pasid(struct mm_struct *mm)
+-{
+-	mutex_lock(&iommu_sva_lock);
+-	if (ioasid_put(mm->pasid))
+-		mm->pasid =3D 0;
+-	mutex_unlock(&iommu_sva_lock);
+-}
+-EXPORT_SYMBOL_GPL(iommu_sva_free_pasid);
 -
- static void __init pirq_peer_trick(void)
+ /* ioasid_find getter() requires a void * argument */
+ static bool __mmget_not_zero(void *mm)
  {
- 	struct irq_routing_table *rt =3D pirq_table;
-@@ -135,7 +204,8 @@ static void __init pirq_peer_trick(void)
- #ifdef DEBUG
- 		{
- 			int j;
--			DBG(KERN_DEBUG "%02x:%02x slot=3D%02x", e->bus, e->devfn/8, e->slot);
-+			DBG(KERN_DEBUG "%02x:%02x.%x slot=3D%02x",
-+			    e->bus, e->devfn / 8, e->devfn % 8, e->slot);
- 			for (j =3D 0; j < 4; j++)
- 				DBG(" %d:%02x/%04x", j, e->irq[j].link, e->irq[j].bitmap);
- 			DBG("\n");
-@@ -155,7 +225,6 @@ static void __init pirq_peer_trick(void)
-  *  Code for querying and setting of IRQ routes on various interrupt routers.
-  *  PIC Edge/Level Control Registers (ELCR) 0x4d0 & 0x4d1.
-  */
--
- void elcr_set_level_irq(unsigned int irq)
+diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva-lib.h
+index 031155010ca8..8909ea1094e3 100644
+--- a/drivers/iommu/iommu-sva-lib.h
++++ b/drivers/iommu/iommu-sva-lib.h
+@@ -9,7 +9,6 @@
+ #include <linux/mm_types.h>
+=20
+ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max);
+-void iommu_sva_free_pasid(struct mm_struct *mm);
+ struct mm_struct *iommu_sva_find(ioasid_t pasid);
+=20
+ /* I/O Page fault */
+@@ -17,7 +16,7 @@ struct device;
+ struct iommu_fault;
+ struct iopf_queue;
+=20
+-#ifdef CONFIG_IOMMU_SVA_LIB
++#ifdef CONFIG_IOMMU_SVA
+ int iommu_queue_iopf(struct iommu_fault *fault, void *cookie);
+=20
+ int iopf_queue_add_device(struct iopf_queue *queue, struct device *dev);
+@@ -28,7 +27,7 @@ struct iopf_queue *iopf_queue_alloc(const char *name);
+ void iopf_queue_free(struct iopf_queue *queue);
+ int iopf_queue_discard_partial(struct iopf_queue *queue);
+=20
+-#else /* CONFIG_IOMMU_SVA_LIB */
++#else /* CONFIG_IOMMU_SVA */
+ static inline int iommu_queue_iopf(struct iommu_fault *fault, void *cookie)
  {
- 	unsigned char mask =3D 1 << (irq & 7);
-@@ -253,6 +322,15 @@ static void write_pc_conf_nybble(u8 base, u8 index, u8 v=
-al)
- 	pc_conf_set(reg, x);
+ 	return -ENODEV;
+@@ -64,5 +63,5 @@ static inline int iopf_queue_discard_partial(struct iopf_qu=
+eue *queue)
+ {
+ 	return -ENODEV;
  }
-=20
-+/*
-+ * FinALi pirq rules are as follows:
-+ *
-+ * - bit 0 selects between INTx Routing Table Mapping Registers,
-+ *
-+ * - bit 3 selects the nibble within the INTx Routing Table Mapping Register,
-+ *
-+ * - bits 7:4 map to bits 3:0 of the PCI INTx Sensitivity Register.
-+ */
- static int pirq_finali_get(struct pci_dev *router, struct pci_dev *dev,
- 			   int pirq)
- {
-@@ -260,11 +338,13 @@ static int pirq_finali_get(struct pci_dev *router, stru=
-ct pci_dev *dev,
- 		0, 9, 3, 10, 4, 5, 7, 6, 0, 11, 0, 12, 0, 14, 0, 15
- 	};
- 	unsigned long flags;
-+	u8 index;
- 	u8 x;
-=20
-+	index =3D (pirq & 1) << 1 | (pirq & 8) >> 3;
- 	raw_spin_lock_irqsave(&pc_conf_lock, flags);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, PC_CONF_FINALI_LOCK_KEY);
--	x =3D irqmap[read_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, pirq - 1)];
-+	x =3D irqmap[read_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, index)];
- 	pc_conf_set(PC_CONF_FINALI_LOCK, 0);
- 	raw_spin_unlock_irqrestore(&pc_conf_lock, flags);
- 	return x;
-@@ -278,13 +358,15 @@ static int pirq_finali_set(struct pci_dev *router, stru=
-ct pci_dev *dev,
- 	};
- 	u8 val =3D irqmap[irq];
- 	unsigned long flags;
-+	u8 index;
-=20
- 	if (!val)
- 		return 0;
-=20
-+	index =3D (pirq & 1) << 1 | (pirq & 8) >> 3;
- 	raw_spin_lock_irqsave(&pc_conf_lock, flags);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, PC_CONF_FINALI_LOCK_KEY);
--	write_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, pirq - 1, val);
-+	write_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, index, val);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, 0);
- 	raw_spin_unlock_irqrestore(&pc_conf_lock, flags);
- 	return 1;
-@@ -293,7 +375,7 @@ static int pirq_finali_set(struct pci_dev *router, struct=
- pci_dev *dev,
- static int pirq_finali_lvl(struct pci_dev *router, struct pci_dev *dev,
- 			   int pirq, int irq)
- {
--	u8 mask =3D ~(1u << (pirq - 1));
-+	u8 mask =3D ~((pirq & 0xf0u) >> 4);
- 	unsigned long flags;
- 	u8 trig;
-=20
-@@ -579,6 +661,81 @@ static int pirq_cyrix_set(struct pci_dev *router, struct=
- pci_dev *dev, int pirq,
- 	return 1;
- }
-=20
-+
-+/*
-+ *	PIRQ routing for the SiS85C497 AT Bus Controller & Megacell (ATM)
-+ *	ISA bridge used with the SiS 85C496/497 486 Green PC VESA/ISA/PCI
-+ *	Chipset.
-+ *
-+ *	There are four PCI INTx#-to-IRQ Link registers provided in the
-+ *	SiS85C497 part of the peculiar combined 85C496/497 configuration
-+ *	space decoded by the SiS85C496 PCI & CPU Memory Controller (PCM)
-+ *	host bridge, at 0xc0/0xc1/0xc2/0xc3 respectively for the PCI INT
-+ *	A/B/C/D lines.  Bit 7 enables the respective link if set and bits
-+ *	3:0 select the 8259A IRQ line as follows:
-+ *
-+ *	0000 : Reserved
-+ *	0001 : Reserved
-+ *	0010 : Reserved
-+ *	0011 : IRQ3
-+ *	0100 : IRQ4
-+ *	0101 : IRQ5
-+ *	0110 : IRQ6
-+ *	0111 : IRQ7
-+ *	1000 : Reserved
-+ *	1001 : IRQ9
-+ *	1010 : IRQ10
-+ *	1011 : IRQ11
-+ *	1100 : IRQ12
-+ *	1101 : Reserved
-+ *	1110 : IRQ14
-+ *	1111 : IRQ15
-+ *
-+ *	We avoid using a reserved value for disabled links, hence the
-+ *	choice of IRQ15 for that case.
-+ *
-+ *	References:
-+ *
-+ *	"486 Green PC VESA/ISA/PCI Chipset, SiS 85C496/497", Rev 3.0,
-+ *	Silicon Integrated Systems Corp., July 1995
-+ */
-+
-+#define PCI_SIS497_INTA_TO_IRQ_LINK	0xc0u
-+
-+#define PIRQ_SIS497_IRQ_MASK		0x0fu
-+#define PIRQ_SIS497_IRQ_ENABLE		0x80u
-+
-+static int pirq_sis497_get(struct pci_dev *router, struct pci_dev *dev,
-+			   int pirq)
+-#endif /* CONFIG_IOMMU_SVA_LIB */
++#endif /* CONFIG_IOMMU_SVA */
+ #endif /* _IOMMU_SVA_LIB_H */
+diff --git a/include/linux/ioasid.h b/include/linux/ioasid.h
+index e9dacd4b9f6b..af1c9d62e642 100644
+--- a/include/linux/ioasid.h
++++ b/include/linux/ioasid.h
+@@ -34,13 +34,16 @@ struct ioasid_allocator_ops {
+ #if IS_ENABLED(CONFIG_IOASID)
+ ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min, ioasid_t max,
+ 		      void *private);
+-void ioasid_get(ioasid_t ioasid);
+-bool ioasid_put(ioasid_t ioasid);
++void ioasid_free(ioasid_t ioasid);
+ void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
+ 		  bool (*getter)(void *));
+ int ioasid_register_allocator(struct ioasid_allocator_ops *allocator);
+ void ioasid_unregister_allocator(struct ioasid_allocator_ops *allocator);
+ int ioasid_set_data(ioasid_t ioasid, void *data);
++static inline bool pasid_valid(ioasid_t ioasid)
 +{
-+	int reg;
-+	u8 x;
-+
-+	reg =3D pirq;
-+	if (reg >=3D 1 && reg <=3D 4)
-+		reg +=3D PCI_SIS497_INTA_TO_IRQ_LINK - 1;
-+
-+	pci_read_config_byte(router, reg, &x);
-+	return (x & PIRQ_SIS497_IRQ_ENABLE) ? (x & PIRQ_SIS497_IRQ_MASK) : 0;
++	return ioasid !=3D INVALID_IOASID;
 +}
-+
-+static int pirq_sis497_set(struct pci_dev *router, struct pci_dev *dev,
-+			   int pirq, int irq)
-+{
-+	int reg;
-+	u8 x;
-+
-+	reg =3D pirq;
-+	if (reg >=3D 1 && reg <=3D 4)
-+		reg +=3D PCI_SIS497_INTA_TO_IRQ_LINK - 1;
-+
-+	pci_read_config_byte(router, reg, &x);
-+	x &=3D ~(PIRQ_SIS497_IRQ_MASK | PIRQ_SIS497_IRQ_ENABLE);
-+	x |=3D irq ? (PIRQ_SIS497_IRQ_ENABLE | irq) : PIRQ_SIS497_IRQ_MASK;
-+	pci_write_config_byte(router, reg, x);
-+	return 1;
-+}
-+
- /*
-  *	PIRQ routing for SiS 85C503 router used in several SiS chipsets.
-  *	We have to deal with the following issues here:
-@@ -640,11 +797,12 @@ static int pirq_cyrix_set(struct pci_dev *router, struc=
-t pci_dev *dev, int pirq,
-  *				bit 6-4 are probably unused, not like 5595
-  */
 =20
--#define PIRQ_SIS_IRQ_MASK	0x0f
--#define PIRQ_SIS_IRQ_DISABLE	0x80
--#define PIRQ_SIS_USB_ENABLE	0x40
-+#define PIRQ_SIS503_IRQ_MASK	0x0f
-+#define PIRQ_SIS503_IRQ_DISABLE	0x80
-+#define PIRQ_SIS503_USB_ENABLE	0x40
-=20
--static int pirq_sis_get(struct pci_dev *router, struct pci_dev *dev, int pir=
-q)
-+static int pirq_sis503_get(struct pci_dev *router, struct pci_dev *dev,
-+			   int pirq)
- {
- 	u8 x;
- 	int reg;
-@@ -653,10 +811,11 @@ static int pirq_sis_get(struct pci_dev *router, struct =
-pci_dev *dev, int pirq)
- 	if (reg >=3D 0x01 && reg <=3D 0x04)
- 		reg +=3D 0x40;
- 	pci_read_config_byte(router, reg, &x);
--	return (x & PIRQ_SIS_IRQ_DISABLE) ? 0 : (x & PIRQ_SIS_IRQ_MASK);
-+	return (x & PIRQ_SIS503_IRQ_DISABLE) ? 0 : (x & PIRQ_SIS503_IRQ_MASK);
+ #else /* !CONFIG_IOASID */
+ static inline ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min,
+@@ -49,14 +52,7 @@ static inline ioasid_t ioasid_alloc(struct ioasid_set *set=
+, ioasid_t min,
+ 	return INVALID_IOASID;
  }
 =20
--static int pirq_sis_set(struct pci_dev *router, struct pci_dev *dev, int pir=
-q, int irq)
-+static int pirq_sis503_set(struct pci_dev *router, struct pci_dev *dev,
-+			   int pirq, int irq)
- {
- 	u8 x;
- 	int reg;
-@@ -665,8 +824,8 @@ static int pirq_sis_set(struct pci_dev *router, struct pc=
-i_dev *dev, int pirq, i
- 	if (reg >=3D 0x01 && reg <=3D 0x04)
- 		reg +=3D 0x40;
- 	pci_read_config_byte(router, reg, &x);
--	x &=3D ~(PIRQ_SIS_IRQ_MASK | PIRQ_SIS_IRQ_DISABLE);
--	x |=3D irq ? irq: PIRQ_SIS_IRQ_DISABLE;
-+	x &=3D ~(PIRQ_SIS503_IRQ_MASK | PIRQ_SIS503_IRQ_DISABLE);
-+	x |=3D irq ? irq : PIRQ_SIS503_IRQ_DISABLE;
- 	pci_write_config_byte(router, reg, x);
- 	return 1;
- }
-@@ -800,11 +959,18 @@ static __init int intel_router_probe(struct irq_router =
-*r, struct pci_dev *route
- 		return 0;
-=20
- 	switch (device) {
-+		u8 rid;
- 	case PCI_DEVICE_ID_INTEL_82375:
- 		r->name =3D "PCEB/ESC";
- 		r->get =3D pirq_esc_get;
- 		r->set =3D pirq_esc_set;
- 		return 1;
-+	case PCI_DEVICE_ID_INTEL_82378:
-+		pci_read_config_byte(router, PCI_REVISION_ID, &rid);
-+		/* Tell 82378IB (rev < 3) and 82378ZB/82379AB apart.  */
-+		if ((rid & 0xfu) < 3)
-+			break;
-+		fallthrough;
- 	case PCI_DEVICE_ID_INTEL_82371FB_0:
- 	case PCI_DEVICE_ID_INTEL_82371SB_0:
- 	case PCI_DEVICE_ID_INTEL_82371AB_0:
-@@ -846,7 +1012,7 @@ static __init int intel_router_probe(struct irq_router *=
-r, struct pci_dev *route
- 	case PCI_DEVICE_ID_INTEL_ICH10_3:
- 	case PCI_DEVICE_ID_INTEL_PATSBURG_LPC_0:
- 	case PCI_DEVICE_ID_INTEL_PATSBURG_LPC_1:
--		r->name =3D "PIIX/ICH";
-+		r->name =3D "SIO/PIIX/ICH";
- 		r->get =3D pirq_piix_get;
- 		r->set =3D pirq_piix_set;
- 		return 1;
-@@ -865,7 +1031,7 @@ static __init int intel_router_probe(struct irq_router *=
-r, struct pci_dev *route
- 	     device <=3D PCI_DEVICE_ID_INTEL_DH89XXCC_LPC_MAX)
- 	||  (device >=3D PCI_DEVICE_ID_INTEL_PANTHERPOINT_LPC_MIN &&
- 	     device <=3D PCI_DEVICE_ID_INTEL_PANTHERPOINT_LPC_MAX)) {
--		r->name =3D "PIIX/ICH";
-+		r->name =3D "SIO/PIIX/ICH";
- 		r->get =3D pirq_piix_get;
- 		r->set =3D pirq_piix_set;
- 		return 1;
-@@ -958,13 +1124,19 @@ static __init int serverworks_router_probe(struct irq_=
-router *r,
-=20
- static __init int sis_router_probe(struct irq_router *r, struct pci_dev *rou=
-ter, u16 device)
- {
--	if (device !=3D PCI_DEVICE_ID_SI_503)
--		return 0;
+-static inline void ioasid_get(ioasid_t ioasid)
+-{
+-}
 -
--	r->name =3D "SIS";
--	r->get =3D pirq_sis_get;
--	r->set =3D pirq_sis_set;
--	return 1;
-+	switch (device) {
-+	case PCI_DEVICE_ID_SI_496:
-+		r->name =3D "SiS85C497";
-+		r->get =3D pirq_sis497_get;
-+		r->set =3D pirq_sis497_set;
-+		return 1;
-+	case PCI_DEVICE_ID_SI_503:
-+		r->name =3D "SiS85C503";
-+		r->get =3D pirq_sis503_get;
-+		r->set =3D pirq_sis503_set;
-+		return 1;
-+	}
-+	return 0;
+-static inline bool ioasid_put(ioasid_t ioasid)
+-{
+-	return false;
+-}
++static inline void ioasid_free(ioasid_t ioasid) { }
+=20
+ static inline void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
+ 				bool (*getter)(void *))
+@@ -78,5 +74,10 @@ static inline int ioasid_set_data(ioasid_t ioasid, void *d=
+ata)
+ 	return -ENOTSUPP;
  }
 =20
- static __init int cyrix_router_probe(struct irq_router *r, struct pci_dev *r=
-outer, u16 device)
-@@ -1084,10 +1256,32 @@ static struct pci_dev *pirq_router_dev;
-  *	chipset" ?
-  */
-=20
-+static bool __init pirq_try_router(struct irq_router *r,
-+				   struct irq_routing_table *rt,
-+				   struct pci_dev *dev)
++static inline bool pasid_valid(ioasid_t ioasid)
 +{
-+	struct irq_router_handler *h;
-+
-+	DBG(KERN_DEBUG "PCI: Trying IRQ router for [%04x:%04x]\n",
-+	    dev->vendor, dev->device);
-+
-+	for (h =3D pirq_routers; h->vendor; h++) {
-+		/* First look for a router match */
-+		if (rt->rtr_vendor =3D=3D h->vendor &&
-+		    h->probe(r, dev, rt->rtr_device))
-+			return true;
-+		/* Fall back to a device match */
-+		if (dev->vendor =3D=3D h->vendor &&
-+		    h->probe(r, dev, dev->device))
-+			return true;
-+	}
 +	return false;
 +}
 +
- static void __init pirq_find_router(struct irq_router *r)
- {
- 	struct irq_routing_table *rt =3D pirq_table;
--	struct irq_router_handler *h;
-+	struct pci_dev *dev;
+ #endif /* CONFIG_IOASID */
+ #endif /* __LINUX_IOASID_H */
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 5140e5feb486..c5cbfd7915ad 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -631,7 +631,7 @@ struct mm_struct {
+ #endif
+ 		struct work_struct async_put_work;
 =20
- #ifdef CONFIG_PCI_BIOS
- 	if (!rt->signature) {
-@@ -1106,50 +1300,95 @@ static void __init pirq_find_router(struct irq_router=
- *r)
- 	DBG(KERN_DEBUG "PCI: Attempting to find IRQ router for [%04x:%04x]\n",
- 	    rt->rtr_vendor, rt->rtr_device);
+-#ifdef CONFIG_IOMMU_SUPPORT
++#ifdef CONFIG_IOMMU_SVA
+ 		u32 pasid;
+ #endif
+ 	} __randomize_layout;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 75ba8aa60248..4e5de3aed410 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -938,6 +938,9 @@ struct task_struct {
+ 	/* Recursion prevention for eventfd_signal() */
+ 	unsigned			in_eventfd_signal:1;
+ #endif
++#ifdef CONFIG_IOMMU_SVA
++	unsigned			pasid_activated:1;
++#endif
 =20
--	pirq_router_dev =3D pci_get_domain_bus_and_slot(0, rt->rtr_bus,
--						      rt->rtr_devfn);
--	if (!pirq_router_dev) {
--		DBG(KERN_DEBUG "PCI: Interrupt router not found at "
--			"%02x:%02x\n", rt->rtr_bus, rt->rtr_devfn);
--		return;
-+	/* Use any vendor:device provided by the routing table or try all.  */
-+	if (rt->rtr_vendor) {
-+		dev =3D pci_get_domain_bus_and_slot(0, rt->rtr_bus,
-+						  rt->rtr_devfn);
-+		if (dev && pirq_try_router(r, rt, dev))
-+			pirq_router_dev =3D dev;
-+	} else {
-+		dev =3D NULL;
-+		for_each_pci_dev(dev) {
-+			if (pirq_try_router(r, rt, dev)) {
-+				pirq_router_dev =3D dev;
-+				break;
-+			}
-+		}
- 	}
+ 	unsigned long			atomic_flags; /* Flags requiring atomic access. */
 =20
--	for (h =3D pirq_routers; h->vendor; h++) {
--		/* First look for a router match */
--		if (rt->rtr_vendor =3D=3D h->vendor &&
--			h->probe(r, pirq_router_dev, rt->rtr_device))
--			break;
--		/* Fall back to a device match */
--		if (pirq_router_dev->vendor =3D=3D h->vendor &&
--			h->probe(r, pirq_router_dev, pirq_router_dev->device))
--			break;
-+	if (pirq_router_dev) {
-+		dev_info(&pirq_router_dev->dev, "%s IRQ router [%04x:%04x]\n",
-+			 pirq_router.name,
-+			 pirq_router_dev->vendor, pirq_router_dev->device);
-+	} else {
-+		DBG(KERN_DEBUG "PCI: Interrupt router not found at %02x:%02x\n",
-+		    rt->rtr_bus, rt->rtr_devfn);
- 	}
--	dev_info(&pirq_router_dev->dev, "%s IRQ router [%04x:%04x]\n",
--		 pirq_router.name,
--		 pirq_router_dev->vendor, pirq_router_dev->device);
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index aa5f09ca5bcf..a80356e9dc69 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -8,6 +8,7 @@
+ #include <linux/mm_types.h>
+ #include <linux/gfp.h>
+ #include <linux/sync_core.h>
++#include <linux/ioasid.h>
 =20
- 	/* The device remains referenced for the kernel lifetime */
+ /*
+  * Routines for handling mm_structs
+@@ -433,4 +434,29 @@ static inline void membarrier_update_current_mm(struct m=
+m_struct *next_mm)
  }
+ #endif
 =20
--static struct irq_info *pirq_get_info(struct pci_dev *dev)
-+/*
-+ * We're supposed to match on the PCI device only and not the function,
-+ * but some BIOSes build their tables with the PCI function included
-+ * for motherboard devices, so if a complete match is found, then give
-+ * it precedence over a slot match.
-+ */
-+static struct irq_info *pirq_get_dev_info(struct pci_dev *dev)
- {
- 	struct irq_routing_table *rt =3D pirq_table;
- 	int entries =3D (rt->size - sizeof(struct irq_routing_table)) /
- 		sizeof(struct irq_info);
-+	struct irq_info *slotinfo =3D NULL;
- 	struct irq_info *info;
-=20
- 	for (info =3D rt->slots; entries--; info++)
--		if (info->bus =3D=3D dev->bus->number &&
--			PCI_SLOT(info->devfn) =3D=3D PCI_SLOT(dev->devfn))
--			return info;
--	return NULL;
-+		if (info->bus =3D=3D dev->bus->number) {
-+			if (info->devfn =3D=3D dev->devfn)
-+				return info;
-+			if (!slotinfo &&
-+			    PCI_SLOT(info->devfn) =3D=3D PCI_SLOT(dev->devfn))
-+				slotinfo =3D info;
-+		}
-+	return slotinfo;
++#ifdef CONFIG_IOMMU_SVA
++static inline void mm_pasid_init(struct mm_struct *mm)
++{
++	mm->pasid =3D INVALID_IOASID;
 +}
 +
-+/*
-+ * Buses behind bridges are typically not listed in the PIRQ routing table.
-+ * Do the usual dance then and walk the tree of bridges up adjusting the
-+ * pin number accordingly on the way until the originating root bus device
-+ * has been reached and then use its routing information.
-+ */
-+static struct irq_info *pirq_get_info(struct pci_dev *dev, u8 *pin)
++/* Associate a PASID with an mm_struct: */
++static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid)
 +{
-+	struct pci_dev *temp_dev =3D dev;
-+	struct irq_info *info;
-+	u8 temp_pin =3D *pin;
-+	u8 dpin =3D temp_pin;
++	mm->pasid =3D pasid;
++}
 +
-+	info =3D pirq_get_dev_info(dev);
-+	while (!info && temp_dev->bus->parent) {
-+		struct pci_dev *bridge =3D temp_dev->bus->self;
-+
-+		temp_pin =3D pci_swizzle_interrupt_pin(temp_dev, temp_pin);
-+		info =3D pirq_get_dev_info(bridge);
-+		if (info)
-+			dev_warn(&dev->dev,
-+				 "using bridge %s INT %c to get INT %c\n",
-+				 pci_name(bridge),
-+				 'A' + temp_pin - 1, 'A' + dpin - 1);
-+
-+		temp_dev =3D bridge;
++static inline void mm_pasid_drop(struct mm_struct *mm)
++{
++	if (pasid_valid(mm->pasid)) {
++		ioasid_free(mm->pasid);
++		mm->pasid =3D INVALID_IOASID;
 +	}
-+	*pin =3D temp_pin;
-+	return info;
++}
++#else
++static inline void mm_pasid_init(struct mm_struct *mm) {}
++static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid) {}
++static inline void mm_pasid_drop(struct mm_struct *mm) {}
++#endif
++
+ #endif /* _LINUX_SCHED_MM_H */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index d75a528f7b21..51fd1df994b7 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -97,6 +97,7 @@
+ #include <linux/scs.h>
+ #include <linux/io_uring.h>
+ #include <linux/bpf.h>
++#include <linux/sched/mm.h>
+=20
+ #include <asm/pgalloc.h>
+ #include <linux/uaccess.h>
+@@ -967,6 +968,10 @@ static struct task_struct *dup_task_struct(struct task_s=
+truct *orig, int node)
+ 	tsk->use_memdelay =3D 0;
+ #endif
+=20
++#ifdef CONFIG_IOMMU_SVA
++	tsk->pasid_activated =3D 0;
++#endif
++
+ #ifdef CONFIG_MEMCG
+ 	tsk->active_memcg =3D NULL;
+ #endif
+@@ -1019,13 +1024,6 @@ static void mm_init_owner(struct mm_struct *mm, struct=
+ task_struct *p)
+ #endif
  }
 =20
- static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
+-static void mm_init_pasid(struct mm_struct *mm)
+-{
+-#ifdef CONFIG_IOMMU_SUPPORT
+-	mm->pasid =3D INIT_PASID;
+-#endif
+-}
+-
+ static void mm_init_uprobes_state(struct mm_struct *mm)
  {
--	u8 pin;
- 	struct irq_info *info;
- 	int i, pirq, newirq;
-+	u8 dpin, pin;
- 	int irq =3D 0;
- 	u32 mask;
- 	struct irq_router *r =3D &pirq_router;
-@@ -1157,8 +1396,8 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int =
-assign)
- 	char *msg =3D NULL;
-=20
- 	/* Find IRQ pin */
--	pci_read_config_byte(dev, PCI_INTERRUPT_PIN, &pin);
--	if (!pin) {
-+	pci_read_config_byte(dev, PCI_INTERRUPT_PIN, &dpin);
-+	if (!dpin) {
- 		dev_dbg(&dev->dev, "no interrupt pin\n");
- 		return 0;
+ #ifdef CONFIG_UPROBES
+@@ -1054,7 +1052,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, =
+struct task_struct *p,
+ 	mm_init_cpumask(mm);
+ 	mm_init_aio(mm);
+ 	mm_init_owner(mm, p);
+-	mm_init_pasid(mm);
++	mm_pasid_init(mm);
+ 	RCU_INIT_POINTER(mm->exe_file, NULL);
+ 	mmu_notifier_subscriptions_init(mm);
+ 	init_tlb_flush_pending(mm);
+@@ -1121,6 +1119,7 @@ static inline void __mmput(struct mm_struct *mm)
  	}
-@@ -1171,20 +1410,21 @@ static int pcibios_lookup_irq(struct pci_dev *dev, in=
-t assign)
- 	if (!pirq_table)
- 		return 0;
+ 	if (mm->binfmt)
+ 		module_put(mm->binfmt->module);
++	mm_pasid_drop(mm);
+ 	mmdrop(mm);
+ }
 =20
--	info =3D pirq_get_info(dev);
-+	pin =3D dpin;
-+	info =3D pirq_get_info(dev, &pin);
- 	if (!info) {
- 		dev_dbg(&dev->dev, "PCI INT %c not found in routing table\n",
--			'A' + pin - 1);
-+			'A' + dpin - 1);
- 		return 0;
- 	}
- 	pirq =3D info->irq[pin - 1].link;
- 	mask =3D info->irq[pin - 1].bitmap;
- 	if (!pirq) {
--		dev_dbg(&dev->dev, "PCI INT %c not routed\n", 'A' + pin - 1);
-+		dev_dbg(&dev->dev, "PCI INT %c not routed\n", 'A' + dpin - 1);
- 		return 0;
- 	}
- 	dev_dbg(&dev->dev, "PCI INT %c -> PIRQ %02x, mask %04x, excl %04x",
--		'A' + pin - 1, pirq, mask, pirq_table->exclusive_irqs);
-+		'A' + dpin - 1, pirq, mask, pirq_table->exclusive_irqs);
- 	mask &=3D pcibios_irq_mask;
+diff --git a/mm/init-mm.c b/mm/init-mm.c
+index b4a6f38fb51d..fbe7844d0912 100644
+--- a/mm/init-mm.c
++++ b/mm/init-mm.c
+@@ -10,6 +10,7 @@
 =20
- 	/* Work around broken HP Pavilion Notebooks which assign USB to
-@@ -1226,7 +1466,7 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int =
-assign)
- 				newirq =3D i;
- 		}
- 	}
--	dev_dbg(&dev->dev, "PCI INT %c -> newirq %d", 'A' + pin - 1, newirq);
-+	dev_dbg(&dev->dev, "PCI INT %c -> newirq %d", 'A' + dpin - 1, newirq);
+ #include <linux/atomic.h>
+ #include <linux/user_namespace.h>
++#include <linux/ioasid.h>
+ #include <asm/mmu.h>
 =20
- 	/* Check if it is hardcoded */
- 	if ((pirq & 0xf0) =3D=3D 0xf0) {
-@@ -1260,15 +1500,17 @@ static int pcibios_lookup_irq(struct pci_dev *dev, in=
-t assign)
- 			return 0;
- 		}
- 	}
--	dev_info(&dev->dev, "%s PCI INT %c -> IRQ %d\n", msg, 'A' + pin - 1, irq);
-+	dev_info(&dev->dev, "%s PCI INT %c -> IRQ %d\n",
-+		 msg, 'A' + dpin - 1, irq);
+ #ifndef INIT_MM_CONTEXT
+@@ -38,6 +39,9 @@ struct mm_struct init_mm =3D {
+ 	.mmlist		=3D LIST_HEAD_INIT(init_mm.mmlist),
+ 	.user_ns	=3D &init_user_ns,
+ 	.cpu_bitmap	=3D CPU_BITS_NONE,
++#ifdef CONFIG_IOMMU_SVA
++	.pasid		=3D INVALID_IOASID,
++#endif
+ 	INIT_MM_CONTEXT(init_mm)
+ };
 =20
- 	/* Update IRQ for all devices with the same pirq value */
- 	for_each_pci_dev(dev2) {
--		pci_read_config_byte(dev2, PCI_INTERRUPT_PIN, &pin);
--		if (!pin)
-+		pci_read_config_byte(dev2, PCI_INTERRUPT_PIN, &dpin);
-+		if (!dpin)
- 			continue;
+diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
+index c10ef78df050..479e769ca324 100644
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -112,7 +112,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
+ 	const struct elf *elf =3D file->elf;
+ 	struct insn insn;
+ 	int x86_64, ret;
+-	unsigned char op1, op2,
++	unsigned char op1, op2, op3,
+ 		      rex =3D 0, rex_b =3D 0, rex_r =3D 0, rex_w =3D 0, rex_x =3D 0,
+ 		      modrm =3D 0, modrm_mod =3D 0, modrm_rm =3D 0, modrm_reg =3D 0,
+ 		      sib =3D 0, /* sib_scale =3D 0, */ sib_index =3D 0, sib_base =3D 0;
+@@ -139,6 +139,7 @@ int arch_decode_instruction(struct objtool_file *file, co=
+nst struct section *sec
 =20
--		info =3D pirq_get_info(dev2);
-+		pin =3D dpin;
-+		info =3D pirq_get_info(dev2, &pin);
- 		if (!info)
- 			continue;
- 		if (info->irq[pin - 1].link =3D=3D pirq) {
+ 	op1 =3D insn.opcode.bytes[0];
+ 	op2 =3D insn.opcode.bytes[1];
++	op3 =3D insn.opcode.bytes[2];
+=20
+ 	if (insn.rex_prefix.nbytes) {
+ 		rex =3D insn.rex_prefix.bytes[0];
+@@ -491,6 +492,14 @@ int arch_decode_instruction(struct objtool_file *file, c=
+onst struct section *sec
+ 			/* nopl/nopw */
+ 			*type =3D INSN_NOP;
+=20
++		} else if (op2 =3D=3D 0x38 && op3 =3D=3D 0xf8) {
++			if (insn.prefixes.nbytes =3D=3D 1 &&
++			    insn.prefixes.bytes[0] =3D=3D 0xf2) {
++				/* ENQCMD cannot be used in the kernel. */
++				WARN("ENQCMD instruction at %s:%lx", sec->name,
++				     offset);
++			}
++
+ 		} else if (op2 =3D=3D 0xa0 || op2 =3D=3D 0xa8) {
+=20
+ 			/* push fs/gs */
 

@@ -2,42 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B064E2AF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF614E2AE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349409AbiCUOfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S1349187AbiCUOe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349857AbiCUOdL (ORCPT
+        with ESMTP id S1349927AbiCUOdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:33:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EC8B99
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:30:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 550E560AF7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 14:30:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E53C340E8;
-        Mon, 21 Mar 2022 14:30:37 +0000 (UTC)
-Date:   Mon, 21 Mar 2022 10:30:35 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [GIT PULL] tracing/rtla: Updates to the RTLA tool
-Message-ID: <20220321103035.564a1df5@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 21 Mar 2022 10:33:16 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE13255A1;
+        Mon, 21 Mar 2022 07:31:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V7r0AMW_1647873068;
+Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V7r0AMW_1647873068)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 21 Mar 2022 22:31:10 +0800
+Message-ID: <774ac783-98f8-eedb-af55-ff99eef5369c@linux.alibaba.com>
+Date:   Mon, 21 Mar 2022 22:31:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v5 05/22] cachefiles: notify user daemon when withdrawing
+ cookie
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, willy@infradead.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com
+References: <20220316131723.111553-6-jefflexu@linux.alibaba.com>
+ <20220316131723.111553-1-jefflexu@linux.alibaba.com>
+ <1030364.1647872428@warthog.procyon.org.uk>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <1030364.1647872428@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -45,73 +54,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Linus,
 
-I'm sending this as a separate pull request from my normal tracing tree, as
-it had dependencies to commits in your tree but not in my development
-branch. As it only affects the tools/ directory, I kept it separate as it
-has no changes to the kernel itself.
+On 3/21/22 10:20 PM, David Howells wrote:
+> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+> 
+>> Notify user daemon that cookie is going to be withdrawed, providing a
+> 
+> "withdrawn".
 
-Real Time Linux Analysis Tool updates for 5.18
+Thanks.
 
-Changes to RTLA:
+> 
+>> +	/* CLOSE request doesn't look forward a reply */
+> 
+> I'm not sure what you mean.
 
- - Support for adjusting tracing_threashold
-
- - Add -a (auto) option to make it easier for users to debug in the field
-
- - Add -e option to add more events to the trace
-
- - Add --trigger option to add triggers to events
-
- - Add --filter option to filter events
-
- - Add support to save histograms to the file
-
- - Add --dma-latency to set /dev/cpu_dma_latency
-
- - Other fixes and cleanups
-
-Please pull the latest trace-rtla-v5.18 tree, which can be found at:
+When cookie gets withdrawn, Cachefiles will send a CLOSE request to user
+daemon, telling that the associated anon_fd could be closed. But it's
+just a hint. User daemon could keep the anon_fd open when it receives
+the CLOSE request. After sending the CLOSE request, Cachefiles will go
+on the process of withdrawing cookie and won't wait for a reply
+synchronously. So CLOSE request is just a hint to user daemon, and it
+doesn't need to be replied.
 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-trace-rtla-v5.18
-
-Tag SHA1: cc921ea64d6df1bb8955ff5762dbcdc408e34264
-Head SHA1: 75016ca3acd0de79868ef5b0694195fe05288ade
-
-
-Daniel Bristot de Oliveira (15):
-      rtla/osnoise: Add support to adjust the tracing_thresh
-      rtla/osnoise: Add an option to set the threshold
-      rtla/osnoise: Add the automatic trace option
-      rtla/timerlat: Add the automatic trace option
-      rtla/trace: Add trace events helpers
-      rtla: Add -e/--event support
-      rtla/trace: Add trace event trigger helpers
-      rtla: Add --trigger support
-      rtla/trace: Add trace event filter helpers
-      rtla: Add --filter support
-      rtla/trace: Save event histogram output to a file
-      rtla: Check for trace off also in the trace instance
-      rtla/osnoise: Fix osnoise hist stop tracing message
-      rtla/timerlat: Add --dma-latency option
-      rtla: Tools main loop cleanup
-
-----
- Documentation/tools/rtla/common_options.rst        |  19 ++
- .../tools/rtla/common_osnoise_options.rst          |  10 +
- .../tools/rtla/common_timerlat_options.rst         |  12 +
- tools/tracing/rtla/src/osnoise.c                   |  83 +++++
- tools/tracing/rtla/src/osnoise.h                   |   8 +
- tools/tracing/rtla/src/osnoise_hist.c              |  95 +++++-
- tools/tracing/rtla/src/osnoise_top.c               |  91 +++++-
- tools/tracing/rtla/src/timerlat_hist.c             | 108 ++++++-
- tools/tracing/rtla/src/timerlat_top.c              | 103 +++++-
- tools/tracing/rtla/src/trace.c                     | 345 +++++++++++++++++++++
- tools/tracing/rtla/src/trace.h                     |  23 ++
- tools/tracing/rtla/src/utils.c                     |  33 ++
- tools/tracing/rtla/src/utils.h                     |   1 +
- 13 files changed, 903 insertions(+), 28 deletions(-)
----------------------------
+-- 
+Thanks,
+Jeffle

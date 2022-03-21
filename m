@@ -2,235 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2098B4E2069
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1864E2071
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344498AbiCUGFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 02:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        id S1344518AbiCUGGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 02:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344486AbiCUGFQ (ORCPT
+        with ESMTP id S238522AbiCUGGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 02:05:16 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84944B865;
-        Sun, 20 Mar 2022 23:03:50 -0700 (PDT)
-X-UUID: 0dfaf9dfe0534777a0c7e501be2722de-20220321
-X-UUID: 0dfaf9dfe0534777a0c7e501be2722de-20220321
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1947819968; Mon, 21 Mar 2022 14:03:43 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 21 Mar 2022 14:03:42 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Mar
- 2022 14:03:42 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 21 Mar 2022 14:03:42 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Subject: [PATCH v6] remoteproc: mediatek: Fix side effect of mt8195 sram power on
-Date:   Mon, 21 Mar 2022 14:03:40 +0800
-Message-ID: <20220321060340.10975-1-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.15.GIT
+        Mon, 21 Mar 2022 02:06:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6012F167CA
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647842682;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IiAGK8MJyYDtNfKFlzVpmQAJqIr42Om/VU2/PvLTG0Y=;
+        b=BZOUuYL2kI9766LTX6r+XylaS3kRPKN8slUF8u4+VISBA5cXWfee0mUiR+bn9z3oX5wfb+
+        NTtX+jqed+tW6CtyEXMT3ebgykad8eT4fXAzh2lHSlvagHtoyDsSgpWKt36Vf+zuA86IWd
+        qLn4Ax8nTlsw2OqPIaizj/lAVdpOu1s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-DXGk5XR-OZCnQpdP67PjOw-1; Mon, 21 Mar 2022 02:04:39 -0400
+X-MC-Unique: DXGk5XR-OZCnQpdP67PjOw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0248E3C02B73;
+        Mon, 21 Mar 2022 06:04:38 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-14-31.pek2.redhat.com [10.72.14.31])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BA0632166B2D;
+        Mon, 21 Mar 2022 06:04:32 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     elic@nvidia.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] vdpa: mlx5: prevent cvq work from hogging CPU
+Date:   Mon, 21 Mar 2022 14:04:28 +0800
+Message-Id: <20220321060429.10457-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
+A userspace triggerable infinite loop could happen in
+mlx5_cvq_kick_handler() if userspace keeps sending a huge amount of
+cvq requests.
 
-L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
+Fixing this by introducing a quota and re-queue the work if we're out
+of the budget. While at it, using a per device workqueue to avoid on
+demand memory allocation for cvq.
 
-L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
-These bits have to be powered on to allow EMI access for SCP.
-
-Bits[7:4] also affect audio DSP because audio DSP and SCP are
-placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
-blocked too.
-
-L1TCM_SRAM_PDN bits[31:8] are not used.
-
-This fix removes modification of bits[7:4] when power on/off mt8195 SCP
-L1TCM. It's because the modification introduces a short period of time
-blocking audio DSP to access EMI. This was not a problem until we have
-to load both SCP module and audio DSP module. audio DSP needs to access
-EMI because it has source/data on DRAM. Audio DSP will have unexpected
-behavior when it accesses EMI and the SCP driver blocks the EMI path at
-the same time.
-
-Fixes: 79111df414fc ("remoteproc: mediatek: Support mt8195 scp")
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
+Fixes: 5262912ef3cfc ("vdpa/mlx5: Add support for control VQ and MAC setting")
+Signed-off-by: Jason Wang <jasowang@redhat.com>
 ---
-v6: fix build error
-v5: rebased on rproc-next
-v4: add Fixes and Reviewed-by tags
-v3: fix build error
-v2: apply comments about macro definition and function calls
----
- drivers/remoteproc/mtk_common.h |  2 +
- drivers/remoteproc/mtk_scp.c    | 69 +++++++++++++++++++++++++--------
- 2 files changed, 54 insertions(+), 17 deletions(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 71ce4977cb0b..ea6fa1100a00 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -54,6 +54,8 @@
- #define MT8192_CORE0_WDT_IRQ		0x10030
- #define MT8192_CORE0_WDT_CFG		0x10034
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index d0f91078600e..d5a6fb3f9c41 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -163,6 +163,7 @@ struct mlx5_vdpa_net {
+ 	u32 cur_num_vqs;
+ 	struct notifier_block nb;
+ 	struct vdpa_callback config_cb;
++	struct mlx5_vdpa_wq_ent cvq_ent;
+ };
  
-+#define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
-+
- #define SCP_FW_VER_LEN			32
- #define SCP_SHARE_BUFFER_SIZE		288
- 
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index 38609153bf64..ee6c4009586e 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -365,22 +365,22 @@ static int mt8183_scp_before_load(struct mtk_scp *scp)
- 	return 0;
+ static void free_resources(struct mlx5_vdpa_net *ndev);
+@@ -1600,6 +1601,8 @@ static virtio_net_ctrl_ack handle_ctrl_mq(struct mlx5_vdpa_dev *mvdev, u8 cmd)
+ 	return status;
  }
  
--static void mt8192_power_on_sram(void __iomem *addr)
-+static void scp_sram_power_on(void __iomem *addr, u32 reserved_mask)
++#define MLX5_CVQ_BUDGET 16
++
+ static void mlx5_cvq_kick_handler(struct work_struct *work)
  {
- 	int i;
+ 	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
+@@ -1609,17 +1612,17 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
+ 	struct mlx5_control_vq *cvq;
+ 	struct mlx5_vdpa_net *ndev;
+ 	size_t read, write;
+-	int err;
++	int err, n = 0;
  
- 	for (i = 31; i >= 0; i--)
--		writel(GENMASK(i, 0), addr);
-+		writel(GENMASK(i, 0) & ~reserved_mask, addr);
- 	writel(0, addr);
+ 	wqent = container_of(work, struct mlx5_vdpa_wq_ent, work);
+ 	mvdev = wqent->mvdev;
+ 	ndev = to_mlx5_vdpa_ndev(mvdev);
+ 	cvq = &mvdev->cvq;
+ 	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
+-		goto out;
++		return;
+ 
+ 	if (!cvq->ready)
+-		goto out;
++		return;
+ 
+ 	while (true) {
+ 		err = vringh_getdesc_iotlb(&cvq->vring, &cvq->riov, &cvq->wiov, &cvq->head,
+@@ -1653,9 +1656,13 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
+ 
+ 		if (vringh_need_notify_iotlb(&cvq->vring))
+ 			vringh_notify(&cvq->vring);
++
++		n++;
++		if (n > MLX5_CVQ_BUDGET) {
++			queue_work(mvdev->wq, &wqent->work);
++			break;
++		}
+ 	}
+-out:
+-	kfree(wqent);
  }
  
--static void mt8192_power_off_sram(void __iomem *addr)
-+static void scp_sram_power_off(void __iomem *addr, u32 reserved_mask)
- {
- 	int i;
+ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+@@ -1663,7 +1670,6 @@ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+ 	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
+ 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+ 	struct mlx5_vdpa_virtqueue *mvq;
+-	struct mlx5_vdpa_wq_ent *wqent;
  
- 	writel(0, addr);
- 	for (i = 0; i < 32; i++)
--		writel(GENMASK(i, 0), addr);
-+		writel(GENMASK(i, 0) & ~reserved_mask, addr);
- }
+ 	if (!is_index_valid(mvdev, idx))
+ 		return;
+@@ -1672,13 +1678,7 @@ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+ 		if (!mvdev->cvq.ready)
+ 			return;
  
- static int mt8186_scp_before_load(struct mtk_scp *scp)
-@@ -393,7 +393,7 @@ static int mt8186_scp_before_load(struct mtk_scp *scp)
- 	writel(0x0, scp->reg_base + MT8183_SCP_CLK_DIV_SEL);
+-		wqent = kzalloc(sizeof(*wqent), GFP_ATOMIC);
+-		if (!wqent)
+-			return;
+-
+-		wqent->mvdev = mvdev;
+-		INIT_WORK(&wqent->work, mlx5_cvq_kick_handler);
+-		queue_work(mvdev->wq, &wqent->work);
++		queue_work(mvdev->wq, &ndev->cvq_ent.work);
+ 		return;
+ 	}
  
- 	/* Turn on the power of SCP's SRAM before using it. Enable 1 block per time*/
--	mt8192_power_on_sram(scp->reg_base + MT8183_SCP_SRAM_PDN);
-+	scp_sram_power_on(scp->reg_base + MT8183_SCP_SRAM_PDN, 0);
+@@ -2668,6 +2668,8 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+ 	if (err)
+ 		goto err_mr;
  
- 	/* Initialize TCM before loading FW. */
- 	writel(0x0, scp->reg_base + MT8183_SCP_L1_SRAM_PD);
-@@ -412,11 +412,32 @@ static int mt8192_scp_before_load(struct mtk_scp *scp)
- 	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
- 
- 	/* enable SRAM clock */
--	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
--	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
--	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
--	mt8192_power_on_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
--	mt8192_power_on_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
-+
-+	/* enable MPU for all memory regions */
-+	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
-+
-+	return 0;
-+}
-+
-+static int mt8195_scp_before_load(struct mtk_scp *scp)
-+{
-+	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
-+	writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
-+
-+	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
-+
-+	/* enable SRAM clock */
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
-+			  MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS);
-+	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
- 
- 	/* enable MPU for all memory regions */
- 	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
-@@ -572,11 +593,25 @@ static void mt8183_scp_stop(struct mtk_scp *scp)
- static void mt8192_scp_stop(struct mtk_scp *scp)
- {
- 	/* Disable SRAM clock */
--	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
--	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
--	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
--	mt8192_power_off_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
--	mt8192_power_off_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
-+
-+	/* Disable SCP watchdog */
-+	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
-+}
-+
-+static void mt8195_scp_stop(struct mtk_scp *scp)
-+{
-+	/* Disable SRAM clock */
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
-+			   MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS);
-+	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
- 
- 	/* Disable SCP watchdog */
- 	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
-@@ -922,11 +957,11 @@ static const struct mtk_scp_of_data mt8192_of_data = {
- 
- static const struct mtk_scp_of_data mt8195_of_data = {
- 	.scp_clk_get = mt8195_scp_clk_get,
--	.scp_before_load = mt8192_scp_before_load,
-+	.scp_before_load = mt8195_scp_before_load,
- 	.scp_irq_handler = mt8192_scp_irq_handler,
- 	.scp_reset_assert = mt8192_scp_reset_assert,
- 	.scp_reset_deassert = mt8192_scp_reset_deassert,
--	.scp_stop = mt8192_scp_stop,
-+	.scp_stop = mt8195_scp_stop,
- 	.scp_da_to_va = mt8192_scp_da_to_va,
- 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
- 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
++	ndev->cvq_ent.mvdev = mvdev;
++	INIT_WORK(&ndev->cvq_ent.work, mlx5_cvq_kick_handler);
+ 	mvdev->wq = create_singlethread_workqueue("mlx5_vdpa_wq");
+ 	if (!mvdev->wq) {
+ 		err = -ENOMEM;
 -- 
-2.18.0
+2.18.1
 

@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2614E2F37
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2639F4E2F3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349791AbiCURlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S1349857AbiCURlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346014AbiCURlT (ORCPT
+        with ESMTP id S1349974AbiCURlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:41:19 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372B3517D9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:39:53 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22LHdiUE096754;
-        Mon, 21 Mar 2022 12:39:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1647884384;
-        bh=/YXfRFfs6htYVgXPCWhHaE5x8G3CaPDSx/tt44tkktU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=uB/LM152GxbUxqerSs3cagmGgK0R44kBQIFko1GV7uxoK8VDiA+km0udbgfnhHXr/
-         RkeDlhocBY6QUmpT1K2/N4tSSrLVBVnmPYn8cjp3YF0AmBbasaoN+7a8WavfRCHicE
-         s/6kmJFs/HEWLRKI9nXdCVnroxb8xlVa1JnZXnQ8=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22LHdhDQ023551
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Mar 2022 12:39:43 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 21
- Mar 2022 12:39:09 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 21 Mar 2022 12:39:09 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22LHd86g002139;
-        Mon, 21 Mar 2022 12:39:08 -0500
-Date:   Mon, 21 Mar 2022 23:09:08 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>
-Subject: Re: [PATCH v2 4/8] mtd: spi-nor: core: Introduce method for RDID op
-Message-ID: <20220321173908.tcqx3ygo6qd62ukg@ti.com>
-References: <20220228111712.111737-1-tudor.ambarus@microchip.com>
- <20220228111712.111737-5-tudor.ambarus@microchip.com>
- <20220321122149.dvqyml4riqkr3gqi@ti.com>
- <32b3449a-66db-3ed1-da96-47e124800500@microchip.com>
+        Mon, 21 Mar 2022 13:41:37 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02868FAE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:40:11 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id b67so12222404qkc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6W2sIVaPd1wN+ZQSZ4o9j1nJ91W2fIHQV8YHK4mslGI=;
+        b=othMTu8DE+iag13P8/3A86+7Cc/DHfdnjpWo/byQ5ZUfFCsKml6d/b3+j7enHM3E4T
+         p+KQDmhtptyFrPuooWSYmYPJhZWIkHdGt+4vDWYH8iYYuao36WWrhVCMkScMLZUcTZup
+         pbxMXwiUoDBFmduoGs8/S8k0tsoBfeYNIRC0GZYKyyNpLf6jW7ygE9Q4oqBC51xdfcFk
+         7ttNl5wra931kZmVavvxQVP/9NCHWg77ijwCiHKLw+zmH2XDabD4PX37zubDr18d1FXu
+         LkskplWtgjBIz3OnXb1aT9cH4qssg21daGzI4dNto8OQ0PN0SvwCPVBwRyAb6Xlo3qN2
+         FbyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6W2sIVaPd1wN+ZQSZ4o9j1nJ91W2fIHQV8YHK4mslGI=;
+        b=ATcfVIhg/3rGCy4HxTgErcjux/o86E6dz15Q9qV6ZdQ+6jaeLlrEpj4dzc+k9KR2bf
+         k1cx9Ef1PTQZaTD5DllZfWeXCLJfwWm4sz9JRNjqhQJRoxKa415YJLbbqy+99sJ7WpQk
+         KuOOL4mWIePJe5M5jAstYM9lL8BHquFjUVkFfLQeGNJs2c72sllcYSvgddIWPKeX++Hh
+         ahd3+NGiFy4Eh2WLfDEM8upyZBSC5pgKQ2Fk2s4Z+HbUHf7Sd2ERQ8xa8qZZAsnVJhx/
+         2AZpbK/MyarJyzaBPq7xxRWTp/UIwsGWm34LPFIUsYMwlZ9NSPpjDVs6aMBU2ei2swzE
+         Cvgg==
+X-Gm-Message-State: AOAM533A9VD5rEdhXTQIj3w0nIe7BQQ2mVESqFMmXybwvHf6HxdocMvE
+        CiRwOrQlYsarKFh31mVol9Pufh+4Ec/dIYv4vWeglA==
+X-Google-Smtp-Source: ABdhPJzAfOtHcF9CqanODzAbHAfQeaYZMAZcZ9hv0xTWt4ZcE9sSN4BkC8am1z8h+EdgxGiCPhpJswcEmaek2cu2UjE=
+X-Received: by 2002:a05:620a:2453:b0:67d:9539:495c with SMTP id
+ h19-20020a05620a245300b0067d9539495cmr13674139qkn.30.1647884410564; Mon, 21
+ Mar 2022 10:40:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <32b3449a-66db-3ed1-da96-47e124800500@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <1647269217-14064-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1647269217-14064-2-git-send-email-quic_vpolimer@quicinc.com>
+ <CAE-0n51vfoOK_6B0yAvws32MtLQ1SvBPoQPHBFE14TLzZFUZaw@mail.gmail.com> <BN0PR02MB8173BBD2C02F5DFBEBE94E40E4169@BN0PR02MB8173.namprd02.prod.outlook.com>
+In-Reply-To: <BN0PR02MB8173BBD2C02F5DFBEBE94E40E4169@BN0PR02MB8173.namprd02.prod.outlook.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 21 Mar 2022 20:39:59 +0300
+Message-ID: <CAA8EJpribc722wN2jR5sQEkX6FiaE_SdBk8B5HPamCXZWhEd7A@mail.gmail.com>
+Subject: Re: [PATCH v6 1/5] drm/msm/disp/dpu1: set mdp clk to the maximum
+ frequency in opp table during probe
+To:     Vinod Polimera <vpolimer@qti.qualcomm.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        quic_vpolimer <quic_vpolimer@quicinc.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,142 +77,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/22 01:18PM, Tudor.Ambarus@microchip.com wrote:
-> On 3/21/22 14:21, Pratyush Yadav wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On 28/02/22 01:17PM, Tudor Ambarus wrote:
-> >> RDID is used in the core to auto detect the flash, but also by some
-> >> manufacturer drivers that contain flashes that support Octal DTR mode,
-> >> so that they can read the flash ID after the switch to Octal DTR was made
-> >> to test if the switch was successful. Introduce a core method for RDID op
-> >> to avoid code duplication.
-> >>
-> >> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> >> ---
-> >>  drivers/mtd/spi-nor/core.c | 58 ++++++++++++++++++++++++++------------
-> >>  drivers/mtd/spi-nor/core.h |  9 ++++++
-> >>  2 files changed, 49 insertions(+), 18 deletions(-)
-> >>
-> >> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> >> index b1d6fa65417d..281e3d25f74c 100644
-> >> --- a/drivers/mtd/spi-nor/core.c
-> >> +++ b/drivers/mtd/spi-nor/core.c
-> >> @@ -369,6 +369,41 @@ int spi_nor_write_disable(struct spi_nor *nor)
-> >>       return ret;
-> >>  }
-> >>
-> >> +/**
-> >> + * spi_nor_read_id() - Read the JEDEC ID.
-> >> + * @nor:     pointer to 'struct spi_nor'.
-> >> + * @naddr:   number of address bytes to send. Can be zero if the operation
-> >> + *           does not need to send an address.
-> >> + * @ndummy:  number of dummy bytes to send after an opcode or address. Can
-> >> + *           be zero if the operation does not require dummy bytes.
-> >> + * @id:              pointer to a DMA-able buffer where the value of the JEDEC ID
-> >> + *           will be written.
-> >> + * @reg_proto:       the SPI protocol for register operation.
-> >> + *
-> >> + * Return: 0 on success, -errno otherwise.
-> >> + */
-> >> +int spi_nor_read_id(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
-> >> +                 enum spi_nor_protocol reg_proto)
-> > 
-> > Nitpick: Could just call it 'proto'.
-> 
-> sure, will update
-> 
-> > 
-> >> +{
-> >> +     int ret;
-> >> +
-> >> +     if (nor->spimem) {
-> >> +             struct spi_mem_op op =
-> >> +                     SPI_NOR_READID_OP(naddr, ndummy, id, SPI_NOR_MAX_ID_LEN);
-> >> +
-> >> +             spi_nor_spimem_setup_op(nor, &op, reg_proto);
-> >> +             ret = spi_mem_exec_op(nor->spimem, &op);
-> >> +     } else {
-> >> +             ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
-> >> +                                                 SPI_NOR_MAX_ID_LEN);
-> >> +     }
-> >> +
-> >> +     if (ret)
-> >> +             dev_dbg(nor->dev, "error %d reading JEDEC ID\n", ret);
-> > 
-> > I think this message should be in spi_nor_detect(). Let octal DTR enable
-> 
-> As of now every SPI NOR operation that return an error also prints a dbg
-> message. I like this because it offers a smaller granularity on the error
-> cause.
+On Mon, 21 Mar 2022 at 19:21, Vinod Polimera <vpolimer@qti.qualcomm.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Stephen Boyd <swboyd@chromium.org>
+> > Sent: Friday, March 18, 2022 2:41 AM
+> > To: quic_vpolimer <quic_vpolimer@quicinc.com>;
+> > devicetree@vger.kernel.org; dri-devel@lists.freedesktop.org;
+> > freedreno@lists.freedesktop.org; linux-arm-msm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org; robdclark@gmail.com;
+> > dmitry.baryshkov@linaro.org; dianders@chromium.org; quic_kalyant
+> > <quic_kalyant@quicinc.com>
+> > Subject: Re: [PATCH v6 1/5] drm/msm/disp/dpu1: set mdp clk to the
+> > maximum frequency in opp table during probe
+> >
+> > WARNING: This email originated from outside of Qualcomm. Please be wary
+> > of any links or attachments, and do not enable macros.
+> >
+> > Quoting Vinod Polimera (2022-03-14 07:46:53)
+> > > use max clock during probe/bind sequence from the opp table.
+> > > The clock will be scaled down when framework sends an update.
+> >
+> > Capitalize 'use'.
+> >
+> > Why is it important to use max frequency during probe/bind? Does not
+> > setting the clk rate during probe mean that we'll never use the max
+> > rate? Does it speed things up during probe?
+>
+> We need to vote mdp clock during probe/bind so that rails are not set at undetermined state as pointed out by Dmitry.
+> Since we dont know what will be the rate set in boot loader, it would be ideal to vote at max frequency.
+> There could be a firmware display programmed in bootloader and we want to transition it to kernel without underflowing.
 
-Yes, but I think this message would be misleading. If someone sees 
-"error reading JEDEC ID", they would think flash detection itself has 
-failed, not that we failed to switch to Octal DTR mode.
+This should be expressed in the commit message.
 
-> 
-> > methods print their own, more specific error messages.
-> 
-> How about duplicating the error in the octal dtr enable methods if you
-> feel it is worth it?
-
-They should at the very least explain that reading ID failed _after_ 
-attempting to switch to Octal DTR. But I think it would just be simpler 
-if this is not printed here and the caller has the flexibility to 
-explain the error.
-
-> 
-> > 
-> >> +
-> >> +     return ret;
-> >> +}
-> >> +
-> >>  /**
-> >>   * spi_nor_read_sr() - Read the Status Register.
-> >>   * @nor:     pointer to 'struct spi_nor'.
-> >> @@ -1649,28 +1684,15 @@ static const struct flash_info *spi_nor_match_id(struct spi_nor *nor,
-> >>       return NULL;
-> >>  }
-> >>
-> >> -static const struct flash_info *spi_nor_read_id(struct spi_nor *nor)
-> >> +static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
-> >>  {
-> >>       const struct flash_info *info;
-> >>       u8 *id = nor->bouncebuf;
-> >>       int ret;
-> >>
-> >> -     if (nor->spimem) {
-> >> -             struct spi_mem_op op =
-> >> -                     SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
-> >> -                                SPI_MEM_OP_NO_ADDR,
-> >> -                                SPI_MEM_OP_NO_DUMMY,
-> >> -                                SPI_MEM_OP_DATA_IN(SPI_NOR_MAX_ID_LEN, id, 1));
-> >> -
-> >> -             ret = spi_mem_exec_op(nor->spimem, &op);
-> >> -     } else {
-> >> -             ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
-> >> -                                                 SPI_NOR_MAX_ID_LEN);
-> >> -     }
-> >> -     if (ret) {
-> >> -             dev_dbg(nor->dev, "error %d reading JEDEC ID\n", ret);
-> >> +     ret = spi_nor_read_id(nor, 0, 0, id, nor->reg_proto);
-> > 
-> > Hmm, I wonder if it is better to explicitly use SNOR_PROTO_1_1_1 so
-> > clearly signify that this is intended to use 1S-1S-1S only. What do you
-> > think?
-> 
-> I would keep it as it is for now, because it offers flexibility.
-> If we ever gonna determine the protocol at runtime this will come in handy
-> because it will work without touching the code. JESD216 suggests an algorithm
-> that tries to determine the mode depending on the SFDP signature.
-
-I was thinking exactly this but came to the opposite conclusion ;-). I 
-think this would imply that other protocols can be used to detect the 
-flash which is not true.
-
-But I have no strong preferences here. Either is fine by me.
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+With best wishes
+Dmitry

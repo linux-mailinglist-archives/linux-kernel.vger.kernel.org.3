@@ -2,181 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75344E2EBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 336C34E2EBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351573AbiCUREs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S1351583AbiCURFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348597AbiCUREp (ORCPT
+        with ESMTP id S1351578AbiCURFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:04:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EB403A180
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647882195;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EclEiKMklxZUr7OGPO5BRpXOeKGJirkfk6SbSBfmrPU=;
-        b=ckFUX1/aWpU1ZWTltlfuM2KA05ZIc4C67hlDCq3xWf5OQhL3hACxxCXlqgi7d+wrfX8TtP
-        terwApsnBWwOzGgauaVaVHEJEU30XSEcounaGf9Nz5OxW9kdAunxFqTzm8VNBWpPblYv9J
-        z/Ybnfe5pDOWTrK9zr68P2evm2hgRNw=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-CwNoBoZOO8C1h2wfGitm8Q-1; Mon, 21 Mar 2022 13:03:14 -0400
-X-MC-Unique: CwNoBoZOO8C1h2wfGitm8Q-1
-Received: by mail-wr1-f69.google.com with SMTP id j67-20020adf9149000000b00203e6b7d151so2575704wrj.13
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:03:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=EclEiKMklxZUr7OGPO5BRpXOeKGJirkfk6SbSBfmrPU=;
-        b=xP1eYNRTxnVAATRb8ixgmjKBCyrUYinPtLPLJoJDRu2C9EC76DdXxULaH99gUHV/B7
-         C87ikvRr4/jS7qO8lVvOcM1050TPLD5sOmpF89BKut4SeGvXKFjNwybKl+ZhkpIWP/40
-         +5HpFvWd+fr1dPM6Cd/tX8tVipnFmD/oaWNATkIGycKLrVAzuAx0hiE4iRR4Pgq5Q/Jl
-         t/RoqrwYA2C7X3Tagt7n58WCV1P5UHqoCi1SLe8e+Y2/7y9xwDOdXtT/QQyq8mbgso0F
-         4zvRV/TDpa6JBfVGi64DRoF8z7AIv01Cxmm1a0hR28jDk70xciuBxnozKl0yYB8yCDJr
-         9fQw==
-X-Gm-Message-State: AOAM531svHbDxdUPoXZ8l/as8zdB+Kx/pupybygbjmxFH+h16+WzHTQz
-        tUlz9yUhjfxz7Bcj2g6T/HWl1Kfqr6+nD8FRu9ScxkTcXWXnLAtXpgWvprXAJZS49MBusGo5ptv
-        a2wjjfxH30nV5sl/5698dCaG4
-X-Received: by 2002:a5d:64cf:0:b0:203:7b90:d5e2 with SMTP id f15-20020a5d64cf000000b002037b90d5e2mr19538782wri.558.1647882193076;
-        Mon, 21 Mar 2022 10:03:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyvImHlCG5CDP1kC2Dto2EW/ZdzaohTgUrRPghuZ9mun31abRhLo+76ZEmCAWgycKVrY5zGvQ==
-X-Received: by 2002:a5d:64cf:0:b0:203:7b90:d5e2 with SMTP id f15-20020a5d64cf000000b002037b90d5e2mr19538745wri.558.1647882192728;
-        Mon, 21 Mar 2022 10:03:12 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:4900:849b:f76e:5e1f:ff95? (p200300cbc7044900849bf76e5e1fff95.dip0.t-ipconnect.de. [2003:cb:c704:4900:849b:f76e:5e1f:ff95])
-        by smtp.gmail.com with ESMTPSA id r13-20020adfbb0d000000b00203e0efdd3bsm13613365wrg.107.2022.03.21.10.03.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 10:03:12 -0700 (PDT)
-Message-ID: <74cd5e99-a52b-610c-89aa-a5fac43cdab6@redhat.com>
-Date:   Mon, 21 Mar 2022 18:03:11 +0100
+        Mon, 21 Mar 2022 13:05:43 -0400
+Received: from srv6.fidu.org (srv6.fidu.org [IPv6:2a01:4f8:231:de0::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840A75E161;
+        Mon, 21 Mar 2022 10:04:14 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id A8C8FC800A5;
+        Mon, 21 Mar 2022 18:04:12 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id Faj0GJC_EOo9; Mon, 21 Mar 2022 18:04:12 +0100 (CET)
+Received: from [192.168.178.30] (host-212-18-30-247.customer.m-online.net [212.18.30.247])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPSA id 117F5C800A4;
+        Mon, 21 Mar 2022 18:04:12 +0100 (CET)
+Message-ID: <0ffb17e1-cb79-75fc-826f-e490bae79381@tuxedocomputers.com>
+Date:   Mon, 21 Mar 2022 18:04:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/3] Input/i8042: Merge quirk tables
 Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Hugh Dickins <hughd@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        William Kucharski <william.kucharski@oracle.com>
-References: <Yjh+EuacJURShtJI@casper.infradead.org>
- <9ae0a8e4-41b7-04f4-4435-17cbba9850fb@redhat.com>
- <d5676cf0-30f9-8497-95a8-332767dede46@redhat.com>
- <YjiaSbUBLJP+9Jtt@casper.infradead.org>
- <9ece8da5-ae0c-fe1c-ff2f-961f641c00fe@redhat.com>
- <YjittBLCYpft5ALc@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [GIT PULL] Folio patches for 5.18 (MM part)
-In-Reply-To: <YjittBLCYpft5ALc@casper.infradead.org>
+To:     Hans de Goede <hdegoede@redhat.com>, dmitry.torokhov@gmail.com,
+        tiwai@suse.de, mpdesouza@suse.com, arnd@arndb.de, samuel@cavoj.net,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220308170523.783284-1-wse@tuxedocomputers.com>
+ <20220308170523.783284-2-wse@tuxedocomputers.com>
+ <e84d98e6-541d-8cc7-626e-f92d76230528@redhat.com>
+ <e8fa9e33-f8af-d449-b357-6c6f310329ad@tuxedocomputers.com>
+ <69901d1c-4e48-0bcc-7716-f1d88953968d@redhat.com>
+From:   Werner Sembach <wse@tuxedocomputers.com>
+In-Reply-To: <69901d1c-4e48-0bcc-7716-f1d88953968d@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.22 17:54, Matthew Wilcox wrote:
-> On Mon, Mar 21, 2022 at 04:38:22PM +0100, David Hildenbrand wrote:
->> On 21.03.22 16:31, Matthew Wilcox wrote:
->>>>>> Alex Sierra (10):
->>>>>>       mm: add zone device coherent type memory support
->>>>>>       mm: add device coherent vma selection for memory migration
->>>>>>       mm/gup: fail get_user_pages for LONGTERM dev coherent type
->>>>>>       drm/amdkfd: add SPM support for SVM
->>>>>>       drm/amdkfd: coherent type as sys mem on migration to ram
->>>>>>       lib: test_hmm add ioctl to get zone device type
->>>>>>       lib: test_hmm add module param for zone device type
->>>>>>       lib: add support for device coherent type in test_hmm
->>>>>>       tools: update hmm-test to support device coherent type
->>>>>>       tools: update test_hmm script to support SP config
->>>>>>
->>>>>> Alistair Popple (2):
->>>>>>       mm: remove the vma check in migrate_vma_setup()
->>>>>>       mm/gup: migrate device coherent pages when pinning instead of failing
->>>>>
->>>>> ... I thought DEVICE_COHERENT is still under development?
->>>>>
+
+Am 21.03.22 um 15:51 schrieb Hans de Goede:
+> Hi,
+>
+> On 3/21/22 15:25, Werner Sembach wrote:
+>> Am 09.03.22 um 18:16 schrieb Hans de Goede:
+>>> Hi,
+>>>
+>>> On 3/8/22 18:05, Werner Sembach wrote:
+>>>> Merge i8042 quirk tables to reduce code duplication for devices that need
+>>>> more than one quirk.
 >>>>
->>>> After verifying that I'm not daydreaming [1] (and realizing that I had
->>>> review comments to some of these patches that have not been resolved
->>>> yet) and also not spotting these change in your changelog above, I
->>>> assume this stuff was included by mistake. NACK to merging
->>>> DEVICE_COHERENT at this point.
+>>>> Also align quirkable options with command line parameters and make vendor
+>>>> wide quirks per device overwriteable on a per device basis.
 >>>>
->>>> [1] https://lkml.kernel.org/r/20220310172633.9151-1-alex.sierra@amd.com
+>>>> Some duplication on the ASUS devices is required to mirror the exact
+>>>> behaviour of the previous code.
+>>> Can you explain this a bit more ?
+>> Yes, see next patch
+> Next patch as in:
+>
+> https://lore.kernel.org/linux-input/20220308170523.783284-3-wse@tuxedocomputers.com/
+>
+> ? Or do you mean the next version of this patch-set ?
+Next patch as in next revision of this patch set. Sorry for causing confusion.
+>
+>
 >>>
->>> That patch ("split vm_normal_pages for LRU and non-LRU handling") isn't
->>> included in this pull request.  The patches I have were those sent by
->>> Christoph here:
 >>>
->>> https://lore.kernel.org/linux-mm/20220210072828.2930359-1-hch@lst.de/
+>>>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+>>>> Cc: stable@vger.kernel.org
+>>>> ---
+>>>>  drivers/input/serio/i8042-x86ia64io.h | 1125 ++++++++++++++-----------
+>>>>  1 file changed, 640 insertions(+), 485 deletions(-)
+>>>>
+>>>> diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
+>>>> index 148a7c5fd0e2..689b9ee3e742 100644
+>>>> --- a/drivers/input/serio/i8042-x86ia64io.h
+>>>> +++ b/drivers/input/serio/i8042-x86ia64io.h
+>>>> @@ -67,675 +67,821 @@ static inline void i8042_write_command(int val)
+>>>>  
+>>>>  #include <linux/dmi.h>
+>>>>  
+>>>> -static const struct dmi_system_id __initconst i8042_dmi_noloop_table[] = {
+>>>> +#define SERIO_QUIRK_NOKBD		BIT(0)
+>>>> +#define SERIO_QUIRK_NOAUX		BIT(1)
+>>>> +#define SERIO_QUIRK_NOMUX		BIT(2)
+>>>> +#define SERIO_QUIRK_FORCEMUX		BIT(3)
+>>>> +#define SERIO_QUIRK_UNLOCK		BIT(4)
+>>>> +#define SERIO_QUIRK_PROBE_DEFER		BIT(5)
+>>>> +#define SERIO_QUIRK_RESET_ALWAYS	BIT(6)
+>>>> +#define SERIO_QUIRK_RESET_NEVER		BIT(7)
+>>>> +#define SERIO_QUIRK_DIECT		BIT(8)
+>>>> +#define SERIO_QUIRK_DUMBKBD		BIT(9)
+>>>> +#define SERIO_QUIRK_NOLOOP		BIT(10)
+>>>> +#define SERIO_QUIRK_NOTIMEOUT		BIT(11)
+>>>> +#define SERIO_QUIRK_KBDRESET		BIT(12)
+>>>> +#define SERIO_QUIRK_DRITEK		BIT(13)
+>>>> +#define SERIO_QUIRK_NOPNP		BIT(14)
+>>>> +
+>>>> +/* Quirk table for different mainboards. Options similar or identical to i8042
+>>>> + * module parameters.
+>>>> + * ORDERING IS IMPORTANT! The first match will be apllied and the rest ignored.
+>>>> + * This allows entries to overwrite vendor wide quirks on a per device basis.
+>>>> + * Where this is irrelevant, entries are sorted case sensitive by DMI_SYS_VENDOR
+>>>> + * and/or DMI_BOARD_VENDOR to make it easier to avoid dublicate entries.
+>>>> + */
+>>>> +static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+>>> <snip>
 >>>
->>> I can drop any patches that you have objections to, but I don't see
->>> any objections from you to any patches in that list.
+>>>> @@ -1167,11 +1307,6 @@ static int __init i8042_pnp_init(void)
+>>>>  	bool pnp_data_busted = false;
+>>>>  	int err;
+>>>>  
+>>>> -#ifdef CONFIG_X86
+>>>> -	if (dmi_check_system(i8042_dmi_nopnp_table))
+>>>> -		i8042_nopnp = true;
+>>>> -#endif
+>>>> -
+>>>>  	if (i8042_nopnp) {
+>>>>  		pr_info("PNP detection disabled\n");
+>>>>  		return 0;
+>>> have you checked that i8042_platform_init() *always*
+>>> gets called before i8042_pnp_init()?
+>> As far as i can tell i8042_pnp_init() is only ever called inside i8042_platform_init() so moving this check from pnp
+>> init to platform init should be no problem.
+> Ok.
+>
+>>> Maybe just add something like this:
+>>>
+>>> #ifdef CONFIG_X86
+>>> static void __init i8042_check_quirks(void)
+>>> {
+>>> 	const struct dmi_system_id *device_quirk_info;
+>>> 	uintptr_t quirks;
+>>>
+>>> 	device_quirk_info = dmi_first_match(i8042_dmi_quirk_table);
+>>> 	if (!device_quirk_info)
+>>> 		return;
+>>>
+>>> 	quirks = (uintptr_t)device_quirk_info->driver_data;
+>>>
+>>> 	if (i8042_reset == I8042_RESET_DEFAULT) {
+>>> 		if (quirks & SERIO_QUIRK_RESET)
+>>> 			i8042_reset = I8042_RESET_ALWAYS;
+>>> 		if (quirks & SERIO_QUIRK_NOSELFTEST)
+>>> 			i8042_reset = I8042_RESET_NEVER;
+>>> 	}
+>>>
+>>> 	/* Do more quirk checks */
+>>> }
+>>> #else
+>>> static inline void i8042_check_quirks(void) {}
+>>> #endif
+>>>
+>>> (above the declaration of i8042_pnp_init())
+>>>
+>>> And call i8042_check_quirks() in both
+>>> i8042_platform_init() and i8042_platform_init() ?
+>>>
+>>> This also abstracts some of the CONFIG_X86
+>>> ifdef-ery out of the other functions.
+>>>
+>>>
+>>>> @@ -1277,6 +1412,9 @@ static inline void i8042_pnp_exit(void) { }
+>>>>  
+>>>>  static int __init i8042_platform_init(void)
+>>>>  {
+>>>> +	bool i8042_reset_always_quirk = false;
+>>>> +	bool i8042_reset_never_quirk = false;
+>>> I'm not a fan of these 2 helper variables, you can do this directly,
+>>> see above.
+>>>
+>>>> +	const struct dmi_system_id *device_quirk_info;
+>>> All 3 these variables will trigger unused variable
+>>> settings when compiling without CONFIG_X86 set. Note
+>>> introducing the i8042_check_quirks() helper as I suggest
+>>> above avoids this without needing more #ifdef-ery.
+>> Fixed by moving it to its own function as you suggested.
 >>
->> Well, I was discussing with the original authors about how to proceed.
+>> My original reasoning for the helper variables was that i didn't want to move the i8042_reset evaluation, but then did
+>> it anyways in the next patch after checking that pnp_init doesn't use the variable.
+> Ok.
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+>>>>  	int retval;
+>>>>  
+>>>>  #ifdef CONFIG_X86
+>>>> @@ -1297,6 +1435,44 @@ static int __init i8042_platform_init(void)
+>>>>  	i8042_kbd_irq = I8042_MAP_IRQ(1);
+>>>>  	i8042_aux_irq = I8042_MAP_IRQ(12);
+>>>>  
+>>>> +#ifdef CONFIG_X86
+>>>> +	device_quirk_info = dmi_first_match(i8042_dmi_quirk_table);
+>>>> +	if (device_quirk_info) {
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_NOKBD)
+>>>> +			i8042_nokbd = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_NOAUX)
+>>>> +			i8042_noaux = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_NOMUX)
+>>>> +			i8042_nomux = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_FORCEMUX)
+>>>> +			i8042_nomux = false;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_UNLOCK)
+>>>> +			i8042_unlock = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_PROBE_DEFER)
+>>>> +			i8042_probe_defer = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_RESET_ALWAYS)
+>>>> +			i8042_reset_always_quirk = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_RESET_NEVER)
+>>>> +			i8042_reset_never_quirk = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_DIECT)
+>>>> +			i8042_direct = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_DUMBKBD)
+>>>> +			i8042_dumbkbd = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_NOLOOP)
+>>>> +			i8042_noloop = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_NOTIMEOUT)
+>>>> +			i8042_notimeout = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_KBDRESET)
+>>>> +			i8042_kbdreset = true;
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_DRITEK)
+>>>> +			i8042_dritek = true;
+>>>> +#ifdef CONFIG_PNP
+>>>> +		if ((uintptr_t)device_quirk_info->driver_data & SERIO_QUIRK_NOPNP)
+>>>> +			i8042_nopnp = true;
+>>>> +#endif
+>>>> +	}
+>>>> +#endif
+>>>> +
+>>>>  	retval = i8042_pnp_init();
+>>>>  	if (retval)
+>>>>  		return retval;
+>>>> @@ -1308,34 +1484,13 @@ static int __init i8042_platform_init(void)
+>>>>  #ifdef CONFIG_X86
+>>>>  	/* Honor module parameter when value is not default */
+>>>>  	if (i8042_reset == I8042_RESET_DEFAULT) {
+>>>> -		if (dmi_check_system(i8042_dmi_reset_table))
+>>>> +		if (i8042_reset_always_quirk)
+>>>>  			i8042_reset = I8042_RESET_ALWAYS;
+>>>>  
+>>>> -		if (dmi_check_system(i8042_dmi_noselftest_table))
+>>>> +		if (i8042_reset_never_quirk)
+>>>>  			i8042_reset = I8042_RESET_NEVER;
+>>>>  	}
+>>>>  
+>>>> -	if (dmi_check_system(i8042_dmi_noloop_table))
+>>>> -		i8042_noloop = true;
+>>>> -
+>>>> -	if (dmi_check_system(i8042_dmi_nomux_table))
+>>>> -		i8042_nomux = true;
+>>>> -
+>>>> -	if (dmi_check_system(i8042_dmi_forcemux_table))
+>>>> -		i8042_nomux = false;
+>>>> -
+>>>> -	if (dmi_check_system(i8042_dmi_notimeout_table))
+>>>> -		i8042_notimeout = true;
+>>>> -
+>>>> -	if (dmi_check_system(i8042_dmi_dritek_table))
+>>>> -		i8042_dritek = true;
+>>>> -
+>>>> -	if (dmi_check_system(i8042_dmi_kbdreset_table))
+>>>> -		i8042_kbdreset = true;
+>>>> -
+>>>> -	if (dmi_check_system(i8042_dmi_probe_defer_table))
+>>>> -		i8042_probe_defer = true;
+>>>> -
+>>>>  	/*
+>>>>  	 * A20 was already enabled during early kernel init. But some buggy
+>>>>  	 * BIOSes (in MSI Laptops) require A20 to be enabled using 8042 to
+>>> Regards,
+>>>
+>>> Hans
+>>>
+>>>
+>> Regards,
 >>
->> Quoting from:
+>> Werner
 >>
->> https://lkml.kernel.org/r/1747447c-202d-9195-9d44-57f299be48c4@amd.com
->>
->> "
->> Yes, it should be part of that series. Alex developed it on top of the
->> series for now. But I think eventually it would need to be spliced into it.
-> 
-> It wasn't clear to me that you were talking about this series.
-> 
->> Patch1 would need to go somewhere before the other DEVICE_COHERENT
->> patches (with minor modifications). Patch 2 could be squashed into
->> "tools: add hmm gup test for long term pinned device pages" or go next
->> to it. Patch 3 doesn't have a direct dependency on device-coherent
->> pages. It only mentions them in comments.
->> "
->>
->> I can understand that Christoph included a rebased version in his rework
->> (to keep it working in -next and/or help the original authors?), but to
->> me that doesn't mean that the feature is finally done.
-> 
-> OK, so you object to the last 12 patches from Alistair and Alex?  And
-> you're OK with the preceeding 15 patches from Christoph?  I can put
-> together a pull request for that combination.
-> 
-
-Yes, I'm only concerned about the new feature (DEVICE_COHERENT),
-essentially what is still under discussion in [1] and [2]
-  [PATCH v6 00/10] Add MEMORY_DEVICE_COHERENT for coherent device memory
-  mapping
-  [PATCH v2 0/3] Migrate device coherent pages on get_user_pages()
-
-I think these should be the patches from Alex and Alistair. I'm happy to
-see Christoph's ZONE_DEVICE refocunt changes upstream ;)
-
-[1] https://lkml.kernel.org/r/20220201154901.7921-1-alex.sierra@amd.com
-[2]
-https://lkml.kernel.org/r/cover.0d3c846b1c6c294e055ff7ebe221fab9964c1436.1644207242.git-series.apopple@nvidia.com
--- 
-Thanks,
-
-David / dhildenb
-

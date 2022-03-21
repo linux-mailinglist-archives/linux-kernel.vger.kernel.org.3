@@ -2,103 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B109C4E1F7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 05:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883514E1F7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 05:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244592AbiCUESp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 00:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S245145AbiCUEXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 00:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239857AbiCUESo (ORCPT
+        with ESMTP id S239857AbiCUEXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 00:18:44 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E988F11434B;
-        Sun, 20 Mar 2022 21:17:18 -0700 (PDT)
-X-UUID: cad40b1b56664c3eb99f8211ddf061ee-20220321
-X-UUID: cad40b1b56664c3eb99f8211ddf061ee-20220321
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 132751500; Mon, 21 Mar 2022 12:17:15 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 21 Mar 2022 12:17:15 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 21 Mar 2022 12:17:15 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <robh@kernel.org>
-CC:     <adrian.hunter@intel.com>, <andrew@aj.id.au>,
-        <andriy.shevchenko@linux.intel.com>,
-        <angelogioacchino.delregno@collabora.com>, <axe.yang@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <dev@lynxeye.de>,
-        <devicetree@vger.kernel.org>, <ebiggers@google.com>,
-        <huyue2@yulong.com>, <kwmad.kim@samsung.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-mmc@vger.kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <satyat@google.com>, <swboyd@chromium.org>,
-        <tiantao6@hisilicon.com>, <ulf.hansson@linaro.org>,
-        <wsa+renesas@sang-engineering.com>,
-        <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [RESEND v7 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and pinctrls properties
-Date:   Mon, 21 Mar 2022 12:17:15 +0800
-Message-ID: <20220321041715.8424-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <1647742413.962309.2990518.nullmailer@robh.at.kernel.org>
-References: <1647742413.962309.2990518.nullmailer@robh.at.kernel.org>
+        Mon, 21 Mar 2022 00:23:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E01713D52
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 21:21:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647836504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QvyzeWrMLOcevBTswhqEkb8FAM3gEDuF897VWUnNA6w=;
+        b=iQbPOfZ+VVEQG4wJZ9eFQ0puQCP3ucX8D3VzUk7Q3B6fAD/i1lW62aw3PRgrtyH0OTFhK7
+        brXkbQqe4qNnNiV4ndOPDSKl2g/LjgJM5ZP7qha1gJUeTn0iI/k5MTTOq+hnLA15CNNyvp
+        xqcdRX+49MOfaZN4xfzslILrGHueCFE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-6DaFMsC2NbKClrPooPyz2w-1; Mon, 21 Mar 2022 00:21:38 -0400
+X-MC-Unique: 6DaFMsC2NbKClrPooPyz2w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2A891066566;
+        Mon, 21 Mar 2022 04:21:37 +0000 (UTC)
+Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EBC06141DC29;
+        Mon, 21 Mar 2022 04:21:36 +0000 (UTC)
+Date:   Mon, 21 Mar 2022 12:21:33 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/3] kexec: clean up arch_kexec_kernel_verify_sig
+Message-ID: <Yjf9TbBo5ysjM7Nl@MiWiFi-R3L-srv>
+References: <20220318094101.274950-1-coxu@redhat.com>
+ <20220318094101.274950-2-coxu@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318094101.274950-2-coxu@redhat.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On 03/18/22 at 05:40pm, Coiby Xu wrote:
+> Commit 9ec4ecef0af7 ("kexec_file,x86,powerpc: factor out kexec_file_ops
+> functions") allows implementing the arch-specific implementation of kernel
+> image verification in kexec_file_ops->verify_sig. Currently, there is no
 
->My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
->yamllint warnings/errors:
->
->dtschema/dtc warnings/errors:
->/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/mtk-sd.yaml: properties:pinctrl-names: {'description': 'Should at least contain default and state_uhs. To support SDIO in-band wakeup, dat1 pin will be switched between GPIO mode and SDIO DAT1 mode, state_eint and state_dat1 are mandatory in this scenarios.', 'minItems': 2, 'maxItems': 4, 'items': [{'const': 'default'}, {'const': 'state_uhs'}, {'const': 'state_eint'}, {'const': 'state_dat1'}]} should not be valid under {'required': ['maxItems']}
->	hint: "maxItems" is not needed with an "items" list
->	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
->/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/mtk-sd.yaml: ignoring, error in schema: properties: pinctrl-names
->Documentation/devicetree/bindings/mmc/mtk-sd.example.dt.yaml:0:0: /example-0/mmc@11230000: failed to match any schema with compatible: ['mediatek,mt8173-mmc']
->
->doc reference errors (make refcheckdocs):
->
->See https://patchwork.ozlabs.org/patch/1606491
->
->This check can fail if there are any dependencies. The base for a patch
->series is generally the most recent rc1.
->
->If you already ran 'make dt_binding_check' and didn't see the above
->error(s), then make sure 'yamllint' is installed and dt-schema is up to
->date:
->
->pip3 install dtschema --upgrade
->
->Please check and re-submit.
+Looking back at the old commit 9ec4ecef0af7, it mistakenly added a
+generic arch_kexec_kernel_verify_sig() which is marked as __weak,
+and expects any architecture will add a arch specified version if needed. 
+In fact those arch specified difference has been removed by wrapping
+them into each architecture's own struct kexec_file_ops methods. Means
+in the commit, the generic arch_kexec_kernel_verify_sig() is unnecessary
+at all.
 
-Thanks for this check.
+Now, you clean up that uncessary function with code change.
 
-When I use 'make DT_CHECKER_FLAGS=-m dt_binding_check' on this patch,
-the warning message does show up but the 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-does not exit, so I am not able to tell if any error occurs by the exit value.
+I think description telling above analysis could be clearer. 
 
-Would you mind sharing the way your bot capture this error? (Do I have to grep 'error'
-from the log or is there any warning-as-error flags?)
+> arch-specific implementation of arch_kexec_kernel_verify_sig. So clean it
+> up.
+> 
+> Suggested-by: Eric W. Biederman <ebiederm@xmission.com>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> ---
+>  include/linux/kexec.h |  4 ----
+>  kernel/kexec_file.c   | 34 +++++++++++++---------------------
+>  2 files changed, 13 insertions(+), 25 deletions(-)
+> 
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 0c994ae37729..755fed183224 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -196,10 +196,6 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>  				 const Elf_Shdr *relsec,
+>  				 const Elf_Shdr *symtab);
+>  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> -#ifdef CONFIG_KEXEC_SIG
+> -int arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+> -				 unsigned long buf_len);
+> -#endif
+>  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>  
+>  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 8347fc158d2b..3720435807eb 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -89,25 +89,6 @@ int __weak arch_kimage_file_post_load_cleanup(struct kimage *image)
+>  	return kexec_image_post_load_cleanup_default(image);
+>  }
+>  
+> -#ifdef CONFIG_KEXEC_SIG
+> -static int kexec_image_verify_sig_default(struct kimage *image, void *buf,
+> -					  unsigned long buf_len)
+> -{
+> -	if (!image->fops || !image->fops->verify_sig) {
+> -		pr_debug("kernel loader does not support signature verification.\n");
+> -		return -EKEYREJECTED;
+> -	}
+> -
+> -	return image->fops->verify_sig(buf, buf_len);
+> -}
+> -
+> -int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+> -					unsigned long buf_len)
+> -{
+> -	return kexec_image_verify_sig_default(image, buf, buf_len);
+> -}
+> -#endif
+> -
+>  /*
+>   * arch_kexec_apply_relocations_add - apply relocations of type RELA
+>   * @pi:		Purgatory to be relocated.
+> @@ -184,13 +165,24 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+>  }
+>  
+>  #ifdef CONFIG_KEXEC_SIG
+> +static int kexec_image_verify_sig(struct kimage *image, void *buf,
+> +		unsigned long buf_len)
+> +{
+> +	if (!image->fops || !image->fops->verify_sig) {
+> +		pr_debug("kernel loader does not support signature verification.\n");
+> +		return -EKEYREJECTED;
+> +	}
+> +
+> +	return image->fops->verify_sig(buf, buf_len);
+> +}
+> +
+>  static int
+>  kimage_validate_signature(struct kimage *image)
+>  {
+>  	int ret;
+>  
+> -	ret = arch_kexec_kernel_verify_sig(image, image->kernel_buf,
+> -					   image->kernel_buf_len);
+> +	ret = kexec_image_verify_sig(image, image->kernel_buf,
+> +			image->kernel_buf_len);
+>  	if (ret) {
+>  
+>  		if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE)) {
+> -- 
+> 2.34.1
+> 
 
-Thanks,
-Miles

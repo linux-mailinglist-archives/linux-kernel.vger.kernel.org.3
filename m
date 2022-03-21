@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F95E4E2F09
+	by mail.lfdr.de (Postfix) with ESMTP id C07A14E2F0A
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351850AbiCUR2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
+        id S1351864AbiCUR2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237671AbiCUR2o (ORCPT
+        with ESMTP id S1347382AbiCUR2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:28:44 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54B918463C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:27:17 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d5so6552988lfj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:27:17 -0700 (PDT)
+        Mon, 21 Mar 2022 13:28:45 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACD8184B67;
+        Mon, 21 Mar 2022 10:27:19 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso16969817pjb.0;
+        Mon, 21 Mar 2022 10:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gjlWSgDYCbI3M0HlDfM+vRBeQFnG0r9FgmdbuPnrgqQ=;
-        b=aVvx3FDfpN2WfwpjlyxpAb5Fwswxlfi/0LDhMZdxBX1bJ4kqbt7F9JwUIf4M2YGi+A
-         +Wnc0mnQTa5PhVU9lA/PnyGKLEnXuH89p3UwUuSoj5zvNzipTCWhi8oYbyzjlZ+P7/bf
-         WHY1ioGhcshdkuE1zdzW3HsrHW2LidtQE0aXvGDbh9W0ZBivvNYFkFRbyEaLU1p/PkrR
-         YqnjBZe9cWSaE1WsqyzmpquwIAyvR0Y5piDM1O9Gs37X6CSORvAEy7NhCpZsbLwgAXl1
-         a9vy260QEtWazFypwCq7q+O33a7nkhm4ra1V5zP6OaPHpRUvrjGs7Xj0WY6U0JMggzFP
-         kVVA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=Lu4ciz8L4V39hpIzjAidyBeE83VuDrlnh+7vkkMs+Yo=;
+        b=Y27Pf18eS/UcO0f2cpaNCIi7t8/+h36UrY8w+NGuIq0UIC9NagnNBBhX8ZXj6iwFY1
+         Z85yy+E4KAu44raainughwtzoKsfl2k6/7U/xdrcvIPuA/Y4VzGTMGQArK9asuTgekGM
+         Kz/5FkvfJ8l+JQAzj7beKNkoAJe26e6rIbdODipopQYtens2wCECMyfK4mPHWzN7B2CX
+         HsRuYHoj1df5dY2E/NrgoTvwDnOmrApXTdDZIU2S2V6LfgWEKAHu+koLxen+O1eASr8u
+         AJlfBRZA8AOM8agLsrBAIeadgrr3WP5EfsXqCPfV6st7Q5OjdZOsH0p2y4iUYdjgqr0m
+         xXgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gjlWSgDYCbI3M0HlDfM+vRBeQFnG0r9FgmdbuPnrgqQ=;
-        b=O5CgBVkV7DnMser6+gsg5TYRmNtuiXmlqgD1RtG9EPtcUWRO3MNUg2zTxpkH2GjlX8
-         ztbQ4pVd+oCi7b1mCGdjIKx/1V1Xm5OmmBJXO5hQGqJVXlVz4oq4jM5Ep6QMG+w2TOSk
-         tppfWuEN9DaBM/BvBxbj0NE7jj39M+I17ZP3P1J1gThg9dEnk+hyjCWDI/LieZZhvJE3
-         JbKjlPmzImOIoovyJQ2TEujIynvKUWvjddc4OD+7gPTdpuE60+NtnVfWR11VfzaRwm21
-         65PfQUMeFJdx3Ms6B1r6HaY//Vh6aKJCO1El/22u3qAHnIwFrghXpl7i4MacKkEO4MRV
-         nYzg==
-X-Gm-Message-State: AOAM530BEFZeSADYuZA1PzUuMlZKR+1SZOjig2reTed213IhQ5NO/gbz
-        rM1/CjSdIcB1hxJbRTgjWprLHPQPwcYhhdwQSM2S5Q==
-X-Google-Smtp-Source: ABdhPJy4rZuO7vtP7+8b/Mnd+Mllf2Xr2hwf83Dz2QNhS8sDUM8I/x5BFB4QCsYPBIVI5J7rSfIgJWZP/6BJmllE6vs=
-X-Received: by 2002:a05:6512:3341:b0:433:b033:bd22 with SMTP id
- y1-20020a056512334100b00433b033bd22mr15309077lfd.190.1647883634694; Mon, 21
- Mar 2022 10:27:14 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=Lu4ciz8L4V39hpIzjAidyBeE83VuDrlnh+7vkkMs+Yo=;
+        b=P6n5+u0KO31fFnHNMEbBRjJoBD97p6kp+z6DY0heFxzoOKA7FG5JXAyxjDV1nNeNle
+         l1V4T89DVhtoj1f2TTp/nENZuH+Pwe+BPz143XITtpKRd0jp2Qz210vnwmGeKWPCWQTA
+         q7GWJMjXxVqGwps0xFdnTnQpVTbgcAjzFUqUnxT9Jnh0ekXLvcdcj7TR2B0Hox1Q8Zjo
+         DvDXftFy3X6R/n5GECdwsHJ1CZaQweaRZND9eiNwGO2cFCXg4YiuH7LhwtbQ+gWOuK4g
+         BGDnwh68JJNpsYF+YonHnE3ny7yAE4Mg5u4oeEYm1qOhfIIwo82KZGUMsjop6rYfLcln
+         PUfA==
+X-Gm-Message-State: AOAM5302GO7rYljvYKT1h/VasX4mTfYKsprK+PcyOfmXvZ5lxMvZpX+d
+        2KsiY9uljpE2aGPlBahiL28=
+X-Google-Smtp-Source: ABdhPJyw7C0YN+YSFSwMBG5CwUugxSG2+T8aL84h7uoGczRFi+kDUQooYZkQxSHlpE/6s44w7/6DwQ==
+X-Received: by 2002:a17:90a:1b6e:b0:1c6:168e:11e7 with SMTP id q101-20020a17090a1b6e00b001c6168e11e7mr197376pjq.136.1647883638931;
+        Mon, 21 Mar 2022 10:27:18 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 16-20020a17090a199000b001bf4b1b268bsm73422pji.44.2022.03.21.10.27.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 10:27:18 -0700 (PDT)
+Message-ID: <59ddb0f0-a48a-ff7b-eea3-560c1e9120a1@gmail.com>
+Date:   Mon, 21 Mar 2022 10:27:15 -0700
 MIME-Version: 1.0
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
- <20220320093750.159991-3-ammarfaizi2@gnuweeb.org> <20220320191619.GA27312@1wt.eu>
- <9e69af8e-74c1-f35b-98dd-e2a77153ea09@gnuweeb.org>
-In-Reply-To: <9e69af8e-74c1-f35b-98dd-e2a77153ea09@gnuweeb.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 21 Mar 2022 10:27:03 -0700
-Message-ID: <CAKwvOdmfscdQQvmDmVqX3RvH55_EnqHokC+G9jSjckYqLG-psw@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 2/6] tools/nolibc: Make the entry point not weak
- for clang
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Nugraha <richiisei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 4.9 00/16] 4.9.308-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220321133216.648316863@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220321133216.648316863@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,50 +78,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 4:38 AM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
->
-> On 3/21/22 2:16 AM, Willy Tarreau wrote:
-> > Hi Ammar,
-> >
-> > I've had a look at this one.
-> >
-> > On Sun, Mar 20, 2022 at 04:37:46PM +0700, Ammar Faizi wrote:
-> >> Budilig with clang yields the following error:
-> >    ^^^^^^^
-> > BTW please fix the typo in the final commit message.
-> >
-> >> @@ -183,7 +183,9 @@ struct sys_stat_struct {
-> >>
-> >>   /* startup code */
-> >>   asm(".section .text\n"
-> >> +#if !defined(__clang__)
-> >>       ".weak _start\n"
-> >> +#endif
-> >>       ".global _start\n"
-> >>       "_start:\n"
-> >
-> > So it seems that I was wrong and that .weak is an alternate for .global
-> > and not a complement. As such, instead of adding all these #if, please
-> > simply remove all .global.
-
-See also:
-commit 4d6ffa27b8e5 ("x86/lib: Change .weak to SYM_FUNC_START_WEAK for
-arch/x86/lib/mem*_64.S")
-commit ec9d78070de9 ("arm64: Change .weak to SYM_FUNC_START_WEAK_PI
-for arch/arm64/lib/mem*.S")
-
-Also, please note in the commit message that this diagnostic comes
-from using clang as the assembler (which is clang's default behavior
-unless -fno-integrated-as is passed).
-
->
-> Will fix this in the next version.
->
-> --
-> Ammar Faizi
->
 
 
+On 3/21/2022 6:51 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.308 release.
+> There are 16 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.308-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Thanks,
-~Nick Desaulniers
+Florian
+

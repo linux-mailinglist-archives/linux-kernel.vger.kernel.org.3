@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7AD4E29F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0D04E29C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350005AbiCUOJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S1350716AbiCUOKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349003AbiCUODO (ORCPT
+        with ESMTP id S1348919AbiCUODK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:03:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA6D1760CA;
-        Mon, 21 Mar 2022 07:00:10 -0700 (PDT)
+        Mon, 21 Mar 2022 10:03:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBC33FBF9;
+        Mon, 21 Mar 2022 06:59:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EBE611CF;
-        Mon, 21 Mar 2022 14:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5635AC340E8;
-        Mon, 21 Mar 2022 14:00:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C9CEB816E3;
+        Mon, 21 Mar 2022 13:59:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04C6C340E8;
+        Mon, 21 Mar 2022 13:59:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871209;
-        bh=HNI1dha5r5/aV4+8R/lLlKF+uCGDZHZnncogH9gUa+A=;
+        s=korg; t=1647871196;
+        bh=jbi74pirWmIJryKTHRKMdiKZsXWXK+wLnFhWCEPB59E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wPPv1QRqufrtvt5zZvYeg/Jr8thbcbgn72VnjEnC83hFYf6zZJbIADzjGXqmSkK20
-         VCxOGAGqVvywhDAP6yN0cRodKJHI3btroVztgdkHZAyspEu4o2MhtE+qUJ8ndX/ONJ
-         72eozrnFfFg2ZEPcNlVQED7xpIZGSOrpbaOfUn9k=
+        b=I8PQMFrJCjHMeX8Am5DIMHgAgrKLK2FUe4gglGJoRLLgsUsUFO5/Nv7mhi2Kbx/LN
+         JGv7UDpfKRl69FQClN87Bsc9m8fEjxBWJwS8YTXYEVs1rgglB+rdgEfaNOuFh2fPyB
+         s9pkm2Ma85ww/0memxmdl53LDCDsLlVdhLlGRjJ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 13/32] iavf: Fix double free in iavf_reset_task
+Subject: [PATCH 5.10 19/30] arm64: fix clang warning about TRAMP_VALIAS
 Date:   Mon, 21 Mar 2022 14:52:49 +0100
-Message-Id: <20220321133220.947912427@linuxfoundation.org>
+Message-Id: <20220321133220.201591833@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
-References: <20220321133220.559554263@linuxfoundation.org>
+In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
+References: <20220321133219.643490199@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,53 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 16b2dd8cdf6f4e0597c34899de74b4d012b78188 ]
+[ Upstream commit 7f34b43e07cb512b28543fdcb9f35d1fbfda9ebc ]
 
-Fix double free possibility in iavf_disable_vf, as crit_lock is
-freed in caller, iavf_reset_task. Add kernel-doc for iavf_disable_vf.
-Remove mutex_unlock in iavf_disable_vf.
-Without this patch there is double free scenario, when calling
-iavf_reset_task.
+The newly introduced TRAMP_VALIAS definition causes a build warning
+with clang-14:
 
-Fixes: e85ff9c631e1 ("iavf: Fix deadlock in iavf_reset_task")
-Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
+                return (char *)TRAMP_VALIAS + SZ_2K * slot;
+
+Change the addition to something clang does not complain about.
+
+Fixes: bd09128d16fa ("arm64: Add percpu vectors for EL1")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: James Morse <james.morse@arm.com>
+Link: https://lore.kernel.org/r/20220316183833.1563139-1-arnd@kernel.org
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/vectors.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 711e8c7f62de..7fca9dd8dcf6 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2133,6 +2133,13 @@ static void iavf_watchdog_task(struct work_struct *work)
- 		queue_delayed_work(iavf_wq, &adapter->watchdog_task, HZ * 2);
- }
+diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
+index f64613a96d53..bc9a2145f419 100644
+--- a/arch/arm64/include/asm/vectors.h
++++ b/arch/arm64/include/asm/vectors.h
+@@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
+ DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
  
-+/**
-+ * iavf_disable_vf - disable VF
-+ * @adapter: board private structure
-+ *
-+ * Set communication failed flag and free all resources.
-+ * NOTE: This function is expected to be called with crit_lock being held.
-+ **/
- static void iavf_disable_vf(struct iavf_adapter *adapter)
+ #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
+-#define TRAMP_VALIAS	0
++#define TRAMP_VALIAS	0ul
+ #endif
+ 
+ static inline const char *
+ arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
  {
- 	struct iavf_mac_filter *f, *ftmp;
-@@ -2187,7 +2194,6 @@ static void iavf_disable_vf(struct iavf_adapter *adapter)
- 	memset(adapter->vf_res, 0, IAVF_VIRTCHNL_VF_RESOURCE_SIZE);
- 	iavf_shutdown_adminq(&adapter->hw);
- 	adapter->netdev->flags &= ~IFF_UP;
--	mutex_unlock(&adapter->crit_lock);
- 	adapter->flags &= ~IAVF_FLAG_RESET_PENDING;
- 	iavf_change_state(adapter, __IAVF_DOWN);
- 	wake_up(&adapter->down_waitqueue);
+ 	if (arm64_kernel_unmapped_at_el0())
+-		return (char *)TRAMP_VALIAS + SZ_2K * slot;
++		return (char *)(TRAMP_VALIAS + SZ_2K * slot);
+ 
+ 	WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
+ 
 -- 
 2.34.1
 

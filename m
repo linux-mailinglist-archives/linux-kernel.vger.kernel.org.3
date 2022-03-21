@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FF14E29F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E294E2A69
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350424AbiCUOJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        id S1349420AbiCUOR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349256AbiCUODe (ORCPT
+        with ESMTP id S1349022AbiCUOGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:03:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D8917A5AA;
-        Mon, 21 Mar 2022 07:00:42 -0700 (PDT)
+        Mon, 21 Mar 2022 10:06:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7028D3D1F8;
+        Mon, 21 Mar 2022 07:01:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25D74B816DA;
-        Mon, 21 Mar 2022 14:00:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CD68C340E8;
-        Mon, 21 Mar 2022 14:00:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 089DAB816DC;
+        Mon, 21 Mar 2022 14:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469D4C340F3;
+        Mon, 21 Mar 2022 14:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871239;
-        bh=ncPSTEN0x7hwAkl3eUC7dRPKqq34LJzaKAZd0CZZJX4=;
+        s=korg; t=1647871311;
+        bh=ZLNrGtC/1yYtaIEPvn2dN37TDlIhPm1AaMyY5zLM+o8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qir9TBe/AakRHXJ24Q5earUGLvz24Ho7Qs5nTKFpKHCKp4vnM5ta296Vm0RNpZcvs
-         qmZ8xsHOqZHVhguipNBgLZ7oUyP9tzwEUvLl1eTzHO56gEkdW/baWzCM0MjiLLaIek
-         jwXZPlYF1TarFPZAksGk+20hcL4tMpBGahzTIFK4=
+        b=w8gY10Zv3XvQyqm2Nt5OAfbKkFgLHV2J5YO3Iotiy2u/isKlm7tgLPqy9zeWe47+z
+         MAyMKDwDDXiU1yKDNENy1+mwsmOd6SgN/UtVjolaUGeNEDO5v/2lA/jQP4qMjXb6Fo
+         X4VsgHpCIBQrBnQoEUgKO35jyy4OSQfjQPcYBEqg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Marek Vasut <marex@denx.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 23/32] net: mscc: ocelot: fix backwards compatibility with single-chain tc-flower offload
+Subject: [PATCH 5.16 17/37] drm/imx: parallel-display: Remove bus flags check in imx_pd_bridge_atomic_check()
 Date:   Mon, 21 Mar 2022 14:52:59 +0100
-Message-Id: <20220321133221.234099431@linuxfoundation.org>
+Message-Id: <20220321133221.794975962@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
-References: <20220321133220.559554263@linuxfoundation.org>
+In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
+References: <20220321133221.290173884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +68,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 
-[ Upstream commit 8e0341aefcc9133f3f48683873284b169581315b ]
+[ Upstream commit 6061806a863e8b65b109eb06a280041cc7525442 ]
 
-ACL rules can be offloaded to VCAP IS2 either through chain 0, or, since
-the blamed commit, through a chain index whose number encodes a specific
-PAG (Policy Action Group) and lookup number.
+If display timings were read from the devicetree using
+of_get_display_timing() and pixelclk-active is defined
+there, the flag DISPLAY_FLAGS_SYNC_POSEDGE/NEGEDGE is
+automatically generated. Through the function
+drm_bus_flags_from_videomode() e.g. called in the
+panel-simple driver this flag got into the bus flags,
+but then in imx_pd_bridge_atomic_check() the bus flag
+check failed and will not initialize the display. The
+original commit fe141cedc433 does not explain why this
+check was introduced. So remove the bus flags check,
+because it stops the initialization of the display with
+valid bus flags.
 
-The chain number is translated through ocelot_chain_to_pag() into a PAG,
-and through ocelot_chain_to_lookup() into a lookup number.
-
-The problem with the blamed commit is that the above 2 functions don't
-have special treatment for chain 0. So ocelot_chain_to_pag(0) returns
-filter->pag = 224, which is in fact -32, but the "pag" field is an u8.
-
-So we end up programming the hardware with VCAP IS2 entries having a PAG
-of 224. But the way in which the PAG works is that it defines a subset
-of VCAP IS2 filters which should match on a packet. The default PAG is
-0, and previous VCAP IS1 rules (which we offload using 'goto') can
-modify it. So basically, we are installing filters with a PAG on which
-no packet will ever match. This is the hardware equivalent of adding
-filters to a chain which has no 'goto' to it.
-
-Restore the previous functionality by making ACL filters offloaded to
-chain 0 go to PAG 0 and lookup number 0. The choice of PAG is clearly
-correct, but the choice of lookup number isn't "as before" (which was to
-leave the lookup a "don't care"). However, lookup 0 should be fine,
-since even though there are ACL actions (policers) which have a
-requirement to be used in a specific lookup, that lookup is 0.
-
-Fixes: 226e9cd82a96 ("net: mscc: ocelot: only install TCAM entries into a specific lookup and PAG")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/r/20220316192117.2568261-1-vladimir.oltean@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: fe141cedc433 ("drm/imx: pd: Use bus format/flags provided by the bridge when available")
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Boris Brezillon <boris.brezillon@collabora.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-arm-kernel@lists.infradead.org
+To: dri-devel@lists.freedesktop.org
+Tested-by: Max Krummenacher <max.krummenacher@toradex.com>
+Acked-by: Boris Brezillon <boris.brezillon@collabora.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220201113643.4638-1-cniedermaier@dh-electronics.com
+Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mscc/ocelot_flower.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/imx/parallel-display.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/mscc/ocelot_flower.c b/drivers/net/ethernet/mscc/ocelot_flower.c
-index afa062c5f82d..f1323af99b0c 100644
---- a/drivers/net/ethernet/mscc/ocelot_flower.c
-+++ b/drivers/net/ethernet/mscc/ocelot_flower.c
-@@ -54,6 +54,12 @@ static int ocelot_chain_to_block(int chain, bool ingress)
-  */
- static int ocelot_chain_to_lookup(int chain)
- {
-+	/* Backwards compatibility with older, single-chain tc-flower
-+	 * offload support in Ocelot
-+	 */
-+	if (chain == 0)
-+		return 0;
-+
- 	return (chain / VCAP_LOOKUP) % 10;
- }
+diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
+index a8aba0141ce7..06cb1a59b9bc 100644
+--- a/drivers/gpu/drm/imx/parallel-display.c
++++ b/drivers/gpu/drm/imx/parallel-display.c
+@@ -217,14 +217,6 @@ static int imx_pd_bridge_atomic_check(struct drm_bridge *bridge,
+ 	if (!imx_pd_format_supported(bus_fmt))
+ 		return -EINVAL;
  
-@@ -62,7 +68,15 @@ static int ocelot_chain_to_lookup(int chain)
-  */
- static int ocelot_chain_to_pag(int chain)
- {
--	int lookup = ocelot_chain_to_lookup(chain);
-+	int lookup;
-+
-+	/* Backwards compatibility with older, single-chain tc-flower
-+	 * offload support in Ocelot
-+	 */
-+	if (chain == 0)
-+		return 0;
-+
-+	lookup = ocelot_chain_to_lookup(chain);
- 
- 	/* calculate PAG value as chain index relative to the first PAG */
- 	return chain - VCAP_IS2_CHAIN(lookup, 0);
+-	if (bus_flags &
+-	    ~(DRM_BUS_FLAG_DE_LOW | DRM_BUS_FLAG_DE_HIGH |
+-	      DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE |
+-	      DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)) {
+-		dev_warn(imxpd->dev, "invalid bus_flags (%x)\n", bus_flags);
+-		return -EINVAL;
+-	}
+-
+ 	bridge_state->output_bus_cfg.flags = bus_flags;
+ 	bridge_state->input_bus_cfg.flags = bus_flags;
+ 	imx_crtc_state->bus_flags = bus_flags;
 -- 
 2.34.1
 

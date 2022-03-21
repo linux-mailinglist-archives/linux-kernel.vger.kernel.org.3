@@ -2,89 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289354E30C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D600B4E30CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352712AbiCUT3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 15:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
+        id S1352667AbiCUTcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 15:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352683AbiCUT3n (ORCPT
+        with ESMTP id S239313AbiCUTb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 15:29:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AC9B44;
-        Mon, 21 Mar 2022 12:28:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 964B1B819C2;
-        Mon, 21 Mar 2022 19:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F53C340E8;
-        Mon, 21 Mar 2022 19:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647890890;
-        bh=2DJ2Ykmemas9uAd8SgNaZWXrO/X4eO+ejMl3uWdMH7M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fwnb1bdv9WmgMmHlUZAq7N+pYfeOf8Vf1ZMuH9E+LkaMXbYXekCBVrWevSq+mGE6Z
-         aPmXdfDFeyCDlpB4iMpFIkjIlg7RgLouMpEjTMVMAH8R3HgoWss6/CXRApfZsASQ//
-         gkfsDDyCxgLmMik4ljcMDYT8T/SDG55wjdOZDP5Wku6fxBXHmj40p/HdmEqSv/8B53
-         /323YNGreXoK17wUsFqE9HkpVFLp7QK3NKzvKrIFa2iK5fpbyb00ASrMkF4e1rlC5G
-         rm8aUmZqys2mUXJVwtGMnxC/G52rndWfV6TuC/wtEmh0MkwxEgXfPx9EgyjfRHfChL
-         a3uzxx/FxH1tQ==
-Date:   Mon, 21 Mar 2022 12:28:08 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Veerasenareddy Burru <vburru@marvell.com>
-Cc:     <davem@davemloft.net>, <corbet@lwn.net>, <netdev@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        Satananda Burla <sburla@marvell.com>
-Subject: Re: [net-next PATCH v4 1/7] octeon_ep: Add driver framework and
- device initialization
-Message-ID: <20220321122808.427d7872@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220321055337.4488-2-vburru@marvell.com>
-References: <20220321055337.4488-1-vburru@marvell.com>
-        <20220321055337.4488-2-vburru@marvell.com>
+        Mon, 21 Mar 2022 15:31:58 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118EE4C7AF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647891032; x=1679427032;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0TYd6gMz9/UO7N5xndFl7v9dU6morw42GxdVe8VECUw=;
+  b=cxL5bvAy78y94HsTkNLqUKoF+Gh6ifpkeofwN5O4VTzIaIUYtL9p2d0/
+   BUwN9ZuICWjQwmbe72FqFfqPYkSE9YzvxeJiWuwOSwTcWOJk3acoTUGKX
+   p3kPFYo2Z43mAnskbcsOzJj1Uyhf1wIkkdAwEAitlrAA3H76QD7rokLWE
+   a6l51YVbAE7rdScBwTaJ8nVKW90rJRfXGThrpSIUI80+kCSbSwp4lMo5c
+   WO21q1wQE4oo4sdMvobBY7iwlZCSug6HFOBHZoTjgk6fzxeTFJQDTWpgt
+   oRAuptf6F+14y0b5LCllsJyZ5Mz/bKlkVCIvwzNDOH48cA3G+fEVFQmPh
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282461877"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="282461877"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 12:30:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="716616948"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 21 Mar 2022 12:30:29 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWNjZ-000I5t-1Y; Mon, 21 Mar 2022 19:30:29 +0000
+Date:   Tue, 22 Mar 2022 03:30:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: kernel/time/hrtimer.c:276:20: warning: unused function
+ 'is_migration_base'
+Message-ID: <202203220318.lF1LF4vW-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 20 Mar 2022 22:53:31 -0700 Veerasenareddy Burru wrote:
-> Add driver framework and device setup and initialization for Octeon
-> PCI Endpoint NIC.
-> 
-> Add implementation to load module, initilaize, register network device,
-> cleanup and unload module.
-> 
-> Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
-> Signed-off-by: Abhijit Ayarekar <aayarekar@marvell.com>
-> Signed-off-by: Satananda Burla <sburla@marvell.com>
+Hi Marcelo,
 
-Clang says:
+FYI, the error/warning still remains.
 
-drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_mbox.c:51:19: warning: unused function 'octep_ctrl_mbox_circq_inc' [-Wunused-function]
-static inline u32 octep_ctrl_mbox_circq_inc(u32 index, u32 mask)
-                  ^
-drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_mbox.c:56:19: warning: unused function 'octep_ctrl_mbox_circq_space' [-Wunused-function]
-static inline u32 octep_ctrl_mbox_circq_space(u32 pi, u32 ci, u32 mask)
-                  ^
-drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_mbox.c:61:19: warning: unused function 'octep_ctrl_mbox_circq_depth' [-Wunused-function]
-static inline u32 octep_ctrl_mbox_circq_depth(u32 pi, u32 ci, u32 mask)
-                  ^
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f443e374ae131c168a065ea1748feac6b2e76613
+commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
+date:   7 months ago
+config: mips-randconfig-r022-20220319 (https://download.01.org/0day-ci/archive/20220322/202203220318.lF1LF4vW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iommu/ fs/ kernel/time/
 
-Please don't use static inlines in C files, static is enough for 
-the compiler to do a reasonable job.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Please fix and repost in 2 weeks we're currently in the merge window
-so networking trees are not accepting new drivers.
+All warnings (new ones prefixed by >>):
 
-Thanks.
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:1830:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void) { }
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-85e9b2687a/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
+
+
+vim +/is_migration_base +276 kernel/time/hrtimer.c
+
+c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
+
+:::::: The code at line 276 was first introduced by commit
+:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
+
+:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

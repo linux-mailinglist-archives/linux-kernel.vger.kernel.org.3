@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E234E2258
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AC84E225E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345366AbiCUImk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 04:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S1345374AbiCUIo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 04:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345358AbiCUImj (ORCPT
+        with ESMTP id S243773AbiCUIo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:42:39 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A29A1441
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:41:09 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id yy13so28346261ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:41:09 -0700 (PDT)
+        Mon, 21 Mar 2022 04:44:56 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D978CD95;
+        Mon, 21 Mar 2022 01:43:31 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id h13so16944932ede.5;
+        Mon, 21 Mar 2022 01:43:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=T1TcUGL3Yr9pbZUIUf4urzAZZW+X+3X2guZDA8VSc8A=;
-        b=doxelnDMfXbB5iuIRK4hrnslkGX8BBTvxzAkb0q9tNJFa34Y3jqcWcfHpVibc9cfiJ
-         Lk3kupzHwyhzogtJ8ePTN72QZOettBzmKjpDw16KezAFhFYdc3WfdA8OP1ZDFtBcuSMZ
-         I2a8XVg4a9eRpDMpV128X0Nq+arrNVtHg4/Ys=
+        bh=Vc0R1Y6JS6B1hLN+ckj3xVfEy5Qs/cD0pZ/QidEGHTI=;
+        b=ijeogGnXfrmhhtDBoTsX8HuPqwl8EUCg2SEdYUzxrQfpXmbo+FJy0FTii1SWVanejo
+         DezuSf8kz0LaaVUJYnj520KAi8T2+/5LhW8ptyA8j1Yh+9xsTemB4UzOpEidHccTl0H8
+         miax7F/8atD3aQL9oGYG+IqL/G7sxntmG6At8UNoepOhTT1X4yZmtaSBpvjtBsniIdkQ
+         Hpvdmtv4+h+r4uX5LoHIlxWgGk7WXniwDytE5e2dBKvBS9yrofzmPxBkDQAJ2z2+vryL
+         whsV36KYYrbdXF0SI90s/PdYfjog4S+jG9qYB3icQE5vsrdNlmMRghOgfd4vpmapCDhX
+         cMyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=T1TcUGL3Yr9pbZUIUf4urzAZZW+X+3X2guZDA8VSc8A=;
-        b=NCoyg1N76lrtJd4P41eyST+WcNrV5F0QPJ+j7O/wsrtjoDl5tJ5j3sxKOT2891hWr2
-         xXt1uzlmodrV3O0M1a+D+LpFnOSX7yhoO9UfBH9QxuUgJkw2rxq1JlIip+esLABjiBXB
-         rehcAPPu/xrJ7f5m/FyOl/ySZZ+OpTGAecelUT4ZLZwzTyeMYFIO9LMkKxdT1Zzc+juW
-         kpoDDNMSWOWlfxHj/6V74XagZ//lmI6TK2UE8LumkAtWJib3OrI8AhYOr/SoZTfDBdPX
-         47L0YZtpE93q91b7E0aj5EsC7WlNZ3PfwGqaw+r7Z64jVWibIOxfpitgK8nj1GW5gLib
-         4SXg==
-X-Gm-Message-State: AOAM532NRC5yyiKpKWmmhtHjLdR9vVJskxC3poGFhX1lrla5QNSSwQLr
-        eS/5lYeyfaDxqXDcIULz1o3DZbg++wMTbWBoAZAw3A==
-X-Google-Smtp-Source: ABdhPJy2lA62e8/yWwcG+98dZn7ToA9GNqRjH90QGk+nz/876LNhUqYCp2yX6ujlNu1Aaufl2Zr0QeGUdZqMPBJUzHQ=
-X-Received: by 2002:a17:906:280b:b0:6ce:f3c7:688f with SMTP id
- r11-20020a170906280b00b006cef3c7688fmr19757403ejc.468.1647852068103; Mon, 21
- Mar 2022 01:41:08 -0700 (PDT)
+        bh=Vc0R1Y6JS6B1hLN+ckj3xVfEy5Qs/cD0pZ/QidEGHTI=;
+        b=4fuN3Bt2EhTwMwtiSuBDiOlxbKt96oe0QS0XPByrnx7n6hDoY7DoyvtSi0fuMe/GTw
+         OgyRYsm9sS6wUdqdRJCmciIub8iVBr4b54mg4uDq6nhQDJCr2quCdR4rPEyTQ2ydhnwv
+         zUqJc2JgUeFJlprr1npSF73V0ibhdBOOJFNvf59xXGo9+CBcrKnjhtVtPVGawa4aFuux
+         Mrb/g+//phRGQ922C4ziRUp/Sf0VgLz+t0Qc5a8Th3D2INdAsLXteBMSqgTBAeaT1Kcc
+         pEtXvoZWF0JTNUOn6h5IAI5aslYx2wPyDmqETGlBnC71U2i/mXMRwrvECGGcRQsuCzMN
+         dzYQ==
+X-Gm-Message-State: AOAM53212i4GXmK9gr8KSNCDFjrVq1ItX1ppaSEfthkbQ0WZN5j2WDsu
+        a1K7gRklZkjl5t9/RA2giF1M1MoCqQvHa3OqL/MilSPBCOM=
+X-Google-Smtp-Source: ABdhPJxT971muxfFm8Ki8jh+Sc9Hsirwi6LKUYRRKequQo0JzJALUsM8RvG3beGXqJMOpJ0WUUHZ2+Y2l/hoPga9YN0=
+X-Received: by 2002:a05:6402:d7:b0:413:673:ba2f with SMTP id
+ i23-20020a05640200d700b004130673ba2fmr21659318edu.29.1647852210010; Mon, 21
+ Mar 2022 01:43:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220318171405.2728855-1-cmllamas@google.com> <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
- <Yjfd1+k83U+meSbi@google.com>
-In-Reply-To: <Yjfd1+k83U+meSbi@google.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 21 Mar 2022 09:40:56 +0100
-Message-ID: <CAJfpeguoFHgG9Jm3hVqWnta3DB6toPRp_vD3EK74y90Aj3w+8Q@mail.gmail.com>
-Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alessio Balsini <balsini@android.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel-team <kernel-team@android.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220319181023.8090-1-jagathjog1996@gmail.com> <20220319181023.8090-5-jagathjog1996@gmail.com>
+In-Reply-To: <20220319181023.8090-5-jagathjog1996@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 21 Mar 2022 10:42:19 +0200
+Message-ID: <CAHp75Ve9cJ9+UuimxD33h-2oDz0ESx640=-0rPbjnk0AVvFfeQ@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] iio: accel: bma400: Add separate channel for step counter
+To:     Jagath Jog J <jagathjog1996@gmail.com>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 03:07, Carlos Llamas <cmllamas@google.com> wrote:
+On Sat, Mar 19, 2022 at 8:10 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
 >
-> On Fri, Mar 18, 2022 at 08:24:55PM +0100, Miklos Szeredi wrote:
-> > On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
-> > >
-> > > Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
-> > > <linux/types.h> instead of 'uint32_t' and similar. This patch changes
-> > > all the definitions in this header to use the correct type. Previous
-> > > discussion of this topic can be found here:
-> > >
-> > >   https://lkml.org/lkml/2019/6/5/18
-> >
-> > This is effectively a revert of these two commits:
-> >
-> > 4c82456eeb4d ("fuse: fix type definitions in uapi header")
-> > 7e98d53086d1 ("Synchronize fuse header with one used in library")
-> >
-> > And so we've gone full circle and back to having to modify the header
-> > to be usable in the cross platform library...
-> >
-> > And also made lots of churn for what reason exactly?
->
-> There are currently only two uapi headers making use of C99 types and
-> one is <linux/fuse.h>. This approach results in different typedefs being
-> selected when compiling for userspace vs the kernel.
+> Added channel for step counter which can be enable or disable
+> through the sysfs interface.
 
-Why is this a problem if the size of the resulting types is the same?
+...
 
-Thanks,
-Miklos
+> +       u32 steps_raw;
+
+I would expect this to be u8 ...[3].
+
+...
+
+> +                       ret = regmap_bulk_read(data->regmap, BMA400_STEP_CNT0_REG,
+> +                                              &steps_raw, 3 * sizeof(u8));
+
+sizeof(&steps_raw);
+
+...
+
+> +                       *val = steps_raw & 0x00FFFFFF;
+
+And here it seems to be be24_to_cpu() like Jonathan mentioned,
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

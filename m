@@ -2,64 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B604A4E30A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F404E30A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352528AbiCUTTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 15:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S1352532AbiCUTTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 15:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244103AbiCUTTU (ORCPT
+        with ESMTP id S1352538AbiCUTTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 15:19:20 -0400
+        Mon, 21 Mar 2022 15:19:30 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1E181717B9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:17:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7ABF925EB2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647890273;
+        s=mimecast20190719; t=1647890280;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XlKbYMmB2V2B0XUMeBVfBmPCy5ACYdvUSKWTFsCVzFE=;
-        b=KjG4PIromjI22I/t/UNN2197HeHfE9QSXwlDExXmHkO9en/U0jXU2VfihjYoFaxDn4c/vZ
-        i/poIEBHFfjXK+aEKZ+9AEHBn8tCiV0ItSwnm+StvmzyhjHmbSvi5yIwmZAJ0ieLn70nhl
-        sQ7cGL42j31SI7t6SgcPXIvnjqlgnfk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uvhBps1UXtsrc+nGVheIq+OQ/K59QvLDMVnB+No/i7I=;
+        b=AgQD6PVigewuCHQjOGkGKUwEvAlhsLyITdgn8tMyS5Nu3YCwZuIKVc28qPdEKAFpuucDPG
+        x55EqpoUcyR1YakkHtCYveJI7JvxIjZRHvIwuRnoo7Pcwaowh8npENBaS/5MMCYwtAvxcX
+        5659j+cP7yN7qrG5jBnUTDZA9kfxDPI=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-402-A6DZj92uPDm8AgVtjq9qww-1; Mon, 21 Mar 2022 15:17:49 -0400
-X-MC-Unique: A6DZj92uPDm8AgVtjq9qww-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44FFA3C01C04;
-        Mon, 21 Mar 2022 19:17:49 +0000 (UTC)
-Received: from ceranb.redhat.com (unknown [10.40.192.65])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 88EF91121319;
-        Mon, 21 Mar 2022 19:17:32 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     poros@redhat.com, mschmidt@redhat.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Akeem G Abodunrin <akeem.g.abodunrin@intel.com>,
-        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net] ice: Fix broken IFF_ALLMULTI handling
-Date:   Mon, 21 Mar 2022 20:17:31 +0100
-Message-Id: <20220321191731.2596414-1-ivecera@redhat.com>
+ us-mta-132-AyFv3_pKOx2CvG1jURIx6Q-1; Mon, 21 Mar 2022 15:17:59 -0400
+X-MC-Unique: AyFv3_pKOx2CvG1jURIx6Q-1
+Received: by mail-qt1-f200.google.com with SMTP id t19-20020ac86a13000000b002e1fd2c4ce5so6844095qtr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:17:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uvhBps1UXtsrc+nGVheIq+OQ/K59QvLDMVnB+No/i7I=;
+        b=1vU8Humxnn9YruITJ9E6ji2f96/3pf7cOEDKhWuKf/chKX+B2QN/x51ddBo9PDrOec
+         Bz1Ralz+SxWeXQRl74eVTtu4om05/Wn/vuW59AIxmw9fh3CZCyYhNon/W/B6dl51iDXn
+         /vCIhiu8pGWif0cK59dseFTLfhEVFE4ffbJqTHpelT/rmQd209AuS0D0IbiAA43UjiB7
+         aELR5ZPuClaihbEujRoEDqieQl2vpTHlqhG5Od9rATvY2ilphslQcaABwA+b+Po5ZNuM
+         dRPgTLfQgP+SCkw1gNKGkhkQO+qaZppk2SljA7bDp5X8quIlSgpfqVSoEqSWtkXBFxGu
+         C9dw==
+X-Gm-Message-State: AOAM530EYy/ew9UgPMZ5MU/KvBtYPrw6AXQ+/xa7WXM/gjScg1CzJhkh
+        VZ5o9guJ0Bwsgi0UumvTabp0+2742KvZi5bf12eWdYQq+1C87314FoxHVXDNaxvxu5/zpWuw8x/
+        +TXUF3UBA5A32n3UCquzcugZ6
+X-Received: by 2002:a05:622a:50d:b0:2e2:1006:35b6 with SMTP id l13-20020a05622a050d00b002e2100635b6mr6045833qtx.536.1647890278919;
+        Mon, 21 Mar 2022 12:17:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxT6OD/Y0C23YFhyuuCC1pdsNk4eMbxjtnCENsX9okSWpzu6X4wl532+Yylnnt9cpM9agH2sw==
+X-Received: by 2002:a05:622a:50d:b0:2e2:1006:35b6 with SMTP id l13-20020a05622a050d00b002e2100635b6mr6045807qtx.536.1647890278574;
+        Mon, 21 Mar 2022 12:17:58 -0700 (PDT)
+Received: from [10.16.222.26] (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id t1-20020a05620a0b0100b0067d3ac00982sm7944596qkg.57.2022.03.21.12.17.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 12:17:57 -0700 (PDT)
+Message-ID: <cf736b49-57e3-51df-56af-5b71d0304e4a@redhat.com>
+Date:   Mon, 21 Mar 2022 15:17:54 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v9 05/14] mm: multi-gen LRU: groundwork
+Content-Language: en-US
+To:     Justin Forbes <jforbes@fedoraproject.org>,
+        Yu Zhao <yuzhao@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, kernel-team@lists.ubuntu.com,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Rik van Riel <riel@surriel.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Brian Geffon <bgeffon@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Steven Barrett <steven@liquorix.net>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Will Deacon <will@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Hillf Danton <hdanton@sina.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        kernel <kernel@lists.fedoraproject.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220309021230.721028-1-yuzhao@google.com>
+ <20220309021230.721028-6-yuzhao@google.com>
+ <875yoh552i.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAOUHufYPSesiePfxaV=y9Vne5cb+Y_vQtJyQ1NiO1CFus=8WOA@mail.gmail.com>
+ <CAFxkdAouXr5Qn9asFge0P-HqA4aAk56yqP4xEiaWYRioJ1ssyA@mail.gmail.com>
+From:   Prarit Bhargava <prarit@redhat.com>
+In-Reply-To: <CAFxkdAouXr5Qn9asFge0P-HqA4aAk56yqP4xEiaWYRioJ1ssyA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,418 +122,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Handling of all-multicast flag and associated multicast promiscuous
-mode is broken in ice driver. When a user switches allmulticast
-flag on or off the driver checks whether any VLANs are configured
-over the interface (except default VLAN 0).
+On 3/21/22 14:58, Justin Forbes wrote:
+> On Mon, Mar 14, 2022 at 4:30 AM Yu Zhao <yuzhao@google.com> wrote:
+>>
+>> On Mon, Mar 14, 2022 at 2:09 AM Huang, Ying <ying.huang@intel.com> wrote:
+>>>
+>>> Hi, Yu,
+>>>
+>>> Yu Zhao <yuzhao@google.com> writes:
+>>>> diff --git a/mm/Kconfig b/mm/Kconfig
+>>>> index 3326ee3903f3..747ab1690bcf 100644
+>>>> --- a/mm/Kconfig
+>>>> +++ b/mm/Kconfig
+>>>> @@ -892,6 +892,16 @@ config ANON_VMA_NAME
+>>>>          area from being merged with adjacent virtual memory areas due to the
+>>>>          difference in their name.
+>>>>
+>>>> +# the multi-gen LRU {
+>>>> +config LRU_GEN
+>>>> +     bool "Multi-Gen LRU"
+>>>> +     depends on MMU
+>>>> +     # the following options can use up the spare bits in page flags
+>>>> +     depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
+>>>
+>>> LRU_GEN depends on !MAXSMP.  So, What is the maximum NR_CPUS supported
+>>> by LRU_GEN?
+>>
+>> LRU_GEN doesn't really care about NR_CPUS. IOW, it doesn't impose a
+>> max number. The dependency is with NODES_SHIFT selected by MAXSMP:
+>>      default "10" if MAXSMP
+>> This combined with LAST_CPUPID_SHIFT can exhaust the spare bits in page flags.
+>>
+>> MAXSMP is meant for kernel developers to test their code, and it
+>> should not be used in production [1]. But some distros unfortunately
+>> ship kernels built with this option, e.g., Fedora and Ubuntu. And
+>> their users reported build errors to me after they applied MGLRU on
+>> those kernels ("Not enough bits in page flags"). Let me add Fedora and
+>> Ubuntu to this thread.
+>>
+>> Fedora and Ubuntu,
+>>
+>> Could you please clarify if there is a reason to ship kernels built
+>> with MAXSMP? Otherwise, please consider disabling this option. Thanks.
+>>
+>> As per above, MAXSMP enables ridiculously large numbers of CPUs and
+>> NUMA nodes for testing purposes. It is detrimental to performance,
+>> e.g., CPUMASK_OFFSTACK.
+> 
+> It was enabled for Fedora, and RHEL because we did need more than 512
+> CPUs, originally only in RHEL until SGI (years ago) complained that
+> they were testing very large machines with Fedora.  The testing done
+> on RHEL showed that the performance impact was minimal.   For a very
+> long time we had MAXSMP off and carried a patch which allowed us to
+> turn on CPUMASK_OFFSTACK without debugging because there was supposed
+> to be "something else" coming.  In 2019 we gave up, dropped that patch
+> and just turned on MAXSMP.
+> 
+> I do not have any metrics for how often someone runs Fedora on a
+> ridiculously large machine these days, but I would guess that number
+> is not 0.
 
-If any extra VLANs are registered it enables multicast promiscuous
-mode for all these VLANs (including default VLAN 0) using
-ICE_SW_LKUP_PROMISC_VLAN look-up type. In this situation all
-multicast packets tagged with known VLAN ID or untagged are received
-and multicast packets tagged with unknown VLAN ID ignored.
+It is not 0.  I've seen data from large systems (1000+ logical threads) 
+that are running Fedora albeit with a modified Fedora kernel.
 
-If no extra VLANs are registered (so only VLAN 0 exists) it enables
-multicast promiscuous mode for VLAN 0 and uses ICE_SW_LKUP_PROMISC
-look-up type. In this situation any multicast packets including
-tagged ones are received.
+Additionally the max limit for CPUS in RHEL is 1792, however, we have 
+recently had a request to *double* that to 3584.  You should just assume 
+that number will continue to increase.
 
-The driver handles IFF_ALLMULTI in ice_vsi_sync_fltr() this way:
+P.
 
-ice_vsi_sync_fltr() {
-  ...
-  if (changed_flags & IFF_ALLMULTI) {
-    if (netdev->flags & IFF_ALLMULTI) {
-      if (vsi->num_vlans > 1)
-        ice_set_promisc(..., ICE_MCAST_VLAN_PROMISC_BITS);
-      else
-        ice_set_promisc(..., ICE_MCAST_PROMISC_BITS);
-    } else {
-      if (vsi->num_vlans > 1)
-        ice_clear_promisc(..., ICE_MCAST_VLAN_PROMISC_BITS);
-      else
-        ice_clear_promisc(..., ICE_MCAST_PROMISC_BITS);
-    }
-  }
-  ...
-}
 
-The code above depends on value vsi->num_vlan that specifies number
-of VLANs configured over the interface (including VLAN 0) and
-this is problem because that value is modified in NDO callbacks
-ice_vlan_rx_add_vid() and ice_vlan_rx_kill_vid().
-
-Scenario 1:
-1. ip link set ens7f0 allmulticast on
-2. ip link add vlan10 link ens7f0 type vlan id 10
-3. ip link set ens7f0 allmulticast off
-4. ip link set ens7f0 allmulticast on
-
-[1] In this scenario IFF_ALLMULTI is enabled and the driver calls
-    ice_set_promisc(..., ICE_MCAST_PROMISC_BITS) that installs
-    multicast promisc rule with non-VLAN look-up type.
-[2] Then VLAN with ID 10 is added and vsi->num_vlan incremented to 2
-[3] Command switches IFF_ALLMULTI off and the driver calls
-    ice_clear_promisc(..., ICE_MCAST_VLAN_PROMISC_BITS) but this
-    call is effectively NOP because it looks for multicast promisc
-    rules for VLAN 0 and VLAN 10 with VLAN look-up type but no such
-    rules exist. So the all-multicast remains enabled silently
-    in hardware.
-[4] Command tries to switch IFF_ALLMULTI on and the driver calls
-    ice_clear_promisc(..., ICE_MCAST_PROMISC_BITS) but this call
-    fails (-EEXIST) because non-VLAN multicast promisc rule already
-    exists.
-
-Scenario 2:
-1. ip link add vlan10 link ens7f0 type vlan id 10
-2. ip link set ens7f0 allmulticast on
-3. ip link add vlan20 link ens7f0 type vlan id 20
-4. ip link del vlan10 ; ip link del vlan20
-5. ip link set ens7f0 allmulticast off
-
-[1] VLAN with ID 10 is added and vsi->num_vlan==2
-[2] Command switches IFF_ALLMULTI on and driver installs multicast
-    promisc rules with VLAN look-up type for VLAN 0 and 10
-[3] VLAN with ID 20 is added and vsi->num_vlan==3 but no multicast
-    promisc rules is added for this new VLAN so the interface does
-    not receive MC packets from VLAN 20
-[4] Both VLANs are removed but multicast rule for VLAN 10 remains
-    installed so interface receives multicast packets from VLAN 10
-[5] Command switches IFF_ALLMULTI off and because vsi->num_vlan is 1
-    the driver tries to remove multicast promisc rule for VLAN 0
-    with non-VLAN look-up that does not exist.
-    All-multicast looks disabled from user point of view but it
-    is partially enabled in HW (interface receives all multicast
-    packets either untagged or tagged with VLAN ID 10)
-
-To resolve these issues the patch introduces these changes:
-1. Adds handling for IFF_ALLMULTI to ice_vlan_rx_add_vid() and
-   ice_vlan_rx_kill_vid() callbacks. So when VLAN is added/removed
-   and IFF_ALLMULTI is enabled an appropriate multicast promisc
-   rule for that VLAN ID is added/removed.
-2. In ice_vlan_rx_add_vid() when first VLAN besides VLAN 0 is added
-   so (vsi->num_vlan == 2) and IFF_ALLMULTI is enabled then look-up
-   type for existing multicast promisc rule for VLAN 0 is updated
-   to ICE_MCAST_VLAN_PROMISC_BITS.
-3. In ice_vlan_rx_kill_vid() when last VLAN besides VLAN 0 is removed
-   so (vsi->num_vlan == 1) and IFF_ALLMULTI is enabled then look-up
-   type for existing multicast promisc rule for VLAN 0 is updated
-   to ICE_MCAST_PROMISC_BITS.
-4. Both ice_vlan_rx_{add,kill}_vid() have to run under ICE_CFG_BUSY
-   bit protection to avoid races with ice_vsi_sync_fltr() that runs
-   in ice_service_task() context.
-5. Bit ICE_VSI_VLAN_FLTR_CHANGED is use-less and can be removed.
-6. Error messages added to ice_fltr_*_vsi_promisc() helper functions
-   to avoid them in their callers
-7. Small improvements to increase readability
-
-Fixes: 5eda8afd6bcc ("ice: Add support for PF/VF promiscuous mode")
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- drivers/net/ethernet/intel/ice/ice.h      |   1 -
- drivers/net/ethernet/intel/ice/ice_fltr.c |  52 +++++++++-
- drivers/net/ethernet/intel/ice/ice_main.c | 119 +++++++++++++++-------
- 3 files changed, 131 insertions(+), 41 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index bea1d1e39fa2..717542e49d65 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -300,7 +300,6 @@ enum ice_vsi_state {
- 	ICE_VSI_NETDEV_REGISTERED,
- 	ICE_VSI_UMAC_FLTR_CHANGED,
- 	ICE_VSI_MMAC_FLTR_CHANGED,
--	ICE_VSI_VLAN_FLTR_CHANGED,
- 	ICE_VSI_PROMISC_CHANGED,
- 	ICE_VSI_STATE_NBITS		/* must be last */
- };
-diff --git a/drivers/net/ethernet/intel/ice/ice_fltr.c b/drivers/net/ethernet/intel/ice/ice_fltr.c
-index c29177c6bb9d..8ed87b43a367 100644
---- a/drivers/net/ethernet/intel/ice/ice_fltr.c
-+++ b/drivers/net/ethernet/intel/ice/ice_fltr.c
-@@ -58,7 +58,18 @@ int
- ice_fltr_set_vlan_vsi_promisc(struct ice_hw *hw, struct ice_vsi *vsi,
- 			      u8 promisc_mask)
- {
--	return ice_set_vlan_vsi_promisc(hw, vsi->idx, promisc_mask, false);
-+	struct ice_pf *pf = hw->back;
-+	int result;
-+
-+	result = ice_set_vlan_vsi_promisc(hw, vsi->idx, promisc_mask, false);
-+	if (!result)
-+		return result;
-+
-+	dev_err(ice_pf_to_dev(pf),
-+		"Error setting promisc mode on VSI %i (rc=%d)\n", vsi->vsi_num,
-+		result);
-+
-+	return result;
- }
- 
- /**
-@@ -73,7 +84,18 @@ int
- ice_fltr_clear_vlan_vsi_promisc(struct ice_hw *hw, struct ice_vsi *vsi,
- 				u8 promisc_mask)
- {
--	return ice_set_vlan_vsi_promisc(hw, vsi->idx, promisc_mask, true);
-+	struct ice_pf *pf = hw->back;
-+	int result;
-+
-+	result = ice_set_vlan_vsi_promisc(hw, vsi->idx, promisc_mask, true);
-+	if (!result)
-+		return result;
-+
-+	dev_err(ice_pf_to_dev(pf),
-+		"Error clearing promisc mode on VSI %i (rc=%d)\n",
-+		vsi->vsi_num, result);
-+
-+	return result;
- }
- 
- /**
-@@ -87,7 +109,18 @@ int
- ice_fltr_clear_vsi_promisc(struct ice_hw *hw, u16 vsi_handle, u8 promisc_mask,
- 			   u16 vid)
- {
--	return ice_clear_vsi_promisc(hw, vsi_handle, promisc_mask, vid);
-+	struct ice_pf *pf = hw->back;
-+	int result;
-+
-+	result = ice_clear_vsi_promisc(hw, vsi_handle, promisc_mask, vid);
-+	if (!result)
-+		return result;
-+
-+	dev_err(ice_pf_to_dev(pf),
-+		"Error clearing promisc mode on VSI %i for VID %u (rc=%d)\n",
-+		ice_get_hw_vsi_num(hw, vsi_handle), vid, result);
-+
-+	return result;
- }
- 
- /**
-@@ -101,7 +134,18 @@ int
- ice_fltr_set_vsi_promisc(struct ice_hw *hw, u16 vsi_handle, u8 promisc_mask,
- 			 u16 vid)
- {
--	return ice_set_vsi_promisc(hw, vsi_handle, promisc_mask, vid);
-+	struct ice_pf *pf = hw->back;
-+	int result;
-+
-+	result = ice_set_vsi_promisc(hw, vsi_handle, promisc_mask, vid);
-+	if (!result)
-+		return result;
-+
-+	dev_err(ice_pf_to_dev(pf),
-+		"Error setting promisc mode on VSI %i for VID %u (rc=%d)\n",
-+		ice_get_hw_vsi_num(hw, vsi_handle), vid, result);
-+
-+	return result;
- }
- 
- /**
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index b7e8744b0c0a..168a41ea37b8 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -227,8 +227,7 @@ static int ice_add_mac_to_unsync_list(struct net_device *netdev, const u8 *addr)
- static bool ice_vsi_fltr_changed(struct ice_vsi *vsi)
- {
- 	return test_bit(ICE_VSI_UMAC_FLTR_CHANGED, vsi->state) ||
--	       test_bit(ICE_VSI_MMAC_FLTR_CHANGED, vsi->state) ||
--	       test_bit(ICE_VSI_VLAN_FLTR_CHANGED, vsi->state);
-+	       test_bit(ICE_VSI_MMAC_FLTR_CHANGED, vsi->state);
- }
- 
- /**
-@@ -244,10 +243,15 @@ static int ice_set_promisc(struct ice_vsi *vsi, u8 promisc_m)
- 	if (vsi->type != ICE_VSI_PF)
- 		return 0;
- 
--	if (vsi->num_vlan > 1)
--		status = ice_fltr_set_vlan_vsi_promisc(&vsi->back->hw, vsi, promisc_m);
--	else
--		status = ice_fltr_set_vsi_promisc(&vsi->back->hw, vsi->idx, promisc_m, 0);
-+	if (vsi->num_vlan > 1) {
-+		promisc_m |= (ICE_PROMISC_VLAN_RX | ICE_PROMISC_VLAN_TX);
-+		status = ice_fltr_set_vlan_vsi_promisc(&vsi->back->hw, vsi,
-+						       promisc_m);
-+	} else {
-+		status = ice_fltr_set_vsi_promisc(&vsi->back->hw, vsi->idx,
-+						  promisc_m, 0);
-+	}
-+
- 	return status;
- }
- 
-@@ -264,10 +268,15 @@ static int ice_clear_promisc(struct ice_vsi *vsi, u8 promisc_m)
- 	if (vsi->type != ICE_VSI_PF)
- 		return 0;
- 
--	if (vsi->num_vlan > 1)
--		status = ice_fltr_clear_vlan_vsi_promisc(&vsi->back->hw, vsi, promisc_m);
--	else
--		status = ice_fltr_clear_vsi_promisc(&vsi->back->hw, vsi->idx, promisc_m, 0);
-+	if (vsi->num_vlan > 1) {
-+		promisc_m |= (ICE_PROMISC_VLAN_RX | ICE_PROMISC_VLAN_TX);
-+		status = ice_fltr_clear_vlan_vsi_promisc(&vsi->back->hw, vsi,
-+							 promisc_m);
-+	} else {
-+		status = ice_fltr_clear_vsi_promisc(&vsi->back->hw, vsi->idx,
-+						    promisc_m, 0);
-+	}
-+
- 	return status;
- }
- 
-@@ -285,7 +294,6 @@ static int ice_vsi_sync_fltr(struct ice_vsi *vsi)
- 	struct ice_pf *pf = vsi->back;
- 	struct ice_hw *hw = &pf->hw;
- 	u32 changed_flags = 0;
--	u8 promisc_m;
- 	int err;
- 
- 	if (!vsi->netdev)
-@@ -303,7 +311,6 @@ static int ice_vsi_sync_fltr(struct ice_vsi *vsi)
- 	if (ice_vsi_fltr_changed(vsi)) {
- 		clear_bit(ICE_VSI_UMAC_FLTR_CHANGED, vsi->state);
- 		clear_bit(ICE_VSI_MMAC_FLTR_CHANGED, vsi->state);
--		clear_bit(ICE_VSI_VLAN_FLTR_CHANGED, vsi->state);
- 
- 		/* grab the netdev's addr_list_lock */
- 		netif_addr_lock_bh(netdev);
-@@ -352,29 +359,15 @@ static int ice_vsi_sync_fltr(struct ice_vsi *vsi)
- 	/* check for changes in promiscuous modes */
- 	if (changed_flags & IFF_ALLMULTI) {
- 		if (vsi->current_netdev_flags & IFF_ALLMULTI) {
--			if (vsi->num_vlan > 1)
--				promisc_m = ICE_MCAST_VLAN_PROMISC_BITS;
--			else
--				promisc_m = ICE_MCAST_PROMISC_BITS;
--
--			err = ice_set_promisc(vsi, promisc_m);
-+			err = ice_set_promisc(vsi, ICE_MCAST_PROMISC_BITS);
- 			if (err) {
--				netdev_err(netdev, "Error setting Multicast promiscuous mode on VSI %i\n",
--					   vsi->vsi_num);
- 				vsi->current_netdev_flags &= ~IFF_ALLMULTI;
- 				goto out_promisc;
- 			}
- 		} else {
- 			/* !(vsi->current_netdev_flags & IFF_ALLMULTI) */
--			if (vsi->num_vlan > 1)
--				promisc_m = ICE_MCAST_VLAN_PROMISC_BITS;
--			else
--				promisc_m = ICE_MCAST_PROMISC_BITS;
--
--			err = ice_clear_promisc(vsi, promisc_m);
-+			err = ice_clear_promisc(vsi, ICE_MCAST_PROMISC_BITS);
- 			if (err) {
--				netdev_err(netdev, "Error clearing Multicast promiscuous mode on VSI %i\n",
--					   vsi->vsi_num);
- 				vsi->current_netdev_flags |= IFF_ALLMULTI;
- 				goto out_promisc;
- 			}
-@@ -3445,19 +3438,47 @@ ice_vlan_rx_add_vid(struct net_device *netdev, __always_unused __be16 proto,
- 	if (!vid)
- 		return 0;
- 
-+	while (test_and_set_bit(ICE_CFG_BUSY, vsi->state))
-+		usleep_range(1000, 2000);
-+
- 	/* Enable VLAN pruning when a VLAN other than 0 is added */
- 	if (!ice_vsi_is_vlan_pruning_ena(vsi)) {
- 		ret = ice_cfg_vlan_pruning(vsi, true);
- 		if (ret)
--			return ret;
-+			goto finish;
-+	}
-+
-+	/* Add multicast promisc rule for the VLAN ID to be added if
-+	 * all-multicast is currently enabled.
-+	 */
-+	if (vsi->current_netdev_flags & IFF_ALLMULTI) {
-+		ret = ice_fltr_set_vsi_promisc(&vsi->back->hw, vsi->idx,
-+					       ICE_MCAST_VLAN_PROMISC_BITS,
-+					       vid);
-+		if (ret)
-+			goto finish;
- 	}
- 
- 	/* Add a switch rule for this VLAN ID so its corresponding VLAN tagged
- 	 * packets aren't pruned by the device's internal switch on Rx
- 	 */
- 	ret = ice_vsi_add_vlan(vsi, vid, ICE_FWD_TO_VSI);
--	if (!ret)
--		set_bit(ICE_VSI_VLAN_FLTR_CHANGED, vsi->state);
-+	if (ret)
-+		goto finish;
-+
-+	/* If all-multicast is currently enabled and this VLAN ID is only one
-+	 * besides VLAN-0 we have to update look-up type of multicast promisc
-+	 * rule for VLAN-0 from ICE_SW_LKUP_PROMISC to ICE_SW_LKUP_PROMISC_VLAN.
-+	 */
-+	if ((vsi->current_netdev_flags & IFF_ALLMULTI) && vsi->num_vlan == 2) {
-+		ice_fltr_clear_vsi_promisc(&vsi->back->hw, vsi->idx,
-+					   ICE_MCAST_PROMISC_BITS, 0);
-+		ice_fltr_set_vsi_promisc(&vsi->back->hw, vsi->idx,
-+					 ICE_MCAST_VLAN_PROMISC_BITS, 0);
-+	}
-+
-+finish:
-+	clear_bit(ICE_CFG_BUSY, vsi->state);
- 
- 	return ret;
- }
-@@ -3482,18 +3503,44 @@ ice_vlan_rx_kill_vid(struct net_device *netdev, __always_unused __be16 proto,
- 	if (!vid)
- 		return 0;
- 
-+	while (test_and_set_bit(ICE_CFG_BUSY, vsi->state))
-+		usleep_range(1000, 2000);
-+
- 	/* Make sure ice_vsi_kill_vlan is successful before updating VLAN
- 	 * information
- 	 */
- 	ret = ice_vsi_kill_vlan(vsi, vid);
- 	if (ret)
--		return ret;
-+		goto finish;
- 
--	/* Disable pruning when VLAN 0 is the only VLAN rule */
--	if (vsi->num_vlan == 1 && ice_vsi_is_vlan_pruning_ena(vsi))
--		ret = ice_cfg_vlan_pruning(vsi, false);
-+	/* Remove multicast promisc rule for the removed VLAN ID if
-+	 * all-multicast is enabled.
-+	 */
-+	if (vsi->current_netdev_flags & IFF_ALLMULTI)
-+		ice_fltr_clear_vsi_promisc(&vsi->back->hw, vsi->idx,
-+					   ICE_MCAST_VLAN_PROMISC_BITS, vid);
-+
-+	if (vsi->num_vlan == 1) {
-+		/* Disable pruning when VLAN 0 is the only VLAN rule */
-+		if (ice_vsi_is_vlan_pruning_ena(vsi))
-+			ice_cfg_vlan_pruning(vsi, false);
-+
-+		/* Update look-up type of multicast promisc rule for VLAN 0
-+		 * from ICE_SW_LKUP_PROMISC_VLAN to ICE_SW_LKUP_PROMISC when
-+		 * all-multicast is enabled and VLAN 0 is the only VLAN rule.
-+		 */
-+		if (vsi->current_netdev_flags & IFF_ALLMULTI) {
-+			ice_fltr_clear_vsi_promisc(&vsi->back->hw, vsi->idx,
-+						   ICE_MCAST_VLAN_PROMISC_BITS,
-+						   0);
-+			ice_fltr_set_vsi_promisc(&vsi->back->hw, vsi->idx,
-+						 ICE_MCAST_PROMISC_BITS, 0);
-+		}
-+	}
-+
-+finish:
-+	clear_bit(ICE_CFG_BUSY, vsi->state);
- 
--	set_bit(ICE_VSI_VLAN_FLTR_CHANGED, vsi->state);
- 	return ret;
- }
- 
--- 
-2.34.1
+> 
+> Justin
+> 
+>> [1] https://lore.kernel.org/lkml/20131106055634.GA24044@gmail.com/
+>>
+> _______________________________________________
+> kernel mailing list -- kernel@lists.fedoraproject.org
+> To unsubscribe send an email to kernel-leave@lists.fedoraproject.org
+> Fedora Code of Conduct: https://docs.fedoraproject.org/en-US/project/code-of-conduct/
+> List Guidelines: https://fedoraproject.org/wiki/Mailing_list_guidelines
+> List Archives: https://lists.fedoraproject.org/archives/list/kernel@lists.fedoraproject.org
+> Do not reply to spam on the list, report it: https://pagure.io/fedora-infrastructure
 

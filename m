@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD694E1FA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 05:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A70EA4E1FA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 05:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344365AbiCUEwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 00:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S1343623AbiCUE4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 00:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbiCUEv5 (ORCPT
+        with ESMTP id S238723AbiCUE4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 00:51:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B58E5714D;
-        Sun, 20 Mar 2022 21:50:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3B64B80F02;
-        Mon, 21 Mar 2022 04:50:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB4DC340E8;
-        Mon, 21 Mar 2022 04:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647838230;
-        bh=wAeBu2wVEWNd56Ntd/skPbNlVoTIPyziMX0Vn/MA9BE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PO07ElUgyX0HLnjM792j3I+Uw0JgvpqFcopDw0zvhkuC3iEtN6NYedGVXsJmrOJGL
-         GlY+u5zmAtw9ZOFXPU7JcCzFPsg4bo7yjJXHfaSTbbHxp94tjGWx3KSbgDS7UJC69H
-         GGOd+ez+2utQX8K6bSmoqOxjcBDqhzl8ldgmmjCM2/KWfUN3I1WCUQ7n4uI/o7OvzC
-         oloms+pm4cJHKP5fohcQIhjZIEJp+M1lSD0s3wjieppaehu1R+UMdmXsoc9Q2b7OZM
-         UUUn2i+j2+J6toQPzD/HJnCeMsyDelDjJBffo/oQv1SI6TXqgiTh40xtlWqR7eWEGv
-         zl/XViTJPIcHQ==
-Date:   Sun, 20 Mar 2022 21:50:19 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [GIT PULL] fscrypt updates for 5.18
-Message-ID: <YjgEC8Nw9PDmdY0O@sol.localdomain>
+        Mon, 21 Mar 2022 00:56:31 -0400
+X-Greylist: delayed 8364 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Mar 2022 21:55:05 PDT
+Received: from mg.sunplus.com (unknown [113.196.136.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61626193DC;
+        Sun, 20 Mar 2022 21:55:04 -0700 (PDT)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(10891:0:AUTH_RELAY)
+        (envelope-from <tony.huang@sunplus.com>); Mon, 21 Mar 2022 12:55:17 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Mon, 21 Mar 2022 12:55:12 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Mon, 21 Mar 2022 12:55:12 +0800
+From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Tony Huang <tonyhuang.sunplus@gmail.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lhjeff911@gmail.com" <lhjeff911@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
+CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+Subject: RE: [PATCH v4 2/2] mmc: Add mmc driver for Sunplus SP7021
+Thread-Topic: [PATCH v4 2/2] mmc: Add mmc driver for Sunplus SP7021
+Thread-Index: AQHYOzO6cpYNd+UZBku5eHHWG55gaqzHpeaAgAGhbhA=
+Date:   Mon, 21 Mar 2022 04:55:11 +0000
+Message-ID: <c6ecbe40dc234454b41bcbc0bf073084@sphcmbx02.sunplus.com.tw>
+References: <cover.1647652688.git.tonyhuang.sunplus@gmail.com>
+ <f954fb1c0d1c4950b71a8fc360c78edcca9954de.1647652688.git.tonyhuang.sunplus@gmail.com>
+ <e5426768-1dd0-0bef-25e8-2ab494f7723d@kernel.org>
+In-Reply-To: <e5426768-1dd0-0bef-25e8-2ab494f7723d@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.54]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
-
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/fs/fscrypt/fscrypt.git tags/fscrypt-for-linus
-
-for you to fetch changes up to cdaa1b1941f667814300799ddb74f3079517cd5a:
-
-  fscrypt: update documentation for direct I/O support (2022-02-08 11:02:18 -0800)
-
-----------------------------------------------------------------
-
-Add support for direct I/O on encrypted files when blk-crypto (inline
-encryption) is being used for file contents encryption.
-
-There will be a merge conflict with the block pull request in
-fs/iomap/direct-io.c, due to some bio interface cleanups.  The merge
-resolution is straightforward and can be found in linux-next.
-
-----------------------------------------------------------------
-Eric Biggers (5):
-      fscrypt: add functions for direct I/O support
-      iomap: support direct I/O with fscrypt using blk-crypto
-      ext4: support direct I/O with fscrypt using blk-crypto
-      f2fs: support direct I/O with fscrypt using blk-crypto
-      fscrypt: update documentation for direct I/O support
-
- Documentation/filesystems/fscrypt.rst | 25 +++++++++-
- fs/crypto/crypto.c                    |  8 +++
- fs/crypto/inline_crypt.c              | 93 +++++++++++++++++++++++++++++++++++
- fs/ext4/file.c                        | 10 ++--
- fs/ext4/inode.c                       |  7 +++
- fs/f2fs/data.c                        |  7 +++
- fs/f2fs/f2fs.h                        |  6 ++-
- fs/iomap/direct-io.c                  |  6 +++
- include/linux/fscrypt.h               | 18 +++++++
- 9 files changed, 173 insertions(+), 7 deletions(-)
+RGVhciBLcnp5c3p0b2Y6DQo+IA0KPiA+ICsJaW50IGRtYV9pbnRfdGhyZXNob2xkOw0KPiA+ICsJ
+c3RydWN0IHNnX21hcHBpbmdfaXRlciBzZ19taXRlcjsgLyogZm9yIHBpbyBtb2RlIHRvIGFjY2Vz
+cyBzZ2xpc3QgKi8NCj4gPiArCWludCBkbWFfdXNlX2ludDsgLyogc2hvdWxkIHJhaXNlIGlycSB3
+aGVuIGRtYSBkb25lICovDQo+ID4gKwlzdHJ1Y3Qgc3BtbWNfdHVuaW5nX2luZm8gZW1tY190dW5p
+bmdfaW5mbzsNCj4gPiArCXN0cnVjdCBzcHNkY190dW5pbmdfaW5mbyBzZF90dW5pbmdfaW5mbzsN
+Cj4gPiArCWludCByZXN0b3JlXzRiaXRfc2Rpb19idXM7DQo+ID4gKwljb25zdCBzdHJ1Y3Qgc3Bt
+bWNfY29tcGF0aWJsZSAqZGV2X2NvbXA7IH07DQo+ID4gKw0KPiA+ICtzdHJ1Y3Qgc3BzZGNfaG9z
+dCB7DQo+IA0KPiBXaGVyZSBpcyB0aGlzIHVzZWQ/DQo+IA0KDQpzdHJ1Y3Qgc3BtbWNfaG9zdHt9
+IGZvciBlbW1jLgkJCQ0Kc3RydWN0IHNwc2RjX2hvc3R7fSBmb3IgU0QgY2FyZC4JCQkNClRoZSBy
+ZWdpc3RlciBiYXNlIGFkZHJlc3MgYW5kIG9mZnNldCBhZGRyZXNzIG9mIGVtbWMgYW5kIHNkIGNh
+cmRzIGFyZSBkaWZmZXJlbnQuCQkJDQplTU1DIGFuZCBzZGNhcmQgYXJlIHRoZWlyIHJlc3BlY3Rp
+dmUgaGFyZHdhcmUgc2V0dGluZ3MuDQoNCg0K

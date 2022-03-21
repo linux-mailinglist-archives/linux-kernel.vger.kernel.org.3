@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188AD4E1EDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B622D4E1EE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343763AbiCUBoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 21:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S1344078AbiCUBtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 21:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234768AbiCUBoQ (ORCPT
+        with ESMTP id S1343763AbiCUBtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 21:44:16 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEDF17DCA8
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:42:51 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id d10so27024331eje.10
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:42:51 -0700 (PDT)
+        Sun, 20 Mar 2022 21:49:01 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D214717E368;
+        Sun, 20 Mar 2022 18:47:37 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id c11so9277578pgu.11;
+        Sun, 20 Mar 2022 18:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aHacubWzDiviNCpvcWTMtixCEncOdpS21OotHIjf+Dg=;
-        b=YDppa3f0inukPgu9KdWgyRLBMeRuhoGRKI2PbdhprUhL/Xls4FWt+sf55iJnvNNN4T
-         slaQxzj7giHRtUOl84xe77V1cu3OcLAVj8awoAbrbp6ditM1HFZXu2zRhAogzAvosJUK
-         CA+FBsqRkE4hB3g3ymXdk/Jxyx+qZ6PM4eJjHYTsMVadG6fWuk6m+824bWT5JCJAtTEZ
-         usHT7SVntfueDnMx8lwZp9jkHpNj5xoK+OM+EChCMtW+v/gkrf6bsrsgWSSAxt2harPF
-         8EnEmMbOplRV0NBvt+ePbjqbLs0pSUkuPwxCHiLrWjvsxXu6bNyEls7LDCfjinYkmg2Z
-         glXQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SOfMbm5RJKvVdhj3M5lguM9j4PPbRfpyMx1l0V2G0sM=;
+        b=YD/sFWwZJgwFHupdzTKj19DesWJPVhibD5xUNFAr41Iqcb6q/n0EE5JL2i88wqugvJ
+         4P7CEEMqcrkZn+e2GwMvW939nl+0L9xEqXL6v66kx4bnHGgsGuxfKBFA6ry8pUpLBjYN
+         8Q3qT/gTYFKbTpr5ULNEEk6WYj1/ki32mjXXf7zXMQBRjcmGvSES4dXo52rP8lyw0S2h
+         LbPbzP51hsLEGsEuA2T147IXbc7vPpnuZIxEue6vbPa4VYqlapiC02AOyEU12FvZal3U
+         eR5PjYfw7wdGi4rQ/EZrWq0/KkiBeyfYD6tCJ7RC67oPXtLAf60dkH0rFM6UCK71gql1
+         HDRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=aHacubWzDiviNCpvcWTMtixCEncOdpS21OotHIjf+Dg=;
-        b=pNd6L58xRrC8TojVQUB/fZB6UP4QMbPbubqmG7O8cj5YrTzu5wi3iBc1s2iqO20IFC
-         Ukaf6jmyFZFkXVqJIRa2N/HZiAa5Uh3KC86eaUMhlu2GceQMzr7Y3WOJdPg+CRx0t9eC
-         d0Nm1PESeqssuZAuVMm/iyK11AJZBPTOGfxFVnipOMNWbXE85di2iCFCN2eviuVCkdr1
-         GIX81ZHgw/GFi2PuotUeYvAmsK/vhpaPm/DxUe6W/vgkhP/PgV3MOR2mtsLNMczFMvnx
-         nhK1uzMiklAueIououjHvJN0k5TrhlSx3PUxcycSmUmmoq8qTXcCn2q+CI875gI5Xyic
-         AcGA==
-X-Gm-Message-State: AOAM531n0bZ60rYAxtj6IPLHnTzZroaznBQMtNZFMck7eWGbpG+EMsJ8
-        77k8Qy/m7er97RoD5q13ysU=
-X-Google-Smtp-Source: ABdhPJxXWAkG5BANLeNjWnAYJ9UBgxFcGCMdCGOpr45Mx5CylS2H44mTpU0RZME6/CEdjhBH7pDB4g==
-X-Received: by 2002:a17:906:30d1:b0:6cf:c116:c9d3 with SMTP id b17-20020a17090630d100b006cfc116c9d3mr17707760ejb.245.1647826970345;
-        Sun, 20 Mar 2022 18:42:50 -0700 (PDT)
-Received: from localhost.localdomain (host-87-20-105-171.retail.telecomitalia.it. [87.20.105.171])
-        by smtp.gmail.com with ESMTPSA id lb10-20020a170907784a00b006db0aadcbd1sm6289126ejc.219.2022.03.20.18.42.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 18:42:49 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     David Howells <dhowells@redhat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
-Subject: [PATCH] watch_queue: Free the real number of allocated pages
-Date:   Mon, 21 Mar 2022 02:42:46 +0100
-Message-Id: <20220321014246.19941-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=SOfMbm5RJKvVdhj3M5lguM9j4PPbRfpyMx1l0V2G0sM=;
+        b=UCqYm7nQXJrUQxWGrkSRZNQovqspnb0KB3N6sA3JRAI/4KRLru9xNKUGTz+pLrjdev
+         JKzLnQCAUNvxhctqGyZeY0Gfk/jABRhmZpdtVp/gvzfnF4ioIx1sE1oLL/i0W/vGtmyT
+         bbRGlQI5Z3rbQHXHdGbHgvy7Sm4Er8dX9eOT0rSRwavSs/3XTLHO35pwhk2sazh52muE
+         WNGKN9RcpeD10k400uLztwdwZy2161XrNREXJrmTfgvcgr5/mbi+IbLTKke5MQcstKx+
+         z1yO0btSGDrFV9yBTt1y0HRChrEHX4Aij1Ekai/H/kCiW4lEaNK1QtxSIuJS6+kryoBY
+         +AGw==
+X-Gm-Message-State: AOAM53033oKnmSLw0dC5GslGfI2tCKSxy6UvJoGEwZEmRxrgeXFScLTZ
+        qGKhorkpuUPbRqiTwBxRWSw=
+X-Google-Smtp-Source: ABdhPJy9vF2yPyOMLUrz5Shpq535MiBZLAqZb32nSc0lGiBI8aK2dWSqx66kmayAta6/+ktf1Ye3MQ==
+X-Received: by 2002:a05:6a00:889:b0:4e0:dcc3:5e06 with SMTP id q9-20020a056a00088900b004e0dcc35e06mr21497904pfj.29.1647827257386;
+        Sun, 20 Mar 2022 18:47:37 -0700 (PDT)
+Received: from [10.11.37.162] ([103.84.139.53])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090a178c00b001bd036e11fdsm18080673pja.42.2022.03.20.18.47.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Mar 2022 18:47:36 -0700 (PDT)
+Message-ID: <0d2f9980-fb1d-4068-7868-effc77892a97@gmail.com>
+Date:   Mon, 21 Mar 2022 09:47:30 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] can: mcba_usb: fix possible double dev_kfree_skb in
+ mcba_usb_start_xmit
+Content-Language: en-US
+To:     yashi@spacecubics.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, kuba@kernel.org, mailhol.vincent@wanadoo.fr,
+        stefan.maetje@esd.eu, paskripkin@gmail.com,
+        remigiusz.kollataj@mobica.com
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220311080208.45047-1-hbh25y@gmail.com>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <20220311080208.45047-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,61 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the "error_p" label, the code calls __free_page() in a loop from
-pages[0] to pages[nr_pages -1].
+Gentle ping.
 
-When pages[i] are allocated in a loop with calls to alloc_page() and one
-of these allocations fails, the code jumps to the "error_p" label without
-saving the real number of successful allocations and without using this
-as the limit of the free cycle.
-
-For the above-mentioned reasons, Syzbot reports a bug:
-"[syzbot] KASAN: null-ptr-deref Read in __free_pages".[1]
-
-Fix this bug by saving the real number of allocated pages and, in those
-cases where the inth iteration of alloc_page() fails and the code jumps
-to the "error_p" label, use that number as the upper limit for the index
-of the 'for' loop that calls __free_pages(pages[i]).
-
-[1] https://lore.kernel.org/lkml/00000000000084e0cf05daafb25f@google.com/T/#m143407dade7ed9126253175728d6f38505d2393c
-
-Reported-and-tested-by: syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- kernel/watch_queue.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index 00703444a219..5b0531020cf8 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -220,7 +220,7 @@ long watch_queue_set_size(struct pipe_inode_info *pipe, unsigned int nr_notes)
- 	struct page **pages;
- 	unsigned long *bitmap;
- 	unsigned long user_bufs;
--	int ret, i, nr_pages;
-+	int ret, i, nr_pages, allocated_pages;
- 
- 	if (!wqueue)
- 		return -ENODEV;
-@@ -254,6 +254,7 @@ long watch_queue_set_size(struct pipe_inode_info *pipe, unsigned int nr_notes)
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		pages[i] = alloc_page(GFP_KERNEL);
-+		allocated_pages = i;
- 		if (!pages[i])
- 			goto error_p;
- 		pages[i]->index = i * WATCH_QUEUE_NOTES_PER_PAGE;
-@@ -271,7 +272,7 @@ long watch_queue_set_size(struct pipe_inode_info *pipe, unsigned int nr_notes)
- 	return 0;
- 
- error_p:
--	for (i = 0; i < nr_pages; i++)
-+	for (i = 0; i < allocated_pages; i++)
- 		__free_page(pages[i]);
- 	kfree(pages);
- error:
--- 
-2.34.1
-
+On 2022/3/11 16:02, Hangyu Hua wrote:
+> There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
+> can_put_echo_skb deletes original skb and can_free_echo_skb deletes the cloned
+> skb.
+> 
+> Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>   drivers/net/can/usb/mcba_usb.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+> index 77bddff86252..7c198eb5bc9c 100644
+> --- a/drivers/net/can/usb/mcba_usb.c
+> +++ b/drivers/net/can/usb/mcba_usb.c
+> @@ -364,7 +364,6 @@ static netdev_tx_t mcba_usb_start_xmit(struct sk_buff *skb,
+>   xmit_failed:
+>   	can_free_echo_skb(priv->netdev, ctx->ndx, NULL);
+>   	mcba_usb_free_ctx(ctx);
+> -	dev_kfree_skb(skb);
+>   	stats->tx_dropped++;
+>   
+>   	return NETDEV_TX_OK;

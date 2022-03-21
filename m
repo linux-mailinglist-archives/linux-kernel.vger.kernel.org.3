@@ -2,214 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615F94E1F5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 04:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419C14E1F5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 04:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238218AbiCUDyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 23:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S240385AbiCUDzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 23:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiCUDyC (ORCPT
+        with ESMTP id S229695AbiCUDzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 23:54:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84246AD10F;
-        Sun, 20 Mar 2022 20:52:37 -0700 (PDT)
+        Sun, 20 Mar 2022 23:55:04 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28235CF0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 20:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647834757; x=1679370757;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+xVB4tejKj+jXZwnepYkpDsgaZslDPFHLemDy5ezqI8=;
-  b=Z8qSyD0mhjgEm1oB8M3MmV4RasRAYQ0hMLngK3qe4okhKVIfyaBs1WPz
-   LXwCDmsJebXNq8NkbTACJGFlZAZccPzI+Nf6ijz3/167coC268RE4BFiG
-   No9hAR/2Q3Wx0CZgPHYLkUF7DSi09Med2etaxEIuSbvZsL/YEGsZgknf+
-   IJpvAj3aF+jptWl+i9QSoikRNX6NWWLiudzTwNXtr5djcBoPzNCgDARK1
-   PsCqNgiWAJda63lt842Figolb1dvwN0v22dHcZ1t8qd+Ld72OfvaB6QBH
-   c36Fu0gJ1vD0BSzEPIN+hM4lP1pVDUPN+MkzflVRESXYA+s4wtKSqGxpJ
+  t=1647834820; x=1679370820;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SsmXh+TUr8SlUAiEUnETJ7m9O7B3Y14OPX6mgzP+iMs=;
+  b=OSUaEajaMx8+bWxV8BnKrWFktwx74rXDaLvaOQZs0z8C3L0b4xvF3u52
+   3BLLHFqOWKVXu/3eJxYi8HDrSjKV5KEqhD0ItehaVGwrltQg5TLcq3REA
+   RcwKQnoLYe17RLCUDABC9A07ShR8Tdwd3Ree1G2PQGriuH7N0ocWsudIg
+   hckTy0MkCqpvqCBhWbOqViV8ySBSJ87dYt0xrEgYR+VR0U3CWdWww0mEw
+   hFulZPNPTrFRoE14scS7pesfWWClv5rO4Q1pEUtHLe4FiILs3kqtgVwp9
+   FOjVtq4skH7UIDJq+Vj2SqOTIhx3mDoLJqAm/fIrPUnDYnCnJADYoAXPr
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257408864"
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="244934857"
 X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
-   d="scan'208";a="257408864"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 20:52:36 -0700
+   d="scan'208";a="244934857"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 20:53:39 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
-   d="scan'208";a="600348464"
-Received: from miahcroc-mobl.amr.corp.intel.com (HELO [10.212.144.180]) ([10.212.144.180])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 20:52:35 -0700
-Message-ID: <9d47ee80-1f92-4b52-1080-4d8325dc4a5e@linux.intel.com>
-Date:   Sun, 20 Mar 2022 20:52:35 -0700
+   d="scan'208";a="518269315"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 20 Mar 2022 20:53:38 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nW96v-000HSQ-J2; Mon, 21 Mar 2022 03:53:37 +0000
+Date:   Mon, 21 Mar 2022 11:53:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:axboe/linux-block/perf-wip 17/17] cc1: error: bad
+ value ('alderlake') for '-march=' switch
+Message-ID: <202203211136.zyGiUsJS-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] PCI/AER: Disable AER service when link is in L2/L3
- ready, L2 and L3 state
-Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        koba.ko@canonical.com, Russell Currey <ruscur@russell.cc>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220127025418.1989642-1-kai.heng.feng@canonical.com>
- <427f19c6-32f0-684e-5fdd-2e5ed192b71d@linux.intel.com>
- <CAAd53p6ZrFNhtKk=9wz8SF68jBuNajKgOzZFgHgKgd57Zp3pHg@mail.gmail.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <CAAd53p6ZrFNhtKk=9wz8SF68jBuNajKgOzZFgHgKgd57Zp3pHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/perf-wip
+head:   9f86e73b1575cedbbce029cc1dc45e8fe6f5a586
+commit: 9f86e73b1575cedbbce029cc1dc45e8fe6f5a586 [17/17] x86: add modern Intel and AMD CPUs
+config: x86_64-randconfig-r025-20220321 (https://download.01.org/0day-ci/archive/20220321/202203211136.zyGiUsJS-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/9f86e73b1575cedbbce029cc1dc45e8fe6f5a586
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/perf-wip
+        git checkout 9f86e73b1575cedbbce029cc1dc45e8fe6f5a586
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 prepare
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On 3/20/22 7:38 PM, Kai-Heng Feng wrote:
-> On Sun, Mar 20, 2022 at 4:38 AM Sathyanarayanan Kuppuswamy
-> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->>
->>
->>
->> On 1/26/22 6:54 PM, Kai-Heng Feng wrote:
->>> Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
->>> hint") enables ACS, and some platforms lose its NVMe after resume from
->>
->> Why enabling ACS makes platform lose NVMe? Can you add more details
->> about the problem?
-> 
-> I don't have a hardware analyzer, so the only detail I can provide is
-> the symptom.
-> I believe the affected system was sent Intel, and there wasn't any
-> feedback since then.
+All errors (new ones prefixed by >>):
 
-Since your commit log refers to ACS, I think first we need to understand
-following points.
-
-1. Why we get ACSViol during S3 resume. Is this just a noise?
-2. Why AER recovery fails?
-3. Is this common for all platforms, or only happens in your test
-    platform?
-
-If you are not clear about above points, I think you can submit this
-patch as adding suspend/resume support to AER/DPC driver and not include
-the issue about ACS.
-
- From your commit log, the problem is not very clear.
-
-> 
->>
->>> S3:
->>> [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
->>> [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
->>> [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
->>> [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
->>> [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
->>> [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
->>> [   50.947843] nvme nvme0: frozen state error detected, reset controller
->>>
->>> It happens right after ACS gets enabled during resume.
->>>
->>> There's another case, when Thunderbolt reaches D3cold:
->>> [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
->>> [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
->>> [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
->>> [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
->>> [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
->>> [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
->>
->> no callback message means one or more devices in the given port does not
->> support error handler. How is this related to ACS?
-> 
-> This case is about D3cold, not related to ACS.
-> And no error_detected is just part of the message. The whole AER
-> message is more important.
-> 
-> Kai-Heng
-> 
->>
->>> [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
->>> [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
->>>
->>> So disable AER service to avoid the noises from turning power rails
->>> on/off when the device is in low power states (D3hot and D3cold), as
->>> PCIe spec "5.2 Link State Power Management" states that TLP and DLLP
->>> transmission is disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold
->>> with aux power) and L3 (D3cold).
->>>
->>> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=209149
->>> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
->>> Fixes: 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in hint")
->>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>> ---
->>> v2:
->>>    - Wording change.
->>>
->>>    drivers/pci/pcie/aer.c | 31 +++++++++++++++++++++++++------
->>>    1 file changed, 25 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
->>> index 9fa1f97e5b270..e4e9d4a3098d7 100644
->>> --- a/drivers/pci/pcie/aer.c
->>> +++ b/drivers/pci/pcie/aer.c
->>> @@ -1367,6 +1367,22 @@ static int aer_probe(struct pcie_device *dev)
->>>        return 0;
->>>    }
->>>
->>> +static int aer_suspend(struct pcie_device *dev)
->>> +{
->>> +     struct aer_rpc *rpc = get_service_data(dev);
->>> +
->>> +     aer_disable_rootport(rpc);
->>> +     return 0;
->>> +}
->>> +
->>> +static int aer_resume(struct pcie_device *dev)
->>> +{
->>> +     struct aer_rpc *rpc = get_service_data(dev);
->>> +
->>> +     aer_enable_rootport(rpc);
->>> +     return 0;
->>> +}
->>> +
->>>    /**
->>>     * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
->>>     * @dev: pointer to Root Port, RCEC, or RCiEP
->>> @@ -1433,12 +1449,15 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
->>>    }
->>>
->>>    static struct pcie_port_service_driver aerdriver = {
->>> -     .name           = "aer",
->>> -     .port_type      = PCIE_ANY_PORT,
->>> -     .service        = PCIE_PORT_SERVICE_AER,
->>> -
->>> -     .probe          = aer_probe,
->>> -     .remove         = aer_remove,
->>> +     .name                   = "aer",
->>> +     .port_type              = PCIE_ANY_PORT,
->>> +     .service                = PCIE_PORT_SERVICE_AER,
->>> +     .probe                  = aer_probe,
->>> +     .suspend                = aer_suspend,
->>> +     .resume                 = aer_resume,
->>> +     .runtime_suspend        = aer_suspend,
->>> +     .runtime_resume         = aer_resume,
->>> +     .remove                 = aer_remove,
->>>    };
->>>
->>>    /**
->>
->> --
->> Sathyanarayanan Kuppuswamy
->> Linux Kernel Developer
+>> cc1: error: bad value ('alderlake') for '-march=' switch
+   cc1: note: valid arguments to '-march=' switch are: nocona core2 nehalem corei7 westmere sandybridge corei7-avx ivybridge core-avx-i haswell core-avx2 broadwell skylake skylake-avx512 cannonlake icelake-client icelake-server cascadelake tigerlake bonnell atom silvermont slm goldmont goldmont-plus tremont knl knm x86-64 eden-x2 nano nano-1000 nano-2000 nano-3000 nano-x2 eden-x4 nano-x4 k8 k8-sse3 opteron opteron-sse3 athlon64 athlon64-sse3 athlon-fx amdfam10 barcelona bdver1 bdver2 bdver3 bdver4 znver1 znver2 btver1 btver2 native; did you mean 'tigerlake'?
+   make[2]: *** [scripts/Makefile.build:288: scripts/mod/empty.o] Error 1
+>> cc1: error: bad value ('alderlake') for '-march=' switch
+   cc1: note: valid arguments to '-march=' switch are: nocona core2 nehalem corei7 westmere sandybridge corei7-avx ivybridge core-avx-i haswell core-avx2 broadwell skylake skylake-avx512 cannonlake icelake-client icelake-server cascadelake tigerlake bonnell atom silvermont slm goldmont goldmont-plus tremont knl knm x86-64 eden-x2 nano nano-1000 nano-2000 nano-3000 nano-x2 eden-x4 nano-x4 k8 k8-sse3 opteron opteron-sse3 athlon64 athlon64-sse3 athlon-fx amdfam10 barcelona bdver1 bdver2 bdver3 bdver4 znver1 znver2 btver1 btver2 native; did you mean 'tigerlake'?
+   make[2]: *** [scripts/Makefile.build:121: scripts/mod/devicetable-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1190: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+0-DAY CI Kernel Test Service
+https://01.org/lkp

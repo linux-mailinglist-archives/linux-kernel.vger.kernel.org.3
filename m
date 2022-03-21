@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32414E2349
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E914B4E234D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345876AbiCUJ1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S1345887AbiCUJ1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345861AbiCUJ1B (ORCPT
+        with ESMTP id S244434AbiCUJ1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:27:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E25CF65154
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647854735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GzohBbkrXG4LXx7mo3/JLEha1Z8wnON9GrcgVqSwS/Y=;
-        b=UbP75GyGALyKef6rFedLwC281x+CcooNeA7xh34InzUtPgjlWcnQMaLWcnVZzaCzrYUbYU
-        CArPmUGWapV+ioHbMb7EK1bepM49VzRqXiSdSEX03ezsTTcy+0otrSFT6J/hDBSLsJHZrs
-        VKHfEd0MqCucHMyPfZCjm5uwt/UiuJ8=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-381-ioT026ynNiWXfdDsJNW_2Q-1; Mon, 21 Mar 2022 05:25:33 -0400
-X-MC-Unique: ioT026ynNiWXfdDsJNW_2Q-1
-Received: by mail-pf1-f199.google.com with SMTP id w19-20020aa79553000000b004fa64758b82so6177305pfq.22
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:25:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GzohBbkrXG4LXx7mo3/JLEha1Z8wnON9GrcgVqSwS/Y=;
-        b=Gs97eD3vKnX6G2kYjf6hygwxg6n0XWi7tmNN+NTthr4QmHmq6Oid7WdXHjJZGANnZm
-         Ndpmg9Eq9kWPZmlGVkhHYpu3nmMOAq6wFu8M8bF93nKim4r24PMUrUgQaT5QdS1xcMCZ
-         QmerPVvcnTZzq2bZ5LiGb8jZCY580iLngqe9KY4xLBxNU7cLC0I0CvsijHmD+Vu+T/ST
-         m13ItYQKMn2+p3CA7x4+U/5bWSC6GhSnuz+YDXwS/HDFllmjLRNPgh6RWlv0XwFYtovV
-         OnOOexzOavPQQZR3DPT2SDea06VRoyjDeQJOvQFKsnZ74QC8KSIOlHIlzdrmuCzw9a3/
-         M91Q==
-X-Gm-Message-State: AOAM533ZwfDwZolaYNk/+rwK8NyHbGWU39fqORpLHXs07jlb2TvGAvyx
-        mqP6WKGi5NHpk2tFoQ5+FrqfqGHRR2JQW6J5v7afj5iUMBZn8t6J0WzGAMXVLixYaYoAFp1Zr0d
-        Vh6fd1REvfOJTbg9j66nSlBRJd0spgSuC03M8KEF8
-X-Received: by 2002:a05:6a00:2182:b0:4fa:6d20:d95d with SMTP id h2-20020a056a00218200b004fa6d20d95dmr16423572pfi.83.1647854732190;
-        Mon, 21 Mar 2022 02:25:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy5GIeW+QMX4U4V2zHohKqElMK7B6VgQJYnzw3N7Tv/o+8SUhfr7/r1sr09VsGyUW1SRSGOo/l09OeZwZL0rvE=
-X-Received: by 2002:a05:6a00:2182:b0:4fa:6d20:d95d with SMTP id
- h2-20020a056a00218200b004fa6d20d95dmr16423547pfi.83.1647854731876; Mon, 21
- Mar 2022 02:25:31 -0700 (PDT)
+        Mon, 21 Mar 2022 05:27:20 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264604F479
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:25:55 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KMTdy4r50z9srY;
+        Mon, 21 Mar 2022 17:21:58 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 21 Mar 2022 17:25:52 +0800
+Subject: Re: [PATCH] mm/mempolicy: fix potential mpol_new leak in
+ shared_policy_replace
+To:     Michal Hocko <mhocko@suse.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        <kosaki.motohiro@jp.fujitsu.com>, <mgorman@suse.de>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220311093624.39546-1-linmiaohe@huawei.com>
+ <Yi9w7TCYbj+OLGXJ@dhcp22.suse.cz>
+ <26577566-ae1e-801c-8c64-89c2c89a487d@huawei.com>
+ <YjCwYpTbGzAj9kmg@dhcp22.suse.cz>
+ <24b2a9ef-eea0-09bd-6842-121d8436e56a@huawei.com>
+ <YjG0PsF25wpAEOY3@dhcp22.suse.cz>
+ <6ebebfd6-6356-e956-4fbc-0abaa58308ff@huawei.com>
+ <YjL5Y6ZrZ2eLnnTv@dhcp22.suse.cz>
+ <207bbd69-6678-5120-3760-e2bcd9803a14@huawei.com>
+ <36b0ea44-39ab-bc52-1ae5-eca2cf832900@huawei.com>
+ <Yjg+hVuJBPGhkfeJ@dhcp22.suse.cz>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <0d306244-748e-9774-8578-525073770a3f@huawei.com>
+Date:   Mon, 21 Mar 2022 17:25:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220320190602.7484-1-jose.exposito89@gmail.com>
-In-Reply-To: <20220320190602.7484-1-jose.exposito89@gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 21 Mar 2022 10:25:20 +0100
-Message-ID: <CAO-hwJKZUSTaWUpE_vsvAs-MNoZ8UJLgxiCyQ6OzwHYFZszf2w@mail.gmail.com>
-Subject: Re: [PATCH] HID: multitouch: fix Dell Precision 7550 and 7750 button type
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     jkosina@suse.cz, tiwai@suse.de, regressions@leemhuis.info,
-        peter.hutterer@who-t.net, linux-input@vger.kernel.org,
-        stable@vger.kernel.org, regressions@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <Yjg+hVuJBPGhkfeJ@dhcp22.suse.cz>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,130 +63,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jos=C3=A9,
+On 2022/3/21 16:59, Michal Hocko wrote:
+> On Sat 19-03-22 18:42:33, Miaohe Lin wrote:
+> [...]
+>> This would be triggered easily with below code snippet in my virtual machine:
+>>
+>> 	shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
+>> 	shm = shmat(shmid, 0, 0);
+>> 	loop {
+>> 		mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
+>> 		mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask, maxnode, 0);
+>> 	}
+>>
+>> If there're many process doing the above work, mpol_new will be leaked easily.
+>> So should I resend this patch with Cc stable? But it seems I'am not supposed
+>> to make this decision and the maintainer will take care of this?
+> 
+> I would just add
+> Fixes: 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
+> Cc: stable # 3.8
+> 
+> And also add your above reproducer snippet added to the original changelog.
+> This would be more then enough to conclude the importance.
 
-On Sun, Mar 20, 2022 at 8:06 PM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gm=
-ail.com> wrote:
->
-> The touchpad present in the Dell Precision 7550 and 7750 laptops
-> reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
-> the device is not a clickpad, it is a touchpad with physical buttons.
->
-> In order to fix this issue, a quirk for the device was introduced in
-> libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
->
->         [Precision 7x50 Touchpad]
->         MatchBus=3Di2c
->         MatchUdevType=3Dtouchpad
->         MatchDMIModalias=3Ddmi:*svnDellInc.:pnPrecision7?50*
->         AttrInputPropDisable=3DINPUT_PROP_BUTTONPAD
->
-> However, because of the change introduced in 37ef4c19b4 ("Input: clear
-> BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
-> anymore breaking the device right click button.
->
-> In order to fix the issue, create a quirk for the device forcing its
-> button type to touchpad regardless of the value reported by the
-> firmware.
->
-> [1] https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/481
-> [2] https://bugzilla.redhat.com/show_bug.cgi?id=3D1868789
->
-> Fixes: 37ef4c19b4 ("Input: clear BTN_RIGHT/MIDDLE on buttonpads")
-> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-> ---
+Will do. Many thanks for your patience and suggestion!
 
-Thanks for the patch.
-However, I'd like to put this one on hold for a bit. I am discussing
-it right now with Peter and we are trying to see what are the possible
-implications of starting to fix those in the kernel one by one.
+> 
+> Thank you for working hard on this!
 
-So Jiri, please hold on before applying this one.
+Thanks. :)
 
-Cheers,
-Benjamin
-
->  drivers/hid/hid-ids.h        |  3 +++
->  drivers/hid/hid-multitouch.c | 20 ++++++++++++++++++++
->  2 files changed, 23 insertions(+)
->
-> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-> index 78bd3ddda442..6cf7a5b6835b 100644
-> --- a/drivers/hid/hid-ids.h
-> +++ b/drivers/hid/hid-ids.h
-> @@ -287,6 +287,9 @@
->
->  #define USB_VENDOR_ID_CIDC             0x1677
->
-> +#define USB_VENDOR_ID_CIRQUE_CORP              0x0488
-> +#define USB_DEVICE_ID_DELL_PRECISION_7X50      0x120A
-> +
->  #define USB_VENDOR_ID_CJTOUCH          0x24b8
->  #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0020 0x0020
->  #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0040 0x0040
-> diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-> index 99eabfb4145b..f012cf8e0b8c 100644
-> --- a/drivers/hid/hid-multitouch.c
-> +++ b/drivers/hid/hid-multitouch.c
-> @@ -71,6 +71,7 @@ MODULE_LICENSE("GPL");
->  #define MT_QUIRK_SEPARATE_APP_REPORT   BIT(19)
->  #define MT_QUIRK_FORCE_MULTI_INPUT     BIT(20)
->  #define MT_QUIRK_DISABLE_WAKEUP                BIT(21)
-> +#define MT_QUIRK_BUTTONTYPE_TOUCHPAD   BIT(22)
->
->  #define MT_INPUTMODE_TOUCHSCREEN       0x02
->  #define MT_INPUTMODE_TOUCHPAD          0x03
-> @@ -194,6 +195,7 @@ static void mt_post_parse(struct mt_device *td, struc=
-t mt_application *app);
->  #define MT_CLS_WIN_8_FORCE_MULTI_INPUT         0x0015
->  #define MT_CLS_WIN_8_DISABLE_WAKEUP            0x0016
->  #define MT_CLS_WIN_8_NO_STICKY_FINGERS         0x0017
-> +#define MT_CLS_BUTTONTYPE_TOUCHPAD             0x0018
->
->  /* vendor specific classes */
->  #define MT_CLS_3M                              0x0101
-> @@ -302,6 +304,15 @@ static const struct mt_class mt_classes[] =3D {
->                         MT_QUIRK_CONTACT_CNT_ACCURATE |
->                         MT_QUIRK_WIN8_PTP_BUTTONS,
->                 .export_all_inputs =3D true },
-> +       { .name =3D MT_CLS_BUTTONTYPE_TOUCHPAD,
-> +               .quirks =3D MT_QUIRK_ALWAYS_VALID |
-> +                       MT_QUIRK_IGNORE_DUPLICATES |
-> +                       MT_QUIRK_HOVERING |
-> +                       MT_QUIRK_CONTACT_CNT_ACCURATE |
-> +                       MT_QUIRK_STICKY_FINGERS |
-> +                       MT_QUIRK_WIN8_PTP_BUTTONS |
-> +                       MT_QUIRK_BUTTONTYPE_TOUCHPAD,
-> +               .export_all_inputs =3D true },
->
->         /*
->          * vendor specific classes
-> @@ -1286,6 +1297,9 @@ static int mt_touch_input_configured(struct hid_dev=
-ice *hdev,
->             (app->buttons_count =3D=3D 1))
->                 td->is_buttonpad =3D true;
->
-> +       if (app->quirks & MT_QUIRK_BUTTONTYPE_TOUCHPAD)
-> +               td->is_buttonpad =3D false;
-> +
->         if (td->is_buttonpad)
->                 __set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
->
-> @@ -1872,6 +1886,12 @@ static const struct hid_device_id mt_devices[] =3D=
- {
->                 MT_USB_DEVICE(USB_VENDOR_ID_CHUNGHWAT,
->                         USB_DEVICE_ID_CHUNGHWAT_MULTITOUCH) },
->
-> +       /* Cirque Corp (Dell Precision 7550 and 7750 touchpad) */
-> +       { .driver_data =3D MT_CLS_BUTTONTYPE_TOUCHPAD,
-> +               HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
-> +                       USB_VENDOR_ID_CIRQUE_CORP,
-> +                       USB_DEVICE_ID_DELL_PRECISION_7X50) },
-> +
->         /* CJTouch panels */
->         { .driver_data =3D MT_CLS_NSMU,
->                 MT_USB_DEVICE(USB_VENDOR_ID_CJTOUCH,
-> --
-> 2.25.1
->
+> 
 

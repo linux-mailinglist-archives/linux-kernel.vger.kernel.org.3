@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2744E318A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67294E3181
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353231AbiCUUOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 16:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S1352981AbiCUUOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 16:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353801AbiCUUNi (ORCPT
+        with ESMTP id S1353824AbiCUUNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 16:13:38 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81DB1903C3;
-        Mon, 21 Mar 2022 13:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647893500; x=1679429500;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z8WP1RGPL88u36PT8SomMKEO3KoX3/fuD+pk4+0xO5s=;
-  b=GQthUszUsCsySLpMhb2ahpHnj54CRKqlkqgpebrsHk8iIaqaEjg7S0D3
-   ADbh9s8ansYvWkKeb4je6H/pghdF0iBzUouJgMkINq/nRt5KoDSmJuJEd
-   4ru4mRrvT2Xsy8T7t25UTVoopE+FNKBW7J0O0OhG+Sr5qZscWCetKrZou
-   aisNQspWo6Gm82cLMXtgAASfEhTAlXa/k9V+cW6MfqugVKb1bMgvQvTV0
-   81U/6EpAMCf6QK+NG+4KOWiqrIS/4kNnM4pd0bHDpEfF0PlRVI6SCWzW/
-   0g5tB9jui5S3lzIgPHjTJYH2aLw5iuY6KcfvzSErVwe6fXGZLXfrZD9Vb
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="245112937"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="245112937"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 13:11:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="518572519"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 21 Mar 2022 13:11:36 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWONL-000I7U-9Q; Mon, 21 Mar 2022 20:11:35 +0000
-Date:   Tue, 22 Mar 2022 04:11:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
-        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, oliver@neukum.org
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn,
-        sunshouxin@chinatelecom.cn
-Subject: Re: [PATCH v5 4/4] net:bonding:Add support for IPV6 RLB to
- balance-alb mode
-Message-ID: <202203220325.jryz7YMX-lkp@intel.com>
-References: <20220321084704.36370-5-sunshouxin@chinatelecom.cn>
+        Mon, 21 Mar 2022 16:13:39 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE05195D92
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 13:11:45 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id jx9so91564pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 13:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=GRTJ3z9kr+ZMTi887PQDmXrT042NqksLTniuRsYDq+0=;
+        b=dKOkYG1/Q//rVjsAYrTYx6OeMeecCd7pQMxEJNPNmL0I22ozrLsgdPpSQcTBQLriXt
+         2RK0XOapLpdhWIy+/0afeI2tS8ES+l2Qo56yKXAljAFwgZMn1DbKa1DBeD04vOdd9a0j
+         Mg4Wz7wDWP1LJsqvVFk+wOFV8usuOdpTsgxkxYUF8iopEMeclSki1zAdz47nPILBBpx2
+         rRNLkS8HLT3LjN6S9eyyEZubppw4SP6LVoJpINm7amKVzR8VYv4sT/tI1h5cKa9yhImK
+         FCH/zVcU6Kg7DQr9hFPJXxfhVSFVx1Y+l1yUSYrIr3rRaELjaaJ3ummFIuhvXvKcQZA0
+         4rNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=GRTJ3z9kr+ZMTi887PQDmXrT042NqksLTniuRsYDq+0=;
+        b=Ph+MzUINi1o+LZ5FlinCwSBAo73Vo2f1LkGEANzpr3lLjlzP1tbjT8HBYTbWSgY6TD
+         TyCq84aVTkr5c4LH8UeEXbGFwaH31z7kRnhiAqZoI5TXxxXPi9PiTFM+N0qvc+MFYXMh
+         VTI3xjtnw1F19At5EsM0k4tVZ0qo/d8uYldQLdlZIdnNrwRnkxCBID0qDqsf3/AT71C1
+         QGkM48ODix5QDiiYw89vTg7bq3nYDdSjlooOH08SQueoCJoEhB3LqQTVimmE5QEpLw6Q
+         pp1XV6/OgKRYsKi4Gtq4ytDd7Zi+5mNX0Ey14twYzfMGcYnImUxroahPK50Ct14Lr//1
+         F5lg==
+X-Gm-Message-State: AOAM533PJDb5LsJIFO15qZx6Q8QM+BqoTvYCQaefU7DhsKVLvUrdXDfh
+        5CCmhR0hzdPfr/CzRPTvl30=
+X-Google-Smtp-Source: ABdhPJwgDwHuIFAon5Xv3pvyosEkL2wWYJloZBE528MbfnXHUJXQuhvM0dP+KmOJVsswKlwPhPgpOA==
+X-Received: by 2002:a17:90a:f011:b0:1c7:1800:a86d with SMTP id bt17-20020a17090af01100b001c71800a86dmr854630pjb.175.1647893504032;
+        Mon, 21 Mar 2022 13:11:44 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id y34-20020a056a00182200b004f71c56a7e8sm20418740pfa.213.2022.03.21.13.11.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 13:11:43 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 21 Mar 2022 10:11:42 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [GIT PULL] workqueue changes for v5.18-rc1
+Message-ID: <Yjjb/qouuLRtV2XW@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321084704.36370-5-sunshouxin@chinatelecom.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sun,
+Hello, Linus.
 
-Thank you for the patch! Yet something to improve:
+Workqueue changes for v5.18-rc1. Nothing major. All follow-up cleanups from
+Lai after the earlier synchronization simplification.
 
-[auto build test ERROR on 092d992b76ed9d06389af0bc5efd5279d7b1ed9f]
+Thanks.
 
-url:    https://github.com/0day-ci/linux/commits/Sun-Shouxin/Add-support-for-IPV6-RLB-to-balance-alb-mode/20220321-164934
-base:   092d992b76ed9d06389af0bc5efd5279d7b1ed9f
-config: parisc-buildonly-randconfig-r002-20220320 (https://download.01.org/0day-ci/archive/20220322/202203220325.jryz7YMX-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d84e696c74aa408d01d0e142f8ec11dd5b6410a5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sun-Shouxin/Add-support-for-IPV6-RLB-to-balance-alb-mode/20220321-164934
-        git checkout d84e696c74aa408d01d0e142f8ec11dd5b6410a5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
+The following changes since commit daadb3bd0e8d3e317e36bc2c1542e86c528665e5:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+  Merge tag 'locking_core_for_v5.17_rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2022-01-11 17:24:45 -0800)
 
-All errors (new ones prefixed by >>):
+are available in the Git repository at:
 
-   hppa-linux-ld: drivers/net/phy/micrel.o: in function `lan8814_ts_info':
-   (.text+0xd74): undefined reference to `ptp_clock_index'
-   hppa-linux-ld: drivers/net/phy/micrel.o: in function `lan8814_probe':
-   (.text+0x2ee8): undefined reference to `ptp_clock_register'
-   hppa-linux-ld: drivers/net/bonding/bond_alb.o: in function `rlb_nd_recv':
->> (.text+0x2538): undefined reference to `ipv6_get_ifaddr'
->> hppa-linux-ld: (.text+0x25d0): undefined reference to `inet6_ifa_finish_destroy'
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-5.18
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MICREL_PHY
-   Depends on NETDEVICES && PHYLIB && PTP_1588_CLOCK_OPTIONAL
-   Selected by
-   - KS8851_MLL && NETDEVICES && ETHERNET && NET_VENDOR_MICREL && HAS_IOMEM
-   Selected by
-   - KS8851 && NETDEVICES && ETHERNET && NET_VENDOR_MICREL && SPI
+for you to fetch changes up to bc35f7ef96284b8c963991357a9278a6beafca54:
+
+  workqueue: Convert the type of pool->nr_running to int (2022-01-12 07:46:36 -1000)
+
+----------------------------------------------------------------
+Lai Jiangshan (4):
+      workqueue: Remove the mb() pair between wq_worker_sleeping() and insert_work()
+      workqueue: Change the comments of the synchronization about the idle_list
+      workqueue: Use wake_up_worker() in wq_worker_sleeping() instead of open code
+      workqueue: Convert the type of pool->nr_running to int
+
+ kernel/workqueue.c | 58 +++++++++++++++++++-----------------------------------
+ 1 file changed, 20 insertions(+), 38 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+tejun

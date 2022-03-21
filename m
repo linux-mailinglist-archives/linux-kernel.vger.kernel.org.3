@@ -2,203 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C764E1E7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 01:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B534E1E80
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 01:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343945AbiCUA22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 20:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S1343933AbiCUA3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 20:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343912AbiCUA2L (ORCPT
+        with ESMTP id S1343936AbiCUA26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 20:28:11 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B7DDE915
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:26:47 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id mm2-20020a17090b358200b001bf529127dfso8195674pjb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=Fmv+HMc2DFxNt8CxUdSLz9dfbbTJJCLxSOxGsXm4RyU=;
-        b=p6WWOu56th14hFbz/vDJsj1YNlhWpB7KWlRQjlG5lF4dyCxZxdkzJkQU/tJPoez92d
-         maakq/dfxmhfKGNOZYWMgEKpDoKtFAgijvHMmtYdKhUALE5ymi1R5lTAcHpGpyth9NMf
-         zLrmS3vhHPaaPsoQVmefiC/MjXoB0+gEZmiY0coOY2wrbWU/wCxd4F5t1N8bnMiJd+ab
-         nhjgojLKs3DtNzC0Bm6ejviuERcb3oxb7/dkWQtPSyV0kSSm2ArXx1WZTCNoLXs8rwBY
-         ecDJ78LUFg6Exe7b5GrWHuRX2wfCdtxK8sQe0zG5z1W/0Afu2KR9/lsuAYZrKEoSzkgu
-         7KrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=Fmv+HMc2DFxNt8CxUdSLz9dfbbTJJCLxSOxGsXm4RyU=;
-        b=YEdiCDyHe/KwXyMeJqGpM737PXoGemSD7uFoGUuEYusJC+v5Wxo9aOm7TTiogL003B
-         8OYGd6IW7h9xgrf2INI0cpt6KlAXPKMdV5UcxGrA5Pi6c2tpwKTYx2BWaB61WMBcv2QR
-         MokIGBp9EGdOSOlw4AHeZT5FBD0dWyqp/6mSC1oOd583LWxkCFJY4sCkWrKds0q5rAGE
-         z5lTDa7kQJoyrPM+XFMsUI8hH6RMv57bZmXkFso3BWvGiRbK68NQpS14GqZY92Jc7Or3
-         agmBEqbL2F3tTslJV97cgHc4FXYUV9sj0v5QbL+yImzVYk+j0nLiqvM04PikUGLCWyOU
-         I8EA==
-X-Gm-Message-State: AOAM530E/ksQTx9hjgRjIpqju44hdVLOJuoMSa5Jk4MKGcrVsUih0Jxk
-        AJl7+rXY4Y8nB1qaXtwD795RKDJBM541
-X-Google-Smtp-Source: ABdhPJyKZwK8L7OgfM5eCJrVgG7L/KDRJs9ML8qnRmGqUKzDjY6RiXCxrTBNf2fA8anI5bY3FN33eH2UxTo1
-X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a17:902:b941:b0:14d:af72:3f23 with SMTP id
- h1-20020a170902b94100b0014daf723f23mr10621824pls.6.1647822406401; Sun, 20 Mar
- 2022 17:26:46 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Mon, 21 Mar 2022 00:26:38 +0000
-In-Reply-To: <20220321002638.379672-1-mizhang@google.com>
-Message-Id: <20220321002638.379672-5-mizhang@google.com>
-Mime-Version: 1.0
-References: <20220321002638.379672-1-mizhang@google.com>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH 4/4] selftests: KVM: use dirty logging to check if page stats
- work correctly
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>, Ben Gardon <bgorden@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 20 Mar 2022 20:28:58 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C72FDF4A1
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:27:28 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 830512C05F3;
+        Mon, 21 Mar 2022 00:27:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1647822445;
+        bh=Rz96f5sjJQKWQ0HhnNfpbrE6GlGWm8SFIyHhy6QKXrg=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=PKiSthMC+Bm36Tj/3T5Ruc29yxDAWuwTrPm7ZjVFdzP8/QH7WJkOZXmCdssoK8MZR
+         i/uJAPLqE7eKB4SFVHAVlXcFkGLwZjcU1wQehDhFrr/fyWkfOfW87hjcM5tNom2rDq
+         qijlMvZlSkBtx7NsM358QZ1cCuFy64TI4UP3L2XuUnOHBwapB4T/P1a7WG/7y78LeJ
+         +vUieyRzhZPqwNTQr/TGCfa2efUQt9DI404xE+K42om89AtD5heL7u6EmXKMFGMZ+z
+         hijfXpnq/zbnVMrDzj4J5pJrynOulNii0Z5gRexVW4FQ+Rv8D/Njrt0/p31CwyW6CZ
+         WB6x11EWtrx+Q==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6237c66d0001>; Mon, 21 Mar 2022 13:27:25 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 21 Mar 2022 13:27:25 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Mon, 21 Mar 2022 13:27:25 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading
+ attenuator settings
+Thread-Topic: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading
+ attenuator settings
+Thread-Index: AQHYOk6t2MAzos32V0mfrGePR/IVEazEW2uAgAPK54A=
+Date:   Mon, 21 Mar 2022 00:27:24 +0000
+Message-ID: <84514187-1170-0932-3a31-9e8ce6b07e9d@alliedtelesis.co.nz>
+References: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
+ <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
+ <20220318143223.GA673001@roeck-us.net>
+In-Reply-To: <20220318143223.GA673001@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C4915410CF2A284680B5EA72E2BB5226@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=o8Y5sQTvuykA:10 a=Q6Hju86AWDR5xJoMpMYA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When dirty logging is enabled, KVM splits the all hugepage mapping in
-NPT/EPT into the smallest 4K size. This property could be used to check if
-the page stats metrics work properly in KVM mmu. At the same time, this
-logic might be used the other way around: using page stats to verify if
-dirty logging really splits all huge pages. Moreover, when dirty logging is
-disabled, KVM zaps corresponding SPTEs and we could check whether the large
-pages come back when guest touches the pages again.
-
-So add page stats checking in dirty logging performance selftest. In
-particular, add checks in three locations:
- - just after vm is created;
- - after populating memory into vm but before enabling dirty logging;
- - just after turning on dirty logging.
- - after one final iteration after turning off dirty logging.
-
-Tested using commands:
- - ./dirty_log_perf_test -s anonymous_hugetlb_1gb
- - ./dirty_log_perf_test -s anonymous_thp
-
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: David Matlack <dmatlack@google.com>
-Cc: Jing Zhang <jingzhangos@google.com>
-Cc: Peter Xu <peterx@redhat.com>
-
-Suggested-by: Ben Gardon <bgorden@google.com>
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
----
- .../selftests/kvm/dirty_log_perf_test.c       | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 1954b964d1cf..ab0457d91658 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -19,6 +19,10 @@
- #include "perf_test_util.h"
- #include "guest_modes.h"
- 
-+#ifdef __x86_64__
-+#include "processor.h"
-+#endif
-+
- /* How many host loops to run by default (one KVM_GET_DIRTY_LOG for each loop)*/
- #define TEST_HOST_LOOP_N		2UL
- 
-@@ -185,6 +189,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 				 p->slots, p->backing_src,
- 				 p->partition_vcpu_memory_access);
- 
-+#ifdef __x86_64__
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") == 0,
-+		    "4K page is non zero");
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
-+		    "2M page is non zero");
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
-+		    "1G page is non zero");
-+#endif
- 	perf_test_set_wr_fract(vm, p->wr_fract);
- 
- 	guest_num_pages = (nr_vcpus * guest_percpu_mem_size) >> vm_get_page_shift(vm);
-@@ -222,6 +234,16 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	pr_info("Populate memory time: %ld.%.9lds\n",
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
-+#ifdef __x86_64__
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
-+		    "4K page is zero");
-+	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP)
-+		TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
-+			    "2M page is zero");
-+	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
-+		TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
-+			    "1G page is zero");
-+#endif
- 	/* Enable dirty logging */
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	enable_dirty_logging(vm, p->slots);
-@@ -267,6 +289,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 				iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 		}
- 	}
-+#ifdef __x86_64__
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
-+		    "4K page is zero after dirty logging");
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
-+		    "2M page is non-zero after dirty logging");
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
-+		    "1G page is non-zero after dirty logging");
-+#endif
- 
- 	/* Disable dirty logging */
- 	clock_gettime(CLOCK_MONOTONIC, &start);
-@@ -275,6 +305,28 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
-+#ifdef __x86_64__
-+	/*
-+	 * Increment iteration to run the vcpus again to verify if huge pages
-+	 * come back.
-+	 */
-+	iteration++;
-+	pr_info("Starting the final iteration to verify page stats\n");
-+
-+	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
-+		while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
-+		       != iteration)
-+			;
-+	}
-+
-+	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP)
-+		TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
-+			    "2M page is zero");
-+	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
-+		TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
-+			    "1G page is zero");
-+#endif
-+
- 	/* Tell the vcpu thread to quit */
- 	host_quit = true;
- 	perf_test_join_vcpu_threads(nr_vcpus);
--- 
-2.35.1.894.gb6a874cedc-goog
-
+DQpPbiAxOS8wMy8yMiAwMzozMiwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gRnJpLCBNYXIg
+MTgsIDIwMjIgYXQgMTE6MzA6NTBBTSArMTMwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IFNp
+bXBsaWZ5IGxvYWRfYXR0ZW51YXRvcnMoKSBieSBtYWtpbmcgdXNlIG9mIGVudW0gY2hpcHMgaW5z
+dGVhZCBvZiBpbnQuDQo+Pg0KPiBUaGF0IGlzbid0IHRoZSBvbmx5IHRoaW5nIHRoZSBwYXRjaCBp
+cyBkb2luZy4NCj4NCj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2to
+YW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+IC0tLQ0KPj4NCj4+IE5vdGVzOg0KPj4gICAgICBD
+aGFuZ2VzIGluIHYyOg0KPj4gICAgICAtIE5ldw0KPj4NCj4+ICAgZHJpdmVycy9od21vbi9hZHQ3
+NDc1LmMgfCA0ICsrLS0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBk
+ZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9hZHQ3NDc1LmMg
+Yi9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPj4gaW5kZXggNmRlNTAxZGU0MWIyLi5lYmU0YTg1
+ZWI2MmUgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPj4gKysrIGIv
+ZHJpdmVycy9od21vbi9hZHQ3NDc1LmMNCj4+IEBAIC0xNTY5LDcgKzE1NjksNyBAQCBzdGF0aWMg
+aW50IHNldF9wcm9wZXJ0eV9iaXQoY29uc3Qgc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwgY2hh
+ciAqcHJvcGVydHksDQo+PiAgIAlyZXR1cm4gcmV0Ow0KPj4gICB9DQo+PiAgIA0KPj4gLXN0YXRp
+YyBpbnQgbG9hZF9hdHRlbnVhdG9ycyhjb25zdCBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCBp
+bnQgY2hpcCwNCj4+ICtzdGF0aWMgaW50IGxvYWRfYXR0ZW51YXRvcnMoY29uc3Qgc3RydWN0IGky
+Y19jbGllbnQgKmNsaWVudCwgZW51bSBjaGlwcyBjaGlwLA0KPj4gICAJCQkgICAgc3RydWN0IGFk
+dDc0NzVfZGF0YSAqZGF0YSkNCj4+ICAgew0KPj4gICAJaW50IHJldDsNCj4+IEBAIC0xNTg4LDcg
+KzE1ODgsNyBAQCBzdGF0aWMgaW50IGxvYWRfYXR0ZW51YXRvcnMoY29uc3Qgc3RydWN0IGkyY19j
+bGllbnQgKmNsaWVudCwgaW50IGNoaXAsDQo+PiAgIAkJCQkJCWRhdGEtPmNvbmZpZzQpOw0KPj4g
+ICAJCWlmIChyZXQgPCAwKQ0KPj4gICAJCQlyZXR1cm4gcmV0Ow0KPj4gLQl9IGVsc2UgaWYgKGNo
+aXAgPT0gYWR0NzQ3MyB8fCBjaGlwID09IGFkdDc0NzUpIHsNCj4+ICsJfSBlbHNlIHsNCj4gVGhp
+cyBpcyB0aGUgcmVhbCBjaGFuZ2UuIFdlbGwsIGluIHRoZW9yeS4gSXQgZG9lc24ndCByZWFsbHkg
+bWFrZSBhIGRpZmZlcmVuY2UsDQo+IGl0IGlzIGp1c3QgKGN1cnJlbnRseSkgdW5uZWNlc3Nhcnkg
+YnV0IGNsYXJpZmllcyB0aGF0IHRoZSBmb2xsb3dpbmcgY29kZSBvbmx5DQo+IGFwcGxpZXMgdG8g
+dGhlIHR3byBjaGlwcy4gSXQgbWF5IGJlIGJldHRlciB0byByZXBsYWNlIHRoZSBpZi9lbHNlIHdp
+dGggYSBzd2l0Y2gNCj4gc3RhdGVtZW50IHRvIGNsYXJpZnkgdGhpcy4gRHJvcHBpbmcgdGhlIGNv
+bmRpdGlvbmFsIHdvdWxkIG5vdCByZXF1aXJlIHRvIGNoYW5nZQ0KPiB0aGUgcGFyYW1ldGVyIHR5
+cGUuIFRoYXQgb25seSByZWFsbHkgYWRkcyB2YWx1ZSBpZiB5b3UgYWxzbyB1c2UgYSBzd2l0Y2gN
+Cj4gc3RhdGVtZW50ICh3aXRob3V0IGR1bW15IGRlZmF1bHQpLg0KDQpJJ3ZlIHdyaXR0ZW4gYSB2
+MyB0aGF0IHVwZGF0ZXMgdGhpcyB0byB1c2UgYSBzd2l0Y2ggc3RhdGVtZW50IGJ1dCBJJ2xsIA0K
+d2FpdCB0byBzZW5kIGl0IGluIGNhc2UgdGhlcmUgaXMgYW55IGZlZWRiYWNrIG9uIHRoZSBmaXJz
+dCAyIHBhdGNoZXMuDQoNCj4gVGhhbmtzLA0KPiBHdWVudGVyDQo+DQo+PiAgIAkJc2V0X3Byb3Bl
+cnR5X2JpdChjbGllbnQsICJhZGksYnlwYXNzLWF0dGVudWF0b3ItaW4xIiwNCj4+ICAgCQkJCSAm
+ZGF0YS0+Y29uZmlnMiwgNSk7DQo+PiAgIA==

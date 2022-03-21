@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFFC4E31A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FBC4E31A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353254AbiCUUVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 16:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S1353279AbiCUUWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 16:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352774AbiCUUVi (ORCPT
+        with ESMTP id S1353251AbiCUUWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 16:21:38 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC185A090;
-        Mon, 21 Mar 2022 13:20:12 -0700 (PDT)
-Received: from [192.168.192.153] (unknown [50.126.114.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 9DC7C3F675;
-        Mon, 21 Mar 2022 20:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647894009;
-        bh=uamzDTJ4eJ/ciPYegLGLh1LwOQ1s4XFLg66bcANk+sw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=PhIGq27tIR6YGTpy+wnDQh8CRjPzA5RjWXdayxXMhy9VMK/vpwY2lrozuck/Q0BGn
-         2yNfzkrnwblJGs4nRobrc6x/F1mcqSShK2KsSINwDHalwonqRl1KBYfR/79XCmtIUZ
-         9TaqHNCZy9x0rba3HHAdQtIv/xnIs3/jmTaTaePPl3/8fhxYte7Of7yWFujkaPGFSY
-         owDvM8DqO9XrRHYH7zI+Ji44jGokH9O8pFnPIsw+8Vb4WkzEhyCapetCAnoJlRKANZ
-         kPdxmH8wylIKPTu0S2a5dPc6fNFg+xVQjcL9f9ipykTZbnSca5Tbm3u2UHPnUKJoXy
-         SK0i5xVgkTLog==
-Message-ID: <a6ce3c77-bb90-f074-e3a5-eb16c7b6ea8b@canonical.com>
-Date:   Mon, 21 Mar 2022 13:20:07 -0700
+        Mon, 21 Mar 2022 16:22:35 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCA78E18C;
+        Mon, 21 Mar 2022 13:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Uk8HaBOL7P4QfOhIUP9iNl2Dlr9/HuQQ9W6qQrbtWew=; b=3jgl895yz7aW01SrmLfCaEzigE
+        6Ghr8BJ/yTtOWwrrOjwyZzJkpabCe8wkAFbsZEyOv7oQXISDqtfeo3y2LplYTIPl9zeoGr3ZqW98R
+        3LRBUnUbMLKAlZLCFc4IKJbldxUYVqZGhabI/aMxwETIJQt64x0AaFidZps8fNEUEk+k=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nWOWY-00C0u3-C7; Mon, 21 Mar 2022 21:21:06 +0100
+Date:   Mon, 21 Mar 2022 21:21:06 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Clause 45 and Clause 22 PHYs on one MDIO bus
+Message-ID: <YjjeMo2YjMZkPIYa@lunn.ch>
+References: <240354b0a54b37e8b5764773711b8aa3@walle.cc>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next] apparmor: Fix some kernel-doc comments
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     jmorris@namei.org, serge@hallyn.com, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220317010330.82929-1-yang.lee@linux.alibaba.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20220317010330.82929-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <240354b0a54b37e8b5764773711b8aa3@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 18:03, Yang Li wrote:
-> Remove some warnings found by running scripts/kernel-doc,
-> which is caused by using 'make W=1'.
+On Mon, Mar 21, 2022 at 12:21:48PM +0100, Michael Walle wrote:
+> Hi,
 > 
-> security/apparmor/domain.c:137: warning: Function parameter or member
-> 'state' not described in 'label_compound_match'
-> security/apparmor/domain.c:137: warning: Excess function parameter
-> 'start' description in 'label_compound_match'
-> security/apparmor/domain.c:1294: warning: Excess function parameter
-> 'onexec' description in 'aa_change_profile'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> I have a board with a c22 phy (microchip lan8814) and a c45 phy
+> (intel/maxlinear gyp215) on one bus. If I understand it correctly, both
+> accesses should be able to coexist on one bus.
 
-Acked-by: John Johansen <john.johansen@canonical.com>
+Yes. A C22 PHY should ignore a C45 access and vica versa.
 
-I have pulled this into my tree
+> But the microchip lan8814
+> actually has a bug and gets confused by c45 accesses. For example it will
+> respond in the middle of another transaction with its own data if it
+> decodes it as a read. That is something we can see on a logic analyzer.
+> But we also see random register writes on the lan8814 (which you don't see
+> on the logic analyzer obviously). Fortunately, the GPY215 supports indirect
+> MMD access by the standard c22 registers. Thus as a workaround for the
+> problem, we could have a c22 only mdio bus.
 
+That should work, but you loose some performance.
 
-> ---
->  security/apparmor/domain.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
-> index a29e69d2c300..d71023f5c9c4 100644
-> --- a/security/apparmor/domain.c
-> +++ b/security/apparmor/domain.c
-> @@ -119,7 +119,7 @@ static inline unsigned int match_component(struct aa_profile *profile,
->   * @profile: profile to find perms for
->   * @label: label to check access permissions for
->   * @stack: whether this is a stacking request
-> - * @start: state to start match in
-> + * @state: state to start match in
->   * @subns: whether to do permission checks on components in a subns
->   * @request: permissions to request
->   * @perms: perms struct to set
-> @@ -1279,7 +1279,6 @@ static int change_profile_perms_wrapper(const char *op, const char *name,
->  /**
->   * aa_change_profile - perform a one-way profile transition
->   * @fqname: name of profile may include namespace (NOT NULL)
-> - * @onexec: whether this transition is to take place immediately or at exec
->   * @flags: flags affecting change behavior
->   *
->   * Change to new profile @name.  Unlike with hats, there is no way
+> The SoC I'm using is the LAN9668, which uses the mdio-mscc-mdio driver.
+> First problem there, it doesn't support C45 (yet) but also doesn't check
+> for MII_ADDR_C45 and happily reads/writes bogus registers.
 
+There are many drivers like that :-(
+
+Whenever a new driver is posted, it is one of the things i ask
+for. But older drivers are missing such checks.
+
+> I've looked at the mdio subsystem in linux, there is probe_capabilities
+> (MDIOBUS_C45 and friends) but the mxl-gpy.c is using c45 accesses
+> nevertheless. I'm not sure if this is a bug or not.
+
+No, that is not a bug. The PHY driver knows the device should be c45
+capable. So it will use C45 addresses. The phydev->is_c45 should
+indicate if it is possible to perform c45 transactions to the PHY. If
+it is not, the core will make use of indirect access via C22,
+otherwise the core will perform a direct C45 access.
+
+So it seems like all you need to do is make mdio-mscc-mdio return
+-EOPNOTSUPP for C45 and check that phydev->is_c45 is correctly false.
+
+	   Andrew

@@ -2,594 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317364E24E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EB74E24E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346630AbiCULDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S1346603AbiCULDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346581AbiCULDO (ORCPT
+        with ESMTP id S1346609AbiCULDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:03:14 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55E214AC87;
-        Mon, 21 Mar 2022 04:01:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647860504; x=1679396504;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xRBwtIDh/v/20pCfRvuDYxkddItfePzENa7BMyH4adk=;
-  b=EWpxffcLeYtPdYuvBYdQvJxj5QPTtsmxEHP5SK3csLA5X8nfNQ/w+94Y
-   6HD9Tu9Ue6jzooKW3IwpVe4QP+lYS1bb9a1jccZjt/q9Y57yGrZIyGEhU
-   nr5DMCIvC05vk4qG86GSgZq4hGm+s2vIP6z64qbPGRnIetUJGBsZoOHhG
-   O0fRglKRIm6/2y8kFah4/CVu00uVSCf9pYQmTPvdCXRl1HeAerCIdlIkG
-   DSmfTvjC2/owjGvLbVswR86+5+wI+s9GsiIQruSxRYPcUVpMZp0u+Qq73
-   RgeHbsbLu82VcXpfOxV1rf/MDsOb7ZwI0r6H/74TFqavCLoY4xlrRXJEs
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="237467098"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="237467098"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 04:01:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="543173208"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga007.jf.intel.com with ESMTP; 21 Mar 2022 04:01:21 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 22LB1HaF031880;
-        Mon, 21 Mar 2022 11:01:20 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        Marcin Szycik <marcin.szycik@linux.intel.com>,
-        Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 net-next 4/5] ice: switch: use convenience macros to declare dummy pkt templates
-Date:   Mon, 21 Mar 2022 11:59:53 +0100
-Message-Id: <20220321105954.843154-5-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321105954.843154-1-alexandr.lobakin@intel.com>
-References: <20220321105954.843154-1-alexandr.lobakin@intel.com>
+        Mon, 21 Mar 2022 07:03:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02ECB12B77F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647860506;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=71QPtwQWP7irJw6pdvQh6v8H9j0P/xaK2PjPht9nnok=;
+        b=XQnmjuIElddd4C6guRilrNqQbHYhsZEmlRMEfs9bkwzTikRYQuhzkLmE+bO10aZ6wDDiSN
+        z1Bs3jS0C/65W9P1q0xQDS2bTng+8HTMG6pvKq9zpjyVpRG4oUPDsXcZxclD/00U9hq18u
+        NvKcOxLLMi/zMb61JW3nJAfvK4y4Bwk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-295-eimu4xTvOZSvzDJU6H-8qA-1; Mon, 21 Mar 2022 07:01:45 -0400
+X-MC-Unique: eimu4xTvOZSvzDJU6H-8qA-1
+Received: by mail-ed1-f72.google.com with SMTP id b24-20020a50e798000000b0041631767675so8407399edn.23
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:01:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=71QPtwQWP7irJw6pdvQh6v8H9j0P/xaK2PjPht9nnok=;
+        b=M0o+JeNZ+5HcTL/u1TKKi1rukXH8kK/gex51821MlsJTQ9+u68eWEWfCckYLe0dU22
+         8oVtSf0zk+bN5KGLT6cYE5ub5tsYJaOatYpcm9JBRt9xbuTeSZgvIMFAJ6sG7xeJWhAf
+         3z73C8XZiTemxwqn+b9eag8OSKBV8QTazqqqwobvIly5lYMcWIYN8DYxQ46I1R5VNP/m
+         Uoju9w+WOiBnBr5kSl3XPDaP6yB1p9sqR74IFrpCGmrAVEDlr8BaAm5aM60xr0/GaM6Y
+         64MrZgNImMrPsb82vgKFa6OPdKxMrohvGrTTBl8G9KfCYbQNzbJv3QcW10Rh8h//jVhM
+         6YsA==
+X-Gm-Message-State: AOAM531x9mw75N1eQSCN3ydGTqKy9+rgogmUBrj/nVJbY8nXUoRjmGlq
+        zdO0phW5Ll4NqAXYIu/qJ5fhdZjkBYsryVFJSuw2goC52mqQ0W8YLwASUzW6uIxHkGpfMXjMbou
+        4XvImEma2YFXU8Ir7D1B8BH++
+X-Received: by 2002:a17:907:7254:b0:6db:ad8f:27b4 with SMTP id ds20-20020a170907725400b006dbad8f27b4mr20312115ejc.599.1647860502593;
+        Mon, 21 Mar 2022 04:01:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw10B4UloyTBi1a7t4NLKKvwYaVeL4Lf9on50mGbJUjofJKCu/uM89wiMqWJDmBuZn+jijjIg==
+X-Received: by 2002:a17:907:7254:b0:6db:ad8f:27b4 with SMTP id ds20-20020a170907725400b006dbad8f27b4mr20312076ejc.599.1647860502271;
+        Mon, 21 Mar 2022 04:01:42 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id e28-20020a170906649c00b006df6dfeb557sm6869828ejm.49.2022.03.21.04.01.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 04:01:41 -0700 (PDT)
+Message-ID: <33b6fb1d-b35c-faab-4737-01427c48d09d@redhat.com>
+Date:   Mon, 21 Mar 2022 12:01:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [syzbot] WARNING in kvm_mmu_notifier_invalidate_range_start (2)
+Content-Language: en-US
+To:     syzbot <syzbot+6bde52d89cfdf9f61425@syzkaller.appspotmail.com>,
+        david@redhat.com, frankja@linux.ibm.com, imbrenda@linux.ibm.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maciej.szmigiero@oracle.com, seanjc@google.com,
+        syzkaller-bugs@googlegroups.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <000000000000b6df0f05dab7e92c@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <000000000000b6df0f05dab7e92c@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Declarations of dummy/template packet headers and offsets can be
-minified to improve readability and simplify adding new templates.
-Move all the repetitive constructions into two macros and let them
-do the name and type expansions.
-Linewrap removal is yet another positive side effect.
+On 3/21/22 11:25, syzbot wrote:
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a2d0a9700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d34fd9700000
+> 
+> The issue was bisected to:
+> 
+> commit ed922739c9199bf515a3e7fec3e319ce1edeef2a
+> Author: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> Date:   Mon Dec 6 19:54:28 2021 +0000
+> 
+>      KVM: Use interval tree to do fast hva lookup in memslots
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=142aa59d700000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=162aa59d700000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=122aa59d700000
 
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Tested-by: Marcin Szycik <marcin.szycik@linux.intel.com>
----
- drivers/net/ethernet/intel/ice/ice_switch.c | 133 +++++++++-----------
- 1 file changed, 62 insertions(+), 71 deletions(-)
+It bisects here just because the patch introduces the warning; the issue 
+is a mmu_notifier_invalidate_range_start with an empty range.  The 
+offending system call
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_switch.c b/drivers/net/ethernet/intel/ice/ice_switch.c
-index 4697eb8b4c66..cde9e480ea89 100644
---- a/drivers/net/ethernet/intel/ice/ice_switch.c
-+++ b/drivers/net/ethernet/intel/ice/ice_switch.c
-@@ -41,15 +41,22 @@ struct ice_dummy_pkt_profile {
- 	u16 pkt_len;
- };
- 
-+#define ICE_DECLARE_PKT_OFFSETS(type)					\
-+	static const struct ice_dummy_pkt_offsets			\
-+	ice_dummy_##type##_packet_offsets[]
+mremap(&(0x7f000000d000/0x2000)=nil, 0xfffffffffffffe74, 0x1000, 0x3, 
+&(0x7f0000007000/0x1000)=nil)
+
+really means old_len == 0 (it's page-aligned at the beginning of 
+sys_mremap), and flags includes MREMAP_FIXED so it goes down to 
+mremap_to and from there to move_page_tables.  No function on this path 
+attempts to special case old_len == 0, the immediate fix would be
+
+diff --git a/mm/mremap.c b/mm/mremap.c
+index 002eec83e91e..0e175aef536e 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -486,6 +486,9 @@ unsigned long move_page_tables(struct vm_area_struct
+  	pmd_t *old_pmd, *new_pmd;
+  	pud_t *old_pud, *new_pud;
+
++	if (!len)
++		return 0;
 +
-+#define ICE_DECLARE_PKT_TEMPLATE(type)					\
-+	static const u8 ice_dummy_##type##_packet[]
-+
- #define ICE_PKT_PROFILE(type) ({					\
- 	(struct ice_dummy_pkt_profile){					\
--		.pkt		= dummy_##type##_packet,		\
--		.pkt_len	= sizeof(dummy_##type##_packet),	\
--		.offsets	= dummy_##type##_packet_offsets,	\
-+		.pkt		= ice_dummy_##type##_packet,		\
-+		.pkt_len	= sizeof(ice_dummy_##type##_packet),	\
-+		.offsets	= ice_dummy_##type##_packet_offsets,	\
- 	};								\
- })
- 
--static const struct ice_dummy_pkt_offsets dummy_gre_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(gre_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -61,7 +68,7 @@ static const struct ice_dummy_pkt_offsets dummy_gre_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_gre_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(gre_tcp) = {
- 	0x00, 0x00, 0x00, 0x00,	/* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -96,7 +103,7 @@ static const u8 dummy_gre_tcp_packet[] = {
- 	0x00, 0x00, 0x00, 0x00
- };
- 
--static const struct ice_dummy_pkt_offsets dummy_gre_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(gre_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -108,7 +115,7 @@ static const struct ice_dummy_pkt_offsets dummy_gre_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_gre_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(gre_udp) = {
- 	0x00, 0x00, 0x00, 0x00,	/* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -140,7 +147,7 @@ static const u8 dummy_gre_udp_packet[] = {
- 	0x00, 0x08, 0x00, 0x00,
- };
- 
--static const struct ice_dummy_pkt_offsets dummy_udp_tun_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(udp_tun_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -155,7 +162,7 @@ static const struct ice_dummy_pkt_offsets dummy_udp_tun_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_udp_tun_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(udp_tun_tcp) = {
- 	0x00, 0x00, 0x00, 0x00,  /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -193,7 +200,7 @@ static const u8 dummy_udp_tun_tcp_packet[] = {
- 	0x00, 0x00, 0x00, 0x00
- };
- 
--static const struct ice_dummy_pkt_offsets dummy_udp_tun_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(udp_tun_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -208,7 +215,7 @@ static const struct ice_dummy_pkt_offsets dummy_udp_tun_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_udp_tun_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(udp_tun_udp) = {
- 	0x00, 0x00, 0x00, 0x00,  /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -243,8 +250,7 @@ static const u8 dummy_udp_tun_udp_packet[] = {
- 	0x00, 0x08, 0x00, 0x00,
- };
- 
--static const struct ice_dummy_pkt_offsets
--dummy_gre_ipv6_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(gre_ipv6_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -256,7 +262,7 @@ dummy_gre_ipv6_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_gre_ipv6_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(gre_ipv6_tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -296,8 +302,7 @@ static const u8 dummy_gre_ipv6_tcp_packet[] = {
- 	0x00, 0x00, 0x00, 0x00
- };
- 
--static const struct ice_dummy_pkt_offsets
--dummy_gre_ipv6_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(gre_ipv6_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -309,7 +314,7 @@ dummy_gre_ipv6_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_gre_ipv6_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(gre_ipv6_udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -346,8 +351,7 @@ static const u8 dummy_gre_ipv6_udp_packet[] = {
- 	0x00, 0x08, 0x00, 0x00,
- };
- 
--static const struct ice_dummy_pkt_offsets
--dummy_udp_tun_ipv6_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(udp_tun_ipv6_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -362,7 +366,7 @@ dummy_udp_tun_ipv6_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_udp_tun_ipv6_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(udp_tun_ipv6_tcp) = {
- 	0x00, 0x00, 0x00, 0x00,  /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -405,8 +409,7 @@ static const u8 dummy_udp_tun_ipv6_tcp_packet[] = {
- 	0x00, 0x00, 0x00, 0x00
- };
- 
--static const struct ice_dummy_pkt_offsets
--dummy_udp_tun_ipv6_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(udp_tun_ipv6_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -421,7 +424,7 @@ dummy_udp_tun_ipv6_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_udp_tun_ipv6_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(udp_tun_ipv6_udp) = {
- 	0x00, 0x00, 0x00, 0x00,  /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -462,7 +465,7 @@ static const u8 dummy_udp_tun_ipv6_udp_packet[] = {
- };
- 
- /* offset info for MAC + IPv4 + UDP dummy packet */
--static const struct ice_dummy_pkt_offsets dummy_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -471,7 +474,7 @@ static const struct ice_dummy_pkt_offsets dummy_udp_packet_offsets[] = {
- };
- 
- /* Dummy packet for MAC + IPv4 + UDP */
--static const u8 dummy_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -491,7 +494,7 @@ static const u8 dummy_udp_packet[] = {
- };
- 
- /* offset info for MAC + VLAN + IPv4 + UDP dummy packet */
--static const struct ice_dummy_pkt_offsets dummy_vlan_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(vlan_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_VLAN_OFOS,	12 },
- 	{ ICE_ETYPE_OL,		16 },
-@@ -501,7 +504,7 @@ static const struct ice_dummy_pkt_offsets dummy_vlan_udp_packet_offsets[] = {
- };
- 
- /* C-tag (801.1Q), IPv4:UDP dummy packet */
--static const u8 dummy_vlan_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(vlan_udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -523,7 +526,7 @@ static const u8 dummy_vlan_udp_packet[] = {
- };
- 
- /* offset info for MAC + IPv4 + TCP dummy packet */
--static const struct ice_dummy_pkt_offsets dummy_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -532,7 +535,7 @@ static const struct ice_dummy_pkt_offsets dummy_tcp_packet_offsets[] = {
- };
- 
- /* Dummy packet for MAC + IPv4 + TCP */
--static const u8 dummy_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -555,7 +558,7 @@ static const u8 dummy_tcp_packet[] = {
- };
- 
- /* offset info for MAC + VLAN (C-tag, 802.1Q) + IPv4 + TCP dummy packet */
--static const struct ice_dummy_pkt_offsets dummy_vlan_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(vlan_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_VLAN_OFOS,	12 },
- 	{ ICE_ETYPE_OL,		16 },
-@@ -565,7 +568,7 @@ static const struct ice_dummy_pkt_offsets dummy_vlan_tcp_packet_offsets[] = {
- };
- 
- /* C-tag (801.1Q), IPv4:TCP dummy packet */
--static const u8 dummy_vlan_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(vlan_tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -589,7 +592,7 @@ static const u8 dummy_vlan_tcp_packet[] = {
- 	0x00, 0x00,	/* 2 bytes for 4 byte alignment */
- };
- 
--static const struct ice_dummy_pkt_offsets dummy_tcp_ipv6_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(tcp_ipv6) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV6_OFOS,	14 },
-@@ -597,7 +600,7 @@ static const struct ice_dummy_pkt_offsets dummy_tcp_ipv6_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_tcp_ipv6_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(tcp_ipv6) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -625,8 +628,7 @@ static const u8 dummy_tcp_ipv6_packet[] = {
- };
- 
- /* C-tag (802.1Q): IPv6 + TCP */
--static const struct ice_dummy_pkt_offsets
--dummy_vlan_tcp_ipv6_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(vlan_tcp_ipv6) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_VLAN_OFOS,	12 },
- 	{ ICE_ETYPE_OL,		16 },
-@@ -636,7 +638,7 @@ dummy_vlan_tcp_ipv6_packet_offsets[] = {
- };
- 
- /* C-tag (802.1Q), IPv6 + TCP dummy packet */
--static const u8 dummy_vlan_tcp_ipv6_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(vlan_tcp_ipv6) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -666,7 +668,7 @@ static const u8 dummy_vlan_tcp_ipv6_packet[] = {
- };
- 
- /* IPv6 + UDP */
--static const struct ice_dummy_pkt_offsets dummy_udp_ipv6_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(udp_ipv6) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV6_OFOS,	14 },
-@@ -675,7 +677,7 @@ static const struct ice_dummy_pkt_offsets dummy_udp_ipv6_packet_offsets[] = {
- };
- 
- /* IPv6 + UDP dummy packet */
--static const u8 dummy_udp_ipv6_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(udp_ipv6) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -703,8 +705,7 @@ static const u8 dummy_udp_ipv6_packet[] = {
- };
- 
- /* C-tag (802.1Q): IPv6 + UDP */
--static const struct ice_dummy_pkt_offsets
--dummy_vlan_udp_ipv6_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(vlan_udp_ipv6) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_VLAN_OFOS,	12 },
- 	{ ICE_ETYPE_OL,		16 },
-@@ -714,7 +715,7 @@ dummy_vlan_udp_ipv6_packet_offsets[] = {
- };
- 
- /* C-tag (802.1Q), IPv6 + UDP dummy packet */
--static const u8 dummy_vlan_udp_ipv6_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(vlan_udp_ipv6) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -741,8 +742,7 @@ static const u8 dummy_vlan_udp_ipv6_packet[] = {
- };
- 
- /* Outer IPv4 + Outer UDP + GTP + Inner IPv4 + Inner TCP */
--static const
--struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv4_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv4_gtpu_ipv4_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV4_OFOS,	14 },
- 	{ ICE_UDP_OF,		34 },
-@@ -752,7 +752,7 @@ struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv4_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv4_gtpu_ipv4_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv4_gtpu_ipv4_tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* Ethernet 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -790,8 +790,7 @@ static const u8 dummy_ipv4_gtpu_ipv4_tcp_packet[] = {
- };
- 
- /* Outer IPv4 + Outer UDP + GTP + Inner IPv4 + Inner UDP */
--static const
--struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv4_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv4_gtpu_ipv4_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV4_OFOS,	14 },
- 	{ ICE_UDP_OF,		34 },
-@@ -801,7 +800,7 @@ struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv4_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv4_gtpu_ipv4_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv4_gtpu_ipv4_udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* Ethernet 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -836,8 +835,7 @@ static const u8 dummy_ipv4_gtpu_ipv4_udp_packet[] = {
- };
- 
- /* Outer IPv6 + Outer UDP + GTP + Inner IPv4 + Inner TCP */
--static const
--struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv6_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv4_gtpu_ipv6_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV4_OFOS,	14 },
- 	{ ICE_UDP_OF,		34 },
-@@ -847,7 +845,7 @@ struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv6_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv4_gtpu_ipv6_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv4_gtpu_ipv6_tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* Ethernet 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -889,8 +887,7 @@ static const u8 dummy_ipv4_gtpu_ipv6_tcp_packet[] = {
- 	0x00, 0x00, /* 2 bytes for 4 byte alignment */
- };
- 
--static const
--struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv6_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv4_gtpu_ipv6_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV4_OFOS,	14 },
- 	{ ICE_UDP_OF,		34 },
-@@ -900,7 +897,7 @@ struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv6_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv4_gtpu_ipv6_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv4_gtpu_ipv6_udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* Ethernet 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -939,8 +936,7 @@ static const u8 dummy_ipv4_gtpu_ipv6_udp_packet[] = {
- 	0x00, 0x00, /* 2 bytes for 4 byte alignment */
- };
- 
--static const
--struct ice_dummy_pkt_offsets dummy_ipv6_gtpu_ipv4_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv6_gtpu_ipv4_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV6_OFOS,	14 },
- 	{ ICE_UDP_OF,		54 },
-@@ -950,7 +946,7 @@ struct ice_dummy_pkt_offsets dummy_ipv6_gtpu_ipv4_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv6_gtpu_ipv4_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv6_gtpu_ipv4_tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* Ethernet 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -992,8 +988,7 @@ static const u8 dummy_ipv6_gtpu_ipv4_tcp_packet[] = {
- 	0x00, 0x00, /* 2 bytes for 4 byte alignment */
- };
- 
--static const
--struct ice_dummy_pkt_offsets dummy_ipv6_gtpu_ipv4_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv6_gtpu_ipv4_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV6_OFOS,	14 },
- 	{ ICE_UDP_OF,		54 },
-@@ -1003,7 +998,7 @@ struct ice_dummy_pkt_offsets dummy_ipv6_gtpu_ipv4_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv6_gtpu_ipv4_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv6_gtpu_ipv4_udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* Ethernet 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -1042,8 +1037,7 @@ static const u8 dummy_ipv6_gtpu_ipv4_udp_packet[] = {
- 	0x00, 0x00, /* 2 bytes for 4 byte alignment */
- };
- 
--static const
--struct ice_dummy_pkt_offsets dummy_ipv6_gtpu_ipv6_tcp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv6_gtpu_ipv6_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV6_OFOS,	14 },
- 	{ ICE_UDP_OF,		54 },
-@@ -1053,7 +1047,7 @@ struct ice_dummy_pkt_offsets dummy_ipv6_gtpu_ipv6_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv6_gtpu_ipv6_tcp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv6_gtpu_ipv6_tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* Ethernet 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -1100,8 +1094,7 @@ static const u8 dummy_ipv6_gtpu_ipv6_tcp_packet[] = {
- 	0x00, 0x00, /* 2 bytes for 4 byte alignment */
- };
- 
--static const
--struct ice_dummy_pkt_offsets dummy_ipv6_gtpu_ipv6_udp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv6_gtpu_ipv6_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV6_OFOS,	14 },
- 	{ ICE_UDP_OF,		54 },
-@@ -1111,7 +1104,7 @@ struct ice_dummy_pkt_offsets dummy_ipv6_gtpu_ipv6_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv6_gtpu_ipv6_udp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv6_gtpu_ipv6_udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* Ethernet 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -1155,8 +1148,7 @@ static const u8 dummy_ipv6_gtpu_ipv6_udp_packet[] = {
- 	0x00, 0x00, /* 2 bytes for 4 byte alignment */
- };
- 
--static const
--struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv4_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv4_gtpu_ipv4) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV4_OFOS,	14 },
- 	{ ICE_UDP_OF,		34 },
-@@ -1164,7 +1156,7 @@ struct ice_dummy_pkt_offsets dummy_ipv4_gtpu_ipv4_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv4_gtpu_ipv4_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv4_gtpu_ipv4) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -1194,8 +1186,7 @@ static const u8 dummy_ipv4_gtpu_ipv4_packet[] = {
- 	0x00, 0x00,
- };
- 
--static const
--struct ice_dummy_pkt_offsets dummy_ipv6_gtp_packet_offsets[] = {
-+ICE_DECLARE_PKT_OFFSETS(ipv6_gtp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_IPV6_OFOS,	14 },
- 	{ ICE_UDP_OF,		54 },
-@@ -1203,7 +1194,7 @@ struct ice_dummy_pkt_offsets dummy_ipv6_gtp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_ipv6_gtp_packet[] = {
-+ICE_DECLARE_PKT_TEMPLATE(ipv6_gtp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
--- 
-2.35.1
+  	old_end = old_addr + len;
+  	flush_cache_range(vma, old_addr, old_end);
+
+but there are several other ways to fix this elsewhere in the call chain:
+
+- check for old_len == 0 somewhere in mremap_to
+
+- skip the call in __mmu_notifier_invalidate_range_start and 
+__mmu_notifier_invalidate_range_end, if people agree not to play 
+whack-a-mole with the callers of mmu_notifier_invalidate_range_*.
+
+- remove the warning in KVM
+
+Thanks,
+
+Paolo
 

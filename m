@@ -2,150 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321414E30EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 687E04E30F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352832AbiCUTu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 15:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S1352838AbiCUTxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 15:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239684AbiCUTu0 (ORCPT
+        with ESMTP id S242322AbiCUTxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 15:50:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D676E7CB35;
-        Mon, 21 Mar 2022 12:49:00 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LHqPGS002594;
-        Mon, 21 Mar 2022 19:48:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=/32NuSvKToMX7b4xGjzfLvjI0xh2tfWsRPAXABKe04o=;
- b=Fu7SOryqbjHwCUsyVrP0hTkdR49q2LOZK9M0gZmcJGae+fExYOgbkAIGJMzc4/6Kyo9d
- kLao/FRpzeQceyBcaWzuLK+0KPhZ26VNyyVPyR4dL9/N0nG/XJn/Cl1gc/MBeiVQXQCF
- 18wJ8Pn6PGVI3gnykf6WSRtQcRm7B8no+O0fXSEztxC03n15Fb/ar4vWZ4uIb1n6zCuf
- EnAMs8rCcXdNzLX5vP99PgKhJlrRkX9O6h7eTBQMsWUT4F8PXuUim/e/HfTKqKtkcyge
- b0Pa1S99y6QiIceZVOgU4D1xfhgMLpU8J2V0k6zCKHC3AVivXDMA0RcqzW1tEZ5iLZwO kQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3expy0mm72-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 19:48:57 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LJmt4J017728;
-        Mon, 21 Mar 2022 19:48:55 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3ew6t8m0b3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 19:48:55 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LJmrsQ26608020
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 19:48:53 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0356B42042;
-        Mon, 21 Mar 2022 19:48:53 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3DA8442041;
-        Mon, 21 Mar 2022 19:48:52 +0000 (GMT)
-Received: from sig-9-65-71-84.ibm.com (unknown [9.65.71.84])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Mar 2022 19:48:52 +0000 (GMT)
-Message-ID: <31254e743b73a43f6f27679678318d0d8744a355.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 2/5] ima: define a new template field named 'd-ngv2'
- and templates
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 21 Mar 2022 15:48:51 -0400
-In-Reply-To: <b19eca12-3ae1-a8a5-fcfd-a22b5ee9319c@linux.ibm.com>
-References: <20220318182151.100847-1-zohar@linux.ibm.com>
-         <20220318182151.100847-3-zohar@linux.ibm.com>
-         <b19eca12-3ae1-a8a5-fcfd-a22b5ee9319c@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hnFN2G3Havcxswh36i790sxpy2UPdC9m
-X-Proofpoint-GUID: hnFN2G3Havcxswh36i790sxpy2UPdC9m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_08,2022-03-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 impostorscore=0
- malwarescore=0 clxscore=1015 priorityscore=1501 suspectscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203210124
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 15:53:40 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB118123BE1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:52:14 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id z8so30016237ybh.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QvfezOET3lCC5FO8wlzK/F9Hv0UPPErwC2g10ZZeTqg=;
+        b=C7S75GM1c5KW3lmmgzpDvrVssfE1dxTGXZBTTaMMZEKb9T3UyRNgsTrnLpBLMrPzTP
+         wTKO7A5vgCE8bgVQjtDPqW7z6vOIks4vSfc09J5dt9QDf2ijfvCvcQFcNtzt7nJvkyCV
+         DEpcHgshkGccdULN9rKKb2+m40Zyj/jUu57RmGpHLG0ZUGw1M1882QqrrdeQI9NXLJPX
+         sst/FAwXi49iC0E7Sg8Lk4oYVRWEGI2Zd6ClTTvHpLkfDKrdNELF6TX+hrwoYkPRpdvv
+         h0lW1rrRqHCMHlXBGeYV+kVoR4G7f+zEgoCHCRtbEaqJ2uV4vBC0ogdsIlvQ2jDBrqbc
+         j51w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QvfezOET3lCC5FO8wlzK/F9Hv0UPPErwC2g10ZZeTqg=;
+        b=TvbSIRhFmt+xEqXgFRdybMrZSi62Bs1mudPGaEfWOWEYS0LfIiDdEtwWoHagLm8zyB
+         rcThFJfDcpaVOst8c1lZ4Dnm8Gym3jPfNB8JqO5npGyywMqKyri7xR9CUhSTLqmt0qVN
+         NbeT6EId0+n5KUxgB2DrVPhUOxMUq2zs32U14bpGGHuCzMo6kFMBbub7UyoAPl6Ia40d
+         Rgqiwfp1vIul7rLGx4M0lvutqI8oBAuqVt+tBg6s+mf0bryGfWte1r2ZG69868KciBeA
+         XSDuB+Pu8rQQrW2NtQNTQCjSgdBIAc1uC6SOnmNvMq6CpL0buNsYPLJZdxyRbJZD3s7C
+         BLhw==
+X-Gm-Message-State: AOAM533AyfLQ2lQsOcakQ11RcmSyhnAucpmYjbRlaWdZTA6imK55Q8fc
+        4gffw3BiIrKaZ3qU3qZ4G1EyAk+s12FucuvlW8nE+g==
+X-Google-Smtp-Source: ABdhPJxLg2RsCkPd5Fc/l+US1HyLmn9WT4iHloqABdNUZIkhfgg+UffDulpLI3GEMfIDZm+sbazSOFms1Cpw7blOHWY=
+X-Received: by 2002:a25:928e:0:b0:633:f370:d9ff with SMTP id
+ y14-20020a25928e000000b00633f370d9ffmr8028608ybl.338.1647892334113; Mon, 21
+ Mar 2022 12:52:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220321133221.290173884@linuxfoundation.org>
+In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
+From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Date:   Mon, 21 Mar 2022 15:51:38 -0400
+Message-ID: <CAG=yYw=eJAnZCM1RgKb_oh1cW75AKyV6zR_vn7oMib6oLrXKzQ@mail.gmail.com>
+Subject: Re: [PATCH 5.16 00/37] 5.16.17-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        torvalds@linux-foundation.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-21 at 08:53 -0400, Stefan Berger wrote:
-> >   	/*
-> >   	 * digest formats:
-> >   	 *  - DATA_FMT_DIGEST: digest
-> >   	 *  - DATA_FMT_DIGEST_WITH_ALGO: [<hash algo>] + ':' + '\0' + digest,
-> > +	 *  - DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO:
-> > +	 *	[<digest type> + ':' + <hash algo>] + ':' + '\0' + digest,
-> > +	 *    where <hash type> is either "ima" or "verity",
-> >   	 *    where <hash algo> is provided if the hash algorithm is not
-> >   	 *    SHA1 or MD5
-> >   	 */
-> > -	u8 buffer[CRYPTO_MAX_ALG_NAME + 2 + IMA_MAX_DIGEST_SIZE] = { 0 };
-> > +	u8 buffer[DIGEST_TYPE_MAXLEN + CRYPTO_MAX_ALG_NAME + 2 +
-> > +		IMA_MAX_DIGEST_SIZE] = { 0 };
-> 
-> Should it not be DIGEST_TYPE_MAXLEN + 1 /* for ':' */ + 
-> CRYPTO_MAX_ALG_NAME + ....
+On Mon, Mar 21, 2022 at 10:14 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.17 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.17-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+hello,
 
-DIGEST_TYPE_MAXLEN is hard coded as 16.
+Compiled and booted 5.16.17-rc1+ on...
+Processor Information
+    Socket Designation: FM2
+    Type: Central Processor
+    Family: A-Series
+    Manufacturer: AuthenticAMD
+    ID: 31 0F 61 00 FF FB 8B 17
+    Signature: Family 21, Model 19, Stepping 1
 
-> 
-> >   	enum data_formats fmt = DATA_FMT_DIGEST;
-> >   	u32 offset = 0;
-> >   
-> > -	if (hash_algo < HASH_ALGO__LAST) {
-> > -		fmt = DATA_FMT_DIGEST_WITH_ALGO;
-> > -		offset += snprintf(buffer, CRYPTO_MAX_ALG_NAME + 1, "%s",
-> > +	if (digest_type < digest_type_size && hash_algo < HASH_ALGO__LAST) {
-> 
-> It's a bit difficult to see what the digest_type has to do with size...
-> Maybe digest_type should be a enum and the comparison here should be 
-> digest_type != DIGEST_TYPE_NONE or something like it..
+output of "dmesg -l warn"
 
-digest_type_size is the size of the array.  It's defined as "static int
-digest_type_size = ARRAY_SIZE(digest_type_name);", with the first
-element as "ima".
+---------------------<output>--------------------------
+$dmesg -l warn
+[    0.007168] ACPI BIOS Warning (bug): Optional FADT field
+Pm2ControlBlock has valid Length but zero Address:
+0x0000000000000000/0x1 (20210930/tbfadt-615)
+[    7.663451] amdgpu: CRAT table not found
+[   49.488716] kauditd_printk_skb: 11 callbacks suppressed
+$
 
-> > +
-> > +/*
-> > + * This function writes the digest of an event (without size limit),
-> > + * prefixed with both the hash type and algorithm.
-> > + */
-> > +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
-> > +			      struct ima_field_data *field_data)
-> > +{
-> > +	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
-> > +	u32 cur_digestsize = 0;
-> > +	u8 digest_type = 0;
-> 
-> What does '0' mean? I think this should definitely be an enum or at 
-> least #define.
+---------------------<output>--------------------------
 
-The first element of the array is "ima".  Should I define two macros
-similar to kernel_read_file_id and kernel_read_file_str for just two
-strings?
 
-thanks,
+Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
 
-Mimi
-
+-- 
+software engineer
+rajagiri school of engineering and technology

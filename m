@@ -2,139 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289D94E2CDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8824E2CE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348056AbiCUPx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S1348122AbiCUPyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350712AbiCUPxo (ORCPT
+        with ESMTP id S1348079AbiCUPx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:53:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554151777F0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647877939; x=1679413939;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XCjwSZNXSIVogZF+tpJYJ0HEnNWCfLTJaR9dHUvTQmc=;
-  b=nu5IABiwJMa1rwi+AFuVR7HzjGxlOSkNvCWIjqthLLCd1pHpptCG40nt
-   M/Lc4zHRiQ24ZHT5NpIIjesDciXHgoUsuLqYWjiEIFlDhq2Ut10h1/c75
-   cqyfDfeKrNUXyMv/DjER1mHIVf81mJPFTrEZdAyjPvONOTeyHber6ePfs
-   HO6awCw2kCjNVBNC9P2QxAS81MV5Kel/M8R33cJV4QJ4b5w46IGNzCv4P
-   mmjGLHZnsLXS88bZgYHwYZYtjxMyPaDtxM1GXbb986YU5+uHRklVsuRrJ
-   wYa/VcfRa3GhnszoM8A5iT+s/OMDE7E2zZzXj42LEIXMt9h/I2/NK7uNR
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="239741208"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="239741208"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 08:52:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="514977890"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 08:52:09 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 0D86418E; Mon, 21 Mar 2022 17:52:29 +0200 (EET)
-Date:   Mon, 21 Mar 2022 18:52:29 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCHv7 02/30] x86/tdx: Provide common base for SEAMCALL and
- TDCALL C wrappers
-Message-ID: <20220321155229.jrjht4vnxgrh2wq5@black.fi.intel.com>
-References: <20220318153048.51177-1-kirill.shutemov@linux.intel.com>
- <20220318153048.51177-3-kirill.shutemov@linux.intel.com>
- <YjXtK4awY6utz3wE@zn.tnic>
+        Mon, 21 Mar 2022 11:53:58 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC2017FD0D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:52:33 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso10709490pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=DaACnoSLUW1MEkWetb56IgER/rRzMuJtTLxjf/saIVs=;
+        b=c6kF2DNwYyle0HR5Rp4cCjyoTtk3B2H6QSr0L3FYCv3OhgvMifvXTUS7HplZw+ZAes
+         LQiGkUyu1zVOFDCiKkvCHkJFxLLmW6XmMuxCJczfWRbSBC5ZJlizxODncZhjaYkALvN/
+         yoNH+ffBzfX/FE/GnMs5c30ReaHsp4ldPHBMY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=DaACnoSLUW1MEkWetb56IgER/rRzMuJtTLxjf/saIVs=;
+        b=LEXdqTtSlyTrIiE7EisAXeNS6UOMLCgfrY6hd5ACIPy1B+hyLDBmmganC5gD2jYIAh
+         5L+mSDPf1TM/12XOcnom1sli8QFtoqkO6lBBSlH92jM3c6uKBU/IrT8OsKigxjojw1Q5
+         bcRNNExrHtR87LLcnKnae6kNCQlKxcCNCTGmNosz3Vp2ddUcKd5/gqWp2bh5YX+Gb3j2
+         Ef03dcivZMN5MfFLsboWynuDaLofIvLd4fw8twPMpdZoQ4L3npbgZWgNVUueTV7Z1vX5
+         i3eZNAD3ay0l+qQx3nB/Q7z2prEDyA8vAiWEIFgzi630OktDZLNbT2DdqIxNtdo/avgz
+         xhyA==
+X-Gm-Message-State: AOAM531KOLHRhtjA84maisT0pm3S9kH4T8e/ftZag1tNrj/HNybDAdfY
+        cvadQfAN37aQtCsC9PyH0dvYQA==
+X-Google-Smtp-Source: ABdhPJzGKDUullg/SFTHvFDoDWDdj53aZEyITEB9xMKJb1jAx+oFNBfpvswsopjNfWUGURf+g2KuBg==
+X-Received: by 2002:a17:90b:3881:b0:1bf:86ea:a5e5 with SMTP id mu1-20020a17090b388100b001bf86eaa5e5mr26651633pjb.11.1647877952902;
+        Mon, 21 Mar 2022 08:52:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p128-20020a622986000000b004e1366dd88esm19591624pfp.160.2022.03.21.08.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 08:52:32 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 08:52:31 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [GIT PULL] bounds fixes for v5.18-rc1
+Message-ID: <202203210843.0E70F58@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjXtK4awY6utz3wE@zn.tnic>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 03:48:11PM +0100, Borislav Petkov wrote:
-> On Fri, Mar 18, 2022 at 06:30:20PM +0300, Kirill A. Shutemov wrote:
-> > Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
-> > defines a new VMX root operation (SEAM VMX root) and a new VMX non-root
-> > operation (SEAM VMX non-root) which are both isolated from the legacy
-> > VMX operation where the host kernel runs.
-> > 
-> > A CPU-attested software module (called 'TDX module') runs in SEAM VMX
-> > root to manage and protect VMs running in SEAM VMX non-root.  SEAM VMX
-> > root is also used to host another CPU-attested software module (called
-> > 'P-SEAMLDR') to load and update the TDX module.
-> > 
-> > Host kernel transits to either P-SEAMLDR or TDX module via the new
-> > SEAMCALL instruction, which is essentially a VMExit from VMX root mode
-> > to SEAM VMX root mode.  SEAMCALLs are leaf functions defined by
-> > P-SEAMLDR and TDX module around the new SEAMCALL instruction.
-> > 
-> > A guest kernel can also communicate with TDX module via TDCALL
-> > instruction.
-> > 
-> > TDCALLs and SEAMCALLs use an ABI different from the x86-64 system-v ABI.
-> > RAX is used to carry both the SEAMCALL leaf function number (input) and
-> > the completion status (output).  Additional GPRs (RCX, RDX, R8-R11) may
-> > be further used as both input and output operands in individual leaf.
-> > 
-> > TDCALL and SEAMCALL share the same ABI and require the largely same
-> > code to pass down arguments and retrieve results.
-> > 
-> > Define an assembly macro that can be used to implement C wrapper for
-> > both TDCALL and SEAMCALL.
-> > 
-> > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-> > Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-> > ---
-> > TDCALL wrapper will be implemented using the macro later in the series.
-> > SEAMCALL wrapper is out-of-scope for the series and will be implemented
-> > as part of TDX host enabling.
-> > ---
-> >  arch/x86/include/asm/tdx.h      | 28 ++++++++++
-> >  arch/x86/kernel/asm-offsets.c   |  9 ++++
-> >  arch/x86/virt/vmx/tdx/tdxcall.S | 94 +++++++++++++++++++++++++++++++++
-> >  3 files changed, 131 insertions(+)
-> >  create mode 100644 arch/x86/virt/vmx/tdx/tdxcall.S
-> 
-> Instead of hurrying to send the set again two days after the v6 one -
-> 
->   [ I frankly wonder why you're even in such a hurry - it seems people
->     believe that hammering out the patches constantly would somehow get them
->     upstreamed faster :-\ ]
-> 
-> - you should rather apply more diligence and take care of working in all
-> the comments from last review:
-> 
-> https://lore.kernel.org/r/87lex9321l.ffs@tglx
+Hi Linus,
 
-My bad.
+Please pull these scattered buffer and array bounds fixes for v5.18-rc1.
+These are a handful of fixes that I've been carrying in -next in
+preparation for the coming memcpy improvements and the enabling of
+-Warray-bounds globally. There are additional similar fixes in other
+maintainer's trees, but these ended up getting carried by me. :)
 
-I clearly remember addressing these. But I lost it somehow, I donno.
+Thanks!
 
-Will send v7.1.
+-Kees
+
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/bounds-fixes-v5.18-rc1
+
+for you to fetch changes up to fad278388e01e3658a356118bed8ee2c2408d280:
+
+  media: omap3isp: Use struct_group() for memcpy() region (2022-02-27 10:58:04 -0800)
+
+----------------------------------------------------------------
+bounds-fixes updates for v5.18-rc1
+
+- Various buffer and array bounds related fixes
+
+----------------------------------------------------------------
+Kees Cook (5):
+      intel_th: msu: Use memset_startat() for clearing hw header
+      m68k: cmpxchg: Dereference matching size
+      alpha: Silence -Warray-bounds warnings
+      tpm: vtpm_proxy: Check length to avoid compiler warning
+      media: omap3isp: Use struct_group() for memcpy() region
+
+Sean Christopherson (1):
+      KVM: x86: Replace memset() "optimization" with normal per-field writes
+
+ arch/alpha/mm/init.c                      |  6 +++---
+ arch/m68k/include/asm/cmpxchg.h           |  9 ++++-----
+ arch/x86/kvm/emulate.c                    |  9 +++++++--
+ arch/x86/kvm/kvm_emulate.h                |  6 +-----
+ drivers/char/tpm/tpm_vtpm_proxy.c         |  2 +-
+ drivers/hwtracing/intel_th/msu.c          |  4 +---
+ drivers/media/platform/omap3isp/ispstat.c |  5 +++--
+ include/uapi/linux/omap3isp.h             | 21 +++++++++++++--------
+ 8 files changed, 33 insertions(+), 29 deletions(-)
 
 -- 
- Kirill A. Shutemov
+Kees Cook

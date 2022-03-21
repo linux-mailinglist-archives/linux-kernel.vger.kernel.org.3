@@ -2,122 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C39E4E2254
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E234E2258
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345355AbiCUIlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 04:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S1345366AbiCUImk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 04:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245345AbiCUIkz (ORCPT
+        with ESMTP id S1345358AbiCUImj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:40:55 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18332B1B8;
-        Mon, 21 Mar 2022 01:39:28 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 111C61BF213;
-        Mon, 21 Mar 2022 08:39:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647851967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JMfmUQxoYTTnscW8TYupXGpFLuQ3KiBZX5n0t2r2KvU=;
-        b=ZINXow/fqTOdibFY3IroekzbrCGELeJ/wgb/Ne81TBoliGoj7rBGdmNOYc5qo0AdbEqC4I
-        iX5cgqZFhQWcYCs+6LKx1lTSgqM8R+M6SEHtfaBSQyJIa3fV3gYGNyrx+J6C5JZtqqLXIv
-        iXTZg316pooXXJSgoM1p5GXkyFQQvtD8AhEOvJAnrcwPLHK8i0BUxwkH/jH26x+TBgstkK
-        WRaqdGkidqV4jzZXnTAoSFDron0tnORHJqv5rwco8P7M5PHpyuOO5PJAgFLKbnpqte1P74
-        GWa9H5pzLPYSYaD5hBdHHi0UxSTRAYBmCyJEPKLxcs0TmLrSXBgM/jvGYYccUg==
-Date:   Mon, 21 Mar 2022 09:39:26 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        mchehab@kernel.org
-Subject: Re: [PATCH resend] media: i2c: ov5648: fix wrong pointer passed to
- IS_ERR() and PTR_ERR()
-Message-ID: <Yjg5vl1prcd6y0rT@aptenodytes>
-References: <20220319035806.3299264-1-yangyingliang@huawei.com>
+        Mon, 21 Mar 2022 04:42:39 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A29A1441
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:41:09 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id yy13so28346261ejb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T1TcUGL3Yr9pbZUIUf4urzAZZW+X+3X2guZDA8VSc8A=;
+        b=doxelnDMfXbB5iuIRK4hrnslkGX8BBTvxzAkb0q9tNJFa34Y3jqcWcfHpVibc9cfiJ
+         Lk3kupzHwyhzogtJ8ePTN72QZOettBzmKjpDw16KezAFhFYdc3WfdA8OP1ZDFtBcuSMZ
+         I2a8XVg4a9eRpDMpV128X0Nq+arrNVtHg4/Ys=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T1TcUGL3Yr9pbZUIUf4urzAZZW+X+3X2guZDA8VSc8A=;
+        b=NCoyg1N76lrtJd4P41eyST+WcNrV5F0QPJ+j7O/wsrtjoDl5tJ5j3sxKOT2891hWr2
+         xXt1uzlmodrV3O0M1a+D+LpFnOSX7yhoO9UfBH9QxuUgJkw2rxq1JlIip+esLABjiBXB
+         rehcAPPu/xrJ7f5m/FyOl/ySZZ+OpTGAecelUT4ZLZwzTyeMYFIO9LMkKxdT1Zzc+juW
+         kpoDDNMSWOWlfxHj/6V74XagZ//lmI6TK2UE8LumkAtWJib3OrI8AhYOr/SoZTfDBdPX
+         47L0YZtpE93q91b7E0aj5EsC7WlNZ3PfwGqaw+r7Z64jVWibIOxfpitgK8nj1GW5gLib
+         4SXg==
+X-Gm-Message-State: AOAM532NRC5yyiKpKWmmhtHjLdR9vVJskxC3poGFhX1lrla5QNSSwQLr
+        eS/5lYeyfaDxqXDcIULz1o3DZbg++wMTbWBoAZAw3A==
+X-Google-Smtp-Source: ABdhPJy2lA62e8/yWwcG+98dZn7ToA9GNqRjH90QGk+nz/876LNhUqYCp2yX6ujlNu1Aaufl2Zr0QeGUdZqMPBJUzHQ=
+X-Received: by 2002:a17:906:280b:b0:6ce:f3c7:688f with SMTP id
+ r11-20020a170906280b00b006cef3c7688fmr19757403ejc.468.1647852068103; Mon, 21
+ Mar 2022 01:41:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="59QPluZI0vorPPeN"
-Content-Disposition: inline
-In-Reply-To: <20220319035806.3299264-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220318171405.2728855-1-cmllamas@google.com> <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
+ <Yjfd1+k83U+meSbi@google.com>
+In-Reply-To: <Yjfd1+k83U+meSbi@google.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Mon, 21 Mar 2022 09:40:56 +0100
+Message-ID: <CAJfpeguoFHgG9Jm3hVqWnta3DB6toPRp_vD3EK74y90Aj3w+8Q@mail.gmail.com>
+Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alessio Balsini <balsini@android.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel-team <kernel-team@android.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 21 Mar 2022 at 03:07, Carlos Llamas <cmllamas@google.com> wrote:
+>
+> On Fri, Mar 18, 2022 at 08:24:55PM +0100, Miklos Szeredi wrote:
+> > On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
+> > >
+> > > Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
+> > > <linux/types.h> instead of 'uint32_t' and similar. This patch changes
+> > > all the definitions in this header to use the correct type. Previous
+> > > discussion of this topic can be found here:
+> > >
+> > >   https://lkml.org/lkml/2019/6/5/18
+> >
+> > This is effectively a revert of these two commits:
+> >
+> > 4c82456eeb4d ("fuse: fix type definitions in uapi header")
+> > 7e98d53086d1 ("Synchronize fuse header with one used in library")
+> >
+> > And so we've gone full circle and back to having to modify the header
+> > to be usable in the cross platform library...
+> >
+> > And also made lots of churn for what reason exactly?
+>
+> There are currently only two uapi headers making use of C99 types and
+> one is <linux/fuse.h>. This approach results in different typedefs being
+> selected when compiling for userspace vs the kernel.
 
---59QPluZI0vorPPeN
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Why is this a problem if the size of the resulting types is the same?
 
-Hi Yang,
-
-On Sat 19 Mar 22, 11:58, Yang Yingliang wrote:
-> IS_ERR() and PTR_ERR() use wrong pointer, it should be
-> sensor->dovdd, fix it.
-
-Nice catch, thank-you!
-
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-
-Cheers,
-
-Paul
-
-> Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor=
-")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/media/i2c/ov5648.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-> index 930ff6897044..dfcd33e9ee13 100644
-> --- a/drivers/media/i2c/ov5648.c
-> +++ b/drivers/media/i2c/ov5648.c
-> @@ -2498,9 +2498,9 @@ static int ov5648_probe(struct i2c_client *client)
-> =20
->  	/* DOVDD: digital I/O */
->  	sensor->dovdd =3D devm_regulator_get(dev, "dovdd");
-> -	if (IS_ERR(sensor->dvdd)) {
-> +	if (IS_ERR(sensor->dovdd)) {
->  		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
-> -		ret =3D PTR_ERR(sensor->dvdd);
-> +		ret =3D PTR_ERR(sensor->dovdd);
->  		goto error_endpoint;
->  	}
-> =20
-> --=20
-> 2.25.1
->=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---59QPluZI0vorPPeN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmI4Ob4ACgkQ3cLmz3+f
-v9HjNAgAmGq67LBBbTp9bg7Wg5UyQukKyemAP2kIIcBJyW4CZ0PlPTeK1E7G5OAN
-bOfhFNB9R4TyRiXlmy5/CxtJSEK7Bdfvim0H4PFGxcjFdZoo36/HkstIEX///l53
-4iOCFVTI52VDx3k9Rrc88229eGkvC0amYtUq9mhC3hdMytXdyDB2WTpW3RIjAZ9B
-OWQxvxmLwLjbOcC6ojLpPHopge1L/WnzcaRqS0VBok2kh3HZKK2zFKLCSZGl/orR
-RUn8fWkxld/gOqg93JuivfOvQYUuCFRnNrV5JEzQxDJx5YYmYYCaIGphl8vGi/qA
-aX1iG98ItVbmgMWxsQhc/VlbiUTcMg==
-=CWJH
------END PGP SIGNATURE-----
-
---59QPluZI0vorPPeN--
+Thanks,
+Miklos

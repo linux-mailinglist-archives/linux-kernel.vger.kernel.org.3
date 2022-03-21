@@ -2,83 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC474E348D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327AC4E34BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbiCUXkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
+        id S233225AbiCUXqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbiCUXkD (ORCPT
+        with ESMTP id S233167AbiCUXqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:40:03 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C1EFE435;
-        Mon, 21 Mar 2022 16:38:09 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id q129so15933025oif.4;
-        Mon, 21 Mar 2022 16:38:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8b7Epipii5BGkqqnIUmpeTC0jmBsZOQ1Tko6IQuWeXc=;
-        b=EeQNjBydUtHGwXexVkxBBNE6t6IVoTapMhzNjqpRq5yYbBluPn9kI51I691jf7XN/+
-         xbltQHyxgq38HltZMSwMG761QRmyecJHtfbHJOzCOH+EOeTR2c9x+ew7OLoNRPJ5Oq4O
-         weUPiywRhK2Ztggbl0qon3N2aDzBAhevG+EwdLQx0LzCiZaHN25z/Re0SJqXZVtfmuWT
-         nMdxzX3TZbXXdG4NlUbKsfdDuEpshO3mNLKw/ZbDyFvqDtQPhWtU/6FwNBcKaUng7PFe
-         TgNTyLURB3NyKpnUoeaE8SQAEaoAjBGBe13xUbukUqIAor+UWWvhjDElscCWd66pRuGG
-         DOGw==
-X-Gm-Message-State: AOAM533ipkOEv9z0M7xg6rSJhoPt/8lxkfq5S61noh4IL4kj4xx99rB5
-        /HgCIP+tl3MLSI1viLbiaQ==
-X-Google-Smtp-Source: ABdhPJxCD1OsOX4lizds5dSzn7Refv1mW/OIYri/zgYxYxIMkJZDVP/QLjzeYyI8RQgJfaT60iQ2qA==
-X-Received: by 2002:a05:6808:9b9:b0:2ef:7562:1586 with SMTP id e25-20020a05680809b900b002ef75621586mr772018oig.261.1647905888839;
-        Mon, 21 Mar 2022 16:38:08 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l13-20020a056830054d00b005a3cce351a1sm8235978otb.28.2022.03.21.16.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 16:38:08 -0700 (PDT)
-Received: (nullmailer pid 757601 invoked by uid 1000);
-        Mon, 21 Mar 2022 23:38:07 -0000
-Date:   Mon, 21 Mar 2022 18:38:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        devicetree@vger.kernel.org, Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 19/22] arm64: dts: mt8192: Add the mmsys reset bit to
- reset the dsi0
-Message-ID: <YjkMX6loduiyQdZy@robh.at.kernel.org>
-References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-20-allen-kh.cheng@mediatek.com>
+        Mon, 21 Mar 2022 19:46:40 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D300D78FD7;
+        Mon, 21 Mar 2022 16:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647906313; x=1679442313;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HiGrn/wqtmjWjv0KYmxpZBLvA9yOpRMmV+uh3duvMLY=;
+  b=RfHXSclMis82kMA7FpPsCO/Hh+8WmipZHoPROmwVsrOTA84mOxPyAs7z
+   dQ02VwHjYknxs+RsKW9YjKScYJVdD1ak9XDsDAYuuCDMwLFgEcSlbKI0R
+   zcVcOBILApkTXIBwf7pcbblHKXM3uWfRyTIMaYLivBjJ4qH0iykO5TIRY
+   UkfAOCBmaqDX0JUfBluHONzozYx1Kt5sKr+SmJqOUOeytnWFln6p7pz0k
+   fI622FCY22Q0alzrD5q7KYriyhpOVW3NLSCHH25fjk9ZPne0LW3HCqv1l
+   BTUh5wgGgqekp7fvyCMJjN88xTxHS0ZlSSOxZd3a4SNMoWl1EvjcP7Tkb
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282506784"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="282506784"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 16:45:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="515116404"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 16:45:09 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWRi1-000IHt-1J; Mon, 21 Mar 2022 23:45:09 +0000
+Date:   Tue, 22 Mar 2022 07:44:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
+        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, oliver@neukum.org
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn,
+        sunshouxin@chinatelecom.cn
+Subject: Re: [PATCH v5 4/4] net:bonding:Add support for IPV6 RLB to
+ balance-alb mode
+Message-ID: <202203220724.6dOxKPRJ-lkp@intel.com>
+References: <20220321084704.36370-5-sunshouxin@chinatelecom.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318144534.17996-20-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220321084704.36370-5-sunshouxin@chinatelecom.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Mar 2022 22:45:31 +0800, Allen-KH Cheng wrote:
-> Reset the DSI hardware is needed to prevent different settings between
-> the bootloader and the kernel.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->  include/dt-bindings/reset/mt8192-resets.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+Hi Sun,
 
-Acked-by: Rob Herring <robh@kernel.org>
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on 092d992b76ed9d06389af0bc5efd5279d7b1ed9f]
+
+url:    https://github.com/0day-ci/linux/commits/Sun-Shouxin/Add-support-for-IPV6-RLB-to-balance-alb-mode/20220321-164934
+base:   092d992b76ed9d06389af0bc5efd5279d7b1ed9f
+config: s390-randconfig-r044-20220321 (https://download.01.org/0day-ci/archive/20220322/202203220724.6dOxKPRJ-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d84e696c74aa408d01d0e142f8ec11dd5b6410a5
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sun-Shouxin/Add-support-for-IPV6-RLB-to-balance-alb-mode/20220321-164934
+        git checkout d84e696c74aa408d01d0e142f8ec11dd5b6410a5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: drivers/net/bonding/bond_alb.o: in function `rlb_nd_recv':
+   bond_alb.c:(.text+0x3c92): undefined reference to `ipv6_get_ifaddr'
+>> s390-linux-ld: bond_alb.c:(.text+0x3cd2): undefined reference to `inet6_ifa_finish_destroy'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

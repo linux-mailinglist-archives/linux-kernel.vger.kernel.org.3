@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253A24E32E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829024E327D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 22:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiCUWr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
+        id S229626AbiCUV5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 17:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiCUWrf (ORCPT
+        with ESMTP id S229522AbiCUV5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:47:35 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67843A35D7;
-        Mon, 21 Mar 2022 15:27:35 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 81CD722175;
-        Mon, 21 Mar 2022 22:41:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647898916;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H8b7+3L8jyoijK3U5LHdUPt3et03RXlG9z84o4vPklU=;
-        b=o/s/oQAP6fhf078SLdCjf35BeBa/MVgWK2EQ5ACRLZmmB8sjXAdT3mItde5d4yhj+YoGJW
-        3SLTBJsX0ffwSsf8G6o0IqCEkV2zYwBf0JTd4YWhUQpjzGtOJcFLRbz7kGeP13ltxceJGS
-        NnJZuKXpaSB3iQSAX/Coq1cQjYYnYPE=
+        Mon, 21 Mar 2022 17:57:46 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571783DBBE0;
+        Mon, 21 Mar 2022 14:52:37 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id o64so17696888oib.7;
+        Mon, 21 Mar 2022 14:52:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d+9QdUNzXb5pmLvt2FMBpD/un8EwCgivlwcq3BPgDKo=;
+        b=RnEoMjswvMf7No6ztoAqjQIP5DHSXZFPMv4uQpSTy1HaragPfyrJ+hLyhRiyFJ7HZO
+         jlwFjqMWv1oGS8HJPrnZKYHAxAJUn/6nCZaGt9Jpogk8T6vsvZZA6tRRS8VQ9N1hx3jP
+         8ncHa7XpPl30No304N6PT1cUFoNWqHsHm1GsCNHx7jMeOOVllK3TRtUnKSl6FR5gexGa
+         3r2+GciQhKW7OfgPDjk+XBrTHnnN1HaWHWwbcWuV7j2wTvYCu9fccZibitpEsYEl1Tel
+         jy/ULD5BPAuntxUL+bodz5Jl/TsWEmU9htY6IIE/j5ZrDhZ36qgleE3MHaMNklAGQ14Y
+         Vmsw==
+X-Gm-Message-State: AOAM533qcPuEQ2+PiaSr69ZlG7ZVBVHLP47b/lhyBV9Ob4D09rVirux0
+        AkMVeRzKGH0D895lff+U6A==
+X-Google-Smtp-Source: ABdhPJwwkIJLLXC6SDoKJ/5qk6FVBsTjioiC2WdygGpaGTYJC+hAJyGx9eyECCh80HYH74LiKhdVbw==
+X-Received: by 2002:aca:2b0d:0:b0:2d9:dc99:38a2 with SMTP id i13-20020aca2b0d000000b002d9dc9938a2mr587534oik.198.1647899205635;
+        Mon, 21 Mar 2022 14:46:45 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a30-20020a4ad1de000000b00320fccd02cfsm7405810oos.5.2022.03.21.14.46.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 14:46:44 -0700 (PDT)
+Received: (nullmailer pid 594751 invoked by uid 1000);
+        Mon, 21 Mar 2022 21:46:43 -0000
+Date:   Mon, 21 Mar 2022 16:46:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: [PATCH v2 2/6] dt-bindings: phy: qcom,qmp: Add SM6350 UFS PHY
+ bindings
+Message-ID: <YjjyQzGGPEgsKDwJ@robh.at.kernel.org>
+References: <20220321133318.99406-1-luca.weiss@fairphone.com>
+ <20220321133318.99406-3-luca.weiss@fairphone.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 21 Mar 2022 22:41:56 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Clause 45 and Clause 22 PHYs on one MDIO bus
-In-Reply-To: <YjjhxbZgKHykJ+35@lunn.ch>
-References: <240354b0a54b37e8b5764773711b8aa3@walle.cc>
- <cdb3d3f6ad35d4e26fd8abb23b2e96a3@walle.cc> <YjjhxbZgKHykJ+35@lunn.ch>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <4d728d267e45fe591c933c86cdfff333@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321133318.99406-3-luca.weiss@fairphone.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,50 +71,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-21 21:36, schrieb Andrew Lunn:
->> Actually, it looks like mdiobus_c45_read() is really c45 only and only
->> used for PHYs which just support c45 and not c45-over-c22 (?). I was
->> mistaken by the heavy use of the function in phy_device.c. All the
->> methods in phy-c45.c use phy_*_mmd() functions. Thus it might only be
->> the mxl-gpy doing something fishy in its probe function.
+On Mon, 21 Mar 2022 14:33:14 +0100, Luca Weiss wrote:
+> Document the compatible string for the UFS PHY found in SM6350.
 > 
-> Yes, there is something odd here. You should search back on the
-> mailing list.
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> Changes in v2:
+> - add second hunk for clock validation
 > 
-> If i remember correctly, it is something like it responds to both c22
-> and c45. If it is found via c22, phylib does not set phydev->is_c45,
-> and everything ends up going indirect. So the probe additionally tries
-> to find it via c45? Or something like that.
-
-Yeah, found it: https://lore.kernel.org/netdev/YLaG9cdn6ewdffjV@lunn.ch/
-
-But that means that if the controller is not c45 capable, it will always
-fail to probe, no?
-
-I've added the "if (regnum & MII_ADDR_C45) return -EOPNOTSUPP" to the
-mdio driver and the gpy phy will then fail to probe - as expected.
-
-Should it check for -EOPNOTSUPP and just ignore that error and continue
-probing? Or make it a no-op if probe_capabilities say it has no c45
-access so it would take advantage of a quirk flag (derived from dt)?
-
->> Nevertheless, I'd still need the opt-out of any c45 access. Otherwise,
->> if someone will ever implement c45 support for the mdio-mscc-mdio
->> driver, I'll run in the erratic behavior.
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Yah, i need to think about that. Are you purely in the DT world, or is
-> ACPI also an option?
 
-Just DT world.
-
-> Maybe extend of_mdiobus_register() to look for a DT property to limit
-> what values probe_capabilities can take?
-
-I'll have to give it a try. First I was thinking that we wouldn't need
-it because a broken PHY driver could just set a quirk 
-"broken_c45_access"
-or similar. But that would mean it has to be probed before any c45 PHY.
-Dunno if that will be true for the future. And it sounds rather fragile.
-So yes, a dt property might be a better option.
-
--michael
+Acked-by: Rob Herring <robh@kernel.org>

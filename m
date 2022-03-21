@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909BE4E2C2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E5F4E2C38
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350168AbiCUP2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S1350213AbiCUP3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350225AbiCUP16 (ORCPT
+        with ESMTP id S1350179AbiCUP3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:27:58 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33899109A5F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:26:33 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id s8so15684225pfk.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:26:33 -0700 (PDT)
+        Mon, 21 Mar 2022 11:29:13 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0AA1637E2;
+        Mon, 21 Mar 2022 08:27:47 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id qa43so30481281ejc.12;
+        Mon, 21 Mar 2022 08:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=Q4NOeoj72t/xyIHwYgDmg6MvXTR5THfLjr7+BD7Q2rQ=;
-        b=WfOHKiM6+TBGTccSD7rMFfL/clpc6ZnzBjQ8Q8CJfMkEPDH4EH7178trlBJXupymF8
-         EEhpiH5StU/kzajKN2sYFl+aBvJvzq+z3qoegReC31SJJ//QqycAcZRj9TgRKHgWQApv
-         he0DSrcrwuaphqmg2ai+/5KVyOiW8BRyms4gQ=
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aLOeU6WpgD0PL1DxU3mLFrPMooW422SjAuE/Y9O4C7Y=;
+        b=kHXuDFc3XLD+ccOUFGUYgxoeu0hLCe4kZBdPoE0BWxAATHREykdDgjFpilpwCOAUkS
+         ze9vvTQXAdNq3RJ8bm0cXmkJcq1OXVmNZd2WyhDrK0IFWBR5194jpKmTypzD/kbTcUGP
+         ZaNFD78HnBxuKPisa0mSpoBW0LsYkj5pYjBpVyQ20V1RqfbPQ1YEFtKTtC2CLGmCxM+F
+         dfofV4s/Qy6osIaonjxpGdAioukKOPWQVy/V/dvvQC0JlKnT9B1e2OD0dWZVGJmAD80N
+         cxab8tu7290NcX4UNNOpSLHaShg5zh6dYpWBoiFqSC6z2HFi0dMfDiIhksucRZ3GvRGi
+         Q1LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Q4NOeoj72t/xyIHwYgDmg6MvXTR5THfLjr7+BD7Q2rQ=;
-        b=wufPyElILFQOa7R7TMaCEUeFqqJkoEpr/Q3piaiGTmImce6DDq/44LME7lA0plNtDl
-         Ll0p0KG6+9N9rGHlVSasnbQGSnfnIXirksGLznkhsZ2mrQV+gTs9IK1wLWnp5w2kZ8FO
-         z46WPno1aAWDiATk3L0jr5MUDeb0XOmFxu1FSAcj5yCNWTdOnJRhTRqhxUKl6LRGPfJJ
-         NqcKp18oLFm7lecDXbsslRKk1GY64zA4jaQn+T1dGmSLF5lOgao/gPjygRFC7xQ45HhQ
-         LtbuwW6mh8oZFT0cTn5XINAavnWa25mKWkVYJfOb7lI3EsAGPKqD+v8PvDI1kWENLyfn
-         c0hA==
-X-Gm-Message-State: AOAM532dla9u5fcHnYkoTcdV6IisiB4xlTIN9acwKc0wF94CEfmmiEMH
-        4rLImjP6mzG+fmlaD2Ot+Fc3Fg==
-X-Google-Smtp-Source: ABdhPJxnlr6oZFlC5KIOc+nwNqzIiYfQsHB+C0fTYN72eZj+JztRQeZEKy36jbSY1NG+lkgsKta9FQ==
-X-Received: by 2002:a05:6a00:21c6:b0:4fa:914c:2c2b with SMTP id t6-20020a056a0021c600b004fa914c2c2bmr8503434pfj.56.1647876392503;
-        Mon, 21 Mar 2022 08:26:32 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u4-20020a056a00158400b004fa0263cf5dsm20634979pfk.130.2022.03.21.08.26.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 08:26:32 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 08:26:31 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jeff Dike <jdike@addtoit.com>,
-        Kees Cook <keescook@chromium.org>,
-        Keith Busch <kbusch@kernel.org>, Len Baker <len.baker@gmx.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Richard Weinberger <richard@nod.at>,
-        Vitor Massaru Iha <vitor@massaru.org>
-Subject: [GIT PULL] overflow updates for v5.18-rc1
-Message-ID: <202203210821.9E5FDCA863@keescook>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aLOeU6WpgD0PL1DxU3mLFrPMooW422SjAuE/Y9O4C7Y=;
+        b=gYHkFeav+w9blvQTzhPvNmQnuBWM05Ozwcez/2ERMEDjWQ77enRycVfAQmATGfHyE6
+         GU2ZCo6ztW8H8Op35luysbwe0W4mGzs+EbOpyaBBNuriDINQ/bf2BB1Zcx3YE0dZCxiU
+         smgVlTcw3Gr1y8aNMs8/sf92el+hu8IUXSciJQCtB7g8LRJwfV7cR7a2cNDMIY/56Sih
+         YKaXIVqfrsWCeLhm8cHhtVR3xJhKvgy58faKCRutnoccdREtrZf5d3tkeAVEQNp0GIK4
+         q4n90VDZre9cWRKNJaNxJFfX/JQcvV5IcRMNaK9T8i6+WNWKiJwfrDqTrhXhYkaTxeIy
+         lb8Q==
+X-Gm-Message-State: AOAM5306XD0JF8tJoOKtghrIRn9hrHXllbayAm3EIAVED27Anyr2gM37
+        tiXdJ+g61Hxq3iza1ZhPsptWNfluP58=
+X-Google-Smtp-Source: ABdhPJzwjTTAAiPPtKV5sp+yKADmJUcTpiZo6kWCim0vVzTeuErWFOlPSuEpSMcwzYBh9o7GV0cK/Q==
+X-Received: by 2002:a17:907:c16:b0:6da:7d72:1357 with SMTP id ga22-20020a1709070c1600b006da7d721357mr21680979ejc.251.1647876465189;
+        Mon, 21 Mar 2022 08:27:45 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id y15-20020a170906518f00b006df87a2bb16sm6334445ejk.89.2022.03.21.08.27.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 08:27:44 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <f8500809-610e-ce44-9906-785b7ddc0911@redhat.com>
+Date:   Mon, 21 Mar 2022 16:27:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org
+References: <20220321150214.1895231-1-pgonda@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220321150214.1895231-1-pgonda@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,59 +81,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 3/21/22 16:02, Peter Gonda wrote:
+> SEV-ES guests can request termination using the GHCB's MSR protocol. See
+> AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
+> guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
+> return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
+> struct the userspace VMM can clearly see the guest has requested a SEV-ES
+> termination including the termination reason code set and reason code.
+> 
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> Cc: Brijesh Singh <brijesh.singh@amd.com>
+> Cc: Joerg Roedel <jroedel@suse.de>
+> Cc: Marc Orr <marcorr@google.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
 
-Please pull these overflow updates for v5.18-rc1. These changes come in
-roughly two halves: support of Gustavo A. R. Silva's struct_size()
-work via additional helpers for catching overflow allocation size
-calculations, and conversions of selftests to KUnit (which includes
-some tweaks for UML + Clang).
+Looks good, but it has to also add a capability.
 
-Thanks!
+> +		/* KVM_EXIT_SHUTDOWN_ENTRY */
 
--Kees
+Just KVM_EXIT_SHUTDOWN.
 
-The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+Paolo
 
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+> +		struct {
+> +			__u64 reason;
+> +			__u32 ndata;
+> +			__u64 data[16];
+> +		} shutdown;
+>   		/* KVM_EXIT_FAIL_ENTRY */
+>   		struct {
+>   			__u64 hardware_entry_failure_reason;
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/overflow-v5.18-rc1
-
-for you to fetch changes up to 02788ebcf521fe78c24eb221fd1ed7f86792c330:
-
-  lib: stackinit: Convert to KUnit (2022-03-21 08:13:04 -0700)
-
-----------------------------------------------------------------
-overflow updates for v5.18-rc1
-
-- Convert overflow selftest to KUnit
-- Convert stackinit selftest to KUnit
-- Implement size_t saturating arithmetic helpers
-- Allow struct_size() to be used in initializers
-
-----------------------------------------------------------------
-Kees Cook (6):
-      test_overflow: Regularize test reporting output
-      overflow: Implement size_t saturating arithmetic helpers
-      overflow: Provide constant expression struct_size
-      lib: overflow: Convert to Kunit
-      um: Allow builds with Clang
-      lib: stackinit: Convert to KUnit
-
- Documentation/process/deprecated.rst        |  20 +-
- arch/um/os-Linux/execvp.c                   |   1 +
- arch/x86/um/user-offsets.c                  |   9 +-
- include/linux/overflow.h                    | 114 +++---
- lib/Kconfig.debug                           |  38 +-
- lib/Makefile                                |   6 +-
- lib/{test_overflow.c => overflow_kunit.c}   | 518 +++++++++++++++-------------
- lib/{test_stackinit.c => stackinit_kunit.c} | 269 ++++++---------
- scripts/Makefile.clang                      |   1 +
- 9 files changed, 518 insertions(+), 458 deletions(-)
- rename lib/{test_overflow.c => overflow_kunit.c} (54%)
- rename lib/{test_stackinit.c => stackinit_kunit.c} (66%)
-
--- 
-Kees Cook

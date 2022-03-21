@@ -2,85 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C474E4E2ECC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89D44E2EDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351663AbiCURKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S1349549AbiCURLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351690AbiCURKM (ORCPT
+        with ESMTP id S235913AbiCURL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:10:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0C382BF5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:08:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647882523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dJfkHmVteh3T64TEzHnOxY0U7R9RqYwPmRB3l1CleQU=;
-        b=DsjwguDXoeUrla7MDJh5Ni/NSgrao3jraCGbuaj2SLc4Jw2rCyb4A+9xTtSbfQValZ3dBT
-        FpMooLsUnV3mSqprTJ0IaeIGDAG7ToX4dVkXfIJ1UvFDFqPReEmeFLRpzuaZcWYUXRrL7m
-        T5z7YzoNjKtVLhx/5QGOOQoGqYkcNug=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-134-oBUT0MDQMX6Qu4SZSKQxgw-1; Mon, 21 Mar 2022 13:08:42 -0400
-X-MC-Unique: oBUT0MDQMX6Qu4SZSKQxgw-1
-Received: by mail-ed1-f69.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so9007646edb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:08:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dJfkHmVteh3T64TEzHnOxY0U7R9RqYwPmRB3l1CleQU=;
-        b=cGJxvc3D3nCSJXojkVcRKbS5D78w73NXmfAL4lln8oWL4A1sNyeTkT9N0G5iGVZPwd
-         Wes4h54l5t1zLcuyROER89V2t1uoQlEYnnoQOGwdAWF92eMkatxaAo1Nr46PjKWy5e2J
-         WZ5iRKiof4vaY2Rt/LrR0BUQCC80cW1uAvJjqteH8NckHIUMeka92iREFaYD3wlLlOPz
-         gJ2W3m/IFnMzyemWZECARif4LAaiAvJX4LcJf3mQTRNs8EGQ9G33owqr10aSXopqciVl
-         cDFTDB/PExDb3tBzu3yr6bXX4EJAUWYty65m2wEx/O1Z6qWovCg30Odh45uuZ0n3hdfL
-         3LSQ==
-X-Gm-Message-State: AOAM530/nPvUJrNQLR4c21Q/b67JalVxLHpeMuXhmJdNHpfhufzZWtOY
-        F6ohgqbUStmXfIkqPkkh954cFgzFoXjnbGdWlmphaIHuiXGqGgjTm37Fm8b+QoMCVYPCnowmmYK
-        y9HjpLCApIoYDGZ8+gVpHmIyK
-X-Received: by 2002:a17:906:ae0c:b0:6a6:a09f:f8d5 with SMTP id le12-20020a170906ae0c00b006a6a09ff8d5mr21214467ejb.627.1647882521149;
-        Mon, 21 Mar 2022 10:08:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy9vOllZzruoK6Px19KOGf8G+AZzG2Lh5NsWDQstKlL8pkmJxJy/bkjawSFGfb/CaNq0Q1wkQ==
-X-Received: by 2002:a17:906:ae0c:b0:6a6:a09f:f8d5 with SMTP id le12-20020a170906ae0c00b006a6a09ff8d5mr21214429ejb.627.1647882520644;
-        Mon, 21 Mar 2022 10:08:40 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id bd12-20020a056402206c00b00418c9bf71cbsm8003710edb.68.2022.03.21.10.08.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 10:08:39 -0700 (PDT)
-Message-ID: <d94532b7-67bc-295b-fe40-73c519b6f916@redhat.com>
-Date:   Mon, 21 Mar 2022 18:08:38 +0100
+        Mon, 21 Mar 2022 13:11:27 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA463427E1;
+        Mon, 21 Mar 2022 10:10:00 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 71BB1E013D;
+        Mon, 21 Mar 2022 10:09:30 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id V6GEmpCEbAdy; Mon, 21 Mar 2022 10:09:29 -0700 (PDT)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org, kernel@puri.sm,
+        stable@vger.kernel.org
+Subject: [PATCH v3] thermal: qoriq: Only enable sites that actually exist
+Date:   Mon, 21 Mar 2022 18:08:52 +0100
+Message-Id: <20220321170852.654094-1-sebastian.krzyszkowiak@puri.sm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220321150214.1895231-1-pgonda@google.com>
- <f8500809-610e-ce44-9906-785b7ddc0911@redhat.com>
- <CAMkAt6pNE9MC7U_qQDwTrFG5e8qaiWZ6f0HzR+mk4dCNC2Ue8A@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CAMkAt6pNE9MC7U_qQDwTrFG5e8qaiWZ6f0HzR+mk4dCNC2Ue8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,36 +45,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/22 16:42, Peter Gonda wrote:
-> On Mon, Mar 21, 2022 at 9:27 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->>
->> On 3/21/22 16:02, Peter Gonda wrote:
->>> SEV-ES guests can request termination using the GHCB's MSR protocol. See
->>> AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
->>> guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
->>> return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
->>> struct the userspace VMM can clearly see the guest has requested a SEV-ES
->>> termination including the termination reason code set and reason code.
->>>
->>> Signed-off-by: Peter Gonda <pgonda@google.com>
->>> Cc: Borislav Petkov <bp@alien8.de>
->>> Cc: Tom Lendacky <thomas.lendacky@amd.com>
->>> Cc: Brijesh Singh <brijesh.singh@amd.com>
->>> Cc: Joerg Roedel <jroedel@suse.de>
->>> Cc: Marc Orr <marcorr@google.com>
->>> Cc: Sean Christopherson <seanjc@google.com>
->>> Cc: kvm@vger.kernel.org
->>> Cc: linux-kernel@vger.kernel.org
->>
->> Looks good, but it has to also add a capability.
-> 
-> Thanks for the quick review! Just so I understand. I should add
-> KVM_CAP_SEV_TERM or something, then if that has been enabled do the
-> new functionality, else keep the old functionality?
+On i.MX8MQ, enabling monitoring sites that aren't connected to anything
+can cause unwanted side effects on some units. This seems to happen
+once some of these sites report out-of-range readings and results in
+sensor misbehavior, such as thermal zone readings getting stuck or even
+suddenly reporting an impossibly high value, triggering emergency
+shutdowns.
 
-No, much simpler; just something for which KVM_CHECK_EXTENSION returns 
-1, so that userspace knows that there is a "shutdown" member to be 
-filled by KVM_EXIT_SHUTDOWN.  e.g. KVM_CAP_EXIT_SHUTDOWN_REASON.
+The datasheet lists all non-existent sites as "reserved" and doesn't
+make any guarantees about being able to enable them at all, so let's
+not do that. Instead, iterate over sensor DT nodes and only enable
+monitoring sites that are specified there prior to registering their
+thermal zones. This still fixes the issue with bogus data being
+reported on the first reading, but doesn't introduce problems that
+come with reading from non-existent sites.
 
-Paolo
+Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before registering them")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+---
+v3: add cc: stable
+v2: augment the commit message with details on what the patch is doing
+---
+ drivers/thermal/qoriq_thermal.c | 63 ++++++++++++++++++++++-----------
+ 1 file changed, 43 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index 73049f9bea25..ef0848849ee2 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -32,7 +32,6 @@
+ #define TMR_DISABLE	0x0
+ #define TMR_ME		0x80000000
+ #define TMR_ALPF	0x0c000000
+-#define TMR_MSITE_ALL	GENMASK(15, 0)
+ 
+ #define REGS_TMTMIR	0x008	/* Temperature measurement interval Register */
+ #define TMTMIR_DEFAULT	0x0000000f
+@@ -129,33 +128,51 @@ static const struct thermal_zone_of_device_ops tmu_tz_ops = {
+ static int qoriq_tmu_register_tmu_zone(struct device *dev,
+ 				       struct qoriq_tmu_data *qdata)
+ {
+-	int id;
++	int ret = 0;
++	struct device_node *np, *child, *sensor_np;
+ 
+-	if (qdata->ver == TMU_VER1) {
+-		regmap_write(qdata->regmap, REGS_TMR,
+-			     TMR_MSITE_ALL | TMR_ME | TMR_ALPF);
+-	} else {
+-		regmap_write(qdata->regmap, REGS_V2_TMSR, TMR_MSITE_ALL);
+-		regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
+-	}
++	np = of_find_node_by_name(NULL, "thermal-zones");
++	if (!np)
++		return -ENODEV;
++
++	sensor_np = of_node_get(dev->of_node);
+ 
+-	for (id = 0; id < SITES_MAX; id++) {
++	for_each_available_child_of_node(np, child) {
+ 		struct thermal_zone_device *tzd;
+-		struct qoriq_sensor *sensor = &qdata->sensor[id];
+-		int ret;
++		struct qoriq_sensor *sensor;
++		int id, site;
++
++		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
++
++		if (ret < 0) {
++			dev_err(dev, "failed to get valid sensor id: %d\n", ret);
++			of_node_put(child);
++			break;
++		}
+ 
++		sensor = &qdata->sensor[id];
+ 		sensor->id = id;
+ 
++		/* Enable monitoring */
++		if (qdata->ver == TMU_VER1) {
++			site = 0x1 << (15 - id);
++			regmap_update_bits(qdata->regmap, REGS_TMR,
++					   site | TMR_ME | TMR_ALPF,
++					   site | TMR_ME | TMR_ALPF);
++		} else {
++			site = 0x1 << id;
++			regmap_update_bits(qdata->regmap, REGS_V2_TMSR, site, site);
++			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
++		}
++
+ 		tzd = devm_thermal_zone_of_sensor_register(dev, id,
+ 							   sensor,
+ 							   &tmu_tz_ops);
+-		ret = PTR_ERR_OR_ZERO(tzd);
+-		if (ret) {
+-			if (ret == -ENODEV)
+-				continue;
+-
+-			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
+-			return ret;
++		if (IS_ERR(tzd)) {
++			ret = PTR_ERR(tzd);
++			dev_err(dev, "failed to register thermal zone: %d\n", ret);
++			of_node_put(child);
++			break;
+ 		}
+ 
+ 		if (devm_thermal_add_hwmon_sysfs(tzd))
+@@ -164,7 +181,13 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
+ 
+ 	}
+ 
+-	return 0;
++	of_node_put(sensor_np);
++	of_node_put(np);
++
++	if (ret)
++		regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
++
++	return ret;
+ }
+ 
+ static int qoriq_tmu_calibration(struct device *dev,
+-- 
+2.35.1
 

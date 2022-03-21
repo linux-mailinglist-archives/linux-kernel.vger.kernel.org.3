@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1024C4E22C7
+	by mail.lfdr.de (Postfix) with ESMTP id 60D7F4E22C8
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345355AbiCUJBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S1345508AbiCUJBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244330AbiCUJBJ (ORCPT
+        with ESMTP id S1345353AbiCUJBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:01:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E607665146
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:59:44 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 08:59:40 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647853182;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 21 Mar 2022 05:01:19 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD73710FA
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:59:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 42178210EC;
+        Mon, 21 Mar 2022 08:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647853190; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=x56KENgwqjeFrYk/9zKTjFLP7GFUcIr5JFJFkbNIIYA=;
-        b=rWUdDb8P3DkhYiT7GdHQxIFwSXMEOLn+aToXjZREnm6iub9cqm+w4SpZBzPaJu2EDYsnQv
-        3N9sYLPDGXHYj52jpvdnWkDi3SNiM8gWTUleCXM9CSjKq4nOtk/PD9bZLyjkMBc4Ge5cRH
-        0k136CsTxL1IDZNpbKya1XWSOwTKtoa8nBTvNjLz8GG7LeibNveeVyOCNvOt2ayxvAFJR8
-        Q631Vqx3YrmJ3lJDyHC+HI2wY519E5lXxzuagKnzexOyjjwONNBMTM28QGlr18QUPa9eAm
-        FAiCn+nfCrz3bpRAuuFgBlC4T8x2KPiFHCHF08J+PsMRb9SVRsvdkz8w2e2SMg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647853182;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x56KENgwqjeFrYk/9zKTjFLP7GFUcIr5JFJFkbNIIYA=;
-        b=6WZeZDOAhv0bnJ/oW/R531WhxEubd0Gqm+7wSO2yKL6x0ZUJiB8zb3uFjXOv4na8YvHwpU
-        fh0YfbYPHVcdvFAg==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/gic-v4: Wait for
- GICR_VPENDBASER.Dirty to clear before descheduling
-Cc:     Jingyi Wang <wangjingyi11@huawei.com>,
-        Nianyao Tang <tangnianyao@huawei.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com>
-References: <4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com>
+        bh=rerL71kehnz2q1cuLKpY1j8XERV8cV3bZj87Fo6jIys=;
+        b=poiCcF7d/51GTWfnNu2CbvHJnzPs2yUjE5Y7L3EkTLobZrTCOGqy2oYA7niyWrfBCVNWPQ
+        3MDrFE82IngFzzAbTGUR2NDZ4PM13k/05MI58h48sOPbvbs7TN65SMiQQxFVNo6P2fQSdz
+        NT6zcFxbSGWCQWWTd/B+mbAmx256Gmw=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 09E3DA3B87;
+        Mon, 21 Mar 2022 08:59:49 +0000 (UTC)
+Date:   Mon, 21 Mar 2022 09:59:49 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kosaki.motohiro@jp.fujitsu.com, mgorman@suse.de,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/mempolicy: fix potential mpol_new leak in
+ shared_policy_replace
+Message-ID: <Yjg+hVuJBPGhkfeJ@dhcp22.suse.cz>
+References: <20220311093624.39546-1-linmiaohe@huawei.com>
+ <Yi9w7TCYbj+OLGXJ@dhcp22.suse.cz>
+ <26577566-ae1e-801c-8c64-89c2c89a487d@huawei.com>
+ <YjCwYpTbGzAj9kmg@dhcp22.suse.cz>
+ <24b2a9ef-eea0-09bd-6842-121d8436e56a@huawei.com>
+ <YjG0PsF25wpAEOY3@dhcp22.suse.cz>
+ <6ebebfd6-6356-e956-4fbc-0abaa58308ff@huawei.com>
+ <YjL5Y6ZrZ2eLnnTv@dhcp22.suse.cz>
+ <207bbd69-6678-5120-3760-e2bcd9803a14@huawei.com>
+ <36b0ea44-39ab-bc52-1ae5-eca2cf832900@huawei.com>
 MIME-Version: 1.0
-Message-ID: <164785318046.389.4078543658581148621.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <36b0ea44-39ab-bc52-1ae5-eca2cf832900@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -66,96 +64,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On Sat 19-03-22 18:42:33, Miaohe Lin wrote:
+[...]
+> This would be triggered easily with below code snippet in my virtual machine:
+> 
+> 	shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
+> 	shm = shmat(shmid, 0, 0);
+> 	loop {
+> 		mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
+> 		mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask, maxnode, 0);
+> 	}
+> 
+> If there're many process doing the above work, mpol_new will be leaked easily.
+> So should I resend this patch with Cc stable? But it seems I'am not supposed
+> to make this decision and the maintainer will take care of this?
 
-Commit-ID:     686121ebe6fce266f16978e98ecda35a72c39dbf
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/686121ebe6fce266f16978e98ecda35a72c39dbf
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Thu, 17 Mar 2022 09:49:02 
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Mon, 21 Mar 2022 08:53:05 
+I would just add
+Fixes: 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
+Cc: stable # 3.8
 
-irqchip/gic-v4: Wait for GICR_VPENDBASER.Dirty to clear before descheduling
+And also add your above reproducer snippet added to the original changelog.
+This would be more then enough to conclude the importance.
 
-The way KVM drives GICv4.{0,1} is as follows:
-- vcpu_load() makes the VPE resident, instructing the RD to start
-  scanning for interrupts
-- just before entering the guest, we check that the RD has finished
-  scanning and that we can start running the vcpu
-- on preemption, we deschedule the VPE by making it invalid on
-  the RD
-
-However, we are preemptible between the first two steps. If it so
-happens *and* that the RD was still scanning, we nonetheless write
-to the GICR_VPENDBASER register while Dirty is set, and bad things
-happen (we're in UNPRED land).
-
-This affects both the 4.0 and 4.1 implementations.
-
-Make sure Dirty is cleared before performing the deschedule,
-meaning that its_clear_vpend_valid() becomes a sort of full VPE
-residency barrier.
-
-Reported-by: Jingyi Wang <wangjingyi11@huawei.com>
-Tested-by: Nianyao Tang <tangnianyao@huawei.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Fixes: 57e3cebd022f ("KVM: arm64: Delay the polling of the GICR_VPENDBASER.Dirty
-bit")
-Link: https://lore.kernel.org/r/4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com
----
- drivers/irqchip/irq-gic-v3-its.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 9e93ff2..c9b1df9 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -3011,18 +3011,12 @@ static int __init allocate_lpi_tables(void)
- 	return 0;
- }
- 
--static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
-+static u64 read_vpend_dirty_clear(void __iomem *vlpi_base)
- {
- 	u32 count = 1000000;	/* 1s! */
- 	bool clean;
- 	u64 val;
- 
--	val = gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
--	val &= ~GICR_VPENDBASER_Valid;
--	val &= ~clr;
--	val |= set;
--	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
--
- 	do {
- 		val = gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
- 		clean = !(val & GICR_VPENDBASER_Dirty);
-@@ -3033,10 +3027,26 @@ static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
- 		}
- 	} while (!clean && count);
- 
--	if (unlikely(val & GICR_VPENDBASER_Dirty)) {
-+	if (unlikely(!clean))
- 		pr_err_ratelimited("ITS virtual pending table not cleaning\n");
-+
-+	return val;
-+}
-+
-+static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
-+{
-+	u64 val;
-+
-+	/* Make sure we wait until the RD is done with the initial scan */
-+	val = read_vpend_dirty_clear(vlpi_base);
-+	val &= ~GICR_VPENDBASER_Valid;
-+	val &= ~clr;
-+	val |= set;
-+	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
-+
-+	val = read_vpend_dirty_clear(vlpi_base);
-+	if (unlikely(val & GICR_VPENDBASER_Dirty))
- 		val |= GICR_VPENDBASER_PendingLast;
--	}
- 
- 	return val;
- }
+Thank you for working hard on this!
+-- 
+Michal Hocko
+SUSE Labs

@@ -2,98 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB7A4E24AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0884E23A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346490AbiCUKvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S1346029AbiCUJxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346498AbiCUKvO (ORCPT
+        with ESMTP id S1343803AbiCUJxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:51:14 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA69E33E05;
-        Mon, 21 Mar 2022 03:49:45 -0700 (PDT)
-Received: from mail-lj1-f174.google.com ([209.85.208.174]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N63i4-1o7j4y0AO0-016OGt; Mon, 21 Mar 2022 11:49:44 +0100
-Received: by mail-lj1-f174.google.com with SMTP id 17so4269401ljw.8;
-        Mon, 21 Mar 2022 03:49:43 -0700 (PDT)
-X-Gm-Message-State: AOAM533fEfKyRDrZl6t5ZGj0/hTxVU3+Q71+iJK8Mpc4XkNfkp1gAo6H
-        p2hKIlCXOlWKUyooNf879P11KDvamRqofD2bEgk=
-X-Google-Smtp-Source: ABdhPJzcZ0Yxl2PaNSM+qTLSuTVghKJG3OLAZNn+JUNcoqLnve1kS8gk8xn9EpeRekkC77XHfghVaNA2oBBlHj9vNLU=
-X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
- e12-20020a056000178c00b002040648b4c4mr6283444wrg.219.1647856201405; Mon, 21
- Mar 2022 02:50:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-3-chenhuacai@loongson.cn>
- <CAK8P3a2gKGuMTLawFSf1hd3LY7rCVUquTPVHMcxBTok6+y-Rag@mail.gmail.com> <CAAhV-H6eDSU20gjLgEKM318i1ksk23thv9cLJKmAo_cBzjtEkw@mail.gmail.com>
-In-Reply-To: <CAAhV-H6eDSU20gjLgEKM318i1ksk23thv9cLJKmAo_cBzjtEkw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 10:49:45 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0PXeEAvZeq0djqCFqPSkFe5z-bg81kcs69ZTcBSL=24Q@mail.gmail.com>
-Message-ID: <CAK8P3a0PXeEAvZeq0djqCFqPSkFe5z-bg81kcs69ZTcBSL=24Q@mail.gmail.com>
-Subject: Re: [PATCH V8 10/22] LoongArch: Add exception/interrupt handling
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Mon, 21 Mar 2022 05:53:10 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88839BAEE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:51:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jyBaXp2PIKW8Ruo8cRzG+zzget6yiobyB7Wjs3fkEW41bWAZSNSzEcCEwYE2AuS8D8J2IZ8+GyeQBrtJaSO79HqHWu7q00vgncRpgyK4GflWFNng/aXPDK1JvqSO1p6NlomHG2aUelBhoNovkZpCS5kc9Q/Ome/EhKHRgC0u+qh+tawScn1SQoaFIU6AdYHTi4Ng3gwFJVoBW1VZYRaRBtIvTKcDHjfEc2eyMbK/co1vVuT2LHcEbGRTfturl041/tCT+tzN+StrrMwjXqCRlMTNrnQnHvmHtHy3dAED1dQkIsy2JIk99wAESJuvy5y7Homh/3CVv01ZQ8Z55yrXGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SdM+8CraNUcODBZ+ejblVoCAp9BYZQ1XhAJVplxHj3k=;
+ b=do/s/5qau6+/FxIGdDUXG/9iGyGEAWlxKRn4LH6je8SDtbofk5kzg/2QCcN/O1ii+CF47HM0SqTcKZANJsukG5SDD172fR2/8G6O8dJY0mNjl62MRpLfLFl4o8p5Syz6e3L73ORZDki2s0/T6haj4LFp1CU/r9le6kAJhhlm+p9e8tPnLYOA+HHNtqp61glOhh2lEtLFm4tVYDC29lE8TNZdymB4VIdqzxWdjlJBYg9jcWJu5z4owKg44Fz1rzWXrHc5jLwjoz/Uu6PHtPk0L2Sq8f/YECxVf8ktMnRqX03t6aCFgfgm6qh6Y3UnvsxEwP3kRTa7r6ReZCAd1JhjNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SdM+8CraNUcODBZ+ejblVoCAp9BYZQ1XhAJVplxHj3k=;
+ b=P8reFv0Hgl8blucNXaPhMCSX6Rc1tYmX+24kpvhBKg0NRKh327OvTvPHwLtxfkPF+M/eD5SxVcFBM9H4wfrkaE72TI6M3e4bnyqtlOYfOoBFMJovP+DCwckgL9LXCKoZm0gNP7x88p32b2SwUjkTPT473Swn7dSVxHaJHFhMF70=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DS7PR12MB5839.namprd12.prod.outlook.com (2603:10b6:8:7a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Mon, 21 Mar
+ 2022 09:51:43 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185%6]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
+ 09:51:43 +0000
+Message-ID: <8688c626-5858-18ba-593b-cdf179ca5201@amd.com>
+Date:   Mon, 21 Mar 2022 10:51:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/ttm: fix potential null ptr deref in when mem space
+ alloc fails
+Content-Language: en-US
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        dri-devel@lists.freedesktop.org, Huang Rui <ray.huang@amd.com>,
         David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:YoaeS4jNV/JubHRnF4GIrDNIMQNQmUO1gQu8S3NIm8f/RE/rKV6
- Dj4TegO2P6SEPv6EMhaH+ipnUUQGfji0yPu/I7NGFMqGnrRfPztjMoPZpE9ICiadMbEHlur
- /g0U2q7gJhR+Pr3+Lo9Svw+6VKExaLPmKG3AJYlyxnXi9Bo7YSogW3CpqEtptzO2ovBm2bm
- L+3OZIs0KtSfxHojkkBNQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ml/XYeb+7Tc=:Yf1FWxdgbKn0Ji8IgXKODS
- pKYHfR9ttwBrINb1uxK5fiD2QaTJlo3WBl96fUdM1zD7pvc84ylCS/8lxdCSlA4fAETjxATwc
- 8pujZ9+trxJMmJsh7hBE8SshtzczxZrx+WGseKLqf48BjRkUNZHYZMrziv6uvNWnsTuhjAXbZ
- WXQnReI9jVrfmyX6T224qlp3k8sKZo17fupBCvVgT8SGE9NsOQZCcGUrA6Y0M3OU5AxBvfZJ8
- GJ18HAXZ3/rCXT0YtgSkLGnX1b5Jf/VIK+lUKNlNmf/RILSSDIOoMlUplaXsKYwc0+rkBxSYL
- t4pyaF1+W/KcOSL3OKv1HI2Z8DTwvXZMNBSevGiThWwXHISCGoTdMY8RWCwb+HV/jGCITVJ4C
- 6UBbtBdWi1sM21s5yCafx3QCGBUb46kyR4Nh7jI0wpvXs2QBgocQE+jO1ENtqBYOFvibz6xzF
- LdEdt6ZNG+I2fWM4pyNMAYFs4neDRneG+XxUw6M1Aj3oEQI7lBY9baA4SkNX3DrnCOzMb1I+w
- ySAjVYdYg/7hCOjQ/L68gh21NAhB52+Ky99ZgsRSWVTZlnQdPeulCAkizwOT8a/9v84535AsZ
- q21obqH30JD1vV6WtvuRNyn+Yhb++ON9jFELtxiJLvhNlu/0oAaBhCYNcaS6ElldjMHQtbDeS
- 1psRTY5VUYYQZzpNuL42SuIosIriV71s3e1h+LH52XQl6EVwxQ8YvOV6xatXmjhDGTvreIr1O
- UGWuqxFSR0kipQebTTFk7tQVuHAczVS/W1nYNN89+YUuWHWRYH/Tk8/IFCDI2dbTYF3LbtBH7
- K+lN/4iMG6kX+7mBARcv85Ru221KSOLddg/7tJCQj2K2FV8DDk=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20220318195004.416539-1-bob.beckett@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220318195004.416539-1-bob.beckett@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM6P195CA0043.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:209:87::20) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e10c3bbf-73a1-45d5-88c2-08da0b20678b
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5839:EE_
+X-Microsoft-Antispam-PRVS: <DS7PR12MB5839D6A8932A8E10BBB70A9E83169@DS7PR12MB5839.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RviQt0aEJRsyfpHgGI/inldeniE4c6dmLgF+i9IDTfQbkHC+YGBU1O0hsZ9VSwqho0CMKwfPxWOXAY/3ThPP+MRFK+O8GfyACOKJOydT4aOEL2ALFcQZrjVkcOL+Dl/wUJrp25By4P9KBfs2gR3zVS8vpt+959qp2naxVU8CK1uu8Q8amUvPhwn8sVXRih2JVrZCOQr84xtsTnLZuT4CLqazhp1cHKeE6bLtWvrRhqhSc0tchSmYXho1S4UmPVZXbi9+tPi8x+2o9xKaLZp7gXtREcxOOQBZeg5755AsybdLlu7YhSVee/gWJ5yUtpB5sJEHltZNlJ4UGKeCeWoAGO6xorWCSYxuv2/clnlNXAef/8o5z+l8W5pewJzx0tzvmiEmh7zm8Pw25S+4jzrO0uCUmHeQr4yK2vcQvwTmAm9N8dofZA2WUdCzlBTbuxWwW/fT0JlubU9sNJUCUgPc8aYXVW1YSEwkbMltXRLgOK1q6SLOR03kdzH0groWCjH6wRZC0JdpXZAqaUzL+UCrq/0V72b86HJz1u/J2WCi/pKCA/Qco1bXJZWlwig7vQkh+b05gXLgY12OZWJp92ds7Gp2wFB3drxsyV0kd0Gz2VhY9Mq6JM4nBnabMCGvbG1weV0vFYPm3xyE/H4SCj9XnLTEfbvTSiminNgEmDujfBg0DX0wFNBrFWKF3JT9Hsngl8OlrDVaR0Ru3tcVuh41t7PG7XrF4FWDVom5wSEjb4YwRYPahow0HzUfNjxiT8MN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(8676002)(4326008)(66946007)(66556008)(66476007)(508600001)(6666004)(6486002)(8936002)(2616005)(6512007)(2906002)(316002)(38100700002)(186003)(36756003)(5660300002)(6506007)(31686004)(86362001)(110136005)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WHA1NktQTkxLQldNVS9JY3dqT1dwUGFZdmZpMkFpeHFKZTlMb1JPN1NMRFZx?=
+ =?utf-8?B?aCsvUTZVVGl0N0JaK2haelROR05IZjZvUWUvSzZwckNOa2xuWWJJOWVzaTFH?=
+ =?utf-8?B?WEVYSVIvWjVjSW9NQVNYenFjRFR1cjFKNlloSTV1SXkxbXIxaE8vc0ZLclhs?=
+ =?utf-8?B?aUtNc2RnOTlaNXBSNS9FSUg4WG1WMDYwWlpVTDRqVlVOZnpHYW5oL3NRWDFD?=
+ =?utf-8?B?bE1kLzB6MnVGVnVLYXEvekZpamxqaXFkblEyZFV0bXppbkl4OVFUdXg3ZTA3?=
+ =?utf-8?B?OGg5ajg4V3JQU1hMVW00d0M1dlJXY3V3N3pzQ3NlMVEwQTVIV0dOeHA4WUV0?=
+ =?utf-8?B?ZVNLTXBxTFppWFRwRDg3ZUFpTjN0RkF4V3NXVDA2SEFHWXc3UUJCNzRpREVn?=
+ =?utf-8?B?YUtXQWZNeHNWQzRpTk9xMkM2MmRJaWo5cXQ4WVVyOFBDemNHYWxSS1lNQzlm?=
+ =?utf-8?B?OThTY2QvejFDam04NDRwZll1a1o1eWduMGxobkN1RU1aUFp6NktVK3FNRm14?=
+ =?utf-8?B?emdzbVJrSXk0Zmhqc0I0Skk1REFhMXROYjlLUTFIWXJMT08vdjlhaEw1Y3A0?=
+ =?utf-8?B?UnA3Q1ZIU2FmeGt3T0ZPdjF5b3UyZDVEeHBQdUF0N0N2YlJ1YkhMK3RwM3dM?=
+ =?utf-8?B?VVJJYytjdDFCYzBKU2ZveGI2anBac3U1SE1VcG91cmRpSmpDTHVPdGw0N0du?=
+ =?utf-8?B?dEZacThUTnJ2UUV4UlFWd0huV3M3VUlkeitBRU9ZZUFpVXpaNGRVTDFFU3dX?=
+ =?utf-8?B?N0JOSEtVcXI2eHBUWVBKQUNCYVVNWWVoeXg4b2RFN1VxL3JWbGdZZTk5aEkz?=
+ =?utf-8?B?NDVtVzNjZzhUQVNaT2ZYVkM1KzFaVzYwTVdPbENRVWk2M2MxQ3hXclpOazlW?=
+ =?utf-8?B?YktQTEpPeTR1dlhaT294eXhxeWY3SVNLcVpPcTNhcWN3WWhJNCtRc1ZFZm50?=
+ =?utf-8?B?cjVEWmJqaVJGU3BJaFFzV1NaWTdxRThSdFZQWHRrSERuMDhsUGQzMGcvbzFQ?=
+ =?utf-8?B?UklvWGtUczV2bU15c08zUXIzemUvbjVEckRZemFUSXRVUHAxYjcrVVRJaDVq?=
+ =?utf-8?B?bkdRZjRaMDVQU255MmF6NGM4b3h0b0h5a0hObWZHMHVpSVZoZWRiYWpINlF6?=
+ =?utf-8?B?dkJFZGtIYlM3QW05UWNETTEzYnc5cjBHeDNOd3pIeEVGVFZJWEgxb2hUZG9G?=
+ =?utf-8?B?cGhOdi81dlVNN2V0clhTS3lNRVNFSERhSGtnUS9MQmZWQ2pTNzhOb2laMk4y?=
+ =?utf-8?B?NFVKd2txNCtCeTh1MFlHMmVMaXFhWWpEQVBZNlRCOEw2OThyWjJUTytWZk56?=
+ =?utf-8?B?NXcrR2RTWDE3bHZvMTMxNmRHZWZ0Q09EOWdoalVoN2VISFpoWVJiMEI2dDhl?=
+ =?utf-8?B?UHl2LzBOekVCT3lENktmMHZRTTlKM04rNlpnbnU2a1Nib0ZLNUZRNEVuYndD?=
+ =?utf-8?B?M1hqcHA0N2RybmtDYWFHcWtEcFhkTTJHZWJ6VlVHN3pQQXVDaVVKRS96TUlj?=
+ =?utf-8?B?bjNpYVc1TEhCbUlZbmlwd2h2dkdPMEVyZGxhL1ZpUVRjUU00NGllOElmUjAz?=
+ =?utf-8?B?WGpLb3BBNXZXMUtzT2Qyd3RBc2tYZHZtZDVtMVFsZiszWXUreU8rNHZVUzhk?=
+ =?utf-8?B?VkdWN3pOU3Q2SE5Ja0dDTytHZVkreXBXZmNPTG9wNHMrSXpUUHhhL2RqTW9J?=
+ =?utf-8?B?QzkxeUV4dld5VVhWTHUvVksxY0E2Wkw0bzM4UmJVMW9QYkpkR2R2RTdmS0NH?=
+ =?utf-8?B?cHZSVUw2NVg3RXJFSzhCcm5wYzJFRXBpd3R0ZDJWYWUrVlJUN0xSRTIwNUdH?=
+ =?utf-8?B?UHdJQ2t5dnN6YjRpUWxwMmI3N3ZRTFpVKzlPY2NML2hjcWUvWEFHc3AzM1dw?=
+ =?utf-8?B?ZjFMRkVaWUtxTjgvU1FyQkhQK3l0aDlVVlc5UFNzUEUwdkN5V2U5aTlSbWFp?=
+ =?utf-8?B?czVLeUVSMmRRSFJRaHhsRzZQZTVEMnRINE1FMyt2YStuZ0I3amN1N3lRbExh?=
+ =?utf-8?B?dmV4QlkwMkVWYWJYZTcxanpRaFk1Yi8zdFZkQzNWK2c3M1R0a3NoVk5YaEUy?=
+ =?utf-8?Q?ZZwVlH?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e10c3bbf-73a1-45d5-88c2-08da0b20678b
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 09:51:43.2278
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z3ebCxAGl6Uw4QrDJ2Ywnc9sdti8+xcHxl9jt51CiTkEa0S95CB1ef4jmCyd+Lzv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5839
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 9:46 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> On Mon, Mar 21, 2022 at 4:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> >
-> > > +unsigned long eentry;
-> > > +EXPORT_SYMBOL_GPL(eentry);
-> > > +unsigned long tlbrentry;
-> > > +EXPORT_SYMBOL_GPL(tlbrentry);
-> >
-> > Why are these exported to modules? Maybe add a comment here, or remove
-> > the export if it's not actually needed.
+Am 18.03.22 um 20:50 schrieb Robert Beckett:
+> when allocating a resource in place it is common to free the buffer's
+> resource, then allocate a new resource in a different placement.
 >
-> They are used by the kvm module in our internal repo.
+> e.g. amdgpu_bo_create_kernel_at calls ttm_resource_free, then calls
+> ttm_bo_mem_space.
 
-Ok, that is fine then. For the moment, please add a comment about it here,
-or remove the exports in the initial merge and add them back when you
-submit the kvm code.
+Well yes I'm working the drivers towards this, but NAK at the moment. 
+Currently bo->resource is never expected to be NULL.
 
-       Arnd
+And yes I'm searching for this bug in amdgpu for quite a while. Where 
+exactly does that happen?
+
+Amdgpu is supposed to allocate a new resource first, then do a swap and 
+the free the old one.
+
+Thanks,
+Christian.
+
+>
+> In this situation, bo->resource will be null as it is cleared during
+> the initial freeing of the previous resource.
+> This leads to a null deref.
+>
+> Fixes: d3116756a710 (drm/ttm: rename bo->mem and make it a pointer)
+>
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> ---
+>   drivers/gpu/drm/ttm/ttm_bo.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+> index db3dc7ef5382..62b29ee7d040 100644
+> --- a/drivers/gpu/drm/ttm/ttm_bo.c
+> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+> @@ -875,7 +875,7 @@ int ttm_bo_mem_space(struct ttm_buffer_object *bo,
+>   	}
+>   
+>   error:
+> -	if (bo->resource->mem_type == TTM_PL_SYSTEM && !bo->pin_count)
+> +	if (bo->resource && bo->resource->mem_type == TTM_PL_SYSTEM && !bo->pin_count)
+>   		ttm_bo_move_to_lru_tail_unlocked(bo);
+>   
+>   	return ret;
+

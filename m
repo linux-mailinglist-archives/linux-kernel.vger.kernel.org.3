@@ -2,117 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DE94E2FFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5364E3000
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352164AbiCUSag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S1352165AbiCUSay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352138AbiCUSab (ORCPT
+        with ESMTP id S1352175AbiCUSav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:30:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBF02AE0A;
-        Mon, 21 Mar 2022 11:29:05 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id m3so14037773lfj.11;
-        Mon, 21 Mar 2022 11:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QJZE8dkCUnUnco1V96yxtmClw0LriXyfY1+6Wy3W2Cc=;
-        b=K/auwkg58bis+KPUyv2LucN9+M2eugoOwqQbdSPyxV/O+vsw08julPiPq/JKG/QQF4
-         hvUsNny4SYaI3irAM2JnrqK/hUchdS6UHbb4A/+vIx2bY9vQMubluIWrsAVCgJtmIgHn
-         nXN2WsRp5E+YMeuZNUwRfMWVL+XKgduggKhmZILxvMjCY7zYW9H3evS0m5ZZ3h3A8zIK
-         JKzoJO/vUuCBEPzXyuqb5jA6ogKNsDGhPS1zv0mD4shTBcJ35k5DChWFlhmdCDfhO33F
-         Rg8UONAMbrIWNO6yPHVzVEnh06oZNQGdlkkzecccFiIY3Hqt6wPtS1zL6k9uHjydBf0S
-         d+AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QJZE8dkCUnUnco1V96yxtmClw0LriXyfY1+6Wy3W2Cc=;
-        b=OolXeokEEFlaCqfTPrGvIv1QPZVEE7vrl3ahQcEuOKBz/97ct3Iv1MacL2OPn25Ygw
-         SMJBXFu14xKa9+nMZBttpU2KaeHcJ1JIjUh8cVjK2Qrswjj+GFeG/zF+seDbLQArCWZy
-         w5QghfweEn8yF+1qbkU47J99P0dTVAaoQAgJNDVgEiX3PIUpSKsM4ep6j5Ua8FCT2kLy
-         UTSpGn2UgKLh6OIgYBFy7WhK2aJje9AmxRD1Pp28c31X5uJT8Bf+Yi0/Vm0tb7UInJ1V
-         c4vyPIrvdPpWw1kv3J5mHNpJCBdB68KGJ6P846R4T92z3n7QijN7bEj69Owo3JmNJ2uo
-         tfwg==
-X-Gm-Message-State: AOAM531GzeuEYmzRywSL2iOJRhvnNcvEPFfDbJc6dMnd/OneZwAzTyRr
-        7vUkQP5PYhjEY82zYqdsi2YBrfxvqpDT/DLO+g==
-X-Google-Smtp-Source: ABdhPJwXvLHLay8erHVCVarSzPk3KZSKXrgZr/Qo7BnjPvJl91SNmZ0JLwo1w/mYrxtHRGimXzrK+jroSI6bBTB7WGQ=
-X-Received: by 2002:a05:6512:3b2c:b0:44a:35fd:994c with SMTP id
- f44-20020a0565123b2c00b0044a35fd994cmr1302459lfv.473.1647887343882; Mon, 21
- Mar 2022 11:29:03 -0700 (PDT)
+        Mon, 21 Mar 2022 14:30:51 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABB02CE1B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647887365; x=1679423365;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rONq22mMYd2BOfwVn3Vvkvv6jVlRMLok2GoRj1UqipM=;
+  b=FPs5gV/9CPhAhCroXh0JbsqYkYGmswSbj1jP04iOW+duexDyg151zekN
+   9IH8Lk4Kpu8YRvRmDxE7CywXeGKcP7mKeDqCf1d4J0lEe8AIR8ruhhgtf
+   PjXFAD8oG7Gx7GesKv1CjOlFyValwsOl+W4qGkIkW8pHXPULzf812JHDd
+   /JkUpnAe0p98e1l/mJCZycuVwSzcLSMzdnU3gc3PinHRVJEfGZGtURDLJ
+   xp9TrnSnts+NNv+FC2DbRWPG1PKsEFUP26xR3/Ji1W6YVYvsY1xaAQp62
+   wnkhmo94xYZdIGbOzvA4HAkyvqFJWMkLuNsVikqurV+V6pSn/WQzIcu9A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="255185776"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="255185776"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 11:29:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="648665264"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 11:29:22 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWMmQ-000I4F-6N; Mon, 21 Mar 2022 18:29:22 +0000
+Date:   Tue, 22 Mar 2022 02:29:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+        mhocko@suse.com
+Cc:     kbuild-all@lists.01.org, kosaki.motohiro@jp.fujitsu.com,
+        mgorman@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linmiaohe@huawei.com
+Subject: Re: [PATCH v2] mm/mempolicy: fix mpol_new leak in
+ shared_policy_replace
+Message-ID: <202203220201.toJrpBkF-lkp@intel.com>
+References: <20220322083456.16563-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-References: <20220317015854.18864-1-ctcchien@nuvoton.com> <20220317015854.18864-4-ctcchien@nuvoton.com>
- <37361667-C932-4139-B649-52DE029BDEE5@alien8.de>
-In-Reply-To: <37361667-C932-4139-B649-52DE029BDEE5@alien8.de>
-From:   Avi Fishman <avifishman70@gmail.com>
-Date:   Mon, 21 Mar 2022 20:28:51 +0200
-Message-ID: <CAKKbWA66rdm11fM2eWpQpSW2aCfFn-9OwJNNN4J2Q4rE2H4vEw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] EDAC: nuvoton: Add NPCM memory controller driver
-To:     Boris Petkov <bp@alien8.de>
-Cc:     Medad CChien <medadyoung@gmail.com>, rric@kernel.org,
-        James Morse <james.morse@arm.com>, YSCHU@nuvoton.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        tony.luck@intel.com, Benjamin Fair <benjaminfair@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        Rob Herring <robh+dt@kernel.org>, JJLIU0@nuvoton.com,
-        KFTING@nuvoton.com, Nancy Yuen <yuenn@google.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>, ctcchien@nuvoton.com,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322083456.16563-1-linmiaohe@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 2:50 PM Boris Petkov <bp@alien8.de> wrote:
->
-> On March 17, 2022 1:58:54 AM UTC, Medad CChien <medadyoung@gmail.com> wrote:
-> >Add support for Nuvoton NPCM SoC.
-> >
-> >Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> >Reported-by: kernel test robot <lkp@intel.com>
->
-> What exactly has the robot reported here?
->
-> >---
-> > drivers/edac/Kconfig     |   9 +
-> > drivers/edac/Makefile    |   1 +
-> > drivers/edac/npcm_edac.c | 710 +++++++++++++++++++++++++++++++++++++++
-> > 3 files changed, 720 insertions(+)
-> > create mode 100644 drivers/edac/npcm_edac.c
->
-> I don't see a MAINTAINERS file entry so that people can Cc you on bugs. See the other EDAC drivers for an example.
->
+Hi Miaohe,
 
-see in MAINTAINERS:
-ARM/NUVOTON NPCM ARCHITECTURE
-M:      Avi Fishman <avifishman70@gmail.com>
-M:      Tomer Maimon <tmaimon77@gmail.com>
-...
-F:      drivers/*/*npcm*
-F:      drivers/*/*/*npcm*
+Thank you for the patch! Yet something to improve:
 
-Isn't it OK?
+[auto build test ERROR on linux/master]
+[also build test ERROR on linus/master v5.17]
+[cannot apply to hnaz-mm/master next-20220321]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> --
-> Sent from a small device: formatting sux and brevity is inevitable.
+url:    https://github.com/0day-ci/linux/commits/Miaohe-Lin/mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace/20220321-200100
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: ia64-defconfig (https://download.01.org/0day-ci/archive/20220322/202203220201.toJrpBkF-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/9a91a8a7964a3af0b60f08dc38b7815e5118206a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Miaohe-Lin/mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace/20220321-200100
+        git checkout 9a91a8a7964a3af0b60f08dc38b7815e5118206a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   mm/mempolicy.c: In function 'shared_policy_replace':
+>> mm/mempolicy.c:2745:22: error: passing argument 1 of 'refcount_set' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    2745 |         refcount_set(&mpol_new->refcnt, 1);
+         |                      ^~~~~~~~~~~~~~~~~
+         |                      |
+         |                      atomic_t *
+   In file included from include/linux/pid.h:7,
+                    from include/linux/sched.h:14,
+                    from include/linux/mempolicy.h:9,
+                    from mm/mempolicy.c:73:
+   include/linux/refcount.h:134:45: note: expected 'refcount_t *' {aka 'struct refcount_struct *'} but argument is of type 'atomic_t *'
+     134 | static inline void refcount_set(refcount_t *r, int n)
+         |                                 ~~~~~~~~~~~~^
+   cc1: some warnings being treated as errors
 
 
+vim +/refcount_set +2745 mm/mempolicy.c
+
+  2681	
+  2682	/* Replace a policy range. */
+  2683	static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
+  2684					 unsigned long end, struct sp_node *new)
+  2685	{
+  2686		struct sp_node *n;
+  2687		struct sp_node *n_new = NULL;
+  2688		struct mempolicy *mpol_new = NULL;
+  2689		int ret = 0;
+  2690	
+  2691	restart:
+  2692		write_lock(&sp->lock);
+  2693		n = sp_lookup(sp, start, end);
+  2694		/* Take care of old policies in the same range. */
+  2695		while (n && n->start < end) {
+  2696			struct rb_node *next = rb_next(&n->nd);
+  2697			if (n->start >= start) {
+  2698				if (n->end <= end)
+  2699					sp_delete(sp, n);
+  2700				else
+  2701					n->start = end;
+  2702			} else {
+  2703				/* Old policy spanning whole new range. */
+  2704				if (n->end > end) {
+  2705					if (!n_new)
+  2706						goto alloc_new;
+  2707	
+  2708					*mpol_new = *n->policy;
+  2709					atomic_set(&mpol_new->refcnt, 1);
+  2710					sp_node_init(n_new, end, n->end, mpol_new);
+  2711					n->end = start;
+  2712					sp_insert(sp, n_new);
+  2713					n_new = NULL;
+  2714					mpol_new = NULL;
+  2715					break;
+  2716				} else
+  2717					n->end = start;
+  2718			}
+  2719			if (!next)
+  2720				break;
+  2721			n = rb_entry(next, struct sp_node, nd);
+  2722		}
+  2723		if (new)
+  2724			sp_insert(sp, new);
+  2725		write_unlock(&sp->lock);
+  2726		ret = 0;
+  2727	
+  2728	err_out:
+  2729		if (mpol_new)
+  2730			mpol_put(mpol_new);
+  2731		if (n_new)
+  2732			kmem_cache_free(sn_cache, n_new);
+  2733	
+  2734		return ret;
+  2735	
+  2736	alloc_new:
+  2737		write_unlock(&sp->lock);
+  2738		ret = -ENOMEM;
+  2739		n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
+  2740		if (!n_new)
+  2741			goto err_out;
+  2742		mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+  2743		if (!mpol_new)
+  2744			goto err_out;
+> 2745		refcount_set(&mpol_new->refcnt, 1);
+  2746		goto restart;
+  2747	}
+  2748	
 
 -- 
-Regards,
-Avi
+0-DAY CI Kernel Test Service
+https://01.org/lkp

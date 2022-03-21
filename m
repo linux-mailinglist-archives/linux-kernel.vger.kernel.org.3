@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ED04E25E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51CB4E25E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347064AbiCUMCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S1347088AbiCUMDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347048AbiCUMCF (ORCPT
+        with ESMTP id S240270AbiCUMDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:02:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E62B532F3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:00:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C800DCE13B1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:00:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E71C340E8;
-        Mon, 21 Mar 2022 12:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647864037;
-        bh=x7RIt4mLNf8mNberwc71l5fBa0XC8ugDp4MrJBP6Nek=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Xa6xRMwoEmgjWxCWOEJdmmp7L8ZGpxrrK/IlLjLMCpZPbOecdMtKsY4ttW5bkyiQn
-         RQdQv+QdS/hH+Aa4AWx213Q864twi8Ro6gvE6BX1ttwwdPhY3CO+n685a17NeHdXJb
-         r4n7YMUlYiqSq4O6IGLvRKMpHHAgTmgI5N4PzK+fNfeh4BtsVZWG+/n9ODaVQ5RkdU
-         ftCJHj+SPsQQWa/J28XMkReAUUpgUaXPsRdx74w0qkQSPZTcOO7SicAeBXGbGliEZj
-         A1elc8hIO0p5rT5DdSpiLF6IBT+FCWBMHYDjMzNVotBhhHO7pcD2qt3VnOEYimFV/p
-         DKAYtWS5X3zPw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        trevor.wu@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        alsa-devel@alsa-project.org,
-        angelogioacchino.delregno@collabora.com, tzungbi@google.com,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220319120325.11882-1-jiaxin.yu@mediatek.com>
-References: <20220319120325.11882-1-jiaxin.yu@mediatek.com>
-Subject: Re: [PATCH] ASoC: mediatek: mt6358: add missing EXPORT_SYMBOLs
-Message-Id: <164786403520.879132.12234155577870165792.b4-ty@kernel.org>
-Date:   Mon, 21 Mar 2022 12:00:35 +0000
+        Mon, 21 Mar 2022 08:03:44 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419765E74A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647864139; x=1679400139;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nb4WpPSGpi5kBYNPvD9P+MCRBMm3tg3prZemHZxBBzA=;
+  b=NU3kqtppC8Td41My7YHweGpdEq9cuvGl91vWc3I+URaFXq6t8MC9Gpfk
+   O1KFdSz4Q8fvIYbcyPeD0xxboCX3IRaW+iSgGHIBfM7baAXaceXzCxGCW
+   effMUitwhcrgCoNxrY0rHxxrbdFg0mTnNfngUNF7nzxb+66RTIubHkYw1
+   LpXc4rSIKRxpH4LSSpePt7ih8E2lGeaLX2Uu6x/ojeuzdQ+/m7XIqmcR4
+   UDKcx9OEogPPs9X4C90JNbS1Wf1NEowkRdKDxi8DRwcH/FyEB5SEHOFZK
+   t5zjKK0YHlJYK8MNa+k6dMGgJEbFuqj4KsZdNsgMOXT+mz77QQMJgB85U
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="256351114"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="256351114"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 05:01:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="692149100"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Mar 2022 05:01:45 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWGjI-000HoK-Hc; Mon, 21 Mar 2022 12:01:44 +0000
+Date:   Mon, 21 Mar 2022 20:01:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yusuf Khan <yusisamerican@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jasowang@redhat.com,
+        mikelley@microsoft.com, mst@redhat.com, gregkh@linuxfoundation.org,
+        javier@javigon.com, arnd@arndb.de, will@kernel.org,
+        axboe@kernel.dk, Yusuf Khan <yusisamerican@gmail.com>,
+        Christoph Grenz <christophg+lkml@grenz-bonn.de>
+Subject: Re: [PATCH v8 1/2] drivers: ddcci: upstream DDCCI driver
+Message-ID: <202203211954.b6DnJ7FO-lkp@intel.com>
+References: <20220321031438.14762-1-yusisamerican@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321031438.14762-1-yusisamerican@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,40 +67,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Mar 2022 20:03:25 +0800, Jiaxin Yu wrote:
-> Fixes the following build errors when mt6358 is configured as module:
-> 
-> >> ERROR: modpost: "mt6358_set_mtkaif_protocol"
-> >> [sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.ko] undefined!
-> >> ERROR: modpost: "mt6358_set_mtkaif_protocol"
-> >> [sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.ko] undefined!
-> 
-> [...]
+Hi Yusuf,
 
-Applied to
+Thank you for the patch! Perhaps something to improve:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-linus
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on linux/master linus/master lee-backlight/for-backlight-next v5.17 next-20220318]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks!
+url:    https://github.com/0day-ci/linux/commits/Yusuf-Khan/drivers-ddcci-upstream-DDCCI-driver/20220321-111557
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 37fd83916da2e4cae03d350015c82a67b1b334c4
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220321/202203211954.b6DnJ7FO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/42317fc284bbedc623892f2b20e404df80f8c393
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Yusuf-Khan/drivers-ddcci-upstream-DDCCI-driver/20220321-111557
+        git checkout 42317fc284bbedc623892f2b20e404df80f8c393
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/char/ drivers/soc/
 
-[1/1] ASoC: mediatek: mt6358: add missing EXPORT_SYMBOLs
-      commit: a7663c89f4193dbf717572e46e5a3251940dbdc8
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+All warnings (new ones prefixed by >>):
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+   drivers/char/ddcci.c:1157:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                    && (IS_ANY_ID(id->module) || (strcmp(device->module, id->module) == 0))) {
+                        ^~~~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:49: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                                            ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1157:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                    && (IS_ANY_ID(id->module) || (strcmp(device->module, id->module) == 0))) {
+                        ^~~~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:31: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                          ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1156:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                    && (IS_ANY_ID(id->vendor) || (strcmp(device->vendor, id->vendor) == 0))
+                        ^~~~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:49: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                                            ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1156:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                    && (IS_ANY_ID(id->vendor) || (strcmp(device->vendor, id->vendor) == 0))
+                        ^~~~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:31: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                          ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1155:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                    && (IS_ANY_ID(id->model) || (strcmp(device->model, id->model) == 0))
+                        ^~~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:49: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                                            ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1155:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                    && (IS_ANY_ID(id->model) || (strcmp(device->model, id->model) == 0))
+                        ^~~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:31: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                          ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1154:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                    && (IS_ANY_ID(id->type) || (strcmp(device->type, id->type) == 0))
+                        ^~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:49: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                                            ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1154:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                    && (IS_ANY_ID(id->type) || (strcmp(device->type, id->type) == 0))
+                        ^~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:31: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                          ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1153:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                   if ((IS_ANY_ID(id->prot) || (strcmp(device->prot, id->prot) == 0))
+                        ^~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:49: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                                            ~~~~~~ ^  ~~
+   drivers/char/ddcci.c:1153:8: warning: result of comparison of constant -1 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                   if ((IS_ANY_ID(id->prot) || (strcmp(device->prot, id->prot) == 0))
+                        ^~~~~~~~~~~~~~~~~~~
+   drivers/char/ddcci.c:1146:31: note: expanded from macro 'IS_ANY_ID'
+   #define IS_ANY_ID(x) (((x)[0] == -1) && ((x)[7] == -1))
+                          ~~~~~~ ^  ~~
+>> drivers/char/ddcci.c:1206:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+           int ret = 0;
+               ^
+   11 warnings generated.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+vim +/ret +1206 drivers/char/ddcci.c
 
-Thanks,
-Mark
+  1201	
+  1202	static void ddcci_device_remove(struct device *dev)
+  1203	{
+  1204		struct ddcci_device	*device = ddcci_verify_device(dev);
+  1205		struct ddcci_driver	*driver;
+> 1206		int ret = 0;
+  1207	
+  1208		if (!device)
+  1209			return;
+  1210		driver = to_ddcci_driver(dev->driver);
+  1211	
+  1212		if (driver->remove)
+  1213			ret = driver->remove(device);
+  1214	}
+  1215	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

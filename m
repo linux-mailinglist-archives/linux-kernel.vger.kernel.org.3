@@ -2,106 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07A14E2F0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8C84E2F0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351864AbiCUR2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S1351872AbiCUR3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347382AbiCUR2p (ORCPT
+        with ESMTP id S1351871AbiCUR3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:28:45 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACD8184B67;
-        Mon, 21 Mar 2022 10:27:19 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso16969817pjb.0;
-        Mon, 21 Mar 2022 10:27:19 -0700 (PDT)
+        Mon, 21 Mar 2022 13:29:10 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C20618617D;
+        Mon, 21 Mar 2022 10:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=Lu4ciz8L4V39hpIzjAidyBeE83VuDrlnh+7vkkMs+Yo=;
-        b=Y27Pf18eS/UcO0f2cpaNCIi7t8/+h36UrY8w+NGuIq0UIC9NagnNBBhX8ZXj6iwFY1
-         Z85yy+E4KAu44raainughwtzoKsfl2k6/7U/xdrcvIPuA/Y4VzGTMGQArK9asuTgekGM
-         Kz/5FkvfJ8l+JQAzj7beKNkoAJe26e6rIbdODipopQYtens2wCECMyfK4mPHWzN7B2CX
-         HsRuYHoj1df5dY2E/NrgoTvwDnOmrApXTdDZIU2S2V6LfgWEKAHu+koLxen+O1eASr8u
-         AJlfBRZA8AOM8agLsrBAIeadgrr3WP5EfsXqCPfV6st7Q5OjdZOsH0p2y4iUYdjgqr0m
-         xXgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=Lu4ciz8L4V39hpIzjAidyBeE83VuDrlnh+7vkkMs+Yo=;
-        b=P6n5+u0KO31fFnHNMEbBRjJoBD97p6kp+z6DY0heFxzoOKA7FG5JXAyxjDV1nNeNle
-         l1V4T89DVhtoj1f2TTp/nENZuH+Pwe+BPz143XITtpKRd0jp2Qz210vnwmGeKWPCWQTA
-         q7GWJMjXxVqGwps0xFdnTnQpVTbgcAjzFUqUnxT9Jnh0ekXLvcdcj7TR2B0Hox1Q8Zjo
-         DvDXftFy3X6R/n5GECdwsHJ1CZaQweaRZND9eiNwGO2cFCXg4YiuH7LhwtbQ+gWOuK4g
-         BGDnwh68JJNpsYF+YonHnE3ny7yAE4Mg5u4oeEYm1qOhfIIwo82KZGUMsjop6rYfLcln
-         PUfA==
-X-Gm-Message-State: AOAM5302GO7rYljvYKT1h/VasX4mTfYKsprK+PcyOfmXvZ5lxMvZpX+d
-        2KsiY9uljpE2aGPlBahiL28=
-X-Google-Smtp-Source: ABdhPJyw7C0YN+YSFSwMBG5CwUugxSG2+T8aL84h7uoGczRFi+kDUQooYZkQxSHlpE/6s44w7/6DwQ==
-X-Received: by 2002:a17:90a:1b6e:b0:1c6:168e:11e7 with SMTP id q101-20020a17090a1b6e00b001c6168e11e7mr197376pjq.136.1647883638931;
-        Mon, 21 Mar 2022 10:27:18 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id 16-20020a17090a199000b001bf4b1b268bsm73422pji.44.2022.03.21.10.27.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 10:27:18 -0700 (PDT)
-Message-ID: <59ddb0f0-a48a-ff7b-eea3-560c1e9120a1@gmail.com>
-Date:   Mon, 21 Mar 2022 10:27:15 -0700
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1647883665; x=1679419665;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=T4h/d62nZ4ujburIkeEBuCEXVQx5jRD/jHSjGcMR4MM=;
+  b=inTzYqVHtTvxFEZyDVBP8FwGIodjys8er0aH7wrdOnLLJo0PFNnhY4KY
+   ldenQZ51SMMuYrxBXrBfgJvY44FAeDKlNFFNTTNbwOxbrHYnm5hBwTdjL
+   67YNgkuCq0/7flk/xtKSMjfLcJhInr+dzJwXd39VSWZiQNTSxqK/mqQPv
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.90,199,1643673600"; 
+   d="scan'208";a="72800917"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1box-d-74e80b3c.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 21 Mar 2022 17:27:29 +0000
+Received: from EX13D32EUB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1box-d-74e80b3c.us-east-1.amazon.com (Postfix) with ESMTPS id EAB0D95052;
+        Mon, 21 Mar 2022 17:27:26 +0000 (UTC)
+Received: from EX13D43EUB002.ant.amazon.com (10.43.166.8) by
+ EX13D32EUB002.ant.amazon.com (10.43.166.114) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 21 Mar 2022 17:27:25 +0000
+Received: from EX13D43EUB002.ant.amazon.com ([10.43.166.8]) by
+ EX13D43EUB002.ant.amazon.com ([10.43.166.8]) with mapi id 15.00.1497.033;
+ Mon, 21 Mar 2022 17:27:25 +0000
+From:   "Kaya, Metin" <metikaya@amazon.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+CC:     "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "Durrant, Paul" <pdurrant@amazon.co.uk>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v2 1/1] KVM: x86/xen: add support for 32-bit guests in
+ SCHEDOP_poll
+Thread-Topic: [PATCH v2 1/1] KVM: x86/xen: add support for 32-bit guests in
+ SCHEDOP_poll
+Thread-Index: AQHYPUc6LvcJQy+oDUqe5JacL/SQ1KzKFpQm
+Date:   Mon, 21 Mar 2022 17:27:25 +0000
+Message-ID: <1647883644964.29736@amazon.com>
+References: <1647881191688.60603@amazon.com>,<1647882914508.15309@amazon.com>
+In-Reply-To: <1647882914508.15309@amazon.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.161.124]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 4.9 00/16] 4.9.308-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220321133216.648316863@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20220321133216.648316863@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/21/2022 6:51 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.308 release.
-> There are 16 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.308-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+From: Metin Kaya <metikaya@amazon.com>=0A=
+=0A=
+This patch introduces compat version of struct sched_poll for=0A=
+SCHEDOP_poll sub-operation of sched_op hypercall, reads correct amount=0A=
+of data (16 bytes in 32-bit case, 24 bytes otherwise) by using new=0A=
+compat_sched_poll struct, copies it to sched_poll properly, and lets=0A=
+rest of the code run as is.=0A=
+=0A=
+Signed-off-by: Metin Kaya <metikaya@amazon.com>=0A=
+---=0A=
+ arch/x86/kvm/xen.c | 31 +++++++++++++++++++++++++++----=0A=
+ arch/x86/kvm/xen.h |  7 +++++++=0A=
+ 2 files changed, 34 insertions(+), 4 deletions(-)=0A=
+=0A=
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c=0A=
+index 7d01983d1087..2d0a5d2ca6f1 100644=0A=
+--- a/arch/x86/kvm/xen.c=0A=
++++ b/arch/x86/kvm/xen.c=0A=
+@@ -998,20 +998,43 @@ static bool kvm_xen_schedop_poll(struct kvm_vcpu *vcp=
+u, bool longmode,=0A=
+ 	evtchn_port_t port, *ports;=0A=
+ 	gpa_t gpa;=0A=
+ =0A=
+-	if (!longmode || !lapic_in_kernel(vcpu) ||=0A=
++	if (!lapic_in_kernel(vcpu) ||=0A=
+ 	    !(vcpu->kvm->arch.xen_hvm_config.flags & KVM_XEN_HVM_CONFIG_EVTCHN_SE=
+ND))=0A=
+ 		return false;=0A=
+ =0A=
+ 	idx =3D srcu_read_lock(&vcpu->kvm->srcu);=0A=
+ 	gpa =3D kvm_mmu_gva_to_gpa_system(vcpu, param, NULL);=0A=
+ 	srcu_read_unlock(&vcpu->kvm->srcu, idx);=0A=
+-=0A=
+-	if (!gpa || kvm_vcpu_read_guest(vcpu, gpa, &sched_poll,=0A=
+-					sizeof(sched_poll))) {=0A=
++	if (!gpa) {=0A=
+ 		*r =3D -EFAULT;=0A=
+ 		return true;=0A=
+ 	}=0A=
+ =0A=
++	if (IS_ENABLED(CONFIG_64BIT) && longmode) {=0A=
++		if (kvm_vcpu_read_guest(vcpu, gpa, &sched_poll,=0A=
++					sizeof(sched_poll))) {=0A=
++			*r =3D -EFAULT;=0A=
++			return true;=0A=
++		}=0A=
++	} else {=0A=
++		struct compat_sched_poll sp;=0A=
++=0A=
++		/*=0A=
++		 * Sanity check that __packed trick works fine and size of=0A=
++		 * compat_sched_poll is 16 bytes just like in the real Xen=0A=
++		 * 32-bit case.=0A=
++		 */=0A=
++		BUILD_BUG_ON(sizeof(struct compat_sched_poll) !=3D 16);=0A=
++=0A=
++		if (kvm_vcpu_read_guest(vcpu, gpa, &sp, sizeof(sp))) {=0A=
++			*r =3D -EFAULT;=0A=
++			return true;=0A=
++		}=0A=
++		sched_poll.ports =3D (evtchn_port_t *)(unsigned long)(sp.ports);=0A=
++		sched_poll.nr_ports =3D sp.nr_ports;=0A=
++		sched_poll.timeout =3D sp.timeout;=0A=
++	}=0A=
++=0A=
+ 	if (unlikely(sched_poll.nr_ports > 1)) {=0A=
+ 		/* Xen (unofficially) limits number of pollers to 128 */=0A=
+ 		if (sched_poll.nr_ports > 128) {=0A=
+diff --git a/arch/x86/kvm/xen.h b/arch/x86/kvm/xen.h=0A=
+index ee5c4ae0755c..8b36d346fc9c 100644=0A=
+--- a/arch/x86/kvm/xen.h=0A=
++++ b/arch/x86/kvm/xen.h=0A=
+@@ -196,6 +196,13 @@ struct compat_shared_info {=0A=
+ 	struct compat_arch_shared_info arch;=0A=
+ };=0A=
+ =0A=
++struct compat_sched_poll {=0A=
++	/* This is actually a guest virtual address which points to ports. */=0A=
++	uint32_t ports;=0A=
++	unsigned int nr_ports;=0A=
++	uint64_t timeout;=0A=
++} __packed;=0A=
++=0A=
+ #define COMPAT_EVTCHN_2L_NR_CHANNELS (8 *				\=0A=
+ 				      sizeof_field(struct compat_shared_info, \=0A=
+ 						   evtchn_pending))=0A=
+-- =0A=
+2.32.0=0A=

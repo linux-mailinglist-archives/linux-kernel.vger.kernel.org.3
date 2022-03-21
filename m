@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6454E2F1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EE64E2F18
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349206AbiCURfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S1349358AbiCURfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348534AbiCURe5 (ORCPT
+        with ESMTP id S1348687AbiCURe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Mar 2022 13:34:57 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1F2566617
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C207266AC5
         for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:33:30 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 22LHXNrS007571;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 22LHXN0f007572;
         Mon, 21 Mar 2022 18:33:23 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH 2/8] tools/nolibc/stdlib: add a simple getenv() implementation
-Date:   Mon, 21 Mar 2022 18:33:08 +0100
-Message-Id: <20220321173314.7519-3-w@1wt.eu>
+Subject: [PATCH 3/8] tools/nolibc/stdio: add support for '%p' to vfprintf()
+Date:   Mon, 21 Mar 2022 18:33:09 +0100
+Message-Id: <20220321173314.7519-4-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220321173314.7519-1-w@1wt.eu>
 References: <20220321173314.7519-1-w@1wt.eu>
@@ -36,48 +36,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implementation relies on an extern definition of the environ
-variable, that the caller must declare and initialize from envp.
+%p remains quite useful in test code, and the code path can easily be
+merged with the existing "%x" thus only adds ~50 bytes, thus let's
+add it.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/stdlib.h | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ tools/include/nolibc/stdio.h | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index 733105c574ee..aca8616335e3 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -60,6 +60,29 @@ int atoi(const char *s)
- 	return atol(s);
- }
+diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
+index 559ebe052a75..15dedf8d0902 100644
+--- a/tools/include/nolibc/stdio.h
++++ b/tools/include/nolibc/stdio.h
+@@ -163,7 +163,7 @@ char *fgets(char *s, int size, FILE *stream)
  
-+/* Tries to find the environment variable named <name> in the environment array
-+ * pointed to by global variable "environ" which must be declared as a char **,
-+ * and must be terminated by a NULL (it is recommended to set this variable to
-+ * the "envp" argument of main()). If the requested environment variable exists
-+ * its value is returned otherwise NULL is returned.
-+ */
-+static __attribute__((unused))
-+char *getenv(const char *name)
-+{
-+	extern char **environ;
-+	int idx, i;
+ 
+ /* minimal vfprintf(). It supports the following formats:
+- *  - %[l*]{d,u,c,x}
++ *  - %[l*]{d,u,c,x,p}
+  *  - %s
+  *  - unknown modifiers are ignored.
+  */
+@@ -184,8 +184,12 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
+ 		if (escape) {
+ 			/* we're in an escape sequence, ofs == 1 */
+ 			escape = 0;
+-			if (c == 'c' || c == 'd' || c == 'u' || c == 'x') {
+-				if (lpref) {
++			if (c == 'c' || c == 'd' || c == 'u' || c == 'x' || c == 'p') {
++				char *out = tmpbuf;
 +
-+	if (environ) {
-+		for (idx = 0; environ[idx]; idx++) {
-+			for (i = 0; name[i] && name[i] == environ[idx][i];)
-+				i++;
-+			if (!name[i] && environ[idx][i] == '=')
-+				return &environ[idx][i+1];
-+		}
-+	}
-+	return NULL;
-+}
-+
- /* Converts the unsigned long integer <in> to its hex representation into
-  * buffer <buffer>, which must be long enough to store the number and the
-  * trailing zero (17 bytes for "ffffffffffffffff" or 9 for "ffffffff"). The
++				if (c == 'p')
++					v = va_arg(args, unsigned long);
++				else if (lpref) {
+ 					if (lpref > 1)
+ 						v = va_arg(args, unsigned long long);
+ 					else
+@@ -202,18 +206,22 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
+ 				}
+ 
+ 				switch (c) {
++				case 'c':
++					out[0] = v;
++					out[1] = 0;
++					break;
+ 				case 'd':
+-					i64toa_r(v, tmpbuf);
++					i64toa_r(v, out);
+ 					break;
+ 				case 'u':
+-					u64toa_r(v, tmpbuf);
++					u64toa_r(v, out);
+ 					break;
+-				case 'x':
+-					u64toh_r(v, tmpbuf);
+-					break;
+-				default: /* 'c' */
+-					tmpbuf[0] = v;
+-					tmpbuf[1] = 0;
++				case 'p':
++					*(out++) = '0';
++					*(out++) = 'x';
++					/* fall through */
++				default: /* 'x' and 'p' above */
++					u64toh_r(v, out);
+ 					break;
+ 				}
+ 				outstr = tmpbuf;
 -- 
 2.35.1
 

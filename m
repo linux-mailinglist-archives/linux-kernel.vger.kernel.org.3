@@ -2,45 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36B24E2190
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EF64E2196
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345028AbiCUHts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 03:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S1345042AbiCUHwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 03:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344050AbiCUHtl (ORCPT
+        with ESMTP id S236143AbiCUHwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 03:49:41 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE7DD7F;
-        Mon, 21 Mar 2022 00:48:15 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KMRYh3Djqz1GBxf;
-        Mon, 21 Mar 2022 15:48:08 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 21 Mar
- 2022 15:48:13 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <linux-integrity@vger.kernel.org>
-CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <roberto.sassu@huawei.com>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xiujianfeng@huawei.com>,
-        <wangweiyang2@huawei.com>
-Subject: [PATCH] ima: remove template "ima" as the compiled default
-Date:   Mon, 21 Mar 2022 15:47:37 +0800
-Message-ID: <20220321074737.138002-1-guozihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 21 Mar 2022 03:52:14 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78235286E2;
+        Mon, 21 Mar 2022 00:50:47 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B2A3A1BF20E;
+        Mon, 21 Mar 2022 07:50:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1647849044;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oyewfmDrMNw+w6+feNe7eI+y5/zMvOy/2DQM7Bmk60I=;
+        b=ncVvFFrRh9wP2PFth4q+uYSwK+8q26M1t++LZ7geib9/toPxbqT3NzW+FNLv4W+YRPiq/C
+        i2xyQFIeyW7jDZPFPfGbLGyrdi4WXgveVFAD7tYOLdn/fNMhSUMnGEjMCvaQI88PZbxqlr
+        GMpSMwIBfwWopJsAW1l452eWa+JNmx9GBIXsksq5fZWxpBxUqQlPgZOTRpTAP4HXiPrbIH
+        VHGX9CyV+Mfg+qfHxduN0BAX5jR8S5byV6rM1uCUEJbracEhv3F852UUNYUzOc+NQwSCDV
+        PeNcafchnRU5Oe6znE6OIgTRi1ojJqu8HX3CVg1R7/ed0GUIFLSevp0tUKUnoA==
+Date:   Mon, 21 Mar 2022 08:49:21 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "'Rafael J . Wysocki '" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/6] property: add fwnode_property_read_string_index()
+Message-ID: <20220321084921.069c688e@fixe.home>
+In-Reply-To: <YjTK4UW7DwZ0S3QY@smile.fi.intel.com>
+References: <20220318160059.328208-1-clement.leger@bootlin.com>
+        <20220318160059.328208-2-clement.leger@bootlin.com>
+        <YjSymEpNH8vnkQ+L@smile.fi.intel.com>
+        <20220318174912.5759095f@fixe.home>
+        <YjTK4UW7DwZ0S3QY@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,74 +73,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Template "ima" is a legacy template which limits the hash algorithm to
-either sha1 or md5. None of them should be considered "strong" these
-days. Besides, allowing template "ima" as the compiled default would
-also cause the following issue: the cmdline option "ima_hash=" must be
-behind "ima_template=", otherwise "ima_hash=" might be rejected.
+Le Fri, 18 Mar 2022 20:09:37 +0200,
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
 
-The root cause of this issue is that during the processing of ima_hash,
-we would try to check whether the hash algorithm is compatible with the
-template. If the template is not set at the moment we do the check, we
-check the algorithm against the compiled default template. If the
-complied default template is "ima", then we reject any hash algorithm
-other than sha1 and md5.
+> On Fri, Mar 18, 2022 at 05:49:12PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Le Fri, 18 Mar 2022 18:26:00 +0200,
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit : =20
+> > > On Fri, Mar 18, 2022 at 05:00:47PM +0100, Cl=C3=A9ment L=C3=A9ger wro=
+te: =20
+> > > > Add fwnode_property_read_string_index() function which allows to
+> > > > retrieve a string from an array by its index. This function is the
+> > > > equivalent of of_property_read_string_index() but for fwnode suppor=
+t.   =20
+>=20
+> ...
+>=20
+> > > > +	values =3D kcalloc(nval, sizeof(*values), GFP_KERNEL);
+> > > > +	if (!values)
+> > > > +		return -ENOMEM;
+> > > > +
+> > > > +	ret =3D fwnode_property_read_string_array(fwnode, propname, value=
+s, nval);
+> > > > +	if (ret < 0)
+> > > > +		goto out;
+> > > > +
+> > > > +	*string =3D values[index];
+> > > > +out:
+> > > > +	kfree(values);   =20
+> > >=20
+> > > Here is UAF (use after free). How is it supposed to work? =20
+> >=20
+> > values is an array of pointers. I'm only retrieving a pointer out of
+> > it. =20
+>=20
+> I see, thanks for pointing out.
+>=20
+> Nevertheless, I don't like the idea of allocating memory in this case.
+> Can we rather add a new callback that will provide us the necessary
+> property directly?
+>=20
 
-For example, if the compiled default template is "ima", and the default
-algorithm is sha1 (which is the current default). In the cmdline, we put
-in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
-that ima starts with ima-ng as the template and sha256 as the hash
-algorithm. However, during the processing of "ima_hash=",
-"ima_template=" has not been processed yet, and hash_setup would check
-the configured hash algorithm against the compiled default: ima, and
-reject sha256. So at the end, the hash algorithm that is actually used
-will be sha1.
+IMHO, it would indeed be better. However,
+fwnode_property_match_string() also allocates memory to do the same
+kind of operation. Would you also like a callback for this one ?
 
-With template "ima" removed from the compiled default, we ensure that the
-default tempalte would at least be "ima-ng" which allows for basically
-any hash algorithm.
+Thanks,
 
-This change would not break the algorithm compatibility checking for
-IMA.
-
-Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/Kconfig | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index f3a9cc201c8c..9513df2ac19e 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -65,14 +65,11 @@ choice
- 	help
- 	  Select the default IMA measurement template.
- 
--	  The original 'ima' measurement list template contains a
--	  hash, defined as 20 bytes, and a null terminated pathname,
--	  limited to 255 characters.  The 'ima-ng' measurement list
--	  template permits both larger hash digests and longer
--	  pathnames.
--
--	config IMA_TEMPLATE
--		bool "ima"
-+	  The 'ima-ng' measurement list template permits various hash
-+	  digests and long pathnames. The compiled default template
-+	  can be overwritten using the kernel command line
-+	  'ima_template=' option.
-+
- 	config IMA_NG_TEMPLATE
- 		bool "ima-ng (default)"
- 	config IMA_SIG_TEMPLATE
-@@ -82,7 +79,6 @@ endchoice
- config IMA_DEFAULT_TEMPLATE
- 	string
- 	depends on IMA
--	default "ima" if IMA_TEMPLATE
- 	default "ima-ng" if IMA_NG_TEMPLATE
- 	default "ima-sig" if IMA_SIG_TEMPLATE
- 
--- 
-2.17.1
-
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

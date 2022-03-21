@@ -2,195 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2653C4E2175
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D93644E2177
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241977AbiCUHh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 03:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S1344963AbiCUHjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 03:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241807AbiCUHh4 (ORCPT
+        with ESMTP id S231861AbiCUHjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 03:37:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BB5153B68
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 00:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647848191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qe08beYUx+UYZYqGshctk6NaXdVdumZ1XV+DJA6B5a8=;
-        b=LoVX1RnyVaGD+R1HfCzE+IrPtoCP5oo+XASkze5pKbotqlzkqrMrXN47NJfogha5DzByqf
-        e5Kk33o8qoFa4uPJQlzYoNAgDkVx4wqrfyxH4CgYw4I17hhMD2dnx7RnfS/Mowal9rVFn4
-        MSBWDZUFQHtek7ajFeG3xMKpi9dfBRw=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-472-A5S5p0eZOFO-qvn-vIl-7g-1; Mon, 21 Mar 2022 03:36:29 -0400
-X-MC-Unique: A5S5p0eZOFO-qvn-vIl-7g-1
-Received: by mail-lj1-f200.google.com with SMTP id n9-20020a2e82c9000000b002435af2e8b9so5863140ljh.20
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 00:36:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qe08beYUx+UYZYqGshctk6NaXdVdumZ1XV+DJA6B5a8=;
-        b=xLR7L7TwTTxq8K52gEoI4e5fUrLrLCjhOaixRwvLBERtDffduW0Ixzn1dtdjF6FFDk
-         rZoCDsspV88Hpe7t+n3J8uImdzUQK91h48qprSP59WJuMWyjaNm8aZg3J49e02Bqf93I
-         Y1YkdmLiwMrfG6ycY4/L1d+x75OE1nte6iHdFcvCpcwugSO9O/Eq6NICnJMPEleZ4OER
-         ++kp3NjVyo9IhiqAStO06KU9mpwpVV6krhTvDI+ER74xq71hIp9M0Z5JW+1UOuoZ9C04
-         VU83xGL49wKh/Y+7E8OWQ7JX/O4XAtiG/skaHarb8WTP1UV4T8sexgNxaB0AmKAi2fq6
-         Vukg==
-X-Gm-Message-State: AOAM533lmS5sIvLxLlZaBJ3p12H9L+EaUYPS/R3FckBz0Z597sRXXm69
-        X4hBfYg+fTBfr9Jnfkp3yYBNoVq6g54nwLQMGQjM9XNXvINdGHCUk5vKaQ4K/SMepPXCx6041eH
-        F/6m/bGiBYgp8qVYOTWxqn8jAO9LIswr6rIxAochk
-X-Received: by 2002:a05:6512:2203:b0:44a:12c9:8696 with SMTP id h3-20020a056512220300b0044a12c98696mr8177462lfu.98.1647848187436;
-        Mon, 21 Mar 2022 00:36:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwrJCIJF80wb6QJBxaOpt0rFvy2rgLkmZPLA1xItXiYu5J1dt0MCV1yBUyegrVf8EYAl2dqO0mzDVFLFNta2T4=
-X-Received: by 2002:a05:6512:2203:b0:44a:12c9:8696 with SMTP id
- h3-20020a056512220300b0044a12c98696mr8177451lfu.98.1647848187178; Mon, 21 Mar
- 2022 00:36:27 -0700 (PDT)
+        Mon, 21 Mar 2022 03:39:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45628DAD;
+        Mon, 21 Mar 2022 00:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647848303; x=1679384303;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cpzD0G7WlQb79BAELGk4nC4vtuBs/ikyOE9n2dBg9kk=;
+  b=lROo1YEysYVD3MraDwexTTJ0ra5QLQpbXT9LhrHuwaDHuhfWJl/Kxvd1
+   fbEesNzBt6zS304KKBAW/Wp/5b9Sn7MA+w8QrLxU5/bu9zD/o3A/Pc22u
+   LZVdlvmIAI0/mCRG0cw0tfenhUCMYl3UYIeQN4NUt/jYyuHd5GGzQmeKZ
+   4fn41c3cqP5KyUGFYyv8w+MWFZhbn/+esY07Qk5z5k/6oW1PvIurSzrjJ
+   n5YKZBkXHDKctMd9uWdK2cY535MCcezh/uvrooI1NpRbJ15XB8WmB4EW8
+   4UpIPtx0SkxtUyTIRSzun0Vp34UDLnNWmk5os35WVuqyt922ZLjYKfAEM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="320694522"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="320694522"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 00:38:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="648466434"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 00:38:20 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWCcN-000Hbn-NW; Mon, 21 Mar 2022 07:38:19 +0000
+Date:   Mon, 21 Mar 2022 15:38:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manish Mandlik <mmandlik@google.com>, marcel@holtmann.org,
+        luiz.dentz@gmail.com
+Cc:     kbuild-all@lists.01.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        linux-bluetooth@vger.kernel.org,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        Manish Mandlik <mmandlik@google.com>,
+        Chethan Tumkur Narayan <chethan.tumkur.narayan@intel.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] Bluetooth: btusb: Add Intel devcoredump support
+Message-ID: <202203211500.z1bvoo6A-lkp@intel.com>
+References: <20220320183225.2.I61857ea92be43418b8ce16839f79a4704cc89fa6@changeid>
 MIME-Version: 1.0
-References: <20220321060429.10457-1-jasowang@redhat.com> <20220321060429.10457-2-jasowang@redhat.com>
- <20220321032130-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220321032130-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 21 Mar 2022 15:36:16 +0800
-Message-ID: <CACGkMEvQCBTk7WVLvRAsgj1OOcE7rh5DEpN91HOdZLZyagcbuw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] vdpa: mlx5: synchronize driver status with CVQ
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Eli Cohen <elic@nvidia.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220320183225.2.I61857ea92be43418b8ce16839f79a4704cc89fa6@changeid>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 3:24 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Mon, Mar 21, 2022 at 02:04:29PM +0800, Jason Wang wrote:
-> > Currently, CVQ doesn't have any synchronization with the driver
-> > status. Then CVQ emulation code run in the middle of:
-> >
-> > 1) device reset
-> > 2) device status changed
-> > 3) map updating
-> >
-> > The will lead several unexpected issue like trying to execute CVQ
-> > command after the driver has been teared down.
-> >
-> > Fixing this by using reslock to synchronize CVQ emulation code with
-> > the driver status changing:
-> >
-> > - protect the whole device reset, status changing and map updating
-> >   with reslock
-> > - protect the CVQ handler with the reslock and check
-> >   VIRTIO_CONFIG_S_DRIVER_OK in the CVQ handler
-> >
-> > This will guarantee that:
-> >
-> > 1) CVQ handler won't work if VIRTIO_CONFIG_S_DRIVER_OK is not set
-> > 2) CVQ handler will see a consistent state of the driver instead of
-> >    the partial one when it is running in the middle of the
-> >    teardown_driver() or setup_driver().
-> >
-> > Cc: 5262912ef3cfc ("vdpa/mlx5: Add support for control VQ and MAC setting")
-> > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > ---
-> >  drivers/vdpa/mlx5/net/mlx5_vnet.c | 42 +++++++++++++++++++++++--------
-> >  1 file changed, 31 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > index d5a6fb3f9c41..524240f55c1c 100644
-> > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > @@ -1618,11 +1618,17 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
-> >       mvdev = wqent->mvdev;
-> >       ndev = to_mlx5_vdpa_ndev(mvdev);
-> >       cvq = &mvdev->cvq;
-> > +
-> > +     mutex_lock(&ndev->reslock);
-> > +
-> > +     if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
-> > +             goto done;
-> > +
-> >       if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
-> > -             return;
-> > +             goto done;
-> >
-> >       if (!cvq->ready)
-> > -             return;
-> > +             goto done;
-> >
-> >       while (true) {
-> >               err = vringh_getdesc_iotlb(&cvq->vring, &cvq->riov, &cvq->wiov, &cvq->head,
-> > @@ -1663,6 +1669,9 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
-> >                       break;
-> >               }
-> >       }
-> > +
-> > +done:
-> > +     mutex_unlock(&ndev->reslock);
-> >  }
-> >
-> >  static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
-> > @@ -2125,6 +2134,8 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb
-> >       struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
-> >       int err;
-> >
-> > +     mutex_lock(&ndev->reslock);
-> > +
-> >       suspend_vqs(ndev);
-> >       err = save_channels_info(ndev);
-> >       if (err)
-> > @@ -2137,18 +2148,20 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb
-> >               goto err_mr;
-> >
-> >       if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
-> > -             return 0;
-> > +             goto err_mr;
-> >
-> >       restore_channels_info(ndev);
-> >       err = setup_driver(mvdev);
-> >       if (err)
-> >               goto err_setup;
-> >
-> > +     mutex_unlock(&ndev->reslock);
-> >       return 0;
-> >
-> >  err_setup:
-> >       mlx5_vdpa_destroy_mr(mvdev);
-> >  err_mr:
-> > +     mutex_unlock(&ndev->reslock);
-> >       return err;
-> >  }
-> >
-> > @@ -2157,7 +2170,8 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev)
-> >       struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
-> >       int err;
-> >
-> > -     mutex_lock(&ndev->reslock);
-> > +     WARN_ON(!mutex_is_locked(&ndev->reslock));
-> > +
-> >       if (ndev->setup) {
-> >               mlx5_vdpa_warn(mvdev, "setup driver called for already setup driver\n");
-> >               err = 0;
->
->
-> Maybe also add a comment near function header explaining this must be
-> called with lock held.
+Hi Manish,
 
-Will do.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks
+[auto build test WARNING on bluetooth/master]
+[also build test WARNING on bluetooth-next/master v5.17 next-20220318]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->
+url:    https://github.com/0day-ci/linux/commits/Manish-Mandlik/Bluetooth-Add-support-for-devcoredump/20220321-093553
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+config: parisc-randconfig-r023-20220320 (https://download.01.org/0day-ci/archive/20220321/202203211500.z1bvoo6A-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/677f482cb7027ab030842015cfd6c188568df39f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Manish-Mandlik/Bluetooth-Add-support-for-devcoredump/20220321-093553
+        git checkout 677f482cb7027ab030842015cfd6c188568df39f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash drivers/bluetooth/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/bluetooth/btintel.c: In function 'btintel_register_devcoredump_support':
+>> drivers/bluetooth/btintel.c:1447:9: warning: 'strncpy' specified bound 16 equals destination size [-Wstringop-truncation]
+    1447 |         strncpy(driver_name, driver, DRIVER_NAME_LEN);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/strncpy +1447 drivers/bluetooth/btintel.c
+
+  1429	
+  1430	int btintel_register_devcoredump_support(struct hci_dev *hdev,
+  1431						 const char *driver)
+  1432	{
+  1433		struct intel_debug_features features;
+  1434		int err;
+  1435	
+  1436		err = btintel_read_debug_features(hdev, &features);
+  1437		if (err) {
+  1438			bt_dev_info(hdev, "Error reading debug features");
+  1439			return err;
+  1440		}
+  1441	
+  1442		if (!(features.page1[0] & 0x3f)) {
+  1443			bt_dev_info(hdev, "Telemetry exception format not supported");
+  1444			return -EOPNOTSUPP;
+  1445		}
+  1446	
+> 1447		strncpy(driver_name, driver, DRIVER_NAME_LEN);
+  1448		hci_devcoredump_register(hdev, btintel_dmp_hdr, NULL);
+  1449	
+  1450		return err;
+  1451	}
+  1452	EXPORT_SYMBOL_GPL(btintel_register_devcoredump_support);
+  1453	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

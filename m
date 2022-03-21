@@ -2,168 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080034E2A83
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E53D94E2A6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345644AbiCUOZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S1349256AbiCUOZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352856AbiCUOXI (ORCPT
+        with ESMTP id S1352549AbiCUOWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:23:08 -0400
-Received: from out199-4.us.a.mail.aliyun.com (out199-4.us.a.mail.aliyun.com [47.90.199.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88201AF51C;
-        Mon, 21 Mar 2022 07:17:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V7rRN9d_1647872182;
-Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V7rRN9d_1647872182)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 21 Mar 2022 22:16:23 +0800
-Message-ID: <eb558006-e5f2-59fe-9c58-844c6deff4dd@linux.alibaba.com>
-Date:   Mon, 21 Mar 2022 22:16:22 +0800
+        Mon, 21 Mar 2022 10:22:38 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14343186897
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:16:35 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id v75so16362318oie.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:16:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QH3AWcYu7AkrcxCD+1AyJsqFqXIRrhSBVQz3h8P5LfU=;
+        b=a6jbebu58k8yNzCyy4LCvlCQfQ5EzUFQADfFplTD2dfiDuiewpP7F1xnW4RRu/3Hl2
+         Neot+S3ZbVaxnTtRDhtUsIZ0HDQ7KFpEdw++9id9UisJ+P1+wlkUbdOr+Wo7Fhiz/YSx
+         Gsz5gzPENQPO4Pv5fQIjyAe3t2x/eCF0rGlxm1ER6f/99PTPtcM7xkKkMOqWw6Sjq2YI
+         J12f/TWMw9dUxicqEYP7RNMREIqVgf7ElH+0hDXNpZCnD7pmg4MjSHa3/t4cIcdQIqIm
+         ZHDJlecpJAwyR71E0IPtlqUKPzedq/5+2dX+vBxD2XI8YVqqmfu6joNwPe7YTGhvPPYN
+         2OFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QH3AWcYu7AkrcxCD+1AyJsqFqXIRrhSBVQz3h8P5LfU=;
+        b=Z35tC3iLFvtFp+qXlLpEvETzLsn7ZanAaHwc7PHdyXNEQYpAIrFcICyTT4NoqtuS58
+         dys3RcC4HA2pM5MVRAFIa6ZOz37rofjO8fk93gMSIMFdG8ItSrYz1+Srfrw1ABUzUw13
+         TORJX9e4+K1miUcSwYf5AomZoNz9Naf1W1kMB6Q23BWwht4S3KX+YshTlyJlrDkMdr2y
+         Z8T203PTgdMb9JLJDhbTKqQrTHMTK6nireoj1/FdIrqSNyZ+F048ocS6ds5PGtpLFHeI
+         uqFSq+jlbWJF0Pj7QyC9G6Kh7Ju1rMl2yYjxorKE/w/ZxYPovfUy2uI6JmZQQw7hbUq9
+         RbTg==
+X-Gm-Message-State: AOAM531Jf23AUphMtDsnwWUq3bBvvmjFGLU0DpB0EF6y8LIGOPwIiqRp
+        wumWC2rOpUQwIyEw99RvXdA8Xw==
+X-Google-Smtp-Source: ABdhPJxr4m2fEljzSzrW1Im9R0W5tgP6mwWuY4H+a54HyaHHJTHSHL/qeGghCZ3NUXyPTdlVO8s+JQ==
+X-Received: by 2002:a05:6808:47:b0:2ec:bddc:c677 with SMTP id v7-20020a056808004700b002ecbddcc677mr13705279oic.250.1647872190940;
+        Mon, 21 Mar 2022 07:16:30 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056830270900b005b22854f3besm7439539otu.39.2022.03.21.07.16.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 07:16:29 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 09:16:27 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
+Subject: Re: [RFT] ufs: qcom: drop custom Android boot parameters
+Message-ID: <YjiIu7BGP4fG13ct@builder.lan>
+References: <20220320110616.18355-1-krzk@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v5 03/22] cachefiles: introduce on-demand read mode
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, willy@infradead.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com
-References: <20220316131723.111553-4-jefflexu@linux.alibaba.com>
- <20220316131723.111553-1-jefflexu@linux.alibaba.com>
- <1027872.1647869684@warthog.procyon.org.uk>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <1027872.1647869684@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220320110616.18355-1-krzk@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun 20 Mar 06:06 CDT 2022, Krzysztof Kozlowski wrote:
 
-Thanks for reviewing.
-
-
-On 3/21/22 9:34 PM, David Howells wrote:
-> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+> The QCOM UFS driver requires an androidboot.bootdevice command line
+> argument matching the UFS device name.  If the name is different, it
+> refuses to probe.  Thise androidboot.bootdevice is provided by
+> stock/vendor (from an Android-based device) bootloader.
 > 
->> Fscache/cachefiles used to serve as a local cache for remote fs. This
->> patch, along with the following patches, introduces a new on-demand read
->> mode for cachefiles, which can boost the scenario where on-demand read
->> semantics is needed, e.g. container image distribution.
->>
->> The essential difference between the original mode and on-demand read
->> mode is that, in the original mode, when cache miss, netfs itself will
->> fetch data from remote, and then write the fetched data into cache file.
->> While in on-demand read mode, a user daemon is responsible for fetching
->> data and then writing to the cache file.
->>
->> This patch only adds the command to enable on-demand read mode. An optional
->> parameter to "bind" command is added. On-demand mode will be turned on when
->> this optional argument matches "ondemand" exactly, i.e.  "bind
->> ondemand". Otherwise cachefiles will keep working in the original mode.
+> This does not make sense from Linux point of view.  Driver should be
+> able to boot regardless of bootloader.  Driver should not depend on some
+> Android custom environment data.
 > 
-> You're not really adding a command, per se.  Also, I would recommend
-> starting the paragraph with a verb.  How about:
-> 
-> 	Make it possible to enable on-demand read mode by adding an
-> 	optional parameter to the "bind" command.  On-demand mode will be
-> 	turned on when this parameter is "ondemand", i.e. "bind ondemand".
-> 	Otherwise cachefiles will work in the original mode.
-> 
-> Also, I'd add a note something like the following:
-> 
-> 	This is implemented as a variation on the bind command so that it
-> 	can't be turned on accidentally in /etc/cachefilesd.conf when
-> 	cachefilesd isn't expecting it.	
-
-Alright, looks much better :)
-
-> 
->> The following patches will implement the data plane of on-demand read
->> mode.
-> 
-> I would remove this line.  If ondemand mode is not fully implemented in
-> cachefiles at this point, I would be tempted to move this to the end of the
-> cachefiles subset of the patchset.  That said, I'm not sure it can be made
-> to do anything much before that point.
-
-
-Alright.
-
-> 
->> +#ifdef CONFIG_CACHEFILES_ONDEMAND
->> +static inline void cachefiles_ondemand_open(struct cachefiles_cache *cache)
->> +{
->> +	xa_init_flags(&cache->reqs, XA_FLAGS_ALLOC);
->> +	rwlock_init(&cache->reqs_lock);
->> +}
-> 
-> Just merge that into the caller.
-> 
->> +static inline void cachefiles_ondemand_release(struct cachefiles_cache *cache)
->> +{
->> +	xa_destroy(&cache->reqs);
->> +}
-> 
-> Ditto.
-> 
->> +static inline
->> +bool cachefiles_ondemand_daemon_bind(struct cachefiles_cache *cache, char *args)
->> +{
->> +	if (!strcmp(args, "ondemand")) {
->> +		set_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags);
->> +		return true;
->> +	}
->> +
->> +	return false;
->> +}
->> ...
->> +	if (!cachefiles_ondemand_daemon_bind(cache, args) && *args) {
->> +		pr_err("'bind' command doesn't take an argument\n");
->> +		return -EINVAL;
->> +	}
->> +
-> 
-> I would merge these together, I think, and say something like "Ondemand
-> mode not enabled in kernel" if CONFIG_CACHEFILES_ONDEMAND=n.
+> Cc: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > 
 
-The reason why I extract all these logic into small sized function is
-that, the **callers** can call cachefiles_ondemand_daemon_bind()
-directly without any clause like:
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-```
-#ifdef CONFIG_CACHEFILES_ONDEMAND
-	...
-#else
-	...
-```
-
-
-
-Another choice is like
-
-```
-if (IS_ENABLED(CONFIG_CACHEFILES_ONDEMAND))
-	...
-else
-	...
-```
-
-
--- 
-Thanks,
-Jeffle
+> ---
+> 
+> Not tested, please kindly provide tests.
+> 
+> See also:
+> https://lore.kernel.org/linux-devicetree/f61abc2b-3ce8-7b1f-3d28-8a4a03ec58eb@kernel.org/T/#u
+> ---
+>  drivers/scsi/ufs/ufs-qcom.c | 15 ---------------
+>  1 file changed, 15 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+> index 0d2e950d0865..586c0e567ff9 100644
+> --- a/drivers/scsi/ufs/ufs-qcom.c
+> +++ b/drivers/scsi/ufs/ufs-qcom.c
+> @@ -957,18 +957,6 @@ static const struct reset_control_ops ufs_qcom_reset_ops = {
+>  	.deassert = ufs_qcom_reset_deassert,
+>  };
+>  
+> -#define	ANDROID_BOOT_DEV_MAX	30
+> -static char android_boot_dev[ANDROID_BOOT_DEV_MAX];
+> -
+> -#ifndef MODULE
+> -static int __init get_android_boot_dev(char *str)
+> -{
+> -	strlcpy(android_boot_dev, str, ANDROID_BOOT_DEV_MAX);
+> -	return 1;
+> -}
+> -__setup("androidboot.bootdevice=", get_android_boot_dev);
+> -#endif
+> -
+>  /**
+>   * ufs_qcom_init - bind phy with controller
+>   * @hba: host controller instance
+> @@ -988,9 +976,6 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+>  	struct resource *res;
+>  	struct ufs_clk_info *clki;
+>  
+> -	if (strlen(android_boot_dev) && strcmp(android_boot_dev, dev_name(dev)))
+> -		return -ENODEV;
+> -
+>  	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
+>  	if (!host) {
+>  		err = -ENOMEM;
+> -- 
+> 2.32.0
+> 

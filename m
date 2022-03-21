@@ -2,103 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327AC4E34BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA2E4E34DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbiCUXqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S233160AbiCUXq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiCUXqk (ORCPT
+        with ESMTP id S233103AbiCUXqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:46:40 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D300D78FD7;
-        Mon, 21 Mar 2022 16:45:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647906313; x=1679442313;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HiGrn/wqtmjWjv0KYmxpZBLvA9yOpRMmV+uh3duvMLY=;
-  b=RfHXSclMis82kMA7FpPsCO/Hh+8WmipZHoPROmwVsrOTA84mOxPyAs7z
-   dQ02VwHjYknxs+RsKW9YjKScYJVdD1ak9XDsDAYuuCDMwLFgEcSlbKI0R
-   zcVcOBILApkTXIBwf7pcbblHKXM3uWfRyTIMaYLivBjJ4qH0iykO5TIRY
-   UkfAOCBmaqDX0JUfBluHONzozYx1Kt5sKr+SmJqOUOeytnWFln6p7pz0k
-   fI622FCY22Q0alzrD5q7KYriyhpOVW3NLSCHH25fjk9ZPne0LW3HCqv1l
-   BTUh5wgGgqekp7fvyCMJjN88xTxHS0ZlSSOxZd3a4SNMoWl1EvjcP7Tkb
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282506784"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="282506784"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 16:45:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="515116404"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 16:45:09 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWRi1-000IHt-1J; Mon, 21 Mar 2022 23:45:09 +0000
-Date:   Tue, 22 Mar 2022 07:44:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
-        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, oliver@neukum.org
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn,
-        sunshouxin@chinatelecom.cn
-Subject: Re: [PATCH v5 4/4] net:bonding:Add support for IPV6 RLB to
- balance-alb mode
-Message-ID: <202203220724.6dOxKPRJ-lkp@intel.com>
-References: <20220321084704.36370-5-sunshouxin@chinatelecom.cn>
+        Mon, 21 Mar 2022 19:46:25 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640AF44A02;
+        Mon, 21 Mar 2022 16:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1647906299; x=1679442299;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=ueRSuVzTY8ZsDESSE/vsPM+hyCtCDS7Tl3WulToFkI8=;
+  b=GB1TaDgn+z44qqUDYD64I8R5BqFrcPn48LMeMyvG+z0+apHDhOwmA3jA
+   CsyISfhmQk1g5KXUAnevEjXGIRkvPcVS48cfPlSuptAURSN2fZpcEgqiS
+   zrhpbfMV8yrPoMTJY4foF/qjeSMdpmAkuQfL1k0+zaXHrAkN8blARuRrk
+   U=;
+X-IronPort-AV: E=Sophos;i="5.90,199,1643673600"; 
+   d="scan'208";a="72903802"
+Subject: Re: [PATCH 1/1] drivers: hwmon: jc42: add HWMON_C_TZ_REGISTER
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 21 Mar 2022 23:44:58 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com (Postfix) with ESMTPS id B594481AF0;
+        Mon, 21 Mar 2022 23:44:56 +0000 (UTC)
+Received: from EX13D05UWC003.ant.amazon.com (10.43.162.226) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 21 Mar 2022 23:44:56 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D05UWC003.ant.amazon.com (10.43.162.226) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 21 Mar 2022 23:44:55 +0000
+Received: from localhost (10.119.251.239) by mail-relay.amazon.com
+ (10.43.162.232) with Microsoft SMTP Server id 15.0.1497.32 via Frontend
+ Transport; Mon, 21 Mar 2022 23:44:55 +0000
+Date:   Mon, 21 Mar 2022 16:44:55 -0700
+From:   Eduardo Valentin <eduval@amazon.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Eduardo Valentin <eduval@amazon.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Eduardo Valentin" <evalenti@kernel.org>
+Message-ID: <20220321234455.GB3248@uf8f119305bce5e.ant.amazon.com>
+References: <20220318233011.13980-1-eduval@amazon.com>
+ <9cec7367-e6ec-5fe4-94ce-c908452c9385@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220321084704.36370-5-sunshouxin@chinatelecom.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9cec7367-e6ec-5fe4-94ce-c908452c9385@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sun,
+On Sat, Mar 19, 2022 at 06:01:27PM -0700, Guenter Roeck wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> On 3/18/22 16:30, Eduardo Valentin wrote:
+> > Add a thermal zone interface to the devices added
+> > under jc42 driver. This way, thermal zones described
+> > in device tree can make use of the of nodes of these
+> > devices.
+> > 
+> 
+> Makes sense. I'll apply the patch, but it is a functional change
+> and a bit too risky to include in the upcoming commit window.
+> I'll apply it after the commit window closes.
 
-Thank you for the patch! Yet something to improve:
+Thank you Guenter. Yeah, this can go on the next window.
 
-[auto build test ERROR on 092d992b76ed9d06389af0bc5efd5279d7b1ed9f]
-
-url:    https://github.com/0day-ci/linux/commits/Sun-Shouxin/Add-support-for-IPV6-RLB-to-balance-alb-mode/20220321-164934
-base:   092d992b76ed9d06389af0bc5efd5279d7b1ed9f
-config: s390-randconfig-r044-20220321 (https://download.01.org/0day-ci/archive/20220322/202203220724.6dOxKPRJ-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d84e696c74aa408d01d0e142f8ec11dd5b6410a5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sun-Shouxin/Add-support-for-IPV6-RLB-to-balance-alb-mode/20220321-164934
-        git checkout d84e696c74aa408d01d0e142f8ec11dd5b6410a5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   s390-linux-ld: drivers/net/bonding/bond_alb.o: in function `rlb_nd_recv':
-   bond_alb.c:(.text+0x3c92): undefined reference to `ipv6_get_ifaddr'
->> s390-linux-ld: bond_alb.c:(.text+0x3cd2): undefined reference to `inet6_ifa_finish_destroy'
+> 
+> Thanks,
+> Guenter
+> 
+> > Cc: Guenter Roeck <linux@roeck-us.net> (maintainer:JC42.4 TEMPERATURE SENSOR DRIVER)
+> > Cc: Jean Delvare <jdelvare@suse.com> (maintainer:HARDWARE MONITORING)
+> > Cc: linux-hwmon@vger.kernel.org (open list:JC42.4 TEMPERATURE SENSOR DRIVER)
+> > Cc: linux-kernel@vger.kernel.org (open list)
+> > 
+> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+> > Signed-off-by: Eduardo Valentin <evalenti@kernel.org>
+> > ---
+> >   drivers/hwmon/jc42.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+> > index cb347a6bd8d9..f40df2f29d41 100644
+> > --- a/drivers/hwmon/jc42.c
+> > +++ b/drivers/hwmon/jc42.c
+> > @@ -443,6 +443,8 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
+> >   }
+> > 
+> >   static const struct hwmon_channel_info *jc42_info[] = {
+> > +     HWMON_CHANNEL_INFO(chip,
+> > +                        HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+> >       HWMON_CHANNEL_INFO(temp,
+> >                          HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+> >                          HWMON_T_CRIT | HWMON_T_MAX_HYST |
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+All the best,
+Eduardo Valentin

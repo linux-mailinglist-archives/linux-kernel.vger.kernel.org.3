@@ -2,58 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8658E4E29BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731714E2A04
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350247AbiCUOJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S1350600AbiCUOKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349070AbiCUODS (ORCPT
+        with ESMTP id S1348903AbiCUODJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:03:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694081770AB;
-        Mon, 21 Mar 2022 07:00:18 -0700 (PDT)
+        Mon, 21 Mar 2022 10:03:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100E13EF3E;
+        Mon, 21 Mar 2022 06:59:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AE53B816CE;
-        Mon, 21 Mar 2022 14:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C335CC340F2;
-        Mon, 21 Mar 2022 14:00:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 370546131F;
+        Mon, 21 Mar 2022 13:59:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F89C36AE7;
+        Mon, 21 Mar 2022 13:59:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871215;
-        bh=ZLNrGtC/1yYtaIEPvn2dN37TDlIhPm1AaMyY5zLM+o8=;
+        s=korg; t=1647871176;
+        bh=B2PwWKJauXDFQuvSQYT/EWCzPk39Vbs2uYKXUVD7pOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L7NgKpvKl3q9avqaRcNYT4cF5OVB2Njhg6V/6NFTNzCmV8N6nR5CYGg4zR8tn0oNs
-         0XzNqdhFeKKiqsaF/PAz/FpIqS9CBgE82la5PICagMZnq4pyhnkb9hIzm7IT/tOxbJ
-         vyFC+1NMT93lI+G79RQCu1fBChobyOyg1ilnteYk=
+        b=06ofGKOpSv04Slz7EMElP9T/T31tmZD4tZwyQCIzoAey6tDBzAW3xVlvis0RumlZ8
+         ex7oKxfukWtnQko8qbuX3F3MxkJgnEpep9pj+qY6Trz7QLOlzd65QMMMgE+pTxC8wT
+         BKkxepjWq9Iu+CxLAkKjc9pYoZc7Irc2IjeX9eTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Marek Vasut <marex@denx.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 15/32] drm/imx: parallel-display: Remove bus flags check in imx_pd_bridge_atomic_check()
-Date:   Mon, 21 Mar 2022 14:52:51 +0100
-Message-Id: <20220321133221.004491467@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com
+Subject: [PATCH 5.10 22/30] usb: usbtmc: Fix bug in pipe direction for control transfers
+Date:   Mon, 21 Mar 2022 14:52:52 +0100
+Message-Id: <20220321133220.287521534@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
-References: <20220321133220.559554263@linuxfoundation.org>
+In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
+References: <20220321133219.643490199@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,68 +54,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-[ Upstream commit 6061806a863e8b65b109eb06a280041cc7525442 ]
+commit e9b667a82cdcfe21d590344447d65daed52b353b upstream.
 
-If display timings were read from the devicetree using
-of_get_display_timing() and pixelclk-active is defined
-there, the flag DISPLAY_FLAGS_SYNC_POSEDGE/NEGEDGE is
-automatically generated. Through the function
-drm_bus_flags_from_videomode() e.g. called in the
-panel-simple driver this flag got into the bus flags,
-but then in imx_pd_bridge_atomic_check() the bus flag
-check failed and will not initialize the display. The
-original commit fe141cedc433 does not explain why this
-check was introduced. So remove the bus flags check,
-because it stops the initialization of the display with
-valid bus flags.
+The syzbot fuzzer reported a minor bug in the usbtmc driver:
 
-Fixes: fe141cedc433 ("drm/imx: pd: Use bus format/flags provided by the bridge when available")
-Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: Boris Brezillon <boris.brezillon@collabora.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org
-To: dri-devel@lists.freedesktop.org
-Tested-by: Max Krummenacher <max.krummenacher@toradex.com>
-Acked-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Marek Vasut <marex@denx.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220201113643.4638-1-cniedermaier@dh-electronics.com
-Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+usb 5-1: BOGUS control dir, pipe 80001e80 doesn't match bRequestType 0
+WARNING: CPU: 0 PID: 3813 at drivers/usb/core/urb.c:412
+usb_submit_urb+0x13a5/0x1970 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 0 PID: 3813 Comm: syz-executor122 Not tainted
+5.17.0-rc5-syzkaller-00306-g2293be58d6a1 #0
+...
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x113/0x530 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x2a5/0x4b0 drivers/usb/core/message.c:153
+ usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1947 [inline]
+
+The problem is that usbtmc_ioctl_request() uses usb_rcvctrlpipe() for
+all of its transfers, whether they are in or out.  It's easy to fix.
+
+CC: <stable@vger.kernel.org>
+Reported-and-tested-by: syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/YiEsYTPEE6lOCOA5@rowland.harvard.edu
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/imx/parallel-display.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/usb/class/usbtmc.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
-index a8aba0141ce7..06cb1a59b9bc 100644
---- a/drivers/gpu/drm/imx/parallel-display.c
-+++ b/drivers/gpu/drm/imx/parallel-display.c
-@@ -217,14 +217,6 @@ static int imx_pd_bridge_atomic_check(struct drm_bridge *bridge,
- 	if (!imx_pd_format_supported(bus_fmt))
- 		return -EINVAL;
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -1889,6 +1889,7 @@ static int usbtmc_ioctl_request(struct u
+ 	struct usbtmc_ctrlrequest request;
+ 	u8 *buffer = NULL;
+ 	int rv;
++	unsigned int is_in, pipe;
+ 	unsigned long res;
  
--	if (bus_flags &
--	    ~(DRM_BUS_FLAG_DE_LOW | DRM_BUS_FLAG_DE_HIGH |
--	      DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE |
--	      DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)) {
--		dev_warn(imxpd->dev, "invalid bus_flags (%x)\n", bus_flags);
--		return -EINVAL;
--	}
--
- 	bridge_state->output_bus_cfg.flags = bus_flags;
- 	bridge_state->input_bus_cfg.flags = bus_flags;
- 	imx_crtc_state->bus_flags = bus_flags;
--- 
-2.34.1
-
+ 	res = copy_from_user(&request, arg, sizeof(struct usbtmc_ctrlrequest));
+@@ -1898,12 +1899,14 @@ static int usbtmc_ioctl_request(struct u
+ 	if (request.req.wLength > USBTMC_BUFSIZE)
+ 		return -EMSGSIZE;
+ 
++	is_in = request.req.bRequestType & USB_DIR_IN;
++
+ 	if (request.req.wLength) {
+ 		buffer = kmalloc(request.req.wLength, GFP_KERNEL);
+ 		if (!buffer)
+ 			return -ENOMEM;
+ 
+-		if ((request.req.bRequestType & USB_DIR_IN) == 0) {
++		if (!is_in) {
+ 			/* Send control data to device */
+ 			res = copy_from_user(buffer, request.data,
+ 					     request.req.wLength);
+@@ -1914,8 +1917,12 @@ static int usbtmc_ioctl_request(struct u
+ 		}
+ 	}
+ 
++	if (is_in)
++		pipe = usb_rcvctrlpipe(data->usb_dev, 0);
++	else
++		pipe = usb_sndctrlpipe(data->usb_dev, 0);
+ 	rv = usb_control_msg(data->usb_dev,
+-			usb_rcvctrlpipe(data->usb_dev, 0),
++			pipe,
+ 			request.req.bRequest,
+ 			request.req.bRequestType,
+ 			request.req.wValue,
+@@ -1927,7 +1934,7 @@ static int usbtmc_ioctl_request(struct u
+ 		goto exit;
+ 	}
+ 
+-	if (rv && (request.req.bRequestType & USB_DIR_IN)) {
++	if (rv && is_in) {
+ 		/* Read control data from device */
+ 		res = copy_to_user(request.data, buffer, rv);
+ 		if (res)
 
 

@@ -2,46 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41D34E2995
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41AF4E29DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348889AbiCUOGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S1352096AbiCUONO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349232AbiCUN7y (ORCPT
+        with ESMTP id S1348817AbiCUOFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:59:54 -0400
+        Mon, 21 Mar 2022 10:05:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D80B2529B;
-        Mon, 21 Mar 2022 06:58:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCA93B02A;
+        Mon, 21 Mar 2022 07:01:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4624BB81598;
-        Mon, 21 Mar 2022 13:58:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F890C340E8;
-        Mon, 21 Mar 2022 13:58:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4346B816E1;
+        Mon, 21 Mar 2022 14:01:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 032A4C340ED;
+        Mon, 21 Mar 2022 14:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871105;
-        bh=z5b40hV7USiaybTi52DgQM4KYPVIVs5XmZFdjoSRWQE=;
+        s=korg; t=1647871295;
+        bh=u3F5wmbk+6PkM8pt2vrxqech9PMOYixTjf4rRI8WWcM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dC97XBpaEqAGch/Hpnu9ReTUkIcZati51cN0/4DrxeIPFFym8jMbb/Gnlq2/lGf3E
-         qb67I7IvuZ/MQlEbufsNik0aTs3RIyeKoJUlNe/vFKdflKn7xykWFxMntrCxwNgcQd
-         sC35GLxbUQti8tE2b/fFl/lxIYYPQCcrs3fPGHTI=
+        b=BU/TADhVZdWXvUJ/8Aps3n/V3Por6ohsJBlFDWyxS31/zx9X7RrP0p9FpVIn+svOh
+         j0mEKFqYy4JKf6APPPlmdW1+NwNmBfKleRMjdPjtU9Khen6BgH8+PrCfwve8QPYxFs
+         wikWMuZ+ZCNd6nGUNAAUXj5FA2wKN8WsZekH9Yxc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 09/17] net: handle ARPHRD_PIMREG in dev_is_mac_header_xmit()
+        stable@vger.kernel.org, Guo Ziliang <guo.ziliang@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Hugh Dickins <hughd@google.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 03/37] mm: swap: get rid of livelock in swapin readahead
 Date:   Mon, 21 Mar 2022 14:52:45 +0100
-Message-Id: <20220321133217.426561871@linuxfoundation.org>
+Message-Id: <20220321133221.392695021@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
-References: <20220321133217.148831184@linuxfoundation.org>
+In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
+References: <20220321133221.290173884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +65,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Guo Ziliang <guo.ziliang@zte.com.cn>
 
-[ Upstream commit 4ee06de7729d795773145692e246a06448b1eb7a ]
+commit 029c4628b2eb2ca969e9bf979b05dc18d8d5575e upstream.
 
-This kind of interface doesn't have a mac header. This patch fixes
-bpf_redirect() to a PIM interface.
+In our testing, a livelock task was found.  Through sysrq printing, same
+stack was found every time, as follows:
 
-Fixes: 27b29f63058d ("bpf: add bpf_redirect() helper")
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Link: https://lore.kernel.org/r/20220315092008.31423-1-nicolas.dichtel@6wind.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  __swap_duplicate+0x58/0x1a0
+  swapcache_prepare+0x24/0x30
+  __read_swap_cache_async+0xac/0x220
+  read_swap_cache_async+0x58/0xa0
+  swapin_readahead+0x24c/0x628
+  do_swap_page+0x374/0x8a0
+  __handle_mm_fault+0x598/0xd60
+  handle_mm_fault+0x114/0x200
+  do_page_fault+0x148/0x4d0
+  do_translation_fault+0xb0/0xd4
+  do_mem_abort+0x50/0xb0
+
+The reason for the livelock is that swapcache_prepare() always returns
+EEXIST, indicating that SWAP_HAS_CACHE has not been cleared, so that it
+cannot jump out of the loop.  We suspect that the task that clears the
+SWAP_HAS_CACHE flag never gets a chance to run.  We try to lower the
+priority of the task stuck in a livelock so that the task that clears
+the SWAP_HAS_CACHE flag will run.  The results show that the system
+returns to normal after the priority is lowered.
+
+In our testing, multiple real-time tasks are bound to the same core, and
+the task in the livelock is the highest priority task of the core, so
+the livelocked task cannot be preempted.
+
+Although cond_resched() is used by __read_swap_cache_async, it is an
+empty function in the preemptive system and cannot achieve the purpose
+of releasing the CPU.  A high-priority task cannot release the CPU
+unless preempted by a higher-priority task.  But when this task is
+already the highest priority task on this core, other tasks will not be
+able to be scheduled.  So we think we should replace cond_resched() with
+schedule_timeout_uninterruptible(1), schedule_timeout_interruptible will
+call set_current_state first to set the task state, so the task will be
+removed from the running queue, so as to achieve the purpose of giving
+up the CPU and prevent it from running in kernel mode for too long.
+
+(akpm: ugly hack becomes uglier.  But it fixes the issue in a
+backportable-to-stable fashion while we hopefully work on something
+better)
+
+Link: https://lkml.kernel.org/r/20220221111749.1928222-1-cgel.zte@gmail.com
+Signed-off-by: Guo Ziliang <guo.ziliang@zte.com.cn>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Reviewed-by: Jiang Xuexin <jiang.xuexin@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+Acked-by: Hugh Dickins <hughd@google.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Roger Quadros <rogerq@kernel.org>
+Cc: Ziliang Guo <guo.ziliang@zte.com.cn>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/if_arp.h | 1 +
- 1 file changed, 1 insertion(+)
+ mm/swap_state.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/if_arp.h b/include/linux/if_arp.h
-index bf5c5f32c65e..e147ea679467 100644
---- a/include/linux/if_arp.h
-+++ b/include/linux/if_arp.h
-@@ -51,6 +51,7 @@ static inline bool dev_is_mac_header_xmit(const struct net_device *dev)
- 	case ARPHRD_VOID:
- 	case ARPHRD_NONE:
- 	case ARPHRD_RAWIP:
-+	case ARPHRD_PIMREG:
- 		return false;
- 	default:
- 		return true;
--- 
-2.34.1
-
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -478,7 +478,7 @@ struct page *__read_swap_cache_async(swp
+ 		 * __read_swap_cache_async(), which has set SWAP_HAS_CACHE
+ 		 * in swap_map, but not yet added its page to swap cache.
+ 		 */
+-		cond_resched();
++		schedule_timeout_uninterruptible(1);
+ 	}
+ 
+ 	/*
 
 

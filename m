@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396A44E25D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19F74E25D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346997AbiCUL6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
+        id S1347017AbiCUL66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347157AbiCUL60 (ORCPT
+        with ESMTP id S1347192AbiCUL6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:58:26 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3B812AE5;
-        Mon, 21 Mar 2022 04:56:59 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id s207so15902267oie.11;
-        Mon, 21 Mar 2022 04:56:59 -0700 (PDT)
+        Mon, 21 Mar 2022 07:58:38 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0862C158564
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:57:13 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id p5so9091035pfo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:57:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5T6DI7AkPvB4V935ogF76yCUBMnMQ3VXXVYsoMJqvMw=;
-        b=Ag0mh8SXiY6dYBBkZJk+JHK3tEx4LkqILNFbfSh8uJ3NFIMjnZnMwFlCSWmOng+m2o
-         hnft/50ssxVwXlDmvEBf3VklElT/v1v/8LJNKx+6jOp4dFlCDlT+1ceMGpu/K44v0dqS
-         Cx4WiLgi2zWOQB0Q1BC09qabC0IAXrNYC4+UQgfXRv8hxLfDG+7WKikJEGo3xfdAdCoy
-         dTbuI6VTI/pFOO2uGmDyK2U37P3BtdpJ8BN37UbhVnoBoPBFSRoNgA7ZIPRqSpP/ZR9r
-         Bcr9MLvEonQ6uPZoo8rCHndfovXUB8H0UuebkbKuC8oGAbwARQ6UjZuJ0GSIXDX2OXVJ
-         6E0A==
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=MDbGXk/uyCGDI/TkoExhl+SCVj0FR5A5NqQjnEQs+pE=;
+        b=K902P2tTEJ8gbOpeeqC1E1bDYECEwa/PxHv2rdC02K4aQv8ASy9xI4YTg+v8vpkwym
+         wPmw4o6/I6ayMbFR3FzxbyhGWjr1R90VWWnjPQE8JYkNH8O+o7Q/E0824AThxR6uf9O6
+         /06hcSCxBmT+ApdXiY/RZH8uKmRsCO4p8MvPs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5T6DI7AkPvB4V935ogF76yCUBMnMQ3VXXVYsoMJqvMw=;
-        b=R739aLp+NoHg6d2kS4G9rZ/5vfUJ+AhQeff9BBLgLANuWdc8a4CEEZFTH73dUEofJl
-         y8iV3IZPoItCRkaSXu1f4HiEGQ9ztV0q97NY6n9o4KxYARjADpVCoQEd8oLX5sV4YHhM
-         kqui4GP8BbXRyWYRlkc5BOoesCuEDVZT3uryOv+1GZazpl6IAnf3gXmeHo9bIQ5Njsl2
-         jTMY6PJhMrOG3oNt6H60lw0q/WrviAdaVyAKKKsyhBPRdQxUhNpl+eyOOu56fZITOmRA
-         a2eb2kCTEdvywgblmSincZzgPZ/jiYVRan+KKI0hiXAULxrX913GWG+23nmwmZH8IFaa
-         9RVg==
-X-Gm-Message-State: AOAM530y+TwLFdJoYZMrS/pUL5n67uyP8WZXLo311s3t2OvrzyDyeTRc
-        O6xZmD53+dNv5Izdf6Hl7nwKi6S5gdPPaxgU6VM=
-X-Google-Smtp-Source: ABdhPJwipqjcwh11ikvZDaa6GIVJEmI4ufGlrxHAi7Hc8/978YGfWuDdNCj3n81bkSzxXxe9o9/cnjI9yfEGwTJwkCI=
-X-Received: by 2002:a05:6808:994:b0:2ee:f9f3:99ec with SMTP id
- a20-20020a056808099400b002eef9f399ecmr10683387oic.98.1647863819270; Mon, 21
- Mar 2022 04:56:59 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=MDbGXk/uyCGDI/TkoExhl+SCVj0FR5A5NqQjnEQs+pE=;
+        b=OwVKb6uY2xkHm/nUaXrC5jpvWGSCA3gmrgMJDPqH4DSLjHJGbXW642n5SBX4yb57/u
+         MMFEnMveSLvjNtSSA26y5FhoLf6e7N3RqyoTcJAdndaYIMjpf5cJn528eSV4N48ikYkg
+         7waZu1z7a4R2VLW0w15AWJeRu8z83iZhzf77Aq7emIjqvGb+EFFxndQMi+MYCEI8cIj0
+         U2U8FMYCBN8vG0YzoalfbjIGWV6Rb/C6Hh5BAD4zXy6Tfg0qebQHYMaCDHEnO8AYudcE
+         3CrgAGyyjp/4apK7q73DETlmy26N07xcj+0jETHDpLBMc6Qdkop67JrEz/HKE9K87JK7
+         kv2Q==
+X-Gm-Message-State: AOAM533idKqlrrPX57G09EFDkpYKMhNKchp1GzBhJyb6ytp6TYwFhFh4
+        J8Xal5FdPdxgu046bxwye+nurA==
+X-Google-Smtp-Source: ABdhPJwFKJgsjju6vAXdHOaMbMz4yDwYompsHojXAVhvb5oHSBCHHaY/UTD3NDmzPvrsxM2yJpgTGQ==
+X-Received: by 2002:a63:4f08:0:b0:34c:6090:603e with SMTP id d8-20020a634f08000000b0034c6090603emr17258600pgb.15.1647863832466;
+        Mon, 21 Mar 2022 04:57:12 -0700 (PDT)
+Received: from [10.176.68.61] ([192.19.148.250])
+        by smtp.gmail.com with ESMTPSA id t71-20020a63784a000000b00380a9f7367asm15525616pgc.77.2022.03.21.04.57.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 04:57:11 -0700 (PDT)
+Message-ID: <4e23d808-2969-0f7a-a6d4-59e0b02061f9@broadcom.com>
+Date:   Mon, 21 Mar 2022 12:57:06 +0100
 MIME-Version: 1.0
-References: <20220319001635.4097742-1-khazhy@google.com> <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
- <CAOQ4uxgTJdcO-xZbtTSUkjD2g0vSHr=PLFc6-T6RgO0u5DS=0g@mail.gmail.com> <20220321112310.vpr7oxro2xkz5llh@quack3.lan>
-In-Reply-To: <20220321112310.vpr7oxro2xkz5llh@quack3.lan>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Mon, 21 Mar 2022 13:56:47 +0200
-Message-ID: <CAOQ4uxiLXqmAC=769ufLA2dKKfHxm=c_8B0N2y4c-aZ5Qci2hg@mail.gmail.com>
-Subject: Re: [PATCH RFC] nfsd: avoid recursive locking through fsnotify
-To:     Jan Kara <jack@suse.cz>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "khazhy@google.com" <khazhy@google.com>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [RFC PATCH 03/10] brcmfmac: sdio: update to new MMC API for
+ resetting cards
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-mmc@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org
+References: <20220321115059.21803-1-wsa+renesas@sang-engineering.com>
+ <20220321115059.21803-4-wsa+renesas@sang-engineering.com>
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+In-Reply-To: <20220321115059.21803-4-wsa+renesas@sang-engineering.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000063840e05dab93234"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,139 +83,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 1:23 PM Jan Kara <jack@suse.cz> wrote:
->
-> On Sat 19-03-22 11:36:13, Amir Goldstein wrote:
-> > On Sat, Mar 19, 2022 at 9:02 AM Trond Myklebust <trondmy@hammerspace.com> wrote:
-> > >
-> > > On Fri, 2022-03-18 at 17:16 -0700, Khazhismel Kumykov wrote:
-> > > > fsnotify_add_inode_mark may allocate with GFP_KERNEL, which may
-> > > > result
-> > > > in recursing back into nfsd, resulting in deadlock. See below stack.
-> > > >
-> > > > nfsd            D    0 1591536      2 0x80004080
-> > > > Call Trace:
-> > > >  __schedule+0x497/0x630
-> > > >  schedule+0x67/0x90
-> > > >  schedule_preempt_disabled+0xe/0x10
-> > > >  __mutex_lock+0x347/0x4b0
-> > > >  fsnotify_destroy_mark+0x22/0xa0
-> > > >  nfsd_file_free+0x79/0xd0 [nfsd]
-> > > >  nfsd_file_put_noref+0x7c/0x90 [nfsd]
-> > > >  nfsd_file_lru_dispose+0x6d/0xa0 [nfsd]
-> > > >  nfsd_file_lru_scan+0x57/0x80 [nfsd]
-> > > >  do_shrink_slab+0x1f2/0x330
-> > > >  shrink_slab+0x244/0x2f0
-> > > >  shrink_node+0xd7/0x490
-> > > >  do_try_to_free_pages+0x12f/0x3b0
-> > > >  try_to_free_pages+0x43f/0x540
-> > > >  __alloc_pages_slowpath+0x6ab/0x11c0
-> > > >  __alloc_pages_nodemask+0x274/0x2c0
-> > > >  alloc_slab_page+0x32/0x2e0
-> > > >  new_slab+0xa6/0x8b0
-> > > >  ___slab_alloc+0x34b/0x520
-> > > >  kmem_cache_alloc+0x1c4/0x250
-> > > >  fsnotify_add_mark_locked+0x18d/0x4c0
-> > > >  fsnotify_add_mark+0x48/0x70
-> > > >  nfsd_file_acquire+0x570/0x6f0 [nfsd]
-> > > >  nfsd_read+0xa7/0x1c0 [nfsd]
-> > > >  nfsd3_proc_read+0xc1/0x110 [nfsd]
-> > > >  nfsd_dispatch+0xf7/0x240 [nfsd]
-> > > >  svc_process_common+0x2f4/0x610 [sunrpc]
-> > > >  svc_process+0xf9/0x110 [sunrpc]
-> > > >  nfsd+0x10e/0x180 [nfsd]
-> > > >  kthread+0x130/0x140
-> > > >  ret_from_fork+0x35/0x40
-> > > >
-> > > > Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
-> > > > ---
-> > > >  fs/nfsd/filecache.c | 4 ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > >
-> > > > Marking this RFC since I haven't actually had a chance to test this,
-> > > > we
-> > > > we're seeing this deadlock for some customers.
-> > > >
-> > > > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
-> > > > index fdf89fcf1a0c..a14760f9b486 100644
-> > > > --- a/fs/nfsd/filecache.c
-> > > > +++ b/fs/nfsd/filecache.c
-> > > > @@ -121,6 +121,7 @@ nfsd_file_mark_find_or_create(struct nfsd_file
-> > > > *nf)
-> > > >         struct fsnotify_mark    *mark;
-> > > >         struct nfsd_file_mark   *nfm = NULL, *new;
-> > > >         struct inode *inode = nf->nf_inode;
-> > > > +       unsigned int pflags;
-> > > >
-> > > >         do {
-> > > >                 mutex_lock(&nfsd_file_fsnotify_group->mark_mutex);
-> > > > @@ -149,7 +150,10 @@ nfsd_file_mark_find_or_create(struct nfsd_file
-> > > > *nf)
-> > > >                 new->nfm_mark.mask = FS_ATTRIB|FS_DELETE_SELF;
-> > > >                 refcount_set(&new->nfm_ref, 1);
-> > > >
-> > > > +               /* fsnotify allocates, avoid recursion back into nfsd
-> > > > */
-> > > > +               pflags = memalloc_nofs_save();
-> > > >                 err = fsnotify_add_inode_mark(&new->nfm_mark, inode,
-> > > > 0);
-> > > > +               memalloc_nofs_restore(pflags);
-> > > >
-> > > >                 /*
-> > > >                  * If the add was successful, then return the object.
-> > >
-> > > Isn't that stack trace showing a slab direct reclaim, and not a
-> > > filesystem writeback situation?
-> > >
-> > > Does memalloc_nofs_save()/restore() really fix this problem? It seems
-> > > to me that it cannot, particularly since knfsd is not a filesystem, and
-> > > so does not ever handle writeback of dirty pages.
-> > >
-> >
-> > Maybe NOFS throttles direct reclaims to the point that the problem is
-> > harder to hit?
-> >
-> > This report came in at good timing for me.
-> >
-> > It demonstrates an issue I did not predict for "volatile"' fanotify marks [1].
-> > As far as I can tell, nfsd filecache is currently the only fsnotify backend that
-> > frees fsnotify marks in memory shrinker. "volatile" fanotify marks would also
-> > be evictable in that way, so they would expose fanotify to this deadlock.
-> >
-> > For the short term, maybe nfsd filecache can avoid the problem by checking
-> > mutex_is_locked(&nfsd_file_fsnotify_group->mark_mutex) and abort the
-> > shrinker. I wonder if there is a place for a helper mutex_is_locked_by_me()?
-> >
-> > Jan,
-> >
-> > A relatively simple fix would be to allocate fsnotify_mark_connector in
-> > fsnotify_add_mark() and free it, if a connector already exists for the object.
-> > I don't think there is a good reason to optimize away this allocation
-> > for the case of a non-first group to set a mark on an object?
->
-> Indeed, nasty. Volatile marks will add group->mark_mutex into a set of
-> locks grabbed during inode slab reclaim. So any allocation under
-> group->mark_mutex has to be GFP_NOFS now. This is not just about connector
-> allocations but also mark allocations for fanotify. Moving allocations from
-> under mark_mutex is also possible solution but passing preallocated memory
-> around is kind of ugly as well.
+--00000000000063840e05dab93234
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Yes, kind of, here is how it looks:
-https://github.com/amir73il/linux/commit/643bb6b9f664f70f68ea0393a06338673c4966b3
-https://github.com/amir73il/linux/commit/66f27fc99e46b12f1078e8e2915793040ce50ee7
+On 3/21/2022 12:50 PM, Wolfram Sang wrote:
+> No functional change, only the name and the argument type change to
+> avoid confusion between resetting a card and a host controller.
 
-> So the cleanest solution I currently see is
-> to come up with helpers like "fsnotify_lock_group() &
-> fsnotify_unlock_group()" which will lock/unlock mark_mutex and also do
-> memalloc_nofs_save / restore magic.
->
+No comments for the driver side change presented here.
 
-Sounds good. Won't this cause a regression - more failures to setup new mark
-under memory pressure?
+Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> RFC, please do not apply yet.
+> 
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-Should we maintain a flag in the group FSNOTIFY_GROUP_SHRINKABLE?
-and set NOFS state only in that case, so at least we don't cause regression
-for existing applications?
+--00000000000063840e05dab93234
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Thanks,
-Amir.
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCV8KU8gGehOVfq1HQe
+FxbTIBAhZWdBrCyvpyvC6YvvbTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAzMjExMTU3MTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEABrOvPg5ctsBh1EDjSNImd8m+acl1MKtD/6HF
+BwaVYIRfBPQ+uP8tlimXIme3T9G4YJD/horb1ioUZVQEVKQa6gwwcf4OlMXs6c9g+IIsdXG9rNsU
+/az5wsNaHAjQtnScX5sgXKCMJhAFwUTp3CZQIo5SxXf3RtSkBFRGvfpEgY1phcqVtheELqrb1xtU
+6FZmaJlFZCjY83wXp7hLQdcp98FLHq83HgigeOjUjyN5wRzAkN4orsMJifC94rwH4UqlOrT0fb4Y
++wU7jKyYzMl9gJoASCSurb7iOMEzxwUNigc3Td9BTYLjNhRTnyfwHeFBSa+Kp1WbBEPpww6hWBkJ
+kw==
+--00000000000063840e05dab93234--

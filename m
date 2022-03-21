@@ -2,171 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B494E2A8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B8F4E2A89
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349178AbiCUOQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S1349025AbiCUOQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351394AbiCUOK6 (ORCPT
+        with ESMTP id S1351435AbiCUOLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:10:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D1E51788DB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647871565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VG0h6aZGi/DKotr1u/FQ4KTyRHDeLftG2T0kmjcokAs=;
-        b=F5Fb3WNEns8GJ0/OScu9wtKvNQUvoMP9ETAmV6e3yQPpceAVrEE8jk5QWzluzX6DZGuNFm
-        9wrhIAUnzEKvNn5D2CJ/QeqPQAcYTPvMxYSmDfzhTYRal/Cr3dtWVVByFZbQsls++uaEb2
-        n/mdUBgLUJ3hHDW0QXlGizFXzDtQrfo=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-DZu6IUACPGmIGEyRGeaKLQ-1; Mon, 21 Mar 2022 10:06:04 -0400
-X-MC-Unique: DZu6IUACPGmIGEyRGeaKLQ-1
-Received: by mail-qv1-f72.google.com with SMTP id 33-20020a0c8024000000b0043d17ffb0bdso11652851qva.18
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:06:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=VG0h6aZGi/DKotr1u/FQ4KTyRHDeLftG2T0kmjcokAs=;
-        b=u8rUNjTCDFzzO6UfyyiVwoPs6lzDhncOL5x+AvSsXoU9g/UmHtTTH3jIFtBHVgnTDn
-         JZLv/EddSHVHfCbXYV96acQ1PPAPwCSbTV+WVcKxqOZAiZuSSI6vHQHwSor9sQVeR1ha
-         e/sNncYxUH4v2PObnOg70b12GjnOYXAHa28V0TwV24kwvvGoBrowaMnXw/ogiOMDC3zt
-         Ygs95uPpeXvsI5zPkW0DCrMvD/RVTk4xJxUlxYxyhoaw/cEHQ5LR1xmXZ8PEniuvLFZr
-         GG+5EB+y7/RoFwpg7RJ+9q8BWyZ98Tj9lRWwf5MQg34DUtJJROm4KPMGOMAo9S/sN++I
-         d5nw==
-X-Gm-Message-State: AOAM531+cJRv65In31Lhzqv2O0ldVbhEapap7f9I9CPML4pxKH6DHWyA
-        saJXjS394aFTwlyC+qYiVjqw37m3iBfi5ulc2IPPhAn7SKbpRIOB5oNWSbCa/OIV06hsR5QVaeS
-        vOiLTl0Hu1h6AG410nc6fHYHu
-X-Received: by 2002:a05:6214:20c6:b0:440:f78c:4ad with SMTP id 6-20020a05621420c600b00440f78c04admr13176165qve.112.1647871563402;
-        Mon, 21 Mar 2022 07:06:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxNogMKYOxmGdk0YIgGRQvxb9KrtAJefEDo+vvNMGUuVX+R+sy5QoO9FAlecHBkxwBde1eN3w==
-X-Received: by 2002:a05:6214:20c6:b0:440:f78c:4ad with SMTP id 6-20020a05621420c600b00440f78c04admr13176133qve.112.1647871562990;
-        Mon, 21 Mar 2022 07:06:02 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id x20-20020ac85f14000000b002e1ee1c56c3sm10538034qta.76.2022.03.21.07.06.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 07:06:02 -0700 (PDT)
-Subject: Re: [PATCH v2] livepatch: Reorder to use before freeing a pointer
-To:     Joe Lawrence <joe.lawrence@redhat.com>, jpoimboe@redhat.com,
-        jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20220320015143.2208591-1-trix@redhat.com>
- <3ee9826e-b770-d015-0251-e9770172d973@redhat.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <b4b347ea-5b12-223a-86f5-c13aee714f08@redhat.com>
-Date:   Mon, 21 Mar 2022 07:05:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 21 Mar 2022 10:11:04 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937D81100;
+        Mon, 21 Mar 2022 07:07:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NDfxK8ZrbMzKdstimr3jEpS437g9g8k0XGuY8f9W+HkFf8CUoU84hKOSdruCC2SuZf0Mlk9BcEIkhicgFfarVdy3SfJaWKfSRlYCLOzHfoHvu4NxVllBQbv/pdmSKTyJDUPHvIiT8mRcgIynv5mY2QA+25HVioYI+ZI7Lyl+pFibA35AaLPvQsQVLZG4Pv95EYbJbWHnvcPm6HCKCRDOQV7ilWFMeD/oPe9g2v7uJx09XwTcpcYkY+XQm3+GxAec33wCa/HXtEoh/1r0ZgZhJexIsDCCm6IjJsN0URHdh9jz5XOaJWVyW/fEvm98le1E7eMBBgos5JqwcQXY2l2JCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I8cpz5mqDR80LUfIirnOdhMXugefKNY5Yd6+kyK5mNE=;
+ b=MKCjOP65cCcGmXw1VAAqTxkxzSuF7/vBcKbuD8KS95nYl9/5RZXqYcqu4LKgHQoWNqUirNQlNlTBDBt29WMEhjMGwJ8tcZ2doXuWxhBK9o+kk5Vb+o72LUQsojv00gxnHil8KHRYSmm+eLt/K0JpCyYZHICAOTzkRYXxZPS80ZHxtTJfQtfOtYS4B7gu0Napuz8kNIXf2lmU4JEWGPyJpeOIEnv/QOmlalikCKXnClYY6pTJNeE5KP21hbuCZtd08WEvtjUaVaIF8OgSEI61UivKntYzOoy5ro5Dphg2SRh5EF6QQPthy0hFnbJeV940G5s2BGvUla4Sv8SGU5Og1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I8cpz5mqDR80LUfIirnOdhMXugefKNY5Yd6+kyK5mNE=;
+ b=UrD5Kyg0pUDgmnrSCHZtV7zy9rjUbyZolSYJhwfprEZokO3f4IepqYNoWOTM+L5sx/5K3y65QQo9aj1+bpyLYMD/3w/gcJ4LCmMgJhgAaNuiVF1oN2g3UJP2fKrzW+uATTnpPu7HX+WMu2vhlaJHDmlW5ONQOT6V2Oc9+ciFAHM6pYCadYnFV0XyV1xluC7/9lkbLWIQsiusillKU8StKlOeKnN9uE6PBhaLAzoAaCOlOXa7BO6JtwiFXh9pcuwgIXg26M+GD5bVDdIdPbZ5n+cND5num7M1wEXYIUtwSWA2bE8xkVoTas7H44jNanU+nno0v2HFyRPM6E3b3mQEQg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CH2PR12MB4296.namprd12.prod.outlook.com (2603:10b6:610:af::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Mon, 21 Mar
+ 2022 14:07:02 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::11a0:970a:4c24:c70c%5]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
+ 14:07:02 +0000
+Date:   Mon, 21 Mar 2022 11:07:01 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "oberpar@linux.ibm.com" <oberpar@linux.ibm.com>,
+        "vneethv@linux.ibm.com" <vneethv@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "thuth@redhat.com" <thuth@redhat.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "freude@linux.ibm.com" <freude@linux.ibm.com>,
+        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Zhao, Yan Y" <yan.y.zhao@intel.com>
+Subject: Re: [PATCH v4 14/32] iommu: introduce iommu_domain_alloc_type and
+ the KVM type
+Message-ID: <20220321140701.GV11336@nvidia.com>
+References: <20220314194451.58266-1-mjrosato@linux.ibm.com>
+ <20220314194451.58266-15-mjrosato@linux.ibm.com>
+ <a9637631-c23b-4158-d2cb-597a36b09a6b@arm.com>
+ <BN9PR11MB5276360F6DBDC3A238F3E41A8C129@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220317135254.GZ11336@nvidia.com>
+ <BN9PR11MB52764EF888DDB7822B88CF918C139@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220318141317.GO11336@nvidia.com>
+ <BN9PR11MB527649907D241347BCB540528C149@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB527649907D241347BCB540528C149@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: MN2PR03CA0012.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::17) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-In-Reply-To: <3ee9826e-b770-d015-0251-e9770172d973@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 250986d1-7ac7-4f9e-f979-08da0b441291
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4296:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB429657047FFEC3C210AAE62BC2169@CH2PR12MB4296.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CKoAj/jnlmMJbberT6z7QbxBlajT5rKtu6/OjY38Obr0rJtDv8xZQrZhMVWH75/Dq2cSzrg3oDJn166RdxvDnk0KWINk76TuBa+WKVCnbI1UBog4JrfQYzrxbGKUMw19VBvtjWpI4WqXYsaWNB7DU+jI/HZqW9C+EDjPwCqj6maAV9udyv/Q2ocqYtv7yPurMYdp4kLa4fEtUc5ApvpY74BnVeB9VBBF7pGAsDMy/rt565ovdjI/dcpWpCcJqqCnGCD1Z2PJD3X7OZRFguUG92cdyjZIGmZfF3sHigxVw6wZnYh5qr1+vgny76K73yX7839r/7oLHKmJaknbNiTvKAC0kdAfK/O0Bq8VkcHPOj6dI56FoJvHrtc8J8tsj66cvtodUrQXX7OFMnNaKFGXwJdG3Zpridha8EGd4wj2i7vfvlAidjpys23x2yZJ9Fflf5gO5cn1WM336xiQr6Kwq66FunrPiaJlPbwBVo6flZeNjL7R8fskwep91HxDNB6Jp48YvEl9ugp6FDjwz/wjepSlcY6u945OSoK3hdP7ld0ltCF3ezGGpYx1qekCZXtQ4quYRL9G6ANnndxJVZEtKohdwxwRQa6PK9PZFvSJkO7UiUsJbaO+6pwl0mVLaQerp0zIr9RSRi68BhG9vgM9wQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66946007)(66476007)(5660300002)(8676002)(4326008)(6916009)(54906003)(508600001)(6486002)(83380400001)(316002)(33656002)(2616005)(6512007)(1076003)(36756003)(186003)(26005)(86362001)(7406005)(8936002)(38100700002)(7416002)(2906002)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XGVPAknhUyhm0K88wW+3o+nj4hh2vnCErlyNJDQ0SAEFLBy03SlndrCx7WwM?=
+ =?us-ascii?Q?/9cCnklrzBNVwOUfLGGkOxDMfyBCv9vdAzQsugddqfrDVCR1GdaNyEsrznUC?=
+ =?us-ascii?Q?Hi+37odDxPHGlw83R/jkPpvf3Wzn9X3lZAmcqLeSTW5S0t77JOWrnaI/eugy?=
+ =?us-ascii?Q?vWC/5fqavna0H1cH90FkNvLP69iMg3PFNnGppH+JCizivnFchFETXQpud9GH?=
+ =?us-ascii?Q?r/JqPRSq1ZaebGaR3Vb4BPKG1h49HqQPPOEMrJBH+TrdV8ezgQFj/tK8NrvH?=
+ =?us-ascii?Q?rRttRUQkD9Wl/Ous3HUbpSefcQBOPyxV7GrcVlNcDtKcNPh+cmMk6XEPed5j?=
+ =?us-ascii?Q?tfPYhkWWn3uaOnKcDkmiIJvU4eiDmeIlJB9GaPMWax/HlcsM/O751FukWj57?=
+ =?us-ascii?Q?BdniCdktmlHzM/qAVKF2Sw95/SgBg/quIomtzCjcJBMe4afeeFtNMuC3xPMG?=
+ =?us-ascii?Q?CDaOvMbtTOM7WID6I4RVWh7XyZ8XI5Fep0atNEvHyM3qbzwlMqIISmMC0cb4?=
+ =?us-ascii?Q?hshQe5FsgZ10n8yMN4IAjeuOUuNEuFuEUyMZIQomkKICWAgT1MbEJdA79c/a?=
+ =?us-ascii?Q?tdY+NCmbvDtNyMn52PZFGMfpH9800aE/Rl57HmgxEeBsj5G+ei3jLguGxzfr?=
+ =?us-ascii?Q?q9ENea7WAiNEzWjXJ9aKHG/BtCpg0Qe3izsvXHPm3RvbHoMieamf6vngkZT7?=
+ =?us-ascii?Q?UyEm6DANthEN6snti3q2TshOTCywxfda8E84HxLJ7pfArLGa5KlZlvbM0frB?=
+ =?us-ascii?Q?4pAxrUOkOgn537TmzIHULKLtVkMWK9ZdwWpfZD0hJzwPPjOl8rPckwn25duB?=
+ =?us-ascii?Q?F3Bfkt3T6DTDrNucy/BwZQNMlnwCFzmXwIPLdcqC8UAD0OJeQFTi7tj5Q5gZ?=
+ =?us-ascii?Q?cHLv+hX2hJWLr9r6Jno9FtBvpQi8kpOt//y0O+X9vp8hsgz+W6N+dchbGgBC?=
+ =?us-ascii?Q?SvCgONd7T3Vy+q1tyIkrBSdu7U/PtXwyBxgKsfjKa7nSJWA8XZLYIwBtqbhI?=
+ =?us-ascii?Q?e+GSMRzmV7KmEjNQ5/pQw1DA+yKcBdMLq4DNTHI7DpuMpaGo5cN7uRuzIq/H?=
+ =?us-ascii?Q?K6/0Yq2ClsRKgR/A+UAR9V2ReP68sGIfUTkOkZFLgRZzuGJ9qej60jDJ1qAU?=
+ =?us-ascii?Q?nbz9zE3EpvHr/Dm1ATb6vhjmQCXuZIpYqYI7t55TCLD4P+bnRrmOLC8e65Bz?=
+ =?us-ascii?Q?cl+/2NO9RYDs6696OOMO7Gi/kwcbwAHCcdfsWbnOKX2OmMta9sesNML5G+PI?=
+ =?us-ascii?Q?QTNDqU7RcCvg2nLS5AckLwivqlrHrVJp2JKiiaEF11M1CwD/GUx83ZxjV0+W?=
+ =?us-ascii?Q?sKk14JVyBqZxpVl2vPArwYxuildnwwrotrsf7WZlkHWoACeN5G+e9fBQihyX?=
+ =?us-ascii?Q?dm1zkSYqRtgo+s47YpWZcmPwD+L8hPPkWSTkGBX3iZW5aoCayuftG+wuBdXe?=
+ =?us-ascii?Q?VSD4h/YmYwqLob36FCh7lrJzszqP/Rb9?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 250986d1-7ac7-4f9e-f979-08da0b441291
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 14:07:02.5459
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vArQL2dkE+bAFBv27NnXD9Hng4Ntl/RD+08NKFpK/QowIbI0SGg5jWgRf2ZCKPzl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4296
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 19, 2022 at 07:51:31AM +0000, Tian, Kevin wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Friday, March 18, 2022 10:13 PM
+> > 
+> > On Fri, Mar 18, 2022 at 02:23:57AM +0000, Tian, Kevin wrote:
+> > 
+> > > Yes, that is another major part work besides the iommufd work. And
+> > > it is not compatible with KVM features which rely on the dynamic
+> > > manner of EPT. Though It is a bit questionable whether it's worthy of
+> > > doing so just for saving memory footprint while losing other capabilities,
+> > > it is a requirement for some future security extension in Intel trusted
+> > > computing architecture. And KVM has been pinning pages for SEV/TDX/etc.
+> > > today thus some facilities can be reused. But I agree it is not a simple
+> > > task thus we need start discussion early to explore various gaps in
+> > > iommu and kvm.
+> > 
+> > Yikes. IMHO this might work better going the other way, have KVM
+> > import the iommu_domain and use that as the KVM page table than vice
+> > versa.
+> > 
+> > The semantics are a heck of a lot clearer, and it is really obvious
+> > that alot of KVM becomes disabled if you do this.
+> > 
+> 
+> This is an interesting angle to look at it. But given pinning is already
+> required in KVM to support SEV/TDX even w/o assigned device, those
+> restrictions have to be understood by KVM MMU code which makes
+> a KVM-managed page table under such restrictions closer to be 
+> sharable with IOMMU.
 
-On 3/21/22 6:39 AM, Joe Lawrence wrote:
-> On 3/19/22 9:51 PM, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> Clang static analysis reports this issue
->> livepatch-shadow-fix1.c:113:2: warning: Use of
->>    memory after it is freed
->>    pr_info("%s: dummy @ %p, prevented leak @ %p\n",
->>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> The pointer is freed in the previous statement.
->> Reorder the pr_info to report before the free.
->>
->> Similar issue in livepatch-shadow-fix2.c
->>
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->> v2: Fix similar issue in livepatch-shadow-fix2.c
->>
->>   samples/livepatch/livepatch-shadow-fix1.c | 2 +-
->>   samples/livepatch/livepatch-shadow-fix2.c | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
->> index 918ce17b43fda..6701641bf12d4 100644
->> --- a/samples/livepatch/livepatch-shadow-fix1.c
->> +++ b/samples/livepatch/livepatch-shadow-fix1.c
->> @@ -109,9 +109,9 @@ static void livepatch_fix1_dummy_leak_dtor(void *obj, void *shadow_data)
->>   	void *d = obj;
->>   	int **shadow_leak = shadow_data;
->>   
->> -	kfree(*shadow_leak);
->>   	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
->>   			 __func__, d, *shadow_leak);
->> +	kfree(*shadow_leak);
->>   }
->>   
->>   static void livepatch_fix1_dummy_free(struct dummy *d)
->> diff --git a/samples/livepatch/livepatch-shadow-fix2.c b/samples/livepatch/livepatch-shadow-fix2.c
->> index 29fe5cd420472..361046a4f10cf 100644
->> --- a/samples/livepatch/livepatch-shadow-fix2.c
->> +++ b/samples/livepatch/livepatch-shadow-fix2.c
->> @@ -61,9 +61,9 @@ static void livepatch_fix2_dummy_leak_dtor(void *obj, void *shadow_data)
->>   	void *d = obj;
->>   	int **shadow_leak = shadow_data;
->>   
->> -	kfree(*shadow_leak);
->>   	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
->>   			 __func__, d, *shadow_leak);
->> +	kfree(*shadow_leak);
->>   }
->>   
->>   static void livepatch_fix2_dummy_free(struct dummy *d)
->>
-> Hi Tom,
->
-> Ordering doesn't matter for the example, so let's clean up the static
-> analysis.
->
-> Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
->
-> But for my sanity, isn't this a false positive?  There shouldn't be harm
-> in printing the pointer itself, even after what it points to has been
-> freed, i.e.
->
-> 	int *i = malloc(sizeof(*i));
-> 	free(i);
-> 	printf("%p\n", i);      << ok
-> 	printf("%d\n", *i);     << NOT ok
->
-> But I suppose clang doesn't know that the passed pointer isn't getting
-> dereferenced by the function, so it throws up a warning?  Just curious
-> what your experience has been with respect to these reports.
+I thought the SEV/TDX stuff wasn't being done with pinning but via a
+memfd in a special mode that does sort of pin under the covers, but it
+is not necessarily a DMA pin. (it isn't even struct page memory, so
+I'm not even sure what pin means)
 
-The analysis it good for static functions, for extern functions it has 
-nothing to analyze so a worst case is assumed.
+Certainly, there is no inherent problem with SEV/TDX having movable
+memory and KVM could concievably handle this - but iommu cannot.
 
-I agree this is likely a false positive.
+I would not make an equivilance with SEV/TDX and iommu at least..
 
-Tom
-
->
-> Thanks,
-
+Jason

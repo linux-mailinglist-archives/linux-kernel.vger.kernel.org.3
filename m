@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F8A4E2985
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A904E2A41
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiCUOF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S1349107AbiCUOP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349147AbiCUN7Y (ORCPT
+        with ESMTP id S1349604AbiCUOId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:59:24 -0400
+        Mon, 21 Mar 2022 10:08:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6422D7672;
-        Mon, 21 Mar 2022 06:57:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558291B7B5;
+        Mon, 21 Mar 2022 07:03:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3D19611D5;
-        Mon, 21 Mar 2022 13:57:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB74C340E8;
-        Mon, 21 Mar 2022 13:57:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F6B661350;
+        Mon, 21 Mar 2022 14:02:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC41C340E8;
+        Mon, 21 Mar 2022 14:02:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871077;
-        bh=dGOcXsBKGb+pa/3WupTRMH4qEFSFdcbUJ2kNGLJFczo=;
+        s=korg; t=1647871378;
+        bh=2nO093whqQ/sqbYqWbv0LaogH00/S1O/HY0QpO+NfNU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wNYvsx8qu26nv3wSAKblb/LEd3/1mpmDYk8Rjtpp3v0ZBt+fND6vYqo40LCbaGIAt
-         xOtGCsA3lpCKE94SOdu/BjzvDWal1CNzoI23Kb4ehsgKY17NaI1x5lMY2Lm04aymwL
-         d+HGK9/rXMvQh9fEiJCXvOYpAxbRNT4/QHcYXL0k=
+        b=uqwUb/iCbeAiGiH6bOubamMb0i0uW3ZAg+C8v54TG9rDDjbseI5zc3tvU32XFWxJ8
+         jwKryWbIpPNP3K3PwOd/+kLeyVK/uYBK4XM1IO2XHFvt6pxYXC1ZUJFqrh1bYhsYTl
+         OzZi9PNmaleALC0ulor5HDKmBUnlktbunm++uz+k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        syzbot+75cccf2b7da87fb6f84b@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 15/17] Input: aiptek - properly check endpoint type
+        stable@vger.kernel.org, Xiumei Mu <xmu@redhat.com>,
+        Sabrina Dubroca <sd@queasysnail.net>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 09/37] esp6: fix check on ipv6_skip_exthdrs return value
 Date:   Mon, 21 Mar 2022 14:52:51 +0100
-Message-Id: <20220321133217.597455661@linuxfoundation.org>
+Message-Id: <20220321133221.564244907@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
-References: <20220321133217.148831184@linuxfoundation.org>
+In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
+References: <20220321133221.290173884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Sabrina Dubroca <sd@queasysnail.net>
 
-commit 5600f6986628dde8881734090588474f54a540a8 upstream.
+[ Upstream commit 4db4075f92af2b28f415fc979ab626e6b37d67b6 ]
 
-Syzbot reported warning in usb_submit_urb() which is caused by wrong
-endpoint type. There was a check for the number of endpoints, but not
-for the type of endpoint.
+Commit 5f9c55c8066b ("ipv6: check return value of ipv6_skip_exthdr")
+introduced an incorrect check, which leads to all ESP packets over
+either TCPv6 or UDPv6 encapsulation being dropped. In this particular
+case, offset is negative, since skb->data points to the ESP header in
+the following chain of headers, while skb->network_header points to
+the IPv6 header:
 
-Fix it by replacing old desc.bNumEndpoints check with
-usb_find_common_endpoints() helper for finding endpoints
+    IPv6 | ext | ... | ext | UDP | ESP | ...
 
-Fail log:
+That doesn't seem to be a problem, especially considering that if we
+reach esp6_input_done2, we're guaranteed to have a full set of headers
+available (otherwise the packet would have been dropped earlier in the
+stack). However, it means that the return value will (intentionally)
+be negative. We can make the test more specific, as the expected
+return value of ipv6_skip_exthdr will be the (negated) size of either
+a UDP header, or a TCP header with possible options.
 
-usb 5-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 2 PID: 48 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
-Modules linked in:
-CPU: 2 PID: 48 Comm: kworker/2:2 Not tainted 5.17.0-rc6-syzkaller-00226-g07ebd38a0da2 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: usb_hub_wq hub_event
-...
-Call Trace:
- <TASK>
- aiptek_open+0xd5/0x130 drivers/input/tablet/aiptek.c:830
- input_open_device+0x1bb/0x320 drivers/input/input.c:629
- kbd_connect+0xfe/0x160 drivers/tty/vt/keyboard.c:1593
+In the future, we should probably either make ipv6_skip_exthdr
+explicitly accept negative offsets (and adjust its return value for
+error cases), or make ipv6_skip_exthdr only take non-negative
+offsets (and audit all callers).
 
-Fixes: 8e20cf2bce12 ("Input: aiptek - fix crash on detecting device without endpoints")
-Reported-and-tested-by: syzbot+75cccf2b7da87fb6f84b@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Link: https://lore.kernel.org/r/20220308194328.26220-1-paskripkin@gmail.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5f9c55c8066b ("ipv6: check return value of ipv6_skip_exthdr")
+Reported-by: Xiumei Mu <xmu@redhat.com>
+Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/tablet/aiptek.c |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ net/ipv6/esp6.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/input/tablet/aiptek.c
-+++ b/drivers/input/tablet/aiptek.c
-@@ -1801,15 +1801,13 @@ aiptek_probe(struct usb_interface *intf,
- 	input_set_abs_params(inputdev, ABS_TILT_Y, AIPTEK_TILT_MIN, AIPTEK_TILT_MAX, 0, 0);
- 	input_set_abs_params(inputdev, ABS_WHEEL, AIPTEK_WHEEL_MIN, AIPTEK_WHEEL_MAX - 1, 0, 0);
+diff --git a/net/ipv6/esp6.c b/net/ipv6/esp6.c
+index b7b573085bd5..5023f59a5b96 100644
+--- a/net/ipv6/esp6.c
++++ b/net/ipv6/esp6.c
+@@ -813,8 +813,7 @@ int esp6_input_done2(struct sk_buff *skb, int err)
+ 		struct tcphdr *th;
  
--	/* Verify that a device really has an endpoint */
--	if (intf->cur_altsetting->desc.bNumEndpoints < 1) {
-+	err = usb_find_common_endpoints(intf->cur_altsetting,
-+					NULL, NULL, &endpoint, NULL);
-+	if (err) {
- 		dev_err(&intf->dev,
--			"interface has %d endpoints, but must have minimum 1\n",
--			intf->cur_altsetting->desc.bNumEndpoints);
--		err = -EINVAL;
-+			"interface has no int in endpoints, but must have minimum 1\n");
- 		goto fail3;
- 	}
--	endpoint = &intf->cur_altsetting->endpoint[0].desc;
- 
- 	/* Go set up our URB, which is called when the tablet receives
- 	 * input.
+ 		offset = ipv6_skip_exthdr(skb, offset, &nexthdr, &frag_off);
+-
+-		if (offset < 0) {
++		if (offset == -1) {
+ 			err = -EINVAL;
+ 			goto out;
+ 		}
+-- 
+2.34.1
+
 
 

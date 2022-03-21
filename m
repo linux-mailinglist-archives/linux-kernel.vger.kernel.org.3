@@ -2,109 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A444E2D0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF62D4E2D13
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350603AbiCUQDt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Mar 2022 12:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        id S1350612AbiCUQEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348726AbiCUQDs (ORCPT
+        with ESMTP id S1346093AbiCUQEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:03:48 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CACD53A70
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:02:23 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-31-F6hM2S3-NnqEGYc8T09CnQ-1; Mon, 21 Mar 2022 16:02:20 +0000
-X-MC-Unique: F6hM2S3-NnqEGYc8T09CnQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Mon, 21 Mar 2022 16:02:20 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Mon, 21 Mar 2022 16:02:20 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Wan Jiabing' <wanjiabing@vivo.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "alexandr.lobakin@intel.com" <alexandr.lobakin@intel.com>
-Subject: RE: [PATCH v2] ice: use min_t() to make code cleaner in ice_gnss
-Thread-Topic: [PATCH v2] ice: use min_t() to make code cleaner in ice_gnss
-Thread-Index: AQHYPSxszwX/VYzTWUmJ1ZXJKTtOx6zJ/3tw
-Date:   Mon, 21 Mar 2022 16:02:20 +0000
-Message-ID: <f888e3cf09944f9aa63532c9f59e69fb@AcuMS.aculab.com>
-References: <20220321135947.378250-1-wanjiabing@vivo.com>
-In-Reply-To: <20220321135947.378250-1-wanjiabing@vivo.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 21 Mar 2022 12:04:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C132621
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647878577; x=1679414577;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mXhSeWGUsiY3LNYSuyKnHfBrodQKAQwXYeDxsO7TL6I=;
+  b=Ny3h2XRFaJhrr1jLAoFwVImxhXadNiQ/bO1eNYQj+lL5Len9gU8LdXZC
+   z2bj4uAwtOr/xs1VdMc2u2CfhkJ1hu2J/NVbPrHuKvuF38P1kKwgHOGTn
+   WCVJSuiB3OEU8Cqtsip/FXnu3oJIPWPRLJGDWnWOcJ6nSxESwTBc8ASpO
+   bya6VA5THG6lD0i+Xgd1JuVohbiP4lvoG8euh0BoXhCrEsA+5uod0WHtc
+   HOc+sT+Y82FdpkBnqaJk7KNOezuxnjUEB0CqHWs3Quh4ih4ga99A7aPr3
+   MXRJKbZypNFcKpQpH0whUJpp4Vxxhv01YnO2BI9Mx7WDJHLxBx9KK6APk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="255149581"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="255149581"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 09:02:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="543276714"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 21 Mar 2022 09:02:49 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id AB94518E; Mon, 21 Mar 2022 18:03:09 +0200 (EET)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     bp@alien8.de
+Cc:     aarcange@redhat.com, ak@linux.intel.com, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@intel.com,
+        dave.hansen@linux.intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Subject: [PATCHv7.1 02/30] x86/tdx: Provide common base for SEAMCALL and TDCALL C wrappers
+Date:   Mon, 21 Mar 2022 19:02:45 +0300
+Message-Id: <20220321160245.42886-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <YjXtK4awY6utz3wE@zn.tnic>
+References: <YjXtK4awY6utz3wE@zn.tnic>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wan Jiabing
-> Sent: 21 March 2022 14:00
-> 
-> Fix the following coccicheck warning:
-> ./drivers/net/ethernet/intel/ice/ice_gnss.c:79:26-27: WARNING opportunity for min()
-> 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
-> Changelog:
-> v2:
-> - Use typeof(bytes_left) instead of u8.
-> ---
->  drivers/net/ethernet/intel/ice/ice_gnss.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
-> index 35579cf4283f..57586a2e6dec 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_gnss.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
-> @@ -76,8 +76,7 @@ static void ice_gnss_read(struct kthread_work *work)
->  	for (i = 0; i < data_len; i += bytes_read) {
->  		u16 bytes_left = data_len - i;
+Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
+defines a new VMX root operation (SEAM VMX root) and a new VMX non-root
+operation (SEAM VMX non-root) which are both isolated from the legacy
+VMX operation where the host kernel runs.
 
-Oh FFS why is that u16?
-Don't do arithmetic on anything smaller than 'int'
+A CPU-attested software module (called 'TDX module') runs in SEAM VMX
+root to manage and protect VMs running in SEAM VMX non-root.  SEAM VMX
+root is also used to host another CPU-attested software module (called
+'P-SEAMLDR') to load and update the TDX module.
 
-	David
+Host kernel transits to either P-SEAMLDR or TDX module via the new
+SEAMCALL instruction, which is essentially a VMExit from VMX root mode
+to SEAM VMX root mode.  SEAMCALLs are leaf functions defined by
+P-SEAMLDR and TDX module around the new SEAMCALL instruction.
 
-> 
-> -		bytes_read = bytes_left < ICE_MAX_I2C_DATA_SIZE ? bytes_left :
-> -					  ICE_MAX_I2C_DATA_SIZE;
-> +		bytes_read = min_t(typeof(bytes_left), bytes_left, ICE_MAX_I2C_DATA_SIZE);
-> 
->  		err = ice_aq_read_i2c(hw, link_topo, ICE_GNSS_UBX_I2C_BUS_ADDR,
->  				      cpu_to_le16(ICE_GNSS_UBX_EMPTY_DATA),
-> --
-> 2.35.1
+A guest kernel can also communicate with TDX module via TDCALL
+instruction.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+TDCALLs and SEAMCALLs use an ABI different from the x86-64 system-v ABI.
+RAX is used to carry both the SEAMCALL leaf function number (input) and
+the completion status (output).  Additional GPRs (RCX, RDX, R8-R11) may
+be further used as both input and output operands in individual leaf.
+
+TDCALL and SEAMCALL share the same ABI and require the largely same
+code to pass down arguments and retrieve results.
+
+Define an assembly macro that can be used to implement C wrapper for
+both TDCALL and SEAMCALL.
+
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+---
+TDCALL wrapper will be implemented using the macro later in the series.
+SEAMCALL wrapper is out-of-scope for the series and will be implemented
+as part of TDX host enabling.
+
+v7.1:
+ - Actually address Thomas' feedback;
+
+---
+ arch/x86/include/asm/tdx.h      | 28 ++++++++++
+ arch/x86/kernel/asm-offsets.c   |  9 ++++
+ arch/x86/virt/vmx/tdx/tdxcall.S | 96 +++++++++++++++++++++++++++++++++
+ 3 files changed, 133 insertions(+)
+ create mode 100644 arch/x86/virt/vmx/tdx/tdxcall.S
+
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+index ba8042ce61c2..2ffefe22f10a 100644
+--- a/arch/x86/include/asm/tdx.h
++++ b/arch/x86/include/asm/tdx.h
+@@ -8,6 +8,33 @@
+ #define TDX_CPUID_LEAF_ID	0x21
+ #define TDX_IDENT		"IntelTDX    "
+ 
++/*
++ * SW-defined error codes.
++ *
++ * Bits 47:40 == 0xFF indicate Reserved status code class that never used by
++ * TDX module.
++ */
++#define TDX_ERROR			_BITUL(63)
++#define TDX_SW_ERROR			(TDX_ERROR | GENMASK_ULL(40, 47))
++#define TDX_SEAMCALL_VMFAILINVALID	(TDX_SW_ERROR | _UL(0xFFFF0000))
++
++#ifndef __ASSEMBLY__
++
++/*
++ * Used to gather the output registers values of the TDCALL and SEAMCALL
++ * instructions when requesting services from the TDX module.
++ *
++ * This is a software only structure and not part of the TDX module/VMM ABI.
++ */
++struct tdx_module_output {
++	u64 rcx;
++	u64 rdx;
++	u64 r8;
++	u64 r9;
++	u64 r10;
++	u64 r11;
++};
++
+ #ifdef CONFIG_INTEL_TDX_GUEST
+ 
+ void __init tdx_early_init(void);
+@@ -18,4 +45,5 @@ static inline void tdx_early_init(void) { };
+ 
+ #endif /* CONFIG_INTEL_TDX_GUEST */
+ 
++#endif /* !__ASSEMBLY__ */
+ #endif /* _ASM_X86_TDX_H */
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index 9fb0a2f8b62a..7dca52f5cfc6 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -18,6 +18,7 @@
+ #include <asm/bootparam.h>
+ #include <asm/suspend.h>
+ #include <asm/tlbflush.h>
++#include <asm/tdx.h>
+ 
+ #ifdef CONFIG_XEN
+ #include <xen/interface/xen.h>
+@@ -65,6 +66,14 @@ static void __used common(void)
+ 	OFFSET(XEN_vcpu_info_arch_cr2, vcpu_info, arch.cr2);
+ #endif
+ 
++	BLANK();
++	OFFSET(TDX_MODULE_rcx, tdx_module_output, rcx);
++	OFFSET(TDX_MODULE_rdx, tdx_module_output, rdx);
++	OFFSET(TDX_MODULE_r8,  tdx_module_output, r8);
++	OFFSET(TDX_MODULE_r9,  tdx_module_output, r9);
++	OFFSET(TDX_MODULE_r10, tdx_module_output, r10);
++	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
++
+ 	BLANK();
+ 	OFFSET(BP_scratch, boot_params, scratch);
+ 	OFFSET(BP_secure_boot, boot_params, secure_boot);
+diff --git a/arch/x86/virt/vmx/tdx/tdxcall.S b/arch/x86/virt/vmx/tdx/tdxcall.S
+new file mode 100644
+index 000000000000..49a54356ae99
+--- /dev/null
++++ b/arch/x86/virt/vmx/tdx/tdxcall.S
+@@ -0,0 +1,96 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <asm/asm-offsets.h>
++#include <asm/tdx.h>
++
++/*
++ * TDCALL and SEAMCALL are supported in Binutils >= 2.36.
++ */
++#define tdcall		.byte 0x66,0x0f,0x01,0xcc
++#define seamcall	.byte 0x66,0x0f,0x01,0xcf
++
++/*
++ * TDX_MODULE_CALL - common helper macro for both
++ *                 TDCALL and SEAMCALL instructions.
++ *
++ * TDCALL   - used by TDX guests to make requests to the
++ *            TDX module and hypercalls to the VMM.
++ * SEAMCALL - used by TDX hosts to make requests to the
++ *            TDX module.
++ */
++.macro TDX_MODULE_CALL host:req
++	/*
++	 * R12 will be used as temporary storage for struct tdx_module_output
++	 * pointer. Since R12-R15 registers are not used by TDCALL/SEAMCALL
++	 * services supported by this function, it can be reused.
++	 */
++
++	/* Callee saved, so preserve it */
++	push %r12
++
++	/*
++	 * Push output pointer to stack.
++	 * After the operation, it will be fetched into R12 register.
++	 */
++	push %r9
++
++	/* Mangle function call ABI into TDCALL/SEAMCALL ABI: */
++	/* Move Leaf ID to RAX */
++	mov %rdi, %rax
++	/* Move input 4 to R9 */
++	mov %r8,  %r9
++	/* Move input 3 to R8 */
++	mov %rcx, %r8
++	/* Move input 1 to RCX */
++	mov %rsi, %rcx
++	/* Leave input param 2 in RDX */
++
++	.if \host
++	seamcall
++	/*
++	 * SEAMCALL instruction is essentially a VMExit from VMX root
++	 * mode to SEAM VMX root mode.  VMfailInvalid (CF=1) indicates
++	 * that the targeted SEAM firmware is not loaded or disabled,
++	 * or P-SEAMLDR is busy with another SEAMCALL.  %rax is not
++	 * changed in this case.
++	 *
++	 * Set %rax to TDX_SEAMCALL_VMFAILINVALID for VMfailInvalid.
++	 * This value will never be used as actual SEAMCALL error code as
++	 * it is from the Reserved status code class.
++	 */
++	jnc .Lno_vmfailinvalid
++	mov $TDX_SEAMCALL_VMFAILINVALID, %rax
++.Lno_vmfailinvalid:
++
++	.else
++	tdcall
++	.endif
++
++	/*
++	 * Fetch output pointer from stack to R12 (It is used
++	 * as temporary storage)
++	 */
++	pop %r12
++
++	/*
++	 * Since this macro can be invoked with NULL as an output pointer,
++	 * check if caller provided an output struct before storing output
++	 * registers.
++	 *
++	 * Update output registers, even if the call failed (RAX != 0).
++	 * Other registers may contain details of the failure.
++	 */
++	test %r12, %r12
++	jz .Lno_output_struct
++
++	/* Copy result registers to output struct: */
++	movq %rcx, TDX_MODULE_rcx(%r12)
++	movq %rdx, TDX_MODULE_rdx(%r12)
++	movq %r8,  TDX_MODULE_r8(%r12)
++	movq %r9,  TDX_MODULE_r9(%r12)
++	movq %r10, TDX_MODULE_r10(%r12)
++	movq %r11, TDX_MODULE_r11(%r12)
++
++.Lno_output_struct:
++	/* Restore the state of R12 register */
++	pop %r12
++.endm
+-- 
+2.34.1
 

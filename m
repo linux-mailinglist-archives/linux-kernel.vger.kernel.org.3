@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A4D4E3530
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBEA4E3525
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbiCUX7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
+        id S233834AbiCUX7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiCUX7j (ORCPT
+        with ESMTP id S233617AbiCUX7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:59:39 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCEF6C92C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:56:58 -0700 (PDT)
+        Mon, 21 Mar 2022 19:59:50 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C1751326
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647907018; x=1679443018;
+  t=1647907026; x=1679443026;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rJEfyOReNJQTGn+tVBm2YXQgWt5h+CMA1eKwF0napew=;
-  b=bSee/7ha5ZYcYl4ckq5lEqtEiK552jndf1pxRAGeGDKHBhPl5JunJ8pV
-   Yc8E0piQFkkL+o8osk2WBop6shLwDDbwOAJyWP4laC8R+J2StFUgVrhyG
-   YSkZHBV5kirJKcpuOwvMi/hhsjHKeGgLyYM31ivl8rKbenoPkhnYmkZGX
-   GMVZeG73KMpUzz8ry6mJyoUorIIUcf5TOxPiGMjeMGDyKcu6q+UK8d+eR
-   A16l9t8yE9BPoIpGRb1U/Oq1L+uF4Y2o3xmTMB0u3ECvhY8SYi9CM8XKf
-   hWdyHwvwtkQ9+kVU0GQsQlp49XxWYbWdM6eEF2DlvlEXslgLXXV8NZHyo
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="344106687"
+  bh=BWlrj7dmd06ikehsHPeKyybN3oK2riR1dqGeRHzQra8=;
+  b=i4fXK040Bs5s3r6eStgHJmReZkwDF4X2peA2ZS2CjLuneWwHhbH/px4E
+   nwSoV+merYuXwGoJ92KtxJeVe5Zf+QerExJh724cHQP/Upah+BrD5+GMo
+   2q3Ubv1Bhn+4hEcee0WsdcBXy+i63qr8SDgsjGz5XHeMyN3+RFGN7uxcL
+   RUpAyEhTPZF92SUZ2EMvs+/Pbapxmm68xVctopZ1Xk9JD/9f4ucwKqHy9
+   3QWmO0POVG1UB4sN0Guamu4TSguS7gcaTw2oaOhkWcTeeHaf1SDg5wYW0
+   8d07ahFnlT+uZn/m7IsCm3Q/w6zOvqoIM+1rjmSRDHVrD5cNU2nNBLr0Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257626358"
 X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="344106687"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 16:55:15 -0700
+   d="scan'208";a="257626358"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 16:55:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="515120209"
+   d="scan'208";a="648758421"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 16:55:13 -0700
+  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 16:55:13 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nWRrk-000IIN-Sg; Mon, 21 Mar 2022 23:55:12 +0000
-Date:   Tue, 22 Mar 2022 07:54:33 +0800
+        id 1nWRrk-000IIK-QU; Mon, 21 Mar 2022 23:55:12 +0000
+Date:   Tue, 22 Mar 2022 07:54:37 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: kernel/time/hrtimer.c:650:19: warning: unused function
- 'hrtimer_hres_active'
-Message-ID: <202203220741.Ez9nK7eG-lkp@intel.com>
+To:     Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Matthew Auld <matthew.auld@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Subject: [drm-drm-intel:drm-intel-gt-next 1210/1212]
+ drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:275:20: error: implicit
+ declaration of function 'sysfs_gt_attribute_r_max_func'
+Message-ID: <202203220742.LAWCiYN8-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,99 +65,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f443e374ae131c168a065ea1748feac6b2e76613
-commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
-date:   7 months ago
-config: mips-randconfig-r022-20220319 (https://download.01.org/0day-ci/archive/20220322/202203220741.Ez9nK7eG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+tree:   git://anongit.freedesktop.org/drm/drm-intel drm-intel-gt-next
+head:   230523ba24bda5387637188ad56530bf6abd3f6c
+commit: 56a709cf77468e3a422b0ce3d58f8c2257bac2f1 [1210/1212] drm/i915/gt: Create per-tile RPS sysfs interfaces
+config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220322/202203220742.LAWCiYN8-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        git remote add drm-drm-intel git://anongit.freedesktop.org/drm/drm-intel
+        git fetch --no-tags drm-drm-intel drm-intel-gt-next
+        git checkout 56a709cf77468e3a422b0ce3d58f8c2257bac2f1
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iommu/ fs/ kernel/time/
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
-   static inline int hrtimer_hres_active(void)
-   ^
-   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void) { }
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-85e9b2687a/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
+   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function 'act_freq_mhz_show':
+>> drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:275:20: error: implicit declaration of function 'sysfs_gt_attribute_r_max_func' [-Werror=implicit-function-declaration]
+     275 |  u32 actual_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function 'boost_freq_mhz_store':
+>> drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:326:9: error: implicit declaration of function 'sysfs_gt_attribute_w_func' [-Werror=implicit-function-declaration]
+     326 |  return sysfs_gt_attribute_w_func(dev, attr,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function 'min_freq_mhz_show':
+>> drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:415:17: error: implicit declaration of function 'sysfs_gt_attribute_r_min_func' [-Werror=implicit-function-declaration]
+     415 |  u32 min_freq = sysfs_gt_attribute_r_min_func(dev, attr,
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
 
-vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
+vim +/sysfs_gt_attribute_r_max_func +275 drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c
 
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
-
-:::::: The code at line 650 was first introduced by commit
-:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
-
-:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+   271	
+   272	static ssize_t act_freq_mhz_show(struct device *dev,
+   273					 struct device_attribute *attr, char *buff)
+   274	{
+ > 275		u32 actual_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+   276							    __act_freq_mhz_show);
+   277	
+   278		return sysfs_emit(buff, "%u\n", actual_freq);
+   279	}
+   280	
+   281	static u32 __cur_freq_mhz_show(struct intel_gt *gt)
+   282	{
+   283		return intel_rps_get_requested_frequency(&gt->rps);
+   284	}
+   285	
+   286	static ssize_t cur_freq_mhz_show(struct device *dev,
+   287					 struct device_attribute *attr, char *buff)
+   288	{
+   289		u32 cur_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+   290							 __cur_freq_mhz_show);
+   291	
+   292		return sysfs_emit(buff, "%u\n", cur_freq);
+   293	}
+   294	
+   295	static u32 __boost_freq_mhz_show(struct intel_gt *gt)
+   296	{
+   297		return intel_rps_get_boost_frequency(&gt->rps);
+   298	}
+   299	
+   300	static ssize_t boost_freq_mhz_show(struct device *dev,
+   301					   struct device_attribute *attr,
+   302					   char *buff)
+   303	{
+   304		u32 boost_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+   305							   __boost_freq_mhz_show);
+   306	
+   307		return sysfs_emit(buff, "%u\n", boost_freq);
+   308	}
+   309	
+   310	static int __boost_freq_mhz_store(struct intel_gt *gt, u32 val)
+   311	{
+   312		return intel_rps_set_boost_frequency(&gt->rps, val);
+   313	}
+   314	
+   315	static ssize_t boost_freq_mhz_store(struct device *dev,
+   316					    struct device_attribute *attr,
+   317					    const char *buff, size_t count)
+   318	{
+   319		ssize_t ret;
+   320		u32 val;
+   321	
+   322		ret = kstrtou32(buff, 0, &val);
+   323		if (ret)
+   324			return ret;
+   325	
+ > 326		return sysfs_gt_attribute_w_func(dev, attr,
+   327						 __boost_freq_mhz_store, val) ?: count;
+   328	}
+   329	
+   330	static u32 __rp0_freq_mhz_show(struct intel_gt *gt)
+   331	{
+   332		return intel_rps_get_rp0_frequency(&gt->rps);
+   333	}
+   334	
+   335	static ssize_t RP0_freq_mhz_show(struct device *dev,
+   336					 struct device_attribute *attr, char *buff)
+   337	{
+   338		u32 rp0_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+   339							     __rp0_freq_mhz_show);
+   340	
+   341		return sysfs_emit(buff, "%u\n", rp0_freq);
+   342	}
+   343	
+   344	static u32 __rp1_freq_mhz_show(struct intel_gt *gt)
+   345	{
+   346		return intel_rps_get_rp1_frequency(&gt->rps);
+   347	}
+   348	
+   349	static ssize_t RP1_freq_mhz_show(struct device *dev,
+   350					 struct device_attribute *attr, char *buff)
+   351	{
+   352		u32 rp1_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+   353							     __rp1_freq_mhz_show);
+   354	
+   355		return sysfs_emit(buff, "%u\n", rp1_freq);
+   356	}
+   357	
+   358	static u32 __rpn_freq_mhz_show(struct intel_gt *gt)
+   359	{
+   360		return intel_rps_get_rpn_frequency(&gt->rps);
+   361	}
+   362	
+   363	static ssize_t RPn_freq_mhz_show(struct device *dev,
+   364					 struct device_attribute *attr, char *buff)
+   365	{
+   366		u32 rpn_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+   367							     __rpn_freq_mhz_show);
+   368	
+   369		return sysfs_emit(buff, "%u\n", rpn_freq);
+   370	}
+   371	
+   372	static u32 __max_freq_mhz_show(struct intel_gt *gt)
+   373	{
+   374		return intel_rps_get_max_frequency(&gt->rps);
+   375	}
+   376	
+   377	static ssize_t max_freq_mhz_show(struct device *dev,
+   378					 struct device_attribute *attr, char *buff)
+   379	{
+   380		u32 max_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+   381							     __max_freq_mhz_show);
+   382	
+   383		return sysfs_emit(buff, "%u\n", max_freq);
+   384	}
+   385	
+   386	static int __set_max_freq(struct intel_gt *gt, u32 val)
+   387	{
+   388		return intel_rps_set_max_frequency(&gt->rps, val);
+   389	}
+   390	
+   391	static ssize_t max_freq_mhz_store(struct device *dev,
+   392					  struct device_attribute *attr,
+   393					  const char *buff, size_t count)
+   394	{
+   395		int ret;
+   396		u32 val;
+   397	
+   398		ret = kstrtou32(buff, 0, &val);
+   399		if (ret)
+   400			return ret;
+   401	
+   402		ret = sysfs_gt_attribute_w_func(dev, attr, __set_max_freq, val);
+   403	
+   404		return ret ?: count;
+   405	}
+   406	
+   407	static u32 __min_freq_mhz_show(struct intel_gt *gt)
+   408	{
+   409		return intel_rps_get_min_frequency(&gt->rps);
+   410	}
+   411	
+   412	static ssize_t min_freq_mhz_show(struct device *dev,
+   413					 struct device_attribute *attr, char *buff)
+   414	{
+ > 415		u32 min_freq = sysfs_gt_attribute_r_min_func(dev, attr,
+   416							     __min_freq_mhz_show);
+   417	
+   418		return sysfs_emit(buff, "%u\n", min_freq);
+   419	}
+   420	
 
 -- 
 0-DAY CI Kernel Test Service

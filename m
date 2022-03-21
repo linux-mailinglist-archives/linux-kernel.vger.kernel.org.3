@@ -2,102 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C458E4E2438
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023A94E243B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346255AbiCUKVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S1346241AbiCUKXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234446AbiCUKVu (ORCPT
+        with ESMTP id S245187AbiCUKXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:21:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74F72DA83;
-        Mon, 21 Mar 2022 03:20:25 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 10:20:23 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647858024;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Eopz/MQCZ+Z8E/7sU2FMr5+ZT81Yw3113vHKndsiWBs=;
-        b=HoduWKmzLVHPFL7Pf/ZXQk8JlQVKbUhABrqVvFI9WS/q667t+30OxWBff7iJVL6yLkSgGI
-        qFL4LTmSia9ZH+S4I4kzg75yuKodxfBdY7e13FdpOd+/I74/GWdvI8oYsLCByLk+coKkEe
-        HqkP3yhAkJiVa5AkPgMsNlp4XIgnA10cT1WTC58n+HnOKBp0WsfuTQojLsEFixjriY5N7X
-        8qlrao/JFREsPnaLe0hCSxMBe7WXZfgWsJS1LjhhphFzq+8BbFwZQJWToMflzquW9FDse7
-        PGL6OmVs1BVSP1PpRXeD+QNdbtIsaLLdlqFHWSI/DNB/PbZNgVnpIsrVE2QfRw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647858024;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Eopz/MQCZ+Z8E/7sU2FMr5+ZT81Yw3113vHKndsiWBs=;
-        b=D0b6EWo913iAW+B08snFFckA5Br94FJMUnmuhv1wijqzMeMTDDy6bP6hmNAKq81BOaU7Ej
-        Ui+BnK84ahymlmDQ==
-From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] headers/prep: Fix header to build standalone: <linux/psi.h>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
+        Mon, 21 Mar 2022 06:23:31 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE0DA66EE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647858126; x=1679394126;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XQTkYCh9YcXqTv8VJW0SOk4W9PTAARN8gk3ZQyi7IxU=;
+  b=Fc1XtqK41aPIlvb2T+C8rorrbd9c6RJh4Ex9XtMExWGqYmYrLbuGfmRB
+   qHf0H1W+uSQXNBtGdboI08mrJP+624hvxvD0bAaKvUH5m9I3d7Ip9yTH6
+   HzvTyLxfFXxlfh3jEKNwqxdeiEmUlSJEVm9u/FyU/Rg7OR5lJ5eoJjsbT
+   9hIVx9AUjjLqMWhug7IRSfG2qOctBxpQ0ufY1PJDgHu6d4KBQso1HbODj
+   qvDJI+/MCPmoWHUe+MFEwnYIvSkzwonjATbdG3yPWsGqe7uhlun0WO0cI
+   +Rgnm16rsDbrIxUvMH0x9yAZgyHsvqE98lDLgRbMJUX3rPxP+EmZzv5PY
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257235629"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="257235629"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:22:06 -0700
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="559805216"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.213.169]) ([10.254.213.169])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:22:02 -0700
+Message-ID: <7de05f5e-864f-175e-5604-29561d330884@linux.intel.com>
+Date:   Mon, 21 Mar 2022 18:22:00 +0800
 MIME-Version: 1.0
-Message-ID: <164785802309.389.16437260063378101886.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC 01/11] iommu: Add pasid_bits field in struct dev_iommu
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>
+References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
+ <20220320064030.2936936-2-baolu.lu@linux.intel.com>
+ <BL1PR11MB527130BAAC3B4F48E4901F5D8C169@BL1PR11MB5271.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <BL1PR11MB527130BAAC3B4F48E4901F5D8C169@BL1PR11MB5271.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+On 2022/3/21 15:01, Tian, Kevin wrote:
+>> From: Lu Baolu<baolu.lu@linux.intel.com>
+>> Sent: Sunday, March 20, 2022 2:40 PM
+>>
+>> Use this field to save the pasid/ssid bits that a device is able to
+>> support with its IOMMU hardware. It is a generic attribute of a device
+>> and lifting it into the per-device dev_iommu struct makes it possible
+>> to allocate a PASID for device without calls into the IOMMU drivers.
+>> Any iommu driver which suports PASID related features should set this
+>> field before features are enabled on the devices.
+>>
+>> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h                       | 1 +
+>>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
+>>   drivers/iommu/intel/iommu.c                 | 5 ++++-
+>>   3 files changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index 6ef2df258673..36f43af0af53 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -368,6 +368,7 @@ struct dev_iommu {
+>>   	struct iommu_fwspec		*fwspec;
+>>   	struct iommu_device		*iommu_dev;
+>>   	void				*priv;
+>> +	unsigned int			pasid_bits;
+>>   };
+>>
+>>   int iommu_device_register(struct iommu_device *iommu,
+>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> index 627a3ed5ee8f..8e262210b5ad 100644
+>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> @@ -2812,6 +2812,7 @@ static int arm_smmu_dev_enable_feature(struct
+>> device *dev,
+>>   		master->iopf_enabled = true;
+>>   		return 0;
+>>   	case IOMMU_DEV_FEAT_SVA:
+>> +		dev->iommu->pasid_bits = master->ssid_bits;
+>>   		return arm_smmu_master_enable_sva(master);
+>>   	default:
+>>   		return -EINVAL;
+>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>> index 6f7485c44a4b..c1b91bce1530 100644
+>> --- a/drivers/iommu/intel/iommu.c
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -4587,8 +4587,11 @@ static struct iommu_device
+>> *intel_iommu_probe_device(struct device *dev)
+>>   			if (pasid_supported(iommu)) {
+>>   				int features = pci_pasid_features(pdev);
+>>
+>> -				if (features >= 0)
+>> +				if (features >= 0) {
+>>   					info->pasid_supported = features | 1;
+>> +					dev->iommu->pasid_bits =
+>> +						fls(pci_max_pasids(pdev)) - 1;
+> Original intel_svm_alloc_pasid() covers both PCI and non-PCI devices:
+> 
+> 	ioasid_t max_pasid = dev_is_pci(dev) ?
+> 		pci_max_pasids(to_pci_dev(dev)) : intel_pasid_max_id;
+> 
+> though I'm not sure whether non-PCI SVA has been supported indeed, this
+> patch implies a functional change here.
+> 
 
-Commit-ID:     3387ce4d8a5f2956fab827edf499fe6780e83faa
-Gitweb:        https://git.kernel.org/tip/3387ce4d8a5f2956fab827edf499fe6780e83faa
-Author:        Ingo Molnar <mingo@kernel.org>
-AuthorDate:    Mon, 21 Mar 2022 11:05:50 +01:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Mon, 21 Mar 2022 11:13:49 +01:00
+The info->pasid_supported is only set for PCI devices. So the status is
+that non-PCI SVA hasn't been supported. No functional change here from
+this point of view.
 
-headers/prep: Fix header to build standalone: <linux/psi.h>
-
-Add the <linux/cgroup-defs.h> dependency to <linux/psi.h>, because
-cgroup_move_task() will dereference 'struct css_set'.
-
-( Only older toolchains are affected, due to variations in
-  the implementation of rcu_assign_pointer() et al. )
-
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-Reported-by: Andrew Morton <akpm@linux-foundation.org>
-Reported-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
----
- include/linux/psi.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/linux/psi.h b/include/linux/psi.h
-index 7f7d1d8..8978476 100644
---- a/include/linux/psi.h
-+++ b/include/linux/psi.h
-@@ -6,6 +6,7 @@
- #include <linux/psi_types.h>
- #include <linux/sched.h>
- #include <linux/poll.h>
-+#include <linux/cgroup-defs.h>
- 
- struct seq_file;
- struct css_set;
+Best regards,
+baolu

@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F2E4E2E1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627E34E2E22
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351237AbiCUQeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
+        id S1351186AbiCUQgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351289AbiCUQd6 (ORCPT
+        with ESMTP id S243126AbiCUQge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:33:58 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A19188A0F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:32:27 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id u22so4524262pfg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fjCU1MalO2ku7wS+OzZnKaTrnAbFLbT6vv2XAruGwg0=;
-        b=C2Q3YotK5tlAAX/5Nt3UugiYRMm54RayeGGL2dzd/kqrUp7IMk5ZRdf0BkaAT/Jp5K
-         rfa4mGAn5AgP10nRH/xkv1tdtp68ZlXcrTXrsR/MK4Qk2yigbRn6vSY5MF5s1IXO1Mok
-         kPr4vJ6SmRagV0zXiBfKrOIKsEocpdvOHEOg/O5jbygovDvL65fb8/FXyu8do0JWLDhh
-         IKoYMok9oyjhwV+qCuQTxA56rFeZbVe6lBft/PPk2NtKCLK2Q3no6xYlQq9GTKVoAXA5
-         xC5Aikh5zJKbK2VuH7LDNqFW+OV32LFHLw8KBkGPBVsCd7kbCu7DVeF9thVJPIgi4a4c
-         /zMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fjCU1MalO2ku7wS+OzZnKaTrnAbFLbT6vv2XAruGwg0=;
-        b=T3lkgm2C+mbZsodYFuTNUBqeVexrasouXPnap77T/OHW5kYxYljkLb1NslG5izRGNP
-         PABYL34S45uaRLEgrDmukPSYZnI+XzCXguqwV93ygJn2cPbBgZgK2O8h7Wo8SZG3DoaV
-         yv9kl4QSS+WP1nbesJuVI0+q3S7BRrpghbTOyC14rGnR8yM717iEQqc+1K3cilszNxxB
-         +Uzj9sH+5OeRwQ0wcIIjPX2n64FsbNrCtJ+PuLcI7aEREcczrVb86+4hQQ0iyVV9T9At
-         qltYH2YOlAo7dTHgsu8WmTssCwzWpEWE70gG3sOl6k1aV08OwO6uTGeGhhy5kIldwr1k
-         ASzQ==
-X-Gm-Message-State: AOAM533uyatP8F02rA8PqF/epFq06utd9NjVRplcPdSm9PjqUZZjKi6z
-        ttIiJSY0aQfQylN+7oZe/34=
-X-Google-Smtp-Source: ABdhPJxbrkQDklVFlVZKw+5uA6kihshjZbDUScq9pxuqDWO0ilYjj6LmQXNA5IJCAZoUZYSsVuDJCg==
-X-Received: by 2002:a05:6a00:338e:b0:4fa:9015:af50 with SMTP id cm14-20020a056a00338e00b004fa9015af50mr9259059pfb.57.1647880346834;
-        Mon, 21 Mar 2022 09:32:26 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id on15-20020a17090b1d0f00b001bfa3e36086sm21950187pjb.54.2022.03.21.09.32.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 09:32:22 -0700 (PDT)
-Message-ID: <781cafb0-8d06-8b56-907a-5175c2da196a@gmail.com>
-Date:   Mon, 21 Mar 2022 09:32:19 -0700
+        Mon, 21 Mar 2022 12:36:34 -0400
+Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB6D41323
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1647880507; bh=vJPepEl0zqrXUFx266WI0WDEhUIpWwDNqvBodY4bDvo=; h=Date:To:Cc:From:Subject:References:From:Subject:Reply-To; b=dywuA94DmdpwVbeksnNjCSCVDoCA/OYp8PP2CzndcyhEmBBHkhj5XUXQTQ77GwoQVMxsOHwVo6is2NEljoHGx7bM4FnWqJUdMMppapD4ymgo4J/yZVydqL4DXiYmR8WbJVJMbMkL4GuB/dIKYnQN1UhL1+Rkd/Ss64cVDG4Lu5WgB6pj4ys6yvfp3cELEGm4ja8Vp58c8HiAGm9TMvS/O1PB20I2QKrOt1EQflK/H+8Oe/Y+Felztkrtzak/MgKWeKmnNwQU4p5Nb8K5qjVA46/1qP46fYKNuDaaPKi1tQfzzJEiGlmWbShNs3rgWkia6sLrDThAzNqT6uWyYQhHyA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1647880507; bh=esLTU+d/0kpFfBCGLE097jy6JeFjv+af4y9e94COAh/=; h=X-Sonic-MF:Date:To:From:Subject:From:Subject; b=WILfKBzAIbLI2xqEgUgs6SkswYONHMI38+lFDeHYHoRmdmvYZGRL5a16HMy/pKGYU7CIyzTUdPW3q2hcRzrRFE/XH+W+lb8J5HyZu1eWbVLHOT2M1wfQolLSm7FbqyJyQmhPpOjWyZtGthBFYcq7e2WJQLt2rrBJUYhzC98u9bHcjf5+sA91IGqGtjPgEAm2joDSa0m5jwIX0HDUsXdPaKbYQTl2QCbzZXF6yK4UuFyF23ck9Qi+yN9KlqRU+qHhSP3fMG0FgHNrc8lNQKlxi04GwNZbrfcjTafCKLnyXpHQNBfpfAg9v8Kq5yskmY5VPs7a/nOG0T733RMdAtcHOg==
+X-YMail-OSG: JZbLgjwVM1ktQnL5.kK5LtqANuiT2MKngRATnS9OgmCqougGrMhdbICKS_3Yg11
+ J9nW5H.NoGQq6pNyFtLuP3fIBDr.xdI4QgfJrx89qnzm6JTjjjuDhMNbkyOC3Hj5WloicmKr262L
+ Qiwp0ZtJhA0AUW9ouJgUBpo_uxjZrldCCxL7fZsuAmiKqsML7fbw338bRjIbzQZD0DM9OuNKi2Cw
+ m1jqCVXfXvomyUdn7TuDQWbt8Z815hUbCilHCEOpHk73XlCvEMYZ.6HqfPYcHYOhCiQOjbxfk0S1
+ 7njoJPhfoWrWXHFvGzD2Usax1gFr1IV5kgSTUaxnKjV9wbFJg5.EEHh3JqocgiSaAw.smNiLiyoG
+ 0cKmes7sDcKO5XvqDI3sQbS4xpKiXY3y0otl4yLy9UKO0hz1bo8VKVicjCt2rYGbx.tRWtobXp4h
+ tX2NOwALloI4DSOqwAphqPwecMQ83Nl1cI2hdGeSozCs81hBAmiPqGU.uxs6aKg8hGV5OwBshrQ2
+ 65eqksNzQX5JcTE0Gy90cz5Kry7veU7QO33PGfKSkd6SEoEDcbEOvBfDjigpf.4wkX_muJiEFhE_
+ fmQ6u6azDGfhJtmCmho9IBOBnR2iQT4jmLdDEzo.UYiiuG6wYTIen.KBLeS.34Iwn8hXNjb1GgNA
+ 6ko9rZtoWoV_EY2n8BzLEi8I8nGroKdLVhhQE0LVgb82M2.1_3oXrPNDGxMsI4chiCY7M_9qJB3P
+ ePL7piHZYzS.D6hzfCbzoHbaZaatyFP2LY.8ekSN3uFufQW8ksFssj2IhSQuWUCLDrNxBZ1kK80s
+ f3ZY5NOvToZm1qyGUW3HtHCZR1zSKajRwzN1wp4lyYiEuCluW276TJin4hjyOWDvlwJvCVjXJqwk
+ OBT5z_V1kCu9B2MrfUfdEFcMhg6de14Yrbu7dYGL461A6LO4nsjJK7aoeN8hQEcXZjhm0mEG4itw
+ e4lsPglpr8UyVer0TWmrIuFKPJodzF8MKUqqEfJioGgeWl22S8BlHzndIYyjhFCLpHACpG.VctTJ
+ TWtsVZ9MS1P7v1NRkJL1eGtbSONiiuQDJs2ko7JHaKKmmEYVVRx_ZjI492dmmLG.2Rp3W6ZVZbda
+ lJShbkhBteI0spJlB4UaxcDAmRhaHoI06UUmC_qgyrFjd39fd1ICf9G1BscsPH211.0B_aBymS07
+ uQJ6G1KZCvYVUTw.wpPcltzqAcw8oIyPHWcZrKhpt7glPQvChtfCyGOU9BoT1BFvZh2yJ7XNO_qg
+ 4.YGU0eywWbmXLYUpOhP5myuZJbUzUZUZqMdxmJKTHzJiiVmOiPLVBlq0tzag3L7ENAFZNxCgM.A
+ ndk_gdzJ1LRLtRCuBhkxD4JqfabGe0l.BkxPYtu.ec2SRHjwSjUkR4fBAHHAki4QPJSFTBE8erh5
+ YZrwxtjBwdySn.IPmGJPmaCOOi.ltQ8bq0fVbS0XccbHU1qVSbrn3IWrtNFkWW5NPHF7CmZbHh5V
+ XfIvuIutewYQbXX65kvLAOahF7iLdG.yGo3LnXuzJCJAVh6Ui5yHTjQjuQqmmQj3M9jVf5aHN92s
+ UXP2LHnPacLd9Uto9XxjoRMdnjk80S2YkWf2YmXkr8Fg2Mub5fWXv2IUdkgx9jl9AiMW.rGnIEGa
+ _xhFPYYKaaMesOXGDDI78prYir2Jue3R32T6CKCpgGczz5mp7vJP.JTgPb82K3IPDcC9JU59ElbJ
+ gexSMKlgU_agalcAR2rYZY3ue0PhQECkap5zd_qtyVytHAhLGB4muCLE6M.37yvFcnddct80rjHS
+ Z.XwoehLPJ6O1bc_zf4wgWZ.4Ga9RK4AbbsYYhqZkk6r7jPFzi0LI862DJbN5lHCWXuUh6qB8lCd
+ RLmA.NLRDbqC2MucC6Mq1IqjCFl7SUtubi7NChExO9_JjQavRjOyUQmpPEhKrVIiJYtRxHweuM.k
+ DuvKzoLrfyZce8CcE.Fsf9t6tvKz3IyJ5Ib0GmgepLwj0x83epbHhpEi6Nq8JBBeW11n1w0V8OrW
+ q9tf_pWVvvBWHFBKslxSIh_dErSht6giVlHuOCa.nVEGNELB21XIXGpk3.uIRNw8PnaEXuBWUXYZ
+ vpOTMJnQlhCt2nniYZEKevefRFVFLsBokHIXyD1lO.zFNYj3Y6cRcwwp2brc0IATMyIvDaeEYvmD
+ F7tg3Dri77ivvTKZOD7ojw.oAqOKSLAFCRXrIDzQHRe8QifQcmnfpvt.b61AefBA2NTvyLz4GUgZ
+ wA27YgeG.Zd0QPx0BCT1jiMEYVne0o1rObG6CwjvkUJi6RTtV35UcYV.KEahHjnalgunQnIiiG8Q
+ -
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Mon, 21 Mar 2022 16:35:07 +0000
+Received: by kubenode522.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID d57b9854834ae6071659616f4d6eb4ff;
+          Mon, 21 Mar 2022 16:35:01 +0000 (UTC)
+Message-ID: <bf678bae-821c-02ab-042a-004c03d9c334@schaufler-ca.com>
+Date:   Mon, 21 Mar 2022 09:34:59 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Question about the Broadcom Always On register panic handling
+ Thunderbird/91.3.0
 Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        computersforpeace@gmail.com
-Cc:     "Guilherme G. Piccoli" <kernel@gpiccoli.net>, opendmb@gmail.com,
-        gpowell@broadcom.com, justinpopo6@gmail.com, mmayer@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <6dac422b-d509-b863-0b31-98a07808ac0d@igalia.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <6dac422b-d509-b863-0b31-98a07808ac0d@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     torvalds@linux-foundation.org
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, casey@schaufler-ca.com
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Subject: [GIT PULL] Smack patches for v5.18
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <bf678bae-821c-02ab-042a-004c03d9c334.ref@schaufler-ca.com>
+X-Mailer: WebService/1.1.19894 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/22 09:15, Guilherme G. Piccoli wrote:
-> Hi Brian and Florian, I'm studying the panic notifiers and found one
-> added by you in the commit 0b741b8234c ("soc: bcm: brcmstb: Add support
-> for S2/S3/S5 suspend states (ARM)". Basically, the handler is very
-> simple and the only thing it does is:
-> 
-> /* from drivers/soc/bcm/brcmstb/pm/aon_defs.h */
-> #define AON_REG_PANIC		0x20
-> #define BRCMSTB_PANIC_MAGIC	0x512E115E
-> 
-> /* from drivers/soc/bcm/brcmstb/pm/pm-arm.c*/
-> brcmstb_pm_panic_notify() {
-> 	writel_relaxed(BRCMSTB_PANIC_MAGIC, ctrl.aon_sram + AON_REG_PANIC);
-> }
-> 
-> This write happens on panic time, but I couldn't find any
-> information/documentation about the AON register and what effectively
-> happens when this write is completed. Does the SoC reboots or anything
-> like that?
+Hello Linus,
 
-The AON (standing for always-on) is a small domain in the SoC that can 
-retain its state across various system wide sleep states and specific 
-reset conditions. The AON DATA RAM is a small ram of a few words (< 1KB) 
-which can store persistent information across such events.
+Here is the Smack pull request for v5.18.
 
-The purpose of this write was initially to help with indicating to the 
-boot loader that a panic occurred and so that it should try its best to 
-preserve the DRAM contents holding that buffer for recovery by the Linux 
-kernel as opposed to wiping out DRAM clean again. I cannot go into the 
-mechanics of what happens publicly unfortunately.
+There is a single change to repair an incorrect use of
+ntohs() in IPv6 audit code. It's very minor and went unnoticed
+until lkp found it. It's been in next and passes all tests.
+Thank you.
 
-> 
-> Any information that helps me to document such panic event is very
-> welcome, and in case you have AON documentation, it'd be also pretty great!
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-Why are you asking specifically about this if I may ask? If you are a 
-legitimate Broadcom STB customer you can reach out to our support and I 
-am sure the question will come back for me to answer.
--- 
-Florian
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  https://github.com/cschaufler/smack-next tags/Smack-for-5.18
+
+for you to fetch changes up to a5cd1ab7ab679d252a6d2f483eee7d45ebf2040c:
+
+  Fix incorrect type in assignment of ipv6 port for audit (2022-02-28 15:45:32 -0800)
+
+----------------------------------------------------------------
+Smack updates for 5.18
+    Fix incorrect type in assignment of ipv6 port for audit
+
+----------------------------------------------------------------
+Casey Schaufler (1):
+      Fix incorrect type in assignment of ipv6 port for audit
+
+ security/smack/smack_lsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+

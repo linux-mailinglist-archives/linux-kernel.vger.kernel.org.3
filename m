@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29F84E228A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BDD4E228B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345471AbiCUIvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 04:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
+        id S1345474AbiCUIwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 04:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344531AbiCUIvu (ORCPT
+        with ESMTP id S1345476AbiCUIwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:51:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403353669A;
-        Mon, 21 Mar 2022 01:50:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C340861158;
-        Mon, 21 Mar 2022 08:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87298C340E8;
-        Mon, 21 Mar 2022 08:50:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647852625;
-        bh=BILM29Vz9Uzyjt1P4yCjGxvGQNz4xIpQPbvuVj+CJNY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gwjQS8/v7pxCCz6xYSKlbvTQ3ICRioXfWlF/cJwei6zLWr9YqnBT3aAgF3VI/SwF2
-         kJG/ZDezwlHYjr0BXKKuMb6mRaRw+E96xndf4QZfxpydbnxA7wTw48y7nr9MY/nOrs
-         jFvPksMrvWZdqPuKu7IYs49e7qiL4epo2X23nJcA=
-Date:   Mon, 21 Mar 2022 09:50:21 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Carlos Llamas <cmllamas@google.com>,
-        Alessio Balsini <balsini@android.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel-team <kernel-team@android.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
-Message-ID: <Yjg8TVQZ6TeTSQxj@kroah.com>
-References: <20220318171405.2728855-1-cmllamas@google.com>
- <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
- <Yjfd1+k83U+meSbi@google.com>
- <CAJfpeguoFHgG9Jm3hVqWnta3DB6toPRp_vD3EK74y90Aj3w+8Q@mail.gmail.com>
+        Mon, 21 Mar 2022 04:52:04 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FE236B74
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:50:38 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 840B25C00AF;
+        Mon, 21 Mar 2022 04:50:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 21 Mar 2022 04:50:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=4ZAouKjLpC5h4H2T+
+        rBDcUdFqGSww9lvE0PZHfaLkkM=; b=RTpvI40YBMxSvUWqEZ2Tmz5LBJYP6qAMv
+        15J+4VNBkCmDjo1YAB/FKtzc0o+NLzUWYBr8DdAtOQEOwvE148n6metJ0ljqB9l6
+        bjuvqkiOITKuE75iqh/h6/i8Y0IN5Fim7kihZfven84N80hs/x4wBdrmSDCc2Cdt
+        0T5TMD/XpTeDY7f0LvTmskhNr1XURPKqRS+Ouvk+OuhKwZDV07Cl1C65XmBi/pbE
+        8hrXMkfl97f7w5NhCnE9YASU/ZuHsTwFKcQsHSvZM1YpaINothtAjc5cnFFl9fxe
+        5BSjw4mbIoYosvVdkRGJujMXq91wWbcnQOC/JVd5/shCl9HmxUwJg==
+X-ME-Sender: <xms:XTw4Yri048sE_ro5ls-IT4HC10KOCcSxBV3pfsaVrfL-wcawOsN5Hg>
+    <xme:XTw4YoBe59WFoTMvbKpgIIqoNQQ806MoqYuidXEJCQlKN_t98Cjmlq-f0Ytfwdr_Z
+    7SN5RR1Av0D0ojdl58>
+X-ME-Received: <xmr:XTw4YrGUygfBuyDoM_B0CwmKoABDl89syBqOzv0gyRwS55BfUO0iJi-gF9C1giUusMkgWcJfjA25gB0ZW7Du2kuQBDULECOFTfQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegvddguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvufgjkfhfgggtsehmtderredttdejnecuhfhrohhmpefhihhnnhcu
+    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeefffejiefgheevheefvefhteeggfeijeeiveeihfffffdugfefkeelfffh
+    gfehvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:XTw4YoTB5yiUMlhyyt6xd3DkptfcvjtpMDf4zvVp6EJmW1cycJ_asw>
+    <xmx:XTw4YozBfbzOge1jLg1jhAUAcC6TrWhOoW5i_WUpSm1p12EBfE1TPQ>
+    <xmx:XTw4Yu7MZZOF7tOdtYMGEqMHP_R_ihXQjpTCRbJZ5nx71hY2lMKqeA>
+    <xmx:XTw4Yj_0chEIvNWuUGEuuhZ81vzl4nQR1Sx3xGF9S1-XpXPDyIa1Vw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Mar 2022 04:50:34 -0400 (EDT)
+Date:   Mon, 21 Mar 2022 19:50:41 +1100 (AEDT)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] macintosh/via-pmu: Fix compiler warnings when CONFIG_PROC_FS
+ is disabled
+In-Reply-To: <39f63c1b-5a1b-8c8e-5991-813d3d3c2576@linux-m68k.org>
+Message-ID: <7b16264-dfef-414-8195-87c14a89fb40@linux-m68k.org>
+References: <650f5577599a701fdd632cdd469a9cea9788cdf3.1647674431.git.fthain@linux-m68k.org> <bb6d3131-3c46-654f-d2a0-6d57bb8cbfbf@csgroup.eu> <39f63c1b-5a1b-8c8e-5991-813d3d3c2576@linux-m68k.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfpeguoFHgG9Jm3hVqWnta3DB6toPRp_vD3EK74y90Aj3w+8Q@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/mixed; boundary="-1463811774-1170941894-1647852641=:12278"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,40 +73,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 09:40:56AM +0100, Miklos Szeredi wrote:
-> On Mon, 21 Mar 2022 at 03:07, Carlos Llamas <cmllamas@google.com> wrote:
-> >
-> > On Fri, Mar 18, 2022 at 08:24:55PM +0100, Miklos Szeredi wrote:
-> > > On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
-> > > >
-> > > > Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
-> > > > <linux/types.h> instead of 'uint32_t' and similar. This patch changes
-> > > > all the definitions in this header to use the correct type. Previous
-> > > > discussion of this topic can be found here:
-> > > >
-> > > >   https://lkml.org/lkml/2019/6/5/18
-> > >
-> > > This is effectively a revert of these two commits:
-> > >
-> > > 4c82456eeb4d ("fuse: fix type definitions in uapi header")
-> > > 7e98d53086d1 ("Synchronize fuse header with one used in library")
-> > >
-> > > And so we've gone full circle and back to having to modify the header
-> > > to be usable in the cross platform library...
-> > >
-> > > And also made lots of churn for what reason exactly?
-> >
-> > There are currently only two uapi headers making use of C99 types and
-> > one is <linux/fuse.h>. This approach results in different typedefs being
-> > selected when compiling for userspace vs the kernel.
-> 
-> Why is this a problem if the size of the resulting types is the same?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-uint* are not "valid" variable types to cross the user/kernel boundary.
-They are part of the userspace variable type namespace, not the kernel
-variable type namespace.  Linus wrong a long post about this somewhere
-in the past, I'm sure someone can dig it up...
+---1463811774-1170941894-1647852641=:12278
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-thanks,
+Hi Christophe,
 
-greg k-h
+On Mon, 21 Mar 2022, Finn Thain wrote:
+
+> On Mon, 21 Mar 2022, Christophe Leroy wrote:
+>=20
+> > Le 19/03/2022 =C3=A0 08:20, Finn Thain a =C3=A9crit=C2=A0:
+> > > drivers/macintosh/via-pmu.c:897:12: warning: 'pmu_battery_proc_show' =
+defined but not used [-Wunused-function]
+> > >   static int pmu_battery_proc_show(struct seq_file *m, void *v)
+> > >              ^~~~~~~~~~~~~~~~~~~~~
+> > > drivers/macintosh/via-pmu.c:871:12: warning: 'pmu_irqstats_proc_show'=
+ defined but not used [-Wunused-function]
+> > >   static int pmu_irqstats_proc_show(struct seq_file *m, void *v)
+> > >              ^~~~~~~~~~~~~~~~~~~~~~
+> > > drivers/macintosh/via-pmu.c:860:12: warning: 'pmu_info_proc_show' def=
+ined but not used [-Wunused-function]
+> > >   static int pmu_info_proc_show(struct seq_file *m, void *v)
+> > >              ^~~~~~~~~~~~~~~~~~
+> > >=20
+> > > Rearrange some code and add some #ifdefs to avoid unused code warning=
+s
+> > > when CONFIG_PROC_FS is disabled.
+> >=20
+> > Why not just put those three functions inside an #ifdef CONFIG_PROC_FS =
+?
+> >=20
+>=20
+> You'd get a warning about the prototypes ("declared static but never=20
+> defined"). Rather than add an ifdef around the prototypes as well, I=20
+> just reordered things a little.
+
+Oops, I was forgetting that I also added an ifdef around the new=20
+prototype.
+
+The simplest solution is probably the patch below, as it better exploits=20
+the stubbed-out proc_* API in include/linux/proc_fs.h.
+
+Was this what you had in mind?
+
+diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
+index 2109129ea1bb..495fd35b11de 100644
+--- a/drivers/macintosh/via-pmu.c
++++ b/drivers/macintosh/via-pmu.c
+@@ -204,9 +204,11 @@ static int init_pmu(void);
+ static void pmu_start(void);
+ static irqreturn_t via_pmu_interrupt(int irq, void *arg);
+ static irqreturn_t gpio1_interrupt(int irq, void *arg);
++#ifdef CONFIG_PROC_FS
+ static int pmu_info_proc_show(struct seq_file *m, void *v);
+ static int pmu_irqstats_proc_show(struct seq_file *m, void *v);
+ static int pmu_battery_proc_show(struct seq_file *m, void *v);
++#endif
+ static void pmu_pass_intr(unsigned char *data, int len);
+ static const struct proc_ops pmu_options_proc_ops;
+=20
+@@ -857,6 +859,7 @@ query_battery_state(void)
+ =09=09=092, PMU_SMART_BATTERY_STATE, pmu_cur_battery+1);
+ }
+=20
++#ifdef CONFIG_PROC_FS
+ static int pmu_info_proc_show(struct seq_file *m, void *v)
+ {
+ =09seq_printf(m, "PMU driver version     : %d\n", PMU_DRIVER_VERSION);
+@@ -977,6 +980,7 @@ static const struct proc_ops pmu_options_proc_ops =3D {
+ =09.proc_release=09=3D single_release,
+ =09.proc_write=09=3D pmu_options_proc_write,
+ };
++#endif
+=20
+ #ifdef CONFIG_ADB
+ /* Send an ADB command */
+---1463811774-1170941894-1647852641=:12278--

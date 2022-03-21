@@ -2,151 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C904E1F95
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 05:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0ED4E1F98
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 05:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344409AbiCUEdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 00:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S242439AbiCUEgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 00:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344398AbiCUEdK (ORCPT
+        with ESMTP id S233041AbiCUEga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 00:33:10 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8038E33E04
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 21:31:29 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 726FE5C0126;
-        Mon, 21 Mar 2022 00:31:27 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 21 Mar 2022 00:31:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
-        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=q/rwds
-        Z9GX/6TRc6IpzD6MxELSkwdXgINKIVSJHbvoo=; b=h6F6rsLrkM49LK8naaPQFf
-        jmtqZkVdkqmcyMr4bXXeDugsLCcVGu86AtOlAFLmyEx7mAWegcgTWAJtSoWNQUMz
-        airESWElgb83a15nivXWJ0F48Jrb3dxBJUuxwOW1YRgyVwVSbVx7LPFqyhL3g9xz
-        bEYSNF1JP1oWjITMieaNiAwyNN1L0I/qt29MomnJ7g1BZ/mgDnIkFVb4KBEACWxK
-        mpazMvWTffuAOTVjES7Njh6/bJFhto5t4/1R9+7RwKhfuKwvocBJ6+/xfgz9s0QK
-        Kuuku9MEWuk97E7pDAK0Mq3mxIg8VoXrFyZ1sIamiKNTzDzh0a0+s6Qv4SaSPZsw
-        ==
-X-ME-Sender: <xms:nv83YvA-2FdJGKP34KKJODHGQs3t0rk_jT9_7fGOc8XaRuE-gYcwfQ>
-    <xme:nv83YliI1Bx7RVotrYRR_cHtD4trKRiAfiC_IoXJAMHkVno8wj9U4eaK4qcdhvseV
-    b7wLZFW0ovz9zSWlCQ>
-X-ME-Received: <xmr:nv83Yql1fTFxpGDFJDOlMBnXO25-q1xdZOKgzBYPVKw2gp3Juu5fie4ykOsZEUrwJWOlRwuQVVlRycCQ8yzUqfmFJDgqwkbeWxI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegvddgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepvffkhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgrihhn
-    uceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvghrnh
-    eptdelteekleekkedvueejheekgfdvtdehhefhteeitefhteefgefhudehveevleelnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrih
-    hnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:n_83Yhxb0BSWnHum-DGXUrspG3HgAw_pKDCO1FD7j1qu0lQ6y_ugFg>
-    <xmx:n_83YkS3pZBSY7M7oy2aWBHwybLJ16dVJEwSeShc45wRO7YsOe9WfA>
-    <xmx:n_83Yka8zOSqkGI9AveVdmN2fRjEIHIPG4wsQb2Sfpb88t-bNFAigg>
-    <xmx:n_83YqckGj0qhlbik_f0UQIB4iwgzag2VxvGWibOPdMoZW38JPDW6g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Mar 2022 00:31:24 -0400 (EDT)
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Message-Id: <d987663bbed18d7dbf106db6066a759040b4e57a.1647837028.git.fthain@linux-m68k.org>
-From:   Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH] macintosh/via-pmu: Fix build failure when CONFIG_INPUT is
- disabled
-Date:   Mon, 21 Mar 2022 15:30:28 +1100
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 00:36:30 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DB514926D
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 21:35:05 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id b7so9608273ilm.12
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 21:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=wNrJMzmUs8L1uyhCpCulO8HdWj50qKBCSBf44V+e8WA=;
+        b=UfxGQcW1Gpo/sRxf/yxPj2Z7q0HAVnsKS+0aYE55NotAkdV4sc5gYXigF2fysUT+iJ
+         jjHJPJ1v67HvuV/dHQt1CNrxjRaaFBlmjpo7bETQRGVj8RZXKLekuvLtMU+SsZnKiMxY
+         2UQn6RSVP4JUPCEZK8PiJG3ASsYVTu80NDPNGo0bd0ShHn2cakruMzA/qil7bECyFV2t
+         deSY/mLxzSLxulEVDN2aPUjcy1lcDfXiOytMrQBMl9ee4m+4EdIwxsBV4W/jAmxeP0xL
+         +FFNe8o3r6rFntEEcJrN5fw9H78YtKKrB3copOOAtyK2/qKT5uPuLCO+M9uDq8/6D7EQ
+         zxVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=wNrJMzmUs8L1uyhCpCulO8HdWj50qKBCSBf44V+e8WA=;
+        b=6sfHjX48TYVh9tR7J0WQaU/zRczLgiBb+Tu0H9kchYJRQ+NJLqDLsDL+VBJMKhaSq4
+         Tht3SmslYdmIru0cYGpXBm0xkqc9xssHMvwywLHFTq84jvZTtq99b+CoTynet+/e84h+
+         Un6SmrNplQv4ZWBMdV62aABrOawP+t4SU/xdgECi5GlTcLyXEfOlqY26sUTpLsC3XZnY
+         JnMIZN40xQjZvN8IhFH8db9d0Abn6Mpailh+6zlnZrbMTRz84PVQzYtkAs7bvqPDNkfx
+         2XEgBbSGyZZrhzgpOXCl4/FsmdeAbG+hOeI3JAh62OE4SkzGAocCY+FexVTywCXxFOdy
+         Yy0A==
+X-Gm-Message-State: AOAM533xlkh5XXMj3Fa4pjhv6R02LLgx/xerXcmWqsr1WZDbdf0R1HUv
+        DEQcUx0KR9HC15qvV34tiaKKCPpKTs63gtEoa+w=
+X-Google-Smtp-Source: ABdhPJyGoOEcbR4tua9ckdH3foOFoLMHXerGVX6dN30Brn7sm6+Ack+IbhJZUBWQsnuTdY7GQWtl/j++S6dXnaexA2o=
+X-Received: by 2002:a05:6e02:5b1:b0:2c6:218d:fb38 with SMTP id
+ k17-20020a056e0205b100b002c6218dfb38mr9131997ils.266.1647837304712; Sun, 20
+ Mar 2022 21:35:04 -0700 (PDT)
+MIME-Version: 1.0
+Sender: hadjara.sawadou@gmail.com
+Received: by 2002:a05:6638:dd4:0:0:0:0 with HTTP; Sun, 20 Mar 2022 21:35:04
+ -0700 (PDT)
+From:   AZIZAT ABIATU KASIMU <kazizatabiatu@gmail.com>
+Date:   Sun, 20 Mar 2022 21:35:04 -0700
+X-Google-Sender-Auth: WDpioDsT-HRKdn2JXB6fwpmmwc0
+Message-ID: <CAKFm-kHEEtr8yHg4HQTyNFFNz1oduAY8q-4_r_8yp7x7yMsQoA@mail.gmail.com>
+Subject: compensation
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/macintosh/via-pmu-event.o: In function `via_pmu_event':
-via-pmu-event.c:(.text+0x44): undefined reference to `input_event'
-via-pmu-event.c:(.text+0x68): undefined reference to `input_event'
-via-pmu-event.c:(.text+0x94): undefined reference to `input_event'
-via-pmu-event.c:(.text+0xb8): undefined reference to `input_event'
-drivers/macintosh/via-pmu-event.o: In function `via_pmu_event_init':
-via-pmu-event.c:(.init.text+0x20): undefined reference to `input_allocate_device'
-via-pmu-event.c:(.init.text+0xc4): undefined reference to `input_register_device'
-via-pmu-event.c:(.init.text+0xd4): undefined reference to `input_free_device'
-make[1]: *** [Makefile:1155: vmlinux] Error 1
-make: *** [Makefile:350: __build_one_by_one] Error 2
+hello....
+this is to inform you that you have be   compensated with the sum of
+1.2 million dollars in your pass effort,and  the payment will be issue
+into ATM visa  card and send to you from the UBA BANK we need your
+address and your Whats App number
 
-Don't call into the input subsystem unless CONFIG_INPUT is built-in.
+Thanks
 
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
----
-This is equivalent to the patch I sent a couple of days ago. This one
-is slightly longer and adds a new symbol so that Kconfig logic can been
-used instead of Makefile logic in case reviewers prefer that.
----
- drivers/macintosh/Kconfig   | 5 +++++
- drivers/macintosh/Makefile  | 3 ++-
- drivers/macintosh/via-pmu.c | 2 ++
- 3 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
-index 5cdc361da37c..b9102f051bbb 100644
---- a/drivers/macintosh/Kconfig
-+++ b/drivers/macintosh/Kconfig
-@@ -67,6 +67,11 @@ config ADB_PMU
- 	  this device; you should do so if your machine is one of those
- 	  mentioned above.
- 
-+config ADB_PMU_EVENT
-+	bool
-+	depends on ADB_PMU && INPUT=y
-+	default y
-+
- config ADB_PMU_LED
- 	bool "Support for the Power/iBook front LED"
- 	depends on PPC_PMAC && ADB_PMU
-diff --git a/drivers/macintosh/Makefile b/drivers/macintosh/Makefile
-index 49819b1b6f20..712edcb3e0b0 100644
---- a/drivers/macintosh/Makefile
-+++ b/drivers/macintosh/Makefile
-@@ -12,7 +12,8 @@ obj-$(CONFIG_MAC_EMUMOUSEBTN)	+= mac_hid.o
- obj-$(CONFIG_INPUT_ADBHID)	+= adbhid.o
- obj-$(CONFIG_ANSLCD)		+= ans-lcd.o
- 
--obj-$(CONFIG_ADB_PMU)		+= via-pmu.o via-pmu-event.o
-+obj-$(CONFIG_ADB_PMU)		+= via-pmu.o
-+obj-$(CONFIG_ADB_PMU_EVENT)	+= via-pmu-event.o
- obj-$(CONFIG_ADB_PMU_LED)	+= via-pmu-led.o
- obj-$(CONFIG_PMAC_BACKLIGHT)	+= via-pmu-backlight.o
- obj-$(CONFIG_ADB_CUDA)		+= via-cuda.o
-diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
-index b1859e5340b3..022e2fd4397b 100644
---- a/drivers/macintosh/via-pmu.c
-+++ b/drivers/macintosh/via-pmu.c
-@@ -1468,12 +1468,14 @@ pmu_handle_data(unsigned char *data, int len)
- 		if (pmu_battery_count)
- 			query_battery_state();
- 		pmu_pass_intr(data, len);
-+#ifdef CONFIG_ADB_PMU_EVENT
- 		/* len == 6 is probably a bad check. But how do I
- 		 * know what PMU versions send what events here? */
- 		if (len == 6) {
- 			via_pmu_event(PMU_EVT_POWER, !!(data[1]&8));
- 			via_pmu_event(PMU_EVT_LID, data[1]&1);
- 		}
-+#endif
- 		break;
- 
- 	default:
--- 
-2.32.0
-
+Mrs AZIZAT ABIATU KASIMU

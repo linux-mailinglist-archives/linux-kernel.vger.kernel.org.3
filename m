@@ -2,147 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023A94E243B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D15394E243D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346241AbiCUKXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S1346288AbiCUKYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245187AbiCUKXb (ORCPT
+        with ESMTP id S1346203AbiCUKYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:23:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE0DA66EE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647858126; x=1679394126;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XQTkYCh9YcXqTv8VJW0SOk4W9PTAARN8gk3ZQyi7IxU=;
-  b=Fc1XtqK41aPIlvb2T+C8rorrbd9c6RJh4Ex9XtMExWGqYmYrLbuGfmRB
-   qHf0H1W+uSQXNBtGdboI08mrJP+624hvxvD0bAaKvUH5m9I3d7Ip9yTH6
-   HzvTyLxfFXxlfh3jEKNwqxdeiEmUlSJEVm9u/FyU/Rg7OR5lJ5eoJjsbT
-   9hIVx9AUjjLqMWhug7IRSfG2qOctBxpQ0ufY1PJDgHu6d4KBQso1HbODj
-   qvDJI+/MCPmoWHUe+MFEwnYIvSkzwonjATbdG3yPWsGqe7uhlun0WO0cI
-   +Rgnm16rsDbrIxUvMH0x9yAZgyHsvqE98lDLgRbMJUX3rPxP+EmZzv5PY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257235629"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="257235629"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:22:06 -0700
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="559805216"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.213.169]) ([10.254.213.169])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:22:02 -0700
-Message-ID: <7de05f5e-864f-175e-5604-29561d330884@linux.intel.com>
-Date:   Mon, 21 Mar 2022 18:22:00 +0800
+        Mon, 21 Mar 2022 06:24:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C4C2A6E02
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:22:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647858164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GPQzv37dAhef7bdDSgkOfAjjIg4+DPr87Bx3nKJPacc=;
+        b=QdKLB/HVs2QCAxfOGslQGZLZlGGlvq8CuXsdb5GvZ31gUvUF4ZRTiItuxE/3iJxqLLYmV1
+        2F79dxOkYw7kAoHnBHOUoSy9kEQQkz3JWqv25KDsCuz6I362ClEfqPHieNGsOOG/i8Xwu5
+        hTf2Z4Fvj9IlQ059zKQ2x+/lvmIkM5U=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-206-oMz7mrr0PweyFqo3K5_ycQ-1; Mon, 21 Mar 2022 06:22:43 -0400
+X-MC-Unique: oMz7mrr0PweyFqo3K5_ycQ-1
+Received: by mail-ed1-f69.google.com with SMTP id m21-20020a50d7d5000000b00418c7e4c2bbso8372021edj.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:22:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GPQzv37dAhef7bdDSgkOfAjjIg4+DPr87Bx3nKJPacc=;
+        b=pbjqA6Djm7tgSXldyb+a02hQlXuFT2GJWGfSivpIcQCraTXveSC6m4DaldHBW8CT40
+         ktWHDbAXE9JRWyrv3f5nlFHfSOPH7hjd/7zAUuMdJIlwz9div33tmbr6y53+bxT2m3gR
+         IcwTHS39SnzpWbNVJvDN7/Q7VlWBIr6pdvweGdveA0TinXWu5QFmfyaWRkdECp1m8LkM
+         uMxi8ivzhaoRaj/DCYf8LXf9FH0ZUnAiUDU9A2vUhUvqzUD1zLVzz9cDdkQlgFmEffIi
+         OgHgRC9zvumW9aJgdfCUg7hWmXvvFD2x4KUoFaCtBtVdSG3zCD2AUMISfgf1p5e3W0/w
+         W1Jw==
+X-Gm-Message-State: AOAM532vO6JPOQt3atyPFcnzYiyvChB0rEg9Dw3WW4ErEqpguXskAkLQ
+        lcbgQcOgA0dxDJSdm4Rr1Yrjlbb6dQfCsZIPmA8oA+rGPYaWC+D+Xlt6XF5mIDJt3o5r9DswXc8
+        r8FViwIVh5gxcAIlUzunKzhAn
+X-Received: by 2002:a17:907:7fa2:b0:6d8:2397:42 with SMTP id qk34-20020a1709077fa200b006d823970042mr19971346ejc.218.1647858161933;
+        Mon, 21 Mar 2022 03:22:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJze4rxpBzkKnbz8jgrINCyHaGWjCABbtCeMM2cXLikzEb0/ptGMWNAtYF+T6AALQ4pxdlPl6A==
+X-Received: by 2002:a17:907:7fa2:b0:6d8:2397:42 with SMTP id qk34-20020a1709077fa200b006d823970042mr19971329ejc.218.1647858161669;
+        Mon, 21 Mar 2022 03:22:41 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id z11-20020a50e68b000000b00412ec8b2180sm7655745edm.90.2022.03.21.03.22.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 03:22:41 -0700 (PDT)
+Message-ID: <2cf4e8b2-dfaa-dd7d-9c00-c7d58eeb367b@redhat.com>
+Date:   Mon, 21 Mar 2022 11:22:40 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC 01/11] iommu: Add pasid_bits field in struct dev_iommu
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] winmate-fm07-keys: Winmate FM07/FM07P buttons
 Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-2-baolu.lu@linux.intel.com>
- <BL1PR11MB527130BAAC3B4F48E4901F5D8C169@BL1PR11MB5271.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <BL1PR11MB527130BAAC3B4F48E4901F5D8C169@BL1PR11MB5271.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Daniel Beer <daniel.beer@tirotech.co.nz>,
+        Mark Gross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <6237f057.1c69fb81.1689.fec7@mx.google.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <6237f057.1c69fb81.1689.fec7@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/21 15:01, Tian, Kevin wrote:
->> From: Lu Baolu<baolu.lu@linux.intel.com>
->> Sent: Sunday, March 20, 2022 2:40 PM
->>
->> Use this field to save the pasid/ssid bits that a device is able to
->> support with its IOMMU hardware. It is a generic attribute of a device
->> and lifting it into the per-device dev_iommu struct makes it possible
->> to allocate a PASID for device without calls into the IOMMU drivers.
->> Any iommu driver which suports PASID related features should set this
->> field before features are enabled on the devices.
->>
->> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
->> ---
->>   include/linux/iommu.h                       | 1 +
->>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
->>   drivers/iommu/intel/iommu.c                 | 5 ++++-
->>   3 files changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
->> index 6ef2df258673..36f43af0af53 100644
->> --- a/include/linux/iommu.h
->> +++ b/include/linux/iommu.h
->> @@ -368,6 +368,7 @@ struct dev_iommu {
->>   	struct iommu_fwspec		*fwspec;
->>   	struct iommu_device		*iommu_dev;
->>   	void				*priv;
->> +	unsigned int			pasid_bits;
->>   };
->>
->>   int iommu_device_register(struct iommu_device *iommu,
->> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> index 627a3ed5ee8f..8e262210b5ad 100644
->> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> @@ -2812,6 +2812,7 @@ static int arm_smmu_dev_enable_feature(struct
->> device *dev,
->>   		master->iopf_enabled = true;
->>   		return 0;
->>   	case IOMMU_DEV_FEAT_SVA:
->> +		dev->iommu->pasid_bits = master->ssid_bits;
->>   		return arm_smmu_master_enable_sva(master);
->>   	default:
->>   		return -EINVAL;
->> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
->> index 6f7485c44a4b..c1b91bce1530 100644
->> --- a/drivers/iommu/intel/iommu.c
->> +++ b/drivers/iommu/intel/iommu.c
->> @@ -4587,8 +4587,11 @@ static struct iommu_device
->> *intel_iommu_probe_device(struct device *dev)
->>   			if (pasid_supported(iommu)) {
->>   				int features = pci_pasid_features(pdev);
->>
->> -				if (features >= 0)
->> +				if (features >= 0) {
->>   					info->pasid_supported = features | 1;
->> +					dev->iommu->pasid_bits =
->> +						fls(pci_max_pasids(pdev)) - 1;
-> Original intel_svm_alloc_pasid() covers both PCI and non-PCI devices:
-> 
-> 	ioasid_t max_pasid = dev_is_pci(dev) ?
-> 		pci_max_pasids(to_pci_dev(dev)) : intel_pasid_max_id;
-> 
-> though I'm not sure whether non-PCI SVA has been supported indeed, this
-> patch implies a functional change here.
-> 
+Hi Daniel,
 
-The info->pasid_supported is only set for PCI devices. So the status is
-that non-PCI SVA hasn't been supported. No functional change here from
-this point of view.
+On 3/21/22 04:16, Daniel Beer wrote:
+> Winmate FM07 and FM07P in-vehicle computers have a row of five buttons
+> below the display. This module adds an input device that delivers key
+> events when these buttons are pressed.
+> 
+> Signed-off-by: Daniel Beer <daniel.beer@tirotech.co.nz>
 
-Best regards,
-baolu
+Do you have control of the firmware on this device?
+
+If yes then IMHO it would be better to implement this in ACPI
+using the intel-hid fw API for this, see:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/platform/x86/intel/hid.c
+
+Basically you create an ACPI device with one of the HIDs from
+the driver. Then on button presses you do an ACPI notify on
+that device with a value of 0xc0 then the driver will call 
+the device's _DSM (device specific ACPI) method with a GUID
+of eeec56b3-4442-408f-a792-4edd4d758054 and an argument value
+of INTEL_HID_DSM_HDEM_FN and then you return the event-code
+for the button.
+
+You can remap the event-codes to different KEY_FOO values using
+/lib/udev/hwdb.d/60-keyboard.hwdb
+
+Regards,
+
+Hans
+
+
+
+
+> ---
+>  drivers/platform/x86/Kconfig             |   8 +
+>  drivers/platform/x86/Makefile            |   3 +
+>  drivers/platform/x86/winmate-fm07-keys.c | 184 +++++++++++++++++++++++
+>  3 files changed, 195 insertions(+)
+>  create mode 100644 drivers/platform/x86/winmate-fm07-keys.c
+> 
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 24deeeb29af2..62a5754d6ac9 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1138,6 +1138,14 @@ config SIEMENS_SIMATIC_IPC
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called simatic-ipc.
+>  
+> +config WINMATE_FM07_KEYS
+> +	tristate "Winmate FM07/FM07P front-panel keys driver"
+> +	depends on INPUT
+> +	help
+> +	  Winmate FM07 and FM07P in-vehicle computers have a row of five
+> +	  buttons below the display. This module adds an input device
+> +	  that delivers key events when these buttons are pressed.
+> +
+>  endif # X86_PLATFORM_DEVICES
+>  
+>  config PMC_ATOM
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+> index c12a9b044fd8..04e7c995b838 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -129,3 +129,6 @@ obj-$(CONFIG_PMC_ATOM)			+= pmc_atom.o
+>  
+>  # Siemens Simatic Industrial PCs
+>  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
+> +
+> +# Winmate
+> +obj-$(CONFIG_WINMATE_FM07_KEYS)		+= winmate-fm07-keys.o
+> diff --git a/drivers/platform/x86/winmate-fm07-keys.c b/drivers/platform/x86/winmate-fm07-keys.c
+> new file mode 100644
+> index 000000000000..3e75adb15444
+> --- /dev/null
+> +++ b/drivers/platform/x86/winmate-fm07-keys.c
+> @@ -0,0 +1,184 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// Driver for the Winmate FM07 front-panel keys
+> +//
+> +// Author: Daniel Beer <daniel.beer@tirotech.co.nz>
+> +
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/input.h>
+> +#include <linux/ioport.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/dmi.h>
+> +#include <linux/io.h>
+> +
+> +#define DRV_NAME	"winmate-fm07keys"
+> +
+> +#define PORT_CMD	0x6c
+> +#define PORT_DATA	0x68
+> +
+> +#define EC_ADDR_KEYS	0x3b
+> +#define EC_CMD_READ	0x80
+> +
+> +#define BASE_KEY	KEY_F13
+> +#define NUM_KEYS	5
+> +
+> +/* Typically we're done in fewer than 10 iterations */
+> +#define LOOP_TIMEOUT	1000
+> +
+> +static void fm07keys_poll(struct input_dev *input)
+> +{
+> +	uint8_t k;
+> +	int i;
+> +
+> +	/* Flush output buffer */
+> +	i = 0;
+> +	while (inb(PORT_CMD) & 0x01) {
+> +		if (++i >= LOOP_TIMEOUT)
+> +			goto timeout;
+> +		inb(PORT_DATA);
+> +	}
+> +
+> +	/* Send request and wait for write completion */
+> +	outb(EC_CMD_READ, PORT_CMD);
+> +	i = 0;
+> +	while (inb(PORT_CMD) & 0x02)
+> +		if (++i >= LOOP_TIMEOUT)
+> +			goto timeout;
+> +
+> +	outb(EC_ADDR_KEYS, PORT_DATA);
+> +	i = 0;
+> +	while (inb(PORT_CMD) & 0x02)
+> +		if (++i >= LOOP_TIMEOUT)
+> +			goto timeout;
+> +
+> +	/* Wait for data ready */
+> +	i = 0;
+> +	while (!(inb(PORT_CMD) & 0x01))
+> +		if (++i >= LOOP_TIMEOUT)
+> +			goto timeout;
+> +	k = inb(PORT_DATA);
+> +
+> +	/* Notify of new key states */
+> +	for (i = 0; i < NUM_KEYS; i++) {
+> +		input_report_key(input, BASE_KEY + i, (~k) & 1);
+> +		k >>= 1;
+> +	}
+> +
+> +	input_sync(input);
+> +	return;
+> +timeout:
+> +	dev_err(&input->dev, "timeout polling IO memory\n");
+> +}
+> +
+> +static int fm07keys_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct input_dev *input;
+> +	int ret;
+> +	int i;
+> +
+> +	input = devm_input_allocate_device(dev);
+> +	if (!input) {
+> +		dev_err(dev, "no memory for input device\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	if (!devm_request_region(dev, PORT_CMD, 1, "Winmate FM07 EC"))
+> +		return -EBUSY;
+> +	if (!devm_request_region(dev, PORT_DATA, 1, "Winmate FM07 EC"))
+> +		return -EBUSY;
+> +
+> +	input->name = "Winmate FM07 front-panel keys";
+> +	input->phys = DRV_NAME "/input0";
+> +
+> +	input->id.bustype = BUS_HOST;
+> +	input->id.vendor = 0x0001;
+> +	input->id.product = 0x0001;
+> +	input->id.version = 0x0100;
+> +
+> +	__set_bit(EV_KEY, input->evbit);
+> +
+> +	for (i = 0; i < NUM_KEYS; i++)
+> +		__set_bit(BASE_KEY + i, input->keybit);
+> +
+> +	ret = input_setup_polling(input, fm07keys_poll);
+> +	if (ret) {
+> +		dev_err(dev, "unable to set up polling, err=%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	input_set_poll_interval(input, 20);
+> +
+> +	ret = input_register_device(input);
+> +	if (ret) {
+> +		dev_err(dev, "unable to register polled device, err=%d\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	input_sync(input);
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver fm07keys_driver = {
+> +	.probe		= fm07keys_probe,
+> +	.driver		= {
+> +		.name	= DRV_NAME
+> +	},
+> +};
+> +
+> +/************************************************************************
+> + * Device instance for the FM07
+> + */
+> +
+> +static struct platform_device *dev;
+> +
+> +static const struct dmi_system_id fm07keys_dmi_table[] __initconst = {
+> +	{
+> +		/* FM07 and FM07P */
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Winmate Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "IP30"),
+> +		},
+> +	},
+> +};
+> +
+> +static int __init fm07keys_init(void)
+> +{
+> +	int ret;
+> +
+> +	if (!dmi_check_system(fm07keys_dmi_table))
+> +		return -ENODEV;
+> +
+> +	ret = platform_driver_register(&fm07keys_driver);
+> +	if (ret) {
+> +		pr_err("fm07keys: failed to register driver, err=%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	dev = platform_device_register_simple(DRV_NAME, -1, NULL, 0);
+> +	if (!dev) {
+> +		pr_err("fm07keys: failed to allocate device\n");
+> +		ret = -ENOMEM;
+> +		goto fail_alloc;
+> +	}
+> +
+> +	return 0;
+> +fail_alloc:
+> +	platform_driver_unregister(&fm07keys_driver);
+> +	return ret;
+> +}
+> +
+> +static void __exit fm07keys_exit(void)
+> +{
+> +	platform_driver_unregister(&fm07keys_driver);
+> +	platform_device_unregister(dev);
+> +}
+> +
+> +module_init(fm07keys_init);
+> +module_exit(fm07keys_exit);
+> +
+> +MODULE_AUTHOR("Daniel Beer <daniel.beer@tirotech.co.nz>");
+> +MODULE_DESCRIPTION("Winmate FM07 front-panel keys driver");
+> +MODULE_LICENSE("GPL v2");
+

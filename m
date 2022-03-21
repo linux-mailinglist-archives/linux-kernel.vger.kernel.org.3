@@ -2,201 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56604E25CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396A44E25D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346979AbiCUL6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S1346997AbiCUL6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347063AbiCUL6H (ORCPT
+        with ESMTP id S1347157AbiCUL60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:58:07 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0162AFB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:56:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TCR+j1Ocd/9UtER5NxgO4itfuze3BFYP9GvV2GxRaHOrV45HpckVP+InafwWHymoZ5KmkxkfblEGKMYN4FxkBcrkKwKuV3cP2PQKWSUc63104MqQLU9UzDyu6MQFhYTsKv69VWIJcH5wOCbELYAgDQ4YjstC4lcvTOdR64oVV7KIum3GbCqXEp6assx6rRZN/agBHv4ouwA92MUJ/0dc6tVNjGLYW/Sy3AHntb8L3tBuv1dRKq7CzNTdeon2oW4sSkNljEfY+5Zs8dJ2j/BnNelllpzg4Sn30efG3JE/UoaqfDYw3RK+kIdC/8EJ4Frt+nZj6D1wYy/FcmejjQuopQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/zxVAMbYtX6BVtlsv6yF81f46bQhKpLboVV5huRjNn8=;
- b=j5MIBGQCFRvEaCzb54pgfKSRyQgtM/+1CG45y7jR4DliVUqfHsMTXXx3KnDwLB/lFmJ9Z5kAWt1s1jZeEWl2rGS3fv6FqIFxd4X4UWeOjHa5tfCW+rE72CeLNzTFc3vFh0g926zapArnG2bLWeVNDX1yDC3aFGHm5x9b1dfbQ0Hx2ddg4KFTW6c+aTNQWmO6Wm/rB77U6LfOUEsiqIaBDPEC8yvJS19D7HjxgBbaB+V6jEukEP4sZKEDhcZP3Ty6eCc3CGLR64EsgU44uMCIyWdlN8lGIAPwRkF0WPhE/1sMhKk7fr99lnMpiaKriit4FXWv8mejhxVSPRUF+UUY+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/zxVAMbYtX6BVtlsv6yF81f46bQhKpLboVV5huRjNn8=;
- b=GpMmBagDJRlZ80AAWXTkqHvg6L/Thenm05rPUWGTuT24/WljrkIoQDrJ2zjJH1AYzFUwYMClyWG5L7Isae+xZpydOKk42PD2PhVxHJuCAuxfXnf/vVYqQxVNhLyz8DY3h5Be2RtSyxcCj/ZGohXfC3E1b8G/+drXSDO1C2S+a8wUb1XtrbLstNFwupXlAFXQRALmv8P926AYzfb0y3ey9/keSu25gc4Nejd5DWKC08zcTCQT7h2zXk1u64Ha7ax3PjydfvJETCIHCpUHBl8L/uo6Qb/S9wZ3Kz+90DlGL6N6k0YXAcWZ04lUH3JtN/mR7qny0QfxKx7ByomFn02gxA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BYAPR12MB2933.namprd12.prod.outlook.com (2603:10b6:a03:138::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Mon, 21 Mar
- 2022 11:56:38 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c%5]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
- 11:56:38 +0000
-Date:   Mon, 21 Mar 2022 08:56:37 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 04/11] iommu/vt-d: Add SVA domain support
-Message-ID: <20220321115637.GK11336@nvidia.com>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-5-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220320064030.2936936-5-baolu.lu@linux.intel.com>
-X-ClientProxiedBy: BL1PR13CA0438.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::23) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 21 Mar 2022 07:58:26 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3B812AE5;
+        Mon, 21 Mar 2022 04:56:59 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id s207so15902267oie.11;
+        Mon, 21 Mar 2022 04:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5T6DI7AkPvB4V935ogF76yCUBMnMQ3VXXVYsoMJqvMw=;
+        b=Ag0mh8SXiY6dYBBkZJk+JHK3tEx4LkqILNFbfSh8uJ3NFIMjnZnMwFlCSWmOng+m2o
+         hnft/50ssxVwXlDmvEBf3VklElT/v1v/8LJNKx+6jOp4dFlCDlT+1ceMGpu/K44v0dqS
+         Cx4WiLgi2zWOQB0Q1BC09qabC0IAXrNYC4+UQgfXRv8hxLfDG+7WKikJEGo3xfdAdCoy
+         dTbuI6VTI/pFOO2uGmDyK2U37P3BtdpJ8BN37UbhVnoBoPBFSRoNgA7ZIPRqSpP/ZR9r
+         Bcr9MLvEonQ6uPZoo8rCHndfovXUB8H0UuebkbKuC8oGAbwARQ6UjZuJ0GSIXDX2OXVJ
+         6E0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5T6DI7AkPvB4V935ogF76yCUBMnMQ3VXXVYsoMJqvMw=;
+        b=R739aLp+NoHg6d2kS4G9rZ/5vfUJ+AhQeff9BBLgLANuWdc8a4CEEZFTH73dUEofJl
+         y8iV3IZPoItCRkaSXu1f4HiEGQ9ztV0q97NY6n9o4KxYARjADpVCoQEd8oLX5sV4YHhM
+         kqui4GP8BbXRyWYRlkc5BOoesCuEDVZT3uryOv+1GZazpl6IAnf3gXmeHo9bIQ5Njsl2
+         jTMY6PJhMrOG3oNt6H60lw0q/WrviAdaVyAKKKsyhBPRdQxUhNpl+eyOOu56fZITOmRA
+         a2eb2kCTEdvywgblmSincZzgPZ/jiYVRan+KKI0hiXAULxrX913GWG+23nmwmZH8IFaa
+         9RVg==
+X-Gm-Message-State: AOAM530y+TwLFdJoYZMrS/pUL5n67uyP8WZXLo311s3t2OvrzyDyeTRc
+        O6xZmD53+dNv5Izdf6Hl7nwKi6S5gdPPaxgU6VM=
+X-Google-Smtp-Source: ABdhPJwipqjcwh11ikvZDaa6GIVJEmI4ufGlrxHAi7Hc8/978YGfWuDdNCj3n81bkSzxXxe9o9/cnjI9yfEGwTJwkCI=
+X-Received: by 2002:a05:6808:994:b0:2ee:f9f3:99ec with SMTP id
+ a20-20020a056808099400b002eef9f399ecmr10683387oic.98.1647863819270; Mon, 21
+ Mar 2022 04:56:59 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 918ce308-a607-4809-b6ce-08da0b31db00
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2933:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB2933D059857DE9E87265511CC2169@BYAPR12MB2933.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K/q1SMYV56Gw2UrdDl+dvFUGOp1EjiPCOz/Q5Yf7KwUtz2jOJ2AMa7YKQaJ3RAg8wg/S1sxyHvz21+0R3V9KGlM/x/de2dKG4vHJyyAxYJUOFzFvNkYSx+wnf/sdSZIQ9H35s1xPbt2KWW6u+dLqBfD8a4X9AbJBitNFTb0fRBxXTgmunc9ZRODUkoDJ5twbOTWE+JXa7daiRuyuqj3iuAMV0BbzyM04FIwqx+G2Zb6lAP6T4clp+brk5Zr4lbUZyfmzzXpuMPogBjadCHkOdfV4l1GonCc4X5VC1AlPMtwCLY0v5A5ZXbj7blAMxwYgV2/HSaP+AGgW2BCBEmX6y7DUtTw16ng2KKoB+h9bkWCi272Tygs7wHoe9FqZsUI0M/ZMRLHLBLRPL56JJww+vRwBs3sLPbGWhdgQiAy+h9jn3X0hc7Oa/4NT+C1z3Mm8Qx/3xXvlhuUSkuZrsYT7u/4WkIb9FfahEdVvkfupyGk0oV96vyeqslc02/KdfIE3fWpB78dU42Cl+56euuwyHBxh40XtnYZx5eQSE6YAdqmUIYjXgZaJLHYABc8kdqkNyIGo7zH3/b13QGh9a05K9tW0bUAgpCyaoDQUPl6P/BR6tYTmhF/UaQt3NCh4ZOuPq4RzGPqnNLgdjUn5baUOOw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(6512007)(1076003)(2616005)(26005)(6486002)(36756003)(2906002)(33656002)(86362001)(4326008)(316002)(38100700002)(8676002)(66556008)(66946007)(66476007)(8936002)(7416002)(5660300002)(6916009)(54906003)(83380400001)(6506007)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rxPonA27HdpcUQU0eVPHPo9Qr2xbGhz1byvP+mb/kTXEzxq7WFWChLfsx+M4?=
- =?us-ascii?Q?KjcsnVs/1gl0TsPfbUPj1Mm9CrieXwZXmFCF320X0IK0rmAMndqBHM8FqLqi?=
- =?us-ascii?Q?C3aKgbOlLKTCI/2DDGAYmat6KSBsumJkaY4SRh6eOWXCzW5BSK3HUI1DsWal?=
- =?us-ascii?Q?Fn5MDOyt2AyZRewCBN3zony1C6ggp6RJoUCSBeVcJz2uXxOEtntYtsY5efXj?=
- =?us-ascii?Q?HZewBFD+5CSU18MRHaJj/3KEADPHeD6hg7ibgVOhI+C7QaRSeGzviVLvv2Lu?=
- =?us-ascii?Q?XSwve5Dx9CoE/QdQBvee5WJAC/RYNLe2l4kOXCj+Z2HFdB/lgwMRAxLninu8?=
- =?us-ascii?Q?/ffnvHoEUZTmvFvzFG+xsBujM4rpjdsCg3c9wsUvCtNFiot/VbpuYaDmOAFe?=
- =?us-ascii?Q?FS03Iz9rMhdSdl8JT3d6Pr3pyqh/nW1+jChMoR60MvxitidGJGJ/hJt/9orT?=
- =?us-ascii?Q?9Wc3Nt+3xI9ke50gqpMMkDuir5yqB3L84qSnkBSk0EWqEYuPXUbA5ljfFz4s?=
- =?us-ascii?Q?fwSSP7VjU3Pnz45Vt6v2DlgBp6GWYen4V0VrITh27PsTWEOjzxA+G2Vk6MnJ?=
- =?us-ascii?Q?AKpqusZlNLuLsw7YgmBZm3DMs+C8lspDALGhM3nVQKx+jEvQIezNS4gVd4Al?=
- =?us-ascii?Q?sWKsOcad6rTPDLJg5SEmxUuro01nHDwToLr4NYd0XKazS8fJIr2ZuBkrRWge?=
- =?us-ascii?Q?W1Ws4/TrKFQ0Wj1/KXxVaqhE2T6p0t7eTZnZ0jM/v6SvJ+oGGkPg1K1BKMMz?=
- =?us-ascii?Q?0fXRU1mpSs3BjKeY8S+3ibadN50kGH08cd215u0EgLlWZ3V02+q+8217ewpq?=
- =?us-ascii?Q?C2Sykie5VhbsDSAdSSR9cPyYF9renXHsCj0jW2aTsWTKQW0PbvojHq03V54X?=
- =?us-ascii?Q?btbUUJCYGkAIvCQHucHLgIwvEWwcEdeMGoDfH0X3yKgiOdTQ+pMLl1G9RXoT?=
- =?us-ascii?Q?FNbu9k5qxAiImb0pI3kpKKETP7o2Yp/ffRlj/abaOOisCaxSfOBRgIYZr2Mt?=
- =?us-ascii?Q?I6HrSoxIh5hv2ej//qWZwdjBjq2c45r+KdLCHyh95MwXXi0iuXTlBaDyueKN?=
- =?us-ascii?Q?UVJDc87ZzSwEDf14efKOSpOQp7AgVLN/DqdEvbLpP9vEsnfz0aW0vOowyqYm?=
- =?us-ascii?Q?u+ZbHUGBmqL/6I6lDRBwbJDhwOym+VqkSNxnEA+k4T5LDiAv6ilTcKisNocY?=
- =?us-ascii?Q?0acf3WWPb+XVIX9HUqsl8h3WSlc+z9wNPlEAtYNfzLx8fTvZ4j2QMyQh/VBP?=
- =?us-ascii?Q?Jz1ZJsk7nRciQMknobHSG28r861fFhoytRPX8vLsuPj3nZCfBulg/0EghFs1?=
- =?us-ascii?Q?nicF80LDMy6iV3UgqJqRh1We+9RRDR06td5B3Z/1gzDtJCob3CYYikKjhQ6G?=
- =?us-ascii?Q?gjxdBVri6WsWj3IKi/2r8GfKEdJsZUQxSO7MbWL8avr6hhRWozVPSkKbasyK?=
- =?us-ascii?Q?qfRhLH42tc6pduYs5daEjolr1HV/o99m?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 918ce308-a607-4809-b6ce-08da0b31db00
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 11:56:38.3468
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t0Tg3xJMojq+2g2fTSrG0mBavLmz1MI4GhPA5qiv2AAFftV5DnXqu8QjiwWrG7AO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2933
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220319001635.4097742-1-khazhy@google.com> <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
+ <CAOQ4uxgTJdcO-xZbtTSUkjD2g0vSHr=PLFc6-T6RgO0u5DS=0g@mail.gmail.com> <20220321112310.vpr7oxro2xkz5llh@quack3.lan>
+In-Reply-To: <20220321112310.vpr7oxro2xkz5llh@quack3.lan>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 21 Mar 2022 13:56:47 +0200
+Message-ID: <CAOQ4uxiLXqmAC=769ufLA2dKKfHxm=c_8B0N2y4c-aZ5Qci2hg@mail.gmail.com>
+Subject: Re: [PATCH RFC] nfsd: avoid recursive locking through fsnotify
+To:     Jan Kara <jack@suse.cz>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "khazhy@google.com" <khazhy@google.com>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 02:40:23PM +0800, Lu Baolu wrote:
-> Add support for SVA domain allocation and provide an SVA-specific
-> iommu_domain_ops.
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->  include/linux/intel-iommu.h |  1 +
->  drivers/iommu/intel/iommu.c | 12 ++++++++++++
->  drivers/iommu/intel/svm.c   | 34 ++++++++++++++++++++++++++++++++++
->  3 files changed, 47 insertions(+)
-> 
-> diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-> index 2f9891cb3d00..c14283137fb5 100644
-> +++ b/include/linux/intel-iommu.h
-> @@ -744,6 +744,7 @@ void intel_svm_unbind(struct iommu_sva *handle);
->  u32 intel_svm_get_pasid(struct iommu_sva *handle);
->  int intel_svm_page_response(struct device *dev, struct iommu_fault_event *evt,
->  			    struct iommu_page_response *msg);
-> +extern const struct iommu_domain_ops intel_svm_domain_ops;
->  
->  struct intel_svm_dev {
->  	struct list_head list;
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index c1b91bce1530..d55dca3eacf8 100644
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -4318,6 +4318,18 @@ static struct iommu_domain *intel_iommu_domain_alloc(unsigned type)
->  		return domain;
->  	case IOMMU_DOMAIN_IDENTITY:
->  		return &si_domain->domain;
-> +#ifdef CONFIG_INTEL_IOMMU_SVM
-> +	case IOMMU_DOMAIN_SVA:
-> +		dmar_domain = alloc_domain(type);
-> +		if (!dmar_domain) {
-> +			pr_err("Can't allocate sva domain\n");
+On Mon, Mar 21, 2022 at 1:23 PM Jan Kara <jack@suse.cz> wrote:
+>
+> On Sat 19-03-22 11:36:13, Amir Goldstein wrote:
+> > On Sat, Mar 19, 2022 at 9:02 AM Trond Myklebust <trondmy@hammerspace.com> wrote:
+> > >
+> > > On Fri, 2022-03-18 at 17:16 -0700, Khazhismel Kumykov wrote:
+> > > > fsnotify_add_inode_mark may allocate with GFP_KERNEL, which may
+> > > > result
+> > > > in recursing back into nfsd, resulting in deadlock. See below stack.
+> > > >
+> > > > nfsd            D    0 1591536      2 0x80004080
+> > > > Call Trace:
+> > > >  __schedule+0x497/0x630
+> > > >  schedule+0x67/0x90
+> > > >  schedule_preempt_disabled+0xe/0x10
+> > > >  __mutex_lock+0x347/0x4b0
+> > > >  fsnotify_destroy_mark+0x22/0xa0
+> > > >  nfsd_file_free+0x79/0xd0 [nfsd]
+> > > >  nfsd_file_put_noref+0x7c/0x90 [nfsd]
+> > > >  nfsd_file_lru_dispose+0x6d/0xa0 [nfsd]
+> > > >  nfsd_file_lru_scan+0x57/0x80 [nfsd]
+> > > >  do_shrink_slab+0x1f2/0x330
+> > > >  shrink_slab+0x244/0x2f0
+> > > >  shrink_node+0xd7/0x490
+> > > >  do_try_to_free_pages+0x12f/0x3b0
+> > > >  try_to_free_pages+0x43f/0x540
+> > > >  __alloc_pages_slowpath+0x6ab/0x11c0
+> > > >  __alloc_pages_nodemask+0x274/0x2c0
+> > > >  alloc_slab_page+0x32/0x2e0
+> > > >  new_slab+0xa6/0x8b0
+> > > >  ___slab_alloc+0x34b/0x520
+> > > >  kmem_cache_alloc+0x1c4/0x250
+> > > >  fsnotify_add_mark_locked+0x18d/0x4c0
+> > > >  fsnotify_add_mark+0x48/0x70
+> > > >  nfsd_file_acquire+0x570/0x6f0 [nfsd]
+> > > >  nfsd_read+0xa7/0x1c0 [nfsd]
+> > > >  nfsd3_proc_read+0xc1/0x110 [nfsd]
+> > > >  nfsd_dispatch+0xf7/0x240 [nfsd]
+> > > >  svc_process_common+0x2f4/0x610 [sunrpc]
+> > > >  svc_process+0xf9/0x110 [sunrpc]
+> > > >  nfsd+0x10e/0x180 [nfsd]
+> > > >  kthread+0x130/0x140
+> > > >  ret_from_fork+0x35/0x40
+> > > >
+> > > > Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+> > > > ---
+> > > >  fs/nfsd/filecache.c | 4 ++++
+> > > >  1 file changed, 4 insertions(+)
+> > > >
+> > > > Marking this RFC since I haven't actually had a chance to test this,
+> > > > we
+> > > > we're seeing this deadlock for some customers.
+> > > >
+> > > > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
+> > > > index fdf89fcf1a0c..a14760f9b486 100644
+> > > > --- a/fs/nfsd/filecache.c
+> > > > +++ b/fs/nfsd/filecache.c
+> > > > @@ -121,6 +121,7 @@ nfsd_file_mark_find_or_create(struct nfsd_file
+> > > > *nf)
+> > > >         struct fsnotify_mark    *mark;
+> > > >         struct nfsd_file_mark   *nfm = NULL, *new;
+> > > >         struct inode *inode = nf->nf_inode;
+> > > > +       unsigned int pflags;
+> > > >
+> > > >         do {
+> > > >                 mutex_lock(&nfsd_file_fsnotify_group->mark_mutex);
+> > > > @@ -149,7 +150,10 @@ nfsd_file_mark_find_or_create(struct nfsd_file
+> > > > *nf)
+> > > >                 new->nfm_mark.mask = FS_ATTRIB|FS_DELETE_SELF;
+> > > >                 refcount_set(&new->nfm_ref, 1);
+> > > >
+> > > > +               /* fsnotify allocates, avoid recursion back into nfsd
+> > > > */
+> > > > +               pflags = memalloc_nofs_save();
+> > > >                 err = fsnotify_add_inode_mark(&new->nfm_mark, inode,
+> > > > 0);
+> > > > +               memalloc_nofs_restore(pflags);
+> > > >
+> > > >                 /*
+> > > >                  * If the add was successful, then return the object.
+> > >
+> > > Isn't that stack trace showing a slab direct reclaim, and not a
+> > > filesystem writeback situation?
+> > >
+> > > Does memalloc_nofs_save()/restore() really fix this problem? It seems
+> > > to me that it cannot, particularly since knfsd is not a filesystem, and
+> > > so does not ever handle writeback of dirty pages.
+> > >
+> >
+> > Maybe NOFS throttles direct reclaims to the point that the problem is
+> > harder to hit?
+> >
+> > This report came in at good timing for me.
+> >
+> > It demonstrates an issue I did not predict for "volatile"' fanotify marks [1].
+> > As far as I can tell, nfsd filecache is currently the only fsnotify backend that
+> > frees fsnotify marks in memory shrinker. "volatile" fanotify marks would also
+> > be evictable in that way, so they would expose fanotify to this deadlock.
+> >
+> > For the short term, maybe nfsd filecache can avoid the problem by checking
+> > mutex_is_locked(&nfsd_file_fsnotify_group->mark_mutex) and abort the
+> > shrinker. I wonder if there is a place for a helper mutex_is_locked_by_me()?
+> >
+> > Jan,
+> >
+> > A relatively simple fix would be to allocate fsnotify_mark_connector in
+> > fsnotify_add_mark() and free it, if a connector already exists for the object.
+> > I don't think there is a good reason to optimize away this allocation
+> > for the case of a non-first group to set a mark on an object?
+>
+> Indeed, nasty. Volatile marks will add group->mark_mutex into a set of
+> locks grabbed during inode slab reclaim. So any allocation under
+> group->mark_mutex has to be GFP_NOFS now. This is not just about connector
+> allocations but also mark allocations for fanotify. Moving allocations from
+> under mark_mutex is also possible solution but passing preallocated memory
+> around is kind of ugly as well.
 
-Don't put random pr_err's/etc in drivers. At least try to use dev_err
+Yes, kind of, here is how it looks:
+https://github.com/amir73il/linux/commit/643bb6b9f664f70f68ea0393a06338673c4966b3
+https://github.com/amir73il/linux/commit/66f27fc99e46b12f1078e8e2915793040ce50ee7
 
-> +			return NULL;
-> +		}
-> +		domain = &dmar_domain->domain;
-> +		domain->ops = &intel_svm_domain_ops;
-> +
-> +		return domain;
-> +#endif /* CONFIG_INTEL_IOMMU_SVM */
->  	default:
->  		return NULL;
->  	}
-> diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-> index ee5ecde5b318..b9f4dd7057d1 100644
-> +++ b/drivers/iommu/intel/svm.c
-> @@ -932,3 +932,37 @@ int intel_svm_page_response(struct device *dev,
->  	mutex_unlock(&pasid_mutex);
->  	return ret;
->  }
-> +
-> +static int intel_svm_attach_dev_pasid(struct iommu_domain *domain,
-> +				      struct device *dev, ioasid_t pasid)
-> +{
-> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
-> +	struct mm_struct *mm = domain->sva_cookie;
-> +	struct intel_iommu *iommu = info->iommu;
-> +	struct iommu_sva *sva;
-> +
-> +	mutex_lock(&pasid_mutex);
-> +	sva = intel_svm_bind_mm(iommu, dev, mm);
-> +	mutex_unlock(&pasid_mutex);
-> +
-> +	return IS_ERR_OR_NULL(sva);
+> So the cleanest solution I currently see is
+> to come up with helpers like "fsnotify_lock_group() &
+> fsnotify_unlock_group()" which will lock/unlock mark_mutex and also do
+> memalloc_nofs_save / restore magic.
+>
 
-Never use IS_ERR_OR_NULL(), fix whatever is wrong in intel_svm_bind_mm()
-that it can return NULL on failure.
+Sounds good. Won't this cause a regression - more failures to setup new mark
+under memory pressure?
 
-> +const struct iommu_domain_ops intel_svm_domain_ops = {
-> +	.attach_dev_pasid	= intel_svm_attach_dev_pasid,
-> +	.detach_dev_pasid	= intel_svm_detach_dev_pasid,
+Should we maintain a flag in the group FSNOTIFY_GROUP_SHRINKABLE?
+and set NOFS state only in that case, so at least we don't cause regression
+for existing applications?
 
-Lets have consistent language either this is called SVA or SVM but not
-both.
-
-Jason
+Thanks,
+Amir.

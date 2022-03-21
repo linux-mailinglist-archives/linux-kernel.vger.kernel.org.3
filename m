@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC50B4E236F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A4E4E2370
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345938AbiCUJiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
+        id S1345945AbiCUJiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345933AbiCUJh6 (ORCPT
+        with ESMTP id S1345957AbiCUJiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:37:58 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791E85FF29
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:36:33 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id j15so14505597eje.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ogrhRXR+AVdt3mfgPz8CUVBxI7B5+eAIXFaggH9T3eY=;
-        b=JTdeK1AYQxPLk0QC4MPXc65N/+9KLmUz6bikgdSXHUYI1p9r2xyaAC87MAdfYFwnjX
-         SBcIYVRVP+XrwcjVGS++LI/xdkXEGR/RfOz7lYc9NYGt5ThG2cWE7ZZrlTctS0fsSm4n
-         iHHZnYjhB4CoSF55F68VVh93gpvkr+4GcL2jw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ogrhRXR+AVdt3mfgPz8CUVBxI7B5+eAIXFaggH9T3eY=;
-        b=Wilq5LbVJcbD5Lulct5agYnDWWY86GED/pGHCTwCpttgyAk8kVQp/lVZ0WCKjG88MC
-         1dHz+mvCB62+aFXArVgcSgszd3eogTollFqsKJl4nSQOOO2NLKavPwFs3llQeOydBjip
-         VmkMJTWqzix7AV700rRDLQJsO7KphzrP7LGx4wPjh+asjntBeoWmoHVoVlb8oU4evqmh
-         60bloYAOEBNK815XmjE+79SZyeNb3rzXmgesA5i0NGTgEsh/sVOExBQCeBulNGEYf9Rp
-         NG0fLJnCZ60UrCvuwQCOsYSYa6YAkeDOKcsmyN4okBLlO9ZsvmDUgvfET3swCekxHAXV
-         +p5w==
-X-Gm-Message-State: AOAM531ONKAptr+W7rF0C5jmasYp4fMGki2utsta7Q4bmUCYCyLnrHIb
-        8SsxPKNKBgI9ZH8rBbVObz3OD4Cf6IFTwlnTzSagqw==
-X-Google-Smtp-Source: ABdhPJw/xfXVim0fva3bC9a3lXSZs/6Jqd/qOjzzPhc6BW9eY8sIeleI+X0vFnNDwscOC3H/fugKA3B7QsQkWDW0q+M=
-X-Received: by 2002:a17:906:c259:b0:6ce:a165:cd0d with SMTP id
- bl25-20020a170906c25900b006cea165cd0dmr19443119ejb.270.1647855392023; Mon, 21
- Mar 2022 02:36:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220318171405.2728855-1-cmllamas@google.com> <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
- <Yjfd1+k83U+meSbi@google.com> <CAJfpeguoFHgG9Jm3hVqWnta3DB6toPRp_vD3EK74y90Aj3w+8Q@mail.gmail.com>
- <Yjg8TVQZ6TeTSQxj@kroah.com>
-In-Reply-To: <Yjg8TVQZ6TeTSQxj@kroah.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 21 Mar 2022 10:36:20 +0100
-Message-ID: <CAJfpegsj94__xdBe8aH+VFdY5fJg515vG0XY-Qu0RXwEAUhM3A@mail.gmail.com>
-Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Carlos Llamas <cmllamas@google.com>,
-        Alessio Balsini <balsini@android.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel-team <kernel-team@android.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+        Mon, 21 Mar 2022 05:38:05 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72C963BED
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:36:38 -0700 (PDT)
+X-UUID: ef0d69968e6348248e783b0787ce3457-20220321
+X-UUID: ef0d69968e6348248e783b0787ce3457-20220321
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 625806720; Mon, 21 Mar 2022 17:36:33 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 21 Mar 2022 17:36:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Mar 2022 17:36:32 +0800
+Message-ID: <0e4344e084e3306cd265580883c0093c7cb40d45.camel@mediatek.com>
+Subject: Re: [PATCH v3, 1/4] drm/mediatek: Adjust the timing of mipi signal
+ from LP00 to LP11
+From:   CK Hu <ck.hu@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>
+CC:     <jitao.shi@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <rex-bc.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Mon, 21 Mar 2022 17:36:32 +0800
+In-Reply-To: <1647503611-13144-2-git-send-email-xinlei.lee@mediatek.com>
+References: <1647503611-13144-1-git-send-email-xinlei.lee@mediatek.com>
+         <1647503611-13144-2-git-send-email-xinlei.lee@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 09:50, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Mar 21, 2022 at 09:40:56AM +0100, Miklos Szeredi wrote:
-> > On Mon, 21 Mar 2022 at 03:07, Carlos Llamas <cmllamas@google.com> wrote:
-> > >
-> > > On Fri, Mar 18, 2022 at 08:24:55PM +0100, Miklos Szeredi wrote:
-> > > > On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
-> > > > >
-> > > > > Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
-> > > > > <linux/types.h> instead of 'uint32_t' and similar. This patch changes
-> > > > > all the definitions in this header to use the correct type. Previous
-> > > > > discussion of this topic can be found here:
-> > > > >
-> > > > >   https://lkml.org/lkml/2019/6/5/18
-> > > >
-> > > > This is effectively a revert of these two commits:
-> > > >
-> > > > 4c82456eeb4d ("fuse: fix type definitions in uapi header")
-> > > > 7e98d53086d1 ("Synchronize fuse header with one used in library")
-> > > >
-> > > > And so we've gone full circle and back to having to modify the header
-> > > > to be usable in the cross platform library...
-> > > >
-> > > > And also made lots of churn for what reason exactly?
-> > >
-> > > There are currently only two uapi headers making use of C99 types and
-> > > one is <linux/fuse.h>. This approach results in different typedefs being
-> > > selected when compiling for userspace vs the kernel.
-> >
-> > Why is this a problem if the size of the resulting types is the same?
->
-> uint* are not "valid" variable types to cross the user/kernel boundary.
-> They are part of the userspace variable type namespace, not the kernel
-> variable type namespace.  Linus wrong a long post about this somewhere
-> in the past, I'm sure someone can dig it up...
+Hi, Xinlei:
 
-Looking forward to the details.  I cannot imagine why this would matter...
+On Thu, 2022-03-17 at 15:53 +0800, xinlei.lee@mediatek.com wrote:
+> From: Jitao Shi <jitao.shi@mediatek.com>
+> 
+> Old sequence:
+> 1. Pull the MIPI signal high
+> 2. Delay & Dsi_reset
+> 3. Set the dsi timing register
+> 4. dsi clk & lanes leave ulp mode and enter hs mode
+> 
+> New sequence:
+> 1. Set the dsi timing register
+> 2. Pull the MIPI signal high
+> 3. Delay & Dsi_reset
+> 4. dsi clk & lanes leave ulp mode and enter hs mode
+> 
+> In the new sequence 2 & 3 & 4 will be moved to dsi_enbale in later
+> patch.
 
-Thanks,
-Miklos
+I think there would be one patch in 5.9 make the wrong sequence, so add
+'Fixes' tag to indicate which patch make the wrong sequence. Use the
+term correct/wrong instead old/new sequence.
+
+I still do not understand what is the sequence after apply this patch?
+
+Does the sequence is this after apply this patch?
+1. Set the dsi timing register
+2. Pull the MIPI signal high
+3. Delay & Dsi_reset
+4. dsi clk & lanes leave ulp mode and enter hs mode
+
+Regards,
+CK
+
+> 
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index ccb0511b9cd5..262c027d8c2f 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -649,14 +649,14 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
+>  	mtk_dsi_reset_engine(dsi);
+>  	mtk_dsi_phy_timconfig(dsi);
+>  
+> -	mtk_dsi_rxtx_control(dsi);
+> -	usleep_range(30, 100);
+> -	mtk_dsi_reset_dphy(dsi);
+>  	mtk_dsi_ps_control_vact(dsi);
+>  	mtk_dsi_set_vm_cmd(dsi);
+>  	mtk_dsi_config_vdo_timing(dsi);
+>  	mtk_dsi_set_interrupt_enable(dsi);
+>  
+> +	mtk_dsi_rxtx_control(dsi);
+> +	usleep_range(30, 100);
+> +	mtk_dsi_reset_dphy(dsi);
+>  	mtk_dsi_clk_ulp_mode_leave(dsi);
+>  	mtk_dsi_lane0_ulp_mode_leave(dsi);
+>  	mtk_dsi_clk_hs_mode(dsi, 0);
+

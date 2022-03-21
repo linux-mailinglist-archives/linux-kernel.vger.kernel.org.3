@@ -2,169 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761724E3483
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AA84E348E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbiCUXhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S233188AbiCUXjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbiCUXhl (ORCPT
+        with ESMTP id S232954AbiCUXjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:37:41 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B996C652CF
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:36:14 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id ke15so3688806qvb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Esj8o9nsjuh5KPQ5hXCUb2zs+6YmCefjtX0+u66UI9o=;
-        b=F/at2R4LwhoAx19uKnKKOl2DgHAPnyUU4WDTq1053CVsGlTsVwZ9UKeomFW4la8cur
-         6FhVYa+IbfYwYuQDSZNJWEdERG1fBhndbqhZ3mnB+03I3Q6gPkTPOvQyFtJqTy9TKqfM
-         izx3nGD2VQm1QC36lxSnPSLe3OMY5VbeMn+qiGi4fD7ITtxH2JDJ4k67IV8v+/z728ZA
-         Bm4vTw3z5gNEWplJl3Eofh7RLo2jEz3JstnxyvwWQIbwJURZau3M7C1MOth8lz3MlDQz
-         xo/CJfifHkK70RMk+blQUWVXT3EW0jlRWVIp1MoYyg9wNDoKMl6YPWOSdYx+wtimrGM3
-         x36w==
+        Mon, 21 Mar 2022 19:39:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0C1E55223
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647905870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzBrE/xKFER9oTs4R1yQOb5Smm6sapxjMw0ldJAMeCY=;
+        b=T1dAliWKC34QTxLnR2BYowDIUdXii+N37JDLow52nyWxjHs69nHTUD8fb+5OHT0+ZeBHg0
+        KrW8oeR0wrr5SmsT5CjpFEiYEzneoQW8hBucat9mTYJKMvcidx+ySEtTe3fljPDugDKKih
+        jm/pIhJg9r+VtvMDk4xHcg43+lIrV2c=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-227-7EF_3DE7NZ2PQtZ-1A5dXg-1; Mon, 21 Mar 2022 19:37:49 -0400
+X-MC-Unique: 7EF_3DE7NZ2PQtZ-1A5dXg-1
+Received: by mail-yb1-f197.google.com with SMTP id h83-20020a25d056000000b0063380d246ceso13285550ybg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:37:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Esj8o9nsjuh5KPQ5hXCUb2zs+6YmCefjtX0+u66UI9o=;
-        b=nz1B4HDCK7kf80PhcJLA7/C6ax4EnVhHXMjgRFXz7AewokiOALi9a4enFeaw9/DXLU
-         PDaMlHE3EF46fzzouCLhvEX5xplyTgg2z6vGO7n1kTer3icm7Db/5C199Z51apYEZESx
-         qARvOfFTxJyjVf50l4AMbWFuoNYe1uBK9wmdYmYvqBWKWaG3mPuvHGcP/MLfpuc0pIIs
-         UaymRbx0H6zr/BNMnGjCZ85h89Q8+5zRVZlrIKbIwHOX4hvJ/PrtYI3UjzwwZCedPNiU
-         xFCOT6e8jrRq6BuCszxVGpTBd3Fjc9Is8lMN9dPMoHcYkVBLnsp7GCU2HnQRHoPAkHqj
-         PgNg==
-X-Gm-Message-State: AOAM531iLpfG3NBnu3TCpKxhRb4RUQ665Ll53B0zI4R6C1IUEBogxY/w
-        PNwPAn8V/Nm6nSeipqNyYvwpgIh0j3/PbDCezg3yhQ==
-X-Google-Smtp-Source: ABdhPJzp9q6YIopEqv4huS1Pfc19Gwk3PoMCGodNY+SpuFOJFPctmrDLWuUlVDhfyldEmoOZPKPu4YmLDRecjrst1rg=
-X-Received: by 2002:a05:6214:10e8:b0:42c:184a:7b9 with SMTP id
- q8-20020a05621410e800b0042c184a07b9mr18075046qvt.48.1647905773690; Mon, 21
- Mar 2022 16:36:13 -0700 (PDT)
+        bh=uzBrE/xKFER9oTs4R1yQOb5Smm6sapxjMw0ldJAMeCY=;
+        b=0X5G4KfVvDMoksS/zYgaoZpWMAimla6cINUHwMQU4xXeVUzkUWp2RCfMraptwliJdf
+         Ocn3AclGh5gQhQB9djv0m7AKqzTJduDDcN2uKWqtkkg9FvmCpzpKx/yLZdTxfT27Sq7X
+         mPvLOGE44TXV13QAnjwVyAmfBtw+RbWTQ+RJZMllj5M1sx0/zrMDEXZ3jp73uBlPQlDH
+         YskaFScIfY1YteJNcJCrNaDbt7ZXDQ9Qt7WD1fZf0jhePvfKjYBcwLdzS9tOz387kFyP
+         SitjUPq8jYw1+WXQiKq4l44zKjUOWRJCJ7OHytSxiJL6aJ1CjKisa3V6Syq2LqEMgML6
+         vEdw==
+X-Gm-Message-State: AOAM533Yj8PqURyH7fbKe4aAwKxF7VGACPR5YpnJSrcf/VMHTw8fuIH5
+        82pExU1QNHGalt7TJ7A8hXN9pLrxXcliZMNysZ3HMZduhkb5+SyHbwmdJszzDyTsd965qBthkzs
+        ClvAhttBNjsZA23cFrw8qi91y/BAXqPDo5AJwlw4w
+X-Received: by 2002:a81:5bc5:0:b0:2d6:5659:73c2 with SMTP id p188-20020a815bc5000000b002d6565973c2mr26915869ywb.121.1647905868547;
+        Mon, 21 Mar 2022 16:37:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyZDeclsfrCetATc8VAEyW1jquLTzrNR9LFM3udw/x+j0o/Or8O7TRRVLhT5BZmuQvKh/HJDxK24979jGo9y6w=
+X-Received: by 2002:a81:5bc5:0:b0:2d6:5659:73c2 with SMTP id
+ p188-20020a815bc5000000b002d6565973c2mr26915853ywb.121.1647905868276; Mon, 21
+ Mar 2022 16:37:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220319001635.4097742-1-khazhy@google.com> <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
- <CAOQ4uxgTJdcO-xZbtTSUkjD2g0vSHr=PLFc6-T6RgO0u5DS=0g@mail.gmail.com>
- <20220321112310.vpr7oxro2xkz5llh@quack3.lan> <31f7822e84583235d84b8c7be24360c46c7450f7.camel@hammerspace.com>
-In-Reply-To: <31f7822e84583235d84b8c7be24360c46c7450f7.camel@hammerspace.com>
-From:   Khazhy Kumykov <khazhy@google.com>
-Date:   Mon, 21 Mar 2022 16:36:02 -0700
-Message-ID: <CACGdZY+3=Xraszi47K2e-Bx=3-d45=qKOgMrV3D1U3dbPjBTmg@mail.gmail.com>
-Subject: Re: [PATCH RFC] nfsd: avoid recursive locking through fsnotify
-To:     Trond Myklebust <trondmy@hammerspace.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "jack@suse.cz" <jack@suse.cz>,
-        "amir73il@gmail.com" <amir73il@gmail.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004a418705dac2f695"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAE4VaGDZr_4wzRn2___eDYRtmdPaGGJdzu_LCSkJYuY9BEO3cw@mail.gmail.com>
+In-Reply-To: <CAE4VaGDZr_4wzRn2___eDYRtmdPaGGJdzu_LCSkJYuY9BEO3cw@mail.gmail.com>
+From:   Jirka Hladky <jhladky@redhat.com>
+Date:   Tue, 22 Mar 2022 00:37:37 +0100
+Message-ID: <CAE4VaGDKXnQJKdayeNsAD5RcqsKu5XG2UeweLvgZoFO-pn-t9Q@mail.gmail.com>
+Subject: Re: PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" starting from 5.17 on
+ dual socket Intel Xeon Gold servers
+To:     stable@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004a418705dac2f695
-Content-Type: text/plain; charset="UTF-8"
+Cc: regressions@lists.linux.dev stable@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 3:50 PM Trond Myklebust <trondmy@hammerspace.com> wrote:
+On Tue, Mar 22, 2022 at 12:29 AM Jirka Hladky <jhladky@redhat.com> wrote:
 >
-> As has already been reported, the problem was fixed in Linux 5.5 by the
-> garbage collector rewrite, and so this is no longer an issue.
+> Starting from kernel 5.17 (tested with rc2, rc4, rc7, rc8) we
+> experience kernel oops on Intel Xeon Gold dual-socket servers (2x Xeon
+> Gold 6126 CPU)
 >
-9542e6a643fc ("nfsd: Containerise filecache laundrette"), 36ebbdb96b69
-("nfsd: cleanup nfsd_file_lru_dispose()") apply cleanly to 5.4.y for
-me, which is still LTS. Since this should fix a real deadlock, would
-it be appropriate to include them for the 5.4 stable?
+> Bellow is a backtrace and the dmesg log.
+>
+> I have trouble creating a simple reproducer - it happens at random
+> places when preparing the NAS benchmark to be run. The script creates
+> a bunch of directories, compiles the benchmark a start trial runs.
+>
+> Could you please help to narrow down the problem?
+>
+> Reports bellow were created with kernel 5.17 rc8 and with
+> echo 1 > /proc/sys/kernel/panic_on_oops
+> setting.
+>
+> crash> sys
+>       KERNEL: /usr/lib/debug/lib/modules/5.17.0-0.rc8.123.fc37.x86_64/vmlinux
+>     DUMPFILE: vmcore  [PARTIAL DUMP]
+>         CPUS: 48
+>         DATE: Thu Mar 17 02:49:40 CET 2022
+>       UPTIME: 00:02:50
+> LOAD AVERAGE: 0.32, 0.10, 0.03
+>        TASKS: 608
+>     NODENAME: gold-2s-c
+>      RELEASE: 5.17.0-0.rc8.123.fc37.x86_64
+>      VERSION: #1 SMP PREEMPT Mon Mar 14 18:11:49 UTC 2022
+>      MACHINE: x86_64  (2600 Mhz)
+>       MEMORY: 94.7 GB
+>        PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" (check log for details)
+>
+>
+> crash> bt
+> PID: 2480   TASK: ffff9e8f76cb8000  CPU: 26  COMMAND: "umount"
+> #0 [ffffae00cacbfbb8] machine_kexec at ffffffffbb068980
+> #1 [ffffae00cacbfc08] __crash_kexec at ffffffffbb1a300a
+> #2 [ffffae00cacbfcc8] crash_kexec at ffffffffbb1a4045
+> #3 [ffffae00cacbfcd0] oops_end at ffffffffbb02c410
+> #4 [ffffae00cacbfcf0] page_fault_oops at ffffffffbb076a38
+> #5 [ffffae00cacbfd68] exc_page_fault at ffffffffbbd0b7c1
+> #6 [ffffae00cacbfd90] asm_exc_page_fault at ffffffffbbe00ace
+>    [exception RIP: kernfs_remove+7]
+>    RIP: ffffffffbb421f67  RSP: ffffae00cacbfe48  RFLAGS: 00010246
+>    RAX: 0000000000000001  RBX: ffffffffbce31e58  RCX: 0000000080200018
+>    RDX: 0000000080200019  RSI: ffffdfbd44161640  RDI: 0000000000000000
+>    RBP: ffffffffbce31e58   R8: 0000000000000000   R9: 0000000080200018
+>    R10: ffff9e8f05859e80  R11: ffff9e9443b1bd98  R12: ffff9ea057f1d000
+>    R13: ffffffffbce31e60  R14: dead000000000122  R15: dead000000000100
+>    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+> #7 [ffffae00cacbfe58] rdt_kill_sb at ffffffffbb05074b
+> #8 [ffffae00cacbfea8] deactivate_locked_super at ffffffffbb36ce1f
+> #9 [ffffae00cacbfec0] cleanup_mnt at ffffffffbb39176e
+> #10 [ffffae00cacbfee8] task_work_run at ffffffffbb10703c
+> #11 [ffffae00cacbff08] exit_to_user_mode_prepare at ffffffffbb17a399
+> #12 [ffffae00cacbff28] syscall_exit_to_user_mode at ffffffffbbd0bde8
+> #13 [ffffae00cacbff38] do_syscall_64 at ffffffffbbd071a6
+> #14 [ffffae00cacbff50] entry_SYSCALL_64_after_hwframe at ffffffffbbe0007c
+>    RIP: 00007f442c75126b  RSP: 00007ffc82d66fe8  RFLAGS: 00000202
+>    RAX: 0000000000000000  RBX: 000055bd4cc37090  RCX: 00007f442c75126b
+>    RDX: 0000000000000001  RSI: 0000000000000001  RDI: 000055bd4cc3b950
+>    RBP: 000055bd4cc371a8   R8: 0000000000000000   R9: 0000000000000073
+>    R10: 0000000000000000  R11: 0000000000000202  R12: 0000000000000001
+>    R13: 000055bd4cc3b950  R14: 000055bd4cc372c0  R15: 000055bd4cc37090
+>    ORIG_RAX: 00000000000000a6  CS: 0033  SS: 002b
+>
+> [2] dmesg
+> [  172.776553] BUG: kernel NULL pointer dereference, address: 0000000000000008
+> [  172.783513] #PF: supervisor read access in kernel mode
+> [  172.788652] #PF: error_code(0x0000) - not-present page
+> [  172.793793] PGD 0 P4D 0
+> [  172.796330] Oops: 0000 [#1] PREEMPT SMP PTI
+> [  172.800519] CPU: 26 PID: 2480 Comm: umount Kdump: loaded Not
+> tainted 5.17.0-0.rc8.123.fc37.x86_64 #1
+> [  172.809645] Hardware name: Supermicro Super Server/X11DDW-L, BIOS
+> 2.0b 03/07/2018
+> [  172.817123] RIP: 0010:kernfs_remove+0x7/0x50
+> [  172.821397] Code: e8 be e7 2c 00 48 89 df e8 b6 8c f0 ff 48 c7 c3
+> f4 ff ff ff 48 89 d8 5b 5d 41 5c 41 5d 41 5e c3 cc 66 90 0f 1f 44 00
+> 00 55 53 <48> 8b 47 08 48 89 fb 48 85 c0 48 0f 44 c7 48 8b 68 50 48 83
+> c5 60
+> [  172.840141] RSP: 0018:ffffae00cacbfe48 EFLAGS: 00010246
+> [  172.845367] RAX: 0000000000000001 RBX: ffffffffbce31e58 RCX: 0000000080200018
+> [  172.852501] RDX: 0000000080200019 RSI: ffffdfbd44161640 RDI: 0000000000000000
+> [  172.859632] RBP: ffffffffbce31e58 R08: 0000000000000000 R09: 0000000080200018
+> [  172.866764] R10: ffff9e8f05859e80 R11: ffff9e9443b1bd98 R12: ffff9ea057f1d000
+> [  172.873899] R13: ffffffffbce31e60 R14: dead000000000122 R15: dead000000000100
+> [  172.881033] FS:  00007f442c53c800(0000) GS:ffff9e9429000000(0000)
+> knlGS:0000000000000000
+> [  172.889117] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  172.894861] CR2: 0000000000000008 CR3: 000000010ba96006 CR4: 00000000007706e0
+> [  172.901997] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  172.909127] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  172.916261] PKRU: 55555554
+> [  172.918974] Call Trace:
+> [  172.921427]  <TASK>
+> [  172.923533]  rdt_kill_sb+0x29b/0x350
+> [  172.927112]  deactivate_locked_super+0x2f/0xa0
+> [  172.931559]  cleanup_mnt+0xee/0x180
+> [  172.935051]  task_work_run+0x5c/0x90
+> [  172.938629]  exit_to_user_mode_prepare+0x229/0x230
+> [  172.943424]  syscall_exit_to_user_mode+0x18/0x40
+> [  172.948043]  do_syscall_64+0x46/0x80
+> [  172.951623]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  172.956675] RIP: 0033:0x7f442c75126b
+> [  172.960271] Code: cb 1b 0e 00 f7 d8 64 89 01 48 83 c8 ff c3 90 f3
+> 0f 1e fa 31 f6 e9 05 00 00 00 0f 1f 44 00 00 f3 0f 1e fa b8 a6 00 00
+> 00 0f 05 <48> 3d 00 f0 ff ff 77 05 c3 0f 1f 40 00 48 8b 15 91 1b 0e 00
+> f7 d8
+> [  172.979017] RSP: 002b:00007ffc82d66fe8 EFLAGS: 00000202 ORIG_RAX:
+> 00000000000000a6
+> [  172.986584] RAX: 0000000000000000 RBX: 000055bd4cc37090 RCX: 00007f442c75126b
+> [  172.993715] RDX: 0000000000000001 RSI: 0000000000000001 RDI: 000055bd4cc3b950
+> [  173.000849] RBP: 000055bd4cc371a8 R08: 0000000000000000 R09: 0000000000000073
+> [  173.007980] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000001
+> [  173.015115] R13: 000055bd4cc3b950 R14: 000055bd4cc372c0 R15: 000055bd4cc37090
+> [  173.022249]  </TASK>
+> [  173.024440] Modules linked in: rfkill intel_rapl_msr
+> intel_rapl_common isst_if_common irdma skx_edac nfit libnvdimm ice
+> x86_pkg_temp_thermal intel_powerclamp coretemp ib_uverbs iTCO_wdt
+> intel_pmc_bxt ib_core iTCO_vendor_support kvm_
+> intel ipmi_ssif kvm irqbypass rapl acpi_ipmi intel_cstate i40e joydev
+> mei_me ioatdma i2c_i801 intel_uncore lpc_ich i2c_smbus mei
+> intel_pch_thermal dca ipmi_si ipmi_devintf ipmi_msghandler acpi_pad
+> acpi_power_meter fuse zram xfs crct10d
+> if_pclmul ast crc32_pclmul crc32c_intel drm_vram_helper drm_ttm_helper
+> ttm wmi ghash_clmulni_intel
+> [  173.073900] CR2: 0000000000000008
+>
+> --
+> -Jirka
 
---0000000000004a418705dac2f695
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
 
-MIIPmwYJKoZIhvcNAQcCoIIPjDCCD4gCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz1MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-h3dPtFviTyG11HYwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYmaHR0cHM6
-Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYIKwYBBQUH
-AQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2NhL2dzYXRs
-YXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29t
-L2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei6x4schvR
-zV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBAE0ANr7NUOqEcZce4KYP
-SjzlrshSC8sgJ8dKDDbe35PL86vDuMIrytVjiV10p/YUofun9GeHBY6r5kTyh4be5FgftiiNtWzn
-U1W5cxLYMT1hKYxXxnM2sWMQGFl4TkxxbRoVZa3ou/NxFdAZeiQSwGnzk5oIDTBZQc8q3wMa1svm
-A5Rd4MVaIUt+hyk6seAldN6k4/O34O1l2V6D+/BwagyzLWvOeMEM9hClVF+F6a20yy4dcDsprFZZ
-Sk9JzUy9F6FM7L1wT2ndjTNDja4Y2tixf31KuisZLGKmDZsW/fXF1GgWDaM0DbYJwtE3kHylWnMk
-CN4PfYgIa15C5A9lXhExggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
-YWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENBIDIwMjAC
-EAFEftjde/YEIFcjUXqhcBUwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBY9Ivtr
-Wj3lAAaArgd4AFPNCjbtfxEYONPIHuD5c3CAMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
-KoZIhvcNAQkFMQ8XDTIyMDMyMTIzMzYxNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
-CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
-hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBkEhrU2WdFo1kGeKwgg4ggtpt7
-oHZ573YrVq0ix7kwhqVqiO9W+iCIAMGzzQz8KEMepDmoOaLcckvraSCght64s0aZ3RwvxaLfjBrU
-4Ra7rcm5Q8+du/7tu+0oCFLMd/Bm0VdR7nyRJHpHko6lno7YTeQVneq1pHHChk8TsPsD1mqD1/hv
-tNS8W8/94FgycIzX+ucoLDgQICibtmpLNccdJ9YwZU5YCXtd/g0oMvEbUR0ddjoskIDZWyBHsdK0
-tdCCDMOCKqaA8gSere4gU0r2ozBSlkdwJfkIG/6sy6T4HR+qvLqQQWqUEKmLBupmtkVes5XkO5yp
-8V3TfXJHhNWi
---0000000000004a418705dac2f695--
+
+-- 
+-Jirka
+

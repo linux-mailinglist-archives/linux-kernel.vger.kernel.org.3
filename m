@@ -2,66 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62CA4E26D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A854E26D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347536AbiCUMrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S1347554AbiCUMsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238218AbiCUMrI (ORCPT
+        with ESMTP id S1347539AbiCUMsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:47:08 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E889972B8;
-        Mon, 21 Mar 2022 05:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Kom58yxs7t2K4oUdufJDsnhiLyTppH8H97t+BIi+2pk=; b=slgidefFqclK1P2DulHa23qtke
-        XdtDCFXKdxr6o3iNY/j5BBLZnNK0Z+vzk8r7RBzyksdnKoCWYMc7c1EE2cmB1NHA791AuDvM89EP9
-        7bL01GhWrQtv0Y3iM0BiLxgv1hf23yB+6VEnT9I1Zya4p+15aU9IZ0qYmpwr69JcIKwE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nWHPe-00BweU-Bh; Mon, 21 Mar 2022 13:45:30 +0100
-Date:   Mon, 21 Mar 2022 13:45:30 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Dylan Hung <dylan_hung@aspeedtech.com>
-Cc:     robh+dt@kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, BMC-SW@aspeedtech.com
-Subject: Re: [PATCH v2 0/3]  Add reset deassertion for Aspeed MDIO
-Message-ID: <YjhzatUg09SoH9DR@lunn.ch>
-References: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
+        Mon, 21 Mar 2022 08:48:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2512E986F0;
+        Mon, 21 Mar 2022 05:46:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C087EB81115;
+        Mon, 21 Mar 2022 12:46:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A36C340F2;
+        Mon, 21 Mar 2022 12:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647866792;
+        bh=BkBf+XFWCAFnCR/tIuvZqXB3Sz74SS7v8oRpDMkj3uM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OJZ11NuW33i8Nzk5Pj4MfF+w79QvgPBxptvAIOI39vAFc2EZjKLDYNoQd2oVBaNiy
+         mci7fV94a9SUIa4t2sTeyU1nbx4HI+NY7/KFd1rBTH+pQWcAOB2NOc3c0PL4IECDy6
+         vtHm55IA1FPfSNFNe0TcPTUm8jrYOG6AXu4UMQUw=
+Date:   Mon, 21 Mar 2022 13:46:29 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Geliang Tang <geliang.tang@suse.com>
+Cc:     "ast@kernel.org" <ast@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "memxor@gmail.com" <memxor@gmail.com>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Guoqing Jiang <guoqing.jiang@suse.com>,
+        Kai Liu <kai.liu@suse.com>
+Subject: Re: [PATCH 5.10 37/71] selftests/bpf: Add test for bpf_timer
+ overwriting crash
+Message-ID: <YjhzpQgUR06JGYdG@kroah.com>
+References: <HE1PR0402MB3497CB13A12C4D15D20A1FCCF8139@HE1PR0402MB3497.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <HE1PR0402MB3497CB13A12C4D15D20A1FCCF8139@HE1PR0402MB3497.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 05:56:45PM +0800, Dylan Hung wrote:
-> Add missing reset deassertion for Aspeed MDIO. There are 4 MDIOs embedded
-> in Aspeed AST2600 and share one reset control bit SCU50[3].
+On Fri, Mar 18, 2022 at 02:42:49PM +0000, Geliang Tang wrote:
+> Hi Greg,
+> 
+> I got this bpf selftests build break today on the stable branch 5.10.106:
+> 
+> =========================================================================
+> CLNG-LLC [test_maps] test_tracepoint.o
+> progs/timer_crash.c:8:19: error: field has incomplete type 'struct bpf_timer'
+>         struct bpf_timer timer;
+>                          ^
+> progs/timer_crash.c:8:9: note: forward declaration of 'struct bpf_timer'
+>         struct bpf_timer timer;
+>                ^
+> progs/timer_crash.c:35:6: warning: implicit declaration of function 'bpf_get_current_task_btf' is invalid in C99 [-Wimplicit-function-declaration]
+>         if (bpf_get_current_task_btf()->tgid != pid)
+>             ^
+> progs/timer_crash.c:35:34: error: member reference type 'int' is not a pointer
+>         if (bpf_get_current_task_btf()->tgid != pid)
+>             ~~~~~~~~~~~~~~~~~~~~~~~~~~  ^
+> progs/timer_crash.c:49:3: warning: implicit declaration of function 'bpf_timer_cancel' is invalid in C99 [-Wimplicit-function-declaration]
+>                 bpf_timer_cancel(&e->timer);
+>                 ^
+> 2 warnings and 2 errors generated.
+>   CLNG-LLC [test_maps] test_trace_ext_tracing.o
+> llc: error: llc: <stdin>:1:1: error: expected top-level entity
+> BPF obj compilation failed
+> ^
+> make: *** [Makefile:402: tools/testing/selftests/bpf/timer_crash.o] Error 1
+> make: *** Waiting for unfinished jobs....
+>   CLNG-LLC [test_maps] test_trace_ext.o
+> =========================================================================
+> 
+> It is introduced by this commit, "selftests/bpf: Add test for bpf_timer
+> overwriting crash". Since the commit "bpf: Introduce bpf timers." has not
+> been merged into the stable branch yet.
+> 
+> I am writing to you to report this bug.
+> 
 
-Hi Dylan
+Now reverted, thanks!
 
-Please wait at least 24 hours between posting versions, to give other
-people times to comment.
-
-The danger here is that my comments on the previous version are going
-to get ignored, and this version merged containing the issues i
-pointed out.
-
-	Andrew
+greg k-h

@@ -2,180 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E934E4E341D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E3B4E33CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbiCUXRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S232027AbiCUXAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbiCUXRK (ORCPT
+        with ESMTP id S232807AbiCUW6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:17:10 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2B03C8AFD;
-        Mon, 21 Mar 2022 16:05:20 -0700 (PDT)
-Received: from handsomejack.molgen.mpg.de (handsomejack.molgen.mpg.de [141.14.17.248])
-        by mx.molgen.mpg.de (Postfix) with ESMTP id 8E77E61E64846;
-        Mon, 21 Mar 2022 22:27:36 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] ata: ahci: Skip 200 ms debounce delay for AMD 300 Series Chipset SATA Controller
-Date:   Mon, 21 Mar 2022 22:24:34 +0100
-Message-Id: <20220321212431.13717-3-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220321212431.13717-1-pmenzel@molgen.mpg.de>
-References: <20220321212431.13717-1-pmenzel@molgen.mpg.de>
+        Mon, 21 Mar 2022 18:58:40 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4B5362D06;
+        Mon, 21 Mar 2022 15:36:15 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so396129wmb.4;
+        Mon, 21 Mar 2022 15:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VEY0X4OyCU3/iAzQa5k+IyEdis1PzP3qOVzQs+i3IrU=;
+        b=LkwRWPCX/iULhA7/6CDwI/dQQG+8KKQEDgfZekVNHnJLVpuugYPcECcWvhcZh+pxGF
+         RQtjateZgvCJXR1QmD6Z1shAJcueM3/8XtWPuZcZLkU4O2ndQgvnniTyMTc7tLuRQLE6
+         lzIVOvGgLwJ529joD5QTMtSPhKevjJWSXAfrCBeFBIPPkW79CZiCHIvRnhkgEyr+bqkM
+         kQPES1cRfkfYwj5VSe/jbfrJ4hxQrP49MR02uPWx6bIxr2mc/VLxCR/VhwCSCkTujdd8
+         fGLOZkPRx58d58X3V0C49ZXm2M82PrMHaNHvrpuGRa49D0uQCiXIs+iaFq1k0CzIgPiG
+         2yYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VEY0X4OyCU3/iAzQa5k+IyEdis1PzP3qOVzQs+i3IrU=;
+        b=3xWeltTzY1mF1k4R8jUJ6KurG9vpf99540DiAe7W5suSSxgkCsybowEdbMOgiq3K1J
+         jlD5E5QzLQencR0Nrf2QKQrIpa5rZM1d1G/I+/W9XSdhTHK3I7hRm0FWF7Nib29rJflg
+         CfkO1a1NoTq3ZQYXrqvlo/8iuBkaUcQ8+1iUREfhm0rPJbo4OA7XgdKLxp7OpY83JxRO
+         jI46usYbtormYu4GwOP4y+FuHlNoI2Vd4HAktbrRSkVtoJ52J7QY6pPwFX+cQZNgnauH
+         Z8Iw3C0qdTS/5pebxM3vjM6fRP2zxZ91Gzg6adLMZEf6Hpsli/tCfVDqxQNCerQI1wLD
+         ztUQ==
+X-Gm-Message-State: AOAM531kYoyKHwfS37DK5iQR1c7JbfcOCFmszi3CmZMAtit2UdDQpGJF
+        GW3zOyptSak5pa9kNiA67SHfWPuJO10=
+X-Google-Smtp-Source: ABdhPJwOu5SgpIvDS+cc8Pa3YCZ3gEvW6NMK+B3R5zhf3SQ0JtRxwjwPpnCkLe2VulMXizTjOT7fHg==
+X-Received: by 2002:a7b:c922:0:b0:383:e7e2:4a1a with SMTP id h2-20020a7bc922000000b00383e7e24a1amr1015908wml.51.1647900049727;
+        Mon, 21 Mar 2022 15:00:49 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
+        by smtp.gmail.com with ESMTPSA id w5-20020a5d5445000000b00203f8c96bcesm8773157wrv.49.2022.03.21.15.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 15:00:49 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 22:31:29 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v5 15/18] dt-bindings: clock: Add L2 clocks to
+ qcom,krait-cc Documentation
+Message-ID: <YjjusXDsyhWMUeZb@Ansuel-xps.localdomain>
+References: <20220321153855.12082-1-ansuelsmth@gmail.com>
+ <20220321153855.12082-16-ansuelsmth@gmail.com>
+ <YjjzQw4z6GCmlmp+@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjjzQw4z6GCmlmp+@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD chipsets for AMD Ryzen contain two SATA controllers, for example on the
-Dell OptiPlex 5055 Ryzen CPU/0P03DX:
+On Mon, Mar 21, 2022 at 04:50:59PM -0500, Rob Herring wrote:
+> On Mon, Mar 21, 2022 at 04:38:52PM +0100, Ansuel Smith wrote:
+> > Krait-cc qcom driver provide also L2 clocks and require the acpu_l2_aux
+> > and the hfpll_l2 clock to be provided. Add these missing clocks to the
+> > Documentation. The driver keep support for both old and this new
+> > implementation and should prevent any regression by this fixup.
+> 
+> Depends on what the old driver looks for.
+>
 
-    01:00.1 SATA controller [0106]: Advanced Micro Devices, Inc. [AMD] 300 Series Chipset SATA Controller [1022:43b7] (rev 02)
-    07:00.2 SATA controller [0106]: Advanced Micro Devices, Inc. [AMD] FCH SATA Controller [AHCI mode] [1022:7901] (rev 51)
+The old driver used parent_names with the same name declared now in the
+Documentation.
 
-The 300 Series Chipset SATA Controller [1022:43b7] does not need the 200 ms
-delay before debouncing the PHY in `sata_link_resume()`, so skip it by
-mapping it to the board with no debounce delay.
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > ---
+> >  .../devicetree/bindings/clock/qcom,krait-cc.yaml     | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml b/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
+> > index e879bfbe67ac..f89b70ab01ae 100644
+> > --- a/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
+> > +++ b/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
+> > @@ -23,16 +23,20 @@ properties:
+> >      items:
+> >        - description: phandle to hfpll for CPU0 mux
+> >        - description: phandle to hfpll for CPU1 mux
+> > +      - description: phandle to hfpll for L2 mux
+> >        - description: phandle to CPU0 aux clock
+> >        - description: phandle to CPU1 aux clock
+> > +      - description: phandle to L2 aux clock
+> >        - description: phandle to QSB fixed clk
+> 
+> Clock indices should not change. New clocks go on the end of the list.
+> 
 
-Tested on the Dell OptiPlex 5055 Ryzen CPU/0P03DX, BIOS 1.1.50 07/28/2021
-Linux 5.17 with an HDD connected to ata1 connected to 01:00.1, and no other
-storage devices. (Only ata9 is connected to 07:00.2.)
+Sad but will change if necessary.
 
-Currently, without this patch (with 200 ms delay), device probe for ata1
-takes 468 ms (= 0.896 s - 0.428 s), ata2 takes 840 ms, ata5 takes 1,125 ms,
-and ata6 takes 1,464 ms:
+> >  
+> >    clock-names:
+> >      items:
+> >        - const: hfpll0
+> >        - const: hfpll1
+> > +      - const: hfpll_l2
+> >        - const: acpu0_aux
+> >        - const: acpu1_aux
+> > +      - const: acpu_l2_aux
+> >        - const: qsb
+> >  
+> >    '#clock-cells':
+> > @@ -50,10 +54,10 @@ examples:
+> >    - |
+> >      clock-controller {
+> >        compatible = "qcom,krait-cc-v1";
+> > -      clocks = <&hfpll0>, <&hfpll1>,
+> > -               <&acpu0_aux>, <&acpu1_aux>, <&qsb>;
+> > -      clock-names = "hfpll0", "hfpll1",
+> > -                    "acpu0_aux", "acpu1_aux", "qsb";
+> > +      clocks = <&hfpll0>, <&hfpll1>, <&hfpll_l2>,
+> > +               <&acpu0_aux>, <&acpu1_aux>, <&acpu_l2_aux>, <&qsb>;
+> > +      clock-names = "hfpll0", "hfpll1", "hfpll_l2",
+> > +                    "acpu0_aux", "acpu1_aux", "acpu_l2_aux", "qsb";
+> >        #clock-cells = <1>;
+> >      };
+> >  ...
+> > -- 
+> > 2.34.1
+> > 
+> > 
 
-    [    0.427251] calling  ahci_pci_driver_init+0x0/0x1a @ 1
-    [    0.427271] ahci 0000:01:00.1: version 3.0
-    [    0.427371] ahci 0000:01:00.1: SSS flag set, parallel bus scan disabled
-    [    0.427405] ahci 0000:01:00.1: AHCI 0001.0301 32 slots 8 ports 6 Gbps 0x33 impl SATA mode
-    [    0.427409] ahci 0000:01:00.1: flags: 64bit ncq sntf stag pm led clo only pmp pio slum part sxs deso sadm sds apst
-    [    0.427814] scsi host0: ahci
-    [    0.427895] scsi host1: ahci
-    [    0.427968] scsi host2: ahci
-    [    0.428038] scsi host3: ahci
-    [    0.428113] scsi host4: ahci
-    [    0.428184] scsi host5: ahci
-    [    0.428255] scsi host6: ahci
-    [    0.428325] scsi host7: ahci
-    [    0.428352] ata1: SATA max UDMA/133 abar m131072@0xf0600000 port 0xf0600100 irq 36
-    [    0.428356] ata2: SATA max UDMA/133 abar m131072@0xf0600000 port 0xf0600180 irq 36
-    [    0.428359] ata3: DUMMY
-    [    0.428360] ata4: DUMMY
-    [    0.428362] ata5: SATA max UDMA/133 abar m131072@0xf0600000 port 0xf0600300 irq 36
-    [    0.428365] ata6: SATA max UDMA/133 abar m131072@0xf0600000 port 0xf0600380 irq 36
-    [    0.428368] ata7: DUMMY
-    [    0.428369] ata8: DUMMY
-    [    0.428481] ahci 0000:07:00.2: AHCI 0001.0301 32 slots 1 ports 6 Gbps 0x1 impl SATA mode
-    [    0.428486] ahci 0000:07:00.2: flags: 64bit ncq sntf ilck pm led clo only pmp fbs pio slum part
-    [    0.428611] scsi host8: ahci
-    [    0.428639] ata9: SATA max UDMA/133 abar m4096@0xf0108000 port 0xf0108100 irq 38
-    [    0.428653] initcall ahci_pci_driver_init+0x0/0x1a returned 0 after 1367 usecs
-    […]
-    [    0.531949] ata9: SATA link down (SStatus 0 SControl 300)
-    [    0.895730] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    0.924392] ata1.00: ATA-8: ST500LM021-1KJ152, 0005SDM1, max UDMA/133
-    [    0.924410] ata1.00: 976773168 sectors, multi 16: LBA48 NCQ (depth 32)
-    [    0.963276] ata1.00: configured for UDMA/133
-    [    0.963355] scsi 0:0:0:0: Direct-Access     ATA      ST500LM021-1KJ15 SDM1 PQ: 0 ANSI: 5
-    [    0.963478] sd 0:0:0:0: Attached scsi generic sg0 type 0
-    [    0.963568] sd 0:0:0:0: [sda] 976773168 512-byte logical blocks: (500 GB/466 GiB)
-    [    0.963594] sd 0:0:0:0: [sda] 4096-byte physical blocks
-    [    0.963616] sd 0:0:0:0: [sda] Write Protect is off
-    [    0.963631] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
-    [    0.963644] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-    [    0.974119]  sda: sda1 sda2 sda3
-    [    0.974299] sd 0:0:0:0: [sda] Attached SCSI disk
-    [    1.268377] ata2: SATA link down (SStatus 0 SControl 300)
-    [    1.580394] ata5: SATA link down (SStatus 0 SControl 300)
-    [    1.892390] ata6: SATA link down (SStatus 0 SControl 300)
-
-With this patch (no delay) device probe for ata1 takes 268 ms
-(= 0.696 s - 0.428 s), ata2 takes 440 ms, ata5 takes 545 ms, and ata6 takes
-650 ms:
-
-    [    0.426850] calling  ahci_pci_driver_init+0x0/0x1a @ 1
-    [    0.426869] ahci 0000:01:00.1: version 3.0
-    [    0.426970] ahci 0000:01:00.1: SSS flag set, parallel bus scan disabled
-    [    0.427004] ahci 0000:01:00.1: AHCI 0001.0301 32 slots 8 ports 6 Gbps 0x33 impl SATA mode
-    [    0.427008] ahci 0000:01:00.1: flags: 64bit ncq sntf stag pm led clo only pmp pio slum part sxs deso sadm sds apst
-    [    0.427412] scsi host0: ahci
-    [    0.427493] scsi host1: ahci
-    [    0.427569] scsi host2: ahci
-    [    0.427653] scsi host3: ahci
-    [    0.427728] scsi host4: ahci
-    [    0.427801] scsi host5: ahci
-    [    0.427876] scsi host6: ahci
-    [    0.427950] scsi host7: ahci
-    [    0.427978] ata1: SATA max UDMA/133 abar m131072@0xf0600000 port 0xf0600100 irq 36
-    [    0.427982] ata2: SATA max UDMA/133 abar m131072@0xf0600000 port 0xf0600180 irq 36
-    [    0.427985] ata3: DUMMY
-    [    0.427986] ata4: DUMMY
-    [    0.427988] ata5: SATA max UDMA/133 abar m131072@0xf0600000 port 0xf0600300 irq 36
-    [    0.427991] ata6: SATA max UDMA/133 abar m131072@0xf0600000 port 0xf0600380 irq 36
-    [    0.427994] ata7: DUMMY
-    [    0.427995] ata8: DUMMY
-    [    0.428116] ahci 0000:07:00.2: AHCI 0001.0301 32 slots 1 ports 6 Gbps 0x1 impl SATA mode
-    [    0.428124] ahci 0000:07:00.2: flags: 64bit ncq sntf ilck pm led clo only pmp fbs pio slum part
-    [    0.428250] scsi host8: ahci
-    [    0.428278] ata9: SATA max UDMA/133 abar m4096@0xf0108000 port 0xf0108100 irq 38
-    [    0.428295] initcall ahci_pci_driver_init+0x0/0x1a returned 0 after 1409 usecs
-    […]
-    [    0.532308] ata9: SATA link down (SStatus 0 SControl 300)
-    […]
-    [    0.696316] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    0.725963] ata1.00: ATA-8: ST500LM021-1KJ152, 0005SDM1, max UDMA/133
-    [    0.725982] ata1.00: 976773168 sectors, multi 16: LBA48 NCQ (depth 32)
-    [    0.764845] ata1.00: configured for UDMA/133
-    [    0.764932] scsi 0:0:0:0: Direct-Access     ATA      ST500LM021-1KJ15 SDM1 PQ: 0 ANSI: 5
-    [    0.765056] sd 0:0:0:0: Attached scsi generic sg0 type 0
-    [    0.765120] sd 0:0:0:0: [sda] 976773168 512-byte logical blocks: (500 GB/466 GiB)
-    [    0.765147] sd 0:0:0:0: [sda] 4096-byte physical blocks
-    [    0.765175] sd 0:0:0:0: [sda] Write Protect is off
-    [    0.765189] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
-    [    0.765198] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-    [    0.866546]  sda: sda1 sda2 sda3
-    [    0.867239] sd 0:0:0:0: [sda] Attached SCSI disk
-    [    0.868330] ata2: SATA link down (SStatus 0 SControl 300)
-    [    0.973337] ata5: SATA link down (SStatus 0 SControl 300)
-    [    1.077832] ata6: SATA link down (SStatus 0 SControl 300)
-
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>
----
-v2: New patch for second SATA controller in Ryzen systems
-
- drivers/ata/ahci.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index 44b79fe43d13d..ac7f230c12ebc 100644
---- a/drivers/ata/ahci.c
-+++ b/drivers/ata/ahci.c
-@@ -453,6 +453,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 		.class_mask = 0xffffff,
- 		board_ahci_al },
- 	/* AMD */
-+	{ PCI_VDEVICE(AMD, 0x43b7), board_ahci_low_power_no_debounce_delay }, /* AMD 300 Series Chipset SATA Controller */
- 	{ PCI_VDEVICE(AMD, 0x7800), board_ahci }, /* AMD Hudson-2 */
- 	{ PCI_VDEVICE(AMD, 0x7801), board_ahci_no_debounce_delay }, /* AMD Hudson-2 (AHCI mode) */
- 	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
 -- 
-2.30.2
-
+	Ansuel

@@ -2,55 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41AF4E29DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075504E298C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352096AbiCUONO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S1348974AbiCUOEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348817AbiCUOFd (ORCPT
+        with ESMTP id S1349111AbiCUN7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:05:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCA93B02A;
-        Mon, 21 Mar 2022 07:01:38 -0700 (PDT)
+        Mon, 21 Mar 2022 09:59:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400CE10CC;
+        Mon, 21 Mar 2022 06:57:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4346B816E1;
-        Mon, 21 Mar 2022 14:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 032A4C340ED;
-        Mon, 21 Mar 2022 14:01:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD594B81598;
+        Mon, 21 Mar 2022 13:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F938C340E8;
+        Mon, 21 Mar 2022 13:57:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871295;
-        bh=u3F5wmbk+6PkM8pt2vrxqech9PMOYixTjf4rRI8WWcM=;
+        s=korg; t=1647871063;
+        bh=iAWoA/KtW5sunOlZanpzjYKJC7pZGFvMadTuEFgrzKQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BU/TADhVZdWXvUJ/8Aps3n/V3Por6ohsJBlFDWyxS31/zx9X7RrP0p9FpVIn+svOh
-         j0mEKFqYy4JKf6APPPlmdW1+NwNmBfKleRMjdPjtU9Khen6BgH8+PrCfwve8QPYxFs
-         wikWMuZ+ZCNd6nGUNAAUXj5FA2wKN8WsZekH9Yxc=
+        b=Lygqz3ANgmJZkHhbMqmsoIRtBqAA7iox7PIFFMMOhjMUKU/ugSQl63V1R1WKnmpZW
+         22wxyzjOcSVgnSr1aRnw8L73pDQ1THNO0YfJg05Kq7rwzy/++Ov40eQObzE5AZUcYh
+         QMRgUcCcxCv+lDEJPnrd0Qnl1PCLJ178py23n+hQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ziliang <guo.ziliang@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Hugh Dickins <hughd@google.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.16 03/37] mm: swap: get rid of livelock in swapin readahead
-Date:   Mon, 21 Mar 2022 14:52:45 +0100
-Message-Id: <20220321133221.392695021@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 10/17] net: dsa: Add missing of_node_put() in dsa_port_parse_of
+Date:   Mon, 21 Mar 2022 14:52:46 +0100
+Message-Id: <20220321133217.455384427@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
-References: <20220321133221.290173884@linuxfoundation.org>
+In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
+References: <20220321133217.148831184@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -65,83 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ziliang <guo.ziliang@zte.com.cn>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 029c4628b2eb2ca969e9bf979b05dc18d8d5575e upstream.
+[ Upstream commit cb0b430b4e3acc88c85e0ad2e25f2a25a5765262 ]
 
-In our testing, a livelock task was found.  Through sysrq printing, same
-stack was found every time, as follows:
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-  __swap_duplicate+0x58/0x1a0
-  swapcache_prepare+0x24/0x30
-  __read_swap_cache_async+0xac/0x220
-  read_swap_cache_async+0x58/0xa0
-  swapin_readahead+0x24c/0x628
-  do_swap_page+0x374/0x8a0
-  __handle_mm_fault+0x598/0xd60
-  handle_mm_fault+0x114/0x200
-  do_page_fault+0x148/0x4d0
-  do_translation_fault+0xb0/0xd4
-  do_mem_abort+0x50/0xb0
-
-The reason for the livelock is that swapcache_prepare() always returns
-EEXIST, indicating that SWAP_HAS_CACHE has not been cleared, so that it
-cannot jump out of the loop.  We suspect that the task that clears the
-SWAP_HAS_CACHE flag never gets a chance to run.  We try to lower the
-priority of the task stuck in a livelock so that the task that clears
-the SWAP_HAS_CACHE flag will run.  The results show that the system
-returns to normal after the priority is lowered.
-
-In our testing, multiple real-time tasks are bound to the same core, and
-the task in the livelock is the highest priority task of the core, so
-the livelocked task cannot be preempted.
-
-Although cond_resched() is used by __read_swap_cache_async, it is an
-empty function in the preemptive system and cannot achieve the purpose
-of releasing the CPU.  A high-priority task cannot release the CPU
-unless preempted by a higher-priority task.  But when this task is
-already the highest priority task on this core, other tasks will not be
-able to be scheduled.  So we think we should replace cond_resched() with
-schedule_timeout_uninterruptible(1), schedule_timeout_interruptible will
-call set_current_state first to set the task state, so the task will be
-removed from the running queue, so as to achieve the purpose of giving
-up the CPU and prevent it from running in kernel mode for too long.
-
-(akpm: ugly hack becomes uglier.  But it fixes the issue in a
-backportable-to-stable fashion while we hopefully work on something
-better)
-
-Link: https://lkml.kernel.org/r/20220221111749.1928222-1-cgel.zte@gmail.com
-Signed-off-by: Guo Ziliang <guo.ziliang@zte.com.cn>
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Reviewed-by: Jiang Xuexin <jiang.xuexin@zte.com.cn>
-Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-Acked-by: Hugh Dickins <hughd@google.com>
-Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Roger Quadros <rogerq@kernel.org>
-Cc: Ziliang Guo <guo.ziliang@zte.com.cn>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6d4e5c570c2d ("net: dsa: get port type at parse time")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220316082602.10785-1-linmq006@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/swap_state.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/dsa/dsa2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -478,7 +478,7 @@ struct page *__read_swap_cache_async(swp
- 		 * __read_swap_cache_async(), which has set SWAP_HAS_CACHE
- 		 * in swap_map, but not yet added its page to swap cache.
- 		 */
--		cond_resched();
-+		schedule_timeout_uninterruptible(1);
- 	}
+diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
+index 70e6fc2edd30..1f27641f9cc0 100644
+--- a/net/dsa/dsa2.c
++++ b/net/dsa/dsa2.c
+@@ -669,6 +669,7 @@ static int dsa_port_parse_of(struct dsa_port *dp, struct device_node *dn)
+ 		struct net_device *master;
  
- 	/*
+ 		master = of_find_net_device_by_node(ethernet);
++		of_node_put(ethernet);
+ 		if (!master)
+ 			return -EPROBE_DEFER;
+ 
+-- 
+2.34.1
+
 
 

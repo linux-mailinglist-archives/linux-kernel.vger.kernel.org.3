@@ -2,70 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0474A4E27AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6725E4E27B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347961AbiCUNgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S1347962AbiCUNgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347057AbiCUNgb (ORCPT
+        with ESMTP id S235400AbiCUNgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Mar 2022 09:36:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36EC142A07
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647869697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ru2iq/ox5s0Rm8wfLoTnDRL9rVImEm3d4wp9HAg3/0=;
-        b=RL6l+woIah/31r6M4stFj9d35Ix2knegrdiJ4v0Dlx5313JJnSbp4iK+XHADvxFrtTYgia
-        iEqF49YR7AtRLp8dcNCO34qZCzbXgWNyz6mXYR1tXWRyfpntqvSBZ7BqfnRpRhfveVrDaa
-        pzUkaHxKUT0lw7ifWUCJTOLySbVq2fY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-634-P_Li5wrOPx-px3Lu6HvcqA-1; Mon, 21 Mar 2022 09:34:54 -0400
-X-MC-Unique: P_Li5wrOPx-px3Lu6HvcqA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2DD291044562;
-        Mon, 21 Mar 2022 13:34:53 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2B1821121318;
-        Mon, 21 Mar 2022 13:34:45 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220316131723.111553-4-jefflexu@linux.alibaba.com>
-References: <20220316131723.111553-4-jefflexu@linux.alibaba.com> <20220316131723.111553-1-jefflexu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com
-Subject: Re: [PATCH v5 03/22] cachefiles: introduce on-demand read mode
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2294474B;
+        Mon, 21 Mar 2022 06:35:05 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KMbDB4F2FzfZMc;
+        Mon, 21 Mar 2022 21:33:30 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 21 Mar 2022 21:35:02 +0800
+Subject: Re: [PATCH -next] ext4: Fix symlink file size not match to file
+ content
+To:     Jan Kara <jack@suse.cz>
+References: <20220321113408.4112428-1-yebin10@huawei.com>
+ <20220321113703.cibgeac5ipslg3df@quack3.lan>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lczerner@redhat.com>
+From:   yebin <yebin10@huawei.com>
+Message-ID: <62387F05.2090408@huawei.com>
+Date:   Mon, 21 Mar 2022 21:35:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1027871.1647869684.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 21 Mar 2022 13:34:44 +0000
-Message-ID: <1027872.1647869684@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <20220321113703.cibgeac5ipslg3df@quack3.lan>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,90 +53,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
-
-> Fscache/cachefiles used to serve as a local cache for remote fs. This
-> patch, along with the following patches, introduces a new on-demand read
-> mode for cachefiles, which can boost the scenario where on-demand read
-> semantics is needed, e.g. container image distribution.
-> =
-
-> The essential difference between the original mode and on-demand read
-> mode is that, in the original mode, when cache miss, netfs itself will
-> fetch data from remote, and then write the fetched data into cache file.
-> While in on-demand read mode, a user daemon is responsible for fetching
-> data and then writing to the cache file.
-> =
-
-> This patch only adds the command to enable on-demand read mode. An optio=
-nal
-> parameter to "bind" command is added. On-demand mode will be turned on w=
-hen
-> this optional argument matches "ondemand" exactly, i.e.  "bind
-> ondemand". Otherwise cachefiles will keep working in the original mode.
-
-You're not really adding a command, per se.  Also, I would recommend
-starting the paragraph with a verb.  How about:
-
-	Make it possible to enable on-demand read mode by adding an
-	optional parameter to the "bind" command.  On-demand mode will be
-	turned on when this parameter is "ondemand", i.e. "bind ondemand".
-	Otherwise cachefiles will work in the original mode.
-
-Also, I'd add a note something like the following:
-
-	This is implemented as a variation on the bind command so that it
-	can't be turned on accidentally in /etc/cachefilesd.conf when
-	cachefilesd isn't expecting it.	=
 
 
-> The following patches will implement the data plane of on-demand read
-> mode.
+On 2022/3/21 19:37, Jan Kara wrote:
+> On Mon 21-03-22 19:34:08, Ye Bin wrote:
+>> We got issue as follows:
+>> [home]# fsck.ext4  -fn  ram0yb
+>> e2fsck 1.45.6 (20-Mar-2020)
+>> Pass 1: Checking inodes, blocks, and sizes
+>> Pass 2: Checking directory structure
+>> Symlink /p3/d14/d1a/l3d (inode #3494) is invalid.
+>> Clear? no
+>> Entry 'l3d' in /p3/d14/d1a (3383) has an incorrect filetype (was 7, should be 0).
+>> Fix? no
+>>
+>> As symlink file size not match to file content. If symlink data block
+>> writback failed, will call ext4_finish_bio to end io. In this path don't
+>> mark buffer error. When umount do checkpoint can't detect buffer error,
+>> then will cleanup jounral. Actually, correct data maybe in journal area.
+>> To solve this issue, mark buffer error when detect bio error in
+>> ext4_finish_bio.
+> Thanks for the patch! Let me rephrase the text a bit:
+>
+> As the symlink file size does not match the file content. If the writeback
+> of the symlink data block failed, ext4_finish_bio() handles the end of IO.
+> However this function fails to mark the buffer with BH_write_io_error and
+> so when unmount does journal checkpoint it cannot detect the writeback
+> error and will cleanup the journal. Thus we've lost the correct data in the
+> journal area. To solve this issue, mark the buffer as BH_write_io_error in
+> ext4_finish_bio().
+>
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>> ---
+>>   fs/ext4/page-io.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/ext4/page-io.c b/fs/ext4/page-io.c
+>> index 495ce59fb4ad..14695e2b5042 100644
+>> --- a/fs/ext4/page-io.c
+>> +++ b/fs/ext4/page-io.c
+>> @@ -134,8 +134,10 @@ static void ext4_finish_bio(struct bio *bio)
+>>   				continue;
+>>   			}
+>>   			clear_buffer_async_write(bh);
+>> -			if (bio->bi_status)
+>> +			if (bio->bi_status) {
+>> +				set_buffer_write_io_error(bh);
+> Why don't you use mark_buffer_write_io_error()? It will also update other IO
+> error counters properly so that e.g. fsync(2) or sync_filesystem() can properly
+> report IO error etc. Granted we'll abort the journal in response to
+> checkpointing error so the failure will be hard to miss anyway but still
+> :).
+>
+> 								Honza
 
-I would remove this line.  If ondemand mode is not fully implemented in
-cachefiles at this point, I would be tempted to move this to the end of th=
-e
-cachefiles subset of the patchset.  That said, I'm not sure it can be made
-to do anything much before that point.
+'ext4_finish_bio' already call 'mapping_set_error' set mapping error , I think fsync
+and sync_filesystem can report IO error.
 
-> +#ifdef CONFIG_CACHEFILES_ONDEMAND
-> +static inline void cachefiles_ondemand_open(struct cachefiles_cache *ca=
-che)
-> +{
-> +	xa_init_flags(&cache->reqs, XA_FLAGS_ALLOC);
-> +	rwlock_init(&cache->reqs_lock);
-> +}
+static inline void mapping_set_error(struct address_space *mapping, int error)
+{
+         if (likely(!error))
+                 return;
 
-Just merge that into the caller.
+         /* Record in wb_err for checkers using errseq_t based tracking */
+         __filemap_set_wb_err(mapping, error);
 
-> +static inline void cachefiles_ondemand_release(struct cachefiles_cache =
-*cache)
-> +{
-> +	xa_destroy(&cache->reqs);
-> +}
+         /* Record it in superblock */
+         if (mapping->host)
+                 errseq_set(&mapping->host->i_sb->s_wb_err, error);
 
-Ditto.
+         /* Record it in flags for now, for legacy callers */
+         if (error == -ENOSPC)
+                 set_bit(AS_ENOSPC, &mapping->flags);
+         else
+                 set_bit(AS_EIO, &mapping->flags);
+}
 
-> +static inline
-> +bool cachefiles_ondemand_daemon_bind(struct cachefiles_cache *cache, ch=
-ar *args)
-> +{
-> +	if (!strcmp(args, "ondemand")) {
-> +		set_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags);
-> +		return true;
-> +	}
-> +
-> +	return false;
-> +}
-> ...
-> +	if (!cachefiles_ondemand_daemon_bind(cache, args) && *args) {
-> +		pr_err("'bind' command doesn't take an argument\n");
-> +		return -EINVAL;
-> +	}
-> +
-
-I would merge these together, I think, and say something like "Ondemand
-mode not enabled in kernel" if CONFIG_CACHEFILES_ONDEMAND=3Dn.
-
-David
 

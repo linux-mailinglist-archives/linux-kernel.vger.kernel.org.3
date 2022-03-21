@@ -2,126 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D223B4E2419
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68164E241B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346233AbiCUKRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S1346241AbiCUKSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346225AbiCUKRf (ORCPT
+        with ESMTP id S1343986AbiCUKSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:17:35 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FA9986F0;
-        Mon, 21 Mar 2022 03:16:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 21 Mar 2022 06:18:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E1985BA;
+        Mon, 21 Mar 2022 03:16:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EF3D6210EC;
-        Mon, 21 Mar 2022 10:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647857765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xvcSTlU5vKYFbBNHotaZrVuLA/p3fs8kSntrwRk3fk0=;
-        b=Zthas33+nHSZJ5CTxv7FyJg2z5QChe2SajEwqtWVuKS7loPcH/vWAeQxojWavIpToWOJfw
-        87Q97Kut2MSqcLOOKpu5Pwapa7zKljZV2Oj0AOWL/9tTbw1Pn0q3NsmLmNx443TVt28iWD
-        eQj1YNq1zDfEmBG1RRAkOvTxkkyLEQk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647857765;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xvcSTlU5vKYFbBNHotaZrVuLA/p3fs8kSntrwRk3fk0=;
-        b=wPGcoGPteEi4YsUOyPrckTew+BIG39p9f3Xqw+giYOl9HjPF8R/3qvs+hkyCvxjtfg+iCV
-        zn8rgWcSgS5MflDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF34E13AD5;
-        Mon, 21 Mar 2022 10:16:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7FF6NmVQOGLFdAAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 21 Mar 2022 10:16:05 +0000
-Date:   Mon, 21 Mar 2022 11:16:01 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC updates for 5.18
-Message-ID: <YjhQYeGqsuiXAsSp@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6796F61312;
+        Mon, 21 Mar 2022 10:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C15C340E8;
+        Mon, 21 Mar 2022 10:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647857798;
+        bh=hs1j1XdHsa05pKB9tDryge7782Yts0Xm0jU6E5GUFjI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wVpP7wlh0tnG5l/utlBmven3RHa4TNGl7gj8+PHlyjppHEssDj8f+6iLwINy+KQ0H
+         JWKXpfKGdkBR5flmjRKV83rMbjXuTNZa0UmgKTgr0N9RxlY8ZcOlZsW3pYdOw2SBjE
+         R9MsTdj5AINOUSSiD6Uy69uQslLz51jzexFXMSKA=
+Date:   Mon, 21 Mar 2022 11:16:35 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+Subject: Re: [PATCH v3 0/4] support USB offload feature
+Message-ID: <YjhQg4I7eYWXIfgr@kroah.com>
+References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
+ <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+ <YjhB7+AaEXvuUmdi@kroah.com>
+ <20220321092409.GA62265@ubuntu>
+ <YjhGKVKuPsKG80wZ@kroah.com>
+ <20220321100631.GB62265@ubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220321100631.GB62265@ubuntu>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Mar 21, 2022 at 07:06:31PM +0900, Jung Daehwan wrote:
+> On Mon, Mar 21, 2022 at 10:32:25AM +0100, Greg Kroah-Hartman wrote:
+> > On Mon, Mar 21, 2022 at 06:24:09PM +0900, Jung Daehwan wrote:
+> > > On Mon, Mar 21, 2022 at 10:14:23AM +0100, Greg Kroah-Hartman wrote:
+> > > > On Mon, Mar 21, 2022 at 05:59:50PM +0900, Daehwan Jung wrote:
+> > > > > This patchset is for USB offload feature, which makes Co-processor to use
+> > > > > some memories of xhci. Especially it's useful for USB Audio scenario.
+> > > > > Audio stream would get shortcut because Co-processor directly write/read
+> > > > > data in xhci memories. It could get speed-up using faster memory like SRAM.
+> > > > > That's why this gives vendors flexibilty of memory management.
+> > > > > Several pathches have been merged in AOSP kernel(android12-5.10) and I put
+> > > > > together and split into 3 patches. Plus let me add user(xhci-exynos)
+> > > > > module to see how user could use it.
+> > > > > 
+> > > > > To sum up, it's for providing xhci memories to Co-Processor.
+> > > > > It would cover DCBAA, Device Context, Transfer Ring, Event Ring, ERST.
+> > > > > It needs xhci hooks and to export some xhci symbols.
+> > > > > 
+> > > > > Changes in v2 :
+> > > > > - Fix commit message by adding Signed-off-by in each patch.
+> > > > > - Fix conflict on latest.
+> > > > > 
+> > > > > Changes in v3 :
+> > > > > - Remove export symbols and xhci hooks which xhci-exynos don't need.
+> > > > > - Modify commit message to clarify why it needs to export symbols.
+> > > > > - Check compiling of xhci-exynos.
+> > > > 
+> > > > As I asked for in the previous submission, you MUST have a user for
+> > > > these hooks, otherwise we can not accept them (nor would you WANT us to
+> > > > accept them).  Please fix that up and add them to the next submission as
+> > > > we can not do anything with this one.
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > > 
+> > > 
+> > > Hi greg,
+> > > 
+> > > I've submitted the user(xhci-exynos) together on the last patch of the patchset.
+> > > You can see xhci-exynos uses these hooks and symbols.
+> > > 
+> > > [PATCH v3 4/4] usb: host: add xhci-exynos driver
+> > 
+> > Then this is not "offload" hooks at all.  They are merely "support
+> > another xhci platform driver, right?
+> 
+> Yes, right.
+> 
+> > 
+> > I see a lot of exports and function hooks added, are they _ALL_ used by
+> > the xhci driver?  If so, please reword this series as it is not very
+> > obvious at all what you are doing.
+> 
+> Yes, they are all used by the xhci driver. Is it OK for me to use "xhci-exynos"
+> instead of "USB offload" on series like below?
+> 
+> [v3, 0/4] add xhci-exynos driver
+> 
+> This patchset is for support xhci-exynos driver....
+> ....
+> 
+>   usb: host: export symbols for xhci-exynos to use xhci hooks
+>   usb: host: add xhci hooks for xhci-exynos
+>   usb: host: add some to xhci overrides for xhci-exynos
+>   usb: host: add xhci-exynos driver
 
-please pull the small pile of EDAC updates accumulated in the last
-round.
+Yes, that makes much more sense.  What would you want to see if you had
+to review such a series?
 
-Thx.
+thanks,
 
----
-
-The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507:
-
-  Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.18_rc1
-
-for you to fetch changes up to 1422df58e5eb83dca131dc64e0f307a1f9e56078:
-
-  Merge branch 'edac-amd64' into edac-updates-for-v5.18 (2022-03-21 10:34:57 +0100)
-
-----------------------------------------------------------------
-- Add support for newer AMD family 0x19, models 0x10-... CPUs to amd64_edac
-
-- The usual amount of improvements and fixes
-
-----------------------------------------------------------------
-Borislav Petkov (1):
-      Merge branch 'edac-amd64' into edac-updates-for-v5.18
-
-Eliav Farber (1):
-      EDAC/mc: Remove unnecessary cast to char * in edac_align_ptr()
-
-Greg Kroah-Hartman (2):
-      EDAC: Use proper list of struct attribute for attributes
-      EDAC: Use default_groups in kobj_type
-
-Rabara Niravkumar L (1):
-      EDAC/altera: Add SDRAM ECC check for U-Boot
-
-Yazen Ghannam (2):
-      EDAC/amd64: Set memory type per DIMM
-      EDAC/amd64: Add new register offset support and related changes
-
- drivers/edac/altera_edac.c       |  40 +++++++++++++-
- drivers/edac/amd64_edac.c        | 109 +++++++++++++++++++++++++++++++--------
- drivers/edac/amd64_edac.h        |  24 ++++++++-
- drivers/edac/edac_device_sysfs.c |  31 ++++++-----
- drivers/edac/edac_mc.c           |   4 +-
- drivers/edac/edac_pci_sysfs.c    |  26 +++++-----
- 6 files changed, 183 insertions(+), 51 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+greg k-h

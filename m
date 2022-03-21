@@ -2,225 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9104E27CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C95884E27D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347978AbiCUNi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S1347860AbiCUNlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347860AbiCUNir (ORCPT
+        with ESMTP id S1345032AbiCUNlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:38:47 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF53C11F78E;
-        Mon, 21 Mar 2022 06:37:21 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h4so2766924wrc.13;
-        Mon, 21 Mar 2022 06:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=C7ur1ssTUbHNpecbbbCU94tMoZ1fCbXzPQjfgyWqqxg=;
-        b=T070mISsGNQa6RHk1dvm7QAfEGtCL8QdJrl2jjSnGDB6cwq2T9wm74b4gFuuuJlMKT
-         2nTxKTsyhsMZ0uvuXyO559/Aq3xhzUs99+G0yudWaQ5o0OyMWNSef1QKfPkUrLfTEah5
-         3JdeOMHFOhs9VAxy7jhmLl68/uKjUa/lOkQ2H6c373zvP+94m9x61dLxPj3jyWYE67HV
-         S3xp7ejlINrtQxXGa6PJS9joqNSBQRIadcOUcKu+CvxWe/QnvrYG1LQ3FDtSmGrQmmS8
-         CBmCy6nrfzqAwRDiRRvD9vz0aorR2mINGePL0dEp2hicWhfcotQ4SKy3kBgcaHiubTKM
-         kABw==
+        Mon, 21 Mar 2022 09:41:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D83710FE0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647869978;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4vB3vLBvRcKjKfgtWTOX9eVbtgZOrJ2AsHjIDSNYEF8=;
+        b=VSGkoowcjzafZPDyNDsH9khvmzzeDJfhptqpgVtYu/fxa4qwUk8VCO+P4WdSHIAT9iG8pe
+        //w6u8ZOILQrhAA8Ms19xS3d0nN6WINkkwhqcExeSTLZors5Mosl5vSZcIRR9IL36i3MsZ
+        CCw/G9ofV0Lgqv7GxgkdIclS5uOS0T4=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-596-V6YgXvScObKoo_nRZZEsHw-1; Mon, 21 Mar 2022 09:39:37 -0400
+X-MC-Unique: V6YgXvScObKoo_nRZZEsHw-1
+Received: by mail-qk1-f199.google.com with SMTP id f11-20020a05620a20cb00b0067b3fedce10so9777771qka.15
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:39:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=C7ur1ssTUbHNpecbbbCU94tMoZ1fCbXzPQjfgyWqqxg=;
-        b=phN75rF3k5IuHIiWhjUMBW9ovpp/oOR9tAFrIWc5Uf6LOWU0T4JROD7JoBezeiuow8
-         8Xn2C9db/OPP14a+xQDwGy/2wts+EUjD1cXEd5afK8DlASDW7cje62UuzQhkBpMRdrmy
-         9YqbqTRSFhGDwEa9gHRu4zPsWGQampbPcsDysiic+tqlvmd7KZnjBA1tQ2mtLWP3ozzo
-         siSKSgxW9VHlSCF3QWcnHOYbXTetGRrq8Oa/MSL/LSiIuMsXrgD4YEb2JkYpkiXN4bhb
-         +DsNh6PvjX6lostOt72pOxUvH/Ay9AljaQ6a2O5jaH15Z8SSc+njrTgKt1HZarFxy1hu
-         5mdg==
-X-Gm-Message-State: AOAM530fF1VtppX1Zh58vVcL06HlpCsFeD+T7+fGEbxMfGzs34BDnDp9
-        kZ/zPM427C95vJ5zhGaG99c8Yat1mPtYBA==
-X-Google-Smtp-Source: ABdhPJwWZt9Ny/5MMoWri+0K296W3KYZx1PnQurYTeD4TmtqWAgVUE/0FAd2tN/N/WuCLsgov0xN5A==
-X-Received: by 2002:a5d:4804:0:b0:203:d59b:e83 with SMTP id l4-20020a5d4804000000b00203d59b0e83mr18685188wrq.696.1647869840048;
-        Mon, 21 Mar 2022 06:37:20 -0700 (PDT)
-Received: from monk.home ([2a01:cb10:430:ec00:4737:d56e:186b:af1])
-        by smtp.gmail.com with ESMTPSA id w5-20020a5d5445000000b00203f8c96bcesm7969426wrv.49.2022.03.21.06.37.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 06:37:19 -0700 (PDT)
-From:   Christophe Branchereau <cbranchereau@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Subject: [PATCH v5 3/3] drm/panel : innolux-ej030na and abt-y030xx067a : add .enable and .disable
-Date:   Mon, 21 Mar 2022 14:36:51 +0100
-Message-Id: <20220321133651.291592-4-cbranchereau@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133651.291592-1-cbranchereau@gmail.com>
-References: <20220321133651.291592-1-cbranchereau@gmail.com>
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4vB3vLBvRcKjKfgtWTOX9eVbtgZOrJ2AsHjIDSNYEF8=;
+        b=jl0ue/SbO2fYlNn64BRmzq3S558nrYNaXT2sn3g7wOaQKmb8sVhLAI5gH2FphGyvHu
+         4WsewNa/Wi7oWMs+yUC9V7lietsA7Oem52zXcznypETjhH6iFRpqnvEBRa9ks6JrExZN
+         2nLZc6P23sOlTg2EHKD6AfdqXYSHSzL1VcVw8igJUXINjkxxx68BI8TPWw0QHG8UPLkk
+         MD1DSgkDOkHUEPF1xol3VnRfBlyJCQCL2GRsDTl9QVrpqc3eyK78jlv8c8Xq0ftNZ9kN
+         /xtivA/Aq2YWLiDTiW83J5zEoXGGUsoNARGQFEvgOQcbPJWILyW5Qx484+cxYOIqkSnR
+         UWxQ==
+X-Gm-Message-State: AOAM530zgw5n7eJSWWG3yNkbIZpB0XFv3k6bbjB0DBYy9L4r/N92rYCB
+        aUvNAZMdyN0MMLrRM/Do58rRXL1rQgaFLGxqMZpWrdu3k0N2Wz/mW79biwz4V9pKhFviB2XFQEU
+        cVcwp7MKJbjVATfJ9hCcyK7IJ
+X-Received: by 2002:a05:622a:4cb:b0:2e1:ce8c:f097 with SMTP id q11-20020a05622a04cb00b002e1ce8cf097mr16352333qtx.395.1647869976582;
+        Mon, 21 Mar 2022 06:39:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwffiZT7sArY+rjQRzyKQCS9OCGHnDeS5R5qqaSRAq/k1AH9vga4g3Q4n0n8Ja7bEYg1j6gaw==
+X-Received: by 2002:a05:622a:4cb:b0:2e1:ce8c:f097 with SMTP id q11-20020a05622a04cb00b002e1ce8cf097mr16352307qtx.395.1647869976251;
+        Mon, 21 Mar 2022 06:39:36 -0700 (PDT)
+Received: from [192.168.1.9] (pool-68-163-101-245.bstnma.fios.verizon.net. [68.163.101.245])
+        by smtp.gmail.com with ESMTPSA id e7-20020a37ac07000000b0067d7cd47af4sm7714115qkm.31.2022.03.21.06.39.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 06:39:35 -0700 (PDT)
+To:     trix@redhat.com, jpoimboe@redhat.com, jikos@kernel.org,
+        mbenes@suse.cz, pmladek@suse.com, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20220320015143.2208591-1-trix@redhat.com>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Subject: Re: [PATCH v2] livepatch: Reorder to use before freeing a pointer
+Message-ID: <3ee9826e-b770-d015-0251-e9770172d973@redhat.com>
+Date:   Mon, 21 Mar 2022 09:39:34 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20220320015143.2208591-1-trix@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following the introduction of bridge_atomic_enable in the ingenic
-drm driver, the crtc is enabled between .prepare and .enable, if
-it exists.
+On 3/19/22 9:51 PM, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this issue
+> livepatch-shadow-fix1.c:113:2: warning: Use of
+>   memory after it is freed
+>   pr_info("%s: dummy @ %p, prevented leak @ %p\n",
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> The pointer is freed in the previous statement.
+> Reorder the pr_info to report before the free.
+> 
+> Similar issue in livepatch-shadow-fix2.c
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+> v2: Fix similar issue in livepatch-shadow-fix2.c
+> 
+>  samples/livepatch/livepatch-shadow-fix1.c | 2 +-
+>  samples/livepatch/livepatch-shadow-fix2.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
+> index 918ce17b43fda..6701641bf12d4 100644
+> --- a/samples/livepatch/livepatch-shadow-fix1.c
+> +++ b/samples/livepatch/livepatch-shadow-fix1.c
+> @@ -109,9 +109,9 @@ static void livepatch_fix1_dummy_leak_dtor(void *obj, void *shadow_data)
+>  	void *d = obj;
+>  	int **shadow_leak = shadow_data;
+>  
+> -	kfree(*shadow_leak);
+>  	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
+>  			 __func__, d, *shadow_leak);
+> +	kfree(*shadow_leak);
+>  }
+>  
+>  static void livepatch_fix1_dummy_free(struct dummy *d)
+> diff --git a/samples/livepatch/livepatch-shadow-fix2.c b/samples/livepatch/livepatch-shadow-fix2.c
+> index 29fe5cd420472..361046a4f10cf 100644
+> --- a/samples/livepatch/livepatch-shadow-fix2.c
+> +++ b/samples/livepatch/livepatch-shadow-fix2.c
+> @@ -61,9 +61,9 @@ static void livepatch_fix2_dummy_leak_dtor(void *obj, void *shadow_data)
+>  	void *d = obj;
+>  	int **shadow_leak = shadow_data;
+>  
+> -	kfree(*shadow_leak);
+>  	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
+>  			 __func__, d, *shadow_leak);
+> +	kfree(*shadow_leak);
+>  }
+>  
+>  static void livepatch_fix2_dummy_free(struct dummy *d)
+> 
 
-Add it so the backlight is only enabled after the crtc is, to avoid
-graphical issues.
+Hi Tom,
 
-Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
----
- drivers/gpu/drm/panel/panel-abt-y030xx067a.c  | 31 +++++++++++++++++--
- drivers/gpu/drm/panel/panel-innolux-ej030na.c | 31 ++++++++++++++++---
- 2 files changed, 55 insertions(+), 7 deletions(-)
+Ordering doesn't matter for the example, so let's clean up the static
+analysis.
 
-diff --git a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-index f043b484055b..ddfacaeac1d4 100644
---- a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-+++ b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-@@ -140,7 +140,7 @@ static const struct reg_sequence y030xx067a_init_sequence[] = {
- 	{ 0x03, REG03_VPOSITION(0x0a) },
- 	{ 0x04, REG04_HPOSITION1(0xd2) },
- 	{ 0x05, REG05_CLIP | REG05_NVM_VREFRESH | REG05_SLBRCHARGE(0x2) },
--	{ 0x06, REG06_XPSAVE | REG06_NT },
-+	{ 0x06, REG06_NT },
- 	{ 0x07, 0 },
- 	{ 0x08, REG08_PANEL(0x1) | REG08_CLOCK_DIV(0x2) },
- 	{ 0x09, REG09_SUB_BRIGHT_R(0x20) },
-@@ -183,8 +183,6 @@ static int y030xx067a_prepare(struct drm_panel *panel)
- 		goto err_disable_regulator;
- 	}
- 
--	msleep(120);
--
- 	return 0;
- 
- err_disable_regulator:
-@@ -202,6 +200,30 @@ static int y030xx067a_unprepare(struct drm_panel *panel)
- 	return 0;
- }
- 
-+static int y030xx067a_enable(struct drm_panel *panel)
-+{
-+
-+	struct y030xx067a *priv = to_y030xx067a(panel);
-+
-+	regmap_set_bits(priv->map, 0x06, REG06_XPSAVE);
-+
-+	if (panel->backlight) {
-+		/* Wait for the picture to be ready before enabling backlight */
-+		msleep(120);
-+	}
-+
-+	return 0;
-+}
-+
-+static int y030xx067a_disable(struct drm_panel *panel)
-+{
-+	struct y030xx067a *priv = to_y030xx067a(panel);
-+
-+	regmap_clear_bits(priv->map, 0x06, REG06_XPSAVE);
-+
-+	return 0;
-+}
-+
- static int y030xx067a_get_modes(struct drm_panel *panel,
- 				struct drm_connector *connector)
- {
-@@ -239,6 +261,8 @@ static int y030xx067a_get_modes(struct drm_panel *panel,
- static const struct drm_panel_funcs y030xx067a_funcs = {
- 	.prepare	= y030xx067a_prepare,
- 	.unprepare	= y030xx067a_unprepare,
-+	.enable		= y030xx067a_enable,
-+	.disable	= y030xx067a_disable,
- 	.get_modes	= y030xx067a_get_modes,
- };
- 
-@@ -246,6 +270,7 @@ static const struct regmap_config y030xx067a_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
- 	.max_register = 0x15,
-+	.cache_type = REGCACHE_FLAT,
- };
- 
- static int y030xx067a_probe(struct spi_device *spi)
-diff --git a/drivers/gpu/drm/panel/panel-innolux-ej030na.c b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-index c558de3f99be..6de7370185cd 100644
---- a/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-+++ b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-@@ -80,8 +80,6 @@ static const struct reg_sequence ej030na_init_sequence[] = {
- 	{ 0x47, 0x08 },
- 	{ 0x48, 0x0f },
- 	{ 0x49, 0x0f },
--
--	{ 0x2b, 0x01 },
- };
- 
- static int ej030na_prepare(struct drm_panel *panel)
-@@ -109,8 +107,6 @@ static int ej030na_prepare(struct drm_panel *panel)
- 		goto err_disable_regulator;
- 	}
- 
--	msleep(120);
--
- 	return 0;
- 
- err_disable_regulator:
-@@ -128,6 +124,31 @@ static int ej030na_unprepare(struct drm_panel *panel)
- 	return 0;
- }
- 
-+static int ej030na_enable(struct drm_panel *panel)
-+{
-+	struct ej030na *priv = to_ej030na(panel);
-+
-+	/* standby off */
-+	regmap_write(priv->map, 0x2b, 0x01);
-+
-+	if (panel->backlight) {
-+		/* Wait for the picture to be ready before enabling backlight */
-+		msleep(120);
-+	}
-+
-+	return 0;
-+}
-+
-+static int ej030na_disable(struct drm_panel *panel)
-+{
-+	struct ej030na *priv = to_ej030na(panel);
-+
-+	/* standby on */
-+	regmap_write(priv->map, 0x2b, 0x00);
-+
-+	return 0;
-+}
-+
- static int ej030na_get_modes(struct drm_panel *panel,
- 			     struct drm_connector *connector)
- {
-@@ -165,6 +186,8 @@ static int ej030na_get_modes(struct drm_panel *panel,
- static const struct drm_panel_funcs ej030na_funcs = {
- 	.prepare	= ej030na_prepare,
- 	.unprepare	= ej030na_unprepare,
-+	.enable		= ej030na_enable,
-+	.disable	= ej030na_disable,
- 	.get_modes	= ej030na_get_modes,
- };
- 
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+
+But for my sanity, isn't this a false positive?  There shouldn't be harm
+in printing the pointer itself, even after what it points to has been
+freed, i.e.
+
+	int *i = malloc(sizeof(*i));
+	free(i);
+	printf("%p\n", i);      << ok
+	printf("%d\n", *i);     << NOT ok
+
+But I suppose clang doesn't know that the passed pointer isn't getting
+dereferenced by the function, so it throws up a warning?  Just curious
+what your experience has been with respect to these reports.
+
+Thanks,
 -- 
-2.35.1
+Joe
 

@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82994E1FD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A6F4E1FD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344280AbiCUFNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 01:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S1344287AbiCUFR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 01:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241614AbiCUFNK (ORCPT
+        with ESMTP id S234158AbiCUFR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 01:13:10 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C697B5A58F
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 22:11:45 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id n15so11755240plh.2
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 22:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ljtCtXdVDHvboQzqZn2Q/lABoXg83zrD6bjOe7HHLFQ=;
-        b=zfrmFyu/ZYdoUki2x8lfXqzA+xFOfDNne30+A0kuctzZXnrUfD659CDieFanTrv3ym
-         h7/+Mi9WRZ8kPZXyA2Y27+TEoVcM3QsxC8yjssKaQgYIvuKCwEYlB3Wnyfr4cFQyTaK1
-         nZ4s7AJMu7uVqv4/UnjgC8rv6vmx1l4/ycjLOnkiVxihvPOarlJvT1pnSRLkSeyqMRO5
-         1qJl9DJK93bcaINaFdqtb9UQo84Y4IuUmTxZHvmmDep2CP0z9r9lEE6bISsIM8eCBXvo
-         uPppjNLRkdm1iCvcgOQmohE4QG+QzsF8ONc1U9VYeQaBcQPx+aaTA/Fd7WgnHb+z0bVV
-         Dd2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ljtCtXdVDHvboQzqZn2Q/lABoXg83zrD6bjOe7HHLFQ=;
-        b=NZSErfu5NV2Dms2WLUX6dYeqO0TPUmdxJzrX0w5Vj77BthtyITGn9AXrpEUSq/J5Uj
-         1Pf51w6kgu6HYs6Wqyl6oy76r8+y/3SWhBb7HRG9njPrCwYOYTrSpL21wAY77axiTCWW
-         nIjJ8FQE7LObhy3VH90XO6kM3vElARHRYPiRFfNzyBqJH5i4jfl/ZqvYv58pJf6OV82e
-         mgFii5ECIVpW1Kwp85JS8x5VCCPAuWzSg0fJOLPosgCO6P2vrSUepNyPgWd9YxVGA3nu
-         t5phsMO6GRUegRumTmYvCZfrQO+p4OuAf8DlCDdeKX2r/ATT03CqlQaYQaBqCA9dyJ37
-         iUug==
-X-Gm-Message-State: AOAM5321F7j40fG2WDr24TO5h0EXd9WBgQZdK+JxfeN+XBHSU4cOzxlD
-        +aNqnEhEKDpsKKKO7CV/VHgKyg==
-X-Google-Smtp-Source: ABdhPJxpP7IH2vtw0+4J1t9nHjBU4tJNb2wQP+R8AXexRkuTkU6j6fBJND4g9OSGcNQaJ2MyM1HtBQ==
-X-Received: by 2002:a17:902:700b:b0:148:ee33:70fe with SMTP id y11-20020a170902700b00b00148ee3370femr11279112plk.38.1647839505294;
-        Sun, 20 Mar 2022 22:11:45 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm13170925pgr.37.2022.03.20.22.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 22:11:44 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 10:41:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Viresh Kumar <vireshk@kernel.org>, kernel-janitors@vger.kernel.org,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: spear: fix typos in comments
-Message-ID: <20220321051142.pkihlm6bnclmtdrq@vireshk-i7>
-References: <20220318103729.157574-21-Julia.Lawall@inria.fr>
+        Mon, 21 Mar 2022 01:17:27 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976B92BB03
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 22:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647839762; x=1679375762;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=szmX5mQ1irZlur5g+LvTvMsi9E1E7QaV9jSuI6zk0wU=;
+  b=XkGSigN0pDkOyvlrgN7OcZVGTXSmTs+ybUImesAuf8quMHNFqQU2h0Aj
+   JCj93cPO/AEqQSHy/G8YtObbK+8zJ22ImeS7ngFRSBLU8z6r/wK1yJP1e
+   xFbfW8cEnWHWxChXtul3rI6Exthveq9H7cy472HZjqfh6WfRYKDKC1ihq
+   dd50UO+jb2mCOqswrwujyMKCJrn/D6FGBmRVlKtLUHt+OCnbP/Ya4haeh
+   ANdxEJ1mb5C8tY0xz/qGP3i84dO8Rzh6Quo1xLUwqJm/jgONGtGv9KUjG
+   Pdct+3lVvKAgtKG23xrqHJn/ZEf6PRkK9QXKKkpwNoDO2xQU5q/3PFK3g
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257189097"
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="257189097"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 22:16:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="500042968"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 20 Mar 2022 22:16:00 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWAOd-000HVJ-Qv; Mon, 21 Mar 2022 05:15:59 +0000
+Date:   Mon, 21 Mar 2022 13:15:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 1895/2335] ./usr/include/linux/neighbour.h:5:10:
+ fatal error: 'uapi/linux/types.h' file not found
+Message-ID: <202203211317.61fjNukZ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318103729.157574-21-Julia.Lawall@inria.fr>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-03-22, 11:37, Julia Lawall wrote:
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
-> ---
->  arch/arm/mach-spear/spear13xx.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/mach-spear/spear13xx.c b/arch/arm/mach-spear/spear13xx.c
-> index 74d1ca2a529a..b38391e9d8bf 100644
-> --- a/arch/arm/mach-spear/spear13xx.c
-> +++ b/arch/arm/mach-spear/spear13xx.c
-> @@ -29,7 +29,7 @@ void __init spear13xx_l2x0_init(void)
->  	/*
->  	 * 512KB (64KB/way), 8-way associativity, parity supported
->  	 *
-> -	 * FIXME: 9th bit, of Auxillary Controller register must be set
-> +	 * FIXME: 9th bit, of Auxiliary Controller register must be set
->  	 * for some spear13xx devices for stable L2 operation.
->  	 *
->  	 * Enable Early BRESP, L2 prefetch for Instruction and Data,
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   85293bf3fca6d85608cff1447ce3097583f15fab
+commit: 8941ec82b6cca439dcb9fafcc1955ebf70746139 [1895/2335] headers/deps: net: Optimize <uapi/linux/neighbour.h> dependencies
+config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220321/202203211317.61fjNukZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=8941ec82b6cca439dcb9fafcc1955ebf70746139
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout 8941ec82b6cca439dcb9fafcc1955ebf70746139
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/linux/neighbour.h:5:10: fatal error: 'uapi/linux/types.h' file not found
+   #include <uapi/linux/types.h>
+            ^~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://01.org/lkp

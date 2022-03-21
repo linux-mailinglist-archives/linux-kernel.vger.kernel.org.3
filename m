@@ -2,299 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD3D4E1F52
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 04:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755A54E1F50
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 04:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344310AbiCUD1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 23:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
+        id S1344293AbiCUDYk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 20 Mar 2022 23:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344209AbiCUD1m (ORCPT
+        with ESMTP id S1344030AbiCUDYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 23:27:42 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD85D396BC
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 20:26:16 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id t14so9408819pgr.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 20:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tirotech-co-nz.20210112.gappssmtp.com; s=20210112;
-        h=message-id:from:date:subject:to:cc;
-        bh=+OtyrEHezIZaXYqEnaU5AZt/+fb+Nwxo8/bTSx/SosM=;
-        b=1LyDLSPpj7R3w5DmDgYlRkb3Uy5UCRgguXSCD46PkZPB9Bttt3mcMDelH80p7zmaIh
-         JtArg6MBDuG3u5eQsYOHZrQz1VdGZ6xvncRSx1itr3gfAX4Snc7Ethzu4l6m4irM5t5L
-         /a4LFcVlZEyBu49pRnwoMe4KL814QnDXwP8EN7KmV8mFb55idiE51R/gIAY354dfAd4k
-         Q9TPh0HuX4jGU4bpPL8EIzbCau6LQt0nb6k0UfzsagdUgr7I2sJlr3Rs/m3xnvwwOggy
-         PrCT46VHuNjaIM8HKFfIxqUrYLIMsEXAd57QJm27GepRkfBzFMwMMQyeA72Ih4WRVYq0
-         ax8A==
+        Sun, 20 Mar 2022 23:24:37 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2EB35870
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 20:23:12 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id z16-20020a05660217d000b006461c7cbee3so9732921iox.21
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 20:23:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:date:subject:to:cc;
-        bh=+OtyrEHezIZaXYqEnaU5AZt/+fb+Nwxo8/bTSx/SosM=;
-        b=udVMN/WVTmJwt3mJ2JP3viCbkpWVOiqz+6P1WfswKhwM1zWBCROOfc9HYf7o2Rcvs0
-         Uen79iZwL07Hv6lDesUEn7R0CGO7CUdK+KFNLCYF5C/gm7jMYMdolmn8styoBp1072cC
-         2ArDCO4iNItC0Qt1g5JInREg5XmC1jxqc1ElomfSMuCUrdBdAhT8tigHCMUfwOHAB589
-         AdC4Vyfup9bhHdYztjx3M/APhth4QBSdK7evQ1+DmmprCUJd9MM8qtnAzyZnHVnJLaOa
-         WsIac9qzqa3Hh3ia98zgpxCzBBFxAxkCjKqvZsu/qIvpVBHh7XvAj3glfwulERA2nMiC
-         bFPA==
-X-Gm-Message-State: AOAM532bZr3bxda6OD1VxCj3UjshI/cItBXX9D5QCaqVY01QZ30nhCYr
-        7wWl5LJVm0duT1F6fhMUOu7m7w==
-X-Google-Smtp-Source: ABdhPJyfYj3y+aITLPJMoFfkbKim6QuwDDCwSnjF2f6qJec1TqoxVfmWD7Dtdz8hfEEmF2y6ivn2lQ==
-X-Received: by 2002:aa7:8889:0:b0:4f7:7283:e378 with SMTP id z9-20020aa78889000000b004f77283e378mr21762281pfe.36.1647833176381;
-        Sun, 20 Mar 2022 20:26:16 -0700 (PDT)
-Received: from localhost ([121.99.145.49])
-        by smtp.gmail.com with ESMTPSA id c3-20020a056a00248300b004f6f729e485sm17582022pfv.127.2022.03.20.20.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 20:26:15 -0700 (PDT)
-Message-ID: <6237f057.1c69fb81.1689.fec7@mx.google.com>
-From:   Daniel Beer <daniel.beer@tirotech.co.nz>
-Date:   Mon, 21 Mar 2022 16:16:27 +1300
-Subject: [PATCH] winmate-fm07-keys: Winmate FM07/FM07P buttons
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Beer <daniel.beer@tirotech.co.nz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to:content-transfer-encoding;
+        bh=0c661rytmbWAhVeK5Jck1fqKGOvw1zkyYHC4V10VBis=;
+        b=iTk44a+3qEqAqFo9B7VdLm4xFH2qtGNjCm3CxWcYs5urvImMPfx1vsV0q+5VsQRFeT
+         D1VylJEZhCNnLie3YO97Pv2WqkD36n9aPn3U2Ogp8eE4XNFMfJ4gj56qlR/RwTpJTwHd
+         d/g7UUc1mIw2kLnA4c5Osi0J7NRQE26hkTuO6VwanX0Y+0F8Px9j5qjFi/bSrBNz/pGv
+         S1z5e3u2MQemEpFzRujfEMjS2dSngYptJsSo+42FGhxNRuxOJRYz02PoMIoFXZHxGRpM
+         mgu6DEbmn0vjYHuV/s9MAJxk/otz/FcPOnNS/bkIpiXkSRMAUcatLgMxYltmK1D4O78E
+         kRgw==
+X-Gm-Message-State: AOAM530BlvIWlvmOVTsgcN+6JusmACzemgz44Oii1E2TdpyhRowzN1qQ
+        7dqK4seHCAWig/+tkpJTrnLhilaoPOOFqA1ykpytzIY7q8Ya
+X-Google-Smtp-Source: ABdhPJxd2Leqx2t6u0MJESQop/sKLcScxhr2HltZTyOotmeB9E4ES6Xx7QjPS/Hn8rW3LVp/7rm6NR1HF4wjxwrSoVd7jn/Z7iIp
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1525:b0:2c7:acda:c557 with SMTP id
+ i5-20020a056e02152500b002c7acdac557mr9180645ilu.35.1647832992182; Sun, 20 Mar
+ 2022 20:23:12 -0700 (PDT)
+Date:   Sun, 20 Mar 2022 20:23:12 -0700
+In-Reply-To: <20220321031535.2804-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000025f60c05dab204c5@google.com>
+Subject: Re: [syzbot] INFO: rcu detected stall in gc_worker (3)
+From:   syzbot <syzbot+eec403943a2a2455adaa@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Winmate FM07 and FM07P in-vehicle computers have a row of five buttons
-below the display. This module adds an input device that delivers key
-events when these buttons are pressed.
+Hello,
 
-Signed-off-by: Daniel Beer <daniel.beer@tirotech.co.nz>
----
- drivers/platform/x86/Kconfig             |   8 +
- drivers/platform/x86/Makefile            |   3 +
- drivers/platform/x86/winmate-fm07-keys.c | 184 +++++++++++++++++++++++
- 3 files changed, 195 insertions(+)
- create mode 100644 drivers/platform/x86/winmate-fm07-keys.c
+syzbot tried to test the proposed patch but the build/boot failed:
 
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 24deeeb29af2..62a5754d6ac9 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -1138,6 +1138,14 @@ config SIEMENS_SIMATIC_IPC
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called simatic-ipc.
- 
-+config WINMATE_FM07_KEYS
-+	tristate "Winmate FM07/FM07P front-panel keys driver"
-+	depends on INPUT
-+	help
-+	  Winmate FM07 and FM07P in-vehicle computers have a row of five
-+	  buttons below the display. This module adds an input device
-+	  that delivers key events when these buttons are pressed.
-+
- endif # X86_PLATFORM_DEVICES
- 
- config PMC_ATOM
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index c12a9b044fd8..04e7c995b838 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -129,3 +129,6 @@ obj-$(CONFIG_PMC_ATOM)			+= pmc_atom.o
- 
- # Siemens Simatic Industrial PCs
- obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
-+
-+# Winmate
-+obj-$(CONFIG_WINMATE_FM07_KEYS)		+= winmate-fm07-keys.o
-diff --git a/drivers/platform/x86/winmate-fm07-keys.c b/drivers/platform/x86/winmate-fm07-keys.c
-new file mode 100644
-index 000000000000..3e75adb15444
---- /dev/null
-+++ b/drivers/platform/x86/winmate-fm07-keys.c
-@@ -0,0 +1,184 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Driver for the Winmate FM07 front-panel keys
-+//
-+// Author: Daniel Beer <daniel.beer@tirotech.co.nz>
-+
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/input.h>
-+#include <linux/ioport.h>
-+#include <linux/platform_device.h>
-+#include <linux/dmi.h>
-+#include <linux/io.h>
-+
-+#define DRV_NAME	"winmate-fm07keys"
-+
-+#define PORT_CMD	0x6c
-+#define PORT_DATA	0x68
-+
-+#define EC_ADDR_KEYS	0x3b
-+#define EC_CMD_READ	0x80
-+
-+#define BASE_KEY	KEY_F13
-+#define NUM_KEYS	5
-+
-+/* Typically we're done in fewer than 10 iterations */
-+#define LOOP_TIMEOUT	1000
-+
-+static void fm07keys_poll(struct input_dev *input)
-+{
-+	uint8_t k;
-+	int i;
-+
-+	/* Flush output buffer */
-+	i = 0;
-+	while (inb(PORT_CMD) & 0x01) {
-+		if (++i >= LOOP_TIMEOUT)
-+			goto timeout;
-+		inb(PORT_DATA);
-+	}
-+
-+	/* Send request and wait for write completion */
-+	outb(EC_CMD_READ, PORT_CMD);
-+	i = 0;
-+	while (inb(PORT_CMD) & 0x02)
-+		if (++i >= LOOP_TIMEOUT)
-+			goto timeout;
-+
-+	outb(EC_ADDR_KEYS, PORT_DATA);
-+	i = 0;
-+	while (inb(PORT_CMD) & 0x02)
-+		if (++i >= LOOP_TIMEOUT)
-+			goto timeout;
-+
-+	/* Wait for data ready */
-+	i = 0;
-+	while (!(inb(PORT_CMD) & 0x01))
-+		if (++i >= LOOP_TIMEOUT)
-+			goto timeout;
-+	k = inb(PORT_DATA);
-+
-+	/* Notify of new key states */
-+	for (i = 0; i < NUM_KEYS; i++) {
-+		input_report_key(input, BASE_KEY + i, (~k) & 1);
-+		k >>= 1;
-+	}
-+
-+	input_sync(input);
-+	return;
-+timeout:
-+	dev_err(&input->dev, "timeout polling IO memory\n");
-+}
-+
-+static int fm07keys_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct input_dev *input;
-+	int ret;
-+	int i;
-+
-+	input = devm_input_allocate_device(dev);
-+	if (!input) {
-+		dev_err(dev, "no memory for input device\n");
-+		return -ENOMEM;
-+	}
-+
-+	if (!devm_request_region(dev, PORT_CMD, 1, "Winmate FM07 EC"))
-+		return -EBUSY;
-+	if (!devm_request_region(dev, PORT_DATA, 1, "Winmate FM07 EC"))
-+		return -EBUSY;
-+
-+	input->name = "Winmate FM07 front-panel keys";
-+	input->phys = DRV_NAME "/input0";
-+
-+	input->id.bustype = BUS_HOST;
-+	input->id.vendor = 0x0001;
-+	input->id.product = 0x0001;
-+	input->id.version = 0x0100;
-+
-+	__set_bit(EV_KEY, input->evbit);
-+
-+	for (i = 0; i < NUM_KEYS; i++)
-+		__set_bit(BASE_KEY + i, input->keybit);
-+
-+	ret = input_setup_polling(input, fm07keys_poll);
-+	if (ret) {
-+		dev_err(dev, "unable to set up polling, err=%d\n", ret);
-+		return ret;
-+	}
-+
-+	input_set_poll_interval(input, 20);
-+
-+	ret = input_register_device(input);
-+	if (ret) {
-+		dev_err(dev, "unable to register polled device, err=%d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	input_sync(input);
-+	return 0;
-+}
-+
-+static struct platform_driver fm07keys_driver = {
-+	.probe		= fm07keys_probe,
-+	.driver		= {
-+		.name	= DRV_NAME
-+	},
-+};
-+
-+/************************************************************************
-+ * Device instance for the FM07
-+ */
-+
-+static struct platform_device *dev;
-+
-+static const struct dmi_system_id fm07keys_dmi_table[] __initconst = {
-+	{
-+		/* FM07 and FM07P */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Winmate Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "IP30"),
-+		},
-+	},
-+};
-+
-+static int __init fm07keys_init(void)
-+{
-+	int ret;
-+
-+	if (!dmi_check_system(fm07keys_dmi_table))
-+		return -ENODEV;
-+
-+	ret = platform_driver_register(&fm07keys_driver);
-+	if (ret) {
-+		pr_err("fm07keys: failed to register driver, err=%d\n", ret);
-+		return ret;
-+	}
-+
-+	dev = platform_device_register_simple(DRV_NAME, -1, NULL, 0);
-+	if (!dev) {
-+		pr_err("fm07keys: failed to allocate device\n");
-+		ret = -ENOMEM;
-+		goto fail_alloc;
-+	}
-+
-+	return 0;
-+fail_alloc:
-+	platform_driver_unregister(&fm07keys_driver);
-+	return ret;
-+}
-+
-+static void __exit fm07keys_exit(void)
-+{
-+	platform_driver_unregister(&fm07keys_driver);
-+	platform_device_unregister(dev);
-+}
-+
-+module_init(fm07keys_init);
-+module_exit(fm07keys_exit);
-+
-+MODULE_AUTHOR("Daniel Beer <daniel.beer@tirotech.co.nz>");
-+MODULE_DESCRIPTION("Winmate FM07 front-panel keys driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.30.2
+failed to create VM pool: failed to create GCE image: create image operation failed: &{Code:PERMISSIONS_ERROR Location: Message:Required 'read' permission for 'disks/ci-upstream-linux-next-kasan-gce-root-test-job-test-job-image.tar.gz' ForceSendFields:[] NullFields:[]}.
+
+
+Tested on:
+
+commit:         91265a6d Add linux-next specific files for 20220303
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
+dashboard link: https://syzkaller.appspot.com/bug?extid=eec403943a2a2455adaa
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17ce6425700000
 

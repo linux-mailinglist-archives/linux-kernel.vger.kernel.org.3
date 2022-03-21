@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2CF4E2A71
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794304E2A0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349498AbiCUOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
+        id S1350456AbiCUOJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349024AbiCUOGx (ORCPT
+        with ESMTP id S1349293AbiCUODg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:06:53 -0400
+        Mon, 21 Mar 2022 10:03:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC523D4AC;
-        Mon, 21 Mar 2022 07:01:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CBE17B886;
+        Mon, 21 Mar 2022 07:00:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 079E96134B;
-        Mon, 21 Mar 2022 14:01:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01BBC340E8;
-        Mon, 21 Mar 2022 14:01:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0DC8612A1;
+        Mon, 21 Mar 2022 14:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0829AC340ED;
+        Mon, 21 Mar 2022 14:00:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871314;
-        bh=dOngte7wDYXuEx59lkF/6L4j2HvH4Rsn+39KIAog/z8=;
+        s=korg; t=1647871245;
+        bh=jbi74pirWmIJryKTHRKMdiKZsXWXK+wLnFhWCEPB59E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ynonakilRfAX2Jh3K9bsSKHAt94pvj8/YNjxVun0zTCmeOuAG1XN2vXe2aryB9eil
-         vhwwmN25/jh5D3D/To01+fQ1uBRPDra3WU2NXVPE0RECMkfNv0MAmMPIKngyLAZJib
-         mxg92xijfAgdAgKT5rTRPaCJPM4yLWO4BQrBkPsI=
+        b=qjBC5LQ8B0dFqsXj71WKwOF61gm7Q5HxcILuJWgyWFkEobXYKkhJPhT8RSBRoLh+a
+         8+TTepPFHNYPu9SQT9x0V+emCFW4ZbrMOMnXijpbntCOj7SZapzXr8W9KvGh1BGB77
+         YvrJjhIN7a3Zd6ZfBpenbFW/huoAfUFFf091jVI8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 18/37] drm/panel: simple: Fix Innolux G070Y2-L01 BPP settings
-Date:   Mon, 21 Mar 2022 14:53:00 +0100
-Message-Id: <20220321133221.824234485@linuxfoundation.org>
+Subject: [PATCH 5.15 25/32] arm64: fix clang warning about TRAMP_VALIAS
+Date:   Mon, 21 Mar 2022 14:53:01 +0100
+Message-Id: <20220321133221.291123727@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
-References: <20220321133221.290173884@linuxfoundation.org>
+In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
+References: <20220321133220.559554263@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,47 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit fc1b6ef7bfb3d1d4df868b1c3e0480cacda6cd81 ]
+[ Upstream commit 7f34b43e07cb512b28543fdcb9f35d1fbfda9ebc ]
 
-The Innolux G070Y2-L01 supports two modes of operation:
-1) FRC=Low/NC ... MEDIA_BUS_FMT_RGB666_1X7X3_SPWG ... BPP=6
-2) FRC=High ..... MEDIA_BUS_FMT_RGB888_1X7X4_SPWG ... BPP=8
+The newly introduced TRAMP_VALIAS definition causes a build warning
+with clang-14:
 
-Currently the panel description mixes both, BPP from 1) and bus
-format from 2), which triggers a warning at panel-simple.c:615.
+arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
+                return (char *)TRAMP_VALIAS + SZ_2K * slot;
 
-Pick the later, set bpp=8, fix the warning.
+Change the addition to something clang does not complain about.
 
-Fixes: a5d2ade627dca ("drm/panel: simple: Add support for Innolux G070Y2-L01")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Christoph Fritz <chf.fritz@googlemail.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Maxime Ripard <maxime@cerno.tech>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220220040718.532866-1-marex@denx.de
-Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Fixes: bd09128d16fa ("arm64: Add percpu vectors for EL1")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: James Morse <james.morse@arm.com>
+Link: https://lore.kernel.org/r/20220316183833.1563139-1-arnd@kernel.org
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-simple.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/include/asm/vectors.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 87f30bced7b7..6a820b698f5a 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2017,7 +2017,7 @@ static const struct display_timing innolux_g070y2_l01_timing = {
- static const struct panel_desc innolux_g070y2_l01 = {
- 	.timings = &innolux_g070y2_l01_timing,
- 	.num_timings = 1,
--	.bpc = 6,
-+	.bpc = 8,
- 	.size = {
- 		.width = 152,
- 		.height = 91,
+diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
+index f64613a96d53..bc9a2145f419 100644
+--- a/arch/arm64/include/asm/vectors.h
++++ b/arch/arm64/include/asm/vectors.h
+@@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
+ DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
+ 
+ #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
+-#define TRAMP_VALIAS	0
++#define TRAMP_VALIAS	0ul
+ #endif
+ 
+ static inline const char *
+ arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
+ {
+ 	if (arm64_kernel_unmapped_at_el0())
+-		return (char *)TRAMP_VALIAS + SZ_2K * slot;
++		return (char *)(TRAMP_VALIAS + SZ_2K * slot);
+ 
+ 	WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
+ 
 -- 
 2.34.1
 

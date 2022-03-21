@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2632E4E33D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6484E33ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbiCUXCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S232173AbiCUXCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbiCUW6b (ORCPT
+        with ESMTP id S233404AbiCUW7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:58:31 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D62459006;
-        Mon, 21 Mar 2022 15:36:44 -0700 (PDT)
-Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MN4qp-1npJtI3mRJ-00J5EQ; Mon, 21 Mar 2022 22:55:25 +0100
-Received: by mail-wr1-f45.google.com with SMTP id u16so21508673wru.4;
-        Mon, 21 Mar 2022 14:55:25 -0700 (PDT)
-X-Gm-Message-State: AOAM530RMxgk3jwFb0JEJYnUYEgIrgliaJYGuAwTZ5ezEyLz5TYH6vAj
-        u51yL9F8v1mBTEmy2GOsCbnBAsDvrd20fH6TlqU=
-X-Google-Smtp-Source: ABdhPJzwh5VrdiI1bc3kA/qP0tQTiqByLF123LNSVb5g7hlw9GovPGy8qh6+Cx7cu+lXNoLCe/LDwLKoy2W/g1NPcQo=
-X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
- e12-20020a056000178c00b002040648b4c4mr8462867wrg.219.1647899725513; Mon, 21
- Mar 2022 14:55:25 -0700 (PDT)
+        Mon, 21 Mar 2022 18:59:10 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25753324D64;
+        Mon, 21 Mar 2022 15:46:45 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id 185so7675664vsq.8;
+        Mon, 21 Mar 2022 15:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KLkiceh7FVS00nQi94x7eJVMtBdQbeaIibQoKaWYl8E=;
+        b=caRSOC3C4scd0H//UxWuKxVs05sAzJncJTZaouCVpdJz+RlMT9Bojz47Vi7CFlKp0c
+         YEmy2SUy4tN5dH1vQtLhDdUvhc3CsI3Drb/1Qox1DGJ8jqPflIjXCvxnmOkL/j6bCys6
+         gNCluTsTCCW5mJYv+T5aLL40BsUU+u+1poIvyIxsBhZsmLVih7y54uDx9ltEvBFA5W/M
+         MhYLnO/73VpP8lJgWUd2lfg1oSUpVOKFYaOpyv2wEHf7VA3ZRF4zgDJSoN4NLQsD/VRF
+         l6Lj6QBXLj5SKxzIrZXdDGn3aYTlnBfgzSGjUKgzI8vgTPAsoleHBHFbgD69BkDcHRXR
+         WUow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KLkiceh7FVS00nQi94x7eJVMtBdQbeaIibQoKaWYl8E=;
+        b=H1LvL5Xh0JvEJuCPx7t+4QA2XfYDGcuhDugYHGLQOD0NBkG4zPTUNTjYWx54A0J8BD
+         zPGDNY4LEty9Dl9Qed+uTzneFDbKCCureBiWPIiJpW13/25OzvgyyUjK7xtHhZ0fF8Uh
+         x43tyAGJUmAFfr03jsjoPL9ynGOkOzl6PZKG7ZZ4Z++F7FxVD3axBLUb4bWCOBV6UQMo
+         W47DxdL8/a/RH8RLPZkOkQRXJBMLUSXDoTcT7xKRfXPJk+zNk8gUt3Usj0xoxe7Dtovm
+         BtzeGq38+YueULF5dadtT5oImHBigIPlvpQekwkty+WEWCsuOV5efVCgrGcJMlMDxY+r
+         5cZQ==
+X-Gm-Message-State: AOAM530hGKUr79LnRSkX5hUsS+XWLDPTgjn7GJZ4A/rvpFDYGmhkZiqH
+        8HGlBTlJdHiE8vhZe8gmC+Wlgb3qzi7sRCJM6mag/T04
+X-Google-Smtp-Source: ABdhPJxCsMaQmrzfv8GKYMyK9qiHMXFUsezbm2wUfdUgXGXQmuYRJDRyumiEJQNikiKCEm0N2orr+DETmegYhv9f6aw=
+X-Received: by 2002:a17:903:32c7:b0:154:4156:f384 with SMTP id
+ i7-20020a17090332c700b001544156f384mr11038638plr.34.1647900736459; Mon, 21
+ Mar 2022 15:12:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <CAK8P3a12dY57+ZPEREAUrsNf45S0_4-yYHen6p0-PjJEivjczg@mail.gmail.com> <CAHk-=wj81Cgjb5xj=ghB0oEA4ronnc=WKZLTPGpJYPUn=QcQ5g@mail.gmail.com>
-In-Reply-To: <CAHk-=wj81Cgjb5xj=ghB0oEA4ronnc=WKZLTPGpJYPUn=QcQ5g@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 22:55:09 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a33TZm2NZg28KbCCeLzLvf759_5r8hr-rcWftci9qinog@mail.gmail.com>
-Message-ID: <CAK8P3a33TZm2NZg28KbCCeLzLvf759_5r8hr-rcWftci9qinog@mail.gmail.com>
-Subject: Re: [PATCH V8 00/22] arch: Add basic LoongArch support
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
+References: <20220321140327.777f9554@canb.auug.org.au> <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+ <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net> <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
+ <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net> <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
+ <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net> <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
+ <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net> <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
+ <20220322090541.7d06c8cb@canb.auug.org.au>
+In-Reply-To: <20220322090541.7d06c8cb@canb.auug.org.au>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 21 Mar 2022 15:12:05 -0700
+Message-ID: <CAADnVQJnZpQjUv-dw7SU-WwTOn_tZ8xmy5ydRn=g_m-9UyS2kw@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:+7UIanepdnWa2y7TiiQIeUT8W83/7V7wzhsPgFRjHFNqvuxf6Ea
- 4jG1C00t5AA4MofPcfSmyU1it8aKVVsCO2chwy50b7NQk56Qhithtgnyc9ihjzcBWNpAIF/
- PmecXMghJ1mJDiA2zrBX01SNt7jxEA7W6XyECNg4WIxaRPTwoH4MPP6BqO1KJr1gMuKT1Za
- KXX5/2ySt9N9Z9SmBq8+w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aEu/Ol8GpwM=:0fBGCWKS7vVuj3OtDQgSgs
- VC3AifaiTuHSZGdq5SX073YeMRn/29OpYFprppfViOnPyoFkVkVZjSsptCMIeeYatDLbDISRq
- l/VVvlP1PAV6EdbGRFyNtvI/AdRrWroQE+6CzpcAuNrHqv8pHyfAE53igm5Aj7Y5hwyN02LEv
- 5Ja6moSRj6p5npZMGQRWtm7jQFNw3u3jOiMT1Y2Zwt5Dx0jzq9kukL+IJv15ETytYUYzCJAsg
- DIggBItQzwfZz3FnUwxCbJ6UKl8XPKL5r1JnG03PNhC1IQVLBKbMo3GLE/yKPXR/FII8I3S/E
- ysv3sGlJCXrkYU0dP7Nco4yGPAJI0caJw664rKlu3rydYJx/mLm27WG0GeQG5c/dAoVCB1f2I
- dv3FW1NDO9jXYQgiYwgpIKP3MGA2jtGk/cDRqA5jfn1utA6Ptax6Bj8wYzXxHkvdDI0ocOohE
- HpuSf/8Ctfk/PnMLbO+vmq5BhlXyctzvm5FY5LUOBdwCqiUGhhjpFOU5N8FuNjz6JgY4wRgcJ
- 93iJ0bGbjnrsvWcvrkmOqVNw8si/b5MbKirzljAFIfPfz5/5SA3XcAZw+23N/sCfnMjKXiZjQ
- gYpLUHrNk20ItwOZUlmx+vyOx+4B5T+lRyq/XAKX61S2hERczmzXnvocUTdgKYEBNL2PR+SgI
- ZtAQRa6X9Y9poY3jZLV5f/eVbKgIq+ba/pdZzKf0oIlNDISzy0Cd2udCw6uyMKTobjsdh3AKm
- h9iiMU6CMIL0vF1kOdJvqEfRPRI73vQiECJk+bFaYrHoa0yQFzj5vkeV4lFJCwA6BFyhGIzY8
- tPxkefWPpcB4Z6vxJEI3nh1ew/Gctq3BRn8aDL4LJ6ybReJX5k=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,38 +90,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 5:59 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Mon, Mar 21, 2022 at 4:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Mon, Mar 21, 2022 at 3:05 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Mon, 21 Mar 2022 09:52:58 -0700 Linus Torvalds <torvalds@linux-foundation.org> wrote:
 > >
-> > This looks fine to me for the most part [...]
+> > On Mon, Mar 21, 2022 at 9:45 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > >
+> > > > It's presumably not in any of the pull requests I already have
+> > > > pending, but it would be nice if I saw some details of _what_ you are
+> > > > complaining about, and not just the complaint itself ;)
+> > >
+> > > Duh, right. It's this series:
+> > >
+> > >   https://lore.kernel.org/bpf/164757541675.26179.17727138330733641017.git-patchwork-notify@kernel.org/
+> > >
+> > > That went into bpf-next last Friday. I just checked but haven't found a
+> > > pull for it yet.
+> >
+> > Thanks. I can confirm it's not in any of the pull requests I have
+> > pending, so I'll just start doing my normal work and try to remember
+> > to look out for this issue later.
 >
-> So it looks like this is getting there.. Do we have a way forward for
-> this to be merged?
+> The normal path for bpf-next code is via the net-next tree.  But the
+> above series has not yet been merged into the net-next tree so is only
+> in the bpf-next tree.
 >
-> I obviously can take the patches, but it would be even nicer to have a
-> pull request, and you'd be the obvious person since you are - whether
-> you like it or not - the "odd architecture guy".
+> So, what am I to do?  Drop the bpf-next tree from linux-next until this
+> is resolved?  Some input from the BPF people would be useful.
+>
+> Dave, Jakub, please do not merge the bpf-bext tree into the net-next
+> tree for now.
 
-I can prepare a pull request when it gets to that, but I think the boot protocol
-should be fixed first, and that makes it 5.19 material.
+That makes little sense. It's not an unusual merge conflict.
+Peter's endbr series conflict with Masami's fprobe.
+Peter has a trivial patch that fixes objtool warning.
+The question is how to land that patch.
+I think the best is for Linus to apply it after bpf-next->net-next gets
+merged.
 
-The TL;DR version here is that LoongArch requires the use of ACPI/UEFI
-firmware, but does not currently enter the kernel using the UEFI protocol.
-
-Instead, grub gets loaded by the firmware (not sure using which protocol),
-and it then loads the kernel from disk, entering it through an ad-hoc
-method passing data from grub to the kernel using a combination of
-CPU registers and in-memory data structures that are different from
-how UEFI passes the same information using the drivers/firmware/efi
-stub entry.
-
-We have already discussed that this will be replaced with a regular
-UEFI entry using the same code that x86 and arm64 have, but at the
-moment, neither the specification nor the code is there.
-
-Merging the current version and changing it to the standard boot
-protocol later would mean they'd have to keep both protocols in
-the kernel, which adds complexity.
-
-         Arnd
+We're preparing bpf-next PR right now.

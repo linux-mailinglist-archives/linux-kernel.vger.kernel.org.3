@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8529E4E2C01
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD944E2B6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350084AbiCUPVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
+        id S1349767AbiCUPDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350009AbiCUPTs (ORCPT
+        with ESMTP id S234542AbiCUPDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:19:48 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4349631533;
-        Mon, 21 Mar 2022 08:18:06 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id q8so9804590wrc.0;
-        Mon, 21 Mar 2022 08:18:06 -0700 (PDT)
+        Mon, 21 Mar 2022 11:03:43 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1281517EB
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:02:17 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id u67-20020a627946000000b004fa6338bd77so6638071pfc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=A+b//XldyNE9F95qbCUHX3SvuVL8EhWJAbUUrBP4C/A=;
-        b=AWd7SeQ2nk/DbNt4+B9BAeDsc+D/A5J+it7uUOxx0MSPsx18/FKGcoI+IAAjeePcw8
-         AALKR4rhf6HUdx10qUy55ZjBjUe+7NGWL9EiIEWN7kiZZRErjA348y+ix+/cs1z6V8lH
-         WebixGUNVrX4ozh6V6nZsakjluOSFSUI+dcfBw7mu/bg50tA2cfGCoaNdzXEsW/H6BLi
-         SdmJBKQDEatwiQXwnVzMg3Zq2mjqlQGoLFuqP/d3xedXkAN/AXbp+k/H9vtAAtre/7Jy
-         wSmRysJ18oOp68arK/vY4+K4Uk+mYMEv8kJIgn3l8bpsYhwz959v6iG02+eHUZ6FHEpJ
-         R2Ig==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=7qxY5R4b4k3tZIlP/A/FDGNN142+VI1rVlCy2DOCwi0=;
+        b=nC46NUSEFVQbOeDk6LfOyhS40oaJ2zPSxyh0pGmiY9ES2hb+V/UH15eh6ZaYsitZd3
+         a4Cj1IZDWfD0Tn+NEfBoMz8Z/Ji1Uz/kkj5U3a4XCZGxYPreJLOAz1qz6+ifam2Thay3
+         DLvopEw1LTvoFncjzixRSB45p+8BCSc60lEP6wdL+hHgyw7uH/0gToixw9cvzxYrdT1g
+         B/5QVa31BXXKsH43r3Cug2AGvZtRdIOESnSF6nYridvRB8A2/5IxgDlQg+/nN9iN1O56
+         ptQJE8EwFMLAi0oX0FqY/bf1/NrR98yHRqDM1EaWASTLAbc+e3eG+9wIL8nYTk0fcO0q
+         XCPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=A+b//XldyNE9F95qbCUHX3SvuVL8EhWJAbUUrBP4C/A=;
-        b=fuXSidv4Te9YQy023n5u58F4zhQhCgkN2tZJW1/AnoUYSgyQRSdf4cuz5QkNGK1IBY
-         44BXUQcicAZ5moG64LKbRLSb3jV2lCV9P6Y73gfVzLsn1NphwS2jfwgGb06oCQlJf3Vj
-         ZdADkePWp5P+Wa5eIxbThMXOUAOYxU1r3AUb+2hkO/XQayO463J5KXWuTgaYmLknVf4M
-         4YDUaCO35ID7FK5CYCXca7wdKalZlTPo4n410nTA3x+bmh7La3ZSijv/Nn7++zSHPZrE
-         h0m9naBf4ytF2+jj0NEu1HZH4IYdOR4cTzpeKTBnkWr4lnsvCdYQYhMkcOb/n0W1Qget
-         TZMg==
-X-Gm-Message-State: AOAM533suQbXIHiiF3v52Pc3oA9CCvbVIY7muHGzILPvn3e4mDhOxYjQ
-        TZrPbu3wwh4mEdhKoHKZHD0=
-X-Google-Smtp-Source: ABdhPJzUsl/AE3isjDU1uubinmMNsCoBHgEoERNBwyk1hdZjIpDdugaDh+pTWJBzJjizW89vEE6l+A==
-X-Received: by 2002:adf:f8cf:0:b0:203:ee8c:8a0b with SMTP id f15-20020adff8cf000000b00203ee8c8a0bmr15573029wrq.363.1647875884632;
-        Mon, 21 Mar 2022 08:18:04 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.googlemail.com with ESMTPSA id 10-20020a5d47aa000000b00204012e4373sm7239729wrb.101.2022.03.21.08.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 08:18:04 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v4 18/18] dt-bindings: arm: msm: Convert kpss-gcc driver Documentation to yaml
-Date:   Mon, 21 Mar 2022 15:48:25 +0100
-Message-Id: <20220321144825.11736-19-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220321144825.11736-1-ansuelsmth@gmail.com>
-References: <20220321144825.11736-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=7qxY5R4b4k3tZIlP/A/FDGNN142+VI1rVlCy2DOCwi0=;
+        b=YybeN2ovCZ+1Nt1r3zih2OsCLsgzUyWGT3T4UhTK7wk2BNMp1MJzDXv3damPVw6/Al
+         yBvzds6GOQa4SdsurcBDGNUDjdd02AyQjkY/zoMb3RFo8YOXBai0HIVfAweT558eK1f7
+         vqaaFtKwCyyzAve9Td1AORBPEqCPtlNiJePolK+MNEZU+iy4N2hl2274GHl9/g9XzRlg
+         txAsjE0sit23ZMwl3tHK4SxHLVsIRSkhMKuK8PZUU8Gu25r9ux2e9glFFZvHNx4yUM0a
+         oy6QjzaL6TVVPXGrHD6MkwCdIqKd+rEvTz/gMIRQxbUwpsMWfe0vlS84+pqpeQrkWe05
+         TJhg==
+X-Gm-Message-State: AOAM533NzCIyD6vh/i4kIgMW5ImHoVcDUbK0eVTINJgUajHbt+++pl/1
+        57a/3rAZXhm4lUF2IBS77vFXBGwtZoQ=
+X-Google-Smtp-Source: ABdhPJw5HrqT+acz2IEXJQLkk1uQOBVBLwD5RCVwc17uWxphkqjuN7JbiWkcphBM/5381aZBpBbMk/wALfY=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:dc6f:6bfe:c575:7dd])
+ (user=pgonda job=sendgmr) by 2002:a17:903:2285:b0:154:c94:c5b7 with SMTP id
+ b5-20020a170903228500b001540c94c5b7mr13543882plh.64.1647874937331; Mon, 21
+ Mar 2022 08:02:17 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 08:02:14 -0700
+Message-Id: <20220321150214.1895231-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+Subject: [PATCH] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,140 +68,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert kpss-gcc driver Documentation to yaml.
+SEV-ES guests can request termination using the GHCB's MSR protocol. See
+AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
+guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
+return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
+struct the userspace VMM can clearly see the guest has requested a SEV-ES
+termination including the termination reason code set and reason code.
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Marc Orr <marcorr@google.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
 ---
- .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
- .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 68 +++++++++++++++++++
- 2 files changed, 68 insertions(+), 44 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
- create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
 
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-deleted file mode 100644
-index e628758950e1..000000000000
---- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-+++ /dev/null
-@@ -1,44 +0,0 @@
--Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
--
--PROPERTIES
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: should be one of the following. The generic compatible
--			"qcom,kpss-gcc" should also be included.
--			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
--			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
--			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
--			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
--
--- reg:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: base address and size of the register region
--
--- clocks:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: reference to the pll parents.
--
--- clock-names:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must be "pll8_vote", "pxo".
--
--- clock-output-names:
--	Usage: required
--	Value type: <string>
--	Definition: Name of the output clock. Typically acpu_l2_aux indicating
--		    an L2 cache auxiliary clock.
--
--Example:
--
--	l2cc: clock-controller@2011000 {
--		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
--		reg = <0x2011000 0x1000>;
--		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
--		clock-names = "pll8_vote", "pxo";
--		clock-output-names = "acpu_l2_aux";
--	};
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-new file mode 100644
-index 000000000000..20ee182eb16f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
+reason code set and reason code and then observing the codes from the
+userspace VMM in the kvm_run.shutdown.data fields.
+
+---
+ arch/x86/kvm/svm/sev.c   |  9 +++++++--
+ include/uapi/linux/kvm.h | 12 ++++++++++++
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 75fa6dd268f0..5f9d37dd3f6f 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -2735,8 +2735,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+ 		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
+ 			reason_set, reason_code);
+ 
+-		ret = -EINVAL;
+-		break;
++		vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
++		vcpu->run->shutdown.reason = KVM_SHUTDOWN_SEV_TERM;
++		vcpu->run->shutdown.ndata = 2;
++		vcpu->run->shutdown.data[0] = reason_set;
++		vcpu->run->shutdown.data[1] = reason_code;
 +
-+title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
++		return 0;
+ 	}
+ 	default:
+ 		/* Error, keep GHCB MSR value as-is */
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 8616af85dc5d..12138b8f290c 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -271,6 +271,12 @@ struct kvm_xen_exit {
+ #define KVM_EXIT_XEN              34
+ #define KVM_EXIT_RISCV_SBI        35
+ 
++/* For KVM_EXIT_SHUTDOWN */
++/* Standard VM shutdown request. No additional metadata provided. */
++#define KVM_SHUTDOWN_REQ	0
++/* SEV-ES termination request */
++#define KVM_SHUTDOWN_SEV_TERM	1
 +
-+maintainers:
-+  - Ansuel Smith <ansuelsmth@gmail.com>
-+
-+description: |
-+  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
-+  to control L2 mux (in the current implementation).
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - qcom,kpss-gcc-ipq8064
-+          - qcom,kpss-gcc-apq8064
-+          - qcom,kpss-gcc-msm8974
-+          - qcom,kpss-gcc-msm8960
-+      - const: qcom,kpss-gcc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: phandle to pll8_vote
-+      - description: phandle to pxo_board
-+
-+  clock-names:
-+    items:
-+      - const: pll8_vote
-+      - const: pxo
-+
-+  clock-output-names:
-+    const: acpu_l2_aux
-+
-+  '#clock-cells':
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-output-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
-+
-+    clock-controller@2011000 {
-+      compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
-+      reg = <0x2011000 0x1000>;
-+      clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
-+      clock-names = "pll8_vote", "pxo";
-+      clock-output-names = "acpu_l2_aux";
-+      #clock-cells = <0>;
-+    };
-+...
-+
+ /* For KVM_EXIT_INTERNAL_ERROR */
+ /* Emulate instruction failed. */
+ #define KVM_INTERNAL_ERROR_EMULATION	1
+@@ -311,6 +317,12 @@ struct kvm_run {
+ 		struct {
+ 			__u64 hardware_exit_reason;
+ 		} hw;
++		/* KVM_EXIT_SHUTDOWN_ENTRY */
++		struct {
++			__u64 reason;
++			__u32 ndata;
++			__u64 data[16];
++		} shutdown;
+ 		/* KVM_EXIT_FAIL_ENTRY */
+ 		struct {
+ 			__u64 hardware_entry_failure_reason;
 -- 
-2.34.1
+2.35.1.894.gb6a874cedc-goog
 

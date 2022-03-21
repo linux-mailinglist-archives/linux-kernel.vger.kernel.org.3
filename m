@@ -2,141 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F804E230A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FDC4E2312
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345720AbiCUJOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S1343644AbiCUJPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345704AbiCUJOb (ORCPT
+        with ESMTP id S235509AbiCUJPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:14:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B512DB7CB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647853985;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ruVQAPQyVxSUmpWM0lWG0+oQ7BPZ/wSzpsVTqVtPuBE=;
-        b=YLl7khnWJA3u5X1TcILcYwXKJOgCpdWUeQKmR4sjTitbsmj75pl1hXTBXbu7qayESJNI6l
-        q9MDECNNvRgK+/a0VNcaVtoWr3YCcGWZYVy5sZPnh/+hgkXlxbqyWcSgP2QjjbiqbE3xmx
-        tfGNN/oqPvdOfd6kjA45PodXCec9duk=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-D0Ortv9ZPLSX5UxCSBFwyQ-1; Mon, 21 Mar 2022 05:13:04 -0400
-X-MC-Unique: D0Ortv9ZPLSX5UxCSBFwyQ-1
-Received: by mail-ej1-f69.google.com with SMTP id gx12-20020a1709068a4c00b006df7e8181ceso6464052ejc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:13:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=ruVQAPQyVxSUmpWM0lWG0+oQ7BPZ/wSzpsVTqVtPuBE=;
-        b=MCeJf511Xn7mwGrDNZfw5ota7kggFOvRSI/ELTWu7KVDERCOg66vav4aRcuVZs7l+E
-         vHrh1HOzCkJflwoewRdnD9Q+GLdGu96IhVBjxyL+9v9+6ReJ4e22fhWH6b58C7opZQP/
-         vuKzVdSeq0pRltC0+pXZvuSdYcGhbbS+nD1MtmEg4odSWGXfeQcshXpjcaT2OIrrc0KM
-         RYPTWuEydndqwTQzlbVMl6Eanbki40yFaAM1JBn1UNz6SC5F+mKje2KoZrZOTGA1bOSq
-         UhWGSPuZI2Acd8rYRzzYeAULJJYz1khavNnUYe4HKKqrg5MJUzvw/2CxRJxQeDh28Ojz
-         1RXg==
-X-Gm-Message-State: AOAM531zVBNlvaDkulHPszNdaM+ibCdHyJVH3da1h7mY40V3RfNGnBpD
-        gHHYvPC5ZECvpotZjpptQMiUflthFN+NRMjQ6+JmBqlsjPcm0kBF3ngO0XgDay59xislmUh9FUA
-        3u97TwF/f1ClhC14mJStdWdOrijuVXaPVgNs6cZptERMnC/XZHl8ulOFbdTH7+6qLRZDMNnfVdK
-        cQ
-X-Received: by 2002:a17:906:d204:b0:6d6:df17:835e with SMTP id w4-20020a170906d20400b006d6df17835emr19286331ejz.20.1647853982747;
-        Mon, 21 Mar 2022 02:13:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwH+3MilHjpAinJ5SoKmOS0poHWTbX3aX4bmpLEON1uG5YV4WPNHhIc+ApRiUKf1wGjcov1jw==
-X-Received: by 2002:a17:906:d204:b0:6d6:df17:835e with SMTP id w4-20020a170906d20400b006d6df17835emr19286311ejz.20.1647853982464;
-        Mon, 21 Mar 2022 02:13:02 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id bw26-20020a170906c1da00b006c8aeca8febsm6647593ejb.47.2022.03.21.02.13.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 02:13:01 -0700 (PDT)
-Message-ID: <d6367754-7782-7c29-e756-ac02dbd4520b@redhat.com>
-Date:   Mon, 21 Mar 2022 10:13:00 +0100
+        Mon, 21 Mar 2022 05:15:43 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC1531DFD;
+        Mon, 21 Mar 2022 02:14:13 -0700 (PDT)
+X-UUID: e030b7e5dcad4d9286f6479676f04775-20220321
+X-UUID: e030b7e5dcad4d9286f6479676f04775-20220321
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 524223218; Mon, 21 Mar 2022 17:14:10 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 21 Mar 2022 17:14:09 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Mar 2022 17:14:08 +0800
+Message-ID: <17e6e8895ebc1113911481c7e097b394005db123.camel@mediatek.com>
+Subject: Re: [v5 3/4] ASoC: mediatek: mt8192: refactor for I2S8/I2S9 DAI
+ links of headset
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+CC:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linmq006@gmail.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <trevor.wu@mediatek.com>,
+        <matthias.bgg@gmail.com>, <aaronyu@google.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <angelogioacchino.delregno@collabora.com>
+Date:   Mon, 21 Mar 2022 17:14:08 +0800
+In-Reply-To: <Yjf4KjXpVJaNnvb8@google.com>
+References: <20220319114111.11496-1-jiaxin.yu@mediatek.com>
+         <20220319114111.11496-4-jiaxin.yu@mediatek.com>
+         <Yjf4KjXpVJaNnvb8@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [FYI PATCH] Revert "KVM: x86/mmu: Zap only TDP MMU leafs in
- kvm_zap_gfn_range()"
-Content-Language: en-US
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-References: <20220318164833.2745138-1-pbonzini@redhat.com>
-In-Reply-To: <20220318164833.2745138-1-pbonzini@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/18/22 17:48, Paolo Bonzini wrote:
-> This reverts commit cf3e26427c08ad9015956293ab389004ac6a338e.
+On Mon, 2022-03-21 at 11:59 +0800, Tzung-Bi Shih wrote:
+> On Sat, Mar 19, 2022 at 07:41:10PM +0800, Jiaxin Yu wrote:
+> > @@ -1145,6 +1140,13 @@ static int mt8192_mt6359_dev_probe(struct
+> > platform_device *pdev)
+> >  		goto err_speaker_codec;
+> >  	}
+> >  
+> > +	headset_codec = of_get_child_by_name(pdev->dev.of_node,
+> > "mediatek,headset-codec");
+> > +	if (!headset_codec) {
+> > +		ret = -EINVAL;
+> > +		dev_err_probe(&pdev->dev, ret, "Property
+> > 'headset_codec' missing or invalid\n");
+> > +		goto err_headset_codec;
+> > +	}
 > 
-> Multi-vCPU Hyper-V guests started crashing randomly on boot with the
-> latest kvm/queue and the problem can be bisected the problem to this
-> particular patch. Basically, I'm not able to boot e.g. 16-vCPU guest
-> successfully anymore. Both Intel and AMD seem to be affected. Reverting
-> the commit saves the day.
-> 
-> Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> (to be neat) Does it have any reason to prevent from using
+> of_parse_phandle()
+> but of_get_child_by_name()?
 
-This is not enough, the following is also needed to account
-for "KVM: x86/mmu: Defer TLB flush to caller when freeing TDP MMU shadow
-pages":
+Hi Tzung-Bi,
 
-------------------- 8< ----------------
-From: Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH] kvm: x86/mmu: Flush TLB before zap_gfn_range releases RCU
+"mediatek,headset-codec" is a child node of pdev->dev.of_node, so I use
+of_get_child_by_name() to get and   pass it to
+snd_soc_of_get_dai_link_codecs().
 
-Since "KVM: x86/mmu: Zap only TDP MMU leafs in kvm_zap_gfn_range()"
-is going to be reverted, it's not going to be true anymore that
-the zap-page flow does not free any 'struct kvm_mmu_page'.  Introduce
-an early flush before tdp_mmu_zap_leafs() returns, to preserve
-bisectability.
-
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index af60922906ef..7f63e1a704e3 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -941,13 +941,17 @@ static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
-  		flush = true;
-  	}
-  
-+	/*
-+	 * Need to flush before releasing RCU.  TODO: do it only if intermediate
-+	 * page tables were zapped; there is no need to flush under RCU protection
-+	 * if no 'struct kvm_mmu_page' is freed.
-+	 */
-+	if (flush)
-+		kvm_flush_remote_tlbs_with_address(kvm, start, end - start);
-+
-  	rcu_read_unlock();
-  
--	/*
--	 * Because this flow zaps _only_ leaf SPTEs, the caller doesn't need
--	 * to provide RCU protection as no 'struct kvm_mmu_page' will be freed.
--	 */
--	return flush;
-+	return false;
-  }
-  
-  /*
+Jiaxin.Yu
+Thanks
 

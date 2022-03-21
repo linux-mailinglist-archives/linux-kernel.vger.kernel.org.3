@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB654E1EC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFE64E1EC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343988AbiCUBfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 21:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S1344015AbiCUBfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 21:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344011AbiCUBfj (ORCPT
+        with ESMTP id S1344006AbiCUBfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 21:35:39 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A701BC23
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:34:10 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2dbfe49a4aaso114993247b3.5
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:34:10 -0700 (PDT)
+        Sun, 20 Mar 2022 21:35:38 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5E4DFDD
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:34:12 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id k13-20020a25c60d000000b006339008b92fso10269747ybf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:34:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ZeOLNklFdxO3u9OAvpBerkpzzU95+aAU0znuTpLngiQ=;
-        b=d1jV4Cp37F7D9BCOUfHlmoTAXcJNeXJ40BNj0wskYrkpjYkINjYOZe9N7OKQihkRfB
-         gP4rkkkd0BJ6jl2+dNIdkv1qBAKhtgplX5VyhaIZ0x4dCcFQyu77f3a8nt5MhnsTVxgU
-         mVHtLKDioiNJmegqN2UyewB+XzCfU3IrlSNGcY9ScTPEOKlz7qs+n5zPWuvEGBO2UJuF
-         4mH1WVf2xyNUa7SVWkfGsC0nt9ltuZgvOpLdB7KdV+i1u/uQ+Y+a3Jm6GT5TUp4frAW/
-         zE0Gf6hOgeeATSbN67lbelakOnB/Wk92YEO1BPD+ctMS2ILTYHnqStgVX0TQOcB6xJUy
-         qKjQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=iqWHeTNrg9XYOwrFBTqAP7o8kk60wCjviTK4u7Q8TPQ=;
+        b=cD0n34Wro5PWE+IrkNo+WmOflHEZZMrsltF90KGOZUVl2LyBfvD0lrHbIoDBGJXO27
+         yNylDnwrG7LOpxUF0lipx3xPkQEsZTsDnQvRZFVLbLmDnr3uurV8oyHT5ePzKN5o9FIb
+         UvqfwIHVrERQd0SDWlwGvFFgEu7BDbyS8rldnyw07J6G3taZH5jy2VeSQXIZd8D8Rt/8
+         jA8YiE6sJnCYt/EX4rwVKMB1hnQ/H1hN31lN7nG9XvOjQBrgufkdU63u13Pdz+qY/Ivj
+         +jyWUzKqAmQRY5SF5sB6Ha4n3JqgDR/0/DuWr76wTr7nDZp8tBDL1Ry2iSjDftS/J0V/
+         NktQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ZeOLNklFdxO3u9OAvpBerkpzzU95+aAU0znuTpLngiQ=;
-        b=BlCClJ+PtAMLEG4PE+LXAj4eJl2qeKxkSYvhTptFZtDbJ7ZfnTpZ/grlDjVO0xF2kY
-         CnVnGY/GHNda3lf2s6ikndiSVnKrXbGqEmRYlkOK05xewKQDx9+XtSZwZUcgGL9duvzD
-         rTjNS5EduCk4PQvMLYA1jgi9VsklNVxW3AyVdqAFDcOGKfOAT8n1Ja3iP4rRxmOltuga
-         pepJpjVaY6ZD9OpYebouBg01n/j8To6Ae7bljUOByn617wT2efWPbO2jVC0THNOnzyRF
-         S0J1GwTErqCDt69NFC1ElOhyEV9p8tywAnzalSjrCfYl6v/0tKTX8mhnk/kiXPeb2uMd
-         0mJA==
-X-Gm-Message-State: AOAM531BZI2cmh5FlNlEmhf1YRLSbxe7IO3PAsUffLY0DTxBgl+jncPT
-        aEPzwZ8BDSL7uq/gTMnzc4riU35NUWVyUg==
-X-Google-Smtp-Source: ABdhPJwT0bz490iHWFWNbNigVu4ofICo3mqLkt63BYyrYcWzYNdJeTC0hDh8faJQIrGbrXZnxIts4ihftVTL8Q==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=iqWHeTNrg9XYOwrFBTqAP7o8kk60wCjviTK4u7Q8TPQ=;
+        b=WBjrMHcrfZ6C6fmIrs2qFrm16uucUj7rcVWC6wZLilJiEhkRWm0YWb2R1T22CZs7vh
+         qzCCH+wp1HDLAr3yZn8zmN/d9Or8S8JYti61aOBIwMEYcQCrNq3J+5z9rsENKCtIxP5h
+         0+PYAc92+f6qMY/nonk7NsnYrOXqaVurmghzkV2en9Q5Ya2uHefzIeBhdmXfY06UWnUs
+         D5EcYfGz5xui6gB9I+LOoJbl4luscak/kZTfCXmFMiAckn523zA6F4MLE3l4NE22O68t
+         mPqxIBbaySVmC12/++ppj/8STKR9/q9d38Qerxq++15NG7PHRB+Ns4ddcOPqKlqVTdS+
+         yoOA==
+X-Gm-Message-State: AOAM530Bjsx9H+ZA3DqKPznCjxD0AsqcK7YdM94hFPrBRKspCbTp49Md
+        MIsyDYagB99jhOlRqvFw/tNOa1k+KYJEng==
+X-Google-Smtp-Source: ABdhPJyH2EyKwM6rOOKSTPvaP6P3ZaNR7CXgl0Yog9h0oPHtnWdEbUrJAlqA2WW8q2ZPPeHUxpNwLYANXRl6yQ==
 X-Received: from mmandlik.mtv.corp.google.com ([2620:15c:202:201:e0cb:81c1:7b8f:ab9f])
- (user=mmandlik job=sendgmr) by 2002:a5b:787:0:b0:624:107a:6c45 with SMTP id
- b7-20020a5b0787000000b00624107a6c45mr19279543ybq.24.1647826449307; Sun, 20
- Mar 2022 18:34:09 -0700 (PDT)
-Date:   Sun, 20 Mar 2022 18:34:00 -0700
-Message-Id: <20220320183225.1.Iaf638bb9f885f5880ab1b4e7ae2f73dd53a54661@changeid>
+ (user=mmandlik job=sendgmr) by 2002:a25:7282:0:b0:633:f254:4541 with SMTP id
+ n124-20020a257282000000b00633f2544541mr4385603ybc.414.1647826451794; Sun, 20
+ Mar 2022 18:34:11 -0700 (PDT)
+Date:   Sun, 20 Mar 2022 18:34:01 -0700
+In-Reply-To: <20220320183225.1.Iaf638bb9f885f5880ab1b4e7ae2f73dd53a54661@changeid>
+Message-Id: <20220320183225.2.I61857ea92be43418b8ce16839f79a4704cc89fa6@changeid>
 Mime-Version: 1.0
+References: <20220320183225.1.Iaf638bb9f885f5880ab1b4e7ae2f73dd53a54661@changeid>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH 1/2] Bluetooth: Add support for devcoredump
+Subject: [PATCH 2/2] Bluetooth: btusb: Add Intel devcoredump support
 From:   Manish Mandlik <mmandlik@google.com>
 To:     marcel@holtmann.org, luiz.dentz@gmail.com
 Cc:     chromeos-bluetooth-upstreaming@chromium.org,
         linux-bluetooth@vger.kernel.org,
         Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
         Manish Mandlik <mmandlik@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Chethan Tumkur Narayan <chethan.tumkur.narayan@intel.com>,
         Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,658 +75,221 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-Add devcoredump APIs to hci core so that drivers only have to provide
-the dump skbs instead of managing the synchronization and timeouts.
-
-The devcoredump APIs should be used in the following manner:
- - hci_devcoredump_init is called to allocate the dump.
- - hci_devcoredump_append is called to append any skbs with dump data
-   OR hci_devcoredump_append_pattern is called to insert a pattern.
- - hci_devcoredump_complete is called when all dump packets have been
-   sent OR hci_devcoredump_abort is called to indicate an error and
-   cancel an ongoing dump collection.
-
-The high level APIs just prepare some skbs with the appropriate data and
-queue it for the dump to process. Packets part of the crashdump can be
-intercepted in the driver in interrupt context and forwarded directly to
-the devcoredump APIs.
-
-Internally, there are 5 states for the dump: idle, active, complete,
-abort and timeout. A devcoredump will only be in active state after it
-has been initialized. Once active, it accepts data to be appended,
-patterns to be inserted (i.e. memset) and a completion event or an abort
-event to generate a devcoredump. The timeout is initialized at the same
-time the dump is initialized (defaulting to 10s) and will be cleared
-either when the timeout occurs or the dump is complete or aborted.
+Intercept debug exception events from the controller and put them into
+a devcoredump using hci devcoredump APIs. The debug exception contains
+data in a TLV format and it will be parsed in userspace.
 
 Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 Signed-off-by: Manish Mandlik <mmandlik@google.com>
 Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Reviewed-by: Chethan Tumkur Narayan <chethan.tumkur.narayan@intel.com>
 ---
 
- include/net/bluetooth/hci_core.h |  51 ++++
- net/bluetooth/hci_core.c         | 496 +++++++++++++++++++++++++++++++
- net/bluetooth/hci_sync.c         |   2 +
- 3 files changed, 549 insertions(+)
+ drivers/bluetooth/btintel.c | 60 +++++++++++++++++++++++++++++++++++++
+ drivers/bluetooth/btintel.h | 14 +++++++++
+ drivers/bluetooth/btusb.c   | 47 +++++++++++++++++++++++++----
+ 3 files changed, 115 insertions(+), 6 deletions(-)
 
-diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
-index d5377740e99c..818ba3a43e8c 100644
---- a/include/net/bluetooth/hci_core.h
-+++ b/include/net/bluetooth/hci_core.h
-@@ -118,6 +118,43 @@ enum suspended_state {
- 	BT_SUSPEND_CONFIGURE_WAKE,
- };
+diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
+index 06514ed66022..9ac7a4441b38 100644
+--- a/drivers/bluetooth/btintel.c
++++ b/drivers/bluetooth/btintel.c
+@@ -32,6 +32,11 @@ struct cmd_write_boot_params {
+ 	u8  fw_build_yy;
+ } __packed;
  
-+#define DEVCOREDUMP_TIMEOUT	msecs_to_jiffies(100000)	/* 100 sec */
++#define DRIVER_NAME_LEN		16
++static char driver_name[DRIVER_NAME_LEN];
++static u8 hw_variant;
++static u32 fw_build_num;
 +
-+typedef int  (*dmp_hdr_t)(struct hci_dev *hdev, char *buf, size_t size);
-+typedef void (*notify_change_t)(struct hci_dev *hdev, int state);
-+
-+/* struct hci_devcoredump - Devcoredump state
-+ *
-+ * @supported: Indicates if FW dump collection is supported by driver
-+ * @state: Current state of dump collection
-+ * @alloc_size: Total size of the dump
-+ * @head: Start of the dump
-+ * @tail: Pointer to current end of dump
-+ * @end: head + alloc_size for easy comparisons
-+ *
-+ * @dmp_hdr: Create a dump header to identify controller/fw/driver info
-+ * @notify_change: Notify driver when devcoredump state has changed
-+ */
-+struct hci_devcoredump {
-+	bool		supported;
-+
-+	enum devcoredump_state {
-+		HCI_DEVCOREDUMP_IDLE,
-+		HCI_DEVCOREDUMP_ACTIVE,
-+		HCI_DEVCOREDUMP_DONE,
-+		HCI_DEVCOREDUMP_ABORT,
-+		HCI_DEVCOREDUMP_TIMEOUT
-+	} state;
-+
-+	u32		alloc_size;
-+	char		*head;
-+	char		*tail;
-+	char		*end;
-+
-+	dmp_hdr_t	dmp_hdr;
-+	notify_change_t	notify_change;
-+};
-+
- struct hci_conn_hash {
- 	struct list_head list;
- 	unsigned int     acl_num;
-@@ -568,6 +605,11 @@ struct hci_dev {
- 	const char		*fw_info;
- 	struct dentry		*debugfs;
+ int btintel_check_bdaddr(struct hci_dev *hdev)
+ {
+ 	struct hci_rp_read_bd_addr *bda;
+@@ -304,6 +309,9 @@ int btintel_version_info(struct hci_dev *hdev, struct intel_version *ver)
+ 		return -EINVAL;
+ 	}
  
-+	struct hci_devcoredump	dump;
-+	struct sk_buff_head	dump_q;
-+	struct work_struct	dump_rx;
-+	struct delayed_work	dump_timeout;
++	hw_variant = ver->hw_variant;
++	fw_build_num = ver->fw_build_num;
 +
- 	struct device		dev;
+ 	bt_dev_info(hdev, "%s revision %u.%u build %u week %u %u",
+ 		    variant, ver->fw_revision >> 4, ver->fw_revision & 0x0f,
+ 		    ver->fw_build_num, ver->fw_build_ww,
+@@ -497,6 +505,9 @@ static int btintel_version_info_tlv(struct hci_dev *hdev,
+ 		return -EINVAL;
+ 	}
  
- 	struct rfkill		*rfkill;
-@@ -1308,6 +1350,15 @@ static inline void hci_set_aosp_capable(struct hci_dev *hdev)
- #endif
++	hw_variant = INTEL_HW_VARIANT(version->cnvi_bt);
++	fw_build_num = version->build_num;
++
+ 	bt_dev_info(hdev, "%s timestamp %u.%u buildtype %u build %u", variant,
+ 		    2000 + (version->timestamp >> 8), version->timestamp & 0xff,
+ 		    version->build_type, version->build_num);
+@@ -1391,6 +1402,55 @@ int btintel_set_quality_report(struct hci_dev *hdev, bool enable)
  }
+ EXPORT_SYMBOL_GPL(btintel_set_quality_report);
  
-+int hci_devcoredump_register(struct hci_dev *hdev, dmp_hdr_t dmp_hdr,
-+			     notify_change_t notify_change);
-+int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_size);
-+int hci_devcoredump_append(struct hci_dev *hdev, struct sk_buff *skb);
-+int hci_devcoredump_append_pattern(struct hci_dev *hdev, u8 pattern, u32 len);
-+int hci_devcoredump_complete(struct hci_dev *hdev);
-+int hci_devcoredump_abort(struct hci_dev *hdev);
-+void hci_devcoredump_reset(struct hci_dev *hdev);
-+
- int hci_dev_open(__u16 dev);
- int hci_dev_close(__u16 dev);
- int hci_dev_do_close(struct hci_dev *hdev);
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index b4782a6c1025..76dbb6b28870 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -28,6 +28,7 @@
- #include <linux/export.h>
- #include <linux/rfkill.h>
- #include <linux/debugfs.h>
-+#include <linux/devcoredump.h>
- #include <linux/crypto.h>
- #include <linux/property.h>
- #include <linux/suspend.h>
-@@ -2404,6 +2405,498 @@ static int hci_suspend_notifier(struct notifier_block *nb, unsigned long action,
- 	return NOTIFY_DONE;
- }
- 
-+enum hci_devcoredump_pkt_type {
-+	HCI_DEVCOREDUMP_PKT_INIT,
-+	HCI_DEVCOREDUMP_PKT_SKB,
-+	HCI_DEVCOREDUMP_PKT_PATTERN,
-+	HCI_DEVCOREDUMP_PKT_COMPLETE,
-+	HCI_DEVCOREDUMP_PKT_ABORT,
-+};
-+
-+struct hci_devcoredump_skb_cb {
-+	u16 pkt_type;
-+};
-+
-+struct hci_devcoredump_skb_pattern {
-+	u8 pattern;
-+	u32 len;
-+} __packed;
-+
-+#define hci_dmp_cb(skb)	((struct hci_devcoredump_skb_cb *)((skb)->cb))
-+
-+#define MAX_DEVCOREDUMP_HDR_SIZE	512	/* bytes */
-+
-+static int hci_devcoredump_update_hdr_state(char *buf, size_t size, int state)
-+{
-+	if (!buf)
-+		return 0;
-+
-+	return snprintf(buf, size, "Bluetooth devcoredump\nState: %d\n", state);
-+}
-+
-+/* Call with hci_dev_lock only. */
-+static int hci_devcoredump_update_state(struct hci_dev *hdev, int state)
-+{
-+	hdev->dump.state = state;
-+
-+	return hci_devcoredump_update_hdr_state(hdev->dump.head,
-+						hdev->dump.alloc_size, state);
-+}
-+
-+static int hci_devcoredump_mkheader(struct hci_dev *hdev, char *buf,
-+				    size_t buf_size)
++static int btintel_dmp_hdr(struct hci_dev *hdev, char *buf, size_t size)
 +{
 +	char *ptr = buf;
-+	size_t rem = buf_size;
++	size_t rem = size;
 +	size_t read = 0;
 +
-+	read = hci_devcoredump_update_hdr_state(ptr, rem, HCI_DEVCOREDUMP_IDLE);
-+	read += 1; /* update_hdr_state adds \0 at the end upon state rewrite */
++	read = snprintf(ptr, rem, "Controller Name: 0x%X\n", hw_variant);
 +	rem -= read;
 +	ptr += read;
 +
-+	if (hdev->dump.dmp_hdr) {
-+		/* dmp_hdr() should return number of bytes written */
-+		read = hdev->dump.dmp_hdr(hdev, ptr, rem);
-+		rem -= read;
-+		ptr += read;
-+	}
-+
-+	read = snprintf(ptr, rem, "--- Start dump ---\n");
++	read = snprintf(ptr, rem, "Firmware Version: 0x%X\n", fw_build_num);
 +	rem -= read;
 +	ptr += read;
 +
-+	return buf_size - rem;
++	read = snprintf(ptr, rem, "Driver: %s\n", driver_name);
++	rem -= read;
++	ptr += read;
++
++	read = snprintf(ptr, rem, "Vendor: Intel\n");
++	rem -= read;
++	ptr += read;
++
++	return size - rem;
 +}
 +
-+/* Do not call with hci_dev_lock since this calls driver code. */
-+static void hci_devcoredump_notify(struct hci_dev *hdev, int state)
++int btintel_register_devcoredump_support(struct hci_dev *hdev,
++					 const char *driver)
 +{
-+	if (hdev->dump.notify_change)
-+		hdev->dump.notify_change(hdev, state);
-+}
++	struct intel_debug_features features;
++	int err;
 +
-+/* Call with hci_dev_lock only. */
-+void hci_devcoredump_reset(struct hci_dev *hdev)
-+{
-+	hdev->dump.head = NULL;
-+	hdev->dump.tail = NULL;
-+	hdev->dump.alloc_size = 0;
-+
-+	hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_IDLE);
-+
-+	cancel_delayed_work(&hdev->dump_timeout);
-+	skb_queue_purge(&hdev->dump_q);
-+}
-+
-+/* Call with hci_dev_lock only. */
-+static void hci_devcoredump_free(struct hci_dev *hdev)
-+{
-+	if (hdev->dump.head)
-+		vfree(hdev->dump.head);
-+
-+	hci_devcoredump_reset(hdev);
-+}
-+
-+/* Call with hci_dev_lock only. */
-+static int hci_devcoredump_alloc(struct hci_dev *hdev, u32 size)
-+{
-+	hdev->dump.head = vmalloc(size);
-+	if (!hdev->dump.head)
-+		return -ENOMEM;
-+
-+	hdev->dump.alloc_size = size;
-+	hdev->dump.tail = hdev->dump.head;
-+	hdev->dump.end = hdev->dump.head + size;
-+
-+	hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_IDLE);
-+
-+	return 0;
-+}
-+
-+/* Call with hci_dev_lock only. */
-+static bool hci_devcoredump_copy(struct hci_dev *hdev, char *buf, u32 size)
-+{
-+	if (hdev->dump.tail + size > hdev->dump.end)
-+		return false;
-+
-+	memcpy(hdev->dump.tail, buf, size);
-+	hdev->dump.tail += size;
-+
-+	return true;
-+}
-+
-+/* Call with hci_dev_lock only. */
-+static bool hci_devcoredump_memset(struct hci_dev *hdev, u8 pattern, u32 len)
-+{
-+	if (hdev->dump.tail + len > hdev->dump.end)
-+		return false;
-+
-+	memset(hdev->dump.tail, pattern, len);
-+	hdev->dump.tail += len;
-+
-+	return true;
-+}
-+
-+/* Call with hci_dev_lock only. */
-+static int hci_devcoredump_prepare(struct hci_dev *hdev, u32 dump_size)
-+{
-+	char *dump_hdr;
-+	int dump_hdr_size;
-+	u32 size;
-+	int err = 0;
-+
-+	dump_hdr = vmalloc(MAX_DEVCOREDUMP_HDR_SIZE);
-+	if (!dump_hdr) {
-+		err = -ENOMEM;
-+		goto hdr_free;
++	err = btintel_read_debug_features(hdev, &features);
++	if (err) {
++		bt_dev_info(hdev, "Error reading debug features");
++		return err;
 +	}
 +
-+	dump_hdr_size = hci_devcoredump_mkheader(hdev, dump_hdr,
-+						 MAX_DEVCOREDUMP_HDR_SIZE);
-+	size = dump_hdr_size + dump_size;
-+
-+	if (hci_devcoredump_alloc(hdev, size)) {
-+		err = -ENOMEM;
-+		goto hdr_free;
++	if (!(features.page1[0] & 0x3f)) {
++		bt_dev_info(hdev, "Telemetry exception format not supported");
++		return -EOPNOTSUPP;
 +	}
 +
-+	/* Insert the device header */
-+	if (!hci_devcoredump_copy(hdev, dump_hdr, dump_hdr_size)) {
-+		bt_dev_err(hdev, "Failed to insert header");
-+		hci_devcoredump_free(hdev);
-+
-+		err = -ENOMEM;
-+		goto hdr_free;
-+	}
-+
-+hdr_free:
-+	if (dump_hdr)
-+		vfree(dump_hdr);
++	strncpy(driver_name, driver, DRIVER_NAME_LEN);
++	hci_devcoredump_register(hdev, btintel_dmp_hdr, NULL);
 +
 +	return err;
 +}
++EXPORT_SYMBOL_GPL(btintel_register_devcoredump_support);
 +
-+/* Bluetooth devcoredump state machine.
-+ *
-+ * Devcoredump states:
-+ *
-+ *      HCI_DEVCOREDUMP_IDLE: The default state.
-+ *
-+ *      HCI_DEVCOREDUMP_ACTIVE: A devcoredump will be in this state once it has
-+ *              been initialized using hci_devcoredump_init(). Once active, the
-+ *              driver can append data using hci_devcoredump_append() or insert
-+ *              a pattern using hci_devcoredump_append_pattern().
-+ *
-+ *      HCI_DEVCOREDUMP_DONE: Once the dump collection is complete, the drive
-+ *              can signal the completion using hci_devcoredump_complete(). A
-+ *              devcoredump is generated indicating the completion event and
-+ *              then the state machine is reset to the default state.
-+ *
-+ *      HCI_DEVCOREDUMP_ABORT: The driver can cancel ongoing dump collection in
-+ *              case of any error using hci_devcoredump_abort(). A devcoredump
-+ *              is still generated with the available data indicating the abort
-+ *              event and then the state machine is reset to the default state.
-+ *
-+ *      HCI_DEVCOREDUMP_TIMEOUT: A timeout timer for HCI_DEVCOREDUMP_TIMEOUT sec
-+ *              is started during devcoredump initialization. Once the timeout
-+ *              occurs, the driver is notified, a devcoredump is generated with
-+ *              the available data indicating the timeout event and then the
-+ *              state machine is reset to the default state.
-+ *
-+ * The driver must register using hci_devcoredump_register() before using the
-+ * hci devcoredump APIs.
-+ */
-+static void hci_devcoredump_rx(struct work_struct *work)
-+{
-+	struct hci_dev *hdev = container_of(work, struct hci_dev, dump_rx);
-+	struct sk_buff *skb;
-+	struct hci_devcoredump_skb_pattern *pattern;
-+	u32 dump_size;
-+	int start_state;
-+
-+#define DBG_UNEXPECTED_STATE() \
-+		bt_dev_dbg(hdev, \
-+			   "Unexpected packet (%d) for state (%d). ", \
-+			   hci_dmp_cb(skb)->pkt_type, hdev->dump.state)
-+
-+	while ((skb = skb_dequeue(&hdev->dump_q))) {
-+		hci_dev_lock(hdev);
-+		start_state = hdev->dump.state;
-+
-+		switch (hci_dmp_cb(skb)->pkt_type) {
-+		case HCI_DEVCOREDUMP_PKT_INIT:
-+			if (hdev->dump.state != HCI_DEVCOREDUMP_IDLE) {
-+				DBG_UNEXPECTED_STATE();
-+				goto loop_continue;
-+			}
-+
-+			if (skb->len != sizeof(dump_size)) {
-+				bt_dev_dbg(hdev, "Invalid dump init pkt");
-+				goto loop_continue;
-+			}
-+
-+			dump_size = *((u32 *)skb->data);
-+			if (!dump_size) {
-+				bt_dev_err(hdev, "Zero size dump init pkt");
-+				goto loop_continue;
-+			}
-+
-+			if (hci_devcoredump_prepare(hdev, dump_size)) {
-+				bt_dev_err(hdev, "Failed to prepare for dump");
-+				goto loop_continue;
-+			}
-+
-+			hci_devcoredump_update_state(hdev,
-+						     HCI_DEVCOREDUMP_ACTIVE);
-+			queue_delayed_work(hdev->workqueue, &hdev->dump_timeout,
-+					   DEVCOREDUMP_TIMEOUT);
-+			break;
-+
-+		case HCI_DEVCOREDUMP_PKT_SKB:
-+			if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-+				DBG_UNEXPECTED_STATE();
-+				goto loop_continue;
-+			}
-+
-+			if (!hci_devcoredump_copy(hdev, skb->data, skb->len))
-+				bt_dev_dbg(hdev, "Failed to insert skb");
-+			break;
-+
-+		case HCI_DEVCOREDUMP_PKT_PATTERN:
-+			if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-+				DBG_UNEXPECTED_STATE();
-+				goto loop_continue;
-+			}
-+
-+			if (skb->len != sizeof(*pattern)) {
-+				bt_dev_dbg(hdev, "Invalid pattern skb");
-+				goto loop_continue;
-+			}
-+
-+			pattern = (void *)skb->data;
-+
-+			if (!hci_devcoredump_memset(hdev, pattern->pattern,
-+						    pattern->len))
-+				bt_dev_dbg(hdev, "Failed to set pattern");
-+			break;
-+
-+		case HCI_DEVCOREDUMP_PKT_COMPLETE:
-+			if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-+				DBG_UNEXPECTED_STATE();
-+				goto loop_continue;
-+			}
-+
-+			hci_devcoredump_update_state(hdev,
-+						     HCI_DEVCOREDUMP_DONE);
-+			dump_size = hdev->dump.tail - hdev->dump.head;
-+
-+			bt_dev_info(hdev,
-+				    "Devcoredump complete with size %u "
-+				    "(expect %u)",
-+				    dump_size, hdev->dump.alloc_size);
-+
-+			dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size,
-+				      GFP_KERNEL);
-+			break;
-+
-+		case HCI_DEVCOREDUMP_PKT_ABORT:
-+			if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-+				DBG_UNEXPECTED_STATE();
-+				goto loop_continue;
-+			}
-+
-+			hci_devcoredump_update_state(hdev,
-+						     HCI_DEVCOREDUMP_ABORT);
-+			dump_size = hdev->dump.tail - hdev->dump.head;
-+
-+			bt_dev_info(hdev,
-+				    "Devcoredump aborted with size %u "
-+				    "(expect %u)",
-+				    dump_size, hdev->dump.alloc_size);
-+
-+			/* Emit a devcoredump with the available data */
-+			dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size,
-+				      GFP_KERNEL);
-+			break;
-+
-+		default:
-+			bt_dev_dbg(hdev,
-+				   "Unknown packet (%d) for state (%d). ",
-+				   hci_dmp_cb(skb)->pkt_type, hdev->dump.state);
-+			break;
-+		}
-+
-+loop_continue:
-+		kfree_skb(skb);
-+		hci_dev_unlock(hdev);
-+
-+		if (start_state != hdev->dump.state)
-+			hci_devcoredump_notify(hdev, hdev->dump.state);
-+
-+		hci_dev_lock(hdev);
-+		if (hdev->dump.state == HCI_DEVCOREDUMP_DONE ||
-+		    hdev->dump.state == HCI_DEVCOREDUMP_ABORT)
-+			hci_devcoredump_reset(hdev);
-+		hci_dev_unlock(hdev);
-+	}
-+}
-+
-+static void hci_devcoredump_timeout(struct work_struct *work)
-+{
-+	struct hci_dev *hdev = container_of(work, struct hci_dev,
-+					    dump_timeout.work);
-+	u32 dump_size;
-+
-+	hci_devcoredump_notify(hdev, HCI_DEVCOREDUMP_TIMEOUT);
-+
-+	hci_dev_lock(hdev);
-+
-+	cancel_work_sync(&hdev->dump_rx);
-+
-+	hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_TIMEOUT);
-+	dump_size = hdev->dump.tail - hdev->dump.head;
-+	bt_dev_info(hdev, "Devcoredump timeout with size %u (expect %u)",
-+		    dump_size, hdev->dump.alloc_size);
-+
-+	/* Emit a devcoredump with the available data */
-+	dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size, GFP_KERNEL);
-+
-+	hci_devcoredump_reset(hdev);
-+
-+	hci_dev_unlock(hdev);
-+}
-+
-+int hci_devcoredump_register(struct hci_dev *hdev, dmp_hdr_t dmp_hdr,
-+			     notify_change_t notify_change)
-+{
-+	/* driver must implement dmp_hdr() function for bluetooth devcoredump */
-+	if (!dmp_hdr)
-+		return -EINVAL;
-+
-+	hci_dev_lock(hdev);
-+	hdev->dump.dmp_hdr = dmp_hdr;
-+	hdev->dump.notify_change = notify_change;
-+	hdev->dump.supported = true;
-+	hci_dev_unlock(hdev);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(hci_devcoredump_register);
-+
-+int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_size)
-+{
-+	struct sk_buff *skb = NULL;
-+
-+	if (!hdev->dump.supported)
-+		return -EOPNOTSUPP;
-+
-+	skb = alloc_skb(sizeof(dmp_size), GFP_ATOMIC);
-+	if (!skb) {
-+		bt_dev_err(hdev, "Failed to allocate devcoredump init");
-+		return -ENOMEM;
-+	}
-+
-+	hci_dmp_cb(skb)->pkt_type = HCI_DEVCOREDUMP_PKT_INIT;
-+	skb_put_data(skb, &dmp_size, sizeof(dmp_size));
-+
-+	skb_queue_tail(&hdev->dump_q, skb);
-+	queue_work(hdev->workqueue, &hdev->dump_rx);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(hci_devcoredump_init);
-+
-+int hci_devcoredump_append(struct hci_dev *hdev, struct sk_buff *skb)
-+{
-+	if (!skb)
-+		return -ENOMEM;
-+
-+	if (!hdev->dump.supported) {
-+		kfree_skb(skb);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	hci_dmp_cb(skb)->pkt_type = HCI_DEVCOREDUMP_PKT_SKB;
-+
-+	skb_queue_tail(&hdev->dump_q, skb);
-+	queue_work(hdev->workqueue, &hdev->dump_rx);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(hci_devcoredump_append);
-+
-+int hci_devcoredump_append_pattern(struct hci_dev *hdev, u8 pattern, u32 len)
-+{
-+	struct hci_devcoredump_skb_pattern p;
-+	struct sk_buff *skb = NULL;
-+
-+	if (!hdev->dump.supported)
-+		return -EOPNOTSUPP;
-+
-+	skb = alloc_skb(sizeof(p), GFP_ATOMIC);
-+	if (!skb) {
-+		bt_dev_err(hdev, "Failed to allocate devcoredump pattern");
-+		return -ENOMEM;
-+	}
-+
-+	p.pattern = pattern;
-+	p.len = len;
-+
-+	hci_dmp_cb(skb)->pkt_type = HCI_DEVCOREDUMP_PKT_PATTERN;
-+	skb_put_data(skb, &p, sizeof(p));
-+
-+	skb_queue_tail(&hdev->dump_q, skb);
-+	queue_work(hdev->workqueue, &hdev->dump_rx);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(hci_devcoredump_append_pattern);
-+
-+int hci_devcoredump_complete(struct hci_dev *hdev)
-+{
-+	struct sk_buff *skb = NULL;
-+
-+	if (!hdev->dump.supported)
-+		return -EOPNOTSUPP;
-+
-+	skb = alloc_skb(0, GFP_ATOMIC);
-+	if (!skb) {
-+		bt_dev_err(hdev, "Failed to allocate devcoredump complete");
-+		return -ENOMEM;
-+	}
-+
-+	hci_dmp_cb(skb)->pkt_type = HCI_DEVCOREDUMP_PKT_COMPLETE;
-+
-+	skb_queue_tail(&hdev->dump_q, skb);
-+	queue_work(hdev->workqueue, &hdev->dump_rx);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(hci_devcoredump_complete);
-+
-+int hci_devcoredump_abort(struct hci_dev *hdev)
-+{
-+	struct sk_buff *skb = NULL;
-+
-+	if (!hdev->dump.supported)
-+		return -EOPNOTSUPP;
-+
-+	skb = alloc_skb(0, GFP_ATOMIC);
-+	if (!skb) {
-+		bt_dev_err(hdev, "Failed to allocate devcoredump abort");
-+		return -ENOMEM;
-+	}
-+
-+	hci_dmp_cb(skb)->pkt_type = HCI_DEVCOREDUMP_PKT_ABORT;
-+
-+	skb_queue_tail(&hdev->dump_q, skb);
-+	queue_work(hdev->workqueue, &hdev->dump_rx);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(hci_devcoredump_abort);
-+
- /* Alloc HCI device */
- struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
+ static const struct firmware *btintel_legacy_rom_get_fw(struct hci_dev *hdev,
+ 					       struct intel_version *ver)
  {
-@@ -2511,14 +3004,17 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
- 	INIT_WORK(&hdev->tx_work, hci_tx_work);
- 	INIT_WORK(&hdev->power_on, hci_power_on);
- 	INIT_WORK(&hdev->error_reset, hci_error_reset);
-+	INIT_WORK(&hdev->dump_rx, hci_devcoredump_rx);
+diff --git a/drivers/bluetooth/btintel.h b/drivers/bluetooth/btintel.h
+index e0060e58573c..785c63cc6c1d 100644
+--- a/drivers/bluetooth/btintel.h
++++ b/drivers/bluetooth/btintel.h
+@@ -137,6 +137,12 @@ struct intel_offload_use_cases {
+ 	__u8	preset[8];
+ } __packed;
  
- 	hci_cmd_sync_init(hdev);
++#define INTEL_TLV_TYPE_ID		0x1
++
++#define INTEL_TLV_SYSTEM_EXCEPTION	0x0
++#define INTEL_TLV_FATAL_EXCEPTION	0x1
++#define INTEL_TLV_DEBUG_EXCEPTION	0x2
++
+ #define INTEL_HW_PLATFORM(cnvx_bt)	((u8)(((cnvx_bt) & 0x0000ff00) >> 8))
+ #define INTEL_HW_VARIANT(cnvx_bt)	((u8)(((cnvx_bt) & 0x003f0000) >> 16))
+ #define INTEL_CNVX_TOP_TYPE(cnvx_top)	((cnvx_top) & 0x00000fff)
+@@ -206,6 +212,8 @@ int btintel_read_boot_params(struct hci_dev *hdev,
+ 			     struct intel_boot_params *params);
+ int btintel_download_firmware(struct hci_dev *dev, struct intel_version *ver,
+ 			      const struct firmware *fw, u32 *boot_param);
++int btintel_register_devcoredump_support(struct hci_dev *hdev,
++					 const char *driver);
+ int btintel_configure_setup(struct hci_dev *hdev);
+ void btintel_bootup(struct hci_dev *hdev, const void *ptr, unsigned int len);
+ void btintel_secure_send_result(struct hci_dev *hdev,
+@@ -302,6 +310,12 @@ static inline void btintel_secure_send_result(struct hci_dev *hdev,
+ {
+ }
  
- 	INIT_DELAYED_WORK(&hdev->power_off, hci_power_off);
-+	INIT_DELAYED_WORK(&hdev->dump_timeout, hci_devcoredump_timeout);
++static int btintel_register_devcoredump_support(struct hci_dev *hdev,
++						const char *driver)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline int btintel_set_quality_report(struct hci_dev *hdev, bool enable)
+ {
+ 	return -ENODEV;
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 50df417207af..42a3d90180a4 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2155,16 +2155,42 @@ static int btusb_recv_bulk_intel(struct btusb_data *data, void *buffer,
+ 	return btusb_recv_bulk(data, buffer, count);
+ }
  
- 	skb_queue_head_init(&hdev->rx_q);
- 	skb_queue_head_init(&hdev->cmd_q);
- 	skb_queue_head_init(&hdev->raw_q);
-+	skb_queue_head_init(&hdev->dump_q);
++static int btusb_intel_diagnostics(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	struct intel_tlv *tlv = (void *)&skb->data[5];
++
++	/* The first event is always an event type TLV */
++	if (tlv->type != INTEL_TLV_TYPE_ID)
++		goto recv_frame;
++
++	switch (tlv->val[0]) {
++	case INTEL_TLV_SYSTEM_EXCEPTION:
++	case INTEL_TLV_FATAL_EXCEPTION:
++	case INTEL_TLV_DEBUG_EXCEPTION:
++		/* Generate devcoredump from exception */
++		if (!hci_devcoredump_init(hdev, skb->len)) {
++			hci_devcoredump_append(hdev, skb);
++			hci_devcoredump_complete(hdev);
++			return 0;
++		}
++		break;
++	}
++
++recv_frame:
++	return hci_recv_frame(hdev, skb);
++}
++
+ static int btusb_recv_event_intel(struct hci_dev *hdev, struct sk_buff *skb)
+ {
+-	if (btintel_test_flag(hdev, INTEL_BOOTLOADER)) {
+-		struct hci_event_hdr *hdr = (void *)skb->data;
++	struct hci_event_hdr *hdr = (void *)skb->data;
++	const char diagnostics_hdr[] = { 0x87, 0x80, 0x03 };
  
- 	init_waitqueue_head(&hdev->req_wait_q);
+-		if (skb->len > HCI_EVENT_HDR_SIZE && hdr->evt == 0xff &&
+-		    hdr->plen > 0) {
+-			const void *ptr = skb->data + HCI_EVENT_HDR_SIZE + 1;
+-			unsigned int len = skb->len - HCI_EVENT_HDR_SIZE - 1;
++	if (skb->len > HCI_EVENT_HDR_SIZE && hdr->evt == 0xff &&
++	    hdr->plen > 0) {
++		const void *ptr = skb->data + HCI_EVENT_HDR_SIZE + 1;
++		unsigned int len = skb->len - HCI_EVENT_HDR_SIZE - 1;
  
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 8f4c5698913d..ec03fa871ef0 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -3877,6 +3877,8 @@ int hci_dev_open_sync(struct hci_dev *hdev)
- 		goto done;
++		if (btintel_test_flag(hdev, INTEL_BOOTLOADER)) {
+ 			switch (skb->data[2]) {
+ 			case 0x02:
+ 				/* When switching to the operational firmware
+@@ -2183,6 +2209,15 @@ static int btusb_recv_event_intel(struct hci_dev *hdev, struct sk_buff *skb)
+ 				break;
+ 			}
+ 		}
++
++		/* Handle all diagnostics events separately. May still call
++		 * hci_recv_frame.
++		 */
++		if (len >= sizeof(diagnostics_hdr) &&
++		    memcmp(&skb->data[2], diagnostics_hdr,
++			   sizeof(diagnostics_hdr)) == 0) {
++			return btusb_intel_diagnostics(hdev, skb);
++		}
  	}
  
-+	hci_devcoredump_reset(hdev);
-+
- 	set_bit(HCI_RUNNING, &hdev->flags);
- 	hci_sock_dev_event(hdev, HCI_DEV_OPEN);
- 
+ 	return hci_recv_frame(hdev, skb);
 -- 
 2.35.1.894.gb6a874cedc-goog
 

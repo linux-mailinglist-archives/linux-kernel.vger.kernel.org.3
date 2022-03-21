@@ -2,166 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6374E2FC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615A34E2FCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348979AbiCUSSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
+        id S1352052AbiCUSUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352070AbiCUSRz (ORCPT
+        with ESMTP id S231928AbiCUSUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:17:55 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714AC17ECFC;
-        Mon, 21 Mar 2022 11:16:29 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id n18so13466943plg.5;
-        Mon, 21 Mar 2022 11:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ls4ppSzcwTphO5fl7/cnR5YWXHZaUFCeJodB7pVCrnU=;
-        b=bayZTwU/9OUWkVg+QqtcVV1j1Ad8zFbewV2DckvEs4eUP0KmVFLQPCXlYku22qs0q4
-         zM49m1PcjGur8W0lk9CJ7B9Bs5b044DrxlaNWyaY9TSZTF9rRyVrsO1mJQg2S3WDeXgm
-         HtWjErAnUi6OMAcvPs/Qv1dm+IkGmF8WjQVeWA0yHP7b0TKjcU+NUwSGG+v1kdmRGdWN
-         rgAKCyMEkYbcHbEQ8pGZvCV54/VfaUQOEz7jXvNyT0aycIrBNasLt1KDTvpdXD8Paq9l
-         6Z+oGHIkWCgFaXp4xbcSZmEjKuNoo6Vk5fHwoVuj6J4+oAsyR7HqN8d5M5+hu5YgFdrD
-         PIAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=ls4ppSzcwTphO5fl7/cnR5YWXHZaUFCeJodB7pVCrnU=;
-        b=p/vmj1NkhdA7V3eTKo5fXiZSkuimLLIUhiPvvpx8vIWM80KEHgTjAqz/ZldboOb2Ep
-         Wa2C5r9bBG7Fyw/naiPRx6eEsrNenZy+i9Y6lkMVYhDMKXO9m4uKk6V3BGUNjCv17mLT
-         Brk7VZtgj8SCc+ol817p9iO9NiOvDaRiP0rnnhVwyjMqg+Fgm4aZkyHQH9saH4uTqDHD
-         ZcFwmDDTVdV1+RbxYuq3L9hydWOHzzj4Wjr63rBALkw8u1cORW3YB6DJXWTORTL0eRB8
-         a0awRMH8ox8Hf22Zzh4k3CpvH6/A+yJ1I8fkm+Pl18/RR58RelA0c7vMCaGk+2ML+v0c
-         uurQ==
-X-Gm-Message-State: AOAM533wMrjNW41jyr6kz/Iyx74A0lp/USbVzRtBZOfSPo6mlOEjaaiS
-        C/9zZm6oLuIdLsuF3u2ePUc=
-X-Google-Smtp-Source: ABdhPJzjYlZZl7OOBIipGbQEYnldtJe0DY15tFkroj2aUWhxl4BxvokM8S1i/lY6WZesYrOWfEXD1A==
-X-Received: by 2002:a17:902:e9c2:b0:153:c185:c7b1 with SMTP id 2-20020a170902e9c200b00153c185c7b1mr13961034plk.92.1647886588695;
-        Mon, 21 Mar 2022 11:16:28 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6664d26eesm19778027pfk.88.2022.03.21.11.16.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 11:16:27 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 21 Mar 2022 08:16:26 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tianchen Ding <dtcccc@linux.alibaba.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michael Wang <yun.wang@linux.alibaba.com>,
-        Cruz Zhao <cruzzhao@linux.alibaba.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Chris Down <chris@chrisdown.name>,
-        Vipin Sharma <vipinsh@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/4] Introduce group balancer
-Message-ID: <YjjA+vyQuh5fNeLG@slm.duckdns.org>
-References: <20220308092629.40431-1-dtcccc@linux.alibaba.com>
- <YieOvaqJeEW2lta/@slm.duckdns.org>
- <defa02c1-9660-f335-a764-d89dbe2f502e@linux.alibaba.com>
- <YijrVmzG8/yT9a0f@slm.duckdns.org>
- <014c8afe-e57f-0f31-32bb-cf4ff3d3cb95@linux.alibaba.com>
+        Mon, 21 Mar 2022 14:20:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A01EAD6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647886764; x=1679422764;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RpxhtOeQxZ8yIXkXuKKL4DSSYVP8/RZrN59np0aIsu4=;
+  b=TRWCxI7AMJPFxIehd13GS+IY0cxejktCMtGFQC69gRQLKxsktWSvIOg7
+   wm5m2e/Q1VU0OlaP49j3J/oLmQxJEZBwX7e14RtBuevoJk1kexq/0GAMd
+   tMrsdwC34+8w33Yc/MKkBnJLUVyeGsKm5qf8SkdK39uLDv4Upi093Yws4
+   nmJL4L5CXX55eoMzcxiy4tpCXQIeP/Yp2wGRJnwtDkp4qz3/pzgkvMVtn
+   BcqBlRRSJ2NBSI16+q1/pMoZ6VSapOgZkps1cmDnOhxATpEY2AKfuTiPX
+   MvcgSJD1xEoo4dWGuQWE6Q0l/LIW/oZOk263hGPw0G9Y/6kc7LuEhCnbt
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="320823041"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="320823041"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 11:19:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="518541486"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 21 Mar 2022 11:19:22 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWMcj-000I3m-MN; Mon, 21 Mar 2022 18:19:21 +0000
+Date:   Tue, 22 Mar 2022 02:18:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [amir73il:fsnotify-volatile 3/10]
+ fs/notify/fanotify/fanotify_user.c:1147:8: error: too few arguments to
+ function 'fsnotify_add_mark_locked'
+Message-ID: <202203220253.CbyFvh3n-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <014c8afe-e57f-0f31-32bb-cf4ff3d3cb95@linux.alibaba.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://github.com/amir73il/linux fsnotify-volatile
+head:   46cbd4482bb2350a2d667d18272e2f0172c1633b
+commit: 66f27fc99e46b12f1078e8e2915793040ce50ee7 [3/10] fsnotify: preallocate connector outside of group lock
+config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220322/202203220253.CbyFvh3n-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://github.com/amir73il/linux/commit/66f27fc99e46b12f1078e8e2915793040ce50ee7
+        git remote add amir73il https://github.com/amir73il/linux
+        git fetch --no-tags amir73il fsnotify-volatile
+        git checkout 66f27fc99e46b12f1078e8e2915793040ce50ee7
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On Thu, Mar 10, 2022 at 01:47:34PM +0800, Tianchen Ding wrote:
-> If we want to build group balancer in userspace, we need:
->   1) gather load info from each rq periodically
->   2) make decision to set cpuset.cpus of each cgroup
-> 
-> However, there're some problems about this way.
-> 
-> For 1), we need to consider how frequently collecting these info, which may
-> impact performance and accuracy. If the load changes hugely right after we
-> get it once, our data are expired and then the decision may be wrong. (If we
-> are in kernel, faster action can be taken.)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-We now have a pretty well established way to transport data to userspace at
-really low overhead. If you piggy back on bpf interfaces, they can usually
-be pretty unintrusive and low effort as long as you have the right kind of
-data aggregated already, which shouldn't be that difficult here.
+Note: the amir73il/fsnotify-volatile HEAD 46cbd4482bb2350a2d667d18272e2f0172c1633b builds fine.
+      It only hurts bisectability.
 
-> We believe 2) is harder. The specific policy may be complex and alter
-> according to different scenes. There's not a general method.
-> e.g., with 16cpus and 4 cgroups, how to decide when we set one of them
-> 0-3(when busy)or 0-7(when some of other cgroups are idle)? If there are much
-> more threads in cgroupA than cgroupB/C/D , and we want to satisfy cgroupA as
-> far as possible(on the premise of fairness of B/C/D)， dynamically
-> enlarging(when B/C/D partly idle) and shrinking(when B/C/D busy) cpuset of
-> cgroupA requires complex policy. In this example, fairness and performance
-> can be provided by existing scheduler, but when it comes to grouping hot
-> cache or decreasing competion, both scheduler in kernel and action in
-> userspace are hard to solve.
+All errors (new ones prefixed by >>):
 
-So, I get that it's not easy. In fact, we don't even yet know how to
-properly compare loads across groups of CPUs - simple sums that you're using
-break down when there are big gaps in weight numbers across tasks and can
-become meaningless in the presence of CPU affinities. They can still work
-when the configuration is fairly homogeenous and controlled but the standard
-should be far higher for something we bake into the kernel and expose
-userland-visible interface for.
+   fs/notify/fanotify/fanotify_user.c: In function 'fanotify_add_new_mark':
+>> fs/notify/fanotify/fanotify_user.c:1147:8: error: too few arguments to function 'fsnotify_add_mark_locked'
+    1147 |  ret = fsnotify_add_mark_locked(mark, connp, obj_type, 0, fsid);
+         |        ^~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from fs/notify/fanotify/fanotify_user.c:8:
+   include/linux/fsnotify_backend.h:642:12: note: declared here
+     642 | extern int fsnotify_add_mark_locked(struct fsnotify_mark *mark,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~
 
-> What's more, in many cloud computing scenes, there may be hundreds or
-> thousands of containers, which are much larger than partition number. These
-> containers may be dynamically created and destroyed at any time. Making
-> policy to manage them from userspace will not be practical.
-> 
-> These problems become easy when going to kernelspace. We get info directly
-> from scheduler, and help revising its decision at some key points, or do
-> some support work(e.g., task migration if possible).
 
-I don't think they become necessarily easy. Sure, you can hack up something
-which works for some cases by poking into existing code; however, the bar
-for acceptance is also way higher for a kernel interface - it should be
-generic, consistent with other interfaces (I won't go into cgroup interface
-issues here), and work orthogonally with other kernel features (ie. task /
-group weights should work in an explainable way). I don't think the proposed
-patches are scoring high in those axes.
+vim +/fsnotify_add_mark_locked +1147 fs/notify/fanotify/fanotify_user.c
 
-I'm not against the goal here. Given that cgroups express the logical
-structure of applications running on the system, it does make sense to
-factor that into scheduling decisions. However, what's proposed seems too
-premature and I have a hard time seeing why this level of functionality
-would be difficult to be implement from userspace with some additions in
-terms of visibility which is really easy to do these days.
+912ee3946c5e57 Andreas Gruenbacher 2009-12-17  1121  
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1122  static struct fsnotify_mark *fanotify_add_new_mark(struct fsnotify_group *group,
+b812a9f5896379 Amir Goldstein      2018-06-23  1123  						   fsnotify_connp_t *connp,
+ad69cd9972e79a Amir Goldstein      2021-11-29  1124  						   unsigned int obj_type,
+77115225acc67d Amir Goldstein      2019-01-10  1125  						   __kernel_fsid_t *fsid)
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1126  {
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1127  	struct ucounts *ucounts = group->fanotify_data.ucounts;
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1128  	struct fsnotify_mark *mark;
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1129  	int ret;
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1130  
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1131  	/*
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1132  	 * Enforce per user marks limits per user in all containing user ns.
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1133  	 * A group with FAN_UNLIMITED_MARKS does not contribute to mark count
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1134  	 * in the limited groups account.
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1135  	 */
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1136  	if (!FAN_GROUP_FLAG(group, FAN_UNLIMITED_MARKS) &&
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1137  	    !inc_ucount(ucounts->ns, ucounts->uid, UCOUNT_FANOTIFY_MARKS))
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1138  		return ERR_PTR(-ENOSPC);
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1139  
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1140  	mark = kmem_cache_alloc(fanotify_mark_cache, GFP_KERNEL);
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1141  	if (!mark) {
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1142  		ret = -ENOMEM;
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1143  		goto out_dec_ucounts;
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1144  	}
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1145  
+054c636e5c8054 Jan Kara            2016-12-21  1146  	fsnotify_init_mark(mark, group);
+ad69cd9972e79a Amir Goldstein      2021-11-29 @1147  	ret = fsnotify_add_mark_locked(mark, connp, obj_type, 0, fsid);
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1148  	if (ret) {
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1149  		fsnotify_put_mark(mark);
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1150  		goto out_dec_ucounts;
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1151  	}
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1152  
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1153  	return mark;
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1154  
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1155  out_dec_ucounts:
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1156  	if (!FAN_GROUP_FLAG(group, FAN_UNLIMITED_MARKS))
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1157  		dec_ucount(ucounts, UCOUNT_FANOTIFY_MARKS);
+5b8fea65d197f4 Amir Goldstein      2021-03-04  1158  	return ERR_PTR(ret);
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1159  }
+5e9c070ca08543 Lino Sanfilippo     2013-07-08  1160  
 
-Thanks.
+:::::: The code at line 1147 was first introduced by commit
+:::::: ad69cd9972e79aba103ba5365de0acd35770c265 fsnotify: clarify object type argument
+
+:::::: TO: Amir Goldstein <amir73il@gmail.com>
+:::::: CC: Jan Kara <jack@suse.cz>
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,149 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45DD4E493B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DFD4E493C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238105AbiCVWkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 18:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S238183AbiCVWlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 18:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiCVWkj (ORCPT
+        with ESMTP id S229687AbiCVWlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 18:40:39 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2979E403E0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:39:11 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2d07ae0b1c0so207734857b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZNSeafrE1nmbZ7HSkTix7SZpM+7OtfLvB9wwfIPQnVU=;
-        b=YfpG3zrHM4XGX58Gp4i9zVcqKUf/p4wAvaNN8+2adT/ZK1z44LeJlwbwUZfZP7QZMe
-         zalNYKjApH4UDG2bKi0T7Z5TO/uQ2kVTGInsCSUDFuuYZSp7ebjPiPufFKPNZfvn1Y+J
-         QKhSXFaqR3FYw2fbkbwUiYAarv4MPfDJyHZh4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZNSeafrE1nmbZ7HSkTix7SZpM+7OtfLvB9wwfIPQnVU=;
-        b=CcPZvS/0JWDw2UXEa2dacEgOJ4vhJOU9qWuFTUtcb9lgkQ7mtmiGaucVK1nhYI2t7G
-         t7QeJH81Z6ZHj1vOsNiRDZ5BGdFMzDPMz8UvfNVG2GnJgRyd26yigYTLbYS+Qb5jQrvy
-         9b0lnTt9lvQ7rb4m7MVhRkHK5vnBa5caGy2LFCpwQ0ejaTommmC2rknSTefSCUg34sIC
-         en9QkGaClZrg4lQVu340RCFcxORqHRnKD2kLS4TjoX6nZSndxvsSxOwPjBgqXyMBJNVG
-         r749SQ2KPgjVL3H9heqCosWxUBorALWn78JA4zvLIgLmQk8fTTp9PkqABAFptiZzVeTU
-         8XZQ==
-X-Gm-Message-State: AOAM533BoD87LXD7HKo1QaegTYiWv5voBEvMIM6gSy2960/ADbjA2bWQ
-        sOUFpHCVCvXByHsRIr4izaPCAQluQ/mHaGoqVC9E
-X-Google-Smtp-Source: ABdhPJwGylMq9FNbaaZRwaP1kpc9KskXKzv38UDmB8eQIrg0xAGndakGfimL3QxqgIpkVpmFTD66yyPZkKin3+e4wzE=
-X-Received: by 2002:a0d:d757:0:b0:2e5:beac:5b48 with SMTP id
- z84-20020a0dd757000000b002e5beac5b48mr29717878ywd.478.1647988750394; Tue, 22
- Mar 2022 15:39:10 -0700 (PDT)
+        Tue, 22 Mar 2022 18:41:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597395B3FE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:40:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id ED79B1F387;
+        Tue, 22 Mar 2022 22:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647988820; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=WU2JEaFQsOONHm05p8N3zxITH7gjDONvFHQ5Zt+mlT4=;
+        b=MC7I60rlvMbnfP5lrOFREWLmIf447EcvBP124LxhI2Waf6csrtc5v4n0GQlzhHFFI4sL4S
+        c8yohMsiZ5H7f79gveWYGQdq56cPMT5UodV6SfWR68YJmQLrxqAg2Xgfmu0S035HdndkoI
+        Y6hhuUbQ8uIvwH8IMOtVhGdWuVtJil0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647988820;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=WU2JEaFQsOONHm05p8N3zxITH7gjDONvFHQ5Zt+mlT4=;
+        b=bqncOegwQHqeFutqAFWYE66wRVTt5NwTzrDGVzKb0s9k4oygg9vTZpj1Irp0DdVhpZOEZx
+        UezzGoramQfZ/aDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5B00B133B6;
+        Tue, 22 Mar 2022 22:40:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id E+ixElRQOmKLagAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 22 Mar 2022 22:40:20 +0000
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH v2] mm: Untangle config dependencies for demote-on-reclaim
+Date:   Tue, 22 Mar 2022 23:40:16 +0100
+Message-Id: <20220322224016.4574-1-osalvador@suse.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220322220147.11407-1-palmer@rivosinc.com>
-In-Reply-To: <20220322220147.11407-1-palmer@rivosinc.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 22 Mar 2022 15:38:59 -0700
-Message-ID: <CAOnJCU+udBVYwoaaB-UOUY2owrCrrLfSRJW7p=vjAkhOF8bt7Q@mail.gmail.com>
-Subject: Re: [PATCH] perf: RISC-V: Remove non-kernel-doc ** comments
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 3:02 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->
-> This will presumably trip up some tools that try to parse the comments
-> as kernel doc when they're not.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 4905ec2fb7e6 ("RISC-V: Add sscofpmf extension support")
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> --
->
-> These recently landed in for-next, but I'm trying to avoid rewriting
-> history as there's a lot in flight right now.
-> ---
->  drivers/perf/riscv_pmu_sbi.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-> index a1317a483512..dca3537a8dcc 100644
-> --- a/drivers/perf/riscv_pmu_sbi.c
-> +++ b/drivers/perf/riscv_pmu_sbi.c
-> @@ -35,7 +35,7 @@ union sbi_pmu_ctr_info {
->         };
->  };
->
-> -/**
-> +/*
->   * RISC-V doesn't have hetergenous harts yet. This need to be part of
->   * per_cpu in case of harts with different pmu counters
->   */
-> @@ -477,7 +477,7 @@ static int pmu_sbi_get_ctrinfo(int nctr)
->
->  static inline void pmu_sbi_stop_all(struct riscv_pmu *pmu)
->  {
-> -       /**
-> +       /*
->          * No need to check the error because we are disabling all the counters
->          * which may include counters that are not enabled yet.
->          */
-> @@ -494,7 +494,7 @@ static inline void pmu_sbi_stop_hw_ctrs(struct riscv_pmu *pmu)
->                   cpu_hw_evt->used_hw_ctrs[0], 0, 0, 0, 0);
->  }
->
-> -/**
-> +/*
->   * This function starts all the used counters in two step approach.
->   * Any counter that did not overflow can be start in a single step
->   * while the overflowed counters need to be started with updated initialization
-> @@ -563,7 +563,7 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
->         /* Overflow status register should only be read after counter are stopped */
->         overflow = csr_read(CSR_SSCOUNTOVF);
->
-> -       /**
-> +       /*
->          * Overflow interrupt pending bit should only be cleared after stopping
->          * all the counters to avoid any race condition.
->          */
-> --
-> 2.34.1
->
+At the time demote-on-reclaim was introduced, it was tied to
+CONFIG_HOTPLUG_CPU + CONFIG_MIGRATE, but that is not really
+accurate.
 
-Sorry for the fallout on linux-next. I just realized that these came
-in with the BUILD_SUCCESS subject line from lkp for me.
-I was filtering those out to a separate folder and missed the
-"warning" part in the subject line. I have fixed that.
+The only two things we need to depen on is CONFIG_NUMA +
+CONFIG_MIGRATE, so clean this up.
+Furthermore, we only register the hotplug memory notifier
+when the system has CONFIG_MEMORY_HOTPLUG.
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+Signed-off-by: Oscar Salvador <osalvador@suse.de>
+Suggested-by: "Huang, Ying" <ying.huang@intel.com>
+---
+v1 -> v2: Feedback from "Huang, Ying"
+---
+ include/linux/migrate.h | 34 +++++++++++++++-------------------
+ mm/migrate.c            | 11 ++++++-----
+ mm/vmstat.c             |  2 --
+ 3 files changed, 21 insertions(+), 26 deletions(-)
 
+diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+index a4a336fd81fc..97407596f058 100644
+--- a/include/linux/migrate.h
++++ b/include/linux/migrate.h
+@@ -47,17 +47,8 @@ void folio_migrate_copy(struct folio *newfolio, struct folio *folio);
+ int folio_migrate_mapping(struct address_space *mapping,
+ 		struct folio *newfolio, struct folio *folio, int extra_count);
+ 
+-extern bool numa_demotion_enabled;
+-extern void migrate_on_reclaim_init(void);
+-#ifdef CONFIG_HOTPLUG_CPU
+-extern void set_migration_target_nodes(void);
+-#else
+-static inline void set_migration_target_nodes(void) {}
+-#endif
+ #else
+ 
+-static inline void set_migration_target_nodes(void) {}
+-
+ static inline void putback_movable_pages(struct list_head *l) {}
+ static inline int migrate_pages(struct list_head *l, new_page_t new,
+ 		free_page_t free, unsigned long private, enum migrate_mode mode,
+@@ -82,9 +73,23 @@ static inline int migrate_huge_page_move_mapping(struct address_space *mapping,
+ 	return -ENOSYS;
+ }
+ 
+-#define numa_demotion_enabled	false
+ #endif /* CONFIG_MIGRATION */
+ 
++#if defined(CONFIG_MIGRATION) && defined(CONFIG_NUMA)
++extern void set_migration_target_nodes(void);
++extern void migrate_on_reclaim_init(void);
++extern bool numa_demotion_enabled;
++extern int next_demotion_node(int node);
++#else
++static inline void set_migration_target_nodes(void) {}
++static inline void migrate_on_reclaim_init(void) {}
++static inline int next_demotion_node(int node)
++{
++        return NUMA_NO_NODE;
++}
++#define numa_demotion_enabled  false
++#endif
++
+ #ifdef CONFIG_COMPACTION
+ extern int PageMovable(struct page *page);
+ extern void __SetPageMovable(struct page *page, struct address_space *mapping);
+@@ -173,15 +178,6 @@ struct migrate_vma {
+ int migrate_vma_setup(struct migrate_vma *args);
+ void migrate_vma_pages(struct migrate_vma *migrate);
+ void migrate_vma_finalize(struct migrate_vma *migrate);
+-int next_demotion_node(int node);
+-
+-#else /* CONFIG_MIGRATION disabled: */
+-
+-static inline int next_demotion_node(int node)
+-{
+-	return NUMA_NO_NODE;
+-}
+-
+ #endif /* CONFIG_MIGRATION */
+ 
+ #endif /* _LINUX_MIGRATE_H */
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 3364bfaddeef..118f71425241 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -2144,7 +2144,6 @@ int migrate_misplaced_page(struct page *page, struct vm_area_struct *vma,
+ 	return 0;
+ }
+ #endif /* CONFIG_NUMA_BALANCING */
+-#endif /* CONFIG_NUMA */
+ 
+ /*
+  * node_demotion[] example:
+@@ -2278,7 +2277,6 @@ int next_demotion_node(int node)
+ 	return target;
+ }
+ 
+-#if defined(CONFIG_HOTPLUG_CPU)
+ /* Disable reclaim-based migration. */
+ static void __disable_all_migrate_targets(void)
+ {
+@@ -2471,6 +2469,7 @@ void set_migration_target_nodes(void)
+  * __set_migration_target_nodes() can be used as opposed to
+  * set_migration_target_nodes().
+  */
++#ifdef CONFIG_MEMORY_HOTPLUG
+ static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
+ 						 unsigned long action, void *_arg)
+ {
+@@ -2516,6 +2515,7 @@ static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
+ 
+ 	return notifier_from_errno(0);
+ }
++#endif
+ 
+ void __init migrate_on_reclaim_init(void)
+ {
+@@ -2523,8 +2523,9 @@ void __init migrate_on_reclaim_init(void)
+ 				      sizeof(struct demotion_nodes),
+ 				      GFP_KERNEL);
+ 	WARN_ON(!node_demotion);
+-
++#ifdef CONFIG_MEMORY_HOTPLUG
+ 	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
++#endif
+ 	/*
+ 	 * At this point, all numa nodes with memory/CPus have their state
+ 	 * properly set, so we can build the demotion order now.
+@@ -2535,7 +2536,6 @@ void __init migrate_on_reclaim_init(void)
+ 	set_migration_target_nodes();
+ 	cpus_read_unlock();
+ }
+-#endif /* CONFIG_HOTPLUG_CPU */
+ 
+ bool numa_demotion_enabled = false;
+ 
+@@ -2596,4 +2596,5 @@ static int __init numa_init_sysfs(void)
+ 	return err;
+ }
+ subsys_initcall(numa_init_sysfs);
+-#endif
++#endif /* CONFIG_SYSFS */
++#endif /* CONFIG_NUMA */
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index b75b1a64b54c..f2d0dec1062d 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -2111,9 +2111,7 @@ void __init init_mm_internals(void)
+ 
+ 	start_shepherd_timer();
+ #endif
+-#if defined(CONFIG_MIGRATION) && defined(CONFIG_HOTPLUG_CPU)
+ 	migrate_on_reclaim_init();
+-#endif
+ #ifdef CONFIG_PROC_FS
+ 	proc_create_seq("buddyinfo", 0444, NULL, &fragmentation_op);
+ 	proc_create_seq("pagetypeinfo", 0400, NULL, &pagetypeinfo_op);
+-- 
+2.34.1
 
-
---
-Regards,
-Atish

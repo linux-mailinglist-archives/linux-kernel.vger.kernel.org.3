@@ -2,144 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1944E4455
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12994E4459
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239156AbiCVQjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
+        id S239170AbiCVQkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238223AbiCVQjm (ORCPT
+        with ESMTP id S239172AbiCVQj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:39:42 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5242E9;
-        Tue, 22 Mar 2022 09:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647967093; x=1679503093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nC2uy4Xiy6nxLZooVE1BSEhtIrAjWOGJKX0aq/EHvdg=;
-  b=Sif4+A+Fj2vWbzGHMQ4u7ON4xy9ZhrU6UMCrBD2oP4iDVadnx6GrLCXJ
-   OKOkRtbqO9ZDWkxsk7FwYRAQQheGnM+9TqTpwHEM+wJ0pccLDyatYsqND
-   y30BaA1a5tQU1p0LCEN4MhNgQ+4FCYQjS0bk5ogH9S8TF2ZpKAqOl2usY
-   c+HHMVqDuyfiv5QFfwVS3FoIIQZGqvNoAG7vT32BmW9aU1fltusXKoxtK
-   7LJgBDnWryFQKN2bksmghIUxsvyw79D1a3KIvVEW9anWy+zCpxhOpy+z3
-   W5OX7Ct0vQ5xz7olOJVlwmnL0dQRV+A54ITJdmSXbJyaGh9ajp+rB+WeZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="282708280"
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="282708280"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:37:44 -0700
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="600943360"
-Received: from tsscotth-mobl1.amr.corp.intel.com (HELO localhost) ([10.213.167.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:37:44 -0700
-Date:   Tue, 22 Mar 2022 09:37:43 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-ext4@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] ext4: check if offset+length is valid in fallocate
-Message-ID: <Yjn7V3whEZ3UmJlF@iweiny-desk3>
-References: <20220315215439.269122-1-tadeusz.struk@linaro.org>
+        Tue, 22 Mar 2022 12:39:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35F25DA7F;
+        Tue, 22 Mar 2022 09:38:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7615561380;
+        Tue, 22 Mar 2022 16:38:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D083BC340EC;
+        Tue, 22 Mar 2022 16:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647967107;
+        bh=8ch5mqYdbCJuCsCkXweGICnpYvia0/ZTsJXceSH6eJ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U6EFRFcbqq0MH4RGKDBcvnPOBumFG3JKuY9d6rv8yWJ7OdUNSxZrGyNpY447B2ZdY
+         9fqiJPPSMkduuWg8QLOuH6GGXhA5vISLYL5SDveJ6DwlVSqjI5KuhXf/sRqX9uDrDx
+         1CZHEYa9l+zHfg4VJwJwl1242arMJHYi9MyCd9ZaOsXO9CqAv0seQDrkLSVIVLYNIe
+         pqpyGrmoX7R7H3g4jU3784353OrW8KQhqyT9W1dKs89OwmHQTSruX+BtSAOIWd4uw5
+         /6fRb48h8ITB0j9iUXq9jb3WBSo9NI38iMhHQYBBSNraMCkLHlcIjZ/TAckGe8YwVR
+         l0PjT/7EaJT9A==
+Date:   Tue, 22 Mar 2022 09:38:27 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org, xfs <linux-xfs@vger.kernel.org>
+Subject: Re: [kbuild] [djwong-xfs:djwong-wtf 349/351]
+ fs/xfs/xfs_bmap_util.c:1372 xfs_map_free_extent() warn: missing error code
+ 'error'
+Message-ID: <20220322163827.GQ8241@magnolia>
+References: <202203190831.AYu7l0vX-lkp@intel.com>
+ <20220321215908.GL8241@magnolia>
+ <20220322054726.GR336@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220315215439.269122-1-tadeusz.struk@linaro.org>
+In-Reply-To: <20220322054726.GR336@kadam>
 X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 02:54:39PM -0700, Tadeusz Struk wrote:
-> Syzbot found an issue [1] in ext4_fallocate().
-> The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-> and offset 0x1000000ul, which, when added together exceed the disk size,
-> and trigger a BUG in ext4_ind_remove_space() [3].
-> According to the comment doc in ext4_ind_remove_space() the 'end' block
-> parameter needs to be one block after the last block to remove.
-> In the case when the BUG is triggered it points to the last block on
-> a 4GB virtual disk image. This is calculated in
-> ext4_ind_remove_space() in [4].
-> This patch adds a check that ensure the length + offest to be
-> within the valid range and returns -ENOSPC error code in case
-> it is invalid.
-
-Why is the check in vfs_fallocate() not working for this?
-
-https://elixir.bootlin.com/linux/v5.17-rc8/source/fs/open.c#L300
-
-Also why do other file systems not fail?  Is it because ext4 is special due to
-the end block needing to be one block after the last.  That seems to imply the
-last block can't be used or there is some off by one issue somewhere?
-
-Ira
-
+On Tue, Mar 22, 2022 at 08:47:26AM +0300, Dan Carpenter wrote:
+> On Mon, Mar 21, 2022 at 02:59:08PM -0700, Darrick J. Wong wrote:
+> > On Mon, Mar 21, 2022 at 10:33:02AM +0300, Dan Carpenter wrote:
+> > > b82670045aab66 Darrick J. Wong 2022-01-06  1365  
+> > > b82670045aab66 Darrick J. Wong 2022-01-06  1366  	error = xfs_alloc_find_freesp(tp, pag, cursor, end_agbno, &len);
+> > > b82670045aab66 Darrick J. Wong 2022-01-06  1367  	if (error)
+> > > b82670045aab66 Darrick J. Wong 2022-01-06  1368  		goto out_cancel;
+> > > b82670045aab66 Darrick J. Wong 2022-01-06  1369  
+> > > b82670045aab66 Darrick J. Wong 2022-01-06  1370  	/* Bail out if the cursor is beyond what we asked for. */
+> > > b82670045aab66 Darrick J. Wong 2022-01-06  1371  	if (*cursor >= end_agbno)
+> > > b82670045aab66 Darrick J. Wong 2022-01-06 @1372  		goto out_cancel;
+> > > 
+> > > This looks like it should have an error = -EINVAL;
+> > 
+> > Nope.  If xfs_alloc_find_freesp moves @cursor goes beyond end_agbno, we
+> > want to exit early so that the xfs_map_free_extent caller will return to
+> > userspace.
+> > 
+> > --D
 > 
-> LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
-> LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
-> LINK: [3] https://elixir.bootlin.com/linux/v5.17-rc8/source/fs/ext4/indirect.c#L1244
-> LINK: [4] https://elixir.bootlin.com/linux/v5.17-rc8/source/fs/ext4/indirect.c#L1234
+> I'm generally pretty happy with this static checker rule.  Returning
+> success on a failure path almost always results if something bad like a
+> NULL deref or a use after free.  But false positives are a real risk
+> because it's tempting to add an error code to this and introduce a bug.
 > 
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Andreas Dilger <adilger.kernel@dilger.ca>
-> Cc: Ritesh Harjani <riteshh@linux.ibm.com>
-> Cc: <linux-ext4@vger.kernel.org>
-> Cc: <stable@vger.kernel.org>
-> Cc: <linux-kernel@vger.kernel.org>
+> Smatch will not print the warning if error is set within 4 lines of the
+> goto.
+> 	error = 0;
+> 	if (*cursor >= end_agbno)
+> 		goto out_cancel;
+
+The trouble is, if I do that:
+
+	error = xfs_alloc_find_freesp(...);
+	if (error)
+		goto out_cancel;
+
+	error = 0;
+	if (*cursor >= end_agbno)
+		goto out_cancel;
+
+then I'll get patch reviewers and/or tools complaining about setting
+error to zero unnecessarily.  Either way we end up with a lot of code
+golf for something the compiler will probably remove for us.
+
+Question: Can sparse detect that the if() test involves a comparison
+between a non-pointer function argument and a dereferenced pointer
+argument?  Would that be sufficient to detect functions that advance a
+cursor passed in by the caller and return early when the cursor moves
+outside of a range also specified by the caller?
+
+--D
+
+> Another option is that people have started adding comments to these
+> blocks in response to the checker warning.
 > 
-> Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
-> Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-> --
-> v2: Change sbi->s_blocksize to inode->i_sb->s_blocksize in maxlength
->  computation.
-> ---
->  fs/ext4/inode.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+> Or if you had a different idea about how to silence the checker warning
+> I can also probably implement that.
 > 
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 01c9e4f743ba..355384007d11 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -3924,7 +3924,8 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
->  	struct super_block *sb = inode->i_sb;
->  	ext4_lblk_t first_block, stop_block;
->  	struct address_space *mapping = inode->i_mapping;
-> -	loff_t first_block_offset, last_block_offset;
-> +	loff_t first_block_offset, last_block_offset, max_length;
-> +	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
->  	handle_t *handle;
->  	unsigned int credits;
->  	int ret = 0, ret2 = 0;
-> @@ -3967,6 +3968,16 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
->  		   offset;
->  	}
->  
-> +	/*
-> +	 * For punch hole the length + offset needs to be at least within
-> +	 * one block before last
-> +	 */
-> +	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
-> +	if (offset + length >= max_length) {
-> +		ret = -ENOSPC;
-> +		goto out_mutex;
-> +	}
-> +
->  	if (offset & (sb->s_blocksize - 1) ||
->  	    (offset + length) & (sb->s_blocksize - 1)) {
->  		/*
-> -- 
-> 2.35.1
+> regards,
+> dan carpenter
+> 
 > 

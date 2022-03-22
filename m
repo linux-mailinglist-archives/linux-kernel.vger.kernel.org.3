@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659834E423E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F764E4243
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238160AbiCVOro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
+        id S238225AbiCVOtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236277AbiCVOrj (ORCPT
+        with ESMTP id S238597AbiCVOsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:47:39 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE176FA09;
-        Tue, 22 Mar 2022 07:46:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647960369; x=1679496369;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zP725tvXUiO7zKOyNAbjmJfwuMlzSbKo9AwbYYlFB/U=;
-  b=gxmJV7osb3tq9BvThiJENUb79TnL85WN3ES3AP6N44fswtIu+F8UVDkZ
-   2FlqtICeHbmk70FIa3kjvDZ0BrLDIEDiKlLoiS/N8wtwys4LlNLKiqkzt
-   cslAjMA4p4yWehXQjcdxZqO5G0H5TucFXoVXc3WnC1o5ivCzspMw7fOhE
-   fhSi4bQUvQh37+pgVeHQX6/PGJHfmzdBAouZWNQ7mUmzsa8z1QuSgILC3
-   O0JshWB2D83DIL6oJYWfFA6bCO6FNANVA76zUmZavqLZMJA0lg8YA3x+k
-   kmoddcWSRCUEguCLDTVLdFz1tRrKOmPAv4Ph2I2+8FXHz8jPlpN4so+eg
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,201,1643698800"; 
-   d="scan'208";a="152834847"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Mar 2022 07:46:08 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 22 Mar 2022 07:46:08 -0700
-Received: from CHE-LT-I21427LX.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 22 Mar 2022 07:46:02 -0700
-Message-ID: <7526eff194e4dcfec1b8d88fc30b22aeb83e3100.camel@microchip.com>
-Subject: Re: [PATCH v9 net-next 02/11] dt-bindings: net: add mdio property
-From:   Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <andrew@lunn.ch>, <netdev@vger.kernel.org>, <olteanv@gmail.com>,
-        <UNGLinuxDriver@microchip.com>, <woojung.huh@microchip.com>,
-        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <devicetree@vger.kernel.org>
-Date:   Tue, 22 Mar 2022 20:16:00 +0530
-In-Reply-To: <YjkJxykT2dQxe3d/@robh.at.kernel.org>
-References: <20220318085540.281721-1-prasanna.vengateshan@microchip.com>
-         <20220318085540.281721-3-prasanna.vengateshan@microchip.com>
-         <YjkJxykT2dQxe3d/@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        Tue, 22 Mar 2022 10:48:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EA9376669
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647960429;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4qzlNRqD4tfZikp/Dsm0XnaKMVbT8FwPh0SW/Cj1Wic=;
+        b=C4pJWM2V9fxKH9AboGEPqs2Y1WsKHFn+J2YkIWnsH1yYPKb1xaaXEci1x9YgsdhVEBgXfj
+        WXE3jgn6Ryg+2AiKR/1z5+/os0BvSrYA76PorFCm548W1ryoN1kpnwn/kWoEcnDsnva2//
+        gKjdLEj8PAYkCw9JxUnWzDAWHKeoTnc=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-530-kDEEsZCYMRyrx3_r-5US9A-1; Tue, 22 Mar 2022 10:47:08 -0400
+X-MC-Unique: kDEEsZCYMRyrx3_r-5US9A-1
+Received: by mail-qk1-f199.google.com with SMTP id i2-20020a05620a248200b0067b51fa1269so11911622qkn.19
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:47:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4qzlNRqD4tfZikp/Dsm0XnaKMVbT8FwPh0SW/Cj1Wic=;
+        b=EINwbrvBhtIIN1n4N4VKIgN3y6c7+R46v9WH3t8IeRf1JxaGLZn787TFme/Uqf95IY
+         E8EMAd1ET4OqbSmVNhKNTk2+W/mIe/teS2tWIgBHEdOMnqiH0OwaXph9NQ9uvgu4qqTA
+         YTMKC3ytlFROvMAf5JHLtk9AW6dYlArvuaebBFFodCyKQ0VFA1hbAq3eK4hr+T9+cneE
+         PoRm8TIQkrxyLfgRyQc20CLbre15fa2i7LGH/tXP/D7RwEgf3+M5BP9CICQnfAmJiGSw
+         Im6ICDCma1qi27dEMbd31mcx5hBQXFHyl4+XpH95pw8PLxi0isTlIss83r5V9ibpY8Ny
+         tfUg==
+X-Gm-Message-State: AOAM533onRW985nYMGKdxtv8r0GyiQQR5QeCO0tYwrqdKhFYph5r/3R1
+        LelKVTy7u1kWMDyvopB9mfGU1sssoVHmV+bSjrhMCLSV4K0TGHPZMDxjKkCRJZuRyD5ki9CFc+5
+        MnetlBMsBJ1OQAOlGcEz7+3O7
+X-Received: by 2002:a05:622a:205:b0:2e1:cda9:88e9 with SMTP id b5-20020a05622a020500b002e1cda988e9mr20487280qtx.384.1647960427432;
+        Tue, 22 Mar 2022 07:47:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwsLj5vUxfXBtD9PGWuK+FxEeeYZyjr67r11l2MMHSXkoX+jf7ZZy940QgqsSUCVpzKFaoUwA==
+X-Received: by 2002:a05:622a:205:b0:2e1:cda9:88e9 with SMTP id b5-20020a05622a020500b002e1cda988e9mr20487261qtx.384.1647960427212;
+        Tue, 22 Mar 2022 07:47:07 -0700 (PDT)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id j188-20020a3755c5000000b0067d1c76a09fsm9474508qkb.74.2022.03.22.07.47.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 07:47:06 -0700 (PDT)
+From:   trix@redhat.com
+To:     hare@suse.com, jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] [SCSI] aic7xxx: use standard pci subsystem, subdevice defines
+Date:   Tue, 22 Mar 2022 07:46:48 -0700
+Message-Id: <20220322144648.2467777-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,53 +74,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-21 at 18:27 -0500, Rob Herring wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> content is safe
-> 
-> On Fri, Mar 18, 2022 at 02:25:31PM +0530, Prasanna Vengateshan wrote:
-> > mdio bus is applicable to any switch hence it is added as per the below
-> > request,
-> > https://lore.kernel.org/netdev/1300f84832ef1c43ecb9edb311fb817e3aab5420.camel@microchip.com/
-> 
-> Quoting that thread:
-> 
-> > Yes indeed, since this is a common property of all DSA switches, it can
-> > be defined or not depending on whether the switch does have an internal
-> > MDIO bus controller or not.
-> 
-> Whether or not a switch has an MDIO controller or not is a property of
-> that switch and therefore 'mdio' needs to be documented in those switch
-> bindings.
-> 
-> > 
-> > Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-> > ---
-> >  Documentation/devicetree/bindings/net/dsa/dsa.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> > b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> > index b9d48e357e77..0f8426e219eb 100644
-> > --- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> > +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> > @@ -31,6 +31,10 @@ properties:
-> >        switch 1. <1 0> is cluster 1, switch 0. A switch not part of any
-> > cluster
-> >        (single device hanging off a CPU port) must not specify this property
-> >      $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +
-> > +  mdio:
-> > +    $ref: /schemas/net/mdio.yaml#
-> > +    unevaluatedProperties: false
-> 
-> From a schema standpoint, this bans every switch from adding additional
-> properties under an mdio node. Not likely what you want.
-> 
-> Rob
+From: Tom Rix <trix@redhat.com>
 
-Thanks for the feedback. Do you mean that the 'unevaluatedProperties: false' to
-be removed, so that the additional properties can be added? or mdio is not
-supposed to be defined in the dsa.yaml ?
+Common defines should be used over custom defines.
 
+Change and remove these defines
+PCIR_SUBVEND_0 to PCI_SUBSYSTEM_VENDOR_ID
+PCIR_SUBDEV_0 to PCI_SUBSYSTEM_ID
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/scsi/aic7xxx/aic79xx_osm.h | 2 --
+ drivers/scsi/aic7xxx/aic79xx_pci.c | 6 +++---
+ drivers/scsi/aic7xxx/aic7xxx_osm.h | 2 --
+ drivers/scsi/aic7xxx/aic7xxx_pci.c | 4 ++--
+ 4 files changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.h b/drivers/scsi/aic7xxx/aic79xx_osm.h
+index 679a4fd138746..793fe19993a90 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_osm.h
++++ b/drivers/scsi/aic7xxx/aic79xx_osm.h
+@@ -420,8 +420,6 @@ ahd_unlock(struct ahd_softc *ahd, unsigned long *flags)
+ 
+ /* config registers for header type 0 devices */
+ #define PCIR_MAPS	0x10
+-#define PCIR_SUBVEND_0	0x2c
+-#define PCIR_SUBDEV_0	0x2e
+ 
+ /****************************** PCI-X definitions *****************************/
+ #define PCIXR_COMMAND	0x96
+diff --git a/drivers/scsi/aic7xxx/aic79xx_pci.c b/drivers/scsi/aic7xxx/aic79xx_pci.c
+index 2f0bdb9225a40..5fad41b1ab58d 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_pci.c
++++ b/drivers/scsi/aic7xxx/aic79xx_pci.c
+@@ -260,8 +260,8 @@ ahd_find_pci_device(ahd_dev_softc_t pci)
+ 
+ 	vendor = ahd_pci_read_config(pci, PCIR_DEVVENDOR, /*bytes*/2);
+ 	device = ahd_pci_read_config(pci, PCIR_DEVICE, /*bytes*/2);
+-	subvendor = ahd_pci_read_config(pci, PCIR_SUBVEND_0, /*bytes*/2);
+-	subdevice = ahd_pci_read_config(pci, PCIR_SUBDEV_0, /*bytes*/2);
++	subvendor = ahd_pci_read_config(pci, PCI_SUBSYSTEM_VENDOR_ID, /*bytes*/2);
++	subdevice = ahd_pci_read_config(pci, PCI_SUBSYSTEM_ID, /*bytes*/2);
+ 	full_id = ahd_compose_id(device,
+ 				 vendor,
+ 				 subdevice,
+@@ -298,7 +298,7 @@ ahd_pci_config(struct ahd_softc *ahd, const struct ahd_pci_identity *entry)
+ 	 * Record if this is an HP board.
+ 	 */
+ 	subvendor = ahd_pci_read_config(ahd->dev_softc,
+-					PCIR_SUBVEND_0, /*bytes*/2);
++					PCI_SUBSYSTEM_VENDOR_ID, /*bytes*/2);
+ 	if (subvendor == SUBID_HP)
+ 		ahd->flags |= AHD_HP_BOARD;
+ 
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.h b/drivers/scsi/aic7xxx/aic7xxx_osm.h
+index 4782a304e93cc..51d9f4de07346 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_osm.h
++++ b/drivers/scsi/aic7xxx/aic7xxx_osm.h
+@@ -433,8 +433,6 @@ ahc_unlock(struct ahc_softc *ahc, unsigned long *flags)
+ 
+ /* config registers for header type 0 devices */
+ #define PCIR_MAPS	0x10
+-#define PCIR_SUBVEND_0	0x2c
+-#define PCIR_SUBDEV_0	0x2e
+ 
+ typedef enum
+ {
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_pci.c b/drivers/scsi/aic7xxx/aic7xxx_pci.c
+index dab3a6d12c4d2..2d4c85426dc3e 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_pci.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_pci.c
+@@ -673,8 +673,8 @@ ahc_find_pci_device(ahc_dev_softc_t pci)
+ 
+ 	vendor = ahc_pci_read_config(pci, PCIR_DEVVENDOR, /*bytes*/2);
+ 	device = ahc_pci_read_config(pci, PCIR_DEVICE, /*bytes*/2);
+-	subvendor = ahc_pci_read_config(pci, PCIR_SUBVEND_0, /*bytes*/2);
+-	subdevice = ahc_pci_read_config(pci, PCIR_SUBDEV_0, /*bytes*/2);
++	subvendor = ahc_pci_read_config(pci, PCI_SUBSYSTEM_VENDOR_ID, /*bytes*/2);
++	subdevice = ahc_pci_read_config(pci, PCI_SUBSYSTEM_ID, /*bytes*/2);
+ 	full_id = ahc_compose_id(device, vendor, subdevice, subvendor);
+ 
+ 	/*
+-- 
+2.26.3
 

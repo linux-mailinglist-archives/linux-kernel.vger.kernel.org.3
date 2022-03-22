@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED604E3B4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1394E3B54
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbiCVI6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S232084AbiCVJBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 05:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbiCVI5w (ORCPT
+        with ESMTP id S231142AbiCVJBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:57:52 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F49729C9C;
-        Tue, 22 Mar 2022 01:56:25 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id b19so23899725wrh.11;
-        Tue, 22 Mar 2022 01:56:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4IDTqc3vS0homRb5egEok1VAKstmLtnVq0FuLPeo1/I=;
-        b=fI0YkxoYnWriJDzISwKrT/RUs0HreSjLl54+DnfaZU9yUYEj0At0eYTRKlYY6DBuON
-         yW8138Vff/Q/YaHWa3a28iqMCFYbfqEHVDka6hSOCjA9qdY+f05BN0IVDMytta9619as
-         qJE9KWOEWfLlr/jGCJHQYQDgHYNJuMD1w/WHPqlZe9x1Uw77G/AUBw97IybkTWnNS/pu
-         y+IH2h1vTZZHXW1N1t9V0FpuJZgoT2bFymQgbNaRxPYJlMrgqQZD7YQ87TOx6hR90w5u
-         fIOA/v8SAZaij4bxq+H+62F36G5+cD9UnAOdu9Y8sKN4t0X4/vFVhXaw2AmqdDsEye5H
-         3KtQ==
-X-Gm-Message-State: AOAM531qnKnc4cM4h+azfwENRI9Mo9nFm1XiFVdqiNds7I6Ro5uHPRaS
-        hxW9DW6EB+Bkz7biM2AJHnY=
-X-Google-Smtp-Source: ABdhPJw3LqEXSODpm7x6a7J1hW37RYctIUsVBlf4FNn9sxGpKqFJ02EMCbHoSiDm/MN0asiqrU6/hg==
-X-Received: by 2002:a5d:588b:0:b0:204:1c1a:965d with SMTP id n11-20020a5d588b000000b002041c1a965dmr4922405wrf.669.1647939383900;
-        Tue, 22 Mar 2022 01:56:23 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id l9-20020a5d6d89000000b00203d62072c4sm16804387wrs.43.2022.03.22.01.56.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 01:56:23 -0700 (PDT)
-Message-ID: <870f8623-8a99-09b6-56c6-0f8c010af237@kernel.org>
-Date:   Tue, 22 Mar 2022 09:56:22 +0100
+        Tue, 22 Mar 2022 05:01:47 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5362DE97;
+        Tue, 22 Mar 2022 02:00:19 -0700 (PDT)
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MKsaz-1nmtPJ2Yqz-00LGhI; Tue, 22 Mar 2022 10:00:16 +0100
+Received: by mail-wr1-f44.google.com with SMTP id r13so8890534wrr.9;
+        Tue, 22 Mar 2022 02:00:16 -0700 (PDT)
+X-Gm-Message-State: AOAM5323lrNfjkjIt385uW2kxCR0p87FIr/EhYJrs2p5XN9Ip8vA9HLR
+        ONLNw+KImh2rDv5xio/5sN3LGLctfS2ErN2pWhA=
+X-Google-Smtp-Source: ABdhPJz+0N9qi9MDERkBo94wRqfVEQA+BUZLonIFsmSQAIgn4FGS8f4CYsBn+NI2HJG468ewXScxwPyLNX/EnR1d1PI=
+X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
+ y1-20020adfd081000000b001ef9378b7ccmr21833938wrh.407.1647939616226; Tue, 22
+ Mar 2022 02:00:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 1/2] thermal: Add thermal driver for Sunplus SP7021
-Content-Language: en-US
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-References: <cover.1647399369.git.lhjeff911@gmail.com>
- <a658d7513a62e067086d8e2a73920bb892293569.1647399369.git.lhjeff911@gmail.com>
- <9b263f80-15df-efd3-2682-0adda06f5b5f@canonical.com>
- <4c05e7767bfe401b8c139e159855fe77@sphcmbx02.sunplus.com.tw>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <4c05e7767bfe401b8c139e159855fe77@sphcmbx02.sunplus.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
+ <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-4-chenhuacai@loongson.cn>
+ <CAK8P3a1ST1hBnhepvoQ9UTbAM=56JEU=-OiBAFQeK2rgaZ5aWw@mail.gmail.com> <CAAhV-H7akp8RNyw=7qJPgWeApAzf0u4kBNbOHzgQN9Mx3PfzcQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H7akp8RNyw=7qJPgWeApAzf0u4kBNbOHzgQN9Mx3PfzcQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 22 Mar 2022 10:00:00 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0WzntBkQiEK+nBrfUNw8TMyQwBQ=cQ+=3EeXLYNT+=iw@mail.gmail.com>
+Message-ID: <CAK8P3a0WzntBkQiEK+nBrfUNw8TMyQwBQ=cQ+=3EeXLYNT+=iw@mail.gmail.com>
+Subject: Re: [PATCH V8 11/22] LoongArch: Add process management
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:KFGabE3KmUmB0m4i/4yl/TwS2C6ATJnFZbMOZ+WZLRJU8+DoTBQ
+ sOM70tgz42K5PzeLtdTrm52MW74lExLaDbcTAOSGeUv7aul0QBaT9OBre6ZJxrrjDqVFGjB
+ /ZsBC1l/CWq28yZDxO1jOtBqj7nc/NV3YyZRQtS/6vTQJSeAj/Vv8v+PcTh5qYgkzPfwvmU
+ gvNSyAdoSVknJ8aNiao2Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5JVpZtY7/U4=:gb8fRQ/fpADc4MpWQVGP5q
+ 9ZYv43cERUZjnocWIS0aRF9icv88LkUpGslot3EbZoQGBLkpMkiH86no9SnBnuXGzdK+z4yVb
+ S3aieZOvk06AFo9u4UgArN46VSYqTWWwBlEuXkk5X+LYSE96vceNdSI3jvaXo55UnjQK3OXxX
+ aYXz57aO4FwO/iXIAA3/4JLhwmhaueAhw2MTVepxCG/xM9f6t5SRJ2eKfKsJwxydtjyaiJH+Q
+ +BHGKT/mwBILPFUvQyZeeRc8iOlGSt29eBtLWXcq0bwot86kUv6EEVicbD4e3JryEPrmRXWK5
+ 4CSB6LxNgyoKBDh677L1TOOkbuPKxHbxtmBHvF/h22BsMArVOSyctJHj8abmZGZFUCrqNhvBn
+ 1DA66U86/+21f7eJfk0j/QbWoyfpCBYZYsvxm/yOxcX50w5KZWuW8jzec1AThu1u9F3UjCGxB
+ DJsKXls9/yGbYjK168pWXojyJ0Lh0oIrZFI3dPpFX0twqHiT5T0ris/HhdqIckLrfN2lejvtO
+ KSVG3AGsgAYIlz6+IH1J5SUtix7feVPqXWI9KQWsWV7fcF2uw4z2jUtkl2DrAV82QwXZCrfjL
+ //E7idE8wykGDTSpl/Dlegafot1YgrBH+1eLqhYleHL6Wh06oUBbn3lK9SItwWvwhz5xAwSBN
+ mRX0FrRD6+q+WwLaMnjtPCkuTeqIbVzGtrnq36zO60uu1MlmtkgTCfgIi0UBxLc4bZ0fukJoz
+ lqqQQrBkrbXtvcXasPy53POG39dYC+0ZecgIjnCM23xlkAyuKrsQdsS5RVy05KsTLIXWVnYxv
+ u12szQQj/6xMXggBf/cxMW3e87u2lN4wlaCATpI1LwOu64RDGc=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 03:55, Lh Kuo 郭力豪 wrote:
->>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>> +	if (IS_ERR(res))
->>> +		return dev_err_probe(&pdev->dev, PTR_ERR(res), "resource get
->>> +fail\n");
->>> +
->>> +	sp_data->regs = devm_ioremap(&pdev->dev, res->start, resource_size(res));
->>> +	if (IS_ERR(sp_data->regs))
->>> +		return dev_err_probe(&pdev->dev, PTR_ERR(sp_data->regs), "mas_base
->>> +get fail\n");
->>
->> Use devm_platform_ioremap_resource() instead.
->>
-> 
-> Other drivers must also access these registers.
-> Warning when using devm_platform_ioremap_resource
-> Can I keep the original settings?
+On Tue, Mar 22, 2022 at 4:07 AM Huacai Chen <chenhuacai@kernel.org> wrote:
+> On Mon, Mar 21, 2022 at 4:43 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> >
+> > > +#ifdef CONFIG_PAGE_SIZE_64KB
+> > > +#define THREAD_SIZE_ORDER (0)
+> > > +#endif
+> > > +
+> > > +#define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
+> > > +#define THREAD_MASK (THREAD_SIZE - 1UL)
+> > > +
+> >
+> > Having a 64KB stack area is rather wasteful. I think you should use a sub-page
+> > allocation in this configuration, or possibly disallow 64KB page configuration
+> > entirely.
+> >
+> > Note that you have to use full pages when using CONFIG_VMAP_STACK, but
+> > you don't seem to support that at the moment, so allocating only 16KB stacks
+> > on a 64KB page config should still work.
+> I think using a 16KB stack for all configurations (4KB/16KB/64KB) is
+> the simplest way. Right?
 
-You should not map one region twice. How do you guarantee
-synchronization during for example updates of specific registers? In
-such case you need to use regmap and share it via syscon (although this
-does not solve synchronization on higher level - avoiding conflicting
-changes to same registers)
+Yes, I agree. 16KB is what almost all 64-bit architectures use, though when
+you add 32-bit support that can probably be limited to 8KB like most others.
 
+As a side note, you should definitely consider supporting both separate
+IRQ stacks and CONFIG_VMAP_STACK if you don't do that already.
+Running with those two enabled makes the kernel more robust both
+against accidental stack overflow and against malicious code that
+attempts to abuse a potential overflow code path.
 
-Best regards,
-Krzysztof
+        Arnd

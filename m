@@ -2,140 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434344E3A91
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8C64E3A98
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbiCVIau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
+        id S231167AbiCVIb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiCVIar (ORCPT
+        with ESMTP id S229706AbiCVIbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:30:47 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2057.outbound.protection.outlook.com [40.107.20.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C4912AFC;
-        Tue, 22 Mar 2022 01:29:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F9z+fNwYgo8/cUT/SPh4kYtfPLefwSpVQvyqfsBNUdMQu3jz3Qnh2BytDRGA5iihOce9CC5h3yqAA673E88BH5lfKNTsptJoTnf1AnoxvL//2OQawMPXTQdgVsCIzc7ZVX84lSeeQ+E6lsjw3VapDS4Ip2aC8c386SnlOtPhd3bWcVG7ymXhujVEVA8wN9CV1pM2weGqzu9cpEu7yYzHKC7WB90Rn/6g47yd1Gmzw5qLYuOWdgvXtR+2Eq+4iGkIPBfxjj1t0KFMQmFsxbU5R3LFXqAeSmHt2Tg7Nfiv74aASbdJpJe1dZ12kGsVshSrPsBLX85ZgPoa369zrHf1RQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QLC6WA3DImuiSPO9+a6qjj4UKWIrSvWqS3Yz+gn9WP8=;
- b=K5WF+eYFWIJy2gzZeqzl/26R84RJ7WYm9tfPLSyQTs9L5TgIfB+n8JLE536A8GDX/daTbwKbkr04vvZdLyH9DCd0cH+b7R0bHzoY7gz+gB7eQLRUZHjW4wfsnYarf8VPDMcgNkkBIFdbTYgNw7IKWrLq5a9t36m+62K+KUtT1F9iaWR3mKWex4czGjzyTu2a0/ziosK9C/U6b0j8HFJIqpq1jKvYf8iSmPm/mLQ+0D3wPRxNVWcL4AKrZsUFi2zXTmfclEBH7YlMeDJmrUIpq7L3NlRgowgQsM11zoDjnamsubmLdFACBjtDIdqRf+ZNualfkArwNWJBKAMPyuilGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QLC6WA3DImuiSPO9+a6qjj4UKWIrSvWqS3Yz+gn9WP8=;
- b=OWQ6Th2ZdmOhb0qR0tx5VX1XYnKykGNPGFqUnrJ7e88QBreGyusOMB/XYw9ZJhryusI3VTUFK5jUBMxnVqHj4Tnd0LGaNTq0PEIAWDO8xzOPcfWzX67lx+v+seGyX9hgDt8HgHOtK9OW1Ej3bXC8AyzmGto+U3+qVdKSYuIxpuc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by AM6PR0402MB3639.eurprd04.prod.outlook.com (2603:10a6:209:19::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.22; Tue, 22 Mar
- 2022 08:29:16 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::c39:69cf:c4ea:967]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::c39:69cf:c4ea:967%5]) with mapi id 15.20.5081.023; Tue, 22 Mar 2022
- 08:29:16 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, shawnguo@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, aisheng.dong@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] media: amphion: ensure the buffer count is not less than min_buffer
-Date:   Tue, 22 Mar 2022 16:28:59 +0800
-Message-Id: <20220322082859.9834-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.33.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0039.apcprd02.prod.outlook.com
- (2603:1096:4:196::9) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
+        Tue, 22 Mar 2022 04:31:53 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC0713F8D;
+        Tue, 22 Mar 2022 01:30:24 -0700 (PDT)
+X-UUID: 2c5a5ae2a33341f9803f4fa11f802fd3-20220322
+X-UUID: 2c5a5ae2a33341f9803f4fa11f802fd3-20220322
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1934978458; Tue, 22 Mar 2022 16:30:18 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 22 Mar 2022 16:30:17 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 22 Mar 2022 16:30:17 +0800
+Message-ID: <51750d230b38aa3d2e9d370247bcb4be93a35877.camel@mediatek.com>
+Subject: Re: [PATCH v2 02/15] clk: mediatek: Add MT8186 mcusys clock support
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 22 Mar 2022 16:30:17 +0800
+In-Reply-To: <CAGXv+5Fq4_dZBWJvKZ8ADUSQF4bTu-QWZ+7KG1dsJoWDrT2nXg@mail.gmail.com>
+References: <20220221015258.913-1-chun-jie.chen@mediatek.com>
+         <20220221015258.913-3-chun-jie.chen@mediatek.com>
+         <CAGXv+5Fq4_dZBWJvKZ8ADUSQF4bTu-QWZ+7KG1dsJoWDrT2nXg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: faee8183-0aab-458b-8379-08da0bde0d7c
-X-MS-TrafficTypeDiagnostic: AM6PR0402MB3639:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR0402MB36393B29CCBFDCB8ADFEC8F4E7179@AM6PR0402MB3639.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UPIKnYxAjExUWICTMInxAFPxYxwF2OO2Nq9JA4x66c7q+8/78IdliAePF8sAa1DxJ2q2/wOtZAt1pZ+XSbo1tX4TcHZrLk9adAoj5UKE6qCSTw/ihWrkDqeI+qinNJJNGmwn5acUkDnuz8h/rfiDOHpmZOAgdVLPVKvHtmBEyH6qTgsdk1AIhiAtv8Lho52C4Rv6E/80/tCAikxKxOd5HaLB2ZeIdpq3rKVb9Oz5yHKqLl0LMmePFy0xInOGB8dvm2nw7xPUiPvJk6G5Q8zozXfg2mKafEdUKZAfv4w+8EYpd3/rBpHAJRkXj9ooUMrbjOGlX/feW9iSO8m8VJu9ONYeYk0MB+pFGgt59t7iQdbMWe48AYg5ivVF9imbig+KobDK7qXdzf7sdtspZm8xhpdxb+xHcSd1kxE1ra565tccLjTUk8BYjP2DJCUZAo7l3UBy8M75jwGufbdfuedodvmLuN0rqo1EOy0prDxwC4CMtXa3OBP3hSs3yR3IAWYSRao4De7n64tcP8B/KSpkQuHTZ/hUP3qIL+DxJBfxv+mIQ7BdAkHGJkTCHZJ1WFnaRyH2LqZJyAapnyf58CGJ4cX31PZBFLPelRJEHYLVLPXk1mv+fkQmCs32U+VpUBg2m62hvw7vlyHm3GK9vOV0kx3r2dH36ke0TpRMW+f7aRnJRHy0Q65K2VRUSJsOVqRKzTUgN+tBaXcb9R6NFGtlXg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(5660300002)(7416002)(2616005)(6666004)(508600001)(86362001)(8936002)(6486002)(4326008)(66556008)(66946007)(66476007)(186003)(26005)(38100700002)(38350700002)(2906002)(6512007)(52116002)(6506007)(44832011)(4744005)(36756003)(1076003)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wKWXPfYOM/UxF8ycWekbziks3bCfAu8TRF9aPHdrjJ/a+tjzptt4YLckVDRG?=
- =?us-ascii?Q?T8+JQIrrPHDoMSefIfpbxJbS4w48kDIhKlcKvAqySUD11mbOSQLVpFR9mqGo?=
- =?us-ascii?Q?9z23Gc4HG4GTulgAKbXAqCfv2c1cMp7NHM8PudNXTkeL3Z0fJO1to/4ZYCx3?=
- =?us-ascii?Q?Uj/xEbrdPJWSxWD4Y87oohciLtZgp5MyXDY65wyCf5zD3RdvI+f177N5CTxZ?=
- =?us-ascii?Q?Jd7Fq7K7hb78IQieqMQTpphJwdZBrbMji33jAxL3QafIeFqXbWv3unZWyF3H?=
- =?us-ascii?Q?krDiQn+/CBvurBEb/aQim9XV/tST9FiMtyUF9cZl7V+UiXBgIsHroXhrl6LW?=
- =?us-ascii?Q?uzBqiLU2R7OiUlm/eb+mgKOEPupC6Kwc4VA/DtItJmxZudbBeAyJ3rc/iv6C?=
- =?us-ascii?Q?3EjkCzkysNKvXkn2xupLZxbWgHr7k3DsCiDUWteQDYxZD3CgOdQzS6DcNYXQ?=
- =?us-ascii?Q?mGCvuUD7Hk+Mzz9T+YAi4nEi1GP4N9PE9xr2+jLREsFNN/bxivaubeYicnA+?=
- =?us-ascii?Q?DBu4C2mvex0OTk9zxGBGX0iY76t+LyS1eTuIhkebM3NHtgvo/MPgTzIpk85n?=
- =?us-ascii?Q?S70RuRzBAc0jXcjqqk44GB3NWOpJuxw6W+Ylge/uN4O7qbR1r41Su6fOsDry?=
- =?us-ascii?Q?ZgXBM/HHyMBJRwUp2864GISLION91FuB5oqqnQ3/TDpS1+agtkX8ZFIrkpz+?=
- =?us-ascii?Q?yB2skKGkKVs4gjYc9SuyRWGMtTAd27QXU3rwm6wT8IdqFQiU00jWATwkVKUP?=
- =?us-ascii?Q?4Tqv+uSjZH9fnO+uuG1curAz6oU9IuejqaBEAmEBw7n6ojf1iTXg/2rcgMHG?=
- =?us-ascii?Q?4aFatdGzwGTDK4JDWwha9pCHN9AAcmFFLZHJVlzFwsgRTlpdKhpZuM+fmcus?=
- =?us-ascii?Q?B29IoZc0No1IHGOBg+FhfcmfIlVnHGn7KuJpzUx8cOp0kKsXD5uEbV//cKPD?=
- =?us-ascii?Q?VoDQ11aIQ3QSShp0e1Ll7L/B7CW9+JTBB+7p99nbM14Vxan+h01MSS7JO+EV?=
- =?us-ascii?Q?EjnKihTyZczj2CjMslHvYTQbsI6gkbAQTrURCWIfhGXpKOWVCxg0Sx9hmzW1?=
- =?us-ascii?Q?T5ttrxNzxPZCrueujwlTEt0XopySPI8Vvfzf+mbG+oPIlM3s/IPChfE3Bw/B?=
- =?us-ascii?Q?K2qQUL/wbKlru5O7pk45s2eTVNPlqGor28GgdY+AXPB5SpkQJkUMSS+hpauO?=
- =?us-ascii?Q?jGmIcFpvDIfG90EKQLfSlDBnc+ec2Ao0yq5Bia6kOHXfjj5DF2OD2oRE+al4?=
- =?us-ascii?Q?ZznxO0G7urYD0nzMEyESa8ugQiwOCJqnQXNIVFyncOjv54UKHgkrLnrqABaQ?=
- =?us-ascii?Q?WERORks6qGdp7wFEb2wLc3io/+uTWgh0K804tTA7UQfgbf4zlhweg7cIcCyV?=
- =?us-ascii?Q?IFTQZvgQU0b8t1+TQXp0s8jlnNVebLRyIrU6RE8s8Y35KFuQu6mWosuFG3Bn?=
- =?us-ascii?Q?FJFu8tpa+T8LLvm4zkn0wt5J09cABFn/?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: faee8183-0aab-458b-8379-08da0bde0d7c
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 08:29:16.6224
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MIEH4rKEG4aJYYkEaY/SQ0YJPhjjwz81aFwrsrmMw57PP1179TvNMMtH1aPiXW7fLcpdFjqlf6MgfJ5sZdO53A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3639
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-the output buffer count should >= min_buffer_out
-the capture buffer count should >= min_buffer_cap
+On Wed, 2022-03-09 at 18:13 +0800, Chen-Yu Tsai wrote:
+> Hi,
+> 
+> On Mon, Feb 21, 2022 at 9:59 AM Chun-Jie Chen
+> <chun-jie.chen@mediatek.com> wrote:
+> > 
+> > Add MT8186 mcusys clock controller which provides muxes
+> > to select the clock source of APMCU.
+> > 
+> > Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> > Acked-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  drivers/clk/mediatek/Kconfig          |   8 ++
+> >  drivers/clk/mediatek/Makefile         |   1 +
+> >  drivers/clk/mediatek/clk-mt8186-mcu.c | 106
+> > ++++++++++++++++++++++++++
+> >  3 files changed, 115 insertions(+)
+> >  create mode 100644 drivers/clk/mediatek/clk-mt8186-mcu.c
+> > 
+> > diff --git a/drivers/clk/mediatek/Kconfig
+> > b/drivers/clk/mediatek/Kconfig
+> > index 01ef02c54725..d5936cfb3bee 100644
+> > --- a/drivers/clk/mediatek/Kconfig
+> > +++ b/drivers/clk/mediatek/Kconfig
+> > @@ -512,6 +512,14 @@ config COMMON_CLK_MT8183_VENCSYS
+> >         help
+> >           This driver supports MediaTek MT8183 vencsys clocks.
+> > 
+> > +config COMMON_CLK_MT8186
+> > +       bool "Clock driver for MediaTek MT8186"
+> > +       depends on ARM64 || COMPILE_TEST
+> > +       select COMMON_CLK_MEDIATEK
+> > +       default ARCH_MEDIATEK
+> > +       help
+> > +         This driver supports MediaTek MT8186 clocks.
+> > +
+> >  config COMMON_CLK_MT8192
+> >         bool "Clock driver for MediaTek MT8192"
+> >         depends on ARM64 || COMPILE_TEST
+> > diff --git a/drivers/clk/mediatek/Makefile
+> > b/drivers/clk/mediatek/Makefile
+> > index 7b0c2646ce4a..677fa4f0eea2 100644
+> > --- a/drivers/clk/mediatek/Makefile
+> > +++ b/drivers/clk/mediatek/Makefile
+> > @@ -71,6 +71,7 @@ obj-$(CONFIG_COMMON_CLK_MT8183_MFGCFG) += clk-
+> > mt8183-mfgcfg.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8183_MMSYS) += clk-mt8183-mm.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8183_VDECSYS) += clk-mt8183-vdec.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8183_VENCSYS) += clk-mt8183-venc.o
+> > +obj-$(CONFIG_COMMON_CLK_MT8186) += clk-mt8186-mcu.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
+> > diff --git a/drivers/clk/mediatek/clk-mt8186-mcu.c
+> > b/drivers/clk/mediatek/clk-mt8186-mcu.c
+> > new file mode 100644
+> > index 000000000000..6d82c5de16c1
+> > --- /dev/null
+> > +++ b/drivers/clk/mediatek/clk-mt8186-mcu.c
+> > @@ -0,0 +1,106 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +//
+> > +// Copyright (c) 2022 MediaTek Inc.
+> > +// Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> > +
+> > +#include "clk-mtk.h"
+> 
+> Please move local headers after global ones. And please do this for
+> all
+> patches.
+> 
+> > +
+> > +#include <dt-bindings/clock/mt8186-clk.h>
+> > +#include <linux/clk-provider.h>
+> > +#include <linux/platform_device.h>
+> > +
+> > +static DEFINE_SPINLOCK(mt8186_clk_lock);
+> > +
+> > +static const char * const mcu_armpll_ll_parents[] = {
+> > +       "clk26m",
+> > +       "armpll_ll",
+> > +       "mainpll",
+> > +       "univpll_d2"
+> > +};
+> > +
+> > +static const char * const mcu_armpll_bl_parents[] = {
+> > +       "clk26m",
+> > +       "armpll_bl",
+> > +       "mainpll",
+> > +       "univpll_d2"
+> > +};
+> > +
+> > +static const char * const mcu_armpll_bus_parents[] = {
+> > +       "clk26m",
+> > +       "ccipll",
+> > +       "mainpll",
+> > +       "univpll_d2"
+> > +};
+> > +
+> > +static struct mtk_composite mcu_muxes[] = {
+> > +       /* CPU_PLLDIV_CFG0 */
+> > +       MUX(CLK_MCU_ARMPLL_LL_SEL, "mcu_armpll_ll_sel",
+> > mcu_armpll_ll_parents, 0x2A0, 9, 2),
+> 
+> Can you add a comment stating that these registers have other bits
+> that
+> should not be touched? Otherwise anyone reading the datasheet might
+> consider this to be incomplete.
+> 
+> I assume the other bits (such as one field that looks like a divider)
+> are
+> configured in the bootloader, or the POR defaults are correct.
+> 
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- drivers/media/platform/amphion/vpu_v4l2.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Yes, We only control mux in linux side and keep same value in divider.
+I will add more description in v4. Sorry I missed this comment before.
 
-diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
-index cbf3315605a9..72a0544f4da3 100644
---- a/drivers/media/platform/amphion/vpu_v4l2.c
-+++ b/drivers/media/platform/amphion/vpu_v4l2.c
-@@ -355,6 +355,10 @@ static int vpu_vb2_queue_setup(struct vb2_queue *vq,
- 		return 0;
- 	}
- 
-+	if (V4L2_TYPE_IS_OUTPUT(vq->type))
-+		*buf_count = max_t(unsigned int, *buf_count, inst->min_buffer_out);
-+	else
-+		*buf_count = max_t(unsigned int, *buf_count, inst->min_buffer_cap);
- 	*plane_count = cur_fmt->num_planes;
- 	for (i = 0; i < cur_fmt->num_planes; i++)
- 		psize[i] = cur_fmt->sizeimage[i];
--- 
-2.33.0
+> > +       /* CPU_PLLDIV_CFG1 */
+> > +       MUX(CLK_MCU_ARMPLL_BL_SEL, "mcu_armpll_bl_sel",
+> > mcu_armpll_bl_parents, 0x2A4, 9, 2),
+> > +       /* BUS_PLLDIV_CFG */
+> > +       MUX(CLK_MCU_ARMPLL_BUS_SEL, "mcu_armpll_bus_sel",
+> > mcu_armpll_bus_parents, 0x2E0, 9, 2),
+> > +};
+> 
+> Note: I've checked the register bits against the datasheet.
+> 
+> > +
+> > +static const struct of_device_id of_match_clk_mt8186_mcu[] = {
+> > +       { .compatible = "mediatek,mt8186-mcusys", },
+> > +       {}
+> > +};
+> > +
+> > +static int clk_mt8186_mcu_probe(struct platform_device *pdev)
+> > +{
+> > +       struct clk_onecell_data *clk_data;
+> > +       struct device_node *node = pdev->dev.of_node;
+> > +       int r;
+> > +       void __iomem *base;
+> > +
+> > +       clk_data = mtk_alloc_clk_data(CLK_MCU_NR_CLK);
+> > +       if (!clk_data)
+> > +               return -ENOMEM;
+> > +
+> > +       base = devm_platform_ioremap_resource(pdev, 0);
+> > +       if (IS_ERR(base)) {
+> > +               r = PTR_ERR(base);
+> > +               goto free_mcu_data;
+> > +       }
+> > +
+> > +       r = mtk_clk_register_composites(mcu_muxes,
+> > ARRAY_SIZE(mcu_muxes), base,
+> > +                                       &mt8186_clk_lock,
+> > clk_data);
+> 
+> I don't think you need the lock. None of the bit fields you have
+> defined
+> in this driver have overlapping registers.
+> 
+> 
+> Regards
+> ChenYu
+> 
+
+Yes, the muxes register of big and little CPU are not overlapping,
+I will remove the lock in next patch.
+
+Thanks!
+
+> > +       if (r)
+> > +               goto free_mcu_data;
+> > +
+> > +       r = of_clk_add_provider(node, of_clk_src_onecell_get,
+> > clk_data);
+> > +       if (r)
+> > +               goto unregister_composite_muxes;
+> > +
+> > +       platform_set_drvdata(pdev, clk_data);
+> > +
+> > +       return r;
+> > +
+> > +unregister_composite_muxes:
+> > +       mtk_clk_unregister_composites(mcu_muxes,
+> > ARRAY_SIZE(mcu_muxes), clk_data);
+> > +free_mcu_data:
+> > +       mtk_free_clk_data(clk_data);
+> > +       return r;
+> > +}
+> > +
+> > +static int clk_mt8186_mcu_remove(struct platform_device *pdev)
+> > +{
+> > +       struct clk_onecell_data *clk_data =
+> > platform_get_drvdata(pdev);
+> > +       struct device_node *node = pdev->dev.of_node;
+> > +
+> > +       of_clk_del_provider(node);
+> > +       mtk_clk_unregister_composites(mcu_muxes,
+> > ARRAY_SIZE(mcu_muxes), clk_data);
+> > +       mtk_free_clk_data(clk_data);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static struct platform_driver clk_mt8186_mcu_drv = {
+> > +       .probe = clk_mt8186_mcu_probe,
+> > +       .remove = clk_mt8186_mcu_remove,
+> > +       .driver = {
+> > +               .name = "clk-mt8186-mcu",
+> > +               .of_match_table = of_match_clk_mt8186_mcu,
+> > +       },
+> > +};
+> > +builtin_platform_driver(clk_mt8186_mcu_drv);
+> > --
+> > 2.18.0
+> > 
 

@@ -2,226 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F204E441F
+	by mail.lfdr.de (Postfix) with ESMTP id 54DCE4E4420
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239021AbiCVQXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S239062AbiCVQXS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Mar 2022 12:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbiCVQXD (ORCPT
+        with ESMTP id S239032AbiCVQXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:23:03 -0400
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36F721E23;
-        Tue, 22 Mar 2022 09:21:32 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 35E96C8009B;
-        Tue, 22 Mar 2022 17:21:31 +0100 (CET)
-Authentication-Results: srv6.fidu.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=tuxedocomputers.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        tuxedocomputers.com; h=content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from; s=default; t=1647966090; x=1649780491; bh=8a
-        Uyrssi2CpLUROB1u6KAOHSFCKEjbxvGeWwSdvf/Nw=; b=bDhVTK+QfffrIQYuoD
-        Q5rn1veSRSBKVPpFoSWBOv3TFJ1dPnleNNDgPbr/GG75kRQiEN5qk1fEErBSzAnV
-        do4cldeQltg3iw+2kC2v7gM3RT7hHS8Cakq10sdYH98gTtr6eccjycnP5JzDvro8
-        5xoK/mkYBo4ZQywW/WQv9pJo8=
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id tGIct-VHPwaq; Tue, 22 Mar 2022 17:21:30 +0100 (CET)
-Received: from wsembach-tuxedo.fritz.box (unknown [IPv6:2001:a61:6168:d301:4be4:641d:6061:c5dc])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPA id BCEDFC800A7;
-        Tue, 22 Mar 2022 17:21:30 +0100 (CET)
-From:   Werner Sembach <wse@tuxedocomputers.com>
-To:     dmitry.torokhov@gmail.com, tiwai@suse.de, mpdesouza@suse.com,
-        arnd@arndb.de, hdegoede@redhat.com, samuel@cavoj.net,
-        wse@tuxedocomputers.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] input/i8042: Add TUXEDO devices to i8042 quirk tables
-Date:   Tue, 22 Mar 2022 17:21:25 +0100
-Message-Id: <20220322162125.59838-5-wse@tuxedocomputers.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220322162125.59838-1-wse@tuxedocomputers.com>
-References: <20220322162125.59838-1-wse@tuxedocomputers.com>
+        Tue, 22 Mar 2022 12:23:06 -0400
+Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5B7245AD;
+        Tue, 22 Mar 2022 09:21:37 -0700 (PDT)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id B3EAA4638F2;
+        Tue, 22 Mar 2022 17:21:35 +0100 (CET)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id A2DC44638E4;
+        Tue, 22 Mar 2022 17:21:35 +0100 (CET)
+X-TM-AS-ERS: 10.149.2.84-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
+        by mail3.swissbit.com (Postfix) with ESMTPS;
+        Tue, 22 Mar 2022 17:21:35 +0100 (CET)
+Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
+ (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 22 Mar
+ 2022 17:21:35 +0100
+Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
+ sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
+ 15.02.0986.022; Tue, 22 Mar 2022 17:21:35 +0100
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+CC:     Avri Altman <Avri.Altman@wdc.com>,
+        "david-b@pacbell.net" <david-b@pacbell.net>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH] mmc: block: Check for errors after write on SPI
+Thread-Topic: [PATCH] mmc: block: Check for errors after write on SPI
+Thread-Index: AQHYPgh2IUgShFZhDU2/hO/RN7a7Qw==
+Date:   Tue, 22 Mar 2022 16:21:34 +0000
+Message-ID: <9d1ea819e4bb4222a227a02d5f6ad97c@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.154.1.4]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-8.6.1018-26788.001
+X-TMASE-Result: 10--2.793200-10.000000
+X-TMASE-MatchedRID: 0aps3uOmWi5rFdvBEmTnvLZ0InVwVLVTn5nfR7I2dFOxPXYIh1l6dlg7
+        cH4SOkOpdWqA+wY3gFZusJxXwmCOnpDH5Y6LoY7BRZfQN+FVqbA1kR+05VC1hsiCh8yBqE+tbiP
+        oclJOCy2GN/nQcKVf4OaffHI8kAmiHY/bzRmIaZH2TmdnNlUFIJki3iIBA3o/d3XtjqAaoMLBTP
+        qP0WxWQAGRC3bBIF8o0+pR+Ea5cIJI5l15C51feb+viKbH3Jj7+VJ6lZyB0s/3K1BQq7xa/qPFj
+        JEFr+olIoOsWgr8s12OhzOa6g8KrZJJPyubgmhlggtVtSto6r/F+XkGTl73rdhmSDF+y18n4CzB
+        jSy1DpI=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: d857b4c3-3f2c-4488-ad4d-658a55c19b80-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A lot of modern Clevo barebones have touchpad and/or keyboard issues after
-suspend fixable with nomux + reset + noloop + nopnp. Luckily, none of them
-have an external PS/2 port so this can safely be set for all of them.
+Introduce a SEND_STATUS check for writes through SPI to not mark
+an unsuccessful write as successful.
 
-I'm not entirely sure if every device listed really needs all four quirks,
-but after testing and production use. No negative effects could be
-observed when setting all four.
+Since SPI SD/MMC does not have states, after a write, the card will
+just hold the line LOW until it is ready again. The driver marks the
+write therefore as completed as soon as it reads something other than
+all zeroes.
+The driver does not distinguish from a card no longer signalling busy
+and it being disconnected (and the line being pulled-up by the host).
+This lead to writes being marked as successful when disconnecting
+a busy card.
+Now the card is ensured to be still connected by an additional CMD13,
+just like non-SPI is ensured to go back to TRAN state.
 
-In this 4th revision the list is reduced by only identifying the devices by
-board_name. This avoids a lot of duplication because of inconsistent and/or
-reseller specific values of board_vendor and/or system_vendor. This change
-is based on Dmitry Torokhovs mention that Clevos default "Notebook" string
-doesn't add much uniqueness anyhow.
+While at it and since we already poll for the post-write status anyway,
+we might as well check for SPIs error bits (any of them).
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+The disconnecting card problem is reproducable for me after continuous
+write activity and randomly disconnecting, around every 20-50 tries
+on SPI DS for some card.
+
+Fixes: 7213d175e3b6f ("MMC/SD card driver learns SPI")
 Cc: stable@vger.kernel.org
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
 ---
- drivers/input/serio/i8042-x86ia64io.h | 125 ++++++++++++++++++++++++++
- 1 file changed, 125 insertions(+)
+ drivers/mmc/core/block.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
-index 229d4936910f..f79b5eea1295 100644
---- a/drivers/input/serio/i8042-x86ia64io.h
-+++ b/drivers/input/serio/i8042-x86ia64io.h
-@@ -1095,6 +1095,25 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
- 		},
- 		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
- 	},
-+	/*
-+	 * A lot of modern Clevo barebones have touchpad and/or keyboard issues
-+	 * after suspend fixable with nomux + reset + noloop + nopnp. Luckily,
-+	 * none of them have an external PS/2 port so this can savely be set for
-+	 * all of them. These two are based on a Clevo design, but have the
-+	 * board_name changed.
-+	 */
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "TUXEDO"),
-+			DMI_MATCH(DMI_BOARD_NAME, "AURA1501"),
-+		},
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "TUXEDO"),
-+			DMI_MATCH(DMI_BOARD_NAME, "EDUBOOK1502"),
-+		},
-+	},
- 	{
- 		/* Mivvy M310 */
- 		.matches = {
-@@ -1124,6 +1143,112 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
- 		},
- 		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
- 	},
-+	/*
-+	 * A lot of modern Clevo barebones have touchpad and/or keyboard issues
-+	 * after suspend fixable with nomux + reset + noloop + nopnp. Luckily,
-+	 * none of them have an external PS/2 port so this can savely be set for
-+	 * all of them.
-+	 * Clevo barebones come with board_vendor and/or system_vendor set to
-+	 * either the very generic string "Notebook" and/or a different value
-+	 * for each individual reseller. The only somewhat universal way to
-+	 * identify them is by board_name.
-+	 */
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "LAPQC71A"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "LAPQC71B"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "N140CU"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "N141CU"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	/*
-+	 * At least one modern Clevo barebone has the touchpad connected both
-+	 * via PS/2 and i2c interface. This causes a race condition between the
-+	 * psmouse and i2c-hid driver. Since the full capability of the touchpad
-+	 * is available via the i2c interface and the device has no external
-+	 * PS/2 port, it is save to just ignore all ps2 mouses here to avoid
-+	 * this issue. The know affected device is the
-+	 * TUXEDO InfinityBook S17 Gen6 / Clevo NS70MU which comes with one of
-+	 * the two different dmi strings below. NS50MU is not a typo!
-+	 */
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "NS50MU"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOAUX | SERIO_QUIRK_NOMUX |
-+					SERIO_QUIRK_RESET_ALWAYS | SERIO_QUIRK_NOLOOP |
-+					SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "NS50_70MU"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOAUX | SERIO_QUIRK_NOMUX |
-+					SERIO_QUIRK_RESET_ALWAYS | SERIO_QUIRK_NOLOOP |
-+					SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "NJ50_70CU"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "PB50_70DFx,DDx"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "X170SM"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "X170KM-G"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
- 	{ }
- };
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 4e67c1403cc9..fa34c4bbeebd 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1903,9 +1903,32 @@ static int mmc_blk_card_busy(struct mmc_card *card, struct request *req)
+ 	struct mmc_blk_busy_data cb_data;
+ 	int err;
  
+-	if (mmc_host_is_spi(card->host) || rq_data_dir(req) == READ)
++	if (rq_data_dir(req) == READ)
+ 		return 0;
+ 
++	/*
++	 * SPI does not have a TRAN state we have to wait on, instead the
++	 * card is ready again when it no longer holds the line LOW.
++	 * We still have to ensure two things here before we know the write
++	 * was successful:
++	 * 1. The card has not disconnected during busy and we actually read our
++	 * own pull-up, thinking it was still connected, so ensure it
++	 * still responds.
++	 * 2. Check for any error bits, in particular R1_SPI_IDLE to catch a
++	 * just reconnected card after being disconnected during busy.
++	 */
++	if (mmc_host_is_spi(card->host)) {
++		u32 status = 0;
++
++		err = __mmc_send_status(card, &status, 0);
++		/* All R1 and R2 bits of SPI are errors in our case */
++		if (status)
++			err = err ? err : -EIO;
++		if (err)
++			mqrq->brq.data.bytes_xfered = 0;
++		return err;
++	}
++
+ 	cb_data.card = card;
+ 	cb_data.status = 0;
+ 	err = __mmc_poll_for_busy(card->host, 0, MMC_BLK_TIMEOUT_MS,
 -- 
-2.25.1
+2.34.1
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 

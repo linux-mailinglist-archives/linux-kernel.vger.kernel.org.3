@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832BD4E3C7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816FE4E3C80
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiCVKeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
+        id S233039AbiCVKfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 06:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbiCVKd5 (ORCPT
+        with ESMTP id S232591AbiCVKfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:33:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC515C358
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:32:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91FE4B81B67
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF1AC340EC;
-        Tue, 22 Mar 2022 10:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647945147;
-        bh=4vRfTKQYtgyUB3FKZacyM7oyLXrvgTFjMYsTjUSXKDg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PxmMRf3HTtDzvtAo/AKdcGvlPJFvhun1kKsI1kashCqdLg+Gop2Y4rfloWtVop9AH
-         P3XXAtCs+EEa64rMv4eLb/JhDRF+f0S4dQwnrpOvg/GsEssDOPH4ZWym/u3jYGtRGO
-         2R4cC0lyhzb7KLzdjR2GGE664kphyodARO5nYuj3alZMD5RB3WWcd6n1IR1eXTAJB+
-         alwYwpsJQyMGAgkD45/8ev02f44hySjxrDSkqjG3Psl8B4wL5ysbgtpmJGguWgxl68
-         oq8WbU07i9zFRgIZ08A1hf7Vi/kv/Jcd7j+Dyb5CeIXuDLd1f4snxPpqOZsaAzBVKg
-         bbWoGtnKs/FXA==
-Date:   Tue, 22 Mar 2022 11:32:24 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 4/4] rcu: Name internal polling flag
-Message-ID: <20220322103224.GA701946@lothringen>
-References: <20220316144255.336021-1-frederic@kernel.org>
- <20220316144255.336021-5-frederic@kernel.org>
- <20220322021107.GP4285@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 22 Mar 2022 06:35:15 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217D52E9D7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:33:48 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id o5so32843310ybe.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bNY2UQZod2nnxVhfUvO5tJXoNrHZT74omp5G4ES+KU0=;
+        b=j4Gh4jgkyTa4NvMUlU2SUGJJiLlsnBgk4ahuE03kgGCe+UCvC1bXj8R+M2KgyU+b1Y
+         xq9MxgD3guYxGnH6jHh5gPqIJrrb0ADOvor17+CoLiE+7cH9X9/x4S3xYb1VlWGQlChE
+         QMDW0/J1EK/QKrztmWhSMBylmO9I1TlWkOrDu46y2Aa3YS0tAN+BriV3tm8qdEniFi6h
+         YsQCbCXrnL/Mpmsrkgy9LKTFsbn2aGpwNFKJDCV3TQkLoIC6uXfxCh+m0Lhcx8MUSdPh
+         vBmI5QjtY0NYj0q1u8n/ulOnQi4bOfqYKbBWvwrFUwm71lC7hTg/onlf1hl4azGIoYzg
+         ywDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bNY2UQZod2nnxVhfUvO5tJXoNrHZT74omp5G4ES+KU0=;
+        b=zOlGeQQIXeh6RkcKaRNdPkJf3W9cWQ+ipXkbWWySLG83CZ4Bzjlo2r6kLe8qh5G6Gz
+         I3yvmVLT8QHatQmD7GI06FkjH+fiGvv40QoCcFmibW4TS9tIqRXUAUY14Kx5j6NZHIvB
+         lagX1GsC7UElR3/VlvGWC3fylqV4UsQ/rLOYv1K9sRoeF1n0oM81awcGUJzvkpuJ+8Gy
+         gJQXd16GDcnBKXL/gvT5seIgPzhVeahytS82zOmb1fhJwq/UvmizkqMwqSlJSkza0ayS
+         PAlDL1zMNS3tmZ6s19TxxY4VolszHoVEDKR0FMVnCskWnjCufV9zLIN0+UTAkupC+DJe
+         Zm7Q==
+X-Gm-Message-State: AOAM532W4xg2HylP08EgUN+LhxbQcxa7hZ6Qqzh8IBB9tD942ReXaJep
+        zDMY12k/6HLC7S9bVc8Njb3HarDLndqVKeW1Oo+5AQ==
+X-Google-Smtp-Source: ABdhPJzHiIqG62kfHI4tbunA7kcIVgoi6jXymVz0Khq50ZzJk0GOEzlFAfQ5auhRc/Ln9FnxcrrIeop9dpkz1VskgrI=
+X-Received: by 2002:a25:a0c5:0:b0:633:63da:5ead with SMTP id
+ i5-20020a25a0c5000000b0063363da5eadmr26903869ybm.412.1647945227227; Tue, 22
+ Mar 2022 03:33:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322021107.GP4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220321133219.643490199@linuxfoundation.org>
+In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 22 Mar 2022 16:03:35 +0530
+Message-ID: <CA+G9fYt6ur-zw0=bWMoFE==T-N6+iLXs9XUV4GkW519Cxwp4Qg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/30] 5.10.108-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,92 +71,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 07:11:07PM -0700, Paul E. McKenney wrote:
-> On Wed, Mar 16, 2022 at 03:42:55PM +0100, Frederic Weisbecker wrote:
-> > Give a proper self-explanatory name to the expedited grace period
-> > internal polling flag.
-> > 
-> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > ---
-> >  kernel/rcu/rcu.h      | 5 +++++
-> >  kernel/rcu/tree.c     | 2 +-
-> >  kernel/rcu/tree_exp.h | 9 +++++----
-> >  3 files changed, 11 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> > index eccbdbdaa02e..8a62bb416ba4 100644
-> > --- a/kernel/rcu/rcu.h
-> > +++ b/kernel/rcu/rcu.h
-> > @@ -30,6 +30,11 @@
-> >  #define RCU_GET_STATE_USE_NORMAL	0x2
-> >  #define RCU_GET_STATE_BAD_FOR_NORMAL	(RCU_GET_STATE_FROM_EXPEDITED | RCU_GET_STATE_USE_NORMAL)
-> >  
-> > +/*
-> > + * Low-order bit definitions for polled grace-period internals.
-> > + */
-> > +#define RCU_EXP_SEQ_POLL_DONE 0x1
-> > +
-> >  /*
-> >   * Return the counter portion of a sequence number previously returned
-> >   * by rcu_seq_snap() or rcu_seq_current().
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index 5da381a3cbe5..b3223b365f9f 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -4679,7 +4679,7 @@ static void __init rcu_init_one(void)
-> >  			spin_lock_init(&rnp->exp_lock);
-> >  			mutex_init(&rnp->boost_kthread_mutex);
-> >  			raw_spin_lock_init(&rnp->exp_poll_lock);
-> > -			rnp->exp_seq_poll_rq = 0x1;
-> > +			rnp->exp_seq_poll_rq = RCU_EXP_SEQ_POLL_DONE;
-> >  			INIT_WORK(&rnp->exp_poll_wq, sync_rcu_do_polled_gp);
-> >  		}
-> >  	}
-> > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-> > index c4a19c6a83cf..7ccb909d6355 100644
-> > --- a/kernel/rcu/tree_exp.h
-> > +++ b/kernel/rcu/tree_exp.h
-> > @@ -910,14 +910,14 @@ static void sync_rcu_do_polled_gp(struct work_struct *wp)
-> >  	unsigned long s;
-> >  
-> >  	s = READ_ONCE(rnp->exp_seq_poll_rq);
-> > -	if (s & 0x1)
-> > +	if (s & RCU_EXP_SEQ_POLL_DONE)
-> >  		return;
-> >  	while (!sync_exp_work_done(s))
-> >  		__synchronize_rcu_expedited(true);
-> 
-> One additional question.  If we re-read rnp->exp_seq_poll_rq on each pass
-> through the loop, wouldn't we have less trouble with counter wrap?
+On Mon, 21 Mar 2022 at 19:29, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.108 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.108-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-We can indeed do that, though it won't eliminate the possibility of wrapping.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> 
-> 							Thanx, Paul
-> 
-> >  	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
-> >  	s = rnp->exp_seq_poll_rq;
-> > -	if (!(s & 0x1) && sync_exp_work_done(s))
-> > -		WRITE_ONCE(rnp->exp_seq_poll_rq, s | 0x1);
-> > +	if (!(s & RCU_EXP_SEQ_POLL_DONE) && sync_exp_work_done(s))
-> > +		WRITE_ONCE(rnp->exp_seq_poll_rq, s | RCU_EXP_SEQ_POLL_DONE);
-> >  	raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
-> >  }
-> >  
-> > @@ -946,7 +946,8 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
-> >  	rnp = rdp->mynode;
-> >  	if (rcu_init_invoked())
-> >  		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
-> > -	if ((rnp->exp_seq_poll_rq & 0x1) || ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
-> > +	if ((rnp->exp_seq_poll_rq & RCU_EXP_SEQ_POLL_DONE) ||
-> > +	    ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
-> >  		WRITE_ONCE(rnp->exp_seq_poll_rq, s);
-> >  		if (rcu_init_invoked())
-> >  			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
-> > -- 
-> > 2.25.1
-> > 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.10.108-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 9d7b0ced5647e0df1b200ee29119cb58ff958339
+* git describe: v5.10.107-31-g9d7b0ced5647
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.107-31-g9d7b0ced5647
+
+## Test Regressions (compared to v5.10.105)
+No test regressions found.
+
+## Metric Regressions (compared to v5.10.105)
+No metric regressions found.
+
+## Test Fixes (compared to v5.10.105)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.105)
+No metric fixes found.
+
+## Test result summary
+total: 99479, pass: 84962, fail: 805, skip: 12837, xfail: 875
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 296 passed, 0 failed
+* arm64: 47 total, 47 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 45 total, 42 passed, 3 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 41 total, 38 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 47 passed, 18 failed
+* riscv: 32 total, 29 passed, 3 failed
+* s390: 26 total, 26 passed, 0 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 47 total, 47 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-time[
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

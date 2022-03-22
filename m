@@ -2,154 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C3E4E48BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F8D4E48C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbiCVV75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 17:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S237302AbiCVWAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 18:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237184AbiCVV7z (ORCPT
+        with ESMTP id S232615AbiCVWAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 17:59:55 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DF8B849
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:58:25 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id z15-20020a25bb0f000000b00613388c7d99so15585936ybg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=qCgb1rQ2NSk0/+tpvGzgIXhekPoKGmbH5RRhGZElgeQ=;
-        b=AC4IZ0WRGywgszT2I5C1P7dkLhuWoxBlmhwDw53CtgGHdsX1XZuBCegossGZ4XTGVh
-         6S4N4oQaQdhlMdrBCgGhf4lQ2pnJagMl/jGZztRvWWHTymvbJJJFcyQHhAndqjxSU3Wk
-         fXrGZdl1QEPw7YKhm+mCPGOHOwyW2uHeZOQtvP+gyGxAXBXjzJtdTcL+0tE6ySD0c7P/
-         8zdQ56X4s24Fz+wk+QFGQo/Z3kT50NzTGZjZ66ukn/OHGkR3IiwQZDXADaAJ1HcxiCt1
-         vjA2m00j2/b1z8aBVM7zJbifXusEo/fG0mt3Lfj5NmfV4twBUoUpDVdv+deCPPlfE1j9
-         IkVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=qCgb1rQ2NSk0/+tpvGzgIXhekPoKGmbH5RRhGZElgeQ=;
-        b=0oODN+eassDHLISfj5+o2s1G9aA1ZmejP32jlXAauQNG/iVQLXzKO8eU/oouqgHnxO
-         yLqJ2BqZs0ivYjvyrKi+QGvyTO6QpVTVTTngP1yPd7RQ0Qo0wcAR8eEQ8jPmRspHSWYx
-         TF0YSrVePMbtbXtkmhjUuSK++mOFEcrZV0+AgbQd4VSe7izBqE9aURe+zshHxA+3+4KC
-         lUDs6QpSmNIigYrhAyvRBvv581WtQ7tUhSrUJlXMhRYZC9N0Oi9sZsHMwvRrlmEu48Hp
-         yOOGRegkIjkKAN1mFTsxJML8YS5dqNiRAtoncDTfSio81j3WVSOn3zBfVj7Dxy+GQPZz
-         n2uw==
-X-Gm-Message-State: AOAM532xGG2aXPbzjCvAIJld6sNGk4RT87zg4AvQVe3+Qm3cGnNVF+QE
-        rtC8Vo3QfJ8JReDXqUwv0bA+ubVummKi
-X-Google-Smtp-Source: ABdhPJyTdOXDPQvbHdvKPmPexGJUYUoBc9yHFZ2ap2avIfYjKIg2RKMrG2cddv1xdLke9d6CIuYnATU3Fcja
-X-Received: from bg.sfo.corp.google.com ([2620:15c:11a:202:49:910f:4d0:9fd7])
- (user=bgeffon job=sendgmr) by 2002:a05:6902:c8:b0:633:ee0c:bca2 with SMTP id
- i8-20020a05690200c800b00633ee0cbca2mr14920563ybs.82.1647986305071; Tue, 22
- Mar 2022 14:58:25 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 14:58:21 -0700
-In-Reply-To: <20220315172221.9522-1-bgeffon@google.com>
-Message-Id: <20220322215821.1196994-1-bgeffon@google.com>
-Mime-Version: 1.0
-References: <20220315172221.9522-1-bgeffon@google.com>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2] zram: Add a huge_idle writeback mode
-From:   Brian Geffon <bgeffon@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, Brian Geffon <bgeffon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 18:00:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DE4B849;
+        Tue, 22 Mar 2022 14:59:12 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 98544DFA;
+        Tue, 22 Mar 2022 22:59:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1647986350;
+        bh=WWYNNsZip/iz5Cn7tnNhT17z3F4rZexUD7nM14C/R1E=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Vb9xh6bsmaeqP1QX0lKLtG44BcDRBtjL1an+KjrY01WxIUlf7ANlyOIyfZMErHGht
+         lMWCLLhfIOtG1xpIVciznl+YXDgEm05hvOHAGRoMvjH5WZlxFMB+/itw7Gaxi6iHGH
+         2tmdsaD6JBpnBh0A40Z0DeqaUMQIAzMP8Ht6eBfk=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220307164607.18258-1-laurentiu.palcu@oss.nxp.com>
+References: <20220307164607.18258-1-laurentiu.palcu@oss.nxp.com>
+Subject: Re: [PATCH v2] media: i2c: max9286: fix kernel oops when removing module
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Niklas =?utf-8?q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Date:   Tue, 22 Mar 2022 21:59:08 +0000
+Message-ID: <164798634811.506124.11264777382844163635@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today it's only possible to write back as a page, idle, or huge.
-A user might want to writeback pages which are huge and idle first
-as these idle pages do not require decompression and make a good
-first pass for writeback.
+Hi Laurentiu,
 
-Idle writeback specifically has the advantage that a refault is
-unlikely given that the page has been swapped for some amount of
-time without being refaulted.
+Thanks for the updates on the v2, Looks good to me.
 
-Huge writeback has the advantage that you're guaranteed to get
-the maximum benefit from a single page writeback, that is, you're
-reclaiming one full page of memory. Pages which are compressed in
-zram being written back result in some benefit which is always
-less than a page size because of the fact that it was compressed.
+Quoting Laurentiu Palcu (2022-03-07 16:46:07)
+> When removing the max9286 module we get a kernel oops:
+>=20
+> Unable to handle kernel paging request at virtual address 000000aa00000094
+> Mem abort info:
+>   ESR =3D 0x96000004
+>   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+>   SET =3D 0, FnV =3D 0
+>   EA =3D 0, S1PTW =3D 0
+>   FSC =3D 0x04: level 0 translation fault
+> Data abort info:
+>   ISV =3D 0, ISS =3D 0x00000004
+>   CM =3D 0, WnR =3D 0
+> user pgtable: 4k pages, 48-bit VAs, pgdp=3D0000000880d85000
+> [000000aa00000094] pgd=3D0000000000000000, p4d=3D0000000000000000
+> Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> Modules linked in: fsl_jr_uio caam_jr rng_core libdes caamkeyblob_desc ca=
+amhash_desc caamalg_desc crypto_engine max9271 authenc crct10dif_ce mxc_jpe=
+g_encdec
+> CPU: 2 PID: 713 Comm: rmmod Tainted: G         C        5.15.5-00057-gaeb=
+cd29c8ed7-dirty #5
+> Hardware name: Freescale i.MX8QXP MEK (DT)
+> pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+> pc : i2c_mux_del_adapters+0x24/0xf0
+> lr : max9286_remove+0x28/0xd0 [max9286]
+> sp : ffff800013a9bbf0
+> x29: ffff800013a9bbf0 x28: ffff00080b6da940 x27: 0000000000000000
+> x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+> x23: ffff000801a5b970 x22: ffff0008048b0890 x21: ffff800009297000
+> x20: ffff0008048b0f70 x19: 000000aa00000064 x18: 0000000000000000
+> x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> x14: 0000000000000014 x13: 0000000000000000 x12: ffff000802da49e8
+> x11: ffff000802051918 x10: ffff000802da4920 x9 : ffff000800030098
+> x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
+> x5 : 8080808000000000 x4 : 0000000000000000 x3 : 0000000000000000
+> x2 : ffffffffffffffff x1 : ffff00080b6da940 x0 : 0000000000000000
+> Call trace:
+>  i2c_mux_del_adapters+0x24/0xf0
+>  max9286_remove+0x28/0xd0 [max9286]
+>  i2c_device_remove+0x40/0x110
+>  __device_release_driver+0x188/0x234
+>  driver_detach+0xc4/0x150
+>  bus_remove_driver+0x60/0xe0
+>  driver_unregister+0x34/0x64
+>  i2c_del_driver+0x58/0xa0
+>  max9286_i2c_driver_exit+0x1c/0x490 [max9286]
+>  __arm64_sys_delete_module+0x194/0x260
+>  invoke_syscall+0x48/0x114
+>  el0_svc_common.constprop.0+0xd4/0xfc
+>  do_el0_svc+0x2c/0x94
+>  el0_svc+0x28/0x80
+>  el0t_64_sync_handler+0xa8/0x130
+>  el0t_64_sync+0x1a0/0x1a4
+>=20
+> The Oops happens because the I2C client data does not point to
+> max9286_priv anymore but to v4l2_subdev. The change happened in
+> max9286_init() which calls v4l2_i2c_subdev_init() later on...
+>=20
+> Besides fixing the max9286_remove() function, remove the call to
+> i2c_set_clientdata() in max9286_probe(), to avoid confusion, and make
+> the necessary changes to max9286_init() so that it doesn't have to use
+> i2c_get_clientdata() in order to fetch the pointer to priv.
+>=20
+> Fixes: 66d8c9d2422d ("media: i2c: Add MAX9286 driver")
+> Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
 
-The primary use of this is for minimizing refaults in situations
-where the device has to be sensitive to storage endurance. On
-ChromeOS we have devices with slow eMMC and repeated writes and
-refaults can negatively affect performance and endurance.
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-Signed-off-by: Brian Geffon <bgeffon@google.com>
-Acked-by: Minchan Kim <minchan@kernel.org>
----
- Documentation/admin-guide/blockdev/zram.rst |  5 +++++
- drivers/block/zram/zram_drv.c               | 10 ++++++----
- 2 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
-index 54fe63745ed8..c73b16930449 100644
---- a/Documentation/admin-guide/blockdev/zram.rst
-+++ b/Documentation/admin-guide/blockdev/zram.rst
-@@ -343,6 +343,11 @@ Admin can request writeback of those idle pages at right timing via::
- 
- With the command, zram will writeback idle pages from memory to the storage.
- 
-+Additionally, if a user choose to writeback only huge and idle pages
-+this can be accomplished with::
-+
-+        echo huge_idle > /sys/block/zramX/writeback
-+
- If an admin wants to write a specific page in zram device to the backing device,
- they could write a page index into the interface.
- 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index e9474b02012d..8562a7cce558 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -639,8 +639,8 @@ static int read_from_bdev_async(struct zram *zram, struct bio_vec *bvec,
- #define PAGE_WB_SIG "page_index="
- 
- #define PAGE_WRITEBACK 0
--#define HUGE_WRITEBACK 1
--#define IDLE_WRITEBACK 2
-+#define HUGE_WRITEBACK (1<<0)
-+#define IDLE_WRITEBACK (1<<1)
- 
- 
- static ssize_t writeback_store(struct device *dev,
-@@ -660,6 +660,8 @@ static ssize_t writeback_store(struct device *dev,
- 		mode = IDLE_WRITEBACK;
- 	else if (sysfs_streq(buf, "huge"))
- 		mode = HUGE_WRITEBACK;
-+	else if (sysfs_streq(buf, "huge_idle"))
-+		mode = IDLE_WRITEBACK | HUGE_WRITEBACK;
- 	else {
- 		if (strncmp(buf, PAGE_WB_SIG, sizeof(PAGE_WB_SIG) - 1))
- 			return -EINVAL;
-@@ -721,10 +723,10 @@ static ssize_t writeback_store(struct device *dev,
- 				zram_test_flag(zram, index, ZRAM_UNDER_WB))
- 			goto next;
- 
--		if (mode == IDLE_WRITEBACK &&
-+		if (mode & IDLE_WRITEBACK &&
- 			  !zram_test_flag(zram, index, ZRAM_IDLE))
- 			goto next;
--		if (mode == HUGE_WRITEBACK &&
-+		if (mode & HUGE_WRITEBACK &&
- 			  !zram_test_flag(zram, index, ZRAM_HUGE))
- 			goto next;
- 		/*
--- 
-2.35.1.894.gb6a874cedc-goog
-
+> ---
+> Changes in v2:
+>  * removed i2c_set_clientdata() in max9286_probe();
+>  * refactored max9286_init() so that we pass priv as argument, not dev;
+>=20
+> Cheers,
+> Laurentiu
+>=20
+>  drivers/media/i2c/max9286.c | 19 +++++++------------
+>  1 file changed, 7 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+> index d2a4915ed9f7..3684faa72253 100644
+> --- a/drivers/media/i2c/max9286.c
+> +++ b/drivers/media/i2c/max9286.c
+> @@ -1147,22 +1147,18 @@ static int max9286_poc_enable(struct max9286_priv=
+ *priv, bool enable)
+>         return ret;
+>  }
+> =20
+> -static int max9286_init(struct device *dev)
+> +static int max9286_init(struct max9286_priv *priv)
+>  {
+> -       struct max9286_priv *priv;
+> -       struct i2c_client *client;
+> +       struct i2c_client *client =3D priv->client;
+>         int ret;
+> =20
+> -       client =3D to_i2c_client(dev);
+> -       priv =3D i2c_get_clientdata(client);
+> -
+>         ret =3D max9286_poc_enable(priv, true);
+>         if (ret)
+>                 return ret;
+> =20
+>         ret =3D max9286_setup(priv);
+>         if (ret) {
+> -               dev_err(dev, "Unable to setup max9286\n");
+> +               dev_err(&client->dev, "Unable to setup max9286\n");
+>                 goto err_poc_disable;
+>         }
+> =20
+> @@ -1172,13 +1168,13 @@ static int max9286_init(struct device *dev)
+>          */
+>         ret =3D max9286_v4l2_register(priv);
+>         if (ret) {
+> -               dev_err(dev, "Failed to register with V4L2\n");
+> +               dev_err(&client->dev, "Failed to register with V4L2\n");
+>                 goto err_poc_disable;
+>         }
+> =20
+>         ret =3D max9286_i2c_mux_init(priv);
+>         if (ret) {
+> -               dev_err(dev, "Unable to initialize I2C multiplexer\n");
+> +               dev_err(&client->dev, "Unable to initialize I2C multiplex=
+er\n");
+>                 goto err_v4l2_register;
+>         }
+> =20
+> @@ -1333,7 +1329,6 @@ static int max9286_probe(struct i2c_client *client)
+>         mutex_init(&priv->mutex);
+> =20
+>         priv->client =3D client;
+> -       i2c_set_clientdata(client, priv);
+> =20
+>         priv->gpiod_pwdn =3D devm_gpiod_get_optional(&client->dev, "enabl=
+e",
+>                                                    GPIOD_OUT_HIGH);
+> @@ -1369,7 +1364,7 @@ static int max9286_probe(struct i2c_client *client)
+>         if (ret)
+>                 goto err_powerdown;
+> =20
+> -       ret =3D max9286_init(&client->dev);
+> +       ret =3D max9286_init(priv);
+>         if (ret < 0)
+>                 goto err_cleanup_dt;
+> =20
+> @@ -1385,7 +1380,7 @@ static int max9286_probe(struct i2c_client *client)
+> =20
+>  static int max9286_remove(struct i2c_client *client)
+>  {
+> -       struct max9286_priv *priv =3D i2c_get_clientdata(client);
+> +       struct max9286_priv *priv =3D sd_to_max9286(i2c_get_clientdata(cl=
+ient));
+> =20
+>         i2c_mux_del_adapters(priv->mux);
+> =20
+> --=20
+> 2.17.1
+>

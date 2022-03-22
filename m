@@ -2,120 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7744E387A
+	by mail.lfdr.de (Postfix) with ESMTP id 14D604E3878
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 06:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbiCVFaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 01:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S236764AbiCVFaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 01:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236704AbiCVFaD (ORCPT
+        with ESMTP id S236711AbiCVFaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 01:30:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344A4DAF;
-        Mon, 21 Mar 2022 22:28:34 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22M47KBQ018787;
-        Tue, 22 Mar 2022 05:27:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=TqqfIpaYW5JGR3JKgjRylpIbTY9DrPh5H2+7LKVkXyY=;
- b=Yk1O5LcktVUoQcWy1/VJG12+S6hktSZSyaUh3TGeEjFvDh5mDbe02e3L2js/pTZqCJU2
- 3X6lNb9uIRGdyNMKp4dcb4hcUVudCs3hNZsNGvNjqYKaXwHAlUnS6WcUWFQ+VDKNGaDO
- unwcxCOXFOWn45zrrg1mrz8oa19xT/TSSwwtcO1t/Q8LDnSyNhtf8ZrjcIwChmAYnecW
- ucdJw/jRmR69ur7lln3Sg11CjyU50DeYJ4uJ7Y44uJjs4x1FlTjG5U6yfEGyeutGb4V4
- J9pNUdIRikUclNKo0neG06P+AY1gGhe1YuT1A5hiOSzdXK6xZouO7+aP+VjLcfDCg304 lA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3expy0wdpc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 05:27:14 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22M5Qc3f001357;
-        Tue, 22 Mar 2022 05:27:13 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3expy0wdnv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 05:27:13 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22M5MmWb027594;
-        Tue, 22 Mar 2022 05:27:12 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma01dal.us.ibm.com with ESMTP id 3ew6t9xf10-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 05:27:11 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22M5RAap5439978
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Mar 2022 05:27:10 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3BE62136065;
-        Tue, 22 Mar 2022 05:27:10 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A1E1613605D;
-        Tue, 22 Mar 2022 05:26:53 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.75.167])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 22 Mar 2022 05:26:53 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Yu Zhao <yuzhao@google.com>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v9 06/14] mm: multi-gen LRU: minimal implementation
-In-Reply-To: <20220309021230.721028-7-yuzhao@google.com>
-References: <20220309021230.721028-1-yuzhao@google.com>
- <20220309021230.721028-7-yuzhao@google.com>
-Date:   Tue, 22 Mar 2022 10:56:50 +0530
-Message-ID: <877d8m7e1x.fsf@linux.ibm.com>
+        Tue, 22 Mar 2022 01:30:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086AF64EF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647926920; x=1679462920;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=APxeAEopBRCFgm1KXudSbbtliPjdlsQ/3Hia294wMx4=;
+  b=I60d8tTEe7pJU9z1yINRjfijcaZuLV3QWKMkSyH3wRPsN99KBnqd6jzw
+   5jI2yPt+ZcXrBFux6Z219GcgF02/uRHyvxlcJn/XQDl49RqEXuffroYPH
+   3PI8ByroyBuxSs6F+eObLrFtGOrKCu1NIDZrlra9BtSxKtPvO7+5r0057
+   6FkCO9DJlpV1K5phvn66+Ixo+INDDGuR69C9i/g1XhePDF6QAkze+OTZP
+   27Z7S6I1Ec7LxjrmHpXhLGJt6WM4aXlTRmvjKSlmVAEHS3aiFFK4996Bv
+   t9xLA07zfb19aMXRoozp133669IGz8Udfag0WTdT9csgvz8guDAPSougY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="255290672"
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="255290672"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 22:28:39 -0700
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="560211178"
+Received: from ellenyin-mobl.ccr.corp.intel.com (HELO [10.254.213.205]) ([10.254.213.205])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 22:28:35 -0700
+Message-ID: <3165c557-b96e-a410-1e0d-2bea1048fb29@linux.intel.com>
+Date:   Tue, 22 Mar 2022 13:28:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Ql37j01KajwgF00k2OgU6gOK2r3sWXEJ
-X-Proofpoint-GUID: DAQxEiwBayf4Zp-JJHxC8P33uRYSCots
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_10,2022-03-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 impostorscore=0
- malwarescore=0 clxscore=1015 priorityscore=1501 suspectscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203220028
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Content-Language: en-US
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
+ <20220320064030.2936936-11-baolu.lu@linux.intel.com>
+ <Yjhj5F0fUWRRKh3v@myrica>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH RFC 10/11] iommu: Make IOPF handling framework generic
+In-Reply-To: <Yjhj5F0fUWRRKh3v@myrica>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,142 +73,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yu Zhao <yuzhao@google.com> writes:
+On 2022/3/21 19:39, Jean-Philippe Brucker wrote:
+> On Sun, Mar 20, 2022 at 02:40:29PM +0800, Lu Baolu wrote:
+>> The existing IOPF handling framework only handles the I/O page faults for
+>> SVA. Ginven that we are able to link iommu domain with each I/O page fault,
+>> we can now make the I/O page fault handling framework more general for
+>> more types of page faults.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h         |  4 +++
+>>   drivers/iommu/io-pgfault.c    | 67 ++++++-----------------------------
+>>   drivers/iommu/iommu-sva-lib.c | 59 ++++++++++++++++++++++++++++++
+>>   3 files changed, 73 insertions(+), 57 deletions(-)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index 803e7b07605e..11c65a7bed88 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -50,6 +50,8 @@ struct iommu_dma_cookie;
+>>   typedef int (*iommu_fault_handler_t)(struct iommu_domain *,
+>>   			struct device *, unsigned long, int, void *);
+>>   typedef int (*iommu_dev_fault_handler_t)(struct iommu_fault *, void *);
+>> +typedef enum iommu_page_response_code (*iommu_domain_iopf_handler_t)
+>> +			(struct iommu_fault *, void *);
+>>   
+>>   struct iommu_domain_geometry {
+>>   	dma_addr_t aperture_start; /* First address that can be mapped    */
+>> @@ -101,6 +103,8 @@ struct iommu_domain {
+>>   	struct iommu_domain_geometry geometry;
+>>   	struct iommu_dma_cookie *iova_cookie;
+>>   	struct mm_struct *sva_cookie;
+>> +	iommu_domain_iopf_handler_t fault_handler;
+>> +	void *fault_data;
+>>   };
+>>   
+>>   static inline bool iommu_is_dma_domain(struct iommu_domain *domain)
+>> diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
+>> index 1df8c1dcae77..dad0e40cd8d2 100644
+>> --- a/drivers/iommu/io-pgfault.c
+>> +++ b/drivers/iommu/io-pgfault.c
+>> @@ -69,62 +69,6 @@ static int iopf_complete_group(struct device *dev, struct iopf_fault *iopf,
+>>   	return iommu_page_response(dev, &resp);
+>>   }
+>>   
+>> -static enum iommu_page_response_code
+>> -iopf_handle_single(struct iopf_fault *iopf)
+>> -{
+>> -	vm_fault_t ret;
+>> -	struct mm_struct *mm;
+>> -	struct vm_area_struct *vma;
+>> -	unsigned int access_flags = 0;
+>> -	unsigned int fault_flags = FAULT_FLAG_REMOTE;
+>> -	struct iommu_fault_page_request *prm = &iopf->fault.prm;
+>> -	enum iommu_page_response_code status = IOMMU_PAGE_RESP_INVALID;
+>> -
+>> -	if (!(prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID))
+>> -		return status;
+>> -
+>> -	mm = iommu_sva_find(prm->pasid);
+>> -	if (IS_ERR_OR_NULL(mm))
+>> -		return status;
+>> -
+>> -	mmap_read_lock(mm);
+>> -
+>> -	vma = find_extend_vma(mm, prm->addr);
+>> -	if (!vma)
+>> -		/* Unmapped area */
+>> -		goto out_put_mm;
+>> -
+>> -	if (prm->perm & IOMMU_FAULT_PERM_READ)
+>> -		access_flags |= VM_READ;
+>> -
+>> -	if (prm->perm & IOMMU_FAULT_PERM_WRITE) {
+>> -		access_flags |= VM_WRITE;
+>> -		fault_flags |= FAULT_FLAG_WRITE;
+>> -	}
+>> -
+>> -	if (prm->perm & IOMMU_FAULT_PERM_EXEC) {
+>> -		access_flags |= VM_EXEC;
+>> -		fault_flags |= FAULT_FLAG_INSTRUCTION;
+>> -	}
+>> -
+>> -	if (!(prm->perm & IOMMU_FAULT_PERM_PRIV))
+>> -		fault_flags |= FAULT_FLAG_USER;
+>> -
+>> -	if (access_flags & ~vma->vm_flags)
+>> -		/* Access fault */
+>> -		goto out_put_mm;
+>> -
+>> -	ret = handle_mm_fault(vma, prm->addr, fault_flags, NULL);
+>> -	status = ret & VM_FAULT_ERROR ? IOMMU_PAGE_RESP_INVALID :
+>> -		IOMMU_PAGE_RESP_SUCCESS;
+>> -
+>> -out_put_mm:
+>> -	mmap_read_unlock(mm);
+>> -	mmput(mm);
+>> -
+>> -	return status;
+>> -}
+>> -
+>>   static void iopf_handle_group(struct work_struct *work)
+>>   {
+>>   	struct iopf_group *group;
+>> @@ -134,12 +78,21 @@ static void iopf_handle_group(struct work_struct *work)
+>>   	group = container_of(work, struct iopf_group, work);
+>>   
+>>   	list_for_each_entry_safe(iopf, next, &group->faults, list) {
+>> +		struct iommu_domain *domain;
+>> +
+>> +		domain = iommu_get_domain_for_dev_pasid(group->dev,
+>> +							iopf->fault.prm.pasid);
+> 
+> Do we have a guarantee that the domain is not freed while we handle the
+> fault?  We could prevent unbind() while there are pending faults on this
+> bond. But a refcount on SVA domains could defer freeing, and would also
+> help with keeping the semantics where bind() returns a single refcounted
+> bond for any {dev, mm}.
+> 
+> Given that this path is full of circular locking pitfalls, and to keep the
+> fault handler efficient (well, at least not make it worse), we should
+> probably keep a getter like iommu_sva_find() that does not require
+> locking.
 
- +
-> +static void inc_min_seq(struct lruvec *lruvec)
-> +{
-> +	int type;
-> +	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-> +
-> +	VM_BUG_ON(!seq_is_valid(lruvec));
-> +
-> +	for (type = 0; type < ANON_AND_FILE; type++) {
-> +		if (get_nr_gens(lruvec, type) != MAX_NR_GENS)
-> +			continue;
-> +
-> +		reset_ctrl_pos(lruvec, type, true);
-> +		WRITE_ONCE(lrugen->min_seq[type], lrugen->min_seq[type] + 1);
-> +	}
-> +}
-> +
-> +static bool try_to_inc_min_seq(struct lruvec *lruvec, bool can_swap)
-> +{
-> +	int gen, type, zone;
-> +	bool success = false;
-> +	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-> +	DEFINE_MIN_SEQ(lruvec);
-> +
-> +	VM_BUG_ON(!seq_is_valid(lruvec));
-> +
-> +	for (type = !can_swap; type < ANON_AND_FILE; type++) {
-> +		while (min_seq[type] + MIN_NR_GENS <= lrugen->max_seq) {
-> +			gen = lru_gen_from_seq(min_seq[type]);
-> +
-> +			for (zone = 0; zone < MAX_NR_ZONES; zone++) {
-> +				if (!list_empty(&lrugen->lists[gen][type][zone]))
-> +					goto next;
-> +			}
-> +
-> +			min_seq[type]++;
-> +		}
-> +next:
-> +		;
-> +	}
-> +
-> +	/* see the comment on lru_gen_struct */
-> +	if (can_swap) {
-> +		min_seq[LRU_GEN_ANON] = min(min_seq[LRU_GEN_ANON], min_seq[LRU_GEN_FILE]);
-> +		min_seq[LRU_GEN_FILE] = max(min_seq[LRU_GEN_ANON], lrugen->min_seq[LRU_GEN_FILE]);
-> +	}
-> +
-> +	for (type = !can_swap; type < ANON_AND_FILE; type++) {
-> +		if (min_seq[type] == lrugen->min_seq[type])
-> +			continue;
-> +
-> +		reset_ctrl_pos(lruvec, type, true);
-> +		WRITE_ONCE(lrugen->min_seq[type], min_seq[type]);
-> +		success = true;
-> +	}
-> +
-> +	return success;
-> +}
-> +
-> +static void inc_max_seq(struct lruvec *lruvec, unsigned long max_seq)
-> +{
-> +	int prev, next;
-> +	int type, zone;
-> +	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-> +
-> +	spin_lock_irq(&lruvec->lru_lock);
-> +
-> +	VM_BUG_ON(!seq_is_valid(lruvec));
-> +
-> +	if (max_seq != lrugen->max_seq)
-> +		goto unlock;
-> +
-> +	inc_min_seq(lruvec);
+Agreed. We need a mechanism to ensure concurrency. I will look into it.
 
-Can this min seq update result in pages considered oldest become young.
-ie, if we had seq value of 0 - 3 and we need ageing, the new min seq and
-max_seq value will now become 1 - 4. What happens to pages in the
-generation value 0 which was oldest generation earlier and is youngest
-now.
+> 
+>> +
+>> +		if (!domain || !domain->fault_handler)
+>> +			status = IOMMU_PAGE_RESP_INVALID;
+>> +
+>>   		/*
+>>   		 * For the moment, errors are sticky: don't handle subsequent
+>>   		 * faults in the group if there is an error.
+>>   		 */
+>>   		if (status == IOMMU_PAGE_RESP_SUCCESS)
+>> -			status = iopf_handle_single(iopf);
+>> +			status = domain->fault_handler(&iopf->fault,
+>> +						       domain->fault_data);
+> 
+> If we make this a direct call and only use a light getter for the
+> PASID->mm lookup we don't need to look at the domain at all. Or are you
+> planning to add external fault handlers?
 
+Yes. I'd like the I/O page fault handling framework to work for
+external domains as well, for example, the I/O page faults for user
+space page table should be routed to user space.
 
-> +
-> +	/* update the active/inactive LRU sizes for compatibility */
-> +	prev = lru_gen_from_seq(lrugen->max_seq - 1);
-> +	next = lru_gen_from_seq(lrugen->max_seq + 1);
-> +
-> +	for (type = 0; type < ANON_AND_FILE; type++) {
-> +		for (zone = 0; zone < MAX_NR_ZONES; zone++) {
-> +			enum lru_list lru = type * LRU_INACTIVE_FILE;
-> +			long delta = lrugen->nr_pages[prev][type][zone] -
-> +				     lrugen->nr_pages[next][type][zone];
-> +
-> +			if (!delta)
-> +				continue;
-> +
-> +			__update_lru_size(lruvec, lru, zone, delta);
-> +			__update_lru_size(lruvec, lru + LRU_ACTIVE, zone, -delta);
-> +		}
-> +	}
-> +
-> +	for (type = 0; type < ANON_AND_FILE; type++)
-> +		reset_ctrl_pos(lruvec, type, false);
-> +
-> +	/* make sure preceding modifications appear */
-> +	smp_store_release(&lrugen->max_seq, lrugen->max_seq + 1);
-> +unlock:
-> +	spin_unlock_irq(&lruvec->lru_lock);
-> +}
-> +
+> 
+>>   
+>>   		if (!(iopf->fault.prm.flags &
+>>   		      IOMMU_FAULT_PAGE_REQUEST_LAST_PAGE))
+>> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+>> index 47cf98e661ff..01fa8096bd02 100644
+>> --- a/drivers/iommu/iommu-sva-lib.c
+>> +++ b/drivers/iommu/iommu-sva-lib.c
+>> @@ -87,6 +87,63 @@ static struct iommu_domain *iommu_sva_domain_alloc(struct device *dev)
+>>   	return domain;
+>>   }
+>>   
+>> +static enum iommu_page_response_code
+>> +iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
+>> +{
+>> +	vm_fault_t ret;
+>> +	struct mm_struct *mm;
+>> +	struct vm_area_struct *vma;
+>> +	unsigned int access_flags = 0;
+>> +	struct iommu_domain *domain = data;
+>> +	unsigned int fault_flags = FAULT_FLAG_REMOTE;
+>> +	struct iommu_fault_page_request *prm = &fault->prm;
+>> +	enum iommu_page_response_code status = IOMMU_PAGE_RESP_INVALID;
+>> +
+>> +	if (!(prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID))
+>> +		return status;
+>> +
+>> +	mm = domain->sva_cookie;
+>> +	if (IS_ERR_OR_NULL(mm))
+>> +		return status;
+>> +
+>> +	mmap_read_lock(mm);
+>> +
+>> +	vma = find_extend_vma(mm, prm->addr);
+>> +	if (!vma)
+>> +		/* Unmapped area */
+>> +		goto out_put_mm;
+>> +
+>> +	if (prm->perm & IOMMU_FAULT_PERM_READ)
+>> +		access_flags |= VM_READ;
+>> +
+>> +	if (prm->perm & IOMMU_FAULT_PERM_WRITE) {
+>> +		access_flags |= VM_WRITE;
+>> +		fault_flags |= FAULT_FLAG_WRITE;
+>> +	}
+>> +
+>> +	if (prm->perm & IOMMU_FAULT_PERM_EXEC) {
+>> +		access_flags |= VM_EXEC;
+>> +		fault_flags |= FAULT_FLAG_INSTRUCTION;
+>> +	}
+>> +
+>> +	if (!(prm->perm & IOMMU_FAULT_PERM_PRIV))
+>> +		fault_flags |= FAULT_FLAG_USER;
+>> +
+>> +	if (access_flags & ~vma->vm_flags)
+>> +		/* Access fault */
+>> +		goto out_put_mm;
+>> +
+>> +	ret = handle_mm_fault(vma, prm->addr, fault_flags, NULL);
+>> +	status = ret & VM_FAULT_ERROR ? IOMMU_PAGE_RESP_INVALID :
+>> +		IOMMU_PAGE_RESP_SUCCESS;
+>> +
+>> +out_put_mm:
+>> +	mmap_read_unlock(mm);
+>> +	mmput(mm);
+> 
+> mmget_not_zero() is missing since iommu_sva_find() is gone. I'm guessing
+> we still need it in case the process dies
 
-....
+Agreed.
 
- +
-> +static int evict_folios(struct lruvec *lruvec, struct scan_control *sc, int swappiness)
-> +{
-> +	int type;
-> +	int scanned;
-> +	int reclaimed;
-> +	LIST_HEAD(list);
-> +	struct folio *folio;
-> +	enum vm_event_item item;
-> +	struct reclaim_stat stat;
-> +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
-> +	struct pglist_data *pgdat = lruvec_pgdat(lruvec);
-> +
-> +	spin_lock_irq(&lruvec->lru_lock);
-> +
-> +	scanned = isolate_folios(lruvec, sc, swappiness, &type, &list);
-> +
-> +	if (try_to_inc_min_seq(lruvec, swappiness))
-> +		scanned++;
+> 
+> Thanks,
+> Jean
 
-we are doing this before we shrink the page list. Any reason to do this before?
-
-> +
-> +	if (get_nr_gens(lruvec, LRU_GEN_FILE) == MIN_NR_GENS)
-> +		scanned = 0;
+Best regards,
+baolu

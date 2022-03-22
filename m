@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6124E3E29
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8424E3E32
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234715AbiCVMMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S233350AbiCVMN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234693AbiCVMME (ORCPT
+        with ESMTP id S232249AbiCVMNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:12:04 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C654D8567A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:10:34 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso2486900pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:10:34 -0700 (PDT)
+        Tue, 22 Mar 2022 08:13:54 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727B0814B7;
+        Tue, 22 Mar 2022 05:12:26 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso2493591pjb.0;
+        Tue, 22 Mar 2022 05:12:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=O/7NZbomHJNevRDviLAq47WogxJXAVWPPfKEsGLaM2Q=;
-        b=u+N3p9kTmRnGrXL314WMH5VKZQw2nEgT4xoBO1regbTW10qO9UIqkNynJKqT6hJTQI
-         GfE7w63Iyvv6FpRThYj5q1G6+loA64m2+EqaBgdw4tNHxFu2u7d90d5asSWZXnxF23bG
-         ZsMTHS7CN4uLkCKYbBNYFmTP8sr4Ok1yodh7ZhdNGts6aWPMBVE4Lz2wIc0PBRP1g1Cx
-         aHFwhyYcQNpwDnmqNls6pMAVG50I1fcCb1R4B+V0kMZVJdSbE98mqY0MkmRyBGyepID5
-         u0ST1DHgNNRuXMPo0APBXThcgYAs8w3cnhfGw7CscQ/Ah9fyysaw89ORGlgdwn5Fh2PI
-         vqTA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=IPjgN3VpyqWKrThD0C2Vv68XFS2hlHNg6yKh9JHRBog=;
+        b=i4DYvQFQdyo/5cGeJC8YCDIAwZGR/35Ev0FGHGhqm4PmaXZhwqDqwpV56iN1d1CTjM
+         VZcf5qQ2rZQuZD4p238kBM0r6GFWxmT0hhew6gUmKBqreUkeulpNBPqtI0nLW48qVUwX
+         vgETrP1DEGJLzakL+r4z/w2UrP8Tc2xqJ2KFYBM1vP+8OEogx8uhjTC5shiNlXoTye9l
+         skl36slIW/bDhZA+UWpwoWIBsUFLikYa+XVyNnhFIMM215ET9iW6u3r5K/lNbwcW7E4T
+         LMl+gqC363rYdTVb4DO6hb5Y31gf65C5arsrIbHXymKFHP9IwLbGl+hNHlovnCTlcziL
+         jw6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=O/7NZbomHJNevRDviLAq47WogxJXAVWPPfKEsGLaM2Q=;
-        b=G1lYuS/4digQgOz++fkNtrGmD2YgeYUTj3L6z0LVtoRDnxVSVu8RC9UraAKU2CuNNd
-         YhYvQyODcuEkO6EXcDQ2vBMtfaVwEUPCOv67Z3is0zJo45rJ7RzK7bFJYXtC87Hti2Y4
-         vGvyIu3wLIaK5HGd21Bp3P/j8rzMdPo0PQEpE27UmRQAELc39Yj9d1Cj8t9U3Y7lV+v0
-         fTdHOP0YS5VrMtMBeu0yvvvX8lLL4GbXTFYKCxmdzRxUwBiI1YFRXT3NFxEDLESOvRJy
-         0S6bHSw0ss3KJyRxOk53xjFbOrRtqiyo/B0s0r04tUz3dEMyJzi97CEgtvZwN60FVfVA
-         GLVg==
-X-Gm-Message-State: AOAM532tSVEqiNzz4BL1R1PjCMtQw1X0kV1F2tsRt7bUT0+J2nhpN3ir
-        b/EMIUM8L8W6qIflMoEUwF+whg==
-X-Google-Smtp-Source: ABdhPJxjr0Mbq/yQ/Er0makurPOudwZPK8zCr3U/6Orououfw/iFmcSMXQY4it/+KgCKOLrzKVLcFw==
-X-Received: by 2002:a17:90a:1197:b0:1bf:65ff:f542 with SMTP id e23-20020a17090a119700b001bf65fff542mr4610157pja.5.1647951034367;
-        Tue, 22 Mar 2022 05:10:34 -0700 (PDT)
-Received: from localhost.localdomain ([2409:8a28:e62:3990:75d0:8573:b73c:e6b4])
-        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004e03b051040sm24833850pfj.112.2022.03.22.05.10.26
+         :references;
+        bh=IPjgN3VpyqWKrThD0C2Vv68XFS2hlHNg6yKh9JHRBog=;
+        b=GknEa54wvS/NjUBeBfkD4rS6tuByYwO4/ImiIxwXuulQrNO7LcUwrd45ekYWulflwU
+         3SHS/039+8W2eDZl5O/7xdI5Hc6zzTjG/3KiNmOfb2+iD8UTxDq05qZGeSt7uSayEUuq
+         BIFgDJ1bbpZ+5Eqt1vjoU+wJfWwMuswCfIAHQ2nJtT9zJugDpAQjh7scOZGoiuCIrh5p
+         73qAfMhRDtFFuoOy3ggrd2JuisOHoHwEs+PzrmKyCADULX5Wr2WqroVXxIqWxFE1MRty
+         1fCykfySyDMcQyRSlnLYI7fAkhdyZw1Jk0ku15J1x8lEeTEPbK9QIlvIh5HBg2oYCyin
+         RPjA==
+X-Gm-Message-State: AOAM530oweC/AP/bb9Y0dby3mC76raz7nSkU88ydiec6yunI35sHEuVr
+        P9lix1k4M/AiTgZs/Rd2BOU=
+X-Google-Smtp-Source: ABdhPJxUF1F8+qJ3SlHYJaeCDF9cQ1MjbET2UM6ubThZHeCEwWI9y8r1CoVnmEtudVQLijl65PtVsg==
+X-Received: by 2002:a17:902:b18a:b0:153:758e:c1 with SMTP id s10-20020a170902b18a00b00153758e00c1mr17757017plr.37.1647951145750;
+        Tue, 22 Mar 2022 05:12:25 -0700 (PDT)
+Received: from localhost.localdomain ([2409:4053:719:67ea:fc62:7f30:7002:e0c2])
+        by smtp.googlemail.com with ESMTPSA id b20-20020a17090a991400b001befe07ae5csm2708380pjp.22.2022.03.22.05.12.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 05:10:34 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, eranian@google.com
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v2 6/6] perf/core: Don't need event_filter_match when merge_sched_in()
-Date:   Tue, 22 Mar 2022 20:08:34 +0800
-Message-Id: <20220322120834.98637-7-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220322120834.98637-1-zhouchengming@bytedance.com>
-References: <20220322120834.98637-1-zhouchengming@bytedance.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 22 Mar 2022 05:12:25 -0700 (PDT)
+From:   Dharmendra Singh <dharamhans87@gmail.com>
+Cc:     fuse-devel@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, miklos@szeredi.hu,
+        dharamhans87@gmail.com, bshubert@ddn.com, amir73il@gmail.com
+Subject: Re: [PATCH v2 0/2] FUSE: Atomic lookup + open performance numbers
+Date:   Tue, 22 Mar 2022 17:42:12 +0530
+Message-Id: <20220322121212.5087-1-dharamhans87@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220322115148.3870-1-dharamhans87@gmail.com>
+References: <20220322115148.3870-1-dharamhans87@gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two obselete comments in perf_cgroup_switch(), since
-we don't use event_filter_match() when event_sched_out(). And
-found we needn't to use event_filter_match() when sched_in too.
+Subject: 'Re: [PATCH v2 0/2] FUSE: Atomic lookup + open performance numbers'
 
-Because now we use the perf_event groups RB-tree to get the
-exact matched perf_events, don't need to go through the
-event_filter_match() to check if matched.
+Thanks, Miklos. For measuring the performance, bonnie++ was used over passthrough_ll mount on tmpfs.
+When taking numbers on vm, I could see non-deterministic behaviour in the results. Therefore core
+binding was used for passthrough_ll and bonnie++, keeping them on separate cores.
 
-We can remove it in merge_sched_in() actually, but this patch
-changes it to a WARN_ON_ONCE for debug purpose, and found
-no warning in our stress test.
+Here are the google sheets having performance numbers.
+https://docs.google.com/spreadsheets/d/1JRgF8DTR9xk5zz3_azmLcyy5kW3bgjjItmS8CYsAoT4/edit#gid=0
+https://docs.google.com/spreadsheets/d/1JRgF8DTR9xk5zz3_azmLcyy5kW3bgjjItmS8CYsAoT4/edit#gid=1833203226
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- kernel/events/core.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+Following are the libfuse patches(commit on March 7 and March 8 in first link) which were used to test
+these changes
+https://github.com/aakefbs/libfuse/commits/atomic-open-and-no-flush
+https://github.com/libfuse/libfuse/pull/644
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 4c8657b08301..744078fe2819 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -860,15 +860,11 @@ static void perf_cgroup_switch(struct task_struct *task)
- 		perf_pmu_disable(cpuctx->ctx.pmu);
- 
- 		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
--		/*
--		 * must not be done before ctxswout due
--		 * to event_filter_match() in event_sched_out()
--		 */
- 		cpuctx->cgrp = cgrp;
- 		/*
- 		 * set cgrp before ctxsw in to allow
--		 * event_filter_match() to not have to pass
--		 * task around
-+		 * visit_groups_merge() to find matched
-+		 * cgroup events
- 		 */
- 		cpu_ctx_sched_in(cpuctx, EVENT_ALL);
- 
-@@ -3729,7 +3725,7 @@ static int merge_sched_in(struct perf_event *event, void *data)
- 	if (event->state <= PERF_EVENT_STATE_OFF)
- 		return 0;
- 
--	if (!event_filter_match(event))
-+	if (WARN_ON_ONCE(!event_filter_match(event)))
- 		return 0;
- 
- 	if (group_can_go_on(event, cpuctx, *can_add_hw)) {
--- 
-2.20.1
+Parameters used in mounting passthrough_ll:
+ numactl --localalloc --physcpubind=16-23 passthrough_ll -f -osource=/tmp/source,allow_other,allow_root,
+ cache=never -o max_idle_threads=1 /tmp/dest
+     (Here cache=never results in direct-io on the file)
 
+Parameters used in bonnie++:
+In sheet 0B:
+numactl --localalloc --physcpubind=0-7  bonnie++ -x 4 -q -s0  -d /tmp/dest/ -n 10:0:0:10 -r 0 -u 0 2>/dev/null
+
+in sheet 1B:
+numactl --localalloc --physcpubind=0-7 bonnie++ -x 4 -q -s0 -d /tmp/dest/ -n 10:1:1:10 -r 0 -u 0 2>/dev/null
+
+Additional settings done on the testing machine:
+cpupower frequency-set -g performance
+
+Running bonnie++ gives us results for Create/s,  Read/s and Delete/s. Below table summarises the numbers
+for  these three operations. Please note that for read of 0 bytes, bonnie++ does ops in order of create-open,
+close and stat but no atomic open.  Therefore performance results  in the sheet 0B had overhead of extra
+stat calls.  Whereas in sheet 1B, we directed bonnie++ to read 1 byte and this triggered atomic open call but
+numbers for this run involve overhead for read operation itself instead of just plain open/close.
+
+Here is the table summarising the performance numbers
+
+Table: 0B
+                                               Sequential                  |            Random
+                                           Creat/s       Read/s    Del/s   |    Creat/s     Read/s      Del/s
+Patched Libfuse                                -3.55%    -4.9%    -4.43%   |    -0.4%      -1.6%       -1.0%
+Patched Libfuse + No-Flush                     +22.3%    +6%       +5.15%  |    +27.9%     +14.5%       +2.8%
+Patched Libfuse + Patched FuseK                +22.9%    +6.1%     +5.3%   |    +28.3%     +14.5%       +2.3%
+Patched Libfuse + Patched FuseK + No-Flush     +33.4%    -4.4%     -3.73%  |    +38.8%     -2.5%        -2.0%
+
+
+
+ Table: 1B
+                                                  Sequential                    |                  Random
+                                           Create/s       Read/s       Del/s    |      Create/s     Read/s     Del/s
+Patched Libfuse                            -0.22%        -0.35%       -0.7%     |      -0.27%        -0.78%    -2.35%
+Patched Libfuse + No-Flush                 +2.5%         +2.6%        -9.6%     |      +2.5%         -8.6%     -6.26%
+Patched Libfuse + Patched FuseK            +1.63%        -1.0%        -11.45%   |      +4.48%        -6.84%    -4.0%
+Patched Libfuse + Patched FuseK + No-Flush  +32.43%      +26.61%      +076%     |      +33.2%       +14.7%     -0.40%
+
+Here
+No-Flush = No flush trigger from fuse kernel into libfuse
+
+In Table 1B, we see 4th row has good improvements for both create and Read whereas Del seems to be almost not
+changed. In Table 0B, 4th row we have Read perf reduced, it was found out that this was caused by some changes
+in libfuse. So this was fixed and in Table 1B, same row, we can see increased numbers.
+
+In Table 0B, 3rd row, we have good numbers because bonnie++ used 0 bytes to read  and this changed behaviour
+and impacted perf whereas for the same row, Table 1B we have reduced numbers because it involved flush
+calls for 1 byte from the fuse kernel into libfuse.
+
+These changes are not for fuse kernel/users-space context switches only, but our main goal is to have improvement performance
+for network file systems
+   - Number network round trips
+   - Reduce load on meta servers with thousands of clients
+
+Reduced kernel/userspace context switches is 'just' a side effect.
+
+Thanks,
+Dharmendra

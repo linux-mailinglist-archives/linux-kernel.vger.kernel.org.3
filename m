@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4544E3A9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F037F4E3A9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiCVIdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
+        id S231183AbiCVIdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiCVIdU (ORCPT
+        with ESMTP id S231175AbiCVIc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:33:20 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF0462A1D;
-        Tue, 22 Mar 2022 01:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647937914; x=1679473914;
-  h=from:to:cc:subject:date:message-id;
-  bh=dhrHqCr8JpnzGj5k2QqDNMs8JfQ6cFepyudJYMAsdpk=;
-  b=StMV+Mci0nQ6kAZViwtm7esBZGM5jDL6Mn8jcNlziC/suh275RmaNB7E
-   Tu4Z0IG5iyAyH2WlqwuQafT0pkte3p3J3ORnEiaV0Np4d5t6iom74qL7M
-   Ep3MVteztEZ1mrAEzfjAgTlImKbZEVxp8MdesvfPAFeAp49bhy2dZZxh1
-   I=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 22 Mar 2022 01:31:54 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Mar 2022 01:31:36 -0700
-X-QCInternal: smtphost
-Received: from hyd-lablnx377.qualcomm.com ([10.204.178.226])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 22 Mar 2022 14:01:18 +0530
-Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
-        id 55842216FA; Tue, 22 Mar 2022 14:01:17 +0530 (IST)
-From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
-To:     agross@kernel.org, robh+dt@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com
-Cc:     mka@chromium.org, linux-bluetooth@vger.kernel.org,
-        quic_hemantg@quicinc.com, quic_bgodavar@quicinc.com,
-        quic_rjliao@quicinc.com, mcchou@chromium.org,
-        Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Subject: [RESEND v3] arm64: dts: qcom: sc7280: Add IO regulator handler in SC7280 CRD platforms
-Date:   Tue, 22 Mar 2022 14:01:04 +0530
-Message-Id: <1647937864-25661-1-git-send-email-quic_saluvala@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 04:32:59 -0400
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94E738BE4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:31:30 -0700 (PDT)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 1E39D100405F0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:31:30 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id WZvNnBHmSY8ycWZvNnn5VT; Tue, 22 Mar 2022 08:31:30 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=ff9od2cF c=1 sm=1 tr=0 ts=62398962
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=o8Y5sQTvuykA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Xg6Z9MnRwFMJUtWyEmzpSzEvafd4fSSDjSnPaN7n+FE=; b=OJ5Gp9iTZfMIovGOkYcdMxODng
+        klzNSaRH/BdnG70MihERkbGuTS30/fD2xrEV2cTz6dmAxQhsd2hbCc5LEjIh05w/qBp0rvwIKLDeK
+        kYOVMeXTvW4hKH9RLZJKT4QR0;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33758 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nWZvM-0010h5-QB; Tue, 22 Mar 2022 02:31:28 -0600
+Subject: Re: [PATCH 5.16 00/37] 5.16.17-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220321133221.290173884@linuxfoundation.org>
+In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <e74296b1-601a-961d-b501-7fed7f1aca0b@w6rz.net>
+Date:   Tue, 22 Mar 2022 01:31:26 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nWZvM-0010h5-QB
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:33758
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add IO regulator handler in SC7280 CRD based platforms.
-As IO regulator varies in different SC7280 platforms
-updating this handler in individual platform bluetooth node.
+On 3/21/22 6:52 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.17 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.17-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
----
-v3: Updated commit text to reflect the change
-v2: updated reviewer comments.
-v1: intial patch
----
----
- arch/arm64/boot/dts/qcom/sc7280-crd.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-index cd2755c..53ea3b4 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-@@ -23,6 +23,10 @@
- 	};
- };
- 
-+&bluetooth {
-+	vddio-supply = <&vreg_l18b_1p8>;
-+};
-+
- ap_tp_i2c: &i2c0 {
- 	status = "okay";
- 	clock-frequency = <400000>;
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+Tested-by: Ron Economos <re@w6rz.net>
 

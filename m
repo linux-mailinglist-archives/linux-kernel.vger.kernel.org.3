@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2C84E3DF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C38D4E3E08
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233417AbiCVMBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
+        id S233251AbiCVMEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbiCVMBj (ORCPT
+        with ESMTP id S231799AbiCVMEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:01:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BD89522DA;
-        Tue, 22 Mar 2022 05:00:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A58D153B;
-        Tue, 22 Mar 2022 05:00:11 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 956A63F73B;
-        Tue, 22 Mar 2022 05:00:08 -0700 (PDT)
-Message-ID: <70422777-a3f9-b2f1-5faa-94d24fe200ac@arm.com>
-Date:   Tue, 22 Mar 2022 12:00:06 +0000
+        Tue, 22 Mar 2022 08:04:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A38301B;
+        Tue, 22 Mar 2022 05:02:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE5ED61382;
+        Tue, 22 Mar 2022 12:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 545B5C340EC;
+        Tue, 22 Mar 2022 12:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647950556;
+        bh=oXomf+OroFKXPI727l4Y0841A5BkhUXzo5xCfhdMsC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TKE/1FWW/oIajs0VV3zmrI5NUmCEutISIFYySMXYpw+kvv0dJFWgyqzsVMXykcuoX
+         PyW7CTXlKifLMnywE5dTPyddnXvi+eurEpvnVBN1blVkHfFTNnAhPA7OE976g/tlqX
+         qbH1SznaPVG4E7H6Fq+qBcpe1PMXBezhJxT6ktcaIQRGDLiQWddT0rcKHLQi6S76bn
+         nuH0sA2NVhSCD0GcNMHL/GhCRYNfhBtAtnl4B1E4WmVWpqwLjXfwYlNfiQ+eIw1biZ
+         yxcoyoqSE0Vw3q7w4p3fNwK+Njl8UbLlQfh8LnObtcK56M/8fqDoxNl9qtaEAcMHc9
+         fzBoxgyDpyTYQ==
+Date:   Tue, 22 Mar 2022 12:02:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-mmc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to
+ CCF
+Message-ID: <Yjm61MFGuo0Yug/B@sirena.org.uk>
+References: <20220310233307.99220-3-jmkrzyszt@gmail.com>
+ <20220321215416.236250-1-jmkrzyszt@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 18/26] arm64: dts: rockchip: rk3399: add crypto node
-Content-Language: en-GB
-To:     Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
-        herbert@gondor.apana.org.au, krzk+dt@kernel.org,
-        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-References: <20220321200739.3572792-1-clabbe@baylibre.com>
- <20220321200739.3572792-19-clabbe@baylibre.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220321200739.3572792-19-clabbe@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="j44egohE1ZoQznmQ"
+Content-Disposition: inline
+In-Reply-To: <20220321215416.236250-1-jmkrzyszt@gmail.com>
+X-Cookie: Drop that pickle!
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-21 20:07, Corentin Labbe wrote:
-> The rk3399 has a crypto IP handled by the rk3288 crypto driver so adds a
-> node for it.
-> 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->   arch/arm64/boot/dts/rockchip/rk3399.dtsi | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> index 88f26d89eea1..ca2c658371a5 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> @@ -573,6 +573,18 @@ saradc: saradc@ff100000 {
->   		status = "disabled";
->   	};
->   
-> +	crypto0: crypto@ff8b0000 {
-> +		compatible = "rockchip,rk3399-crypto";
-> +		reg = <0x0 0xff8b0000 0x0 0x4000>,
-> +		      <0x0 0xff8b8000 0x0 0x4000>;
-> +		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH 0>,
-> +			     <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH 0>;
-> +		clocks = <&cru SCLK_CRYPTO0>, <&cru HCLK_M_CRYPTO0>, <&cru HCLK_S_CRYPTO0>,
-> +			 <&cru SCLK_CRYPTO1>, <&cru HCLK_M_CRYPTO1>, <&cru HCLK_S_CRYPTO1>;
-> +		resets = <&cru SRST_CRYPTO0>, <&cru SRST_CRYPTO0_S>, <&cru SRST_CRYPTO0_M>,
-> +			 <&cru SRST_CRYPTO1>, <&cru SRST_CRYPTO1_S>, <&cru SRST_CRYPTO1_M>;
-> +	};
 
-What's going on here? If these are simply two instances of the same IP 
-block as the evidence suggests, why are they crammed into a single DT 
-node rather than simply being described as two separate instances? I was 
-rather wondering what all the confusing mess in patch #16 was about, 
-until I got here.
+--j44egohE1ZoQznmQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If there's something in the crypto API that means the driver can't 
-simply naively register itself multiple times, there should be any 
-number of ways for the probe routine to keep track of whether it's 
-already registered something and associate any subsequent devices with 
-the first one internally if need be. Linux implementation details should 
-not leak out as non-standard DT weirdness.
+On Mon, Mar 21, 2022 at 10:54:16PM +0100, Janusz Krzysztofik wrote:
+> In preparation for conversion of OMAP1 clocks to common clock framework,
+> identify users of those clocks which don't call clk_prepare/unprepare()
+> and update them to call clk_prepare_enable/clk_disable_unprepare() instead
+> of just clk_enable/disable(), as required by CCF implementation of clock
+> API.
 
-I know the Rockchip IOMMU driver does this, but in that case the two 
-IOMMU instances are closely coupled and sharing work such that they 
-effectively need to be programmed identically at all times, so it was a 
-bit more justifiable. I don't know the full story here, but it certainly 
-looks like rk_get_engine_number() is just a means to schedule work on 
-any available unit independently, so looks like it wouldn't take much to 
-select between distinct devices at that point, and actually end up a lot 
-simpler and cleaner overall.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Robin.
+--j44egohE1ZoQznmQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +
->   	i2c1: i2c@ff110000 {
->   		compatible = "rockchip,rk3399-i2c";
->   		reg = <0x0 0xff110000 0x0 0x1000>;
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI5utQACgkQJNaLcl1U
+h9COEQf9ELwbgSwwn1JVU6FAUZODISuwoWMyUuvHTGdNQEvrMH3GFIUbXQVQONw5
+wO62KwasXhYThVzc3rrC74tKTRzwY9/CvA4GNJfZqmHSuXg02O1XqYe6zUmlRbdt
+qxVjr4o/EKcY48qmrI9SV9k4GBDuOeU2fSZJP7EIvFqLC/tfDbQYYuRB+TY9Ig+j
+oTmg/0JXVooTcMULwexILHzRg4S4+mxOAjfsMojVzku0MepzEPzGo0xZDGYmD0RC
+QggKUpiyDnHPKgNk+pEG+1HmSf9sEd2Vb4k2eMfkacZ7Tz81/FON54F8K/213wKl
+hCsEajyZs2COxhX4Xfe+zoGXkLD3bg==
+=HhWj
+-----END PGP SIGNATURE-----
+
+--j44egohE1ZoQznmQ--

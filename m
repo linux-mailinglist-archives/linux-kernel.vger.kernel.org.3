@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AF54E4499
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D6C4E449A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239307AbiCVQ5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S239322AbiCVQ66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239315AbiCVQ5u (ORCPT
+        with ESMTP id S239314AbiCVQ6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:57:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E415FB7CC
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:56:22 -0700 (PDT)
+        Tue, 22 Mar 2022 12:58:55 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2751064E5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:57:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647968182; x=1679504182;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bmmDyu0Vb7XFsOT1vxBWP7QRy91KbOrlHk6aSyxue84=;
-  b=fNB2DyNQZ6a2DAbiYXSeoXh6ftUdt5hLUKDAAuGa6QC8gC2aJoANMZpU
-   IjpO4q/LlYFuaaCV+gHsl9zOqAZ4Q//LcLOdapfKJR6uaYUVaWl6qKTCt
-   SgbBuTMknhZJSVI2sMJFRuxXVLzFsmV3z3tQCzPhemrLxOAKGC/btj5RN
-   RJxPJKGiFUVXJ3LPUzVXTZVnW8wQqbYZ9gODq85F5jxBXDbirz93bzRe5
-   OXUfcQYlWs0/kQp83Eg5M/Cte+Rvj+CFx3F1zSYhABqOnIuqsa6l1VDV/
-   aznwiUC6nYMZrWsFu9YD+e69MxGCuIS5NEFC78AOIEqyp7iRPKOAqxXh7
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="245346352"
+  t=1647968247; x=1679504247;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ScSYfyns+xu5hdlmPyqe24Bvzvw7kqFl4X0Fkpkr0fY=;
+  b=cNRM5Upi7ZfrVORzFjB6EnzS5rgkJ7WaVLrFOzCGPJCc2sUbqsUHyDfJ
+   Z28uaksu4Kk/JWlwpxrjoF5ZrbjtpRChmyzkngV5O6WYQERwu1XUfpUJm
+   4y3iXybMkVYXlKv25uXXStsPUxPl04v2zMqHoFXrQzkV5EzUGIP/SX9EB
+   G23+oxTqY4Y4ppNNMydI6Bna+qF/Dt879Tv8qDiy7L8BIq2ozXqSDCS2f
+   gnsIHBU7s05L23idOPm35x+84HgnwCK3bi+mN/fSN1rFq8p/Tf5liMh7C
+   iW8j2GvvwaYcY2NrPSIuxWccPrOjzBxraFleOgT9xxPaiH1/sppFuVjGS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="282713209"
 X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="245346352"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:56:22 -0700
+   d="scan'208";a="282713209"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:57:26 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="560464945"
-Received: from jdtong-mobl.amr.corp.intel.com (HELO intel.com) ([10.255.37.87])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:56:20 -0700
-Date:   Tue, 22 Mar 2022 12:56:18 -0400
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Alexander Usyskin <alexander.usyskin@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH v11 4/5] mei: gsc: add runtime pm handlers
-Message-ID: <Yjn/si3bGhPtJcyc@intel.com>
-References: <20220315131157.3972238-1-alexander.usyskin@intel.com>
- <20220315131157.3972238-5-alexander.usyskin@intel.com>
+   d="scan'208";a="637115637"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Mar 2022 09:57:25 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWhoy-000J1N-Uo; Tue, 22 Mar 2022 16:57:24 +0000
+Date:   Wed, 23 Mar 2022 00:57:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 37/38] arch/riscv/kvm/aia_aplic.c:264:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202203230040.8LZkUPnS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220315131157.3972238-5-alexander.usyskin@intel.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,122 +63,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 03:11:56PM +0200, Alexander Usyskin wrote:
-> From: Tomas Winkler <tomas.winkler@intel.com>
-> 
-> Implement runtime handlers for mei-gsc, to track
-> idle state of the device properly.
-> 
-> CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-> ---
-> V4: drop debug prints
-> V5: Rebase
-> V6: Rebase
-> V7: add Greg KH Reviewed-by
-> V8: Rebase
-> V9: Rebase
-> V11: Rebase
-> ---
->  drivers/misc/mei/gsc-me.c | 67 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 66 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/mei/gsc-me.c b/drivers/misc/mei/gsc-me.c
-> index 58e39c00f150..32ea75f5e7aa 100644
-> --- a/drivers/misc/mei/gsc-me.c
-> +++ b/drivers/misc/mei/gsc-me.c
-> @@ -159,7 +159,72 @@ static int __maybe_unused mei_gsc_pm_resume(struct device *device)
->  	return 0;
->  }
->  
-> -static SIMPLE_DEV_PM_OPS(mei_gsc_pm_ops, mei_gsc_pm_suspend, mei_gsc_pm_resume);
-> +static int __maybe_unused mei_gsc_pm_runtime_idle(struct device *device)
-> +{
-> +	struct mei_device *dev = dev_get_drvdata(device);
-> +
-> +	if (!dev)
-> +		return -ENODEV;
-> +	if (mei_write_is_idle(dev))
-> +		pm_runtime_autosuspend(device);
-> +
-> +	return -EBUSY;
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   bafeaefb38960799e1f7ac9b6707a22e5be067d0
+commit: bb1ce232e2aadecea3d50ea8476fdd2a83e3c5e6 [37/38] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220323/202203230040.8LZkUPnS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/bb1ce232e2aadecea3d50ea8476fdd2a83e3c5e6
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout bb1ce232e2aadecea3d50ea8476fdd2a83e3c5e6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-I see now... this function takes to the autosuspend but returns the EBUSY so
-the pci subsystem won't take it. Many other drivers taking this approach.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +}
-> +
-> +static int  __maybe_unused mei_gsc_pm_runtime_suspend(struct device *device)
-> +{
-> +	struct mei_device *dev = dev_get_drvdata(device);
-> +	struct mei_me_hw *hw;
-> +	int ret;
-> +
-> +	if (!dev)
-> +		return -ENODEV;
-> +
-> +	mutex_lock(&dev->device_lock);
-> +
-> +	if (mei_write_is_idle(dev)) {
-> +		hw = to_me_hw(dev);
-> +		hw->pg_state = MEI_PG_ON;
-> +		ret = 0;
-> +	} else {
-> +		ret = -EAGAIN;
-> +	}
-> +
-> +	mutex_unlock(&dev->device_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int __maybe_unused mei_gsc_pm_runtime_resume(struct device *device)
-> +{
-> +	struct mei_device *dev = dev_get_drvdata(device);
-> +	struct mei_me_hw *hw;
-> +	irqreturn_t irq_ret;
-> +
-> +	if (!dev)
-> +		return -ENODEV;
-> +
-> +	mutex_lock(&dev->device_lock);
-> +
-> +	hw = to_me_hw(dev);
-> +	hw->pg_state = MEI_PG_OFF;
-> +
-> +	mutex_unlock(&dev->device_lock);
-> +
-> +	irq_ret = mei_me_irq_thread_handler(1, dev);
-> +	if (irq_ret != IRQ_HANDLED)
-> +		dev_err(dev->dev, "thread handler fail %d\n", irq_ret);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct dev_pm_ops mei_gsc_pm_ops = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(mei_gsc_pm_suspend,
-> +				mei_gsc_pm_resume)
-> +	SET_RUNTIME_PM_OPS(mei_gsc_pm_runtime_suspend,
-> +			   mei_gsc_pm_runtime_resume,
-> +			   mei_gsc_pm_runtime_idle)
-> +};
+All warnings (new ones prefixed by >>):
 
-Thank you for all the explanation.
-
-I would prefer if you could move the autosuspend enable and autosuspend delay
-to this patch instead of having it on the patch 2. Concerning some strange
-behaviour in some bisect...
-
-But that's minor and up to you:
-
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+>> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
 
 
+vim +264 arch/riscv/kvm/aia_aplic.c
 
->  
->  static const struct auxiliary_device_id mei_gsc_id_table[] = {
->  	{
-> -- 
-> 2.32.0
-> 
+   248	
+   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   250	{
+   251		u32 target;
+   252		bool inject, ie;
+   253		unsigned long flags;
+   254		struct aplic_irq *irqd;
+   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   256	
+   257		if (!aplic || !source || (aplic->nr_irqs <= source))
+   258			return -ENODEV;
+   259		irqd = &aplic->irqs[source];
+   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   261	
+   262		raw_spin_lock_irqsave(&irqd->lock, flags);
+   263	
+ > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   265			goto skip_unlock;
+   266	
+   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   272			break;
+   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   277			break;
+   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   281			break;
+   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   285			break;
+   286		}
+   287	
+   288		if (level)
+   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   290		else
+   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   292	
+   293		inject = false;
+   294		target = irqd->target;
+   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   297			inject = true;
+   298		}
+   299	
+   300	skip_unlock:
+   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   302	
+   303		if (inject)
+   304			aplic_inject_msi(kvm, source, target);
+   305	
+   306		return 0;
+   307	}
+   308	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

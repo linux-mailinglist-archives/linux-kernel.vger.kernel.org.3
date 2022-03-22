@@ -2,194 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E2D4E3FB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218074E3FBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235772AbiCVNmk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Mar 2022 09:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        id S235808AbiCVNnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235769AbiCVNmi (ORCPT
+        with ESMTP id S235877AbiCVNm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:42:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A404F7DA95
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:41:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40910B81CFF
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:41:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BF8C340EC;
-        Tue, 22 Mar 2022 13:41:02 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 09:41:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mark.rutland@arm.com, mingo@redhat.com, tglx@linutronix.de,
-        catalin.marinas@arm.com, will@kernel.org,
-        dave.hansen@linux.intel.com, broonie@kernel.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, qirui.001@bytedance.com
-Subject: Re: [PATCH v3 3/3] arm64/ftrace: Make function graph use ftrace
- directly
-Message-ID: <20220322094100.73dc3ad0@gandalf.local.home>
-In-Reply-To: <c8b7508b-ce2a-c7dc-92c4-ca5f17992844@bytedance.com>
-References: <20220224093251.49971-1-zhouchengming@bytedance.com>
-        <20220224093251.49971-3-zhouchengming@bytedance.com>
-        <c8b7508b-ce2a-c7dc-92c4-ca5f17992844@bytedance.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 22 Mar 2022 09:42:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC9185BF2;
+        Tue, 22 Mar 2022 06:41:30 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MDbMDM004427;
+        Tue, 22 Mar 2022 13:41:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zBky09gpZxVUERWeYr3BZiOSqFMAs8Fbzj2n2/ZIL1M=;
+ b=cKCQj0c5u1l+oi8e+lx6g1zD+za/WmjOmxUcN61U6C+41zEbruMuEvBVwWo78FCBRhYw
+ vVtbReDpnXiNGMZ4KKDS82s5JRTaHzE1p1oTPq9tRKGdGpAjr0VFI4Jxjeipx9gdLRGr
+ TYTPbjkXhO7TYzE+fiFrPzKOd5QjprLA4uYUrbE+boW4N1chU6Sg4BCWkIrb+8wOjdtQ
+ zs/GGAd4fzhIPhzj0imkYkovH8VBXBC5sv/RT6FAO/faMDMEdzDobfxTuvuQ62BB1VP4
+ Wa8+Aa2IkE6AcGQE0q8Hdo6Dwh2fDs7y6GcMD1g3CREii8xHNdeTqWGw2qsAGYtJarLf 6A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ey5wcc8cd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:41:27 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22MDdZ5P012439;
+        Tue, 22 Mar 2022 13:41:27 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ey5wcc8c4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:41:27 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MDZOmN003639;
+        Tue, 22 Mar 2022 13:41:26 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma05wdc.us.ibm.com with ESMTP id 3ew6t9mbp3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:41:26 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22MDfOKs25559478
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Mar 2022 13:41:25 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8FFE6E04E;
+        Tue, 22 Mar 2022 13:41:24 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E05E6E052;
+        Tue, 22 Mar 2022 13:41:23 +0000 (GMT)
+Received: from [9.65.234.56] (unknown [9.65.234.56])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Mar 2022 13:41:23 +0000 (GMT)
+Message-ID: <381b7144-3e60-a825-06fb-ea15ecb4c365@linux.ibm.com>
+Date:   Tue, 22 Mar 2022 09:41:22 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v18 14/18] s390/vfio-ap: sysfs attribute to display the
+ guest's matrix
+Content-Language: en-US
+To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
+ <20220215005040.52697-15-akrowiak@linux.ibm.com>
+ <d66ef5e1-9a77-a71c-e182-ca1f3fc17574@linux.ibm.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <d66ef5e1-9a77-a71c-e182-ca1f3fc17574@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WPx93eGmqkoosjzIaxXGg2yp2gsj5woR
+X-Proofpoint-GUID: kbt4o666BROnwwKsGqGmS7VnAruNwko0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-22_04,2022-03-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 malwarescore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 mlxscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203220078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 20:48:00 +0800
-Chengming Zhou <zhouchengming@bytedance.com> wrote:
-
-> Hello,
-> 
-> ping... have any comments?
-
-Hi Chengming,
-
-BTW, if you don't hear back for a week, it's OK to send a ping. You don't
-need to wait a month. Usually, it's just that the maintainers have other
-priorities and will try to look at it when they get a chance, but then
-forget to do so :-/
 
 
-> 
-> Thanks.
-> 
-> On 2022/2/24 5:32 下午, Chengming Zhou wrote:
-> > As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
-> > use ftrace directly"), we don't need special hook for graph tracer,
-> > but instead we use graph_ops:func function to install return_hooker.
-> > 
-> > Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
-> > implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
-> > the same cleanup on arm64. And this cleanup only changes the
-> > FTRACE_WITH_REGS implementation, so the mcount-based implementation
-> > is unaffected.
-> > 
-> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> > ---
-> > Changes in v3:
-> >  - Add comments in ftrace_graph_func() as suggested by Steve.
-> > 
-> > Changes in v2:
-> >  - Remove FTRACE_WITH_REGS ftrace_graph_caller asm as suggested by Mark.
-> > ---
-> >  arch/arm64/include/asm/ftrace.h  |  7 +++++++
-> >  arch/arm64/kernel/entry-ftrace.S | 17 -----------------
-> >  arch/arm64/kernel/ftrace.c       | 17 +++++++++++++++++
-> >  3 files changed, 24 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-> > index 1494cfa8639b..dbc45a4157fa 100644
-> > --- a/arch/arm64/include/asm/ftrace.h
-> > +++ b/arch/arm64/include/asm/ftrace.h
-> > @@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
-> >  
-> >  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> >  struct dyn_ftrace;
-> > +struct ftrace_ops;
-> > +struct ftrace_regs;
-> > +
-> >  int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
-> >  #define ftrace_init_nop ftrace_init_nop
-> > +
-> > +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-> > +		       struct ftrace_ops *op, struct ftrace_regs *fregs);
-> > +#define ftrace_graph_func ftrace_graph_func
-> >  #endif
-> >  
-> >  #define ftrace_return_address(n) return_address(n)
-> > diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-> > index e535480a4069..d42a205ef625 100644
-> > --- a/arch/arm64/kernel/entry-ftrace.S
-> > +++ b/arch/arm64/kernel/entry-ftrace.S
-> > @@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
-> >  SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
-> >  	bl	ftrace_stub
-> >  
-> > -#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> > -SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
-> > -	nop				// If enabled, this will be replaced
-> > -					// "b ftrace_graph_caller"
-> > -#endif
-> > -
-> >  /*
-> >   * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
-> >   * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
-> > @@ -127,17 +121,6 @@ ftrace_common_return:
-> >  	ret	x9
-> >  SYM_CODE_END(ftrace_common)
-> >  
-> > -#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> > -SYM_CODE_START(ftrace_graph_caller)
-> > -	ldr	x0, [sp, #S_PC]
-> > -	sub	x0, x0, #AARCH64_INSN_SIZE	// ip (callsite's BL insn)
-> > -	add	x1, sp, #S_LR			// parent_ip (callsite's LR)
-> > -	ldr	x2, [sp, #PT_REGS_SIZE]	   	// parent fp (callsite's FP)
-> > -	bl	prepare_ftrace_return
-> > -	b	ftrace_common_return
-> > -SYM_CODE_END(ftrace_graph_caller)
-> > -#endif
-> > -
-> >  #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-> >  
-> >  /*
-> > diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-> > index 4506c4a90ac1..35eb7c9b5e53 100644
-> > --- a/arch/arm64/kernel/ftrace.c
-> > +++ b/arch/arm64/kernel/ftrace.c
-> > @@ -268,6 +268,22 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
-> >  }
-> >  
-> >  #ifdef CONFIG_DYNAMIC_FTRACE
-> > +
-> > +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+On 3/22/22 09:22, Jason J. Herne wrote:
+> On 2/14/22 19:50, Tony Krowiak wrote:
+>> The matrix of adapters and domains configured in a guest's APCB may
+>> differ from the matrix of adapters and domains assigned to the matrix 
+>> mdev,
+>> so this patch introduces a sysfs attribute to display the matrix of
+>> adapters and domains that are or will be assigned to the APCB of a guest
+>> that is or will be using the matrix mdev. For a matrix mdev denoted by
+>> $uuid, the guest matrix can be displayed as follows:
+>>
+>>     cat /sys/devices/vfio_ap/matrix/$uuid/guest_matrix
+> My OCD wants you to name this matrix_guest instead of guest_matrix. 
+> Simply
+> because then "matrix" and "matrix_guest" will be grouped together when 
+> doing
+> an ls on the parent directory. As a system admin, its the little 
+> things that
+> make the difference :) Please consider... though I won't withhold an 
+> R-b for
+> it.
 
-Is there a case were we have DYNAMIC_FTRACE but not
-DYNAMIC_FTRACE_WITH_REGS?
+I am going to leave it as guest_matrix for two reasons:
+1. To me, the name matrix_guest reads like the guest belongs to the 
+matrix rather
+     than the matrix belonging to the guest.
+2. Changing it will require changes to all of the automated test cases 
+that check
+     sysfs to determine whether the attribute is present and I don't 
+think the juice
+     is worth the squeeze.
 
-> > +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-> > +		       struct ftrace_ops *op, struct ftrace_regs *fregs)
-> > +{
-> > +	/*
-> > +	 * Athough graph_ops doesn't have FTRACE_OPS_FL_SAVE_REGS set in flags,
-> > +	 * regs can't be NULL in DYNAMIC_FTRACE_WITH_REGS. By design, it should
-> > +	 * be fixed when DYNAMIC_FTRACE_WITH_ARGS is implemented.
-> > +	 */
-> > +	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
-> > +	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
-> > +
-> > +	prepare_ftrace_return(ip, parent, frame_pointer(regs));
-> > +}
-> > +#else
-
-You deleted ftrace_graph_caller above from entry-ftrace.S, if we can get
-here with some options, wouldn't that break the build?
-
--- Steve
-
-
-> >  /*
-> >   * Turn on/off the call to ftrace_graph_caller() in ftrace_caller()
-> >   * depending on @enable.
-> > @@ -297,5 +313,6 @@ int ftrace_disable_ftrace_graph_caller(void)
-> >  {
-> >  	return ftrace_modify_graph_caller(false);
-> >  }
-> > +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-> >  #endif /* CONFIG_DYNAMIC_FTRACE */
-> >  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */  
+>
+> Reviewed-by: Jason J. Herne <jjherne@linux.ibm.com>
+>
 

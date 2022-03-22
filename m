@@ -2,81 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D644E3AD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936454E3AD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbiCVIlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S231514AbiCVIma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiCVIlb (ORCPT
+        with ESMTP id S231260AbiCVImZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:41:31 -0400
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F11725D8;
-        Tue, 22 Mar 2022 01:40:04 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id p9so23824857wra.12;
-        Tue, 22 Mar 2022 01:40:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=/Tfn3grWM8EBZ0IFyy5BUNygjofN0WZXFLyZhdj5fD8=;
-        b=UlDPQna4CCdnJGBrEqI6B8NF4N/ps+D1GLXFLuXXlmtvEs5zpF2MdoIvIpAoofLeJU
-         ZOKbOec2wgadltr6Qxs9Bw0nrxcduvkxlHaH1Vvv52+VNzvVbYmXtIxQWA6oaOk7RGFr
-         sERxThNv90Ev5yaTWNhyfNU2oDhqyhV3PKWuiq/sHOtD52XQf4rL+pYRRlAOgQVgZ6DU
-         eOVp/S1BrSS662yJTlpIzrhmQOaQE7AH5ztC8xUv2ncfWcK6yrwQLz5LKFAPc0Vo38X6
-         oYVpeD6I9Ar4f7bCAmKKBf1b3lNq62eawlTJnM8MLdL9vKab0kz54DS0su+Cbjur5pq5
-         mpvw==
-X-Gm-Message-State: AOAM530r1O45zpM53iKwyh+LSkPDwKvpfbvxBeQQVIpUXZfmykDCVIn2
-        YJYHELMAlVFb7HDhmB1tY9iGFEc7K7U=
-X-Google-Smtp-Source: ABdhPJxkORCp7gIYkTNw3KV3bdX3kmbwKYImn33rbcbzHbL5oapUbtQ9rTY8znVVhU8GFn8NowZFyg==
-X-Received: by 2002:a5d:4609:0:b0:203:e792:3add with SMTP id t9-20020a5d4609000000b00203e7923addmr21101655wrq.657.1647938402451;
-        Tue, 22 Mar 2022 01:40:02 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id i10-20020a0560001aca00b00203daf3759asm16563813wry.68.2022.03.22.01.40.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 01:40:01 -0700 (PDT)
-Message-ID: <216b98d5-a254-4527-c569-9f3397811e70@kernel.org>
-Date:   Tue, 22 Mar 2022 09:40:00 +0100
+        Tue, 22 Mar 2022 04:42:25 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B962313CF6;
+        Tue, 22 Mar 2022 01:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/NmC01N3JvtvFUOOHkfjZBbXiJu6Ht33d+DqM28OQjQ=; b=rJ9Ly2kbGsEib6Dqq36DIfmdfV
+        i+XI3dFmUgfuD/aGQHoWFIgUeAVLyTZjCJ+omMMV0iETJaBeOcIABp+40IVM4CJ+etUXdxc4q0fHJ
+        NZAA5jJIbkIPobLGx7ZFqxioEvYZ+FgZOpEiA/iFD3u0R17FIl1PJNWCUjX5Ms7dwF8674YSqaWQ7
+        NO9i10AvgHrFeA88WtbNR2lSUbQIG2X0fxlhm5zMlDaoPDt2ZzIhDC2YK/ahc55hi17Owrr0zN7/d
+        hqxLNwZnbJG9c+yg0+d2J042/0YzcHGf4p3JtlaT+YSIsjTRKS0hQPDKSVlhS6FgTFVrQLR68K9fM
+        6o9rZQWg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWa4N-00ARy0-D1; Tue, 22 Mar 2022 08:40:47 +0000
+Date:   Tue, 22 Mar 2022 01:40:47 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
+        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
+        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v6 1/6] x86/mm: fix comment
+Message-ID: <YjmLj78jjoieT2nm@infradead.org>
+References: <20220319062833.3136528-1-jane.chu@oracle.com>
+ <20220319062833.3136528-2-jane.chu@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: add reset properties into MDIO
- nodes
-Content-Language: en-US
-To:     Dylan Hung <dylan_hung@aspeedtech.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Cc:     BMC-SW <BMC-SW@aspeedtech.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
- <20220321095648.4760-4-dylan_hung@aspeedtech.com>
- <eefe6dd8-6542-a5c2-6bdf-2c3ffe06e06b@kernel.org>
- <HK0PR06MB2834CFADF087A439B06F87C29C179@HK0PR06MB2834.apcprd06.prod.outlook.com>
-In-Reply-To: <HK0PR06MB2834CFADF087A439B06F87C29C179@HK0PR06MB2834.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220319062833.3136528-2-jane.chu@oracle.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,39 +55,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 03:32, Dylan Hung wrote:
->> -----Original Message-----
->> From: Krzysztof Kozlowski [mailto:krzk@kernel.org]
->> Sent: 2022年3月21日 11:53 PM
->> To: Dylan Hung <dylan_hung@aspeedtech.com>; robh+dt@kernel.org;
->> joel@jms.id.au; andrew@aj.id.au; andrew@lunn.ch; hkallweit1@gmail.com;
->> linux@armlinux.org.uk; davem@davemloft.net; kuba@kernel.org;
->> pabeni@redhat.com; p.zabel@pengutronix.de; devicetree@vger.kernel.org;
->> linux-arm-kernel@lists.infradead.org; linux-aspeed@lists.ozlabs.org;
->> linux-kernel@vger.kernel.org; netdev@vger.kernel.org
->> Cc: BMC-SW <BMC-SW@aspeedtech.com>; stable@vger.kernel.org
->> Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: add reset properties into MDIO
->> nodes
->>
->> On 21/03/2022 10:56, Dylan Hung wrote:
->>> Add reset control properties into MDIO nodes.  The 4 MDIO controllers in
->>> AST2600 SOC share one reset control bit SCU50[3].
->>>
->>> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
->>> Cc: stable@vger.kernel.org
->>
->> Please describe the bug being fixed. See stable-kernel-rules.
+On Sat, Mar 19, 2022 at 12:28:28AM -0600, Jane Chu wrote:
+> There is no _set_memory_prot internal helper, while coming across
+> the code, might as well fix the comment.
 > 
-> Thank you for your comment.
-> The reset deassertion of the MDIO device was usually done by the bootloader (u-boot).
-> However, one of our clients uses proprietary bootloader and doesn't deassert the MDIO
-> reset so failed to access the HW in kernel driver.  The reset deassertion is missing in the
-> kernel driver since it was created, should I add a BugFix for the first commit of this driver?
-> Or would it be better if I remove " Cc: stable@vger.kernel.org"?
+> Signed-off-by: Jane Chu <jane.chu@oracle.com>
 
-This rather looks like a missing feature, not a bug. Anyway any
-description must be in commit message.
+Looks good:
 
-
-Best regards,
-Krzysztof
+Reviewed-by: Christoph Hellwig <hch@lst.de>

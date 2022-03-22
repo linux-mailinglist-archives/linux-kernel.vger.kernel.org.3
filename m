@@ -2,143 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89254E433F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18AF4E4350
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238716AbiCVPnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S238725AbiCVPuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238704AbiCVPnh (ORCPT
+        with ESMTP id S232819AbiCVPuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:43:37 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17638BF71
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:42:08 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id t1so22159461edc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nlDmFglz7whj/r0GBRKFJ24ATNTxPzzUgtpMW7485f4=;
-        b=CND1Tv8y6h1wN3nXUQIKzu8LJkbk/862t1GsMuYd+VkdxovrTkb3al98dhDbupbe12
-         QXuRoX6v14abx56NU7QF+9NGYzOFXPjIFilEb5iGh5vpslTno0fzKgvJfg5koKbmHz5d
-         vYj7LoRwC6XkP+3DLboyZVHpk8OUGbhumdqo9fqMS2jco8PbB4d+WrP5GBaK+jgACVjc
-         H3mKuCT2WW6HfHHoK5gzbP10+klCOPRsnAr11BVA7ZEnncpigY41CsoHDPS8S3Dlr0Ns
-         iZHZ/WcuewTT+kVQ6KA2kKz4zO/JxPoHq3uYjMYs2gCqp960E+gWubc8R1ajqLYXIZYY
-         OQZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nlDmFglz7whj/r0GBRKFJ24ATNTxPzzUgtpMW7485f4=;
-        b=vdreATs52rQ11cMJBCFxfO/bBbw48AelLQthFVADKRhJpqHJg5Ytcoj3l4PWelT5i1
-         vwlwy6FZw7k6U/AkuQqw6NpTOWUMrA1WUrg1/bfwhaukh5RjcjlHAQtj+5hvqxSlu0RM
-         1E1N5PJCnbtkPq+A3uj8DaJnW7Z6fL7MidF23yol+HiEuDE7WDS0FAw9H3BzFwHKv47V
-         8w8tAKkyRIa/5aH4J3uI19W3zp4YQu7j8OOU23P/1RQrOJvsqLp6HSwpxiksTQBkZsh2
-         8B/ZAWwfLfedZ/YR8DNj9xwjNEdHcNj+wUz/sJJJ9o2UyPvxGpyh4PbZgtiZinrUvATb
-         yARA==
-X-Gm-Message-State: AOAM532ZYKJ+mW95dYjXRYqpW7waAXRW6RJA0UTvay6V1OObK+XLcdb/
-        ikWjhGV1e3ljfA4Fft88fNqVNGqcuoAxe3WkKyDYPQ==
-X-Google-Smtp-Source: ABdhPJyfaNCeAne2eFe8CfwRN/f/oVNmY2Y/pOhZZsuRaOYGVMOQUibxtTc32t6sxxUnC/B69PTQ0uqLWnTvQDvhzLc=
-X-Received: by 2002:a05:6402:1e96:b0:418:ff57:ada2 with SMTP id
- f22-20020a0564021e9600b00418ff57ada2mr27039663edf.197.1647963727136; Tue, 22
- Mar 2022 08:42:07 -0700 (PDT)
+        Tue, 22 Mar 2022 11:50:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C083766AF9;
+        Tue, 22 Mar 2022 08:48:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GWmTPAsKiygAsKe/gYrXQNAX5phOsYXBOkLRg3HAuqE=; b=R51TeMWpKxJIfUBzyk+ZVdxyhp
+        rJPi2hg+Rmz3n0kkNiO4Q/xcXcffftpXUeoUprxh05yGHiJtqe/VfA6M/sIgygYBGzwlSBKBAX9OG
+        zIXPa+VmyYr1YCtLpPRq62/9alhSpCERrpIfFUSrMp4q+pF9eEm7V+qDscZZXg7i9r00yCsVFMsmx
+        b4LlLs2WeJDvNu5G2UEZHptQZRDlo4JWBK/fc+z8QjbKz1aU7rfQ21nbv0K3AoSXROh4w3983N2+A
+        W7vwCUPgvZCIFNNgz43c7O54jGEK4af9QIn6MfRGqw9azSOQAZY6fo7WK9C2CxriToYQWblD257d5
+        PxABj9Gg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWgjs-00Bj5T-PQ; Tue, 22 Mar 2022 15:48:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 451553001CD;
+        Tue, 22 Mar 2022 16:48:02 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B77A52D6E78DD; Tue, 22 Mar 2022 16:48:02 +0100 (CET)
+Date:   Tue, 22 Mar 2022 16:48:02 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <Yjnvsrp8253bxWPA@hirez.programming.kicks-ass.net>
+References: <20220321121209.3b95e406@gandalf.local.home>
+ <20220321121549.1c8588c5@gandalf.local.home>
+ <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
+ <20220321124551.3d73660b@gandalf.local.home>
+ <Yjis6hJKUj/WrSwK@hirez.programming.kicks-ass.net>
+ <20220321125419.0a20415c@gandalf.local.home>
+ <YjmAz0MbdW4Q1Cnv@hirez.programming.kicks-ass.net>
+ <20220322091242.1ad0206b@gandalf.local.home>
+ <Yjneyn8o06svJkY4@hirez.programming.kicks-ass.net>
+ <20220322110438.25c2a760@gandalf.local.home>
 MIME-Version: 1.0
-References: <20220309165222.2843651-1-tjmercier@google.com>
- <20220309165222.2843651-2-tjmercier@google.com> <20220321173726.GA9640@blackbody.suse.cz>
-In-Reply-To: <20220321173726.GA9640@blackbody.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 22 Mar 2022 08:41:55 -0700
-Message-ID: <CABdmKX10jqubJr49JENaHpFnqHV88+Fb7iNZNH4T1Cy7n9y=ag@mail.gmail.com>
-Subject: Re: [RFC v3 1/8] gpu: rfc: Proposal for a GPU cgroup controller
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322110438.25c2a760@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:37 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrot=
-e:
->
-> Hello.
->
-> On Wed, Mar 09, 2022 at 04:52:11PM +0000, "T.J. Mercier" <tjmercier@googl=
-e.com> wrote:
-> > +The new cgroup controller would:
-> > +
-> > +* Allow setting per-cgroup limits on the total size of buffers charged=
- to it.
->
-> What is the meaning of the total? (I only have very na=C3=AFve
-> understanding of the device buffers.)
+On Tue, Mar 22, 2022 at 11:04:38AM -0400, Steven Rostedt wrote:
 
-So "total" is used twice here in two different contexts.
-The first one is the global "GPU" cgroup context. As in any buffer
-that any exporter claims is a GPU buffer, regardless of where/how it
-is allocated. So this refers to the sum of all gpu buffers of any
-type/source. An exporter contributes to this total by registering a
-corresponding gpucg_device and making charges against that device when
-it exports.
-The second one is in a per device context. This allows us to make a
-distinction between different types of GPU memory based on who
-exported the buffer. A single process can make use of several
-different types of dma buffers (for example cached and uncached
-versions of the same type of memory), and it would be useful to have
-different limits for each. These are distinguished by the device name
-string chosen when the gpucg_device is first registered.
+> > In recap:
+> > 
+> > 	__fentry__ -- push on trace-stack
+> > 	__ftail__  -- mark top-most entry complete
+> > 	__fexit__  -- mark top-most entry complete;
+> > 	              pop all completed entries
+> 
+> Again, this would require that the tail-calls are also being traced.
 
->
-> Is it like a) there's global pool of memory that is partitioned among
-> individual devices or b) each device has its own specific type of memory
-> and adding across two devices is adding apples and oranges or c) there
-> can be various devices both of a) and b) type?
+Which is why we should inhibit tail-calls if the function is notrace.
 
-So I guess the most correct answer to this question is c.
+> > inhibit tail-calls to notrace.
+> 
+> Just inhibiting tail-calls to notrace would work without any of the above.
 
+I'm lost again; what? Without any of the above you got nothing because
+return-trampoline will not work.
 
->
-> (Apologies not replying to previous versions and possibly missing
-> anything.)
->
-> Thanks,
-> Michal
->
+> But my fear is that will cause a noticeable performance impact.
+
+Most code isn't in fact notrace, and call+ret aren't *that* expensive.
+
+> > It's function graph tracing, kretprobes and whatever else this rethook
+> > stuff is about that needs this because return trampolines will stop
+> > working somewhere in the not too distant future.
+> 
+> Another crazy solution is to have:
+> 
+> func_A:
+> 	call __fentry__
+> 	...
+> tail:	jmp 1f 
+> 	call 1f
+	
+> 	call __fexit__
+> 	ret
+> 1:	jmp func_B
+> 
+> 
+> where the compiler tells us about "tail:" and that we know that func_A ends
+> with a tail call, and if we want to trace the end of func_A we convert that
+> jmp 1f into a nop. And then we call the func_B and it's return comes back
+> to where we call __fexit__ and then return normally.
+
+At that point giving us something like:
+
+1:
+	pushsection __ftail_loc
+	.long	1b - .
+	popsection
+
+	jmp.d32	func_B
+	call	__fexit__
+	ret
+
+is smaller and simpler, we can patch the jmp.d32 to call when tracing.
+The only problem is SLS, that might wants an int3 after jmp too
+( https://www.amd.com/en/corporate/product-security/bulletin/amd-sb-1026 ).
+
+That does avoid the need for __ftail__ I suppose.

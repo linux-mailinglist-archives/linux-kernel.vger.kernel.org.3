@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4914E452B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E46B84E452C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239756AbiCVRag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
+        id S239741AbiCVRci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239754AbiCVRad (ORCPT
+        with ESMTP id S236813AbiCVRch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:30:33 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB4FDFE2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:28:54 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2e6650cde1bso46919497b3.12
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:28:54 -0700 (PDT)
+        Tue, 22 Mar 2022 13:32:37 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEF823BDF
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:31:08 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id bn33so24935988ljb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ngLIg9b4BlGvztL4m59Z6YNmmHxfTM8WHA3l9qn5cQw=;
-        b=p4kXZ57BGxTHMyT63eQqh+aVMHPNJP6siHAhD8Qz8wWtqDCYeluc9hvog8YHro/8nF
-         Jto/x2Die2vbaHlQq8eUojlc7umSrjRAPBZEBhA7aUAlJ68M4L+HiWvlp24eF/oPv8c8
-         GrC1WdAIzQELqr8iVdZcLM8ECe/EiCJYlggXM/YXIdOh8abmnJD50NfLJCA/CloGeq5r
-         Jme7fTDpENccLa6rMCqBBKoldhhifXKiZhb/Hfm6YlThLJzD9WtyF71tJKvXTHcShF3F
-         vDHHPHJRUjq6OrEHzIJpJ38KhVqMBrFjSXLSPhHN+Svtqjm+ani6vVEnWtAlAabK2ZGA
-         gxSQ==
+        bh=zgcgyCIbWUTOoVOlIFHHmtoodCzEMkbLy9TNN/VAosg=;
+        b=naptp6Dpy+85YfyC34kaFusYQmU1UYYJb1v0QokmAZ/OC156PjQKVkMdUdnZTFP3pI
+         9BLeqi/l8Szf7/x+NC+k5zOh+OaHrPK7DQVvX7j1X0ddioyzwX172ho1EW4NU6uncyhz
+         6hpurP0vHYti9dft5+IoDbp9NQlUEAYI2/a39CHcgLqA1RcSjTKP9PVz+JaUxurX1o/i
+         dQcF73IPVJJzlJNzFBqx6dgxQ1rdRuNZpa95I9GNHyCn5URu2yNMY5c3IULf0R4b7K+L
+         z/d9txrBGCP43dBC1XnY0T22CnvkA+y2QQlGIZczuT0NmwRQnJAl9O15bUplsLBFEHSZ
+         QB2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ngLIg9b4BlGvztL4m59Z6YNmmHxfTM8WHA3l9qn5cQw=;
-        b=ZZG6w6cwk5PxP2n0UQyqkVDBOEea/V7FgGGevXNL1f8q2GhaZOClzqmFjCGEVFW9VQ
-         M/ZE6NyjLarKulLpfp8AaGyhqDXwf6aLwz+cmURbe8AMlcP0r77r6//acrziEsNs2ik0
-         6YBpo0XsAsI5nUmO/7W7YPvri7PMg6DrjDHwD7Fle5g+ghYkKMDpXHAXdcCZo3aKL4pl
-         5paOC1CQ7B30TwB4TyK9L7KTaJib8ARNFKySO3i4LncLEigG5kRZAzYt56mlUSGkcdtX
-         azJ0LiaKLFKsXyDYy4QApcw4Q0KZA8ftj50/42Bt5zl9q4oz3Q1GbR7a1M0Vqrvkdfau
-         33OQ==
-X-Gm-Message-State: AOAM531zfkbsY+64gPpwJDru5Mf5z247dwF1oVr6c7I25i62n96qZQ8y
-        dfSiyOb8GjYHvmpOPJgj3OZ5zyjPCk50BvmxuUWAcw==
-X-Google-Smtp-Source: ABdhPJxBrAZ89IvwaQcef+Yp1XwPz+DqEpA5BuCi2RyulXypYZnUIjDR55DShtn8q6ZkvHAshQ6yTNpy1vnHtXFbcr8=
-X-Received: by 2002:a0d:f485:0:b0:2e6:8c95:d874 with SMTP id
- d127-20020a0df485000000b002e68c95d874mr1924073ywf.23.1647970133194; Tue, 22
- Mar 2022 10:28:53 -0700 (PDT)
+        bh=zgcgyCIbWUTOoVOlIFHHmtoodCzEMkbLy9TNN/VAosg=;
+        b=TLVzASgMDCxzqFuSRH4KlQyw2foBx9oAkzNnMkeN0M0meQUE/zWf/cCIidroFDNfFX
+         VpBfmJSg0HJJsPph6NALJwKGYP7MuW0l3K0mirapYQFAKgaRKWEbgHXgkA+H63cr4Jar
+         x2J5JCBw0iZ/DC6tcMCH8lCTrGL5E34Kk6ewB4VW7bsJNUHOfpB3UJVLDu0Hf2WFIr4g
+         X6t7oA0sxspriKEm4rbkUltgjhoU8vmA3aDWp0dtO7J77GgBMYx9daJzkESPbcoucY/9
+         SVI7+TYQEwAMGGdEhs4ecAo27knt9hzUqC0Pcnd+HzscuONuWZnYinT3VXbwz3FjM5e2
+         /0vw==
+X-Gm-Message-State: AOAM530RYomd9WU1DLEQ5kg2awJwSHOo7atqmXB6UCYo6kYXnZXofNIK
+        SLH+LEJL/1BupnHvD1JrDMENsQHyIz27YneRTLIlUQ==
+X-Google-Smtp-Source: ABdhPJz+tT+vwRLT/un0YR41TNqqDOomNEbU0yM8lSArWPNncnylHvc5h3OSavrgElwizaqHJQOJc6w3u9B9x4FLPeg=
+X-Received: by 2002:a2e:8692:0:b0:249:a0b1:3c77 with SMTP id
+ l18-20020a2e8692000000b00249a0b13c77mr93511lji.235.1647970265022; Tue, 22 Mar
+ 2022 10:31:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1646422845.git.isaku.yamahata@intel.com> <cedda3dbe8597356374ef64de26ecef0d8cd7a62.1646422845.git.isaku.yamahata@intel.com>
-In-Reply-To: <cedda3dbe8597356374ef64de26ecef0d8cd7a62.1646422845.git.isaku.yamahata@intel.com>
-From:   Erdem Aktas <erdemaktas@google.com>
-Date:   Tue, 22 Mar 2022 10:28:42 -0700
-Message-ID: <CAAYXXYy3QLWyq9QrEnrsOLB3r44QTgKaOW4=HhOozDuw1073Gg@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 064/104] KVM: TDX: Implement TDX vcpu enter/exit path
-To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Cc:     "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+ <20220322102115.186179-3-ammarfaizi2@gnuweeb.org> <CAKwvOdkEwkzT0uf9a5SokCScDTY4gbhNFZ+fLxsti9innaEZRQ@mail.gmail.com>
+ <20220322172550.GL10306@1wt.eu>
+In-Reply-To: <20220322172550.GL10306@1wt.eu>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 22 Mar 2022 10:30:53 -0700
+Message-ID: <CAKwvOdmr6u-zNynUDAg4pmwerQFUkG+eD0QhpzDED9eg+U2pfA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/8] tools/nolibc: Remove .global _start from the
+ entry point code
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -71,197 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 11:50 AM <isaku.yamahata@intel.com> wrote:
->
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> This patch implements running TDX vcpu.  Once vcpu runs on the logical
-> processor (LP), the TDX vcpu is associated with it.  When the TDX vcpu
-> moves to another LP, the TDX vcpu needs to flush its status on the LP.
-> When destroying TDX vcpu, it needs to complete flush and flush cpu memory
-> cache.  Track which LP the TDX vcpu run and flush it as necessary.
->
-> Do nothing on sched_in event as TDX doesn't support pause loop.
->
-> TDX vcpu execution requires restoring PMU debug store after returning back
-> to KVM because the TDX module unconditionally resets the value.  To reuse
-> the existing code, export perf_restore_debug_store.
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/vmx/main.c    | 10 +++++++++-
->  arch/x86/kvm/vmx/tdx.c     | 34 ++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/tdx.h     | 33 +++++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/x86_ops.h |  2 ++
->  arch/x86/kvm/x86.c         |  1 +
->  5 files changed, 79 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index f571b07c2aae..2e5a7a72d560 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -89,6 +89,14 @@ static void vt_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->         return vmx_vcpu_reset(vcpu, init_event);
->  }
->
-> +static fastpath_t vt_vcpu_run(struct kvm_vcpu *vcpu)
-> +{
-> +       if (is_td_vcpu(vcpu))
-> +               return tdx_vcpu_run(vcpu);
-> +
-> +       return vmx_vcpu_run(vcpu);
-> +}
-> +
->  static void vt_flush_tlb_all(struct kvm_vcpu *vcpu)
->  {
->         if (is_td_vcpu(vcpu))
-> @@ -200,7 +208,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->         .tlb_flush_guest = vt_flush_tlb_guest,
->
->         .vcpu_pre_run = vmx_vcpu_pre_run,
-> -       .run = vmx_vcpu_run,
-> +       .run = vt_vcpu_run,
->         .handle_exit = vmx_handle_exit,
->         .skip_emulated_instruction = vmx_skip_emulated_instruction,
->         .update_emulated_instruction = vmx_update_emulated_instruction,
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 85d5f961d97e..ebe4f9bf19e7 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -10,6 +10,9 @@
->  #include "vmx.h"
->  #include "x86.h"
->
-> +#include <trace/events/kvm.h>
-> +#include "trace.h"
-> +
->  #undef pr_fmt
->  #define pr_fmt(fmt) "tdx: " fmt
->
-> @@ -509,6 +512,37 @@ void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->         vcpu->kvm->vm_bugged = true;
->  }
->
-> +u64 __tdx_vcpu_run(hpa_t tdvpr, void *regs, u32 regs_mask);
-> +
-> +static noinstr void tdx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
-> +                                       struct vcpu_tdx *tdx)
-> +{
-> +       guest_enter_irqoff();
-> +       tdx->exit_reason.full = __tdx_vcpu_run(tdx->tdvpr.pa, vcpu->arch.regs, 0);
-> +       guest_exit_irqoff();
-> +}
-> +
-> +fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu)
-> +{
-> +       struct vcpu_tdx *tdx = to_tdx(vcpu);
-> +
-> +       if (unlikely(vcpu->kvm->vm_bugged)) {
-> +               tdx->exit_reason.full = TDX_NON_RECOVERABLE_VCPU;
-> +               return EXIT_FASTPATH_NONE;
-> +       }
-> +
-> +       trace_kvm_entry(vcpu);
-> +
-> +       tdx_vcpu_enter_exit(vcpu, tdx);
-> +
-> +       vcpu->arch.regs_avail &= ~VMX_REGS_LAZY_LOAD_SET;
-> +       trace_kvm_exit(vcpu, KVM_ISA_VMX);
-> +
-> +       if (tdx->exit_reason.error || tdx->exit_reason.non_recoverable)
-> +               return EXIT_FASTPATH_NONE;
+(Moving folks to bcc; check the lists if you're interested)
 
-Looks like the above if statement has no effect. Just checking if this
-is intentional.
+On Tue, Mar 22, 2022 at 10:25 AM Willy Tarreau <w@1wt.eu> wrote:
+>
+> Hi Nick,
+>
+> On Tue, Mar 22, 2022 at 10:09:18AM -0700, Nick Desaulniers wrote:
+> > Then again, I'm not familiar with nolibc.
+>
+> No problem. The purpose is clearly *not* to implement a libc, but to have
+> something very lightweight that allows to compile trivial programs. A good
+> example of this is tools/testing/selftests/rcutorture/bin/mkinitrd.sh. I'm
+> personally using a tiny pre-init shell that I always package with my
+> kernels and that builds with them [1]. It will never do big things but
+> the balance between ease of use and coding effort is pretty good in my
+> experience. And I'm also careful not to make it complicated to use nor
+> to maintain, pragmatism is important and the effort should remain on the
+> program developer if some arbitration is needed.
 
-> +       return EXIT_FASTPATH_NONE;
-> +}
-> +
->  void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int pgd_level)
->  {
->         td_vmcs_write64(to_tdx(vcpu), SHARED_EPT_POINTER, root_hpa & PAGE_MASK);
-> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> index bf9865a88991..e950404ce5de 100644
-> --- a/arch/x86/kvm/vmx/tdx.h
-> +++ b/arch/x86/kvm/vmx/tdx.h
-> @@ -44,12 +44,45 @@ struct kvm_tdx {
->         spinlock_t seamcall_lock;
->  };
->
-> +union tdx_exit_reason {
-> +       struct {
-> +               /* 31:0 mirror the VMX Exit Reason format */
-> +               u64 basic               : 16;
-> +               u64 reserved16          : 1;
-> +               u64 reserved17          : 1;
-> +               u64 reserved18          : 1;
-> +               u64 reserved19          : 1;
-> +               u64 reserved20          : 1;
-> +               u64 reserved21          : 1;
-> +               u64 reserved22          : 1;
-> +               u64 reserved23          : 1;
-> +               u64 reserved24          : 1;
-> +               u64 reserved25          : 1;
-> +               u64 bus_lock_detected   : 1;
-> +               u64 enclave_mode        : 1;
-> +               u64 smi_pending_mtf     : 1;
-> +               u64 smi_from_vmx_root   : 1;
-> +               u64 reserved30          : 1;
-> +               u64 failed_vmentry      : 1;
-> +
-> +               /* 63:32 are TDX specific */
-> +               u64 details_l1          : 8;
-> +               u64 class               : 8;
-> +               u64 reserved61_48       : 14;
-> +               u64 non_recoverable     : 1;
-> +               u64 error               : 1;
-> +       };
-> +       u64 full;
-> +};
-> +
->  struct vcpu_tdx {
->         struct kvm_vcpu vcpu;
->
->         struct tdx_td_page tdvpr;
->         struct tdx_td_page *tdvpx;
->
-> +       union tdx_exit_reason exit_reason;
-> +
->         bool initialized;
->  };
->
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index 922a3799336e..44404dd25737 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -140,6 +140,7 @@ void tdx_vm_free(struct kvm *kvm);
->  int tdx_vcpu_create(struct kvm_vcpu *vcpu);
->  void tdx_vcpu_free(struct kvm_vcpu *vcpu);
->  void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event);
-> +fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu);
->
->  int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
->  int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp);
-> @@ -160,6 +161,7 @@ static inline void tdx_vm_free(struct kvm *kvm) {}
->  static inline int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
->  static inline void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
->  static inline void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-> +static inline fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
->
->  static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
->  static inline int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -EOPNOTSUPP; }
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index da411bcd8cbc..66400810d54f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -300,6 +300,7 @@ const struct kvm_stats_header kvm_vcpu_stats_header = {
->  };
->
->  u64 __read_mostly host_xcr0;
-> +EXPORT_SYMBOL_GPL(host_xcr0);
->  u64 __read_mostly supported_xcr0;
->  EXPORT_SYMBOL_GPL(supported_xcr0);
->
-> --
-> 2.25.1
->
+Neat, I bet that helps generate very small initrd! Got any quick size
+measurements?
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,99 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5540C4E3566
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152F64E356A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233944AbiCVAXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S233960AbiCVAYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 20:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233943AbiCVAXQ (ORCPT
+        with ESMTP id S233943AbiCVAYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 20:23:16 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08C5B53FA
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:20:30 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bt26so27208017lfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:20:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pricXOa/ATSDhwTUxrPjUclF7KODhUvRqabLNNb/HQs=;
-        b=EzBq+h96Nb7iGIL2cJkD3bSq/6zdXFWa1MJkT/5P2WOGfvFzn88nEAQzUt7RinBxHr
-         d5axvifURcfN49zJEDyMYjEip3NyGkPT2Opo0AacGZDu/+vwE8ev8t3ysuqoXVqecmHK
-         bgYKATX0k2ZD+3d4IKsi11tIGhVRavakB0W9o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pricXOa/ATSDhwTUxrPjUclF7KODhUvRqabLNNb/HQs=;
-        b=2Qs838A313BcOarGXyqTyJTfmvkuQlGbaexQf20KPgYzZ1OF4R9qMrsDLtPsI5epgM
-         1nDyOynNB+D2ILNjcGiJfuVzssaJlFjz+vx313JoGZaZQqUwZejSPDhe3QeFAkvhVB3Q
-         7AYMmWHHJnlwVEktenPjKfo5N+m+t226dF+PumYtOST08b1Ka5/J1hWhSDtnKh/LiLIN
-         0byfMcBtn6iWxktmAT5fRDhHu3R4cQbbVCdl63TPsDtSFCe97bSJivw5OYnpwGzUXPEv
-         U6SCJ1rOBuNTNuunL3rQG2AFbh0fo/IXX7fky4udbqoAUQxsZX85KmEx2mJdPy+RBt2Q
-         KPTw==
-X-Gm-Message-State: AOAM530gKpdKaCuW1Uk20RZ5XFfRaE+nZf91LUn5nhTrChIrgcOHp/tQ
-        d1e51I9aDzbRUNYH+eovQ6e8vV4xywqiHNyG2OE=
-X-Google-Smtp-Source: ABdhPJxDF013M+4xYrEeY+u7gYoGrw+ztVJM1r5gl7j5fG3g8HEUdKwSNTEUlRhgWE3BqQpFZjutJA==
-X-Received: by 2002:a05:6512:3046:b0:44a:247:2cf with SMTP id b6-20020a056512304600b0044a024702cfmr14038214lfb.161.1647908332576;
-        Mon, 21 Mar 2022 17:18:52 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id l18-20020a194952000000b00445bf2c3b83sm1968516lfj.58.2022.03.21.17.18.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 17:18:50 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id 17so22056650lji.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:18:49 -0700 (PDT)
-X-Received: by 2002:a05:651c:1509:b0:249:6cd6:96d8 with SMTP id
- e9-20020a05651c150900b002496cd696d8mr13138285ljf.358.1647908329343; Mon, 21
- Mar 2022 17:18:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <YjhZUezhnamHAl0H@gmail.com> <Yjh58h8cpcPERVZA@qian>
-In-Reply-To: <Yjh58h8cpcPERVZA@qian>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 21 Mar 2022 17:18:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whrqeX-8yHEdSCGFUyyC2sj=OLyeFR9civUiswR=A+PwA@mail.gmail.com>
-Message-ID: <CAHk-=whrqeX-8yHEdSCGFUyyC2sj=OLyeFR9civUiswR=A+PwA@mail.gmail.com>
-Subject: Re: [GIT PULL] scheduler updates for v5.18
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Huang, Ying" <ying.huang@intel.com>
+        Mon, 21 Mar 2022 20:24:49 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65622DF3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647908587; x=1679444587;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hOiVnLtmtOaXxc1V56DZer88UbTpxYJfZvguMvjAozA=;
+  b=Umqy38rg2URe9i2elChsnVFa0SPtOi4kyI8kEU7/LngfECPLF5JVV6gS
+   jajSmqDy5ElB1UK8UoFFf9Eh4KvtaZ4jJwj/kcbq31H1tEmcL4Uuxud5D
+   2EXlbLYfTvJIa9x3WLDc9aK1RO0J3vy9YthHmxApOBa2eM35A5Yq2GteN
+   XxnNaMPNjqkuHZC6DIhH3ehLjf4dvfupnWKRQhGABuyAt1X/R65UN6Est
+   a0A2K2zaQKNpDipafN/RSn1/Q1GAWc71IhRbev+VSHDgq2C7w7PhiIX+5
+   /aN2etbMBriBWZH4prKplRCU/blnsPCrxLPKVnhm+B2+PprfjxiWOs4XW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="238287755"
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="238287755"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:22:23 -0700
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="518647965"
+Received: from schen9-mobl.amr.corp.intel.com ([10.212.227.186])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:22:22 -0700
+Message-ID: <2d401a6c591e7fd1711c0db5b28517f7bf1f5adc.camel@linux.intel.com>
+Subject: Re: [PATCH 3/6] sched: Allow sched_{get,set}attr to change
+ latency_nice of the task
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, linux-kernel@vger.kernel.org, parth@linux.ibm.com
+Cc:     qais.yousef@arm.com, chris.hyser@oracle.com,
+        pkondeti@codeaurora.org, valentin.schneider@arm.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org,
+        dhaval.giani@oracle.com, qperret@google.com
+Date:   Mon, 21 Mar 2022 17:22:22 -0700
+In-Reply-To: <20220311161406.23497-4-vincent.guittot@linaro.org>
+References: <20220311161406.23497-1-vincent.guittot@linaro.org>
+         <20220311161406.23497-4-vincent.guittot@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 6:13 AM Qian Cai <quic_qiancai@quicinc.com> wrote:
->
-> On Mon, Mar 21, 2022 at 11:54:09AM +0100, Ingo Molnar wrote:
-> > Huang Ying (3):
-> >       sched/numa-balancing: Move some document to make it consistent with the code
-> >       sched/numa: Fix NUMA topology for systems with CPU-less nodes
-> >       sched/numa: Avoid migrating task to CPU-less node
->
-> Linus, I don't think you want to merge this as-is. This will introduce a
-> kernel crash on arm64 NUMA as mentioned in this thread,
+On Fri, 2022-03-11 at 17:14 +0100, Vincent Guittot wrote:
+> 
+> +static void __setscheduler_latency(struct task_struct *p,
+> +		const struct sched_attr *attr)
+> +{
+> +	if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE) {
+> +		p->latency_prio = NICE_TO_LATENCY(attr->sched_latency_nice);
 
-Ok, dropped from my queue. Thanks,
+NICE_TO_LATENCY used here but has defined later in patch 5.  This will break
+bisect.
 
-                 Linus
+> +		set_latency_weight(p);
+> +	}
+>  }
+>  
+> 
+
+Tim
+

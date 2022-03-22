@@ -2,104 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA71E4E457F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FD14E458F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239892AbiCVRw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
+        id S239960AbiCVRzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239841AbiCVRwZ (ORCPT
+        with ESMTP id S239946AbiCVRzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:52:25 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F106D3BC
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:50:56 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w7so31077866lfd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:50:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xVTkoL6IvScupcc82uGKxY6t/dEoMhywmokb0M6nLRQ=;
-        b=SxzIsWJtVeaoBw1JvaNfWaX6iOJGZ1awG+smm6ZI3+2778B8fIRobefB0fFKcM4q6y
-         2r4/TVzojriOvGIybdvH82leIyhyqc+uKQhIoA5t/IeWmMqoqy0YAgzr+NxHjUuOLxlx
-         Q2wcsmI+T+V32+6FiBPcrXt1ViZUuv3r4KJS0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xVTkoL6IvScupcc82uGKxY6t/dEoMhywmokb0M6nLRQ=;
-        b=xzYBK97pebPrZag6cYoqLl7JigHXZk5UjFWa9hEhCkDH+2YYzzmNlOZtqvlKu2WpvI
-         JCTJutVHJEReQmCrfPXhCmZuJR8j9ChAZ86yC5MPv0AS9pHYaHApS47vGQDt2LwAm2aH
-         zek0FrCdRnGUkvkUxAyiOcyBjdkrpnHvRl10POffYztrl0WDz/ycTykKmQZ9vty03fzc
-         VqUmG5P5T/flDu5ZUow5OKX5DTudcfVnZEAajqrSkmun9L+Rsqp1BBqqU/GhglcCHzwO
-         s2tDldc3npnHhjOeYykTOYb3P3QGdmbDW9MyvRiZczXD4A530LjQeLWoc7niAVu3nJbY
-         NQvw==
-X-Gm-Message-State: AOAM530mQsBEQr/dyiwimNhn6DTyWvVM62EBfIFw6SNxbKAvqOvv7jFe
-        vnfUwiaMXq6CzDnyfMJ24RbpTJwLSuHTLrigz3g=
-X-Google-Smtp-Source: ABdhPJwmTntAlNcdrpCzHUJgWtqFqeUPVaKX1JwLNZ2enCdj6LC5U30nc84iRSGWeAyVEjhCX0YlIw==
-X-Received: by 2002:ac2:5bcb:0:b0:44a:1fd6:6b14 with SMTP id u11-20020ac25bcb000000b0044a1fd66b14mr11745765lfn.186.1647971453692;
-        Tue, 22 Mar 2022 10:50:53 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id h8-20020ac25d68000000b00447b5cad2a7sm2270462lft.228.2022.03.22.10.50.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 10:50:52 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id u3so25094704ljd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:50:51 -0700 (PDT)
-X-Received: by 2002:a2e:9904:0:b0:247:ec95:fdee with SMTP id
- v4-20020a2e9904000000b00247ec95fdeemr20114422lji.291.1647971451760; Tue, 22
- Mar 2022 10:50:51 -0700 (PDT)
+        Tue, 22 Mar 2022 13:55:05 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA5BBE30;
+        Tue, 22 Mar 2022 10:53:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647971617; x=1679507617;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=GOSyCMT3Bo8pMPfvKQ6OUb28JkU8aRwvgc6c1E/p/HM=;
+  b=B+kfcUm0RBWon1+HvTZuAamntyPWOB6ublxkKUZjpHfGJHvukY1g9EBF
+   EMnIuNeQjMt/Nyets3Mw1czzTe0qbi/Wtr0EgiBQ1tYmk1nwuNC4Y/4mC
+   ATptsjFDWml1ABeU/xKh62bayEPEK/8sSGLXFeIgb9TvBCLLxzLZj7732
+   sqi5D9YWulrKU+4umpigMu5QfTJWZGz1gPsn3CGeyx6c6b/Smasp712Gv
+   IRYqjgQT8EokoXjZDwoyiei/Y80CdYJDsW1cVoG+fZJedSboMwhvTCqE1
+   kHG9Zd/aU8uqg7o+UUo0UKX5yK8fMM6nxgUUUlkAuonBP3hxTVl6vA28i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="245374809"
+X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
+   d="scan'208";a="245374809"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 10:52:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
+   d="scan'208";a="692645180"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2022 10:51:58 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 22MHpvJb002184;
+        Tue, 22 Mar 2022 17:51:57 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "'Wan Jiabing'" <wanjiabing@vivo.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] ice: use min_t() to make code cleaner in ice_gnss
+Date:   Tue, 22 Mar 2022 18:50:38 +0100
+Message-Id: <20220322175038.2691665-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <f888e3cf09944f9aa63532c9f59e69fb@AcuMS.aculab.com>
+References: <20220321135947.378250-1-wanjiabing@vivo.com> <f888e3cf09944f9aa63532c9f59e69fb@AcuMS.aculab.com>
 MIME-Version: 1.0
-References: <YjjihIZuvZpUjaSs@google.com> <CAHk-=wgsmvoJFKFWxQ2orEVUOWH1agk9iUNZ=-DFh5OXZL=Ldw@mail.gmail.com>
- <51cded74-3135-eed8-06d3-0b2165e3b379@redhat.com>
-In-Reply-To: <51cded74-3135-eed8-06d3-0b2165e3b379@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 22 Mar 2022 10:50:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi=Xsekgj7zfw_vpOM673CG24vznmz-yx9G05rWSAAYXg@mail.gmail.com>
-Message-ID: <CAHk-=wi=Xsekgj7zfw_vpOM673CG24vznmz-yx9G05rWSAAYXg@mail.gmail.com>
-Subject: Re: [GIT PULL] f2fs for 5.18
-To:     Waiman Long <longman@redhat.com>, Tim Murray <timmurray@google.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 10:37 AM Waiman Long <longman@redhat.com> wrote:
->
-> AFAICS, the read-unfair rwsem code is created to resolve a potential
-> lock starvation problem that they found on linux-5.10.y stable tree. I
-> believe I have fixed that in the v5.11 kernel, see commit 2f06f702925
-> ("locking/rwsem: Prevent potential lock starvation").
+From: David Laight <David.Laight@ACULAB.COM>
+Date: Mon, 21 Mar 2022 16:02:20 +0000
 
-Ahh.
+> From: Wan Jiabing
+> > Sent: 21 March 2022 14:00
+> >
+> > Fix the following coccicheck warning:
+> > ./drivers/net/ethernet/intel/ice/ice_gnss.c:79:26-27: WARNING opportunity for min()
+> >
+> > Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> > ---
+> > Changelog:
+> > v2:
+> > - Use typeof(bytes_left) instead of u8.
+> > ---
+> >  drivers/net/ethernet/intel/ice/ice_gnss.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
+> > index 35579cf4283f..57586a2e6dec 100644
+> > --- a/drivers/net/ethernet/intel/ice/ice_gnss.c
+> > +++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
+> > @@ -76,8 +76,7 @@ static void ice_gnss_read(struct kthread_work *work)
+> >  	for (i = 0; i < data_len; i += bytes_read) {
+> >  		u16 bytes_left = data_len - i;
+> 
+> Oh FFS why is that u16?
+> Don't do arithmetic on anything smaller than 'int'
 
-Adding Tim Murray to the cc, since he was the source of that odd
-reader-unfair thing.
+Any reasoning? I don't say it's good or bad, just want to hear your
+arguments (disasms, perf and object code measurements) etc.
 
-I really *really* dislike people thinking they can do locking
-primitives, because history has taught us that they are wrong.
+> 
+> 	David
+> 
+> >
+> > -		bytes_read = bytes_left < ICE_MAX_I2C_DATA_SIZE ? bytes_left :
+> > -					  ICE_MAX_I2C_DATA_SIZE;
+> > +		bytes_read = min_t(typeof(bytes_left), bytes_left, ICE_MAX_I2C_DATA_SIZE);
+> >
+> >  		err = ice_aq_read_i2c(hw, link_topo, ICE_GNSS_UBX_I2C_BUS_ADDR,
+> >  				      cpu_to_le16(ICE_GNSS_UBX_EMPTY_DATA),
+> > --
+> > 2.35.1
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
-Even when people get the semantics and memory ordering right (which is
-not always the case, but at least the f2fs code uses real lock
-primitives - just oddly - and should thus be ok), it invariably tends
-to be a sign of something else being very wrong.
-
-And I can easily believe that in this case it's due to a rmsem issue
-that was already fixed long long ago as per Waiman.
-
-Can people please test with the actual modern rwsem code and with the
-odd reader-unfair locks disabled?
-
-            Linus
+Thanks,
+Al

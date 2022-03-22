@@ -2,127 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7944E3D15
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A65494E3D1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbiCVLA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 07:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S232786AbiCVLCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 07:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbiCVLAu (ORCPT
+        with ESMTP id S233816AbiCVLCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 07:00:50 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC77C6AA60;
-        Tue, 22 Mar 2022 03:59:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SFbSvFsAQMNlG74JQ4hhrBuNj24t/AZvLVG5UH4k9zY=; b=iSkb8T57dmBnvaEcOXsCG5QBE+
-        1r/KMWko09MS3eEwdGl2h6836XauX5iDgMOI8nFzSFRiEkI2jLZvJND6qKxt0xSgd1TS1dWlC4btJ
-        4FXS+5VLqHpNFBAR6lPF0gDesnqan+jy6XrRfoi5ZTvVV6J+tKcWAHl+1/axADj7XcqzvSvEzzhWS
-        sV/PMzAwGK6czmM606IFBTjFyMwg8tBrMpPSuVsDqsJ/A5fxvVmWmYUhHAuB2V9jZbMsWEVtrV562
-        ASrCtYnq8+ewsFkrnewsypc4M/9HWBUtQVt1MAtsntwGxfUjHhetI1EyPR+h8l58e8zwql3fbSd/D
-        2laCqmCw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWcEE-003RYY-O3; Tue, 22 Mar 2022 10:59:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EDF9230021B;
-        Tue, 22 Mar 2022 11:59:04 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D1C822C6ADE43; Tue, 22 Mar 2022 11:59:04 +0100 (CET)
-Date:   Tue, 22 Mar 2022 11:59:04 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-crypto@vger.kernel.org, ebiggers@google.com,
-        herbert@gondor.apana.org.au, Jason@zx2c4.com,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <Yjmr+BLAoBusQ0hh@hirez.programming.kicks-ass.net>
-References: <20220321140327.777f9554@canb.auug.org.au>
- <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
- <Yjmo7KDlfR537J0W@hirez.programming.kicks-ass.net>
+        Tue, 22 Mar 2022 07:02:47 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B1B5A08E;
+        Tue, 22 Mar 2022 04:01:19 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id g24so22215206lja.7;
+        Tue, 22 Mar 2022 04:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=Gkv/Enp/IZmxcfofAOCjTBnszxX0aQMOLZxHcfoa6sI=;
+        b=cjd3KI2i21VdxnTAX1vYFQv6InII+4UIOpRkW0Ttkn25FiUgiZzihokuoLn2u36vWj
+         Q3ZcqOqeG+xvuevBbHaGOQjtlM2kZlqMXQpfmCDp5+BFaBIovgfjJvWYTBm+/abwkyMC
+         sUF1AnOXneFlisQihQI5QzuITbgQNp7MbxSJL4CGsdoiW5ou4V6EYBz7zzaswNhIebRI
+         McrLmmO5VoNznl/5PtHFYtSFS3d99FUJFBMnrbl6JezgidCYPNegRQWJuRtlu+OB+qbp
+         xuqAjvzNLJAB8ow04SzHI9MIY4q6hESh0kWlvf0iPg0fSciu0AY/dbli7YUz3IjbpgnT
+         irdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Gkv/Enp/IZmxcfofAOCjTBnszxX0aQMOLZxHcfoa6sI=;
+        b=cztiYhhxCp8w5D8WupBtdEg0kdEKAFwkIWh2Cl1XOVPMX1Haw+OfD9pf+w1VbW9B1B
+         Bd2U3P65E6DuRU6MuEcjGEYWukqpduuInnhCP3GWUHPHoP0ABEV6Pi+RmDmL9cDymIC5
+         68DDCSsclO4JGOh3s90xRSmOr7/bcgkxpJFCZ7XWZaE7+efAxTnB+7S3Um0VDPoRrDfa
+         IKndoFk2oRW9xtH5kCDmY7nxb0cYN9YibK2SEXQUT4gw461FcP13L9Zrr3qeB9y+2OF+
+         hAXaGy9E/vh4nGHbwuNowZ6Xx1Guq4L82EL7WFFYiMAc8/+Iz/1mBetJU+0+8Hl128Ij
+         Ndjw==
+X-Gm-Message-State: AOAM532kClFxeXPchAvCU11RSIpbRG49oGtakw28RAuOEb3Q2dY3xvfH
+        lWwulOcLsIGz2nfqbaRvW50hoFne9f2Qeg==
+X-Google-Smtp-Source: ABdhPJy17WGcM1t+58Ds/55kZB/UVfagy6H7Awrmygrcjn4ZsnGei+mnwfnnX1ZBL1MjhCeUXHA+MQ==
+X-Received: by 2002:a2e:8847:0:b0:249:7d2f:8a26 with SMTP id z7-20020a2e8847000000b002497d2f8a26mr10192677ljj.493.1647946877458;
+        Tue, 22 Mar 2022 04:01:17 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id 5-20020a2e1445000000b002491768821asm2392781lju.49.2022.03.22.04.01.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 04:01:16 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20220318131943.hc7z52beztqlzwfq@skbuf>
+References: <86lex9hsg0.fsf@gmail.com> <YjNDgnrYaYfviNTi@lunn.ch>
+ <20220317153625.2ld5zgtuhoxbcgvo@skbuf> <86ilscr2a4.fsf@gmail.com>
+ <20220317161808.psftauoz5iaecduy@skbuf> <8635jg5xe5.fsf@gmail.com>
+ <20220317172013.rhjvknre5w7mfmlo@skbuf> <86tubvk24r.fsf@gmail.com>
+ <20220318121400.sdc4guu5m4auwoej@skbuf> <86pmmjieyl.fsf@gmail.com>
+ <20220318131943.hc7z52beztqlzwfq@skbuf>
+Date:   Tue, 22 Mar 2022 12:01:13 +0100
+Message-ID: <86a6dixnd2.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yjmo7KDlfR537J0W@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 11:46:04AM +0100, Peter Zijlstra wrote:
-> On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
+On fre, mar 18, 2022 at 15:19, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Fri, Mar 18, 2022 at 02:10:26PM +0100, Hans Schultz wrote:
+>> In the offloaded case there is no difference between static and dynamic
+>> flags, which I see as a general issue. (The resulting ATU entry is static
+>> in either case.)
+>
+> It _is_ a problem. We had the same problem with the is_local bit.
+> Independently of this series, you can add the dynamic bit to struct
+> switchdev_notifier_fdb_info and make drivers reject it.
+>
+>> These FDB entries are removed when link goes down (soft or hard). The
+>> zero DPV entries that the new code introduces age out after 5 minutes,
+>> while the locked flagged FDB entries are removed by link down (thus the
+>> FDB and the ATU are not in sync in this case).
+>
+> Ok, so don't let them disappear from hardware, refresh them from the
+> driver, since user space and the bridge driver expect that they are
+> still there.
 
-> > > arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx() falls through to next function poly1305_blocks_x86_64()
-> > > arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_emit_avx() falls through to next function poly1305_emit_x86_64()
-> > > arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx2() falls through to next function poly1305_blocks_x86_64()
-> > 
-> > Yes, those are somewhere on the todo list, lemme bump them.
+I have now tested with two extra unmanaged switches (each connected to a
+seperate port on our managed switch, and when migrating from one port to
+another, there is member violations, but as the initial entry ages out,
+a new miss violation occurs and the new port adds the locked entry. In
+this case I only see one locked entry, either on the initial port or
+later on the port the host migrated to (via switch).
 
-The poly one is a little more involved since it's a perl script writing
-asm O_O
+If I refresh the ATU entries indefinitly, then this migration will for
+sure not work, and with the member violation suppressed, it will be
+silent about it.
 
-Looking at the generated asm tough, the these are conditional tail-calls
-and objtool *should* recognise them but doesn't...
+So I don't think it is a good idea to refresh the ATU entries
+indefinitely.
 
-This seems to cure.
-
----
- tools/objtool/check.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 6de5085e3e5a..b848e1ddd5d8 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1239,11 +1239,20 @@ static bool same_function(struct instruction *insn1, struct instruction *insn2)
- 	return insn1->func->pfunc == insn2->func->pfunc;
- }
- 
--static bool is_first_func_insn(struct instruction *insn)
-+static bool is_first_func_insn(struct objtool_file *file, struct instruction *insn)
- {
--	return insn->offset == insn->func->offset ||
--	       (insn->type == INSN_ENDBR &&
--		insn->offset == insn->func->offset + insn->len);
-+	if (insn->offset == insn->func->offset)
-+		return true;
-+
-+	if (ibt) {
-+		struct instruction *prev = prev_insn_same_sym(file, insn);
-+
-+		if (prev && prev->type == INSN_ENDBR &&
-+		    insn->offset == insn->func->offset + prev->len)
-+			return true;
-+	}
-+
-+	return false;
- }
- 
- /*
-@@ -1327,7 +1336,7 @@ static int add_jump_destinations(struct objtool_file *file)
- 				insn->jump_dest->func->pfunc = insn->func;
- 
- 			} else if (!same_function(insn, insn->jump_dest) &&
--				   is_first_func_insn(insn->jump_dest)) {
-+				   is_first_func_insn(file, insn->jump_dest)) {
- 				/* internal sibling call (without reloc) */
- 				add_call_dest(file, insn, insn->jump_dest->func, true);
- 			}
-
+Another issue I see, is that there is a deadlock or similar issue when
+receiving violations and running 'bridge fdb show' (it seemed that
+member violations also caused this, but not sure yet...), as the unit
+freezes, not to return...

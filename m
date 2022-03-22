@@ -2,224 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CF44E47D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040284E47DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234541AbiCVU4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S234556AbiCVU5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234460AbiCVU4s (ORCPT
+        with ESMTP id S234460AbiCVU4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:56:48 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34001640E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:55:20 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id h13-20020a056e021d8d00b002c7fb1ec601so6046714ila.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:55:20 -0700 (PDT)
+        Tue, 22 Mar 2022 16:56:54 -0400
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C455BC30;
+        Tue, 22 Mar 2022 13:55:25 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id i8-20020a4a6f48000000b00324ada4b9d9so53836oof.11;
+        Tue, 22 Mar 2022 13:55:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=FN+1NVtCnXt+yRhx/xLwYJoUJ8YsTtya7D1032pDwrQ=;
-        b=bkHbfpSSJViYleVFazranezt7pojWmBWyYVI9C+NG0ShZDECh22DgahXY9yEoYBxfW
-         SN/wbicBc2LTHHgLq/aWhaCfpa46wFfZ3Gn74eXrY/Ihjz7e2/94DnDJim2PZBz6Vjtt
-         eXi73Nn1wN+oMM08Qv0kVB9CYVUXLJy/zfxw7jSnRDCGr49h/50NxJlEVuCrrc1qvYkk
-         KzFq7VF35uzB2ijWjbZxujNkSlAENVA2k7bdX1qWewO7cuaFhNA/4t/MUY/+8jV1VdVn
-         likH2YIBaCprDsjvs/B7LEf7HZfVbyNRMIzxyMEtWkOBKXHKMPprLD5KB5SKAfg24XJy
-         X7uw==
-X-Gm-Message-State: AOAM5332w87YtJjKctMq+BxZtO/TLWQuduIRydsQN2yJShrtizuYzlbz
-        BOGSypUThV+pxKB4ATO/Ai3eSziviH50yBrZT4PZEWwvudSD
-X-Google-Smtp-Source: ABdhPJx8PK1hql2jp+jTJE+7bnuYzFldNluuYSsRZ4FyANQoGVrUK+f/qbZRf94esENKcZ+DPiD2/RDuVSf6nHYuQ9QWwtDIL3bH
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PdC3E4qaPnZZNFTNYFLxJGsk5AS6T7uPKXTafMYdgQI=;
+        b=i835bAqOtrIsCic4NadUh1xSFxg44BTjxESUNI3+YpXyuDY1XldyHV5YOfCTOaNGlz
+         Ypu/9FMVpOePZdiGVpevgq0QhlSMphXVnzVYYpcMTpmnCr+5LCBkjtULX9O4nfdvr8Yc
+         hXlEBLG41gYjeCfDBNmSL5VHIGcld8hfCjBprupLUdlQqUBcQeyBSH/uSfRU2snqTYlf
+         Mz8S5zN481SBSVrMauJWgv6SzDZeg/jCGicrY0SJkaVjkoudq82oohzL0KUh9VkASMdj
+         pffqZ42584fPdG3+wDoUtnZJHfn1T4YVraiQgJplAnN4uLTHHO7USZug5rJyNeRNB7UV
+         DxsQ==
+X-Gm-Message-State: AOAM532zkc6bY4TifpBEfHBhRcIuE5JgWbnNOWBMagpgoSL4wmWv89rt
+        2YEneqnzmrTZU+hhhTdlYA==
+X-Google-Smtp-Source: ABdhPJzmeSYmnMa0uGdA/0qg5EdBfNdQTOomNICVd5//jKRvuWiuCqzpe2kJle2BZrFv15ZEpA8R+A==
+X-Received: by 2002:a4a:e865:0:b0:318:4b66:ffe0 with SMTP id m5-20020a4ae865000000b003184b66ffe0mr9070591oom.80.1647982524760;
+        Tue, 22 Mar 2022 13:55:24 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u9-20020a4ab5c9000000b003182df292f7sm8372141ooo.18.2022.03.22.13.55.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 13:55:23 -0700 (PDT)
+Received: (nullmailer pid 2491290 invoked by uid 1000);
+        Tue, 22 Mar 2022 20:55:22 -0000
+Date:   Tue, 22 Mar 2022 15:55:22 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
+ controller
+Message-ID: <Yjo3umi9bJ0xb2Gl@robh.at.kernel.org>
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-6-15330273260@189.cn>
+ <YjkITWpbnCmhKaX+@robh.at.kernel.org>
+ <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a80a:0:b0:645:b477:bc23 with SMTP id
- c10-20020a5ea80a000000b00645b477bc23mr13017161ioa.191.1647982519560; Tue, 22
- Mar 2022 13:55:19 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 13:55:19 -0700
-In-Reply-To: <00000000000012e22c05dacabb11@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000acacb205dad4d42c@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in add_wait_queue
-From:   syzbot <syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Tue, Mar 22, 2022 at 10:33:45AM +0800, Sui Jingfeng wrote:
+> 
+> On 2022/3/22 07:20, Rob Herring wrote:
+> > On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
+> > > From: suijingfeng <suijingfeng@loongson.cn>
+> > > 
+> > Needs a commit message.
+> > 
+> > > Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+> > > Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> > Same person? Don't need both emails.
+> 
+> Yes,  suijingfeng@loongson.cn is my company's email. But it can not be used
+> to send patches to dri-devel,
+> 
+> when send patches with this email, the patch will not be shown on patch
+> works.
+> 
+> Emails  are either blocked or got  rejected  by loongson's mail server.  It
+> can only receive emails
+> 
+> from you and other people, but not dri-devel. so have to use my personal
+> email(15330273260@189.cn) to send patches.
+> 
+> > > ---
+> > >   .../loongson/loongson,display-controller.yaml | 230 ++++++++++++++++++
+> > >   1 file changed, 230 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> > > new file mode 100644
+> > > index 000000000000..7be63346289e
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> > > @@ -0,0 +1,230 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
+> > > +
+> > > +maintainers:
+> > > +  - Sui Jingfeng <suijingfeng@loongson.cn>
+> > > +
+> > > +description: |+
+> > > +
+> > > +  Loongson display controllers are simple which require scanout buffers
+> > > +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
+> > > +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
+> > > +  with a dedicated video RAM which is 64MB or more, precise size can be
+> > > +  read from the PCI BAR 2 of the GPU device(0x0014:0x7A15) in the bridge
+> > > +  chip.
+> > > +
+> > > +  LSDC has two display pipes, each way has a DVO interface which provide
+> > > +  RGB888 signals, vertical & horizontal synchronisations, data enable and
+> > > +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
+> > > +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
+> > > +
+> > > +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
+> > > +  located at the DC register space. They are used to emulate two way i2c,
+> > > +  One for DVO0, another for DVO1.
+> > > +
+> > > +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
+> > > +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
+> > > +
+> > > +  LSDC's display pipeline have several components as below description,
+> > > +
+> > > +  The display controller in LS7A1000:
+> > > +     ___________________                                     _________
+> > > +    |            -------|                                   |         |
+> > > +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+> > > +    |  _   _     -------|        ^             ^            |_________|
+> > > +    | | | | |    -------|        |             |
+> > > +    | |_| |_|    | i2c0 <--------+-------------+
+> > > +    |            -------|
+> > > +    |   DC IN LS7A1000  |
+> > > +    |  _   _     -------|
+> > > +    | | | | |    | i2c1 <--------+-------------+
+> > > +    | |_| |_|    -------|        |             |             _________
+> > > +    |            -------|        |             |            |         |
+> > > +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+> > > +    |            -------|                                   |_________|
+> > > +    |___________________|
+> > > +
+> > > +  Simple usage of LS7A1000 with LS3A4000 CPU:
+> > > +
+> > > +    +------+            +-----------------------------------+
+> > > +    | DDR4 |            |  +-------------------+            |
+> > > +    +------+            |  | PCIe Root complex |   LS7A1000 |
+> > > +       || MC0           |  +--++---------++----+            |
+> > > +  +----------+  HT 3.0  |     ||         ||                 |
+> > > +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+> > > +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+> > > +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+> > > +       || MC1           +---------------|--|----------------+
+> > > +    +------+                            |  |
+> > > +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+> > > +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+> > > +                      +-------+                      +------+
+> > > +
+> > > +  The display controller in LS2K1000/LS2K0500:
+> > > +     ___________________                                     _________
+> > > +    |            -------|                                   |         |
+> > > +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+> > > +    |  _   _     -------|        ^              ^           |_________|
+> > > +    | | | | |           |        |              |
+> > > +    | |_| |_|           |     +------+          |
+> > > +    |                   <---->| i2c0 |<---------+
+> > > +    |   DC IN LS2K1000  |     +------+
+> > > +    |  _   _            |     +------+
+> > > +    | | | | |           <---->| i2c1 |----------+
+> > > +    | |_| |_|           |     +------+          |            _________
+> > > +    |            -------|        |              |           |         |
+> > > +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+> > > +    |            -------|                                   |_________|
+> > > +    |___________________|
+> > > +
+> > > +properties:
+> > > +  $nodename:
+> > > +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
+> > > +
+> > > +  compatible:
+> > > +    oneOf:
+> > > +      - items:
+> > > +          - enum:
+> > > +              - loongson,ls7a1000-dc
+> > > +              - loongson,ls2k1000-dc
+> > > +              - loongson,ls2k0500-dc
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  '#address-cells':
+> > > +    const: 1
+> > > +
+> > > +  '#size-cells':
+> > > +    const: 0
+> > > +
+> > > +  i2c-gpio@0:
+> > > +    description: |
+> > > +      Built-in GPIO emulate i2c exported for external display bridge
+> > If you have i2c-gpio, that belongs at the DT top-level, not here.
+> > 
+> > > +      configuration, onitor detection and edid read back etc, for ls7a1000
+> > > +      only. Its compatible must be lsdc,i2c-gpio-0. The reg property can be
+> > No, there's a defined i2c-gpio compatible already.
+> 
+> This is different from the i2c-gpio already defined under drivers/i2c/busses/i2c-gpio.c,
+> By design, my i2c-gpio is vendor specific properties, lsdc device driver create the i2c
+> adapter at runtime. These are 4 dedicated GPIOs whose control register is located at the
+> LSDC register space, not general purpose GPIOs with separate control register resource.
+> So i think it is the child node of display-controller@6,1, it belongs to LSDC.
+> It seems that put it at the DT top-level break the hierarchy and relationship.
 
-HEAD commit:    b47d5a4f6b8d Merge tag 'audit-pr-20220321' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=106365bd700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=63af44f0631a5c3a
-dashboard link: https://syzkaller.appspot.com/bug?extid=950cee6d91e62329be2c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14506ddb700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=139b2093700000
+Okay, I see. Then just 'i2c' for the node names. You need a reference to 
+i2c-controller.yaml for these nodes too.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com
+The compatible should not have an index in it.
 
-==================================================================
-BUG: KASAN: use-after-free in __add_wait_queue include/linux/wait.h:177 [inline]
-BUG: KASAN: use-after-free in add_wait_queue+0x1c0/0x260 kernel/sched/wait.c:24
-Read of size 4 at addr ffff88807ec70f18 by task syz-executor133/3649
 
-CPU: 1 PID: 3649 Comm: syz-executor133 Tainted: G        W         5.17.0-syzkaller-01442-gb47d5a4f6b8d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- __add_wait_queue include/linux/wait.h:177 [inline]
- add_wait_queue+0x1c0/0x260 kernel/sched/wait.c:24
- __io_queue_proc+0x18c/0x6f0 fs/io_uring.c:6131
- poll_wait include/linux/poll.h:49 [inline]
- n_tty_poll+0x76/0x8a0 drivers/tty/n_tty.c:2322
- tty_poll+0x139/0x1b0 drivers/tty/tty_io.c:2212
- vfs_poll include/linux/poll.h:88 [inline]
- __io_arm_poll_handler+0x397/0xc00 fs/io_uring.c:6165
- io_arm_poll_handler+0x42c/0x940 fs/io_uring.c:6257
- io_queue_sqe_arm_apoll+0x6d/0x430 fs/io_uring.c:7499
- __io_queue_sqe fs/io_uring.c:7541 [inline]
- io_queue_sqe fs/io_uring.c:7568 [inline]
- io_submit_sqe fs/io_uring.c:7776 [inline]
- io_submit_sqes+0x7dda/0x9310 fs/io_uring.c:7882
- __do_sys_io_uring_enter+0x9f1/0x1520 fs/io_uring.c:10924
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f9692ff4fd9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffee24ecca8 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
-RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f9692ff4fd9
-RDX: 0000000000000000 RSI: 0000000000001261 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000009668
-R13: 00007ffee24ecccc R14: 00007ffee24ecce0 R15: 00007ffee24eccd0
- </TASK>
+> 
+> > > +      used to specify a I2c adapter bus number, if you don't specify one
+> > > +      i2c driver core will dynamically assign a bus number. Please specify
+> > Bus numbers are a linux detail not relevant to DT binding.
+> > 
+> > > +      it only when its bus number matters. Bus number greater than 6 is safe
+> > > +      because ls7a1000 bridge have 6 hardware I2C controller integrated.
+> > > +
+> > > +  i2c-gpio@1:
+> > > +    description: |
+> > > +      Built-in GPIO emulate i2c exported for external display bridge
+> > > +      configuration, onitor detection and edid read back etc, for ls7a1000
+> > > +      only. Its compatible must be lsdc,i2c-gpio-1.
+> > > +
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
+> > > +
+> > > +      port@1:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
+> > > +
+> > > +    required:
+> > > +      - port@0
+> > > +      - port@1
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - interrupts
+> > > +  - ports
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > +    bus {
+> > > +
+> > > +        #address-cells = <3>;
+> > > +        #size-cells = <2>;
+> > > +        #interrupt-cells = <2>;
+> > > +
+> > > +        display-controller@6,1 {
+> > > +            compatible = "loongson,ls7a1000-dc";
+> > > +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+> > > +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+> > > +
+> > > +            #address-cells = <1>;
+> > > +            #size-cells = <0>;
+> > > +
+> > > +            i2c-gpio@0 {
+> > > +                compatible = "lsdc,i2c-gpio-0";
+> > > +                reg = <6>;
 
-Allocated by task 3631:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
- kmalloc include/linux/slab.h:581 [inline]
- io_arm_poll_handler+0x39d/0x940 fs/io_uring.c:6248
- io_queue_sqe_arm_apoll+0x6d/0x430 fs/io_uring.c:7499
- __io_queue_sqe fs/io_uring.c:7541 [inline]
- io_queue_sqe fs/io_uring.c:7568 [inline]
- io_submit_sqe fs/io_uring.c:7776 [inline]
- io_submit_sqes+0x7dda/0x9310 fs/io_uring.c:7882
- __do_sys_io_uring_enter+0x9f1/0x1520 fs/io_uring.c:10924
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+'reg' needs to be documented with some description of what 6 and 7 
+represent. If they are the control register offset, then make the 
+address translatable (use 'ranges' and define the size).
 
-Freed by task 3615:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x126/0x160 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:215 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
- slab_free mm/slub.c:3509 [inline]
- kfree+0xd0/0x390 mm/slub.c:4562
- io_flush_apoll_cache fs/io_uring.c:10038 [inline]
- io_ring_ctx_free fs/io_uring.c:10064 [inline]
- io_ring_exit_work+0x7f7/0x1053 fs/io_uring.c:10244
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> > > +                sda = <0>;
+> > > +                scl = <1>;
 
-The buggy address belongs to the object at ffff88807ec70f00
- which belongs to the cache kmalloc-96 of size 96
-The buggy address is located 24 bytes inside of
- 96-byte region [ffff88807ec70f00, ffff88807ec70f60)
-The buggy address belongs to the page:
-page:ffffea0001fb1c00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7ec70
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea00051d7980 dead000000000006 ffff888010c41780
-raw: 0000000000000000 0000000000200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY), pid 2955, ts 13260642360, free_ts 13233642928
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x27f/0x3c0 mm/slub.c:1944
- new_slab mm/slub.c:2004 [inline]
- ___slab_alloc+0xbe1/0x12b0 mm/slub.c:3018
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
- slab_alloc_node mm/slub.c:3196 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- __kmalloc+0x372/0x450 mm/slub.c:4420
- kmalloc include/linux/slab.h:586 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- tomoyo_commit_ok+0x1e/0x90 security/tomoyo/memory.c:76
- tomoyo_update_domain+0x5de/0x850 security/tomoyo/domain.c:139
- tomoyo_update_path_number_acl security/tomoyo/file.c:691 [inline]
- tomoyo_write_file+0x68b/0x7f0 security/tomoyo/file.c:1034
- tomoyo_write_domain2+0x116/0x1d0 security/tomoyo/common.c:1152
- tomoyo_add_entry security/tomoyo/common.c:2042 [inline]
- tomoyo_supervisor+0xbc7/0xf00 security/tomoyo/common.c:2103
- tomoyo_audit_path_number_log security/tomoyo/file.c:235 [inline]
- tomoyo_path_number_perm+0x419/0x590 security/tomoyo/file.c:734
- security_file_ioctl+0x50/0xb0 security/security.c:1557
- __do_sys_ioctl fs/ioctl.c:868 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0xb3/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page_list+0x1a9/0xfa0 mm/page_alloc.c:3441
- release_pages+0x317/0x1220 mm/swap.c:980
- tlb_batch_pages_flush mm/mmu_gather.c:50 [inline]
- tlb_flush_mmu_free mm/mmu_gather.c:243 [inline]
- tlb_flush_mmu mm/mmu_gather.c:250 [inline]
- tlb_finish_mmu+0x165/0x8c0 mm/mmu_gather.c:341
- exit_mmap+0x21a/0x6a0 mm/mmap.c:3180
- __mmput+0x122/0x4b0 kernel/fork.c:1180
- mmput+0x56/0x60 kernel/fork.c:1202
- exit_mm kernel/exit.c:507 [inline]
- do_exit+0xa12/0x29d0 kernel/exit.c:793
- do_group_exit+0xd2/0x2f0 kernel/exit.c:936
- __do_sys_exit_group kernel/exit.c:947 [inline]
- __se_sys_exit_group kernel/exit.c:945 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:945
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+These need a vendor prefix.
 
-Memory state around the buggy address:
- ffff88807ec70e00: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff88807ec70e80: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
->ffff88807ec70f00: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-                            ^
- ffff88807ec70f80: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
- ffff88807ec71000: fa fb fb fb fc fc fc fc fa fb fb fb fc fc fc fc
-==================================================================
-
+> > > +            };
+> > > +
+> > > +            i2c-gpio@1 {
+> > > +                compatible = "lsdc,i2c-gpio-1";
+> > > +                reg = <7>;
+> > > +                sda = <2>;
+> > > +                scl = <3>;
+> > > +            };
+> > > +
+> > > +            ports {
+> > > +                #address-cells = <1>;
+> > > +                #size-cells = <0>;
+> > > +                port@0 {
+> > > +                    reg = <0>;
+> > > +                    endpoint {
+> > > +                            remote-endpoint = <&vga_encoder_in>;
+> > > +                    };
+> > > +                };
+> > > +                port@1 {
+> > > +                    reg = <1>;
+> > > +                    endpoint {
+> > > +                            remote-endpoint = <&dvi_encoder_in>;
+> > > +                    };
+> > > +                };
+> > > +            };
+> > > +        };
+> > > +    };
+> > > +
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > +    bus {
+> > > +
+> > > +        #address-cells = <3>;
+> > > +        #size-cells = <2>;
+> > > +        #interrupt-cells = <2>;
+> > > +
+> > > +        display-controller@6,0 {
+> > > +            compatible = "loongson,ls2k1000-dc";
+> > > +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+> > > +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+> > > +
+> > > +            ports {
+> > > +                #address-cells = <1>;
+> > > +                #size-cells = <0>;
+> > > +                port@0 {
+> > > +                    reg = <0>;
+> > > +                    endpoint {
+> > > +                            remote-endpoint = <&panel_in>;
+> > > +                    };
+> > > +                };
+> > > +                port@1 {
+> > > +                    reg = <1>;
+> > > +                    endpoint {
+> > > +                            remote-endpoint = <&hdmi_encoder_in>;
+> > > +                    };
+> > > +                };
+> > > +            };
+> > > +        };
+> > > +    };
+> > > +...
+> > > -- 
+> > > 2.25.1
+> > > 
+> > > 

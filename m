@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE08E4E44C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7C54E44C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239429AbiCVRLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S239417AbiCVRLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239420AbiCVRLg (ORCPT
+        with ESMTP id S230246AbiCVRLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:11:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745997890C;
-        Tue, 22 Mar 2022 10:10:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1C3F614BA;
-        Tue, 22 Mar 2022 17:10:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B984C340F0;
-        Tue, 22 Mar 2022 17:10:03 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Umso1iRg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1647969001;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gPX0nJxefwWFFSNK75somPtzsLvzvt9oMVqDAB0yArg=;
-        b=Umso1iRg6iLt1J9W2agcmRvJm8/SwpH5XzKQ2jWhqRWp2rJMQFPahsU7BNThUuO3/kTZrU
-        BzyfqemUzgGr2R9+Jlb2Zw0o2gCLNOns0Ma4jGaIgkzGU78vKHYj/MrBuIFFD4YHluuKbF
-        vaCL5KqJKrn+BR1+D5ezEAVXc1tGj+k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f4b3020f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 22 Mar 2022 17:10:01 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 11:09:58 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-Message-ID: <YjoC5kQMqyC/3L5Y@zx2c4.com>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <20220322155820.GA1745955@roeck-us.net>
+        Tue, 22 Mar 2022 13:11:32 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE7478059;
+        Tue, 22 Mar 2022 10:10:04 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id c62so2977166edf.5;
+        Tue, 22 Mar 2022 10:10:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xgLpXYKrGRM0LPMxrUU/nWjLzhk/XDVmKUWyNC9e+2s=;
+        b=QGNmG+YDXM8tS3npRaoXcBab0tK96+y7yJIWSUGcgacsmx4+IdshoxorgxR5E4k9rK
+         WzKM+OTxUURACO2iy2YC+Cg7IZbapp/G5cCh/zeyqzV4iqtf8nHxwLwXqLKAto8xkyX5
+         TR9OCsEMaGVS0THoKuHUuFosxzsXvifvH7gMocWrvUN4Qujs0NEs/A38eDTJJHFnUXQm
+         7gIiITvOvEhDLNHAXNH9uBFaXfG2R+nppdfxB4wEbsy4VIW+40EMfxAjiz43Y+0IqiBt
+         YYQkeafo+xDdoCvEs872QDrVxg3dfhpMS72JwMQ91SqO+bguX+HIY6tpFRSC1KTfkniL
+         6X/A==
+X-Gm-Message-State: AOAM5324+SQvMJMO4rGV09s5ec4aWRi/ZxAjRTGFKNI8Jauwxm8bPv/z
+        Vg4y0WsR3PKUxgDLFi5wWBs=
+X-Google-Smtp-Source: ABdhPJxVSiGCUR2u9o3p68s+gMYV2ZChhCYnEeRkVV3BdjnI7U4sMC2OGOYza3FR+oduALIcCEu7VA==
+X-Received: by 2002:a50:cc89:0:b0:400:8f82:99e8 with SMTP id q9-20020a50cc89000000b004008f8299e8mr29768149edi.7.1647969003077;
+        Tue, 22 Mar 2022 10:10:03 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id o2-20020a50d802000000b00410d7f0c52csm10124565edj.8.2022.03.22.10.10.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 10:10:02 -0700 (PDT)
+Message-ID: <ad877924-68bb-f029-258a-0cf9094265eb@kernel.org>
+Date:   Tue, 22 Mar 2022 18:10:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220322155820.GA1745955@roeck-us.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 4/4] usb: host: add xhci-exynos driver
+Content-Language: en-US
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220321090205epcas2p15ac16f281554b663062e0e31666defab@epcas2p1.samsung.com>
+ <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Guenter,
+On 21/03/2022 09:59, Daehwan Jung wrote:
+> This driver supports USB Audio offload with Co-processor.
 
-On Tue, Mar 22, 2022 at 08:58:20AM -0700, Guenter Roeck wrote:
-> On Thu, Feb 17, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
-> > This topic has come up countless times, and usually doesn't go anywhere.
-> > This time I thought I'd bring it up with a slightly narrower focus,
-> > updated for some developments over the last three years: we finally can
-> > make /dev/urandom always secure, in light of the fact that our RNG is
-> > now always seeded.
-> > 
+One do you need one more XHCI driver? How does it differ from existing
+and why existing cannot be extended?
+
+> It only cares DCBAA, Device Context, Transfer Ring, Event Ring, and ERST.
+> They are allocated on specific address with xhci hooks.
+> Co-processor could use them directly without xhci driver after then.
 > 
-> [ ... ]
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> ---
+>  drivers/usb/host/Kconfig       |   9 +
+>  drivers/usb/host/Makefile      |   1 +
+>  drivers/usb/host/xhci-exynos.c | 982 +++++++++++++++++++++++++++++++++
+>  drivers/usb/host/xhci-exynos.h |  63 +++
+>  4 files changed, 1055 insertions(+)
+>  create mode 100644 drivers/usb/host/xhci-exynos.c
+>  create mode 100644 drivers/usb/host/xhci-exynos.h
 > 
-> This patch (or a later version of it) made it into mainline and causes a
-> large number of qemu boot test failures for various architectures (arm,
-> m68k, microblaze, sparc32, xtensa are the ones I observed). Common
-> denominator is that boot hangs at "Saving random seed:". A sample bisect
-> log is attached. Reverting this patch fixes the problem.
 
-As Linus said, it was worth a try, but I guess it just didn't work. For
-my own curiosity, though, do you have a link to those QEMU VMs you could
-share? I'd sort of like to poke around, and if we do ever reattempt this
-sometime down the road, it seems like understanding everything about why
-the previous time failed might be a good idea.
+Please address all the questions I raised in your v1, do not ignore them.
 
-Jason
+Please use get_maintainers.pl to CC all necessary people and lists. It
+makes me very sad that you do not follow the kernel development process
+(as mentioned in submitting-patches.rst and other documents).
+
+Best regards,
+Krzysztof

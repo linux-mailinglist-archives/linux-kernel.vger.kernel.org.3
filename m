@@ -2,146 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F214E35AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09254E35B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234359AbiCVAoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
+        id S234371AbiCVAql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 20:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234334AbiCVAoI (ORCPT
+        with ESMTP id S234341AbiCVAqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 20:44:08 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8CD19C07
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:42:40 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 7D3792A0E2F;
-        Tue, 22 Mar 2022 00:42:39 +0000 (UTC)
-Received: from pdx1-sub0-mail-a293.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 500AF2A0E60;
-        Tue, 22 Mar 2022 00:42:36 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1647909758; a=rsa-sha256;
-        cv=none;
-        b=hRnd5bcfFtJTKXhE8KQ/tD1oLxWQRI/S+Dno3Q6YPrR/3MRZbclNq3VSRzwZvbStfreQ0N
-        aSRUAdzJmqAuUHG4WQvF4obMFq6ArO/OPupozxAJMaQiXCFg+lamllhtFexm5jmj7CHZYM
-        pnyhETHJ9p1gPitRK6ar3Fe7Frt0ulhs95uU2Fc7zCVySuGaIoI0KY8FoJMCllBPDEY7BZ
-        ZRteff+modLrIhrqek+uW6WpgN2zLamQ+8sqMB+TGmqV25LBMyj/3oY31QKapwEfe20l3O
-        4YIXCkBcst0ulXCj84F0EamuN9NIihKUaJjEuOJO2J0T1ukTZFW4ZdV7T3F6GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1647909758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=vPZbW0GWJzQANezJo4DlrrqJ9SbpG6UBsaLg8t4cDOQ=;
-        b=iq+4iOMGB61ZGSQ0ERIUAOoliul7JkaVUEXGutuxXapecPAw3nRbY9dycO9tLAyOZoq6m+
-        HfEaVlGnBaDYDHBnxNRlplb6iMnUUygvhT8cHAAWxqAhyu3I6ZTiykT8r0eI8uD5sYkfp4
-        1qTsJVQwdgmi1b0O8IzcsK9zGjePIQvpkjIfOowNeY3OI1RNmSvcuy+VsjxceRJ4v8SS8/
-        ++JtwQJ/NyR6r6xKZfjHZbdNub8vpXDxQndAD41DuQGfExeRaWrShjDVORRCrhPC2wtF9i
-        90wv9ccIMJgcy4t501ut22Nc549ePqVr3eaSMe3CnkCVuzDe3T1ckvudEm0mFw==
-ARC-Authentication-Results: i=1;
-        rspamd-74bfb75fc6-c8rj8;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from pdx1-sub0-mail-a293.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.112.55.223 (trex/6.5.3);
-        Tue, 22 Mar 2022 00:42:39 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Bottle-Industry: 2f6040ef6efb8d8e_1647909759179_1679096437
-X-MC-Loop-Signature: 1647909759178:1934302358
-X-MC-Ingress-Time: 1647909759178
-Received: from offworld (unknown [104.36.25.8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a293.dreamhost.com (Postfix) with ESMTPSA id 4KMt4B5Jk4z1D;
-        Mon, 21 Mar 2022 17:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1647909755;
-        bh=vPZbW0GWJzQANezJo4DlrrqJ9SbpG6UBsaLg8t4cDOQ=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=Qu34K8Fq/uFkX/LjMn1xQ/LwAdxrqsYN2DhwGt3efhaxPHnCGghxLgpVzXK0lpDLd
-         h49eKoAXq9xQQ4bRff51lKUq8bodn/MxbZtBY6ADDCb5tRO0rBIyUEMrKODkvKGIr/
-         i1ZwL9Bnj2HNSqHRGanlWriM83geflbxgtftEC26JONLJjKhXYAAYfA9zBhd9Z0MoM
-         0g4V4ONsRlvjTEop0HgIKoUtXfWrVvjeFVO7nSuPE/hnUyJ83Z0jPNx6SXGQVAVz2P
-         mZiVc8s61wsadXGuylP63xofHseElfG8+/910etxic/DcEs1M0Tx2x8Zq1XQkwN78z
-         39x9ojleNc3gw==
-Date:   Mon, 21 Mar 2022 17:42:31 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andre Almeida <andrealmeid@collabora.com>,
-        David Rientjes <rientjes@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joel Savitz <jsavitz@redhat.com>
-Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit
- and the oom_reaper
-Message-ID: <20220322004231.rwmnbjpq4ms6fnbi@offworld>
-Mail-Followup-To: Michal Hocko <mhocko@suse.com>,
-        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andre Almeida <andrealmeid@collabora.com>,
-        David Rientjes <rientjes@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joel Savitz <jsavitz@redhat.com>
-References: <20220318033621.626006-1-npache@redhat.com>
- <Yjg9ncgep58gFLiN@dhcp22.suse.cz>
+        Mon, 21 Mar 2022 20:46:37 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CB6DE8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:45:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647909911; x=1679445911;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TSpDJqCgCqJQmfCcYan0G8S5Qg4VBq1hKKqgc00HwE4=;
+  b=XFRLL3Z2p1krXhIPAwn+UCAPUCCEo7hUjZAgQpWO9XEZFSbJe7dKo31U
+   I+oF4Xttns5meiBVYOZvH4w+z/tqc0q0HTQMs5b9qXXPRPcR3/nOWc0rv
+   SZXVVaiNYa35sDJIFumbSAGkL+pIQ8Fk11qeY0Y35KrY346DP3NQFbG2N
+   tNoSvTXLnJstqWVL7CdWwRws6KWA95XRiltklCnAU+xv+MSwopxxYRfl6
+   45jflQHcLje4CJjtTShrc0+eMbZgaVp4P1ws86/B2TY6FcfM86wFYTZDS
+   /N0PA1USQ5A4x1TIVHTBsDdazwo1f76bO3Pldu867cBbadCkJ+FKcwCic
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257876818"
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="257876818"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:45:11 -0700
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="560118888"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.208.85]) ([10.254.208.85])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:45:07 -0700
+Message-ID: <a0be971d-2cbc-8d62-4a05-9f8542fefe94@linux.intel.com>
+Date:   Tue, 22 Mar 2022 08:45:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Yjg9ncgep58gFLiN@dhcp22.suse.cz>
-User-Agent: NeoMutt/20201120
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 01/11] iommu: Add pasid_bits field in struct dev_iommu
+Content-Language: en-US
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
+ <20220320064030.2936936-2-baolu.lu@linux.intel.com> <Yjhf4dlthDkHBICr@myrica>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <Yjhf4dlthDkHBICr@myrica>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022, Michal Hocko wrote:
+On 2022/3/21 19:22, Jean-Philippe Brucker wrote:
+> Hi Baolu,
+> 
+> On Sun, Mar 20, 2022 at 02:40:20PM +0800, Lu Baolu wrote:
+>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> index 627a3ed5ee8f..8e262210b5ad 100644
+>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> @@ -2812,6 +2812,7 @@ static int arm_smmu_dev_enable_feature(struct device *dev,
+>>   		master->iopf_enabled = true;
+>>   		return 0;
+>>   	case IOMMU_DEV_FEAT_SVA:
+>> +		dev->iommu->pasid_bits = master->ssid_bits;
+> This would be better in arm_smmu_probe_device()
 
->The more I am thinking about this the more I am getting convinced that
->we should rather approach this differently and skip over vmas which can
->be holding the list. Have you considered this option?
+Sure.
 
-While I tend to agree with this over a hacky trylock approach, I cannot
-help but think that v3 was the right thing to do, at least conceptually.
-Robust futex users here care enough about dealing with crashes while holding
-a lock that they sacrifice the performance of regular futexes. So the OOM
-killer should not cause this very thing. I went through previous threads
-but other than the user base (which I don't think would be very large
-just because of the performance implications), was there any other reason
-to no just set MMF_OOM_SKIP upon a robust list?
-
-Thanks,
-Davidlohr
+Best regards,
+baolu

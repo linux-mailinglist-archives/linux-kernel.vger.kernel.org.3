@@ -2,470 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F4C4E4063
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 583684E4046
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236978AbiCVOPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        id S236326AbiCVOOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiCVOPC (ORCPT
+        with ESMTP id S236272AbiCVOOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:15:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4407E5B2;
-        Tue, 22 Mar 2022 07:13:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15910B81D0C;
-        Tue, 22 Mar 2022 14:13:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D9BC340F4;
-        Tue, 22 Mar 2022 14:13:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647958408;
-        bh=t843GNSlBQ+OLnAhDLhjaKymftIPqAwDBvnnD6Yt9Ws=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=utZl0Tnt7b0g0CW91nrRnDMnpmWme7i5B5DXydfnF38ljBA5AXtvHu+hfdXf0Jn9L
-         6Cg5/QxCkpgKBm/J8Sul/UKcql+U8R0aBEfn4FuaXiFZWDKBifFeUKe2BP10oBulcx
-         1Ln6RrqzlsDQtfL+i2bLcc20IkWoNMTJnKvMPvbrLQseDCgUXD1Bhw6gRHM700TkDF
-         kzYr6iIVnOAeNoDFOkURIYPBfHlf2q/QTZy4P7A8yvFt/yyQt74Hz56Z1sCX0IxTqC
-         gnyrMmgiNvU/W44GNLvwLQO/xG+dpSaCsirHHJcZSyLPD3c8vvVFBSkXkuLANns3L0
-         u6Iw+CntzitHQ==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     idryomov@gmail.com, xiubli@redhat.com
-Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lhenriques@suse.de
-Subject: [RFC PATCH v11 10/51] ceph: implement -o test_dummy_encryption mount option
-Date:   Tue, 22 Mar 2022 10:12:35 -0400
-Message-Id: <20220322141316.41325-11-jlayton@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220322141316.41325-1-jlayton@kernel.org>
-References: <20220322141316.41325-1-jlayton@kernel.org>
+        Tue, 22 Mar 2022 10:14:18 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017475E756
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:12:50 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id a17so20774152edm.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=b/g6tTbOh1J+b6I0Bj7+4xBjDC+KuKXoWPrgs4jGFZY=;
+        b=ENIYC5DWMSnFJrGhldn/1hcXzlFWlZYd3l9SrKHw2ghi9QSR6YV852tu1MwT2lUAUx
+         agXIkF+1EluMwp05knqCwLCGmFWnjuAU+bl8CSpeia3D87G0OoY7wgYabz0csj/bhH2J
+         wyDVHvOdrml/C/K3mnCgn30lUQ0KkTycjOkkcmDpXsq00pf1lscFwl3xzntJlMFRE+WL
+         S6FjlrSpoAHUPcuGqM39U7qszKYODR0emH3nTnt6vxM2B+uOWu8ctOyjNDkDnGfG8FYZ
+         OBCw8VB2cCnK66cdIG1WP8nNR7K3wr+3JrZFV7KOeO71ID6VAeSzNX06jKzauQkxfWMz
+         SjTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=b/g6tTbOh1J+b6I0Bj7+4xBjDC+KuKXoWPrgs4jGFZY=;
+        b=PUVhb8yyn37SAQPVL0T5UwH7NsN4jDk+K+HaI3JAKRLCm9uW689xtwLUY0Pf0WRusQ
+         0GkMF6wtWZoKcKCukB7m0WYxa0Mj/zRQ/JDmFOcl+DCzginICQUn/+pT0fmdWAFjX7Ja
+         /knij1wNszzhMKVvNu9YvSidLJRwygC9FlJalj+XnOnZ0ar5Pzibs39Rn3jQW8EAVd2w
+         rP9AjXp9yD6JBcLBXDMmIPl/wwyFIA8sDljGabFa/PDAgs/vHX/lILaLdQNz+4FHgmGv
+         6861BMBh5Bji6IHjYhTY1BmZ2JL6Qum6hGekaz8eovClwJzuq9iXvUzZq16HPang28Oj
+         B8mw==
+X-Gm-Message-State: AOAM531Z0GjH1JkohPU3c578iKI639tMKCDejiwAFqxK9vD+RnWJF8ol
+        HDBpYVi0sH2VK7zs3ba0dfEvYPouqjLcIhriaxEz6PFEJOqhvD0bNuU=
+X-Google-Smtp-Source: ABdhPJzvS7ml8Ex06Obh1flW08eSBskW1dEeogCf+eP3E1GYXvNih72DTt8s54sO7BBajvbGg3cGybqNaLxS6LCd0nU=
+X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
+ n13-20020a5099cd000000b00418d6c22405mr28398636edb.342.1647958365769; Tue, 22
+ Mar 2022 07:12:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Tue, 22 Mar 2022 14:12:36 +0000
+Message-ID: <CAHpNFcOb8vwZPySqV_htA7+mZCaNX3h=DQN_tu-MZbG-B38SxQ@mail.gmail.com>
+Subject: Kernel C/TRNG System TIMECrystal Quartz Variable T, Variable Fraction
+ & Security Leaf Systems :RS NT Interrupt counter Entropy : A counter theory : RS
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the test_dummy_encryption mount option. This allows us
-to test the encrypted codepaths in ceph without having to manually set
-keys, etc.
+Kernel C/TRNG System TIMECrystal Quartz Variable T, Variable Fraction
+& Security Leaf Systems :RS NT Interrupt counter Entropy : A counter
+theory : RS
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/ceph/crypto.c | 53 ++++++++++++++++++++++++++++++++
- fs/ceph/crypto.h | 26 ++++++++++++++++
- fs/ceph/inode.c  | 10 ++++--
- fs/ceph/super.c  | 80 ++++++++++++++++++++++++++++++++++++++++++++++--
- fs/ceph/super.h  | 12 +++++++-
- fs/ceph/xattr.c  |  3 ++
- 6 files changed, 178 insertions(+), 6 deletions(-)
+NT Interrupt counter Entropy : A counter theory : RS
 
-diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
-index a513ff373b13..017f31eacb74 100644
---- a/fs/ceph/crypto.c
-+++ b/fs/ceph/crypto.c
-@@ -4,6 +4,7 @@
- #include <linux/fscrypt.h>
- 
- #include "super.h"
-+#include "mds_client.h"
- #include "crypto.h"
- 
- static int ceph_crypt_get_context(struct inode *inode, void *ctx, size_t len)
-@@ -64,9 +65,20 @@ static bool ceph_crypt_empty_dir(struct inode *inode)
- 	return ci->i_rsubdirs + ci->i_rfiles == 1;
- }
- 
-+void ceph_fscrypt_free_dummy_policy(struct ceph_fs_client *fsc)
-+{
-+	fscrypt_free_dummy_policy(&fsc->dummy_enc_policy);
-+}
-+
-+static const union fscrypt_policy *ceph_get_dummy_policy(struct super_block *sb)
-+{
-+	return ceph_sb_to_client(sb)->dummy_enc_policy.policy;
-+}
-+
- static struct fscrypt_operations ceph_fscrypt_ops = {
- 	.get_context		= ceph_crypt_get_context,
- 	.set_context		= ceph_crypt_set_context,
-+	.get_dummy_policy	= ceph_get_dummy_policy,
- 	.empty_dir		= ceph_crypt_empty_dir,
- };
- 
-@@ -74,3 +86,44 @@ void ceph_fscrypt_set_ops(struct super_block *sb)
- {
- 	fscrypt_set_ops(sb, &ceph_fscrypt_ops);
- }
-+
-+int ceph_fscrypt_prepare_context(struct inode *dir, struct inode *inode,
-+				 struct ceph_acl_sec_ctx *as)
-+{
-+	int ret, ctxsize;
-+	bool encrypted = false;
-+	struct ceph_inode_info *ci = ceph_inode(inode);
-+
-+	ret = fscrypt_prepare_new_inode(dir, inode, &encrypted);
-+	if (ret)
-+		return ret;
-+	if (!encrypted)
-+		return 0;
-+
-+	as->fscrypt_auth = kzalloc(sizeof(*as->fscrypt_auth), GFP_KERNEL);
-+	if (!as->fscrypt_auth)
-+		return -ENOMEM;
-+
-+	ctxsize = fscrypt_context_for_new_inode(as->fscrypt_auth->cfa_blob, inode);
-+	if (ctxsize < 0)
-+		return ctxsize;
-+
-+	as->fscrypt_auth->cfa_version = cpu_to_le32(CEPH_FSCRYPT_AUTH_VERSION);
-+	as->fscrypt_auth->cfa_blob_len = cpu_to_le32(ctxsize);
-+
-+	WARN_ON_ONCE(ci->fscrypt_auth);
-+	kfree(ci->fscrypt_auth);
-+	ci->fscrypt_auth_len = ceph_fscrypt_auth_len(as->fscrypt_auth);
-+	ci->fscrypt_auth = kmemdup(as->fscrypt_auth, ci->fscrypt_auth_len, GFP_KERNEL);
-+	if (!ci->fscrypt_auth)
-+		return -ENOMEM;
-+
-+	inode->i_flags |= S_ENCRYPTED;
-+
-+	return 0;
-+}
-+
-+void ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req, struct ceph_acl_sec_ctx *as)
-+{
-+	swap(req->r_fscrypt_auth, as->fscrypt_auth);
-+}
-diff --git a/fs/ceph/crypto.h b/fs/ceph/crypto.h
-index 6dca674f79b8..cb00fe42d5b7 100644
---- a/fs/ceph/crypto.h
-+++ b/fs/ceph/crypto.h
-@@ -8,6 +8,10 @@
- 
- #include <linux/fscrypt.h>
- 
-+struct ceph_fs_client;
-+struct ceph_acl_sec_ctx;
-+struct ceph_mds_request;
-+
- struct ceph_fscrypt_auth {
- 	__le32	cfa_version;
- 	__le32	cfa_blob_len;
-@@ -25,12 +29,34 @@ static inline u32 ceph_fscrypt_auth_len(struct ceph_fscrypt_auth *fa)
- #ifdef CONFIG_FS_ENCRYPTION
- void ceph_fscrypt_set_ops(struct super_block *sb);
- 
-+void ceph_fscrypt_free_dummy_policy(struct ceph_fs_client *fsc);
-+
-+int ceph_fscrypt_prepare_context(struct inode *dir, struct inode *inode,
-+				 struct ceph_acl_sec_ctx *as);
-+void ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req, struct ceph_acl_sec_ctx *as);
-+
- #else /* CONFIG_FS_ENCRYPTION */
- 
- static inline void ceph_fscrypt_set_ops(struct super_block *sb)
- {
- }
- 
-+static inline void ceph_fscrypt_free_dummy_policy(struct ceph_fs_client *fsc)
-+{
-+}
-+
-+static inline int ceph_fscrypt_prepare_context(struct inode *dir, struct inode *inode,
-+						struct ceph_acl_sec_ctx *as)
-+{
-+	if (IS_ENCRYPTED(dir))
-+		return -EOPNOTSUPP;
-+	return 0;
-+}
-+
-+static inline void ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req,
-+						struct ceph_acl_sec_ctx *as_ctx)
-+{
-+}
- #endif /* CONFIG_FS_ENCRYPTION */
- 
- #endif
-diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-index c52625f4b5f4..9043761bd9c8 100644
---- a/fs/ceph/inode.c
-+++ b/fs/ceph/inode.c
-@@ -83,12 +83,17 @@ struct inode *ceph_new_inode(struct inode *dir, struct dentry *dentry,
- 			goto out_err;
- 	}
- 
-+	inode->i_state = 0;
-+	inode->i_mode = *mode;
-+
- 	err = ceph_security_init_secctx(dentry, *mode, as_ctx);
- 	if (err < 0)
- 		goto out_err;
- 
--	inode->i_state = 0;
--	inode->i_mode = *mode;
-+	err = ceph_fscrypt_prepare_context(dir, inode, as_ctx);
-+	if (err)
-+		goto out_err;
-+
- 	return inode;
- out_err:
- 	iput(inode);
-@@ -101,6 +106,7 @@ void ceph_as_ctx_to_req(struct ceph_mds_request *req, struct ceph_acl_sec_ctx *a
- 		req->r_pagelist = as_ctx->pagelist;
- 		as_ctx->pagelist = NULL;
- 	}
-+	ceph_fscrypt_as_ctx_to_req(req, as_ctx);
- }
- 
- /**
-diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-index 52ff78f0462a..6a2044d61420 100644
---- a/fs/ceph/super.c
-+++ b/fs/ceph/super.c
-@@ -47,6 +47,7 @@ static void ceph_put_super(struct super_block *s)
- 	struct ceph_fs_client *fsc = ceph_sb_to_client(s);
- 
- 	dout("put_super\n");
-+	ceph_fscrypt_free_dummy_policy(fsc);
- 	ceph_mdsc_close_sessions(fsc->mdsc);
- }
- 
-@@ -150,6 +151,7 @@ enum {
- 	Opt_recover_session,
- 	Opt_source,
- 	Opt_mon_addr,
-+	Opt_test_dummy_encryption,
- 	/* string args above */
- 	Opt_dirstat,
- 	Opt_rbytes,
-@@ -192,6 +194,7 @@ static const struct fs_parameter_spec ceph_mount_parameters[] = {
- 	fsparam_string	("fsc",				Opt_fscache), // fsc=...
- 	fsparam_flag_no ("ino32",			Opt_ino32),
- 	fsparam_string	("mds_namespace",		Opt_mds_namespace),
-+	fsparam_string	("mon_addr",			Opt_mon_addr),
- 	fsparam_flag_no ("poolperm",			Opt_poolperm),
- 	fsparam_flag_no ("quotadf",			Opt_quotadf),
- 	fsparam_u32	("rasize",			Opt_rasize),
-@@ -203,7 +206,8 @@ static const struct fs_parameter_spec ceph_mount_parameters[] = {
- 	fsparam_u32	("rsize",			Opt_rsize),
- 	fsparam_string	("snapdirname",			Opt_snapdirname),
- 	fsparam_string	("source",			Opt_source),
--	fsparam_string	("mon_addr",			Opt_mon_addr),
-+	fsparam_flag	("test_dummy_encryption",	Opt_test_dummy_encryption),
-+	fsparam_string	("test_dummy_encryption",	Opt_test_dummy_encryption),
- 	fsparam_u32	("wsize",			Opt_wsize),
- 	fsparam_flag_no	("wsync",			Opt_wsync),
- 	fsparam_flag_no	("pagecache",			Opt_pagecache),
-@@ -583,6 +587,17 @@ static int ceph_parse_mount_param(struct fs_context *fc,
- 		else
- 			fsopt->flags |= CEPH_MOUNT_OPT_SPARSEREAD;
- 		break;
-+	case Opt_test_dummy_encryption:
-+#ifdef CONFIG_FS_ENCRYPTION
-+		kfree(fsopt->test_dummy_encryption);
-+		fsopt->test_dummy_encryption = param->string;
-+		param->string = NULL;
-+		fsopt->flags |= CEPH_MOUNT_OPT_TEST_DUMMY_ENC;
-+#else
-+		warnfc(fc,
-+		       "FS encryption not supported: test_dummy_encryption mount option ignored");
-+#endif
-+		break;
- 	default:
- 		BUG();
- 	}
-@@ -603,6 +618,7 @@ static void destroy_mount_options(struct ceph_mount_options *args)
- 	kfree(args->server_path);
- 	kfree(args->fscache_uniq);
- 	kfree(args->mon_addr);
-+	kfree(args->test_dummy_encryption);
- 	kfree(args);
- }
- 
-@@ -722,6 +738,8 @@ static int ceph_show_options(struct seq_file *m, struct dentry *root)
- 	if (fsopt->flags & CEPH_MOUNT_OPT_SPARSEREAD)
- 		seq_puts(m, ",sparseread");
- 
-+	fscrypt_show_test_dummy_encryption(m, ',', root->d_sb);
-+
- 	if (fsopt->wsize != CEPH_MAX_WRITE_SIZE)
- 		seq_printf(m, ",wsize=%u", fsopt->wsize);
- 	if (fsopt->rsize != CEPH_MAX_READ_SIZE)
-@@ -1056,6 +1074,52 @@ static struct dentry *open_root_dentry(struct ceph_fs_client *fsc,
- 	return root;
- }
- 
-+#ifdef CONFIG_FS_ENCRYPTION
-+static int ceph_set_test_dummy_encryption(struct super_block *sb, struct fs_context *fc,
-+						struct ceph_mount_options *fsopt)
-+{
-+	/*
-+	 * No changing encryption context on remount. Note that
-+	 * fscrypt_set_test_dummy_encryption will validate the version
-+	 * string passed in (if any).
-+	 */
-+	if (fsopt->flags & CEPH_MOUNT_OPT_TEST_DUMMY_ENC) {
-+		struct ceph_fs_client *fsc = sb->s_fs_info;
-+		int err = 0;
-+
-+		if (fc->purpose == FS_CONTEXT_FOR_RECONFIGURE && !fsc->dummy_enc_policy.policy) {
-+			errorfc(fc, "Can't set test_dummy_encryption on remount");
-+			return -EEXIST;
-+		}
-+
-+		err = fscrypt_set_test_dummy_encryption(sb,
-+							fsc->mount_options->test_dummy_encryption,
-+							&fsc->dummy_enc_policy);
-+		if (err) {
-+			if (err == -EEXIST)
-+				errorfc(fc, "Can't change test_dummy_encryption on remount");
-+			else if (err == -EINVAL)
-+				errorfc(fc, "Value of option \"%s\" is unrecognized",
-+					fsc->mount_options->test_dummy_encryption);
-+			else
-+				errorfc(fc, "Error processing option \"%s\" [%d]",
-+					fsc->mount_options->test_dummy_encryption, err);
-+			return err;
-+		}
-+		warnfc(fc, "test_dummy_encryption mode enabled");
-+	}
-+	return 0;
-+}
-+#else
-+static inline int ceph_set_test_dummy_encryption(struct super_block *sb, struct fs_context *fc,
-+						struct ceph_mount_options *fsopt)
-+{
-+	if (fsopt->flags & CEPH_MOUNT_OPT_TEST_DUMMY_ENC)
-+		warnfc(fc, "test_dummy_encryption mode ignored");
-+	return 0;
-+}
-+#endif
-+
- /*
-  * mount: join the ceph cluster, and open root directory.
-  */
-@@ -1084,6 +1148,10 @@ static struct dentry *ceph_real_mount(struct ceph_fs_client *fsc,
- 				goto out;
- 		}
- 
-+		err = ceph_set_test_dummy_encryption(fsc->sb, fc, fsc->mount_options);
-+		if (err)
-+			goto out;
-+
- 		dout("mount opening path '%s'\n", path);
- 
- 		ceph_fs_debugfs_init(fsc);
-@@ -1292,9 +1360,15 @@ static void ceph_free_fc(struct fs_context *fc)
- 
- static int ceph_reconfigure_fc(struct fs_context *fc)
- {
-+	int err;
- 	struct ceph_parse_opts_ctx *pctx = fc->fs_private;
- 	struct ceph_mount_options *fsopt = pctx->opts;
--	struct ceph_fs_client *fsc = ceph_sb_to_client(fc->root->d_sb);
-+	struct super_block *sb = fc->root->d_sb;
-+	struct ceph_fs_client *fsc = ceph_sb_to_client(sb);
-+
-+	err = ceph_set_test_dummy_encryption(sb, fc, fsopt);
-+	if (err)
-+		return err;
- 
- 	if (fsopt->flags & CEPH_MOUNT_OPT_ASYNC_DIROPS)
- 		ceph_set_mount_opt(fsc, ASYNC_DIROPS);
-@@ -1313,7 +1387,7 @@ static int ceph_reconfigure_fc(struct fs_context *fc)
- 		pr_notice("ceph: monitor addresses recorded, but not used for reconnection");
- 	}
- 
--	sync_filesystem(fc->root->d_sb);
-+	sync_filesystem(sb);
- 	return 0;
- }
- 
-diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-index b05ae8899a1a..8f5fdb59344c 100644
---- a/fs/ceph/super.h
-+++ b/fs/ceph/super.h
-@@ -17,6 +17,7 @@
- #include <linux/posix_acl.h>
- #include <linux/refcount.h>
- #include <linux/security.h>
-+#include <linux/fscrypt.h>
- 
- #include <linux/ceph/libceph.h>
- 
-@@ -24,6 +25,8 @@
- #include <linux/fscache.h>
- #endif
- 
-+#include "crypto.h"
-+
- /* large granularity for statfs utilization stats to facilitate
-  * large volume sizes on 32-bit machines. */
- #define CEPH_BLOCK_SHIFT   22  /* 4 MB */
-@@ -44,6 +47,7 @@
- #define CEPH_MOUNT_OPT_ASYNC_DIROPS    (1<<15) /* allow async directory ops */
- #define CEPH_MOUNT_OPT_NOPAGECACHE     (1<<16) /* bypass pagecache altogether */
- #define CEPH_MOUNT_OPT_SPARSEREAD      (1<<17) /* always do sparse reads */
-+#define CEPH_MOUNT_OPT_TEST_DUMMY_ENC  (1<<18) /* enable dummy encryption (for testing) */
- 
- #define CEPH_MOUNT_OPT_DEFAULT			\
- 	(CEPH_MOUNT_OPT_DCACHE |		\
-@@ -107,6 +111,7 @@ struct ceph_mount_options {
- 	char *server_path;    /* default NULL (means "/") */
- 	char *fscache_uniq;   /* default NULL */
- 	char *mon_addr;
-+	char *test_dummy_encryption;	/* default NULL */
- };
- 
- struct ceph_fs_client {
-@@ -146,9 +151,11 @@ struct ceph_fs_client {
- #ifdef CONFIG_CEPH_FSCACHE
- 	struct fscache_volume *fscache;
- #endif
-+#ifdef CONFIG_FS_ENCRYPTION
-+	struct fscrypt_dummy_policy dummy_enc_policy;
-+#endif
- };
- 
--
- /*
-  * File i/o capability.  This tracks shared state with the metadata
-  * server that allows us to cache or writeback attributes or to read
-@@ -1091,6 +1098,9 @@ struct ceph_acl_sec_ctx {
- #ifdef CONFIG_CEPH_FS_SECURITY_LABEL
- 	void *sec_ctx;
- 	u32 sec_ctxlen;
-+#endif
-+#ifdef CONFIG_FS_ENCRYPTION
-+	struct ceph_fscrypt_auth *fscrypt_auth;
- #endif
- 	struct ceph_pagelist *pagelist;
- };
-diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
-index 8c2dc2c762a4..58628cef4207 100644
---- a/fs/ceph/xattr.c
-+++ b/fs/ceph/xattr.c
-@@ -1397,6 +1397,9 @@ void ceph_release_acl_sec_ctx(struct ceph_acl_sec_ctx *as_ctx)
- #endif
- #ifdef CONFIG_CEPH_FS_SECURITY_LABEL
- 	security_release_secctx(as_ctx->sec_ctx, as_ctx->sec_ctxlen);
-+#endif
-+#ifdef CONFIG_FS_ENCRYPTION
-+	kfree(as_ctx->fscrypt_auth);
- #endif
- 	if (as_ctx->pagelist)
- 		ceph_pagelist_release(as_ctx->pagelist);
--- 
-2.35.1
+"more importantly, our
+distribution is not 2-monotone like NT's, because in addition to the
+cycle counter, we also include in those 4 words a register value, a
+return address, and an inverted jiffies. (Whether capturing anything
+beyond the cycle counter in the interrupt handler is even adding much of
+value is a question for a different time.)"
 
+NT Interrupt counter Entropy : A counter theory : RS
+
+To be clear interrupts are old fashioned (NT & Bios) : Points
+
+Network cards have offloading? Yes & why cannot we?
+
+Offloaded does not mean that a time differential matrix HASH AES of 32Bit w=
+ords,
+Cross pollinated though MMX, AVX , SiMD is plausible!
+
+Combined with even network latency timing & interrupt latency...
+
+Various system differentials can alternate line in our table per clock sync=
+!
+
+In this reference Quartz clock instability is not only counter acted by NTP=
+...
+But also utilized as a variable co-modifier.
+
+So why not also advantage ourselves of the clock frequency scaling
+effect to confuse odds again for Entropy (Random, Not Entropy)
+
+SSD does also have a write counter & a cleared state, not so boring as
+one thinks if per 32KB segment is hashed in 4Bit, 8,Bit 32Bit float!
+(remember we have DOT3 DOT 4 & INT8 in ML)
+
+We can utilize write cycle statistics & all hardware; Interrupts by
+themselves are rather Boring!
+
+Computed timings on processes multiplexed over 3 Threads per group in
+competition is also a potential complexifier of Random
+
+Rupert S
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
+tml
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+****
+
+PreSEED Poly Elliptic SiMD RAND : RS
+
+Preseed ; 3 Seeds with AES or Poly ChaCha or even 1 : 2 would be
+rather fast Init
+
+Blending them would make a rather paranoid Kernel developer feel safe! :D
+
+Like so List:
+
+3 seeds 32Bit or 64Bit :
+Examples :
+
+1 Seed : Pre seeded from CPU IRQ & Net 16Bit values each & merged
+2 & 3 from server https://pollinate.n-helix.com &or System TRNG
+
+4 Seed mix 128Bit Value
+
+Advantages :
+
+AVX & SiMD Mixxer is fast 'Byte Swap & Maths etcetera" & MultiThreaded
+AES Support is common :
+
+*
+HASH : RSA Source Cert C/TRNG : (c)RS
+
+Elliptic RSA : Cert Mixer : RSA 4096/2048/1024Temporal : 384/256/192
+ECC Temporal
+
+Centric Entropy HASH: Butterfly Effects
+
+ChaCha
+SM4
+SHA2
+SHA3
+
+Elliptic Encipher
+AES
+Poly ChaCha
+
+Elliptic : Time Variance : Tick Count Variance : On & Off Variance : IRQ
+
+*
+Time & Crystal : Quartz as a diffraction point fractal differentiator : RS
+
+RDTSC Variable bit differentiation & deviation of the quartz sub .0001
+Value combined with complexity of unique interplay with Alternative
+clocks such as Network cards, Audio cards & USB Sticks & Bluetooth
+radio clocks & Ultimately the NTP Pools themselves when required.
+
+(TIME Differential Float maths) TSC : RDTSC : RDTSCP : TCE supports
+single and half precision floating-point calculations
+
+Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+pge mca cmov pat pse36 clflush mmx fxsr sse sse2 htt pni ssse3 fma
+cx16 sse4_1 sse4_2 popcnt aes f16c syscall nx lm avx svm sse4a osvw
+ibs xop skinit wdt lwp fma4 tce tbm topx page1gb rdtscp bmi1
+
+*
+For RDTSCP =3D TValue TV1=3D16.0685 TV2=3D16.1432 TV3=3D15.1871
+When Processor Mzh =3D PV1 PV2 PV3
+RAND Source =3D Es1 Es2 Es3
+
+If Xt =3D 1.9 < then roll right
+
+((TV1 - TV2) * (PV1 - PV2)) / ((TV1 - TV3) * (PV1 - PV3)) =3D FractorXt(Xt)
+
+Es1 * Xt =3D Differential
+
+Es2 Es3
+
+(c) Rupert S
+
+Quartz as a diffraction point fractal differentiator : RS
+
+https://tches.iacr.org/index.php/TCHES/article/download/7274/6452
+https://perso.univ-rennes1.fr/david.lubicz/articles/gda.pdf
+https://patents.google.com/patent/US9335971
+*
+
+"Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
+is, in part, why we take trylocks instead. But apparently this still
+trips up various lock dependency analysers. That seems like a bug in the
+analyser's that should be fixed, rather than having to change things
+here.
+
+But maybe there's another reason to change things up: by deferring the
+crng pre-init loading to the worker, we can use the cryptographic hash
+function rather than xor, which is perhaps a meaningful difference when
+considering this data has only been through the relatively weak
+fast_mix() function.
+
+The biggest downside of this approach is that the pre-init loading is
+now deferred until later, which means things that need random numbers
+after interrupts are enabled, but before work-queues are running -- or
+before this particular worker manages to run -- are going to get into
+trouble. Hopefully in the real world, this window is rather small,
+especially since this code won't run until 64 interrupts have occurred."
+
+https://lore.kernel.org/lkml/Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net/T/
+
+Rupert S
+
+*****
+Serve C-TRNG QT Fractional Differentiator(c)RS
+
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
+
+SipHash: a fast short-input PRF
+
+Rotation Alignment : "The advantage of choosing such =E2=80=9Caligned=E2=80=
+=9D
+rotation counts is that aligned rotation counts are much faster than
+unaligned rotation counts on many non-64-bit architectures."
+
+http://cr.yp.to/siphash/siphash-20120918.pdf
+
+https://www.aumasson.jp/siphash/siphash.pdf
+
+"Choice of rotation counts. Finding really bad rotation counts for ARX
+algorithms turns out to be difficult. For example, randomly setting
+all rotations in
+BLAKE-512 or Skein to a value in {8, 16, 24, . . . , 56} may allow known at=
+tacks
+to reach slightly more rounds, but no dramatic improvement is expected.
+The advantage of choosing such =E2=80=9Caligned=E2=80=9D rotation counts is=
+ that
+aligned rotation counts are much faster than unaligned rotation counts
+on many non-64-bit
+architectures. Many 8-bit microcontrollers have only 1-bit shifts of bytes,=
+ so
+rotation by (e.g.) 3 bits is particularly expensive; implementing a rotatio=
+n by
+a mere permutation of bytes greatly speeds up ARX algorithms. Even 64-bit
+systems can benefit from alignment, when a sequence of shift-shift-xor can =
+be
+replaced by SSSE3=E2=80=99s pshufb byte-shuffling instruction. For comparis=
+on,
+implementing BLAKE-256=E2=80=99s 16- and 8-bit rotations with pshufb led to=
+ a
+20% speedup
+on Intel=E2=80=99s Nehalem microarchitecture."
+
+https://www.kernel.org/doc/html/latest/security/siphash.html
+
+https://en.wikipedia.org/wiki/SipHash
+
+Code SIP-HASH
+https://github.com/veorq/SipHash
+
+Serve C-TRNG QT Fractional Differentiator(c)RS
+
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
+
+As we see rotation may benefit from the addition of Quartz crystal
+alignment sync data from 4 cycles & aligning data blocks,
+
+Obviously we can pre share 4 64Bit blocks use; use a pre seed AES/ChaCha Qu=
+ad!
+Indeed we can have 16 64Bit pre Seeds & chose them by time sync for kernel
+
+Security bug; Solutions & explanation's (contains additional RANDOM
+Security Methods) :RS
+
+https://science.n-helix.com/2020/06/cryptoseed.html
+https://science.n-helix.com/2019/05/zombie-load.html
+https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
+
+Rupert S https://science.n-helix.com
+
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://aka.ms/win10rng
+*
+
+Encryption Methods:
+https://tools.ietf.org/id/?doc=3Dhash
+
+https://tools.ietf.org/id/?doc=3Dencrypt
+
+HASH :
+
+https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs
+
+https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
+
+https://tools.ietf.org/id/?doc=3Dsha
+
+https://tools.ietf.org/id/?doc=3Drsa
+
+Encryption Common Support:
+
+https://tools.ietf.org/id/?doc=3Dchacha
+
+https://tools.ietf.org/id/?doc=3Daes
+
+SM4e does seem a good possibility for C/T/RNG CORE HASH Functions!
+
+ARM Crypto Extensions Code (Maybe AES Extensions would work here)
+https://lkml.org/lkml/2022/3/15/324
+
+ARM Neon / SiMD / AVX Compatible (GPU is possible)
+https://lkml.org/lkml/2022/3/15/323
+
+*
+
+197 FIPS NIST Standards Specification C/T/RNG
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+Only a Neanderthal would approve a non additive source combination
+that is injected into the HASH & Re-HASHED ,
+
+One does not Procreate inadequate RANDOM from a simple bias KERNEL,
+Hardware RNG's added together may add around 450% Complexity!
+
+Hardware RNG devices MUST be able to Re-HASH to their 197 NIST
+Standards Specification, That is FINAL 2022 DT
+
+KEYS: trusted: allow use of kernel RNG for key material
+
+https://lkml.org/lkml/2022/3/16/598
+
+CAAM PRNG Reference : https://lkml.org/lkml/2022/3/16/649
+
+TRNG Samples & Method
+
+https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=
+=3Ddrive_web
+https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=
+=3Ddrive_web
+https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=
+=3Ddrive_web
+https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=
+=3Ddrive_web

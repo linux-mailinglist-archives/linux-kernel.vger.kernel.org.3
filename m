@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46B84E452C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9170F4E452F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbiCVRci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S239754AbiCVRdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236813AbiCVRch (ORCPT
+        with ESMTP id S236000AbiCVRdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:32:37 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEF823BDF
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:31:08 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id bn33so24935988ljb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zgcgyCIbWUTOoVOlIFHHmtoodCzEMkbLy9TNN/VAosg=;
-        b=naptp6Dpy+85YfyC34kaFusYQmU1UYYJb1v0QokmAZ/OC156PjQKVkMdUdnZTFP3pI
-         9BLeqi/l8Szf7/x+NC+k5zOh+OaHrPK7DQVvX7j1X0ddioyzwX172ho1EW4NU6uncyhz
-         6hpurP0vHYti9dft5+IoDbp9NQlUEAYI2/a39CHcgLqA1RcSjTKP9PVz+JaUxurX1o/i
-         dQcF73IPVJJzlJNzFBqx6dgxQ1rdRuNZpa95I9GNHyCn5URu2yNMY5c3IULf0R4b7K+L
-         z/d9txrBGCP43dBC1XnY0T22CnvkA+y2QQlGIZczuT0NmwRQnJAl9O15bUplsLBFEHSZ
-         QB2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zgcgyCIbWUTOoVOlIFHHmtoodCzEMkbLy9TNN/VAosg=;
-        b=TLVzASgMDCxzqFuSRH4KlQyw2foBx9oAkzNnMkeN0M0meQUE/zWf/cCIidroFDNfFX
-         VpBfmJSg0HJJsPph6NALJwKGYP7MuW0l3K0mirapYQFAKgaRKWEbgHXgkA+H63cr4Jar
-         x2J5JCBw0iZ/DC6tcMCH8lCTrGL5E34Kk6ewB4VW7bsJNUHOfpB3UJVLDu0Hf2WFIr4g
-         X6t7oA0sxspriKEm4rbkUltgjhoU8vmA3aDWp0dtO7J77GgBMYx9daJzkESPbcoucY/9
-         SVI7+TYQEwAMGGdEhs4ecAo27knt9hzUqC0Pcnd+HzscuONuWZnYinT3VXbwz3FjM5e2
-         /0vw==
-X-Gm-Message-State: AOAM530RYomd9WU1DLEQ5kg2awJwSHOo7atqmXB6UCYo6kYXnZXofNIK
-        SLH+LEJL/1BupnHvD1JrDMENsQHyIz27YneRTLIlUQ==
-X-Google-Smtp-Source: ABdhPJz+tT+vwRLT/un0YR41TNqqDOomNEbU0yM8lSArWPNncnylHvc5h3OSavrgElwizaqHJQOJc6w3u9B9x4FLPeg=
-X-Received: by 2002:a2e:8692:0:b0:249:a0b1:3c77 with SMTP id
- l18-20020a2e8692000000b00249a0b13c77mr93511lji.235.1647970265022; Tue, 22 Mar
- 2022 10:31:05 -0700 (PDT)
+        Tue, 22 Mar 2022 13:33:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D631A26AF8;
+        Tue, 22 Mar 2022 10:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NFkGwkkhrXKsXoNixvjMqhth6GVq1xT6H5Lol9T+VgU=; b=IR9zRK//WRfac+j77k3QtuHdQX
+        EIPyO0vIrQX4N5JoOX9kGpQFG9RNjID2VdiaJliR/IGjMTEEXCTL30GPpejZTR270Z7oeHcsCiVVt
+        /9C+hoeDPFXYIRlEJEwhsAhCIj9hxyvU94pGeVq64F9cqA55TCgSdBm4D4knqSshcqYAsnFkb3yxS
+        0/r6qwEn4PjLuocTXtfxJtopFGCyUOY6OXVc9+p+zbPSLWSmAy1e61+FInhcqDvWE5Fkjvms/ljDn
+        1X+P73+wiHNENBM4w7eOfb9hlOPp16sU8GW5hnxE37yy0VN0cJaxVUPYMlZUSoKOvnFBBtLul+3Pf
+        GCgTlcCw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWiMC-00BkCB-9u; Tue, 22 Mar 2022 17:31:44 +0000
+Date:   Tue, 22 Mar 2022 10:31:44 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Maninder Singh <maninder1.s@samsung.com>,
+        Vimal Agrawal <avimalin@gmail.com>
+Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        avimalin@gmail.com, atomlin@redhat.com, keescook@chromium.org,
+        ndesaulniers@google.com, rdunlap@infradead.org, void@manifault.com
+Subject: Re: [PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when
+ KALLSYSMS is disabled
+Message-ID: <YjoIAF/FoFDFMiOi@bombadil.infradead.org>
+References: <CGME20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933@epcas5p2.samsung.com>
+ <20220316043540.677128-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-3-ammarfaizi2@gnuweeb.org> <CAKwvOdkEwkzT0uf9a5SokCScDTY4gbhNFZ+fLxsti9innaEZRQ@mail.gmail.com>
- <20220322172550.GL10306@1wt.eu>
-In-Reply-To: <20220322172550.GL10306@1wt.eu>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 22 Mar 2022 10:30:53 -0700
-Message-ID: <CAKwvOdmr6u-zNynUDAg4pmwerQFUkG+eD0QhpzDED9eg+U2pfA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/8] tools/nolibc: Remove .global _start from the
- entry point code
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316043540.677128-1-maninder1.s@samsung.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Moving folks to bcc; check the lists if you're interested)
+On Wed, Mar 16, 2022 at 10:05:40AM +0530, Maninder Singh wrote:
+> print module information when KALLSYMS is disabled.
+> 
+> No change for %pB, as it needs to know symbol name to adjust address
+> value which can't be done without KALLSYMS.
+> 
+> (A) original output with KALLSYMS:
+> [8.842129] ps function_1 [crash]
+> [8.842735] pS function_1+0x4/0x2c [crash]
+> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> [8.843175] pB function_1+0x4/0x2c [crash]
+> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> 
+> (B) original output without KALLSYMS:
+> [12.487424] ps 0xffff800000eb008c
+> [12.487598] pS 0xffff800000eb008c
+> [12.487723] pSb 0xffff800000eb008c
+> [12.487850] pB 0xffff800000eb008c
+> [12.487967] pBb 0xffff800000eb008c
+> 
+> (C) With patched kernel
+> with KALLYSMS:
+> [41.974576] ps function_1 [crash]
+> [41.975173] pS function_1+0x4/0x2c [crash]
+> [41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> [41.975879] pB function_1+0x4/0x2c [crash]
+> [41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> 
+> without KALLSYMS:
+> [9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
+> [9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
+> [9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> [9.625388] pB 0x(____ptrval____)+0x8c [crash]
+> [9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> 
+> with disable hashing:
+> [8.563916] ps 0xffff800000f2008c [crash]
+> [8.564574] pS 0xffff800000f20000+0x8c [crash]
+> [8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
+> [8.565008] pB 0xffff800000f20000+0x8c [crash]
+> [8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
+> 
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Co-developed-by: Vaneet Narang <v.narang@samsung.com>
+> Signed-off-by: Vaneet Narang <v.narang@samsung.com>
+> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
 
-On Tue, Mar 22, 2022 at 10:25 AM Willy Tarreau <w@1wt.eu> wrote:
->
-> Hi Nick,
->
-> On Tue, Mar 22, 2022 at 10:09:18AM -0700, Nick Desaulniers wrote:
-> > Then again, I'm not familiar with nolibc.
->
-> No problem. The purpose is clearly *not* to implement a libc, but to have
-> something very lightweight that allows to compile trivial programs. A good
-> example of this is tools/testing/selftests/rcutorture/bin/mkinitrd.sh. I'm
-> personally using a tiny pre-init shell that I always package with my
-> kernels and that builds with them [1]. It will never do big things but
-> the balance between ease of use and coding effort is pretty good in my
-> experience. And I'm also careful not to make it complicated to use nor
-> to maintain, pragmatism is important and the effort should remain on the
-> program developer if some arbitration is needed.
+I've pushed a lot of queued code into modules-testing (not modules-next
+yet) [0] please base your changes on that in a new iteration as that is what
+things look like now.
 
-Neat, I bet that helps generate very small initrd! Got any quick size
-measurements?
--- 
-Thanks,
-~Nick Desaulniers
+Vimal might be interested in your work too and you might be interested
+in his patch too [1].
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
+[1] https://lkml.kernel.org/r/CALkUMdRO+JAF_Dw3Q-mHOxvt7uM6gVDNGAA3OMeCUpnSvi7_Pg@mail.gmail.com
+
+  Luis

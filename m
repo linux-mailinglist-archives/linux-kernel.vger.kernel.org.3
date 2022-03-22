@@ -2,79 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057354E47EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7E24E47EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiCVU7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S230159AbiCVVAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 17:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiCVU7d (ORCPT
+        with ESMTP id S230023AbiCVVAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:59:33 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF675FF2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:58:02 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id n16so13297014ile.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=3fa+Yc6J9FxvaVrYGbZmAuXR7+SlkzyafMy9YlzUS1Y=;
-        b=xzCRh0mzebV0NEbXdETJkgSxAjpFmUqIBWTgTh3BxUKaEYubmStk+H/cgCIN9Jsa1q
-         kW/Xf9szJrxn2780580bikRVFWJfwlb1ATAZLECyKgnLTTI7iIf1TqjTC5/4bgB6S79G
-         CphxK1WNPG0eWvMV2xw8xLXUxMY4fu+bW15NPT9m0N0w1ZhNzIZZHI35mAi4p156E9gV
-         PKz4bIZ3FVVQ3aLeAyQfbjPJnHXB9TJ3ug7/U0ZhsmDIb4+8dMPjsfu9wGQfNsAFs9ax
-         oYyisDmI5tBYh8xo6IgywOGxsc9CV2H8BiqzB6M/I6WfwQS8p+8gFgeFj8eWpAcIb65C
-         AS0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3fa+Yc6J9FxvaVrYGbZmAuXR7+SlkzyafMy9YlzUS1Y=;
-        b=ekav+81JAX2hsQhEjrQlWPeOkqpgb6/8OWUlcRTzS42AkwiRjHhFLAHkLGYw5SRzLD
-         2Gmc60/T91Uxoz5ha/2F+iZLHAQT5b/jq2cVoY5cPwvm1GNCy2p1PyBpDnjtd+y2B7DY
-         yBoApG2/SECDk3v5pVKaO/5IGiyINC4+DmVGCadfPSEi40zPdE6gZ1FwKyjWfXuAauBz
-         EDw/mNZh3EIz9wA3EdBOyXg7pYuBjj8UEiHmMC5r5QjC+gbTwamt53qO59NzpOIEhqUX
-         GSqoCKxBd6yAskhBR64X90Od/YBtSBG0nP1TrDTeMYzWfKJFf8ZoMx2v2Id0J0NO3bg/
-         S5rA==
-X-Gm-Message-State: AOAM533oTsrqa/ecMI/1LuHfJyEcJ0Cu4Kq6I7dXd4QkMYR/rhH9jTnp
-        +7tYUIWaaYlQQM/0yKa/s9FTdg==
-X-Google-Smtp-Source: ABdhPJzGGVYNkM9jRB4tYvUPREszbLNgJgr5gOIuewZQxhfFL2bL6v0GCiGwZ7tnVqWQ38VRoOHEXA==
-X-Received: by 2002:a92:c242:0:b0:2c6:7a1e:1cb2 with SMTP id k2-20020a92c242000000b002c67a1e1cb2mr14069387ilo.315.1647982681889;
-        Tue, 22 Mar 2022 13:58:01 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id w13-20020a92d2cd000000b002c8533c4b27sm519308ilg.78.2022.03.22.13.58.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 13:58:01 -0700 (PDT)
-Message-ID: <5cd8d8f7-b172-12a1-5c4f-f9933b576208@kernel.dk>
-Date:   Tue, 22 Mar 2022 14:58:00 -0600
+        Tue, 22 Mar 2022 17:00:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA6A14017
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:58:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4D846171D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019BBC340EC;
+        Tue, 22 Mar 2022 20:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647982720;
+        bh=qneKTjCnzz1tSRczDENyPpegPElP0m0jzzOPobXNPLk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ht4dYd/bNEB12UbTCLdQOiYj35b9WG6DBUguqxmVkhLeU5fCqJUa8ZLhRZbqmPnKa
+         leOOQPPl9CIm2JlCWfDym3kx99dyQ8JyM0HmSxS3JWmsisL0aJhsL9wRjN6jnTRTTs
+         Y16qQV8sHJCGnqSP9JDo//puaaVKuF/eQIQmIal2zlpphLTmsxqr78C43cE78uVYaz
+         n0nPEsNfE/62DIrpwvnbCjB56Q9naia+8XdWszdQNMoWbkHchBr+qU1JJCgFL59abo
+         2NWqJgv2/GiP0Rk640D9z4gmlJYagwuoyR+ALI6j49boo9+u6aEzvSkVvS+saGcqHG
+         I5sa/JchBKDtw==
+Date:   Tue, 22 Mar 2022 13:58:38 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Waiman Long <longman@redhat.com>,
+        Tim Murray <timmurray@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>
+Subject: Re: [GIT PULL] f2fs for 5.18
+Message-ID: <Yjo4fg4HRzEVDr7o@google.com>
+References: <YjjihIZuvZpUjaSs@google.com>
+ <CAHk-=wgsmvoJFKFWxQ2orEVUOWH1agk9iUNZ=-DFh5OXZL=Ldw@mail.gmail.com>
+ <51cded74-3135-eed8-06d3-0b2165e3b379@redhat.com>
+ <CAHk-=wi=Xsekgj7zfw_vpOM673CG24vznmz-yx9G05rWSAAYXg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [syzbot] KASAN: use-after-free Read in add_wait_queue
-Content-Language: en-US
-To:     syzbot <syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000acacb205dad4d42c@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <000000000000acacb205dad4d42c@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi=Xsekgj7zfw_vpOM673CG24vznmz-yx9G05rWSAAYXg@mail.gmail.com>
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.dk/linux-block for-5.18/io_uring
+Hi Linus,
 
--- 
-Jens Axboe
+On 03/22, Linus Torvalds wrote:
+> On Tue, Mar 22, 2022 at 10:37 AM Waiman Long <longman@redhat.com> wrote:
+> >
+> > AFAICS, the read-unfair rwsem code is created to resolve a potential
+> > lock starvation problem that they found on linux-5.10.y stable tree. I
+> > believe I have fixed that in the v5.11 kernel, see commit 2f06f702925
+> > ("locking/rwsem: Prevent potential lock starvation").
+> 
+> Ahh.
+> 
+> Adding Tim Murray to the cc, since he was the source of that odd
+> reader-unfair thing.
+> 
+> I really *really* dislike people thinking they can do locking
+> primitives, because history has taught us that they are wrong.
+> 
+> Even when people get the semantics and memory ordering right (which is
+> not always the case, but at least the f2fs code uses real lock
+> primitives - just oddly - and should thus be ok), it invariably tends
+> to be a sign of something else being very wrong.
+> 
+> And I can easily believe that in this case it's due to a rmsem issue
+> that was already fixed long long ago as per Waiman.
+> 
+> Can people please test with the actual modern rwsem code and with the
+> odd reader-unfair locks disabled?
 
+The pain point is 1) we don't have a specific test to reproduce the issue,
+but got some foundings from field only, 2) in order to test the patches, we
+need to merge the patches into Android kernel [1] through LTS, 3) but, LTS
+wants to see any test results [2].
+
+[1] https://android-review.googlesource.com/q/topic:rwsem_unfair
+[2] https://lore.kernel.org/stable/988fd9b5-8e89-03ae-3858-85320382792e@redhat.com/
+
+So, I thought applying it in f2fs could avoid kernel version issues without
+any risk of updating rwsem. Meanwhile, agreed that we should use the right APIs,
+I'm going to disable this f2fs change in the next device having newer kernel to
+see whether or not uptodate rwsem can really fix the issue.
+
+> 
+>             Linus

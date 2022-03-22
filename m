@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D071A4E49CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 00:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C33D24E49CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 00:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiCVXym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 19:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S237075AbiCVXzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 19:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiCVXyl (ORCPT
+        with ESMTP id S230077AbiCVXzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 19:54:41 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719FB5D182;
-        Tue, 22 Mar 2022 16:53:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V7yMQzf_1647993189;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7yMQzf_1647993189)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 23 Mar 2022 07:53:10 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     jlayton@kernel.org
-Cc:     xiubli@redhat.com, idryomov@gmail.com, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] ceph: replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
-Date:   Wed, 23 Mar 2022 07:53:08 +0800
-Message-Id: <20220322235308.9770-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 22 Mar 2022 19:55:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C62B5D649;
+        Tue, 22 Mar 2022 16:54:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1743661241;
+        Tue, 22 Mar 2022 23:54:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8DDFC340EC;
+        Tue, 22 Mar 2022 23:54:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647993263;
+        bh=IfeQKWQHKmMsVpDpghMQ2MPXJZHCcqpXEy3KM2Js+0A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aFwkQsCmbYaS/pZhJX8lMaoDQWspKbXfEylq+p+drhKDIUUj8geC5Fp9U89I7pMJT
+         7Sau9Qz9GOO/4EaqRPQQT1lOq/xZzTuofABv29I1VSd+8tx9bWIvsrpIkBVPQIyjYY
+         WZ9zV4g5LYz5bgaCsjoAqxngiy227l83tY1lf7Y0NRYg/h84/6Eods9jTCoQI45eFx
+         +VsEOfWGMTa8K0Eu9GBepY0KJ4ojbfE6ERnWBUpSY7jLcgsIrk7OSAUf7OsiW6Ldpg
+         vP3LumImnHpScKbu4b5/88wVhRN/SJcDEYx37vvqveY6OScI1N68yG7Z6VXy92xG1F
+         hgRt73cQkw2oA==
+Date:   Tue, 22 Mar 2022 16:54:21 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     menglong8.dong@gmail.com
+Cc:     dsahern@kernel.org, pabeni@redhat.com, rostedt@goodmis.org,
+        mingo@redhat.com, xeb@mail.ru, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, imagedong@tencent.com,
+        edumazet@google.com, kafai@fb.com, talalahmad@google.com,
+        keescook@chromium.org, alobakin@pm.me, flyingpeng@tencent.com,
+        mengensun@tencent.com, dongli.zhang@oracle.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        benbjiang@tencent.com
+Subject: Re: [PATCH net-next v4 1/4] net: sock: introduce
+ sock_queue_rcv_skb_reason()
+Message-ID: <20220322165421.00dd3443@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220322025220.190568-2-imagedong@tencent.com>
+References: <20220322025220.190568-1-imagedong@tencent.com>
+        <20220322025220.190568-2-imagedong@tencent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
-./fs/ceph/debugfs.c:389:0-23: WARNING: congestion_kb_fops should be
-defined with DEFINE_DEBUGFS_ATTRIBUTE
+On Tue, 22 Mar 2022 10:52:17 +0800 menglong8.dong@gmail.com wrote:
+>  include/net/sock.h |  9 ++++++++-
+>  net/core/sock.c    | 30 ++++++++++++++++++++++++------
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- fs/ceph/debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/ceph/debugfs.c b/fs/ceph/debugfs.c
-index bec3c4549c07..05d15a0bbd9b 100644
---- a/fs/ceph/debugfs.c
-+++ b/fs/ceph/debugfs.c
-@@ -386,7 +386,7 @@ static int congestion_kb_get(void *data, u64 *val)
- 	return 0;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
-+DEFINE_DEBUGFS_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
- 			congestion_kb_set, "%llu\n");
- 
- 
--- 
-2.20.1.7.g153144c
-
+The merge window has started, and we'll be sending our changes from
+net-next to Linus soon. Let's defer these patches after 5.18-rc1 is 
+cut and net-next opens up again.

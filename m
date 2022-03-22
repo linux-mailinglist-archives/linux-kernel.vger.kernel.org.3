@@ -2,141 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF444E48B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E104E48B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237151AbiCVVz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 17:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S237175AbiCVV7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 17:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237109AbiCVVzy (ORCPT
+        with ESMTP id S237109AbiCVV65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 17:55:54 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFDF6004E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:54:25 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 5B8B75F63
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 16:54:25 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id WmSPnL9oZRnrrWmSPngq45; Tue, 22 Mar 2022 16:54:25 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=85qDSXjuy3bqX48/V7qNAooeuLGvtvt332ffL0LuTg8=; b=WSLUVe52oGs/Ddtq6qQsCamGOs
-        BMT1coTNJUYWPu167rm2U2dlsI6QLQehPvM9u4V/1wCnCJHSoLHHgj8NYbHP3oZO4gXj8xVL9c9zS
-        vvD/zl0LNnzW/1HzjfgD25wzBtawy5bmlHT346hYaIsu+zPzLHQXnxZv9/GHee71iQnYGVrf6Llxf
-        79yWtF5uQ6iini3C4yMLmO/gy5ruQL7shgzTfehlB4C2yLa66ka7nkeMfMoLQTE1KTqnOzbLFcSv+
-        hAQGgxVECzthuOQLPiZ6TDCWR+k8GavdUHT0rUh8pP9ABeyGMoRWqb1PLayQ3iMyvBINUosOVKeof
-        rywwIZ/A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54406)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nWmSO-0015dB-47; Tue, 22 Mar 2022 21:54:24 +0000
-Message-ID: <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
-Date:   Tue, 22 Mar 2022 14:54:20 -0700
+        Tue, 22 Mar 2022 17:58:57 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459F96F48F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:57:28 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so3094265fac.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=SfPaV706mzf7LD/k9iodk6fw8mNgdKmY8MpWGwKVFSU=;
+        b=E31pR5kDUasDNZDFz0ARpHY1hIP1zTgG9pdO5YBzRYKZPLFCkCnfNdlv8a9kzoiwst
+         F00TE6wTwa6UIUZNnv4X8LBPH6v5vvyH9Myf8+76ViqGfDU4xvh+w+0u6wA++f8rrgGc
+         JwQwfAzobZw1AFiIkDiOwZ6Ldew0fVkKDURZ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=SfPaV706mzf7LD/k9iodk6fw8mNgdKmY8MpWGwKVFSU=;
+        b=t5kFlehRdUD+yovsVAVABYEecQvyoo8t2gFYseN2eX+3520UHa45rGmJM9fgk06gFg
+         2IaCTV9Mjc7Z43Hrd/ZR4RlAHyPX5h86BNcEkpy4x9VF+GROpjL9kOu3ovYNSi81S1yn
+         qaig81o0g2b7HxSYjhTWazFsXKbdvr3OdeY5W4yZ8CTTOU2SRFLa6USJeNKUwMPabfQ0
+         e53xZqMv0rKKAyFDcGaovdxK/grkpMAlZ8zT62K1uCy9jwLd2wl7xsVSymLcX/YV2s6X
+         0csL96AHu68uXfSaGasCc9DCRpCJPBvAWHnyrEucuHvt/G5GxdiQOVTegx8DvoaO5Wfu
+         nMPQ==
+X-Gm-Message-State: AOAM532o4U+rlMQqW7Mc1keZHJP2uXH6nxbE7mZNhS1azbVdyqiOpKX2
+        VXot8ShlPWo/Twmy5ZALqHlzLFrnyrIiHu46vlCt6UESGo4=
+X-Google-Smtp-Source: ABdhPJwbSHhRs5Y++NGO3oszBoNTYAA6ag8jdOu5XrhXLUceI5d29DIZavih9eOM8SFOiz31smVOQp9zIBpax8wMtMg=
+X-Received: by 2002:a05:6870:b69c:b0:dd:b74b:4099 with SMTP id
+ cy28-20020a056870b69c00b000ddb74b4099mr2510322oab.193.1647986247339; Tue, 22
+ Mar 2022 14:57:27 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 22 Mar 2022 17:57:26 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <20220322155820.GA1745955@roeck-us.net> <YjoUU+8zrzB02pW7@sirena.org.uk>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-In-Reply-To: <YjoUU+8zrzB02pW7@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nWmSO-0015dB-47
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54406
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 48
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220322203844.0000466f@Huawei.com>
+References: <20220318204808.3404542-1-swboyd@chromium.org> <20220319152641.49d8b3e1@jic23-huawei>
+ <CAE-0n52jDZz0qKhfg8OWVDmDg5+xXo-qSL3jNka82QHwA2-xsw@mail.gmail.com> <20220322203844.0000466f@Huawei.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 22 Mar 2022 17:57:26 -0400
+Message-ID: <CAE-0n51=ewQnTctWsmvawb_p3CrE0JgJFwLy+FR6rUPkWmTgHw@mail.gmail.com>
+Subject: Re: [PATCH] iio:proximity:sx9324: Fix hardware gain read/write
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Gwendal Grignou <gwendal@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/22 11:24, Mark Brown wrote:
-> On Tue, Mar 22, 2022 at 08:58:20AM -0700, Guenter Roeck wrote:
-> 
->> This patch (or a later version of it) made it into mainline and causes a
->> large number of qemu boot test failures for various architectures (arm,
->> m68k, microblaze, sparc32, xtensa are the ones I observed). Common
->> denominator is that boot hangs at "Saving random seed:". A sample bisect
->> log is attached. Reverting this patch fixes the problem.
-> 
-> Just as a datapoint for debugging at least qemu/arm is getting coverage
-> in CI systems (KernelCI is covering a bunch of different emulated
-> machines and LKFT has at least one configuration as well, clang's tests
-> have some wider architecture coverage as well I think) and they don't
-> seem to be seeing any problems - there's some other variable in there.
-> 
-> For example current basic boot tests for KernelCI are at:
-> 
->     https://linux.kernelci.org/test/job/mainline/branch/master/kernel/v5.17-1442-gb47d5a4f6b8d/plan/baseline/
-> 
-> for mainline and -next has:
-> 
->     https://linux.kernelci.org/test/job/next/branch/master/kernel/next-20220322/plan/baseline/
-> 
-> These are with a buildroot based rootfs that has a "Saving random seed: "
-> step in the boot process FWIW.
+Quoting Jonathan Cameron (2022-03-22 13:38:44)
+> On Mon, 21 Mar 2022 19:36:33 +0100
+> Stephen Boyd <swboyd@chromium.org> wrote:
+> > Quoting Jonathan Cameron (2022-03-19 08:26:41)
+> > > On Fri, 18 Mar 2022 13:48:08 -0700
+> > > Stephen Boyd <swboyd@chromium.org> wrote:
+> > > >
+> > > > diff --git a/drivers/iio/proximity/sx9324.c b/drivers/iio/proximity/sx9324.c
+> > > > index 0d9bbbb50cb4..a3c8e02f5a56 100644
+> > > > --- a/drivers/iio/proximity/sx9324.c
+> > > > +++ b/drivers/iio/proximity/sx9324.c
+> > > > @@ -379,7 +379,10 @@ static int sx9324_read_gain(struct sx_common_data *data,
+> > > >       if (ret)
+> > > >               return ret;
+> > > >
+> > > > -     *val = 1 << FIELD_GET(SX9324_REG_PROX_CTRL0_GAIN_MASK, regval);
+> > > > +     regval = FIELD_GET(SX9324_REG_PROX_CTRL0_GAIN_MASK, regval);
+> > > > +     if (regval)
+> > >
+> > > If 0 is reserved then I'd return and error code here to indicate
+> > > we don't know what the gain is rather than carrying on regardless.
+> > > Or is this going to cause problems as it will be an ABI change (error
+> > > return possible when it wasn't really before)?
+> > >
+> >
+> > That sounds OK to me. The driver is only being introduced now so we can
+> > still fix it to reject a gain of 0. Unless 0 should mean "off", i.e.
+> > hardware gain of 1?
+> No.  I don't think we want to add that sort of fiddly definition.
+> So error is the way to go - I'd forgotten we only just introduced this
+> so no ABI breakage risk.
+>
 
-I use buildroot 2021.02.3. I have not changed the buildroot code, and it
-still seems to be the same in 2022.02. I don't see the problem with all
-boot tests, only with the architectures mentioned above, and not with all
-qemu machines on the affected platforms. For arm, mostly older machines
-are affected (versatile, realview, pxa configurations, collie, integratorcp,
-sx1, mps2-an385, vexpress-a9, cubieboard). I didn't check, but maybe
-kernelci doesn't test those machines ?
-
-Guenter
+Ok got it. Does the write_gain function also need to reject values
+greater than 8 and less than or equal to 0?

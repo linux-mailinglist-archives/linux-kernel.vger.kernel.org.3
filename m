@@ -2,223 +2,405 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D454E484D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C114E484C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235676AbiCVVeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 17:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S235645AbiCVVdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 17:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiCVVeC (ORCPT
+        with ESMTP id S230262AbiCVVdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 17:34:02 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D635C373
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:32:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647984754; x=1679520754;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4YecuNbZ7H1xwUMk5C43gwWXdMFDqhF42R5lIuM3GFQ=;
-  b=QbCnD6hNZuPxTV0aoApTR+P5lIiLxRLEtZRNWe/Q+arAxddT0jvu8c+6
-   strYBL8SDSrdI187S+znAhmEM/YvYeybc65hyFi/paUKNb3tb+ctFXi75
-   9TjQ527EftveoaS6c8ptmtAiErOtOj/ND6t8echbBh/mg9C/jrZ4cEk1H
-   fh4aPbl/CXI+4h7ErjkJRCgIzYkNvA+CGb/Upupj31n1PKnosMkZRQnqD
-   vEg8JqLHAuTwQY8WESk5Nkfh3Zy+o9A7E06iZ8bYbWnmBz3v2Cvo2rx5w
-   No9SQwcVz/p9U8nlA9n2TnRWYLWYHmqUYgDTRvV9aCDfrX/To2wKbWvDo
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="282793763"
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="282793763"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 14:32:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="717133400"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 22 Mar 2022 14:32:32 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWm7D-000JJ7-Sa; Tue, 22 Mar 2022 21:32:31 +0000
-Date:   Wed, 23 Mar 2022 05:31:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [amir73il:fan_evictable 8/8]
- fs/notify/fanotify/fanotify_user.c:1834:38: error: unterminated argument
- list invoking macro "if"
-Message-ID: <202203230546.qTDYhD1c-lkp@intel.com>
+        Tue, 22 Mar 2022 17:33:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A475C350;
+        Tue, 22 Mar 2022 14:32:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB07B61733;
+        Tue, 22 Mar 2022 21:32:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEAC6C340EC;
+        Tue, 22 Mar 2022 21:32:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647984741;
+        bh=QUX350/awbdS4jPASe375jrc09cUHTodSnJNNqlPDdc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NcT5W9QIqFZtceEouTG6WaIAB9q0K6Nt7ElNyVu7INwMbCTWFrPQU8DIVTx5lgJkI
+         QEcQ8Jq1eb20kg2D5TxFgqCR5KoK4P2pzDBTAzDa67LwwJmwtkvsxRP+xeukk3y4AJ
+         twlS//R8JYTHuZuAq7Uf6uRYSb3AmmPkN7FjJd6AJDtWh3Y0pT8KNdqHWFat0aH/25
+         XAbm32yVB0qrR9X8CE+la0PUdtXi7P0WtzBI6hbwgC7eE0hhOyo+f4hI1b1f0QiS8w
+         cvvfWGpDsVYoUep/o1g0IfpvKdITGyPwUoQljYzZTdEmguYWNANyg8SrFj1cpuKrYA
+         jB8oaR68cvqpg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4629040407; Tue, 22 Mar 2022 18:32:18 -0300 (-03)
+Date:   Tue, 22 Mar 2022 18:32:18 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Steinar H. Gunderson" <sesse@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] perf intel-pt: Synthesize cycle events
+Message-ID: <YjpAYjdgHWwkid5N@kernel.org>
+References: <20220322082452.1429091-1-sesse@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220322082452.1429091-1-sesse@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/amir73il/linux fan_evictable
-head:   124c00a81cb264d633c45154392e0b1835fa7fd2
-commit: 124c00a81cb264d633c45154392e0b1835fa7fd2 [8/8] fanotify: introduce FAN_MARK_LARGE for testing
-config: nds32-buildonly-randconfig-r001-20220320 (https://download.01.org/0day-ci/archive/20220323/202203230546.qTDYhD1c-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/amir73il/linux/commit/124c00a81cb264d633c45154392e0b1835fa7fd2
-        git remote add amir73il https://github.com/amir73il/linux
-        git fetch --no-tags amir73il fan_evictable
-        git checkout 124c00a81cb264d633c45154392e0b1835fa7fd2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash fs/notify/fanotify/
+Em Tue, Mar 22, 2022 at 09:24:52AM +0100, Steinar H. Gunderson escreveu:
+> There is no good reason why we cannot synthesize "cycle" events
+> from Intel PT just as we can synthesize "instruction" events,
+> in particular when CYC packets are available. This enables using
+> PT to getting much more accurate cycle profiles than regular sampling
+> (record -e cycles) when the work last for very short periods (<10 ms).
+> Thus, add support for this, based off of the existing IPC calculation
+> framework. The new option to --itrace is "y" (for cYcles), as c was
+> taken for calls. Cycle and instruction events can be synthesized
+> together, and are by default.
+> 
+> The only real caveat is that CYC packets are only emitted whenever
+> some other packet is, which in practice is when a branch instruction
+> is encountered (and not even all branches). Thus, even at no subsampling
+> (e.g. --itrace=y0ns), it is impossible to get more accuracy than
+> a single basic block, and all cycles spent executing that block
+> will get attributed to the branch instruction that ends the packet.
+> Thus, one cannot know whether the cycles came from e.g. a specific load,
+> a mispredicted branch, or something else. When subsampling (which
+> is the default), the cycle events will get smeared out even more,
+> but will still be generally useful to attribute cycle counts to functions.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I saw there was some issue, should I proceed and apply this v3 patch or
+wait for some v4?
 
-All error/warnings (new ones prefixed by >>):
-
-   fs/notify/fanotify/fanotify_user.c: In function 'do_fanotify_mark':
->> fs/notify/fanotify/fanotify_user.c:1834:38: error: unterminated argument list invoking macro "if"
-    1834 | device_initcall(fanotify_user_setup);
-         |                                      ^
->> fs/notify/fanotify/fanotify_user.c:1835: error: expected '(' at end of input
-   fs/notify/fanotify/fanotify_user.c:1634:9: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-    1634 |         if ((!capable(CAP_SYS_ADMIN) ||
-         |         ^~
-   fs/notify/fanotify/fanotify_user.c:1634:9: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
->> fs/notify/fanotify/fanotify_user.c:1634:9: error: expected declaration or statement at end of input
-   fs/notify/fanotify/fanotify_user.c:1625:17: error: label 'fput_and_out' used but not defined
-    1625 |                 goto fput_and_out;
-         |                 ^~~~
-   fs/notify/fanotify/fanotify_user.c:1568:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-    1568 |         int ret;
-         |             ^~~
-   fs/notify/fanotify/fanotify_user.c:1567:13: warning: unused variable 'umask' [-Wunused-variable]
-    1567 |         u32 umask = 0;
-         |             ^~~~~
-   fs/notify/fanotify/fanotify_user.c:1566:32: warning: unused variable 'fid_mode' [-Wunused-variable]
-    1566 |         unsigned int obj_type, fid_mode;
-         |                                ^~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1566:22: warning: variable 'obj_type' set but not used [-Wunused-but-set-variable]
-    1566 |         unsigned int obj_type, fid_mode;
-         |                      ^~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1562:34: warning: unused variable 'fsid' [-Wunused-variable]
-    1562 |         __kernel_fsid_t __fsid, *fsid = NULL;
-         |                                  ^~~~
-   fs/notify/fanotify/fanotify_user.c:1562:25: warning: unused variable '__fsid' [-Wunused-variable]
-    1562 |         __kernel_fsid_t __fsid, *fsid = NULL;
-         |                         ^~~~~~
-   fs/notify/fanotify/fanotify_user.c:1561:21: warning: unused variable 'path' [-Wunused-variable]
-    1561 |         struct path path;
-         |                     ^~~~
->> fs/notify/fanotify/fanotify_user.c:1559:32: warning: variable 'group' set but not used [-Wunused-but-set-variable]
-    1559 |         struct fsnotify_group *group;
-         |                                ^~~~~
-   fs/notify/fanotify/fanotify_user.c:1558:26: warning: unused variable 'mnt' [-Wunused-variable]
-    1558 |         struct vfsmount *mnt = NULL;
-         |                          ^~~
-   fs/notify/fanotify/fanotify_user.c:1557:23: warning: unused variable 'inode' [-Wunused-variable]
-    1557 |         struct inode *inode = NULL;
-         |                       ^~~~~
-   At top level:
-   fs/notify/fanotify/fanotify_user.c:1554:12: warning: 'do_fanotify_mark' defined but not used [-Wunused-function]
-    1554 | static int do_fanotify_mark(int fanotify_fd, unsigned int flags, __u64 mask,
-         |            ^~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1538:12: warning: 'fanotify_events_supported' defined but not used [-Wunused-function]
-    1538 | static int fanotify_events_supported(struct path *path, __u64 mask)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1522:12: warning: 'fanotify_test_fid' defined but not used [-Wunused-function]
-    1522 | static int fanotify_test_fid(struct dentry *dentry)
-         |            ^~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1491:12: warning: 'fanotify_test_fsid' defined but not used [-Wunused-function]
-    1491 | static int fanotify_test_fsid(struct dentry *dentry, __kernel_fsid_t *fsid)
-         |            ^~~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1279:12: warning: 'fanotify_add_inode_mark' defined but not used [-Wunused-function]
-    1279 | static int fanotify_add_inode_mark(struct fsnotify_group *group,
-         |            ^~~~~~~~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1271:12: warning: 'fanotify_add_sb_mark' defined but not used [-Wunused-function]
-    1271 | static int fanotify_add_sb_mark(struct fsnotify_group *group,
-         |            ^~~~~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1263:12: warning: 'fanotify_add_vfsmount_mark' defined but not used [-Wunused-function]
-    1263 | static int fanotify_add_vfsmount_mark(struct fsnotify_group *group,
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1079:12: warning: 'fanotify_remove_inode_mark' defined but not used [-Wunused-function]
-    1079 | static int fanotify_remove_inode_mark(struct fsnotify_group *group,
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1071:12: warning: 'fanotify_remove_sb_mark' defined but not used [-Wunused-function]
-    1071 | static int fanotify_remove_sb_mark(struct fsnotify_group *group,
-         |            ^~~~~~~~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:1063:12: warning: 'fanotify_remove_vfsmount_mark' defined but not used [-Wunused-function]
-    1063 | static int fanotify_remove_vfsmount_mark(struct fsnotify_group *group,
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:951:12: warning: 'fanotify_find_path' defined but not used [-Wunused-function]
-     951 | static int fanotify_find_path(int dfd, const char __user *filename,
-         |            ^~~~~~~~~~~~~~~~~~
-
-
-vim +/if +1834 fs/notify/fanotify/fanotify_user.c
-
-91c2e0bcae72a3 Al Viro           2013-03-05  1788  
-2a3edf86040a7e Eric Paris        2009-12-17  1789  /*
-ae0e47f02aaedb Justin P. Mattock 2011-03-01  1790   * fanotify_user_setup - Our initialization function.  Note that we cannot return
-2a3edf86040a7e Eric Paris        2009-12-17  1791   * error because we have compiled-in VFS hooks.  So an (unlikely) failure here
-2a3edf86040a7e Eric Paris        2009-12-17  1792   * must result in panic().
-2a3edf86040a7e Eric Paris        2009-12-17  1793   */
-2a3edf86040a7e Eric Paris        2009-12-17  1794  static int __init fanotify_user_setup(void)
-2a3edf86040a7e Eric Paris        2009-12-17  1795  {
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1796  	struct sysinfo si;
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1797  	int max_marks;
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1798  
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1799  	si_meminfo(&si);
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1800  	/*
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1801  	 * Allow up to 1% of addressable memory to be accounted for per user
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1802  	 * marks limited to the range [8192, 1048576]. mount and sb marks are
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1803  	 * a lot cheaper than inode marks, but there is no reason for a user
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1804  	 * to have many of those, so calculate by the cost of inode marks.
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1805  	 */
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1806  	max_marks = (((si.totalram - si.totalhigh) / 100) << PAGE_SHIFT) /
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1807  		    INODE_MARK_COST;
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1808  	max_marks = clamp(max_marks, FANOTIFY_OLD_DEFAULT_MAX_MARKS,
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1809  				     FANOTIFY_DEFAULT_MAX_USER_MARKS);
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1810  
-a8b98c808eab3e Amir Goldstein    2021-05-24  1811  	BUILD_BUG_ON(FANOTIFY_INIT_FLAGS & FANOTIFY_INTERNAL_GROUP_FLAGS);
-d61fd650e9d206 Amir Goldstein    2021-11-29  1812  	BUILD_BUG_ON(HWEIGHT32(FANOTIFY_INIT_FLAGS) != 12);
-124c00a81cb264 Amir Goldstein    2022-03-22  1813  	BUILD_BUG_ON(HWEIGHT32(FANOTIFY_MARK_FLAGS) != 11);
-bdd5a46fe30653 Amir Goldstein    2018-10-04  1814  
-d46eb14b735b11 Shakeel Butt      2018-08-17  1815  	fanotify_mark_cache = KMEM_CACHE(fsnotify_mark,
-d46eb14b735b11 Shakeel Butt      2018-08-17  1816  					 SLAB_PANIC|SLAB_ACCOUNT);
-7088f35720a55b Jan Kara          2020-03-24  1817  	fanotify_fid_event_cachep = KMEM_CACHE(fanotify_fid_event,
-7088f35720a55b Jan Kara          2020-03-24  1818  					       SLAB_PANIC);
-7088f35720a55b Jan Kara          2020-03-24  1819  	fanotify_path_event_cachep = KMEM_CACHE(fanotify_path_event,
-7088f35720a55b Jan Kara          2020-03-24  1820  						SLAB_PANIC);
-6685df31255493 Miklos Szeredi    2017-10-30  1821  	if (IS_ENABLED(CONFIG_FANOTIFY_ACCESS_PERMISSIONS)) {
-6685df31255493 Miklos Szeredi    2017-10-30  1822  		fanotify_perm_event_cachep =
-33913997d5c067 Amir Goldstein    2019-01-10  1823  			KMEM_CACHE(fanotify_perm_event, SLAB_PANIC);
-6685df31255493 Miklos Szeredi    2017-10-30  1824  	}
-2a3edf86040a7e Eric Paris        2009-12-17  1825  
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1826  	fanotify_max_queued_events = FANOTIFY_DEFAULT_MAX_EVENTS;
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1827  	init_user_ns.ucount_max[UCOUNT_FANOTIFY_GROUPS] =
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1828  					FANOTIFY_DEFAULT_MAX_GROUPS;
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1829  	init_user_ns.ucount_max[UCOUNT_FANOTIFY_MARKS] = max_marks;
-7b9ad122b52c98 Xiaoming Ni       2022-01-21  1830  	fanotify_sysctls_init();
-5b8fea65d197f4 Amir Goldstein    2021-03-04  1831  
-2a3edf86040a7e Eric Paris        2009-12-17  1832  	return 0;
-bbaa4168b2d2d8 Eric Paris        2009-12-17  1833  }
-2a3edf86040a7e Eric Paris        2009-12-17 @1834  device_initcall(fanotify_user_setup);
-
-:::::: The code at line 1834 was first introduced by commit
-:::::: 2a3edf86040a7e15684525a2aadc29f532c51325 fanotify: fanotify_mark syscall implementation
-
-:::::: TO: Eric Paris <eparis@redhat.com>
-:::::: CC: Eric Paris <eparis@redhat.com>
+- Arnaldo
+ 
+> Signed-off-by: Steinar H. Gunderson <sesse@google.com>
+> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/Documentation/itrace.txt        |  3 +-
+>  tools/perf/Documentation/perf-intel-pt.txt | 36 ++++++++----
+>  tools/perf/util/auxtrace.c                 |  9 ++-
+>  tools/perf/util/auxtrace.h                 |  7 ++-
+>  tools/perf/util/intel-pt.c                 | 67 ++++++++++++++++++++--
+>  5 files changed, 101 insertions(+), 21 deletions(-)
+> 
+> diff --git a/tools/perf/Documentation/itrace.txt b/tools/perf/Documentation/itrace.txt
+> index c52755481e2f..af69d80a05b7 100644
+> --- a/tools/perf/Documentation/itrace.txt
+> +++ b/tools/perf/Documentation/itrace.txt
+> @@ -1,4 +1,5 @@
+>  		i	synthesize instructions events
+> +		y	synthesize cycles events
+>  		b	synthesize branches events (branch misses for Arm SPE)
+>  		c	synthesize branches events (calls only)
+>  		r	synthesize branches events (returns only)
+> @@ -23,7 +24,7 @@
+>  		A	approximate IPC
+>  		Z	prefer to ignore timestamps (so-called "timeless" decoding)
+>  
+> -	The default is all events i.e. the same as --itrace=ibxwpe,
+> +	The default is all events i.e. the same as --itrace=iybxwpe,
+>  	except for perf script where it is --itrace=ce
+>  
+>  	In addition, the period (default 100000, except for perf script where it is 1)
+> diff --git a/tools/perf/Documentation/perf-intel-pt.txt b/tools/perf/Documentation/perf-intel-pt.txt
+> index cbb920f5d056..d71710fb8e0c 100644
+> --- a/tools/perf/Documentation/perf-intel-pt.txt
+> +++ b/tools/perf/Documentation/perf-intel-pt.txt
+> @@ -101,12 +101,12 @@ data is available you can use the 'perf script' tool with all itrace sampling
+>  options, which will list all the samples.
+>  
+>  	perf record -e intel_pt//u ls
+> -	perf script --itrace=ibxwpe
+> +	perf script --itrace=iybxwpe
+>  
+>  An interesting field that is not printed by default is 'flags' which can be
+>  displayed as follows:
+>  
+> -	perf script --itrace=ibxwpe -F+flags
+> +	perf script --itrace=iybxwpe -F+flags
+>  
+>  The flags are "bcrosyiABExgh" which stand for branch, call, return, conditional,
+>  system, asynchronous, interrupt, transaction abort, trace begin, trace end,
+> @@ -146,16 +146,17 @@ displayed as follows:
+>  There are two ways that instructions-per-cycle (IPC) can be calculated depending
+>  on the recording.
+>  
+> -If the 'cyc' config term (see config terms section below) was used, then IPC is
+> -calculated using the cycle count from CYC packets, otherwise MTC packets are
+> -used - refer to the 'mtc' config term.  When MTC is used, however, the values
+> -are less accurate because the timing is less accurate.
+> +If the 'cyc' config term (see config terms section below) was used, then IPC
+> +and cycle events are calculated using the cycle count from CYC packets, otherwise
+> +MTC packets are used - refer to the 'mtc' config term.  When MTC is used, however,
+> +the values are less accurate because the timing is less accurate.
+>  
+>  Because Intel PT does not update the cycle count on every branch or instruction,
+>  the values will often be zero.  When there are values, they will be the number
+>  of instructions and number of cycles since the last update, and thus represent
+> -the average IPC since the last IPC for that event type.  Note IPC for "branches"
+> -events is calculated separately from IPC for "instructions" events.
+> +the average IPC cycle count since the last IPC for that event type.
+> +Note IPC for "branches" events is calculated separately from IPC for "instructions"
+> +events.
+>  
+>  Even with the 'cyc' config term, it is possible to produce IPC information for
+>  every change of timestamp, but at the expense of accuracy.  That is selected by
+> @@ -865,11 +866,12 @@ Having no option is the same as
+>  
+>  which, in turn, is the same as
+>  
+> -	--itrace=cepwx
+> +	--itrace=cepwxy
+>  
+>  The letters are:
+>  
+>  	i	synthesize "instructions" events
+> +	y	synthesize "cycles" events
+>  	b	synthesize "branches" events
+>  	x	synthesize "transactions" events
+>  	w	synthesize "ptwrite" events
+> @@ -890,6 +892,16 @@ The letters are:
+>  "Instructions" events look like they were recorded by "perf record -e
+>  instructions".
+>  
+> +"Cycles" events look like they were recorded by "perf record -e cycles"
+> +(ie., the default). Note that even with CYC packets enabled and no sampling,
+> +these are not fully accurate, since CYC packets are not emitted for each
+> +instruction, only when some other event (like an indirect branch, or a
+> +TNT packet representing multiple branches) happens causes a packet to
+> +be emitted. Thus, it is more effective for attributing cycles to functions
+> +(and possibly basic blocks) than to individual instructions, although it
+> +is not even perfect for functions (although it becomes better if the noretcomp
+> +option is active).
+> +
+>  "Branches" events look like they were recorded by "perf record -e branches". "c"
+>  and "r" can be combined to get calls and returns.
+>  
+> @@ -897,9 +909,9 @@ and "r" can be combined to get calls and returns.
+>  'flags' field can be used in perf script to determine whether the event is a
+>  transaction start, commit or abort.
+>  
+> -Note that "instructions", "branches" and "transactions" events depend on code
+> -flow packets which can be disabled by using the config term "branch=0".  Refer
+> -to the config terms section above.
+> +Note that "instructions", "cycles", "branches" and "transactions" events
+> +depend on code flow packets which can be disabled by using the config term
+> +"branch=0".  Refer to the config terms section above.
+>  
+>  "ptwrite" events record the payload of the ptwrite instruction and whether
+>  "fup_on_ptw" was used.  "ptwrite" events depend on PTWRITE packets which are
+> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+> index 825336304a37..18e457b80bde 100644
+> --- a/tools/perf/util/auxtrace.c
+> +++ b/tools/perf/util/auxtrace.c
+> @@ -1346,6 +1346,7 @@ void itrace_synth_opts__set_default(struct itrace_synth_opts *synth_opts,
+>  		synth_opts->calls = true;
+>  	} else {
+>  		synth_opts->instructions = true;
+> +		synth_opts->cycles = true;
+>  		synth_opts->period_type = PERF_ITRACE_DEFAULT_PERIOD_TYPE;
+>  		synth_opts->period = PERF_ITRACE_DEFAULT_PERIOD;
+>  	}
+> @@ -1424,7 +1425,11 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
+>  	for (p = str; *p;) {
+>  		switch (*p++) {
+>  		case 'i':
+> -			synth_opts->instructions = true;
+> +		case 'y':
+> +			if (p[-1] == 'y')
+> +				synth_opts->cycles = true;
+> +			else
+> +				synth_opts->instructions = true;
+>  			while (*p == ' ' || *p == ',')
+>  				p += 1;
+>  			if (isdigit(*p)) {
+> @@ -1578,7 +1583,7 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
+>  		}
+>  	}
+>  out:
+> -	if (synth_opts->instructions) {
+> +	if (synth_opts->instructions || synth_opts->cycles) {
+>  		if (!period_type_set)
+>  			synth_opts->period_type =
+>  					PERF_ITRACE_DEFAULT_PERIOD_TYPE;
+> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
+> index 19910b9011f3..7cd6bad3e46a 100644
+> --- a/tools/perf/util/auxtrace.h
+> +++ b/tools/perf/util/auxtrace.h
+> @@ -69,6 +69,9 @@ enum itrace_period_type {
+>   * @inject: indicates the event (not just the sample) must be fully synthesized
+>   *          because 'perf inject' will write it out
+>   * @instructions: whether to synthesize 'instructions' events
+> + * @cycles: whether to synthesize 'cycles' events
+> + *          (not fully accurate, since CYC packets are only emitted
+> + *          together with other events, such as branches)
+>   * @branches: whether to synthesize 'branches' events
+>   *            (branch misses only for Arm SPE)
+>   * @transactions: whether to synthesize events for transactions
+> @@ -115,6 +118,7 @@ struct itrace_synth_opts {
+>  	bool			default_no_sample;
+>  	bool			inject;
+>  	bool			instructions;
+> +	bool			cycles;
+>  	bool			branches;
+>  	bool			transactions;
+>  	bool			ptwrites;
+> @@ -628,6 +632,7 @@ bool auxtrace__evsel_is_auxtrace(struct perf_session *session,
+>  
+>  #define ITRACE_HELP \
+>  "				i[period]:    		synthesize instructions events\n" \
+> +"				y[period]:    		synthesize cycles events (same period as i)\n" \
+>  "				b:	    		synthesize branches events (branch misses for Arm SPE)\n" \
+>  "				c:	    		synthesize branches events (calls only)\n"	\
+>  "				r:	    		synthesize branches events (returns only)\n" \
+> @@ -657,7 +662,7 @@ bool auxtrace__evsel_is_auxtrace(struct perf_session *session,
+>  "				A:			approximate IPC\n" \
+>  "				Z:			prefer to ignore timestamps (so-called \"timeless\" decoding)\n" \
+>  "				PERIOD[ns|us|ms|i|t]:   specify period to sample stream\n" \
+> -"				concatenate multiple options. Default is ibxwpe or cewp\n"
+> +"				concatenate multiple options. Default is iybxwpe or cewp\n"
+>  
+>  static inline
+>  void itrace_synth_opts__set_time_range(struct itrace_synth_opts *opts,
+> diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
+> index e8613cbda331..826405b843d7 100644
+> --- a/tools/perf/util/intel-pt.c
+> +++ b/tools/perf/util/intel-pt.c
+> @@ -5,6 +5,7 @@
+>   */
+>  
+>  #include <inttypes.h>
+> +#include <linux/perf_event.h>
+>  #include <stdio.h>
+>  #include <stdbool.h>
+>  #include <errno.h>
+> @@ -89,6 +90,10 @@ struct intel_pt {
+>  	u64 instructions_sample_type;
+>  	u64 instructions_id;
+>  
+> +	bool sample_cycles;
+> +	u64 cycles_sample_type;
+> +	u64 cycles_id;
+> +
+>  	bool sample_branches;
+>  	u32 branches_filter;
+>  	u64 branches_sample_type;
+> @@ -195,6 +200,8 @@ struct intel_pt_queue {
+>  	u64 ipc_cyc_cnt;
+>  	u64 last_in_insn_cnt;
+>  	u64 last_in_cyc_cnt;
+> +	u64 last_cy_insn_cnt;
+> +	u64 last_cy_cyc_cnt;
+>  	u64 last_br_insn_cnt;
+>  	u64 last_br_cyc_cnt;
+>  	unsigned int cbr_seen;
+> @@ -1217,7 +1224,7 @@ static struct intel_pt_queue *intel_pt_alloc_queue(struct intel_pt *pt,
+>  	if (pt->filts.cnt > 0)
+>  		params.pgd_ip = intel_pt_pgd_ip;
+>  
+> -	if (pt->synth_opts.instructions) {
+> +	if (pt->synth_opts.instructions || pt->synth_opts.cycles) {
+>  		if (pt->synth_opts.period) {
+>  			switch (pt->synth_opts.period_type) {
+>  			case PERF_ITRACE_PERIOD_INSTRUCTIONS:
+> @@ -1647,6 +1654,33 @@ static int intel_pt_synth_instruction_sample(struct intel_pt_queue *ptq)
+>  					    pt->instructions_sample_type);
+>  }
+>  
+> +static int intel_pt_synth_cycle_sample(struct intel_pt_queue *ptq)
+> +{
+> +	struct intel_pt *pt = ptq->pt;
+> +	union perf_event *event = ptq->event_buf;
+> +	struct perf_sample sample = { .ip = 0, };
+> +	u64 period = 0;
+> +
+> +	if (ptq->sample_ipc)
+> +		period = ptq->ipc_cyc_cnt - ptq->last_cy_cyc_cnt;
+> +
+> +	if (!period || intel_pt_skip_event(pt))
+> +		return 0;
+> +
+> +	intel_pt_prep_sample(pt, ptq, event, &sample);
+> +
+> +	sample.id = ptq->pt->cycles_id;
+> +	sample.stream_id = ptq->pt->cycles_id;
+> +	sample.period = period;
+> +
+> +	sample.cyc_cnt = period;
+> +	sample.insn_cnt = ptq->ipc_insn_cnt - ptq->last_cy_insn_cnt;
+> +	ptq->last_cy_insn_cnt = ptq->ipc_insn_cnt;
+> +	ptq->last_cy_cyc_cnt = ptq->ipc_cyc_cnt;
+> +
+> +	return intel_pt_deliver_synth_event(pt, event, &sample, pt->cycles_sample_type);
+> +}
+> +
+>  static int intel_pt_synth_transaction_sample(struct intel_pt_queue *ptq)
+>  {
+>  	struct intel_pt *pt = ptq->pt;
+> @@ -2301,10 +2335,17 @@ static int intel_pt_sample(struct intel_pt_queue *ptq)
+>  		}
+>  	}
+>  
+> -	if (pt->sample_instructions && (state->type & INTEL_PT_INSTRUCTION)) {
+> -		err = intel_pt_synth_instruction_sample(ptq);
+> -		if (err)
+> -			return err;
+> +	if (state->type & INTEL_PT_INSTRUCTION) {
+> +		if (pt->sample_instructions) {
+> +			err = intel_pt_synth_instruction_sample(ptq);
+> +			if (err)
+> +				return err;
+> +		}
+> +		if (pt->sample_cycles) {
+> +			err = intel_pt_synth_cycle_sample(ptq);
+> +			if (err)
+> +				return err;
+> +		}
+>  	}
+>  
+>  	if (pt->sample_transactions && (state->type & INTEL_PT_TRANSACTION)) {
+> @@ -3378,6 +3419,22 @@ static int intel_pt_synth_events(struct intel_pt *pt,
+>  		id += 1;
+>  	}
+>  
+> +	if (pt->synth_opts.cycles) {
+> +		attr.config = PERF_COUNT_HW_CPU_CYCLES;
+> +		if (pt->synth_opts.period_type == PERF_ITRACE_PERIOD_NANOSECS)
+> +			attr.sample_period =
+> +				intel_pt_ns_to_ticks(pt, pt->synth_opts.period);
+> +		else
+> +			attr.sample_period = pt->synth_opts.period;
+> +		err = intel_pt_synth_event(session, "cycles", &attr, id);
+> +		if (err)
+> +			return err;
+> +		pt->sample_cycles = true;
+> +		pt->cycles_sample_type = attr.sample_type;
+> +		pt->cycles_id = id;
+> +		id += 1;
+> +	}
+> +
+>  	attr.sample_type &= ~(u64)PERF_SAMPLE_PERIOD;
+>  	attr.sample_period = 1;
+>  
+> -- 
+> 2.35.1
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+- Arnaldo

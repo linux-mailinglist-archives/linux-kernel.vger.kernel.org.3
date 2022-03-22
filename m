@@ -2,117 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14354E4831
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A859C4E482D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbiCVVQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 17:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S235266AbiCVVQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 17:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235353AbiCVVQz (ORCPT
+        with ESMTP id S235311AbiCVVQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 17:16:55 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC2548E49
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:15:27 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id w7so31918219lfd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=trfqNpkVEV+ZEGPvxk3Z2VrndmcFkmsdgc9Q9CjCl60=;
-        b=CAjQDqcxULBk7zTfFtYarhPBLBc7cHTQRJvGuAq1oTUwSLpKYYBKEK+ALZCQJAYlMg
-         9P75HZgCFQfc0fPKtsouOAsUhdp0Ox8WoKm1ZJ/Ts2w6cFv68vSArZRAnk8pBQSCd7RD
-         A9QZSORo9lnpfL6h6pEm95rKaNAhVOQ7e6ao0=
+        Tue, 22 Mar 2022 17:16:38 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91487396A4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:15:09 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id s4-20020a92c5c4000000b002c7884b8608so9852566ilt.21
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:15:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=trfqNpkVEV+ZEGPvxk3Z2VrndmcFkmsdgc9Q9CjCl60=;
-        b=M42qozJlmeqBp+rZ3CdfflASyC7p5enBx2yDzBd34l4DkGpY4CBDBrLVk2O0VZCHNZ
-         BiQMOlm912kto6zEBwJC95ediE9nXB4GeCPTb/a3FUu0IszCSYc8wc+HP8xt47DCOMUj
-         1XCKHLzK1nYnXHcgylc5LOHPUBQYYM62wiAUKp5uGlfrg5ox9KkWjqDrDDind/armvqx
-         2dDSNyUfv0p+8GUwzzzSgdkl1aNc7Cvb8GX1sS9otu5ABiy3hN8wh2w5qgJkBIPB9R0g
-         f9+hFmNg1nemSeQ+wnFnoxu2919S/BdZeJ86dwMCGVpEmLsQWpUeCuPUP1mAMEUbRr+q
-         SkfA==
-X-Gm-Message-State: AOAM533Y/57gSlErasS2VcOnBvaXc/ZuU5nBiJgW2/lHlu5PpjTOwBR8
-        I1SHYHm2tgYX07UtzUUx2VhzX5MkJW+TCrMK/74=
-X-Google-Smtp-Source: ABdhPJy2CxtrkWlpJhtqgUTRa7oiOOXzYVFwFIrkzvA0CLiFZ+fBZOeURmdWAinaBrRA2iU2pcs5Sg==
-X-Received: by 2002:a05:6512:108a:b0:448:6519:3bc1 with SMTP id j10-20020a056512108a00b0044865193bc1mr20176953lfg.679.1647983725782;
-        Tue, 22 Mar 2022 14:15:25 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id i20-20020a056512225400b004487ec11344sm2304763lfu.122.2022.03.22.14.15.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 14:15:25 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id b5so7098895ljf.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:15:24 -0700 (PDT)
-X-Received: by 2002:a2e:6f17:0:b0:248:124:9c08 with SMTP id
- k23-20020a2e6f17000000b0024801249c08mr20668386ljc.506.1647983724517; Tue, 22
- Mar 2022 14:15:24 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=MG5Y8xILdnFlJljeDRhJEgQB6FlTo+9PoQNjAE5QtFg=;
+        b=FwOT5qzDZ8y36L/Zwnw6h+DEvc1q8OPSWlHYCVJAvNzBkmc9GB/4QwG+nkxIgOcENw
+         EH/de6zHaO/T8ygmzpU3W7vn0J3vExZfgN2rfrzI0wQJlZOEVRsNATgRnnskXjA3oFUl
+         hbNEwvmYrCAAEjONEUrH9Isd3WrHt3cil7BgTYDYgddr2Ws9F5joaHFvGJS+HkoQsvum
+         /F38r7d6/f6WA0iOumR8TEDDtIeD84qYbT2Xj4bzNMqU6Pw1Uk5rntvLDDY2zWYAaa2w
+         oAG5RhrgWDoPZ8j+cvSJDWTqmxp2Mynqx7iA6b+I5hjUw59gN4iKKM0qUU0Fwm7GIi1o
+         7bGA==
+X-Gm-Message-State: AOAM530YJixziYRPrbAq6eKi0qJM1fcowyVbZ5xnJXhDV8KhAMBz1GGy
+        0hkcyxXP6jFIfQn/DSwVya94L104c74gPDJPDL2grpkvE35w
+X-Google-Smtp-Source: ABdhPJzTvsmDj8F2NfYsv6RQxGTEFIkU5OHFdqWqiIQHfiW3AlzdeqdQlJ/DXbOuA/B92prR6jT/PoV0AmcCO+DnykKKdH6Hytq8
 MIME-Version: 1.0
-References: <cover.1647894991.git.dsterba@suse.com> <CAADWXX-uX74SETx8QNnGDyBGMJHY-6wr8jC9Sjpv4ARqUca0Xw@mail.gmail.com>
- <Yjo3tQO+fNNlZ4/i@localhost.localdomain>
-In-Reply-To: <Yjo3tQO+fNNlZ4/i@localhost.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 22 Mar 2022 14:15:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjtS=sNkAK+DF8Gur4q1Pb0x1DrsagJ-kJCzV9eDmAebQ@mail.gmail.com>
-Message-ID: <CAHk-=wjtS=sNkAK+DF8Gur4q1Pb0x1DrsagJ-kJCzV9eDmAebQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Btrfs updates for 5.18
-To:     Josef Bacik <josef@toxicpanda.com>
-Cc:     David Sterba <dsterba@suse.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a05:6602:2f04:b0:648:cfb5:974a with SMTP id
+ q4-20020a0566022f0400b00648cfb5974amr13360299iow.187.1647983709020; Tue, 22
+ Mar 2022 14:15:09 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 14:15:09 -0700
+In-Reply-To: <5cd8d8f7-b172-12a1-5c4f-f9933b576208@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000092671e05dad51b08@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in add_wait_queue
+From:   syzbot <syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 1:55 PM Josef Bacik <josef@toxicpanda.com> wrote:
->
-> This more fine-grained checking is handled by generic_remap_file_range_prep() to
-> make sure we don't try to dedup a directory or pipe or some other nonsense.
+Hello,
 
-Yeah, that does seem to take care of the obvious cases, and requires
-that both files be regular files at least.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-I'm still not a huge fan of how we use the 'f_op->remap_file_range' of
-the source file, without really checking that the destination file is
-ok with remap_file_range.
+Reported-and-tested-by: syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com
 
-They end up _superficially_ very similar, yes, but I can point to
-filesystems that use different f_op's for different files.
+Tested on:
 
-And some of those depend on - wait for it - how the filesystem was mounted.
+commit:         7d58de1a io_uring: don't recycle provided buffer if pu..
+git tree:       git://git.kernel.dk/linux-block for-5.18/io_uring
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3172c0bf8614827
+dashboard link: https://syzkaller.appspot.com/bug?extid=950cee6d91e62329be2c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-See for example cifs:
-
-                if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_BRL)
-                        file->f_op = &cifs_file_direct_nobrl_ops;
-                else
-                        file->f_op = &cifs_file_direct_ops;
-
-so I'm just thinking "what about doing remap_file_range between two
-regular files that act differently - either due to mount options or
-other details".
-
-In that cifs example, read_iter and write_iter are different. Yes,
-copy/remap_file_range uses the same function pointer, but it still
-worries me about copying from a mount to another if there might be
-different semantics for IO between them.
-
-I think in this cifs case, the superblock ends up being the same, so
-the mnt_cifs_flags end up being the same, and the above is not
-actually a real issue. But conceptually I could imagine cases where
-that wasn't the case - or even cases like /proc that have
-fundamentally different file operations for different files)
-
-                 Linus
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.

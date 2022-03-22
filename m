@@ -2,91 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C68A4E430E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2504E4311
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbiCVPdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
+        id S238553AbiCVPe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237504AbiCVPdm (ORCPT
+        with ESMTP id S232622AbiCVPeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:33:42 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC86A82D1B;
-        Tue, 22 Mar 2022 08:32:14 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MFJOWR025803;
-        Tue, 22 Mar 2022 15:32:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=EzCy9QqoK8aDCpZvzNCryR+3SBEwvODW6uUXG8KKtjs=;
- b=GxUuj4M6jI+n13Ui+a/bsQO5vx1dmwLBCl3q2wbbYWOL9TcAXs2N/MagEcDs9z5Zq0Ks
- vXMgvwrtf75jo9heKv+VTzLGk4RO6oVABIOMlecneWxzugoTORUJLpbTuvchIyRq31eZ
- OUHkC10dr727Ux7X4049M/xvS0ZOwj6kkTEQiwLoeQDDhxmZFokRnm/MVi1Yi4YvOVUH
- +v4lAx9Ax6mxhCK+RpQjojLNZgfPYEdizR+zkLVVz/LyFet+2tQ6WA9TBS5vWDM+X68S
- 8uk8pUh2SEg17/p7n/9yPXP0HBAM2hRX0Wpf9cdF1lrMZddYD2tiRPYBrXVLyoZbwqzl 9g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eyautshys-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 15:32:13 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22MFJOxi025687;
-        Tue, 22 Mar 2022 15:32:13 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eyautshy5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 15:32:13 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MFTGA6001232;
-        Tue, 22 Mar 2022 15:32:11 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ew6t8xgpm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 15:32:11 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22MFW87B27066822
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Mar 2022 15:32:08 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27E204C052;
-        Tue, 22 Mar 2022 15:32:08 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C56514C040;
-        Tue, 22 Mar 2022 15:32:07 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 22 Mar 2022 15:32:07 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: s390: Fix lockdep issue in vm memop
-Date:   Tue, 22 Mar 2022 16:32:04 +0100
-Message-Id: <20220322153204.2637400-1-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 22 Mar 2022 11:34:23 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4A382D1B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:32:53 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id y142so34238245ybe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tqDPM5RlgpXSQi1Ee2XnXishFimAHDqmADlb12IdHGI=;
+        b=yeTDYvrn200X+80eXdUJtJ1yM+FmFqDC2clNaFSxGxu/DPOvhJCpKD6uZvWu9DUeHf
+         j4EQLVr6R0+9uVHTaxUYz1bMwnmDIjkQPO/r5TVYMIyZo7FKNYThRrL6VM12mQBkVdjF
+         WQKrbiD1YuwAntBEWGAgziO/yMAYWAH+3gEhBcb3hov7lHGniKWPh0LHSTUkHRQ9IL16
+         o1ypIQo3iF0XwRnEfxI5Lllqinm89HNPTKNjopuXLTJe5jQM+i2BzbGg/j9tXD/SZhot
+         Zh+jycNEhJhiNBYZKZ3a0Wmx5ozxn4oznybrTRmlYXlLmhrXYRYodHRvCVRSvUwnX7FO
+         admA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tqDPM5RlgpXSQi1Ee2XnXishFimAHDqmADlb12IdHGI=;
+        b=F9nfQXzZyJPEIlFyGU70FLaY6+bfH6RRj8vFPLXc2LZo1FHCEfZoFqtmHw5shNe3P7
+         NYPkw2GQUUwv//BstZCrG1l+Dx5JVaCj28ste56WDY9bmNPXRGu9SZQE/c6FfG9ySHT0
+         IFIDGrTg2ZJmC3xYDwl87zOHzWL/rreIlqvp4FgPpB3tHxoFxQYGakvvwvVuWiWPKmDs
+         XCmU3Vy6BS0XMxancMM8bDDhj0pqYxH5pQzC6jOS6LRMyOV8wIg+9BRsqN/W8f6dIiRS
+         YZ9UuR6gvNtAoBbcpJeEohfYcyi5ZMI4FJhCLTJz5c2nhfxqOaBPU6567EBq4phqAZxA
+         8O2g==
+X-Gm-Message-State: AOAM532D9s6LCs/Oupn0a8x/H2EEZuyheEAkkqBgkur4kfd/txL9Is5f
+        oJitRxskLMGL2gXSSIudcR4VobVZSuAcqqtdzOvxBg==
+X-Google-Smtp-Source: ABdhPJx/oh3K4UCmXLO5BuBjsTgL2X9Ol2SqzDRFLnaCkRwITbus2a6io3xJ6+SrfhNofe6YIZWMU/q2CVjkezGEOeY=
+X-Received: by 2002:a25:9846:0:b0:61a:3deb:4d39 with SMTP id
+ k6-20020a259846000000b0061a3deb4d39mr27461840ybo.537.1647963172547; Tue, 22
+ Mar 2022 08:32:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: MhqFlwEUswo9YzQCOGLTpRB3_EH8CH7A
-X-Proofpoint-ORIG-GUID: mMJXVzBI4J81vBVOo9wGKqtRbSV9bWyD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-22_06,2022-03-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203220089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+References: <20220321133216.648316863@linuxfoundation.org>
+In-Reply-To: <20220321133216.648316863@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 22 Mar 2022 21:02:41 +0530
+Message-ID: <CA+G9fYvNXydpNH_oymBx3PHbVu=_HtqSCOrF-x0usPSpWJcJdQ@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/16] 4.9.308-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,49 +71,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Issuing a memop on a protected vm does not make sense,
-neither is the memory readable/writable, nor does it make sense to check
-storage keys. This is why the ioctl will return -EINVAL when it detects
-the vm to be protected. However, in order to ensure that the vm cannot
-become protected during the memop, the kvm->lock would need to be taken
-for the duration of the ioctl. This is also required because
-kvm_s390_pv_is_protected asserts that the lock must be held.
-Instead, don't try to prevent this. If user space enables secure
-execution concurrently with a memop it must accecpt the possibility of
-the memop failing.
-Still check if the vm is currently protected, but without locking and
-consider it a heuristic.
+On Mon, 21 Mar 2022 at 19:21, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.308 release.
+> There are 16 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.308-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Fixes: ef11c9463ae0 ("KVM: s390: Add vm IOCTL for key checked guest absolute memory access")
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
----
- arch/s390/kvm/kvm-s390.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index ca96f84db2cc..53adbe86a68f 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -2385,7 +2385,16 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
- 		return -EINVAL;
- 	if (mop->size > MEM_OP_MAX_SIZE)
- 		return -E2BIG;
--	if (kvm_s390_pv_is_protected(kvm))
-+	/*
-+	 * This is technically a heuristic only, if the kvm->lock is not
-+	 * taken, it is not guaranteed that the vm is/remains non-protected.
-+	 * This is ok from a kernel perspective, wrongdoing is detected
-+	 * on the access, -EFAULT is returned and the vm may crash the
-+	 * next time it accesses the memory in question.
-+	 * There is no sane usecase to do switching and a memop on two
-+	 * different CPUs at the same time.
-+	 */
-+	if (kvm_s390_pv_get_handle(kvm))
- 		return -EINVAL;
- 	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
- 		if (access_key_invalid(mop->key))
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-base-commit: c9b8fecddb5bb4b67e351bbaeaa648a6f7456912
--- 
-2.32.0
+## Build
+* kernel: 4.9.308-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.9.y
+* git commit: 9edf1c247ba23173e6a105911ccdd3491f0f1a7e
+* git describe: v4.9.307-17-g9edf1c247ba2
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
+07-17-g9edf1c247ba2
 
+## Test Regressions (compared to v4.9.307-12-g907431a01b50)
+No test regressions found.
+
+## Metric Regressions (compared to v4.9.307-12-g907431a01b50)
+No metric regressions found.
+
+## Test Fixes (compared to v4.9.307-12-g907431a01b50)
+No test fixes found.
+
+## Metric Fixes (compared to v4.9.307-12-g907431a01b50)
+No metric fixes found.
+
+## Test result summary
+total: 51902, pass: 42014, fail: 393, skip: 8470, xfail: 1025
+
+## Build Summary
+* arm: 254 total, 238 passed, 16 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 18 passed, 1 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7106B4E3E80
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F934E3E84
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbiCVMcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        id S234880AbiCVMcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbiCVMcE (ORCPT
+        with ESMTP id S234877AbiCVMcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:32:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB4874DE1;
-        Tue, 22 Mar 2022 05:30:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B95E0614BA;
-        Tue, 22 Mar 2022 12:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98175C340EC;
-        Tue, 22 Mar 2022 12:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647952233;
-        bh=8UgqJKeD83b+41XF6fMFtLi8TcWYbvRRK9SI91LW1cQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XDt4sQWbciCLej+F53LbxtOwznRDJXiHwX8xDrGNpy2FeqBhzp8RltICjsB7lpMK0
-         A6OutEYTGQW/yjcxckDM2YlHZYdazmmJ3rqy983SP6XeE2waaFYRxa8UXg+TCcey2/
-         xSBtMXlaoMT9O9jLcS3xkeO047HMcQkKfsnG4UGUqpgv+zkLII5mgzmZIoviFHCetJ
-         qcX9Er/uH19nc36w9RrkmNwvyARkrBhsqUxhR+TPV2Aj9IYF7GS4fWo/T8dNiHqunh
-         iyUPG3YGN3sR5MWZSZQEWBHWvCEE67cD1uBVrfIwYr1bQHVLBwpN3kGQnRfVQSWnMY
-         JkHjcM1YR9kFg==
-Date:   Tue, 22 Mar 2022 13:30:29 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     paulmck@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] rcu: Call rcu_nocb_rdp_deoffload() directly after
- rcuog/op kthreads spawn failed
-Message-ID: <20220322123029.GC701946@lothringen>
-References: <20220318080719.1501471-1-qiang1.zhang@intel.com>
- <20220318080719.1501471-2-qiang1.zhang@intel.com>
+        Tue, 22 Mar 2022 08:32:16 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD43B7DAA9;
+        Tue, 22 Mar 2022 05:30:47 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KN9kp4dxgz6H6rn;
+        Tue, 22 Mar 2022 20:28:34 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Tue, 22 Mar 2022 13:30:44 +0100
+Received: from [10.47.85.68] (10.47.85.68) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Mar
+ 2022 12:30:44 +0000
+Message-ID: <a5e42012-c1fc-082e-e636-594abc07dd70@huawei.com>
+Date:   Tue, 22 Mar 2022 12:30:42 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318080719.1501471-2-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 01/11] blk-mq: Add blk_mq_init_queue_ops()
+To:     Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>
+CC:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
+        <bvanassche@acm.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <ming.lei@redhat.com>,
+        <chenxiang66@hisilicon.com>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <dm-devel@redhat.com>,
+        <beanhuo@micron.com>
+References: <1647945585-197349-1-git-send-email-john.garry@huawei.com>
+ <1647945585-197349-2-git-send-email-john.garry@huawei.com>
+ <20220322111848.GA29270@lst.de>
+ <cacc3f7b-c8be-0f72-1c52-562c15b468a4@huawei.com>
+ <b5df2ef1-2d6d-340e-e4b4-09132dc0516b@suse.de>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <b5df2ef1-2d6d-340e-e4b4-09132dc0516b@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.85.68]
+X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 04:07:18PM +0800, Zqiang wrote:
-> @@ -1009,10 +1015,33 @@ static long rcu_nocb_rdp_deoffload(void *arg)
->  	 */
->  	rcu_segcblist_set_flags(cblist, SEGCBLIST_RCU_CORE);
->  	invoke_rcu_core();
-> -	ret = rdp_offload_toggle(rdp, false, flags);
-> -	swait_event_exclusive(rdp->nocb_state_wq,
-> -			      !rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB |
-> -							SEGCBLIST_KTHREAD_GP));
-> +	wake_gp = rdp_offload_toggle(rdp, false, flags);
-> +
-> +	mutex_lock(&rdp_gp->nocb_gp_kthread_mutex);
-> +	if (rdp_gp->nocb_gp_kthread) {
-> +		if (wake_gp)
-> +			wake_up_process(rdp_gp->nocb_gp_kthread);
-> +
-> +		if (rdp->nocb_cb_kthread) {
-> +			condition = SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP;
-> +		} else {
-> +			/*
-> +			 *If rcuop kthread spawn failed, direct remove SEGCBLIST_KTHREAD_CB
-> +			 *just wait SEGCBLIST_KTHREAD_GP to be cleared.
-> +			 */
-> +			condition = SEGCBLIST_KTHREAD_GP;
-> +			rcu_segcblist_clear_flags(&rdp->cblist,
-> SEGCBLIST_KTHREAD_CB);
+On 22/03/2022 12:16, Hannes Reinecke wrote:
+> On 3/22/22 12:33, John Garry wrote:
+>> On 22/03/2022 11:18, Christoph Hellwig wrote:
+>>> On Tue, Mar 22, 2022 at 06:39:35PM +0800, John Garry wrote:
+>>>> Add an API to allocate a request queue which accepts a custom set of
+>>>> blk_mq_ops for that request queue.
+>>>>
+>>>> The reason which we may want custom ops is for queuing requests 
+>>>> which we
+>>>> don't want to go through the normal queuing path.
+>>>
+>>> Eww.  I really do not think we should do separate ops per queue, as that
+>>> is going to get us into a deep mess eventually.
+>>>
+>>
+>> Yeah... so far (here) it works out quite nicely, as we don't need to 
+>> change the SCSI blk mq ops nor allocate a scsi_device - everything is 
+>> just separate.
+>>
+>> The other method mentioned previously was to add the request 
+>> "reserved" flag and add new paths in scsi_queue_rq() et al to handle 
+>> this, but that gets messy.
+>>
+>> Any other ideas ...?
+>>
+> 
+> As outlined in the other mail, I think might be useful is to have a 
+> _third_ type of requests (in addition to the normal and the reserved ones).
+> That one would be allocated from the normal I/O pool (and hence could 
+> fail if the pool is exhausted), but would be able to carry a different 
+> payload (type) than the normal requests.
 
-You may be running concurrently againt nocb_gp_wait() ->
-nocb_gp_update_state_deoffloading() -> rcu_segcblist_clear_flags(cblist,
-SEGCBLIST_KTHREAD_GP)
+As mentioned in the cover letter response, it just seems best to keep 
+the normal scsi_cmnd payload but have other means to add on the internal 
+command data, like using host_scribble or scsi_cmnd priv data.
 
-So you need to protect the flags clear with rcu_nocb lock.
+> And we could have a separate queue_rq for these requests, as we can 
+> differentiate them in the block layer.
 
+I don't know, let me think about it. Maybe we could add an "internal" 
+blk flag, which uses a separate "internal" queue_rq callback.
 
-
-
-> +		}
-> +		swait_event_exclusive(rdp->nocb_state_wq,
-> +					!rcu_segcblist_test_flags(cblist, condition));
-> +	} else {
-> +		rcu_nocb_lock_irqsave(rdp, flags);
-> +		rcu_segcblist_clear_flags(&rdp->cblist,
-> +				SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
-> +		rcu_nocb_unlock_irqrestore(rdp, flags);
-
-Like you're doing here.
-
-Thanks!
+Thanks,
+John

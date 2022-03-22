@@ -2,110 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4E04E3A6D
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDC24E3A6C
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiCVIUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S230352AbiCVIVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiCVIUc (ORCPT
+        with ESMTP id S230342AbiCVIVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:20:32 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C3B5EDD4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:19:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647937145; x=1679473145;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=x1YD9my+L35IteAZDqbEgYROw0JzwAUiseR0i+LHqww=;
-  b=klcKSWF5u/G108lMJoCoYQOgv7gtk+DtBISSeRMwko8rQig9mXsFBLqZ
-   7kzPXeVvZG52iUPZIMSZJVGU4S/1U+cjZWr8+UjK5mch7126jGcvbjX51
-   BkclN2LbEi0CUtn+0qq0Yq85fuob/T7bPYow1vHbgQv/HGnvhNg0bEofl
-   6AqgSkNIBnA5W+XAAYL47yPFAh2uVM4Y4c8iaS53LM5ck583XqURB0jKy
-   CM00Qay4lEJkLiln5SKALd3nqmC1HEWjjignRTH/Y0fJUiCn+/4yQXfAm
-   A9rGHcNLX0kBy7ebaLZ7ULyLsarPmIW+Cv7pTS5rvMyVNthh+cFwDOx8P
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257708565"
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="257708565"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 01:19:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="518789896"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 01:18:59 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [GIT PULL] scheduler updates for v5.18
-References: <YjhZUezhnamHAl0H@gmail.com> <Yjh58h8cpcPERVZA@qian>
-        <CAHk-=whrqeX-8yHEdSCGFUyyC2sj=OLyeFR9civUiswR=A+PwA@mail.gmail.com>
-        <Yjl8Lk2uPiZkXoM9@gmail.com> <Yjl/T0SBCo1zfkkS@gmail.com>
-Date:   Tue, 22 Mar 2022 16:18:57 +0800
-In-Reply-To: <Yjl/T0SBCo1zfkkS@gmail.com> (Ingo Molnar's message of "Tue, 22
-        Mar 2022 08:48:31 +0100")
-Message-ID: <871qyu5rim.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 04:21:04 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3D05BD3D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:19:35 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220322081931epoutp03762c28c4dfa08b7f9e2a52a82f5cc8d6~epiBO1EVT1446214462epoutp03R
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:19:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220322081931epoutp03762c28c4dfa08b7f9e2a52a82f5cc8d6~epiBO1EVT1446214462epoutp03R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647937171;
+        bh=HhEg8SeIzOQ+B0sMaC9D5JpzHmXS6nQ9Z/IoLLlUzo0=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=UZwnrBJKH7n2qS4+spnZTA2KOb6E5ORtjJJh49fu7jmPac3GgSVvG1fMmFhMaCo4U
+         1SVD9CZtedLwpzTDnbOxkG+uZDtmOgkXC6g/1oiYz4UA7g5L6XwqHRlbarLTqc2sLI
+         /62xZB7cJmlcaHg/z9dWKpxwew/RGvq5IzQZQfpQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220322081930epcas2p290165808ac75eba01e3f09182d951db2~epiAgacJo1883518835epcas2p2a;
+        Tue, 22 Mar 2022 08:19:30 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KN4CP2bHJz4x9Q2; Tue, 22 Mar
+        2022 08:19:29 +0000 (GMT)
+X-AuditID: b6c32a46-be9ff70000023ea8-c2-62398690f0c9
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        29.50.16040.09689326; Tue, 22 Mar 2022 17:19:28 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH 1/2] dt-bindings: thermal: Add ARTPEC-8 compatible string
+ for exynos-thermal
+Reply-To: hypmean.kim@samsung.com
+Sender: Sang Min Kim <hypmean.kim@samsung.com>
+From:   Sang Min Kim <hypmean.kim@samsung.com>
+To:     "bzolnier@gmail.com" <bzolnier@gmail.com>,
+        "krzysztof.kozlowski@canonical.com" 
+        <krzysztof.kozlowski@canonical.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220322075617.109855-1-hypmean.kim@samsung.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220322081928epcms2p5c426f8eebbc5251a294ab08ae869e487@epcms2p5>
+Date:   Tue, 22 Mar 2022 17:19:28 +0900
+X-CMS-MailID: 20220322081928epcms2p5c426f8eebbc5251a294ab08ae869e487
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMJsWRmVeSWpSXmKPExsWy7bCmue6ENsskg3VnxSwezNvGZnF4foXF
+        9y3XmSxeHtK0mPdZ1mL+kXOsFhvf/mCy2PT4GqvF5V1z2Cw+9x5htJhxfh+TxdwvU5ktWvce
+        Ybd48rCPzYHPY1ZDL5vHzll32T0W73nJ5LFpVSebx51re9g8Ni+p9+jbsorR4/MmuQCOqGyb
+        jNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKCjlRTKEnNK
+        gUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkF5gV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGU++
+        1RVcFqh4t28VUwPjbIEuRk4OCQETiaNTP7F3MXJxCAnsYJR4sfEYYxcjBwevgKDE3x3CIDXC
+        AnESnefWsoPYQgKKEi93bGeGiOtJ3Nz4GSzOJqAj8bj1PhPIHBGBDmaJY53HWUEcZoGrTBLP
+        589jh9jGKzGj/SkLhC0tsX35VrBlnAJ2Emv2hkCENSR+LOtlhrBFJW6ufssOY78/Np8RwhaR
+        aL13FqpGUOLBz91QcUmJTYe3Q9VXS9zauBzsBgmBBkaJ1m9NzCC7JAT0JXZcNwap4RXwlVi4
+        eh9YPYuAqsS9y7ugel0kLt9rAJvJLKAtsWzha7BWZgFNifW79CGmKEscucUC81TDxt/s6Gxm
+        AT6JjsN/4eI75j1hgrBVJXZu6mafwKg8CxHQs5DsmoWwawEj8ypGsdSC4tz01GKjAiN41Cbn
+        525iBKdeLbcdjFPeftA7xMjEwXiIUYKDWUmEd/EH8yQh3pTEyqrUovz4otKc1OJDjKZAX05k
+        lhJNzgcm/7ySeEMTSwMTMzNDcyNTA3MlcV6vlA2JQgLpiSWp2ampBalFMH1MHJxSDUw7933c
+        4eTrpHnkOC/P/Zuzrh/Q2r5ndWHpzBlrde264o2Dr7bdbHv8+UTR+vrrZ4o7YxbPv6/mtqtr
+        XUHmpwev7rN4XFLz9BbQEuMK8zs0oaq39YMHB2v/g4Ji/5LzD95Nvbg9eWNbJ6+S4wzvx4k/
+        onh7zhj1qHc4OR7tKrR9VmNT7X1iXmErvxzr0plOy+azLFP6e8Mmz0z99sFOk/ZPSZuPae6a
+        F7rA2Pbkwr0ODeWiRa8C9q9p91EJyXYrVP5sd0ki8rSHaODXVd3zlheELtCIvzfvwgJl7wMb
+        XRXiAtvV9/T1/l74o7CVV3vTyxNu/Wd97z6fsl6gcJtx18uU7pl9xecNpA9cqMv3MFZiKc5I
+        NNRiLipOBACIUOEGRgQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220322075557epcas2p26c9dcb578e9c5f68a23f7fe1bdf35f65
+References: <20220322075617.109855-1-hypmean.kim@samsung.com>
+        <CGME20220322075557epcas2p26c9dcb578e9c5f68a23f7fe1bdf35f65@epcms2p5>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ingo,
-
-Ingo Molnar <mingo@kernel.org> writes:
-
-> * Ingo Molnar <mingo@kernel.org> wrote:
->
->> 
->> * Linus Torvalds <torvalds@linux-foundation.org> wrote:
->> 
->> > On Mon, Mar 21, 2022 at 6:13 AM Qian Cai <quic_qiancai@quicinc.com> wrote:
->> > >
->> > > On Mon, Mar 21, 2022 at 11:54:09AM +0100, Ingo Molnar wrote:
->> > > > Huang Ying (3):
->> > > >       sched/numa-balancing: Move some document to make it consistent with the code
->> > > >       sched/numa: Fix NUMA topology for systems with CPU-less nodes
->> > > >       sched/numa: Avoid migrating task to CPU-less node
->> > >
->> > > Linus, I don't think you want to merge this as-is. This will introduce a
->> > > kernel crash on arm64 NUMA as mentioned in this thread,
->> > 
->> > Ok, dropped from my queue. Thanks,
->> 
->> I've reverted the broken commit & will send another pull request after 
->> some testing. Sorry about that!
->
-> Ended up using the fix below instead - it's tested already on the affected 
-> system.
->
-
-Thanks a lot for your help!
-
-Is it a general rule to send a fixing patch for the bug of a patch
-merged by tip tree?  Or a new version of the patch is acceptable too?
-
-Best Regards,
-Huang, Ying
+Extend=C2=A0the=C2=A0exynos-thermal=C2=A0dt=C2=A0bindings=C2=A0document=C2=
+=A0to=C2=A0include=C2=A0compatible=0D=0Astring=C2=A0supporting=C2=A0ARTPEC-=
+8=C2=A0SoC=0D=0A=C2=A0=0D=0ASigned-off-by:=C2=A0sangmin=C2=A0kim=C2=A0<hypm=
+ean.kim=40samsung.com>=0D=0A---=0D=0A=C2=A0Documentation/devicetree/binding=
+s/thermal/samsung,exynos-thermal.yaml=C2=A0=7C=C2=A02=C2=A0++=0D=0A=C2=A01=
+=C2=A0file=C2=A0changed,=C2=A02=C2=A0insertions(+)=0D=0A=C2=A0=0D=0Adiff=C2=
+=A0--git=C2=A0a/Documentation/devicetree/bindings/thermal/samsung,exynos-th=
+ermal.yaml=C2=A0b/Documentation/devicetree/bindings/thermal/samsung,exynos-=
+thermal.yaml=0D=0Aindex=C2=A017129f7..c12bcff=C2=A0100644=0D=0A---=C2=A0a/D=
+ocumentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml=0D=0A+=
+++=C2=A0b/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.=
+yaml=0D=0A=40=40=C2=A0-16,6=C2=A0+16,7=C2=A0=40=40=C2=A0description:=C2=A0=
+=7C=0D=0A=C2=A0properties:=0D=0A=C2=A0=C2=A0=C2=A0compatible:=0D=0A=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0enum:=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=
+=C2=A0axis,artpec8-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=
+=A0samsung,exynos3250-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=
+=C2=A0samsung,exynos4412-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0-=C2=A0samsung,exynos4210-tmu=0D=0A=40=40=C2=A0-101,6=C2=A0+102,7=C2=A0=
+=40=40=C2=A0allOf:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0compatible:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0contains:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum:=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0axis,artpec8-tmu=
+=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0-=C2=A0samsung,exynos5433-tmu=0D=0A=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=
+=C2=A0samsung,exynos7-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0then:=0D=0A--=
+=C2=A0=0D=0A2.9.5=0D=0A=C2=A0=0D=0A=C2=A0

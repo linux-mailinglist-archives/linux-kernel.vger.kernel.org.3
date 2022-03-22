@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D704E36C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 636A84E36C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235549AbiCVClk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S235571AbiCVCm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235438AbiCVClh (ORCPT
+        with ESMTP id S235473AbiCVCmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:41:37 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179ED24F02
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:40:10 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so950980pjf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M+KlCJnb95r0VR1xBE5WLiRYber7fzPWf0JKHkm47E0=;
-        b=Pe0u5j5dFgSZ3lzCDOdBMiZkLDKDrBHO4RaGl9PVTMzGEvtxylOpkAyknVfzIpO+Pz
-         ehR+nkVvIdTYsCY+P3yFpKLsWaX+15b35OChFAjuO0ygpZnVv/45OCaHeU1x5A8cg2R0
-         MGSQvXE7COuhSYamHkoUH2dPNWwGWwnPBGqqh8xMQ6qLCRuG96LpVcXbhtyrDh1Jzqky
-         khcLzlfY01LbFFTj/yZnIa8WQ5oJpFPpT9YEMBwf0uGv4cBPmi6rd3zchZij9eyrlQZq
-         tf0Y7ZRk8k747hA+WQMYW0sVnJpoGvxUAYx9fqWDdDNPaFr1xbojzpAOo4gEtu81i7N1
-         9flw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=M+KlCJnb95r0VR1xBE5WLiRYber7fzPWf0JKHkm47E0=;
-        b=yHIwY9pNSe3AZB7/yH1dw3A5W/H/GyKIIgFMwKsgo1e/+epsNur5YBXCkJzqZhey5u
-         4P753AS6ZoPwmOvjIEbQMc/mkcTcHm+e+WgkaD0/VOfCP2YBcivAzy4rv+Jubo3kO65S
-         Bj34CLaS7ffN33xkkNTEWEbuQTyJwgLhNPiRYaTvzFuysckNZ4u3DJE08yMKaFSfBHH3
-         J+wLQVSyKqc6g+ljyWpXIUIPtfVfQW//0q/aeY/s9O4x7+Rk9te4zWFZOySSz6qOZ5rE
-         bfwdj1M8esVTe5uh6TNxt1aNHKi0m0/VCHshCZtLRda2CovUR3QTQjOPp8EOfs0hSsSg
-         9i5A==
-X-Gm-Message-State: AOAM530XB7WfCjDPie2IONNdYjfcls+bmLwY2gJjOEa7BRcYnw5TLP2n
-        zQ+rpYrKtq1LB5e+iQXNAeZv/A==
-X-Google-Smtp-Source: ABdhPJyDcJGpQWK2rYm3jfCyAwNOjQpHzMh5NTSXwfiYOHiLN06VyUaDlpPdX+aQeV/AFP+ZUbQqqg==
-X-Received: by 2002:a17:90a:c984:b0:1bf:aee2:3503 with SMTP id w4-20020a17090ac98400b001bfaee23503mr2402874pjt.28.1647916809497;
-        Mon, 21 Mar 2022 19:40:09 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id m17-20020a17090a7f9100b001b9e4d62ed0sm724127pjl.13.2022.03.21.19.40.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 19:40:08 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 19:40:08 -0700 (PDT)
-X-Google-Original-Date: Mon, 21 Mar 2022 19:39:45 PDT (-0700)
-Subject:     Re: [PATCH] riscv: ftrace: no need to acquire text_mutex when executed in stop_machine
-In-Reply-To: <20220313080711.mrzsgtxpbycug2vm@mail.google.com>
-CC:     rostedt@goodmis.org, changbin.du@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>, mingo@redhat.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     changbin.du@gmail.com
-Message-ID: <mhng-62c2ef00-fb64-48c3-a2bb-43b2799161bf@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 22:42:25 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BE413F53
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:40:58 -0700 (PDT)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWUS6-00FB9i-7g; Tue, 22 Mar 2022 02:40:54 +0000
+Date:   Tue, 22 Mar 2022 02:40:54 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Imran Khan <imran.f.khan@oracle.com>, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v7 7/8] kernfs: Replace per-fs rwsem with hashed
+ rwsems.
+Message-ID: <Yjk3Nqft/U6vDvd1@zeniv-ca.linux.org.uk>
+References: <20220317072612.163143-1-imran.f.khan@oracle.com>
+ <20220317072612.163143-8-imran.f.khan@oracle.com>
+ <YjPNOQJf/Wxa4YeV@zeniv-ca.linux.org.uk>
+ <536f2392-45d2-2f43-5e9d-01ef50e33126@oracle.com>
+ <YjgpaeFfFandY999@zeniv-ca.linux.org.uk>
+ <Yjir/d5S3J1PTiux@slm.duckdns.org>
+ <Yji8KT2K7ZKOQ+6S@zeniv-ca.linux.org.uk>
+ <YjjP5ldCCGYqD+UV@slm.duckdns.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjjP5ldCCGYqD+UV@slm.duckdns.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Mar 2022 00:07:11 PST (-0800), changbin.du@gmail.com wrote:
-> On Thu, Mar 10, 2022 at 09:27:42AM -0500, Steven Rostedt wrote:
->> On Thu, 10 Mar 2022 12:54:54 +0800
->> Changbin Du <changbin.du@gmail.com> wrote:
->>
->> > It's safe to patch text segment in stop_machine. No race is possible here.
->> > Besides, there is a false positive for the lock assertion in
->> > patch_insn_write() since the lock is not held by cpu migration thread.
->> >
->> > So we actually don't need our ftrace_arch_code_modify_prepare/post(). And
->> > the lock assertion in patch_insn_write() should be removed to avoid
->> > producing lots of false positive warnings.
->> >
->> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
->>
->> Ideally, RISC-V should try to get off of the stop_machine approach, and
->> move to the breakpoint modification.
->>
-> yes, that's a further step. I can feel a obvious stall to enable ftrace running
-> in QEMU. (maybe qemu-riscv tcg is too slow...)
+On Mon, Mar 21, 2022 at 09:20:06AM -1000, Tejun Heo wrote:
+> Hello,
+> 
+> On Mon, Mar 21, 2022 at 05:55:53PM +0000, Al Viro wrote:
+> > Why bother with rwsem, when we don't need anything blocking under it?
+> > DEFINE_RWLOCK instead of DEFINE_SPINLOCK and don't make it static.
+> 
+> Oh I mean, in case the common readers get way too hot, percpu_rwsem is a
+> relatively easy way to shift the burder from the readers to the writers. I
+> doubt we'll need that.
+> 
+> > kernfs_walk_ns() - this is fucking insane; on the surface, it needs to
+> > be exclusive due to the use of the same static buffer.  It uses that
+> > buffer to generate a pathname, *THEN* walks over it with strsep().
+> > That's an... interesting approach, for the lack of other printable
+> > terms - we walk the chain of ancestors, concatenating their names
+> > into a buffer and separating those names with slashes, then we walk
+> > that buffer, searching for slashes...  WTF?
+> 
+> It takes the @parent to walk string @path from. Where does it generate the
+> pathname?
 
-Looks like we've had this exact discussion before, even with exactly the 
-same patch and people and everything.  I guess I dropped the ball here, 
-I got so distracted trying to figure out those sequences to avoid 
-stop_machine() that I forgot to clean up the patch to fix stop machine.  
-I just sent out a v2 <20220322022331.32136-1-palmer@rivosinc.com>.  That 
-should at least fix the crash, we can deal with getting rid of 
-stop_machine() later.
+Sorry, misread that thing - the reason it copies the damn thing at all is
+the use of strsep().  Yecch...  Rule of the thumb regarding strsep() use,
+be it in kernel or in the userland: don't.  It's almost never the right
+primitive to use.
+
+Lookups should use qstr; it has both the length and place for hash.
+Switch kernfs_find_ns() to that (and lift the calculation of length
+into the callers that do not have it - note that kernfs_iop_lookup()
+does) and you don't need the strsep() shite (or copying) anymore.
+
+That would allow for kernfs_walk_ns() to take kernfs_rename_lock shared.
+
+HOWEVER, that's not the only lock needed there and this patchset is
+broken in that respect - it locks the starting node, then walks the
+path.  Complete with lookups in rbtrees of children in the descendents
+of that node and those are *not* locked.
+
+> > Wait a sec; what happens if e.g. kernfs_path_from_node() races with
+> > __kernfs_remove()?  We do _not_ clear ->parent, but we do drop references
+> > that used to pin what it used to point to, unless I'm misreading that
+> > code...  Or is it somehow prevented by drain-related logics?  Seeing
+> > that it seems to be possible to have kernfs_path_from_node() called from
+> > an interrupt context, that could be delicate...
+> 
+> kernfs_remove() is akin to freeing of the node and all its descendants. The
+> caller shouldn't be racing that against any other operations in the subtree.
+
+That's interesting...  My impression had been that some of these functions
+could be called from interrupt contexts (judging by the spin_lock_irqsave()
+in there).  What kind of async contexts those are, and what do you use to
+make sure they don't leak into overlap with kernfs_remove()?
+
+In particular, if you ever use those from RCU callbacks, you need to make
+sure that you have a grace period somewhere; the wait_event() you have in
+kernfs_drain() won't do it.
+
+I've tried to track the callchains that could lead there, but it gets
+hairy fast.

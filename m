@@ -2,138 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4951A4E463A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B63A4E463D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240798AbiCVSqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S240803AbiCVSsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiCVSqS (ORCPT
+        with ESMTP id S234151AbiCVSsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:46:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027353B3C6;
-        Tue, 22 Mar 2022 11:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647974689; x=1679510689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Z9ISvqYW+aTilxDXA9Qpu3ET59simZEgcBrqEX9APhA=;
-  b=WEqkixNrv8Yg6RumBPTxNK9NpMxqtqjq7waUgbBYUvBUP2kxVpv1m0yv
-   GY8EJn3a/FWMvjdMPhD/XeRuYhN1ltnSriIrH/NzPjD7mEYGmV7bJzPOI
-   +Xna8XHFADHkNmY6xgOswe5npn8o6Y4bv5wOaKcCDL8h7OfFrgc17h8Ma
-   6nspBNMdfFVrOMK+0lZN+ZWhfT6a8w1YwRb0za5/+ldqWOD06v0E03HQE
-   o5cl26cT4jCQ3Jmz3bLyikLjQBkEemJ/iHLJeRY3iG8OcGBdjjP8jAo1w
-   0POH1HS1UEFK7aihwI85Vj1eBlmV7ufWwreM9FOSEX56xnr57haAH3gLC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="344347989"
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="344347989"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 11:44:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="649120085"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 11:44:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nWjUH-004jQF-U9;
-        Tue, 22 Mar 2022 20:44:09 +0200
-Date:   Tue, 22 Mar 2022 20:44:09 +0200
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     Christian =?iso-8859-1?Q?L=F6hle?= <CLoehle@hyperstone.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        "david-b@pacbell.net" <david-b@pacbell.net>
-Subject: Re: [PATCH] mmc: block: Check for errors after write on SPI
-Message-ID: <YjoY+Z/iuIoNDhch@smile.fi.intel.com>
-References: <9d1ea819e4bb4222a227a02d5f6ad97c@hyperstone.com>
+        Tue, 22 Mar 2022 14:48:52 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3BE21B5;
+        Tue, 22 Mar 2022 11:47:24 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id b18so5430887qtk.13;
+        Tue, 22 Mar 2022 11:47:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xv2SG83/A8VIj/Yvme6nER5PuyvERHQnlLaL0v26UZU=;
+        b=aAez4bENUsIVokJXzci6E7NcI8/EoYeRFg2MIV+bNEjy2Kg+goJXhVKVFZPjf2SVFx
+         gYBQG3VcfaihOrVQfxZ+uMwW26BrEl3hwrcimICXp97Bjx1wbQ2d/0g1GrqTz994/72n
+         z6vaIr51UvlczzhepIf6G7W9Sod3wqnfXhr5uKfb5yb3QHQ5jnqF8MgGMrPrpe5iSGIB
+         Vr2Mi0ALsIzRfAsxKOGreoLnU0lUsGBaSgVCePNALrEEPIwOr9DNVpmbiTXPlIKWQoec
+         IpEb3VLcDhhwZKuOW1fk4FPF42QyN1TwIRCiTTIVowmfJuIdZbMLiR/cH3IrBPOwkR0q
+         Vzdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xv2SG83/A8VIj/Yvme6nER5PuyvERHQnlLaL0v26UZU=;
+        b=Zvl+yaDk7DrRw9VFKjvPrm9CwvfuzmH869KqaxL/fY9jKNzKIyH8/2UOJNYUzlGOh0
+         /7/FbX8vII5vqY6RA083rZJ48wjKwCPbSTQJGK7B2WfbzpUdZ/C4uMlXnijncGioeCI9
+         fMQ9phdHJSpzDYZf7hz3nxFODyyJb1jtLBX6XPQtnAbrQDG2OIWYMuQVT1zEQOssTfhr
+         S9/b48y0VC40w2uinnlC0eA4lNLkjIbxIW/JzAnhKsKGcwwX94b9Xa192vuTMAxL7dS2
+         jqugcht6jygjXibXItb+A6Hn1oVpSrQzm7eRUOtFfHU3sqRUUC2or/l1Asb9Cj5FOE6j
+         cgGQ==
+X-Gm-Message-State: AOAM530EeAjHCxBuODbc5IXn9W/Si/zdvS4kvJUjLrKde0CbIFAFQwet
+        lEXM9vVZYnPJFXo+ZopY6tNka5FPEMhN3fdw
+X-Google-Smtp-Source: ABdhPJws46frHdp5v61m+kB2H/p59SY9YKS3aKTzXO3MMnX73gPrLba+XJeizaAl2d5LTf7HFiVLlw==
+X-Received: by 2002:ac8:5b05:0:b0:2e2:1ce8:1533 with SMTP id m5-20020ac85b05000000b002e21ce81533mr5919450qtw.428.1647974843416;
+        Tue, 22 Mar 2022 11:47:23 -0700 (PDT)
+Received: from localhost.localdomain ([136.56.17.68])
+        by smtp.gmail.com with ESMTPSA id bl3-20020a05620a1a8300b0067d4cd00231sm9356639qkb.135.2022.03.22.11.47.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 11:47:23 -0700 (PDT)
+From:   joshuahant@gmail.com
+To:     jbaron@akamai.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joshuahant@gmail.com
+Subject: [PATCH] EDAC/ie31200: Add Skylake-S support
+Date:   Tue, 22 Mar 2022 14:47:17 -0400
+Message-Id: <20220322184717.29882-1-joshuahant@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9d1ea819e4bb4222a227a02d5f6ad97c@hyperstone.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 04:21:34PM +0000, Christian Löhle wrote:
-> Introduce a SEND_STATUS check for writes through SPI to not mark
-> an unsuccessful write as successful.
-> 
-> Since SPI SD/MMC does not have states, after a write, the card will
-> just hold the line LOW until it is ready again. The driver marks the
-> write therefore as completed as soon as it reads something other than
-> all zeroes.
-> The driver does not distinguish from a card no longer signalling busy
-> and it being disconnected (and the line being pulled-up by the host).
-> This lead to writes being marked as successful when disconnecting
-> a busy card.
-> Now the card is ensured to be still connected by an additional CMD13,
-> just like non-SPI is ensured to go back to TRAN state.
-> 
-> While at it and since we already poll for the post-write status anyway,
-> we might as well check for SPIs error bits (any of them).
-> 
-> The disconnecting card problem is reproducable for me after continuous
-> write activity and randomly disconnecting, around every 20-50 tries
-> on SPI DS for some card.
+From: Josh Hant <joshuahant@gmail.com>
 
-...
+Add device IDs for Skylake-S CPUs according to datasheet.
 
-> +	if (mmc_host_is_spi(card->host)) {
-> +		u32 status = 0;
+Signed-off-by: Josh Hant <joshuahant@gmail.com>
+---
+Dear all,
 
-> +		err = __mmc_send_status(card, &status, 0);
+I found that edac-util -v shows no memory controllers when using an
+Intel i5-6100T with a Supermicro X11SAE motherboard. With this patch,
+the ECC memory is detected. I tried to follow previous patches
+that added new families of processors to the module.
 
-> +		/* All R1 and R2 bits of SPI are errors in our case */
-> +		if (status)
-> +			err = err ? err : -EIO;
+This is my first submission to the kernel so please let me know if I
+missed something in the process.
 
-I would use either this:
+Thanks,
+Josh Hant
 
-		if (err || status) {
-			mqrq->brq.data.bytes_xfered = 0;
+ drivers/edac/ie31200_edac.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-			if (err)
-				return err;
-			return -EIO;
-		}
+diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+index 9a9ff5ad611a..96a3f70d06e6 100644
+--- a/drivers/edac/ie31200_edac.c
++++ b/drivers/edac/ie31200_edac.c
+@@ -20,11 +20,14 @@
+  * 0c08: Xeon E3-1200 v3 Processor DRAM Controller
+  * 1918: Xeon E3-1200 v5 Skylake Host Bridge/DRAM Registers
+  * 5918: Xeon E3-1200 Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers
++ * 190f: 6th Gen Core Dual-Core Processor Host Bridge/DRAM Registers
++ * 191f: 6th Gen Core Quad-Core Processor Host Bridge/DRAM Registers
+  * 3e..: 8th/9th Gen Core Processor Host Bridge/DRAM Registers
+  *
+  * Based on Intel specification:
+  * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/xeon-e3-1200v3-vol-2-datasheet.pdf
+  * http://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1200-family-vol-2-datasheet.html
++ * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/desktop-6th-gen-core-family-datasheet-vol-2.pdf
+  * https://www.intel.com/content/www/us/en/processors/core/7th-gen-core-family-mobile-h-processor-lines-datasheet-vol-2.html
+  * https://www.intel.com/content/www/us/en/products/docs/processors/core/8th-gen-core-family-datasheet-vol-2.html
+  *
+@@ -53,15 +56,17 @@
+ #define ie31200_printk(level, fmt, arg...) \
+ 	edac_printk(level, "ie31200", fmt, ##arg)
 
-		return 0;
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_1 0x0108
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_2 0x010c
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_3 0x0150
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_4 0x0158
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_5 0x015c
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_6 0x0c04
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_7 0x0c08
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_8 0x1918
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_9 0x5918
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_1  0x0108
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_2  0x010c
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_3  0x0150
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_4  0x0158
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_5  0x015c
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_6  0x0c04
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_7  0x0c08
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_8  0x190F
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_9  0x1918
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_10 0x191F
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_11 0x5918
 
-or at least this:
+ /* Coffee Lake-S */
+ #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK 0x3e00
+@@ -80,6 +85,7 @@
+ #define DEVICE_ID_SKYLAKE_OR_LATER(did)                                        \
+ 	(((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_8) ||                        \
+ 	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_9) ||                        \
++	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_10) ||                       \
+ 	 (((did) & PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ==                 \
+ 	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK))
 
-			err = err ?: -EIO;
-
-or even this:
-
-		if (!err && status)
-			err = -EIO;
-
-(Personally I would choose the first option)
-
-
-> +		if (err)
-> +			mqrq->brq.data.bytes_xfered = 0;
-> +		return err;
-> +	}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+@@ -577,6 +583,8 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_7),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_8),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_9),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
++	{ PCI_VEND_DEV(INTEL, IE31200_HB_10),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
++	{ PCI_VEND_DEV(INTEL, IE31200_HB_11),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_1),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_2),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_3),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+--
+2.34.1
 

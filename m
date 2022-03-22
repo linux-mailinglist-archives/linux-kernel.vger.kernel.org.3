@@ -2,381 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583684E4046
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05204E4071
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbiCVOOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S236906AbiCVOPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbiCVOOS (ORCPT
+        with ESMTP id S236426AbiCVOPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:14:18 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017475E756
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:12:50 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id a17so20774152edm.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=b/g6tTbOh1J+b6I0Bj7+4xBjDC+KuKXoWPrgs4jGFZY=;
-        b=ENIYC5DWMSnFJrGhldn/1hcXzlFWlZYd3l9SrKHw2ghi9QSR6YV852tu1MwT2lUAUx
-         agXIkF+1EluMwp05knqCwLCGmFWnjuAU+bl8CSpeia3D87G0OoY7wgYabz0csj/bhH2J
-         wyDVHvOdrml/C/K3mnCgn30lUQ0KkTycjOkkcmDpXsq00pf1lscFwl3xzntJlMFRE+WL
-         S6FjlrSpoAHUPcuGqM39U7qszKYODR0emH3nTnt6vxM2B+uOWu8ctOyjNDkDnGfG8FYZ
-         OBCw8VB2cCnK66cdIG1WP8nNR7K3wr+3JrZFV7KOeO71ID6VAeSzNX06jKzauQkxfWMz
-         SjTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=b/g6tTbOh1J+b6I0Bj7+4xBjDC+KuKXoWPrgs4jGFZY=;
-        b=PUVhb8yyn37SAQPVL0T5UwH7NsN4jDk+K+HaI3JAKRLCm9uW689xtwLUY0Pf0WRusQ
-         0GkMF6wtWZoKcKCukB7m0WYxa0Mj/zRQ/JDmFOcl+DCzginICQUn/+pT0fmdWAFjX7Ja
-         /knij1wNszzhMKVvNu9YvSidLJRwygC9FlJalj+XnOnZ0ar5Pzibs39Rn3jQW8EAVd2w
-         rP9AjXp9yD6JBcLBXDMmIPl/wwyFIA8sDljGabFa/PDAgs/vHX/lILaLdQNz+4FHgmGv
-         6861BMBh5Bji6IHjYhTY1BmZ2JL6Qum6hGekaz8eovClwJzuq9iXvUzZq16HPang28Oj
-         B8mw==
-X-Gm-Message-State: AOAM531Z0GjH1JkohPU3c578iKI639tMKCDejiwAFqxK9vD+RnWJF8ol
-        HDBpYVi0sH2VK7zs3ba0dfEvYPouqjLcIhriaxEz6PFEJOqhvD0bNuU=
-X-Google-Smtp-Source: ABdhPJzvS7ml8Ex06Obh1flW08eSBskW1dEeogCf+eP3E1GYXvNih72DTt8s54sO7BBajvbGg3cGybqNaLxS6LCd0nU=
-X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
- n13-20020a5099cd000000b00418d6c22405mr28398636edb.342.1647958365769; Tue, 22
- Mar 2022 07:12:45 -0700 (PDT)
+        Tue, 22 Mar 2022 10:15:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D6C7EB0E;
+        Tue, 22 Mar 2022 07:13:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44E95615B3;
+        Tue, 22 Mar 2022 14:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0714DC340EC;
+        Tue, 22 Mar 2022 14:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647958409;
+        bh=BeiWjClR9/rWod7wBmw6bmaaS1SjP/iSiCIKrIaSi7I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Hfdl+d//FDgzlDGY4S134COgJb0shtdyXy+vVu5z2ynWlWscv1u60SiPjyytL8FeQ
+         J3D71hbc7fIm/+zgRC1mIzHFf6DNPM0RcdW6VVBZdkMACoiVWGnmiYI+vyeiY3DArE
+         J69mE+/NOennDHRhqkKpnTVAKhXXxP0qSDh68crQTA8+/+xN4mWqytm9vCUapIArNx
+         /zZ9soJHaz1QdQFVpgbKh5Wln0d+GPjpT55RgKv7XF7RjPPL9WyYzckHjFWXya7uvf
+         kQujdnZY1GTAzbvt+wGIE8n8ojmna4Ny/M4raE2H/vkoTLdL69fGHTTijftThC1MZw
+         C2iZQ8uKYneuw==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     idryomov@gmail.com, xiubli@redhat.com
+Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lhenriques@suse.de
+Subject: [RFC PATCH v11 11/51] ceph: decode alternate_name in lease info
+Date:   Tue, 22 Mar 2022 10:12:36 -0400
+Message-Id: <20220322141316.41325-12-jlayton@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220322141316.41325-1-jlayton@kernel.org>
+References: <20220322141316.41325-1-jlayton@kernel.org>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 22 Mar 2022 14:12:36 +0000
-Message-ID: <CAHpNFcOb8vwZPySqV_htA7+mZCaNX3h=DQN_tu-MZbG-B38SxQ@mail.gmail.com>
-Subject: Kernel C/TRNG System TIMECrystal Quartz Variable T, Variable Fraction
- & Security Leaf Systems :RS NT Interrupt counter Entropy : A counter theory : RS
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel C/TRNG System TIMECrystal Quartz Variable T, Variable Fraction
-& Security Leaf Systems :RS NT Interrupt counter Entropy : A counter
-theory : RS
+Ceph is a bit different from local filesystems, in that we don't want
+to store filenames as raw binary data, since we may also be dealing
+with clients that don't support fscrypt.
+
+We could just base64-encode the encrypted filenames, but that could
+leave us with filenames longer than NAME_MAX. It turns out that the
+MDS doesn't care much about filename length, but the clients do.
+
+To manage this, we've added a new "alternate name" field that can be
+optionally added to any dentry that we'll use to store the binary
+crypttext of the filename if its base64-encoded value will be longer
+than NAME_MAX. When a dentry has one of these names attached, the MDS
+will send it along in the lease info, which we can then store for
+later usage.
+
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
+---
+ fs/ceph/mds_client.c | 43 +++++++++++++++++++++++++++++++++----------
+ fs/ceph/mds_client.h | 11 +++++++----
+ 2 files changed, 40 insertions(+), 14 deletions(-)
+
+diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+index 648816eb4228..49ba47baac8e 100644
+--- a/fs/ceph/mds_client.c
++++ b/fs/ceph/mds_client.c
+@@ -308,27 +308,47 @@ static int parse_reply_info_dir(void **p, void *end,
+ 
+ static int parse_reply_info_lease(void **p, void *end,
+ 				  struct ceph_mds_reply_lease **lease,
+-				  u64 features)
++				  u64 features, u32 *altname_len, u8 **altname)
+ {
++	u8 struct_v;
++	u32 struct_len;
++	void *lend;
++
+ 	if (features == (u64)-1) {
+-		u8 struct_v, struct_compat;
+-		u32 struct_len;
++		u8 struct_compat;
++
+ 		ceph_decode_8_safe(p, end, struct_v, bad);
+ 		ceph_decode_8_safe(p, end, struct_compat, bad);
++
+ 		/* struct_v is expected to be >= 1. we only understand
+ 		 * encoding whose struct_compat == 1. */
+ 		if (!struct_v || struct_compat != 1)
+ 			goto bad;
++
+ 		ceph_decode_32_safe(p, end, struct_len, bad);
+-		ceph_decode_need(p, end, struct_len, bad);
+-		end = *p + struct_len;
++	} else {
++		struct_len = sizeof(**lease);
++		*altname_len = 0;
++		*altname = NULL;
+ 	}
+ 
+-	ceph_decode_need(p, end, sizeof(**lease), bad);
++	lend = *p + struct_len;
++	ceph_decode_need(p, end, struct_len, bad);
+ 	*lease = *p;
+ 	*p += sizeof(**lease);
+-	if (features == (u64)-1)
+-		*p = end;
++
++	if (features == (u64)-1) {
++		if (struct_v >= 2) {
++			ceph_decode_32_safe(p, end, *altname_len, bad);
++			ceph_decode_need(p, end, *altname_len, bad);
++			*altname = *p;
++			*p += *altname_len;
++		} else {
++			*altname = NULL;
++			*altname_len = 0;
++		}
++	}
++	*p = lend;
+ 	return 0;
+ bad:
+ 	return -EIO;
+@@ -358,7 +378,8 @@ static int parse_reply_info_trace(void **p, void *end,
+ 		info->dname = *p;
+ 		*p += info->dname_len;
+ 
+-		err = parse_reply_info_lease(p, end, &info->dlease, features);
++		err = parse_reply_info_lease(p, end, &info->dlease, features,
++					     &info->altname_len, &info->altname);
+ 		if (err < 0)
+ 			goto out_bad;
+ 	}
+@@ -425,9 +446,11 @@ static int parse_reply_info_readdir(void **p, void *end,
+ 		dout("parsed dir dname '%.*s'\n", rde->name_len, rde->name);
+ 
+ 		/* dentry lease */
+-		err = parse_reply_info_lease(p, end, &rde->lease, features);
++		err = parse_reply_info_lease(p, end, &rde->lease, features,
++					     &rde->altname_len, &rde->altname);
+ 		if (err)
+ 			goto out_bad;
++
+ 		/* inode */
+ 		err = parse_reply_info_in(p, end, &rde->inode, features);
+ 		if (err < 0)
+diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
+index aab3ab284fce..2cc75f9ae7c7 100644
+--- a/fs/ceph/mds_client.h
++++ b/fs/ceph/mds_client.h
+@@ -29,8 +29,8 @@ enum ceph_feature_type {
+ 	CEPHFS_FEATURE_MULTI_RECONNECT,
+ 	CEPHFS_FEATURE_DELEG_INO,
+ 	CEPHFS_FEATURE_METRIC_COLLECT,
+-
+-	CEPHFS_FEATURE_MAX = CEPHFS_FEATURE_METRIC_COLLECT,
++	CEPHFS_FEATURE_ALTERNATE_NAME,
++	CEPHFS_FEATURE_MAX = CEPHFS_FEATURE_ALTERNATE_NAME,
+ };
+ 
+ /*
+@@ -45,8 +45,7 @@ enum ceph_feature_type {
+ 	CEPHFS_FEATURE_MULTI_RECONNECT,		\
+ 	CEPHFS_FEATURE_DELEG_INO,		\
+ 	CEPHFS_FEATURE_METRIC_COLLECT,		\
+-						\
+-	CEPHFS_FEATURE_MAX,			\
++	CEPHFS_FEATURE_ALTERNATE_NAME,		\
+ }
+ #define CEPHFS_FEATURES_CLIENT_REQUIRED {}
+ 
+@@ -98,7 +97,9 @@ struct ceph_mds_reply_info_in {
+ 
+ struct ceph_mds_reply_dir_entry {
+ 	char                          *name;
++	u8			      *altname;
+ 	u32                           name_len;
++	u32			      altname_len;
+ 	struct ceph_mds_reply_lease   *lease;
+ 	struct ceph_mds_reply_info_in inode;
+ 	loff_t			      offset;
+@@ -122,7 +123,9 @@ struct ceph_mds_reply_info_parsed {
+ 	struct ceph_mds_reply_info_in diri, targeti;
+ 	struct ceph_mds_reply_dirfrag *dirfrag;
+ 	char                          *dname;
++	u8			      *altname;
+ 	u32                           dname_len;
++	u32                           altname_len;
+ 	struct ceph_mds_reply_lease   *dlease;
+ 	struct ceph_mds_reply_xattr   xattr_info;
+ 
+-- 
+2.35.1
 
-NT Interrupt counter Entropy : A counter theory : RS
-
-"more importantly, our
-distribution is not 2-monotone like NT's, because in addition to the
-cycle counter, we also include in those 4 words a register value, a
-return address, and an inverted jiffies. (Whether capturing anything
-beyond the cycle counter in the interrupt handler is even adding much of
-value is a question for a different time.)"
-
-NT Interrupt counter Entropy : A counter theory : RS
-
-To be clear interrupts are old fashioned (NT & Bios) : Points
-
-Network cards have offloading? Yes & why cannot we?
-
-Offloaded does not mean that a time differential matrix HASH AES of 32Bit w=
-ords,
-Cross pollinated though MMX, AVX , SiMD is plausible!
-
-Combined with even network latency timing & interrupt latency...
-
-Various system differentials can alternate line in our table per clock sync=
-!
-
-In this reference Quartz clock instability is not only counter acted by NTP=
-...
-But also utilized as a variable co-modifier.
-
-So why not also advantage ourselves of the clock frequency scaling
-effect to confuse odds again for Entropy (Random, Not Entropy)
-
-SSD does also have a write counter & a cleared state, not so boring as
-one thinks if per 32KB segment is hashed in 4Bit, 8,Bit 32Bit float!
-(remember we have DOT3 DOT 4 & INT8 in ML)
-
-We can utilize write cycle statistics & all hardware; Interrupts by
-themselves are rather Boring!
-
-Computed timings on processes multiplexed over 3 Threads per group in
-competition is also a potential complexifier of Random
-
-Rupert S
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
-tml
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-****
-
-PreSEED Poly Elliptic SiMD RAND : RS
-
-Preseed ; 3 Seeds with AES or Poly ChaCha or even 1 : 2 would be
-rather fast Init
-
-Blending them would make a rather paranoid Kernel developer feel safe! :D
-
-Like so List:
-
-3 seeds 32Bit or 64Bit :
-Examples :
-
-1 Seed : Pre seeded from CPU IRQ & Net 16Bit values each & merged
-2 & 3 from server https://pollinate.n-helix.com &or System TRNG
-
-4 Seed mix 128Bit Value
-
-Advantages :
-
-AVX & SiMD Mixxer is fast 'Byte Swap & Maths etcetera" & MultiThreaded
-AES Support is common :
-
-*
-HASH : RSA Source Cert C/TRNG : (c)RS
-
-Elliptic RSA : Cert Mixer : RSA 4096/2048/1024Temporal : 384/256/192
-ECC Temporal
-
-Centric Entropy HASH: Butterfly Effects
-
-ChaCha
-SM4
-SHA2
-SHA3
-
-Elliptic Encipher
-AES
-Poly ChaCha
-
-Elliptic : Time Variance : Tick Count Variance : On & Off Variance : IRQ
-
-*
-Time & Crystal : Quartz as a diffraction point fractal differentiator : RS
-
-RDTSC Variable bit differentiation & deviation of the quartz sub .0001
-Value combined with complexity of unique interplay with Alternative
-clocks such as Network cards, Audio cards & USB Sticks & Bluetooth
-radio clocks & Ultimately the NTP Pools themselves when required.
-
-(TIME Differential Float maths) TSC : RDTSC : RDTSCP : TCE supports
-single and half precision floating-point calculations
-
-Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
-pge mca cmov pat pse36 clflush mmx fxsr sse sse2 htt pni ssse3 fma
-cx16 sse4_1 sse4_2 popcnt aes f16c syscall nx lm avx svm sse4a osvw
-ibs xop skinit wdt lwp fma4 tce tbm topx page1gb rdtscp bmi1
-
-*
-For RDTSCP =3D TValue TV1=3D16.0685 TV2=3D16.1432 TV3=3D15.1871
-When Processor Mzh =3D PV1 PV2 PV3
-RAND Source =3D Es1 Es2 Es3
-
-If Xt =3D 1.9 < then roll right
-
-((TV1 - TV2) * (PV1 - PV2)) / ((TV1 - TV3) * (PV1 - PV3)) =3D FractorXt(Xt)
-
-Es1 * Xt =3D Differential
-
-Es2 Es3
-
-(c) Rupert S
-
-Quartz as a diffraction point fractal differentiator : RS
-
-https://tches.iacr.org/index.php/TCHES/article/download/7274/6452
-https://perso.univ-rennes1.fr/david.lubicz/articles/gda.pdf
-https://patents.google.com/patent/US9335971
-*
-
-"Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
-is, in part, why we take trylocks instead. But apparently this still
-trips up various lock dependency analysers. That seems like a bug in the
-analyser's that should be fixed, rather than having to change things
-here.
-
-But maybe there's another reason to change things up: by deferring the
-crng pre-init loading to the worker, we can use the cryptographic hash
-function rather than xor, which is perhaps a meaningful difference when
-considering this data has only been through the relatively weak
-fast_mix() function.
-
-The biggest downside of this approach is that the pre-init loading is
-now deferred until later, which means things that need random numbers
-after interrupts are enabled, but before work-queues are running -- or
-before this particular worker manages to run -- are going to get into
-trouble. Hopefully in the real world, this window is rather small,
-especially since this code won't run until 64 interrupts have occurred."
-
-https://lore.kernel.org/lkml/Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net/T/
-
-Rupert S
-
-*****
-Serve C-TRNG QT Fractional Differentiator(c)RS
-
-Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
-32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
-differentiator.
-
-SipHash: a fast short-input PRF
-
-Rotation Alignment : "The advantage of choosing such =E2=80=9Caligned=E2=80=
-=9D
-rotation counts is that aligned rotation counts are much faster than
-unaligned rotation counts on many non-64-bit architectures."
-
-http://cr.yp.to/siphash/siphash-20120918.pdf
-
-https://www.aumasson.jp/siphash/siphash.pdf
-
-"Choice of rotation counts. Finding really bad rotation counts for ARX
-algorithms turns out to be difficult. For example, randomly setting
-all rotations in
-BLAKE-512 or Skein to a value in {8, 16, 24, . . . , 56} may allow known at=
-tacks
-to reach slightly more rounds, but no dramatic improvement is expected.
-The advantage of choosing such =E2=80=9Caligned=E2=80=9D rotation counts is=
- that
-aligned rotation counts are much faster than unaligned rotation counts
-on many non-64-bit
-architectures. Many 8-bit microcontrollers have only 1-bit shifts of bytes,=
- so
-rotation by (e.g.) 3 bits is particularly expensive; implementing a rotatio=
-n by
-a mere permutation of bytes greatly speeds up ARX algorithms. Even 64-bit
-systems can benefit from alignment, when a sequence of shift-shift-xor can =
-be
-replaced by SSSE3=E2=80=99s pshufb byte-shuffling instruction. For comparis=
-on,
-implementing BLAKE-256=E2=80=99s 16- and 8-bit rotations with pshufb led to=
- a
-20% speedup
-on Intel=E2=80=99s Nehalem microarchitecture."
-
-https://www.kernel.org/doc/html/latest/security/siphash.html
-
-https://en.wikipedia.org/wiki/SipHash
-
-Code SIP-HASH
-https://github.com/veorq/SipHash
-
-Serve C-TRNG QT Fractional Differentiator(c)RS
-
-Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
-32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
-differentiator.
-
-As we see rotation may benefit from the addition of Quartz crystal
-alignment sync data from 4 cycles & aligning data blocks,
-
-Obviously we can pre share 4 64Bit blocks use; use a pre seed AES/ChaCha Qu=
-ad!
-Indeed we can have 16 64Bit pre Seeds & chose them by time sync for kernel
-
-Security bug; Solutions & explanation's (contains additional RANDOM
-Security Methods) :RS
-
-https://science.n-helix.com/2020/06/cryptoseed.html
-https://science.n-helix.com/2019/05/zombie-load.html
-https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
-
-Rupert S https://science.n-helix.com
-
-*RAND OP Ubuntu :
-https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
-
-https://pollinate.n-helix.com
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://aka.ms/win10rng
-*
-
-Encryption Methods:
-https://tools.ietf.org/id/?doc=3Dhash
-
-https://tools.ietf.org/id/?doc=3Dencrypt
-
-HASH :
-
-https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs
-
-https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
-
-https://tools.ietf.org/id/?doc=3Dsha
-
-https://tools.ietf.org/id/?doc=3Drsa
-
-Encryption Common Support:
-
-https://tools.ietf.org/id/?doc=3Dchacha
-
-https://tools.ietf.org/id/?doc=3Daes
-
-SM4e does seem a good possibility for C/T/RNG CORE HASH Functions!
-
-ARM Crypto Extensions Code (Maybe AES Extensions would work here)
-https://lkml.org/lkml/2022/3/15/324
-
-ARM Neon / SiMD / AVX Compatible (GPU is possible)
-https://lkml.org/lkml/2022/3/15/323
-
-*
-
-197 FIPS NIST Standards Specification C/T/RNG
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-Only a Neanderthal would approve a non additive source combination
-that is injected into the HASH & Re-HASHED ,
-
-One does not Procreate inadequate RANDOM from a simple bias KERNEL,
-Hardware RNG's added together may add around 450% Complexity!
-
-Hardware RNG devices MUST be able to Re-HASH to their 197 NIST
-Standards Specification, That is FINAL 2022 DT
-
-KEYS: trusted: allow use of kernel RNG for key material
-
-https://lkml.org/lkml/2022/3/16/598
-
-CAAM PRNG Reference : https://lkml.org/lkml/2022/3/16/649
-
-TRNG Samples & Method
-
-https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=
-=3Ddrive_web

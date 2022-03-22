@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6344E3ACD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D644E3AD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbiCVIkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S231455AbiCVIlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbiCVIkc (ORCPT
+        with ESMTP id S231260AbiCVIlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:40:32 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E5F17AB9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:39:04 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id h1so20752279edj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X99bYtMPXK/lUQRyXYEMc82PYA/a9iPeIbyvT5Yw/Y4=;
-        b=kjzsyGVFO7n/ps8vT3T+52rxTOI3jY2t4UGftFX6Dtm8CrsMtWfqW64D0NbY1KpUuR
-         jdxGVxIa88gbx79Sk52K8S8NW2HRlfKnjYPVqvF8NYUPt+I3CEtqMyxVhYYuW5W+vm37
-         TgSCx1X8nvHFVASN7iSujEpSLkonNCyxDyUi30caOnYTIo1WWoHgKoxRviJpAVa1TdH8
-         hh3/+J3r2akg4O/LDR7iHSIDypgp6iGeiX68pb4XD8EPB7vNijFw/2YUo4+Zg7RKIjua
-         1ZvETy+DeS/IcM+O3CUR+AOnxe7HaBuGeZTcyfp6U+MzK7FS9MVRGwc0WOFqu8N7y6dE
-         Ny6g==
+        Tue, 22 Mar 2022 04:41:31 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F11725D8;
+        Tue, 22 Mar 2022 01:40:04 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id p9so23824857wra.12;
+        Tue, 22 Mar 2022 01:40:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=X99bYtMPXK/lUQRyXYEMc82PYA/a9iPeIbyvT5Yw/Y4=;
-        b=7tPNdLZH0mhHSZJerVjRPGpFHmqnC/WTtlA4vjhOyzNRiGfPNclf0Znh9Y5QHArCpA
-         lDLs91OykNhPHAsDdep6hs71boA91WkBg+man2ulNPYzqqYvgLlay8ztmC1kNRDQoZd6
-         irnQQgVA5hRohOBzNbM0j7esnIG6akgvYEW0dtuyqZIAZ1cNbJ9wehMtNO8zXtgFE7W+
-         huKf1znEnPk4/cq74NvF4OSIE1j7Nk6IiiOD0sS/uZcyTDRLIsgJZZq4nTC22YH6FBZ6
-         jNJt3spwxZQnoyevor2tRTRL/56Y0ZEAYCxjf/IQVbmj7xmvoHY6oKq39CyH24LtSQ4c
-         0bgg==
-X-Gm-Message-State: AOAM5329DHSaheyhdvNtn7CIH+qkLcKIqA3ixb7fgT2VExCv0my/zivb
-        aX7w/DpOnxNPRnWzS14gstM7PWLc+xI=
-X-Google-Smtp-Source: ABdhPJxXDtRJWchyCbVOGD2wwIGmi4wLssoOiyYgO2VoKtkzls9TLlTHQKUP8kctT6dQwoJcuefSAA==
-X-Received: by 2002:a05:6402:280f:b0:419:4c6f:a91b with SMTP id h15-20020a056402280f00b004194c6fa91bmr6438066ede.84.1647938342706;
-        Tue, 22 Mar 2022 01:39:02 -0700 (PDT)
-Received: from localhost.localdomain (host-79-37-100-169.retail.telecomitalia.it. [79.37.100.169])
-        by smtp.gmail.com with ESMTPSA id do8-20020a170906c10800b006dfe4d1edc6sm3631131ejc.61.2022.03.22.01.39.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 01:39:01 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     David Kershner <david.kershner@unisys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH] staging: unisys: Properly test debugfs_create_dir() return values
-Date:   Tue, 22 Mar 2022 09:38:58 +0100
-Message-Id: <20220322083858.16887-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=/Tfn3grWM8EBZ0IFyy5BUNygjofN0WZXFLyZhdj5fD8=;
+        b=UlDPQna4CCdnJGBrEqI6B8NF4N/ps+D1GLXFLuXXlmtvEs5zpF2MdoIvIpAoofLeJU
+         ZOKbOec2wgadltr6Qxs9Bw0nrxcduvkxlHaH1Vvv52+VNzvVbYmXtIxQWA6oaOk7RGFr
+         sERxThNv90Ev5yaTWNhyfNU2oDhqyhV3PKWuiq/sHOtD52XQf4rL+pYRRlAOgQVgZ6DU
+         eOVp/S1BrSS662yJTlpIzrhmQOaQE7AH5ztC8xUv2ncfWcK6yrwQLz5LKFAPc0Vo38X6
+         oYVpeD6I9Ar4f7bCAmKKBf1b3lNq62eawlTJnM8MLdL9vKab0kz54DS0su+Cbjur5pq5
+         mpvw==
+X-Gm-Message-State: AOAM530r1O45zpM53iKwyh+LSkPDwKvpfbvxBeQQVIpUXZfmykDCVIn2
+        YJYHELMAlVFb7HDhmB1tY9iGFEc7K7U=
+X-Google-Smtp-Source: ABdhPJxkORCp7gIYkTNw3KV3bdX3kmbwKYImn33rbcbzHbL5oapUbtQ9rTY8znVVhU8GFn8NowZFyg==
+X-Received: by 2002:a5d:4609:0:b0:203:e792:3add with SMTP id t9-20020a5d4609000000b00203e7923addmr21101655wrq.657.1647938402451;
+        Tue, 22 Mar 2022 01:40:02 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id i10-20020a0560001aca00b00203daf3759asm16563813wry.68.2022.03.22.01.40.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 01:40:01 -0700 (PDT)
+Message-ID: <216b98d5-a254-4527-c569-9f3397811e70@kernel.org>
+Date:   Tue, 22 Mar 2022 09:40:00 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: add reset properties into MDIO
+ nodes
+Content-Language: en-US
+To:     Dylan Hung <dylan_hung@aspeedtech.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Cc:     BMC-SW <BMC-SW@aspeedtech.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
+ <20220321095648.4760-4-dylan_hung@aspeedtech.com>
+ <eefe6dd8-6542-a5c2-6bdf-2c3ffe06e06b@kernel.org>
+ <HK0PR06MB2834CFADF087A439B06F87C29C179@HK0PR06MB2834.apcprd06.prod.outlook.com>
+In-Reply-To: <HK0PR06MB2834CFADF087A439B06F87C29C179@HK0PR06MB2834.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-debugfs_create_dir() returns a pointers to a dentry objects. On failures
-it returns errors. Currently the values returned to visornic_probe()
-seem to be tested for being equal to NULL in case of failures.
+On 22/03/2022 03:32, Dylan Hung wrote:
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski [mailto:krzk@kernel.org]
+>> Sent: 2022年3月21日 11:53 PM
+>> To: Dylan Hung <dylan_hung@aspeedtech.com>; robh+dt@kernel.org;
+>> joel@jms.id.au; andrew@aj.id.au; andrew@lunn.ch; hkallweit1@gmail.com;
+>> linux@armlinux.org.uk; davem@davemloft.net; kuba@kernel.org;
+>> pabeni@redhat.com; p.zabel@pengutronix.de; devicetree@vger.kernel.org;
+>> linux-arm-kernel@lists.infradead.org; linux-aspeed@lists.ozlabs.org;
+>> linux-kernel@vger.kernel.org; netdev@vger.kernel.org
+>> Cc: BMC-SW <BMC-SW@aspeedtech.com>; stable@vger.kernel.org
+>> Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: add reset properties into MDIO
+>> nodes
+>>
+>> On 21/03/2022 10:56, Dylan Hung wrote:
+>>> Add reset control properties into MDIO nodes.  The 4 MDIO controllers in
+>>> AST2600 SOC share one reset control bit SCU50[3].
+>>>
+>>> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
+>>> Cc: stable@vger.kernel.org
+>>
+>> Please describe the bug being fixed. See stable-kernel-rules.
+> 
+> Thank you for your comment.
+> The reset deassertion of the MDIO device was usually done by the bootloader (u-boot).
+> However, one of our clients uses proprietary bootloader and doesn't deassert the MDIO
+> reset so failed to access the HW in kernel driver.  The reset deassertion is missing in the
+> kernel driver since it was created, should I add a BugFix for the first commit of this driver?
+> Or would it be better if I remove " Cc: stable@vger.kernel.org"?
 
-Properly test with "if (IS_ERR())" and then assign the correct error 
-value to the "err" variable.
+This rather looks like a missing feature, not a bug. Anyway any
+description must be in commit message.
 
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/staging/unisys/visornic/visornic_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/unisys/visornic/visornic_main.c b/drivers/staging/unisys/visornic/visornic_main.c
-index 643432458105..58d03f3d3173 100644
---- a/drivers/staging/unisys/visornic/visornic_main.c
-+++ b/drivers/staging/unisys/visornic/visornic_main.c
-@@ -1922,11 +1922,11 @@ static int visornic_probe(struct visor_device *dev)
- 	/* create debug/sysfs directories */
- 	devdata->eth_debugfs_dir = debugfs_create_dir(netdev->name,
- 						      visornic_debugfs_dir);
--	if (!devdata->eth_debugfs_dir) {
-+	if (IS_ERR(devdata->eth_debugfs_dir)) {
- 		dev_err(&dev->device,
- 			"%s debugfs_create_dir %s failed\n",
- 			__func__, netdev->name);
--		err = -ENOMEM;
-+		err = PTR_ERR(devdata->eth_debugfs_dir);
- 		goto cleanup_register_netdev;
- 	}
- 
--- 
-2.34.1
-
+Best regards,
+Krzysztof

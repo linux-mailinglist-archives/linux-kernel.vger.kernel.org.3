@@ -2,179 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482D54E394F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA9D4E395E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237259AbiCVHIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 03:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S237251AbiCVHIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 03:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237101AbiCVHHs (ORCPT
+        with ESMTP id S237285AbiCVHIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:07:48 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170F753723;
-        Tue, 22 Mar 2022 00:06:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647932781; x=1679468781;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=W6+C+tjNsFPIggC60uO1N1X1X2MoTSJyFlV01A2b0Co=;
-  b=lub+FKyZufsiFDDHDICryHfSowVrZVRRv+nsDGWfZr5dBEnz6ZYszaiV
-   TBfIEVAcjSyn/KfDiQMGN+1ig/vvsUwE0SEAJ0x6PMNi+DsdGd+Kf24xM
-   bzdk9g2AUTMkBb13raujNr8CEPiBsYaFKzGtvMeXzEEzWQ2sZahs+EdxP
-   X7sBLmLquCcWCBDDkA3zczz+oRgFzVPYVplpROXLLjD+oXC2o1JNffgZv
-   hc+2RKqMr1sln05+L/xCV1YsGXsFibP9p6H0uFh/dyFWE1xt1WY4xZw2S
-   kO9qRiEuvYtlZ1dfuFN3lgcBZyt1P/3zS8x4T73EkB7eijMKHKb8ct9ve
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282576618"
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="282576618"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 00:06:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="824812675"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Mar 2022 00:06:20 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 22 Mar 2022 00:06:19 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 22 Mar 2022 00:06:19 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Tue, 22 Mar 2022 00:06:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ljCnUhSRWiBYk+2o1xu/542e1YaN0CNQ28QlDJNY6gse4QW198jHn2lYmRBlEHaaBxmDQxFg582bLijkV6xIgA3tWWVRDhm3r7U56dw0nTXh3gozaSzSybrHeaBw9ZRH4gtWzd0oAzhgTcHR2fVHFQwiVkhigajSNSQOvko+6hJbLVatA1MOzcuCBYRePqug8Ik/tUmwMWYnOYTjAGRZSuNu2/totBN3lKLjywK+DgcW7WpxW3vyGZ6sen0PmFaRQfIM9WgV4yaShfHDEEdW9WX+MJc4VUg1qPQVkEO8n23J29z+gmMwogyHK9JABSNfdGcZyqcZzlNn+KqEQVa8dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=exjPxVTxN2BhQtgvShActp/FxmJEPyxKRcVX+s9X8/I=;
- b=kzwDO6b1BzpTCSkJnuxhYemTugOcPtNOVU3NYPb9gmjhKsao1ZvKH9Ks4ZzrYbeRsLtrDBMxyCUk2pfGqqH2IWw9ZmdccJaGa2KNABAFHi67RdD6VjCNuy48nLANIRvJaHmSZN2QbzJUqfTbV4bP8rYjUd0Pjy7iEg+VTJOEF1X3pKsKc8Q0QtS9rdZP889Jba6c+0im9BFr3uDVNfVDqs/zYL2lepSNjjZ8MNwyBDx/YDORuF94xNSUw5e6O2KT8god0vRr2uX/I4mgg1XgnOMpeQ48RIhnS8bRf9R08VHVWicnQjYv3U2BjWGNhZp+JE9xwxMAQctSH1qlAERO9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
- by CY4PR1101MB2087.namprd11.prod.outlook.com (2603:10b6:910:25::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Tue, 22 Mar
- 2022 07:06:16 +0000
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::8516:e462:e23c:85fb]) by PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::8516:e462:e23c:85fb%6]) with mapi id 15.20.5081.023; Tue, 22 Mar 2022
- 07:06:16 +0000
-Message-ID: <fa7c8772-2a70-c3c7-bfbd-4804abbd28ea@intel.com>
-Date:   Tue, 22 Mar 2022 00:06:06 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] intel_idle: Add a new flag to initialize the AMX
- state
-Content-Language: en-CA
-To:     Artem Bityutskiy <dedekind1@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-References: <20220309223431.26560-1-chang.seok.bae@intel.com>
- <20220309223431.26560-3-chang.seok.bae@intel.com>
- <CAJZ5v0g2ZU8PY8QkGD1Nb6VH37pm=ho8ZYa3h3UBRWDoH+xqnQ@mail.gmail.com>
- <8fc192be-348d-0102-22ab-57b974e9d840@intel.com>
- <ad071c01174bfb76ec790a2b43db2892e5b652e9.camel@gmail.com>
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-In-Reply-To: <ad071c01174bfb76ec790a2b43db2892e5b652e9.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR04CA0004.apcprd04.prod.outlook.com
- (2603:1096:4:197::22) To PH0PR11MB4855.namprd11.prod.outlook.com
- (2603:10b6:510:41::12)
+        Tue, 22 Mar 2022 03:08:22 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF54C5716F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:06:54 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id w25so20474912edi.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=74AEUdctc3ZeeBqiC+ypczzjJ82s4XY5TZ4m0+nyhR8=;
+        b=MaSdtgUtMm1stk7+jnTEYcU+1TIquX0e5Ii9hArhNZVJ/Z7qmSa91QZED0TySgz4Ge
+         TH0+EPa9gDmojjJ+ucSsmED9linlopH3/bR7R2yBTdeJHAe1SBuPYXl48y2myXEjCUHD
+         7R70NhaSsp/Rk2j4/1H7Q3GaK3lWnmgSZaVZ6ZUha71D0UeSFuZ+kiimRxMVIf6oAbUb
+         8gCE1D2du7YMeDz93VpxaXOMp2QvBZalmxddHSUiUw8kG+YZ5bsUiUn5+YoJcCcHS8Nu
+         hw/Idoxi9LpaH+HtoPaOIa5TtqI8LPVCtDu2Q4dgdK+mroBDOtnu78Malcqf7AidyvC0
+         4SCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=74AEUdctc3ZeeBqiC+ypczzjJ82s4XY5TZ4m0+nyhR8=;
+        b=S919EdG87bE6LiXSU4VmHRgxOZs+EL9mUlAyKjH9713THgvRGLOTB+xq/IRfQQDxDJ
+         71iFJPKfYeXoTDNOKI/9EXiSuzaE3j6hyEhAqiLp4GOvoX5YmHGPz50Q/D+NgYMkWyMO
+         LRe34uka0m39KiEdVNqelqX/Fprr/ys+LvKbbrxaI+3qc+JVYQ5eIdlr5pFvtv2cXGoI
+         TuLWV6YM4HNazG+Ls7sF6w4eiGVzxIVNMg0gKJlLJgC08LD/0r4nxNhVR7gNjFf9WmKO
+         Au/f8i9eNxZgoXl7/JNq7sTAN7fjsGf5ulmt3Ms2K17ZUB4whIj7M1FglnRZP+tjvHVZ
+         4hDA==
+X-Gm-Message-State: AOAM531QW0C5MzjSWgiRdteE9thdg5WaFB2xdjkdHK5oUFcbLveiOa4k
+        TavDTIvB2lw2yyPcxiMkrigoCJ6wQ81D935jnEfe9g==
+X-Google-Smtp-Source: ABdhPJw5t5dAxPGHTaI+GD+LzXDLXi7+MvMqy9BPlDFTQ159KmNOHeVo5nttIyS8szCt9wVbtVW6O5THdVcNT4AjBtM=
+X-Received: by 2002:aa7:d947:0:b0:419:3e8d:3e37 with SMTP id
+ l7-20020aa7d947000000b004193e8d3e37mr8909466eds.247.1647932812900; Tue, 22
+ Mar 2022 00:06:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 845be648-1a8f-47c1-ff9c-08da0bd2751d
-X-MS-TrafficTypeDiagnostic: CY4PR1101MB2087:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1101MB2087B7337759DD4B4B59027CD8179@CY4PR1101MB2087.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uR92WPLpxyExbGv0eao3AB8OAfvvMByf+GraKjBwIWZ/jn3zpOKYds0pTeNIk7BRG1aIWLpgz4ILr3BQY0H/vkonKT21H3mdNcvGpOq7q7fklH/wwmFAzIZ/0SUewme+T7T1pEu9Wql1ECOZSWtcz7USZpn1OMH6m7btKJw1pZDzCq6aniCUj4P+wfaLu6NnX5xW+hYQpc3hQRA1o2gJwmV5vXq1UZyZlV+TcH2GyooqtRUnQuiw81HP4yfN2e8wb1zu2YWhtucWXsTJE/lKL1anhPVYQ5aYKwRrEfAJYc1r9BQPjOx5cX1vVdKb+7eJmjliCDeTVSeAOJeTF8MTQ0smAQqqG7peQzYjh1uOH3p237vaJPpx6KtdPpo6OT76b1Xurj2AR3zYEY7r3oMNnxSkPWrQIALjXfdPmVz9MLlb1mAJ11jRdptl82NjzvfVQ6EfB2M7nQUWlRZ7pgUmSMtR3AGIf8e42TBMyY0is0icfEB4wKrGv+Dhael7TOK2rlN/NmMaxjEpqupkhL6AVoO9u9Y0WhEyy/xx7ITno9AU7n1SrJmAy9QuJNLb9Q1bAnDyKhl+W2ZsS5v3rp+7I8uiW/fuO3eePVqljnUeQU3Ie0T0/Ar9lW1QmTyW+KMVqViU4tZrTMVW3hg8Kk5j6CpDW8UVN2Oraxbfh2zofh+Wi8QQMvKP1YR2Jrs/LS4de8yFTYZgHbg8r0Jye5gTnS1utHECxj+dqmFSghn7saRh+2RnTFDD4PM/iL005PYU7qN+4JXFYW4YDLTiub5CC8Mjzt68E1/I0T6qpT0/01o4kNUP+43OUSwABfe+uvmI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(82960400001)(31696002)(86362001)(38100700002)(966005)(6486002)(54906003)(5660300002)(110136005)(4744005)(8676002)(66556008)(66476007)(66946007)(4326008)(2906002)(2616005)(6666004)(6512007)(508600001)(26005)(186003)(6506007)(53546011)(31686004)(36756003)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?anlreXAvb28yV0dESUNkSUZTZ2dmcXFibElFdnZpWGZaMitTSnRUSFhReHo5?=
- =?utf-8?B?KzAxQThLS3JDcGhadkF1NkNnZ0ZYWmk0T1BKeE5pYkUxbWRYdWwwMzdkUDVa?=
- =?utf-8?B?YVZMZDZRWTRTSWh4VVFnVVhrbUxmTzVjcVhNRVJHdDd4all1cStRbW53a20y?=
- =?utf-8?B?WlZvdkJSQVM0blNweTBCYm9sN005Yk9WRXpQN2ZJMzhFTjdVN3RUTTUwNFkx?=
- =?utf-8?B?ME1yaEQvdDFPc0FnM25TVVNrcllBcUp3cXdlWXJ1dVlrUGsvZ1hqYXZIM1Bh?=
- =?utf-8?B?VUhac0xOK0tSODc3Nks3TmZZeWZDeGJaMk40OGRkN3dXa2lSTnNSRHZra2t0?=
- =?utf-8?B?aWREUzVld1pYUWJzaFBxQTRJbnlrOSsyNUVXRVpXK3MxVTdtNCs4dHpmYkRK?=
- =?utf-8?B?bkk3WE0rckV4NGdIdWRPL1hLV0I0R1ZrLzNxWkVDY1pRTjF5azdJRDBNR0tx?=
- =?utf-8?B?NTRPTFRTNmptS1BDSngzcGRGZ3o2ZXJ1S1FqSFdrekp6UDJ5OFZGa3RoQ2JC?=
- =?utf-8?B?bFE3dE0xYmhXbXRSUzZFYVlWanJ1RDRLOFVILzNmMkE1V1kxYjRVZndLZkFL?=
- =?utf-8?B?RERyVFJnNGdXK0trM25YbG1ZNkdTOTNyS1orOGNNQVBJVEIrbVRjMTVTZFJ1?=
- =?utf-8?B?S1h1MmlkNDIwL0pCbWMxcEkxSWZSZmF6R1dLL2dLODQ1TU54TXFVYWpoZGkz?=
- =?utf-8?B?YlJXZTdyV1JuVkJnaStwZnpyMHozSXhISnpNY0VVQ0R2R1dLMnlFbHhvaHFH?=
- =?utf-8?B?d1MzdkNuc0dnQWN0Q2JzWnRZazhOZHk1aEtpbThIaFQ4ZEtIVkw5TDVxOCsv?=
- =?utf-8?B?NlA0bVFCL3puaU9nR1QwcWhKaVRNcXlXSGFDakdjbmlkYUdqSWdUd2RPNXpq?=
- =?utf-8?B?Qm4xZzRObjMyTnZ4NWN5eFk0cUU2blBjbm1JazR3dmJoUFJiSHRNTSs5RWJI?=
- =?utf-8?B?R0l6VXFzTytOMFNoVFB3V0ZoLzI0VXg4OXQzMlF6M0NwSysxNmdGZ1RPSC9m?=
- =?utf-8?B?WTNVZEQwa3RjQlFBSHYxVnptWGY2akNHZldhRDZtQkZOQ3pwdW4xZXQwemdt?=
- =?utf-8?B?WWRIWXY1V0pheURSNFlNYXFxdzBWcmxYTkVSS0RVcjd1WUVtYnNpblIxWStj?=
- =?utf-8?B?ekxscURnRTA2R3JybTJQWmtzR25OdkQyWkw2ZUdWQXFGeWFTRkplSDljTDd4?=
- =?utf-8?B?V0R5SitXRnFnZnZ5Z0dWUGFXLzRKS05ta1NPVTdqMGFZYzRMRGZwclJCN3ky?=
- =?utf-8?B?RWFxaEd3YVBkaThJcFg4M0c4M3lheHh0MWhKWUtpeE1PVGVEQ2ZncnlYaGRr?=
- =?utf-8?B?TFllRW03Vk1SQWQzbzJaakxVQ1lCOEc3ajFMLzd5Q2VxRW1tc3NzcE9CK3Nq?=
- =?utf-8?B?eGJySVp3cXhIZ1VvdlZ4b2ZJcTBHSWs3RDVSNG9aYklvOE1mdDVGalhVVlZB?=
- =?utf-8?B?ZlhsbmRhR29oeERjL05SK0Fiak81RU16SXh3V0J0aUJubCtTWWYvdU50VDB5?=
- =?utf-8?B?Y3BqYTBhY0VIam9XQTZKNmFCYXZIdFV0cC9Keno4RFFQbTJVSk96R25jWXdI?=
- =?utf-8?B?Vy9NUFNlZ2J5U0lZRnJPdWNDLy90NmhBeXVPUlIwbDN6cHJvSmdaZkRGSGE5?=
- =?utf-8?B?Wnl1WG5FZHFhM1A2bEJOcEVpa3EwOEdDREhITE55cDlsbHJaU3pFakdyOW5O?=
- =?utf-8?B?WGFZME9LT3dJNjdHdlF6WVF2UzhNWFZ1ZmJTY3NyOGhHS3pYRi9hbjBvVHMv?=
- =?utf-8?B?ejl0bUtvMXhuSDBmaWtGc25KUGJPamhDTHl5MkZCN3JuZDRqWEh4alRZaU81?=
- =?utf-8?B?aGN3cXpLMWRoaW5XWUwzd3JJUnhGaGQ5eFNDL0lDczJPdkNyUUxzdWYwSXd3?=
- =?utf-8?B?NlVsNkpOd1p4Ym5xUTRwUkpMRVdiVVc5U3pPalFnamQ2SFhCRUc2Vkgvbnls?=
- =?utf-8?B?ejY0VTF1TkR1bDNkM3VCOUVNUmpSRVJKTEltZ1BIR2x2MHFLYWUzeHdLYUt3?=
- =?utf-8?B?S1FrcDRBbUFnPT0=?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 845be648-1a8f-47c1-ff9c-08da0bd2751d
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 07:06:16.5732
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bg5Nl6D7NWTclsBWQ4mK9RftQwy2jJrdWHz+gKpYe4yaM1+23cUmjVgm9qooqd/q/dLaC/asReLc8WM2l8ciZKu6A5VIYf7r6pEeYrk1jvg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2087
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220319055600.3471875-1-davidgow@google.com> <CAGS_qxpqcc8O2HpmF3qB-uzXZrDNg9=h3nE_f7si=aOxXkRA+Q@mail.gmail.com>
+ <CABVgOS=sKWiDLN=GgyXQGOdmRn6t35mEA_0C7GrZyEApjVg1Pw@mail.gmail.com>
+In-Reply-To: <CABVgOS=sKWiDLN=GgyXQGOdmRn6t35mEA_0C7GrZyEApjVg1Pw@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 22 Mar 2022 02:06:41 -0500
+Message-ID: <CAGS_qxobBt2gH3FB79m7sfQZ9thKXQ5exQEa_1GcQOmXFFEv1A@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Rework kunit_resource allocation policy
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/2022 11:33 PM, Artem Bityutskiy wrote:
-> 
-> Let me know if you would remove that backslash at the same time, or I can
-> submit a patch.
+On Mon, Mar 21, 2022 at 11:10 PM David Gow <davidgow@google.com> wrote:
+>
+> On Tue, Mar 22, 2022 at 9:57 AM 'Daniel Latypov' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+> >
+> > On Sat, Mar 19, 2022 at 12:56 AM David Gow <davidgow@google.com> wrote:
+> > >
+> > > KUnit's test-managed resources can be created in two ways:
+> > > - Using the kunit_add_resource() family of functions, which accept a
+> > >   struct kunit_resource pointer, typically allocated statically or on
+> > >   the stack during the test.
+> > > - Using the kunit_alloc_resource() family of functions, which allocate a
+> > >   struct kunit_resource using kzalloc() behind the scenes.
+> > >
+> > > Both of these families of functions accept a 'free' function to be
+> > > called when the resource is finally disposed of.
+> > >
+> > > At present, KUnit will kfree() the resource if this 'free' function is
+> > > specified, and will not if it is NULL. However, this can lead
+> > > kunit_alloc_resource() to leak memory (if no 'free' function is passed
+> > > in), or kunit_add_resource() to incorrectly kfree() memory which was
+> > > allocated by some other means (on the stack, as part of a larger
+> > > allocation, etc), if a 'free' function is provided.
+> >
+> > Trying it with this:
+> >
+> > static void noop_free_resource(struct kunit_resource *) {}
+> >
+> > struct kunit_resource global_res;
+> >
+> > static void example_simple_test(struct kunit *test)
+> > {
+> >         kunit_add_resource(test, NULL, noop_free_resource, &global_res, test);
+> > }
+> >
+> > Running then with
+> > $ run_kunit --kunitconfig=lib/kunit --arch=x86_64
+> > --build_dir=kunit_x86/ --kconfig_add=CONFIG_KASAN=y
+> >
+> > Before:
+> > BUG: KASAN: double-free or invalid-free in kunit_cleanup+0x51/0xb0
+> >
+> > After:
+> > Passes
+> >
+>
+> Phew! :-)
+> I'm glad it works.
+>
+> > >
+> > > Instead, always kfree() if the resource was allocated with
+> > > kunit_alloc_resource(), and never kfree() if it was passed into
+> > > kunit_add_resource() by the user. (If the user of kunit_add_resource()
+> > > wishes the resource be kfree()ed, they can call kfree() on the resource
+> > > from within the 'free' function.
+> > >
+> > > This is implemented by adding a 'should_free' member to
+> >
+> > nit: would `should_kfree` be a bit better?
+> > `should_free` almost sounds like "should we invoke res->free" (as
+> > nonsensical as that might be)
+> >
+>
+> I think I had it as should_kfree at some point. I agree it's a little
+> clearer. I'll rename it back.
+>
+> The other option I considered was to have a "flags" member, of which
+> SHOULD_KFREE could be one. Though I eventually decided to leave that
+> until we needed another flag.
+>
+> > > struct kunit_resource and setting it appropriately. To facilitate this,
+> > > the various resource add/alloc functions have been refactored somewhat,
+> > > making them all call a __kunit_add_resource() helper after setting the
+> > > 'should_free' member appropriately. In the process, all other functions
+> > > have been made static inline functions.
+> > >
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> >
+> > Tested-by: Daniel Latypov <dlatypov@google.com>
+> >
+> >
+> > > ---
+> > >  include/kunit/test.h | 135 +++++++++++++++++++++++++++++++++++--------
+> > >  lib/kunit/test.c     |  65 +++------------------
+> > >  2 files changed, 120 insertions(+), 80 deletions(-)
+> > >
+> > > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > > index 00b9ff7783ab..5a3aacbadda2 100644
+> > > --- a/include/kunit/test.h
+> > > +++ b/include/kunit/test.h
+> > > @@ -36,11 +36,14 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+> > >   * struct kunit_resource - represents a *test managed resource*
+> > >   * @data: for the user to store arbitrary data.
+> > >   * @name: optional name
+> > > - * @free: a user supplied function to free the resource. Populated by
+> > > - * kunit_resource_alloc().
+> > > + * @free: a user supplied function to free the resource.
+> > >   *
+> > >   * Represents a *test managed resource*, a resource which will automatically be
+> > > - * cleaned up at the end of a test case.
+> > > + * cleaned up at the end of a test case. This cleanup is performed by the 'free'
+> > > + * function. The resource itself is allocated with kmalloc() and freed with
+> > > + * kfree() if created with kunit_alloc_{,and_get_}resource(), otherwise it must
+> > > + * be freed by the user, typically with the 'free' function, or automatically if
+> > > + * it's allocated on the stack.
+> >
+> > I'm not a fan of this complexity, but I'm not sure if we have a way
+> > around it, esp. w/ stack-allocated data.
+> >
+> The other option is to make all resources allocated with
+> kunit_alloc_resource() require a non-NULL 'free' function which calls
+> kfree() itself. This is much simpler on the KUnit side, but does put
+> some of that burden on the user (and may prevent a free() function
+> from being shared between allocated and non-allocated resources).
 
-Looks like the table was merged without the backslash. Rafael thankfully 
-removed it via:
-https://lore.kernel.org/linux-pm/4731792.31r3eYUQgx@kreacher/
+Overall, I'm ambivalent.
 
-Thanks,
-Chang
+To be honest, I'm not sure how real the user burden would be (it's
+basically 0 right now).
+
+This would only add about 6 more lines to add a kfree version:
+static void free_stack_resource(struct kunit_resource *res) { ... }
+
+static void free_heap_resource(struct kunit_resource *res)
+{
+   free_stack_resource(res);
+   kfree(res);
+}
+
+So far, this function is only ever used w/ non-NULL free functions
+(even in the under-review stubbing patches).
+So now would be the time to make such a change.
+
+But I'm slightly against such a change.
+It slightly complicates the "resources as storage" usecase in favor of
+simplifying the "resources as memory wranglers".
+Maybe it'd be fine if we added a helper they could use, e.g.
+  void kunit_resource_default_free(struct kunit_resource *res) { kfree(res); }
+but it
+
+>
+> > Perhaps this would be a bit easier to read if we tweaked it a bit like:
+> > "freed with kfree() if allocated by KUnit (via kunit_alloc..."
+> >
+> > Maybe we can drop the "or automatically, if it's allocated on the
+> > stack" as well.
+>
+> Yeah: I'm not 100% happy with that wording. I wanted to make it clear
+> that there are cases where no automatic freeing is needed, but I agree
+> it's really just making things more confusing.
+> >
+> > A bigger way to simplify: perhaps we should get rid of
+> > kunit_alloc_and_get_resource() first?
+> > It's only used in KUnit's tests for itself.
+> > They could instead use kunit_alloc_resource() +
+> > kunit_find_resource(test, kunit_resource_instance_match, data).
+> > We could even define the helper with the same name in kunit-test.c
+> > (the only place it's used).
+> >
+> > Alternatively, we could make it an internal helper and define
+> > kunit_alloc_resource() as
+> >
+> > void *kunit_alloc_resource(...)
+> > {
+> >    struct kunit_resource *res = _kunit_alloc_and_get_resource(...)
+> >    if (res) return res->data;
+> >    return NULL;
+> > }
+> >
+> > ?
+> >
+>
+> I was thinking about this a bit this morning, and I think we should do
+> the opposite: get rid of kunit_alloc_resource() and leave only
+> kunit_alloc_and_get_resource().
+> Then, split the resource system basically in two:
+> - The system for managing "findable" resources, whose main purpose is
+> for cases like the KASAN integration and the stub stuff where main
+> goal is tying some named bit of data to a test, and reference counting
+> it so it can safely be retrieved and used throughout the kernel if
+> need be.
+> - The simpler "free this on test exit" system, which could be as
+> simple as a kunit_defer(func, context) function built on top of the
+> former. This wouldn't need detailed tracking of reference counts, etc,
+
+Agree that there's two distinct usecases here.
+One wants a replacement for global variables (which thus need
+"finding") and the other just wants to ensure some function like
+kfree() gets called.
+
+The latter ~never need to get "found" (e.g. kunit_kmalloc() users).
+The one exception: when people use kunit_kfree() to free things early,
+which requires us to "find" these resources we otherwise wouldn't care
+about.
+
+So I don't know how we can split the API unless we get rid of kunit_kfree().
+Its presence means kunit_kmalloc() and friends need refcounting.
+
+Can we drop it? Maybe.
+Looking at the uses of kunit_kfree(), they're all internal to kunit except one.
+
+   111  static void
+ne_misc_dev_test_merge_phys_contig_memory_regions(struct kunit *test)
+   112  {
+...
+   117          phys_contig_mem_regions.regions = kunit_kcalloc(test,
+MAX_PHYS_REGIONS,
+   118
+sizeof(*phys_contig_mem_regions.regions),
+   119                                                          GFP_KERNEL);
+...
+   140
+   141          kunit_kfree(test, phys_contig_mem_regions.regions);
+   142  }
+
+Hmm, that looks redundant since it's right before the end of the test case.
+We can drop that call, I think.
+
+But I think kunit_kfree() can serve a purpose.
+E.g. for short-lived allocations where assertions are used.
+  buf = kunit_kzalloc(test, sizeof(*buf), GFP_KERNEL);
+  KUNIT_ASSERT_EQ(test, do_stuff(buf), 0);
+  KUNIT_EXPECT_EQ(test, <something about buf>);
+  kunit_kfree(buf);
+  // do more stuff
+
+Sure we can drop kunit_kfree() and have `buf` stick around longer than needed.
+Or we could rewrite it like
+  buf = kzalloc(sizeof(*buf), GFP_KERNEL);
+  if (do_stuff(buf)) {
+    KUNIT_FAIL(test, "do_stuff() failed");
+  } else {
+     KUNIT_EXPECT_EQ(test, <something about buf>);
+  }
+  kfree(buf);
+ but I think the kunit_kfree() code is cleaner.
+
+>
+> (tl;dr: I think that kunit_alloc_resource() is broken, refcount-wise,
+> if we're trying to implement the first kind of system, but useful for
+> the second, and this is quite confusing. So kunit_alloc_resource()
+> probably shouldn't be used alongside kunit_find_resource(), as there
+> could be a potential race condition. Now, this shouldn't happen in
+> practice, as most tests are single threaded and none are doing fancy
+> things with kunit_remove_resource(), but
+> kunit_alloc_and_get_resource() should be safer, as you're not playing
+> with a resource you don't have a reference to according to the
+> refcount.)
+>
+> That's a more complicated refactor and redesign of the resources
+> system, though, so I'd rather fix this first.
+>
+> Cheers,
+> -- David

@@ -2,142 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D203E4E3FC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165C64E3FCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235843AbiCVNq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S235853AbiCVNrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235823AbiCVNq1 (ORCPT
+        with ESMTP id S235823AbiCVNrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:46:27 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275E82610E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647956700; x=1679492700;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xNjDnMgEHpCF2A25uwYP+Yv48qAIEF8LeOXaCc3uCd0=;
-  b=WJ6iZ+MgXYxKGSVew7/9lVe/lBUlMVTCbaXIWURPONZ8SfztgTIjnRni
-   2KaEo+rF/HyJBtjkYum/6uoLnBrqR90VvuPgud+aX4PLZ+Dsrqp9Xm21K
-   bwG3KsXkwjjH+RJk8Ty5f1fq/cyA1LPS33wIcW2+c3sYPe3WuG2B4oEvX
-   7J97caqryJgomRip3kfNprGJGu8nhL9HbggPyuv/FB30U0pV9YvAdTQ39
-   0qQ9jVDYeP2GMpuGN0iwuskC4/5TsoykeggqOFT273gtUi4KgblKYn5GQ
-   HiLNaFGEyTKAdzLuN1Hs+OVw08/yOJXw0ShD6R8BjXoPRw4UHZe3PVQnA
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="237761000"
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="237761000"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 06:44:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="518881444"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 22 Mar 2022 06:44:49 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWeoa-000Irk-AU; Tue, 22 Mar 2022 13:44:48 +0000
-Date:   Tue, 22 Mar 2022 21:44:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 421/2335] include/linux/huge_mm.h:168:6: error:
- implicit declaration of function 'vma_is_dax'
-Message-ID: <202203222155.TlSyCe5J-lkp@intel.com>
+        Tue, 22 Mar 2022 09:47:39 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF77C2612A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:46:10 -0700 (PDT)
+Received: from [192.168.12.80] (unknown [182.2.69.158])
+        by gnuweeb.org (Postfix) with ESMTPSA id E54737E2FC;
+        Tue, 22 Mar 2022 13:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1647956770;
+        bh=HKgnPToOKuDtMd2JSw/Bl1HQmJatv90FvRD6l9jl9jY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pCTjxSUhL5rr31ViBmr/RMoiC2r2s4CGvgFgDjmMFypfINpuGHuLjS+2DNiJ2CiYu
+         ahBjCo6pi3R3OngD0DX5g8J9yHOhi9iw5CxPs5eQPFtCh6R8K1v+ay7Nhpktm3b2Bn
+         RxkI+I4Ylea+1tv9WjC9PSAHF3IpV+fJuQRNffqoJrNOS7jSApYEFCrBpKknwHp5AH
+         VNL0U1x9VGzgXLRFiAINDchQKgTx09w0pcdMqJrGI3eWbSgoN6g5FASYimW2g1jSp4
+         +NYHTsF+XIuEyOqqtb+fwpd6HYkXQ89udqUekqH32ASo0xTvV6JKKk1aBJWFCbMuCb
+         Yr4IDbYt7jGPA==
+Message-ID: <9cfcb296-9dfe-aef1-4209-20a3a95c50ba@gnuweeb.org>
+Date:   Tue, 22 Mar 2022 20:45:59 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Content-Language: en-US
+To:     Willy Tarreau <w@1wt.eu>, David Laight <David.Laight@aculab.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+ <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
+ <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
+ <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
+ <20220322121338.GD10306@1wt.eu>
+ <81569a1c-a6d3-ceb2-a1f1-f229a024d684@gnuweeb.org>
+ <20220322133413.GG10306@1wt.eu>
+ <58cb5455-d065-b508-b328-20b57c3a67a7@gnuweeb.org>
+ <3b8984ecfbcd4c93aeb468d01728cd74@AcuMS.aculab.com>
+ <20220322134100.GH10306@1wt.eu>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220322134100.GH10306@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: f7a0205170ca096c85d224726dc7f9cfc5950de3 [421/2335] headers/uninline: Uninline multi-use function: vma_is_dax() and vma_is_fsdax()
-config: i386-randconfig-a016-20220314 (https://download.01.org/0day-ci/archive/20220322/202203222155.TlSyCe5J-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=f7a0205170ca096c85d224726dc7f9cfc5950de3
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout f7a0205170ca096c85d224726dc7f9cfc5950de3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+On 3/22/22 8:41 PM, Willy Tarreau wrote:
+[...]
+>>> When you pushl %ebp, the %esp changes, N(%esp) no longer points to the
+>>> 6-th argument.
+>>
+>> Yep - that is why I wrote the 'push arg6'.
+> 
+> Got it and you're right indeed, sorry for the noise :-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Uggh... it seems I hit a GCC bug when playing with -m32 (32-bit code).
+I am on Linux x86-64. Compiling without optimization causing GCC stuck
+in an endless loop with 100% CPU usage.
 
-Note: the mingo-tip/master HEAD 85293bf3fca6d85608cff1447ce3097583f15fab builds fine.
-      It only hurts bisectability.
+I will try to narrow it down and see if I can create a simple reproducer
+on this issue.
 
-All errors (new ones prefixed by >>):
+ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ gcc --version
+gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-   In file included from fs/fuse/virtio_fs.c:8:
-   In file included from include/linux/dax.h:6:
-   In file included from include/linux/mm.h:689:
->> include/linux/huge_mm.h:168:6: error: implicit declaration of function 'vma_is_dax' [-Werror,-Wimplicit-function-declaration]
-           if (vma_is_dax(vma))
-               ^
-   In file included from fs/fuse/virtio_fs.c:8:
-   In file included from include/linux/dax.h:6:
->> include/linux/mm.h:3240:13: error: conflicting types for 'vma_is_dax'
-   extern bool vma_is_dax(const struct vm_area_struct *vma);
-               ^
-   include/linux/huge_mm.h:168:6: note: previous implicit declaration is here
-           if (vma_is_dax(vma))
-               ^
-   2 errors generated.
+ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
+^C
 
+real	0m46.696s
+user	0m0.000s
+sys	0m0.002s
+ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O1 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
 
-vim +/vma_is_dax +168 include/linux/huge_mm.h
+real	0m0.054s
+user	0m0.046s
+sys	0m0.008s
+ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O2 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
 
-bae84953815793 Aneesh Kumar K.V  2021-02-24  152  
-bae84953815793 Aneesh Kumar K.V  2021-02-24  153  	/*
-bae84953815793 Aneesh Kumar K.V  2021-02-24  154  	 * If the hardware/firmware marked hugepage support disabled.
-bae84953815793 Aneesh Kumar K.V  2021-02-24  155  	 */
-bae84953815793 Aneesh Kumar K.V  2021-02-24  156  	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_NEVER_DAX))
-bae84953815793 Aneesh Kumar K.V  2021-02-24  157  		return false;
-bae84953815793 Aneesh Kumar K.V  2021-02-24  158  
-e6be37b2e7bddf Miaohe Lin        2021-06-30  159  	if (!transhuge_vma_enabled(vma, vma->vm_flags))
-16981d763501c0 Dan Williams      2017-07-10  160  		return false;
-16981d763501c0 Dan Williams      2017-07-10  161  
-222100eed264ba Anshuman Khandual 2020-04-01  162  	if (vma_is_temporary_stack(vma))
-16981d763501c0 Dan Williams      2017-07-10  163  		return false;
-16981d763501c0 Dan Williams      2017-07-10  164  
-16981d763501c0 Dan Williams      2017-07-10  165  	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_FLAG))
-16981d763501c0 Dan Williams      2017-07-10  166  		return true;
-bae84953815793 Aneesh Kumar K.V  2021-02-24  167  
-baabda26142451 Dan Williams      2017-07-10 @168  	if (vma_is_dax(vma))
-baabda26142451 Dan Williams      2017-07-10  169  		return true;
-baabda26142451 Dan Williams      2017-07-10  170  
-16981d763501c0 Dan Williams      2017-07-10  171  	if (transparent_hugepage_flags &
-16981d763501c0 Dan Williams      2017-07-10  172  				(1 << TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG))
-16981d763501c0 Dan Williams      2017-07-10  173  		return !!(vma->vm_flags & VM_HUGEPAGE);
-16981d763501c0 Dan Williams      2017-07-10  174  
-16981d763501c0 Dan Williams      2017-07-10  175  	return false;
-16981d763501c0 Dan Williams      2017-07-10  176  }
-16981d763501c0 Dan Williams      2017-07-10  177  
+real	0m0.079s
+user	0m0.067s
+sys	0m0.012s
+ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O3 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
 
-:::::: The code at line 168 was first introduced by commit
-:::::: baabda261424517110ea98c6651f632ebf2561e3 mm: always enable thp for dax mappings
+real	0m0.110s
+user	0m0.097s
+sys	0m0.013s
+ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$
 
-:::::: TO: Dan Williams <dan.j.williams@intel.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ammar Faizi

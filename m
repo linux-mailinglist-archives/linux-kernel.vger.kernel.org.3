@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2EA4E37EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A78F4E37F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236434AbiCVEcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 00:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
+        id S236457AbiCVEdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 00:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236416AbiCVEcD (ORCPT
+        with ESMTP id S236452AbiCVEdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 00:32:03 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A3511C16
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:30:34 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id bc27so11781291pgb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aHNQ24PWiPjii6F5lkM3fKzrkShIeqqIUDEofSLJIto=;
-        b=eOPIZw6UeU1k5ngrdt8Ghoc3fF1MCx8GDFYmjZHl1yJJV/CqC9U56k5j1lYfZ4ugl9
-         +c3+cfuxLKJDsYidpaWnwLHKP72/0yWOIwU7I+2lkvKltjP2O3zQodOU0XqFmCW/vGg3
-         Uhg8VElhMz6JWo1Iib2B3Q5H4Cevqb+Df3leDeGpSgGQsj169if5vaJK1RHJRl+CRNzU
-         9uHiPffOaUgl/BJlnTeosGZ9XPzk99F+wuX4W6hf8NA8Y8PK7aLK6iACMgIqPWcPcQq0
-         ZSj/fI+8WnwjDKq1esfiBuaLKfH5ipuKupvaIw3ClQ8kv6Ddm9PdrVWrXOsdqMcizAL6
-         D56g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aHNQ24PWiPjii6F5lkM3fKzrkShIeqqIUDEofSLJIto=;
-        b=kVNYwwg7zzisbNr85HNU1fXPbc7cebuJWX/fGyD29Z1eiIiwfy6VBuwxkPccOew247
-         d0cLUe3vzCDct+9RcLvpK/ZGnJhew2NgQfQejxfx0A1TOIDPel3yNxUDenCfmTzsqx3w
-         M9ScQ/pj0HrrpqdPF3mHR5ML3NaLGm+ENIXvqyhhdpnvk3UnhwMBRPaua9vqCoGjWTxl
-         OYqBTqqB4tEWfgk1lddZLujXt3v6aasI7p3e5Xk2k3gniDw7gpCMqvcpxRKnwvjpKp1F
-         uorfo1eWG5fnDID0YBJrvNz4O723xv1Oxg7xHT7qpJurgGKzZgZbNgKI61/9idmPrcEv
-         GCKg==
-X-Gm-Message-State: AOAM533o0YUDtsYlezar7DCSBwpoWd88xwEK0hQJYNso81tdH0Dp6s4h
-        KADykU7Q4S1NtAaOZoz+SAk=
-X-Google-Smtp-Source: ABdhPJynC+Dxfbf4XOsFfakoXjYdBPUwanv3IemaVPMlWaytEYdm9ih0AbVD33vrWon8J+ZhxuMlQQ==
-X-Received: by 2002:a62:3896:0:b0:4f7:87dc:de5b with SMTP id f144-20020a623896000000b004f787dcde5bmr27534389pfa.49.1647923434419;
-        Mon, 21 Mar 2022 21:30:34 -0700 (PDT)
-Received: from [192.168.225.67] ([157.49.254.255])
-        by smtp.gmail.com with ESMTPSA id h13-20020a056a00170d00b004f757a795fesm21071279pfc.219.2022.03.21.21.30.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 21:30:33 -0700 (PDT)
-Message-ID: <3a85ae64-00c1-6483-f1d7-c12abdd3ff3a@gmail.com>
-Date:   Tue, 22 Mar 2022 10:00:29 +0530
+        Tue, 22 Mar 2022 00:33:13 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADF81F636
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:31:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647923506; x=1679459506;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dsKJ5aYjOe1ElqEXDty5bKxW35OhOUL49tF3kSu1rOs=;
+  b=Nd90I/VjsBJVCwNdG542o//a6NNhfMKATkwTAeRYEcgOYidBChIuY568
+   e48Dzwj/DLplgRbBuTOAuXdY1sYAZNv6ACp2v9sj9ZNLvGSYJIKAMjHak
+   t/l6O1KsXNPgGEADw2yFKj93c1KmJV16sS+vjJimaX0IyyHroYoh21jb7
+   2rfh6AraHKTNrV4jIJV5FlO5KaiwifcPl6TjW4wgceU8ehUrhKdVB5PWh
+   XqgHl1NJ597RxkZqkWBV218gbOpe2s3SVcEKeiWa2ZH4LImp/y//u2/5w
+   QW1v7odg4n61RIalTF7ZlM5Ebx5W1Lq+xNUIF+/IXxJ59TDLK++fxLqPK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257437066"
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="257437066"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 21:31:46 -0700
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="518719355"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.209.186]) ([10.254.209.186])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 21:31:41 -0700
+Message-ID: <bdf294e5-b4ed-04dd-1c71-24fada7c9f3d@linux.intel.com>
+Date:   Tue, 22 Mar 2022 12:31:38 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v2] staging: rtl8712: Fix CamelCase warnings
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 06/11] iommu/sva: Use attach/detach_pasid_dev in SVA
+ interfaces
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220318101440.13887-1-skumark1902@gmail.com>
- <YjRswrHu0JUm9331@kroah.com>
-From:   Sathish Kumar <skumark1902@gmail.com>
-In-Reply-To: <YjRswrHu0JUm9331@kroah.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
+ <20220320064030.2936936-7-baolu.lu@linux.intel.com>
+ <20220321120503.GN11336@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220321120503.GN11336@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,85 +73,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/22 4:58 pm, Greg KH wrote:
-> On Fri, Mar 18, 2022 at 03:44:40PM +0530, Sathish Kumar wrote:
->> This patch fixes the checkpatch.pl warnings like:
->> CHECK: Avoid CamelCase: <blnEnableRxFF0Filter>
->> +   u8 blnEnableRxFF0Filter;
->>
->> Signed-off-by: Sathish Kumar <skumark1902@gmail.com>
->> ---
->> Changes in v2:
->>      - Remove the "bln" prefix
->> ---
->>   drivers/staging/rtl8712/drv_types.h   | 2 +-
->>   drivers/staging/rtl8712/rtl871x_cmd.c | 2 +-
->>   drivers/staging/rtl8712/xmit_linux.c  | 4 ++--
->>   3 files changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/staging/rtl8712/drv_types.h b/drivers/staging/rtl8712/drv_types.h
->> index a44d04effc8b..4de3aad08242 100644
->> --- a/drivers/staging/rtl8712/drv_types.h
->> +++ b/drivers/staging/rtl8712/drv_types.h
->> @@ -157,7 +157,7 @@ struct _adapter {
->>   	struct iw_statistics iwstats;
->>   	int pid; /*process id from UI*/
->>   	struct work_struct wk_filter_rx_ff0;
->> -	u8 blnEnableRxFF0Filter;
->> +	u8 enable_rx_ff0_filter;
-> Shouldn't this be a boolean?
->
->>   	spinlock_t lock_rx_ff0_filter;
->>   	const struct firmware *fw;
->>   	struct usb_interface *pusb_intf;
->> diff --git a/drivers/staging/rtl8712/rtl871x_cmd.c b/drivers/staging/rtl8712/rtl871x_cmd.c
->> index acda930722b2..69d3c55ee9e5 100644
->> --- a/drivers/staging/rtl8712/rtl871x_cmd.c
->> +++ b/drivers/staging/rtl8712/rtl871x_cmd.c
->> @@ -202,7 +202,7 @@ u8 r8712_sitesurvey_cmd(struct _adapter *padapter,
->>   	mod_timer(&pmlmepriv->scan_to_timer,
->>   		  jiffies + msecs_to_jiffies(SCANNING_TIMEOUT));
->>   	padapter->ledpriv.LedControlHandler(padapter, LED_CTL_SITE_SURVEY);
->> -	padapter->blnEnableRxFF0Filter = 0;
->> +	padapter->enable_rx_ff0_filter = 0;
->>   	return _SUCCESS;
->>   }
->>   
->> diff --git a/drivers/staging/rtl8712/xmit_linux.c b/drivers/staging/rtl8712/xmit_linux.c
->> index 90d34cf9d2ff..d58ae5b387d4 100644
->> --- a/drivers/staging/rtl8712/xmit_linux.c
->> +++ b/drivers/staging/rtl8712/xmit_linux.c
->> @@ -102,11 +102,11 @@ void r8712_SetFilter(struct work_struct *work)
->>   	r8712_write8(adapter, 0x117, newvalue);
->>   
->>   	spin_lock_irqsave(&adapter->lock_rx_ff0_filter, irqL);
->> -	adapter->blnEnableRxFF0Filter = 1;
->> +	adapter->enable_rx_ff0_filter = 1;
->>   	spin_unlock_irqrestore(&adapter->lock_rx_ff0_filter, irqL);
->>   	do {
->>   		msleep(100);
->> -	} while (adapter->blnEnableRxFF0Filter == 1);
->> +	} while (adapter->enable_rx_ff0_filter == 1);
-> Ah, that's funny.  It's amazing it works at all and that the compiler
-> doesn't optimize this away.  This isn't a good pattern to use in kernel
-Do you mean the following code is not a good pattern in kernel?
-do {
-msleep();
-} while(condition);
-> code.  I know it's not caused by your change here, but perhaps you might
-> want to fix this up to work properly?
->
-> thanks,
->
-> greg k-h
+On 2022/3/21 20:05, Jason Gunthorpe wrote:
+> On Sun, Mar 20, 2022 at 02:40:25PM +0800, Lu Baolu wrote:
+> 
+>> +/**
+>> + * iommu_sva_bind_device() - Bind a process address space to a device
+>> + * @dev: the device
+>> + * @mm: the mm to bind, caller must hold a reference to it
+>> + * @drvdata: opaque data pointer to pass to bind callback
+>> + *
+>> + * Create a bond between device and address space, allowing the device to access
+>> + * the mm using the returned PASID. If a bond already exists between @device and
+>> + * @mm, it is returned and an additional reference is taken. Caller must call
+>> + * iommu_sva_unbind_device() to release each reference.
+>> + *
+>> + * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
+>> + * initialize the required SVA features.
+>> + *
+>> + * On error, returns an ERR_PTR value.
+>> + */
+>> +struct iommu_sva *
+>> +iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
+> The drvdata is never used
 
-Do i need to replace the above code with some other mechanism?
+Yes. It is cleaned up in Jacob's series.
 
-If yes, please let me know which mechanism i should use? Or what should 
-I do here?
-
-Note : I am new to Linux kernel development and looking forward to learn 
-and contribute.
-
-Thanks,
-Sathish
+Best regards,
+baolu

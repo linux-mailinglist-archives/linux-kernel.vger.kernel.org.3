@@ -2,138 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963184E3798
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CB34E37A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236247AbiCVDiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 23:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
+        id S236184AbiCVDlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 23:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236244AbiCVDiG (ORCPT
+        with ESMTP id S236157AbiCVDlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 23:38:06 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A17130;
-        Mon, 21 Mar 2022 20:36:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V7tw9PW_1647920194;
-Received: from 30.240.116.16(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V7tw9PW_1647920194)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 22 Mar 2022 11:36:35 +0800
-Message-ID: <57665787-66f1-1d5a-a190-e73f4b941dce@linux.alibaba.com>
-Date:   Tue, 22 Mar 2022 11:36:29 +0800
+        Mon, 21 Mar 2022 23:41:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37286262
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647920386; x=1679456386;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iNJVsi91LXwI+KDYvgStCpTZNqDYFiZwPuSi1+SqKLg=;
+  b=Z2oYULGAcvE/1eFrdnXOIsWRUgzo8L34YGaVOIar/eK1oYVXW6ypfnq2
+   /2art43Rs9qeIbRU3vYLJg2MT0koszO+d2CYuGaT+W94SbD3F+nJRewZL
+   cqJ5/IVaEn8TdTmgK9tgVScyNiN3ttpvpY1njhHM2F13zLyquxwQZ1WIs
+   ul8C0rfgUPexpd0Bm6RYQgaMM7OzS9hEwPMu3/fEx2oIfza6R7OMhk51o
+   Kv+wjzaGff03SniCZHvi+q+WjbrWAKhZQ1nMNX9oCutzMddxfJ0zYl5DN
+   4le9Hil3oP2bna9knY0dH3PBwH9woear5Mnjd2tFvCt9/vUOpDTFmfJjZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="238318234"
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="238318234"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 20:39:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="648819314"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 20:39:44 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWVN1-000IRL-Ct; Tue, 22 Mar 2022 03:39:43 +0000
+Date:   Tue, 22 Mar 2022 11:38:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, build@wireguard.com,
+        linux-kernel@vger.kernel.org
+Subject: [zx2c4-wireguard:devel 1/2] lib/crypto/poly1305-selftest.c:1043:13:
+ warning: no previous prototype for function 'poly1305_selftest'
+Message-ID: <202203221101.Vd8pIU2T-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [BUG] kernel side can NOT trigger memory error with einj
-Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "graeme.gregory@linaro.org" <graeme.gregory@linaro.org>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "myron.stowe@redhat.com" <myron.stowe@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>
-References: <8c40a492-9461-2b43-6ec9-06bfc7a0e77f@linux.alibaba.com>
- <YjIeff7ESJB/amYA@agluck-desk3.sc.intel.com>
- <f93a5532-3e07-edf4-38ca-142a0f1d78d7@linux.alibaba.com>
- <1421c3ac3d3c4438a6ff18f193f8a41c@intel.com>
- <78cefd4c-f735-2ec4-0c09-35c8191280c5@linux.alibaba.com>
- <87wngoc9ff.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <87wngoc9ff.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/3/21 AM10:43, Huang, Ying 写道:
-> Shuai Xue <xueshuai@linux.alibaba.com> writes:
-> 
->> 在 2022/3/18 AM12:57, Luck, Tony 写道:
->>>> -       rc = apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR);
->>>> +       ptr = kmap(pfn_to_page(pfn));
->>>> +       tmp = *(ptr + (param1 & ~ PAGE_MASK));
->>>
->>> That hack works when the trigger action is just trying to access the injected
->>> location. But on Intel platforms the trigger "kicks" the patrol scrubber in the
->>> memory controller to access the address. So the error is triggered not by
->>> an access from the core, but by internal memory controller access.
->>>
->>> This results in a different error signature (for an uncorrected error injection
->>> it will be a UCNA or SRAO in Intel acronym-speak).
->>
->> As far as I know, APEI only defines five injection instructions, ACPI_EINJ_READ_REGISTER,
->> ACPI_EINJ_READ_REGISTER_VALUE, ACPI_EINJ_WRITE_REGISTER, ACPI_EINJ_WRITE_REGISTER_VALUE and
->> ACPI_EINJ_NOOP. ACPI_EINJ_TRIGGER_ERROR action should run one of them, I don't see
->> any of them will kick the patrol scrubber. For example, trigger with ACPI_EINJ_READ_REGISTER:
->>
->> apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR)
->>     __apei_exec_run	// ins=0
->>         => apei_exec_read_register
->>             => apei_read
->>                 => acpi_os_read_memory
->>                     => acpi_map_vaddr_lookup    /* lookup VA of PA from acpi_ioremap */
->>                     => acpi_os_ioremap
->> 		    => acpi_os_read_iomem
->> 			=> *(u32 *) value = readl(virt_addr);
->>
->> As we can see, the error is triggered by access from the core. However, the physical
->> address can NOT be mapped by acpi_os_ioremap.
->>
->> If I missed anything, please let me know. Thank you very much.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git devel
+head:   85edbe4cea2a4446b6425d67a00c04dce142b2f2
+commit: 957612a1219877cad2e0fd43f89dea54575db069 [1/2] crypto: poly1305 - add library selftests
+config: s390-randconfig-r044-20220320 (https://download.01.org/0day-ci/archive/20220322/202203221101.Vd8pIU2T-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git/commit/?id=957612a1219877cad2e0fd43f89dea54575db069
+        git remote add zx2c4-wireguard https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git
+        git fetch --no-tags zx2c4-wireguard devel
+        git checkout 957612a1219877cad2e0fd43f89dea54575db069
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash lib/crypto/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> lib/crypto/poly1305-selftest.c:1043:13: warning: no previous prototype for function 'poly1305_selftest' [-Wmissing-prototypes]
+   bool __init poly1305_selftest(void)
+               ^
+   lib/crypto/poly1305-selftest.c:1043:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool __init poly1305_selftest(void)
+   ^
+   static 
+   1 warning generated.
 
 
-> If you write a device register, the device can kick the patrol scrubber
-> for you.  This device behavior needs not to be defined in APEI spec.
+vim +/poly1305_selftest +1043 lib/crypto/poly1305-selftest.c
 
-I see, thank you. In our platform, patrol scrubber triggers deferred error, and the fatal
-error is triggered by an access from CPU.
+  1042	
+> 1043	bool __init poly1305_selftest(void)
+  1044	{
+  1045		bool success = true;
+  1046		size_t i, j;
+  1047	
+  1048		for (i = 0; i < ARRAY_SIZE(poly1305_testvecs); ++i) {
+  1049			struct poly1305_desc_ctx poly1305;
+  1050			u8 out[POLY1305_DIGEST_SIZE];
+  1051	
+  1052			memset(out, 0, sizeof(out));
+  1053			memset(&poly1305, 0, sizeof(poly1305));
+  1054			poly1305_init(&poly1305, poly1305_testvecs[i].key);
+  1055			poly1305_update(&poly1305, poly1305_testvecs[i].input,
+  1056					poly1305_testvecs[i].ilen);
+  1057			poly1305_final(&poly1305, out);
+  1058			if (memcmp(out, poly1305_testvecs[i].output,
+  1059				   POLY1305_DIGEST_SIZE)) {
+  1060				pr_err("poly1305 self-test %zu: FAIL\n", i + 1);
+  1061				success = false;
+  1062			}
+  1063	
+  1064			if (poly1305_testvecs[i].ilen <= 1)
+  1065				continue;
+  1066	
+  1067			for (j = 1; j < poly1305_testvecs[i].ilen - 1; ++j) {
+  1068				memset(out, 0, sizeof(out));
+  1069				memset(&poly1305, 0, sizeof(poly1305));
+  1070				poly1305_init(&poly1305, poly1305_testvecs[i].key);
+  1071				poly1305_update(&poly1305, poly1305_testvecs[i].input, j);
+  1072				poly1305_update(&poly1305,
+  1073						poly1305_testvecs[i].input + j,
+  1074						poly1305_testvecs[i].ilen - j);
+  1075				poly1305_final(&poly1305, out);
+  1076				if (memcmp(out, poly1305_testvecs[i].output,
+  1077					   POLY1305_DIGEST_SIZE)) {
+  1078					pr_err("poly1305 self-test %zu (split %zu): FAIL\n",
+  1079					       i + 1, j);
+  1080					success = false;
+  1081				}
+  1082	
 
-> As the name suggested, ACPI_EINJ_READ/WRITE_REGISTER are used to
-> read/write device registers via iomem.  They aren't used to read/write
-> normal physical memory.  If that's needed, you can try some other method
-> I guess.
-
-I think so, should we add new injection instructions to address this problem,
-e.g. ACPI_EINJ_READ_MEMORY implemented by kmap?
-
-By the way, commit fdea163d8c17 ("ACPI, APEI, EINJ, Fix resource conflict on some
-machine") removes the injecting memory address range which conflits with
-regular memory from trigger table resources. It make sense when calling
-apei_resources_request(). **However, the actual mapping operation in
-apei_exec_pre_map_gars() with trigger_ctx. And the conflit physical address
-is still in trigger_ctx.**
-
-		// drivers/acpi/apei/einj.c: __einj_error_trigger
-		trigger_param_region = einj_get_trigger_parameter_region(
-			trigger_tab, param1, param2);
-		if (trigger_param_region) {
-			...
-		}
-
-If the trigger_param_region is valid which means that the triggered address is
-ACPI_ADR_SPACE_SYSTEM_MEMORY, then we should not use apei_exec_pre_map_gars to
-map like a register, right? If we have ACPI_EINJ_READ_MEMORY, then we can directly
-run ACPI_EINJ_TRIGGER_ERROR through ACPI_EINJ_READ_MEMORY.
-
-Best Regards
-Shuai
-
-
-
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

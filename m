@@ -2,182 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3AA4E45E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1F94E45E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240282AbiCVSY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        id S240388AbiCVSZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240281AbiCVSYz (ORCPT
+        with ESMTP id S240324AbiCVSZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:24:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184CC1E3F2;
-        Tue, 22 Mar 2022 11:23:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A8818210E9;
-        Tue, 22 Mar 2022 18:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647973391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jKxuo3tSnTqh2UAPL1+VAIp6n+IcAR/qJqwZEPA/Ep0=;
-        b=pejEAflbD21zArvB8wKtKlgVaGQeoKrHBbjaNQ+yMhdLHxpcZ5nSjgpEPiuPF3IwpPCuTN
-        kdOtpj5t1Kj+d0NpiDAtZwrchSIQpMrEws2qmz681mePvSYG9jyO1PXoABxfa1eApIX/gQ
-        v3p8YpFlcSdFbFKNVSoUFV6FpkRp080=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0AF82133B6;
-        Tue, 22 Mar 2022 18:23:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sIFvAQ8UOmLwGwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 22 Mar 2022 18:23:11 +0000
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Richard Palethorpe <rpalethorpe@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Tejun Heo <tj@kernel.org>, Chris Down <chris@chrisdown.name>
-Subject: [RFC PATCH] mm: memcg: Do not count memory.low reclaim if it does not happen
-Date:   Tue, 22 Mar 2022 19:22:48 +0100
-Message-Id: <20220322182248.29121-1-mkoutny@suse.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 22 Mar 2022 14:25:18 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32649DE83
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:23:34 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id w25so22704271edi.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:23:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=85Ws1qb644UrDxX3GqtVYKt4YI7t6y+/3TtLCRrTTKc=;
+        b=Ku1bCHHBy4U/B0ntBvZYaNo6sJY8WQONWU//cYuzD1bsiWewQg70QTeDzl2hXY4XFN
+         NwP5Gw/RMT8B+yi8bWlXB4Skrv6zKuyqhznjY3mFaV89GZ3JlOBl5l20RiE80NBafVP2
+         AU1HrlWh98Cpn2TbAJ9BGX4m7EnwW3Eei6uQg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=85Ws1qb644UrDxX3GqtVYKt4YI7t6y+/3TtLCRrTTKc=;
+        b=a44Sy1RgXPJfgT5jF7fmWHXcURSJYjg+NtNfzEMzORLvjzEH4gBAkbn57XXNTrFTkp
+         X0wbMMZt8fIzOfTJswRuAzMQsUuw7j9EMW5XxvLF1LPc5vXhFEUxelYE0gJZk+XsIITF
+         I63wppU2/nuPGsrDLgNm9gfuySst+/RC4Dn9NnA7g4ivcSBjViYgIDM+lU8BfB85HPfg
+         T77zU/QHY45LuxqNzUcb32QcK5kbe97U6gKPmVYL/T9GjCWXhIZ7TzpAiv+oR5LBdtZE
+         LWyR1gmmE91vSr2l2QXvk2JIl7bfGtd1hh74Yf/Q9ITUm6dC5Qq2TP6tcTi+bJw/G+Xe
+         qUFA==
+X-Gm-Message-State: AOAM533yzyRFgk9jlGGY7A2P0X3RMkEpdmFOkSaRkkVWZc63duGo4brm
+        B6cxQTN3FWgQ3he4FdNp/fEroe+rSS5cV2FhW3mXbg==
+X-Google-Smtp-Source: ABdhPJwMtH2ef4MJrXE0r5q0QsAUPWiDH4EPuum8RS4ja9iTxc2/V115+eJwjZT4xBGe3Onik6xG+a123W5HezabEwg=
+X-Received: by 2002:aa7:c755:0:b0:419:2f66:e22c with SMTP id
+ c21-20020aa7c755000000b004192f66e22cmr14457833eds.381.1647973412741; Tue, 22
+ Mar 2022 11:23:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1647894991.git.dsterba@suse.com>
+In-Reply-To: <cover.1647894991.git.dsterba@suse.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 22 Mar 2022 11:23:21 -0700
+Message-ID: <CAADWXX-uX74SETx8QNnGDyBGMJHY-6wr8jC9Sjpv4ARqUca0Xw@mail.gmail.com>
+Subject: Re: [GIT PULL] Btrfs updates for 5.18
+To:     David Sterba <dsterba@suse.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Cc:     linux-btrfs <linux-btrfs@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This was observed with memcontrol selftest/new LTP test but can be also
-reproduced in simplified setup of two siblings:
+On Mon, Mar 21, 2022 at 2:37 PM David Sterba <dsterba@suse.com> wrote:
+>
+> - allow reflinks/deduplication from two different mounts of the same
+>   filesystem
 
-	`parent .low=50M
-	  ` s1	.low=50M  .current=50M+ε
-	  ` s2  .low=0M   .current=50M
+So I've pulled this, and it looks ok, but I'm not getting the warm and fuzzies.
 
-The expectation is that s2/memory.events:low will be zero under outer
-reclaimer since no protection should be given to cgroup s2 (even with
-memory_recursiveprot).
+In particular, I'm not seeing any commentary about different
+filesystems for this.
 
-However, this does not happen. The apparent reason is that when s1 is
-considered for (proportional) reclaim the scanned proportion is rounded
-up to SWAP_CLUSTER_MAX and slightly over-proportional amount is
-reclaimed. Consequently, when the effective low value of s2 is
-calculated, it observes unclaimed parent's protection from s1
-(ε-SWAP_CLUSTER_MAX in theory) and effectively appropriates it.
-The effect is slightly regularized protection (workload dependent)
-between siblings and misreported MEMCG_LOW event when reclaiming s2 with
-this protection.
+There are several filesystems that use that ->remap_file_range()
+operation, so these relaxed rules don't just affect btrfs.
 
-Fix the behavior by not reporting breached memory.low in such
-situations. (This affects also setups where all siblings have
-memory.low=0, parent's memory.events:low will still be non-zero when
-parent's memory.low is breached but it will be reduced by the events
-originated in children.)
+Yes, yes, checking for i_sb matching does seem sensible, but I'd
+*really* have liked some sign that people checked with other
+filesystem maintainers and this is ok for all of them, and they didn't
+make assumptions about "always same mount" rather than "always same
+filesystem".
 
-Fixes: 8a931f801340 ("mm: memcontrol: recursive memory.low protection")
-Reported-by: Richard Palethorpe <rpalethorpe@suse.com>
-Link: https://lore.kernel.org/all/20220321101429.3703-1-rpalethorpe@suse.com/
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- include/linux/memcontrol.h | 8 ++++----
- mm/vmscan.c                | 5 +++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+This affects at least cifs, nfs, overlayfs and ocfs2.
 
-Why is this RFC?
+Adding fsdevel, and pointing to that
 
-1) It changes number of events observed on parent/memory.events:low (especially
-   for truly recursive configs where all children specify memory.low=0).
-   IIUC past discussions about equality of all-zeros and all-infinities, those
-   eagerly reported MEMCG_LOW events (in latter case) were deemed skewing the
-   stats [1].
-2) The observed behavior slightly impacts distribution of parent's memory.low. 
-   Constructed example is a passive protected workload in s1 and active in s2
-   (active ~ counteracts the reclaim with allocations). It could strip
-   protection from s1 one by one (one:=SWAP_CLUSTER_MAX/2^sc.priority).
-   That may be considered both wrong (s1 should have been more protected) or
-   correct s2 deserves protection due to its activity.
-   I don't have (didn't collect) data for this, so I think just masking the
-   false events is sufficient (or independent).
+-       if (src_file->f_path.mnt != dst_file->f_path.mnt)
++       if (file_inode(src_file)->i_sb != file_inode(dst_file)->i_sb)
 
-[1] https://lore.kernel.org/r/20200221185839.GB70967@cmpxchg.org
+change in commit 9f5710bbfd30 ("fs: allow cross-vfsmount reflink/dedupe")
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 0abbd685703b..99ac72e00bff 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -626,13 +626,13 @@ static inline bool mem_cgroup_supports_protection(struct mem_cgroup *memcg)
- 
- }
- 
--static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
-+static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg, bool effective)
- {
- 	if (!mem_cgroup_supports_protection(memcg))
- 		return false;
- 
--	return READ_ONCE(memcg->memory.elow) >=
--		page_counter_read(&memcg->memory);
-+	return page_counter_read(&memcg->memory) <= (effective ?
-+		READ_ONCE(memcg->memory.elow) :	READ_ONCE(memcg->memory.low));
- }
- 
- static inline bool mem_cgroup_below_min(struct mem_cgroup *memcg)
-@@ -1177,7 +1177,7 @@ static inline void mem_cgroup_calculate_protection(struct mem_cgroup *root,
- {
- }
- 
--static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
-+static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg, bool effective)
- {
- 	return false;
- }
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 59b14e0d696c..3bdb35d6bee6 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3152,7 +3152,7 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
- 			 * If there is no reclaimable memory, OOM.
- 			 */
- 			continue;
--		} else if (mem_cgroup_below_low(memcg)) {
-+		} else if (mem_cgroup_below_low(memcg, true)) {
- 			/*
- 			 * Soft protection.
- 			 * Respect the protection only as long as
-@@ -3163,7 +3163,8 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
- 				sc->memcg_low_skipped = 1;
- 				continue;
- 			}
--			memcg_memory_event(memcg, MEMCG_LOW);
-+			if (mem_cgroup_below_low(memcg, false))
-+				memcg_memory_event(memcg, MEMCG_LOW);
- 		}
- 
- 		reclaimed = sc->nr_reclaimed;
--- 
-2.35.1
+And yes, there was already a comment about "Practically, they only
+need to be on the same file system" from before that matches the new
+behavior, but hey, comments have been known to be wrong in the past
+too.
 
+And yes, I'm also aware that do_clone_file_range() already had that
+exact same i_sb check and it's not new, but since ioctl_file_clone()
+cheched for the mount path, I don't think you could actually reach it
+without being on the same mount.
+
+And while discussing these sanity checks: wouldn't it make sense to
+check that *both* the source file and the destination file support
+that remap_file_range() op, and it's the same op?
+
+Yes, yes, it probably always is in practice, but I could imagine some
+type confusion thing. So wouldn't it be nice to also have something
+like
+
+    if (dst_file->f_op != src_file->f_op)
+          goto out_drop_write;
+
+in there? I'm thinking "how about dedupe from a directory to a regular
+file" kind of craziness...
+
+                 Linus

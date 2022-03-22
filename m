@@ -2,113 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F594E3FB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6B04E3FAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235710AbiCVNkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S235759AbiCVNkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235718AbiCVNkD (ORCPT
+        with ESMTP id S235702AbiCVNkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Mar 2022 09:40:03 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C4B21279
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:38:35 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id t5so18189612pfg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:38:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3hBW2jq9rQv2PGQ7z4Xm8VijqZLc6qsdwGJm+DpeyK0=;
-        b=maGu3bj7QiYTNAQFKfvkcYWpIuUPj3nmsTaF8s/efLzEuhnH23mhLP3aEdqHLwKH+x
-         FLBm0J3/SkxwmbzBheQ5384GI6bOuybr+W76KaFFUgU5tS7nfWVdPILrU/DU9Y7SZAus
-         sTrKuka4J3v19x0k1LI85dd4rMgyzPbEkd6XHdjLhKbh2vdkuEg31Da2A0F3Mc2f0sNR
-         3bHEoJjkkU1GNxc6abAyJfzZnvVLjQMVNsL2Cajfl/BQEx0QyxA+aZ+vxmanpyQpxAOD
-         kKoIq8YQS0eY6maVmURqrBHIelP1F7iN0eUjnRLgOmtsI2RdnpRzfW4Ey8M0RzzorNJJ
-         IuZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3hBW2jq9rQv2PGQ7z4Xm8VijqZLc6qsdwGJm+DpeyK0=;
-        b=ET5imHaYi8nZdJmDZM6OXz+nsiGbILa9/xBRLCtB6cqsiXyB2UywOXdKZ8yVMB1un8
-         dKRRqRARBTTJO7GPyK2DmGYOEicuOKBW61sw1LTCnB0J9QxoZ6hE5JE77ZyzZyqFOO6e
-         b1BTjBxnG58Acx++GLYmutr5fjQE5bJqE3CpQyZoKSLk/0h3BnUy/BR4Avf1xBrqEb8u
-         M299N8WJAdwt7Mf5ak+ktGkkV8Wjpw5WIP7EqCICyktgTZtg82Xa3VS9EtNV5q/vbBog
-         LXfmOQX9vN02llnB8LDVNtE4GsxrahcJb5w4o2HAmlfjo4iwyW4J3OY0qD2dGREAR7Gc
-         dqYA==
-X-Gm-Message-State: AOAM530qOfNfu41eCabVhqbkwS2tPWSKqHUKpbNOXxCEIBxzxhyZ05N9
-        QH3TG04VWDBuWIv9YuKJvWqrDg==
-X-Google-Smtp-Source: ABdhPJw9VTBsVAskTxmV8drgozBswhR7Sk3zdW6yWS/yOBcMNJNiPdFLtlSIG+SuFq+NDKsL+Zaktw==
-X-Received: by 2002:a05:6a00:23cb:b0:4f7:872d:86eb with SMTP id g11-20020a056a0023cb00b004f7872d86ebmr29441308pfc.37.1647956314616;
-        Tue, 22 Mar 2022 06:38:34 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e62:3990:4de5:990f:881e:dd0e? ([2409:8a28:e62:3990:4de5:990f:881e:dd0e])
-        by smtp.gmail.com with ESMTPSA id e19-20020a637453000000b003821bdb8103sm13985352pgn.83.2022.03.22.06.38.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 06:38:34 -0700 (PDT)
-Message-ID: <b55676c3-07da-f4f1-e4c8-252cd9d4fac2@bytedance.com>
-Date:   Tue, 22 Mar 2022 21:38:21 +0800
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14BAD1F633;
+        Tue, 22 Mar 2022 06:38:32 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:60198.555504461
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id C74A8100225;
+        Tue, 22 Mar 2022 21:38:28 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id bbab2de56e904e23a38356a55f9eb734 for jiaxun.yang@flygoat.com;
+        Tue, 22 Mar 2022 21:38:31 CST
+X-Transaction-ID: bbab2de56e904e23a38356a55f9eb734
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <2c671752-6684-f87b-7b2d-90568d36adde@189.cn>
+Date:   Tue, 22 Mar 2022 21:38:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [External] Re: [PATCH v2 1/6] perf/core: Fix incosistency between
- cgroup sched_out and sched_in
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v11 2/7] MIPS: Loongson64: dts: introduce ls3A4000
+ evaluation board
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, eranian@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-References: <20220322120834.98637-1-zhouchengming@bytedance.com>
- <20220322120834.98637-2-zhouchengming@bytedance.com>
- <YjnIKCIRV+ePJVCN@hirez.programming.kicks-ass.net>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <YjnIKCIRV+ePJVCN@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-3-15330273260@189.cn>
+ <2644866a-8db2-923e-4227-2aa6d8e375fe@flygoat.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <2644866a-8db2-923e-4227-2aa6d8e375fe@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/22 8:59 下午, Peter Zijlstra wrote:
-> On Tue, Mar 22, 2022 at 08:08:29PM +0800, Chengming Zhou wrote:
->> There is a race problem that can trigger WARN_ON_ONCE(cpuctx->cgrp)
->> in perf_cgroup_switch().
->>
->> CPU1					CPU2
->> (in context_switch)			(attach running task)
->> perf_cgroup_sched_out(prev, next)
->> 	cgrp1 == cgrp2 is True
->> 					next->cgroups = cgrp3
->> 					perf_cgroup_attach()
->> perf_cgroup_sched_in(prev, next)
->> 	cgrp1 == cgrp3 is False
->>
->> The commit a8d757ef076f ("perf events: Fix slow and broken cgroup
->> context switch code") would save cpuctx switch out/in when the
->> perf_cgroup of "prev" and "next" are the same.
->>
->> But perf_cgroup of task can change in concurrent with context_switch.
-> 
-> Can you clarify? IIRC then a task changes cgroup it goes throught the
-> whole ->attach() dance, and that serializes against the context switch
-> code.
-> 
 
-task->cgroups changed before perf_cgroup_attach(), and is not serialized
-against the context switch, since task->cgroups can be changed without
-rq lock held. (cgroup v1 or cgroup v2 with PSI disabled)
+On 2022/3/22 21:05, Jiaxun Yang wrote:
+>
+>
+> 在 2022/3/21 16:29, Sui Jingfeng 写道:
+>> From: suijingfeng <suijingfeng@loongson.cn>
+>>
+>> The board name is LS3A4000_7A1000_EVB_BOARD_V1.4, it consist of 1.8Ghz
+>> mips64r5 4-core CPU and LS7A1000 bridge chip. It has PCIe GEN2 x8 slot,
+>> therefore can play with discrete graphics card.
+>
+> Hi Jingfeng,
+>
+> As we've discussed before if you are going to introduce new dts then 
+> you *MUST*
+> include it in makefile and wire it up in code.
+>
+> A dts file doing nothing lying in the tree is just suspicious.
+>
+> Thanks.
+> - Jiaxun
+>
+Hi, Jiaxun,
 
-So perf_cgroup_from_task() in perf_cgroup_switch() may see the old or
-new perf_cgroup when do context switch.
+I know what you means, but it is the kernel side developer's job.
+I am just a naive graphic driver developer,I can not care so much.
+Below is my private patch which can be used to built specific dts
+into the linux kernel, therefore make the verification easier.
 
-Thanks.
+
+diff --git a/arch/mips/boot/dts/loongson/Makefile b/arch/mips/boot/dts/loongson/Makefile
+index 5c6433e441ee..99b66675c4a1 100644
+--- a/arch/mips/boot/dts/loongson/Makefile
++++ b/arch/mips/boot/dts/loongson/Makefile
+@@ -1,9 +1,22 @@
+  # SPDX-License-Identifier: GPL-2.0
+-dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64_2core_2k1000.dtb
+-dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64c_4core_ls7a.dtb
+-dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64c_4core_rs780e.dtb
+-dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64c_8core_rs780e.dtb
+-dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64g_4core_ls7a.dtb
+-dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64v_4core_virtio.dtb
++
++dtb-$(CONFIG_LOONGSON64_LS2K1000_PAI_V1_5)	+= ls2k1000_pai.dtb
++dtb-$(CONFIG_LOONGSON64_LS2K1000_EVB_V1_2)	+= ls2k1000_evb.dtb
++dtb-$(CONFIG_LOONGSON64_LS2K1000_GENERIC)	+= loongson64_2core_2k1000.dtb
++
++dtb-$(CONFIG_LOONGSON64_LS3A3000_LS7A1000)	+= loongson64c_4core_ls7a.dtb
++dtb-$(CONFIG_LOONGSON64_LS3A3000_RS780E)	+= loongson64c_4core_rs780e.dtb
++dtb-$(CONFIG_LOONGSON64_LS3B3000_RS780E)	+= loongson64c_8core_rs780e.dtb
++
++dtb-$(CONFIG_LOONGSON64_LS3A4000_7A1000_LEMOTE_A1901) += lemote_a1901.dtb
++dtb-$(CONFIG_LOONGSON64_LS3A4000_7A1000_EVB_V1_4) += ls3a4000_7a1000_evb.dtb
++dtb-$(CONFIG_LOONGSON64_LS3A4000_7A1000_GENERIC)  += loongson64g_4core_ls7a.dtb
++
++dtb-$(CONFIG_LOONGSON64_BOARD_DEFAULT)	+= loongson64_2core_2k1000.dtb
++dtb-$(CONFIG_LOONGSON64_BOARD_DEFAULT)	+= loongson64c_4core_ls7a.dtb
++dtb-$(CONFIG_LOONGSON64_BOARD_DEFAULT)	+= loongson64c_4core_rs780e.dtb
++dtb-$(CONFIG_LOONGSON64_BOARD_DEFAULT)	+= loongson64c_8core_rs780e.dtb
++dtb-$(CONFIG_LOONGSON64_BOARD_DEFAULT)	+= loongson64g_4core_ls7a.dtb
++dtb-$(CONFIG_LOONGSON64_BOARD_DEFAULT)	+= loongson64v_4core_virtio.dtb
+  
+  obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+diff --git a/arch/mips/include/asm/mach-loongson64/builtin_dtbs.h b/arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+index 8be710557bdb..605bfa47b4b9 100644
+--- a/arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
++++ b/arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+@@ -8,10 +8,10 @@
+  #ifndef __ASM_MACH_LOONGSON64_BUILTIN_DTBS_H_
+  #define __ASM_MACH_LOONGSON64_BUILTIN_DTBS_H_
+  
+-extern u32 __dtb_loongson64_2core_2k1000_begin[];
+-extern u32 __dtb_loongson64c_4core_ls7a_begin[];
+-extern u32 __dtb_loongson64c_4core_rs780e_begin[];
+-extern u32 __dtb_loongson64c_8core_rs780e_begin[];
+-extern u32 __dtb_loongson64g_4core_ls7a_begin[];
+-extern u32 __dtb_loongson64v_4core_virtio_begin[];
++extern u32 __weak __dtb_loongson64_2core_2k1000_begin[];
++extern u32 __weak __dtb_loongson64c_4core_ls7a_begin[];
++extern u32 __weak __dtb_loongson64c_4core_rs780e_begin[];
++extern u32 __weak __dtb_loongson64c_8core_rs780e_begin[];
++extern u32 __weak __dtb_loongson64g_4core_ls7a_begin[];
++extern u32 __weak __dtb_loongson64v_4core_virtio_begin[];
+  #endif
+diff --git a/arch/mips/loongson64/Kconfig b/arch/mips/loongson64/Kconfig
+index 517f1f8e81fb..7030185ed0c6 100644
+--- a/arch/mips/loongson64/Kconfig
++++ b/arch/mips/loongson64/Kconfig
+@@ -12,4 +12,43 @@ config RS780_HPET
+  	  Note: This driver is doing some dangerous hack. Please only enable
+  	  it on RS780E systems.
+  
++choice
++	prompt "Board type"
++	depends on MACH_LOONGSON64
++	depends on BUILTIN_DTB
++	help
++	 pick a device tree that matches the target board.
++
++config LOONGSON64_BOARD_DEFAULT
++	bool "Default"
++
++config LOONGSON64_LS3A4000_7A1000_LEMOTE_A1901
++	bool "LEMOTE A1901 LS3A4000 board"
++
++config LOONGSON64_LS3A4000_7A1000_EVB_V1_4
++	bool "LS3A4000 LS7A1000 evaluation board v1.4"
++
++config LOONGSON64_LS3A4000_7A1000_GENERIC
++	bool "LS3A4000 LS7A1000 generic board"
++
++config LOONGSON64_LS3A3000_LS7A1000
++	bool "LS3A3000 LS7A1000 generic board"
++
++config LOONGSON64_LS3A3000_RS780E
++	bool "LS3A3000 RS780E generic board"
++
++config LOONGSON64_LS3B3000_RS780E
++	bool "LS3B3000 RS780E generic board"
++
++config LOONGSON64_LS2K1000_PAI_V1_5
++	bool "LS2K1000 PAI board V1.5"
++
++config LOONGSON64_LS2K1000_EVB_V1_2
++	bool "LS2K1000 evaluation board V1.2"
++
++config LOONGSON64_LS2K1000_GENERIC
++	bool "LS2K1000 generic"
++
++endchoice
++
+  endif # MACH_LOONGSON64
+diff --git a/arch/mips/loongson64/setup.c b/arch/mips/loongson64/setup.c
+index cb10d14da433..f8859039a4e0 100644
+--- a/arch/mips/loongson64/setup.c
++++ b/arch/mips/loongson64/setup.c
+@@ -16,6 +16,13 @@ void *loongson_fdt_blob;
+  
+  void __init plat_mem_setup(void)
+  {
++	void *fdt;
++
++	fdt = get_fdt();
++
++	if (fdt)
++		loongson_fdt_blob = fdt;
++
+  	if (loongson_fdt_blob)
+  		__dt_setup_arch(loongson_fdt_blob);
+  }
+
+>>
+>> While the integrated display copntroller is equipped with a VGA output
+>> and a DVI output, the VGA is connect to the DVO0 output port of the
+>> display controller, the DVI is connected to DVO1 output port of the
+>> display controller.
+>>
+>>      +------+            +-----------------------------------+
+>>      | DDR4 |            |  +-------------------+            |
+>>      +------+            |  | PCIe Root complex |   LS7A1000 |
+>>         || MC0           |  +--++---------++----+            |
+>>    +----------+  HT 3.0  |     ||         ||                 |
+>>    | LS3A4000 |<-------->| +---++---+  +--++--+ +---------+   +------+
+>>    |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| 
+>> VRAM |
+>>    +----------+          | +--------+  +-+--+-+    +---------+ +------+
+>>         || MC1           +---------------|--|----------------+
+>>      +------+                            |  |
+>>      | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+>>      +------+   VGA <--|ADV7125|<--------+ +-------->|TFP410|--> 
+>> DVI/HDMI
+>>                        +-------+                      +------+
+>>
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>> ---
+>>   .../boot/dts/loongson/ls3a4000_7a1000_evb.dts | 136 ++++++++++++++++++
+>>   1 file changed, 136 insertions(+)
+>>   create mode 100644 arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+>>
+>> diff --git a/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts 
+>> b/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+>> new file mode 100644
+>> index 000000000000..f467eddccdac
+>> --- /dev/null
+>> +++ b/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+>> @@ -0,0 +1,136 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "loongson64g-package.dtsi"
+>> +#include "ls7a-pch.dtsi"
+>> +
+>> +/ {
+>> +    compatible = "loongson,loongson64g-4core-ls7a";
+>> +    model = "LS3A4000_7A1000_EVB_BOARD_V1.4";
+>> +
+>> +    vga-encoder {
+>> +        compatible = "adi,adv7123", "dumb-vga-dac";
+>> +
+>> +        ports {
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +
+>> +            port@0 {
+>> +                reg = <0>;
+>> +                adv7123_in: endpoint {
+>> +                    remote-endpoint = <&dc_out_rgb0>;
+>> +                };
+>> +            };
+>> +
+>> +            port@1 {
+>> +                reg = <1>;
+>> +                adv7123_out: endpoint {
+>> +                    remote-endpoint = <&vga_connector_in>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +    vga-connector {
+>> +        compatible = "vga-connector";
+>> +        label = "vga";
+>> +
+>> +        ddc-i2c-bus = <&i2c6>;
+>> +
+>> +        port {
+>> +            vga_connector_in: endpoint {
+>> +                remote-endpoint = <&adv7123_out>;
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +    tfp410: dvi-encoder {
+>> +        compatible = "ti,tfp410";
+>> +
+>> +        ports {
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +
+>> +            port@0 {
+>> +                reg = <0>;
+>> +                tfp410_in: endpoint {
+>> +                    pclk-sample = <1>;
+>> +                    bus-width = <24>;
+>> +                    remote-endpoint = <&dc_out_rgb1>;
+>> +                };
+>> +            };
+>> +
+>> +            port@1 {
+>> +                reg = <1>;
+>> +                tfp410_out: endpoint {
+>> +                    remote-endpoint = <&dvi_connector_in>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +    dvi-connector {
+>> +        compatible = "dvi-connector";
+>> +        label = "dvi";
+>> +        digital;
+>> +
+>> +        ddc-i2c-bus = <&i2c7>;
+>> +
+>> +        port {
+>> +            dvi_connector_in: endpoint {
+>> +                remote-endpoint = <&tfp410_out>;
+>> +            };
+>> +        };
+>> +    };
+>> +};
+>> +
+>> +&package0 {
+>> +    htvec: interrupt-controller@efdfb000080 {
+>> +        compatible = "loongson,htvec-1.0";
+>> +        reg = <0xefd 0xfb000080 0x40>;
+>> +        interrupt-controller;
+>> +        #interrupt-cells = <1>;
+>> +
+>> +        interrupt-parent = <&liointc>;
+>> +        interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
+>> +                 <25 IRQ_TYPE_LEVEL_HIGH>,
+>> +                 <26 IRQ_TYPE_LEVEL_HIGH>,
+>> +                 <27 IRQ_TYPE_LEVEL_HIGH>,
+>> +                 <28 IRQ_TYPE_LEVEL_HIGH>,
+>> +                 <29 IRQ_TYPE_LEVEL_HIGH>,
+>> +                 <30 IRQ_TYPE_LEVEL_HIGH>,
+>> +                 <31 IRQ_TYPE_LEVEL_HIGH>;
+>> +    };
+>> +};
+>> +
+>> +&pch {
+>> +    msi: msi-controller@2ff00000 {
+>> +        compatible = "loongson,pch-msi-1.0";
+>> +        reg = <0 0x2ff00000 0 0x8>;
+>> +        interrupt-controller;
+>> +        msi-controller;
+>> +        loongson,msi-base-vec = <64>;
+>> +        loongson,msi-num-vecs = <192>;
+>> +        interrupt-parent = <&htvec>;
+>> +    };
+>> +};
+>> +
+>> +&lsdc {
+>> +    ports {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        port@0 {
+>> +            endpoint {
+>> +                remote-endpoint = <&adv7123_in>;
+>> +            };
+>> +        };
+>> +
+>> +        port@1 {
+>> +            endpoint {
+>> +                remote-endpoint = <&tfp410_in>;
+>> +            };
+>> +        };
+>> +    };
+>> +};
+>

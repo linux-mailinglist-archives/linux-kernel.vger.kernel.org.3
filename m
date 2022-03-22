@@ -2,148 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D994E3FAE
+	by mail.lfdr.de (Postfix) with ESMTP id 054864E3FAD
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbiCVNk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S235765AbiCVNlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235749AbiCVNkZ (ORCPT
+        with ESMTP id S230049AbiCVNlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:40:25 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0F5BE12;
-        Tue, 22 Mar 2022 06:38:57 -0700 (PDT)
-Received: from mail-wm1-f43.google.com ([209.85.128.43]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N3bCH-1oEl190w43-010d2h; Tue, 22 Mar 2022 14:38:56 +0100
-Received: by mail-wm1-f43.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so1756900wmp.5;
-        Tue, 22 Mar 2022 06:38:56 -0700 (PDT)
-X-Gm-Message-State: AOAM5324cotBQ0lfYEOmJeoFNHhV9pmsgUxLcDOixQVRl6SsmGG1y1ZR
-        pTKAyKk/0AsZiNMActrT8aoJKk1mF+PY5wlh0i8=
-X-Google-Smtp-Source: ABdhPJzs3QeOlZNcBzENKO3A5fNgCdfHUg3y8+9tjOUu6Mb84GKwxwBSCBHL98AVKD2sOKEDH/Q+ERdYLiTXX/5v0oE=
-X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
- e15-20020a5d6d0f000000b0020391571c48mr22098146wrq.192.1647956335843; Tue, 22
- Mar 2022 06:38:55 -0700 (PDT)
+        Tue, 22 Mar 2022 09:41:11 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D6451EEFE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:39:44 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-304-TpoBb9E-P5-0NQ4l7f4Q5Q-1; Tue, 22 Mar 2022 13:39:41 +0000
+X-MC-Unique: TpoBb9E-P5-0NQ4l7f4Q5Q-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Tue, 22 Mar 2022 13:39:41 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Tue, 22 Mar 2022 13:39:41 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Ammar Faizi' <ammarfaizi2@gnuweeb.org>, Willy Tarreau <w@1wt.eu>
+CC:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Thread-Topic: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Thread-Index: AQHYPdalMvftIu2CIkSH1LImoy2kmazLRP7AgAAjOSaAAABv0A==
+Date:   Tue, 22 Mar 2022 13:39:41 +0000
+Message-ID: <3b8984ecfbcd4c93aeb468d01728cd74@AcuMS.aculab.com>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+ <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
+ <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
+ <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
+ <20220322121338.GD10306@1wt.eu>
+ <81569a1c-a6d3-ceb2-a1f1-f229a024d684@gnuweeb.org>
+ <20220322133413.GG10306@1wt.eu>
+ <58cb5455-d065-b508-b328-20b57c3a67a7@gnuweeb.org>
+In-Reply-To: <58cb5455-d065-b508-b328-20b57c3a67a7@gnuweeb.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220321165049.35985-1-sven@svenpeter.dev> <20220321165049.35985-7-sven@svenpeter.dev>
-In-Reply-To: <20220321165049.35985-7-sven@svenpeter.dev>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 22 Mar 2022 14:38:39 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a27-eWP=krGQOp29krcc7bVME9=MbN6B3Rs7Q4Ran_VFw@mail.gmail.com>
-Message-ID: <CAK8P3a27-eWP=krGQOp29krcc7bVME9=MbN6B3Rs7Q4Ran_VFw@mail.gmail.com>
-Subject: Re: [PATCH 6/9] nvme-apple: Add initial Apple SoC NVMe driver
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zenq9dNBPyR4Cpm38NfQEf+UK2FuiOPpPDempQ8AJnXebIfJXmf
- 93BsvJKhF2GNjg5ntyJdNAGHx7cj0du+3Y7hr/e3IDFlMFylmv1QhGT2YmxbvCU4tYtGYom
- JF9+BKTMyIYC4Khx6AMqSme/EhlO/fkFXm/jWw+uORNzEcsGLjSpGaJeaCNcaZlWq+XfLxB
- GZTmzbNWw6iTfuX3PQF2A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8SvVq9YpZvI=:5uHD4aaefb0pZ9QtPGiYX5
- eI+YnRZXpI+NVn9zCydT3pqTEEhF02jE0y8CzwtGQ4NugYNPidTta2WgifBjqM6SXjY+uS06f
- vy3OdU/Qn6iOXq3bo6Kd1o6SYTq7ejEHrkt3Pn4Xth9D44xN2w0SnCRGOpyx93eMjtqHZJe4a
- eoxHqYDnF2dn7gucqsbfZ1tuekm0s1z0oDSuhJfAvioUvbbftfQG+e/Tl8aBO9dOHCMhQOi7T
- BuCpC296aXeKjdqZExM1rzYhqsgOLV0p7K3roqWFomPEcDtf7YJE4Ml4Hn2IEFLax3U3MRB9f
- rgJOqoZEfVWHFcUIWHkaAGdjr0ZIoBFGLXjeGvoGhADRVeuzRf8h8qy0eCiIc3YIqOqO9FKvO
- RynHNQ1UpoAdYqW2QKohP7wiFI05VWqcgIdsErB7Ltux0yQslaHvaG/se0MdMagqpMQaJ6Aq5
- Ss251BH/4qn83ICK8RbltFIlD+/6mJxkup51b+LXzRb5t3jnEMPcIBuQ6lsw83XlJev0TqOri
- XyAK2ic6J0PtARB0hCt+0gslv4XyMW7yQlL2uXK8zY67iFan8W/Ho2cAvV6fYdx4yqaW0ersK
- q5uD2brLFpk5va++IBaIEW8X1yNm9ZVHgj0WU8b9uy1GUvr+YfgNF5fDM3oiWyS5kPPJeq4P6
- 0bMDNysji/JwZe0eu+9x6XG757aTMzUXIuDP/pobw8t0eNA7O0Z+8KEqUySKk567elGtdIYti
- NJ8HJZogQxj0/pT2SEHL89KGJZ+LxW9P01eYTFf+jnnbxbNr/gLTlX8r+JfkWKfDlvKxBNK+x
- kfqRS7lw08u4XxdrxPt5SYeql7DmFtm9v9KLFxe3RZSf+IWcZA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 5:50 PM Sven Peter <sven@svenpeter.dev> wrote:
+RnJvbTogQW1tYXIgRmFpemkNCj4gU2VudDogMjIgTWFyY2ggMjAyMiAxMzozNw0KPiANCj4gT24g
+My8yMi8yMiA4OjM0IFBNLCBXaWxseSBUYXJyZWF1IHdyb3RlOg0KPiA+PiBJIHR1cm5lZCBvdXQg
+R0NDIHJlZnVzZXMgdG8gdXNlICJybSIgaWYgd2UgY29tcGlsZSB3aXRob3V0IC1mb21pdC1mcmFt
+ZS1wb2ludGVyDQo+ID4+IChlLmcuIHdpdGhvdXQgb3B0aW1pemF0aW9uIC8gLU8wKS4gU28gSSB3
+aWxsIHN0aWxsIHVzZSAibSIgaGVyZS4NCj4gPg0KPiA+IE9LIHRoYXQncyBmaW5lLiB0aGVuIHlv
+dSBjYW4gcHJvYmFibHkgc2ltcGxpZnkgaXQgbGlrZSB0aGlzOg0KPiA+DQo+ID4gICAgICAgIGxv
+bmcgX2FyZzYgPSAobG9uZykoYXJnNik7IC8qIE1pZ2h0IGJlIGluIG1lbW9yeSAqLyAgICBcDQo+
+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBcDQo+ID4gICAgICAgIGFzbSB2b2xhdGlsZSAoICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBcDQo+ID4gICAgICAgICAgICAicHVzaGwgICUlZWJwXG5cdCIg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ID4gICAgICAgICAgICAibW92bCAg
+ICVbX2FyZzZdLCAlJWVicFxuXHQiICAgICAgICAgICAgICAgICAgICAgICBcDQo+ID4gICAgICAg
+ICAgICAiaW50ICAgICQweDgwXG5cdCIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBc
+DQo+ID4gICAgICAgICAgICAicG9wbCAgICUlZWJwXG5cdCIgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBcDQo+ID4gICAgICAgICAgICA6ICI9YSIoX3JldCkgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBcDQo+ID4gICAgICAgICAgICA6ICJyIihfbnVtKSwgInIi
+KF9hcmcxKSwgInIiKF9hcmcyKSwgInIiKF9hcmczKSwgICBcDQo+ID4gICAgICAgICAgICAgICJy
+IihfYXJnNCksInIiKF9hcmc1KSwgW19hcmc2XSJtIihfYXJnNikgICAgICAgIFwNCj4gPiAgICAg
+ICAgICAgIDogIm1lbW9yeSIsICJjYyIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IFwNCj4gPiAgICAgICAgKTsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIFwNCj4gPg0KPiA+IFNlZSA/IG5vIG1vcmUgcHVzaCwgbm8gbW9yZSBhZGRs
+LCBkaXJlY3QgbG9hZCBmcm9tIG1lbW9yeS4NCj4gDQo+IFVnZ2guLi4gSSBjcmFmdGVkIHRoZSBz
+YW1lIGNvZGUgbGlrZSB5b3Ugc3VnZ2VzdGVkIGJlZm9yZSwgYnV0IHRoZW4NCj4gSSByZWFsaXpl
+ZCBpdCdzIGJ1Z2d5LCBpdCdzIGJ1Z2d5IGJlY2F1c2UgJVtfYXJnNl0gbWF5IGxpdmUgaW4gTigl
+ZXNwKS4NCj4gDQo+IFdoZW4geW91IHB1c2hsICVlYnAsIHRoZSAlZXNwIGNoYW5nZXMsIE4oJWVz
+cCkgbm8gbG9uZ2VyIHBvaW50cyB0byB0aGUNCj4gNi10aCBhcmd1bWVudC4NCg0KWWVwIC0gdGhh
+dCBpcyB3aHkgSSB3cm90ZSB0aGUgJ3B1c2ggYXJnNicuDQoNCglEYXZpZA0KDQotDQpSZWdpc3Rl
+cmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtl
+eW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-> +static int apple_nvme_sart_dma_setup(void *cookie, struct apple_rtkit_shmem *bfr,
-> +                                    dma_addr_t iova, size_t size)
-> +{
-> +       struct apple_nvme *anv = cookie;
-> +       int ret;
-> +
-> +       if (iova)
-> +               return -EINVAL;
-> +
-> +       bfr->buffer = dma_alloc_coherent(anv->dev, size, &iova, GFP_KERNEL);
-> +       if (!bfr->buffer)
-> +               return -ENOMEM;
-
-You pass 'iova' as an argument, but then replace it with the address
-returned by dma_alloc_coherent(). Can you remove the function
-argument?
-
-> +static void apple_nvmmu_inval(struct apple_nvme_queue *q, unsigned int tag)
-> +{
-> +       struct apple_nvme *anv = queue_to_apple_nvme(q);
-> +
-> +       writel(tag, anv->mmio_nvme + APPLE_NVMMU_TCB_INVAL);
-> +       if (readl_relaxed(anv->mmio_nvme + APPLE_NVMMU_TCB_STAT))
-> +               dev_warn(anv->dev, "NVMMU TCB invalidation failed\n");
-> +}
-
-I don't like to see the _relaxed() accessors used without an explanation
-about why that helps. Please use the non-relaxed version, or make sure
-it's obvious here why you use it.
-
-> +bad_sgl:
-> +       WARN(DO_ONCE(apple_nvme_print_sgl, iod->sg, iod->nents),
-> +            "Invalid SGL for payload:%d nents:%d\n", blk_rq_payload_bytes(req),
-> +            iod->nents);
-
-I think you mean WARN_ONCE() here?
-
-> +       writel_relaxed(0, anv->mmio_coproc + APPLE_ANS_COPROC_CPU_CONTROL);
-> +       (void)readl_relaxed(anv->mmio_coproc + APPLE_ANS_COPROC_CPU_CONTROL);
-
-What is the purpose of the readl_relaxed() here? It looks like you are
-trying to flush
-the write to the hardware, but then again
-
-  a) on Apple hardware, the registers are mapped using PROT_DEVICE_nGnRnE,
-      so MMIO writes are never posted
-
-  b) the read is "_relaxed", so there is no barrier, and the result is
-unused, so
-      it would appear that the CPU can just keep executing code anyway.
-
-Since this is all the initialization path, I can't imagine what the
-relaxation of
-the barriers helps with.
-
-> +static int apple_nvme_reg_read32(struct nvme_ctrl *ctrl, u32 off, u32 *val)
-> +{
-> +       *val = readl_relaxed(ctrl_to_apple_nvme(ctrl)->mmio_nvme + off);
-> +       return 0;
-> +}
-> +
-> +static int apple_nvme_reg_write32(struct nvme_ctrl *ctrl, u32 off, u32 val)
-> +{
-> +       writel_relaxed(val, ctrl_to_apple_nvme(ctrl)->mmio_nvme + off);
-> +       return 0;
-> +}
-
-If you have generic register access functions, don't make them use
-_relaxed internally. If there are instances that need to be _relaxed,
-add another version of the accessor that spells this out in the caller.
-
-       Arnd

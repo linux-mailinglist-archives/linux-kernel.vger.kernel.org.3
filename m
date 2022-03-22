@@ -2,108 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F934E3E84
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A14D4E3E89
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234880AbiCVMcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S234901AbiCVMeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234877AbiCVMcQ (ORCPT
+        with ESMTP id S233049AbiCVMeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:32:16 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD43B7DAA9;
-        Tue, 22 Mar 2022 05:30:47 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KN9kp4dxgz6H6rn;
-        Tue, 22 Mar 2022 20:28:34 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Tue, 22 Mar 2022 13:30:44 +0100
-Received: from [10.47.85.68] (10.47.85.68) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Mar
- 2022 12:30:44 +0000
-Message-ID: <a5e42012-c1fc-082e-e636-594abc07dd70@huawei.com>
-Date:   Tue, 22 Mar 2022 12:30:42 +0000
+        Tue, 22 Mar 2022 08:34:03 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923DB6D867;
+        Tue, 22 Mar 2022 05:32:36 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so2158997wms.2;
+        Tue, 22 Mar 2022 05:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s1JUJCCgG5/o2Zp0PVl1hbmBjO3D2+rLg6kaSAKktV8=;
+        b=jS7+/KvA3Oefko2h/dqc+VGDYDUNth7fCiYMN8PX6Lz/S+7YSFxWSEJJfZu9s+IJFw
+         S+JbKyv8XGzyVks7u1FfvWcQ7ouvh6zhHNmGqhDIOKYFa8V+apBh/8k5uIfOsxAbdOyT
+         7EUZjVTbH6yht5hwz2sYu/V6wxdg5wBARwT7S8MGZk3AAHa4F0RxSmiFukGdI7N+N3Ij
+         cXP8FN48ttB/nvs8at1ToUaDlmeHxl850SdFIevuAml7yrSIFKpMfgLRxXaW2NE3sSHL
+         OwEqLtiMVTocIWwcE2EoV4pSd5AILb6uSJJDxp6Anubs+t7wF5paBMhMHVH5z4ZJBSKN
+         eyLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s1JUJCCgG5/o2Zp0PVl1hbmBjO3D2+rLg6kaSAKktV8=;
+        b=oQgGosI1ucISnKhJA0LPvqas0OMqccAw1s8x3dSxzFxvVVs3+ctMn4Ad2D+YNPbrws
+         203AoXfztIExYsWHzl0w4IoBV63CIgPtGAWUc+aTggBYHvWRuJFaQ+amX1a8w2ge3QCy
+         yZ8LSsDytxi0M2vdpmIITrd+oeVkkfr3RoqE3Hv4QsvX3gxmQs62SfiAf69mark8oy6Z
+         PKEra6xPnLcmabDe+eW4npUZ9iJ6EupiB1sfj4Ux4PWNklWyyN/DfZeuZWx+DMTWiv/Z
+         N6u4jTYSnqLRIQ4B2K4HeD5d6gBzEJLkTmnIp+G9bYocHeT8hPxdeIOiI2587YKosKua
+         Gtxg==
+X-Gm-Message-State: AOAM532FODC0Dh+pI9RoTjX0jyxeBYDYcJoAaTPTkZsT1IxDsH84LEbP
+        MR87tn0NjoQWKX9IiVxXnVo=
+X-Google-Smtp-Source: ABdhPJyNcGl6JSE0x09iKOEbNKdNrkLeqPqFsPCjCCBQzi8KOxj8+oPuUCqlvq63ocVlyaAJzBJM2A==
+X-Received: by 2002:a05:600c:ad1:b0:38c:8bf6:7d6b with SMTP id c17-20020a05600c0ad100b0038c8bf67d6bmr3710820wmr.84.1647952355154;
+        Tue, 22 Mar 2022 05:32:35 -0700 (PDT)
+Received: from [10.168.10.170] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id o14-20020a5d47ce000000b00203e0a21c16sm18518776wrc.3.2022.03.22.05.32.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 05:32:34 -0700 (PDT)
+Message-ID: <a2380fac-d173-50e3-963a-d7fc22b2da5d@gmail.com>
+Date:   Tue, 22 Mar 2022 13:32:33 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 01/11] blk-mq: Add blk_mq_init_queue_ops()
-To:     Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>
-CC:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
-        <bvanassche@acm.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <ming.lei@redhat.com>,
-        <chenxiang66@hisilicon.com>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <dm-devel@redhat.com>,
-        <beanhuo@micron.com>
-References: <1647945585-197349-1-git-send-email-john.garry@huawei.com>
- <1647945585-197349-2-git-send-email-john.garry@huawei.com>
- <20220322111848.GA29270@lst.de>
- <cacc3f7b-c8be-0f72-1c52-562c15b468a4@huawei.com>
- <b5df2ef1-2d6d-340e-e4b4-09132dc0516b@suse.de>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <b5df2ef1-2d6d-340e-e4b4-09132dc0516b@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.47.85.68]
-X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ioctl_userfaultfd.2: Corrections for returned .ioctls
+ members
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, Ian Abbott <abbotti@mev.co.uk>
+Cc:     linux-man@vger.kernel.org,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+References: <20220318191343.72812-1-abbotti@mev.co.uk>
+ <YjgW7L77+Y2fylcR@xz-m1.local>
+From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+In-Reply-To: <YjgW7L77+Y2fylcR@xz-m1.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 12:16, Hannes Reinecke wrote:
-> On 3/22/22 12:33, John Garry wrote:
->> On 22/03/2022 11:18, Christoph Hellwig wrote:
->>> On Tue, Mar 22, 2022 at 06:39:35PM +0800, John Garry wrote:
->>>> Add an API to allocate a request queue which accepts a custom set of
->>>> blk_mq_ops for that request queue.
->>>>
->>>> The reason which we may want custom ops is for queuing requests 
->>>> which we
->>>> don't want to go through the normal queuing path.
->>>
->>> Eww.  I really do not think we should do separate ops per queue, as that
->>> is going to get us into a deep mess eventually.
->>>
->>
->> Yeah... so far (here) it works out quite nicely, as we don't need to 
->> change the SCSI blk mq ops nor allocate a scsi_device - everything is 
->> just separate.
->>
->> The other method mentioned previously was to add the request 
->> "reserved" flag and add new paths in scsi_queue_rq() et al to handle 
->> this, but that gets messy.
->>
->> Any other ideas ...?
->>
+Hi Ian and Peter,
+
+On 3/21/22 07:10, Peter Xu wrote:
+> On Fri, Mar 18, 2022 at 07:13:43PM +0000, Ian Abbott wrote:
+>> Support for the `UFFDIO_WRITEPROTECT` operation is not indicated in the
+>> `ioctls` member of `struct uffdio_api`.  It is indicated in the `ioctls`
+>> member of `struct uffdio_register` along with indications of support for
+>> the `UFFDIO_COPY`, `UFFDIO_WAKE` and `UFFDIO_ZEROPAGE` operations (and
+>> also the `UFFDIO_CONTINUE` operation supported since Linux 5.13 but
+>> that is not documented by this man page yet.)
 > 
-> As outlined in the other mail, I think might be useful is to have a 
-> _third_ type of requests (in addition to the normal and the reserved ones).
-> That one would be allocated from the normal I/O pool (and hence could 
-> fail if the pool is exhausted), but would be able to carry a different 
-> payload (type) than the normal requests.
+> I thought it should have landed but indeed it's not.  Copying Axel.
+> 
+>>
+>> Fixes: f559fa36a678 ("ioctl_userfaultfd.2: Add write-protect mode docs")
+>> Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
 
-As mentioned in the cover letter response, it just seems best to keep 
-the normal scsi_cmnd payload but have other means to add on the internal 
-command data, like using host_scribble or scsi_cmnd priv data.
+Patch applied.
 
-> And we could have a separate queue_rq for these requests, as we can 
-> differentiate them in the block layer.
+> 
+> The patch looks correct to me, thanks for fixing it.
+> 
+> Acked-by: Peter Xu <peterx@redhat.com>
 
-I don't know, let me think about it. Maybe we could add an "internal" 
-blk flag, which uses a separate "internal" queue_rq callback.
+And tag appended.
 
-Thanks,
-John
+Thank you both!
+
+Alex
+
+> 
+>> ---
+>>   man2/ioctl_userfaultfd.2 | 27 ++++++++++++++++++++-------
+>>   1 file changed, 20 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/man2/ioctl_userfaultfd.2 b/man2/ioctl_userfaultfd.2
+>> index 504f61d4b..e930af520 100644
+>> --- a/man2/ioctl_userfaultfd.2
+>> +++ b/man2/ioctl_userfaultfd.2
+>> @@ -235,11 +235,6 @@ operation is supported.
+>>   The
+>>   .B UFFDIO_UNREGISTER
+>>   operation is supported.
+>> -.TP
+>> -.B 1 << _UFFDIO_WRITEPROTECT
+>> -The
+>> -.B UFFDIO_WRITEPROTECT
+>> -operation is supported.
+>>   .PP
+>>   This
+>>   .BR ioctl (2)
+>> @@ -333,8 +328,26 @@ If the operation is successful, the kernel modifies the
+>>   bit-mask field to indicate which
+>>   .BR ioctl (2)
+>>   operations are available for the specified range.
+>> -This returned bit mask is as for
+>> -.BR UFFDIO_API .
+>> +This returned bit mask can contain the following bits:
+>> +.TP
+>> +.B 1 << _UFFDIO_COPY
+>> +The
+>> +.B UFFDIO_COPY
+>> +operation is supported.
+>> +.TP
+>> +.B 1 << _UFFDIO_WAKE
+>> +The
+>> +.B UFFDIO_WAKE
+>> +operation is supported.
+>> +.TP
+>> +.B 1 << _UFFDIO_WRITEPROTECT
+>> +The
+>> +.B UFFDIO_WRITEPROTECT
+>> +.TP
+>> +.B 1 << _UFFDIO_ZEROPAGE
+>> +The
+>> +.B UFFDIO_ZEROPAGE
+>> +operation is supported.
+>>   .PP
+>>   This
+>>   .BR ioctl (2)
+>> -- 
+> 
+
+-- 
+Alejandro Colomar
+Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
+http://www.alejandro-colomar.es/

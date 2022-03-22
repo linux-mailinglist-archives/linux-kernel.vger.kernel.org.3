@@ -2,145 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE46A4E47AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C95504E47B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbiCVUoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S234331AbiCVUoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbiCVUoN (ORCPT
+        with ESMTP id S232243AbiCVUoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:44:13 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE39C75604
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:42:44 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 5so13621410lfp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2U9MBMr+1/uM/VxRs4MdeE4RwpAAvsI7P/hOZkh3NDc=;
-        b=fCNY/BolP7QFEI2E0i5Od5B6ze3g0v6AZHkuuWB94UFzHknCYmVASkXg7Wz6WggffZ
-         BpK/5sPNmAEPzbEW1Cpwu/1yzLvFavPbUVek4kcWFUhsYkm1IKbXTuaX4Qzi0d6kluSP
-         Jy1h/b/dTzXEPW2O2PiifN8B5S4BdpypKJPl8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2U9MBMr+1/uM/VxRs4MdeE4RwpAAvsI7P/hOZkh3NDc=;
-        b=mRfAC+2iMQ1biw4HKEnGeF4oyLiE8XhLBHmxPOdiLLqMxJeIVcRbi8HOMVm9Sr0J5n
-         1PxnWQ4dyFc75s2DUUNVEaziIU5BylER3vqUTOJwNwF/5T2oefvbMFBd4pUo1uqytMli
-         /DbWWyYPN2R018ZPA0w6rWjcyrZJqovpyyu9O9/4Jxuw1sk/EB9W80gww6CJ+zcJpqid
-         C5AbShCytxAMY6ZxO8S9mCw97mj0Q7GZO4nK4hqrwXwVWr4a58jPBfClado3fF++t3iX
-         Ny7Bh2Vky+yt4v6aM80OhMSj41j0Wzm8fqAjkG8TERTRng7Sa8mQhvyiwW27u3hEMaz0
-         FxEA==
-X-Gm-Message-State: AOAM531L+j09o9LTSH4rLoxXkiJz7AjckiYi6N2Y1H3Z/YIn+NkQx9GK
-        eKAV3L4vYNffSeJkDf2/hVOIeN3Imy/KENzmXgw=
-X-Google-Smtp-Source: ABdhPJwxu9Q7j/G6Tyfe53mtowtYb2VUawNi6dfd27bhjEIGnY9oc6Sc3sqzwxuK2H42IOY+3yt4Yw==
-X-Received: by 2002:a05:6512:2294:b0:448:6c86:3c78 with SMTP id f20-20020a056512229400b004486c863c78mr18774243lfu.531.1647981762895;
-        Tue, 22 Mar 2022 13:42:42 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id f23-20020a2e9e97000000b0024921bcf06bsm2562487ljk.57.2022.03.22.13.42.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 13:42:40 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id a26so13799021lfg.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:42:40 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr19150741lfh.687.1647981759939; Tue, 22
- Mar 2022 13:42:39 -0700 (PDT)
+        Tue, 22 Mar 2022 16:44:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3309DEBF
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:43:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3281EB81D02
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:43:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A39C340EC;
+        Tue, 22 Mar 2022 20:43:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647981780;
+        bh=79qffZlvQw65hd/UIIF1NQPthcGMEn4m9eg+9BsTt9s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QSWhjAqh8VVOIkp5OdZM/wDjc+TSeF7LFdEbab5WuPS9OebpRwRTM2Lje3VGTHyti
+         j+52ndutbDhMR3BBOj8mkqCWB7RbXMYGjViMKeC3Mts1krCM96e4npn7Y32SlVu6fS
+         HJ09D1jIcaV6eDIVyUtvbmfnEiHJZ9KlHeWk/FEt07TP+XFhPCF7/OQEs2EO6EuwaW
+         mml2G4FgxxBBNxk0hWfdS4kvCmjttBYBcV5LPIlmwdXJNxohHWi+HZkGwuUbIIwgVd
+         gZacmGBlOLiX8VrH0Nv1jf9TchK3fwH+mtw/Yzr0E8qntwtcjKtBuMrcLBpicKrnyA
+         W4a0hEcQ0ZyHA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C166740407; Tue, 22 Mar 2022 17:42:57 -0300 (-03)
+Date:   Tue, 22 Mar 2022 17:42:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Changbin Du <changbin.du@gmail.com>
+Subject: Re: [PATCH 1/2] perf ftrace: Add -n/--use-nsec option for latency
+Message-ID: <Yjo00URy0mhUnNxL@kernel.org>
+References: <20220321234609.90455-1-namhyung@kernel.org>
 MIME-Version: 1.0
-References: <20220322191436.110963-1-Jason@zx2c4.com>
-In-Reply-To: <20220322191436.110963-1-Jason@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 22 Mar 2022 13:42:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgSRk_-Nh5gtDKZj_fKya1NKry1Y5jdejfKNPnB+Pr4cw@mail.gmail.com>
-Message-ID: <CAHk-=wgSRk_-Nh5gtDKZj_fKya1NKry1Y5jdejfKNPnB+Pr4cw@mail.gmail.com>
-Subject: Re: [PATCH] random: allow writes to /dev/urandom to influence fast init
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Theodore Ts'o" <tytso@mit.edu>, Jann Horn <jannh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321234609.90455-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 12:15 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> @@ -1507,6 +1507,8 @@ static int write_pool(const char __user *ubuf, size_t count)
->                 }
->                 count -= len;
->                 ubuf += len;
-> +               if (unlikely(crng_init == 0 && !will_credit))
-> +                       crng_pre_init_inject(block, len, false);
->                 mix_pool_bytes(block, len);
->                 cond_resched();
->         }
+Em Mon, Mar 21, 2022 at 04:46:08PM -0700, Namhyung Kim escreveu:
+> Sometimes we want to see nano-second granularity.
+> 
+>   $ sudo perf ftrace latency -T dput -a -n sleep 1
+>   #   DURATION     |      COUNT | GRAPH                          |
+>        0 - 1    us |          0 |                                |
+>        1 - 2    ns |          0 |                                |
+>        2 - 4    ns |          0 |                                |
+>        4 - 8    ns |          0 |                                |
+>        8 - 16   ns |          0 |                                |
+>       16 - 32   ns |          0 |                                |
+>       32 - 64   ns |          0 |                                |
+>       64 - 128  ns |    1163434 | ##############                 |
+>      128 - 256  ns |     914102 | #############                  |
+>      256 - 512  ns |        884 |                                |
+>      512 - 1024 ns |        613 |                                |
+>        1 - 2    us |         31 |                                |
+>        2 - 4    us |         17 |                                |
+>        4 - 8    us |          7 |                                |
+>        8 - 16   us |        123 |                                |
 
-Ugh. I hate that whole crng_pre_init_inject() dance.
 
-We already mix the data into the input_pool with that 'mix_pool_bytes()' call.
+Thanks, applied.
 
-So what I think the real fix is, is to just make urandom_read() use
-the input_pool data directly for initializing the state.
+- Arnaldo
 
-IOW, why isn't the patch along the lines of just making
-crng_make_state() take the data from the input pool instead, when
-crng_ready() isn't set?
-
-As a broken example patch, something like the appended (except that
-doesn't build, because 'input_pool' is declared later)?
-
-So take this purely as a conceptual patch, not a real patch.
-
-(Yeah, I think this also means that code that currently does that
-
-                crng_pre_init_inject(pool, sizeof(pool), true);
-                mix_pool_bytes(pool, sizeof(pool));
-
-should do those two operations in the reverse order, so that the input
-pool is always updated before that crng_pre_init_inject() dance).
-
-Maybe I'm missing something. But it seems kind of silly to use
-base_crng AT ALL before crng_ready(). Why not use the pool we have
-that *is* actually updated (that 'input_pool')?
-
-                Linus
-
-@@ -374,19 +374,14 @@ static void crng_make_state(u32
-chacha_state[CHACHA_STATE_WORDS],
-        /*
-         * For the fast path, we check whether we're ready, unlocked first, and
-         * then re-check once locked later. In the case where we're really not
--        * ready, we do fast key erasure with the base_crng directly, because
--        * this is what crng_pre_init_inject() mutates during early init.
-+        * ready, we do fast key erasure with the input pool directly.
-         */
-        if (!crng_ready()) {
--               bool ready;
--
--               spin_lock_irqsave(&base_crng.lock, flags);
--               ready = crng_ready();
--               if (!ready)
--                       crng_fast_key_erasure(base_crng.key, chacha_state,
--                                             random_data, random_data_len);
--               spin_unlock_irqrestore(&base_crng.lock, flags);
--               if (!ready)
-+               spin_lock_irqsave(&input_pool.lock, flags);
-+               crng_fast_key_erasure(input_pool.key, chacha_state,
-+                                     random_data, random_data_len);
-+               spin_unlock_irqrestore(&input_pool.lock, flags);
-+               if (!crng_ready())
-                        return;
-        }

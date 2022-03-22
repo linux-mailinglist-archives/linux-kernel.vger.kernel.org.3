@@ -2,218 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635E14E45C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 790914E45C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237308AbiCVSOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S240267AbiCVSPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbiCVSOn (ORCPT
+        with ESMTP id S231956AbiCVSPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:14:43 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6E3FD13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:13:14 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id q11so21155928iod.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rtlpiHKGuBI50mYkezQOMw981of4REeJs1p1T1jGRPs=;
-        b=b1k7K7ub7mzBu3/wLuv94d84NYAlaajtfz6AOuR0CeT9C9qpU91QBP1wQJB/2RAXLe
-         GN5zOQaagJhe27FM8MOPvm08HNFOa5bSpOxyEy0ci74fos4f/fJuFx3DEt0HzRCcfZnW
-         npFZwNfX5aB1iXWx6m/OWMBxdVuUt8zGqB1hI+8vlEa+1k9wBWo+qM5zex7uBxaF+Vcu
-         uXVcjMjKcNtHim7npKFNLvwvVpT1pxRZODArBqMETzMc+ICCDZIbFg+U/go3dxvN41WP
-         SP2Fya60PunclCXP/JP4lFIf8EYh77i4MxWLTEctWVK5vyKHswcNcPtaLN0Z2ebnWbRE
-         dM5g==
+        Tue, 22 Mar 2022 14:15:39 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C544193C1;
+        Tue, 22 Mar 2022 11:14:12 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id w4so22680361edc.7;
+        Tue, 22 Mar 2022 11:14:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rtlpiHKGuBI50mYkezQOMw981of4REeJs1p1T1jGRPs=;
-        b=yGmkVOz7SKlIaT+f0UqgiN5CxtGAJbIq20WeuZuReChEcmto0hZ7fq9BRP0aW6QkLO
-         u2jo38UrJkWZTaWGTw7ABugeTac01w31l9pYI+dA72t5y31EGAlpKhyh59PaQ4ky9Kg7
-         EN4IySdFkcF2RT2KHw40+/mCMvPr4rUp/0G+MTRFKEnFxCf2gtgTJtqoJqUSXJLqMtVP
-         CWXauXvol8RMa0hl5aKQ/TX6s0jH2Q2z2QTt6n3O3huIvFMHvCZeCasSyQSLk1TZJ3zT
-         SlemanewpH/Yn3YtzXBp4gcIUZV31ZOuvHOMjoZbIv0Zz0BRUXErEu4tNzyK6qEJ6V/P
-         5hBw==
-X-Gm-Message-State: AOAM532uhRXMLE/oFJ1erd4yP9HJUGqSo44cKgPpAEEBsTLTqimXSXBR
-        o6HKSh6naIMpioismT2ozOAyKOa342DkXQ==
-X-Google-Smtp-Source: ABdhPJxq27BzAmXq4Aget5l4uWNoLAIXNiKfQwk5X/rVxCtuv8st/BJUxLXdZyLFZ4x7jhTu9xZtcw==
-X-Received: by 2002:a05:6638:3e13:b0:321:446d:2977 with SMTP id co19-20020a0566383e1300b00321446d2977mr5417041jab.178.1647972793943;
-        Tue, 22 Mar 2022 11:13:13 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id w13-20020a92d2cd000000b002c8533c4b27sm341551ilg.78.2022.03.22.11.13.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 11:13:13 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 18:13:09 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-Subject: Re: [PATCH v5 00/22] Support SDEI Virtualization
-Message-ID: <YjoRteSXpPkDGqgp@google.com>
-References: <20220322080710.51727-1-gshan@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YSNtfm2I+E7ZPtbQKZG0Nrw6hi+P+RYiX3Pd+JP3Ab4=;
+        b=lU2Ya6Ec2j4EQTNwBZDB1kO0YT3zjgAbZVU2jIOh9B2ONxJKVuHBCbkSiPldvIJ/cg
+         dsddPzrLVmPXdpaWEccSQk7vAJKWh/egYVeLAJQP+65vsBfq+W3i/1MK5L8QMwLD2fJm
+         BUTfrJl9XJ74gnxXFEZ4jEILy+2T7858DYG/JLjMFlxdRR++gaybucA04gn7snSowYRk
+         gFnzF2c5c4joyNsuiOh8RDft+o75zissG7GfiIIVeA4ImJBxBqX8w6numCc9f3RMAJsJ
+         zNm69p/rsB9XBJmkdE7C6wZk3FCeaWYpxrPcjJ4n1zoXeLPT1ws9D3lmydHGPFw7bP0j
+         7Txw==
+X-Gm-Message-State: AOAM530UQqkCIMM7sfr0DxoADfMBZ3oKbpgE2Ph6nWcS5mgHe8HYLpXw
+        6LA+Ce4pY94NHGtk1pCIdXrfTmnBZcA/Vg==
+X-Google-Smtp-Source: ABdhPJwdUri/i8z1B7zh8yu0O1Iy/wywZGubvdSv0lI+ID/JVL2IS4yIxLLkfnX8yWWh3ln4JtofCQ==
+X-Received: by 2002:a50:c00a:0:b0:418:f10f:b27c with SMTP id r10-20020a50c00a000000b00418f10fb27cmr29450490edb.204.1647972850517;
+        Tue, 22 Mar 2022 11:14:10 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id n24-20020a17090673d800b006df8ec24712sm7481201ejl.215.2022.03.22.11.14.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 11:14:09 -0700 (PDT)
+Message-ID: <55e161d1-face-6958-1d86-8a85b82e8485@kernel.org>
+Date:   Tue, 22 Mar 2022 19:14:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322080710.51727-1-gshan@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC] arm64: dts: ti: introduce a minimal am642 device tree
+Content-Language: en-US
+To:     Bryan Brattlof <bb@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220321155417.13267-1-bb@ti.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220321155417.13267-1-bb@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 04:06:48PM +0800, Gavin Shan wrote:
-> This series intends to virtualize Software Delegated Exception Interface
-> (SDEI), which is defined by DEN0054C (v1.1). It allows the hypervisor to
-> deliver NMI-alike SDEI event to guest and it's needed by Async PF to
-> deliver page-not-present notification from hypervisor to guest. The code
-> and the required qemu changes can be found from:
+On 21/03/2022 16:54, Bryan Brattlof wrote:
+> Texas Instrument's am642 is one of many k3 based, low cost, low power,
+> chips designed to work in a wide range of applications spanning an even
+> wider range of industries that TI is actively developing
 > 
->    https://developer.arm.com/documentation/den0054/c
->    https://github.com/gwshan/linux    ("kvm/arm64_sdei")
->    https://github.com/gwshan/qemu     ("kvm/arm64_sdei")
+> With its pin-mux and peripheral rich designs, these chips will likely
+> have a multitude of custom device trees that range wildly from one
+> another and (hopefully) guarantee an influx of variants into the kernel
+> in the coming years
 > 
-> For the design and migration needs, please refer to the document in
-> PATCH[21/22] in this series. The series is organized as below:
+> With overlays no longer a thing, I wanted to ask for opinions on how
+> we can best help integrate these dt files as they begin to be developed
 > 
->   PATCH[01]    Introduces template for smccc_get_argx()
->   PATCH[02]    Adds SDEI virtualization infrastructure
->   PATCH[03-17] Supports various SDEI hypercalls and event handling
->   PATCH[18-20] Adds ioctl commands to support migration and configuration
->                and exports SDEI capability
->   PATCH[21]    Adds SDEI document 
->   PATCH[22]    Adds SDEI selftest case
+> I also wanted to introduce a skeletonized (nothing but uart) device tree
+> to give others a good starting point while developing their projects.
+
+Real hardware as DTS please. There is no need to add some skeleton for
+specific SoC. What if every SoC goes that way?
+
+Feel free to create re-usable components in DTSI ways, still reflecting
+some hardware parts.
+
 > 
-> Testing
-> =======
+> Let me know what you think :)
 > 
-> [1] The selftest case included in this series works fine. The default SDEI
->     event, whose number is zero, can be registered, enabled, raised. The
->     SDEI event handler can be invoked.
+> Signed-off-by: Bryan Brattlof <bb@ti.com>
+> ---
+>  .../devicetree/bindings/arm/ti/k3.yaml        |   1 +
+>  arch/arm64/boot/dts/ti/Makefile               |   1 +
+>  arch/arm64/boot/dts/ti/k3-am642-skeleton.dts  | 335 ++++++++++++++++++
+>  3 files changed, 337 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am642-skeleton.dts
 > 
->     [host]# pwd
->     /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
->     [root@virtlab-arm01 kvm]# ./aarch64/sdei 
-> 
->         NR_VCPUS: 2    SDEI Event: 0x00000000
-> 
->     --- VERSION
->         Version:              1.1 (vendor: 0x4b564d)
->     --- FEATURES
->         Shared event slots:   0
->         Private event slots:  0
->         Relative mode:        No
->     --- PRIVATE_RESET
->     --- SHARED_RESET
->     --- PE_UNMASK
->     --- EVENT_GET_INFO
->         Type:                 Private
->         Priority:             Normal
->         Signaled:             Yes
->     --- EVENT_REGISTER
->     --- EVENT_ENABLE
->     --- EVENT_SIGNAL
->         Handled:              Yes
->         IRQ:                  No
->         Status:               Registered-Enabled-Running
->         PC/PSTATE:            000000000040232c 00000000600003c5
->         Regs:                 0000000000000000 0000000000000000
->                               0000000000000000 0000000000000000
->     --- PE_MASK
->     --- EVENT_DISABLE
->     --- EVENT_UNREGISTER
-> 
->         Result: OK
-> 
-> [2] There are additional patches in the following repositories to create
->     procfs entries, allowing to inject SDEI event from host side. The
->     SDEI client in the guest side registers the SDEI default event, whose
->     number is zero. Also, the QEMU exports SDEI ACPI table and supports
->     migration for SDEI.
-> 
->     https://github.com/gwshan/linux    ("kvm/arm64_sdei")
->     https://github.com/gwshan/qemu     ("kvm/arm64_sdei")
-> 
->     [2.1] Start the guests and migrate the source VM to the destination
->           VM.
-> 
->     [host]# /home/gavin/sandbox/qemu.main/build/qemu-system-aarch64       \
->             -accel kvm -machine virt,gic-version=host                     \
->             -cpu host -smp 6,sockets=2,cores=3,threads=1                  \
->             -m 1024M,slots=16,maxmem=64G                                  \
->                :                                                          \
->             -kernel /home/gavin/sandbox/linux.guest/arch/arm64/boot/Image \
->             -initrd /home/gavin/sandbox/images/rootfs.cpio.xz             \
->             -append earlycon=pl011,mmio,0x9000000                         \
->                :
-> 
->     [host]# /home/gavin/sandbox/qemu.main/build/qemu-system-aarch64       \
->             -accel kvm -machine virt,gic-version=host                     \
->             -cpu host -smp 6,sockets=2,cores=3,threads=1                  \
->             -m 1024M,slots=16,maxmem=64G                                  \
->                :                                                          \
->             -kernel /home/gavin/sandbox/linux.guest/arch/arm64/boot/Image \
->             -initrd /home/gavin/sandbox/images/rootfs.cpio.xz             \
->             -append earlycon=pl011,mmio,0x9000000                         \
->             -incoming tcp:0:4444                                          \
->                :
-> 
->     [2.2] Check kernel log on the source VM. The SDEI service is enabled
->           and the default SDEI event (0x0) is enabled.
-> 
->      [guest-src]# dmesg | grep -i sdei
->      ACPI: SDEI 0x000000005BC80000 000024 \
->                 (v00 BOCHS  BXPC     00000001 BXPC 00000001)
->      sdei: SDEIv1.1 (0x4b564d) detected in firmware.
->      SDEI TEST: Version 1.1, Vendor 0x4b564d
->      sdei_init: SDEI event (0x0) registered
->      sdei_init: SDEI event (0x0) enabled
-> 
+> diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> index 61c6ab4f52e26..e65053d6465bd 100644
+> --- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> +++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> @@ -55,6 +55,7 @@ properties:
+>        - description: K3 AM642 SoC
+>          items:
+>            - enum:
+> +              - ti,am642-generic
+
+Real hardware is needed.
+
+>                - ti,am642-evm
+>                - ti,am642-sk
+>            - const: ti,am642
+> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> index 02e5d80344d00..df7bdf087558c 100644
+> --- a/arch/arm64/boot/dts/ti/Makefile
+> +++ b/arch/arm64/boot/dts/ti/Makefile
+> @@ -19,6 +19,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
 >  
->      (qemu) migrate -d tcp:localhost:4444
-> 
->     [2.3] Migrate the source VM to the destination VM. Inject SDEI event
->           to the destination VM. The event is raised and handled.
-> 
->     (qemu) migrate -d tcp:localhost:4444
-> 
->     [host]# echo 0 > /proc/kvm/kvm-5360/vcpu-1
-> 
->     [guest-dst]#
->     =========== SDEI Event (CPU#1) ===========
->     Event: 0000000000000000  Parameter: 00000000dabfdabf
->     PC: ffff800008cbb554  PSTATE: 00000000604000c5  SP: ffff800009c7bde0
->     Regs:    00000000000016ee ffff00001ffd2e28 00000000000016ed 0000000000000001 
->              ffff800016c28000 0000000000000000 0000000000000000 0000000000000000 
->              0000000000000000 0000000000000000 0000000000000000 0000000000000000 
->              0000000000000000 0000000000000000 0000000000000000 0000000000000000 
->              0000000000000000 0000000000000000 0000000000000000 ffff800009399008 
->              ffff8000097d9af0 ffff8000097d99f8 ffff8000093a8db8 ffff8000097d9b18 
->              0000000000000000 0000000000000000 ffff000000339d00 0000000000000000 
->              0000000000000000 ffff800009c7bde0 ffff800008cbb5c4 
->     Context: 00000000000016ee ffff00001ffd2e28 00000000000016ed 0000000000000001 
->              ffff800016c28000 03ffffffffffffff 000000024325db59 ffff8000097de190 
->              ffff00000033a790 ffff800008cbb814 0000000000000a30 0000000000000000 
-> 
-> Changelog
-> ========= 
-> v5:
+>  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
+>  
+> +dtb-$(CONFIG_ARCH_K3) += k3-am642-skeleton.dtb
+>  dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
+>  dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
+>  
+> diff --git a/arch/arm64/boot/dts/ti/k3-am642-skeleton.dts b/arch/arm64/boot/dts/ti/k3-am642-skeleton.dts
+> new file mode 100644
+> index 0000000000000..2b789c9c25ced
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-am642-skeleton.dts
+> @@ -0,0 +1,335 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * The absolute minimum DTS file needed for an AM642
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/pinctrl/k3.h>
+> +#include "k3-am642.dtsi"
+> +
+> +/ {
+> +	compatible = "ti,am642-generic", "ti,am642";
+> +	model = "Texas Instruments AM642 Generic";
+> +
+> +	chosen {
+> +		stdout-path = "serial2:115200n8";
+> +		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000";
 
-Next time can you include a link to the cover letter of the previous
-patch set? It is extremely helpful for understanding the progress to
-date and allows reviewers to see prior feedback.
 
---
-Thanks,
-Oliver
+No development bootargs.
+
+> +	};
+> +
+> +	cpus {
+> +		/delete-node/ cpu@1;
+
+A bit weird... especially without any comment.
+
+> +	};
+> +
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		reg = <0x00000000 0x20000000 0x00000000 0x20000000>;
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		secure_ddr: optee@9e800000 {
+> +			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
+> +			alignment = <0x1000>;
+> +			no-map;
+> +		};
+> +	};
+> +};
+> +
+> +/* reserved for mcu firmware */
+> +&mcu_gpio0 {
+> +	status = "reserved";
+> +};
+> +
+> +&mcu_i2c0 {
+> +	status = "disabled";
+> +};
+> +
+
+Judging by this file - several disabled or reserved blocks - this does
+not look at all usable. What's the point? How does it even help anyone?
+
+
+Best regards,
+Krzysztof

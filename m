@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539154E4903
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315D04E4908
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237863AbiCVWRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 18:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S237747AbiCVWRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 18:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237675AbiCVWRN (ORCPT
+        with ESMTP id S237780AbiCVWRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 18:17:13 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880BC53706
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:43 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id h8-20020a25e208000000b00628c0565607so15577721ybe.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:43 -0700 (PDT)
+        Tue, 22 Mar 2022 18:17:24 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCE7546B2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:45 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e5bcae3665so133049267b3.16
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=7qNmmGdeOZfhSMOT7dCrcgJQwc8RsaRFAUQUg+lLang=;
-        b=GE1fkQSG5UPK9yaBOk8BPYrtG1GL8BXl7+NGttFKQ+cJthceRepKDcVxfFWEaRfBE1
-         ckAsenBftKkABGhW8mB/aFrSW5uuFKtXbpWgc+lkS/U6/63xgfI647u25IUL4QyWtp0w
-         u4Wqdi2ME2dL+fcdFhqZbbrYfyOl9U8sXqjBjnfdY/3LPgOPlBttyh60cnhBDqzPiy4V
-         VTqrMTzlL9mbzIW7zp6/ZYLqg6DW69rmremv8XduyMKHRoey18L8TU2uf03n/nFVOEFy
-         WR0vuADpZInZrg3IN8ZjrT/e8TcWEHNFUjZ7lmHDEo553wPhnhetbOn8WiR+DlJ71ZK0
-         u6xg==
+        bh=x5KPGBSUSbYd8r6Fxn0mzFbKXE7+7xB0auo11QNIbWU=;
+        b=QLdsZED2n4IqW8UKETQ8GKP2zRviwfaK8u+UJCNNX/EOS5b5PRE4DBTaE2edFLbtV7
+         AJUk6+u1351fvM95T4Rk6c7p1Nm4K+AR5LoufJBbvGzLsXNQB54gQjTjBogO5ZtluMu4
+         nFNONXZzu469cpjKIJiIpFauUQ1OMOgDwnyrWAO+XIVE9/y4joINUlrLxn0FkynJcX0E
+         9ziIMHvJE5PaVIOOuyT8Li4D2jEuezPz3qrNgtA/e6L11x4lX2EZHY3I/niv5HuFCPq8
+         xsd3+S1IIQn/oFYWLHuCbT8s4H1ADuf76irwyeDYRXa1K+R21u3EDa7geMqAkbNFlZwI
+         FazA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=7qNmmGdeOZfhSMOT7dCrcgJQwc8RsaRFAUQUg+lLang=;
-        b=LWGrFTO/rudNfNop5jaEKhIt56zFd8qUfqBkebF58J+i78hkwoevZSpgza+zU1LPFG
-         f+rGZq8ri0F46CDnksv6OoUwnziWsmAPWHX4LZxMdxZ8b7Num6dudwL4XRCuPv2hlVIB
-         BWY+AHfUTw4mCcljOc+XvhzNp8+HUUEwzoWZReq4OmQtkhYPqy+fZt5VtiO0pw/xlDIi
-         gDVCyoLlMbLhTjtdD8JRUKTQFE5bMfFgzkabXCj2IXcJzCaVwzoj/k4yn7yh+ByZ1eR3
-         LhVdFwzLbFNPeGrKLRW8cjTxR45VgpIQKZOX5RxcRfWkiJDMaDDis0HwP+3AhW/7/8eM
-         e+UQ==
-X-Gm-Message-State: AOAM531IV+RI6Q7+LSwJ5p3Z0nyYgLhoFI6Hg9HmejnC6F4quR/buTI3
-        6Nv+sOuwDVb8VB7N87blWfPssPpWJtXXfMpOLDOKU658cJKFl2zNrW+wZJCwIjwJ9aapf/L6xNW
-        LzwMZfBjm4gbf4RICs8epHxWE6DY9Ps8I6eQUWYnVxxVSsHqo/bhOeVfAEwydxNq0XBHkRYMz
-X-Google-Smtp-Source: ABdhPJwhoiDQ88LuSGeOkBVk+NzZlC9VxWnNNrRnEvUWD7IUchPhBkAD0OGNSHEQzq1JWSkKFrnM91nBN9FZ
+        bh=x5KPGBSUSbYd8r6Fxn0mzFbKXE7+7xB0auo11QNIbWU=;
+        b=beCu3PCRVfuIlySbZCyn93Ow55lbG7C0YO/fBxGfKbld3k7XtZmVhwWhoO3bxq5euq
+         svh2ianrjww7H0hOSUyaf41c3kkdNqPlLEXedi7JBvAdGbcAFclZ7xYRQg6v08EXwNvk
+         JwMl/Tq0xYeUE2qHjvJBLaB0kj5pIKd7im5KTBUEESUfc/dEtfATe3Dsix2dw/URacss
+         WS9ieXOFAfpO2H4F/ouy4756GVCEaO7ovekb4PUz/xHiS8sSslKBmawVqhpsIqXMECxG
+         cLGp2vHmD+JD/iUztLgVCQ5u8CZYR5j1RXIU1MyFhdmnA06CliDUx9ZkqxJgkRQLOMS+
+         qLYQ==
+X-Gm-Message-State: AOAM533tNzFYhK9kpuAQgUKsO9GD7Paiym5OeCUquDt3T4gvmcvRluIn
+        mkpCJibMOclWLtICgXPy7xupbkM7awoRLWu+bW9h7UKC0Bb0PLrMs0VkU5lotvP/eMBnnX4pE7R
+        XZt5ybsPCLkOFLx+kB1aQ5Vjk/wYebmyP7dkgX8KgZxJvlgHoVA+sUwXswElZUwiWhe1G35fD
+X-Google-Smtp-Source: ABdhPJzSL9g/xvSn9I3A0Fn3susXUMd/DqEzperr0Rp1LQzVJ6gC9KCObJzOOKppSekjWHIifoJvEeUd+zLZ
 X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:1817:acc9:c45f:d133])
- (user=eranian job=sendgmr) by 2002:a25:c58b:0:b0:629:5064:894c with SMTP id
- v133-20020a25c58b000000b006295064894cmr29761335ybe.590.1647987342642; Tue, 22
- Mar 2022 15:15:42 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 15:15:11 -0700
+ (user=eranian job=sendgmr) by 2002:a81:39d7:0:b0:2e5:2b46:1963 with SMTP id
+ g206-20020a8139d7000000b002e52b461963mr31224365ywa.372.1647987345029; Tue, 22
+ Mar 2022 15:15:45 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 15:15:12 -0700
 In-Reply-To: <20220322221517.2510440-1-eranian@google.com>
-Message-Id: <20220322221517.2510440-8-eranian@google.com>
+Message-Id: <20220322221517.2510440-9-eranian@google.com>
 Mime-Version: 1.0
 References: <20220322221517.2510440-1-eranian@google.com>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH v7 07/13] perf/x86/amd: make Zen3 branch sampling opt-in
+Subject: [PATCH v7 08/13] ACPI: add perf low power callback
 From:   Stephane Eranian <eranian@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
@@ -70,122 +70,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a kernel config option CONFIG_PERF_EVENTS_AMD_BRS
-to make the support for AMD Zen3 Branch Sampling (BRS) an opt-in
-compile time option.
+Add an optional callback needed by some PMU features, e.g., AMD
+BRS, to give a chance to the perf_events code to change its state before
+a CPU goes to low power and after it comes back.
+
+The callback is void when the PERF_NEEDS_LOPWR_CB flag is not set.
+This flag must be set in arch specific perf_event.h header whenever needed.
+When not set, there is no impact on the ACPI code.
 
 Signed-off-by: Stephane Eranian <eranian@google.com>
 ---
- arch/x86/events/Kconfig      |  8 ++++++
- arch/x86/events/amd/Makefile |  3 ++-
- arch/x86/events/perf_event.h | 49 ++++++++++++++++++++++++++++--------
- 3 files changed, 49 insertions(+), 11 deletions(-)
+ drivers/acpi/acpi_pad.c       | 6 ++++++
+ drivers/acpi/processor_idle.c | 5 +++++
+ include/linux/perf_event.h    | 6 ++++++
+ 3 files changed, 17 insertions(+)
 
-diff --git a/arch/x86/events/Kconfig b/arch/x86/events/Kconfig
-index d6cdfe631674..09c56965750a 100644
---- a/arch/x86/events/Kconfig
-+++ b/arch/x86/events/Kconfig
-@@ -44,4 +44,12 @@ config PERF_EVENTS_AMD_UNCORE
- 
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called 'amd-uncore'.
+diff --git a/drivers/acpi/acpi_pad.c b/drivers/acpi/acpi_pad.c
+index f45979aa2d64..a306a07a60b5 100644
+--- a/drivers/acpi/acpi_pad.c
++++ b/drivers/acpi/acpi_pad.c
+@@ -164,6 +164,9 @@ static int power_saving_thread(void *data)
+ 				tsc_marked_unstable = 1;
+ 			}
+ 			local_irq_disable();
 +
-+config PERF_EVENTS_AMD_BRS
-+	depends on PERF_EVENTS && CPU_SUP_AMD
-+	bool "AMD Zen3 Branch Sampling support"
-+	help
-+	  Enable AMD Zen3 branch sampling support (BRS) which samples up to
-+	  16 consecutive taken branches in registers.
++			perf_lopwr_cb(true);
 +
- endmenu
-diff --git a/arch/x86/events/amd/Makefile b/arch/x86/events/amd/Makefile
-index cf323ffab5cd..b9f5d4610256 100644
---- a/arch/x86/events/amd/Makefile
-+++ b/arch/x86/events/amd/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
--obj-$(CONFIG_CPU_SUP_AMD)		+= core.o brs.o
-+obj-$(CONFIG_CPU_SUP_AMD)		+= core.o
-+obj-$(CONFIG_PERF_EVENTS_AMD_BRS)	+= brs.o
- obj-$(CONFIG_PERF_EVENTS_AMD_POWER)	+= power.o
- obj-$(CONFIG_X86_LOCAL_APIC)		+= ibs.o
- obj-$(CONFIG_PERF_EVENTS_AMD_UNCORE)	+= amd-uncore.o
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 25b037b571e4..4d050579dcbd 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1218,6 +1218,8 @@ static inline bool fixed_counter_disabled(int i, struct pmu *pmu)
- #ifdef CONFIG_CPU_SUP_AMD
+ 			tick_broadcast_enable();
+ 			tick_broadcast_enter();
+ 			stop_critical_timings();
+@@ -172,6 +175,9 @@ static int power_saving_thread(void *data)
  
- int amd_pmu_init(void);
+ 			start_critical_timings();
+ 			tick_broadcast_exit();
 +
-+#ifdef CONFIG_PERF_EVENTS_AMD_BRS
- int amd_brs_init(void);
- void amd_brs_disable(void);
- void amd_brs_enable(void);
-@@ -1252,25 +1254,52 @@ static inline void amd_pmu_brs_del(struct perf_event *event)
++			perf_lopwr_cb(false);
++
+ 			local_irq_enable();
  
- void amd_pmu_brs_sched_task(struct perf_event_context *ctx, bool sched_in);
+ 			if (time_before(expire_time, jiffies)) {
+diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+index f8e9fa82cb9b..f83596960d9a 100644
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -21,6 +21,7 @@
+ #include <linux/cpuidle.h>
+ #include <linux/cpu.h>
+ #include <linux/minmax.h>
++#include <linux/perf_event.h>
+ #include <acpi/processor.h>
  
--/*
-- * check if BRS is activated on the CPU
-- * active defined as it has non-zero users and DBG_EXT_CFG.BRSEN=1
-- */
--static inline bool amd_brs_active(void)
-+static inline s64 amd_brs_adjust_period(s64 period)
+ /*
+@@ -549,6 +550,8 @@ static void wait_for_freeze(void)
+  */
+ static void __cpuidle acpi_idle_do_entry(struct acpi_processor_cx *cx)
  {
--	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	if (period > x86_pmu.lbr_nr)
-+		return period - x86_pmu.lbr_nr;
- 
--	return cpuc->brs_active;
-+	return period;
-+}
-+#else
-+static inline int amd_brs_init(void)
-+{
-+	return 0;
- }
-+static inline void amd_brs_disable(void) {}
-+static inline void amd_brs_enable(void) {}
-+static inline void amd_brs_drain(void) {}
-+static inline void amd_brs_lopwr_init(void) {}
-+static inline void amd_brs_disable_all(void) {}
-+static inline int amd_brs_setup_filter(struct perf_event *event)
-+{
-+	return 0;
-+}
-+static inline void amd_brs_reset(void) {}
- 
--static inline s64 amd_brs_adjust_period(s64 period)
-+static inline void amd_pmu_brs_add(struct perf_event *event)
- {
--	if (period > x86_pmu.lbr_nr)
--		return period - x86_pmu.lbr_nr;
-+}
++	perf_lopwr_cb(true);
 +
-+static inline void amd_pmu_brs_del(struct perf_event *event)
-+{
-+}
+ 	if (cx->entry_method == ACPI_CSTATE_FFH) {
+ 		/* Call into architectural FFH based C-state */
+ 		acpi_processor_ffh_cstate_enter(cx);
+@@ -559,6 +562,8 @@ static void __cpuidle acpi_idle_do_entry(struct acpi_processor_cx *cx)
+ 		inb(cx->address);
+ 		wait_for_freeze();
+ 	}
 +
-+static inline void amd_pmu_brs_sched_task(struct perf_event_context *ctx, bool sched_in)
-+{
-+}
- 
-+static inline s64 amd_brs_adjust_period(s64 period)
-+{
- 	return period;
++	perf_lopwr_cb(false);
  }
  
-+static inline void amd_brs_enable_all(void)
+ /**
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 496eb6aa6e54..1b98e46588bc 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1676,4 +1676,10 @@ typedef int (perf_snapshot_branch_stack_t)(struct perf_branch_entry *entries,
+ 					   unsigned int cnt);
+ DECLARE_STATIC_CALL(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
+ 
++#ifndef PERF_NEEDS_LOPWR_CB
++static inline void perf_lopwr_cb(bool mode)
 +{
 +}
-+
 +#endif
 +
- #else /* CONFIG_CPU_SUP_AMD */
- 
- static inline int amd_pmu_init(void)
+ #endif /* _LINUX_PERF_EVENT_H */
 -- 
 2.35.1.894.gb6a874cedc-goog
 

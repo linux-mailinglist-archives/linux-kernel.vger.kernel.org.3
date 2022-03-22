@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E292B4E4219
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 295EC4E41D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234228AbiCVOoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
+        id S238051AbiCVOnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238218AbiCVOnI (ORCPT
+        with ESMTP id S238095AbiCVOml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:43:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB536AA48;
-        Tue, 22 Mar 2022 07:41:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFC1D616D7;
-        Tue, 22 Mar 2022 14:41:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC11C340F5;
-        Tue, 22 Mar 2022 14:41:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647960099;
-        bh=a1P2DNQDu+Nr0wIsMe45GFTAoBbxFKExa639SNMT8Ac=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WSUKIo4uz8F6v3kwDldgpdzakw9QYzSDpCf1vKY8kHyGGW12dHTbHWHRNo+muqiog
-         oZl8cMAldYFIPgQjoBfSXYrnRM2Izb2leRb9j9KDZb9TTv9LTPFMf9VU6GXHMCwmel
-         kwq/0a2qRV1PFG4XleTzMGDve7A081QNGbvoI7E4Um2JGZW+/nbmTmvB+ZOVmif8VI
-         83zhr4yZvBiGZa8VpkltGgjdHdvAYRiXU35fYY+My0OdW8V56NTwa9YQmpGi+l2fQ1
-         8UgtwBXOa0Ps/8dBEPn73WU1ztxWffutVlciz1jujJxf6ncVbqGsgjsopmkVYst8WV
-         M1I959eBGkygQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, hch@lst.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V9 13/20] riscv: compat: process: Add UXL_32 support in start_thread
-Date:   Tue, 22 Mar 2022 22:39:56 +0800
-Message-Id: <20220322144003.2357128-14-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220322144003.2357128-1-guoren@kernel.org>
-References: <20220322144003.2357128-1-guoren@kernel.org>
+        Tue, 22 Mar 2022 10:42:41 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227E78930C;
+        Tue, 22 Mar 2022 07:41:09 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id x34so20762162ede.8;
+        Tue, 22 Mar 2022 07:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OzyTaasiO8jKwxHbdxBCj4qwgrblVvgvVf/SVRqTgd0=;
+        b=ekdWaU3QDKePVgnBed2hzRqhGz5Qeu/183EdI12go49UJyJ1bFqc57tT9tW5TaDytI
+         3s82S4vVZoTzakk/CpjzL4O75/EzxiAWdzEwMiWgf2Lta4QhLu0Lsl0j3znXGlkTOIaf
+         srM79z7DK/H/SNs2gRUYhVno/Gvozxqee6t0KB99t3/7+V8GPQKq8/jwpq9aaATb7Jjl
+         ZokV6pTht5oV3wdv07eko4EOO2yhKue98E8Xfh3eQVki0CcUj1/rESZmGMC5Ny4dsbRk
+         oASc4jJIhraUepd+cQpasQWk+8w/EqIgDIuvgIpZIe1EQhb70HABDGOk3J4pOOPX1zu4
+         Eelg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OzyTaasiO8jKwxHbdxBCj4qwgrblVvgvVf/SVRqTgd0=;
+        b=WneydY55qWXO2Bj06IhFHOJsKfPlBhBOhXhN+EHXn7A6gPov3NsTO+NlpPKGbG1LTM
+         ZcsdpHDq/cgYBunBzBGekbRHgJY46AQ+PmIPmC8KISoxSytRkjP4hJHmM4JQ7F17Jfti
+         gNTX0icOnQGshDJ8k9DTrillPzwDpetj8QSnvMJ/mLcDRBJ9Ailylj10uNJwmdLTonGv
+         /WXVl+UJFmGXMOaLUfsIl7Dhk7mMh+00u3MOKhbyRbt8MIrxKo+dj1qIWRaG06nNtP1L
+         SoT/2fes3O4afU8XVHg1t75eI+rXob+QFDBvJmA39ILPzXbmcj6QVf3gW8A15UIbNqLp
+         9pMA==
+X-Gm-Message-State: AOAM533rJUpK0Dr5HTkr7hC300pl2/gDGv8HP4oCUcWDdJiCx3LYPtii
+        Lw5x8axWUOLAM/f5SA0tlZBcCyoMzazCYXAjdSM=
+X-Google-Smtp-Source: ABdhPJzdAIkFASoexhx9ghd9uoqOIfZ4rY1nnGow0Ezbv59oe8/Dpew/t5rSUL6LsutpjDZX15IsCS0wdmCoxBamQiw=
+X-Received: by 2002:a05:6402:d7:b0:413:673:ba2f with SMTP id
+ i23-20020a05640200d700b004130673ba2fmr28858146edu.29.1647960067499; Tue, 22
+ Mar 2022 07:41:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310150905.1.Ie0a005d7a763d501e03b7abe8ee968ca99d23282@changeid>
+ <CAMRc=McbY6vK_M9fP7Hzg8LE9ANOZKN49hmBFn92YFH+2ToM8w@mail.gmail.com>
+In-Reply-To: <CAMRc=McbY6vK_M9fP7Hzg8LE9ANOZKN49hmBFn92YFH+2ToM8w@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 22 Mar 2022 16:39:57 +0200
+Message-ID: <CAHp75Vf8ktdCYTAULz2j-3CPON75707TpwV0FDL36V_GQ4Ttgw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Drop CONFIG_DEBUG_GPIO
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Brian Norris <briannorris@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Mon, Mar 14, 2022 at 6:35 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> On Fri, Mar 11, 2022 at 12:09 AM Brian Norris <briannorris@chromium.org> wrote:
 
-If the current task is in COMPAT mode, set SR_UXL_32 in status for
-returning userspace. We need CONFIG _COMPAT to prevent compiling
-errors with rv32 defconfig.
+> I like it. It's true we don't see many of those DEBUG constructs
+> anymore nowadays and overhead for might_sleep() and WARN_ON() is
+> negligible.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
----
- arch/riscv/kernel/process.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+I don't like the part about removing -DDEBUG at all.
 
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index 03ac3aa611f5..8c7665481a9f 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -97,6 +97,15 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
- 	}
- 	regs->epc = pc;
- 	regs->sp = sp;
-+
-+#ifdef CONFIG_64BIT
-+	regs->status &= ~SR_UXL;
-+
-+	if (is_compat_task())
-+		regs->status |= SR_UXL_32;
-+	else
-+		regs->status |= SR_UXL_64;
-+#endif
- }
- 
- void flush_thread(void)
+> Applied, thanks!
+
+Shall I send a partial revert?
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko

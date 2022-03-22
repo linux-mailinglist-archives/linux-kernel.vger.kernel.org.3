@@ -2,112 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96FE4E44A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AA94E44A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbiCVREI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
+        id S239336AbiCVRG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiCVREG (ORCPT
+        with ESMTP id S231186AbiCVRG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:04:06 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A75D46B14
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:02:38 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id u3so24904150ljd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eIBwyCFA8yu0ZwbObg31b7AuYcniAsjV38ZCEKNbmEs=;
-        b=eLZjTCnmz/MJskMW0Kx+WYB3YbOumPc4a5X5vE0tih1aCTVrAd15AW4a/LR/YaaAnj
-         DmZKFF4T2mmVHwy1yi6h3xezVUEJxEB8h7TCOGIf/WXVynxd8dyZbf2xG51ZbuNE8uCY
-         PsGMa75RvSN/Dk+hf2DCnaUb5U/LGy4iLRcjpauITH+wqbfRcvDR3Bcxi6ypKq7Ji16E
-         V3mNIFubUOJq3hX5giXxQVCDJuJB9b1AAFbtVYjcP58tL6nG5NAtSg60NCFOPwMxpov4
-         SEaRKk7aGFiKjpGi4E3+3futcITEJIpJ7XMhTwvw9hlabBqrZyO7c79WwRa7g1Af+Pkf
-         rJkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eIBwyCFA8yu0ZwbObg31b7AuYcniAsjV38ZCEKNbmEs=;
-        b=hs6enbXlmNakulUepHBod2cF39MZ2KjzzqmRgx+LJQGvxzrnn11o6tlFfRdSmk5NqW
-         fT243ixcmantQ7ULx9fA3wPNARFLKWnbrub0EhMYnoCZ+lwuMk0kPBdbRWcvugwYSqId
-         NDf0irxs8B1FcT8DYU+51LpFFdojPNZ2N6fiTubMEtGTNu4KIa1mt5Wvq5T2sQSjPDgt
-         fFnrRndlzxmLHLvUzjlSqquRTAn/+CsXP+ZFa8ww3J0fK7N6nMIXgvD1xioPtpE84VPd
-         5JoS6Tp8s2CjbYXFhMZaNQcRNWD/IB0DMmTwQReKcxqkEfHYVgVvWYgKtRQ8j/cDrEFN
-         9TDA==
-X-Gm-Message-State: AOAM531xLG9KSjdRPfQZdS/LKeglKoczW0tEZA0G4Qj0SuBfc2s7czyP
-        0yF3S+KpOmQNth6ppngTUGrYPu3c9tluIkjc6uvOtATrqrqIpogS
-X-Google-Smtp-Source: ABdhPJz56XKTAMhxLOEhU4dMPRaQZpKutqbXKi+guc67m6Jv0gTpaFk3QWQR3g81THfjHOADVBK+pIn/W0HiBnTV7xM=
-X-Received: by 2002:a05:651c:1791:b0:243:94bd:d94c with SMTP id
- bn17-20020a05651c179100b0024394bdd94cmr19231645ljb.468.1647968554603; Tue, 22
- Mar 2022 10:02:34 -0700 (PDT)
+        Tue, 22 Mar 2022 13:06:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8D5E59;
+        Tue, 22 Mar 2022 10:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=e6u86QrrFQ7usesxm14f5416orKnbME+ZYyiXSDZccc=; b=oUZGH4/ColHKYt58ouWBYR/4qU
+        DhTlw/fWf0BNLcfnWfLjOP+lwol/8i6f5MNDd4mZafk6PyH9wgmQ8u1ftnM8agWwcFyXl0tYNMHZh
+        OSr1iOyEqQ1eJG572qgYt10ILN9c73UAgCBM9HjqB5veGHx0yVxZqPt3lnFZyLu2VlOZy3Xg7pINk
+        YwFf2fVflEnxfZJA2sSrtB4XVXFW52O4dA0dyW/1pB53BMaqueAlgP7mM/fQChooMiVhiOoOcwc1z
+        UKWf8Erh46pysIHK/KcwMN3zbaf+sP4OmqYTzyxLMA1g7uedqSZH0Qz0m+2xpu9QZL9NHU6F+bwbU
+        a8GlfK9g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWhvy-00BmKW-HY; Tue, 22 Mar 2022 17:04:38 +0000
+Date:   Tue, 22 Mar 2022 17:04:38 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     JeffleXu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
+        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com
+Subject: Re: [PATCH v5 03/22] cachefiles: introduce on-demand read mode
+Message-ID: <YjoBpm8mUHX/w/rK@casper.infradead.org>
+References: <YjiX5oXYkmN6WrA3@casper.infradead.org>
+ <20220316131723.111553-1-jefflexu@linux.alibaba.com>
+ <20220316131723.111553-4-jefflexu@linux.alibaba.com>
+ <YjiAVezd5B9auhcP@casper.infradead.org>
+ <6bc551d2-15fc-5d17-c99b-8db588c6b671@linux.alibaba.com>
+ <YjiLACenpRV4XTcs@casper.infradead.org>
+ <adb957da-8909-06d8-1b2c-b8a293b37930@linux.alibaba.com>
+ <1035025.1647876652@warthog.procyon.org.uk>
 MIME-Version: 1.0
-References: <20220316183833.1563139-1-arnd@kernel.org> <3b9cedd6-a084-5d87-2fdd-0da10146827b@arm.com>
- <CAKwvOdnut8db1Z1FdZkkSXCvmggrzfKv9Y9GO3uz4ND=K5sB3g@mail.gmail.com>
-In-Reply-To: <CAKwvOdnut8db1Z1FdZkkSXCvmggrzfKv9Y9GO3uz4ND=K5sB3g@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 22 Mar 2022 10:02:23 -0700
-Message-ID: <CAKwvOdkyGumBcCWwNo+yBFZ_A9OOFgVCOecOgpcfEunNRqy_+w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1035025.1647876652@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 12:52 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Fri, Mar 18, 2022 at 12:11 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> >
-> > On 2022-03-16 18:38, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > The newly introduced TRAMP_VALIAS definition causes a build warning
-> > > with clang-14:
-> > >
-> > > arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
-> >
-> > Tangentially, all the other GNU extensions we depend on throughout Linux
-> > are also GNU extensions. Do we know what's special about this one?
->
-> My first thought is that -Wnull-pointer-arithmetic should be in the
-> -Wgnu flag group, such that -Wno-gnu (as set by Kbuild) implies
-> -Wno-null-pointer-arithmetic.
->
-> One issue seems to be that -Wnull-pointer-arithmetic seems to control
-> at least 2 different checks in clang.
->
-> https://godbolt.org/z/hdYYejj3d
->
-> So it's likely these two checks should have 2 distinct flags, such
-> that the warning we're observing can be grouped under -Wgnu.
->
-> Filed: https://github.com/llvm/llvm-project/issues/54444
+On Mon, Mar 21, 2022 at 03:30:52PM +0000, David Howells wrote:
+> Matthew Wilcox <willy@infradead.org> wrote:
+> 
+> > Absolutely; just use xa_lock() to protect both setting & testing the
+> > flag.
+> 
+> How should Jeffle deal with xarray dropping the lock internally in order to do
+> an allocation and then taking it again (actually in patch 5)?
 
-Fix should be landing shortly:
-https://reviews.llvm.org/D122224
+There are a number of ways to handle this.  I'll outline two; others
+are surely possible.
 
--- 
-Thanks,
-~Nick Desaulniers
+option 1:
+
+add side:
+
+xa_lock();
+if (!DEAD)
+	xa_store(GFP_KERNEL);
+	if (DEAD)
+		xa_erase();
+xa_unlock();
+
+destroy side:
+
+xa_lock();
+set DEAD;
+xa_for_each()
+	xa_erase();
+xa_unlock();
+
+That has the problem (?) that it might be temporarily possible to see
+a newly-added entry in a DEAD array.
+
+If that is a problem, you can use xa_reserve() on the add side, followed
+by overwriting it or removing it, depending on the state of the DEAD flag.
+
+If you really want to, you can decompose the add side so that you always
+check the DEAD flag before doing the store, ie:
+
+do {
+	xas_lock();
+	if (DEAD)
+		xas_set_error(-EINVAL);
+	else
+		xas_store();
+	xas_unlock();
+} while (xas_nomem(GFP_KERNEL));
+

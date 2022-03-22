@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A41C4E368C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D774E368A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235309AbiCVCOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S235453AbiCVCSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235223AbiCVCOU (ORCPT
+        with ESMTP id S235439AbiCVCS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:14:20 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2074.outbound.protection.outlook.com [40.107.21.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6D626106;
-        Mon, 21 Mar 2022 19:12:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PDY18oYqt6rdsEGjwUlgrMaeflGNP+7VEU60Nl0xnNUkXrct3B6YbPXzjTgNZ+O/sZooTv5MvgeIEdj2KBK3vJwd1yvYpDUMvoxpFHz+h4qcb9PNcSyLZjTitF7cUwFg7oFBWwNUQ+Kck7QJSTk+nd9u9i+Wz9qRioyEgY6NcIF814mnjF3PvJB32zg650Jufn5yJV8AX4RDJoY7PvgNcwdE5YsuCDbzfvlHLItIjlG/soGojUgv7J0a+Zvrm1FMfBT5ED5X5XhqQXgrcdrmT1aVSSZBtH89Zel6oXXlq3SM5j/Rw773qA3uqKuerGi6T/xwc27TEOgu/WTVBsBzBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z4cDMqY5dSh30OvfO2pyvgxpKCV50bLcPKCTT4ToGgA=;
- b=IhdkSXVqS2614OvkDUvjWJIkLz04NFWrGsLG4ZRuffatrpga539QhOEOj4JVY8c0sEwn+8HyHeCe0zm0hsbcIcMq2oWMWaT5kpV9wu4/agXlVqotxkhr/0I+1ia0wZd+u72bAexc2IkjJX/iWlaE315wof5x8PgRYl/O4u5sO/83iMe7nkMRW/ipH/SuEFiUk/ZCW9TzB5PnsiG7ljSUc/kX6n6LKemjwtyQV32tktxkoLtNmCwyqHI2TWvrGrIr4U71QmHDEESnC8EmUiKi5cJdxDgC49hkMxpJsISFJXXkNSyUH617US+T7Gwo4+Hp1V+9SBdAwqc3/kz/oU+a/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z4cDMqY5dSh30OvfO2pyvgxpKCV50bLcPKCTT4ToGgA=;
- b=CeiYImL+/tFNfo9/AYBMUUQ3/+ALypusB85Q9V3s+Jc9rY12Cx9ChannGMgSb6gMwQLCB4JuAOLLYTBF3R2ELfk6A/Cmm0UYcTCp18qPmpHYYHbpgcnSFMLt6NEGAOx/TddoBPkQUA+dnqYpWNthig09ookOPYTcLlwHjOZeJ/8=
-Received: from VI1PR04MB4016.eurprd04.prod.outlook.com (2603:10a6:803:4a::27)
- by AS8PR04MB7733.eurprd04.prod.outlook.com (2603:10a6:20b:288::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.23; Tue, 22 Mar
- 2022 02:12:27 +0000
-Received: from VI1PR04MB4016.eurprd04.prod.outlook.com
- ([fe80::f9dc:f8c6:2d8b:475f]) by VI1PR04MB4016.eurprd04.prod.outlook.com
- ([fe80::f9dc:f8c6:2d8b:475f%7]) with mapi id 15.20.5081.022; Tue, 22 Mar 2022
- 02:12:27 +0000
-From:   Bough Chen <haibo.chen@nxp.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] gpio: Add gpio alias support
-Thread-Topic: [PATCH] gpio: Add gpio alias support
-Thread-Index: AQHYPPvPQVOQk554LEuD2CGFYqxhMKzKCvmAgACeVxA=
-Date:   Tue, 22 Mar 2022 02:12:27 +0000
-Message-ID: <VI1PR04MB4016969365895A57403C48AE90179@VI1PR04MB4016.eurprd04.prod.outlook.com>
-References: <1647849919-8778-1-git-send-email-haibo.chen@nxp.com>
- <CAHp75Veqswa9nuiRbuGE013EQ7d+-DWAiYqQG2o7p3=EDYk4pQ@mail.gmail.com>
-In-Reply-To: <CAHp75Veqswa9nuiRbuGE013EQ7d+-DWAiYqQG2o7p3=EDYk4pQ@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d7e670b9-1216-4e8e-9289-08da0ba969aa
-x-ms-traffictypediagnostic: AS8PR04MB7733:EE_
-x-microsoft-antispam-prvs: <AS8PR04MB77335B41EC1A5FD79EDFBA0B90179@AS8PR04MB7733.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Gy8UDVVnTAw04C03hmw+6ebMVuZQviBYmXvhdZOxjlcBUEA7iyYkybe/I/7EK4eVAOBSrfcaAObhjIe7CqPMKzx8s1JC0vYknlhy9soJ/HZWKTxdu+zihjACEb+OTDU88xjWx1sZUcLKgc2ho3zp9WaiU3W7SgP6rbrlIhat3M3PvEOd3KWf98PtSJmHs6R+woCrvjSASrW0eO+6HeZPGJOnl5yUnAxeZc1oFYL0uoEeGZupJVeq1BjcFARupX3trwTuH50wlaRcUPkU/YVplIfSqi+nXf4CjkKvdu/yQGXsgc0Xwpaf5uiMDQwBz85quh75E/7hBOf35msrdbx9798/YmAxpeZWHdP7b4DQ42GtaXJREQ6Vwbuc0rIrIRhBJHVMPVJl8uJKSeLhzd1L1O2g6qTO7LAIUwHanr9FeTkHp4oZ7cghRYQH01aFYMH9xV6s4UNl3d2fI81QV+YeztXTYIqTPlOpC9LErgykXuAYgE15XTfp4WlvQs9V1Azb37I9R/GAPIN5u50/fgjCOmxMGejj2cybKs6s2vboYP9j9wahc1W0Xx0UbPtaILkQ6DZWW+CvWZXsiWN0HiKwSuO2d582AjVN5UPgCzeKfDIjoNHwUW0+GSss0lSi3UM9eowkUE6k32UAVpJjlP4/MY4RbQYRiWQEQhylh31TeTadVZj3SXAfWLP9WhuyHldSJabO2RkgKWRGwHG5Mb4pMQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4016.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(71200400001)(966005)(7696005)(53546011)(6506007)(38100700002)(316002)(52536014)(5660300002)(6916009)(54906003)(508600001)(38070700005)(86362001)(45080400002)(2906002)(9686003)(83380400001)(33656002)(26005)(186003)(8676002)(4326008)(66556008)(66446008)(64756008)(66476007)(76116006)(8936002)(66946007)(122000001)(55016003)(99936003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?UUE3VE9SSEUvd2FnMkY3dGk2RTJIcDd2dWp2cE9SZ0dkMzdOV2d3bDExSkFl?=
- =?gb2312?B?c25uKzUvKzBEa1ZZSGZTdm0rWEJBeEg4dW53N2tnKys5Zkx1Wm5hUm1QcG9M?=
- =?gb2312?B?WTZWbmV2TldSRDlidnF4emtDOXdDMzExc1M3RnpIS3lhNitMam0zbUo2MmFy?=
- =?gb2312?B?bXowb3BCYTZKcEZZY2RNL09IV2g4NE9XTVRNS1Y5ODEwUVpIK0hKaytENlpM?=
- =?gb2312?B?UXlHclFKaWVKQ2w1ekQ2RDd0ZjNrbTJFMTNVZFRVWXFPaEU4aXdYMGNLRnlS?=
- =?gb2312?B?Uzg4VitjQU5VeGxORElNN2hBZHR6cU1mRGlqYXJHeTgzei9kVmtQUGp0ZXF0?=
- =?gb2312?B?ZXZPaEtLTE5JZFFMVk9QSnFLOG9EMmFNSDhqNzE4NVZmdDI5TEZTd1NlN2Q5?=
- =?gb2312?B?NWdhUHo2VThNK09ua005NHVOQmgvVi8yR0JYc3hPV3hXK2EwL2hOODhKWVRn?=
- =?gb2312?B?emdWTHNjRmlKUFV1b0JFMjVJelozS3lpbmtYSnFSU3NlUm81MGlCT1h6WWVV?=
- =?gb2312?B?WllMRU1LMzE1MzNDUm9IL040YTM1aWFRY0ZmbU52SHlENG1ud3FEMVBWR3o3?=
- =?gb2312?B?WC9LalVSeGtZUmk0bTlSVmMraEdWRyt2bkt4S2h1K3B4RWUzZFk5cGkrK0Uz?=
- =?gb2312?B?bndWdVpnNW8xR0YwSFJKSXlMRm51S1VMd0ZRTTkramRrM0JxUTZPdnNIMlIy?=
- =?gb2312?B?alNaeURTenJrNDB3RzlQU1Fuc0tIOGp1Nm1NanFreGRNSE1FRFZVaFh6dk10?=
- =?gb2312?B?ZUhxSnRzNU9kYjhFb0RHRzZ3RFNhNEhrK2FUVUltRjQxeThhRHVrNm42MGVX?=
- =?gb2312?B?UUcwaFk3Qm1mV3FEcjVMS1psOExsV3FESGpMT0dzd2liNWJPaS9BOUtsdCts?=
- =?gb2312?B?eEhRUzB3UVVBa2kzVHNTanNPdHlib3A0TUE5bTFaNDBVOWUzeXp0RFBqNk5H?=
- =?gb2312?B?dGxlYmcxY3dvVHlsSlNnbHREdTg3dCtoT01BT2FSMkVnTnB1ZjB6cjh1OGJv?=
- =?gb2312?B?eEFNYldSaHgxM3FUdFkwQy9CMkoveCtSVUlLUmJrSTVoQ242QVNpMllQNTBh?=
- =?gb2312?B?TXZUSjF2bEkvN3NhQVorUkxxcytGZENhaW8weTErVG00R0FSdXlFSGIvaEFZ?=
- =?gb2312?B?N1dldnc2d2IycUU2b1B5eThpQTd5TnljQURpdmZnQmZHUTJmeTFJR2ZjdURu?=
- =?gb2312?B?a0hSc09NdmQ1aVZwdXdHeUhxbTVaSmtHbUN1dWswbVh3ZlJ0a3FFSmVZbjJx?=
- =?gb2312?B?amk5S1QxVTR0KzBZS1pwa2RjVU82dWxtK2hPWnlMV2ZiWkdoeGdSL3p0WE8y?=
- =?gb2312?B?d08yeWllTnBCYnlubjFJMURNY1FBbUo2T3dsUHlDTDZyWnJmZ1ZBZUNzekJ0?=
- =?gb2312?B?bjM4UHBFWTZZYXJCNUdFcTlFQ2l5bHZ0a0hxbmxoU0dvWEN1Tm92amVhSlRK?=
- =?gb2312?B?K0ZYMkFYSUhWSkdPcGs4dHRLbzljd0ZKenBESEpNWVM2ZTZQM1hzTkJWQlhm?=
- =?gb2312?B?dERhcHBFYVRoclJ5Tm5ocHUrL0VvUTZLZEpveFprdmRmdFFiVkVVT3UwRFVP?=
- =?gb2312?B?d0o4VDhGSnZucU1VU2RrUjlSR01VcGtWS1FkU2xnVDBPK3dDYTZjenBNVVUw?=
- =?gb2312?B?cnlMT0FYVysyOHMwT0o2NncwR1U1dnV1Z2lPT1dqYTdWQXFETU1mTDNjTnFH?=
- =?gb2312?B?N0toWW1WMWcvZ1BXMjJMZzN3c2xSL3hBa21yVVFoeDJ1NGFwK1lCZy9XL2U3?=
- =?gb2312?B?WlRud0lROE5xUWRkb095enhDWGM3V3JyYW16U2tRZXZMQjhUWXh4WkNDVzhG?=
- =?gb2312?B?em1VUDhscmFIUkV0NSsxZGxEVVBTQ1BOK0QvK21uZUJJWHRMSngzQTNXdEdu?=
- =?gb2312?B?R1FBNVhFZ3A3Wmg3N1Jqa1FzVFdhQTk3L3VYa2dPVnBHSEFwTGIxanYweEd3?=
- =?gb2312?Q?PVqFQpf0b/JlTP84j8cQni385zZKxeqk?=
-Content-Type: multipart/signed;
-        micalg=SHA1;
-        protocol="application/x-pkcs7-signature";
-        boundary="----=_NextPart_000_0084_01D83DD5.52F78070"
+        Mon, 21 Mar 2022 22:18:28 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8234827B24
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:16:14 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220322021608epoutp01bafb5c14aeffc4eb280fcfacf41bb617~ekkwHPRgI3155131551epoutp01f
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:16:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220322021608epoutp01bafb5c14aeffc4eb280fcfacf41bb617~ekkwHPRgI3155131551epoutp01f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647915368;
+        bh=YkyXc49blA5j2YgNtVL9LfMTogUrkHGCfnzHkF2IvSs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K/XWEpQoZwgCSlJwGa8u7G5/s/Ys7v5D1oWUkd9sBrzEToW60OLWKhTZv9WweN18r
+         vfSSUVncIfmbAO9NZcTZ2l7sruKaTrP3vwhkwent49gLVbwKH5vhJ44AgZoooErAD3
+         s3oabUsYUtIFcVn9X4gMPXFvwPXTQuyGiPuza5d4=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220322021608epcas2p3485b283f589044bd6ea1cd37e6ee32ba~ekkvf2lwq1317813178epcas2p3A;
+        Tue, 22 Mar 2022 02:16:08 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KMw851l6Vz4x9QV; Tue, 22 Mar
+        2022 02:16:05 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        80.37.16040.36139326; Tue, 22 Mar 2022 11:16:03 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220322021603epcas2p2fb2d8ac144fc59ff2b75b416f9e2b650~ekkq8Mvex2873328733epcas2p2v;
+        Tue, 22 Mar 2022 02:16:03 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220322021603epsmtrp161310519870a8e08a7a8fd9faa151af6~ekkq7T8jN2314223142epsmtrp1I;
+        Tue, 22 Mar 2022 02:16:03 +0000 (GMT)
+X-AuditID: b6c32a46-bffff70000023ea8-e5-623931638fae
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F5.A9.29871.36139326; Tue, 22 Mar 2022 11:16:03 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220322021603epsmtip1e44bf2b3722a9e8d09a985503f5b1425~ekkqy2_080819308193epsmtip1S;
+        Tue, 22 Mar 2022 02:16:03 +0000 (GMT)
+Date:   Tue, 22 Mar 2022 11:14:42 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+Subject: Re: [PATCH v3 2/4] usb: host: add xhci hooks for USB offload
+Message-ID: <20220322021442.GA67215@ubuntu>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4016.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7e670b9-1216-4e8e-9289-08da0ba969aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2022 02:12:27.5105
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sVk5rpcHcUicX64yLd9RBv6yZ5iMgtIPkpVKrPNvVfc2fJj6rwt9CvCSeQ4r5udG31kmq5n9Yb39276fsYdK+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7733
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <8f34e9ee-4f50-9028-34ba-444090acf48c@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJJsWRmVeSWpSXmKPExsWy7bCmmW6yoWWSweRb5hZPjixit2hevJ7N
+        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtXn9oYrGYuVbZouvuDUYHLo/Lfb1MHgs2lXos
+        3vOSyWPeyUCP/XPXsHv0bVnF6PF5k1wAe1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGh
+        rqGlhbmSQl5ibqqtkotPgK5bZg7QcUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpSc
+        AvMCveLE3OLSvHS9vNQSK0MDAyNToMKE7IynbX/ZCvrsKo7u421gvG3YxcjJISFgIvHk4EG2
+        LkYuDiGBHYwSP44tZwZJCAl8YpTYd9ccIvGNUeLjpC6gBAdYx6P7iRDxvYwS+4/1sUM4Txgl
+        rm5/zdTFyM7BIqAq8SEGZA6bgJbEvR8nwGaKCBhKfLu0nRGknFngMZNEy7vp7CAJYQFXicWb
+        DrGCzOcV0Jb40pQOEuYVEJQ4OfMJC4jNKeAs8e3RBEaQElEBFYlXB+tBxkgILOWQmDdvMhvE
+        My4S+//0MkLYwhKvjm9hh7ClJF72t0HZxRK7PrUyQTQ3MEo0PoA4TkLAWGLWs3awZmaBTIn3
+        S28zQfyrLHHkFgtEmE+i4/Bfdogwr0RHmxBEp7LE9MsTWCFsSYmDr89BTfSQaL26Fxq2fUwS
+        nxruskxglJ+F5LVZSLZB2DoSC3Z/YpsFtIJZQFpi+T8OCFNTYv0u/QWMrKsYxVILinPTU4uN
+        CozgEZ2cn7uJEZxmtdx2ME55+0HvECMTB+MhRgkOZiUR3sUfzJOEeFMSK6tSi/Lji0pzUosP
+        MZoCY2kis5Rocj4w0eeVxBuaWBqYmJkZmhuZGpgrifN6pWxIFBJITyxJzU5NLUgtgulj4uCU
+        amBa3tQVfuZy34zELDPPEI/AIrtdeuf/8usbVD5auPjezKlVxmt95l1fmLY4ofJ/198AG4tJ
+        mb/mvqmcKdS+YpPQrXttDQzdc9z3RdulXElMsOS+rV1sGdR5Zk6E/uu5b1QbvbnbpPky3vLb
+        mNqylH4SZbiuvNowr4Zxy1KBnj9LmDM5r55qPdp16HeBkFf2hKVx26R/rg1S2SyyRTfn6/Wd
+        N+QaL4ldXZ51ICF0C+v2S9Y975b2KKVb8Pru2exy0/TX2f3X9jZIOEQazG8/IKJa1SQxVcPI
+        0NUvNXqq3Ors03nfrqQuK2NkSeTktgx7lcnd3SnI/y60gvH+ORv37mw27ilnK7IPfwnol72z
+        UomlOCPRUIu5qDgRAJfngNs8BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPLMWRmVeSWpSXmKPExsWy7bCSnG6yoWWSwbQHghZPjixit2hevJ7N
+        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtXn9oYrGYuVbZouvuDUYHLo/Lfb1MHgs2lXos
+        3vOSyWPeyUCP/XPXsHv0bVnF6PF5k1wAexSXTUpqTmZZapG+XQJXxv1Fh1gKTltXrGzuYW1g
+        3KjfxcjBISFgIvHofmIXIyeHkMBuRon1jwVAbAkBSYmlc2+wQ9jCEvdbjrB2MXIB1TxilDi3
+        fTOQw87BIqAq8SEGpIRNQEvi3o8TzCC2iIChxLdL2xlBypkFnjJJLN7YxgSSEBZwlVi86RAr
+        yFpeAW2JL03pECP7mCS2nLvJBlLDKyAocXLmExYQmxlo6I1/L5lA6pkFpCWW/+MACXMKOEt8
+        ezSBESQsKqAi8epg/QRGwVlImmchaZ6F0LyAkXkVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpe
+        cn7uJkZwnGhp7mDcvuqD3iFGJg7GQ4wSHMxKIryLP5gnCfGmJFZWpRblxxeV5qQWH2KU5mBR
+        Eue90HUyXkggPbEkNTs1tSC1CCbLxMEp1cDEqCju4mEVUX74xPOAWYZ17T239u7yZnRkvSsh
+        Jn2IJSZ4Xs76/1PTF8smSt7m/GyZVn74XhCPcR77zY8zXD/kKRySimQ8+SNr0v9T8vJGcg01
+        xy7ynshsXLf5F/tiz2+Cs3NfqV/1ChZasXTO6rWn3y3wmnZ0ar1WtGIo4wJXN4PPl0ImKl+T
+        dH7Lqqqlo3gz4PHTKdaBuhnHnuod2+Rx5s+a+663/fmzzr707dHf67VuIlPNyRvi1TrbTb/2
+        L+B48Tsqc94FyVXXfvj/rAm67WRUF+Pnx3a3dAu78+6A85/nZ+7/pGvOFnNrRe41F5Hzkcrn
+        mRhaNU6eE0z8O33TRPH7S4z/1nOGXAyYLf5CiaU4I9FQi7moOBEAz0e+JQIDAAA=
+X-CMS-MailID: 20220322021603epcas2p2fb2d8ac144fc59ff2b75b416f9e2b650
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----GSQR3kPPEyoeEG69Vah8YifR26QqWy9Bp_qtiefWPF7qlfBd=_22cc65_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220321090204epcas2p3b2be5c6b131240e408d12d40c517395c
+References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+        <CGME20220321090204epcas2p3b2be5c6b131240e408d12d40c517395c@epcas2p3.samsung.com>
+        <1647853194-62147-3-git-send-email-dh10.jung@samsung.com>
+        <8f34e9ee-4f50-9028-34ba-444090acf48c@linux.intel.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -128,235 +124,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------=_NextPart_000_0084_01D83DD5.52F78070
-Content-Type: text/plain;
-	charset="gb2312"
-Content-Transfer-Encoding: quoted-printable
+------GSQR3kPPEyoeEG69Vah8YifR26QqWy9Bp_qtiefWPF7qlfBd=_22cc65_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+
+On Mon, Mar 21, 2022 at 07:00:55PM +0200, Mathias Nyman wrote:
+> On 21.3.2022 10.59, Daehwan Jung wrote:
+> > To enable supporting for USB offload, define "offload" in usb controller
+> > node of device tree. "offload" value can be used to determine which type
+> > of offload was been enabled in the SoC.
+> > 
+> > For example:
+> > 
+> > &usbdrd_dwc3 {
+> > 	...
+> > 	/* support usb offloading, 0: disabled, 1: audio */
+> > 	offload = <1>;
+> > 	...
+> > };
+> > 
+> > There are several vendor_ops introduced by this patch:
+> > 
+> > struct xhci_vendor_ops - function callbacks for vendor specific operations
+> > {
+> > 	@vendor_init:
+> > 		- called for vendor init process during xhci-plat-hcd
+> > 		  probe.
+> > 	@vendor_cleanup:
+> > 		- called for vendor cleanup process during xhci-plat-hcd
+> > 		  remove.
+> 
+> The vendor_init() and vendor_cleanup() aren't really useful.
+> you are calling them from platform_probe() and platform_remove(),
+> just modify the probe and remove functions of the xhci-exynos driver directly.
+> 
+>
+
+OK. I agree with you and I'm going to modify it on next submission.
+
+> > 	@is_usb_offload_enabled:
+> > 		- called to check if usb offload enabled.
+> 
+> Looks like this is being used more like a quirk bit.
+> I think we can get rid of this as well
+> 
+
+Yes. I don't need it if I could get a quirk bit.
+
+> > 	@alloc_dcbaa:
+> > 		- called when allocating vendor specific dcbaa during
+> > 		  memory initializtion.
+> > 	@free_dcbaa:
+> > 		- called to free vendor specific dcbaa when cleanup the
+> > 		  memory.
+> > 	@alloc_transfer_ring:
+> > 		- called when vendor specific transfer ring allocation is required
+> > 	@free_transfer_ring:
+> > 		- called to free vendor specific transfer ring
+> > 	@sync_dev_ctx:
+> > 		- called when synchronization for device context is required
+> > }
+> > 
+> > The xhci hooks with prefix "xhci_vendor_" on the ops in xhci_vendor_ops.
+> > For example, vendor_init ops will be invoked by xhci_vendor_init() hook,
+> > is_usb_offload_enabled ops will be invoked by
+> > xhci_vendor_is_usb_offload_enabled(), and so on.
+> > 
+> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> > Signed-off-by: J. Avila <elavila@google.com>
+> > Signed-off-by: Puma Hsu <pumahsu@google.com>
+> > Signed-off-by: Howard Yen <howardyen@google.com>
+> > ---
+> >  drivers/usb/host/xhci-hub.c  |   5 ++
+> >  drivers/usb/host/xhci-mem.c  | 131 +++++++++++++++++++++++++++++++----
+> >  drivers/usb/host/xhci-plat.c |  43 +++++++++++-
+> >  drivers/usb/host/xhci-plat.h |   7 ++
+> >  drivers/usb/host/xhci.c      |  80 ++++++++++++++++++++-
+> >  drivers/usb/host/xhci.h      |  46 ++++++++++++
+> >  6 files changed, 295 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> > index 56546aaa93c7..aea72ffce820 100644
+> > --- a/drivers/usb/host/xhci-hub.c
+> > +++ b/drivers/usb/host/xhci-hub.c
+> > @@ -535,8 +535,13 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
+> >  	    cmd->status == COMP_COMMAND_RING_STOPPED) {
+> >  		xhci_warn(xhci, "Timeout while waiting for stop endpoint command\n");
+> >  		ret = -ETIME;
+> > +		goto cmd_cleanup;
+> >  	}
+> >  
+> > +	ret = xhci_vendor_sync_dev_ctx(xhci, slot_id);
+> > +	if (ret)
+> > +		xhci_warn(xhci, "Sync device context failed, ret=%d\n", ret);
+> > +
+> >  cmd_cleanup:
+> >  	xhci_free_command(xhci, cmd);
+> >  	return ret;
+> > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> > index 82b9f90c0f27..5ee0ffb676d3 100644
+> > --- a/drivers/usb/host/xhci-mem.c
+> > +++ b/drivers/usb/host/xhci-mem.c
+> > @@ -365,6 +365,54 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
+> >  	return 0;
+> >  }
+> >  
+> > +static void xhci_vendor_free_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx)
+> > +{
+> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> > +
+> > +	if (ops && ops->free_container_ctx)
+> > +		ops->free_container_ctx(xhci, ctx);
+> > +}
+> 
+> 
+> Looks suspicious, we always need to free container contexts, why this much checking?
+> 
+> 
+
+Calling funcion could cause a problem if some functions haven't been mapped
+on ops yet. Others below are same.
+
+> > +
+> > +static void xhci_vendor_alloc_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx,
+> > +					    int type, gfp_t flags)
+> > +{
+> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> > +
+> > +	if (ops && ops->alloc_container_ctx)
+> > +		ops->alloc_container_ctx(xhci, ctx, type, flags);
+> > +}
+> 
+> same, there should always be a function to allocate container context..
+> 
+> > +
+> > +static struct xhci_ring *xhci_vendor_alloc_transfer_ring(struct xhci_hcd *xhci,
+> > +		u32 endpoint_type, enum xhci_ring_type ring_type,
+> > +		unsigned int max_packet, gfp_t mem_flags)
+> > +{
+> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> > +
+> > +	if (ops && ops->alloc_transfer_ring)
+> > +		return ops->alloc_transfer_ring(xhci, endpoint_type, ring_type,
+> > +				max_packet, mem_flags);
+> > +	return 0;
+> 
+> same, looks like a lot of extra code.
+> 
+> > +}
+> > +
+> > +void xhci_vendor_free_transfer_ring(struct xhci_hcd *xhci,
+> > +		struct xhci_ring *ring, unsigned int ep_index)
+> > +{
+> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> > +
+> > +	if (ops && ops->free_transfer_ring)
+> > +		ops->free_transfer_ring(xhci, ring, ep_index);
+> > +}
+> > +
+> 
+> same.
+> 
+> > +bool xhci_vendor_is_usb_offload_enabled(struct xhci_hcd *xhci,
+> > +		struct xhci_virt_device *virt_dev, unsigned int ep_index)
+> > +{
+> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> > +
+> > +	if (ops && ops->is_usb_offload_enabled)
+> > +		return ops->is_usb_offload_enabled(xhci, virt_dev, ep_index);
+> > +	return false;
+> > +}
+> > +
+> >  /*
+> >   * Create a new ring with zero or more segments.
+> >   *
+> > @@ -417,7 +465,11 @@ void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
+> >  		struct xhci_virt_device *virt_dev,
+> >  		unsigned int ep_index)
+> >  {
+> > -	xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
+> > +	if (xhci_vendor_is_usb_offload_enabled(xhci, virt_dev, ep_index))
+> > +		xhci_vendor_free_transfer_ring(xhci, virt_dev->eps[ep_index].ring, ep_index);
+> > +	else
+> > +		xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
+> > +
+> >  	virt_dev->eps[ep_index].ring = NULL;
+> >  }
+> 
+> Ok, I see.
+> So idea is to override some functions that allocate and free DMA memory.
+> Your vendor_ops structure filled with function callbacks could be a 
+> mem_ops structure that allows your driver to directly override those
+> functions.
+> 
+> For example here we would only call
+> 
+> xhci->mem_ops->ring_free(...);
+> This would set to xhci_ring_free() by default, but your xhci-exonys driver could
+> set it to xhci_exonys_free_ring(), which would do any needed is_offload_enabled()
+> checks and custom freeing.
+> 
+> Same goes for most most of the other functions in this patch
+> 
+
+Exactly. I'm appreciate for your understanding my patch.
+
+> If possible see if it's enough to override the existing callbacks in
+> struct hc_driver instead of creating new function pointers.
+> 
+> -Mathias
+>
+
+I've used override for reset, start, add_endpoint, address_device, bus_suspend,
+and bus_resume in hc_driver. I could use reset_bandwidth more but I don't
+think override is better in this case because allocation / free of ep ring are
+always done with xhci hooks on others.
+
+Best Regards,
+Jung Daehwan
+
+------GSQR3kPPEyoeEG69Vah8YifR26QqWy9Bp_qtiefWPF7qlfBd=_22cc65_
+Content-Type: text/plain; charset="utf-8"
 
 
-> -----Original Message-----
-> From: Andy Shevchenko [mailto:andy.shevchenko@gmail.com]
-> Sent: 2022=C4=EA3=D4=C222=C8=D5 0:41
-> To: Bough Chen <haibo.chen@nxp.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>; Bartosz Golaszewski
-> <brgl@bgdev.pl>; open list:GPIO SUBSYSTEM =
-<linux-gpio@vger.kernel.org>;
-> Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; dl-linux-imx
-> <linux-imx@nxp.com>
-> Subject: Re: [PATCH] gpio: Add gpio alias support
->=20
-> On Mon, Mar 21, 2022 at 11:22 AM <haibo.chen@nxp.com> wrote:
-> >
-> > From: Haibo Chen <haibo.chen@nxp.com>
-> >
-> > This patch allow setting gpio device id via device tree alias.
->=20
-> allows
->=20
-> But read the Submitting Patches document about imperative mode.
->=20
-> Moreover, this commit message is quite bad. Please, read [1] for =
-making
-your
-> commit messages meaningful and useful.
-
-Thanks for your suggestion, I will add some info to explain why I =
-involve
-this change,
-and the benefit of this patch.
-
-Best Regards
-Haibo Chen
->=20
-> [1]:
-> =
-https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fcbea.=
-m
-> s%2Fgit-commit%2F&amp;data=3D04%7C01%7Chaibo.chen%40nxp.com%7C365
-> e24600aee43b3310508da0b59c5b3%7C686ea1d3bc2b4c6fa92cd99c5c301635
-> %7C0%7C0%7C637834777437333289%7CUnknown%7CTWFpbGZsb3d8eyJWIj
-> oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C30
-> 00&amp;sdata=3DJuJrBC1M079h5%2Bpc3i10eVqpL%2BXJLd4rt%2BjSPeIys4U%3
-> D&amp;reserved=3D0
->=20
-> --
-> With Best Regards,
-> Andy Shevchenko
-
-------=_NextPart_000_0084_01D83DD5.52F78070
-Content-Type: application/pkcs7-signature;
-	name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
-	filename="smime.p7s"
-
-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
-MjBFbnRlcnByaXNlJTIwQ0ElMjA1LENOPU5MQU1TUEtJMDAwNSxDTj1DRFAsQ049UHVibGljJTIw
-S2V5JTIwU2VydmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz13YmksREM9bnhw
-LERDPWNvbT9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2U/b2JqZWN0Q2xhc3M9Y1JMRGlz
-dHJpYnV0aW9uUG9pbnSGL2h0dHA6Ly9ud3cucGtpLm54cC5jb20vY3JsL05YUEVudGVycHJpc2VD
-QTUuY3Jshi9odHRwOi8vd3d3LnBraS5ueHAuY29tL2NybC9OWFBFbnRlcnByaXNlQ0E1LmNybDCC
-ARAGCCsGAQUFBwEBBIIBAjCB/zCBuwYIKwYBBQUHMAKGga5sZGFwOi8vL0NOPU5YUCUyMEVudGVy
-cHJpc2UlMjBDQSUyMDUsQ049QUlBLENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZp
-Y2VzLENOPUNvbmZpZ3VyYXRpb24sREM9d2JpLERDPW54cCxEQz1jb20/Y0FDZXJ0aWZpY2F0ZT9i
-YXNlP29iamVjdENsYXNzPWNlcnRpZmljYXRpb25BdXRob3JpdHkwPwYIKwYBBQUHMAKGM2h0dHA6
-Ly9ud3cucGtpLm54cC5jb20vY2VydHMvTlhQLUVudGVycHJpc2UtQ0E1LmNydDANBgkqhkiG9w0B
-AQsFAAOCAQEAJpGYHveFzmgLQ4J62fcmPkd4wJ8urL46itMWCgyLBPRARYB9oArCqPd4j0Yl0RmS
-F1oNZgVDYQTy2aLoe+YGm23TkdJsTx1ExTxtv+njRnvvlSXMMULlOIt25/Vj+vTZ/wjFDq6PJOSZ
-MSQHaVHSUrkLBT1H0pBmCA1Ecjuo7gUpG5T2NqD5KJP083pJZ+nogA9TVC9Ob+jNx0d/UR7UgRLf
-KOxBG05AakTa4luadPIRktiULtjzG20WDhvAIg4M9w1+9SV+LpvvqBtkovpCfj9Rf4pNRV1CjjTY
-AFIH0s3Q11HnFd1UNHKUvpp7/SrTyxaCXBO68U5aJz4zDjwIPzCCB+swggbToAMCAQICEy0ABsdV
-/0AV+3f0TucAAAAGx1UwDQYJKoZIhvcNAQELBQAwgbYxHDAaBgNVBAMME05YUCBFbnRlcnByaXNl
-IENBIDUxCzAJBgNVBAsMAklUMREwDwYDVQQKDAhOWFAgQi5WLjESMBAGA1UEBwwJRWluZGhvdmVu
-MRYwFAYDVQQIDA1Ob29yZC1CcmFiYW50MRMwEQYKCZImiZPyLGQBGRYDd2JpMRMwEQYKCZImiZPy
-LGQBGRYDbnhwMRMwEQYKCZImiZPyLGQBGRYDY29tMQswCQYDVQQGEwJOTDAeFw0yMTA5MjIwMTMw
-MTRaFw0yMzA5MjIwMTMwMTRaMIGaMRMwEQYKCZImiZPyLGQBGRYDY29tMRMwEQYKCZImiZPyLGQB
-GRYDbnhwMRMwEQYKCZImiZPyLGQBGRYDd2JpMQwwCgYDVQQLEwNOWFAxCzAJBgNVBAsTAkNOMRYw
-FAYDVQQLEw1NYW5hZ2VkIFVzZXJzMRMwEQYDVQQLEwpEZXZlbG9wZXJzMREwDwYDVQQDEwhueGEx
-MjkzNzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAL6VTRRCbJgUEuoR2bppNZQc3ghr
-l0pDEZjK8uaayFYadelTc6iWe8EBLWrrOWd17yNeXc054yw+Yu8eI1IWMEE/mo5l93Kw+BkuCUda
-vpqZUMOvaPDKkHNPBNPJ6AP+vmZW8p/46dxo6Nx6xGzkpbUZ1Ju1a9LuxeFQBNNvV54wYbFmoKJF
-eQQ3RZdEafNucOw8ukTyWurcC8fPUQwqE1sFRdtjLeJWZBtrvNim4oikb5UFxcmoaQkJ/sqoJGZL
-+bR3ZZx3101+Y7RJp56hfqT1eqkJkc7OTz+tsZx3p1a6r266NCB/RBIGVD2cFmhUs2Uitp/oB+9k
-BhycuX8wowECAwEAAaOCBAowggQGMDwGCSsGAQQBgjcVBwQvMC0GJSsGAQQBgjcVCIWCwH6BjvRV
-hu2FOILrmUuaklY/heaKboS14X4CAWQCATowEwYDVR0lBAwwCgYIKwYBBQUHAwQwDgYDVR0PAQH/
-BAQDAgUgMAwGA1UdEwEB/wQCMAAwGwYJKwYBBAGCNxUKBA4wDDAKBggrBgEFBQcDBDCBlAYJKoZI
-hvcNAQkPBIGGMIGDMAsGCWCGSAFlAwQBKjALBglghkgBZQMEAS0wCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBGTALBglghkgBZQMEAQIwCwYJYIZIAWUDBAEFMAoGCCqGSIb3DQMHMAcGBSsOAwIHMA4G
-CCqGSIb3DQMCAgIAgDAOBggqhkiG9w0DBAICAgAwQQYDVR0RBDowOKAiBgorBgEEAYI3FAIDoBQM
-EmhhaWJvLmNoZW5AbnhwLmNvbYESaGFpYm8uY2hlbkBueHAuY29tMB0GA1UdDgQWBBQY587dMxoS
-HzI5SkUyoLrumaVa5jAfBgNVHSMEGDAWgBRYlWDuTnTvZSKqve0ZqSt6jhedBzCCAUYGA1UdHwSC
-AT0wggE5MIIBNaCCATGgggEthoHIbGRhcDovLy9DTj1OWFAlMjBFbnRlcnByaXNlJTIwQ0ElMjA1
-LENOPU5MQU1TUEtJMDAwNSxDTj1DRFAsQ049UHVibGljJTIwS2V5JTIwU2VydmljZXMsQ049U2Vy
-dmljZXMsQ049Q29uZmlndXJhdGlvbixEQz13YmksREM9bnhwLERDPWNvbT9jZXJ0aWZpY2F0ZVJl
-dm9jYXRpb25MaXN0P2Jhc2U/b2JqZWN0Q2xhc3M9Y1JMRGlzdHJpYnV0aW9uUG9pbnSGL2h0dHA6
-Ly9ud3cucGtpLm54cC5jb20vY3JsL05YUEVudGVycHJpc2VDQTUuY3Jshi9odHRwOi8vd3d3LnBr
-aS5ueHAuY29tL2NybC9OWFBFbnRlcnByaXNlQ0E1LmNybDCCARAGCCsGAQUFBwEBBIIBAjCB/zCB
-uwYIKwYBBQUHMAKGga5sZGFwOi8vL0NOPU5YUCUyMEVudGVycHJpc2UlMjBDQSUyMDUsQ049QUlB
-LENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRpb24s
-REM9d2JpLERDPW54cCxEQz1jb20/Y0FDZXJ0aWZpY2F0ZT9iYXNlP29iamVjdENsYXNzPWNlcnRp
-ZmljYXRpb25BdXRob3JpdHkwPwYIKwYBBQUHMAKGM2h0dHA6Ly9ud3cucGtpLm54cC5jb20vY2Vy
-dHMvTlhQLUVudGVycHJpc2UtQ0E1LmNydDANBgkqhkiG9w0BAQsFAAOCAQEAsjJuJnMzvA59CAlY
-87eQCOafWbMF4HfC4oobtAqboB48BtCZ5dOeo+X4XQRaSmTwFJ2hZjX614KFnRGXLk/nDIY4pp8+
-fqfgHKUdY1ceVqs+Kjtabk3gY8zq7PtFUsAkwp4OW23kwphh7Awx1tf3XRZeOqwiVuk5V57GT8Tu
-dKNiOZqut3mrcdZINNUsqjt7ZA82r4ov5MbEBHeWVjo7CeWbgZFZhKhMKC9+2DKEUkdDJUcDYqxz
-+Rh+6B+dgxeYkTGIqHELhkMjMCC5SwRNHfCxXCI+qRy4zIAo2K3V96zs3ungqiFZuFrpatfSBfAL
-d86AIrOgsHhvOB0UU1W//zGCBLMwggSvAgEBMIHOMIG2MRwwGgYDVQQDDBNOWFAgRW50ZXJwcmlz
-ZSBDQSA1MQswCQYDVQQLDAJJVDERMA8GA1UECgwITlhQIEIuVi4xEjAQBgNVBAcMCUVpbmRob3Zl
-bjEWMBQGA1UECAwNTm9vcmQtQnJhYmFudDETMBEGCgmSJomT8ixkARkWA3diaTETMBEGCgmSJomT
-8ixkARkWA254cDETMBEGCgmSJomT8ixkARkWA2NvbTELMAkGA1UEBhMCTkwCEy0ABsdWyH4wxYEw
-yQ4AAAAGx1YwCQYFKw4DAhoFAKCCArkwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG
-9w0BCQUxDxcNMjIwMzIyMDIxMjIzWjAjBgkqhkiG9w0BCQQxFgQUGZqS+BeJLu4+nv/ljjR3h0Yv
-Fs4wgZMGCSqGSIb3DQEJDzGBhTCBgjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAoGCCqGSIb3
-DQMHMAsGCWCGSAFlAwQBAjAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAwBwYFKw4DAhow
-CwYJYIZIAWUDBAIDMAsGCWCGSAFlAwQCAjALBglghkgBZQMEAgEwgd8GCSsGAQQBgjcQBDGB0TCB
-zjCBtjEcMBoGA1UEAwwTTlhQIEVudGVycHJpc2UgQ0EgNTELMAkGA1UECwwCSVQxETAPBgNVBAoM
-CE5YUCBCLlYuMRIwEAYDVQQHDAlFaW5kaG92ZW4xFjAUBgNVBAgMDU5vb3JkLUJyYWJhbnQxEzAR
-BgoJkiaJk/IsZAEZFgN3YmkxEzARBgoJkiaJk/IsZAEZFgNueHAxEzARBgoJkiaJk/IsZAEZFgNj
-b20xCzAJBgNVBAYTAk5MAhMtAAbHVf9AFft39E7nAAAABsdVMIHhBgsqhkiG9w0BCRACCzGB0aCB
-zjCBtjEcMBoGA1UEAwwTTlhQIEVudGVycHJpc2UgQ0EgNTELMAkGA1UECwwCSVQxETAPBgNVBAoM
-CE5YUCBCLlYuMRIwEAYDVQQHDAlFaW5kaG92ZW4xFjAUBgNVBAgMDU5vb3JkLUJyYWJhbnQxEzAR
-BgoJkiaJk/IsZAEZFgN3YmkxEzARBgoJkiaJk/IsZAEZFgNueHAxEzARBgoJkiaJk/IsZAEZFgNj
-b20xCzAJBgNVBAYTAk5MAhMtAAbHVf9AFft39E7nAAAABsdVMA0GCSqGSIb3DQEBAQUABIIBAIPK
-jDLm6IKCyG6M/WGlpjl8M16jhL1bJPxlncR1/h8zOHc7GhF9IlNlJGMFnkrEcRg7U+iyNvieCT2+
-IkjL8aoGDtK49KV7slc6qV6PMH6oXaxFPr2s/IXoU+ISYemFuDF0wwwfC0Hwa2HZdkdKDOcFCe2g
-Rbz5F2ILFFXPERp/uILnnV7wUJiGug47C+cg9fRv+l6X31FSJ3CHIfpHNTQDlMPIkm7bKROWqsK+
-KB4KUcnYRrzZpLbbMe4MUX90SlUeBPFUeMytyAxUPCboF2YdloAE7fGHK6GVPOJyX9GaWyshnoi0
-ChDXr6ppBlQQSnKGTMO1uA2THSlocPTUtYoAAAAAAAA=
-
-------=_NextPart_000_0084_01D83DD5.52F78070--
+------GSQR3kPPEyoeEG69Vah8YifR26QqWy9Bp_qtiefWPF7qlfBd=_22cc65_--

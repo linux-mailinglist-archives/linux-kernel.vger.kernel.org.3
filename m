@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452934E4268
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC004E4267
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238285AbiCVO6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S238274AbiCVO6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238141AbiCVO6m (ORCPT
+        with ESMTP id S238353AbiCVO6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:58:42 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE118A6F6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:57:14 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bg10so36760153ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ACAYSEDWD5ESysQrTVSpvpyNPWyQJYYphq3zGhfs3to=;
-        b=F0ReZqpR0eJJZPfRXmhPfPYCxhdWLvBTWf7eDeWLT9YFSquqvtdNHw/ozPaJqFaDR9
-         gmQM5CfhmW9wLZxMfAnahEQe2HP5+aaHoBax92QGuiJsWy9R6+CROEK0lfcH+ybs1Vnm
-         8XQAGIJDgaKKzTbddoss7FjpTJFEAZoDR6VRhkefmZZPDF1xit626EYlBEoLipIS2jD1
-         SzFpxP1OkMZ51M929ird0DSrUH90FNYDRKH1e271IfdNZuYFvJiSa6rjA4rPy7FndrJ+
-         Rq7fmEVwG8L1DUZwYffdltMWeL8P2f1yDzkBXe4OSR+F+hNXXXL0gxbUwcDKwf1cEEjM
-         QvmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ACAYSEDWD5ESysQrTVSpvpyNPWyQJYYphq3zGhfs3to=;
-        b=VLYSEHfzQvHn/QETrBp65VSC1kUP/Ps3+2CJTzyqlMQZakLdC/+/TZDEJlojnjYT7J
-         PQ8vY4RsB9/Gud1Qepx/s/DqL62vE3iUrNAQSDBH6M1FUbaJJNN7Q4lNYoSepdASOx/D
-         K1IM8AnMREDFxMNf7a4akOR91WpKsu9gsQ1KBM8fhuCsbxyGRbyW9bS3vICatNudXB0V
-         whVcs4n8B8B9n1vvPlGU1/ALE5MIqXuw/I96/m90UJBnfg7tXJzG+kehoCco2ilFM7pZ
-         mvD3QbSPMj1rvJyw6+oXvuOvgt8XFMIuPc7vmbSzoRTsJLi6acoFXq45cqaUEE5DRsTg
-         aH9Q==
-X-Gm-Message-State: AOAM533A2gTbHei0ok1e/lDWfdtZzv6fTb3wHdoueqwW5N2Xfeyi8fv1
-        APp1yuupEZcmt4O3q5Z2220EeoDe4kPReeUGLkNCXMo1RSI=
-X-Google-Smtp-Source: ABdhPJxGpoDD8exbxrBLAL2GR7kH1USTNczC+C5/RJhxx+X8CsvaU7UFlUQyrXA/OHBAYTxz8GcGfhasnrDKwhxA1Ak=
-X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id
- nd14-20020a170907628e00b006d9c6fa6168mr26321155ejc.132.1647961032695; Tue, 22
- Mar 2022 07:57:12 -0700 (PDT)
+        Tue, 22 Mar 2022 10:58:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DBA88A6EA;
+        Tue, 22 Mar 2022 07:56:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 425931042;
+        Tue, 22 Mar 2022 07:56:35 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 76C6D3F73B;
+        Tue, 22 Mar 2022 07:56:33 -0700 (PDT)
+Message-ID: <e6120f45-d5cd-bb95-d56c-af3b614bd6ac@arm.com>
+Date:   Tue, 22 Mar 2022 14:56:29 +0000
 MIME-Version: 1.0
-References: <20220320064529.12827-1-sensor1010@163.com> <CAHp75VfkDbO3J=MgTdRF_UyMvZ9XCJEQcEOUEBuyqEwnrNwbsA@mail.gmail.com>
-In-Reply-To: <CAHp75VfkDbO3J=MgTdRF_UyMvZ9XCJEQcEOUEBuyqEwnrNwbsA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 22 Mar 2022 16:56:02 +0200
-Message-ID: <CAHp75Vc5FZ-N68vDhyGhCObUdek6JFccotctH-C5KmZ_boL6Wg@mail.gmail.com>
-Subject: Re: [PATCH] drivers/bus/brcmstb_gisb.c : Remove the
- suppress_bind_attrs attribute of the driver
-To:     lizhe <sensor1010@163.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
+Content-Language: en-GB
+To:     Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>
+Cc:     dann frazier <dann.frazier@canonical.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
+        Android Kernel Team <kernel-team@android.com>
+References: <20220321104843.949645-1-maz@kernel.org>
+ <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
+ <87h77rxnyl.wl-maz@kernel.org>
+ <CAL_JsqK57KpZmzCE=86dLcHK4Ws_0w0ga4_qoYUe2GwFNpDzRw@mail.gmail.com>
+ <87fsnbxgau.wl-maz@kernel.org> <e52c8cbd-031b-848f-3d78-dff8b93bd416@arm.com>
+ <61809b8f-acaa-bae2-ac5e-aa47c55eea23@arm.com>
+ <Yjnfr7V6egc1sewb@robh.at.kernel.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <Yjnfr7V6egc1sewb@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,21 +59,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 4:52 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Tue, Mar 22, 2022 at 12:41 AM lizhe <sensor1010@163.com> wrote:
-> >
-> > Even if platform_driver does not set suppress_bind_attrs attribute,
-> > when registering with platform_driver_probe,  the value of
-> > suppress_bind_attrs is still true, see __platform_driver_probe()
->
-> Any reasons it can't be switched to builtin_platform_driver() macro
-> and hence constification of the driver structure?
+On 2022-03-22 14:39, Rob Herring wrote:
+> On Tue, Mar 22, 2022 at 01:16:35PM +0000, Robin Murphy wrote:
+>> On 2022-03-21 20:06, Robin Murphy wrote:
+>>> On 2022-03-21 19:21, Marc Zyngier wrote:
+>>>> On Mon, 21 Mar 2022 18:03:27 +0000,
+>>>> Rob Herring <robh@kernel.org> wrote:
+>>>>>
+>>>>> On Mon, Mar 21, 2022 at 11:36 AM Marc Zyngier <maz@kernel.org> wrote:
+>>>>>>
+>>>>>> On Mon, 21 Mar 2022 15:17:34 +0000,
+>>>>>> Rob Herring <robh@kernel.org> wrote:
+>>>>>>>
+>>>>>>> On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org> wrote:
+>>>>>>>>
+>>>>>>> For XGene-1, I'd still like to understand what the issue is. Reverting
+>>>>>>> the first fix and fixing 'dma-ranges' should have fixed it. I need a
+>>>>>>> dump of how the IB registers are initialized in both cases. I'm not
+>>>>>>> saying changing 'dma-ranges' in the firmware is going to be required
+>>>>>>> here. There's a couple of other ways we could fix that without a
+>>>>>>> firmware change, but first I need to understand why it broke.
+>>>>>>
+>>>>>> Reverting 6dce5aa59e0b was enough for me, without changing anything
+>>>>>> else.
+>>>>>
+>>>>> Meaning c7a75d07827a didn't matter for you. I'm not sure that it would.
+>>>>>
+>>>>> Can you tell me what 'dma-ranges' contains on your system?
+>>>>
+>>>> Each pcie node (all 5 of them) has:
+>>>>
+>>>> dma-ranges = <0x42000000 0x80 0x00 0x80 0x00 0x00 0x80000000
+>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0x42000000 0x00 0x00 0x00 0x00 0x80 0x00>;
+> 
+> This is the same as what Stï¿½phane has for Merlin. So c7a75d07827a ("PCI:
+> xgene: Fix IB window setup") should have fixed Mustang.
 
-Ah, the patch that brought that assignment actually allows to built
-the driver as a module, so, the correct patch would be to switch to
-module_platform_driver() I suppose.
+Unless XGene 1 has some weird implicit requirement on the order in which 
+the registers are programmed, that XGene 2 doesn't. And from looking at 
+the code, I don't see any obvious less-mad possibility to explain the 
+breakage.
 
--- 
-With Best Regards,
-Andy Shevchenko
+>>> Hmm, is there anyone other than iommu-dma who actually depends on the
+>>> resource list being sorted in ascending order of bus address? I recall
+>>> at the time I pushed for creating the list in sorted order as it was the
+>>> simplest and most efficient option, but there's no technical reason we
+>>> couldn't create it in as-found order and defer the sorting until
+>>> iova_reserve_pci_windows() (at worst that could even operate on a
+>>> temporary copy if need be). It's just more code, which didn't need to
+>>> exist without a good reason, but if this is one then exist it certainly
+>>> may.
+>>
+>> Taking a closer look, the Cadence driver is already re-sorting the list
+>> for its own setup, so iommu-dma can't assume the initial sort is
+>> preserved and needs to do its own anyway. Does the (untested) diff below
+>> end up helping X-Gene also?
+> 
+> There's no IOMMU on X-Gene 1 or 2 based on the upstream dts files, so
+> how would this matter?
+
+Because devm_of_pci_get_host_bridge_resources() is forcing the 
+dma_ranges list to be in a different order from the original DT for 
+iommu-dma's benefit, but whether iommu-dma actually consumes it or not 
+later is immaterial.
+
+Robin.

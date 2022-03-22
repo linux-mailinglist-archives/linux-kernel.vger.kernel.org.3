@@ -2,45 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D044E3F30
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92184E3F35
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbiCVNMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        id S234388AbiCVNOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbiCVNMK (ORCPT
+        with ESMTP id S232743AbiCVNOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:12:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F5C63521;
-        Tue, 22 Mar 2022 06:10:41 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AA371DFA;
-        Tue, 22 Mar 2022 14:10:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1647954638;
-        bh=4/zDggOfdRrl+UUfNTaaa9LlWfBAHXPBbJUpBU72Ais=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d09MxOhzbYU4/sEvMW+7fm2xLqi0xkXExEgBJBkcIqzSiG/tVNhXbvIkYEsSrinKx
-         OOpGI7f7JQ/rO3xh7qfp70Y2SBsUhBcYdOlSvaYCvvyJMmwwS4a0MSjAT0WIAAAN6X
-         2b8MuBeZ4t+TQlsa0vEbRK1UgbE3jlxDrYAKw6fk=
-Date:   Tue, 22 Mar 2022 15:10:21 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] uvc: fix missing check to determine if element is found
- in list
-Message-ID: <YjnKvQZot2wnljmW@pendragon.ideasonboard.com>
-References: <20220319102222.3079-1-xiam0nd.tong@gmail.com>
- <CANiDSCugwwNc8HjqNX2Mp8GdFN0s=jgPkT_2d4kiVygp=XZa4w@mail.gmail.com>
+        Tue, 22 Mar 2022 09:14:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9FF83B0E;
+        Tue, 22 Mar 2022 06:12:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32C11B81CF8;
+        Tue, 22 Mar 2022 13:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33944C340EC;
+        Tue, 22 Mar 2022 13:12:44 +0000 (UTC)
+Date:   Tue, 22 Mar 2022 09:12:42 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220322091242.1ad0206b@gandalf.local.home>
+In-Reply-To: <YjmAz0MbdW4Q1Cnv@hirez.programming.kicks-ass.net>
+References: <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+        <20220321112805.1393f9b9@gandalf.local.home>
+        <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
+        <20220321121209.3b95e406@gandalf.local.home>
+        <20220321121549.1c8588c5@gandalf.local.home>
+        <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
+        <20220321124551.3d73660b@gandalf.local.home>
+        <Yjis6hJKUj/WrSwK@hirez.programming.kicks-ass.net>
+        <20220321125419.0a20415c@gandalf.local.home>
+        <YjmAz0MbdW4Q1Cnv@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANiDSCugwwNc8HjqNX2Mp8GdFN0s=jgPkT_2d4kiVygp=XZa4w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,111 +62,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 01:40:07PM +0100, Ricardo Ribalda wrote:
-> Hi Xiaomeng
+On Tue, 22 Mar 2022 08:54:55 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> On Mon, Mar 21, 2022 at 12:54:19PM -0400, Steven Rostedt wrote:
+> > On Mon, 21 Mar 2022 17:50:50 +0100
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> >   
+> > > > This also assumes that we need to trace everything that is marked. I
+> > > > mentioned in another email, what do we do if we only trace funcA?    
+> > > 
+> > > Like I said later on; if we inhibit tail-calls to notrace, this goes
+> > > away.  
+> > 
+> > Please no. The number of "notrace" functions is increasing to the point
+> > that it's starting to make function tracing useless in a lot of
+> > circumstances. I've already lost my ability to see when user space goes
+> > into the kernel (which I have to hack up custom coding to enable again).  
 > 
-> Thanks for the patch. Maybe it would be better to just make a function
-> to find the ITERM entity with a given id?
+> I really can't follow the argument there, nor on IRC.
+> 
+> Suppose:
+> 
+> notrace func_B()
+> {
+> 	...
+> }
+> 
+> func_A()
+> {
+> 	...
+> 	return func_B();
+> }
+> 
+> then inhibiting tail calls would end up looking like:
 
-We already have a uvc_entity_by_id() which could be used for that, but
-only for the second loop iteration. The first one finds any input
-terminal. Also, the second loop restricts the search to a chain, while
-uvc_entity_by_id() it global to the device. I think the proposed patch
-is fine.
+If we inhibit tail calls, then we do not need to make func_B notrace.
 
-> On Mon, 21 Mar 2022 at 16:33, Xiaomeng Tong wrote:
-> >
-> > The list iterator will point to a bogus position containing HEAD if
-> > the list is empty or the element is not found in list. This case
-> > should be checked before any use of the iterator, otherwise it will
-> > lead to a invalid memory access. The missing check here is before
-> > "pin = iterm->id;", just add check here to fix the security bug.
-> >
-> > In addition, the list iterator value will *always* be set and non-NULL
-> > by list_for_each_entry(), so it is incorrect to assume that the iterator
-> > value will be NULL if the element is not found in list, considering
-> > the (mis)use here: "if (iterm == NULL".
-> >
-> > Use a new value 'it' as the list iterator, while use the old value
-> > 'iterm' as a dedicated pointer to point to the found element, which
-> > 1. can fix this bug, due to 'iterm' is NULL only if it's not found.
-> > 2. do not need to change all the uses of 'iterm' after the loop.
-> > 3. can also limit the scope of the list iterator 'it' *only inside*
-> >    the traversal loop by simply declaring 'it' inside the loop in the
-> >    future, as usage of the iterator outside of the list_for_each_entry
-> >    is considered harmful. https://lkml.org/lkml/2022/2/17/1032
+> 
+> func_A:
+> 	call __fentry__
+> 	...
+> 	call func_B
+> 	call __fexit__
+> 	ret
+> 
+> Then A is fully traced, B is invisible, as per spec. What is the
+> problem?
 
-Looking forward to that :-)
+The above is fine, but then func_B is not a tail call and can also be
+traced.
 
-> > Fixes: d5e90b7a6cd1c ("[media] uvcvideo: Move to video_ioctl2")
-> > Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> > ---
-> >  drivers/media/usb/uvc/uvc_v4l2.c | 20 +++++++++++++-------
-> >  1 file changed, 13 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> > index 711556d13d03..e7cdc01ad277 100644
-> > --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> > @@ -871,6 +871,7 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
-> >         struct uvc_video_chain *chain = handle->chain;
-> >         const struct uvc_entity *selector = chain->selector;
-> >         struct uvc_entity *iterm = NULL;
-> > +       struct uvc_entity *it;
-> >         u32 index = input->index;
-> >         int pin = 0;
-> >
-> > @@ -878,22 +879,27 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
-> >             (chain->dev->quirks & UVC_QUIRK_IGNORE_SELECTOR_UNIT)) {
-> >                 if (index != 0)
-> >                         return -EINVAL;
-> > -               list_for_each_entry(iterm, &chain->entities, chain) {
-> > -                       if (UVC_ENTITY_IS_ITERM(iterm))
-> > +               list_for_each_entry(it, &chain->entities, chain) {
-> > +                       if (UVC_ENTITY_IS_ITERM(it)) {
-> > +                               iterm = it;
-> >                                 break;
-> > +                       }
-> >                 }
-> > -               pin = iterm->id;
-> > +               if (iterm)
-> > +                       pin = iterm->id;
+> 
+> The problem you initially had, of doing a tail-call into a notrace, was
+> that the __fexit__ call went missing, because notrace will obviously not
+> have that. But that's avoided by inhibiting all tail-calls between
+> notrace and !notrace functions (note that notrace must also not
+> tail-call !notrace).
 
-You can drop this, pin is not used anymore in the rest of the function.
+I'm confused by the above. Why can't a notrace tail call a !notrace?
+If we tail call to a
 
-> >         } else if (index < selector->bNrInPins) {
-> >                 pin = selector->baSourceID[index];
-> > -               list_for_each_entry(iterm, &chain->entities, chain) {
-> > -                       if (!UVC_ENTITY_IS_ITERM(iterm))
-> > +               list_for_each_entry(it, &chain->entities, chain) {
-> > +                       if (!UVC_ENTITY_IS_ITERM(it))
-> >                                 continue;
-> > -                       if (iterm->id == pin)
-> > +                       if (it->id == pin) {
+func_B:
+	call __fentry__
+	...
+	call __fexit__
+	ret
 
-And here you could use
-			if (it->id == selector->baSourceID[index]) {
+then the fentry and fexit show a perfectly valid trace of func_B.
 
-and drop the local pin variable.
 
-If you're fine with those small changes I can handle them when applying
-the patch to my tree.
+> 
+> Your worry seems to stem about loosing visiblilty of !notrace functions,
+> but AFAICT that doesn't happen.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+My worry is:
 
-> > +                               iterm = it;
-> >                                 break;
-> > +                       }
-> >                 }
-> >         }
-> >
-> > -       if (iterm == NULL || iterm->id != pin)
-> > +       if (iterm == NULL)
-> >                 return -EINVAL;
-> >
-> >         memset(input, 0, sizeof(*input));
+func_A:
+	call __fentry__
+	...
+	jmp func_B
 
--- 
-Regards,
+Where do we do the call __fexit__ ?
 
-Laurent Pinchart
+That was the original concern, and I think the proposed solutions have
+convoluted our thoughts about what we are trying to fix. So let's go back
+to the beginning, and see how to deal with it.
+
+That is, we have:
+
+func_C:
+	call __fenty__
+	...
+	call func_A:
+	...
+	call func_B:
+	...
+	call __fexit__
+	ret
+
+func_A:
+	call __fentry__
+	...
+	jmp func_B
+
+func_B:
+	call __fentry__
+	...
+	call __fexit__
+	ret
+
+Where the above is C calling A and B as normal functions, A calling B as a
+tail call and B just being a normal function called by both A and C (and
+many other functions).
+
+And note, I do not want to limit function tracing (which does not rely on
+__fexit__) just because we can't figure out how to handle __fexit__.
+
+-- Steve

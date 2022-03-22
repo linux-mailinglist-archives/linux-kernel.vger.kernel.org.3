@@ -2,252 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFFC4E3EEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 467224E3EEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbiCVM6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S235072AbiCVM6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiCVM6Q (ORCPT
+        with ESMTP id S234139AbiCVM6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:58:16 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9C85F24E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:56:46 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id g20so21548280edw.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:56:45 -0700 (PDT)
+        Tue, 22 Mar 2022 08:58:36 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0898D7E5B1;
+        Tue, 22 Mar 2022 05:57:00 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id b67so13856391qkc.6;
+        Tue, 22 Mar 2022 05:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=RpNDE+NQdE9P4TAEep76tk6uwbTamSrXJxQiX7LzDmA=;
-        b=lX+X9maIKUJOLri8mprQ4Qmj91/gjBbEx8RQ4xszeU7Yez8pDm/yEYLFPEhfR9hoSi
-         fCSX+1wfijU6ET5bZ2wFPrqEZYX/7GdNpJAEzHf5bhtj9cINsyg/J7eNRxeohHzzxN/O
-         f45QGU5PKEyqIUbPr0/7y4h4NEoWfkDt7UHIgLU07InyvbtJtEqhHV0vmYAW1ekycXbS
-         UM+2URli33c3DuLbfgmfp05bsNtFdgYiWevAMFdHyWF3EDY7uvP0Mxz11O5XtkCJGkqn
-         KB8XwGM8+GFAYWiAMc/tCJl/yJ/jJLW+6bTp8o7/aOWwtJ7f+9vcYLbIiNWvh7MM/JH/
-         l8RQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i2S7GUSm4U+AQin/dmmFLgpcSV/IXmCIEf4kHj0vegw=;
+        b=amfkBcqD44VtirdMn+A9VzZR6t0nli76vBiTvadY3X2EAMOAntGpYjPjbqnPh6tIvI
+         PV3bj+UTlnOvlIEmeQ0MnC4FCD2OmtUo8DKz6p9z3xPvscMW9nNwDUUAQuL4baUMVect
+         KAoZrAXEK0fYMDC7WiRS+TSC8EsxcrT/QG1mrSaJ/g9TelOg/HP4pQcxBCfM9beyfrsG
+         Ykvkd1zkhxSxrG3GmkqAXwgll24z5JjLTo3FkgI/d+DKmxKEF3LzgCLHBFdEnzWmmBpk
+         2GQHNS1gpMo4oBtLZMfMm4xGn2lER6ZhXPz2N8l5vMHlfgeycdEcUsrDjettVGu1MnsX
+         +gGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=RpNDE+NQdE9P4TAEep76tk6uwbTamSrXJxQiX7LzDmA=;
-        b=kIE4+79AeTW2xiFknn2GQ2YvMeZ/gJaI5l+UntSlwcYjgcBNHxaPa3dQN6LW+GA8gt
-         PsAhRCXrEmljq0410ARkq271o4Fe3uJ6ch07tjwvdUYtMuo2SNK1LFgZEzPwBifaAvk+
-         6Ezq5iXiGrTRYXZBU4LSc8CQbiw16d6L4Vf/fofWjupVUPQfVuVDggWFvlz25OVja8pV
-         1t3K0aZEUJTMo1FxhR6DtbCxmgskX26HzQpPo6z3xjFSH6W7rAnPg1P1wmKdDlKfVnoz
-         VbLJTf81HD953V8buhQQPmxqLtwURMK2AuxnfeuGh067ieHT5m2sitwe2YOmzvD6eT1a
-         0wWg==
-X-Gm-Message-State: AOAM530oaJLWu4pJVmC6P5o8TtkVWG5KZuFF/TTXKOofBcjcTONT2gzX
-        lUUNs4dLqE3VXrPzC8T5R5KEhz1i9SunJhEtPCY=
-X-Google-Smtp-Source: ABdhPJxDMYmxXWtAPybkm95NxHlSLzAZxS7jp7bunCMyQFGxcOzHKiNga7Yb5Kaxy+uJgi+Yz/DQ56qp4e+cW1CDQFY=
-X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
- n13-20020a5099cd000000b00418d6c22405mr28043520edb.342.1647953804463; Tue, 22
- Mar 2022 05:56:44 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i2S7GUSm4U+AQin/dmmFLgpcSV/IXmCIEf4kHj0vegw=;
+        b=yoDzgk6SfbOlqdmyej7FwlWPI0oryurtbMv2ep7as3I2lC1bkUno+I8QLVb6iBlzZH
+         01GjUar6bnVwUJdihdNQoON3s+5p0LYD3JH5oocef1KYqqRkafoQgAuy/FumaIULVzdx
+         cv0vHzdjPIoZ9d68nrnePfoNmkMMfE0jjQSmFXOkHQ4gup3AYbOMTLSu+yOLr4RTClEj
+         K4nBcmOLxRASfVPUYKfUCrNVVM8XpL7naJ5th3N4Lvu6SQK1lpzR6s/QA1GyFfk34eAG
+         BHiJb9P/QD1eT+XlBqi63cTEeIE1HhVeJP3eVqriFsxr27onzErm5Ksq47ftvpiHXEyM
+         85Lw==
+X-Gm-Message-State: AOAM532Fd3JNmRQPmg/rxrESg77w0EOHk6w68wBS52FWV463/3Q7CmPm
+        w4qMpsh3wj/nb29vJOcZQwHQisGtv/c=
+X-Google-Smtp-Source: ABdhPJyHrDcm46F8h/4fgwjIMArSK8hAMGmWW49trJwvxRqhUMpMbZulByGyLPkLVFOTCMy/qv7i+A==
+X-Received: by 2002:a05:620a:1a0e:b0:67e:8e1f:e2f8 with SMTP id bk14-20020a05620a1a0e00b0067e8e1fe2f8mr5635727qkb.756.1647953819966;
+        Tue, 22 Mar 2022 05:56:59 -0700 (PDT)
+Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
+        by smtp.gmail.com with ESMTPSA id m4-20020ac85b04000000b002e1dcaed228sm13381979qtw.7.2022.03.22.05.56.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 05:56:59 -0700 (PDT)
+Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
+        by vps.qemfd.net (Postfix) with ESMTP id E7A5C2B525;
+        Tue, 22 Mar 2022 08:56:58 -0400 (EDT)
+Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
+        id E4DB86002D6; Tue, 22 Mar 2022 08:56:58 -0400 (EDT)
+Date:   Tue, 22 Mar 2022 08:56:58 -0400
+From:   nick black <dankamongmen@gmail.com>
+To:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+Cc:     "G. Branden Robinson" <g.branden.robinson@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
+Subject: Re: [patch] console_codes.4: ffix
+Message-ID: <YjnHmiYL50SqHCW/@schwarzgerat.orthanc>
+References: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
+ <CAN4uE+p-uKzHNYry2YhCMfEFBQ2jUqpDAGx=+eha01w-L4fAjg@mail.gmail.com>
+ <20220320160217.gws42lklp6ishzub@localhost.localdomain>
+ <fd0b3fea-4b40-ffba-442f-00908a5335a9@gmail.com>
+ <Yjg3jXCAsjQVHJAi@schwarzgerat.orthanc>
+ <809c40c4-068b-8296-57d9-024e6623362d@gmail.com>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 22 Mar 2022 12:56:34 +0000
-Message-ID: <CAHpNFcMJwu1JDMxuYygeMZbP3Y+L+Cv9=YRuBBVtj_Koe9169A@mail.gmail.com>
-Subject: Reference Kernel Security: https://science.n-helix.com/2019/06/kernel.html
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PDS_OTHER_BAD_TLD,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <809c40c4-068b-8296-57d9-024e6623362d@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-https://science.n-helix.com/2019/06/kernel.html
-
-Trace ID : Kernel & Bios HASH Reference
-https://lkml.org/lkml/2022/3/22/446
-
-Jumpless Security HASH
-https://lkml.org/lkml/2022/3/22/440
-
-SPE Decode & Encode
-https://lkml.org/lkml/2022/3/22/415
-
-*****
-
-VM Virtual Call Frame : Security Aspect Leaf HASH Identifiers : Rupert S
-
-Leaf HASH Identifiers in 16Bit/32Bit/64Bit : RS
-
-With this example in mind 16Bit HASH Values & identifiers make sense.
-
-16Bit HASH Reasoning Table: based upon Leaf HASH Identifiers in
-16Bit/32Bit/64Bit
-
-16Bit Leaf HASH, Compatible max RAM) : 4GB Large Page
-
-16 Million HASH groups for identifiers with 128MB RAM per HASH Master group..
-
-256 HASH master Table
-256 HASH Per Group
-
-16:32MB up to 4GB(16Bit Leaf HASH, Compatible max RAM) : RAM per group
-
-16Bit Hash identifier tables load into 16KB of processor cache
-Load, Save & Store can be done in a higher Bit depth; 32Bit for example
-SiMD can operate in Half, Single & Double Float capacity
-
-Micro work loads such as motion & video & 3D Tessellation
-
-*
-
-VM Virtual Call Frame : Security Aspect Leaf HASH Identifiers in
-16Bit/32Bit/64Bit : RS
-
-If the CPU Manager can call Compression & Cypher independently on TASK Call,
-If the Processor Manager can call from Virtualisation functions for
-each secure task group.
-
-Security Aspect : With CPU Cache in the 8MB+ Region Leaf HASH
-Identifiers can be stored:
-
-Compressed if Processor has Compression such as BZip
-Encrypted Compressed if Processor has Compression such as AES
-
-In a Secure &+ Work Isolation Container : WIC or SWIC contained L2
-(Compress Store Small Identifier List)
-
-In a Secure &+ Work Isolation Container : WIC or SWIC contained L3
-(larger identifier lists),
-
-(c)Rupert S
-
-Reference Kernel Security:
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
-
-Leaf HASH Identifier Paths to clear logic:
-
-Performance issues related to handheld would be solved with the use of:
-
-FP16 packed pixel
-FP16 background object maths
-FP/Int8/4 Machine learning adaptive code...
-Compute Shaders
-Compression > DOT Image format
-
-With these resources available, We can potentially do more!
-
-https://science.n-helix.com/2019/06/vulkan-stack.html
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-https://science.n-helix.com/2021/09/temporal-aliasing-image-shaping-polygon.html
-https://science.n-helix.com/2022/03/simd-render.html
-
-*
-https://science.n-helix.com/2019/06/kernel.html
-
-Trace ID : Kernel & Bios HASH Reference
-https://lkml.org/lkml/2022/3/22/446
-
-Jumpless Security HASH
-https://lkml.org/lkml/2022/3/22/440
-
-SPE Decode & Encode
-https://lkml.org/lkml/2022/3/22/415
-*
-
-As you know in my studies i found that 16x AA rarely has a performance
-hit on all verified hardware since RX200 3GB (and the RX560) & even
-the RX5770 1GB.The NVidia 1080 can manage most of this & i optimised
-Elite Dangerous for the 1080 & RX200 market.
-
-
-A lot of the performance issues related to handheld would be solved
-with the use of:
-
-FP16 packed pixel
-FP16 background object maths
-FP/Int8/4 Machine learning adaptive code...
-Compute Shaders
-Compression > DOT Image format
-
-With these resources available, We can potentially do more!
-
-*
-
-"Apex Legends : I get the feeling that the lower final precision on
-the screen output is the result of a 4x Anti Aliasing layer and lower
-Image compression settings,"
-
-*
-
-Elite Dangerous Reference
-Videos:https://www.youtube.com/watch?v=JmMQPS_azJA&list=PL8DNvgnwiUU1cezx_Y9DraHjyqJxnrrN7
-
-ML & Game performance improvement
-
-Rupert S
-
-The Handheld market performance ratings are :
-
-Snapdragon (often used & is good)
-
-High quality option based upon Notebook expectations
-
-AMD Chipset
-NVidia
-
-My studies concluded that both NVidia and AMD have little to worry
-about AA performance upto 16x and it makes almost no performance
-advantage to use less in my performance tuning...
-
-I am frequently in possession of older hardware; Like many users i
-cannot always afford all the best gear,
-
-However there are examples of things that make a bigger hit:
-
-16x tessellation rarely causes a problem (RX200 3GB+)24 & 32 both
-dynamically jiggle FPS around heavy asteroids & space stations in
-frontier elite..
-
-but looks amazing!
-
-Multisampling is manageable at 2x on RX200 on elite dangerous
-
-(a quite intense graphic space MMO)
-4x MultiSampling does involve a 20% frame rate drop, Quality is
-preferred but i went for 2x as it rarely causes issues.
-
-Texture Image compression format optimisation is a priority NO.1 Priority..
-
-You save a lot of space & heavy usage of DOT 1 > 5 compression
-management is advised..
-10Bit sampling is perfectly logical.
-
-https://www.nintendolife.com/news/2021/03/video_check_out_this_side-by-side_comparison_of_apex_legends_running_on_switch_and_ps4_pro
-
-https://www.youtube.com/watch?v=uGrPwt_KHRE
-
-Elite Dangerous 64Bit PvP Arena DeathMatch 4Q 2xMultiSampling.mp4
-(93.26 MB) https://mirrorace.org/m/6qr3y
-
-Elite Dangerous 64 Sub.FM Rastafari PvP 2016-04-23 19-27-22-552.mp4
-(89.27 MB) https://mirrorace.org/m/54waA
-
-EliteDangerous - CQC PvP Arena - Bloody is the bath of kings -
-2016-05-05 14-30-27-909.mp4 (277.04 MB) https://mirrorace.org/m/3IO7p
-
-yes cloudflare apex_eoso.nx7v.icu apex_eu.nx7v.icu apex_wes.nx7v.icu
-apex_eas.nx7v.icu
-
-USA: pop: apex_sv1.nx7v.icu apex_sv2.nx7v.icu apex_sv3.nx7v.icu
-
-*
+Alejandro Colomar (man-pages) left as an exercise for the reader:
+> Patch applied.
+> However, it's weird:  I had to apply the following to your patch before
+> applying it with `git am`:
+> 
+> /^diff --git/s, man4, a/man4,
+> /^diff --git/s, man4, b/man4,
+> /^--- man4/s, man4, a/man4,
+> /^+++ man4/s, man4, b/man4,
+> 
+> I'm curious, how did you generate the patch?
+
+i bounced this out from ~/Mail/sent, and have no idea how i
+originally created it, sorry =\. i'm assuming git email-send?
+
+-- 
+nick black -=- https://www.nick-black.com
+to make an apple pie from scratch,
+you need first invent a universe.

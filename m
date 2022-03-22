@@ -2,99 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4924E44AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A16D4E44AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239343AbiCVRHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S236740AbiCVRIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiCVRHc (ORCPT
+        with ESMTP id S231186AbiCVRIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:07:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A8762C2;
-        Tue, 22 Mar 2022 10:06:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A85F5B81CED;
-        Tue, 22 Mar 2022 17:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66269C340F5;
-        Tue, 22 Mar 2022 17:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647968761;
-        bh=I90Q1yL3ZsVCkc/hXJ77PW/IOeESv0+uLIFtxRhG+QY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YlaG1a4Lcc3Io4HDmK/3kzGApE6DcetS4vE2nVLUCgETwMvmhKIXPBkcnJjgt7mR0
-         IW8J3qN50G/8aFySTRxsQ2uWrrf48HrJIlWJCJLS26Wv8VDJNhhYj6mQfOkC1ji2KG
-         vw01y/iSI5Gpo6zYlZi7wtBiR2g0P0b7jLOawTdG7TGEocJ9pmkRJNR1M4hf6u/i4x
-         vRoOLK38oPwQMjckVOqqnvS+M3cJ2Ns26jh94Dk/MkouZs+jhD/Bg6c3EBy/2G4fQo
-         +Vt26MsjuZuq4ALOMB6W3DaDzfK9c0c9g+IB+GBy8iB7sPZfzidxiNLyOU0JDWenD2
-         tLiYcVOlhnkIQ==
-Received: by mail-pj1-f48.google.com with SMTP id mz9-20020a17090b378900b001c657559290so3560000pjb.2;
-        Tue, 22 Mar 2022 10:06:01 -0700 (PDT)
-X-Gm-Message-State: AOAM532AqKhYHACNRU1DCkeqgAMxQm9EzR6LeCwNKAzTIpmQN+Ob4VdI
-        U7cSMLo6FCJa0f4rkj05ukKLSL6sB0aLjLkPplE=
-X-Google-Smtp-Source: ABdhPJycCT1LkvZga/e0W6zDH8tC9vsexe7bu7jZnKVb+DPob7Sqf3iYqLKdXUYGmNT216Iji86Xg+la6oaCr9tqOGY=
-X-Received: by 2002:a17:90a:3181:b0:1c7:6d18:391a with SMTP id
- j1-20020a17090a318100b001c76d18391amr2895779pjb.30.1647968760887; Tue, 22 Mar
- 2022 10:06:00 -0700 (PDT)
+        Tue, 22 Mar 2022 13:08:04 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361B363BF4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:06:36 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:36584)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nWhxq-00Be9o-HU; Tue, 22 Mar 2022 11:06:34 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:39048 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nWhxp-0006YH-5j; Tue, 22 Mar 2022 11:06:34 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <Yjmn/kVblV3TdoAq@elver.google.com>
+        <87ee2uyr4z.fsf@email.froward.int.ebiederm.org>
+        <CANpmjNN4UjUTB5x6-2T-+b7MY=oAYn37MKvQy-4jYh6JDeJuKg@mail.gmail.com>
+Date:   Tue, 22 Mar 2022 12:06:06 -0500
+In-Reply-To: <CANpmjNN4UjUTB5x6-2T-+b7MY=oAYn37MKvQy-4jYh6JDeJuKg@mail.gmail.com>
+        (Marco Elver's message of "Tue, 22 Mar 2022 17:44:31 +0100")
+Message-ID: <87k0clvrwh.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
- <1647853194-62147-1-git-send-email-dh10.jung@samsung.com> <YjhB7+AaEXvuUmdi@kroah.com>
- <20220321092409.GA62265@ubuntu> <YjhGKVKuPsKG80wZ@kroah.com>
- <20220321100631.GB62265@ubuntu> <YjhQg4I7eYWXIfgr@kroah.com>
-In-Reply-To: <YjhQg4I7eYWXIfgr@kroah.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 22 Mar 2022 18:05:49 +0100
-X-Gmail-Original-Message-ID: <CAJKOXPdmSUqs+d3CuJ9px=vWPPdgP0scAZvKJkKDrs5O+sw6yA@mail.gmail.com>
-Message-ID: <CAJKOXPdmSUqs+d3CuJ9px=vWPPdgP0scAZvKJkKDrs5O+sw6yA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] support USB offload feature
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jung Daehwan <dh10.jung@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nWhxp-0006YH-5j;;;mid=<87k0clvrwh.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18zZgVo2V4Ymywh3u9tzrBhXMZipJ3gZDQ=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Marco Elver <elver@google.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 778 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 11 (1.4%), b_tie_ro: 10 (1.2%), parse: 1.03
+        (0.1%), extract_message_metadata: 13 (1.7%), get_uri_detail_list: 2.6
+        (0.3%), tests_pri_-1000: 13 (1.7%), tests_pri_-950: 1.17 (0.2%),
+        tests_pri_-900: 0.98 (0.1%), tests_pri_-90: 226 (29.1%), check_bayes:
+        225 (28.9%), b_tokenize: 9 (1.1%), b_tok_get_all: 10 (1.3%),
+        b_comp_prob: 3.1 (0.4%), b_tok_touch_all: 199 (25.6%), b_finish: 0.85
+        (0.1%), tests_pri_0: 497 (63.8%), check_dkim_signature: 0.55 (0.1%),
+        check_dkim_adsp: 2.6 (0.3%), poll_dns_idle: 0.83 (0.1%), tests_pri_10:
+        2.1 (0.3%), tests_pri_500: 9 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: RFC: Use of user space handler vs. SIG_DFL on forced signals
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 11:16, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> >
-> > [v3, 0/4] add xhci-exynos driver
-> >
-> > This patchset is for support xhci-exynos driver....
-> > ....
-> >
-> >   usb: host: export symbols for xhci-exynos to use xhci hooks
-> >   usb: host: add xhci hooks for xhci-exynos
-> >   usb: host: add some to xhci overrides for xhci-exynos
-> >   usb: host: add xhci-exynos driver
+Marco Elver <elver@google.com> writes:
+
+> On Tue, 22 Mar 2022 at 15:54, Eric W. Biederman <ebiederm@xmission.com> wrote:
+>> Marco Elver <elver@google.com> writes:
+>>
+>> > Hello,
+>> >
+>> > Currently force_sig_info_to_task() will always unblock a blocked signal
+>> > but deliver the signal to SIG_DFL:
+>> >
+>> >       [...]
+>> >        * Note: If we unblock the signal, we always reset it to SIG_DFL,
+>> >        * since we do not want to have a signal handler that was blocked
+>> >        * be invoked when user space had explicitly blocked it.
+>> >       [...]
+>> >
+>> > Is this requirement part of the POSIX spec? Or is the intent simply to
+>> > attempt to do the least-bad thing?
+>>
+>> I have not found any POSIX language about this.
+>>
+>> The options are either we terminate the application, or the application
+>> spins forever re-triggering the trap.
 >
-> Yes, that makes much more sense.  What would you want to see if you had
-> to review such a series?
+> Is this in case of things like SEGV? I think this doesn't quite apply
+> to us. The cause of the signal (perf event) is rather benign, and the
+> signal handler can deal with recursion.
 
-Unfortunately it might not make more sense, because last time
-xhci-exynos driver was a fake driver, not for submission. It did not
-compile, it did not work in mainline.
+Yes. Signals like SIGSEGV are what force_sig_info_to_task is used for.
 
-That driver was not even sent to proper mailing lists, as pointed out
-by get_maintainers.pl, maybe because it was not developed on the
-mainline kernel, so there is no MAINTAINERS file?
+Signals where a userspace instruction causes a fault and the signal
+is delivered immediately (synchronously) with that fault.
 
 
-Best regards,
-Krzysztof
+> [...]
+>> > For SIGTRAP on perf events we found this makes the situation worse,
+>> > since the cause of the signal wasn't an error condition, but explicitly
+>> > requested monitoring. In this case, we do in fact want delivery of the
+>> > signal to user space even if the signal is blocked, i.e.
+>> > force_sig_perf() should be an unblockable forced synchronous signal to
+>> > user space!
+>>
+>> Which is exactly what we have.  If you block it you get terminated.
+>
+> Right, however, in this case we want to monitor/trace memory accesses
+> etc, and some 3rd party code such as a library being traced isn't
+> under our control.
+>
+> What we can do instead is to intercept sigprocmask() and work around
+> the issue, but libc interception is brittle. :-/
+> We do just want to receive the signal, all the time.
+>
+> [...]
+>> I think HANDLER_UNBLOCK is pretty much nonsense.
+>>
+>> A block signal very much means that userspace is not prepared to handle
+>> the signal.  So calling something that is not ready to be called can't
+>> work.  That is common sense, and I expect in POSIX as well.
+>
+> The fundamental question is, if we have a valid signal handler, but
+> sigprocmask() is called, how do we still keep receiving signals for
+> SIGTRAP despite sigprocmask()?
+>
+> Perhaps this is impossible without intercepting sigprocmask() in user
+> space, in which we'll need to find a different solution.
+
+Or adding some kind of feature to the kernel where you can report that
+some signal is unblockable.
+
+>> I expect that either you are looking for something like what ptrace does
+>> with signal interruptions where another process is notified, and
+>> userspace does not need to be involved, or that this is a don't do that
+>> then.
+>>
+>> Or possibly you have some weird asynchronous signal thing happening and
+>> you are calling it synchronous.
+>
+> Not quite. We need it to be synchronous, because we need to know the
+> precise instruction and potentially do some other stuff _before_
+> subsequent instructions.
+>
+> A compromise might be to deliver synchronously normally, but when
+> blocked deliver asynchronously. But if the signal was delivered
+> asynchronously, we need to let the signal handler know delivery was
+> asynchronous, so that our tracing logic can recover and give up at
+> that point.
+>
+> To do this indication if it was asynchronous, we probably need to
+> extend siginfo_t once more. Would that be reasonable?
+
+So the idea is to use normal signal delivery but to set a flag
+to indicate that the signal was blocked at the time it was sent?
+
+It should be possible to add another field that takes a non-zero
+value.  On older kernels it should always have a value of zero so it
+should be safe.
+
+It might also be possible to simply ignore the signal if it is blocked.
+
+In either case it will probably take a little bit of care to get the
+races out.
+
+Eric

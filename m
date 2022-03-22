@@ -2,114 +2,587 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4574E35F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8258A4E35FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiCVB1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 21:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S234676AbiCVBd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 21:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234503AbiCVB1s (ORCPT
+        with ESMTP id S234668AbiCVBdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 21:27:48 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A66A3633C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:26:21 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e5a3c1384cso133885627b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:26:21 -0700 (PDT)
+        Mon, 21 Mar 2022 21:33:25 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092C72CD831
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:31:57 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id z7so18778193iom.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:31:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Zcfus1hr4rL4+XSk7ZeSMnR2CKTg6P0EKLP3F7c9nb8=;
-        b=i8x6bw63C8CnBwNWToBn1ejwhs1I5sT+Qt9rGn8CdzD2q5bI6ajCe3oOQ78/3FZGIs
-         qmXDGKtcf8+1xdLslk9ffOSueyPzSySWMSsk5Yq8Ly0Wd5PeXu0lxN1YBt84AS2iny0Q
-         A0fzfbjqIHB/yamvOOvVSOO6Nx+KjZdAEe39VS4o1cjeZId+2Y0ZnFkqrcKqcS99Xlrs
-         Y79QpCoATrBt4sBO6s619f0NsNV3loVUEwp9wTNb0aPu41sSSH+jhAKIOjE1W9ELy2l3
-         Adh+H7EmKMo9H0/LyE/2qeSEKHxHjskBU9fCJeJ1yYdC3WyJDhOm4FnonjpV0MsT/W3m
-         vaXw==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=fiG1TYuywPb8D46YfLOmwuD0wtAiZkZLSs/JIg5IzAA=;
+        b=CKEpwCuxCdabbwgtAzP7CO3uwmUACOV6rDOZYFHRcNIRYcUAdLNkgLSAsjQd5Bx2uv
+         oa1lAxDRYvC28bOZ6k4siK3CYrv+snF1dEhU9J2wf9xpNXQ4qRppk2w6qkijKjMZtE6t
+         i3D/uUY4ygm9RRRAhZYEalM+K68JKVlTQyRCQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Zcfus1hr4rL4+XSk7ZeSMnR2CKTg6P0EKLP3F7c9nb8=;
-        b=c0Nx79ogrPTaq/y3amO9ffUVThATznGqe2Y6m0LzKamrUesV5yznNpInQXTp1GK2lO
-         ATNn1T2kq1r8rpcccjx4y0bP+tZFqnLP9w5wwtyz9pNUKA7DjtG56cQsdEII5P/IdTQj
-         i9cDb9X/GFTddqwQcOV4GlKnkhSktWHOUJUP+c6wjpq0oaecjhyMDG7Ue6zAHULkUT2O
-         lvHHd8jqmum7n3nYXhYLgYlEe/q69seCfQceSIpDXWJ5vgDL3JLiZzVuDeMEPSjP066n
-         SSIg5HMJIdkXnv6BqKnPTafDcVoLGKkYwjIVoyT1GZdHVkySFPjA6l3zNKKMJD3/eqVe
-         Fb0Q==
-X-Gm-Message-State: AOAM530Nt/qFTBWHQYlpWC0dKPEhOGYn6t2qlY4fSWNGzA1q5foVoTo2
-        GkwTNX4BUEBoJDIMilkiF/P5rOpD0t8c
-X-Google-Smtp-Source: ABdhPJxWQf3SqgA1tT/yCHPjgY7eRo1TW3y0rLfi2WTbwvt3o1LIklSxiCpYdgBDhAGwzIqiHVsde/KU8+bJ
-X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:b489:622a:ba50:950a])
- (user=maskray job=sendgmr) by 2002:a25:dd87:0:b0:628:e822:bd with SMTP id
- u129-20020a25dd87000000b00628e82200bdmr24014508ybg.505.1647912380832; Mon, 21
- Mar 2022 18:26:20 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 18:26:17 -0700
-In-Reply-To: <mhng-7fe2c5d9-a8e6-4123-ac5c-0c9190792520@palmer-ri-x1c9>
-Message-Id: <20220322012617.3517297-1-maskray@google.com>
-Mime-Version: 1.0
-References: <mhng-7fe2c5d9-a8e6-4123-ac5c-0c9190792520@palmer-ri-x1c9>
-Subject: [PATCH v2] riscv module: remove (NOLOAD)
-From:   Fangrui Song <maskray@google.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=fiG1TYuywPb8D46YfLOmwuD0wtAiZkZLSs/JIg5IzAA=;
+        b=LxZeuBm20yHMqgc2qzqRyLLKQx27VDWcGsduF9+n912KgW1pYmeAj6ZKQB7dG9Ph6f
+         YVHETXnhEidM0Xf1+x7NDrRVd6t9yJfNc6oGzQ5i2xfAD8HpIbM4DmcEKGP8bBq6w/pP
+         gHxwjOfGekUcWf9+XQjwAdJ1iGKrLAagpb8Y0LdsWs+lvr2d3U/6DEGkY6n1Te70/vgW
+         xtamSm3A21JgFkUYZHe80P/9cl8ucDFPrMEWey1Gcc0kF8aBihdXp7Z5J0s98r2mI47p
+         a0m/+famWCM5LY4Dpybj/HdxWPf72BSgaw07OpZLyTymseUHD3B6SGyWUe+dgKCZQ4yR
+         fyCA==
+X-Gm-Message-State: AOAM5333ajJszvMiihn0DnN8Ekbcmz9cZCxc/38Bae9Tk4k5YBpYVGwc
+        1GThYZz/twMgzYKwLA5lAzp2FeXPTyP3AQ==
+X-Google-Smtp-Source: ABdhPJzZFKuYxJA1ownkO3WYE/6v7QC4GO9EX2rshs//0RrZVxZhOmmlrkbQTqfXRmSYYDG/+uaQUA==
+X-Received: by 2002:a05:6638:300b:b0:317:a127:53ac with SMTP id r11-20020a056638300b00b00317a12753acmr11395854jak.77.1647912716124;
+        Mon, 21 Mar 2022 18:31:56 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id g4-20020a92cda4000000b002c24724f23csm10763040ild.13.2022.03.21.18.31.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 18:31:55 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest update for Linux 5.18-rc1
+Message-ID: <fac10dac-f8e3-97b9-8d11-0ca2136991ed@linuxfoundation.org>
+Date:   Mon, 21 Mar 2022 19:31:54 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------5B3800F5CA87D485C71C9073"
+Content-Language: en-US
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
-inappropriate for .plt, .got, and .got.plt sections which are always
-SHT_PROGBITS.
+This is a multi-part message in MIME format.
+--------------5B3800F5CA87D485C71C9073
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
-and (NOLOAD) will be essentially ignored. In ld.lld, since
-https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
-customize the output section type"), ld.lld will report a `section type
-mismatch` error (later changed to a warning). Just remove (NOLOAD) to
-fix the warning.
+Hi Linus,
 
-[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
-section should be marked as not loadable" on
-https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
-outdated for ELF.
+Please pull the following Kselftest update for Linux 5.18-rc1
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1597
-Fixes: ab1ef68e5401 ("RISC-V: Add sections of PLT and GOT for kernel module")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Fangrui Song <maskray@google.com>
----
- arch/riscv/include/asm/module.lds.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This Kselftest update for Linux 5.18-rc1 consists of several build and
+cleanup fixes.
 
-diff --git a/arch/riscv/include/asm/module.lds.h b/arch/riscv/include/asm/module.lds.h
-index 4254ff2ff049..1075beae1ac6 100644
---- a/arch/riscv/include/asm/module.lds.h
-+++ b/arch/riscv/include/asm/module.lds.h
-@@ -2,8 +2,8 @@
- /* Copyright (C) 2017 Andes Technology Corporation */
- #ifdef CONFIG_MODULE_SECTIONS
- SECTIONS {
--	.plt (NOLOAD) : { BYTE(0) }
--	.got (NOLOAD) : { BYTE(0) }
--	.got.plt (NOLOAD) : { BYTE(0) }
-+	.plt : { BYTE(0) }
-+	.got : { BYTE(0) }
-+	.got.plt : { BYTE(0) }
+- removing obsolete config options
+- removing dependency on internal kernel macros
+- adding config options
+- several build fixes related to headers and install paths
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507:
+
+   Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.18-rc1
+
+for you to fetch changes up to f6d344cd5fa6a15e1ec2da350470b35a3f55f74c:
+
+   selftests: Fix build when $(O) points to a relative path (2022-03-03 15:18:13 -0700)
+
+----------------------------------------------------------------
+linux-kselftest-next-5.18-rc1
+
+This Kselftest update for Linux 5.18-rc1 consists of several build and
+cleanup fixes.
+
+- removing obsolete config options
+- removing dependency on internal kernel macros
+- adding config options
+- several build fixes related to headers and install paths
+
+----------------------------------------------------------------
+Cristian Marussi (1):
+       selftests/kselftest/runner.sh: Pass optional command parameters in environment
+
+Geliang Tang (1):
+       selftests: netfilter: fix a build error on openSUSE
+
+Mateusz Jończyk (1):
+       selftests/rtc: continuously read RTC in a loop for 30s
+
+Muhammad Usama Anjum (19):
+       selftests: futex: set DEFAULT_INSTALL_HDR_PATH
+       selftests: set the BUILD variable to absolute path
+       selftests: Add and export a kernel uapi headers path
+       selftests: Correct the headers install path
+       selftests: futex: Add the uapi headers include variable
+       selftests: kvm: Add the uapi headers include variable
+       selftests: landlock: Add the uapi headers include variable
+       selftests: net: Add the uapi headers include variable
+       selftests: mptcp: Add the uapi headers include variable
+       selftests: vm: Add the uapi headers include variable
+       selftests: vm: remove dependecy from internal kernel macros
+       selftests: Use -isystem instead of -I to include headers
+       selftests/exec: Rename file binfmt_script to binfmt_script.py
+       selftests/lkdtm: Remove dead config option
+       selftests/lkdtm: Add UBSAN config
+       selftests: add kselftest_install to .gitignore
+       selftests/exec: add generated files to .gitignore
+       selftests: kvm: add generated file to the .gitignore
+       selftests: Fix build when $(O) points to a relative path
+
+  tools/testing/selftests/.gitignore                 |  1 +
+  tools/testing/selftests/Makefile                   | 37 ++++++++----
+  tools/testing/selftests/exec/.gitignore            |  2 +
+.../exec/{binfmt_script => binfmt_script.py}       |  0
+  tools/testing/selftests/futex/functional/Makefile  |  6 +-
+  tools/testing/selftests/kselftest/runner.sh        | 30 +++++++++-
+  tools/testing/selftests/kvm/.gitignore             |  1 +
+  tools/testing/selftests/kvm/Makefile               |  2 +-
+  tools/testing/selftests/landlock/Makefile          |  2 +-
+  tools/testing/selftests/lkdtm/config               |  2 +-
+  tools/testing/selftests/net/Makefile               |  2 +-
+  tools/testing/selftests/net/mptcp/Makefile         |  2 +-
+  tools/testing/selftests/netfilter/Makefile         |  1 +
+  tools/testing/selftests/rtc/rtctest.c              | 66 ++++++++++++++++++++++
+  tools/testing/selftests/rtc/settings               |  2 +-
+  tools/testing/selftests/vm/Makefile                |  2 +-
+  tools/testing/selftests/vm/userfaultfd.c           |  3 +
+  18 files changed, 140 insertions(+), 23 deletions(-)
+  rename tools/testing/selftests/exec/{binfmt_script => binfmt_script.py}
+----------------------------------------------------------------
+
+--------------5B3800F5CA87D485C71C9073
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-next-5.18-rc1.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-next-5.18-rc1.diff"
+
+diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+index 055a5019b13c..cb24124ac5b9 100644
+--- a/tools/testing/selftests/.gitignore
++++ b/tools/testing/selftests/.gitignore
+@@ -3,6 +3,7 @@ gpiogpio-event-mon
+ gpiogpio-hammer
+ gpioinclude/
+ gpiolsgpio
++kselftest_install/
+ tpm2/SpaceTest.log
+ 
+ # Python bytecode and cache
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index d08fe4cfe811..2319ec87f53d 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -114,23 +114,35 @@ ifdef building_out_of_srctree
+ override LDFLAGS =
+ endif
+ 
+-ifneq ($(O),)
+-	BUILD := $(O)/kselftest
++top_srcdir ?= ../../..
++
++ifeq ("$(origin O)", "command line")
++  KBUILD_OUTPUT := $(O)
++endif
++
++ifneq ($(KBUILD_OUTPUT),)
++  # Make's built-in functions such as $(abspath ...), $(realpath ...) cannot
++  # expand a shell special character '~'. We use a somewhat tedious way here.
++  abs_objtree := $(shell cd $(top_srcdir) && mkdir -p $(KBUILD_OUTPUT) && cd $(KBUILD_OUTPUT) && pwd)
++  $(if $(abs_objtree),, \
++    $(error failed to create output directory "$(KBUILD_OUTPUT)"))
++  # $(realpath ...) resolves symlinks
++  abs_objtree := $(realpath $(abs_objtree))
++  BUILD := $(abs_objtree)/kselftest
++  KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
+ else
+-	ifneq ($(KBUILD_OUTPUT),)
+-		BUILD := $(KBUILD_OUTPUT)/kselftest
+-	else
+-		BUILD := $(shell pwd)
+-		DEFAULT_INSTALL_HDR_PATH := 1
+-	endif
++  BUILD := $(CURDIR)
++  abs_srctree := $(shell cd $(top_srcdir) && pwd)
++  KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
++  DEFAULT_INSTALL_HDR_PATH := 1
+ endif
+ 
+ # Prepare for headers install
+-top_srcdir ?= ../../..
+ include $(top_srcdir)/scripts/subarch.include
+ ARCH           ?= $(SUBARCH)
+ export KSFT_KHDR_INSTALL_DONE := 1
+ export BUILD
++export KHDR_INCLUDES
+ 
+ # set default goal to all, so make without a target runs all, even when
+ # all isn't the first target in the file.
+@@ -155,7 +167,7 @@ khdr:
+ ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+ 	$(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+ else
+-	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
++	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$(abs_objtree)/usr \
+ 		ARCH=$(ARCH) -C $(top_srcdir) headers_install
+ endif
+ 
+@@ -165,6 +177,7 @@ all: khdr
+ 		BUILD_TARGET=$$BUILD/$$TARGET;			\
+ 		mkdir $$BUILD_TARGET  -p;			\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
++				O=$(abs_objtree)		\
+ 				$(if $(FORCE_TARGETS),|| exit);	\
+ 		ret=$$((ret * $$?));				\
+ 	done; exit $$ret;
+@@ -172,7 +185,8 @@ all: khdr
+ run_tests: all
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests \
++				O=$(abs_objtree);		    \
+ 	done;
+ 
+ hotplug:
+@@ -223,6 +237,7 @@ ifdef INSTALL_PATH
+ 	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install \
++				O=$(abs_objtree)		\
+ 				$(if $(FORCE_TARGETS),|| exit);	\
+ 		ret=$$((ret * $$?));		\
+ 	done; exit $$ret;
+diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
+index 9e2f00343f15..90c238ba6a4b 100644
+--- a/tools/testing/selftests/exec/.gitignore
++++ b/tools/testing/selftests/exec/.gitignore
+@@ -7,6 +7,8 @@ execveat.moved
+ execveat.path.ephemeral
+ execveat.ephemeral
+ execveat.denatured
++non-regular
++null-argv
+ /load_address_*
+ /recursion-depth
+ xxxxxxxx*
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index 2d7fca446c7f..7f0412a26ba9 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -3,7 +3,7 @@ CFLAGS = -Wall
+ CFLAGS += -Wno-nonnull
+ CFLAGS += -D_GNU_SOURCE
+ 
+-TEST_PROGS := binfmt_script
++TEST_PROGS := binfmt_script.py
+ TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
+ TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+ # Makefile is a run-time dependency, since it's accessed by the execveat test
+diff --git a/tools/testing/selftests/exec/binfmt_script b/tools/testing/selftests/exec/binfmt_script.py
+similarity index 100%
+rename from tools/testing/selftests/exec/binfmt_script
+rename to tools/testing/selftests/exec/binfmt_script.py
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index 5cc38de9d8ea..b8152c573e8a 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-INCLUDES := -I../include -I../../ -I../../../../../usr/include/ \
+-	-I$(KBUILD_OUTPUT)/kselftest/usr/include
+-CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES)
++INCLUDES := -I../include -I../../ -I../../../../../usr/include/
++CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
+ LDLIBS := -lpthread -lrt
+ 
+ HEADERS := \
+@@ -24,6 +23,7 @@ TEST_PROGS := run.sh
+ 
+ top_srcdir = ../../../../..
+ KSFT_KHDR_INSTALL := 1
++DEFAULT_INSTALL_HDR_PATH := 1
+ include ../../lib.mk
+ 
+ $(TEST_GEN_FILES): $(HEADERS)
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index a9ba782d8ca0..294619ade49f 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -18,6 +18,8 @@ if [ -z "$BASE_DIR" ]; then
+ 	exit 1
+ fi
+ 
++TR_CMD=$(command -v tr)
++
+ # If Perl is unavailable, we must fall back to line-at-a-time prefixing
+ # with sed instead of unbuffered output.
+ tap_prefix()
+@@ -49,6 +51,31 @@ run_one()
+ 
+ 	# Reset any "settings"-file variables.
+ 	export kselftest_timeout="$kselftest_default_timeout"
++
++	# Safe default if tr not available
++	kselftest_cmd_args_ref="KSELFTEST_ARGS"
++
++	# Optional arguments for this command, possibly defined as an
++	# environment variable built using the test executable in all
++	# uppercase and sanitized substituting non acceptable shell
++	# variable name characters with "_" as in:
++	#
++	# 	KSELFTEST_<UPPERCASE_SANITIZED_TESTNAME>_ARGS="<options>"
++	#
++	# e.g.
++	#
++	# 	rtctest --> KSELFTEST_RTCTEST_ARGS="/dev/rtc1"
++	#
++	# 	cpu-on-off-test.sh --> KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10"
++	#
++	if [ -n "$TR_CMD" ]; then
++		BASENAME_SANITIZED=$(echo "$BASENAME_TEST" | \
++					$TR_CMD -d "[:blank:][:cntrl:]" | \
++					$TR_CMD -c "[:alnum:]_" "_" | \
++					$TR_CMD [:lower:] [:upper:])
++		kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
++	fi
++
+ 	# Load per-test-directory kselftest "settings" file.
+ 	settings="$BASE_DIR/$DIR/settings"
+ 	if [ -r "$settings" ] ; then
+@@ -69,7 +96,8 @@ run_one()
+ 		echo "# Warning: file $TEST is missing!"
+ 		echo "not ok $test_num $TEST_HDR_MSG"
+ 	else
+-		cmd="./$BASENAME_TEST"
++		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
++		cmd="./$BASENAME_TEST $kselftest_cmd_args"
+ 		if [ ! -x "$TEST" ]; then
+ 			echo "# Warning: file $TEST is not executable"
+ 
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index dce7de7755e6..62f9b781545b 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -20,6 +20,7 @@
+ /x86_64/hyperv_clock
+ /x86_64/hyperv_cpuid
+ /x86_64/hyperv_features
++/x86_64/hyperv_svm_test
+ /x86_64/mmio_warning_test
+ /x86_64/mmu_role_test
+ /x86_64/platform_info_test
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 17c3f0749f05..b970397f725c 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -149,7 +149,7 @@ endif
+ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+ 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
+ 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+-	-I$(<D) -Iinclude/$(UNAME_M) -I.. $(EXTRA_CFLAGS)
++	-I$(<D) -Iinclude/$(UNAME_M) -I.. $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+ 
+ no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
+         $(CC) -Werror -no-pie -x c - -o "$$TMP", -no-pie)
+diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+index a99596ca9882..0b0049e133bb 100644
+--- a/tools/testing/selftests/landlock/Makefile
++++ b/tools/testing/selftests/landlock/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-CFLAGS += -Wall -O2
++CFLAGS += -Wall -O2 $(KHDR_INCLUDES)
+ 
+ src_test := $(wildcard *_test.c)
+ 
+diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
+index a26a3fa9e925..46f39ee76208 100644
+--- a/tools/testing/selftests/lkdtm/config
++++ b/tools/testing/selftests/lkdtm/config
+@@ -3,9 +3,9 @@ CONFIG_DEBUG_LIST=y
+ CONFIG_SLAB_FREELIST_HARDENED=y
+ CONFIG_FORTIFY_SOURCE=y
+ CONFIG_HARDENED_USERCOPY=y
+-# CONFIG_HARDENED_USERCOPY_FALLBACK is not set
+ CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
+ CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
++CONFIG_UBSAN=y
+ CONFIG_UBSAN_BOUNDS=y
+ CONFIG_UBSAN_TRAP=y
+ CONFIG_STACKPROTECTOR_STRONG=y
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 9897fa9ab953..0b1488616c55 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -2,7 +2,7 @@
+ # Makefile for net selftests
+ 
+ CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
+-CFLAGS += -I../../../../usr/include/
++CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
+ 
+ TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
+ 	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
+diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
+index 0356c4501c99..f905d5358e68 100644
+--- a/tools/testing/selftests/net/mptcp/Makefile
++++ b/tools/testing/selftests/net/mptcp/Makefile
+@@ -3,7 +3,7 @@
+ top_srcdir = ../../../../..
+ KSFT_KHDR_INSTALL := 1
+ 
+-CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g  -I$(top_srcdir)/usr/include
++CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
+ 
+ TEST_PROGS := mptcp_connect.sh pm_netlink.sh mptcp_join.sh diag.sh \
+ 	      simult_flows.sh mptcp_sockopt.sh
+diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
+index e4f845dd942b..8136c1fab7ab 100644
+--- a/tools/testing/selftests/netfilter/Makefile
++++ b/tools/testing/selftests/netfilter/Makefile
+@@ -8,6 +8,7 @@ TEST_PROGS := nft_trans_stress.sh nft_fib.sh nft_nat.sh bridge_brouter.sh \
+ 	ipip-conntrack-mtu.sh conntrack_tcp_unreplied.sh \
+ 	conntrack_vrf.sh nft_synproxy.sh
+ 
++CFLAGS += $(shell pkg-config --cflags libmnl 2>/dev/null || echo "-I/usr/include/libmnl")
+ LDLIBS = -lmnl
+ TEST_GEN_FILES =  nf-queue
+ 
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 66af608fb4c6..2b9d929a24ed 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -20,6 +20,8 @@
+ 
+ #define NUM_UIE 3
+ #define ALARM_DELTA 3
++#define READ_LOOP_DURATION_SEC 30
++#define READ_LOOP_SLEEP_MS 11
+ 
+ static char *rtc_file = "/dev/rtc0";
+ 
+@@ -49,6 +51,70 @@ TEST_F(rtc, date_read) {
+ 	       rtc_tm.tm_hour, rtc_tm.tm_min, rtc_tm.tm_sec);
  }
- #endif
--- 
-2.35.1.894.gb6a874cedc-goog
+ 
++static time_t rtc_time_to_timestamp(struct rtc_time *rtc_time)
++{
++	struct tm tm_time = {
++	       .tm_sec = rtc_time->tm_sec,
++	       .tm_min = rtc_time->tm_min,
++	       .tm_hour = rtc_time->tm_hour,
++	       .tm_mday = rtc_time->tm_mday,
++	       .tm_mon = rtc_time->tm_mon,
++	       .tm_year = rtc_time->tm_year,
++	};
++
++	return mktime(&tm_time);
++}
++
++static void nanosleep_with_retries(long ns)
++{
++	struct timespec req = {
++		.tv_sec = 0,
++		.tv_nsec = ns,
++	};
++	struct timespec rem;
++
++	while (nanosleep(&req, &rem) != 0) {
++		req.tv_sec = rem.tv_sec;
++		req.tv_nsec = rem.tv_nsec;
++	}
++}
++
++TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
++	int rc;
++	long iter_count = 0;
++	struct rtc_time rtc_tm;
++	time_t start_rtc_read, prev_rtc_read;
++
++	TH_LOG("Continuously reading RTC time for %ds (with %dms breaks after every read).",
++	       READ_LOOP_DURATION_SEC, READ_LOOP_SLEEP_MS);
++
++	rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
++	ASSERT_NE(-1, rc);
++	start_rtc_read = rtc_time_to_timestamp(&rtc_tm);
++	prev_rtc_read = start_rtc_read;
++
++	do  {
++		time_t rtc_read;
++
++		rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
++		ASSERT_NE(-1, rc);
++
++		rtc_read = rtc_time_to_timestamp(&rtc_tm);
++		/* Time should not go backwards */
++		ASSERT_LE(prev_rtc_read, rtc_read);
++		/* Time should not increase more then 1s at a time */
++		ASSERT_GE(prev_rtc_read + 1, rtc_read);
++
++		/* Sleep 11ms to avoid killing / overheating the RTC */
++		nanosleep_with_retries(READ_LOOP_SLEEP_MS * 1000000);
++
++		prev_rtc_read = rtc_read;
++		iter_count++;
++	} while (prev_rtc_read <= start_rtc_read + READ_LOOP_DURATION_SEC);
++
++	TH_LOG("Performed %ld RTC time reads.", iter_count);
++}
++
+ TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
+ 	int i, rc, irq = 0;
+ 	unsigned long data;
+diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
+index a953c96aa16e..0c1a2075d5f3 100644
+--- a/tools/testing/selftests/rtc/settings
++++ b/tools/testing/selftests/rtc/settings
+@@ -1 +1 @@
+-timeout=180
++timeout=210
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 1607322a112c..033e9e11e2da 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -23,7 +23,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
+ # LDLIBS.
+ MAKEFLAGS += --no-builtin-rules
+ 
+-CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
++CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+ LDLIBS = -lrt -lpthread
+ TEST_GEN_FILES = compaction_test
+ TEST_GEN_FILES += gup_test
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 2f49c9af1b58..50476ec6c070 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -119,6 +119,9 @@ struct uffd_stats {
+ 				 ~(unsigned long)(sizeof(unsigned long long) \
+ 						  -  1)))
+ 
++#define swap(a, b) \
++	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
++
+ const char *examples =
+     "# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
+     "./userfaultfd anon 100 99999\n\n"
 
+--------------5B3800F5CA87D485C71C9073--

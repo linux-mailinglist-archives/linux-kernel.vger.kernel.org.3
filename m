@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669D24E3BED
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91B04E3BF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiCVJvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 05:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        id S232130AbiCVJzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 05:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiCVJvj (ORCPT
+        with ESMTP id S232053AbiCVJzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 05:51:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBE71FA41;
-        Tue, 22 Mar 2022 02:50:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77CF061693;
-        Tue, 22 Mar 2022 09:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CE20EC340EE;
-        Tue, 22 Mar 2022 09:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647942610;
-        bh=p/usoSYbsmz0Jijh/9aah7ymyeDbRBze0vsgWTZqz5c=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KosnwjP7goxB++402G2clmmDEql3S8ufYYUHatgjTJ3jIzTmCtT050fOfc+oSjaLm
-         HESIH1k4mTysE5Aifj8OCxt7LnAcwalr80qLWcnnHb09uyfhx6bcVPHjKAFT05B/9T
-         1NZSMPfvbdMnPXc5zvKIFZ2nYnPXr9/bseFw+Fv9HezwdJFDwk2rJvD5WWC1FoBbo7
-         bsqbp9hda//foU1qHE/8evzxFo4OP8w77+EnJHlnEzDol/n4Ub2bsl7TyBGkGJVyA2
-         Ia07RQYeJNEppRvjOTJUuUubsgnVpKYWTtQ5sWEOCqdVvqD7XoxA7kOwftfBL+hTsH
-         HgoZlVD6h4fww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B1CD1E6D402;
-        Tue, 22 Mar 2022 09:50:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 22 Mar 2022 05:55:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94267387;
+        Tue, 22 Mar 2022 02:53:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 531B3106F;
+        Tue, 22 Mar 2022 02:53:35 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B62283F66F;
+        Tue, 22 Mar 2022 02:53:33 -0700 (PDT)
+Message-ID: <3e715fb9-7a0d-046a-c32c-bc6afbecf55e@arm.com>
+Date:   Tue, 22 Mar 2022 09:53:29 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bnx2x: truncate value to original sizing
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164794261072.31108.16084505304692876635.git-patchwork-notify@kernel.org>
-Date:   Tue, 22 Mar 2022 09:50:10 +0000
-References: <20220321023155.106066-1-morbo@google.com>
-In-Reply-To: <20220321023155.106066-1-morbo@google.com>
-To:     Bill Wendling <morbo@google.com>
-Cc:     aelior@marvell.com, skalluru@marvell.com, manishc@marvell.com,
-        davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] iommu: Add capability for pre-boot DMA protection
+Content-Language: en-GB
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     michael.jamet@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, YehezkelShB@gmail.com,
+        iommu@lists.linux-foundation.org, mario.limonciello@amd.com,
+        andreas.noever@gmail.com, mika.westerberg@linux.intel.com
+References: <cover.1647624084.git.robin.murphy@arm.com>
+ <797c70d255f946c4d631f2ffc67f277cfe0cb97c.1647624084.git.robin.murphy@arm.com>
+ <20220322091432.GA27069@lst.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220322091432.GA27069@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sun, 20 Mar 2022 19:31:55 -0700 you wrote:
-> The original behavior was to print out unsigned short or unsigned char
-> values. The change in commit d65aea8e8298 ("bnx2x: use correct format
-> characters") prints out the whole value if not truncated. So truncate
-> the value to an unsigned {short|char} to retain the original behavior.
+On 2022-03-22 09:14, Christoph Hellwig wrote:
+> On Fri, Mar 18, 2022 at 05:42:57PM +0000, Robin Murphy wrote:
+>> VT-d's dmar_platform_optin() actually represents a combination of
+>> properties fairly well standardised by Microsoft as "Pre-boot DMA
+>> Protection" and "Kernel DMA Protection"[1]. As such, we can provide
+>> interested consumers with an abstracted capability rather than
+>> driver-specific interfaces that won't scale. We name it for the former
+>> aspect since that's what external callers are most likely to be
+>> interested in; the latter is for the IOMMU layer to handle itself.
+>>
+>> Also use this as an opportunity to draw a line in the sand and add a
+>> new interface so as not to introduce any more callers of iommu_capable()
+>> which I also want to get rid of. For now it's a quick'n'dirty wrapper
+>> function, but will evolve to subsume the internal interface in future.
+>>
+>> [1] https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-kernel-dma-protection
+>>
+>> Suggested-by: Christoph Hellwig <hch@lst.de>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 > 
-> Fixes: d65aea8e8298 ("bnx2x: use correct format characters")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> 
-> [...]
+> I can't really think of a way in which I suggested this, but it does
+> looks like a good interface:
 
-Here is the summary with links:
-  - bnx2x: truncate value to original sizing
-    https://git.kernel.org/netdev/net-next/c/4723832fa63f
+Well, you were the first to say it should be abstracted[1], and since my 
+initial thought that it could be hidden completely didn't pan out, I 
+felt I should give you credit for being right all along :)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
+Thanks!
 
+Robin.
+
+[1] https://lore.kernel.org/linux-iommu/YjDDUUeZ%2FdvUZoDN@infradead.org/

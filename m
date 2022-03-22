@@ -2,109 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14A34E3842
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 06:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0174E3872
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 06:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbiCVFVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 01:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S236708AbiCVF2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 01:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236708AbiCVFVd (ORCPT
+        with ESMTP id S236770AbiCVF2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 01:21:33 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF81B29C;
-        Mon, 21 Mar 2022 22:20:05 -0700 (PDT)
+        Tue, 22 Mar 2022 01:28:16 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF64DB2B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:26:48 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id r22so13828354ejs.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647926405; x=1679462405;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mxwNRxhZXnEhaBLVuTqpNgMwfQI6b2+lXrJsxhkw+1A=;
-  b=E8D/ED2bdKxMQqCu/OG4RKtdIPvSSfEmXwDivdfBfk751zVtbkK6lNVI
-   N2cOEbE3FVeFxrUsSnUv8mHy0zSe2oJE9m3MmTAjJsGgVobrIP+1hhJ6d
-   wg+YDpZ17zs/OMUnMS4ZNnryLtBBsxZ1XTA2xe20W1mDep9XGHL4fdE5+
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Mar 2022 22:20:05 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 22:20:05 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 21 Mar 2022 22:20:04 -0700
-Received: from [10.216.14.252] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 21 Mar
- 2022 22:20:00 -0700
-Message-ID: <72b4183b-2ec7-dc73-0c21-b12f342860d4@quicinc.com>
-Date:   Tue, 22 Mar 2022 10:49:56 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fItX+GihZgoJ7uro2VD9Dwj+UocrOzftQvPe7LNkJSk=;
+        b=LlIke8AHL/iucw3CHc2GzxIqBABNNKcNOBP6JROnk/K+BwkzZ5jVTmnNpEz0VIDXQZ
+         sjWLBDtwEeNgANEVOiHL/hPP+J+aEAfYv8Hd1y+Ic4kLtPZ6N3ppPa8PJTcXEq/LU8sH
+         8p9q/e8Et4GaURIgz3lRFq6Dmp62PnWovVRO2qEAD4zZ0GIu8MMwBveyFUaBE0zBQoiD
+         jdtS2HxvB53KJ6dzbxjUS9q3dtYE74ngI9HmTN00oCEP4pTaM3TkBn6MJQ2LdxzzjRFK
+         ZViTtZ11y0QXZ/fkhPstM//8k3506PYNlLSfJfBq9KaIqghixQTq5PLu2ioZl24eoabu
+         8HlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fItX+GihZgoJ7uro2VD9Dwj+UocrOzftQvPe7LNkJSk=;
+        b=NNojHh6lqpSlT8jk42OHtPJU8nQ8VolIlc0w8PxrJOrZnfUlGSs2BiIbRL2NEKjUUj
+         HUQqyp1SLhNM7WIslv1torrvi7mRnlea9ZmkhzSLbbrs0zEXcDPwgLUCBb2SapLigTuv
+         1XZT8vduHNUaC2/5FpUJo8uBt0NN1ZcQJVGLjtW0qIz5P/LzlnD2XOBXiIq+rgncJz12
+         6fvxhsWpMw3Ls226jZXuKvf7ipJJm8XiJUqY/BJyyhl1EvKIKwVYYL6HeRYMgSCJsRNh
+         Tm6oynd8xbZuu476jnCly8um6YQXjFe22G2SZ8OzXOHMsh3+gWDh9XZBwynL63x8qmeL
+         GNZA==
+X-Gm-Message-State: AOAM531uPlCmXOd0K7aXausJ7eOcMQ6CMCXyvwg40Vnp6XCGqACY4N1g
+        CPvRlqWyRRCqyKFYhldN0NCoSWV0zFe6M6rJrpo=
+X-Google-Smtp-Source: ABdhPJyx+2b4cTpGIHESEU16rQVCnm/Bmtis9slZwxRlH8QetZws9O5v7cFpnUq4NCJ3YsTA2F86auVYZ9yn/84f9s8=
+X-Received: by 2002:a17:907:3f17:b0:6da:68b6:7876 with SMTP id
+ hq23-20020a1709073f1700b006da68b67876mr23629274ejc.740.1647926807227; Mon, 21
+ Mar 2022 22:26:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
- process_madvise
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-CC:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, <surenb@google.com>,
-        <vbabka@suse.cz>, <rientjes@google.com>, <sfr@canb.auug.org.au>,
-        <edgararriaga@google.com>, <nadav.amit@gmail.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        "# 5 . 10+" <stable@vger.kernel.org>
-References: <cover.1647008754.git.quic_charante@quicinc.com>
- <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
- <YjEaFBWterxc3Nzf@google.com>
- <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
- <YjFAzuLKWw5eadtf@google.com>
- <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
- <YjiTn+7vw2rXA6K/@dhcp22.suse.cz>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <YjiTn+7vw2rXA6K/@dhcp22.suse.cz>
+References: <20220319035457.2214979-6-guoren@kernel.org> <202203200824.EQJTy8pW-lkp@intel.com>
+ <CAJF2gTQXgXJjX6h5d_5tM312Ky_QfCKm-wLZP2SJBuYtHvE9xQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTQXgXJjX6h5d_5tM312Ky_QfCKm-wLZP2SJBuYtHvE9xQ@mail.gmail.com>
+From:   Stafford Horne <shorne@gmail.com>
+Date:   Tue, 22 Mar 2022 14:26:36 +0900
+Message-ID: <CAAfxs751zQ=rut1qkNwKZXtMAUmKdcG28YgJ+fqYzT9mXgtDFA@mail.gmail.com>
+Subject: Re: [PATCH V2 5/5] openrisc: Move to ticket-spinlock
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Jonas Bonn <jonas@southpole.se>,
+        Openrisc <openrisc@lists.librecores.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
-On 3/21/2022 8:32 PM, Michal Hocko wrote:
->> It can return EINTR when:
->> -------------------------
->> 1) PTRACE_MODE_READ is being checked in mm_access() where it is waiting
->> on task->signal->exec_update_lock. EINTR returned from here guarantees
->> that process_madvise() didn't event start processing.
->> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1264 -->
->> https://elixir.bootlin.com/linux/v5.16.14/source/kernel/fork.c#L1318
->>
->> 2) The process_madvise() started processing VMA's but the required
->> behavior on a VMA needs mmap_write_lock_killable(), from where EINTR is
->> returned.
-> Please note this will happen if the task has been killed. The return
-> value doesn't really matter because the process won't run in userspace.
+On Sun, Mar 20, 2022 at 12:05 PM Guo Ren <guoren@kernel.org> wrote:
+>
+> Hi openrisc guys,
+>
+> >    kernel/signal.c:2625:49: sparse:     expected struct sighand_struct *sighand
+> >    kernel/signal.c:2625:49: sparse:     got struct sighand_struct [noderef] __rcu *sighand
+>
+> Some warning here, Is that all right? I don't think it is because of
+> changing arch_spinlock_t from struct qspinlock to atomic_t.
+>
+> On Sun, Mar 20, 2022 at 8:07 AM kernel test robot <lkp@intel.com> wrote:
+> >
+> > Hi,
+> >
+> > I love your patch! Perhaps something to improve:
+> >
+> > [auto build test WARNING on arnd-asm-generic/master]
+> > [also build test WARNING on tip/locking/core openrisc/for-next linus/master v5.17-rc8 next-20220318]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch]
+> >
+> > url:    https://github.com/0day-ci/linux/commits/guoren-kernel-org/Generic-Ticket-Spinlocks/20220319-115644
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+> > config: openrisc-randconfig-s032-20220319 (https://download.01.org/0day-ci/archive/20220320/202203200824.EQJTy8pW-lkp@intel.com/config)
+> > compiler: or1k-linux-gcc (GCC) 11.2.0
+> > reproduce:
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # apt-get install sparse
+> >         # sparse version: v0.6.4-dirty
+> >         # https://github.com/0day-ci/linux/commit/4e66dc8c71c62011bcb287f66bf5c5363920cd91
+> >         git remote add linux-review https://github.com/0day-ci/linux
+> >         git fetch --no-tags linux-review guoren-kernel-org/Generic-Ticket-Spinlocks/20220319-115644
+> >         git checkout 4e66dc8c71c62011bcb287f66bf5c5363920cd91
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> >
+> > sparse warnings: (new ones prefixed by >>)
+> >    kernel/signal.c: note: in included file (through include/uapi/asm-generic/signal.h, include/asm-generic/signal.h, arch/openrisc/include/generated/uapi/asm/signal.h, ...):
+> >    include/uapi/asm-generic/signal-defs.h:83:29: sparse: sparse: multiple address spaces given
+> >    kernel/signal.c:195:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+> >    kernel/signal.c:195:31: sparse:     expected struct spinlock [usertype] *lock
+> >    kernel/signal.c:195:31: sparse:     got struct spinlock [noderef] __rcu *
+> >    kernel/signal.c:198:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+> >    kernel/signal.c:198:33: sparse:     expected struct spinlock [usertype] *lock
+> >    kernel/signal.c:198:33: sparse:     got struct spinlock [noderef] __rcu *
+> >    kernel/signal.c:480:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+> >    kernel/signal.c:480:9: sparse:     expected struct spinlock [usertype] *lock
+> >    kernel/signal.c:480:9: sparse:     got struct spinlock [noderef] __rcu *
+> >    kernel/signal.c:484:34: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+> >    kernel/signal.c:484:34: sparse:     expected struct spinlock [usertype] *lock
+> >    kernel/signal.c:484:34: sparse:     got struct spinlock [noderef] __rcu *
+> >    kernel/signal.c:517:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+> >    kernel/signal.c:517:9: sparse:     expected struct spinlock [usertype] *lock
+> >    kernel/signal.c:517:9: sparse:     got struct spinlock [noderef] __rcu *
+> >    kernel/signal.c:520:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+> >    kernel/signal.c:520:36: sparse:     expected struct spinlock [usertype] *lock
+> >    kernel/signal.c:520:36: sparse:     got struct spinlock [noderef] __rcu *
+> >    kernel/signal.c:542:53: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct k_sigaction *ka @@     got struct k_sigaction [noderef] __rcu * @@
+> >    kernel/signal.c:542:53: sparse:     expected struct k_sigaction *ka
+> >    kernel/signal.c:542:53: sparse:     got struct k_sigaction [noderef] __rcu *
+> >    include/uapi/asm-generic/signal-defs.h:83:29: sparse: sparse: multiple address spaces given
+> >    kernel/signal.c:698:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+> >    kernel/signal.c:698:33: sparse:     expected struct spinlock [usertype] *lock
+> >    kernel/signal.c:698:33: sparse:     got struct spinlock [noderef] __rcu *
+> >    kernel/signal.c:700:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+> >    kernel/signal.c:700:31: sparse:     expected struct spinlock [usertype] *lock
+> >    kernel/signal.c:700:31: sparse:     got struct spinlock [noderef] __rcu *
+> > >> kernel/signal.c:887:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct atomic_t [usertype] *lock @@     got struct atomic_t [noderef] __rcu * @@
+> >    kernel/signal.c:887:9: sparse:     expected struct atomic_t [usertype] *lock
+> >    kernel/signal.c:887:9: sparse:     got struct atomic_t [noderef] __rcu *
 
-Okay, thanks here.
+This one is being reported as a new warning. I can see this warning
+even when testing with x86_64 which uses qspinlock:
 
-> 
->> The current behaviours supported by process_madvise(),
->> MADV_COLD, PAGEOUT, WILLNEED, just need read lock here.
->> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1164
->>  **Thus I think no way for EINTR can be returned by process_madvise() in
->> the middle of processing.** . No?
-> Maybe not with the current implementation but I can easily imagine that
-> there is a requirement to break out early when there is a signal pending
-> (e.g. to support terminating madvise on a large memory rage). You would
-> get EINTR then somehow need to communicate that to the userspace.
+    kernel/signal.c:542:53:    got struct k_sigaction [noderef] __rcu *
+    ./include/uapi/asm-generic/signal-defs.h:83:29: error: multiple
+address spaces given
+    kernel/signal.c:698:33: warning: incorrect type in argument 1
+(different address spaces)
+    kernel/signal.c:698:33:    expected struct spinlock [usertype] *lock
+    kernel/signal.c:698:33:    got struct spinlock [noderef] __rcu *
+    kernel/signal.c:700:31: warning: incorrect type in argument 1
+(different address spaces)
+    kernel/signal.c:700:31:    expected struct spinlock [usertype] *lock
+    kernel/signal.c:700:31:    got struct spinlock [noderef] __rcu *
+    kernel/signal.c:887:9: warning: incorrect type in argument 1
+(different address spaces)
+    kernel/signal.c:887:9:    expected struct qspinlock *lock
+    kernel/signal.c:887:9:    got struct qspinlock [noderef] __rcu *
+    kernel/signal.c:1082:9: warning: incorrect type in argument 1
+(different address spaces)
+    kernel/signal.c:1082:9:    expected struct qspinlock *lock
 
-Agree. Will implement this.
+It looks like these are treated as *new* by the kbuild robot because
+they changed from qspinlock to atomic_t, which changes the match
+pattern.
 
+I looked into what it takes to fix it but it seems such a change would
+be very intrusive.  I think we can leave as is for now.
+
+-Stafford

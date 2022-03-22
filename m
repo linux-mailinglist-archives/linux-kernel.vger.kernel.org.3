@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EAA4E48FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A474E4900
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237723AbiCVWRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 18:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S237756AbiCVWR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 18:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237638AbiCVWRH (ORCPT
+        with ESMTP id S237696AbiCVWRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 18:17:07 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A8553B45
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:38 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id c6-20020a621c06000000b004fa7307e2e0so7409636pfc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:38 -0700 (PDT)
+        Tue, 22 Mar 2022 18:17:10 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177EB5370C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:41 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id h16-20020a056902009000b00628a70584b2so15494833ybs.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=xr6XYf8jb8sbPWyL/uYgYyRzO0ukjO2H3fyJviEcQXg=;
-        b=rGalqej0UnCyQ05se0hm7gNO6QXvs6QeB1cZfj7jAd+Jr+SwvJzUHYJ5roglDEbXCJ
-         002Wlp1UQgVnPwhz/4tqCVbqBhi/f+Jgorx/odjWpzbabpQr6+eI6V1fBVgGyPfBdaMY
-         TXYrKICh1pI9QUc0JfbvkaPsjwLjMYr7lTMg04UDiD9c/+AHkNorbxOPMrvHFdAulqjT
-         Zvlzb57gEHzGDmMkX5xufPP9Cri6K3UeFUY0afY1IoJhOcPIF80HulEIs/s23NqrTBBv
-         90p5Ew2EKPpqXBTKrDzn7AHanshLC0rLfLUYZmYkctrZh7iFuSn77yD1Mfduyt2Tsg2b
-         jyIQ==
+        bh=rjDM4PZxQVnGsW8D6ZRUNvFtAvJliadKtjfByZf01o0=;
+        b=JkuuGgSvC6W5z4yYL1/b9HdlCLYiUXwRQRC5UyKU13aVKsMav/zd2hTZwzFQWxezAU
+         vb1VUUPu0wjVanlY5/XuggY99TEpTxETb4C7qWfPFYilicVrRGUcn+VdP1m5JYDXN0jx
+         qag8N+JDE1MqrY1aEDVRjfjjtk2mMZ7kOD/hr+y4oqrYhCFJg3XZ4H+YuQH2IgOBpZui
+         WVh258SKoUbt/dYevxp92eb23Tvo4/2gC+uLrhzwkkoeyC2rEAGXTG6ESz5n+FhpPcwE
+         Dz6lnPJn6FBw5zLuFIyn+KCIcj/hymZxm6C2dpYbyTnNL/cGx8/LbxCmcA4nkpn9bsxx
+         rItA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=xr6XYf8jb8sbPWyL/uYgYyRzO0ukjO2H3fyJviEcQXg=;
-        b=cdIwL4JyB/absE1uTFsFbZVChRMoARhdxnBKnzyBQqOcD2wjpagUGrDgB542jaHPcp
-         j+3WLHZO8Vp6JkAWus6rC0PVNv7tVOROlD1cet8JFIleXcQiedDd8QnzfdIdbOu5nDw8
-         aYeA6FoKVL57509/W5cOuvW74B2jOF8d/NKSa0DKsVT/eqb5f17akF0RC/HNBrMjoqgs
-         EpPwoYtMCUBB9bfVlilN+UfDilh8qvdX3ghBYlszb8g28ehSuriQNj4bG9WEsbvb66Yf
-         t8Q5UGid8cZPifFMxVdvuOPuUGuAkI1kOE/ULK93hmWDyybLE+Bm4pEFRqXp4NEGN/Sa
-         x1Gg==
-X-Gm-Message-State: AOAM531SyCWdo++uufuEEVoOI4Vs3BdeCPmvefEO+5GPWpHiBoT2vHxK
-        MCdbLpdk/Yp4d6XJIA54bIiw/i5F87sOdYvBn04GkMJD1kXk3TdtPa9pbfD0XqxWONZE7s23+e4
-        kH1kEsdNGXasIzMGs0axItjNwM7notwoCyTfSwVa82wexLhtkujMBzaYnFtlkuvUXoC5gABdW
-X-Google-Smtp-Source: ABdhPJwd9yM6lWfV46wsN89JqFFozvJBmep7JOnBfXXRCzFhjivuXQ9HOcb5Onpis8jt46RzPzdAXqbCwLqG
+        bh=rjDM4PZxQVnGsW8D6ZRUNvFtAvJliadKtjfByZf01o0=;
+        b=bOU7dvcYWP584svdr7qCtfLr3r7ezAJcBApTwdzCuewsudtu3pfOCpGt3T1NfouErQ
+         Sglui3SmHggCE/XteX+sl/AFyZ9yUt/SuY2u71ujZPOixG0V/p0ZrzQ10iSyc9O5CPtq
+         nxRDG4vdd+MwZryxOpwWHCFcHyGgLDBqb1yk7orJAhTAdQgmsf8aV6ExPe/ncVxkZWai
+         nM93kYgy9qMK7oepAF8B65JqZknAZp131lN9sgRqJUAkME8QEzWpiVbUrmeWqLJkFsp+
+         kP7pk+uybj02vN3gM2SCcakA3e5oi/EunKbrldGUo7E8lrN9WxTFyz6Bbh7gJje/6rco
+         olmg==
+X-Gm-Message-State: AOAM530sPJmeRQ5eEVRiwQdL/4lZ0ySFLgcN68uc7QhUrEYyKvRk20FX
+        asKGK6U7ttI9EE6/pl4Tr9LKH+V6uC1PlL4i4juNB3x5L7+uDzxAdy//5b9/mqoVQ9oBzmHdA+v
+        wNzF1umT2QwMbJVr8dYXrTaVof+o+nHgMly1Mapi4fV/gU2PhCwfWuhQCKrMzT51j+IS0Thiy
+X-Google-Smtp-Source: ABdhPJy2169MxJ6wk/bRojYugdoldDuP5WWPT/h2dbIbJ2zV2sHAvMwofe9TGpX72Wqtl9w/BJ8w+KU496DH
 X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:1817:acc9:c45f:d133])
- (user=eranian job=sendgmr) by 2002:aa7:943a:0:b0:4f6:adc9:d741 with SMTP id
- y26-20020aa7943a000000b004f6adc9d741mr30858044pfo.30.1647987337937; Tue, 22
- Mar 2022 15:15:37 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 15:15:09 -0700
+ (user=eranian job=sendgmr) by 2002:a0d:c6c4:0:b0:2d6:f343:fa99 with SMTP id
+ i187-20020a0dc6c4000000b002d6f343fa99mr31888711ywd.142.1647987340238; Tue, 22
+ Mar 2022 15:15:40 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 15:15:10 -0700
 In-Reply-To: <20220322221517.2510440-1-eranian@google.com>
-Message-Id: <20220322221517.2510440-6-eranian@google.com>
+Message-Id: <20220322221517.2510440-7-eranian@google.com>
 Mime-Version: 1.0
 References: <20220322221517.2510440-1-eranian@google.com>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH v7 05/13] perf/x86/amd: enable branch sampling priv level filtering
+Subject: [PATCH v7 06/13] perf/x86/amd: add AMD branch sampling period adjustment
 From:   Stephane Eranian <eranian@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
@@ -70,85 +70,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AMD Branch Sampling features does not provide hardware filtering by
-privilege level. The associated PMU counter does but not the branch sampling
-by itself. Given how BRS operates there is a possibility that BRS captures
-kernel level branches even though the event is programmed to count only at
-the user level.
-
-Implement a workaround in software by removing the branches which belong to
-the wrong privilege level. The privilege level is evaluated on the target of
-the branch and not the source so as to be compatible with other architectures.
-As a consequence of this patch, the number of entries in the
-PERF_RECORD_BRANCH_STACK buffer may be less than the maximum (16).  It could
-even be zero. Another consequence is that consecutive entries in the branch
-stack may not reflect actual code path and may have discontinuities, in case
-kernel branches were suppressed. But this is no different than what happens
-on other architectures.
+Add code to adjust the sampling event period when used with the Branch
+Sampling feature (BRS). Given the depth of the BRS (16), the period is
+reduced by that depth such that in the best case scenario, BRS saturates at
+the desired sampling period. In practice, though, the processor may execute
+more branches. Given a desired period P and a depth D, the kernel programs
+the actual period at P - D. After P occurrences of the sampling event, the
+counter overflows. It then may take X branches (skid) before the NMI is
+caught and held by the hardware and BRS activates. Then, after D branches,
+BRS saturates and the NMI is delivered.  With no skid, the effective period
+would be (P - D) + D = P. In practice, however, it will likely be (P - D) +
+X + D. There is no way to eliminate X or predict X.
 
 Signed-off-by: Stephane Eranian <eranian@google.com>
 ---
- arch/x86/events/amd/brs.c | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+ arch/x86/events/core.c       |  7 +++++++
+ arch/x86/events/perf_event.h | 12 ++++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
-index 3c13c484c637..40461c3ce714 100644
---- a/arch/x86/events/amd/brs.c
-+++ b/arch/x86/events/amd/brs.c
-@@ -92,10 +92,6 @@ int amd_brs_setup_filter(struct perf_event *event)
- 	if ((type & ~PERF_SAMPLE_BRANCH_PLM_ALL) != PERF_SAMPLE_BRANCH_ANY)
- 		return -EINVAL;
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index c2a890caeb0a..ed285f640efe 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -1374,6 +1374,13 @@ int x86_perf_event_set_period(struct perf_event *event)
+ 	    x86_pmu.set_topdown_event_period)
+ 		return x86_pmu.set_topdown_event_period(event);
  
--	/* can only capture at all priv levels due to the way BRS works */
--	if ((type & PERF_SAMPLE_BRANCH_PLM_ALL) != PERF_SAMPLE_BRANCH_PLM_ALL)
--		return -EINVAL;
--
- 	return 0;
++	/*
++	 * decrease period by the depth of the BRS feature to get
++	 * the last N taken branches and approximate the desired period
++	 */
++	if (has_branch_stack(event))
++		period = amd_brs_adjust_period(period);
++
+ 	/*
+ 	 * If we are way outside a reasonable range then just skip forward:
+ 	 */
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 3485a4cf0241..25b037b571e4 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1263,6 +1263,14 @@ static inline bool amd_brs_active(void)
+ 	return cpuc->brs_active;
  }
  
-@@ -195,6 +191,21 @@ void amd_brs_disable_all(void)
- 		amd_brs_disable();
- }
- 
-+static bool amd_brs_match_plm(struct perf_event *event, u64 to)
++static inline s64 amd_brs_adjust_period(s64 period)
 +{
-+	int type = event->attr.branch_sample_type;
-+	int plm_k = PERF_SAMPLE_BRANCH_KERNEL | PERF_SAMPLE_BRANCH_HV;
-+	int plm_u = PERF_SAMPLE_BRANCH_USER;
++	if (period > x86_pmu.lbr_nr)
++		return period - x86_pmu.lbr_nr;
 +
-+	if (!(type & plm_k) && kernel_ip(to))
-+		return 0;
-+
-+	if (!(type & plm_u) && !kernel_ip(to))
-+		return 0;
-+
-+	return 1;
++	return period;
 +}
 +
- /*
-  * Caller must ensure amd_brs_inuse() is true before calling
-  * return:
-@@ -252,8 +263,6 @@ void amd_brs_drain(void)
- 		if (to == BRS_POISON)
- 			break;
+ #else /* CONFIG_CPU_SUP_AMD */
  
--		rdmsrl(brs_from(brs_idx), from);
--
- 		/*
- 		 * Sign-extend SAMP_BR_TO to 64 bits, bits 61-63 are reserved.
- 		 * Necessary to generate proper virtual addresses suitable for
-@@ -261,6 +270,11 @@ void amd_brs_drain(void)
- 		 */
- 		to = (u64)(((s64)to << shift) >> shift);
+ static inline int amd_pmu_init(void)
+@@ -1287,6 +1295,10 @@ static inline void amd_brs_disable_all(void)
+ {
+ }
  
-+		if (!amd_brs_match_plm(event, to))
-+			continue;
-+
-+		rdmsrl(brs_from(brs_idx), from);
-+
- 		perf_clear_branch_entry_bitfields(br+nr);
++static inline s64 amd_brs_adjust_period(s64 period)
++{
++	return period;
++}
+ #endif /* CONFIG_CPU_SUP_AMD */
  
- 		br[nr].from = from;
+ static inline int is_pebs_pt(struct perf_event *event)
 -- 
 2.35.1.894.gb6a874cedc-goog
 

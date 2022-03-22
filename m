@@ -2,203 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478724E3BA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BBF4E3BB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbiCVJYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 05:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S232554AbiCVJZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 05:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiCVJXz (ORCPT
+        with ESMTP id S231376AbiCVJZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 05:23:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8697C5F26D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:22:28 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nWaiU-0004ha-Pd; Tue, 22 Mar 2022 10:22:14 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-7c76-e54b-1dbb-9ff1.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:7c76:e54b:1dbb:9ff1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8B471513DE;
-        Tue, 22 Mar 2022 09:22:12 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 10:22:12 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver,
- PCI, platform integration and documentation
-Message-ID: <20220322092212.f5eaxm5k45j5khra@pengutronix.de>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz>
- <20220322074622.5gkjhs25epurecvx@pengutronix.de>
- <202203220918.33033.pisa@cmp.felk.cvut.cz>
+        Tue, 22 Mar 2022 05:25:39 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D423337D;
+        Tue, 22 Mar 2022 02:24:12 -0700 (PDT)
+Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M2Nm2-1nW32y3IzO-003vD9; Tue, 22 Mar 2022 10:24:10 +0100
+Received: by mail-wm1-f54.google.com with SMTP id r7so9991344wmq.2;
+        Tue, 22 Mar 2022 02:24:10 -0700 (PDT)
+X-Gm-Message-State: AOAM5319y3xG6KE30cXZa02tZk5szEol9jGRNrauJbCyUcQNUwIXEKW5
+        D3bVOk3lTl+dzBtV+8d82q9cjcLJBNBS2iGz450=
+X-Google-Smtp-Source: ABdhPJwsixCYKczxHEkB8tnxWnn7WcRL3uS0+upLMvgBna2t7w8kHg6YLFFU+Drbavx3w8/MLHV5750XhIVVex2zZF0=
+X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
+ f19-20020a7bcd13000000b0038bf39c1181mr2957769wmj.20.1647941050207; Tue, 22
+ Mar 2022 02:24:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wz3c3pbms7s7war2"
-Content-Disposition: inline
-In-Reply-To: <202203220918.33033.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
+ <20220319143130.1026432-1-chenhuacai@loongson.cn> <20220319143130.1026432-7-chenhuacai@loongson.cn>
+ <CAK8P3a0wVKWFASv6cVDOZmX=1h7EeAVyrxLFXmoH5REVaAoNhQ@mail.gmail.com> <CAAhV-H6zddef+ezmXhK+K3eZtvVECqq-nujyr9H2RjS1iJndrg@mail.gmail.com>
+In-Reply-To: <CAAhV-H6zddef+ezmXhK+K3eZtvVECqq-nujyr9H2RjS1iJndrg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 22 Mar 2022 10:23:53 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0rJi35Bx+_Joq1NH79Pvd-+hNV8apDv5othr0_7_SqcQ@mail.gmail.com>
+Message-ID: <CAK8P3a0rJi35Bx+_Joq1NH79Pvd-+hNV8apDv5othr0_7_SqcQ@mail.gmail.com>
+Subject: Re: [PATCH V8 07/22] LoongArch: Add atomic/locking headers
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:GsZZXVIyiFWAil3OKfUQDeR3PG8Hyp4LfdjBL4/0CGCIX9DyTBw
+ 79WB2ES2iqdZNU3UkmpzmCAhKwBmVSmz8qtKMqHUA5Eo7HFh74XAdGStqFhe6lEtv+bw18Q
+ +r998ajs2qP4kwCrIauh1scQXo4DcG1SfJczz1a2hIaMkDDIeBJSMRP8BjGrz9Sf4+2iAv+
+ kqoHgKzvs5XoOdjgjpzUQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0cUHH2aJ6Tw=:7C5yPvboapmwLvnOrfGXe/
+ IDOct5/8Rnu68+uGrbNLpYTdu6Rlr/RAoalDiNAXAHBfHRvP/wPwgcFCHBENJfX6dJcx7a0hy
+ 4fmgDIR0J9P/MESv2PxehvkicPb/3usvpJ3pCe2RYkhJmETYa+4JT9x2JEZ1Rkwu/2ISAEPys
+ +Iw6jQSSlWKKb5iqJ0KYW1zTOC4fu5+/Rjca259fDNT4WmTm7A0qPnFRsDBiTgZfdzis6h/wv
+ jEgegu+aHR+ejR8QBIasddGA6YMFqcnyHrBeLxLcUaT7IFIoIQCwiEhfIQZXvDsvX2TkjXsFQ
+ tkMbD8n+rolnk5yc01u3y7qfsBT46xdw0wfow/LGABLMnvFeSIe6uo39aI6e9TEsGrB9XnyDW
+ eMM1RqV0Lr8zpMdqqyc/tvrWda5IZNwHyRkW7s8c+lhTJ4FbQgTdr8qmW9pcVizad7qmiM+l0
+ el7ESCr1duVvmquTRQ5EwHNx9DJ5nDkKFZx5yT+JQ90JgGmuh5OG+dIyiujRXk7/U/zn8HZ/o
+ LdiTh4neRito/mq9hcxA1rnI6ozzT7J1+mGZrRItgfvw5TszFqNzAgCDuO6kuSVkXVAfO0WWj
+ 6JtLQEgR7ECRjP1oAzh09q/HhiWU27QYn2cN8zJcqokM7GPNBd/6e74afj0MHFVhq/i+Qh46Q
+ 4wcL+Z3acwAAtkFH6brvW0myBt/AalGCM6f39FOORqPHWsnivCyQukH7lzGls2q8EEBG+o/qd
+ lc49B2EvJ4+4qYd03FF+lGDbMuWKQUMdbkNljO29eSAvZEoHYAmLkvMBdy8bEwanvhB8nxyGN
+ 0MCrmjbm4FyHaxqwuGkGOPsjRrHvF8pCycDNmkKfbyaSvU+4T0=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 22, 2022 at 4:03 AM Huacai Chen <chenhuacai@kernel.org> wrote:
+> On Mon, Mar 21, 2022 at 5:42 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Sat, Mar 19, 2022 at 3:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
 
---wz3c3pbms7s7war2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > Please coordinate the inclusion of the patches with them and use that
+> > spinlock implementation for the initial merge, to avoid further discussion
+> > on the topic. If at a later point you are able to come up with a qspinlock
+> > implementation that has convincing forward-progress guarantees and
+> > can be shown to be better, we can revisit this.
+>
+> In my opinion, forward-progress is solved in V2, since we have
+> reworked __xchg_small()/__cmpxchg_small(), and qspinlock is needed by
+> NUMA.
+> However, if the generic ticket lock is merged later, I will try to use
+> it at present.
 
-On 22.03.2022 09:18:32, Pavel Pisa wrote:
-> > The driver looks much better now. Good work. Please have a look at the
-> > TX path of the mcp251xfd driver, especially the tx_stop_queue and
-> > tx_wake_queue in mcp251xfd_start_xmit() and mcp251xfd_handle_tefif(). A
-> > lockless implementation should work in your hardware, too.
->=20
-> Is this blocker for now? I would like to start with years tested base.
+Yes, please do. If I merge both the ticket spinlock code and your architecture
+code through the asm-generic tree for 5.19, this should work out nicely.
 
-Makes sense.
+I'd good to hear that you have a solution for the forward-progress
+issue with qspinlock, We should discuss that when the architecture
+is merged then, and see what this means for the other architectures
+that currently use the qspinlock code, to decide which ones of those
+should be converted to ticket lock, which can use the same approach
+that you have, and which are already safe.
 
-> We have HW timestamping implemented for actual stable CTU CAN FD IP core=
-=20
-> version, support for variable number of TX buffers which count can be=20
-> parameterized up to 8 in the prepared version and long term desire to=20
-> configurable-SW defined multi-queue which our HW interface allows to=20
-> dynamically server by =C3=A1 TX buffers. But plan is to keep combinations
-> of the design and driver compatible from the actual revision.
-
-Is the number of RX and TX buffers and TX queues auto detectable by
-software, or do we need DT bindings for this?
-
-> I would be happy if we can agree on some base/minimal support and get
-> it into mainline and use it as base for the followup patch series.
->=20
-> I understand that I have sent code late for actual merge window,
-> but I am really loaded by teaching, related RISC-V simulator
-> https://github.com/cvut/qtrvsim , ESA and robotic projects
-> at company. So I would prefer to go step by step and cooperate
-> on updates and testing with my diploma students.
-
-The net-next merge window closed with Monday evening, so this driver
-will go into net-next for v5.19.
-
-> > BTW: The PROP_SEG/PHASE_SEG1 issue is known:
-> > > +A curious reader will notice that the durations of the segments PROP=
-_SEG
-> > > +and PHASE_SEG1 are not determined separately but rather combined and
-> > > +then, by default, the resulting TSEG1 is evenly divided between PROP=
-_SEG
-> > > +and PHASE_SEG1.
-> >
-> > and the flexcan IP core in CAN-FD mode has the same problem. When
-> > working on the bit timing parameter, I'll plan to have separate
-> > PROP_SEG/PHASE_SEG1 min/max in the kernel, so that the bit timing
-> > algorithm can take care of this.
->=20
-> Hmm, when I have thought about that years ago I have not noticed real
-> difference when time quanta is move between PROP_SEG and PHASE_SEG1.
-> So for me it had no influence on the algorithm computation and
-> could be done on the chip level when minimal and maximal sum is
-> respected. But may it be I have overlooked something and there is
-> difference for CAN FD.  May it be my colleagues Jiri Novak and=20
-> Ondrej Ille are more knowable.
-
-Jiri, Ondrej, I'm interested in details :)
-
-> As for the optimal timequantas per bit value, I agree that it
-> is not so simple. In the fact SJW and even tipple-sampling
-> should be defined in percentage of bit time
-
-I thought of specifying SJW in a relative value, too.
-
-> and then all should be optimized together
-
-SJW has no influence on the bit rate and sample point. Although SJW is
-max phase seg 2, so it's maximum is influenced by the sample point.
-
-> and even combination with slight bitrate error should be preferred
-> against other exact matching when there is significant difference in
-> the other parameters values.
-
-Since linux-4.8, i.e.
-
-| 7da29f97d6c8 can: dev: can-calc-bit-timing(): better sample point calcula=
-tion
-
-the algorithm optimizes for best bit minimal absolute bit rate error
-first and then for minimal sample point error. The sample point must be
-<=3D the nominal sample point. I have some experiments where the algorithm
-optimizes the absolute sample point error.
-
-For more complicated bit timing optimization you need to combine the
-bitrate error and the sample point error into a function that needs to
-be minimized.
-
-> But I am not ready to dive into it till our ESA space NanoXplore
-> FPGA project passes final stage...=20
-
-Ok
-
-> By the way we have received report from Andrew Dennison about
-> successful integration of CTU CAN FD into Litex based RISC-V
-> system. Tested with the Linux our Linux kernel driver.
-
-That sounds interesting!
-
-> The first iteration there, but he reported that some corrections
-> from his actual development needs to be added to the public
-> repo still to be usable out of the box
->=20
->   https://github.com/AndrewD/litecan
-
-Nice!
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---wz3c3pbms7s7war2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmI5lUEACgkQrX5LkNig
-013s3AgAiI2/IBnSVWKDKiirvit6BOUskBFzxN/zqF0p+ydquBA3ebQ6z9kbKbjb
-pPc8Ic8qgxg7dFhW3a7XrwdzCoe7ShCnjqsR2wgYibExjrizLCfFJ/K1vO4dE4Df
-VRKbw5+cQDsT6+tZHnIqjzVRglmQIgG0WnXFc349DdrWoQXTP2ugd9p0cylVjNBu
-suwfT8LBtgNM6swYeEkq3otP72+Ksw0WAeIPHUlBaMA+dAxNYubX3EqRN9VyCpe5
-VXnaEh3vSnGrMRn8DYIwFYplA7wLoA0AjfKEL8ZjlUixopJWWPGbIGN+beAKW2jq
-aNKQ+pn/RpnswF+EtDGMcREGmm83lA==
-=fe3N
------END PGP SIGNATURE-----
-
---wz3c3pbms7s7war2--
+        Arnd

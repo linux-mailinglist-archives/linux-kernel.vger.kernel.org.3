@@ -2,107 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9374E446D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7D84E446E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239208AbiCVQn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        id S239229AbiCVQnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236602AbiCVQnY (ORCPT
+        with ESMTP id S236602AbiCVQnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:43:24 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C2A6F4B4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647967317; x=1679503317;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=L1enrMMeP7A1GNwFPV4khrxuFYhjjyPfKFdlkVvrYpc=;
-  b=lgx/ZLmb+r7+5O7OJZd5G9KfJB1y84WATbYTwFxXHbWYwrQUWv5m56oA
-   lKOsWs6k1jva/Fqka0uOoAmFKRJqqFwhdLkRFOmvzvQQz7LYWy7sBhLvh
-   eUBdjx0/QrUJHXmNfg0z37I/X1pLqUv8x9AoWFX9TBZllL9ZB/c72xHYu
-   CVY+wn9c/1p9W82FDKbDu1ZqSIRHzfHAasPBtiW8feEY5xxRCya7OIJSw
-   lwYcPporLQM39Al2QQPuuM4XI1KQD/81CbBPLcpg/2Aoll7rHyFEoJ9x+
-   iVJOsSlblCHAeD9rE1jEKGPqkg648KsJbV4xs8jHFLG1HFRTXfm38MWo3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="245342758"
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="245342758"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:41:47 -0700
-X-IronPort-AV: E=Sophos;i="5.90,202,1643702400"; 
-   d="scan'208";a="518954584"
-Received: from schen9-mobl.amr.corp.intel.com ([10.212.218.224])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:41:47 -0700
-Message-ID: <3c3a86fb2ead653318ecbaf2c999f6088c6eca4f.camel@linux.intel.com>
-Subject: Re: [RFC 6/6] sched/fair: Add sched group latency support
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Tejun Heo <tj@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        pkondeti@codeaurora.org, valentin.schneider@arm.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, dhaval.giani@oracle.com,
-        qperret@google.com
-Date:   Tue, 22 Mar 2022 09:41:47 -0700
-In-Reply-To: <Yji0twS4N+0b/Rs9@slm.duckdns.org>
-References: <20220311161406.23497-1-vincent.guittot@linaro.org>
-         <20220311161406.23497-7-vincent.guittot@linaro.org>
-         <Yji0twS4N+0b/Rs9@slm.duckdns.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Tue, 22 Mar 2022 12:43:32 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F0C7463C;
+        Tue, 22 Mar 2022 09:42:04 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id e4so17008603oif.2;
+        Tue, 22 Mar 2022 09:42:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f19PtgxgIFInjc+IlAHkQp6KzpsdEzJgw42yMBWHdQg=;
+        b=kQwgwdEcuemqrF7dnyGxmc0ir6Qoi1GS5OZ0cVJfR5Q7FkCZsYRlPThQoDUuKVBORT
+         XZmJPnpsWyK+MuD+LnqFoQ8emgOsH14FNlj7vtys5k10XsyZ7DXtssOUPeHK6KNyUMKg
+         xxo5EjrBuTyDnJl2hkTBzK5Qb1H7QuAON2DbZGQe0duGwlDYQi/jBt+CLevzIe82I7Gm
+         l9iP2lc0wWgr65BjT5GdEz+Z1yMh6IIXB16ni1TCe84WMk23SGf5F8e5oIoupPViV/8O
+         7ZxAUzn/TGKmjOiz3r/FqkSvbBWMZp+lylm4ETUagQ+ZsbKEIxd2lcWbou0OzbhLXF/c
+         WcYA==
+X-Gm-Message-State: AOAM530CV+bAmYyHZnrSoTiiNtCvA6l29EASPvGwbsDnTfUJ6UsiK7pg
+        Z/5OABcD2v0hs5/8qKaSbw==
+X-Google-Smtp-Source: ABdhPJy77nVIsmtyMrQZ89IidhxzPS7fqu8uM2zZDvVPEioBV9LTEyx/xmCMVJUZEAwG9u6Urw0D7Q==
+X-Received: by 2002:aca:eb58:0:b0:2d9:deea:2014 with SMTP id j85-20020acaeb58000000b002d9deea2014mr2513406oih.83.1647967324171;
+        Tue, 22 Mar 2022 09:42:04 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s125-20020acaa983000000b002ecdbaf98fesm8932484oie.34.2022.03.22.09.42.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 09:42:03 -0700 (PDT)
+Received: (nullmailer pid 2149693 invoked by uid 1000);
+        Tue, 22 Mar 2022 16:42:01 -0000
+Date:   Tue, 22 Mar 2022 11:42:01 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Axe Yang <axe.yang@mediatek.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v8 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
+ pinctrls properties
+Message-ID: <Yjn8WVBdwiCrstx5@robh.at.kernel.org>
+References: <20220321115133.32121-1-axe.yang@mediatek.com>
+ <20220321115133.32121-2-axe.yang@mediatek.com>
+ <YjkKURNzg8JPbXcg@robh.at.kernel.org>
+ <b03df175f871ee9a6561862f5bd7bceb9cafbde1.camel@mediatek.com>
+ <5d9c7655-b05e-aa77-d405-c1ec971daa77@collabora.com>
+ <4e7a532814510b03b74455f5a924b50a70699ca1.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e7a532814510b03b74455f5a924b50a70699ca1.camel@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-21 at 07:24 -1000, Tejun Heo wrote:
-> Hello,
+On Tue, Mar 22, 2022 at 05:33:55PM +0800, Axe Yang wrote:
+> Hello AngeloGioacchino,
 > 
-> On Fri, Mar 11, 2022 at 05:14:06PM +0100, Vincent Guittot wrote:
-> > Tasks can set its latency priority which is then used to decide to preempt
-> > the current running entity of the cfs but sched group entities still have
-> > the default latency priority.
+> On Tue, 2022-03-22 at 09:42 +0100, AngeloGioacchino Del Regno wrote:
+> > Il 22/03/22 02:35, Axe Yang ha scritto:
+> > > On Mon, 2022-03-21 at 18:29 -0500, Rob Herring wrote:
+> > > > On Mon, Mar 21, 2022 at 07:51:32PM +0800, Axe Yang wrote:
+> > > > > Extend interrupts and pinctrls for SDIO wakeup interrupt
+> > > > > feature.
+> > > > > This feature allow SDIO devices alarm asynchronous interrupt to
+> > > > > host
+> > > > > even when host stop providing clock to SDIO card. An extra
+> > > > > wakeup
+> > > > > interrupt and pinctrl states for SDIO DAT1 pin state switching
+> > > > > are
+> > > > > required in this scenario.
+> > > > > 
+> > > > > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> > > > > ---
+> > > > >   .../devicetree/bindings/mmc/mtk-sd.yaml       | 23
+> > > > > ++++++++++++++++++-
+> > > > >   1 file changed, 22 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > > > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > > > index 297ada03e3de..f57774535a1d 100644
+> > > > > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > > > @@ -69,12 +69,23 @@ properties:
+> > > > >         - const: ahb_cg
+> > > > >   
+> > > > >     interrupts:
+> > > > > -    maxItems: 1
+> > > > > +    description:
+> > > > > +      Should at least contain MSDC GIC interrupt. To support
+> > > > > SDIO
+> > > > > in-band wakeup, an extended
+> > > > > +      interrupt is required and be configured as wakeup source
+> > > > > irq.
+> > > > > +    minItems: 1
+> > > > > +    maxItems: 2
+> > > > >   
+> > > > >     pinctrl-names:
+> > > > > +    description:
+> > > > > +      Should at least contain default and state_uhs. To
+> > > > > support
+> > > > > SDIO in-band wakeup, dat1 pin
+> > > > > +      will be switched between GPIO mode and SDIO DAT1 mode,
+> > > > > state_eint and state_dat1 are
+> > > > > +      mandatory in this scenarios.
+> > > > > +    minItems: 2
+> > > > >       items:
+> > > > >         - const: default
+> > > > >         - const: state_uhs
+> > > > > +      - const: state_eint
+> > > > > +      - const: state_dat1
+> > > > >   
+> > > > >     pinctrl-0:
+> > > > >       description:
+> > > > > @@ -86,6 +97,16 @@ properties:
+> > > > >         should contain uhs mode pin ctrl.
+> > > > >       maxItems: 1
+> > > > >   
+> > > > > +  pinctrl-2:
+> > > > > +    description:
+> > > > > +      should switch dat1 pin to GPIO mode.
+> > > > > +    maxItems: 1
+> > > > > +
+> > > > > +  pinctrl-3:
+> > > > > +    description:
+> > > > > +      should switch SDIO dat1 pin from GPIO mode back to SDIO
+> > > > > mode.
+> > > > 
+> > > > How is this different than pinctrl-0?
+> > > 
+> > > pinctrl-0 contains default settings for all IO pins(CLK/CMD/DAT).
+> > > pinctrl-1 contains settings for all IO pins(CLK/CMD/DAT) in UHS
+> > > mode.
+> > > pinctrl-3 is lightweight pinctrl-1, only keep SDIO DAT1 pin
+> > > function
+> > > switch part.
+> > > 
 > > 
-> > Add a latency field in task group to set the latency priority of the group
-> > which will be used against other entity in the parent cfs.
+> > Is there any particular reason why we cannot simply select pinctrl-1
+> > again
+> > instead of pinctrl-3, apart from the virtually not existent overhead
+> > of one more mmio write?
 > 
-> One thing that bothers me about this interface is that the configuration
-> values aren't well defined. We have the same problems with the nice levels
-> but at least have them map to well defined weight values, which likely won't
-> change in any foreseeable future. The fact that we have the
-> not-too-well-defined nice levels as an interface shouldn't be a reason we
-> add another one. Provided that this is something scheduler folks want, it'd
-> be really great if the interface can be better thought through. What are the
-> numbers actually encoding?
+> No, there is no particular reason. 
+> I just want to do the pin function switch quick and clean. 
 > 
-> 
+> The intention of pinctrl-1 is to set the most initial state of IO pins
+> in UHS mode. If I don't need to adjust IO settings any longer, it is
+> okay to select pinctrl-1 state instead of pinctrl-3. 
+> But think about this scenarios: after initial SDIO IO pins to UHS mode,
+> I want to adjust some IO related properties, such as driving strength.
+> And I want to keep these settings because with new driving strength,
+> the signal is better. I'd rather to choose pinctrl-3 but not pinctrl-1, 
+> because I do not want the change be restored after next runtime resume.
 
-The way I was interpreting the latency_nice number is as follow:
-Given runnable tasks that have not exceeded their time slice,
-the task with the lowest latency nice number run first.
+The pinctrl-X properties set modes, they aren't supposed to be a state 
+machine.
 
-The current patchset takes care of the
-case of tasks within a run queue. I think we also need to
-consider which cpu should be selected for a waking
-task, if we cannot find an idle CPU.
-
-It seems reasonable that we wake a task on a CPU that is running a task with
-a higher latency nice value and lower load than previous CPU the waking task
-has run on. That way we can wake latency sensitive tasks faster in a busy system.
-
-Tim
-
+Rob

@@ -2,104 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027284E3EDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B92F4E3EDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbiCVM4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S233967AbiCVM5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbiCVM4A (ORCPT
+        with ESMTP id S233936AbiCVM50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:56:00 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22353632D;
-        Tue, 22 Mar 2022 05:54:32 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so1623577wme.0;
-        Tue, 22 Mar 2022 05:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+2UTXJuqiFDZ39HnP9HDQjye7jwZjpbaDsJ7VLr5nOk=;
-        b=aNzYzCJ4PLf+yohKKkdE92T0ZYdYjXmjrzBSEHVk6TsCrGb28L+qb/v7Y4pn53+7f1
-         jcPaO3UenBthWJHkJtq859rVaAv26K8QoyfyUiBVJQUxzO+q2rHgv0renoCF3FTPFyo2
-         gZlrTL5zPbdc+pDR/3hvfNLHkU6FNn/CvAyj39uWs4cWWnYzhb6Rtk1FTOw7R9Ar68vZ
-         LcYtF4FOKjMyj1bJabVRG83ebm/YPhN3MhzWmTZb74M80o5taCxmHtAQHXAuJ4m9I72r
-         a+padPJz7aGJxqerRB0YZ2G0wwKzMibHJaWJr9Ab8F6ym4yg3ls2Q3oVTWeagSvkYKHH
-         d5JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+2UTXJuqiFDZ39HnP9HDQjye7jwZjpbaDsJ7VLr5nOk=;
-        b=enWknHCDCaqwVmpyW8v975ViC7PNo6KpJhDze1IT8EjeaOMem1fkPZ0MhnINfgxydI
-         Lm2JiSltarRsq/kat6nUp7/qUww13ZIxLgWwKAs2nQBPNGiVmtv3y+jHH/anqaigIP1V
-         hpCSSAXcOoKEGXXDtRzr67CtJ6jojVZWbDMj9ObDNQ+HnlbDASAwfAWG28Akai/3ufu+
-         FkQ8x49ykisMnQU9LIMyb8qGhRY3aGUpqwdxWNoXANFWcUacAlXrkDavZWRYTUzIeWMX
-         IQ+uLa9q0VaiKgImW6f583upQGPmhEdIDmHjWGj5xGnbWi4KbjHWdvTIRQgk4uziuLk7
-         rnDA==
-X-Gm-Message-State: AOAM531ws6oQj2jmY02VpV22b2gWT1UPkkcSIhmx+hc3c+jjWQ6SEfIl
-        K7JREq9FCyYLC018BeaZ9S/c88kTCOc=
-X-Google-Smtp-Source: ABdhPJxnEIVJK7cCdaSegfjFgN2T7n1+pfdwJvVfaEcaYIwtwU775R97d7Ss0Q4lJHkBFudpUbY6gA==
-X-Received: by 2002:a7b:c20b:0:b0:38c:6ed9:f4f with SMTP id x11-20020a7bc20b000000b0038c6ed90f4fmr3793856wmi.131.1647953671229;
-        Tue, 22 Mar 2022 05:54:31 -0700 (PDT)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id w5-20020a5d5445000000b00203f8c96bcesm10066560wrv.49.2022.03.22.05.54.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 05:54:30 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 12:54:29 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/57] 4.19.236-rc1 review
-Message-ID: <YjnHBVv3z6UXc/+X@debian>
-References: <20220321133221.984120927@linuxfoundation.org>
+        Tue, 22 Mar 2022 08:57:26 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19275BE52;
+        Tue, 22 Mar 2022 05:55:58 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KNBLF5S7Dz1GClp;
+        Tue, 22 Mar 2022 20:55:49 +0800 (CST)
+Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 20:55:56 +0800
+Received: from [10.67.108.26] (10.67.108.26) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Mar
+ 2022 20:55:56 +0800
+Subject: Re: [PATCH -next] uaccess: fix __access_ok limit setup in compat mode
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     "Eric W . Biederman" <ebiederm@xmission.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+References: <20220318071130.163942-1-chenjiahao16@huawei.com>
+ <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
+From:   "chenjiahao (C)" <chenjiahao16@huawei.com>
+Message-ID: <88ff36b3-558b-9c3f-f21d-5ef05b3227c5@huawei.com>
+Date:   Tue, 22 Mar 2022 20:55:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321133221.984120927@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.26]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Mon, Mar 21, 2022 at 02:51:41PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.236 release.
-> There are 57 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
+在 2022/3/18 15:44, Arnd Bergmann 写道:
+> On Fri, Mar 18, 2022 at 8:11 AM Chen Jiahao <chenjiahao16@huawei.com> wrote:
+>> In __access_ok, TASK_SIZE_MAX is used to check if a memory access
+>> is in user address space, but some cases may get omitted in compat
+>> mode.
+>>
+>> For example, a 32-bit testcase calling pread64(fd, buf, -1, 1)
+>> and running in x86-64 kernel, the obviously illegal size "-1" will
+>> get ignored by __access_ok. Since from the kernel point of view,
+>> 32-bit userspace 0xffffffff is within the limit of 64-bit
+>> TASK_SIZE_MAX.
+>>
+>> Replacing the limit TASK_SIZE_MAX with TASK_SIZE in __access_ok
+>> will fix the problem above.
+> I don't see what problem this fixes, the choice of TASK_SIZE_MAX in
+> __access_ok() is intentional, as this means we can use a compile-time
+> constant as the limit, which produces better code.
+>
+> Any user pointer between COMPAT_TASK_SIZE and TASK_SIZE_MAX is
+> not accessible by a user process but will not let user space access
+> any kernel data either, which is the point of the check.
+>
+> In your example of using '-1' as the pointer, access_ok() returns true,
+> so the kernel can go on to perform an unchecked __get_user() on
+> __put_user() on 0xffffffffull, which causes page fault that is intercepted
+> by the ex_table fixup.
+>
+> This should not result in any user visible difference, in both cases
+> user process will see a -EFAULT return code from its system call.
+> Are you able to come up with a test case that shows an observable
+> difference in behavior?
+>
+>        Arnd
+>
+> .
 
-Build test:
-mips (gcc version 11.2.1 20220314): 63 configs -> no new failure
-arm (gcc version 11.2.1 20220314): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20220314): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
+Actually, this patch do comes from a testcase failure, the code is 
+pasted below:
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+#define TMPFILE "__1234567890"
+#define BUF_SIZE    1024
 
-[1]. https://openqa.qa.codethink.co.uk/tests/926
+int main()
+{
+     char buf[BUF_SIZE] = {0};
+     int fd;
+     int ret;
+     int err;
+
+     fd = open(TMPFILE, O_CREAT | O_RDWR);
+     if(-1 == fd)
+     {
+         perror("open");
+         return 1;
+     }
+
+     ret = pread64(fd, buf, -1, 1);
+     if((-1 == ret) && (EFAULT == errno))
+     {
+         close(fd);
+         unlink(TMPFILE);
+         printf("PASS\n");
+         return 0;
+     }
+     err = errno;
+     perror("pread64");
+     printf("err = %d\n", err);
+     close(fd);
+     unlink(TMPFILE);
+     printf("FAIL\n");
+
+     return 1;
+  }
+
+The expected result is:
+
+PASS
+
+but the result of 32-bit testcase running in x86-64 kernel with compat 
+mode is:
+
+pread64: Success
+err = 0
+FAIL
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+In my explanation, pread64 is called with count '0xffffffffull' and 
+offset '1', which might still not trigger
 
---
-Regards
-Sudip
+page fault in 64-bit kernel.
+
+
+This patch uses TASK_SIZE as the addr_limit to performance a stricter 
+address check and intercepts
+
+the illegal pointer address from 32-bit userspace at a very early time. 
+Which is roughly the same
+
+address limit check as __access_ok in arch/ia64.
+
+
+This is why this fixes my testcase failure above, or have I missed 
+anything else?
+
+
+Jiahao
 

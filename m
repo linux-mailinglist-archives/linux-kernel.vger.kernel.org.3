@@ -2,158 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967C54E3702
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8B64E36E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235794AbiCVC7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S235658AbiCVCyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235789AbiCVC7T (ORCPT
+        with ESMTP id S235601AbiCVCyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:59:19 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD1C33EEDB;
-        Mon, 21 Mar 2022 19:57:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V7tXCnQ_1647917867;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V7tXCnQ_1647917867)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 22 Mar 2022 10:57:49 +0800
-Date:   Tue, 22 Mar 2022 10:57:47 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     xfs <linux-xfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] xfs: some end COW remapping optimization
-Message-ID: <Yjk7K2yTqpJZLsx5@B-P7TQMD6M-0146.local>
-Mail-Followup-To: "Darrick J. Wong" <djwong@kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220216030854.30180-1-hsiangkao@linux.alibaba.com>
- <20220321222125.GN8241@magnolia>
+        Mon, 21 Mar 2022 22:54:22 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CA85717B;
+        Mon, 21 Mar 2022 19:52:55 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KMwyR0XqXz1GCph;
+        Tue, 22 Mar 2022 10:52:47 +0800 (CST)
+Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 10:52:53 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
+ (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Mar
+ 2022 10:52:53 +0800
+From:   Yu Liao <liaoyu15@huawei.com>
+To:     <hca@linux.ibm.com>, <gor@linux.ibm.com>, <agordeev@linux.ibm.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <liaoyu15@huawei.com>, <liwei391@huawei.com>
+Subject: [PATCH] s390: cleanup timer API use
+Date:   Tue, 22 Mar 2022 11:00:57 +0800
+Message-ID: <20220322030057.1243196-1-liaoyu15@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220321222125.GN8241@magnolia>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500003.china.huawei.com (7.185.36.200)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Darrick,
+cleanup the s390's use of the timer API
+- del_timer() contains timer_pending() condition
+- mod_timer(timer, expires) is equivalent to:
 
-On Mon, Mar 21, 2022 at 03:21:25PM -0700, Darrick J. Wong wrote:
-> On Wed, Feb 16, 2022 at 11:08:51AM +0800, Gao Xiang wrote:
-> > Hi folks,
-> > 
-> > Currently, xfs_reflink_end_cow_extent() will unconditionally unmap an
-> > extent from DATA fork and then remap an extent from COW fork. It seems
-> > somewhat ineffective since for many cases we could update real bmbt
-> > records directly by sightly enhancing old
-> > xfs_bmap_add_extent_unwritten_real() implementation, thus reduce some
-> > measurable extra metadata overhead.
-> 
-> Does it work with rmap enabled?
+	del_timer(timer);
+	timer->expires = expires;
+	add_timer(timer);
 
-Yeah, I've tested with rmap enabled. But for now, I have to prioritize
-`erofs over fscache' stuff since it's really needed for cloud vendors and
-cloud-native ecosystem to achieve high-dense and proformance image
-solution for runC and Kata containers. And this patchset still left
-some work to do (since our tester found some cases could cause
-performance degration but I haven't checked/confirm it yet.)
+If the timer is inactive it will be activated, using add_timer() on
+condition !timer_pending(&private->timer) is redundant.
 
-> Reading between the lines, I'm guessing the performance boost might
-> come from avoiding a transaction roll and (possibly) reducing the need
-> to log bmbt updates?  Particularly in the worst case where we split the
-> bmbt only to rejoin the blocks immediately after.
-> 
-> Recently, Dave and Allison have been pondering making an addition to the
-> deferred log item code so that we could ->finish_item the first defer op
-> in the same transaction that logs the caller's deferred operations.
-> Might that get you most of the speed advantage that you're seeking?
+Just cleanup, no logic change.
 
-Ok, I will recheck later after my container stuff are almost done..
+Signed-off-by: Yu Liao <liaoyu15@huawei.com>
+---
+ drivers/s390/char/sclp.c       |  4 +---
+ drivers/s390/char/sclp_con.c   |  3 +--
+ drivers/s390/char/sclp_vt220.c |  6 ++----
+ drivers/s390/cio/device_fsm.c  | 12 +++---------
+ drivers/s390/cio/eadm_sch.c    | 12 +++---------
+ 5 files changed, 10 insertions(+), 27 deletions(-)
 
-> 
-> > It's important to us since, actually, we're planing to use a modified
-> > alway-cow like atomic write approach internally for database
-> > applications, therefore it'd be nice to do some optimization over
-> > simple end COW approach. Also I think it's still generic and can
-> > benefit other reflink use cases as well.
-> 
-> Hmm, that sounds /awfully/ similar to what sqlite does with f2fs' atomic
-> write ioctls.
-> 
-> Alternately, would this[1] feature that's been sitting around in
-> djwong-dev since late 2019 help?
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/?h=atomic-file-updates
-> 
+diff --git a/drivers/s390/char/sclp.c b/drivers/s390/char/sclp.c
+index f0763e36b861..cb2491761958 100644
+--- a/drivers/s390/char/sclp.c
++++ b/drivers/s390/char/sclp.c
+@@ -745,9 +745,7 @@ sclp_sync_wait(void)
+ 	/* Loop until driver state indicates finished request */
+ 	while (sclp_running_state != sclp_running_state_idle) {
+ 		/* Check for expired request timer */
+-		if (timer_pending(&sclp_request_timer) &&
+-		    get_tod_clock_fast() > timeout &&
+-		    del_timer(&sclp_request_timer))
++		if (get_tod_clock_fast() > timeout && del_timer(&sclp_request_timer))
+ 			sclp_request_timer.function(&sclp_request_timer);
+ 		cpu_relax();
+ 	}
+diff --git a/drivers/s390/char/sclp_con.c b/drivers/s390/char/sclp_con.c
+index de028868c6f4..fe5ee2646fcf 100644
+--- a/drivers/s390/char/sclp_con.c
++++ b/drivers/s390/char/sclp_con.c
+@@ -109,8 +109,7 @@ static void sclp_console_sync_queue(void)
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&sclp_con_lock, flags);
+-	if (timer_pending(&sclp_con_timer))
+-		del_timer(&sclp_con_timer);
++	del_timer(&sclp_con_timer);
+ 	while (sclp_con_queue_running) {
+ 		spin_unlock_irqrestore(&sclp_con_lock, flags);
+ 		sclp_sync_wait();
+diff --git a/drivers/s390/char/sclp_vt220.c b/drivers/s390/char/sclp_vt220.c
+index 7bc4e4a10937..3b4e7e5d9b71 100644
+--- a/drivers/s390/char/sclp_vt220.c
++++ b/drivers/s390/char/sclp_vt220.c
+@@ -231,8 +231,7 @@ sclp_vt220_emit_current(void)
+ 			list_add_tail(&sclp_vt220_current_request->list,
+ 				      &sclp_vt220_outqueue);
+ 			sclp_vt220_current_request = NULL;
+-			if (timer_pending(&sclp_vt220_timer))
+-				del_timer(&sclp_vt220_timer);
++			del_timer(&sclp_vt220_timer);
+ 		}
+ 		sclp_vt220_flush_later = 0;
+ 	}
+@@ -776,8 +775,7 @@ static void __sclp_vt220_flush_buffer(void)
+ 
+ 	sclp_vt220_emit_current();
+ 	spin_lock_irqsave(&sclp_vt220_lock, flags);
+-	if (timer_pending(&sclp_vt220_timer))
+-		del_timer(&sclp_vt220_timer);
++	del_timer(&sclp_vt220_timer);
+ 	while (sclp_vt220_queue_running) {
+ 		spin_unlock_irqrestore(&sclp_vt220_lock, flags);
+ 		sclp_sync_wait();
+diff --git a/drivers/s390/cio/device_fsm.c b/drivers/s390/cio/device_fsm.c
+index 05e136cfb8be..6d63b968309a 100644
+--- a/drivers/s390/cio/device_fsm.c
++++ b/drivers/s390/cio/device_fsm.c
+@@ -113,16 +113,10 @@ ccw_device_timeout(struct timer_list *t)
+ void
+ ccw_device_set_timeout(struct ccw_device *cdev, int expires)
+ {
+-	if (expires == 0) {
++	if (expires == 0)
+ 		del_timer(&cdev->private->timer);
+-		return;
+-	}
+-	if (timer_pending(&cdev->private->timer)) {
+-		if (mod_timer(&cdev->private->timer, jiffies + expires))
+-			return;
+-	}
+-	cdev->private->timer.expires = jiffies + expires;
+-	add_timer(&cdev->private->timer);
++	else
++		mod_timer(&cdev->private->timer, jiffies + expires);
+ }
+ 
+ int
+diff --git a/drivers/s390/cio/eadm_sch.c b/drivers/s390/cio/eadm_sch.c
+index 8b463681a149..ab6a7495180a 100644
+--- a/drivers/s390/cio/eadm_sch.c
++++ b/drivers/s390/cio/eadm_sch.c
+@@ -112,16 +112,10 @@ static void eadm_subchannel_set_timeout(struct subchannel *sch, int expires)
+ {
+ 	struct eadm_private *private = get_eadm_private(sch);
+ 
+-	if (expires == 0) {
++	if (expires == 0)
+ 		del_timer(&private->timer);
+-		return;
+-	}
+-	if (timer_pending(&private->timer)) {
+-		if (mod_timer(&private->timer, jiffies + expires))
+-			return;
+-	}
+-	private->timer.expires = jiffies + expires;
+-	add_timer(&private->timer);
++	else
++		mod_timer(&private->timer, jiffies + expires);
+ }
+ 
+ static void eadm_subchannel_irq(struct subchannel *sch)
+-- 
+2.25.1
 
-The problem is that, for example, mysql directly uses direct I/O to
-write data, and we don't want to touch applications (since there are
-still old e.g. mysql versions in production.) so a transparent COW
-atomic write would be much helpful for products (yeah, I admit it's a
-bit tricky, but until applications choose to use swapext, we still
-need some way that we don't need to touch database apps).
-
-Thanks for the reply and the time!
-
-Thanks,
-Gao Xiang 
-
-> --D
-> 
-> > 
-> > I did some tests with ramdisk in order to measure metadata overhead:
-> > 
-> > echo 1 > /sys/fs/xfs/debug/always_cow
-> > mkfs.xfs -f -mreflink=1 /dev/ram0
-> > mount /dev/ram0 testdir
-> > fio -filename=testdir/1 -size=1G -ioengine=psync -bs=4k -rw=randwrite -overwrite=1 -direct=1 -end_fsync=1 -name=job1
-> > 
-> > Test results as below:
-> > Vanilla:
-> > (1)   iops        : min= 7986, max=16434, avg=12505.76, stdev=2400.05, samples=41
-> > (2)   iops        : min= 7636, max=16376, avg=12474.19, stdev=2258.18, samples=42
-> > (3)   iops        : min= 8346, max=16439, avg=12227.95, stdev=2432.12, samples=42
-> > (4)   iops        : min= 8580, max=16496, avg=12779.41, stdev=2297.42, samples=41
-> > (5)   iops        : min= 8286, max=16556, avg=12500.76, stdev=2123.90, samples=41
-> > 
-> > Patched:
-> > (1)   iops        : min= 7086, max=17132, avg=12931.20, stdev=2729.10, samples=40
-> > (2)   iops        : min= 7704, max=17508, avg=13204.62, stdev=2507.70, samples=39
-> > (3)   iops        : min= 8736, max=17634, avg=13253.08, stdev=2545.18, samples=39
-> > (4)   iops        : min= 7188, max=17550, avg=12928.40, stdev=2633.64, samples=40
-> > (5)   iops        : min= 8268, max=17446, avg=12837.55, stdev=2717.98, samples=40
-> > 
-> > xfstests seems survived. Comments are much welcomed and
-> > thanks for your time!
-> > 
-> > Thanks,
-> > Gao Xiang
-> > 
-> > Changes since v1:
-> >  - fix missing tmp_logflags initialization;
-> >  - drop unnecessary realtime inode check pointed out by Darrick.
-> > 
-> > Gao Xiang (3):
-> >   xfs: get rid of LEFT, RIGHT, PREV in
-> >     xfs_bmap_add_extent_unwritten_real()
-> >   xfs: introduce xfs_bmap_update_extent_real()
-> >   xfs: introduce xfs_bremapi_from_cowfork()
-> > 
-> >  fs/xfs/libxfs/xfs_bmap.c | 377 +++++++++++++++++++++++++--------------
-> >  fs/xfs/libxfs/xfs_bmap.h |   7 +-
-> >  fs/xfs/xfs_reflink.c     |  24 +--
-> >  3 files changed, 252 insertions(+), 156 deletions(-)
-> > 
-> > -- 
-> > 2.24.4
-> > 

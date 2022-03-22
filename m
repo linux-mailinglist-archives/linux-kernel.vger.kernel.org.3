@@ -2,116 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAF54E367F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18AD4E3622
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235414AbiCVCRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S235049AbiCVBqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 21:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235370AbiCVCRW (ORCPT
+        with ESMTP id S234610AbiCVBqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:17:22 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEB8245B5;
-        Mon, 21 Mar 2022 19:14:39 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h4so5070524wrc.13;
-        Mon, 21 Mar 2022 19:14:39 -0700 (PDT)
+        Mon, 21 Mar 2022 21:46:43 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800321D0FE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:45:16 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id w21so7869760pgm.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:45:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4e4qPKq8sPq7QTzJDHmma/b/Tofj4GtIBeiWbSSZTeU=;
-        b=YNZ5DgH6/1NoZacr7qT+3PEBFsjWiYDKBXmU7Asw57xhxohy6dB4I7hzagd9h5XpN6
-         u72wALuNNgpg0bmdLZGl+YSLdHR5Isye4A9yBDQs1NT8XJINE9fL+qEVXfwzb2UTQmlt
-         qUdfk0sDQKJocGUWvGTtFA/QHZ0sYMBVMv6G6M/lJFe16BELEBpK51ESljWmHZEeWgH9
-         NocZx6981JPByVBQFQ5ZJxWSeS9i6V3+Q7Ldvs3CpMJ27Q17ihZECAcvFNrfq8pGQPum
-         bPbpKUubJJq2F+q3f9SGPZ9e/Hd0lEIM9zg5yGEW+DTp0xGkUT+rzR9eWehdeWJXNTFO
-         JPEQ==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QIf4Hy84dx7L6X4BNNjvqyd7qQS9lH8gSrCqndVgulg=;
+        b=c1eIS7vo7uHJkChkDX9E8UuibyJlcPj9ny6akRAfhecft5A4sQAAvRT6NWdrwAyYS1
+         dhaWlwDJJ1cJQ9ZRJHl9EjacUiDF5EHf3CHkOAqMuf0zU49JchE3kIj49+xSipYMpZiR
+         HImhOI6SXmdIbf5Eor+xzxKwjeQIQjsWyx8OU4AT+mnrMtNSqd3W8TbEmgIo7Y1ycTlD
+         rVRjOa0tpXALsViv1QgoVdGtel5P6mOpCoBMe6neh7LZthVINVhnDwPsTLrKPRqvH1Ba
+         hTfFX+3SOKUYmcJb74di86aoahq+yHYqmpEMYLfZnR7rPa1oD6FVpe5eB6p5JxtXIWju
+         iwxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4e4qPKq8sPq7QTzJDHmma/b/Tofj4GtIBeiWbSSZTeU=;
-        b=p8Eoj+mazcNajT8VutL3XrjSNxXdbNk76AbQcu3dhq8JzNGuttfGBAD0eJtKj0BCGE
-         I8fkM8pTmXnauLzoID0PmClbW+kQA0VueZv+sotvtD9L4hjpGoHGCscRvH+U51WYo6R5
-         8PdFEODPcly9qvXWiJed0rlmdvJceFzyk7IYs7gIkwGOpwdj13pxdGgRUvShbhcjTQeg
-         3RhdW+q0uOEhK0XyN8f24C/Kv1nayTh0zyscEfKPBuXfmPH4Ic+lrJWyHKS0c5AccIxU
-         crcawVi2OrkImsy39QtMuxs8DS1cFMqVry8/9NTAvxsj1P7VM06CDGShA0l8/S2lnxsT
-         ZIpQ==
-X-Gm-Message-State: AOAM533USzFgNnYCuDKaQ2w9kIg7Yt1PjFzC6odH8PVbtDtYNU77RtXZ
-        uBEntJ9Qp1xX+tsovRuhjZM=
-X-Google-Smtp-Source: ABdhPJwVqBIAkIhwQPknJL4WIrRPIV67cJTRB6J0Dl+eIow16WwcWdXgO9Mv1abtugRBvKjBOyMTMQ==
-X-Received: by 2002:a5d:4491:0:b0:203:f63a:e89b with SMTP id j17-20020a5d4491000000b00203f63ae89bmr14937568wrq.342.1647915278309;
-        Mon, 21 Mar 2022 19:14:38 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.googlemail.com with ESMTPSA id m2-20020a056000024200b00205718e3a3csm177968wrz.2.2022.03.21.19.14.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 19:14:38 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next PATCH 4/4] drivers: net: dsa: qca8k: drop dsa_switch_ops from qca8k_priv
-Date:   Tue, 22 Mar 2022 02:45:06 +0100
-Message-Id: <20220322014506.27872-5-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220322014506.27872-1-ansuelsmth@gmail.com>
-References: <20220322014506.27872-1-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QIf4Hy84dx7L6X4BNNjvqyd7qQS9lH8gSrCqndVgulg=;
+        b=TO4AuhbWFtXrdSbmZVY23o8Pl5luzWZ8cyHsgcrTorP7/vDoVSvr0eVhnUHCDxEGch
+         JESDA7FpmoFQfE4+u6XHrK11ibvLXzzjof0uVjmssFmqb3Iol5rdmJHSlHyNk7jPwKAG
+         3+9Gw4I3+LsXSJR0EtRx6O6ymsS7389AIERBIsXqd5xLsdxW76DTFPA6PsSFdkcxbTo5
+         /qFBBB+ZYoBZxJ7cOuhwld1Zi4NbyEnaYLO0gDNEGnhOZXk6wTHGomCgovyzUu4WC/RU
+         KWzMIXZJBB79UrExGfssWEv1ddaM3prx2Uk1LVmZaEeb2SIla4zVkUDXIQ7QEqPsX7Yu
+         erfw==
+X-Gm-Message-State: AOAM531D8tXXiISzsbf8QXYphoBxZslUmluHdxDLcWQ179YStZayMxWO
+        L/wjU45Zrou/vc4/oYlDYUcdXrES2xuxAvMCUUkbOA==
+X-Google-Smtp-Source: ABdhPJzVR8hSV4LYUKgF5NX85hxfFWmgAFFzJsBeUycAZHnf4kgiNP9olDkABVHU+za3VoOGb088WtmKxpJ0jIdi06E=
+X-Received: by 2002:a63:5c53:0:b0:381:309e:e72c with SMTP id
+ n19-20020a635c53000000b00381309ee72cmr20646280pgm.40.1647913516040; Mon, 21
+ Mar 2022 18:45:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220318114133.113627-1-kjain@linux.ibm.com> <20220318114133.113627-2-kjain@linux.ibm.com>
+ <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+In-Reply-To: <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 21 Mar 2022 18:45:08 -0700
+Message-ID: <CAPcyv4iNy-RqKgwc61c+hL9g1zAE_tL5r_mqUQwCiKTzevjoDA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
+ CONFIG_PERF_EVENTS is not set
+To:     Kajol Jain <kjain@linux.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that dsa_switch_ops is not switch specific anymore, we can drop it
-from qca8k_priv and use the static ops directly for the dsa_switch
-pointer.
+On Mon, Mar 21, 2022 at 2:39 PM Dan Williams <dan.j.williams@intel.com> wro=
+te:
+>
+> On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
+> >
+> > The following build failure occures when CONFIG_PERF_EVENTS is not set
+> > as generic pmu functions are not visible in that scenario.
+> >
+> > arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: =E2=80=98struc=
+t perf_event=E2=80=99 has no member named =E2=80=98attr=E2=80=99
+> >          p->nvdimm_events_map[event->attr.config],
+> >                                    ^~
+> > In file included from ./include/linux/list.h:5,
+> >                  from ./include/linux/kobject.h:19,
+> >                  from ./include/linux/of.h:17,
+> >                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+> > arch/powerpc/platforms/pseries/papr_scm.c: In function =E2=80=98papr_sc=
+m_pmu_event_init=E2=80=99:
+> > arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: =E2=80=98struc=
+t perf_event=E2=80=99 has no member named =E2=80=98pmu=E2=80=99
+> >   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
+> >                                                  ^~
+> > ./include/linux/container_of.h:18:26: note: in definition of macro =E2=
+=80=98container_of=E2=80=99
+> >   void *__mptr =3D (void *)(ptr);     \
+> >                           ^~~
+> > arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion of=
+ macro =E2=80=98to_nvdimm_pmu=E2=80=99
+> >   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
+> >                               ^~~~~~~~~~~~~
+> > In file included from ./include/linux/bits.h:22,
+> >                  from ./include/linux/bitops.h:6,
+> >                  from ./include/linux/of.h:15,
+> >                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+> >
+> > Fix the build issue by adding check for CONFIG_PERF_EVENTS config optio=
+n
+> > and disabling the papr_scm perf interface support incase this config
+> > is not set
+> >
+> > Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") (C=
+ommit id
+> > based on linux-next tree)
+> > Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+> > ---
+> >  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
+>
+> This is a bit messier than I would have liked mainly because it dumps
+> a bunch of ifdefery into a C file contrary to coding style, "Wherever
+> possible, don't use preprocessor conditionals (#if, #ifdef) in .c
+> files". I would expect this all to move to an organization like:
+>
+> arch/powerpc/platforms/pseries/papr_scm/main.c
+> arch/powerpc/platforms/pseries/papr_scm/perf.c
+>
+> ...and a new config symbol like:
+>
+> config PAPR_SCM_PERF
+>        depends on PAPR_SCM && PERF_EVENTS
+>        def_bool y
+>
+> ...with wrappers in header files to make everything compile away
+> without any need for main.c to carry an ifdef.
+>
+> Can you turn a patch like that in the next couple days? Otherwise, I
+> think if Linus saw me sending a late breaking compile fix that threw
+> coding style out the window he'd have cause to just drop the pull
+> request entirely.
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- drivers/net/dsa/qca8k.c | 3 +--
- drivers/net/dsa/qca8k.h | 1 -
- 2 files changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-index c837444d37f6..38567080e7b3 100644
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -3177,8 +3177,7 @@ qca8k_sw_probe(struct mdio_device *mdiodev)
- 	priv->ds->dev = &mdiodev->dev;
- 	priv->ds->num_ports = QCA8K_NUM_PORTS;
- 	priv->ds->priv = priv;
--	priv->ops = qca8k_switch_ops;
--	priv->ds->ops = &priv->ops;
-+	priv->ds->ops = &qca8k_switch_ops;
- 	mutex_init(&priv->reg_mutex);
- 	dev_set_drvdata(&mdiodev->dev, priv);
- 
-diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
-index 8bbe36f135b5..04408e11402a 100644
---- a/drivers/net/dsa/qca8k.h
-+++ b/drivers/net/dsa/qca8k.h
-@@ -394,7 +394,6 @@ struct qca8k_priv {
- 	struct dsa_switch *ds;
- 	struct mutex reg_mutex;
- 	struct device *dev;
--	struct dsa_switch_ops ops;
- 	struct gpio_desc *reset_gpio;
- 	struct net_device *mgmt_master; /* Track if mdio/mib Ethernet is available */
- 	struct qca8k_mgmt_eth_data mgmt_eth_data;
--- 
-2.34.1
-
+Also, please base it on the current state of the libnvdimm-for-next
+branch as -next includes some of the SMART health changes leading to
+at least one conflict.

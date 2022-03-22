@@ -2,236 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221384E42F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C95D4E42FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbiCVP34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S235780AbiCVPaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238509AbiCVP3j (ORCPT
+        with ESMTP id S235044AbiCVPaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:29:39 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E165C869
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:28:11 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id j2so34395149ybu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:28:11 -0700 (PDT)
+        Tue, 22 Mar 2022 11:30:22 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAD28BE05
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:28:55 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id w4so15726607ply.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:28:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5OphcbqCvpsr6M8Vdm3IZvaMniCBLLpqro87f20by7I=;
-        b=cP5l6kuOhGa2NIFX0lSgTv3KX7wNCjukAhamFY0GzHp6M1U8tMNg8hOhUduyo70T1M
-         B31mtAuBTrDx9QuHMdlu586g3GeY0umcRas81yhNJ2ncSDPBTpnD9T3LeNIrKZZ0HGrT
-         iyj9vQWuDOjpNGVHu92wFCZcmGJ1x1XQGSPDuKavRsCwZU6ixDPg/4cjq6rTPx3esnvh
-         k+Sz8niVifCDmHO4aWd9pLT1vIhJvrZ3ByqDRn8vB+9seqyxkgKCjCP6ui+ROuyXxd4X
-         tAhZeeBsodNJdR2ZSlGgLXZpYy76EUc6CabsgsSRR6d8J7zZwoQz8mpTsO8pOr+mabdF
-         k00A==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=rNmQUGUX4iegT4ln3Ho9tZlmybJbnh/sFb9omQweIME=;
+        b=QBfZ+OpF6JMIpQazvukmHUlkfuIkFH4DGleUiBUV9YWAkacSyVDvh0pOZ78yoTD8no
+         GdWQ2Epf8/4SmiDbEgaMwjwrrUq6fXMxpy+ymUYV9N4L2SLnclk4LPW4VFf2js0ybxp1
+         EtoeZlLqaLrYRXc5ZZSjE3EZusMHv8p5AA1TaI0c7brUD9Cc7tZ7eF3jppowcsB+HyMj
+         nKZ9HhjfueLYa3egD+k6vOtrlpp/H8ggRthopnFz1H90Pd+khqutGvpfIiua5mBXqm7g
+         Q83x6W81Wpmk4Sa7nzPPuk2aofyrD3rqaXO8vZRYxIbRmvCE4ii6/lhn/er/wljlxGgS
+         n4fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5OphcbqCvpsr6M8Vdm3IZvaMniCBLLpqro87f20by7I=;
-        b=xHacIxg3MMMg34IJLUGlg82iAnsrNLcRFi1a5PvUhcXXOqwv9Y6ShNB5c9wTXtw9P0
-         x2H2l/CiSPXWcCHVVfbG+N4XV5XfczjJDiRb1gsS3VYvl3WWekppqdd1lzurQdUyHKlz
-         eP5q73RT1q9JiW/Chx5ssIo6V7i4IQEHOyxP+nNNjoiL3TT5xHZ0AgOXiMuaMnjzMBFm
-         R01iOpyNnxJ4PbqXQzyeLLoWdTW8xYhBcNsnVf4HvxinodBD2ZSb/3BpzGGGn/zQwzT/
-         C0PUtkUsPtB9ow08V/X32XhKTadON3nWc1JlhD6YT/JGRiDZAydWHvbhpvXX2G+f0Va0
-         12Mw==
-X-Gm-Message-State: AOAM53161BwuqxftMGyTKixi0DhdqxqAjwlRfyMbZgugNXOvawNGaIju
-        57YzWyyayor1h7Fjt+q4Xz374skGF+5L1dP6RrzbYQ==
-X-Google-Smtp-Source: ABdhPJxX7msaA/OuYVdNFTYBmHmaknr4iEnV1D+ilxqM1QiabCf/srnsbs1GVfF3MZTd/FFt2tAyvsHBarbiJX+lCj0=
-X-Received: by 2002:a25:9846:0:b0:61a:3deb:4d39 with SMTP id
- k6-20020a259846000000b0061a3deb4d39mr27437171ybo.537.1647962890736; Tue, 22
- Mar 2022 08:28:10 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=rNmQUGUX4iegT4ln3Ho9tZlmybJbnh/sFb9omQweIME=;
+        b=Jxk0Vk00snM8G49RIdK47iZAJvvBwg553mnb6v2gpdq3EwDGABxhVTjUHgtKkd7GvG
+         6T9jugwvGuSdKc9cCzsO8KPRQ9O9G5fa4Bz8nz5ZjI8p2x5fYlrtqYhIkjoYXQE8H2QB
+         Y5BScEHM4k0U6bSIMLqnVPPSRLQFPwI6j0QpFgppXzwi+C+5+2R1ZA7cbQbu7HO18n4O
+         nl+4QDvQ2NFUuRyQHLDKi0ceqmsaKHinwL4K5mOAnZih3slcmpLy0PfKMoC1wyJONE/k
+         7S7XX5YUNXXTVxDFoHHQr7foWUpKyAxGDuFCFT38Skp89mKnJFdVdVrgYmQ6F0WxKnuI
+         Vm4w==
+X-Gm-Message-State: AOAM530ss8MEq/tYh+mPAFL0TaQXN7B7PVBQ7jrN69K03geP0SwEb//9
+        NrIvsqRmw2UTRc7zSPpVrqv1ZBZlxdU56w==
+X-Google-Smtp-Source: ABdhPJyJh6C78MwL4q2c9liWGTvFzMFdScUIAOg0OrH5sRT1BcKJFOL93R5xBUjWfTmKEXDaQtkv+w==
+X-Received: by 2002:a17:902:f64e:b0:14d:20db:8478 with SMTP id m14-20020a170902f64e00b0014d20db8478mr19224608plg.158.1647962934906;
+        Tue, 22 Mar 2022 08:28:54 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e62:3990:a113:6fc:a7b4:4226? ([2409:8a28:e62:3990:a113:6fc:a7b4:4226])
+        by smtp.gmail.com with ESMTPSA id om17-20020a17090b3a9100b001bf0fffee9bsm3230338pjb.52.2022.03.22.08.28.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 08:28:54 -0700 (PDT)
+Message-ID: <1c9f2383-ec9f-f819-d7be-23aed2bf121a@bytedance.com>
+Date:   Tue, 22 Mar 2022 23:28:41 +0800
 MIME-Version: 1.0
-References: <20220321133217.602054917@linuxfoundation.org>
-In-Reply-To: <20220321133217.602054917@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 22 Mar 2022 20:57:58 +0530
-Message-ID: <CA+G9fYsa8pvVdsnEV9YEkxhcXzY2NYV0ev2v7APsTC3K8KEJzw@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/22] 4.14.273-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [External] Re: [PATCH v2 1/6] perf/core: Fix incosistency between
+ cgroup sched_out and sched_in
+Content-Language: en-US
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, eranian@google.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+References: <20220322120834.98637-1-zhouchengming@bytedance.com>
+ <20220322120834.98637-2-zhouchengming@bytedance.com>
+ <YjnIKCIRV+ePJVCN@hirez.programming.kicks-ass.net>
+ <b55676c3-07da-f4f1-e4c8-252cd9d4fac2@bytedance.com>
+ <YjnjHPuNjo8YTwiQ@hirez.programming.kicks-ass.net>
+ <cdfb252e-9bfc-bee3-7ebe-b8ef401c85dd@bytedance.com>
+In-Reply-To: <cdfb252e-9bfc-bee3-7ebe-b8ef401c85dd@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 19:24, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.273 release.
-> There are 22 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.273-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 2022/3/22 11:16 下午, Chengming Zhou wrote:
+> Hi peter,
+> 
+> On 2022/3/22 10:54 下午, Peter Zijlstra wrote:
+>> On Tue, Mar 22, 2022 at 09:38:21PM +0800, Chengming Zhou wrote:
+>>> On 2022/3/22 8:59 下午, Peter Zijlstra wrote:
+>>>> On Tue, Mar 22, 2022 at 08:08:29PM +0800, Chengming Zhou wrote:
+>>>>> There is a race problem that can trigger WARN_ON_ONCE(cpuctx->cgrp)
+>>>>> in perf_cgroup_switch().
+>>>>>
+>>>>> CPU1					CPU2
+>>>>> (in context_switch)			(attach running task)
+>>>>> perf_cgroup_sched_out(prev, next)
+>>>>> 	cgrp1 == cgrp2 is True
+>>>>> 					next->cgroups = cgrp3
+>>>>> 					perf_cgroup_attach()
+>>>>> perf_cgroup_sched_in(prev, next)
+>>>>> 	cgrp1 == cgrp3 is False
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+I see, you must have been misled by my wrong drawing above ;-)
+I'm sorry, perf_cgroup_attach() on the right should be put at the bottom.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+CPU1						CPU2
+(in context_switch)				(attach running task)
+perf_cgroup_sched_out(prev, next)
+	cgrp1 == cgrp2 is True
+						next->cgroups = cgrp3
+perf_cgroup_sched_in(prev, next)
+	cgrp1 == cgrp3 is False
+						__perf_cgroup_move()
 
-## Build
-* kernel: 4.14.273-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.14.y
-* git commit: 7d28b4c6f4588cfdd8cd0d45f9183570fae70ffb
-* git describe: v4.14.272-23-g7d28b4c6f458
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.272-23-g7d28b4c6f458
+Thanks.
 
-## Test Regressions (compared to v4.14.272-15-gd7a314aa75d7)
-No test regressions found.
-
-## Metric Regressions (compared to v4.14.272-15-gd7a314aa75d7)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.272-15-gd7a314aa75d7)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.272-15-gd7a314aa75d7)
-No metric fixes found.
-
-## Test result summary
-total: 80301, pass: 64836, fail: 778, skip: 12411, xfail: 2276
-
-## Build Summary
-* arm: 280 total, 270 passed, 10 failed
-* arm64: 35 total, 35 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 24 total, 0 passed, 24 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 34 total, 34 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+>>>>>
+>>>>> The commit a8d757ef076f ("perf events: Fix slow and broken cgroup
+>>>>> context switch code") would save cpuctx switch out/in when the
+>>>>> perf_cgroup of "prev" and "next" are the same.
+>>>>>
+>>>>> But perf_cgroup of task can change in concurrent with context_switch.
+>>>>
+>>>> Can you clarify? IIRC then a task changes cgroup it goes throught the
+>>>> whole ->attach() dance, and that serializes against the context switch
+>>>> code.
+>>>>
+>>>
+>>> task->cgroups changed before perf_cgroup_attach(), and is not serialized
+>>> against the context switch, since task->cgroups can be changed without
+>>> rq lock held. (cgroup v1 or cgroup v2 with PSI disabled)
+>>>
+>>> So perf_cgroup_sched_out() in perf_cgroup_switch() may see the old or
+>>> new perf_cgroup when do context switch.
+>>
+>> __schedule()
+>>   local_irq_disable();				<--- IRQ disable
+>>   rq_lock();
+>>
+>>   ...
+>>
+>>   context_switch()
+>>     prepare_task_switch()
+>>       perf_event_task_sched_out()
+>>         __perf_event_task_sched_out()
+>> 	  perf_cgroup_sched_out();
+> 
+> here compare perf_cgroup_from_task(prev) and perf_cgroup_from_task(next)
+> 
+>>
+>>   switch_to()
+>>   finish_task_switch()
+>>     perf_event_task_sched_in()
+>>       __perf_event_task_sched_in()
+>>         perf_cgroup_sched_in();
+> 
+> here compare perf_cgroup_from_task(prev) and perf_cgroup_from_task(next)
+> 
+>>     finish_lock_switch()
+>>       raw_spin_irq_unlock_irq();		<--- IRQ enable
+>>
+>>
+>> vs
+>>
+> 
+> rcu_assign_pointer(p->cgroups, to)		<--- task perf_cgroup changed
+> 
+> task->cgroups has changed before sending IPI
+> 
+>> perf_event_cgrp_subsys.attach = perf_cgroup_attach()
+>>   cgroup_taskset_for_each()
+>>     task_function_call(task, __perf_cgroup_move) <--- sends IPI
+>>
+>>
+>> Please explain how this can interleave.
+> 
+> __perf_cgroup_move in IPI is of course serialized against context switch,
+> but the task->cgroups has changed before that, without rq lock held.
+> So perf_cgroup_from_task() may see the old or new perf_cgroup.
+> 
+> Thanks.
+> 

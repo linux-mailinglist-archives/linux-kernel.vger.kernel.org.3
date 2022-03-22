@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77894E3AF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06814E3AFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiCVIpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S231674AbiCVIpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbiCVIph (ORCPT
+        with ESMTP id S231668AbiCVIpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:45:37 -0400
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756B62AE3B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1647938642;
-        bh=ZhwrLpVxeb9axPGjqfL98j6rEPtndBto6xt6FHoWVFQ=;
-        h=In-Reply-To:References:From:To:Cc:Subject:Date;
-        b=b7zf73dWIOkwFECVzERXf9Tw8FBktKAlVjv63eby4QJh8wXCr70HiJqno9cWXDV9H
-         iXgzxjqA0rn9JQXvGS1bcjEPMEkKmGGiUR1oTgaPMt6r+Bv53GiEpPZ57Ig/qK1YXq
-         oSMLG80piuC1tzBBAC/+IV5LYfIMjYdNbmjwOS7Q=
-X-QQ-FEAT: oHWrrGTW1dA7H/rBCZjy5XfNuaD0tECu
-X-QQ-SSF: 00000000000000F000000000000000Z
-X-QQ-XMAILINFO: OG3fjXpkFjhKoqZJ8p9LShZ0qRbZgWnC4h8mcUwCvFzrNZiMSE+n1Ho72vSgu/
-         yFHdBzlz2y3pTtUhmmQe6DiwarocpDiM4FeByYS8glxyv2jUFrwwX+o+4tKk4KiMP/WW/t1boRg9V
-         OfkxDG3rG+CyL3f3LtSy0+HEscqwPMiY+4PCNtg1OmSaqewDKP0MDHZ27uIcsfwSPVMY8MafKjkHU
-         hLhOd/h9m4RHcEjHeQ4unrTPVSUZz+EydFuACugptDljljG/IogLRYTfnOkqFxEWAE5ht2MJV+pev
-         AH3/okz6pKSpkuy+nhM/pgmJMEr/7QEJEnzqH1IUNHSr2iZwAp1UgVgWy3OJWvQuFh6TwuLerOTfa
-         7JjBygQgtC67/84JjKr46eJVJoO17BaNdJaUY7k3KD/8LGSuA8ThUPSk+Nb4bnK5w63nNxd8gcqHc
-         zKY8kW50tBJNWgp6orrfxUgFY4P/Km+Tit5AnNEBw6fYzro05R4IjcrIQvZ1LRO/LyVAxy4hKUqxN
-         blwZR0jGBLSWIgI/4frZ1wHfD5SLBO5n/JcKvnlJ86vN/fNPu1CnNj/baqLEQonzQrGnMRSN35JW+
-         QIBNXWEkpBJE4ZNu+NLGIuWB3poqmxliLQMlUCrrO1lc6O36LKqdLILuIp4vxXCV19yp3A98RBmTi
-         tLy8DtVj7N4Yb7PMNNoaQ1RxyYzrGp6EnZb/tnjusGLnNxZkSjlDmo/SaZfKtZP08DTUmrkGGBg99
-         QitjclRRR0TVxXPjqmmjFcS8JMZdgW+VT9M7tU7PMFZ+lM1GDy2yn3yTVe3kAzubhUOIK3N+UYeA1
-         ozwu3s10alC3TjgmCSrcPvO9TZ/xisl9Rr8hJ9YETenmY4chstLJRMKCmgmjakTjNaiIqgEA4katV
-         D8JEv8NTBobW5Ec1e1Kdw+lhb9buoInIMvXIvU6bh8=
-X-HAS-ATTACH: no
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 111.47.122.156
-In-Reply-To: <YjmImXwknNx4WXDb@B-P7TQMD6M-0146.local>
-References: <tencent_010A807048A5F97F0A900866A35C648E2E07@qq.com>
-        <YjmImXwknNx4WXDb@B-P7TQMD6M-0146.local>
-X-QQ-STYLE: 
-X-QQ-mid: webmail813t1647938642t1340443
-From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
-To:     "=?ISO-8859-1?B?aHNpYW5na2Fv?=" <hsiangkao@linux.alibaba.com>
-Cc:     "=?ISO-8859-1?B?eGlhbmc=?=" <xiang@kernel.org>,
-        "=?ISO-8859-1?B?Y2hhbw==?=" <chao@kernel.org>,
-        "=?ISO-8859-1?B?bGludXgtZXJvZnM=?=" <linux-erofs@lists.ozlabs.org>,
-        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] erofs: fix a potential NULL dereference of alloc_pages()
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="ISO-8859-1"
-Content-Transfer-Encoding: base64
-Date:   Tue, 22 Mar 2022 16:44:02 +0800
-X-Priority: 3
-Message-ID: <tencent_A9204DCC4AB98B1CA0144FE1794AD8FFD708@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_EXCESS_BASE64,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Tue, 22 Mar 2022 04:45:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49F22AE3B;
+        Tue, 22 Mar 2022 01:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QAMnkCbPUARhn8PReqsuR28ofrVR9sa+6IKI9MA59uc=; b=YYeEAtVT0hh7A0ZXZQf1G7Cmvm
+        kigmRFo8HKuqBMYwA3Pgh7PbkRRCntyglV30cb1JjhwP6+IyYU+qCgliuVyXnT8Q1Y2HNicRqK2u7
+        k4TcBXLdR+3l3Iy+EM0cfVbYOgUbpcVIlMIc8aLtK/HpGgB1aaZoqrooGTbw97vl4rehTa8X7PWbZ
+        PZ13nq9X6pfiy+HThwMfgTE/5YiMX3RfulLBRxnJ4AeCy3yYSnGW248GMzg9Kkcv70zjj1cWfOlaN
+        V+S8qt2mRg4M2b+Y5/66GG64uUPj6NkgM/HhLTDsCaqhdkl4RnhFfTm8eX0GlgmWry4cLaAy1BmK+
+        kjn9ABQQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWa7e-00ASlo-Ri; Tue, 22 Mar 2022 08:44:10 +0000
+Date:   Tue, 22 Mar 2022 01:44:10 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
+        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
+        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v6 3/6] mce: fix set_mce_nospec to always unmap the whole
+ page
+Message-ID: <YjmMWvDRUHE08T+a@infradead.org>
+References: <20220319062833.3136528-1-jane.chu@oracle.com>
+ <20220319062833.3136528-4-jane.chu@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220319062833.3136528-4-jane.chu@oracle.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,10 +56,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMiBNYXIgMjAyMiAxNjoyODowOSArMDgwMCwgaHNpYW5na2FvQGxpbnV4LmFs
-aWJhYmEuY29tIHdyb3RlOgoKJmd0OyBJdCdzIHJlYWxseSBhIG5vZmFpbCBhbGxvY2F0aW9u
-LCBhbSBJIG1pc3Npbmcgc29tZXRoaW5nPwoKU29ycnksIEkgZGlkIG5vdCBjYXJlZnVsbHkg
-bm90aWNlIHRoZSBmbGFnIGBfX0dGUF9OT0ZBSUxgLgpQbGVhc2UgaWdub3JlIHRoaXMgcGF0
-Y2ggaWYgdGhpcyBkb2VzIG5vdCBuZWVkIHRvIGRlYWwgd2l0aCBmYWlsdXJlLgoKUmVnYXJk
-cywKWGlhb2tlIFdhbmc=
+On Sat, Mar 19, 2022 at 12:28:30AM -0600, Jane Chu wrote:
+> Mark poisoned page as not present, and to reverse the 'np' effect,
+> restate the _PAGE_PRESENT bit. Please refer to discussions here for
+> reason behind the decision.
+> https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
+
+I think it would be good to summarize the conclusion here instead of
+just linking to it.
+
+> +static int _set_memory_present(unsigned long addr, int numpages)
+> +{
+> +	return change_page_attr_set(&addr, numpages, __pgprot(_PAGE_PRESENT), 0);
+> +}
+
+What is the point of this trivial helper with a single caller?
 

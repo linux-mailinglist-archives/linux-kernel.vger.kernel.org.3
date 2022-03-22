@@ -2,194 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4592C4E4670
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 20:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 682C74E467A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 20:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiCVTFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 15:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S231261AbiCVTJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 15:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiCVTFg (ORCPT
+        with ESMTP id S230383AbiCVTJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 15:05:36 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA25DE85;
-        Tue, 22 Mar 2022 12:04:08 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b24so22830262edu.10;
-        Tue, 22 Mar 2022 12:04:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hfLUfSmKk/F6oL+pEdnJmHbr46HHHKKN6gcQZmfRAMw=;
-        b=XwH1KBP7s8AWHIdqkpt29/9jKPxp2TUdIHq4DYz2SkEkpNwuXBjh3+Jy773jmZN6vj
-         sGD8nlOqmKY20ZzqpHgfGQ7HA1sKoi1IGecbHnUkjkXIJHX9nSBa4vEcYvbfXLmwf9oA
-         PAOYtiyhUEIHXoC7hcexSBXROndfo13UwiiWpxZmGa4lGFc6v8cRehieAJDpVYKVAQRR
-         PVfct1tzf+vcw2wkAWT3DyWC8aCjz4nfCSYkYOMam1zXJrrwGB0+V9/dJlPdDpWUCewS
-         zyspE8YDK/F8HcmixEnYeAmTYvTj40gQOd8cSN6U1Be3leUfhC1PtA7n+8mASN1LJCsW
-         EgpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hfLUfSmKk/F6oL+pEdnJmHbr46HHHKKN6gcQZmfRAMw=;
-        b=PX7OQml7m+370t6HaGT1d2RkmkeX527LEHYVocFYqQLqQ7T5EDGaMjwVSPuSM5EhpG
-         BUokspA1bm8m8dW3p1WTjz8gtWJhyvuDEj0fLCFPj3oid6dWV2eAIJKLsE9zwuOrfBu1
-         s98RcQMzqZVXgJ15WDAnfzIPNmNTTXtYuLjOfLW4SPkwjW8iY+Ux4kiRBDXyW9AFFOlH
-         7d7o8jaPHgjQX63jKQZqfKq0PB6a2dkNIUAG9K68M8Baw/JOaWc0a33btuUUeEzIg9pN
-         CC52CgCdItbieKvbm6GWHIk+jwlWYIAQOHi25vUJVo0ZP7zuQ9+J4fSNYMyktO5q7XVT
-         2Dmw==
-X-Gm-Message-State: AOAM532+Wn7cN3ScyjqMyqywp1RJnHNGXBfalOrdUk8/yzwcUopPZ/ZS
-        /4aZYkVKzLrCb5a2rj2n0lezUE/PX1v2XXyVYCo=
-X-Google-Smtp-Source: ABdhPJwfpbpd/pXkiH2VtyBbD4b0xTNa7Dts7vTqnqzOw6ZriE6R584i1NaFtOgyocc/mhJuDI6NiS1GOuS42sgPR9w=
-X-Received: by 2002:a50:ec16:0:b0:40f:28a0:d0d6 with SMTP id
- g22-20020a50ec16000000b0040f28a0d0d6mr24268596edr.368.1647975847194; Tue, 22
- Mar 2022 12:04:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <Ydm7ReZWQPrbIugn@gmail.com> <YjBr10JXLGHfEFfi@gmail.com>
- <CAKBF=pvWzuPx0JB3XZ-v+i7KGbhMQTgH6xtii_Bed+qKRFx+ww@mail.gmail.com>
- <b8095bf8-961f-827c-2bd6-2ffa6298b730@infradead.org> <CAC=eVgQCs97N_jkB1LKOdxhd=Yvgf1SZfBWcDbG2dGhsihXLqw@mail.gmail.com>
-In-Reply-To: <CAC=eVgQCs97N_jkB1LKOdxhd=Yvgf1SZfBWcDbG2dGhsihXLqw@mail.gmail.com>
-From:   Kari Argillander <kari.argillander@gmail.com>
-Date:   Tue, 22 Mar 2022 21:03:56 +0200
-Message-ID: <CAC=eVgQeawN4Kr2DSePunCdLr_z9zbE=W72vVcLpHU63_3u4YA@mail.gmail.com>
-Subject: Re: [TREE] "Fast Kernel Headers" Tree -v3
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Kari Argillander <kari.argillander@stargateuniverse.net>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tue, 22 Mar 2022 15:09:29 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56861A6;
+        Tue, 22 Mar 2022 12:08:00 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-100-34-nat.elisa-mobile.fi [85.76.100.34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id B3C5F20388;
+        Tue, 22 Mar 2022 21:07:54 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1647976075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9zTS3DT6xcfZw/ju05KElVTkQiN1fQ/ztsa9TbNgG2s=;
+        b=cX6LmeT38lN2NaF7Qsx5VX0GwklLy2du9kOpxTh3b4+Qw5wrtoKy5+CaPdFHVPF7PUQJV7
+        JP0eZNy7X0Jfbj3WAB5bQXsUGhmUeS+qIfMHxdWpTOM+QUCxar+jfmcf0+g1AFcQ1pCKkA
+        q4bRX979489LLYULp2d8EW4EbP4qAGY=
+Date:   Tue, 22 Mar 2022 21:07:53 +0200
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-mmc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to
+ CCF
+Message-ID: <20220322190753.GF297526@darkstar.musicnaut.iki.fi>
+References: <20220310233307.99220-3-jmkrzyszt@gmail.com>
+ <20220321215416.236250-1-jmkrzyszt@gmail.com>
+ <20220322163646.GD297526@darkstar.musicnaut.iki.fi>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322163646.GD297526@darkstar.musicnaut.iki.fi>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1647976075; a=rsa-sha256; cv=none;
+        b=X6jYN8e4edIdwhVqd08HooVar4l9k4zaeYIbPBffuNKwdkVOZqop0cLduutP177L6DWw1t
+        z3md1/KyrpNc4Oj2NmcgYKgqs06xOi37+Q82NbgDQR7qRGbl7dmfLBEOUOb/ZvPz8Q9kzG
+        iv9WWWKrxOwoKKPEYH88Tk0Gi1Jit1A=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1647976075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9zTS3DT6xcfZw/ju05KElVTkQiN1fQ/ztsa9TbNgG2s=;
+        b=uVqGTgouIQJQ2R58scj6U0J2KM/YtrOq4hq0tSnqJjTw6VkH13Shbd3ZumElBWGBl6w/C+
+        SIBA6Ck0VAZhNiAy4cgvRL+DdTJJmixLaEk9B9FpqhWM/Nmc5koLsdctAdg9syFOac++N8
+        L8McGNzCb7F/2+k2v1U0gta89xs02Sw=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-22.03.2022 18.22 Kari Argillander (kari.argillander@gmail.com) wrote:
->
-> 22.03.2022 17.37 Randy Dunlap (rdunlap@infradead.org) wrote:
-> >
-> > Hi Kari,
-> >
-> > On 3/22/22 00:59, Kari Argillander wrote:
-> > > 15.3.2022 12.35 Ingo Molnar (mingo@kernel.org) wrote:
-> > >>
-> > >> This is -v3 of the "Fast Kernel Headers" tree, which is an ongoing r=
-ework
-> > >> of the Linux kernel's header hierarchy & header dependencies, with t=
-he dual
-> > >> goals of:
-> > >>
-> > >>  - speeding up the kernel build (both absolute and incremental build=
- times)
-> > >>
-> > >>  - decoupling subsystem type & API definitions from each other
-> > >>
-> > >> The fast-headers tree consists of over 25 sub-trees internally, span=
-ning
-> > >> over 2,300 commits, which can be found at:
-> > >>
-> > >>     git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git mast=
-er
-> > >
-> > > I have had problems to build master branch (defconfig) with gcc9
-> > >     gcc (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-> > >
-> > > I did also test v2 and problems where there too. I have no problem wi=
-th gcc10 or
-> > > Clang11. Error I get is:
-> > >
-> > > In file included from ./include/linux/rcuwait_api.h:7,
-> > >                  from ./include/linux/rcuwait.h:6,
-> > >                  from ./include/linux/irq_work.h:7,
-> > >                  from ./include/linux/perf_event_types.h:44,
-> > >                  from ./include/linux/perf_event_api.h:17,
-> > >                  from arch/x86/kernel/kprobes/opt.c:8:
-> > > ./include/linux/rcuwait_api.h: In function =E2=80=98rcuwait_active=E2=
-=80=99:
-> > > ./include/linux/rcupdate.h:328:9: error: dereferencing pointer to
-> > > incomplete type =E2=80=98struct task_struct=E2=80=99
-> > >   328 |  typeof(*p) *local =3D (typeof(*p) *__force)READ_ONCE(p); \
-> > >       |         ^
-> > > ./include/linux/rcupdate.h:439:31: note: in expansion of macro
-> > > =E2=80=98__rcu_access_pointer=E2=80=99
-> > >   439 | #define rcu_access_pointer(p) __rcu_access_pointer((p),
-> > > __UNIQUE_ID(rcu), __rcu)
-> > >       |                               ^~~~~~~~~~~~~~~~~~~~
-> > > ./include/linux/rcuwait_api.h:15:11: note: in expansion of macro
-> > > =E2=80=98rcu_access_pointer=E2=80=99
-> > >    15 |  return !!rcu_access_pointer(w->task);
-> > >
-> > >     Argillander
-> >
-> > You could try the patch here:
-> > https://lore.kernel.org/all/917e9ce0-c8cf-61b2-d1ba-ebf25bbd979d@infrad=
-ead.org/
->
-> I have to edit it to <linux/cgroup_types.h> as there is no <linux/cgroup-=
-defs.h>
-> with fast headers. I also tried a couple other things but it didn't
-> seem to make a
-> difference.
->
-> > although the build error that it fixes doesn't look exactly the same
-> > as yours.
->
-> Quite close still. Maybe I should try to bisect this and I will also
-> see how bisectable
-> this branch is.
+Hi,
 
-Ok. I have now bisect first bad to this commit.
-c4ad6fcb67c4 ("sched/headers: Reorganize, clean up and optimize
-kernel/sched/fair.c dependencies")
-Note that this has been also bisect by others.
+On Tue, Mar 22, 2022 at 06:36:48PM +0200, Aaro Koskinen wrote:
+> On Mon, Mar 21, 2022 at 10:54:16PM +0100, Janusz Krzysztofik wrote:
+> > In preparation for conversion of OMAP1 clocks to common clock framework,
+> > identify users of those clocks which don't call clk_prepare/unprepare()
+> > and update them to call clk_prepare_enable/clk_disable_unprepare() instead
+> > of just clk_enable/disable(), as required by CCF implementation of clock
+> > API.
+> > 
+> > v2: update still a few more OMAP specific drivers missed in v1,
+> >   - call clk_prepare/unprepare() just after/before clk_get/put() where it
+> >     can make more sense than merging prepare/unprepare with enable/disable.
+> 
+> Something is still broken. When doing kexec (using CCF kernel), the
+> kexec'ed kernel now hangs early (on 770):
+[...]
+> [    0.928863] calling  omap1_init_devices+0x0/0x2c @ 1
 
-With this I get little bit different error:
+It hangs in omap_sram_reprogram_clock() (<- omap1_select_table_rate()
+<- omap1_clk_late_init()).
 
-In file included from ./arch/x86/include/generated/asm/rwonce.h:1,
-                 from ./include/linux/compiler.h:255,
-                 from ./include/linux/export.h:43,
-                 from ./include/linux/linkage.h:7,
-                 from ./include/linux/kernel.h:17,
-                 from ./include/linux/cpumask.h:10,
-                 from ./include/linux/energy_model.h:4,
-                 from kernel/sched/fair.c:23:
-./include/linux/psi.h: In function =E2=80=98cgroup_move_task=E2=80=99:
-./include/linux/rcupdate.h:414:36: error: dereferencing pointer to
-incomplete type =E2=80=98struct css_set=E2=80=99
-  414 | #define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
-      |                                    ^~~~
-
-Which is actually the same error that is in Randy's message. Patch of
-Randy works
-on top of this commit. But I cannot get this patch to work with HEAD,
-but probably
-I'm just missing something obvious. Still nice to see that probably a
-solution is near.
-
-> > >> There's various changes in -v3, and it's now ported to the latest ke=
-rnel
-> > >> (v5.17-rc8).
-> > >>
-> > >> Diffstat difference:
-> > >>
-> > >>  -v2: 25332 files changed, 178498 insertions(+), 74790 deletions(-)
-> > >>  -v3: 25513 files changed, 180947 insertions(+), 74572 deletions(-)
-> >
-> >
-> > --
-> > ~Randy
+A.

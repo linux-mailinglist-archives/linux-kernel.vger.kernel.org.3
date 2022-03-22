@@ -2,150 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144CC4E4331
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A88C14E4335
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238689AbiCVPmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S238674AbiCVPmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238698AbiCVPm0 (ORCPT
+        with ESMTP id S238753AbiCVPmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:42:26 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A638C7C2;
-        Tue, 22 Mar 2022 08:40:55 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id jx9so2100360pjb.5;
-        Tue, 22 Mar 2022 08:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=UeqnEbJtsjk38FgKKJvvntXTXF5S5w1SgNTftwLe55I=;
-        b=LqMPZ32/mNBrsEGWAuuBqOcOWjEwRjwdv6OukQumYHYqDTGJWfL44Ze/DJzeaQGGDU
-         ZmwzF2QAN/8aD9BUepQdhQALlIoW5IOZGXOgCbJfrBmWdg4vmTLF/fB+cc4CR/GHGHpN
-         MPkX8YVNx93pPBbTmryACB2U7UeyR2LwtuFwjNZDrlEcvD+sVpbEoectmN2bMOO0aQjY
-         jGPj6SDRFcyu11CIFh5BU018KTKDDPcZ4Ynsf/EDAlOB1+gErnLQi/UuxUu8wEgrYOGO
-         v9cOtGFj62dvDpxgWLuLOBx4DmDQ1HbL7B+UGzvpwM2LOPo52YXdvb7cNc3bQVWZVkdk
-         zHrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UeqnEbJtsjk38FgKKJvvntXTXF5S5w1SgNTftwLe55I=;
-        b=LwnTECXiupqavnREtqzeZqfAvLczxJrK8CMUctHOcNmlsWod8sPpqWfn9umhshgyK9
-         nofYcRy9cS9GeR7i3n6+WNGZH/P/TAZQGwyBlQK8oF1qwARLUIOKcYFKxchNpS6xcbIM
-         ZP0+7stcAoWdw4/S2bUg9DdHB3Yt+T2gfXew38mnXxGnAh1N/6E7TYtEno7g2lp/OvTz
-         4+gMaVlC0TdQ77sY6Ud8vMmnnSmlD4Rx8zzmrr0U4hrV7L7Acn/X4Ghb137sZ7JeZoDV
-         4ni68cSZU2WftqdxXCJrXvBDpOAlyPvoJokvynTh7wi+uZGNO43DmoQUYXvSvT4AFIF4
-         QH3w==
-X-Gm-Message-State: AOAM533xWXbF9rFtg7de81JiJpr8BNYHji50LTUppH/oPcg8tE9MscP1
-        pxXmhBIjudPox2REwDiqTytnkF0C2mUsyK57
-X-Google-Smtp-Source: ABdhPJxnVeDiW9j5igEfONbmgwW2E/cXPuxXfw1GcXeDZO5bdExIeNTPWy5GGIHL0/Jy7Cq5o0XNGw==
-X-Received: by 2002:a17:90b:4785:b0:1c6:ad62:dda3 with SMTP id hz5-20020a17090b478500b001c6ad62dda3mr5756285pjb.232.1647963654718;
-        Tue, 22 Mar 2022 08:40:54 -0700 (PDT)
-Received: from jagath-PC ([115.99.184.169])
-        by smtp.gmail.com with ESMTPSA id v23-20020a17090a521700b001bbfc181c93sm3174317pjh.19.2022.03.22.08.40.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 22 Mar 2022 08:40:54 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 21:10:49 +0530
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 3/5] iio: accel: bma400: Add triggered buffer support
-Message-ID: <20220322154047.GA3677@jagath-PC>
-References: <20220319181023.8090-1-jagathjog1996@gmail.com>
- <20220319181023.8090-4-jagathjog1996@gmail.com>
- <CAHp75VdB5q+Y2R46OO-kCKCkPY58YzyLNjN3PjJiQhTOgV4n2w@mail.gmail.com>
- <20220321222117.GD10058@jagath-PC>
- <CAHp75Vdp12bm+CHWun36b36Sui73zh0_wtY5YhEqVdNy4rUxVA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vdp12bm+CHWun36b36Sui73zh0_wtY5YhEqVdNy4rUxVA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 11:42:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C67C8BF70;
+        Tue, 22 Mar 2022 08:41:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FFEEB81BC2;
+        Tue, 22 Mar 2022 15:41:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0A0C340F0;
+        Tue, 22 Mar 2022 15:41:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647963680;
+        bh=9lulS55rYge/f8W4ZmQhmOklPUPvVcTI/5fpSeo3QfU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fp+8gdct1DJvbNMsy39hAXeyD9lXCvxA3iEOwKO572M19fRn3QP/St5RrWWK3KP3Y
+         CQ1DaQ5x0zUaMxrDl1AWLIwhkeEVGQFIFxyziNBLYOPJgh9RvO6lKQokoKekCuRGvz
+         QF5d8J18mW7aXCw8HNLiwIk0eZVWM9nJicBrEp5nA5q0BuB+X1karYG8oOnzmB8gMe
+         Yg/C7+6Z0cuIahWHjk13kYBhPWeJx3fYqs9zaMzQoXTVDx2QDgxpUeweJJwbgl4dQu
+         O5T+mHXlvgy6EyVxp2LIiXQenuYedgXeiKgVHH6oNgJEpTxIVblHKXxNy3YgdUMpNz
+         FTfk7k8NLj7Sg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nWgdH-00GJ9a-PK; Tue, 22 Mar 2022 15:41:16 +0000
+Date:   Tue, 22 Mar 2022 15:41:15 +0000
+Message-ID: <87bkxyxaec.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        dann frazier <dann.frazier@canonical.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?B?U3TDqXBo?= =?UTF-8?B?YW5l?= Graber 
+        <stgraber@ubuntu.com>,
+        Android Kernel Team <kernel-team@android.com>
+Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
+In-Reply-To: <Yjnfr7V6egc1sewb@robh.at.kernel.org>
+References: <20220321104843.949645-1-maz@kernel.org>
+        <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
+        <87h77rxnyl.wl-maz@kernel.org>
+        <CAL_JsqK57KpZmzCE=86dLcHK4Ws_0w0ga4_qoYUe2GwFNpDzRw@mail.gmail.com>
+        <87fsnbxgau.wl-maz@kernel.org>
+        <e52c8cbd-031b-848f-3d78-dff8b93bd416@arm.com>
+        <61809b8f-acaa-bae2-ac5e-aa47c55eea23@arm.com>
+        <Yjnfr7V6egc1sewb@robh.at.kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robh@kernel.org, robin.murphy@arm.com, dann.frazier@canonical.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, toan@os.amperecomputing.com, lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com, stgraber@ubuntu.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
+On Tue, 22 Mar 2022 14:39:43 +0000,
+Rob Herring <robh@kernel.org> wrote:
+>=20
+> On Tue, Mar 22, 2022 at 01:16:35PM +0000, Robin Murphy wrote:
+> > On 2022-03-21 20:06, Robin Murphy wrote:
+> > > On 2022-03-21 19:21, Marc Zyngier wrote:
+> > > > On Mon, 21 Mar 2022 18:03:27 +0000,
+> > > > Rob Herring <robh@kernel.org> wrote:
+> > > > >=20
+> > > > > On Mon, Mar 21, 2022 at 11:36 AM Marc Zyngier <maz@kernel.org> wr=
+ote:
+> > > > > >=20
+> > > > > > On Mon, 21 Mar 2022 15:17:34 +0000,
+> > > > > > Rob Herring <robh@kernel.org> wrote:
+> > > > > > >=20
+> > > > > > > On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org>=
+ wrote:
+> > > > > > > >=20
+> > > > > > > For XGene-1, I'd still like to understand what the issue is. =
+Reverting
+> > > > > > > the first fix and fixing 'dma-ranges' should have fixed it. I=
+ need a
+> > > > > > > dump of how the IB registers are initialized in both cases. I=
+'m not
+> > > > > > > saying changing 'dma-ranges' in the firmware is going to be r=
+equired
+> > > > > > > here. There's a couple of other ways we could fix that withou=
+t a
+> > > > > > > firmware change, but first I need to understand why it broke.
+> > > > > >=20
+> > > > > > Reverting 6dce5aa59e0b was enough for me, without changing anyt=
+hing
+> > > > > > else.
+> > > > >=20
+> > > > > Meaning c7a75d07827a didn't matter for you. I'm not sure that it =
+would.
+> > > > >=20
+> > > > > Can you tell me what 'dma-ranges' contains on your system?
+> > > >=20
+> > > > Each pcie node (all 5 of them) has:
+> > > >=20
+> > > > dma-ranges =3D <0x42000000 0x80 0x00 0x80 0x00 0x00 0x80000000
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 0x42000000 0x00 0x00 0x00 0x00 0x80 0x00>;
+>=20
+> This is the same as what St=C3=A9phane has for Merlin. So c7a75d07827a ("=
+PCI:=20
+> xgene: Fix IB window setup") should have fixed Mustang.
 
-On Tue, Mar 22, 2022 at 10:54:53AM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 22, 2022 at 12:21 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> > On Mon, Mar 21, 2022 at 10:39:22AM +0200, Andy Shevchenko wrote:
-> > > On Sat, Mar 19, 2022 at 8:10 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> 
-> First of all, you left many uncommented comments. I assume you agree
-> with my comments and are going to address them. If it's not the case,
-> please elaborate.
+Should, but didn't. The DT also carries additional properties:
 
-Yes Andy, I agree with your comments and I will address them in the next v2 series.
+ib-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00
+             0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
 
-> 
-> ...
-> 
-> > > > +out:
-> >
-> > Just to skip the below "if()" if error occurs in previous regmap read,
-> > I used this label.
-> >        if (status & BMA400_INT_DRDY_MSK)
-> >              iio_trigger_poll_chained(data->trig);
-> >
-> > I will remove the label in next patch
-> 
-> Just return directly.
-> 
-> ...
-> 
-> > > A useless label. Moreover this raises a question: why is it okay to
-> > > always mark IRQ as handled?
-> > >
-> > > > +       return IRQ_HANDLED;
-> >
-> > Since I was not using top-half of the interrupt so I marked IRQ as handled
-> > even for error case in the handler.
-> 
-> Yes, but why? Isn't it an erroneous state? Does it mean spurious
-> interrupt? Does it mean interrupt is unserviced?
+which the driver ignores, but that could be relevant. FWIW, I've
+stashed the DT at [1].
 
-Sorry, even for erroneous state I was returning IRQ_HANDLED.
-As shown below, now for erroneous state and spurious interrupt I will return
-IRQ_NONE and for valid interrupt IRQ_HANDLED will be returned.
+	M.
 
-Is below method is correct?
+[1] http://www.loen.fr/tmp/mustang.dts
 
-static irqreturn_t bma400_interrupt(int irq, void *private)
-{
-       struct iio_dev *indio_dev = private;
-       struct bma400_data *data = iio_priv(indio_dev);
-       int ret;
-       __le16 status;
-
-       mutex_lock(&data->mutex);
-       ret = regmap_bulk_read(data->regmap, BMA400_INT_STAT0_REG, &status,
-                              sizeof(status));
-       mutex_unlock(&data->mutex);
-       if (ret)
-               return IRQ_NONE;
-
-       if (le16_to_cpu(status) & BMA400_INT_DRDY_MSK) {
-               iio_trigger_poll_chained(data->trig);
-	       return IRQ_HANDLED;
-	}
-
-        return IRQ_NONE;
-}
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+--=20
+Without deviation from the norm, progress is not possible.

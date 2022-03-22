@@ -2,187 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B4E4E364E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDF34E3650
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiCVB6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 21:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S235272AbiCVB7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 21:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235253AbiCVB6v (ORCPT
+        with ESMTP id S235253AbiCVB7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 21:58:51 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A2B44761
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:57:24 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id w25so19958236edi.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eu82S/LN4yJm+Zr0EcUu+NKIR8yR7yewIFipExmLnts=;
-        b=tmn+mtJMulOY4ofwfJbO4qp0DVMbyuIKSSmBHV1gWJExoLcc7Iwt7juvCR29p6Zn+E
-         /pa85Rd+BUJTwgk/hmZonCLc8mygujG71WvK48iP4C0PgmkPKXK+fLBS/JpdVMP333Cd
-         mu8g594S706CMxBVum1OZLOHnNLHZkV0Qh6UbjvxSUPRhRngWM5Of3D3WbTcCTr6M2Ds
-         KKUkHEsUT5nLtsK2wxFlcjsGD1UNtWVakR2lB7fBVSMN8yrNTyXLjz+SOlox1wxh6lJf
-         nX6JL3+TScbK0E3r0BHM1N/uqnqbrJejp8WCzUxtGQZN30pdXoDSW/pI43IFJSYToSxg
-         eD+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eu82S/LN4yJm+Zr0EcUu+NKIR8yR7yewIFipExmLnts=;
-        b=VuOArDtHnICh3+EAC3OEQHyS5+PBbAb8tafoc1p0HCO+0gdEoMqha7Ul6fisjToDUa
-         njMtvatm4s1J9eD2yFKvdfn0n4Qx2OjNz8WClPYcmJyZzMgoRhUu6HO8svHRhJyM6lmB
-         MlNTR8iotdsysLGjJW9hE27z8DdHA+bBJp5XD7pTMEDpzdUB9myIEx9ZUrc0FrPV2Ciw
-         19fDGnPA6ghsoeaLDLf6PXAtnhsBXIC/MV65cvBYIdQTK09A+P1PcbOrQ5V8WfYWhfWn
-         wjMRmxhC6MeEvGHMqK3V2xg6aWgNgHfNwFjIkGkysJfHZJme0Zp8qPgA1bSZLoN4bfwL
-         qkqA==
-X-Gm-Message-State: AOAM530jDBC8W3NzdATTR0KleP1hMsRWLqc1xQ0i9N2yeXCIKUstMvyo
-        7ZIDt+e2zRXViOJT+oo0dpzINzUSISWtIy2HdI+LTFSk8auPgQ==
-X-Google-Smtp-Source: ABdhPJwzSc/GZd8LazoT4/186Ywwiur0zNxKFcTZRVyPV67hq7en9ZiuaQL3z9vYLMlCA0awd1KOQow2SsyGRB9CQbs=
-X-Received: by 2002:a50:c307:0:b0:418:ec3b:2242 with SMTP id
- a7-20020a50c307000000b00418ec3b2242mr25864060edb.229.1647914243135; Mon, 21
- Mar 2022 18:57:23 -0700 (PDT)
+        Mon, 21 Mar 2022 21:59:41 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9624B1C2;
+        Mon, 21 Mar 2022 18:58:13 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KMvfx3fbrz9ssl;
+        Tue, 22 Mar 2022 09:54:17 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 09:58:12 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 09:58:10 +0800
+Subject: Re: [PATCH v21 3/5] arm64: kdump: reimplement crashkernel=X
+To:     John Donnelly <John.p.donnelly@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+CC:     Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Chen Zhou" <dingguo.cz@antgroup.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220227030717.1464-1-thunder.leizhen@huawei.com>
+ <20220227030717.1464-4-thunder.leizhen@huawei.com>
+ <cc0186d9-29a3-8eff-e38a-95fd4dd9c46f@oracle.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <d2c5f465-6edc-416c-3005-ef13ff3884b0@huawei.com>
+Date:   Tue, 22 Mar 2022 09:58:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20220319055600.3471875-1-davidgow@google.com>
-In-Reply-To: <20220319055600.3471875-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 21 Mar 2022 20:57:12 -0500
-Message-ID: <CAGS_qxpqcc8O2HpmF3qB-uzXZrDNg9=h3nE_f7si=aOxXkRA+Q@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Rework kunit_resource allocation policy
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cc0186d9-29a3-8eff-e38a-95fd4dd9c46f@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 12:56 AM David Gow <davidgow@google.com> wrote:
->
-> KUnit's test-managed resources can be created in two ways:
-> - Using the kunit_add_resource() family of functions, which accept a
->   struct kunit_resource pointer, typically allocated statically or on
->   the stack during the test.
-> - Using the kunit_alloc_resource() family of functions, which allocate a
->   struct kunit_resource using kzalloc() behind the scenes.
->
-> Both of these families of functions accept a 'free' function to be
-> called when the resource is finally disposed of.
->
-> At present, KUnit will kfree() the resource if this 'free' function is
-> specified, and will not if it is NULL. However, this can lead
-> kunit_alloc_resource() to leak memory (if no 'free' function is passed
-> in), or kunit_add_resource() to incorrectly kfree() memory which was
-> allocated by some other means (on the stack, as part of a larger
-> allocation, etc), if a 'free' function is provided.
-
-Trying it with this:
-
-static void noop_free_resource(struct kunit_resource *) {}
-
-struct kunit_resource global_res;
-
-static void example_simple_test(struct kunit *test)
-{
-        kunit_add_resource(test, NULL, noop_free_resource, &global_res, test);
-}
-
-Running then with
-$ run_kunit --kunitconfig=lib/kunit --arch=x86_64
---build_dir=kunit_x86/ --kconfig_add=CONFIG_KASAN=y
-
-Before:
-BUG: KASAN: double-free or invalid-free in kunit_cleanup+0x51/0xb0
-
-After:
-Passes
-
->
-> Instead, always kfree() if the resource was allocated with
-> kunit_alloc_resource(), and never kfree() if it was passed into
-> kunit_add_resource() by the user. (If the user of kunit_add_resource()
-> wishes the resource be kfree()ed, they can call kfree() on the resource
-> from within the 'free' function.
->
-> This is implemented by adding a 'should_free' member to
-
-nit: would `should_kfree` be a bit better?
-`should_free` almost sounds like "should we invoke res->free" (as
-nonsensical as that might be)
-
-> struct kunit_resource and setting it appropriately. To facilitate this,
-> the various resource add/alloc functions have been refactored somewhat,
-> making them all call a __kunit_add_resource() helper after setting the
-> 'should_free' member appropriately. In the process, all other functions
-> have been made static inline functions.
->
-> Signed-off-by: David Gow <davidgow@google.com>
-
-Tested-by: Daniel Latypov <dlatypov@google.com>
 
 
-> ---
->  include/kunit/test.h | 135 +++++++++++++++++++++++++++++++++++--------
->  lib/kunit/test.c     |  65 +++------------------
->  2 files changed, 120 insertions(+), 80 deletions(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 00b9ff7783ab..5a3aacbadda2 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -36,11 +36,14 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
->   * struct kunit_resource - represents a *test managed resource*
->   * @data: for the user to store arbitrary data.
->   * @name: optional name
-> - * @free: a user supplied function to free the resource. Populated by
-> - * kunit_resource_alloc().
-> + * @free: a user supplied function to free the resource.
->   *
->   * Represents a *test managed resource*, a resource which will automatically be
-> - * cleaned up at the end of a test case.
-> + * cleaned up at the end of a test case. This cleanup is performed by the 'free'
-> + * function. The resource itself is allocated with kmalloc() and freed with
-> + * kfree() if created with kunit_alloc_{,and_get_}resource(), otherwise it must
-> + * be freed by the user, typically with the 'free' function, or automatically if
-> + * it's allocated on the stack.
+On 2022/3/21 21:29, John Donnelly wrote:
+> On 2/26/22 9:07 PM, Zhen Lei wrote:
+>> From: Chen Zhou <chenzhou10@huawei.com>
+>>
+>> There are following issues in arm64 kdump:
+>> 1. We use crashkernel=X to reserve crashkernel below 4G, which
+>> will fail when there is no enough low memory.
+> 
+>                         " Not enough "
 
-I'm not a fan of this complexity, but I'm not sure if we have a way
-around it, esp. w/ stack-allocated data.
+OK, thanks
 
-Perhaps this would be a bit easier to read if we tweaked it a bit like:
-"freed with kfree() if allocated by KUnit (via kunit_alloc..."
+>> 2. If reserving crashkernel above 4G, in this case, crash dump
+>> kernel will boot failure because there is no low memory available
+>> for allocation.
+> 
+>  We can't have a "boot failure". If the requested reservation
+>  can not be met,  the kdump  configuration is not setup.
+>>
+>> To solve these issues, change the behavior of crashkernel=X and
+>> introduce crashkernel=X,[high,low]. crashkernel=X tries low allocation
+>> in DMA zone, and fall back to high allocation if it fails.
+>> We can also use "crashkernel=X,high" to select a region above DMA zone,
+>> which also tries to allocate at least 256M in DMA zone automatically.
+>> "crashkernel=Y,low" can be used to allocate specified size low memory.
+> 
+> Is there going to be documentation on what values certain Arm platforms are going to use this on ?
 
-Maybe we can drop the "or automatically, if it's allocated on the
-stack" as well.
+There is no exact formula.
 
-A bigger way to simplify: perhaps we should get rid of
-kunit_alloc_and_get_resource() first?
-It's only used in KUnit's tests for itself.
-They could instead use kunit_alloc_resource() +
-kunit_find_resource(test, kunit_resource_instance_match, data).
-We could even define the helper with the same name in kunit-test.c
-(the only place it's used).
+> 
+>>
+>> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
+>> Co-developed-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>   arch/arm64/kernel/machine_kexec.c      |   9 ++-
+>>   arch/arm64/kernel/machine_kexec_file.c |  12 ++-
+>>   arch/arm64/mm/init.c                   | 106 +++++++++++++++++++++++--
+>>   3 files changed, 115 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
+>> index e16b248699d5c3c..19c2d487cb08feb 100644
+>> --- a/arch/arm64/kernel/machine_kexec.c
+>> +++ b/arch/arm64/kernel/machine_kexec.c
+>> @@ -329,8 +329,13 @@ bool crash_is_nosave(unsigned long pfn)
+>>         /* in reserved memory? */
+>>       addr = __pfn_to_phys(pfn);
+>> -    if ((addr < crashk_res.start) || (crashk_res.end < addr))
+>> -        return false;
+>> +    if ((addr < crashk_res.start) || (crashk_res.end < addr)) {
+>> +        if (!crashk_low_res.end)
+>> +            return false;
+>> +
+>> +        if ((addr < crashk_low_res.start) || (crashk_low_res.end < addr))
+>> +            return false;
+>> +    }
+>>         if (!kexec_crash_image)
+>>           return true;
+>> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+>> index 59c648d51848886..889951291cc0f9c 100644
+>> --- a/arch/arm64/kernel/machine_kexec_file.c
+>> +++ b/arch/arm64/kernel/machine_kexec_file.c
+>> @@ -65,10 +65,18 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
+>>         /* Exclude crashkernel region */
+>>       ret = crash_exclude_mem_range(cmem, crashk_res.start, crashk_res.end);
+>> +    if (ret)
+>> +        goto out;
+>> +
+>> +    if (crashk_low_res.end) {
+>> +        ret = crash_exclude_mem_range(cmem, crashk_low_res.start, crashk_low_res.end);
+>> +        if (ret)
+>> +            goto out;
+>> +    }
+>>   -    if (!ret)
+>> -        ret =  crash_prepare_elf64_headers(cmem, true, addr, sz);
+>> +    ret = crash_prepare_elf64_headers(cmem, true, addr, sz);
+>>   +out:
+>>       kfree(cmem);
+>>       return ret;
+>>   }
+>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+>> index 90f276d46b93bc6..30ae6638ff54c47 100644
+>> --- a/arch/arm64/mm/init.c
+>> +++ b/arch/arm64/mm/init.c
+>> @@ -65,6 +65,44 @@ EXPORT_SYMBOL(memstart_addr);
+>>   phys_addr_t arm64_dma_phys_limit __ro_after_init;
+>>     #ifdef CONFIG_KEXEC_CORE
+>> +/* Current arm64 boot protocol requires 2MB alignment */
+>> +#define CRASH_ALIGN            SZ_2M
+>> +
+>> +#define CRASH_ADDR_LOW_MAX        arm64_dma_phys_limit
+>> +#define CRASH_ADDR_HIGH_MAX        memblock.current_limit
+>> +
+>> +/*
+>> + * This is an empirical value in x86_64 and taken here directly. Please
+>> + * refer to the code comment in reserve_crashkernel_low() of x86_64 for more
+>> + * details.
+>> + */
+>> +#define DEFAULT_CRASH_KERNEL_LOW_SIZE    \
+>> +    max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20)
+>> +
+>> +static int __init reserve_crashkernel_low(unsigned long long low_size)
+>> +{
+>> +    unsigned long long low_base;
+>> +
+>> +    /* passed with crashkernel=0,low ? */
+>> +    if (!low_size)
+>> +        return 0;
+>> +
+>> +    low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+>> +    if (!low_base) {
+>> +        pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
+>> +        return -ENOMEM;
+>> +    }
+>> +
+>> +    pr_info("crashkernel low memory reserved: 0x%08llx - 0x%08llx (%lld MB)\n",
+>> +        low_base, low_base + low_size, low_size >> 20);
+>> +
+>> +    crashk_low_res.start = low_base;
+>> +    crashk_low_res.end   = low_base + low_size - 1;
+>> +    insert_resource(&iomem_resource, &crashk_low_res);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   /*
+>>    * reserve_crashkernel() - reserves memory for crash kernel
+>>    *
+>> @@ -75,30 +113,79 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
+>>   static void __init reserve_crashkernel(void)
+>>   {
+>>       unsigned long long crash_base, crash_size;
+>> -    unsigned long long crash_max = arm64_dma_phys_limit;
+>> +    unsigned long long crash_low_size;
+>> +    unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>>       int ret;
+>> +    bool fixed_base, high = false;
+>> +    char *cmdline = boot_command_line;
+>>   -    ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+>> +    /* crashkernel=X[@offset] */
+>> +    ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
+>>                   &crash_size, &crash_base);
+>> -    /* no crashkernel= or invalid value specified */
+>> -    if (ret || !crash_size)
+>> -        return;
+>> +    if (ret || !crash_size) {
+>> +        /* crashkernel=X,high */
+>> +        ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
+>> +        if (ret || !crash_size)
+>> +            return;
+>> +
+>> +        /* crashkernel=Y,low */
+>> +        ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
+>> +        if (ret == -ENOENT)
+>> +            /*
+>> +             * crashkernel=Y,low is not specified explicitly, use
+>> +             * default size automatically.
+>> +             */
+>> +            crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+>> +        else if (ret)
+>> +            /* crashkernel=Y,low is specified but Y is invalid */
+>> +            return;
+>> +
+>> +        /* Mark crashkernel=X,high is specified */
+>> +        high = true;
+>> +        crash_max = CRASH_ADDR_HIGH_MAX;
+>> +    }
+>>   +    fixed_base = !!crash_base;
+>>       crash_size = PAGE_ALIGN(crash_size);
+>>         /* User specifies base address explicitly. */
+>> -    if (crash_base)
+>> +    if (fixed_base)
+>>           crash_max = crash_base + crash_size;
+>>   -    /* Current arm64 boot protocol requires 2MB alignment */
+>> -    crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+>> +retry:
+>> +    crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>>                              crash_base, crash_max);
+>>       if (!crash_base) {
+>> +        /*
+>> +         * Attempt to fully allocate low memory failed, fall back
+>> +         * to high memory, the minimum required low memory will be
+>> +         * reserved later.
+>> +         */
+>> +        if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
+>> +            crash_max = CRASH_ADDR_HIGH_MAX;
+>> +            goto retry;
+>> +        }
+>> +
+>>           pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+>>               crash_size);
+>>           return;
+>>       }
+>>   +    if (crash_base >= SZ_4G) {
+>> +        /*
+>> +         * For case crashkernel=X, low memory is not enough and fall
+>> +         * back to reserve specified size of memory above 4G, try to
+>> +         * allocate minimum required memory below 4G again.
+>> +         */
+>> +        if (!high)
+>> +            crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+>> +
+>> +        if (reserve_crashkernel_low(crash_low_size)) {
+>> +            memblock_phys_free(crash_base, crash_size);
+>> +            return;
+>> +        }
+>> +    }
+>> +
+>>       pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
+>>           crash_base, crash_base + crash_size, crash_size >> 20);
+>>   @@ -107,6 +194,9 @@ static void __init reserve_crashkernel(void)
+>>        * map. Inform kmemleak so that it won't try to access it.
+>>        */
+>>       kmemleak_ignore_phys(crash_base);
+>> +    if (crashk_low_res.end)
+>> +        kmemleak_ignore_phys(crashk_low_res.start);
+>> +
+>>       crashk_res.start = crash_base;
+>>       crashk_res.end = crash_base + crash_size - 1;
+>>       insert_resource(&iomem_resource, &crashk_res);
+> 
+> .
+> 
 
-Alternatively, we could make it an internal helper and define
-kunit_alloc_resource() as
-
-void *kunit_alloc_resource(...)
-{
-   struct kunit_resource *res = _kunit_alloc_and_get_resource(...)
-   if (res) return res->data;
-   return NULL;
-}
-
-?
+-- 
+Regards,
+  Zhen Lei

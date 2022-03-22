@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B394E49B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 00:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A84704E49B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 00:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240591AbiCVXkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 19:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        id S240573AbiCVXkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 19:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241008AbiCVXif (ORCPT
+        with ESMTP id S241442AbiCVXjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 19:38:35 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8FB61A1D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 16:37:07 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id g16-20020a05660226d000b00638d8e1828bso13432342ioo.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 16:37:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=nxTGya4rQb08tK4gHJKHSTw3wZe8r7lubNldP0E5UM0=;
-        b=PQIK8mO5Tx0d8P7yxXme7Jo3+8VSBTmnPKwjLDBF++afWdy1K6aXDy1km/1eY8EyJf
-         clgp+O8IWSiZL9CV/G5zmGg/jnrbA305vn5Fg+wU1A+T4zIt6NyzwgwtQko4L/6B0Pvj
-         6wnERLqZ/6DOjh4E8Dd0+LSLc+Y4uLV2b1V0Vp39EmoHYMA6YiCpBDM5Y+8VkuS9QZtY
-         igBQz5G4bauBM2XzoToRsRpKtLAOAYA6eqkVgGRIa/JL6Tyh10xwdZcKgW71E+6ffGfC
-         Dmw2PcfD9pl4760N6oNs5nJZr1dsYLRqiyISxZcAfhCPbjP1PF+bpTSkH72tqbjCmoxO
-         3MYw==
-X-Gm-Message-State: AOAM532mMInRY6ndbyz9RLBYEfMX49ztpWKlzgQKUp38I85O7jj6rIUM
-        IyRD8L5JOJfQIMKVrKYDMDVLiQXZ4tJEbpFhS3Lrboas2Osp
-X-Google-Smtp-Source: ABdhPJxkBIOSGWs6S8nhxejuf9nHwhVtj7JyAqCDEH/z3FhT2iqZsZ6dhC1IxoNid3/SYYBBE6W47SN+xfAXn5CzD4+KmXXPCsmG
+        Tue, 22 Mar 2022 19:39:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044B432996;
+        Tue, 22 Mar 2022 16:38:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 903A261252;
+        Tue, 22 Mar 2022 23:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08B1C340F2;
+        Tue, 22 Mar 2022 23:38:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647992301;
+        bh=Rl6UbQHgIDuIZXTEr3KxFphz2xVsXFACCwsYJCc9Foc=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=RMkO1k1uRrd3MYz1fVVoo8rvu6nTTwWo663BI3cKuT52leGP+D0YnSctOwlj21wZu
+         o+oAFV22egqV5SDCINjimBkejMfAd5tZz4FE05WN65Jgumb933lMsxuxyN+9P58iuR
+         9O5/gtgSS3oM3/AnB8jDcBb7FVMeNj44bhEp6ipa5Xm13MgGv9XHEgn12f21SswIlw
+         u9oNU59NRqSG+grclBXTDtRZ8uwMxqX/baYRfLQYGgpjpPlH15jXBSwb2oEqQdJrzt
+         mJ7ThjNTXVHz9oyrZGrPnp2gYtN20Kq8MSziJnyhwGnbDmr6PSno50pbp3PY6d/DD1
+         HUN5LWQuQv0tA==
+Received: by mail-wr1-f42.google.com with SMTP id u3so2414976wrg.3;
+        Tue, 22 Mar 2022 16:38:20 -0700 (PDT)
+X-Gm-Message-State: AOAM531DmzxbkmYjBslnNSfrQa4e8zTS7i6KZ8Ur1eYXRhkgvqrrzT9x
+        aAW3oU+EsS3ZeY8/EmPKdvcKkcMV5U7ECEsx5kY=
+X-Google-Smtp-Source: ABdhPJzcg278ZxDjnI+PAPQsTD7HvxcDXuSxkbmldiXfC2g12QTbS7y7QzXW7ZoN8ScCP1YK8myMYXNVUavbho2ce9I=
+X-Received: by 2002:a5d:47a5:0:b0:203:d4fd:4653 with SMTP id
+ 5-20020a5d47a5000000b00203d4fd4653mr24623747wrb.229.1647992299262; Tue, 22
+ Mar 2022 16:38:19 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:6012:0:b0:2bd:fb5f:d627 with SMTP id
- u18-20020a926012000000b002bdfb5fd627mr13275273ilb.86.1647992226627; Tue, 22
- Mar 2022 16:37:06 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 16:37:06 -0700
-In-Reply-To: <00000000000012e22c05dacabb11@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000042c81b05dad717e6@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in add_wait_queue
-From:   syzbot <syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk,
-        gregkh@linuxfoundation.org, io-uring@vger.kernel.org,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Received: by 2002:a05:6000:2c1:0:0:0:0 with HTTP; Tue, 22 Mar 2022 16:38:18
+ -0700 (PDT)
+In-Reply-To: <f8f1f383c4533a91a6025b1db5827ed6aaab002f.1647980983.git.christophe.jaillet@wanadoo.fr>
+References: <f8f1f383c4533a91a6025b1db5827ed6aaab002f.1647980983.git.christophe.jaillet@wanadoo.fr>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Wed, 23 Mar 2022 08:38:18 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd9uGsASkCSuKS7NW0MsME2n9Bhk8Sf=L0_uvs1qXU1wLg@mail.gmail.com>
+Message-ID: <CAKYAXd9uGsASkCSuKS7NW0MsME2n9Bhk8Sf=L0_uvs1qXU1wLg@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: Remove a redundant zeroing of memory
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steve French <sfrench@samba.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-cifs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,25 +66,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+2022-03-23 5:29 GMT+09:00, Christophe JAILLET <christophe.jaillet@wanadoo.fr>:
+> fill_transform_hdr() already call memset(0) on its 1st argument, so there
+> is no need to clear it explicitly before calling this function.
+>
+> Use kmalloc() instead of kzalloc() to save a few cycles.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Alternatively, fill_transform_hdr() has only one caller. So its memset()
+> could be removed instead and this kzalloc() left as is.
+I prefer this. Could you update the patch ?
 
-commit 91eac1c69c202d9dad8bf717ae5b92db70bfe5cf
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Wed Mar 16 22:59:10 2022 +0000
-
-    io_uring: cache poll/double-poll state with a request flag
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1280c825700000
-start commit:   b47d5a4f6b8d Merge tag 'audit-pr-20220321' of git://git.ke..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1180c825700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1680c825700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=63af44f0631a5c3a
-dashboard link: https://syzkaller.appspot.com/bug?extid=950cee6d91e62329be2c
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14506ddb700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=139b2093700000
-
-Reported-by: syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com
-Fixes: 91eac1c69c20 ("io_uring: cache poll/double-poll state with a request flag")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Thanks!
+> ---
+>  fs/ksmbd/smb2pdu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+> index bcb98109bac9..0e4f819e5859 100644
+> --- a/fs/ksmbd/smb2pdu.c
+> +++ b/fs/ksmbd/smb2pdu.c
+> @@ -8434,7 +8434,7 @@ int smb3_encrypt_resp(struct ksmbd_work *work)
+>  	if (ARRAY_SIZE(iov) < rq_nvec)
+>  		return -ENOMEM;
+>
+> -	work->tr_buf = kzalloc(sizeof(struct smb2_transform_hdr) + 4,
+> GFP_KERNEL);
+> +	work->tr_buf = kmalloc(sizeof(struct smb2_transform_hdr) + 4,
+> GFP_KERNEL);
+>  	if (!work->tr_buf)
+>  		return rc;
+>
+> --
+> 2.32.0
+>
+>

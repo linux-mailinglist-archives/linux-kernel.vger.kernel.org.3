@@ -2,152 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF254E4478
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4194E447B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239240AbiCVQqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
+        id S239247AbiCVQrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239231AbiCVQqh (ORCPT
+        with ESMTP id S235446AbiCVQrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:46:37 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D924B873
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:45:09 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id u103so34675062ybi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:45:09 -0700 (PDT)
+        Tue, 22 Mar 2022 12:47:09 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BFBBC2C;
+        Tue, 22 Mar 2022 09:45:42 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id mp6-20020a17090b190600b001c6841b8a52so3456328pjb.5;
+        Tue, 22 Mar 2022 09:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AEPKdfQLbwPTzKqThQDGwgj7kWss99Dn8po4pyO255s=;
-        b=ddWplO2lvUqvqxO14GRhtJiIcIil6ImSCV0lQvOyB6RhwfseAeO/f3MbwjXg0gB2AI
-         Y6wK6Z1zurAf8hSxxYyh5aO+O+vxAaoemeucwVmcGyYcyPCo1ko+7oQaiVttX2jLA/Gl
-         uABWSRhRigugKLHpvjeYnO1NzwOnJZJmZabgbd9pBfOzTCWhBhUMXEkS8wkosbIx40wn
-         7LaVEhfF7lNrRyEifBQcWvpUCYdPxhbyh0kHyJO/LVgH8nw7leDhZUbS8WB52AsELMI5
-         P3YeBG8ZJY0h4acRiqBgl5+sR7snJPYaA8UFnAo131KEGnUFAPbVlyKVonkYIZI+09Ie
-         Uqug==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hfRgv6jdzK8YulxLImbs+RMzKkrNiSCQi//JUrZBqC0=;
+        b=MoOu0p755ivzIOlPR9Bapgru6r7wiIpiB8r+3PGw4SkStK/VcXRUvBOaMb54A3cSvW
+         Z7GQXEPPbE2FAb0Dw4MljIT330zefErVhDJBBLt9CMku7KyHO8+nI3MeHQ1EdOj9vJnm
+         EuEergroqdkXWVdc1u9knYYQvtBX04oCUA+EZw36H3lePZzcAWpQpYxocKguR9frlUCs
+         WioxfVwp7AsLBXdNuspNszxQg5Q+fEhHRrHHGux0/pDoj0/3TdxuHbTaLWaVcnJxFbrk
+         n8Vt9F6V06Am6rhmS3suHxa3yyT2UB7+JntlCqp3wbhUIPDQzdZi2HQAR4o9dU9EshfC
+         qONg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AEPKdfQLbwPTzKqThQDGwgj7kWss99Dn8po4pyO255s=;
-        b=SbFa8SnBsU+MnJm9+oVkB0DptOanX4eKmzwgTZaBYU8O73+w2WKAjw+NQIKJgy3HVM
-         eT4WFKNt3Yc5e2o5/FXUqIF3P8gT5lEQBWhgODv1oGYd5AfuiF41q7+KMttAhjFNDCht
-         iaoHaD8lIg7+izAfUEi5gesC/lzWBwmdjZp58BevHeyVeSls6co007kLs1LH0P1lZyfW
-         XvG2BoBRRiaSDf7oHX97Ar6TaIMLFpnsy0cJY3KntKun8oWCKBBXqkeqOkRbT5M3TuqL
-         u7O1DDRMOhfvnAPfK14MlC8QgFl7VVVhoFHFf71GVdkbALheGqPSn9wDjTmnaMFaYL4T
-         EdqA==
-X-Gm-Message-State: AOAM533ad/Lz2pPyYsiuC8lsZM2nYi4c72//HRtgZ6N7kn1mQgIGdXqL
-        e1NiMRiJVaw94Bs6qAuE05lQejGyK7EdK2yW3t+j5A==
-X-Google-Smtp-Source: ABdhPJwNeDSZQOjU+JcF3GBLS/i9yWqJD8C5YRvGxuEpEvBXt9pPTbr55XtMe5XOsWg/E58B8eckCMecpnUUt1ZNU5U=
-X-Received: by 2002:a05:6902:203:b0:628:7b6f:2845 with SMTP id
- j3-20020a056902020300b006287b6f2845mr28163313ybs.533.1647967508132; Tue, 22
- Mar 2022 09:45:08 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hfRgv6jdzK8YulxLImbs+RMzKkrNiSCQi//JUrZBqC0=;
+        b=vwfv1Iz9WuqTdmlISmu2gqpaDpkS+WaLABCe86s/c3ckxoYlhg1Doiqytxc+kBbjTg
+         /cGCH/dZ3mhZKzYz+p0EP8pNadgAt01wlpOmenCTmA7ptYhfCKdQPlUsg55vn1Sr7I4C
+         jNjgLeXF1TpWHu93/Da3TgghJgj9rW0hDR6EEwV3smwPNHqfi4Ko/Lb2JYqCyVBH8C/j
+         e+HJ9bAp1aXTYXm1KwEniVVMwlcy+pijHBR1YtdScmHiVjHglRdLiTrvdlHQ/dl8FZ7y
+         +pouai+cnEF2YdZS98EaO/WUZYuzt2Drq686G8eBaTX1u3PE2R6tdRClYCh1E9FIH+lq
+         VHNw==
+X-Gm-Message-State: AOAM5301TGrhi+eWMAa9spCFcstPJvZ38/aVjK1iruLwjrv+TTzw6jl8
+        B/xVIG5tHrdo7RRzNcXlOMA=
+X-Google-Smtp-Source: ABdhPJyTPxL3VEmB64sxKlaS6AIXzW12S4IN0SS3U3LFpVoXAfVs88wjAOM88y5mN06pFQCIkw1grw==
+X-Received: by 2002:a17:90b:4a0d:b0:1c6:f480:b7f2 with SMTP id kk13-20020a17090b4a0d00b001c6f480b7f2mr6130673pjb.79.1647967541900;
+        Tue, 22 Mar 2022 09:45:41 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:b4a1:cd7d:303a:93b9])
+        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f66d50f054sm23335159pfi.158.2022.03.22.09.45.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 09:45:41 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] xtensa: define update_mmu_tlb function
+Date:   Tue, 22 Mar 2022 09:45:31 -0700
+Message-Id: <20220322164531.3513925-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <Yjmn/kVblV3TdoAq@elver.google.com> <87ee2uyr4z.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87ee2uyr4z.fsf@email.froward.int.ebiederm.org>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 22 Mar 2022 17:44:31 +0100
-Message-ID: <CANpmjNN4UjUTB5x6-2T-+b7MY=oAYn37MKvQy-4jYh6JDeJuKg@mail.gmail.com>
-Subject: Re: RFC: Use of user space handler vs. SIG_DFL on forced signals
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 at 15:54, Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Marco Elver <elver@google.com> writes:
->
-> > Hello,
-> >
-> > Currently force_sig_info_to_task() will always unblock a blocked signal
-> > but deliver the signal to SIG_DFL:
-> >
-> >       [...]
-> >        * Note: If we unblock the signal, we always reset it to SIG_DFL,
-> >        * since we do not want to have a signal handler that was blocked
-> >        * be invoked when user space had explicitly blocked it.
-> >       [...]
-> >
-> > Is this requirement part of the POSIX spec? Or is the intent simply to
-> > attempt to do the least-bad thing?
->
-> I have not found any POSIX language about this.
->
-> The options are either we terminate the application, or the application
-> spins forever re-triggering the trap.
+Before the commit f9ce0be71d1f ("mm: Cleanup faultaround and finish_fault()
+codepaths") there was a call to update_mmu_cache in alloc_set_pte that
+used to invalidate TLB entry caching invalid PTE that caused a page
+fault. That commit removed that call so now invalid TLB entry survives
+causing repetitive page faults on the CPU that took the initial fault
+until that TLB entry is occasionally evicted. This issue is spotted by
+the xtensa TLB sanity checker.
 
-Is this in case of things like SEGV? I think this doesn't quite apply
-to us. The cause of the signal (perf event) is rather benign, and the
-signal handler can deal with recursion.
+Fix this issue by defining update_mmu_tlb function that flushes TLB entry
+for the faulting address.
 
-[...]
-> > For SIGTRAP on perf events we found this makes the situation worse,
-> > since the cause of the signal wasn't an error condition, but explicitly
-> > requested monitoring. In this case, we do in fact want delivery of the
-> > signal to user space even if the signal is blocked, i.e.
-> > force_sig_perf() should be an unblockable forced synchronous signal to
-> > user space!
->
-> Which is exactly what we have.  If you block it you get terminated.
+Cc: stable@vger.kernel.org # 5.12+
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ arch/xtensa/include/asm/pgtable.h | 4 ++++
+ arch/xtensa/mm/tlb.c              | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-Right, however, in this case we want to monitor/trace memory accesses
-etc, and some 3rd party code such as a library being traced isn't
-under our control.
+diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
+index bd5aeb795567..a63eca126657 100644
+--- a/arch/xtensa/include/asm/pgtable.h
++++ b/arch/xtensa/include/asm/pgtable.h
+@@ -411,6 +411,10 @@ extern  void update_mmu_cache(struct vm_area_struct * vma,
+ 
+ typedef pte_t *pte_addr_t;
+ 
++void update_mmu_tlb(struct vm_area_struct *vma,
++		    unsigned long address, pte_t *ptep);
++#define __HAVE_ARCH_UPDATE_MMU_TLB
++
+ #endif /* !defined (__ASSEMBLY__) */
+ 
+ #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
+diff --git a/arch/xtensa/mm/tlb.c b/arch/xtensa/mm/tlb.c
+index f436cf2efd8b..27a477dae232 100644
+--- a/arch/xtensa/mm/tlb.c
++++ b/arch/xtensa/mm/tlb.c
+@@ -162,6 +162,12 @@ void local_flush_tlb_kernel_range(unsigned long start, unsigned long end)
+ 	}
+ }
+ 
++void update_mmu_tlb(struct vm_area_struct *vma,
++		    unsigned long address, pte_t *ptep)
++{
++	local_flush_tlb_page(vma, address);
++}
++
+ #ifdef CONFIG_DEBUG_TLB_SANITY
+ 
+ static unsigned get_pte_for_vaddr(unsigned vaddr)
+-- 
+2.30.2
 
-What we can do instead is to intercept sigprocmask() and work around
-the issue, but libc interception is brittle. :-/
-We do just want to receive the signal, all the time.
-
-[...]
-> I think HANDLER_UNBLOCK is pretty much nonsense.
->
-> A block signal very much means that userspace is not prepared to handle
-> the signal.  So calling something that is not ready to be called can't
-> work.  That is common sense, and I expect in POSIX as well.
-
-The fundamental question is, if we have a valid signal handler, but
-sigprocmask() is called, how do we still keep receiving signals for
-SIGTRAP despite sigprocmask()?
-
-Perhaps this is impossible without intercepting sigprocmask() in user
-space, in which we'll need to find a different solution.
-
-> I expect that either you are looking for something like what ptrace does
-> with signal interruptions where another process is notified, and
-> userspace does not need to be involved, or that this is a don't do that
-> then.
->
-> Or possibly you have some weird asynchronous signal thing happening and
-> you are calling it synchronous.
-
-Not quite. We need it to be synchronous, because we need to know the
-precise instruction and potentially do some other stuff _before_
-subsequent instructions.
-
-A compromise might be to deliver synchronously normally, but when
-blocked deliver asynchronously. But if the signal was delivered
-asynchronously, we need to let the signal handler know delivery was
-asynchronous, so that our tracing logic can recover and give up at
-that point.
-
-To do this indication if it was asynchronous, we probably need to
-extend siginfo_t once more. Would that be reasonable?
-
-Thanks,
--- Marco

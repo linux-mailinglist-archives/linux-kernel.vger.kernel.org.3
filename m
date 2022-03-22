@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912704E39F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0444E39EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiCVHzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 03:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S229545AbiCVHz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 03:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiCVHzp (ORCPT
+        with ESMTP id S229494AbiCVHzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:55:45 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14A74A3D4;
-        Tue, 22 Mar 2022 00:54:17 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D2EA4240002;
-        Tue, 22 Mar 2022 07:54:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647935656;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hL95WIkdjvtUtma7mkkPOD4nhIAtPPlN3w0wuizzJOs=;
-        b=CtYGjJ3RELDYNEkF8xpunTXp7/UOD8Z1R5pYu/yHzgzpNiIWaVp+5QTsjUZ7X1eUepxBiT
-        7AdNl5rSbXWguc2UV5n8SRvtlL7SwbaOzuqTjJ6axk5N9M0aHhs8N6XQ9bmAioR4sdpax9
-        sDKHg8s13+R4MwRpc6/Fk1lloD+yl00xvaI9bafNniv0TtZUYBHA2zpqFQ+daiuqRd2e/S
-        q9SvPNlVW2QremxkvnjZmr99XWsWmaEM4bEajI4ZUXUkKYtsWRH6zJOtIhs0ct23zFa9/F
-        xOh2gHpUdmvscPFGHNJpsQ7v3XjUj4dt1dj7JlpL0mM4Lne0bah6cuomJFm6cQ==
-Date:   Tue, 22 Mar 2022 08:52:52 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "'Rafael J . Wysocki '" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 0/6] introduce fwnode in the I2C subsystem
-Message-ID: <20220322085252.143a700f@fixe.home>
-In-Reply-To: <20220321113634.56d6fe2b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220318160059.328208-1-clement.leger@bootlin.com>
-        <20220318100201.630c70bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20220321115634.5f4b8bd4@fixe.home>
-        <20220321113634.56d6fe2b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Tue, 22 Mar 2022 03:55:23 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220374338F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:53:52 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id yy13so34450870ejb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AAxWSvxZc3dHAbuVIHS0Ej6XKzk9JLz41VAoFlDO6jw=;
+        b=C0uPodIT8HkST7rvrjEAsthafRPgDgdeogyPa1un9cJDZbJa20Jdr8DaXZoQwie8Rp
+         ixs06Tox9foTZsYh0W4rZGlhEGSSnf8vzLBth3PHPtfpjbQuwwT32koIj3xMhRkuE35h
+         mE9UL6Phgcf5ouszXqr829JHPnvDZRTUYybjYSD/53BKorbjQtcPrFnpZBR0ewkTJHPf
+         TChrG8h/DJhGId7IDw1fS/XN/NneBtnb39sgjeNm5wSbv8QEpQ1rDfP/KIYwYPTSHObU
+         6AqyTDMaTD6K0p2jV7IDqmIO+bQqhSdnK8Xa8JlOKnyNXwcBWkmSV3st3WKB8oKoxPRM
+         hhuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=AAxWSvxZc3dHAbuVIHS0Ej6XKzk9JLz41VAoFlDO6jw=;
+        b=HR678o4wDpQoketq4QpTN0WCHVIR2syJSfmlpdDI3EbXYnNS3gjcxqcSV6JMrDK847
+         A579xHLORmC5LYCfYLpbKbJSXslbNKnDORCVkKrGRWgdjounmMXnZfmPlwGqN8tG1Cbd
+         yoMMzMgWMegeEFzhEInQfNsXWyqiDPJhFkZs5KI4H4fHtUQ5ie8bd/juq83iYJbmN8sy
+         ZVsHQoFrVodY97OppfXZbvI055IbxD+pKPRykas0CM4j3mU301IcflUbKWXxU2wUu7S+
+         UQ4P0YVeF/9hjM27lewF+I8NRLgRfA9qOhsKm2WU59hEnXLvFIyJhggM0+REvE5hGAh+
+         i9Gg==
+X-Gm-Message-State: AOAM530z5MuMONO2IJHRxzdIJEewVRBmDT6Y3SwNLXTKRr/AODA6bA9D
+        4Uc2q8bkDJ6qCDjbsou8dSc=
+X-Google-Smtp-Source: ABdhPJxhTfnbx2XGatBlTfA7tIzj0wD63Dzv0AJ5fDSXXhpdMy6c64spTxxCKLobqnFlUuWCj4acoA==
+X-Received: by 2002:a17:906:69c5:b0:6cf:d164:8b32 with SMTP id g5-20020a17090669c500b006cfd1648b32mr24065603ejs.233.1647935630735;
+        Tue, 22 Mar 2022 00:53:50 -0700 (PDT)
+Received: from gmail.com (0526ECD0.dsl.pool.telekom.hu. [5.38.236.208])
+        by smtp.gmail.com with ESMTPSA id l20-20020a1709062a9400b006ce71a88bf5sm7763971eje.183.2022.03.22.00.53.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 00:53:49 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 22 Mar 2022 08:53:46 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH -next] sched/headers: ARM needs asm/paravirt_api_clock.h
+Message-ID: <YjmAihCq5jtUVXvq@gmail.com>
+References: <20220316204146.14000-1-rdunlap@infradead.org>
+ <Yjib7hDFRFEOwaWf@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yjib7hDFRFEOwaWf@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,27 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, 21 Mar 2022 11:36:34 -0700,
-Jakub Kicinski <kuba@kernel.org> a =C3=A9crit :
 
-> > Hi Jakub,
-> >=20
-> > Ok, to be clear, you would like a series which contains all the
-> > "base" fwnode functions that I'm going to add to be sent separately
-> > right ? And then also split i2c/net stuff that was sent in this series =
-? =20
->=20
-> I'm mostly concerned about conflicts, so if you can get the entire
-> series into 5.18 before the merge window is over then consider it=20
-> acked. If it doesn't make 5.18 looks like you'd need to send patches=20
-> 1 and 2 as a PR so that both the i2c and net trees can pull it.=20
-> Once pulled send patch 6 out to net-next. Does that make sense?
+* Nathan Chancellor <nathan@kernel.org> wrote:
 
-Yes totally, I guess I'll go for I2C only and then I'll move on with
-next patches individually later. No need to hurry.
+> On Wed, Mar 16, 2022 at 01:41:46PM -0700, Randy Dunlap wrote:
+> > Add <asm/paravirt_api_clock.h> for arch/arm/.
+> > 
+> > Fixes this build error:
+> > 
+> > In file included from ../kernel/sched/core.c:81:
+> > ../kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+> >    87 | # include <asm/paravirt_api_clock.h>
+> > 
+> > Fixes: 4ff8f2ca6ccd ("sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies")
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Cc: Ingo Molnar <mingo@kernel.org>
+> > Cc: Russell King <linux@armlinux.org.uk>
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: patches@armlinux.org.uk
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
+Applied, thanks!
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+	Ingo

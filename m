@@ -2,385 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040284E47DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2D44E47EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234556AbiCVU5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
+        id S234764AbiCVU7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234460AbiCVU4y (ORCPT
+        with ESMTP id S229947AbiCVU72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:56:54 -0400
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C455BC30;
-        Tue, 22 Mar 2022 13:55:25 -0700 (PDT)
-Received: by mail-oo1-f44.google.com with SMTP id i8-20020a4a6f48000000b00324ada4b9d9so53836oof.11;
-        Tue, 22 Mar 2022 13:55:25 -0700 (PDT)
+        Tue, 22 Mar 2022 16:59:28 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5148245;
+        Tue, 22 Mar 2022 13:57:56 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id mr5-20020a17090b238500b001c67366ae93so4339372pjb.4;
+        Tue, 22 Mar 2022 13:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PV9asN78i9k5czPNuB4sslJhn+5RxlOoSYgBWgtQ1bE=;
+        b=Agsxea+h2u87/x7t7edOvh7c/XgpZKM4eaHJIWIFp/76EnAZmFlzyD4kDxm79MtoKs
+         siK+gH+a+3ducQjrOz+3kN+Skdl+yx8Dvx+sNk6eAA52fGcCedJ/WuuTNuE2mPAs6OQt
+         /sv0DYPY8cNhfwT/nFy7jFoB3Bmmreb8viajleCIlmCm2rIkn4wmRNLTUKfZgz4kulcX
+         9xNG4y5np7LE+wAZV5M6D+JHFReWArZP+SE6bXwhgOcnvi+D5vdH2xXidREzB50bRyNa
+         E6KUDEWNswWuqEH0DWXMVvrgE9IeMUXPO9inAF6g8nXC2CKgG3HmHFxpnWWpSB5mHhgF
+         pe8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PdC3E4qaPnZZNFTNYFLxJGsk5AS6T7uPKXTafMYdgQI=;
-        b=i835bAqOtrIsCic4NadUh1xSFxg44BTjxESUNI3+YpXyuDY1XldyHV5YOfCTOaNGlz
-         Ypu/9FMVpOePZdiGVpevgq0QhlSMphXVnzVYYpcMTpmnCr+5LCBkjtULX9O4nfdvr8Yc
-         hXlEBLG41gYjeCfDBNmSL5VHIGcld8hfCjBprupLUdlQqUBcQeyBSH/uSfRU2snqTYlf
-         Mz8S5zN481SBSVrMauJWgv6SzDZeg/jCGicrY0SJkaVjkoudq82oohzL0KUh9VkASMdj
-         pffqZ42584fPdG3+wDoUtnZJHfn1T4YVraiQgJplAnN4uLTHHO7USZug5rJyNeRNB7UV
-         DxsQ==
-X-Gm-Message-State: AOAM532zkc6bY4TifpBEfHBhRcIuE5JgWbnNOWBMagpgoSL4wmWv89rt
-        2YEneqnzmrTZU+hhhTdlYA==
-X-Google-Smtp-Source: ABdhPJzmeSYmnMa0uGdA/0qg5EdBfNdQTOomNICVd5//jKRvuWiuCqzpe2kJle2BZrFv15ZEpA8R+A==
-X-Received: by 2002:a4a:e865:0:b0:318:4b66:ffe0 with SMTP id m5-20020a4ae865000000b003184b66ffe0mr9070591oom.80.1647982524760;
-        Tue, 22 Mar 2022 13:55:24 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u9-20020a4ab5c9000000b003182df292f7sm8372141ooo.18.2022.03.22.13.55.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 13:55:23 -0700 (PDT)
-Received: (nullmailer pid 2491290 invoked by uid 1000);
-        Tue, 22 Mar 2022 20:55:22 -0000
-Date:   Tue, 22 Mar 2022 15:55:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
- controller
-Message-ID: <Yjo3umi9bJ0xb2Gl@robh.at.kernel.org>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-6-15330273260@189.cn>
- <YjkITWpbnCmhKaX+@robh.at.kernel.org>
- <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PV9asN78i9k5czPNuB4sslJhn+5RxlOoSYgBWgtQ1bE=;
+        b=TJvEzG3z+y6V7AcZBBQc1fap3X0nQylHNrZAAJgi+U+Ap9YSDbV+vA5bd3FumiP7VA
+         VqJv9uuh6scpouDD/2GHNU6KJJkO/KOq2+nhM0eedvYToFVrF+3lZl2zcaUjF2eFOK7A
+         AImfJBtWtlfnOvMHfMJdrk52CGK89wPGDkDEtY+/NyWvnhS2lEEA7JVRGKYycE4cHGZX
+         VJE9WrviXZJtnrPGGRTD0m9GeuodTvwZzDIMqNOwsd3/szQfAIWLgJ3eW/7wvP264V1X
+         fIj5bipZgazR5x0hmnWsB6JBg138+OkUYO5oO8W9KdC3uSHcGnU2duUPur8eSzWxeRA0
+         nNlw==
+X-Gm-Message-State: AOAM533ak4gWLat/vGh9qFUsUV+hlG0GV8iw7gK71DZyGaztgMbhSRmb
+        KC0iUXLsiaDkfckFC+4jKfFnIZLzFEyNTzMiB49XitGz
+X-Google-Smtp-Source: ABdhPJyVCDbBGEy+0EXAkkDCY7emf36LvUvuWy6/3nTkTkb0dvN+FMgQ476Nh5O1CL/Cljtexb3snIGfpKA/NBTJu0M=
+X-Received: by 2002:a17:903:124a:b0:151:99fe:1a10 with SMTP id
+ u10-20020a170903124a00b0015199fe1a10mr19926503plh.87.1647982675496; Tue, 22
+ Mar 2022 13:57:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220321142128.2471199-1-zi.yan@sent.com> <20220321142128.2471199-4-zi.yan@sent.com>
+In-Reply-To: <20220321142128.2471199-4-zi.yan@sent.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 22 Mar 2022 13:57:43 -0700
+Message-ID: <CAHbLzkqcv=USKxZLkrqWHGC1571kK8XAmCaPOPTxDRE+V_FaTQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/5] mm: thp: split huge page to any lower order pages.
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shuah Khan <shuah@kernel.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Hugh Dickins <hughd@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 10:33:45AM +0800, Sui Jingfeng wrote:
-> 
-> On 2022/3/22 07:20, Rob Herring wrote:
-> > On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
-> > > From: suijingfeng <suijingfeng@loongson.cn>
-> > > 
-> > Needs a commit message.
-> > 
-> > > Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
-> > > Signed-off-by: Sui Jingfeng <15330273260@189.cn>
-> > Same person? Don't need both emails.
-> 
-> Yes,  suijingfeng@loongson.cn is my company's email. But it can not be used
-> to send patches to dri-devel,
-> 
-> when send patches with this email, the patch will not be shown on patch
-> works.
-> 
-> Emails  are either blocked or got  rejected  by loongson's mail server.  It
-> can only receive emails
-> 
-> from you and other people, but not dri-devel. so have to use my personal
-> email(15330273260@189.cn) to send patches.
-> 
-> > > ---
-> > >   .../loongson/loongson,display-controller.yaml | 230 ++++++++++++++++++
-> > >   1 file changed, 230 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
-> > > new file mode 100644
-> > > index 000000000000..7be63346289e
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
-> > > @@ -0,0 +1,230 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
-> > > +
-> > > +maintainers:
-> > > +  - Sui Jingfeng <suijingfeng@loongson.cn>
-> > > +
-> > > +description: |+
-> > > +
-> > > +  Loongson display controllers are simple which require scanout buffers
-> > > +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
-> > > +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
-> > > +  with a dedicated video RAM which is 64MB or more, precise size can be
-> > > +  read from the PCI BAR 2 of the GPU device(0x0014:0x7A15) in the bridge
-> > > +  chip.
-> > > +
-> > > +  LSDC has two display pipes, each way has a DVO interface which provide
-> > > +  RGB888 signals, vertical & horizontal synchronisations, data enable and
-> > > +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
-> > > +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
-> > > +
-> > > +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
-> > > +  located at the DC register space. They are used to emulate two way i2c,
-> > > +  One for DVO0, another for DVO1.
-> > > +
-> > > +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
-> > > +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
-> > > +
-> > > +  LSDC's display pipeline have several components as below description,
-> > > +
-> > > +  The display controller in LS7A1000:
-> > > +     ___________________                                     _________
-> > > +    |            -------|                                   |         |
-> > > +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
-> > > +    |  _   _     -------|        ^             ^            |_________|
-> > > +    | | | | |    -------|        |             |
-> > > +    | |_| |_|    | i2c0 <--------+-------------+
-> > > +    |            -------|
-> > > +    |   DC IN LS7A1000  |
-> > > +    |  _   _     -------|
-> > > +    | | | | |    | i2c1 <--------+-------------+
-> > > +    | |_| |_|    -------|        |             |             _________
-> > > +    |            -------|        |             |            |         |
-> > > +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
-> > > +    |            -------|                                   |_________|
-> > > +    |___________________|
-> > > +
-> > > +  Simple usage of LS7A1000 with LS3A4000 CPU:
-> > > +
-> > > +    +------+            +-----------------------------------+
-> > > +    | DDR4 |            |  +-------------------+            |
-> > > +    +------+            |  | PCIe Root complex |   LS7A1000 |
-> > > +       || MC0           |  +--++---------++----+            |
-> > > +  +----------+  HT 3.0  |     ||         ||                 |
-> > > +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
-> > > +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
-> > > +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
-> > > +       || MC1           +---------------|--|----------------+
-> > > +    +------+                            |  |
-> > > +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
-> > > +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
-> > > +                      +-------+                      +------+
-> > > +
-> > > +  The display controller in LS2K1000/LS2K0500:
-> > > +     ___________________                                     _________
-> > > +    |            -------|                                   |         |
-> > > +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
-> > > +    |  _   _     -------|        ^              ^           |_________|
-> > > +    | | | | |           |        |              |
-> > > +    | |_| |_|           |     +------+          |
-> > > +    |                   <---->| i2c0 |<---------+
-> > > +    |   DC IN LS2K1000  |     +------+
-> > > +    |  _   _            |     +------+
-> > > +    | | | | |           <---->| i2c1 |----------+
-> > > +    | |_| |_|           |     +------+          |            _________
-> > > +    |            -------|        |              |           |         |
-> > > +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
-> > > +    |            -------|                                   |_________|
-> > > +    |___________________|
-> > > +
-> > > +properties:
-> > > +  $nodename:
-> > > +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
-> > > +
-> > > +  compatible:
-> > > +    oneOf:
-> > > +      - items:
-> > > +          - enum:
-> > > +              - loongson,ls7a1000-dc
-> > > +              - loongson,ls2k1000-dc
-> > > +              - loongson,ls2k0500-dc
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  '#address-cells':
-> > > +    const: 1
-> > > +
-> > > +  '#size-cells':
-> > > +    const: 0
-> > > +
-> > > +  i2c-gpio@0:
-> > > +    description: |
-> > > +      Built-in GPIO emulate i2c exported for external display bridge
-> > If you have i2c-gpio, that belongs at the DT top-level, not here.
-> > 
-> > > +      configuration, onitor detection and edid read back etc, for ls7a1000
-> > > +      only. Its compatible must be lsdc,i2c-gpio-0. The reg property can be
-> > No, there's a defined i2c-gpio compatible already.
-> 
-> This is different from the i2c-gpio already defined under drivers/i2c/busses/i2c-gpio.c,
-> By design, my i2c-gpio is vendor specific properties, lsdc device driver create the i2c
-> adapter at runtime. These are 4 dedicated GPIOs whose control register is located at the
-> LSDC register space, not general purpose GPIOs with separate control register resource.
-> So i think it is the child node of display-controller@6,1, it belongs to LSDC.
-> It seems that put it at the DT top-level break the hierarchy and relationship.
+On Mon, Mar 21, 2022 at 7:21 AM Zi Yan <zi.yan@sent.com> wrote:
+>
+> From: Zi Yan <ziy@nvidia.com>
+>
+> To split a THP to any lower order pages, we need to reform THPs on
+> subpages at given order and add page refcount based on the new page
+> order. Also we need to reinitialize page_deferred_list after removing
+> the page from the split_queue, otherwise a subsequent split will see
+> list corruption when checking the page_deferred_list again.
+>
+> It has many uses, like minimizing the number of pages after
+> truncating a pagecache THP. For anonymous THPs, we can only split them
+> to order-0 like before until we add support for any size anonymous THPs.
 
-Okay, I see. Then just 'i2c' for the node names. You need a reference to 
-i2c-controller.yaml for these nodes too.
+Yes, I think it is good for now. The arbitrary sized anonymous huge
+page may be more useful with continuous PTEs supported by some
+architectures otherwise it doesn't sound that intriguing given its
+complexity.
 
-The compatible should not have an index in it.
-
-
-> 
-> > > +      used to specify a I2c adapter bus number, if you don't specify one
-> > > +      i2c driver core will dynamically assign a bus number. Please specify
-> > Bus numbers are a linux detail not relevant to DT binding.
-> > 
-> > > +      it only when its bus number matters. Bus number greater than 6 is safe
-> > > +      because ls7a1000 bridge have 6 hardware I2C controller integrated.
-> > > +
-> > > +  i2c-gpio@1:
-> > > +    description: |
-> > > +      Built-in GPIO emulate i2c exported for external display bridge
-> > > +      configuration, onitor detection and edid read back etc, for ls7a1000
-> > > +      only. Its compatible must be lsdc,i2c-gpio-1.
-> > > +
-> > > +  ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +
-> > > +    properties:
-> > > +      port@0:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
-> > > +
-> > > +      port@1:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
-> > > +
-> > > +    required:
-> > > +      - port@0
-> > > +      - port@1
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - interrupts
-> > > +  - ports
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > > +    bus {
-> > > +
-> > > +        #address-cells = <3>;
-> > > +        #size-cells = <2>;
-> > > +        #interrupt-cells = <2>;
-> > > +
-> > > +        display-controller@6,1 {
-> > > +            compatible = "loongson,ls7a1000-dc";
-> > > +            reg = <0x3100 0x0 0x0 0x0 0x0>;
-> > > +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
-> > > +
-> > > +            #address-cells = <1>;
-> > > +            #size-cells = <0>;
-> > > +
-> > > +            i2c-gpio@0 {
-> > > +                compatible = "lsdc,i2c-gpio-0";
-> > > +                reg = <6>;
-
-'reg' needs to be documented with some description of what 6 and 7 
-represent. If they are the control register offset, then make the 
-address translatable (use 'ranges' and define the size).
-
-> > > +                sda = <0>;
-> > > +                scl = <1>;
-
-These need a vendor prefix.
-
-> > > +            };
-> > > +
-> > > +            i2c-gpio@1 {
-> > > +                compatible = "lsdc,i2c-gpio-1";
-> > > +                reg = <7>;
-> > > +                sda = <2>;
-> > > +                scl = <3>;
-> > > +            };
-> > > +
-> > > +            ports {
-> > > +                #address-cells = <1>;
-> > > +                #size-cells = <0>;
-> > > +                port@0 {
-> > > +                    reg = <0>;
-> > > +                    endpoint {
-> > > +                            remote-endpoint = <&vga_encoder_in>;
-> > > +                    };
-> > > +                };
-> > > +                port@1 {
-> > > +                    reg = <1>;
-> > > +                    endpoint {
-> > > +                            remote-endpoint = <&dvi_encoder_in>;
-> > > +                    };
-> > > +                };
-> > > +            };
-> > > +        };
-> > > +    };
-> > > +
-> > > +  - |
-> > > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > > +    bus {
-> > > +
-> > > +        #address-cells = <3>;
-> > > +        #size-cells = <2>;
-> > > +        #interrupt-cells = <2>;
-> > > +
-> > > +        display-controller@6,0 {
-> > > +            compatible = "loongson,ls2k1000-dc";
-> > > +            reg = <0x3100 0x0 0x0 0x0 0x0>;
-> > > +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
-> > > +
-> > > +            ports {
-> > > +                #address-cells = <1>;
-> > > +                #size-cells = <0>;
-> > > +                port@0 {
-> > > +                    reg = <0>;
-> > > +                    endpoint {
-> > > +                            remote-endpoint = <&panel_in>;
-> > > +                    };
-> > > +                };
-> > > +                port@1 {
-> > > +                    reg = <1>;
-> > > +                    endpoint {
-> > > +                            remote-endpoint = <&hdmi_encoder_in>;
-> > > +                    };
-> > > +                };
-> > > +            };
-> > > +        };
-> > > +    };
-> > > +...
-> > > -- 
-> > > 2.25.1
-> > > 
-> > > 
+>
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  include/linux/huge_mm.h |   8 +++
+>  mm/huge_memory.c        | 111 ++++++++++++++++++++++++++++++----------
+>  2 files changed, 91 insertions(+), 28 deletions(-)
+>
+> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> index 2999190adc22..c7153cd7e9e4 100644
+> --- a/include/linux/huge_mm.h
+> +++ b/include/linux/huge_mm.h
+> @@ -186,6 +186,8 @@ void free_transhuge_page(struct page *page);
+>
+>  bool can_split_folio(struct folio *folio, int *pextra_pins);
+>  int split_huge_page_to_list(struct page *page, struct list_head *list);
+> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +               unsigned int new_order);
+>  static inline int split_huge_page(struct page *page)
+>  {
+>         return split_huge_page_to_list(page, NULL);
+> @@ -355,6 +357,12 @@ split_huge_page_to_list(struct page *page, struct list_head *list)
+>  {
+>         return 0;
+>  }
+> +static inline int
+> +split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +               unsigned int new_order)
+> +{
+> +       return 0;
+> +}
+>  static inline int split_huge_page(struct page *page)
+>  {
+>         return 0;
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index fcfa46af6c4c..3617aa3ad0b1 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2236,11 +2236,13 @@ void vma_adjust_trans_huge(struct vm_area_struct *vma,
+>  static void unmap_page(struct page *page)
+>  {
+>         struct folio *folio = page_folio(page);
+> -       enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
+> -               TTU_SYNC;
+> +       enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SYNC;
+>
+>         VM_BUG_ON_PAGE(!PageHead(page), page);
+>
+> +       if (folio_order(folio) >= HPAGE_PMD_ORDER)
+> +               ttu_flags |= TTU_SPLIT_HUGE_PMD;
+> +
+>         /*
+>          * Anon pages need migration entries to preserve them, but file
+>          * pages can simply be left unmapped, then faulted back on demand.
+> @@ -2254,9 +2256,9 @@ static void unmap_page(struct page *page)
+>         VM_WARN_ON_ONCE_PAGE(page_mapped(page), page);
+>  }
+>
+> -static void remap_page(struct folio *folio, unsigned long nr)
+> +static void remap_page(struct folio *folio, unsigned short nr)
+>  {
+> -       int i = 0;
+> +       unsigned int i;
+>
+>         /* If unmap_page() uses try_to_migrate() on file, remove this check */
+>         if (!folio_test_anon(folio))
+> @@ -2274,7 +2276,6 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>                 struct lruvec *lruvec, struct list_head *list)
+>  {
+>         VM_BUG_ON_PAGE(!PageHead(head), head);
+> -       VM_BUG_ON_PAGE(PageCompound(tail), head);
+>         VM_BUG_ON_PAGE(PageLRU(tail), head);
+>         lockdep_assert_held(&lruvec->lru_lock);
+>
+> @@ -2295,9 +2296,10 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>  }
+>
+>  static void __split_huge_page_tail(struct page *head, int tail,
+> -               struct lruvec *lruvec, struct list_head *list)
+> +               struct lruvec *lruvec, struct list_head *list, unsigned int new_order)
+>  {
+>         struct page *page_tail = head + tail;
+> +       unsigned long compound_head_flag = new_order ? (1L << PG_head) : 0;
+>
+>         VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
+>
+> @@ -2321,6 +2323,7 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>  #ifdef CONFIG_64BIT
+>                          (1L << PG_arch_2) |
+>  #endif
+> +                        compound_head_flag |
+>                          (1L << PG_dirty)));
+>
+>         /* ->mapping in first tail page is compound_mapcount */
+> @@ -2329,7 +2332,10 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>         page_tail->mapping = head->mapping;
+>         page_tail->index = head->index + tail;
+>
+> -       /* Page flags must be visible before we make the page non-compound. */
+> +       /*
+> +        * Page flags must be visible before we make the page non-compound or
+> +        * a compound page in new_order.
+> +        */
+>         smp_wmb();
+>
+>         /*
+> @@ -2339,10 +2345,15 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>          * which needs correct compound_head().
+>          */
+>         clear_compound_head(page_tail);
+> +       if (new_order) {
+> +               prep_compound_page(page_tail, new_order);
+> +               prep_transhuge_page(page_tail);
+> +       }
+>
+>         /* Finally unfreeze refcount. Additional reference from page cache. */
+> -       page_ref_unfreeze(page_tail, 1 + (!PageAnon(head) ||
+> -                                         PageSwapCache(head)));
+> +       page_ref_unfreeze(page_tail, 1 + ((!PageAnon(head) ||
+> +                                          PageSwapCache(head)) ?
+> +                                               thp_nr_pages(page_tail) : 0));
+>
+>         if (page_is_young(head))
+>                 set_page_young(page_tail);
+> @@ -2360,7 +2371,7 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>  }
+>
+>  static void __split_huge_page(struct page *page, struct list_head *list,
+> -               pgoff_t end)
+> +               pgoff_t end, unsigned int new_order)
+>  {
+>         struct folio *folio = page_folio(page);
+>         struct page *head = &folio->page;
+> @@ -2369,10 +2380,11 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>         unsigned long offset = 0;
+>         unsigned int order = thp_order(head);
+>         unsigned int nr = thp_nr_pages(head);
+> +       unsigned int new_nr = 1 << new_order;
+>         int i;
+>
+>         /* complete memcg works before add pages to LRU */
+> -       split_page_memcg(head, nr, 0);
+> +       split_page_memcg(head, nr, new_order);
+>
+>         if (PageAnon(head) && PageSwapCache(head)) {
+>                 swp_entry_t entry = { .val = page_private(head) };
+> @@ -2387,42 +2399,50 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>
+>         ClearPageHasHWPoisoned(head);
+>
+> -       for (i = nr - 1; i >= 1; i--) {
+> -               __split_huge_page_tail(head, i, lruvec, list);
+> +       for (i = nr - new_nr; i >= new_nr; i -= new_nr) {
+> +               __split_huge_page_tail(head, i, lruvec, list, new_order);
+>                 /* Some pages can be beyond EOF: drop them from page cache */
+>                 if (head[i].index >= end) {
+>                         ClearPageDirty(head + i);
+>                         __delete_from_page_cache(head + i, NULL);
+>                         if (shmem_mapping(head->mapping))
+> -                               shmem_uncharge(head->mapping->host, 1);
+> +                               shmem_uncharge(head->mapping->host, new_nr);
+>                         put_page(head + i);
+>                 } else if (!PageAnon(page)) {
+>                         __xa_store(&head->mapping->i_pages, head[i].index,
+>                                         head + i, 0);
+>                 } else if (swap_cache) {
+> +                       /*
+> +                        * split anonymous THPs (including swapped out ones) to
+> +                        * non-zero order not supported
+> +                        */
+> +                       VM_BUG_ON(new_order);
+>                         __xa_store(&swap_cache->i_pages, offset + i,
+>                                         head + i, 0);
+>                 }
+>         }
+>
+> -       ClearPageCompound(head);
+> +       if (!new_order)
+> +               ClearPageCompound(head);
+> +       else
+> +               set_compound_order(head, new_order);
+>         unlock_page_lruvec(lruvec);
+>         /* Caller disabled irqs, so they are still disabled here */
+>
+> -       split_page_owner(head, order, 0);
+> +       split_page_owner(head, order, new_order);
+>
+>         /* See comment in __split_huge_page_tail() */
+>         if (PageAnon(head)) {
+>                 /* Additional pin to swap cache */
+>                 if (PageSwapCache(head)) {
+> -                       page_ref_add(head, 2);
+> +                       page_ref_add(head, 1 + new_nr);
+>                         xa_unlock(&swap_cache->i_pages);
+>                 } else {
+>                         page_ref_inc(head);
+>                 }
+>         } else {
+>                 /* Additional pin to page cache */
+> -               page_ref_add(head, 2);
+> +               page_ref_add(head, 1 + new_nr);
+>                 xa_unlock(&head->mapping->i_pages);
+>         }
+>         local_irq_enable();
+> @@ -2435,7 +2455,14 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>                 split_swap_cluster(entry);
+>         }
+>
+> -       for (i = 0; i < nr; i++) {
+> +       /*
+> +        * set page to its compound_head when split to THPs, so that GUP pin and
+> +        * PG_locked are transferred to the right after-split page
+> +        */
+> +       if (new_order)
+> +               page = compound_head(page);
+> +
+> +       for (i = 0; i < nr; i += new_nr) {
+>                 struct page *subpage = head + i;
+>                 if (subpage == page)
+>                         continue;
+> @@ -2472,36 +2499,60 @@ bool can_split_folio(struct folio *folio, int *pextra_pins)
+>   * This function splits huge page into normal pages. @page can point to any
+>   * subpage of huge page to split. Split doesn't change the position of @page.
+>   *
+> + * See split_huge_page_to_list_to_order() for more details.
+> + *
+> + * Returns 0 if the hugepage is split successfully.
+> + * Returns -EBUSY if the page is pinned or if anon_vma disappeared from under
+> + * us.
+> + */
+> +int split_huge_page_to_list(struct page *page, struct list_head *list)
+> +{
+> +       return split_huge_page_to_list_to_order(page, list, 0);
+> +}
+> +
+> +/*
+> + * This function splits huge page into pages in @new_order. @page can point to
+> + * any subpage of huge page to split. Split doesn't change the position of
+> + * @page.
+> + *
+>   * Only caller must hold pin on the @page, otherwise split fails with -EBUSY.
+>   * The huge page must be locked.
+>   *
+>   * If @list is null, tail pages will be added to LRU list, otherwise, to @list.
+>   *
+> - * Both head page and tail pages will inherit mapping, flags, and so on from
+> - * the hugepage.
+> + * Pages in new_order will inherit mapping, flags, and so on from the hugepage.
+>   *
+> - * GUP pin and PG_locked transferred to @page. Rest subpages can be freed if
+> - * they are not mapped.
+> + * GUP pin and PG_locked transferred to @page or the compound page @page belongs
+> + * to. Rest subpages can be freed if they are not mapped.
+>   *
+>   * Returns 0 if the hugepage is split successfully.
+>   * Returns -EBUSY if the page is pinned or if anon_vma disappeared from under
+>   * us.
+>   */
+> -int split_huge_page_to_list(struct page *page, struct list_head *list)
+> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +                                    unsigned int new_order)
+>  {
+>         struct folio *folio = page_folio(page);
+>         struct page *head = &folio->page;
+>         struct deferred_split *ds_queue = get_deferred_split_queue(head);
+> -       XA_STATE(xas, &head->mapping->i_pages, head->index);
+> +       /* reset xarray order to new order after split */
+> +       XA_STATE_ORDER(xas, &head->mapping->i_pages, head->index, new_order);
+>         struct anon_vma *anon_vma = NULL;
+>         struct address_space *mapping = NULL;
+>         int extra_pins, ret;
+>         pgoff_t end;
+>
+> +       VM_BUG_ON(thp_order(head) <= new_order);
+>         VM_BUG_ON_PAGE(is_huge_zero_page(head), head);
+>         VM_BUG_ON_PAGE(!PageLocked(head), head);
+>         VM_BUG_ON_PAGE(!PageCompound(head), head);
+>
+> +       /* Cannot split THP to order-1 (no order-1 THPs) */
+> +       VM_BUG_ON(new_order == 1);
+> +
+> +       /* Split anonymous THP to non-zero order not support */
+> +       VM_BUG_ON(PageAnon(head) && new_order);
+> +
+>         if (PageWriteback(head))
+>                 return -EBUSY;
+>
+> @@ -2582,7 +2633,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>         if (page_ref_freeze(head, 1 + extra_pins)) {
+>                 if (!list_empty(page_deferred_list(head))) {
+>                         ds_queue->split_queue_len--;
+> -                       list_del(page_deferred_list(head));
+> +                       list_del_init(page_deferred_list(head));
+>                 }
+>                 spin_unlock(&ds_queue->split_queue_lock);
+>                 if (mapping) {
+> @@ -2592,14 +2643,18 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>                         if (PageSwapBacked(head)) {
+>                                 __mod_lruvec_page_state(head, NR_SHMEM_THPS,
+>                                                         -nr);
+> -                       } else {
+> +                       } else if (!new_order) {
+> +                               /*
+> +                                * Decrease THP stats only if split to normal
+> +                                * pages
+> +                                */
+>                                 __mod_lruvec_page_state(head, NR_FILE_THPS,
+>                                                         -nr);
+>                                 filemap_nr_thps_dec(mapping);
+>                         }
+>                 }
+>
+> -               __split_huge_page(page, list, end);
+> +               __split_huge_page(page, list, end, new_order);
+>                 ret = 0;
+>         } else {
+>                 spin_unlock(&ds_queue->split_queue_lock);
+> --
+> 2.35.1
+>

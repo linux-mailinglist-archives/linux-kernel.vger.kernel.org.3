@@ -2,152 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921774E4413
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40EC4E4422
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239015AbiCVQU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S239091AbiCVQXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbiCVQU4 (ORCPT
+        with ESMTP id S239066AbiCVQXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:20:56 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55C411A28;
-        Tue, 22 Mar 2022 09:19:26 -0700 (PDT)
+        Tue, 22 Mar 2022 12:23:19 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DD727CF2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:21:43 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id w7so30672056lfd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647965966; x=1679501966;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=U7HtkD8e2y1BOHA9zy3SPJmEKe96PjQ8/7rxSr5oFsI=;
-  b=dS3vIWW1rB5aytj1fgPR4CeR5G5L+MIMt0c4m/gwp7CaoamTuL82aNqX
-   71CU4218QZguGlG39Zt2s8pUzc4mjyrpkNH1yU6vuqRSXV+LvFPX1EUoY
-   PnJr3cJ2h/9tGZvCKG1VuOHKO6eIZPpeClGWnwhDp6ycxpzrYcaEbyetj
-   c=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Mar 2022 09:19:25 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 09:19:24 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 22 Mar 2022 09:19:24 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 22 Mar 2022 09:19:18 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH] ASoC: codecs: Fix error handling in power domain init and exit handlers
-Date:   Tue, 22 Mar 2022 21:48:57 +0530
-Message-ID: <1647965937-32203-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=24K1hLJb9rmuEHEKW5a8QYhjnmRyomvMSDjxeIg/X38=;
+        b=VYS/UqPlwEg8dUg0nl76d7UJ1IUszygkxcr1j2/1mvgghsV+p3mYrgwsp34aOKQ6tk
+         ScvhZMD1nx0OBvbT+5UaohuxHTKJjXselVVpziaLmccjKez67+onMBakhk/M73Kxl+Ut
+         p2gOZHShBVjr2xBbgB8NPD9eut9eQpbmThYAM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=24K1hLJb9rmuEHEKW5a8QYhjnmRyomvMSDjxeIg/X38=;
+        b=Tsu3PXl6rga9I/EoSHeqLrkblBz/UzJt3DOglLOgxgxAN31m/cyr4JRU/rjCrZkDHu
+         UgZ+Q0gw8BW4R/CeBfDO3lXsjXH2rjx8pgGn0Q3VwmT8kqTFbqxzhTySyp/9pDRSFXlb
+         s23JROtrWwyIKGtOMCQ37/b75JHVuG57C0CsJGxFrCGRTFgCGwC1eZdxLfvsWaPBaW++
+         2GIQYBYZDmPwk4P9kfPxKD7/JM7+8O0ZpCqxwIEWvxT6r2/8zDNpzkkoe7EA+jpLTswT
+         ov2eFGY6qX3PfuwWShUeHt09QfRaWxFn89yneTwpoe8l/MUWEa1oWbbmutCi66UaXW4W
+         Fmug==
+X-Gm-Message-State: AOAM532zuiG1qNKH3zie866U+g7MUQDFIx/+y+g0nkOiTJC13ghDUAvj
+        KbtSyQe7GFSr+RFrv1eMrzoBJ3zJPWc1jjgEDq0=
+X-Google-Smtp-Source: ABdhPJzVdYDrI7Avz0dUvM+NHcWHMjxWGqx+F8tEq7GuINFjbMbA/SymkGnYbGEY6BD8Lh1aHP33YA==
+X-Received: by 2002:a05:6512:3a89:b0:44a:43ca:93ae with SMTP id q9-20020a0565123a8900b0044a43ca93aemr1445329lfu.307.1647966099036;
+        Tue, 22 Mar 2022 09:21:39 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id l4-20020a2e9084000000b00244cb29e3e4sm2520356ljg.133.2022.03.22.09.21.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 09:21:38 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id c15so24636860ljr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:21:37 -0700 (PDT)
+X-Received: by 2002:a2e:6f17:0:b0:248:124:9c08 with SMTP id
+ k23-20020a2e6f17000000b0024801249c08mr19763021ljc.506.1647966097175; Tue, 22
+ Mar 2022 09:21:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220217162848.303601-1-Jason@zx2c4.com> <20220322155820.GA1745955@roeck-us.net>
+In-Reply-To: <20220322155820.GA1745955@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 22 Mar 2022 09:21:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjH7rNyP_S7ut3EUPfa_dOYAP1T6yOxS6hdVi3zPV9SzA@mail.gmail.com>
+Message-ID: <CAHk-=wjH7rNyP_S7ut3EUPfa_dOYAP1T6yOxS6hdVi3zPV9SzA@mail.gmail.com>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update error handling in power domain init and exit handlers, as existing handling
-may cause issues in device remove function.
-Use appropriate pm core api for power domain get and sync to avoid redundant code.
+On Tue, Mar 22, 2022 at 8:58 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> This patch (or a later version of it) made it into mainline and causes a
+> large number of qemu boot test failures for various architectures (arm,
+> m68k, microblaze, sparc32, xtensa are the ones I observed). Common
+> denominator is that boot hangs at "Saving random seed:". A sample bisect
+> log is attached. Reverting this patch fixes the problem.
 
-Fixes: 9e3d83c52844 ("ASoC: codecs: Add power domains support in digital macro codecs")
+Ok, it was worth trying, but yeah, it clearly causes problems for
+various platforms that can't do jitter entropy and have nothing else
+happening either.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- sound/soc/codecs/lpass-macro-common.c | 35 +++++++++++++++++++----------------
- 1 file changed, 19 insertions(+), 16 deletions(-)
+Will revert.
 
-diff --git a/sound/soc/codecs/lpass-macro-common.c b/sound/soc/codecs/lpass-macro-common.c
-index 6cede75..3c661fd 100644
---- a/sound/soc/codecs/lpass-macro-common.c
-+++ b/sound/soc/codecs/lpass-macro-common.c
-@@ -24,42 +24,45 @@ struct lpass_macro *lpass_macro_pds_init(struct device *dev)
- 		return ERR_PTR(-ENOMEM);
- 
- 	l_pds->macro_pd = dev_pm_domain_attach_by_name(dev, "macro");
--	if (IS_ERR_OR_NULL(l_pds->macro_pd))
--		return NULL;
--
--	ret = pm_runtime_get_sync(l_pds->macro_pd);
--	if (ret < 0) {
--		pm_runtime_put_noidle(l_pds->macro_pd);
-+	if (IS_ERR_OR_NULL(l_pds->macro_pd)) {
-+		ret = PTR_ERR(l_pds->macro_pd);
- 		goto macro_err;
- 	}
- 
-+	ret = pm_runtime_resume_and_get(l_pds->macro_pd);
-+	if (ret < 0)
-+		goto macro_sync_err;
-+
- 	l_pds->dcodec_pd = dev_pm_domain_attach_by_name(dev, "dcodec");
--	if (IS_ERR_OR_NULL(l_pds->dcodec_pd))
-+	if (IS_ERR_OR_NULL(l_pds->dcodec_pd)) {
-+		ret = PTR_ERR(l_pds->dcodec_pd);
- 		goto dcodec_err;
-+	}
- 
--	ret = pm_runtime_get_sync(l_pds->dcodec_pd);
--	if (ret < 0) {
--		pm_runtime_put_noidle(l_pds->dcodec_pd);
-+	ret = pm_runtime_resume_and_get(l_pds->dcodec_pd);
-+	if (ret < 0)
- 		goto dcodec_sync_err;
--	}
- 	return l_pds;
- 
- dcodec_sync_err:
- 	dev_pm_domain_detach(l_pds->dcodec_pd, false);
- dcodec_err:
- 	pm_runtime_put(l_pds->macro_pd);
--macro_err:
-+macro_sync_err:
- 	dev_pm_domain_detach(l_pds->macro_pd, false);
-+macro_err:
- 	return ERR_PTR(ret);
- }
- EXPORT_SYMBOL_GPL(lpass_macro_pds_init);
- 
- void lpass_macro_pds_exit(struct lpass_macro *pds)
- {
--	pm_runtime_put(pds->macro_pd);
--	dev_pm_domain_detach(pds->macro_pd, false);
--	pm_runtime_put(pds->dcodec_pd);
--	dev_pm_domain_detach(pds->dcodec_pd, false);
-+	if (pds) {
-+		pm_runtime_put(pds->macro_pd);
-+		dev_pm_domain_detach(pds->macro_pd, false);
-+		pm_runtime_put(pds->dcodec_pd);
-+		dev_pm_domain_detach(pds->dcodec_pd, false);
-+	}
- }
- EXPORT_SYMBOL_GPL(lpass_macro_pds_exit);
- 
--- 
-2.7.4
+Thanks.
 
+               Linus

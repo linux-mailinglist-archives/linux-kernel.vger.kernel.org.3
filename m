@@ -2,163 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DA74E45DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300DC4E45E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240237AbiCVSVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S240250AbiCVSWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240234AbiCVSU4 (ORCPT
+        with ESMTP id S236651AbiCVSWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:20:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF786FF6B;
-        Tue, 22 Mar 2022 11:19:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAE84B81D57;
-        Tue, 22 Mar 2022 18:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB13C340EC;
-        Tue, 22 Mar 2022 18:19:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="f7++ytaT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1647973161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kC3rlTX6IZ1qsGZ7LbDOlnDblc/s2ccWEzBAw4VZMDc=;
-        b=f7++ytaT+H4u8qIP3z8QM4EFX6FAMoDH590KSUK64ZOpOrVJ5PuZLQuBMwkGrSFTEN1k/a
-        d05Aa9C/shaEo0E+EIQY7x2vghRnB6o4FvQbDIhwvvXfNkxlVtbdf2zIVQKm0FLTxA2H1K
-        /o8yXOT4AC4cjLQqpX6LcrKPdfygCxQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 262f21e8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 22 Mar 2022 18:19:20 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 12:19:16 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-Message-ID: <YjoTJFRook+rGyDI@zx2c4.com>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <20220322155820.GA1745955@roeck-us.net>
- <YjoC5kQMqyC/3L5Y@zx2c4.com>
- <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 14:22:49 -0400
+Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 8BF9B8A6CE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:21:20 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1647973280; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: From: References: Cc: To: To: Subject: Subject:
+ MIME-Version: Date: Message-ID: Sender: Sender;
+ bh=sEvq6f8Dlb0RhdG0uADYTZ1NJ0F/U8AnOMfkzmpDdFo=; b=PDPUNtqx/X+lKT34MAShAI9oNKv9i4OeZGwpJ1eougRkrV5vC/jTfetrCrySDrG9RK3SpTBK
+ 63SaUNDbuYAdGyMpUh1ZANwGBpVvfl/gNe9GH9juyRoCkMvhp+Cam2D18rrg7F4PN9Q7OhTy
+ 1oRnomhlOUIQQfqu1kN693/Gg/s=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 623a139eeaaf7770b71219f5 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 22 Mar 2022 18:21:18
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id BBA88C43617; Tue, 22 Mar 2022 18:21:18 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from [10.71.112.238] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0069DC4338F;
+        Tue, 22 Mar 2022 18:21:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 0069DC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Message-ID: <eeee97bf-2987-3cfb-217e-42615d8d864b@codeaurora.org>
+Date:   Tue, 22 Mar 2022 11:21:16 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH v2 1/3] usb: dwc3: Flush pending SETUP data during
+ stop active xfers
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>, balbi@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_jackp@quicinc.com, Thinh.Nguyen@synopsys.com
+References: <20220216000835.25400-1-quic_wcheng@quicinc.com>
+ <20220216000835.25400-2-quic_wcheng@quicinc.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+In-Reply-To: <20220216000835.25400-2-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Hi Thinh,
 
-On Tue, Mar 22, 2022 at 10:56:44AM -0700, Guenter Roeck wrote:
-> Everything - including the various root file systems - is at
-> git@github.com:groeck/linux-build-test.git. Look into rootfs/ for the
-> various boot tests. I'll be happy to provide some qemu command lines
-> if needed.
+On 2/15/2022 4:08 PM, Wesley Cheng wrote:
+> While running the pullup disable sequence, if there are pending SETUP
+> transfers stored in the controller, then the ENDTRANSFER commands on non
+> control eps will fail w/ ETIMEDOUT.  As a suggestion from SNPS, in order
+> to drain potentially cached SETUP packets, SW needs to issue a
+> STARTTRANSFER command.  After issuing the STARTTRANSFER, and retrying the
+> ENDTRANSFER, the command should succeed.  Else, if the endpoints are not
+> properly stopped, the controller halt sequence will fail as well.
+> 
+> One limitation is that the current logic will drop the SETUP data
+> being received (ie dropping the SETUP packet), however, it should be
+> acceptable in the pullup disable case, as the device is eventually
+> going to disconnect from the host.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+Just wondering if you had any inputs for this particular change?  I
+think on the dequeue path discussion you had some concerns with parts of
+this change?  I think the difficult part for the pullup disable path is
+that we have this API running w/ interrupts disabled, so the EP0 state
+won't be able to advance compared to the dequeue case.
 
-Thanks. It looks like the "problem" is with this shell script:
+Ideally, if there is a way to ensure that we avoid reading further setup
+packets, that would be nice, but from our discussions with Synopsys,
+this was not possible. (controller is always armed and ready to ACK
+setup tokens)
 
-  init_rng() {
-    if check_file_size; then
-      printf 'Initializing random number generator: '
-      dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
-      status=$?
-      if [ "$status" -eq 0 ]; then
-        echo "OK"
-      else
-        echo "FAIL"
-      fi
-      return "$status"
-    fi
-  }
-  
-  save_random_seed() {
-    printf 'Saving random seed: '
-    if touch "$URANDOM_SEED" 2> /dev/null; then
-      old_umask=$(umask)
-      umask 077
-      dd if=/dev/urandom of="$URANDOM_SEED" bs="$pool_size" count=1 2> /dev/null
-      status=$?
-      umask "$old_umask"
-      if [ "$status" -eq 0 ]; then
-        echo "OK"
-      else
-        echo "FAIL"
-      fi
-    else
-      status=$?
-      echo "SKIP (read-only file system detected)"
-    fi
-    return "$status"
-  }
+I did evaluate keeping IRQs enabled and periodically releasing/attaining
+the lock between the stop active xfer calls, but that opened another can
+of worms.  If you think this is the approach we should take, I can take
+a look at this implementation further.
 
-  case "$1" in
-    start|restart|reload)
-      # Carry a random seed from start-up to start-up
-      # Load and then save the whole entropy pool
-      init_rng && save_random_seed;;
+Thanks
+Wesley Cheng
 
-This code is actually problematic for a number of reasons. (And Linus,
-I'm not saying "userspace is wrong" to justify breaking it or something,
-don't worry.)
+>  drivers/usb/dwc3/core.h   |  7 +++++++
+>  drivers/usb/dwc3/ep0.c    | 20 +++++++++++--------
+>  drivers/usb/dwc3/gadget.c | 42 ++++++++++++++++++++++++++++++++++-----
+>  3 files changed, 56 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index eb9c1efced05..a411682e7f44 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1551,6 +1551,8 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+>  int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
+>  		u32 param);
+>  void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc);
+> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc);
+> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep);
+>  #else
+>  static inline int dwc3_gadget_init(struct dwc3 *dwc)
+>  { return 0; }
+> @@ -1572,6 +1574,11 @@ static inline int dwc3_send_gadget_generic_command(struct dwc3 *dwc,
+>  { return 0; }
+>  static inline void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
+>  { }
+> +static inline void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+> +{ }
+> +static inline void dwc3_ep0_end_control_data(struct dwc3 *dwc,
+> +					     struct dwc3_ep *dep)
+> +{ }
+>  #endif
+>  
+>  #if IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+> index 658739410992..a2cc94c25dcf 100644
+> --- a/drivers/usb/dwc3/ep0.c
+> +++ b/drivers/usb/dwc3/ep0.c
+> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+>  	int				ret;
+>  
+>  	spin_lock_irqsave(&dwc->lock, flags);
+> -	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+> +	if (!dep->endpoint.desc || !dwc->pullups_connected || !dwc->connected) {
+>  		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
+>  				dep->name);
+>  		ret = -ESHUTDOWN;
+> @@ -218,19 +218,21 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+>  	return ret;
+>  }
+>  
+> -static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+>  {
+>  	struct dwc3_ep		*dep;
+>  
+>  	/* reinitialize physical ep1 */
+>  	dep = dwc->eps[1];
+>  	dep->flags = DWC3_EP_ENABLED;
+> +	dep->trb_enqueue = 0;
+>  
+>  	/* stall is always issued on EP0 */
+>  	dep = dwc->eps[0];
+>  	__dwc3_gadget_ep_set_halt(dep, 1, false);
+>  	dep->flags = DWC3_EP_ENABLED;
+>  	dwc->delayed_status = false;
+> +	dep->trb_enqueue = 0;
+>  
+>  	if (!list_empty(&dep->pending_list)) {
+>  		struct dwc3_request	*req;
+> @@ -240,7 +242,9 @@ static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+>  	}
+>  
+>  	dwc->ep0state = EP0_SETUP_PHASE;
+> -	dwc3_ep0_out_start(dwc);
+> +	complete(&dwc->ep0_in_setup);
+> +	if (dwc->softconnect)
+> +		dwc3_ep0_out_start(dwc);
+>  }
+>  
+>  int __dwc3_gadget_ep0_set_halt(struct usb_ep *ep, int value)
+> @@ -272,8 +276,6 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>  	struct dwc3_ep			*dep;
+>  	int				ret;
+>  
+> -	complete(&dwc->ep0_in_setup);
+> -
+>  	dep = dwc->eps[0];
+>  	dwc3_ep0_prepare_one_trb(dep, dwc->ep0_trb_addr, 8,
+>  			DWC3_TRBCTL_CONTROL_SETUP, false);
+> @@ -922,7 +924,9 @@ static void dwc3_ep0_complete_status(struct dwc3 *dwc,
+>  		dwc->setup_packet_pending = true;
+>  
+>  	dwc->ep0state = EP0_SETUP_PHASE;
+> -	dwc3_ep0_out_start(dwc);
+> +	complete(&dwc->ep0_in_setup);
+> +	if (dwc->softconnect)
+> +		dwc3_ep0_out_start(dwc);
+>  }
+>  
+>  static void dwc3_ep0_xfer_complete(struct dwc3 *dwc,
+> @@ -1073,7 +1077,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
+>  	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
+>  }
+>  
+> -static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+>  {
+>  	struct dwc3_gadget_ep_cmd_params params;
+>  	u32			cmd;
+> @@ -1083,7 +1087,7 @@ static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+>  		return;
+>  
+>  	cmd = DWC3_DEPCMD_ENDTRANSFER;
+> -	cmd |= DWC3_DEPCMD_CMDIOC;
+> +	cmd |= dwc->connected ? DWC3_DEPCMD_CMDIOC : DWC3_DEPCMD_HIPRI_FORCERM;
+>  	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
+>  	memset(&params, 0, sizeof(params));
+>  	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 183b90923f51..f6801199440c 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -885,12 +885,13 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+>  		reg |= DWC3_DALEPENA_EP(dep->number);
+>  		dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
+>  
+> -		if (usb_endpoint_xfer_control(desc))
+> -			goto out;
+> -
+>  		/* Initialize the TRB ring */
+>  		dep->trb_dequeue = 0;
+>  		dep->trb_enqueue = 0;
+> +
+> +		if (usb_endpoint_xfer_control(desc))
+> +			goto out;
+> +
+>  		memset(dep->trb_pool, 0,
+>  		       sizeof(struct dwc3_trb) * DWC3_TRB_NUM);
+>  
+> @@ -2476,7 +2477,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>  	 * Per databook, when we want to stop the gadget, if a control transfer
+>  	 * is still in process, complete it and get the core into setup phase.
+>  	 */
+> -	if (!is_on && dwc->ep0state != EP0_SETUP_PHASE) {
+> +	if ((!is_on && (dwc->ep0state != EP0_SETUP_PHASE ||
+> +	     dwc->ep0_next_event != DWC3_EP0_COMPLETE))) {
+>  		reinit_completion(&dwc->ep0_in_setup);
+>  
+>  		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
+> @@ -2519,6 +2521,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>  		u32 count;
+>  
+>  		dwc->connected = false;
+> +
+> +		/*
+> +		 * Ensure no pending data/setup stages, and disable ep0 to
+> +		 * block further EP0 transactions before stopping pending
+> +		 * transfers.
+> +		 */
+> +		dwc3_ep0_end_control_data(dwc, dwc->eps[1]);
+> +		dwc3_ep0_stall_and_restart(dwc);
+> +		__dwc3_gadget_ep_disable(dwc->eps[0]);
+> +		__dwc3_gadget_ep_disable(dwc->eps[1]);
+> +
+>  		/*
+>  		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
+>  		 * Section 4.1.8 Table 4-7, it states that for a device-initiated
+> @@ -3600,8 +3613,10 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>  	bool interrupt)
+>  {
+>  	struct dwc3_gadget_ep_cmd_params params;
+> +	struct dwc3 *dwc = dep->dwc;
+>  	u32 cmd;
+>  	int ret;
+> +	int retries = 1;
+>  
+>  	if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
+>  	    (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
+> @@ -3633,7 +3648,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>  	 *
+>  	 * This mode is NOT available on the DWC_usb31 IP.
+>  	 */
+> -
+> +retry:
+>  	cmd = DWC3_DEPCMD_ENDTRANSFER;
+>  	cmd |= force ? DWC3_DEPCMD_HIPRI_FORCERM : 0;
+>  	cmd |= interrupt ? DWC3_DEPCMD_CMDIOC : 0;
+> @@ -3641,6 +3656,23 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>  	memset(&params, 0, sizeof(params));
+>  	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
+>  	WARN_ON_ONCE(ret);
+> +	if (ret == -ETIMEDOUT) {
+> +		if (!dwc->connected) {
+> +			/*
+> +			 * While the controller is in an active setup/control
+> +			 * transfer, the HW is unable to service other eps
+> +			 * potentially leading to an endxfer command timeout.
+> +			 * It was recommended to ensure that there are no
+> +			 * pending/cached setup packets stored in internal
+> +			 * memory.  Only way to achieve this is to issue another
+> +			 * start transfer, and retry.
+> +			 */
+> +			if (retries--) {
+> +				dwc3_ep0_out_start(dwc);
+> +				goto retry;
+> +			}
+> +		}
+> +	}
+>  	dep->resource_index = 0;
+>  
+>  	if (!interrupt)
 
-The first `dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1`
-will write the seed into the input pool, but:
-
-  - It won't credit the entropy from that seed, so the pool won't
-    actually initialize. (You need to use the ioctl to credit it.)
-  - Because the pool doesn't initialize, subsequent reads from
-    /dev/urandom won't actually use that seed.
-
-The first point is why we had to revert this patch. But the second one
-is actually a bit dangerous: you might write in a perfectly good seed to
-/dev/urandom, but what you read out for the subsequent seed may be
-complete deterministic crap. This is because the call to write_pool()
-goes right into the input pool and doesn't touch any of the "fast init"
-stuff, where we immediately mutate the crng key during early boot.
-
-As far as I can tell, this has been the behavior for a really long time,
-making the above innocuous pattern a pretty old thing that's broken. So
-I could perhaps say, "this behavior is so old now, that your userspace
-code is just plain broken," but I think I might actually have a very
-quick unobtrusive fix for this. I'll mull some things over for rc2 or
-later in rc1.
-
-But, anyway, this only fixes the second point mentioned above. The first
-one -- which resulted in the revert -- remains a stumper for now.
-
-Jason
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project

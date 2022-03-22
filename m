@@ -2,128 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31C34E379A
+	by mail.lfdr.de (Postfix) with ESMTP id 963184E3798
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236161AbiCVDiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 23:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
+        id S236247AbiCVDiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 23:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236241AbiCVDiG (ORCPT
+        with ESMTP id S236244AbiCVDiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Mar 2022 23:38:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28555BD7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647920198;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iMzx+aioEJysUsrwA03nQ3DLxiWp0PNXhW4lisYP70U=;
-        b=ija/uiPG7vViYO1JI+76TgZGvUhEoHTwz2vk3WcRXw531UfQ++nsGBJDrHiNOqMVqzYqPV
-        M971K3lr+t/91cw3WK2+TTfO68BVJvd3CPmCTtCHwkMxWpfaahYiDK8iGQsR1rhMT4PSLz
-        1gD8nzeAQGWNVSzcXpwHkxYeuC0z0AY=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-SZUVseLTN8SoyZqXjFU05A-1; Mon, 21 Mar 2022 23:36:37 -0400
-X-MC-Unique: SZUVseLTN8SoyZqXjFU05A-1
-Received: by mail-lf1-f69.google.com with SMTP id z39-20020a0565120c2700b0044a219505a4so1254299lfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:36:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iMzx+aioEJysUsrwA03nQ3DLxiWp0PNXhW4lisYP70U=;
-        b=q4pnBH9vpa9NV4Rl5BWqbKZrHG7N/eFgzaIbjed/aTAmtkrTBnAGMyhuA5AmyV6KFf
-         OwGbIqTwyZ0gnuWgx2QVLZAb/oBuwGH7/jyI4RPaBw5hbzD1UvkQ6bmCWLDtBOrj0QPl
-         Nod1nPIH/BETIlf+SQV74JLOeOlZwXCd5xIlK6XYdHUx40I+mQJuhrPj1ov/NNEUXulz
-         1u9zETKWUx8Hckdh4gf39Qth5reRauP53kngW5BwwG16SedfXpdWPal8IPbCmJiAIZ0k
-         i1Di/TwaSt8L/pe7zOaerd0nCXukOx9ZbJRru0JC3hnVLD6xH03b3wYFt4JgA/TfxASB
-         j+Kg==
-X-Gm-Message-State: AOAM532dxmdraLYYnWPAhTS/VGAgTpkag7RWfLDbWWqkCTGLZNTW7CUX
-        MmWGVIqoOE68n2mL/6RhuKAZaEGn3e7l+Md9XWN66UWOpNJL8LQpEEeknkwI+Pl8sSNGUhlHUhT
-        cAYmmucYjEQhm/GOj0QJb4LjINZXrSAuMVE6j9V2Z
-X-Received: by 2002:a05:6512:b81:b0:448:b342:513c with SMTP id b1-20020a0565120b8100b00448b342513cmr16747263lfv.257.1647920195435;
-        Mon, 21 Mar 2022 20:36:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyj1G/AYOP3skVnNg/P+5mXQxxZT3muCA9UKvGxFZZI4XYPIarVqtXRw6VTfqLiA2IK6CTrcVHAKh6xTpSY7rc=
-X-Received: by 2002:a05:6512:b81:b0:448:b342:513c with SMTP id
- b1-20020a0565120b8100b00448b342513cmr16747254lfv.257.1647920195269; Mon, 21
- Mar 2022 20:36:35 -0700 (PDT)
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A17130;
+        Mon, 21 Mar 2022 20:36:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V7tw9PW_1647920194;
+Received: from 30.240.116.16(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V7tw9PW_1647920194)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 22 Mar 2022 11:36:35 +0800
+Message-ID: <57665787-66f1-1d5a-a190-e73f4b941dce@linux.alibaba.com>
+Date:   Tue, 22 Mar 2022 11:36:29 +0800
 MIME-Version: 1.0
-References: <20220321154931.859511-1-keirf@google.com>
-In-Reply-To: <20220321154931.859511-1-keirf@google.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 22 Mar 2022 11:36:23 +0800
-Message-ID: <CACGkMEuEh+vsDok6hrp96kgGHkxbmzskFMJOouR3mo3d3VjwdQ@mail.gmail.com>
-Subject: Re: [PATCH] virtio: pci: Sanity check the bar index in find_shm_cap
-To:     Keir Fraser <keirf@google.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [BUG] kernel side can NOT trigger memory error with einj
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>
+Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "graeme.gregory@linaro.org" <graeme.gregory@linaro.org>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "myron.stowe@redhat.com" <myron.stowe@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>
+References: <8c40a492-9461-2b43-6ec9-06bfc7a0e77f@linux.alibaba.com>
+ <YjIeff7ESJB/amYA@agluck-desk3.sc.intel.com>
+ <f93a5532-3e07-edf4-38ca-142a0f1d78d7@linux.alibaba.com>
+ <1421c3ac3d3c4438a6ff18f193f8a41c@intel.com>
+ <78cefd4c-f735-2ec4-0c09-35c8191280c5@linux.alibaba.com>
+ <87wngoc9ff.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <87wngoc9ff.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 11:49 PM Keir Fraser <keirf@google.com> wrote:
->
-> The bar index is used as an index into the device's resource list
-> and should be checked as within range for a standard bar.
->
-> Signed-off-by: Keir Fraser <keirf@google.com>
+在 2022/3/21 AM10:43, Huang, Ying 写道:
+> Shuai Xue <xueshuai@linux.alibaba.com> writes:
+> 
+>> 在 2022/3/18 AM12:57, Luck, Tony 写道:
+>>>> -       rc = apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR);
+>>>> +       ptr = kmap(pfn_to_page(pfn));
+>>>> +       tmp = *(ptr + (param1 & ~ PAGE_MASK));
+>>>
+>>> That hack works when the trigger action is just trying to access the injected
+>>> location. But on Intel platforms the trigger "kicks" the patrol scrubber in the
+>>> memory controller to access the address. So the error is triggered not by
+>>> an access from the core, but by internal memory controller access.
+>>>
+>>> This results in a different error signature (for an uncorrected error injection
+>>> it will be a UCNA or SRAO in Intel acronym-speak).
+>>
+>> As far as I know, APEI only defines five injection instructions, ACPI_EINJ_READ_REGISTER,
+>> ACPI_EINJ_READ_REGISTER_VALUE, ACPI_EINJ_WRITE_REGISTER, ACPI_EINJ_WRITE_REGISTER_VALUE and
+>> ACPI_EINJ_NOOP. ACPI_EINJ_TRIGGER_ERROR action should run one of them, I don't see
+>> any of them will kick the patrol scrubber. For example, trigger with ACPI_EINJ_READ_REGISTER:
+>>
+>> apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR)
+>>     __apei_exec_run	// ins=0
+>>         => apei_exec_read_register
+>>             => apei_read
+>>                 => acpi_os_read_memory
+>>                     => acpi_map_vaddr_lookup    /* lookup VA of PA from acpi_ioremap */
+>>                     => acpi_os_ioremap
+>> 		    => acpi_os_read_iomem
+>> 			=> *(u32 *) value = readl(virt_addr);
+>>
+>> As we can see, the error is triggered by access from the core. However, the physical
+>> address can NOT be mapped by acpi_os_ioremap.
+>>
+>> If I missed anything, please let me know. Thank you very much.
 
-Patch looks good, do we need a similar check in vp_modern_map_capability()?
 
-Thanks
+> If you write a device register, the device can kick the patrol scrubber
+> for you.  This device behavior needs not to be defined in APEI spec.
 
-> ---
->  drivers/virtio/virtio_pci_modern.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-> index 5455bc041fb6..84bace98dff5 100644
-> --- a/drivers/virtio/virtio_pci_modern.c
-> +++ b/drivers/virtio/virtio_pci_modern.c
-> @@ -293,7 +293,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
->
->         for (pos = pci_find_capability(dev, PCI_CAP_ID_VNDR); pos > 0;
->              pos = pci_find_next_capability(dev, pos, PCI_CAP_ID_VNDR)) {
-> -               u8 type, cap_len, id;
-> +               u8 type, cap_len, id, res_bar;
->                 u32 tmp32;
->                 u64 res_offset, res_length;
->
-> @@ -317,7 +317,12 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
->
->                 /* Type, and ID match, looks good */
->                 pci_read_config_byte(dev, pos + offsetof(struct virtio_pci_cap,
-> -                                                        bar), bar);
-> +                                                        bar), &res_bar);
-> +               if (res_bar >= PCI_STD_NUM_BARS) {
-> +                       dev_err(&dev->dev, "%s: shm cap with bad bar: %d\n",
-> +                               __func__, res_bar);
-> +                       continue;
-> +               }
->
->                 /* Read the lower 32bit of length and offset */
->                 pci_read_config_dword(dev, pos + offsetof(struct virtio_pci_cap,
-> @@ -337,6 +342,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
->                                                      length_hi), &tmp32);
->                 res_length |= ((u64)tmp32) << 32;
->
-> +               *bar = res_bar;
->                 *offset = res_offset;
->                 *len = res_length;
->
-> --
-> 2.35.1.894.gb6a874cedc-goog
->
+I see, thank you. In our platform, patrol scrubber triggers deferred error, and the fatal
+error is triggered by an access from CPU.
+
+> As the name suggested, ACPI_EINJ_READ/WRITE_REGISTER are used to
+> read/write device registers via iomem.  They aren't used to read/write
+> normal physical memory.  If that's needed, you can try some other method
+> I guess.
+
+I think so, should we add new injection instructions to address this problem,
+e.g. ACPI_EINJ_READ_MEMORY implemented by kmap?
+
+By the way, commit fdea163d8c17 ("ACPI, APEI, EINJ, Fix resource conflict on some
+machine") removes the injecting memory address range which conflits with
+regular memory from trigger table resources. It make sense when calling
+apei_resources_request(). **However, the actual mapping operation in
+apei_exec_pre_map_gars() with trigger_ctx. And the conflit physical address
+is still in trigger_ctx.**
+
+		// drivers/acpi/apei/einj.c: __einj_error_trigger
+		trigger_param_region = einj_get_trigger_parameter_region(
+			trigger_tab, param1, param2);
+		if (trigger_param_region) {
+			...
+		}
+
+If the trigger_param_region is valid which means that the triggered address is
+ACPI_ADR_SPACE_SYSTEM_MEMORY, then we should not use apei_exec_pre_map_gars to
+map like a register, right? If we have ACPI_EINJ_READ_MEMORY, then we can directly
+run ACPI_EINJ_TRIGGER_ERROR through ACPI_EINJ_READ_MEMORY.
+
+Best Regards
+Shuai
+
+
+
+
+
 

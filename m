@@ -2,98 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB50C4E37AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2752E4E37B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236221AbiCVDqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 23:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
+        id S236217AbiCVDrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 23:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236157AbiCVDqA (ORCPT
+        with ESMTP id S236157AbiCVDrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 23:46:00 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0EF19C20;
-        Mon, 21 Mar 2022 20:44:32 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id kl29so6609514qvb.2;
-        Mon, 21 Mar 2022 20:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XrmP5QvY9v5GfSMnu4vuXWWsz33rmP/bhFlcHw3wCB0=;
-        b=SCQgrbnQiBATElkNySc+P2EvESrtkrBHSXxGF61YIy9c6z1Jom1CELWcUvzFVrDvRa
-         bAOHUmF+f0GdV+bEpYclmQOXh1fXzZZygS9U/oQ9Rujr/IHQ2blU6WWoFcb/k/fiWmLx
-         CmD8oxNSo1M3rlfA1T1p+5OWTZ3AzwSuqBfDCKmrL+yX5CCyxhCwMJoBJxdVAZp5SAeq
-         7UFeBpOW3HsRN72yU6FT84Auf83Ao3nsnX8FHsxk59piAMHktHzDvcK5hANlsKClDjhI
-         FCriZSIqeDtcFD3hPdyiEOw9MTTF8N1r3LQLP+GnWX21tt1ee1PRV7JqpoSejAlpyxAW
-         Rq6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XrmP5QvY9v5GfSMnu4vuXWWsz33rmP/bhFlcHw3wCB0=;
-        b=MoQY8AzNPuIevHMRvqBWNjbKl4mfuFZYDEveXTeLO9l4Pe0IGBHQRrybSUIbogZ9wW
-         pxWHIv2i+svfUg1mJ7S9yCSDms2Xm6bHoDaokT+BntHPv04CkTrXBLyLqSdQgY0zhD2k
-         gdaxepuSCOSaNYlX3NmeKACkxpEeCH5IVekqqHsxtNPzMSdeB/sgfPQ++jfz/z/C2dYB
-         8w1KMKLVMMlotP0Ww8kTNYuRPYwem92SfDZMGSdVvapnXCj5qnzRTbWCI5a+iHGukU+u
-         U63WJZXxhvrnCNtChUdVwjrDJB+gfBQKIyy9pLTALAtLycKv5lDGSztUYTUUa75iLTD5
-         UaLg==
-X-Gm-Message-State: AOAM5325oi7mS4hUM9c8eZUbYrqwijyeMlAvV14H7uaZvnnfQtb5z6I4
-        Ve6ZPKuJiA4igu2tTNBIo+o=
-X-Google-Smtp-Source: ABdhPJwVOoAsZhDiZ1fE+whpWR+QfbOW/feKY++VvePGtmd17Yj6x3BU/ZzxppQbTHJgb39Le2LBfg==
-X-Received: by 2002:a05:6214:21aa:b0:440:cd95:323b with SMTP id t10-20020a05621421aa00b00440cd95323bmr18629030qvc.53.1647920672139;
-        Mon, 21 Mar 2022 20:44:32 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b26-20020a05620a119a00b0067e5a092d45sm5481464qkk.11.2022.03.21.20.44.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 20:44:31 -0700 (PDT)
-Message-ID: <6239461f.1c69fb81.df45.a622@mx.google.com>
-X-Google-Original-Message-ID: <20220322034428.GA2327077@cgel.zte@gmail.com>
-Date:   Tue, 22 Mar 2022 03:44:28 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
- for file pages
-References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
- <YjiMsGoXoDU+FwsS@cmpxchg.org>
+        Mon, 21 Mar 2022 23:47:00 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C881C91A;
+        Mon, 21 Mar 2022 20:45:31 -0700 (PDT)
+X-UUID: e2f1032bd75c4a44aedc03b14251f9a1-20220322
+X-UUID: e2f1032bd75c4a44aedc03b14251f9a1-20220322
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1473736653; Tue, 22 Mar 2022 11:45:27 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 22 Mar 2022 11:45:26 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 22 Mar
+ 2022 11:45:25 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 22 Mar 2022 11:45:25 +0800
+Message-ID: <0e909de12a52ae88633634d868bd5001eef1b830.camel@mediatek.com>
+Subject: Re: [v5 1/4] ASoC: dt-bindings: mt8192-mt6359: add new compatible
+ and new properties
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <broonie@kernel.org>, <tzungbi@google.com>,
+        <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 22 Mar 2022 11:45:24 +0800
+In-Reply-To: <YjkLVwvxvOKr30qL@robh.at.kernel.org>
+References: <20220319114111.11496-1-jiaxin.yu@mediatek.com>
+         <20220319114111.11496-2-jiaxin.yu@mediatek.com>
+         <YjkLVwvxvOKr30qL@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjiMsGoXoDU+FwsS@cmpxchg.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:33:20AM -0400, Johannes Weiner wrote:
-> On Wed, Mar 16, 2022 at 06:39:28AM +0000, cgel.zte@gmail.com wrote:
-> > From: Yang Yang <yang.yang29@zte.com.cn>
+On Mon, 2022-03-21 at 18:33 -0500, Rob Herring wrote:
+> On Sat, Mar 19, 2022 at 07:41:08PM +0800, Jiaxin Yu wrote:
+> > 1. Adds new compatible string "mt8192_mt6359_rt1015p_rt5682s" for
+> > machines
+> > with rt1015p and rt5682s.
+> > 2. Adds new property "mediatek,headset-codec" for getting headset
+> > codecs.
+> > 3. Adds new property "mediatek,speaker-codec" for getting speaker
+> > codecs.
 > > 
-> > psi tracks the time spent on submitting the IO of refaulting file pages
-> > and anonymous pages[1]. But after we tracks refaulting anonymous pages
-> > in swap_readpage[2][3], there is no need to track refaulting anonymous
-> > pages in submit_bio.
+> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> > ---
+> >  .../sound/mt8192-mt6359-rt1015-rt5682.yaml    | 29
+> > +++++++++++++++++++
+> >  1 file changed, 29 insertions(+)
 > > 
-> > So this patch can reduce redundant calling of psi_memstall_enter. And
-> > make it easier to track refaulting file pages and anonymous pages
-> > separately.
+> > diff --git a/Documentation/devicetree/bindings/sound/mt8192-mt6359-
+> > rt1015-rt5682.yaml
+> > b/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-
+> > rt5682.yaml
+> > index a781e7aaaa38..aa0476eedd38 100644
+> > --- a/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-
+> > rt5682.yaml
+> > +++ b/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-
+> > rt5682.yaml
+> > @@ -18,6 +18,7 @@ properties:
+> >      enum:
+> >        - mediatek,mt8192_mt6359_rt1015_rt5682
+> >        - mediatek,mt8192_mt6359_rt1015p_rt5682
+> > +      - mediatek,mt8192_mt6359_rt1015p_rt5682s
+> >  
+> >    mediatek,platform:
+> >      $ref: "/schemas/types.yaml#/definitions/phandle"
+> > @@ -27,6 +28,25 @@ properties:
+> >      $ref: "/schemas/types.yaml#/definitions/phandle"
+> >      description: The phandle of HDMI codec.
+> >  
+> > +patternProperties:
+> > +  "^mediatek,headset-codec$":
 > 
-> I don't think this is an improvement.
+> Fixed string, not a pattern. Move to 'properties'. Drop the vendor 
+> prefix too.
 > 
-> psi_memstall_enter() will check current->in_memstall once, detect the
-> nested call, and bail. Your patch checks PageSwapBacked for every page
-> being added. It's more branches for less robust code.
+Hi Rob,
 
-And PageSwapBacked checking is after unlikely(PageWorkingset(page), so I think
-the impact is little.
+I originally referred to simple-card.yaml and move "xxx.yyy" to the
+patternProperties.
+
+Such as:
+# use patternProperties to avoid naming "xxx,yyy" issue
+patternProperties:
+  "^simple-audio-card,widgets$":
+    $ref: "#/definitions/widgets"
+
+But your comment is more reasonable. I will move them to 'properties'
+and drop the vendor prefix. Thanks for your review.
+
+
+> > +    description: Holds subnode which indicates headset dai.
+> > +    type: object
+> > +    properties:
+> > +      sound-dai:
+> > +        $ref: /schemas/types.yaml#/definitions/phandle-array
+> 
+> Standard property, don't need a type or description. Just how many
+> and 
+> what each one is if more than 1.
+
+Should I describe them as below?
+
+properties:
+...
+  speaker-codec:
+    type: object
+    properties:
+      sound-dai:
+         maxItems: 1
+...
+
+> 
+> > +        description: List of phandles to the headset codec nodes.
+> 
+> More than 1?
+> 
+
+Sorry, the description here is incorrect, there is only one phandle.
+
+> > +    additionalProperties: false
+> > +
+> > +  "^mediatek,speaker-codec$":
+> > +    description: Holds subnode which indicates speaker dai.
+> > +    type: object
+> > +    properties:
+> > +      sound-dai:
+> > +        $ref: /schemas/types.yaml#/definitions/phandle-array
+> > +        description: List of phandles to the speaker codec nodes.
+> 
+> Same here.
+> 
+> > +    additionalProperties: false
+> > +
+> >  additionalProperties: false
+> >  
+> >  required:
+> > @@ -44,6 +64,15 @@ examples:
+> >                          "aud_clk_mosi_on";
+> >          pinctrl-0 = <&aud_clk_mosi_off>;
+> >          pinctrl-1 = <&aud_clk_mosi_on>;
+> > +
+> > +        mediatek,headset-codec {
+> > +            sound-dai = <&rt5682>;
+> > +        };
+> > +
+> > +        mediatek,speaker-codec {
+> > +            sound-dai = <&rt1015_l>,
+> > +                        <&rt1015_r>;
+> > +        };
+> >      };
+> >  
+> >  ...
+> > -- 
+> > 2.18.0
+> > 
+> > 
+

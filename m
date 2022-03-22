@@ -2,110 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7413C4E43C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3334E43CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236275AbiCVQES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S237661AbiCVQEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234304AbiCVQEP (ORCPT
+        with ESMTP id S236653AbiCVQEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:04:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4585C36E;
-        Tue, 22 Mar 2022 09:02:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 22 Mar 2022 12:04:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 538452186
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:03:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647964989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=TYrBsKa5StLxSmcyuHRyNtTAfASWqZ8KDbpJaYy3rsE=;
+        b=W/5DausXqHCC2uS3SpbB3ouydTih6E1r1/aQx/M54ObfNcd6SeV53v7Uq6QkiUcXz+LyVh
+        TQRS5UtRwVaoNicS2n9/9pkVRVlyTzNppnK7uEkMD11cZNroHmGpfeAlm/w2JUVjX8vMI7
+        2SMWTwo+ddbAYLpTWTOY2F18ZZsP/Cc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-374-Po9Jd18JM5iqeEIC7-JoeA-1; Tue, 22 Mar 2022 12:03:06 -0400
+X-MC-Unique: Po9Jd18JM5iqeEIC7-JoeA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F38D6126E;
-        Tue, 22 Mar 2022 16:02:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B72C340EC;
-        Tue, 22 Mar 2022 16:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647964966;
-        bh=53qhTxwIy68V/G2LTGU3ZP7e3PIWiRm5YddHHvOGxXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TYTt1n9K9NQ0sVF+i5iOM90fsEoISAnF4ekEo5NM2Q6qavYzlU8FTwRdkAFx4MH7D
-         oKlB0+XXboSDJb9pHvpMLb+tymOJoyYKLhANS/IwqHsaxv9jk9P+POCejcbVc4g56I
-         tgG1AHyFuMw0tqFhDQOXERtCjcMQBGewEE7HJv5aAKpN2CyuHBxECyjz62gVvzuGlm
-         MqPxdmvBg8E8hP8zuGhRqXeaDz4V/rd00J18PJIteP71u7aJ9KNxrxA+2z9lYPchMp
-         kDeTlOfpsijC4ucm7AQ5RyWcovn+UfaWKbkJwpixHhpetjmmkmXoYd7Jnwj8Od1nu+
-         4qv0Jtg0q7FPA==
-Date:   Tue, 22 Mar 2022 17:02:34 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9292D811E7A;
+        Tue, 22 Mar 2022 16:03:05 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-51.bos.redhat.com [10.18.17.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 64000C07F5B;
+        Tue, 22 Mar 2022 16:03:05 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "H.J. Lu" <hjl.tools@gmail.com>
-Subject: Re: [PATCH V8 13/22] LoongArch: Add system call support
-Message-ID: <20220322160234.hxyiugzm3qstyun2@wittgenstein>
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-6-chenhuacai@loongson.cn>
- <CAK8P3a2kroHVN3fTabuFVMz08SXytz-SC8X11BxxszsUCksJ4g@mail.gmail.com>
- <CAAhV-H6zE7p6Tq8rg1Fq5cK5L38z-VHjxsZ+qm8+Cp5x=u_bUQ@mail.gmail.com>
- <CAK8P3a38nUyAt8gGEYregqivdP7NsXS0RuU1NX4_EAVvwGQBWA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a38nUyAt8gGEYregqivdP7NsXS0RuU1NX4_EAVvwGQBWA@mail.gmail.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] arch/arm64:  Fix topology initialization for core scheduling
+Date:   Tue, 22 Mar 2022 12:03:04 -0400
+Message-Id: <20220322160304.26229-1-pauld@redhat.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:47:49AM +0100, Arnd Bergmann wrote:
-> On Mon, Mar 21, 2022 at 10:41 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > On Mon, Mar 21, 2022 at 5:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > > >
-> > > > This patch adds system call support and related uaccess.h for LoongArch.
-> > > >
-> > > > Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
-> > > > A: Until the latest glibc release (2.34), statx is only used for 32-bit
-> > > >    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
-> > > >    bit platforms still use newstat now.
-> > > >
-> > > > Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
-> > > > A: The latest glibc release (2.34) has some basic support for clone3 but
-> > > >    it isn't complete. E.g., pthread_create() and spawni() have converted
-> > > >    to use clone3 but fork() will still use clone. Moreover, some seccomp
-> > > >    related applications can still not work perfectly with clone3.
-> > >
-> > > Please leave those out of the mainline kernel support though: Any users
-> > > of existing glibc binaries can keep using patched kernels for the moment,
-> > > and then later drop those pages when the proper glibc support gets
-> > > merged.
-> > The glibc commit d8ea0d0168b190bdf138a20358293c939509367f ("Add an
-> > internal wrapper for clone, clone2 and clone3") modified nearly
-> > everything in order to move to clone3(), except arch_fork() which used
-> > by fork(). And I cannot find any submitted patches to solve it. So I
-> > don't think this is just a forget, maybe there are other fundamental
-> > problems?
-> 
-> I don't think there are fundamental issues, they probably did not consider
-> it necessary because so far all architectures supported clone().
-> 
-> Adding Christian Brauner and H.J. Lu for clarificatoin.
+Some arm64 rely on store_cpu_topology() to setup the real topology.
+This needs to be done before the call to notify_cpu_starting() which
+tell the scheduler about the cpu otherwise the core scheduling data
+structures are setup in a way that does not match the actual topology.
 
-Probably, yes. I don't know of any fundamental problems there either.
+Without this change stress-ng (which enables core scheduling in its prctl 
+tests) causes a warning and then a crash (trimmed for legibility):
+
+[ 1853.805168] ------------[ cut here ]------------
+[ 1853.809784] task_rq(b)->core != rq->core
+[ 1853.809792] WARNING: CPU: 117 PID: 0 at kernel/sched/fair.c:11102 cfs_prio_less+0x1b4/0x1c4
+...
+[ 1854.015210] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+...
+[ 1854.231256] Call trace:
+[ 1854.233689]  pick_next_task+0x3dc/0x81c
+[ 1854.237512]  __schedule+0x10c/0x4cc
+[ 1854.240988]  schedule_idle+0x34/0x54
+
+Fixes: 9edeaea1bc45 ("sched: Core-wide rq->lock")
+Signed-off-by: Phil Auld <pauld@redhat.com>
+---
+This is a similar issue to 
+  f2703def339c ("MIPS: smp: fill in sibling and core maps earlier") 
+which fixed it for MIPS. 
+
+
+
+ arch/arm64/kernel/smp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index 27df5c1e6baa..3b46041f2b97 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -234,6 +234,7 @@ asmlinkage notrace void secondary_start_kernel(void)
+ 	 * Log the CPU info before it is marked online and might get read.
+ 	 */
+ 	cpuinfo_store_cpu();
++	store_cpu_topology(cpu);
+ 
+ 	/*
+ 	 * Enable GIC and timers.
+@@ -242,7 +243,6 @@ asmlinkage notrace void secondary_start_kernel(void)
+ 
+ 	ipi_setup(cpu);
+ 
+-	store_cpu_topology(cpu);
+ 	numa_add_cpu(cpu);
+ 
+ 	/*
+-- 
+2.18.0
+

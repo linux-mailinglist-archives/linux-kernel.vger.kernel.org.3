@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7814E35B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369034E35BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234478AbiCVAua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
+        id S234428AbiCVAwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 20:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234456AbiCVAu3 (ORCPT
+        with ESMTP id S234389AbiCVAwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 20:50:29 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01B02F3BD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:49:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647910142; x=1679446142;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0x7qIpjv0NuBVYWXT9Tw0mEj9Ru1y7+aMXqGBkCgSwc=;
-  b=Ag6g7MDhLCmplK7Jes7zPXCvDBAbApNYYb0bLlwdlfSgxEWX1jE8c+ai
-   p3a7q7IlHshEviy3dZhbQQ0hL2m8VT18hUgWcrsN3LiLfVXup844sufP6
-   UvuobO4C1e+fIMWhgFUPO9wvqRN6hE5rCWgcHiDgiGrgrvNqAbxRGwnSB
-   eD2sVePyJg7XeRSURHh1RdgSsmFOUQMSVwF70z9y/m/qp40y0fz/beIxG
-   vmazL9lc1/bI4koQWNTyUkpb2CfDyrmw+dqLJvhb8snm07EGvAFwjzrXi
-   qzz69Uc+GnFKeTS1Zu5fyaABgeFFBVFQ0Qc5APZo89HHC6wTBXTnSLsPs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282517335"
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="282517335"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:49:02 -0700
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="560120071"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.208.85]) ([10.254.208.85])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:48:59 -0700
-Message-ID: <85d61ad6-0cf0-ac65-3312-32d0cdeb1b27@linux.intel.com>
-Date:   Tue, 22 Mar 2022 08:48:57 +0800
+        Mon, 21 Mar 2022 20:52:32 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C8D275C2;
+        Mon, 21 Mar 2022 17:51:04 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id kk12so1284543qvb.13;
+        Mon, 21 Mar 2022 17:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=2yh3eeY6mtNkWo8Z5mBcuKeO1GX7Ddd7cVaBFvCLdqY=;
+        b=T1AELz7TXpicUIyDb5QZbA+4pQnpQWobSFXoQ2oGtPnx/PNHES0PpfTNln/mzS9+cE
+         jZ32TaAssTlfIkmAYzpUS2/jXB3TsJlCXZB1Nn943LxRVYI9IG6M0sPcfPF0ySlPHzm3
+         gAnLQivzAkgi2YQvhKmi21SFYRDWq4/E3QygKLTWi7z5pKtOeTKsB+mDfzq2pAe2iwQ4
+         GAPdKN9JsQanuFxmSkYEihQQBNqxCkRDFH2LqxAYLAJlVBVVCALCgVT+/CccZ4vqUrtl
+         /ECmO3eKRwmLBLxT//6YO9dbGwEvGxj8sQ8q5nr38Z5+AIt2WKquf7KM2F5Gkcb3sPSp
+         g9UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=2yh3eeY6mtNkWo8Z5mBcuKeO1GX7Ddd7cVaBFvCLdqY=;
+        b=mctVM0bnCuOm6SMMLCq/ek1UJPg+ULv7uxUdNXdpZLUbI91aWLPXBSKeCKJUptiydk
+         gHxGFh1cT6UQXEV2AdtRwkcZakDyHyosGacVVcvE1mlDXVgN72zSqDFmCMIwUq09yTlJ
+         w787lvql0cV39rq0pq0I/7SL2AKv5KzjO+SzrhQT3IbshLZBeErT5AvHvP/jT9tHpY3g
+         eNiQIsndmodhmJtcTypekn3zBInA8DZZqhRI4YvAx2KFN4tWggaArfMzld+q8zDT11aO
+         lxH7BF7RGzIv7RtavdNZtjg5bp1BsHsZX1jBhG3+/mrHmqK+JEkYcKe8k8e9Di6KArsO
+         S+rw==
+X-Gm-Message-State: AOAM5314C2F2o1wXIiY5Vea7J5tza1wfrjJ1MZ22m456wJ/n3LZVyrQv
+        lNwiFvNbcNqCjZt7grvkYs3EJEq9w8e5
+X-Google-Smtp-Source: ABdhPJyi1+KUHGTwPd9f7MTj0Iy15QPqAMe7NH2nWXXVcPZ2VNiKCcWGMKm6ugMmcUrXiUKHlCQw+g==
+X-Received: by 2002:a05:6214:19e3:b0:440:da81:34e9 with SMTP id q3-20020a05621419e300b00440da8134e9mr18153251qvc.31.1647910263462;
+        Mon, 21 Mar 2022 17:51:03 -0700 (PDT)
+Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id z8-20020ac87f88000000b002e1cecad0e4sm12658207qtj.33.2022.03.21.17.51.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 17:51:02 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 20:51:01 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, lsf-pc@lists.linux-foundation.org
+Subject: [LSF/MM TOPIC] Improving OOM debugging
+Message-ID: <20220322005101.actefn6nttzeo2qr@moria.home.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC 01/11] iommu: Add pasid_bits field in struct dev_iommu
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-2-baolu.lu@linux.intel.com>
- <BL1PR11MB527130BAAC3B4F48E4901F5D8C169@BL1PR11MB5271.namprd11.prod.outlook.com>
- <7de05f5e-864f-175e-5604-29561d330884@linux.intel.com>
- <BN9PR11MB5276981B9328F10E5FC89B728C179@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276981B9328F10E5FC89B728C179@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/22 8:26, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Monday, March 21, 2022 6:22 PM
->>>> -				if (features >= 0)
->>>> +				if (features >= 0) {
->>>>    					info->pasid_supported = features | 1;
->>>> +					dev->iommu->pasid_bits =
->>>> +						fls(pci_max_pasids(pdev)) - 1;
->>> Original intel_svm_alloc_pasid() covers both PCI and non-PCI devices:
->>>
->>> 	ioasid_t max_pasid = dev_is_pci(dev) ?
->>> 		pci_max_pasids(to_pci_dev(dev)) : intel_pasid_max_id;
->>>
->>> though I'm not sure whether non-PCI SVA has been supported indeed, this
->>> patch implies a functional change here.
->>>
->>
->> The info->pasid_supported is only set for PCI devices. So the status is
->> that non-PCI SVA hasn't been supported. No functional change here from
->> this point of view.
->>
-> 
-> Then this information should be included in the commit msg.
+Frustration when debugging OOMs, memory usage, and memory reclaim behaviour is a
+topic I think a lot of us can relate to.
 
-Sure.
+I think it might be worth having a talk to collectively air our frustrations and
+collect ideas for improvements.
 
-Best regards,
-baolu
+To start with: on memory allocation failure or OOM, we currently don't have a
+lot to go on. We get information about the allocation that failed, and only very
+coarse grained information about how memory is being tied up - page granural
+informatian aka show_mem() is nigh useless in most situations, and slab granural
+information is only slightly better.
+
+I have a couple ideas I want to float:
+ - An old idea I've had and mentioned to some people before is to steal dynamic
+   debug's trick of statically allocating tracking structs in a special elf
+   section, and use it to wrap kmalloc(), alloc_pages() etc. calls for memory
+   allocation tracking _per call site_, and then available in debugs broken out
+   by file and line number.
+
+   This would be cheap enough that it could be always on in production, unlike
+   doing the same sort of thing with tracepoints. The cost would be another
+   pointer of overhead for each allocation - for page allocations we've got
+   CONFIG_PAGE_OWNER that does something like this (in a much more expensive
+   fashion), and the pointer it uses could be repurposed. For slub/slab I think
+   something analogous exists, but last I looked it'd probably need help from
+   those developers (in both cases, really; mm code is hairy).
+
+ - In bcachefs, I've been evolving a 'printbuf' thingy - heap allocated strings
+   that you can pass around and append to. They make it really convenient to
+   write pretty-printers for lots of things and pass them around, which in turn
+   has made my life considerably easier in the debugging realm.
+
+   I think that could be useful here: On a typical system shrinkers own a
+   signifcant fraction of non-pagecache kernel memory, and shrinkers have
+   internal state that's particular to each shrinker that's relevant to how much
+   memory is currently freeable (dirtyness, locking issues).
+
+   Imagine if shrinkers all had .to_text() methods, and then on memory
+   allocation failure we could call those and print them for top-10 shrinkers by
+   memory owned - in addition to sticking it in sysfs or debugfs.

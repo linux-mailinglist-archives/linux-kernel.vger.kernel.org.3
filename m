@@ -2,45 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A80E4E4034
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EED4E403C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236402AbiCVOJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S236157AbiCVOKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236345AbiCVOJm (ORCPT
+        with ESMTP id S234928AbiCVOKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:09:42 -0400
-Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [203.148.12.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4278167C1;
-        Tue, 22 Mar 2022 07:07:56 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Tue, 22 Mar
- 2022 22:07:23 +0800
-Received: from L440.zhaoxin.com (10.29.8.49) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 22 Mar
- 2022 22:07:23 +0800
-From:   WeitaoWangoc <WeitaoWang-oc@zhaoxin.com>
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <hzpeterchen@gmail.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
-        <CobeChen@zhaoxin.com>, Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Subject: [PATCH v2] USB: Fix xhci ERDP update issue
-Date:   Tue, 22 Mar 2022 22:07:23 +0800
-Message-ID: <20220322140723.9554-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 22 Mar 2022 10:10:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85DBB5E773
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647958154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XjrS+i8ux47oEqISC/xAzvVvrtglGui4NIu7mtB3Zfk=;
+        b=dRCk5HozTd2BTjVC1ifS7Ak05l6jUoZPE7HGYNU6vcvDYkEyJZLqLCUgaLpVxTy1/LVWkb
+        /qyAFjfah7NhTmZwZo99XuMXP2tEJroEQeJzZh84dK8p+gnccnIKxizt8tmrqLNRcggJ9E
+        2fVSFRshKPztyKfVEUpFXDgirZm0Ctk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-38-ftpneX9iOnK-XC9D8TR9iQ-1; Tue, 22 Mar 2022 10:09:12 -0400
+X-MC-Unique: ftpneX9iOnK-XC9D8TR9iQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 12-20020a05600c24cc00b0038c6caa95f7so985438wmu.4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:09:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XjrS+i8ux47oEqISC/xAzvVvrtglGui4NIu7mtB3Zfk=;
+        b=3Lr42U9xZyBYzYkx4X0kG6bHsJlbJhmiS99DEnJblIMSyH1W2PjOddbEjLzrB/QAeK
+         8ub+J7g7EOdPSjyNJzJdeN6f4iNi8fTMLUmc4IiGIB0JUoI3M+Ha2+ze0PQ4dGr0CVvr
+         iROigf2wTqGcZzRjAvA5MJpafH/sKPgFomVBlJOTRluDBEMritsXyNvUKo+payadoM3F
+         KM40fUeA0DCHZC3Bt1xqvzTYkAVDtdijYxSCyhZAXhDtla+mBR+fZMtGSONAFFiuKFrS
+         zFaJ26zERXqsx9Xbcbru4t03QwfNFBfTfDmbav+TZ+Ti3pvz7ILkpnndsHQAcKEM+jbk
+         ooUQ==
+X-Gm-Message-State: AOAM533tpoKRX2tDVOzygGlpXx1/67BwL1GR0wi5gPH7fxUZSH13ttfY
+        3kHJM3C2P0tvzbptoBd9gmii+R1KzBT9zzhpZSFeRsFOlyAD04CxfEaBqRqDK4nuBvRo+q08nFd
+        glBXihtCBZHBqGT8iwB2i74LG
+X-Received: by 2002:a05:6000:1ace:b0:203:d45b:fbce with SMTP id i14-20020a0560001ace00b00203d45bfbcemr21853211wry.673.1647958151074;
+        Tue, 22 Mar 2022 07:09:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwthJ2YR6qum+rIdVwv5c7F+YfWcOGMnm3G5bxJSaXDIMo7k9XlQ8+7FNG7SNMTkGwYmHNl7g==
+X-Received: by 2002:a05:6000:1ace:b0:203:d45b:fbce with SMTP id i14-20020a0560001ace00b00203d45bfbcemr21853185wry.673.1647958150834;
+        Tue, 22 Mar 2022 07:09:10 -0700 (PDT)
+Received: from redhat.com ([2.55.132.0])
+        by smtp.gmail.com with ESMTPSA id 6-20020a05600c020600b0038cbb21fb00sm1106899wmi.39.2022.03.22.07.09.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 07:09:10 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 10:09:06 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net] vsock/virtio: enable VQs early on probe
+Message-ID: <20220322100835-mutt-send-email-mst@kernel.org>
+References: <20220322103823.83411-1-sgarzare@redhat.com>
+ <20220322092723-mutt-send-email-mst@kernel.org>
+ <20220322140500.bn5yrqj5ljckhcdb@sgarzare-redhat>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.29.8.49]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322140500.bn5yrqj5ljckhcdb@sgarzare-redhat>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,55 +82,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some situations, software handles TRB events slower than adding TRBs.
-If the number of TRB events to be processed in a given interrupt is 256.
-The local variable "event_ring_deq" that records in interrupt handler
-is equal to software_dequeue. It will cause driver not update ERDP,then
-software dequeue pointer is out of sync with ERDP on interrupt exit.
-On the next interrupt, the event ring may full but driver will not
-update ERDP as software_dequeue is equal to ERDP.
+On Tue, Mar 22, 2022 at 03:05:00PM +0100, Stefano Garzarella wrote:
+> On Tue, Mar 22, 2022 at 09:36:14AM -0400, Michael S. Tsirkin wrote:
+> > On Tue, Mar 22, 2022 at 11:38:23AM +0100, Stefano Garzarella wrote:
+> > > virtio spec requires drivers to set DRIVER_OK before using VQs.
+> > > This is set automatically after probe returns, but virtio-vsock
+> > > driver uses VQs in the probe function to fill rx and event VQs
+> > > with new buffers.
+> > 
+> > 
+> > So this is a spec violation. absolutely.
+> > 
+> > > Let's fix this, calling virtio_device_ready() before using VQs
+> > > in the probe function.
+> > > 
+> > > Fixes: 0ea9e1d3a9e3 ("VSOCK: Introduce virtio_transport.ko")
+> > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > > ---
+> > >  net/vmw_vsock/virtio_transport.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> > > index 5afc194a58bb..b1962f8cd502 100644
+> > > --- a/net/vmw_vsock/virtio_transport.c
+> > > +++ b/net/vmw_vsock/virtio_transport.c
+> > > @@ -622,6 +622,8 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
+> > >  	INIT_WORK(&vsock->event_work, virtio_transport_event_work);
+> > >  	INIT_WORK(&vsock->send_pkt_work, virtio_transport_send_pkt_work);
+> > > 
+> > > +	virtio_device_ready(vdev);
+> > > +
+> > >  	mutex_lock(&vsock->tx_lock);
+> > >  	vsock->tx_run = true;
+> > >  	mutex_unlock(&vsock->tx_lock);
+> > 
+> > Here's the whole code snippet:
+> > 
+> > 
+> >        mutex_lock(&vsock->tx_lock);
+> >        vsock->tx_run = true;
+> >        mutex_unlock(&vsock->tx_lock);
+> > 
+> >        mutex_lock(&vsock->rx_lock);
+> >        virtio_vsock_rx_fill(vsock);
+> >        vsock->rx_run = true;
+> >        mutex_unlock(&vsock->rx_lock);
+> > 
+> >        mutex_lock(&vsock->event_lock);
+> >        virtio_vsock_event_fill(vsock);
+> >        vsock->event_run = true;
+> >        mutex_unlock(&vsock->event_lock);
+> > 
+> >        if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
+> >                vsock->seqpacket_allow = true;
+> > 
+> >        vdev->priv = vsock;
+> >        rcu_assign_pointer(the_virtio_vsock, vsock);
+> > 
+> >        mutex_unlock(&the_virtio_vsock_mutex);
+> > 
+> > 
+> > I worry that this is not the only problem here:
+> > seqpacket_allow and setting of vdev->priv at least after
+> > device is active look suspicious.
+> 
+> Right, so if you agree I'll move these before virtio_device_ready().
+> 
+> > E.g.:
+> > 
+> > static void virtio_vsock_event_done(struct virtqueue *vq)
+> > {
+> >        struct virtio_vsock *vsock = vq->vdev->priv;
+> > 
+> >        if (!vsock)
+> >                return;
+> >        queue_work(virtio_vsock_workqueue, &vsock->event_work);
+> > }
+> > 
+> > looks like it will miss events now they will be reported earlier.
+> > One might say that since vq has been kicked it might send
+> > interrupts earlier too so not a new problem, but
+> > there's a chance device actually waits until DRIVER_OK
+> > to start operating.
+> 
+> Yes I see, should I break into 2 patches (one where I move the code already
+> present and this one)?
+> 
+> Maybe a single patch is fine since it's the complete solution.
+> 
+> Thank you for the detailed explanation,
+> Stefano
 
-[  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-[  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7
-inflight: CMD OUT
-[  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78
-00 00 08 00
-[  572.041186] xhci_hcd On some situataions,the 0000:00:12.0: xHCI host
-not responding to stop endpoint command.
-[  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-[  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not
-responding, assume dead
-[  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6
-inflight: CMD
-[  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8
-00 00 08 00
-[  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5
-inflight: CMD
+Two I think since movement can be backported to before the hardening
+effort.
 
-Fixed this issue by update software record local variable when
-handles 128 TRB events.
-
-Fixes: dc0ffbea5729 ("usb: host: xhci: update event ring dequeue pointer on purpose")
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
-v1->v2:
- - Add fixes information with improved commit messages.
- - Fix "tabs converted to spaces" issue.
-
- drivers/usb/host/xhci-ring.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index d0b6806275e0..f9707997969d 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 		if (event_loop++ < TRBS_PER_SEGMENT / 2)
- 			continue;
- 		xhci_update_erst_dequeue(xhci, event_ring_deq);
-+		event_ring_deq = xhci->event_ring->dequeue;
- 
- 		/* ring is half-full, force isoc trbs to interrupt more often */
- 		if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
 -- 
-2.32.0
+MST
+

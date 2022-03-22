@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529AA4E3D08
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5D94E3D16
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbiCVK6n convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Mar 2022 06:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S233776AbiCVLAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 07:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbiCVK6d (ORCPT
+        with ESMTP id S233780AbiCVLAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:58:33 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEBE7692B5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:57:05 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-9-Lon-t17yP1qoUoOghi9yew-1; Tue, 22 Mar 2022 10:57:01 +0000
-X-MC-Unique: Lon-t17yP1qoUoOghi9yew-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Tue, 22 Mar 2022 10:57:02 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Tue, 22 Mar 2022 10:57:01 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Ammar Faizi' <ammarfaizi2@gnuweeb.org>, Willy Tarreau <w@1wt.eu>
-CC:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Nugraha <richiisei@gmail.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-Thread-Topic: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-Thread-Index: AQHYPdalMvftIu2CIkSH1LImoy2kmazLOrmQ
-Date:   Tue, 22 Mar 2022 10:57:01 +0000
-Message-ID: <35ec31089f724a74a584f946deac6248@AcuMS.aculab.com>
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 22 Mar 2022 07:00:34 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C163C66238
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:59:05 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id o10so16600826ejd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zfghx/qEkC2ONfoEHoNhajwMqvVU/Rw6+xNqAELkwE4=;
+        b=3ggq4f3T64nDuKSwbTf/6v4FwlZ/AFMKwVp+igZxWrKaF6n6Orwm1OAgFbA5Zm8EwI
+         0MzsmZOeTGQRLC93xUoEqVOCa3qKL8W8N48Ph8Ci544dyke+Dgi95sgCezM+4d9GE1S2
+         jdHBYObpDUd/YWJ34i0wcPkKigC2hEwzzakfhC7iGQPMQp+pkSJ1JyeSG4y1v0YfTcI2
+         lWZsZb6H8h1GXh6cF3j3Z5z0xQi3RRycMyZxZM6TKTiWP5LZsoaaTRRsx0au5lm8SwUl
+         /ijvmNlzSWC1LWRZd+mvBRfwFjPoyAJqN58Gdf0d5gW+KcJzXDHxLixGiS0qdmPADSm6
+         WsKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zfghx/qEkC2ONfoEHoNhajwMqvVU/Rw6+xNqAELkwE4=;
+        b=rBNqNBh80NoKxNngofdeleYssPHQS+5yqYjyElbXPdQ0wB4K+kh9HMNRiknQipdgp2
+         WrtqDhGHUB5k2luTpUnR5HIkpGhAew9EUfu/JtbLMVrzPGgr6NsZkbFQf6YKoCmMqTxF
+         utJktPevf5frdpqdN0r3xYMduXCsdz8c+HcCCcQj7VtBSrFh0+AQgHHvmKRWt1qCQ1IG
+         A8LMw0Y5mLhjYLXyiLPUHMjMN2RPCnSmR2zU0GubvwR5vdkXD77g7+hflqKSxwaZuCD5
+         zVBt/tY7sStII0CMYOLgxiRtQAB7I7udiRy5XmkvdVXjiqBmgivG6999uCu6nKdHq1E8
+         sCQg==
+X-Gm-Message-State: AOAM532TBGhMltzzvOV2JFjoDnCK2fjuH7vl4weq2fFtfns/qdNzzlX7
+        Ewqt22AdlQztSFLnNMB1unBd+w==
+X-Google-Smtp-Source: ABdhPJzmf1aOUH0Mk/vPLVvoQz/uaOiphL8+V2bJXKtiEls+synowm9ZyksG2v6vj+lPIw7QNwo2ew==
+X-Received: by 2002:a17:907:7f88:b0:6db:c308:c247 with SMTP id qk8-20020a1709077f8800b006dbc308c247mr25177763ejc.300.1647946744330;
+        Tue, 22 Mar 2022 03:59:04 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpezg-94-253-144-57-cbl.xnet.hr. [94.253.144.57])
+        by smtp.googlemail.com with ESMTPSA id b7-20020a056402084700b004190d2fc521sm6150240edz.89.2022.03.22.03.59.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 03:59:03 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pali@kernel.org, marek.behun@nic.cz
+Cc:     Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v2 1/2] arm64: dts: uDPU: update partition table
+Date:   Tue, 22 Mar 2022 11:58:56 +0100
+Message-Id: <20220322105857.1107016-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,135 +69,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi
-> Sent: 22 March 2022 10:21
-> 
-> On i386, the 6th argument of syscall goes in %ebp. However, both Clang
-> and GCC cannot use %ebp in the clobber list and in the "r" constraint
-> without using -fomit-frame-pointer. To make it always available for
-> any kind of compilation, the below workaround is implemented.
-> 
-> For clang (the Assembly statement can't clobber %ebp):
->   1) Push the 6-th argument.
->   2) Push %ebp.
->   3) Load the 6-th argument from 4(%esp) to %ebp.
->   4) Do the syscall (int $0x80).
->   5) Pop %ebp (restore the old value of %ebp).
->   6) Add %esp by 4 (undo the stack pointer).
-> 
-> For GCC, fortunately it has a #pragma that can force a specific function
-> to be compiled with -fomit-frame-pointer, so it can use "r"(var) where
-> var is a variable bound to %ebp.
+Partition currently called "uboot" does not only contain U-boot, but
+rather it contains TF-A, U-boot and U-boot environment.
 
-You need to use the 'clang' pattern for gcc.
-#pragma optimise is fundamentally broken.
-What actually happens here is the 'inline' gets lost
-(because of the implied -O0) and you get far worse code
-than you might expect.
+So, to avoid accidentally deleting the U-boot environment which is
+located at 0x180000 split the partition.
 
-Since you need the 'clang' version, use it all the time.
+"uboot" is not the correct name as you can't boot these boards with U-boot
+only, TF-A must be present as well, so rename the "uboot" partition to
+"firmware".
 
-	David
+While we are here, describe the NOR node as "spi-flash@0" instead of
+"m25p80@0" which is the old SPI-NOR driver name.
 
-> 
-> Cc: x86@kernel.org
-> Cc: llvm@lists.linux.dev
-> Link: https://lore.kernel.org/lkml/2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com
-> Suggested-by: David Laight <David.Laight@ACULAB.COM>
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> ---
-> 
-> @@ Changelog:
-> 
->    Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-4-ammarfaizi2@gnuweeb.org
->    RFC v1 -> RFC v2:
->     - Fix %ebp saving method. Don't use redzone, i386 doesn't have a redzone
->       (comment from David and Alviro).
-> ---
->  tools/include/nolibc/arch-i386.h | 66 ++++++++++++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
-> 
-> diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-> index 125a691fc631..9f4dc36e6ac2 100644
-> --- a/tools/include/nolibc/arch-i386.h
-> +++ b/tools/include/nolibc/arch-i386.h
-> @@ -167,6 +167,72 @@ struct sys_stat_struct {
->  	_ret;                                                                 \
->  })
-> 
-> +
-> +/*
-> + * Both Clang and GCC cannot use %ebp in the clobber list and in the "r"
-> + * constraint without using -fomit-frame-pointer. To make it always
-> + * available for any kind of compilation, the below workaround is
-> + * implemented.
-> + *
-> + * For clang (the Assembly statement can't clobber %ebp):
-> + *   1) Push the 6-th argument.
-> + *   2) Push %ebp.
-> + *   3) Load the 6-th argument from 4(%esp) to %ebp.
-> + *   4) Do the syscall (int $0x80).
-> + *   5) Pop %ebp (restore the old value of %ebp).
-> + *   6) Add %esp by 4 (undo the stack pointer).
-> + *
-> + * For GCC, fortunately it has a #pragma that can force a specific function
-> + * to be compiled with -fomit-frame-pointer, so it can use "r"(var) where
-> + * var is a variable bound to %ebp.
-> + *
-> + */
-> +#if defined(__clang__)
-> +static inline long ____do_syscall6(long eax, long ebx, long ecx, long edx,
-> +				   long esi, long edi, long ebp)
-> +{
-> +	__asm__ volatile (
-> +		"pushl	%[arg6]\n\t"
-> +		"pushl	%%ebp\n\t"
-> +		"movl	4(%%esp), %%ebp\n\t"
-> +		"int	$0x80\n\t"
-> +		"popl	%%ebp\n\t"
-> +		"addl	$4,%%esp\n\t"
-> +		: "=a"(eax)
-> +		: "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
-> +		  [arg6]"m"(ebp)
-> +		: "memory", "cc"
-> +	);
-> +	return eax;
-> +}
-> +
-> +#else /* #if defined(__clang__) */
-> +#pragma GCC push_options
-> +#pragma GCC optimize "-fomit-frame-pointer"
-> +static long ____do_syscall6(long eax, long ebx, long ecx, long edx, long esi,
-> +			    long edi, long ebp)
-> +{
-> +	register long __ebp __asm__("ebp") = ebp;
-> +	__asm__ volatile (
-> +		"int	$0x80"
-> +		: "=a"(eax)
-> +		: "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
-> +		  "r"(__ebp)
-> +		: "memory", "cc"
-> +	);
-> +	return eax;
-> +}
-> +#pragma GCC pop_options
-> +#endif /* #if defined(__clang__) */
-> +
-> +#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6) (   \
-> +	____do_syscall6((long)(num), (long)(arg1),               \
-> +			(long)(arg2), (long)(arg3),              \
-> +			(long)(arg4), (long)(arg5),              \
-> +			(long)(arg6))                            \
-> +)
-> +
-> +
->  /* startup code */
->  /*
->   * i386 System V ABI mandates:
-> --
-> Ammar Faizi
+This won't break booting for existing devices as the SoC-s BootROM is not
+partition aware at all, it will simply try booting from 0x0 of the
+boot device that is set by bootstrap pins.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+This will however prevent accidental or automated flashing of just U-boot
+to the partition.
+
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v2:
+* Update the commit description by adressing ABI breaking concerns
+---
+ arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
+index 95d46e8d081c..ac64949bb53e 100644
+--- a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
+@@ -99,7 +99,7 @@ &spi0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&spi_quad_pins>;
+ 
+-	m25p80@0 {
++	spi-flash@0 {
+ 		compatible = "jedec,spi-nor";
+ 		reg = <0>;
+ 		spi-max-frequency = <54000000>;
+@@ -108,10 +108,15 @@ partitions {
+ 			compatible = "fixed-partitions";
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+-			/* only bootloader is located on the SPI */
++
+ 			partition@0 {
+-				label = "uboot";
+-				reg = <0 0x400000>;
++				label = "firmware";
++				reg = <0x0 0x180000>;
++			};
++
++			partition@180000 {
++				label = "u-boot-env";
++				reg = <0x180000 0x10000>;
+ 			};
+ 		};
+ 	};
+-- 
+2.35.1
 

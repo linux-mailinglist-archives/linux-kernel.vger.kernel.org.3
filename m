@@ -2,250 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0CE4E3C8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED384E3C8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbiCVKim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S233090AbiCVKjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 06:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbiCVKil (ORCPT
+        with ESMTP id S231570AbiCVKjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:38:41 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F6B80201
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:37:14 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id l2so32824091ybe.8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:37:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=x6/91/zzXNBZAn/HehU3V1JqNB9kBJi7VDCHYFDiOOE=;
-        b=wQbsWc+v0qUthPe8+sryBGJe0IoTmMm1K5pH2BQwDJFag3LPivxR5BNsRM9bDJ7T59
-         5dTedS0yPFd0Qw3vucuO137pLOBL+3D/oL4Ruz8QYsS8H3RHiDb2RTCrUdwa2tPj0Ey3
-         tCn725WpVsdHzkBNlicm481RsNfhDsKmpQcm4fkqtIMavwwUl3w3fU0HtTVZPSJtTkDu
-         XEYe7PP+ywx8oeTY4sAVfg2RBeRCTfcCPkVAIBc6VpN1Uc2NbYsqGz/jfJ9uNrQpqZ8E
-         cRR0r/A5H16UkkPRjokS7pkEg06PAP2MW5NEA7JyHDfi5olk34WgaUA+l+jlAErNvQ5o
-         m5SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=x6/91/zzXNBZAn/HehU3V1JqNB9kBJi7VDCHYFDiOOE=;
-        b=HfoW/bd74M/B+lNMNzJmoMBc1T/ZF7icOd9rpcK22bNNkwB3rsubOEwu3N1k95bPzZ
-         eqhbnCj3JCVBmoB0lPn26a19IjiEMzefeSrlUHBLX86cB9GEffVeNUKn2gQhIkO23hOa
-         +aZVDspy4rCxTqkYoBxf9plpYJRfgLrZPMOnz866F0Try6o1kiG/hAZzi4MoDbDqEEIa
-         IcPa3jFEOqd7NF3r0bcmBonxU20dyBwO1hy/bFh0evoBJ4Js1LcV06rMQuUCydBD3sHs
-         7GrlupTXFioY83p2iNJ9PPkBMQ6d/Amw2cHOxUBtSksHIpZ4WeKKQAowzLE0aO9sJtf/
-         LiOg==
-X-Gm-Message-State: AOAM533YHkoVmVBSQ0B1bjcQ4FdyUCuVySoo+y5iH3gpOq7qZDAkp+zF
-        mFpKcVutZpu09ZAaOs7BchtNj8mVGNrV+LATPXYxvg==
-X-Google-Smtp-Source: ABdhPJxwCQmhIbn5P9G/jzsHrcF6HXN4peb6aVWIWJD+ycwF8cvwZuLc/hGPa5KfIJLt4Y7aR0PANnTMb8HNceRJPzg=
-X-Received: by 2002:a25:a0c5:0:b0:633:63da:5ead with SMTP id
- i5-20020a25a0c5000000b0063363da5eadmr26916591ybm.412.1647945433160; Tue, 22
- Mar 2022 03:37:13 -0700 (PDT)
+        Tue, 22 Mar 2022 06:39:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507918020C;
+        Tue, 22 Mar 2022 03:37:47 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id EA2ED1F37C;
+        Tue, 22 Mar 2022 10:37:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647945465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gmbUswLJoIAaiGeCon8zxgA+Ily6/JQQW3FtwFLIyVQ=;
+        b=EGp9LJf8pvt0tM2iT2vBf2GUcktImAOaYYMJUqQbOHTO2xyfWiL2prt8XyKhUqxj1IVMA3
+        atpJ3+sDilSPm2Iv6wBQgLsTmIL/9WrHCOgFRVVdo4eWmdx00dx/mNHAjLAOrPIN3UCCEd
+        jb1VJIhhYVH15JsKUO+kzs9yrh23s8M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647945465;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gmbUswLJoIAaiGeCon8zxgA+Ily6/JQQW3FtwFLIyVQ=;
+        b=3JVJ1Yl6N+w3j/zqml7u8u8upXTbA9FT34zEjq/Hbk9pt/pQgnT8THFshn3Kl0VPkOF9N7
+        X08AOQiR+as64HDA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6A07FA3B81;
+        Tue, 22 Mar 2022 10:37:45 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 1829EA0610; Tue, 22 Mar 2022 11:37:44 +0100 (CET)
+Date:   Tue, 22 Mar 2022 11:37:44 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     "jack@suse.cz" <jack@suse.cz>,
+        "amir73il@gmail.com" <amir73il@gmail.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "khazhy@google.com" <khazhy@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>
+Subject: Re: [PATCH RFC] nfsd: avoid recursive locking through fsnotify
+Message-ID: <20220322103744.niejj6ovzxyfej74@quack3.lan>
+References: <20220319001635.4097742-1-khazhy@google.com>
+ <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
+ <CAOQ4uxgTJdcO-xZbtTSUkjD2g0vSHr=PLFc6-T6RgO0u5DS=0g@mail.gmail.com>
+ <20220321112310.vpr7oxro2xkz5llh@quack3.lan>
+ <31f7822e84583235d84b8c7be24360c46c7450f7.camel@hammerspace.com>
 MIME-Version: 1.0
-References: <20220321133220.559554263@linuxfoundation.org>
-In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 22 Mar 2022 16:07:02 +0530
-Message-ID: <CA+G9fYsU5W=N6vd4rgWbEdr0WYewDfAAcwuCSgL44uZ+ZqqTZQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/32] 5.15.31-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <31f7822e84583235d84b8c7be24360c46c7450f7.camel@hammerspace.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 19:31, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.31 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.31-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon 21-03-22 22:50:11, Trond Myklebust wrote:
+> On Mon, 2022-03-21 at 12:23 +0100, Jan Kara wrote:
+> > On Sat 19-03-22 11:36:13, Amir Goldstein wrote:
+> > > On Sat, Mar 19, 2022 at 9:02 AM Trond Myklebust
+> > > <trondmy@hammerspace.com> wrote:
+> > > > 
+> > > > On Fri, 2022-03-18 at 17:16 -0700, Khazhismel Kumykov wrote:
+> > > > > fsnotify_add_inode_mark may allocate with GFP_KERNEL, which may
+> > > > > result
+> > > > > in recursing back into nfsd, resulting in deadlock. See below
+> > > > > stack.
+> > > > > 
+> > > > > nfsd            D    0 1591536      2 0x80004080
+> > > > > Call Trace:
+> > > > >  __schedule+0x497/0x630
+> > > > >  schedule+0x67/0x90
+> > > > >  schedule_preempt_disabled+0xe/0x10
+> > > > >  __mutex_lock+0x347/0x4b0
+> > > > >  fsnotify_destroy_mark+0x22/0xa0
+> > > > >  nfsd_file_free+0x79/0xd0 [nfsd]
+> > > > >  nfsd_file_put_noref+0x7c/0x90 [nfsd]
+> > > > >  nfsd_file_lru_dispose+0x6d/0xa0 [nfsd]
+> > > > >  nfsd_file_lru_scan+0x57/0x80 [nfsd]
+> > > > >  do_shrink_slab+0x1f2/0x330
+> > > > >  shrink_slab+0x244/0x2f0
+> > > > >  shrink_node+0xd7/0x490
+> > > > >  do_try_to_free_pages+0x12f/0x3b0
+> > > > >  try_to_free_pages+0x43f/0x540
+> > > > >  __alloc_pages_slowpath+0x6ab/0x11c0
+> > > > >  __alloc_pages_nodemask+0x274/0x2c0
+> > > > >  alloc_slab_page+0x32/0x2e0
+> > > > >  new_slab+0xa6/0x8b0
+> > > > >  ___slab_alloc+0x34b/0x520
+> > > > >  kmem_cache_alloc+0x1c4/0x250
+> > > > >  fsnotify_add_mark_locked+0x18d/0x4c0
+> > > > >  fsnotify_add_mark+0x48/0x70
+> > > > >  nfsd_file_acquire+0x570/0x6f0 [nfsd]
+> > > > >  nfsd_read+0xa7/0x1c0 [nfsd]
+> > > > >  nfsd3_proc_read+0xc1/0x110 [nfsd]
+> > > > >  nfsd_dispatch+0xf7/0x240 [nfsd]
+> > > > >  svc_process_common+0x2f4/0x610 [sunrpc]
+> > > > >  svc_process+0xf9/0x110 [sunrpc]
+> > > > >  nfsd+0x10e/0x180 [nfsd]
+> > > > >  kthread+0x130/0x140
+> > > > >  ret_from_fork+0x35/0x40
+> > > > > 
+> > > > > Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+> > > > > ---
+> > > > >  fs/nfsd/filecache.c | 4 ++++
+> > > > >  1 file changed, 4 insertions(+)
+> > > > > 
+> > > > > Marking this RFC since I haven't actually had a chance to test
+> > > > > this,
+> > > > > we
+> > > > > we're seeing this deadlock for some customers.
+> > > > > 
+> > > > > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
+> > > > > index fdf89fcf1a0c..a14760f9b486 100644
+> > > > > --- a/fs/nfsd/filecache.c
+> > > > > +++ b/fs/nfsd/filecache.c
+> > > > > @@ -121,6 +121,7 @@ nfsd_file_mark_find_or_create(struct
+> > > > > nfsd_file
+> > > > > *nf)
+> > > > >         struct fsnotify_mark    *mark;
+> > > > >         struct nfsd_file_mark   *nfm = NULL, *new;
+> > > > >         struct inode *inode = nf->nf_inode;
+> > > > > +       unsigned int pflags;
+> > > > > 
+> > > > >         do {
+> > > > >                 mutex_lock(&nfsd_file_fsnotify_group-
+> > > > > >mark_mutex);
+> > > > > @@ -149,7 +150,10 @@ nfsd_file_mark_find_or_create(struct
+> > > > > nfsd_file
+> > > > > *nf)
+> > > > >                 new->nfm_mark.mask = FS_ATTRIB|FS_DELETE_SELF;
+> > > > >                 refcount_set(&new->nfm_ref, 1);
+> > > > > 
+> > > > > +               /* fsnotify allocates, avoid recursion back
+> > > > > into nfsd
+> > > > > */
+> > > > > +               pflags = memalloc_nofs_save();
+> > > > >                 err = fsnotify_add_inode_mark(&new->nfm_mark,
+> > > > > inode,
+> > > > > 0);
+> > > > > +               memalloc_nofs_restore(pflags);
+> > > > > 
+> > > > >                 /*
+> > > > >                  * If the add was successful, then return the
+> > > > > object.
+> > > > 
+> > > > Isn't that stack trace showing a slab direct reclaim, and not a
+> > > > filesystem writeback situation?
+> > > > 
+> > > > Does memalloc_nofs_save()/restore() really fix this problem? It
+> > > > seems
+> > > > to me that it cannot, particularly since knfsd is not a
+> > > > filesystem, and
+> > > > so does not ever handle writeback of dirty pages.
+> > > > 
+> > > 
+> > > Maybe NOFS throttles direct reclaims to the point that the problem
+> > > is
+> > > harder to hit?
+> > > 
+> > > This report came in at good timing for me.
+> > > 
+> > > It demonstrates an issue I did not predict for "volatile"' fanotify
+> > > marks [1].
+> > > As far as I can tell, nfsd filecache is currently the only fsnotify
+> > > backend that
+> > > frees fsnotify marks in memory shrinker. "volatile" fanotify marks
+> > > would also
+> > > be evictable in that way, so they would expose fanotify to this
+> > > deadlock.
+> > > 
+> > > For the short term, maybe nfsd filecache can avoid the problem by
+> > > checking
+> > > mutex_is_locked(&nfsd_file_fsnotify_group->mark_mutex) and abort
+> > > the
+> > > shrinker. I wonder if there is a place for a helper
+> > > mutex_is_locked_by_me()?
+> > > 
+> > > Jan,
+> > > 
+> > > A relatively simple fix would be to allocate
+> > > fsnotify_mark_connector in
+> > > fsnotify_add_mark() and free it, if a connector already exists for
+> > > the object.
+> > > I don't think there is a good reason to optimize away this
+> > > allocation
+> > > for the case of a non-first group to set a mark on an object?
+> > 
+> > Indeed, nasty. Volatile marks will add group->mark_mutex into a set
+> > of
+> > locks grabbed during inode slab reclaim. So any allocation under
+> > group->mark_mutex has to be GFP_NOFS now. This is not just about
+> > connector
+> > allocations but also mark allocations for fanotify. Moving
+> > allocations from
+> > under mark_mutex is also possible solution but passing preallocated
+> > memory
+> > around is kind of ugly as well. So the cleanest solution I currently
+> > see is
+> > to come up with helpers like "fsnotify_lock_group() &
+> > fsnotify_unlock_group()" which will lock/unlock mark_mutex and also
+> > do
+> > memalloc_nofs_save / restore magic. 
+> 
+> As has already been reported, the problem was fixed in Linux 5.5 by the
+> garbage collector rewrite, and so this is no longer an issue.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Sorry, I was not clear enough I guess. NFS is not a problem since 5.5 as
+you say. But Amir has changes in the works after which any filesystem inode
+reclaim could end up in exactly the same path (calling
+fsnotify_destroy_mark() from clear_inode()). So these changes would
+introduce the same deadlock NFS was prone to before 5.5.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> In addition, please note that memalloc_nofs_save/restore and the use of
+> GFP_NOFS was never a solution, because it does not prevent the kind of
+> direct reclaim that was happening here. You'd have to enforce
+> GFP_NOWAIT allocations, afaics.
 
-## Build
-* kernel: 5.15.31-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.15.y
-* git commit: ca23d8a1f1ca986793db05e0398452d325571a3a
-* git describe: v5.15.30-33-gca23d8a1f1ca
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.30-33-gca23d8a1f1ca
+GFP_NOFS should solve the above problem because with GFP_NOFS we cannot
+enter inode reclaim from the memory allocation and thus end up freeing
+marks.
 
-## Test Regressions (compared to v5.15.29-26-gbce139da2f8a)
-No test regressions found.
+								Honza
 
-## Metric Regressions (compared to v5.15.29-26-gbce139da2f8a)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.29-26-gbce139da2f8a)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.29-26-gbce139da2f8a)
-No metric fixes found.
-
-## Test result summary
-total: 104518, pass: 88956, fail: 870, skip: 13586, xfail: 1106
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 293 passed, 3 failed
-* arm64: 47 total, 47 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 45 total, 41 passed, 4 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 50 passed, 15 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 47 total, 47 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselft[
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

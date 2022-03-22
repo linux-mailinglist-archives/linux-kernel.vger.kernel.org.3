@@ -2,106 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E504E35E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BE84E35D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234631AbiCVBXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 21:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S234552AbiCVBKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 21:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbiCVBXM (ORCPT
+        with ESMTP id S234514AbiCVBKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 21:23:12 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1319C2DCD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:21:46 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id d5so8185827lfj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V7BLAt/fJYUj0OsISV5J6z9qzVDh6CQrx7wQ/ZZuGFs=;
-        b=PsdAyGqfgTpjhTv0nYwzSdVRaR+CB/53R2SZpWfxShtuAAHGPlf2B/Jg5PWRg3yudw
-         UotUSXTbQYjhSyEJ9OSNmmJ3VZtgRBv58AMCF7LrO3EJBDZ7K5tuaRPDCVNMbfm8qm9X
-         9ID6wa/EDvmSMzIdAZ+B3zN/k2wJoO6rHAcLQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V7BLAt/fJYUj0OsISV5J6z9qzVDh6CQrx7wQ/ZZuGFs=;
-        b=nr0EGJTl+NWtTSkkJbLzoPaKMIzItjRGm311OSkCWo2+X9hAq6dTh1sKQ3c+42bHyl
-         1iEcBeclsF0uFEQ7lWTgs0Rd8h1z/d4QoE5mPYf03coaWfVq76OkwAlTuwSFFYvxTpwb
-         Mim+zS5MJB5TeG5g6dtKJ4yn0pU37WXKaGS2/bguRShvR3mQm2VOMpNuJYXcv6BVE9MA
-         PmL1LihGIFyOg2s0LGtlMqYcAYVtA5OhfQnSVYFpZP6/KBWG9SHNsmTv/oKobSxWwUxX
-         nXR49w4EMPwx77S4q7DEQZLq5Re248Mk20kZ3BQXccGuLe+btIr4+j7TfF8QaWWtl8dG
-         iS/g==
-X-Gm-Message-State: AOAM533qyBtKvcFz5gv+KKFYp9oa3INiKlGeFSt8hNoHpii2vlz7EZuR
-        3P4bZ/JpG/PKQdhbAtiz8CfoJwKRJP8srGS07GY=
-X-Google-Smtp-Source: ABdhPJxtY5MaCVOcoAIuDyPvNS+qfAKIuFbYyX8v50azwZFdPgvA6LcsmfzzPFnrrGOWsQwS8Fx3Xg==
-X-Received: by 2002:a05:6512:3f0a:b0:44a:e3f:2862 with SMTP id y10-20020a0565123f0a00b0044a0e3f2862mr11809562lfa.397.1647912103964;
-        Mon, 21 Mar 2022 18:21:43 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id m13-20020ac2424d000000b0044859fdd0b7sm1977675lfl.301.2022.03.21.18.21.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 18:21:43 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id 17so22177938lji.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:21:43 -0700 (PDT)
-X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
- i19-20020a05651c121300b00247e2d9cddamr17545979lja.443.1647912102735; Mon, 21
- Mar 2022 18:21:42 -0700 (PDT)
+        Mon, 21 Mar 2022 21:10:48 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1189519C17;
+        Mon, 21 Mar 2022 18:09:19 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KMtfv06kcz1GClN;
+        Tue, 22 Mar 2022 09:09:11 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Mar
+ 2022 09:09:17 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next] ext4: fix bug_on in start_this_handle during umount filesystem
+Date:   Tue, 22 Mar 2022 09:24:19 +0800
+Message-ID: <20220322012419.725457-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220320231317.2171300-1-linux@roeck-us.net>
-In-Reply-To: <20220320231317.2171300-1-linux@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 21 Mar 2022 18:21:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgM1uHH1WJ47Zt5OGK5qjtFkvVCZLff+TKA2ahXAM1xQg@mail.gmail.com>
-Message-ID: <CAHk-=wgM1uHH1WJ47Zt5OGK5qjtFkvVCZLff+TKA2ahXAM1xQg@mail.gmail.com>
-Subject: Re: [GIT PULL] hwmon updates for v5.18
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 4:13 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Improvements to existing drivers:
-> - adt7x10: Convert to use regmap, convert to use with_info API,
->   use hwmon_notify_event, and other cleanup
-> - aquacomputer_d5next: Add support for Aquacomputer Farbwerk 360
-> - asus_wmi_sensors: Add ASUS ROG STRIX B450-F GAMING II
-> - asus_wmi_ec_sensors: Support T_Sensor on Prime X570-Pro
->   Deprecate driver (replaced by new driver)
-[...]
+We got issue as follows:
+------------[ cut here ]------------
+kernel BUG at fs/jbd2/transaction.c:389!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+CPU: 9 PID: 131 Comm: kworker/9:1 Not tainted 5.17.0-862.14.0.6.x86_64-00001-g23f87daf7d74-dirty #197
+Workqueue: events flush_stashed_error_work
+RIP: 0010:start_this_handle+0x41c/0x1160
+RSP: 0018:ffff888106b47c20 EFLAGS: 00010202
+RAX: ffffed10251b8400 RBX: ffff888128dc204c RCX: ffffffffb52972ac
+RDX: 0000000000000200 RSI: 0000000000000004 RDI: ffff888128dc2050
+RBP: 0000000000000039 R08: 0000000000000001 R09: ffffed10251b840a
+R10: ffff888128dc204f R11: ffffed10251b8409 R12: ffff888116d78000
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888128dc2000
+FS:  0000000000000000(0000) GS:ffff88839d680000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000001620068 CR3: 0000000376c0e000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ jbd2__journal_start+0x38a/0x790
+ jbd2_journal_start+0x19/0x20
+ flush_stashed_error_work+0x110/0x2b3
+ process_one_work+0x688/0x1080
+ worker_thread+0x8b/0xc50
+ kthread+0x26f/0x310
+ ret_from_fork+0x22/0x30
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
 
-To make my life easier, can I ask you to try to format these things a
-bit more sanely and legibly?
+Above issue may happen as follows:
+      umount            read procfs            error_work
+ext4_put_super
+  flush_work(&sbi->s_error_work);
 
-You had this odd mix of sometimes using new lines to separate
-different things (eg that asus_wmi_ec_sensors entry), and sometimes
-just multiple different things in a list that then had line-breaks in
-the middle.
+                      ext4_mb_seq_groups_show
+	                ext4_mb_load_buddy_gfp
+			  ext4_mb_init_group
+			    ext4_mb_init_cache
+	                      ext4_read_block_bitmap_nowait
+			        ext4_validate_block_bitmap
+				  ext4_error
+			            ext4_handle_error
+			              schedule_work(&EXT4_SB(sb)->s_error_work);
 
-That kind of stuff is _very_ hard to parse as anything but a random
-jumble of words all crammed together.
+  ext4_unregister_sysfs(sb);
+  jbd2_journal_destroy(sbi->s_journal);
+    journal_kill_thread
+      journal->j_flags |= JBD2_UNMOUNT;
 
-Whitespace to separate things is good, and some kind of consistent
-indentation makes it more legible. I edited it all up (hopefully
-correctly), but it would be nice to get it in a readable form to begin
-with..
+                                          flush_stashed_error_work
+				            jbd2_journal_start
+					      start_this_handle
+					        BUG_ON(journal->j_flags & JBD2_UNMOUNT);
 
-Yeah, if everything does well, nobody will ever need to read that
-merge message, but let's try to aim for nice and informative commit
-messages anyway.
+To solve this issue, we call 'ext4_unregister_sysfs' in 'ext4_put_super' firstly
+like 'ext4_fill_super' error handle.
 
-             Linus
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/super.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 81749eaddf4c..a673012e35c8 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -1199,20 +1199,25 @@ static void ext4_put_super(struct super_block *sb)
+ 	int aborted = 0;
+ 	int i, err;
+ 
+-	ext4_unregister_li_request(sb);
+-	ext4_quota_off_umount(sb);
+-
+-	flush_work(&sbi->s_error_work);
+-	destroy_workqueue(sbi->rsv_conversion_wq);
+-	ext4_release_orphan_info(sb);
+-
+ 	/*
+ 	 * Unregister sysfs before destroying jbd2 journal.
+ 	 * Since we could still access attr_journal_task attribute via sysfs
+ 	 * path which could have sbi->s_journal->j_task as NULL
++	 * Unregister sysfs before flush sbi->s_error_work.
++	 * Since user may read /proc/fs/ext4/xx/mb_groups during umount, If
++	 * read metadata verify failed then will queue error work.
++	 * flush_stashed_error_work will call start_this_handle may trigger
++	 * BUG_ON.
+ 	 */
+ 	ext4_unregister_sysfs(sb);
+ 
++	ext4_unregister_li_request(sb);
++	ext4_quota_off_umount(sb);
++
++	flush_work(&sbi->s_error_work);
++	destroy_workqueue(sbi->rsv_conversion_wq);
++	ext4_release_orphan_info(sb);
++
+ 	if (sbi->s_journal) {
+ 		aborted = is_journal_aborted(sbi->s_journal);
+ 		err = jbd2_journal_destroy(sbi->s_journal);
+-- 
+2.31.1
+

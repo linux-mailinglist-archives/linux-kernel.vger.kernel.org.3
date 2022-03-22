@@ -2,46 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D104E477A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9319F4E4780
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbiCVU2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
+        id S233665AbiCVUaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiCVU21 (ORCPT
+        with ESMTP id S232903AbiCVUaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:28:27 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9EB6661B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:26:57 -0700 (PDT)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWl5i-00Faic-Ar; Tue, 22 Mar 2022 20:26:54 +0000
-Date:   Tue, 22 Mar 2022 20:26:54 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Imran Khan <imran.f.khan@oracle.com>, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v7 7/8] kernfs: Replace per-fs rwsem with hashed
- rwsems.
-Message-ID: <YjoxDicNK1pTkrKJ@zeniv-ca.linux.org.uk>
-References: <20220317072612.163143-1-imran.f.khan@oracle.com>
- <20220317072612.163143-8-imran.f.khan@oracle.com>
- <YjPNOQJf/Wxa4YeV@zeniv-ca.linux.org.uk>
- <536f2392-45d2-2f43-5e9d-01ef50e33126@oracle.com>
- <YjgpaeFfFandY999@zeniv-ca.linux.org.uk>
- <Yjir/d5S3J1PTiux@slm.duckdns.org>
- <Yji8KT2K7ZKOQ+6S@zeniv-ca.linux.org.uk>
- <YjjP5ldCCGYqD+UV@slm.duckdns.org>
- <Yjk3Nqft/U6vDvd1@zeniv-ca.linux.org.uk>
- <YjoCqqs+UDxZ55nM@slm.duckdns.org>
+        Tue, 22 Mar 2022 16:30:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1950166632;
+        Tue, 22 Mar 2022 13:28:33 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 89B281F431E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647980911;
+        bh=1CkcBWcFLWap6uKtAh1dSlwHTFBzBqGJJwNqC1b53nE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PHjlpq/kg6OUyZsGSXY47+FiRpjGpYfOtwTS/cXDajteWi2DMGrrBKg6pE/7K3lit
+         s9yP6YOd5Z4JxBuQVUJz+kAgLusobcFRv9lDwH28EGDMoA+7RN16Ix6MUdm58yNVHf
+         Kp4mrq/U/GI837iIIhkn9SmYVZxWeYqFq5fKAn2FAU53c7oH1QMIBFK94w8MDS4MIN
+         s80J5IKqlHe0us25z6HONWFDRaFRuc89AK082yO3eQY4EUGOObsSjOL4jGXZdFa1py
+         aA7ig2syp6EBtOxAz1HJEdiv8M8P+S/6LSv4WOe+/3YrtpSHUfNU0j3vVPW2ksnoJi
+         lq6cazoWPVLTQ==
+Date:   Tue, 22 Mar 2022 16:28:26 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+Subject: Re: [PATCH v4 04/22] arm64: dts: mt8192: Add SCP node
+Message-ID: <20220322202826.64kwisnka5xq64vc@notapiano>
+References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
+ <20220318144534.17996-5-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YjoCqqs+UDxZ55nM@slm.duckdns.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220318144534.17996-5-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,43 +60,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 07:08:58AM -1000, Tejun Heo wrote:
-
-> > That's interesting...  My impression had been that some of these functions
-> > could be called from interrupt contexts (judging by the spin_lock_irqsave()
-> > in there).  What kind of async contexts those are, and what do you use to
-> > make sure they don't leak into overlap with kernfs_remove()?
+On Fri, Mar 18, 2022 at 10:45:16PM +0800, Allen-KH Cheng wrote:
+> Add SCP node for mt8192 SoC.
 > 
-> The spin_lock_irqsave()'s are there because they're often used when printing
-> messages which can happen from any context. e.g. cpuset ends up calling into
-> them to print current's cgroup under rcu_read_lock(), iocost to print
-> warning message under an irq-safe lock. In both and similar cases, the
-> caller knows that the cgroup is accessible which in turn guarantees that the
-> kernfs node hasn't be deleted.
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 
-Wait a sec.  Choice of spin_lock_irqsave() vs. spin_lock_irq() is affected by
-having it called with interrupts disabled; choice of either vs. spin_lock()
-is not - that's needed only if you might end up taking the spinlock in question
-from interrupt handler.  "Under rcu_read_lock()" is irrelevant here...
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-The point of spin_lock_irq/spin_lock_irqsave is the prevention of
-	spin_lock(&LOCK); // locked
-take an interrupt, enter interrupt handler and there run into
-	spin_lock(&LOCK); // and we spin forever
-If there's no users in interrupt contexts, we are just fine with plain
-spin_lock().
-
-The only thing that matter wrt rcu_read_lock() is that we can't block there;
-there are tons of plain spin_lock() calls done in those conditions.  And
-rcu_read_lock() doesn't disable interrupts, so spin_lock_irq() is usable
-under it.  Now, holding another spinlock with spin_lock_irq{,save}() *does*
-prohibit the use of spin_lock_irq() - there you can use only spin_lock()
-or spin_lock_irqsave().
-
-The callchains that prohibit spin_lock() do exist - for example, there's
-pr_cont_kernfs_path <- pr_cont_cgroup_path <- transfer_surpluses <- ioc_timer_fn.
-
-	Out of curiosity, what guarantees that kernfs_remove() won't do
-fun things to ancestors of iocg_to_blkg(iocg)->blkcg->css.cgroup for some
-iocg in ioc->active_iocgs, until after ioc_rqos_exit(ioc) has finished
-del_timer_sync()?
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 9e1b563bebab..195d50894df4 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -706,6 +706,18 @@
+>  			status = "disabled";
+>  		};
+>  
+> +		scp: scp@10500000 {
+> +			compatible = "mediatek,mt8192-scp";
+> +			reg = <0 0x10500000 0 0x100000>,
+> +			      <0 0x10700000 0 0x8000>,
+> +			      <0 0x10720000 0 0xe0000>;
+> +			reg-names = "sram", "l1tcm", "cfg";
+> +			interrupts = <GIC_SPI 435 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks = <&infracfg CLK_INFRA_SCPSYS>;
+> +			clock-names = "main";
+> +			status = "disabled";
+> +		};
+> +
+>  		nor_flash: spi@11234000 {
+>  			compatible = "mediatek,mt8192-nor";
+>  			reg = <0 0x11234000 0 0xe0>;
+> -- 
+> 2.18.0
+> 
+> 

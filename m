@@ -2,204 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B7C4E4178
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2E84E417B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237879AbiCVOiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S237900AbiCVOiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237974AbiCVOiE (ORCPT
+        with ESMTP id S237881AbiCVOiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:38:04 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194366AA52;
-        Tue, 22 Mar 2022 07:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/4heW2XHZRFLz+hyRlxTzkxlhn+UmcdznSx7bzv3MCk=; b=piByHcxa0J71QzEQn5NsjwE3QM
-        LEZc/7zDWEdUMpJl6gD7uOEjjk9XAfEdoyV/6dpngp1sO94yVcx+FUVHJIakHA8q2y7BKkjeiReA7
-        h5+Q38djso32qbqwXG3m8Pp+jv8zMDIzSlM5Gxx2Vm2nYdRBKvPOHdRzpS/XOMPD/Olgey5Q7jUK4
-        rL9M4E4CSTpybeVmbBNAU6kekKpH5xSp+v7O0J/IcmdxxTow/WFnvCIkKmwFR5JM1RGGQq21QGcA+
-        gDnlKNKm3kPUQamkvEuT8yjowK69aHfnPxcI7sBApEXzQ3kjc9JXBNEECzeq4hlFZ/zjFLxmgY+7E
-        C9JwgN8g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWfc6-00Bg37-5p; Tue, 22 Mar 2022 14:35:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 49D1A3001CD;
-        Tue, 22 Mar 2022 15:35:54 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C73622D6D4316; Tue, 22 Mar 2022 15:35:54 +0100 (CET)
-Date:   Tue, 22 Mar 2022 15:35:54 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
-        rick.p.edgecombe@intel.com, rppt@kernel.org,
-        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
-        ndesaulniers@google.com
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <Yjneyn8o06svJkY4@hirez.programming.kicks-ass.net>
-References: <20220321112805.1393f9b9@gandalf.local.home>
- <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
- <20220321121209.3b95e406@gandalf.local.home>
- <20220321121549.1c8588c5@gandalf.local.home>
- <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
- <20220321124551.3d73660b@gandalf.local.home>
- <Yjis6hJKUj/WrSwK@hirez.programming.kicks-ass.net>
- <20220321125419.0a20415c@gandalf.local.home>
- <YjmAz0MbdW4Q1Cnv@hirez.programming.kicks-ass.net>
- <20220322091242.1ad0206b@gandalf.local.home>
+        Tue, 22 Mar 2022 10:38:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0580E6AA42
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647959799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dOj1GKJWSWVxdAPCqvgvT1u26bVfFeq3QZ8vKHNzDPY=;
+        b=AqnJBH9sZtfoCRD87RqFWsoPSpIhpG1s3AyH7TnayHfTESf+ieb2fIvpU1ucqo9xZNVEdY
+        xxABPzf+cuI3rwUfcjDUqOlZdiAIJNd4Z/r+cl6ODLnb3PWUJUbU4YFxoIGBhlgDgUv45e
+        lB3blhDxYeMy+TwxQvjg7iC6suol4d0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-rdkHp50cNSeAakYmwWX8cg-1; Tue, 22 Mar 2022 10:36:38 -0400
+X-MC-Unique: rdkHp50cNSeAakYmwWX8cg-1
+Received: by mail-qk1-f197.google.com with SMTP id v22-20020a05620a0a9600b0067e87a1ff57so4922007qkg.14
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:36:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dOj1GKJWSWVxdAPCqvgvT1u26bVfFeq3QZ8vKHNzDPY=;
+        b=0JrpI8P1nbp1MVVAGTjOdNGLRNHGry1CSCgkO2oo3ZSQQxB8Sve2HwJcbdVFLOuUtd
+         hZhLOTDsBnlU8ecTiAIdTPjheFtD1S8zq13DlbFKipf/l0IFnjONKX3IoudOrl7C7Fqi
+         sVXSFKRqYfAARdXEpwoRHVbbvMSX8Hv6+NwG/r7BkdKwK9BrvMkX9ljF6CQYBgq66eKU
+         NNanFf7zs0Ff55DE1uOLLIMq+lMZoyMRVtaqqCuw4COCUoxKvPvG6rMtlyrvjALlEY8O
+         Y/utcBjaW0GSTwvwohIgyyux0n/JmKbYBDb0wGZDJAnXjgpVql8yVWGjDMcEC4HuynIb
+         agHg==
+X-Gm-Message-State: AOAM531r61xfbYqt8HlC13LbRPbmspc6ca5d6UqpmKYB6MHWDqqsdbzK
+        KEDo3zeY/oDVM+6UoD3+u8utCvh3pZ8TZa0GIYiGKwLQEut7DQUTEMBo70UO9axUODhd1+exgC0
+        WjSn49Pa3sSj53furz+C8NmkG
+X-Received: by 2002:a05:620a:28d2:b0:67e:c956:7ca8 with SMTP id l18-20020a05620a28d200b0067ec9567ca8mr471785qkp.683.1647959798183;
+        Tue, 22 Mar 2022 07:36:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwXDv4AGOYhcpwZ3iXOsgSE7vB8MlD/bpaFwtt1h5AIpAisGg+eAfZ6KhHHNlDh4AUml/kF1w==
+X-Received: by 2002:a05:620a:28d2:b0:67e:c956:7ca8 with SMTP id l18-20020a05620a28d200b0067ec9567ca8mr471763qkp.683.1647959797928;
+        Tue, 22 Mar 2022 07:36:37 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-114.business.telecomitalia.it. [87.12.25.114])
+        by smtp.gmail.com with ESMTPSA id h27-20020a05620a13fb00b0067b3615e4acsm8944129qkl.70.2022.03.22.07.36.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 07:36:37 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 15:36:31 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net] vsock/virtio: enable VQs early on probe
+Message-ID: <20220322143631.gt32cshbwyetq2fh@sgarzare-redhat>
+References: <20220322103823.83411-1-sgarzare@redhat.com>
+ <20220322092723-mutt-send-email-mst@kernel.org>
+ <20220322140500.bn5yrqj5ljckhcdb@sgarzare-redhat>
+ <20220322100835-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220322091242.1ad0206b@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220322100835-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 09:12:42AM -0400, Steven Rostedt wrote:
+On Tue, Mar 22, 2022 at 10:09:06AM -0400, Michael S. Tsirkin wrote:
+>On Tue, Mar 22, 2022 at 03:05:00PM +0100, Stefano Garzarella wrote:
+>> On Tue, Mar 22, 2022 at 09:36:14AM -0400, Michael S. Tsirkin wrote:
+>> > On Tue, Mar 22, 2022 at 11:38:23AM +0100, Stefano Garzarella wrote:
+>> > > virtio spec requires drivers to set DRIVER_OK before using VQs.
+>> > > This is set automatically after probe returns, but virtio-vsock
+>> > > driver uses VQs in the probe function to fill rx and event VQs
+>> > > with new buffers.
+>> >
+>> >
+>> > So this is a spec violation. absolutely.
+>> >
+>> > > Let's fix this, calling virtio_device_ready() before using VQs
+>> > > in the probe function.
+>> > >
+>> > > Fixes: 0ea9e1d3a9e3 ("VSOCK: Introduce virtio_transport.ko")
+>> > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> > > ---
+>> > >  net/vmw_vsock/virtio_transport.c | 2 ++
+>> > >  1 file changed, 2 insertions(+)
+>> > >
+>> > > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+>> > > index 5afc194a58bb..b1962f8cd502 100644
+>> > > --- a/net/vmw_vsock/virtio_transport.c
+>> > > +++ b/net/vmw_vsock/virtio_transport.c
+>> > > @@ -622,6 +622,8 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
+>> > >  	INIT_WORK(&vsock->event_work, virtio_transport_event_work);
+>> > >  	INIT_WORK(&vsock->send_pkt_work, virtio_transport_send_pkt_work);
+>> > >
+>> > > +	virtio_device_ready(vdev);
+>> > > +
+>> > >  	mutex_lock(&vsock->tx_lock);
+>> > >  	vsock->tx_run = true;
+>> > >  	mutex_unlock(&vsock->tx_lock);
+>> >
+>> > Here's the whole code snippet:
+>> >
+>> >
+>> >        mutex_lock(&vsock->tx_lock);
+>> >        vsock->tx_run = true;
+>> >        mutex_unlock(&vsock->tx_lock);
+>> >
+>> >        mutex_lock(&vsock->rx_lock);
+>> >        virtio_vsock_rx_fill(vsock);
+>> >        vsock->rx_run = true;
+>> >        mutex_unlock(&vsock->rx_lock);
+>> >
+>> >        mutex_lock(&vsock->event_lock);
+>> >        virtio_vsock_event_fill(vsock);
+>> >        vsock->event_run = true;
+>> >        mutex_unlock(&vsock->event_lock);
+>> >
+>> >        if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
+>> >                vsock->seqpacket_allow = true;
+>> >
+>> >        vdev->priv = vsock;
+>> >        rcu_assign_pointer(the_virtio_vsock, vsock);
+>> >
+>> >        mutex_unlock(&the_virtio_vsock_mutex);
+>> >
+>> >
+>> > I worry that this is not the only problem here:
+>> > seqpacket_allow and setting of vdev->priv at least after
+>> > device is active look suspicious.
+>>
+>> Right, so if you agree I'll move these before virtio_device_ready().
+>>
+>> > E.g.:
+>> >
+>> > static void virtio_vsock_event_done(struct virtqueue *vq)
+>> > {
+>> >        struct virtio_vsock *vsock = vq->vdev->priv;
+>> >
+>> >        if (!vsock)
+>> >                return;
+>> >        queue_work(virtio_vsock_workqueue, &vsock->event_work);
+>> > }
+>> >
+>> > looks like it will miss events now they will be reported earlier.
+>> > One might say that since vq has been kicked it might send
+>> > interrupts earlier too so not a new problem, but
+>> > there's a chance device actually waits until DRIVER_OK
+>> > to start operating.
+>>
+>> Yes I see, should I break into 2 patches (one where I move the code already
+>> present and this one)?
+>>
+>> Maybe a single patch is fine since it's the complete solution.
+>>
+>> Thank you for the detailed explanation,
+>> Stefano
+>
+>Two I think since movement can be backported to before the hardening
+>effort.
 
-> > Suppose:
-> > 
-> > notrace func_B()
-> > {
-> > 	...
-> > }
-> > 
-> > func_A()
-> > {
-> > 	...
-> > 	return func_B();
-> > }
-> > 
-> > then inhibiting tail calls would end up looking like:
-> 
-> If we inhibit tail calls, then we do not need to make func_B notrace.
+Yep, maybe 3 since seqpacket was added later.
 
-Dude, you're arguing in circles :-( the notrace was a given.
-
-> > func_A:
-> > 	call __fentry__
-> > 	...
-> > 	call func_B
-> > 	call __fexit__
-> > 	ret
-> > 
-> > Then A is fully traced, B is invisible, as per spec. What is the
-> > problem?
-> 
-> The above is fine, but then func_B is not a tail call and can also be
-> traced.
-
-Again, B is notrace as a given. This was all about how to deal with
-notrace functions.
-
-I suggested inhibiting tail-call to notrace, you said no. You now seem to
-agree that solves it.
-
-> > The problem you initially had, of doing a tail-call into a notrace, was
-> > that the __fexit__ call went missing, because notrace will obviously not
-> > have that. But that's avoided by inhibiting all tail-calls between
-> > notrace and !notrace functions (note that notrace must also not
-> > tail-call !notrace).
-> 
-> I'm confused by the above. Why can't a notrace tail call a !notrace?
-> If we tail call to a
-> 
-> func_B:
-> 	call __fentry__
-> 	...
-> 	call __fexit__
-> 	ret
-> 
-> then the fentry and fexit show a perfectly valid trace of func_B.
-
-Bah; I thought I had a case this morning, but now I can't seem to recall
-:/
-
-> > Your worry seems to stem about loosing visiblilty of !notrace functions,
-> > but AFAICT that doesn't happen.
-> 
-> My worry is:
-> 
-> func_A:
-> 	call __fentry__
-> 	...
-> 	jmp func_B
-> 
-> Where do we do the call __fexit__ ?
-
-In B (or wherever if B again does a tail-call).
-
-> That was the original concern, and I think the proposed solutions have
-> convoluted our thoughts about what we are trying to fix. So let's go back
-> to the beginning, and see how to deal with it.
-> 
-> That is, we have:
-> 
-> func_C:
-> 	call __fenty__
-> 	...
-> 	call func_A:
-> 	...
-> 	call func_B:
-> 	...
-> 	call __fexit__
-> 	ret
-> 
-> func_A:
-> 	call __fentry__
-> 	...
-	call __ftail__
-> 	jmp func_B
-> 
-> func_B:
-> 	call __fentry__
-> 	...
-> 	call __fexit__
-> 	ret
-> 
-> Where the above is C calling A and B as normal functions, A calling B as a
-> tail call and B just being a normal function called by both A and C (and
-> many other functions).
-
-We need the __ftail__ thing to mark the trace-stack entry of func_A as
-complete, then any future __fexit__ will be able to pop all completed
-entries.
-
-In recap:
-
-	__fentry__ -- push on trace-stack
-	__ftail__  -- mark top-most entry complete
-	__fexit__  -- mark top-most entry complete;
-	              pop all completed entries
-
-inhibit tail-calls to notrace.
-
-> And note, I do not want to limit function tracing (which does not rely on
-> __fexit__) just because we can't figure out how to handle __fexit__.
-
-I'm not following. Regular function tracing needs none of this.
-
-It's function graph tracing, kretprobes and whatever else this rethook
-stuff is about that needs this because return trampolines will stop
-working somewhere in the not too distant future.
+Thanks,
+Stefano
 

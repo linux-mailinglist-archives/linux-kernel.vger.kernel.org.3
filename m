@@ -2,132 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D584E3647
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D478C4E363F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235152AbiCVBzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 21:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S235182AbiCVBzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 21:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235114AbiCVBzC (ORCPT
+        with ESMTP id S235114AbiCVBzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 21:55:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C81D638182
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647914014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uFNsqpDgHlwcJWc3v3norTXsqUprQGWM/kHX+J5t3Ig=;
-        b=CU4rrbrhdqNXGnIrPTPsCesSzSt7HCOk8SABmV+D1BU+y3sT0CNbXObs5QdIrg9dUighwg
-        +iPh2J+cziu2K+av0IoStpWz+HIpL3IleChN51pTrgIwzacK3bJHbXaq/DaD/cXIfNa+jZ
-        cGRu6cdUuSQ5CZEoZjabNoglFCccEcI=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-434-6Bd3W-KdPhaqKInQzmq6Ag-1; Mon, 21 Mar 2022 21:53:33 -0400
-X-MC-Unique: 6Bd3W-KdPhaqKInQzmq6Ag-1
-Received: by mail-il1-f199.google.com with SMTP id t16-20020a056e02061000b002c7ddaa0006so7174019ils.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:53:33 -0700 (PDT)
+        Mon, 21 Mar 2022 21:55:11 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7DD403C7;
+        Mon, 21 Mar 2022 18:53:43 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id d62so18717712iog.13;
+        Mon, 21 Mar 2022 18:53:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sK2XIvRwJokvHYWTYU8uFheWkP/r57FKGT/u90S+b7g=;
+        b=lTt72ls24quxBHbAnkJ66ieUrqlisTV/ofKJhlcTRmcUX/3Qx0yeQY8oi/taaFxus4
+         YIpurMnsydk2PDDKqNOQvmj77kVEjPXJ9osEWXLFz+7y+hk42qea2gmpfCDNrdMx3qUV
+         s0EnUHGMQB4xRt7cvInxrIOFORjVNOsQdtPFYDvUXkV/Xct5TFnyZv4uqBvpbF+HamJN
+         ccdj7mE5qNn9ZoM/zlKobHYt6mEi6EJgJSFNBzEEMr9RjSGoZs7xEMB77tGj9LRMcn8S
+         ZbvKh1xh8o+2bPz+ok3OwQL7Q0p+1yqvKGLzjdk1kgYJuFN3ePe27n60lxDUaf50yOfa
+         Mlfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:cc:in-reply-to
-         :content-transfer-encoding;
-        bh=uFNsqpDgHlwcJWc3v3norTXsqUprQGWM/kHX+J5t3Ig=;
-        b=o1eCtlWbMXHcHIfBFOvwo9CUwerWs8/65rQkF/HhlfTi6FoDXzCSMpnCGPCq078g51
-         FKHTb/lv2tnaEyqP9JwwceHa6X9uvxHfEkST3sF4K6brD5n/1rcD7NkSfNmeywKmDhaf
-         0e+NTVAtjThHW72Zdeax3ZaDzoul6IKLaLy4v6S/4ZaaTrExLRKibORkDNXw/abzoRYh
-         eYIt9cTTN12wPkvhLJy06L1Raa8sf4b7gDvFLW1kXjfsO1ujceAL3T8cw5KQqalBYjyl
-         TAhyJ9mMbjpB10fCL+3yuvpGMoTjNlp8XYEjmzU6G53jLxrCVDfjncf/DpgXQpUweWqp
-         6Ytw==
-X-Gm-Message-State: AOAM531kAS/RlJhw5ZVJ9vESAgylSCqZXq8irWhMknl5WSAwUDiEG8MM
-        VGb+43O/nhVCtRiCs7T38uzjhgp3bBZ5yfvLZvuwIu6JTPp81zcjMbr2cuKyiq2hBUlaiVIkeP7
-        /Sz+2Lwk8ve+FsSHQwHQfKPWh
-X-Received: by 2002:a02:862a:0:b0:319:dc78:e4c0 with SMTP id e39-20020a02862a000000b00319dc78e4c0mr12827505jai.43.1647914012396;
-        Mon, 21 Mar 2022 18:53:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw8bte1WXFTU8OUCyGzAx1f7rsxslZ1ODKlNKZMhc1jWXF7e+o9XaEshaQnbT2hydNoyTxl/Q==
-X-Received: by 2002:a02:862a:0:b0:319:dc78:e4c0 with SMTP id e39-20020a02862a000000b00319dc78e4c0mr12827493jai.43.1647914012199;
-        Mon, 21 Mar 2022 18:53:32 -0700 (PDT)
-Received: from ?IPV6:2601:280:4400:a2e0:7336:512c:930d:4f0e? ([2601:280:4400:a2e0:7336:512c:930d:4f0e])
-        by smtp.gmail.com with ESMTPSA id h4-20020a5e9744000000b006415b179a0dsm9157661ioq.37.2022.03.21.18.53.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 18:53:31 -0700 (PDT)
-Message-ID: <c8bb0b6d-981c-8591-d5b6-17414c934758@redhat.com>
-Date:   Mon, 21 Mar 2022 19:53:29 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sK2XIvRwJokvHYWTYU8uFheWkP/r57FKGT/u90S+b7g=;
+        b=Vz+7ntnQvWMonnXIlfPj9a5RphLyJaoO2/ho+ZoSn2dGKCcfdIAUA/zIEXC4wK2QoB
+         U6yJ3Fjv3FMnly0kaWcIBjEgEB57pA519XvUhDBSrZ+ymlJze3Dv7ao4/04bn3KUsdGy
+         voo7Xqv4a1Pi0qLsht0/JHuLBzwbQl2wdPs1uvehNxBh9G6xCfro5H5hUdu346NCfinY
+         WKaNHcELZT/Jxb0wLnXgoDUfYCVOVuOUUrspDCpITcUZgX7IS2eqpO3salYxGixGVDN1
+         gjjyYIDuaF+sCEwlzLWZphnIwvhTzaH4rlogcJ7qdfOkbilCjOjPKQBW/zUhgoOeC5ac
+         QWiQ==
+X-Gm-Message-State: AOAM5339oyDQ4KR+gufZLxxzZi5fK+n/L1TUxTWouj1uYybTbzx0gAoM
+        fS+DD8KI/ZYOIL4OI00toX2eQvJ/DUxU83fSj/GtNJHFpjE=
+X-Google-Smtp-Source: ABdhPJxG3s0zrvk6SlN/ZoCg+PIfGO+7Bmxr8y0wnLeCq0+ZII9ygMee+efZE3rZeMSwYYA2s/AoTbpPDFGRfppu/qs=
+X-Received: by 2002:a05:6638:2692:b0:319:c4bb:995f with SMTP id
+ o18-20020a056638269200b00319c4bb995fmr12807550jat.42.1647914022662; Mon, 21
+ Mar 2022 18:53:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit and
- the oom_reaper
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>, Davidlohr Bueso <dave@stgolabs.net>
-References: <20220318033621.626006-1-npache@redhat.com>
- <Yjg9ncgep58gFLiN@dhcp22.suse.cz> <20220322004231.rwmnbjpq4ms6fnbi@offworld>
-From:   Nico Pache <npache@redhat.com>
-Cc:     linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andre Almeida <andrealmeid@collabora.com>,
-        David Rientjes <rientjes@google.com>
-In-Reply-To: <20220322004231.rwmnbjpq4ms6fnbi@offworld>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220321133221.290173884@linuxfoundation.org>
+In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Mon, 21 Mar 2022 19:53:32 -0600
+Message-ID: <CAFU3qob+SSec3Qj7U030t+Vvfg05boEkLATGHZXEjgDv+hiNwQ@mail.gmail.com>
+Subject: Re: [PATCH 5.16 00/37] 5.16.17-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 21, 2022 at 9:51 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.17 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.17-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+Hi Greg,
 
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
-On 3/21/22 18:42, Davidlohr Bueso wrote:
-> On Mon, 21 Mar 2022, Michal Hocko wrote:
-> 
->> The more I am thinking about this the more I am getting convinced that
->> we should rather approach this differently and skip over vmas which can
->> be holding the list. Have you considered this option?
-> 
-> While I tend to agree with this over a hacky trylock approach, I cannot
-> help but think that v3 was the right thing to do, at least conceptually.
-Yeah conceptually the V3 was the first correct patch. It could use some slight
-cleanup with a wrapper like in this v5 (has_robust_list), and instead of
-returning it should set MMF_OOM_SKIP.
-> Robust futex users here care enough about dealing with crashes while holding
-> a lock that they sacrifice the performance of regular futexes. So the OOM
-> killer should not cause this very thing. I went through previous threads
-> but other than the user base (which I don't think would be very large
-> just because of the performance implications), was there any other reason
-> to no just set MMF_OOM_SKIP upon a robust list?
-We could proceed with the V3 approach; however if we are able to find a complete
-solution that keeps both functionalities (Concurrent OOM Reaping & Robust Futex)
-working, I dont see why we wouldnt go for it.
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
 
-If we can't find a good/reliable way to check if the vma contains the robust
-list then I think we should just skip the OOM like in the v3.
+     Total time: 0.449 [sec]
 
-Cheers,
--- Nico
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
 
-> 
-> Thanks,
-> Davidlohr
-> 
+     Total time: 10.436 [sec]
 
+      10.436791 usecs/op
+          95814 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467224E3EEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E16D4E3EE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235072AbiCVM6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S234839AbiCVM6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234139AbiCVM6g (ORCPT
+        with ESMTP id S234029AbiCVM6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:58:36 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0898D7E5B1;
-        Tue, 22 Mar 2022 05:57:00 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id b67so13856391qkc.6;
-        Tue, 22 Mar 2022 05:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i2S7GUSm4U+AQin/dmmFLgpcSV/IXmCIEf4kHj0vegw=;
-        b=amfkBcqD44VtirdMn+A9VzZR6t0nli76vBiTvadY3X2EAMOAntGpYjPjbqnPh6tIvI
-         PV3bj+UTlnOvlIEmeQ0MnC4FCD2OmtUo8DKz6p9z3xPvscMW9nNwDUUAQuL4baUMVect
-         KAoZrAXEK0fYMDC7WiRS+TSC8EsxcrT/QG1mrSaJ/g9TelOg/HP4pQcxBCfM9beyfrsG
-         Ykvkd1zkhxSxrG3GmkqAXwgll24z5JjLTo3FkgI/d+DKmxKEF3LzgCLHBFdEnzWmmBpk
-         2GQHNS1gpMo4oBtLZMfMm4xGn2lER6ZhXPz2N8l5vMHlfgeycdEcUsrDjettVGu1MnsX
-         +gGA==
+        Tue, 22 Mar 2022 08:58:37 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D153180211;
+        Tue, 22 Mar 2022 05:57:06 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id w127so19351974oig.10;
+        Tue, 22 Mar 2022 05:57:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i2S7GUSm4U+AQin/dmmFLgpcSV/IXmCIEf4kHj0vegw=;
-        b=yoDzgk6SfbOlqdmyej7FwlWPI0oryurtbMv2ep7as3I2lC1bkUno+I8QLVb6iBlzZH
-         01GjUar6bnVwUJdihdNQoON3s+5p0LYD3JH5oocef1KYqqRkafoQgAuy/FumaIULVzdx
-         cv0vHzdjPIoZ9d68nrnePfoNmkMMfE0jjQSmFXOkHQ4gup3AYbOMTLSu+yOLr4RTClEj
-         K4nBcmOLxRASfVPUYKfUCrNVVM8XpL7naJ5th3N4Lvu6SQK1lpzR6s/QA1GyFfk34eAG
-         BHiJb9P/QD1eT+XlBqi63cTEeIE1HhVeJP3eVqriFsxr27onzErm5Ksq47ftvpiHXEyM
-         85Lw==
-X-Gm-Message-State: AOAM532Fd3JNmRQPmg/rxrESg77w0EOHk6w68wBS52FWV463/3Q7CmPm
-        w4qMpsh3wj/nb29vJOcZQwHQisGtv/c=
-X-Google-Smtp-Source: ABdhPJyHrDcm46F8h/4fgwjIMArSK8hAMGmWW49trJwvxRqhUMpMbZulByGyLPkLVFOTCMy/qv7i+A==
-X-Received: by 2002:a05:620a:1a0e:b0:67e:8e1f:e2f8 with SMTP id bk14-20020a05620a1a0e00b0067e8e1fe2f8mr5635727qkb.756.1647953819966;
-        Tue, 22 Mar 2022 05:56:59 -0700 (PDT)
-Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
-        by smtp.gmail.com with ESMTPSA id m4-20020ac85b04000000b002e1dcaed228sm13381979qtw.7.2022.03.22.05.56.59
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=pl/BJ9q+YsDBv49alBkTvA+Fq5IMYwC01bJf59GIEQ4=;
+        b=YF1+bRfLqLwGs9Wv9704z1JkYfL9kpBN9JYP9/WyJaRW+MQRfmeKxH/VPXbMEIvJlj
+         64W4eNiFs4MWRnlzVmy1vYwK0aSPq+Eti4Bu/wqX5vomNqzQrn+iPVcXKdxK6vmg67xw
+         2vRFtzQ9vXoEku5l3zAFlRqCVLtNU3LIJTWJm1LBtmtTb3yGteasbt+7oG5kEBwMYo7w
+         cjmmJMTaq5+ki8vsDNO3kInBEGG3PUdecN+6kngdQVEwXI738/zuh3JmWrBW3KI+WO94
+         IGFIUokOmE0Z3tRPpvw0VCjk4zyiczoK7ywjtUGY2SJ8ezj/n/h2hXXu9lsuku639AlP
+         a8eQ==
+X-Gm-Message-State: AOAM530yJs/W/b+dUufOIxm3YV+XueBDOBI+tlN7+C86Jc/aMMmwKtR3
+        h2IgzJRJ6oApi1EWAi53RQ==
+X-Google-Smtp-Source: ABdhPJx3WzhGPyoHLx2nFXw2TYGFCsRSGzOwQwTcz4duy4GzTSSG97skkKNPovKJvmJPCMHJuUIshQ==
+X-Received: by 2002:a54:4384:0:b0:2ec:f432:59bf with SMTP id u4-20020a544384000000b002ecf43259bfmr1984468oiv.278.1647953825768;
+        Tue, 22 Mar 2022 05:57:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 184-20020a4a03c1000000b003240492fc15sm8127148ooi.36.2022.03.22.05.57.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 05:56:59 -0700 (PDT)
-Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
-        by vps.qemfd.net (Postfix) with ESMTP id E7A5C2B525;
-        Tue, 22 Mar 2022 08:56:58 -0400 (EDT)
-Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
-        id E4DB86002D6; Tue, 22 Mar 2022 08:56:58 -0400 (EDT)
-Date:   Tue, 22 Mar 2022 08:56:58 -0400
-From:   nick black <dankamongmen@gmail.com>
-To:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-Cc:     "G. Branden Robinson" <g.branden.robinson@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
-Subject: Re: [patch] console_codes.4: ffix
-Message-ID: <YjnHmiYL50SqHCW/@schwarzgerat.orthanc>
-References: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
- <CAN4uE+p-uKzHNYry2YhCMfEFBQ2jUqpDAGx=+eha01w-L4fAjg@mail.gmail.com>
- <20220320160217.gws42lklp6ishzub@localhost.localdomain>
- <fd0b3fea-4b40-ffba-442f-00908a5335a9@gmail.com>
- <Yjg3jXCAsjQVHJAi@schwarzgerat.orthanc>
- <809c40c4-068b-8296-57d9-024e6623362d@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <809c40c4-068b-8296-57d9-024e6623362d@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 05:57:04 -0700 (PDT)
+Received: (nullmailer pid 1840076 invoked by uid 1000);
+        Tue, 22 Mar 2022 12:57:03 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     devicetree@vger.kernel.org, linux-fpga@vger.kernel.org,
+        hao.wu@intel.com, linux-kernel@vger.kernel.org, mdf@kernel.org,
+        conor.dooley@microchip.com, trix@redhat.com, robh+dt@kernel.org,
+        yilun.xu@intel.com, system@metrotek.ru
+In-Reply-To: <20220322043219.23770-3-i.bornyakov@metrotek.ru>
+References: <20220322043219.23770-1-i.bornyakov@metrotek.ru> <20220322043219.23770-3-i.bornyakov@metrotek.ru>
+Subject: Re: [PATCH v7 2/2] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+Date:   Tue, 22 Mar 2022 07:57:03 -0500
+Message-Id: <1647953823.568706.1840075.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alejandro Colomar (man-pages) left as an exercise for the reader:
-> Patch applied.
-> However, it's weird:  I had to apply the following to your patch before
-> applying it with `git am`:
+On Tue, 22 Mar 2022 07:32:19 +0300, Ivan Bornyakov wrote:
+> Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
+> slave SPI to load .dat formatted bitstream image.
 > 
-> /^diff --git/s, man4, a/man4,
-> /^diff --git/s, man4, b/man4,
-> /^--- man4/s, man4, a/man4,
-> /^+++ man4/s, man4, b/man4,
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
 > 
-> I'm curious, how did you generate the patch?
 
-i bounced this out from ~/Mail/sent, and have no idea how i
-originally created it, sorry =\. i'm assuming git email-send?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-nick black -=- https://www.nick-black.com
-to make an apple pie from scratch,
-you need first invent a universe.
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.example.dts:20.21-29.11: Warning (unit_address_vs_reg): /example-0/spi@2008000: node has a unit name, but no reg or ranges property
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1608028
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

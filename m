@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB69C4E45B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80A64E45C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240190AbiCVSJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        id S240218AbiCVSNl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Mar 2022 14:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236572AbiCVSJo (ORCPT
+        with ESMTP id S240201AbiCVSNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:09:44 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D86165D13;
-        Tue, 22 Mar 2022 11:08:16 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id dr20so37415001ejc.6;
-        Tue, 22 Mar 2022 11:08:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=xklhjzZKzADY2xRK99pbIfVzHLVmN5wMRTs9ZPfdbng=;
-        b=WsNBOrifNwv/I038wgPe5EYzd30do0PnzUKANhA40zPTxqqc3H1gnkxqhDiX+dH8z7
-         9OQpnBLd+IjVrDDE04iyYfbk9rUn28y+oT1QrLhW+Z1n04ZJpayxiOeqZYxrwgxKB3DI
-         /UUfebykAJq7LYMlR84IL4TfNF8XFNwWGfOUuwf9tvMWocZV7hVAUp5iU7wxia4uYmzK
-         YEDdGjuu7Zsh+wh8vZoI5TXRJ3bH0JAZrPH17u4toZn8jAIzV3erqkwOIKXSe+JSzFms
-         t/fYjMy8fpaF4Ucz75LZ0Pa2W3n/sDOLRW0+bXQy86+kW2DSli63T9zD6f3oN57blHWQ
-         A0QQ==
-X-Gm-Message-State: AOAM530K6j+PoNmp8aAh2ImOi57CHD+41bxYD8ZoUA5pjuXY7gE3ZNLg
-        zeTSGcnr9TtyHH5LZGtiecs=
-X-Google-Smtp-Source: ABdhPJxUAx4IdVJWahehxkglRm1NqufvIFeuOA2YpXQp/NK47AD8PHQ9rSGI79bpqQ4VfewQip7ZhA==
-X-Received: by 2002:a17:906:58cd:b0:6df:f5f8:3037 with SMTP id e13-20020a17090658cd00b006dff5f83037mr13658660ejs.531.1647972494886;
-        Tue, 22 Mar 2022 11:08:14 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id l20-20020a1709062a9400b006ce71a88bf5sm8516663eje.183.2022.03.22.11.08.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 11:08:14 -0700 (PDT)
-Message-ID: <a8eb005e-3fa4-ef60-c94c-5a6decb7a5df@kernel.org>
-Date:   Tue, 22 Mar 2022 19:08:12 +0100
+        Tue, 22 Mar 2022 14:13:39 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C5E569CD9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:12:11 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-116-Y9JyBsN6MQCkC0PcUTDBfg-1; Tue, 22 Mar 2022 18:12:08 +0000
+X-MC-Unique: Y9JyBsN6MQCkC0PcUTDBfg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Tue, 22 Mar 2022 18:12:08 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Tue, 22 Mar 2022 18:12:08 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Alexander Lobakin' <alexandr.lobakin@intel.com>
+CC:     'Wan Jiabing' <wanjiabing@vivo.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] ice: use min_t() to make code cleaner in ice_gnss
+Thread-Topic: [PATCH v2] ice: use min_t() to make code cleaner in ice_gnss
+Thread-Index: AQHYPSxszwX/VYzTWUmJ1ZXJKTtOx6zJ/3twgAGw2QCAAAVpMA==
+Date:   Tue, 22 Mar 2022 18:12:08 +0000
+Message-ID: <af3fa59809654c9b9939f1e0bd8ca76b@AcuMS.aculab.com>
+References: <20220321135947.378250-1-wanjiabing@vivo.com>
+ <f888e3cf09944f9aa63532c9f59e69fb@AcuMS.aculab.com>
+ <20220322175038.2691665-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20220322175038.2691665-1-alexandr.lobakin@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: phy: mediatek: Add YAML schema for
- PCIe PHY
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Wei-Shun Chang <weishunc@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
-        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
-        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
-References: <20220322024705.9665-1-jianjun.wang@mediatek.com>
- <20220322024705.9665-2-jianjun.wang@mediatek.com>
-In-Reply-To: <20220322024705.9665-2-jianjun.wang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 03:47, Jianjun Wang wrote:
-> Add YAML schema documentation for PCIe PHY on MediaTek chipsets.
+From: Alexander Lobakin
+> Sent: 22 March 2022 17:51
+> From: David Laight <David.Laight@ACULAB.COM>
+> Date: Mon, 21 Mar 2022 16:02:20 +0000
 > 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> ---
->  .../bindings/phy/mediatek,pcie-phy.yaml       | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+> > From: Wan Jiabing
+> > > Sent: 21 March 2022 14:00
+> > >
+> > > Fix the following coccicheck warning:
+> > > ./drivers/net/ethernet/intel/ice/ice_gnss.c:79:26-27: WARNING opportunity for min()
+> > >
+> > > Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> > > ---
+> > > Changelog:
+> > > v2:
+> > > - Use typeof(bytes_left) instead of u8.
+> > > ---
+> > >  drivers/net/ethernet/intel/ice/ice_gnss.c | 3 +--
+> > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
+> > > index 35579cf4283f..57586a2e6dec 100644
+> > > --- a/drivers/net/ethernet/intel/ice/ice_gnss.c
+> > > +++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
+> > > @@ -76,8 +76,7 @@ static void ice_gnss_read(struct kthread_work *work)
+> > >  	for (i = 0; i < data_len; i += bytes_read) {
+> > >  		u16 bytes_left = data_len - i;
+> >
+> > Oh FFS why is that u16?
+> > Don't do arithmetic on anything smaller than 'int'
 > 
+> Any reasoning? I don't say it's good or bad, just want to hear your
+> arguments (disasms, perf and object code measurements) etc.
 
+Look at the object code on anything except x86.
+The compiler has to add instruction to mask the value
+(which is in a full sized register) down to 16 bits
+after every arithmetic operation.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+	David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Best regards,
-Krzysztof

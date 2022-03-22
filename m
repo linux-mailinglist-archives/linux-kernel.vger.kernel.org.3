@@ -2,75 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8C14E4189
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709774E41A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237909AbiCVOlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S237999AbiCVOmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236750AbiCVOlO (ORCPT
+        with ESMTP id S237940AbiCVOmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:41:14 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A4412AC8;
-        Tue, 22 Mar 2022 07:39:47 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so1881600fac.7;
-        Tue, 22 Mar 2022 07:39:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WxMgpeiQYhggSsVLRZ+q7Wz7Ufhtg8Nvw1FX59uyKIM=;
-        b=pfUofWc5YccH3Zbnj4KCFOAV8I71L318nWLCeKLpHUTKvd+BXMv9tEOu3iId6f7wED
-         jMyBo3MYsQS1NQ+tbu9yOkxRdREFIO0UlLmN7BZfZ/ybxAVP7CyViK75qZ+b60G2mkeb
-         x3gX7uel7QkZk0x6xUGDfo235NbPim1dmc9Tn1igxU5qO5qSWaFk7eQQ8PbXyHwqJZFE
-         vs/lST17/LBmjp0opMEm0qpf8q6VKYO0KA92dRCsQ4zDXwYxFY7RlloXJuVL+7HtiVQZ
-         UTg0anqQIRVWznllxg0NPsbxRXXWh3nrqVarepD0x8YDZFRpTDdsSEOoekQ+tID+f653
-         07HQ==
-X-Gm-Message-State: AOAM531oISgT7pVj6AvSSxAfuEuRlhgjvcWfsg72xf90zyj+EAbLmzjE
-        4q06Cb6rqemmYlqE9Vyxbg==
-X-Google-Smtp-Source: ABdhPJxPcgHGhDH2C+e7WOOnw416Mg/sQWc1cDtvNNEnB3Z8MzHF5ZBtTXUWtbYsyVbA1huXzoN4QQ==
-X-Received: by 2002:a05:6870:6108:b0:dd:ca26:f135 with SMTP id s8-20020a056870610800b000ddca26f135mr1818123oae.22.1647959986324;
-        Tue, 22 Mar 2022 07:39:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f8-20020a4a8908000000b0032472938f95sm4241174ooi.17.2022.03.22.07.39.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 07:39:45 -0700 (PDT)
-Received: (nullmailer pid 1981681 invoked by uid 1000);
-        Tue, 22 Mar 2022 14:39:43 -0000
-Date:   Tue, 22 Mar 2022 09:39:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>, Marc Zyngier <maz@kernel.org>
-Cc:     dann frazier <dann.frazier@canonical.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
-Message-ID: <Yjnfr7V6egc1sewb@robh.at.kernel.org>
-References: <20220321104843.949645-1-maz@kernel.org>
- <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
- <87h77rxnyl.wl-maz@kernel.org>
- <CAL_JsqK57KpZmzCE=86dLcHK4Ws_0w0ga4_qoYUe2GwFNpDzRw@mail.gmail.com>
- <87fsnbxgau.wl-maz@kernel.org>
- <e52c8cbd-031b-848f-3d78-dff8b93bd416@arm.com>
- <61809b8f-acaa-bae2-ac5e-aa47c55eea23@arm.com>
+        Tue, 22 Mar 2022 10:42:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838C933E09;
+        Tue, 22 Mar 2022 07:40:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 396B8B81D08;
+        Tue, 22 Mar 2022 14:40:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 719D8C340F2;
+        Tue, 22 Mar 2022 14:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647960029;
+        bh=x++Mq2RxURkLMg1JsydDN/FlbWbJrQ+uoj7qljhzM7U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=faxKNsk97ypovZQxUGNVF94Yu6sPv5m2gE3guRFkCALwbMx8vugMaoSkjLl/TsdK8
+         pX1lLYdy+jyYR6LX+fX/cjX4yXaJ4BoL8ctpotI1M3KtvdiCPEeHt2NgotM/c26FeH
+         efKRXaqJ9KIsnH92f3aO6an4ECs9P3fuqsrXK6CAlCuK+UoAu8+ZsfsS+Xq6dmWeZg
+         q4mX7o4lDvd2L+XLx3IqpgpFH3m3eVvBNcPHPnE75Z7c7wlgzd7GoD3XNlBrXsyTQ/
+         8v2Fwa3qMJ6fbxBtMr0m45dA175SLelya88rg6h54frbubgcpUNgr9vWLJaxfaM3IG
+         jpu9jS8pQZOCA==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, hch@lst.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, heiko@sntech.de
+Subject: [PATCH V9 01/20] uapi: simplify __ARCH_FLOCK{,64}_PAD a little
+Date:   Tue, 22 Mar 2022 22:39:44 +0800
+Message-Id: <20220322144003.2357128-2-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220322144003.2357128-1-guoren@kernel.org>
+References: <20220322144003.2357128-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <61809b8f-acaa-bae2-ac5e-aa47c55eea23@arm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,58 +59,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 01:16:35PM +0000, Robin Murphy wrote:
-> On 2022-03-21 20:06, Robin Murphy wrote:
-> > On 2022-03-21 19:21, Marc Zyngier wrote:
-> > > On Mon, 21 Mar 2022 18:03:27 +0000,
-> > > Rob Herring <robh@kernel.org> wrote:
-> > > > 
-> > > > On Mon, Mar 21, 2022 at 11:36 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > > > 
-> > > > > On Mon, 21 Mar 2022 15:17:34 +0000,
-> > > > > Rob Herring <robh@kernel.org> wrote:
-> > > > > > 
-> > > > > > On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > > > > > 
-> > > > > > For XGene-1, I'd still like to understand what the issue is. Reverting
-> > > > > > the first fix and fixing 'dma-ranges' should have fixed it. I need a
-> > > > > > dump of how the IB registers are initialized in both cases. I'm not
-> > > > > > saying changing 'dma-ranges' in the firmware is going to be required
-> > > > > > here. There's a couple of other ways we could fix that without a
-> > > > > > firmware change, but first I need to understand why it broke.
-> > > > > 
-> > > > > Reverting 6dce5aa59e0b was enough for me, without changing anything
-> > > > > else.
-> > > > 
-> > > > Meaning c7a75d07827a didn't matter for you. I'm not sure that it would.
-> > > > 
-> > > > Can you tell me what 'dma-ranges' contains on your system?
-> > > 
-> > > Each pcie node (all 5 of them) has:
-> > > 
-> > > dma-ranges = <0x42000000 0x80 0x00 0x80 0x00 0x00 0x80000000
-> > >                0x42000000 0x00 0x00 0x00 0x00 0x80 0x00>;
+From: Christoph Hellwig <hch@lst.de>
 
-This is the same as what Stéphane has for Merlin. So c7a75d07827a ("PCI: 
-xgene: Fix IB window setup") should have fixed Mustang.
+Don't bother to define the symbols empty, just don't use them.
+That makes the intent a little more clear.
 
-> > 
-> > Hmm, is there anyone other than iommu-dma who actually depends on the
-> > resource list being sorted in ascending order of bus address? I recall
-> > at the time I pushed for creating the list in sorted order as it was the
-> > simplest and most efficient option, but there's no technical reason we
-> > couldn't create it in as-found order and defer the sorting until
-> > iova_reserve_pci_windows() (at worst that could even operate on a
-> > temporary copy if need be). It's just more code, which didn't need to
-> > exist without a good reason, but if this is one then exist it certainly
-> > may.
-> 
-> Taking a closer look, the Cadence driver is already re-sorting the list
-> for its own setup, so iommu-dma can't assume the initial sort is
-> preserved and needs to do its own anyway. Does the (untested) diff below
-> end up helping X-Gene also?
+Remove the unused HAVE_ARCH_STRUCT_FLOCK64 define and merge the
+32-bit mips struct flock into the generic one.
 
-There's no IOMMU on X-Gene 1 or 2 based on the upstream dts files, so 
-how would this matter?
+Add a new __ARCH_FLOCK_EXTRA_SYSID macro following the style of
+__ARCH_FLOCK_PAD to avoid having a separate definition just for
+one architecture.
 
-Rob
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+---
+ arch/mips/include/uapi/asm/fcntl.h     | 26 +++-----------------------
+ include/uapi/asm-generic/fcntl.h       | 19 +++++++------------
+ tools/include/uapi/asm-generic/fcntl.h | 19 +++++++------------
+ 3 files changed, 17 insertions(+), 47 deletions(-)
+
+diff --git a/arch/mips/include/uapi/asm/fcntl.h b/arch/mips/include/uapi/asm/fcntl.h
+index 42e13dead543..9e44ac810db9 100644
+--- a/arch/mips/include/uapi/asm/fcntl.h
++++ b/arch/mips/include/uapi/asm/fcntl.h
+@@ -50,30 +50,10 @@
+ #define F_SETLKW64	35
+ #endif
+ 
+-/*
+- * The flavours of struct flock.  "struct flock" is the ABI compliant
+- * variant.  Finally struct flock64 is the LFS variant of struct flock.	 As
+- * a historic accident and inconsistence with the ABI definition it doesn't
+- * contain all the same fields as struct flock.
+- */
+-
+ #if _MIPS_SIM != _MIPS_SIM_ABI64
+-
+-#include <linux/types.h>
+-
+-struct flock {
+-	short	l_type;
+-	short	l_whence;
+-	__kernel_off_t	l_start;
+-	__kernel_off_t	l_len;
+-	long	l_sysid;
+-	__kernel_pid_t l_pid;
+-	long	pad[4];
+-};
+-
+-#define HAVE_ARCH_STRUCT_FLOCK
+-
+-#endif /* _MIPS_SIM == _MIPS_SIM_ABI32 */
++#define __ARCH_FLOCK_EXTRA_SYSID	long l_sysid;
++#define __ARCH_FLOCK_PAD		long pad[4];
++#endif
+ 
+ #include <asm-generic/fcntl.h>
+ 
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index ecd0f5bdfc1d..77aa9f2ff98d 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -192,25 +192,19 @@ struct f_owner_ex {
+ 
+ #define F_LINUX_SPECIFIC_BASE	1024
+ 
+-#ifndef HAVE_ARCH_STRUCT_FLOCK
+-#ifndef __ARCH_FLOCK_PAD
+-#define __ARCH_FLOCK_PAD
+-#endif
+-
+ struct flock {
+ 	short	l_type;
+ 	short	l_whence;
+ 	__kernel_off_t	l_start;
+ 	__kernel_off_t	l_len;
+ 	__kernel_pid_t	l_pid;
+-	__ARCH_FLOCK_PAD
+-};
++#ifdef	__ARCH_FLOCK_EXTRA_SYSID
++	__ARCH_FLOCK_EXTRA_SYSID
+ #endif
+-
+-#ifndef HAVE_ARCH_STRUCT_FLOCK64
+-#ifndef __ARCH_FLOCK64_PAD
+-#define __ARCH_FLOCK64_PAD
++#ifdef	__ARCH_FLOCK_PAD
++	__ARCH_FLOCK_PAD
+ #endif
++};
+ 
+ struct flock64 {
+ 	short  l_type;
+@@ -218,8 +212,9 @@ struct flock64 {
+ 	__kernel_loff_t l_start;
+ 	__kernel_loff_t l_len;
+ 	__kernel_pid_t  l_pid;
++#ifdef	__ARCH_FLOCK64_PAD
+ 	__ARCH_FLOCK64_PAD
+-};
+ #endif
++};
+ 
+ #endif /* _ASM_GENERIC_FCNTL_H */
+diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+index ac190958c981..99bc9b15ce2b 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -187,25 +187,19 @@ struct f_owner_ex {
+ 
+ #define F_LINUX_SPECIFIC_BASE	1024
+ 
+-#ifndef HAVE_ARCH_STRUCT_FLOCK
+-#ifndef __ARCH_FLOCK_PAD
+-#define __ARCH_FLOCK_PAD
+-#endif
+-
+ struct flock {
+ 	short	l_type;
+ 	short	l_whence;
+ 	__kernel_off_t	l_start;
+ 	__kernel_off_t	l_len;
+ 	__kernel_pid_t	l_pid;
+-	__ARCH_FLOCK_PAD
+-};
++#ifdef	__ARCH_FLOCK_EXTRA_SYSID
++	__ARCH_FLOCK_EXTRA_SYSID
+ #endif
+-
+-#ifndef HAVE_ARCH_STRUCT_FLOCK64
+-#ifndef __ARCH_FLOCK64_PAD
+-#define __ARCH_FLOCK64_PAD
++#ifdef	__ARCH_FLOCK_PAD
++	__ARCH_FLOCK_PAD
+ #endif
++};
+ 
+ struct flock64 {
+ 	short  l_type;
+@@ -213,8 +207,9 @@ struct flock64 {
+ 	__kernel_loff_t l_start;
+ 	__kernel_loff_t l_len;
+ 	__kernel_pid_t  l_pid;
++#ifdef	__ARCH_FLOCK64_PAD
+ 	__ARCH_FLOCK64_PAD
+-};
+ #endif
++};
+ 
+ #endif /* _ASM_GENERIC_FCNTL_H */
+-- 
+2.25.1
+

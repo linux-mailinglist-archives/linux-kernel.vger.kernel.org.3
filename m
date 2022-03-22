@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F704E49A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 00:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987D54E49AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 00:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238349AbiCVXcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 19:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
+        id S240506AbiCVXec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 19:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiCVXcR (ORCPT
+        with ESMTP id S239543AbiCVXea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 19:32:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222D067D0A;
-        Tue, 22 Mar 2022 16:30:46 -0700 (PDT)
-X-UUID: 394dd279d67247d5bcf32c48e9ae501a-20220323
-X-UUID: 394dd279d67247d5bcf32c48e9ae501a-20220323
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2119202589; Wed, 23 Mar 2022 07:30:43 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 23 Mar 2022 07:30:41 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 23 Mar
- 2022 07:30:41 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 23 Mar 2022 07:30:41 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
-        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
-        <jsiuda@google.com>, <frankgor@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Yake Yang" <yake.yang@mediatek.com>
-Subject: [PATCH] Bluetooth: mt7921s: Fix the incorrect pointer check
-Date:   Wed, 23 Mar 2022 07:30:40 +0800
-Message-ID: <5d56b2a23e6e793c64ed98890329ce1beb010ce0.1647991506.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Tue, 22 Mar 2022 19:34:30 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA334D95;
+        Tue, 22 Mar 2022 16:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647991980; x=1679527980;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XwlEgxZx+biSuXUGcY7iQ2dLxTEwH6VqQm6lQR1IWEM=;
+  b=BxdOQ5bUi5RZrD05EdU/xwQjnJhwSkHFo8CZ1v9Y23zc+clMuWFzGw4d
+   fjQ8vAjGYNvy/Qk/0SgQypQnf2W3Ms9Nija0kPyYTiBGxiZ6Xzi6DGXnU
+   uVlBpeotNJs+HsSrDCUslgqDJt1tyHjLHr5QetHWl+jsevU+4TRjUQB8p
+   rfyj70WkIohxwX96zotOSLKSNhOAeHql9s7TteAW9WpW3Krh5yM0PagwA
+   4FdhaNaNUFVyRi+tLlk5AXfbavNFUZTUSOt4nmYxMsMQvWywEQKP7blh5
+   1UfFQE7t5lduzkpfTYT2Z8RixXW60P0GKrIQgeCM1bIuSWdEESVUf8Cfy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="344411960"
+X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
+   d="scan'208";a="344411960"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 16:33:00 -0700
+X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
+   d="scan'208";a="692749730"
+Received: from rtgarci1-mobl2.amr.corp.intel.com (HELO guptapa-desk) ([10.212.228.140])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 16:32:58 -0700
+Date:   Tue, 22 Mar 2022 16:32:42 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        antonio.gomez.iglesias@linux.intel.com, neelima.krishnan@intel.com,
+        stable@vger.kernel.org, Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v2 0/2] TSX update
+Message-ID: <20220322233242.mlslvnucjb5sjyk2@guptapa-desk>
+References: <cover.1646943780.git.pawan.kumar.gupta@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <cover.1646943780.git.pawan.kumar.gupta@linux.intel.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+Hi Boris and others,
 
-Fix the incorrect pointer check on ven_data.
+On Thu, Mar 10, 2022 at 01:59:47PM -0800, Pawan Gupta wrote:
+>v2:
+>- Added patch to disable TSX development mode (Andrew, Boris)
+>- Rebased to v5.17-rc7
+>
+>v1: https://lore.kernel.org/lkml/5bd785a1d6ea0b572250add0c6617b4504bc24d1.1644440311.git.pawan.kumar.gupta@linux.intel.com/
+>
+>Hi,
+>
+>After a recent microcode update some Intel processors will always abort
+>Transactional Synchronization Extensions (TSX) transactions [*]. On
+>these processors a new CPUID bit,
+>CPUID.07H.0H.EDX[11](RTM_ALWAYS_ABORT), will be enumerated to indicate
+>that the loaded microcode is forcing Restricted Transactional Memory
+>(RTM) abort. If the processor enumerated support for RTM previously, the
+>CPUID enumeration bits for TSX (CPUID.RTM and CPUID.HLE) continue to be
+>set by default after the microcode update.
+>
+>First patch in this series clears CPUID.RTM and CPUID.HLE so that
+>userspace doesn't enumerate TSX feature.
+>
+>Microcode also added support to re-enable TSX for development purpose,
+>doing so is not recommended for production deployments, because MD_CLEAR
+>flows for the mitigation of TSX Asynchronous Abort (TAA) may not be
+>effective on these processors when TSX is enabled with updated
+>microcode.
+>
+>Second patch unconditionally disables this TSX development mode, in case
+>it was enabled by the software running before kernel boot.
+>
+>Thanks,
+>Pawan
+>
+>[*] Intel Transactional Synchronization Extension (Intel TSX) Disable Update for Selected Processors
+>    https://cdrdv2.intel.com/v1/dl/getContent/643557
+>
+>Pawan Gupta (2):
+>  x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
+>  x86/tsx: Disable TSX development mode at boot
 
-Fixes: f41b91fa1783 ("Bluetooth: mt7921s: Add .btmtk_get_codec_config_data")
-Co-developed-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
----
- drivers/bluetooth/btmtksdio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I am hoping to get some feedback on v2. Are these patches looking okay?
 
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index f3dc5881fff7..b6d77e04240c 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -961,7 +961,7 @@ static int btmtksdio_get_codec_config_data(struct hci_dev *hdev,
- 	}
- 
- 	*ven_data = kmalloc(sizeof(__u8), GFP_KERNEL);
--	if (!ven_data) {
-+	if (!*ven_data) {
- 		err = -ENOMEM;
- 		goto error;
- 	}
--- 
-2.25.1
-
+Thanks,
+Pawan

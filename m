@@ -2,175 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B624E3E76
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE474E3E7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbiCVM3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S234864AbiCVMa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbiCVM3L (ORCPT
+        with ESMTP id S234859AbiCVMaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:29:11 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FF07DA9B;
-        Tue, 22 Mar 2022 05:27:42 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id o30-20020a05600c511e00b0038c9cfb79cbso1368402wms.1;
-        Tue, 22 Mar 2022 05:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=J0XVZsccyYJ9Mem2SrqqXmIc+qNVt5+LRwSBtuEfuLE=;
-        b=IxAnldyyvOvUmwerKfTSKOCAqJP0C0r8dyKUmc3NAz1kFbkwbObzw8v8vjkqTSfSFz
-         7XMD707GuhjuSHLhKo9yO/KhdyVgmstR9tnQh6IEohWU/d6NvCIIB7hfr1lwJ/6GSABo
-         x4VvM2oiCnvSEQPeq9BenCPN8KClhOZdNSAaHpToRaL4odo/v6IlWyFbotms99cucclo
-         QwUEXtLR25190rR+VE9K5F62JSM3nYKY4xwyNO6NG/hhZxyYZGk+nUT73/dOq7dsOqIX
-         n0clvAkv9DnX8jTBgfD6bwUhs7BR9ecai70Yd2GnaJ7XlXfgVcKAQHkBnbKTqWI7Gzyp
-         pc0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J0XVZsccyYJ9Mem2SrqqXmIc+qNVt5+LRwSBtuEfuLE=;
-        b=j6ddxIqMRjBUI98ELKVBClp3UK2l+Ekleq/QirYIPxnefteXBzY9lOSHx9er3kkjE0
-         Idc41n8hDku+P8jduZwFO+L/ASLTqcv76L8p+2vJ4pmfo2MQ+GD5tdRzqMlxGGG0q2bX
-         gmrxkpsI+S+D8uh4r4V8b6UTw0akj21W9FpZvu9r4Aom8Hs+GWGMSB/SeejF/zWJOmcF
-         OanEFgBr91DgcHIX1M2khBvrTlCcUKpmZdudf4kuZfZfT+lKBOIyFzV+IojhGnzkjUSe
-         gpvXWsnQ6mt7xfq74LI0IiDa8FIRZCH2hQ0wNdMp/IOEyj+vWaUUy1XHFjQTdg4yL19Z
-         f8hg==
-X-Gm-Message-State: AOAM530En00fdKPEDCrJsqqfVU4oV2vyxEkSUPKFDEcdrafnhlggZ3wU
-        nFpVMsiyf8m3ku0JuC3fpSE=
-X-Google-Smtp-Source: ABdhPJwPPP9lVN/CiF3Mv94/Ta8O9nqmFgKbmzmhJuOCfiiEhKZEsENMvCjNKKu1oNysHhLkHYsLVA==
-X-Received: by 2002:a1c:7906:0:b0:38c:8cfa:cbb0 with SMTP id l6-20020a1c7906000000b0038c8cfacbb0mr3556553wme.163.1647952061411;
-        Tue, 22 Mar 2022 05:27:41 -0700 (PDT)
-Received: from [10.168.10.170] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5d588a000000b002052e4aaf89sm1323964wrf.80.2022.03.22.05.27.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 05:27:40 -0700 (PDT)
-Message-ID: <809c40c4-068b-8296-57d9-024e6623362d@gmail.com>
-Date:   Tue, 22 Mar 2022 13:27:39 +0100
+        Tue, 22 Mar 2022 08:30:24 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143CC13F50;
+        Tue, 22 Mar 2022 05:28:52 -0700 (PDT)
+X-UUID: d75214175f7b4c9887984bbf88c1975e-20220322
+X-UUID: d75214175f7b4c9887984bbf88c1975e-20220322
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1570562477; Tue, 22 Mar 2022 20:28:48 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 22 Mar 2022 20:28:47 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 22 Mar
+ 2022 20:28:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 22 Mar 2022 20:28:46 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH] remoteproc: mediatek: enable cache for mt8186 SCP
+Date:   Tue, 22 Mar 2022 20:28:45 +0800
+Message-ID: <20220322122845.4068-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [patch] console_codes.4: ffix
-Content-Language: en-US
-To:     nick black <dankamongmen@gmail.com>
-Cc:     "G. Branden Robinson" <g.branden.robinson@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
-References: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
- <CAN4uE+p-uKzHNYry2YhCMfEFBQ2jUqpDAGx=+eha01w-L4fAjg@mail.gmail.com>
- <20220320160217.gws42lklp6ishzub@localhost.localdomain>
- <fd0b3fea-4b40-ffba-442f-00908a5335a9@gmail.com>
- <Yjg3jXCAsjQVHJAi@schwarzgerat.orthanc>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-In-Reply-To: <Yjg3jXCAsjQVHJAi@schwarzgerat.orthanc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi nick,
+1. Set SCP cache size before loading SCP FW. (8KB+8KB)
+2. Adjust ipi_buf_offset from 0x7bdb0 to 0x3BDB0 for enableing cache
 
-On 3/21/22 09:30, nick black wrote:
-> Alejandro Colomar (man-pages) left as an exercise for the reader:
->> nick, can you please resend the patch?  I've lost the original email.
-> 
-> Fix up the busted OSC command list (reset palette and
-> set palette). Remove CSI prefix from the list of non-CSI
-> escapes. End all items of said list with periods,
-> matching other sections of the page.
-> 
-> Signed-off-by: nick black <nickblack@linux.com>
+SCP side
+ - IPI Buffer: 0x3BDB0 <-> 0x3C000
+ - Cache: 0x3C000 <-> 0x40000
 
-Patch applied.
-However, it's weird:  I had to apply the following to your patch before 
-applying it with `git am`:
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+---
+ drivers/remoteproc/mtk_scp.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-/^diff --git/s, man4, a/man4,
-/^diff --git/s, man4, b/man4,
-/^--- man4/s, man4, a/man4,
-/^+++ man4/s, man4, b/man4,
-
-I'm curious, how did you generate the patch?
-
-Cheers,
-
-Alex
-
-> ---
->   man4/console_codes.4 | 22 +++++++++++-----------
->   1 file changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git man4/console_codes.4 man4/console_codes.4
-> index d549b76a9..001de1955 100644
-> --- man4/console_codes.4
-> +++ man4/console_codes.4
-> @@ -139,29 +139,28 @@ T}
->   ESC 8	DECRC	T{
->   Restore state most recently saved by ESC 7.
->   T}
-> -ESC [	CSI	Control sequence introducer
->   ESC %		Start sequence selecting character set
->   ESC % @		\0\0\0Select default (ISO 646 / ISO 8859-1)
->   ESC % G		\0\0\0Select UTF-8
->   ESC % 8		\0\0\0Select UTF-8 (obsolete)
->   ESC # 8	DECALN	T{
-> -DEC screen alignment test \- fill screen with E's
-> +DEC screen alignment test \- fill screen with E's.
->   T}
->   ESC (		T{
->   Start sequence defining G0 character set
->   (followed by one of B, 0, U, K, as below)
->   T}
->   ESC ( B		T{
-> -Select default (ISO 8859-1 mapping)
-> +Select default (ISO 8859-1 mapping).
->   T}
->   ESC ( 0		T{
-> -Select VT100 graphics mapping
-> +Select VT100 graphics mapping.
->   T}
->   ESC ( U		T{
-> -Select null mapping \- straight to character ROM
-> +Select null mapping \- straight to character ROM.
->   T}
->   ESC ( K		T{
-> -Select user mapping \- the map that is loaded by the utility \fBmapscrn\fP(8)
-> +Select user mapping \- the map that is loaded by the utility \fBmapscrn\fP(8).
->   T}
->   ESC )		T{
->   Start sequence defining G1 (followed by one of B, 0, U, K, as above).
-> @@ -169,12 +168,13 @@ T}
->   ESC >	DECPNM	Set numeric keypad mode
->   ESC =	DECPAM	Set application keypad mode
->   ESC ]	OSC	T{
-> -(Should be: Operating system command)
-> -ESC ] P \fInrrggbb\fP: set palette, with parameter
-> -given in 7 hexadecimal digits after the final P :-(.
-> -Here \fIn\fP is the color (0\(en15), and \fIrrggbb\fP indicates
-> +Operating System Command prefix.
-> +T}
-> +ESC ] R		Reset palette.
-> +ESC ] P		T{
-> +Set palette, with parameter given in 7 hexadecimal digits \fInrrggbb\fP after
-> +the final P. Here \fIn\fP is the color (0\(en15), and \fIrrggbb\fP indicates
->   the red/green/blue values (0\(en255).
-> -ESC ] R: reset palette
->   T}
->   .TE
->   .ad
-
+diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+index 38609153bf64..24065b6b4da8 100644
+--- a/drivers/remoteproc/mtk_scp.c
++++ b/drivers/remoteproc/mtk_scp.c
+@@ -401,6 +401,14 @@ static int mt8186_scp_before_load(struct mtk_scp *scp)
+ 	writel(0x0, scp->reg_base + MT8186_SCP_L1_SRAM_PD_P1);
+ 	writel(0x0, scp->reg_base + MT8186_SCP_L1_SRAM_PD_p2);
+ 
++	/*
++	 * Set I-cache and D-cache size before loading SCP FW.
++	 * SCP SRAM logical address may change when cache size setting differs.
++	 */
++	writel(MT8183_SCP_CACHE_CON_WAYEN | MT8183_SCP_CACHESIZE_8KB,
++	       scp->reg_base + MT8183_SCP_CACHE_CON);
++	writel(MT8183_SCP_CACHESIZE_8KB, scp->reg_base + MT8183_SCP_DCACHE_CON);
++
+ 	return 0;
+ }
+ 
+@@ -905,7 +913,7 @@ static const struct mtk_scp_of_data mt8186_of_data = {
+ 	.scp_da_to_va = mt8183_scp_da_to_va,
+ 	.host_to_scp_reg = MT8183_HOST_TO_SCP,
+ 	.host_to_scp_int_bit = MT8183_HOST_IPC_INT_BIT,
+-	.ipi_buf_offset = 0x7bdb0,
++	.ipi_buf_offset = 0x3bdb0,
+ };
+ 
+ static const struct mtk_scp_of_data mt8192_of_data = {
 -- 
-Alejandro Colomar
-Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
-http://www.alejandro-colomar.es/
+2.18.0
+

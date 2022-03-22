@@ -2,161 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3254E3B0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9B84E3B0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbiCVIrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S231725AbiCVIrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiCVIrF (ORCPT
+        with ESMTP id S231713AbiCVIq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:47:05 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86570488A0;
-        Tue, 22 Mar 2022 01:45:37 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id m67so32410087ybm.4;
-        Tue, 22 Mar 2022 01:45:37 -0700 (PDT)
+        Tue, 22 Mar 2022 04:46:59 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCDB4665A;
+        Tue, 22 Mar 2022 01:45:32 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id mp6-20020a17090b190600b001c6841b8a52so1872297pjb.5;
+        Tue, 22 Mar 2022 01:45:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+iR4cCSnBvYIEX8JGakAV745I2rgE58S9R2YY4Ged7c=;
-        b=NIARtr2oBs7uLYQBYidFLx6MPr55F+lN7qAoql6P3hnq45R1mXdc9VfJ8mEFo9hZXB
-         brCk27+g2z4tjCw+jNan4V813Fu7jvJb4vKphwkvh0ixkI/X0rAJUfH/PMx12sHVSi6I
-         5vB4YSwU7b7V0ZUbHVme3qC+0mM/LGF0as2ysi8L/04eTWPfCA1Tg/0GvoO3Q4Rh8W2i
-         wRaNcLi/NQYckSD8SAv5+Ys0piFZrTv/qFor7iThwAjc1eu+sNNDfpwWobhd03+7bSEb
-         xlYh+RuGpr0nY/ByJ43BeJNeSg8ECs3u6x9WvWLFjwaLpRQdNc+PxKPQPoAnjX0IxwBl
-         n1Hw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=q52eDajcdb7Rqfr+TDj+rYXShCii6o0JcJYCHCQrCGw=;
+        b=K2ABBwDVUHxHtK2uHgGcfUS7M4wmkh4de2tKP2a9Xqbf/z/ymA6z8qVnrdmT4XMJbx
+         5PgcYEURK58nvh3DLvkHm6BDLwvprLyMFNfPkCFuNkxuoOGZErPi7uZUf6TvMe3I/TiO
+         SY/+eZXzVVQdQpQ0LuMM/KpcOA+1frwC2xqx0SMEeYnlNfH2tEYCYNmiOCF862Cz2wPg
+         RiWi+RxmTo+AZUCD/XWfBIlCEHHyNafSDNLt1wK+BO7kaotk4arfVWI/929ZRwPIQvSD
+         Av+9LRdQFxIFwRzsw2PhyUbQ5ewRwVuZ6JYVzI34ZQCGXL1vTPLJW7QL9JRHSC+GxKxU
+         qbXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+iR4cCSnBvYIEX8JGakAV745I2rgE58S9R2YY4Ged7c=;
-        b=DR3Z3Mw2kUPjxbOWXrfA4K1Yofmx5x1uI2REfWTkcqnkxBlUPhqrNKvPmHJH2D9y7g
-         Etbsw43OZupZkxfGGWkFZ6z+Uz1fcsbf3eFbg/LRZw/w/k/m9jNflmfU1Uch+HXrri3a
-         2b/2mLmoheunOhPioBV2uz6b4G/fDCmXCcu1DuNk8gkomoeUrrK1UtmtJ4kucYFvqI+f
-         tKDHDoKDiYeCClySL87zTUQ96PFg7qwDoo60ArhXlw4qL8ig9DLVvSrTWXvTinAF8omf
-         TZMUyfCjcU0bXGwhjH4HQPE1uGSIUpjazDB+Yz8h3yEUXReijZbgoRlZ95GCFpRwFvRW
-         01+Q==
-X-Gm-Message-State: AOAM532NtC2Ej/UVzKpGn49+UD1BoMUEY/gsT+s8T6iV4odQmTOBbgBG
-        s5X2kHQZEJc18dFLui5VHn/oylFF8ixCbvSK7Tk=
-X-Google-Smtp-Source: ABdhPJw6H/IKc8pB2tyJzweSxfHKCrXN2p8geLUHg4bnZl1ae8zz+b4V+A1AAXqfxr8U643fQljqZsv1xh/JqETo5gI=
-X-Received: by 2002:a25:4003:0:b0:633:8ab5:b93e with SMTP id
- n3-20020a254003000000b006338ab5b93emr26470634yba.387.1647938736779; Tue, 22
- Mar 2022 01:45:36 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q52eDajcdb7Rqfr+TDj+rYXShCii6o0JcJYCHCQrCGw=;
+        b=0B+i5GGa+dzqXYWhh9MOQPc40n9dtwUVbT2GSAYOqnazUYJE3jI3i2VNf5ZpUfT6Wt
+         pnxmgLHhat9WwU+cDHnjXJ+0hKy/nF1DONZn7of8ralUCjnHbuAkrZr2ENFedGtQ89lv
+         GJ4WxFtEWH4XrTz6m2YCcsuX0pNfBOp+SHsUOTjgFVVRVrQtZlOhRXiVygm1tj+VzHF2
+         U5yYAISyQGRrkoNSuHQeqbYoKSqcQoC7EMlbTIiuHJNPmMra8fF9iZPpY9JBZrqHHiMM
+         obxpfSMiDxOa2yQudJpFP8atQmTxVaFENDwBIi9e/OCgzpPwWceqS8t7tNLzBWC+OfHp
+         4Q4A==
+X-Gm-Message-State: AOAM531xPEuSHu9keu0qAQbv9ss5us07hziYyvAOtvFOdY/KCeVw7YST
+        pacftHevhY4vIOA2V+dWtzPGtXB3HiLIH3rC
+X-Google-Smtp-Source: ABdhPJws0PsQepO6L48R2qUzhyAhVI7bVwQlm0yX1tw8IO51B6YBn0ZbfsDGV29mhR7CFTfLgJF6qA==
+X-Received: by 2002:a17:902:c713:b0:153:f75d:253b with SMTP id p19-20020a170902c71300b00153f75d253bmr16949319plp.99.1647938732164;
+        Tue, 22 Mar 2022 01:45:32 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-13.three.co.id. [180.214.232.13])
+        by smtp.gmail.com with ESMTPSA id f22-20020a056a0022d600b004f7a0b47b0dsm23918412pfj.109.2022.03.22.01.45.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 01:45:31 -0700 (PDT)
+Message-ID: <70cc1b0b-0510-71da-aded-2134cdc22f6a@gmail.com>
+Date:   Tue, 22 Mar 2022 15:45:26 +0700
 MIME-Version: 1.0
-References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-11-yuzhao@google.com>
- <CAGsJ_4xqRGp1gV89+bAx5iA=AVwj2TA+No92UqLHFa0i14MBMQ@mail.gmail.com> <CAOUHufbP7kHquWiD3VsmD=veNFF2v_E9HWqdYSMbS1nPJic0Fg@mail.gmail.com>
-In-Reply-To: <CAOUHufbP7kHquWiD3VsmD=veNFF2v_E9HWqdYSMbS1nPJic0Fg@mail.gmail.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Tue, 22 Mar 2022 21:45:23 +1300
-Message-ID: <CAGsJ_4wPWRkmioxGYOwZ9KwdiJUUdgH9Xd38MJH6B2sKJNG+iA@mail.gmail.com>
-Subject: Re: [PATCH v9 10/14] mm: multi-gen LRU: kill switch
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.15 00/32] 5.15.31-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220321133220.559554263@linuxfoundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 9:20 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Tue, Mar 22, 2022 at 1:47 AM Barry Song <21cnbao@gmail.com> wrote:
-> >
-> ...
-> > > +static bool drain_evictable(struct lruvec *lruvec)
-> > > +{
-> > > +       int gen, type, zone;
-> > > +       int remaining = MAX_LRU_BATCH;
-> > > +
-> > > +       for_each_gen_type_zone(gen, type, zone) {
-> > > +               struct list_head *head = &lruvec->lrugen.lists[gen][type][zone];
-> > > +
-> > > +               while (!list_empty(head)) {
-> > > +                       bool success;
-> > > +                       struct folio *folio = lru_to_folio(head);
-> > > +
-> > > +                       VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
-> > > +                       VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
-> > > +                       VM_BUG_ON_FOLIO(folio_is_file_lru(folio) != type, folio);
-> > > +                       VM_BUG_ON_FOLIO(folio_zonenum(folio) != zone, folio);
-> > > +
-> > > +                       success = lru_gen_del_folio(lruvec, folio, false);
-> > > +                       VM_BUG_ON(!success);
-> > > +                       lruvec_add_folio(lruvec, folio);
-> >
-> > for example, max_seq=4(GEN=0) and max_seq-1=3, then we are supposed to put
-> > max_seq in the head of active list. but your code seems to be putting max_seq-1
-> > after putting max_seq, then max_seq is more likely to be evicted
-> > afterwards as it
-> > is in the tail of the active list.
->
-> This is correct.
+On 21/03/22 20.52, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.31 release.
+> There are 32 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-maybe something like below can fix it:
- #define for_each_gen_type_zone(gen, type, zone)
-         \
--       for ((gen) = 0; (gen) < MAX_NR_GENS; (gen)++)                   \
-+       for (int seq = min_seq[type], (gen)=(seq_to_gen(seq)); seq <=
-max_seq ; seq++)                       \
-                for ((type) = 0; (type) < ANON_AND_FILE; (type)++)      \
-                        for ((zone) = 0; (zone) < MAX_NR_ZONES; (zone)++)
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
+and powerpc (ps3_defconfig, gcc 11.2.0).
 
-but i am not quite sure it is worth it if we don't switch mglru/lru that
-often. so it is all up to you, either fix it or put a comment to describe
-we are not trying to make an active list with completely the same
-temperature (hot/cold) as pages were in mglru lists.
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
->
-> > anyway, it might not be so important. I can't imagine we will
-> > frequently switch mglru
-> > with lru dynamically. will we?
->
-> I certainly hope not :)
-
-me too.
-
-Thanks
-Barry
+-- 
+An old man doll... just what I always wanted! - Clara

@@ -2,130 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BD84E4980
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 00:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBC04E4985
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 00:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235062AbiCVXHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 19:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S236651AbiCVXKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 19:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiCVXHh (ORCPT
+        with ESMTP id S230148AbiCVXJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 19:07:37 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394886EB17
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 16:06:09 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id z6so12467032iot.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 16:06:09 -0700 (PDT)
+        Tue, 22 Mar 2022 19:09:57 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D9B5EDCC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 16:08:27 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id t5so35249pfg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 16:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=21fg6XWhU71tdjvtfle0AJij7OP2A2tXWl2jGQhNfvU=;
-        b=WmVfjk0ZQjejqSijckp6Pw+yiFEK2WgK97TPc650R9vz61ruco/HdtN/loRXvj/fZY
-         TpoYto7Qkfc1WWv0Kti0nvVS1+cIHPLHqziHvknk/NGBdxjXGOKeJWQ6fv/cimzX4qSU
-         uTZtPGjqDZ2AJlTc0y0m2g0n/rlQHpTeeDGGRjAqhE/F4aWTp/km/QlYmiEUMjDGBwpt
-         AOU+vDFwhqaG7US7+OvkH+hM6ITRrhBhvOWg9CqaHdcMwBAYyOWx8zN+DUL9eAFkIo/F
-         smHrN1GRopkkH4wgH+6RD3BzpK6hfOMC8wSDZWFguX3hupusBLvAls19QuRtGUoaTIqK
-         SUIg==
+        d=spacecubics-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WVuJ5iTMnLNg6p4o6FYZzWHkDiNOVLzOVLvxqh6C8Y4=;
+        b=LlXGZhX0rVNs3cNb3DAGu9aomSpRR2vuW7l7DcvmvZVZMKPgeUSI7WxeyGGKf6V3+v
+         4q2Az1q/1o1sFKWPwC4qHAM9UwHxP2ZpGa6kjxB5e3YcEH44psttcBZgtOom+aa3qDEx
+         QnAZWL9FNaQesELzuft1OW9ZoJ751IRQKRFK4Qy+kjZW++9xQtx40OXaEmhXpsdTydaQ
+         ocKEYwgkVDMMCTvNJuUiCOU5mlr3HCkzjtg2zjkQZTxeun8p2VdGNx25frevoEfsn4vu
+         9XwWyaqB6PWKQXO1V+JwKP0ZDzdW9ZTkSCE9brkxKKJA92CRiaVv/8LumBs2EmSGk5qQ
+         iIMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=21fg6XWhU71tdjvtfle0AJij7OP2A2tXWl2jGQhNfvU=;
-        b=B6fVYhB6GvRFRN+E53sAAjFDPygHxYe18+1Gvv19j+fTJ1Bohdqo7IVyVm/2hWbN95
-         iV0SoeCYtMJfJujx4UnW9yhLn9OC1nLQDblBr0drns4SYU1DCI6neRagKotsjPw1TlJd
-         x89GQayRx2Mw9KzvvDIZFiXg1RMO9F4F7mfJgsxeQHtuUHSSqAoxNgMmiY0o84EixzwG
-         MQGML5YEf6nq26tmnyzGPcn0SGa06GaKB7ypL3lC51ALCyIbeuH3Xy8actr7z6Kb4zEZ
-         SUcj+WgK7U8PAGWX6/VEh2nJRQ8nG7Jj3tyLi5MAQAqTdIclFfugx+n04vpP68FltkUZ
-         kMlw==
-X-Gm-Message-State: AOAM531ZTW+gpEd6rbLHBzbrgtTQMmgXYd2vVSQ3TAD0JV0vNC0w5zMi
-        AgIg0I5mYvPV8x+UE3PMMGa5vw==
-X-Google-Smtp-Source: ABdhPJzGCE6EzVZman8fSiUohf3D8+V2/3CWoBE09YGE21g6Vy6+LY5kvFh/StgAYK6rV9NtGAC5Xg==
-X-Received: by 2002:a05:6638:1511:b0:319:fde7:501c with SMTP id b17-20020a056638151100b00319fde7501cmr14282398jat.13.1647990368349;
-        Tue, 22 Mar 2022 16:06:08 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id y3-20020a92c983000000b002c7dce8329fsm10292511iln.72.2022.03.22.16.06.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 16:06:07 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 23:06:04 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-Subject: Re: [PATCH v5 15/22] KVM: arm64: Support SDEI_EVENT_SIGNAL hypercall
-Message-ID: <YjpWXGIoaXUVjXQW@google.com>
-References: <20220322080710.51727-1-gshan@redhat.com>
- <20220322080710.51727-16-gshan@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WVuJ5iTMnLNg6p4o6FYZzWHkDiNOVLzOVLvxqh6C8Y4=;
+        b=zXxp0BgxuMZCvvoRyklR7JntHEJPMvl1irEeJj+ntHDnjEoXKg0A/xTqsE1S/xYoif
+         rlrE15ykLYeaA6DgHtkACO3t/ROXdJfoyWEb/V4hF9cII/aqo3RKWEPncBm2kIdzan6j
+         zgoD4zG7msDogmlTZkABeas6N+YotjSD+YepDe87MEzZCrnn8Ek4WFOJnWBAade4IC4Y
+         qJRcrZdTwdXeo5ILPKtN2vBz+Lbpuu0UVH9gEW8p9Tx35IAk+VCn5Zp8aZpr3zmAPdAW
+         iv8tXEup7vLJqDsVU9RqWecuX7EEKjBPrShpknbZpPA6Hfrb6R/79tjnLP5SWMYJzDac
+         kZGQ==
+X-Gm-Message-State: AOAM532oly4XmMskYzXsnMl36Hx+ZONZQX9T2sQnBRu1pHQqieJSE5/i
+        tpj7s8fFn0F3Pw5jeFjYStWQSsY6703VH4FsQCPrUw==
+X-Google-Smtp-Source: ABdhPJytcKyVVLZRHTvS/Y/aI+XgKcwjXvUtr6xRy6GO8nXN6NBbyX6AuEi+Tpd6Lc9sF9z5bKeJWcwSkPju1XRiW6Y=
+X-Received: by 2002:a05:6a02:19c:b0:385:f2a0:2b38 with SMTP id
+ bj28-20020a056a02019c00b00385f2a02b38mr3263566pgb.286.1647990507325; Tue, 22
+ Mar 2022 16:08:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322080710.51727-16-gshan@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220311080208.45047-1-hbh25y@gmail.com>
+In-Reply-To: <20220311080208.45047-1-hbh25y@gmail.com>
+From:   Yasushi SHOJI <yashi@spacecubics.com>
+Date:   Wed, 23 Mar 2022 08:08:16 +0900
+Message-ID: <CAGLTpnK=4Gd8S488osvrbttkMvtsPy8eCGspV4-=z2N3UGZ5rw@mail.gmail.com>
+Subject: Re: [PATCH] can: mcba_usb: fix possible double dev_kfree_skb in mcba_usb_start_xmit
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        stefan.maetje@esd.eu, Pavel Skripkin <paskripkin@gmail.com>,
+        remigiusz.kollataj@mobica.com,
+        linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gavin,
+Hi Hangyu,
 
-On Tue, Mar 22, 2022 at 04:07:03PM +0800, Gavin Shan wrote:
-> This supports SDEI_EVENT_SIGNAL hypercall. It's used by the guest
-> to inject SDEI event, whose number must be zero to the specified
-> vCPU. As the routing mode and affinity isn't supported yet, the
-> calling vCPU is assumed to be the target.
-> 
-> The SDEI event 0x0 is a private one, with normal priority. It's
-> usually used for testing.
+On Fri, Mar 11, 2022 at 5:02 PM Hangyu Hua <hbh25y@gmail.com> wrote:
+>
+> There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
+> can_put_echo_skb deletes original skb and can_free_echo_skb deletes the cloned
+> skb.
 
-I don't know if that is actually the case. One real use that immediately
-comes to mind is doing an NMI on a wedged CPU. KVM probably shouldn't
-glean at how the guest may use a particular call, so at most we should
-just point at the spec and state that event 0 is for software signaled
-events.
+So, it's more like, "we don't need to call dev_kfree_skb() after
+can_put_echo_skb()
+because can_put_echo_skb() consumes the given skb.".  It seems it doesn't depend
+on the condition of usb_submit_urb().  Plus, we don't see the "cloned
+skb" at the
+call site.
 
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->  arch/arm64/kvm/sdei.c | 64 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 63 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
-> index a24270378305..ba2ca65c871b 100644
-> --- a/arch/arm64/kvm/sdei.c
-> +++ b/arch/arm64/kvm/sdei.c
-> @@ -726,6 +726,66 @@ static int do_inject_event(struct kvm_vcpu *vcpu,
->  	return 0;
->  }
->  
-> +static unsigned long hypercall_signal(struct kvm_vcpu *vcpu)
-> +{
-> +	struct kvm *kvm = vcpu->kvm;
-> +	struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
-> +	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
-> +	struct kvm_sdei_exposed_event *exposed_event;
-> +	struct kvm_sdei_registered_event *registered_event;
-> +	unsigned long event_num = smccc_get_arg1(vcpu);
-> +	int index;
-> +	unsigned long ret = SDEI_SUCCESS;
-> +
-> +	/* @event_num must be zero */
-> +	if (!kvm_sdei_is_default(event_num)) {
+Would you mind adding a comment on can_put_echo_skb(), in a separate patch,
+saying the fact that it consumes the skb?
 
-0 isn't KVM's default event. I'd argue KVM doesn't have a default event
-to begin with. This has a precise definition coming from the spec. In
-fact, 'KVM_SDEI_DEFAULT_EVENT' should probably be eliminated, and any
-missing SDEI definitions should be added to include/uapi/linux/arm_sdei.h.
+ems_usb.c, gs_usb.c and possibly some others seem to call
+dev_kfree_skb() as well.
+Are they affected?
 
-That goes for any values coming from the specification. KVM's
-implementation details belong in a KVM header :)
-
---
-Thanks,
-Oliver
+Best,
+-- 
+           yashi

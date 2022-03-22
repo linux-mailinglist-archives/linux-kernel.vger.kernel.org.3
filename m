@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DE34E3ACC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6344E3ACD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbiCVIkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S231402AbiCVIkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiCVIkT (ORCPT
+        with ESMTP id S231432AbiCVIkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:40:19 -0400
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27009EA9;
-        Tue, 22 Mar 2022 01:38:52 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so859175wme.0;
-        Tue, 22 Mar 2022 01:38:52 -0700 (PDT)
+        Tue, 22 Mar 2022 04:40:32 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E5F17AB9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:39:04 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id h1so20752279edj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X99bYtMPXK/lUQRyXYEMc82PYA/a9iPeIbyvT5Yw/Y4=;
+        b=kjzsyGVFO7n/ps8vT3T+52rxTOI3jY2t4UGftFX6Dtm8CrsMtWfqW64D0NbY1KpUuR
+         jdxGVxIa88gbx79Sk52K8S8NW2HRlfKnjYPVqvF8NYUPt+I3CEtqMyxVhYYuW5W+vm37
+         TgSCx1X8nvHFVASN7iSujEpSLkonNCyxDyUi30caOnYTIo1WWoHgKoxRviJpAVa1TdH8
+         hh3/+J3r2akg4O/LDR7iHSIDypgp6iGeiX68pb4XD8EPB7vNijFw/2YUo4+Zg7RKIjua
+         1ZvETy+DeS/IcM+O3CUR+AOnxe7HaBuGeZTcyfp6U+MzK7FS9MVRGwc0WOFqu8N7y6dE
+         Ny6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0FcdRambMsRKShOfd/k3JzjIzx8GGv4n7YmQbRU/7n0=;
-        b=lpDvjwP6pvZL9HmzQ77KoautAOs5kJnLoc02cm3sYA0m84fXOEelWpz7oEnBv1xiFe
-         zvgTmEMCek2O/LvrJxbzgQEHWUf6nAO/dE2YwZIP+8fbXSwss59uf/RSQVkM2Lau3v8o
-         6PCYH9d7K3ZorZTBAsDsv54PJJqYkH0l1iz3UNQpGAwsSh1yLgz0jFDxRt7tKGnSI7Hh
-         CzsWBrLLd0HHK0MNpWz+ZBYzMpiU2ap9+z4+ORrmBW1jR6gnvZfk/uGG2frCrhrvs3eG
-         PspKIzCouWb1YrtzwXlgLv1ZNQtls6Y4m4dVDLdSkSM4jtGnysbyiydtyvrtQdhRfhT6
-         uMFA==
-X-Gm-Message-State: AOAM531S5jzb/YZrPf4ggCgMqz/QMMJA5QNJUxAh94YGF+suS6r8C7nT
-        lGWWrzbwUlI4SYx5uIBKO8rug30RGCQ=
-X-Google-Smtp-Source: ABdhPJx5cFoT4/ge0DuruG2LnSzEJ79ktilr8/JnWLY7QJDxE5kYgAMTZFcS3KNJQKTEJo5dvxbGKw==
-X-Received: by 2002:a1c:2744:0:b0:382:a9b7:1c8a with SMTP id n65-20020a1c2744000000b00382a9b71c8amr2551228wmn.187.1647938330451;
-        Tue, 22 Mar 2022 01:38:50 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id i206-20020a1c3bd7000000b0038bfc3ab76csm1336485wma.48.2022.03.22.01.38.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 01:38:49 -0700 (PDT)
-Message-ID: <7b6fec6a-12ef-7381-b06e-108a7b3ff1e4@kernel.org>
-Date:   Tue, 22 Mar 2022 09:38:48 +0100
+        bh=X99bYtMPXK/lUQRyXYEMc82PYA/a9iPeIbyvT5Yw/Y4=;
+        b=7tPNdLZH0mhHSZJerVjRPGpFHmqnC/WTtlA4vjhOyzNRiGfPNclf0Znh9Y5QHArCpA
+         lDLs91OykNhPHAsDdep6hs71boA91WkBg+man2ulNPYzqqYvgLlay8ztmC1kNRDQoZd6
+         irnQQgVA5hRohOBzNbM0j7esnIG6akgvYEW0dtuyqZIAZ1cNbJ9wehMtNO8zXtgFE7W+
+         huKf1znEnPk4/cq74NvF4OSIE1j7Nk6IiiOD0sS/uZcyTDRLIsgJZZq4nTC22YH6FBZ6
+         jNJt3spwxZQnoyevor2tRTRL/56Y0ZEAYCxjf/IQVbmj7xmvoHY6oKq39CyH24LtSQ4c
+         0bgg==
+X-Gm-Message-State: AOAM5329DHSaheyhdvNtn7CIH+qkLcKIqA3ixb7fgT2VExCv0my/zivb
+        aX7w/DpOnxNPRnWzS14gstM7PWLc+xI=
+X-Google-Smtp-Source: ABdhPJxXDtRJWchyCbVOGD2wwIGmi4wLssoOiyYgO2VoKtkzls9TLlTHQKUP8kctT6dQwoJcuefSAA==
+X-Received: by 2002:a05:6402:280f:b0:419:4c6f:a91b with SMTP id h15-20020a056402280f00b004194c6fa91bmr6438066ede.84.1647938342706;
+        Tue, 22 Mar 2022 01:39:02 -0700 (PDT)
+Received: from localhost.localdomain (host-79-37-100-169.retail.telecomitalia.it. [79.37.100.169])
+        by smtp.gmail.com with ESMTPSA id do8-20020a170906c10800b006dfe4d1edc6sm3631131ejc.61.2022.03.22.01.39.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 01:39:01 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     David Kershner <david.kershner@unisys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH] staging: unisys: Properly test debugfs_create_dir() return values
+Date:   Tue, 22 Mar 2022 09:38:58 +0100
+Message-Id: <20220322083858.16887-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH] dt-bindings: virtio: mmio: add optional virtio,wakeup
- property
-Content-Language: en-US
-To:     Minghao Xue <quic_mingxue@quicinc.com>
-Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>, mst@redhat.com,
-        jasowang@redhat.com, quic_ztu@quicinc.com, robh+dt@kernel.org,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1646733156-19333-1-git-send-email-quic_mingxue@quicinc.com>
- <20220317063515.GA30789@mingxue-gv.qualcomm.com> <YjMJ32SFXTLCuaRY@myrica>
- <20220318021052.GA16300@mingxue-gv.qualcomm.com>
- <d4d69acd-72d3-dfe1-9a11-d6590d2d90d8@kernel.org>
- <20220322061956.GA1441@mingxue-gv.qualcomm.com>
-In-Reply-To: <20220322061956.GA1441@mingxue-gv.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 07:19, Minghao Xue wrote:
-> Hi Krzysztof,
-> 
-> Thanks for your comment. First of all, which "generic wakeup-source
-> property" do you mean? 
+debugfs_create_dir() returns a pointers to a dentry objects. On failures
+it returns errors. Currently the values returned to visornic_probe()
+seem to be tested for being equal to NULL in case of failures.
 
-There is only one generic - wakeup-source.
+Properly test with "if (IS_ERR())" and then assign the correct error 
+value to the "err" variable.
 
-> Could you give an example? I find "wakeup-source"
-> property in several binding files. Are you pointing to this? 
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/staging/unisys/visornic/visornic_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yes, use wakeup-source.
+diff --git a/drivers/staging/unisys/visornic/visornic_main.c b/drivers/staging/unisys/visornic/visornic_main.c
+index 643432458105..58d03f3d3173 100644
+--- a/drivers/staging/unisys/visornic/visornic_main.c
++++ b/drivers/staging/unisys/visornic/visornic_main.c
+@@ -1922,11 +1922,11 @@ static int visornic_probe(struct visor_device *dev)
+ 	/* create debug/sysfs directories */
+ 	devdata->eth_debugfs_dir = debugfs_create_dir(netdev->name,
+ 						      visornic_debugfs_dir);
+-	if (!devdata->eth_debugfs_dir) {
++	if (IS_ERR(devdata->eth_debugfs_dir)) {
+ 		dev_err(&dev->device,
+ 			"%s debugfs_create_dir %s failed\n",
+ 			__func__, netdev->name);
+-		err = -ENOMEM;
++		err = PTR_ERR(devdata->eth_debugfs_dir);
+ 		goto cleanup_register_netdev;
+ 	}
+ 
+-- 
+2.34.1
 
-Please avoid top-posting.
-
-
-
-Best regards,
-Krzysztof

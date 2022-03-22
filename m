@@ -2,71 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E7C4E3F17
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285654E3F18
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235206AbiCVNEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S235209AbiCVNFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235209AbiCVNEq (ORCPT
+        with ESMTP id S233272AbiCVNFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:04:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C8880205;
-        Tue, 22 Mar 2022 06:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YLFI2fBZ0UWYJRw3Uru9b5P3P4hYSoc85pA5ka88n10=; b=WG22YZvtwG4Fo0YHKUXk/x5LvT
-        lFgW3bQzbFblWqZeWJFx5sx76UKKVR6hoPv666ldogD3qgJNMvRyuUef8I2XkftU7K24rRE9aaSUz
-        QXDIDxCe8cLUNP1FMWt4uvRa9LkVuUYZjEeJ8s4KMzjwA8ET6ytT7qz2yySk5eN2msqdCIsu50llw
-        t+iYFPrmXM7KBxUE//awVNRDsIJ0++Yy7VyHf+/BWAEho3O8JDB0dTro8SdCbqba+EMpFzS2akRsu
-        CCizPmJ+lXSfw+gplxhDUZrsP9fFsa0BAfUL0CIR/NJg+ZnCkrpnSbpNzdUarayxuUit+Z2ZqPTlo
-        j2UGfTig==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWeAE-00BbVD-Q5; Tue, 22 Mar 2022 13:03:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6CC8F30007E;
-        Tue, 22 Mar 2022 14:03:06 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5B8272D273A0F; Tue, 22 Mar 2022 14:03:06 +0100 (CET)
-Date:   Tue, 22 Mar 2022 14:03:06 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, eranian@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-Subject: Re: [PATCH v2 4/6] perf/core: Use stable cpuctx->cgrp when update
- perf cgroup time
-Message-ID: <YjnJCr6QRtj6agJz@hirez.programming.kicks-ass.net>
-References: <20220322120834.98637-1-zhouchengming@bytedance.com>
- <20220322120834.98637-5-zhouchengming@bytedance.com>
+        Tue, 22 Mar 2022 09:05:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73F534BA5;
+        Tue, 22 Mar 2022 06:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647954225; x=1679490225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wTEFoqt0sHeodi8gzP7osTTZGHMVkgdCnObqjc11j/U=;
+  b=EHqmACFXaseMCX1hMW9zd1i9mESfvs5Sr4oJduRczOOQzMkO0fC3A1Mf
+   S/3z7VBeq9H79zRtCV2FKPWJxbzVD9VYmSFDKnnc3wbHYAZBV0re03tBB
+   aKEFv+i4eJMj6Dmk7gikcLBAxzIJfwGyZYpufno1GOWqRolj1XZe3Z58O
+   6q3mc2m8tyKO6i3II25Wae7FsDdn3KHkhmFr/eBsgyzRwOovl9s9QBxMl
+   ocetlWQj+9u1fmToHlJerAo1X9rqIbLKGAAp55qFB1ZEfmaeZSAgD8S3J
+   utqxM7gi1ePlCqldJTyxe550uiiTAa6NW1f6n4fGNBfYICTeKpffcSWra
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257760231"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="257760231"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 06:03:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="543682073"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 22 Mar 2022 06:03:43 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWeAo-000Iou-Bs; Tue, 22 Mar 2022 13:03:42 +0000
+Date:   Tue, 22 Mar 2022 21:03:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     kbuild-all@lists.01.org, linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] pinctrl: mediatek: common-v1: fix semicolon.cocci warnings
+Message-ID: <20220322130308.GA21877@65fc916127a5>
+References: <202203222145.UcCrXHfm-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220322120834.98637-5-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202203222145.UcCrXHfm-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 08:08:32PM +0800, Chengming Zhou wrote:
-> The current code use the changeable task->cgroups when update
-> the perf cgroup time, which maybe not the active perf_cgroup
-> that sched_in on the CPU.
+From: kernel test robot <lkp@intel.com>
 
-How?!?
+drivers/pinctrl/mediatek/pinctrl-mtk-common.c:171:2-3: Unneeded semicolon
 
+
+ Remove unneeded semicolon.
+
+Generated by: scripts/coccinelle/misc/semicolon.cocci
+
+Fixes: 156f721704b5 ("pinctrl: mediatek: common-v1: Commonize spec_ies_smt_set callback")
+CC: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git for-next
+head:   4d3a82e4ec28e7956db55487eeb480407a002c37
+commit: 156f721704b5c9e8fae02270f606f09d710ff27e [76/78] pinctrl: mediatek: common-v1: Commonize spec_ies_smt_set callback
+:::::: branch date: 6 days ago
+:::::: commit date: 6 days ago
+
+ drivers/pinctrl/mediatek/pinctrl-mtk-common.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+@@ -168,7 +168,7 @@ int mtk_pconf_spec_set_ies_smt_range(str
+ 		break;
+ 	default:
+ 		break;
+-	};
++	}
+ 
+ 	if (!ies_smt_infos)
+ 		return -EINVAL;

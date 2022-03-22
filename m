@@ -2,256 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9AC4E4577
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679694E4579
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239884AbiCVRuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
+        id S239886AbiCVRux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239843AbiCVRuC (ORCPT
+        with ESMTP id S236073AbiCVRuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:50:02 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EF7240A0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:48:34 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id s8so18736622pfk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:48:34 -0700 (PDT)
+        Tue, 22 Mar 2022 13:50:51 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2117.outbound.protection.outlook.com [40.107.21.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9929850E18
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:49:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H01Dai/375MeHwz1GcuH757FNMsYXiAbMf5PXmE5Az4joWtQ8ZeeZucjacl/CsAHUCyt/dUyX5lBKITFUZMF1V9HwNS9w/irdLSELV1GPQYqMOGhY4ZKp0L/roMQBZMmZXwxoPd/mCLTbrPDvMNOcBhsHJsBc/y2lZbBbfwoX9tYN3+/lJF6G79QNrwcecmj8SjcjJjVzXnMSjQ1hhLKmiS0Cu/c8rSkcRbi8paARpUEN/7K6dO+CaKCE6LMOEujnGzadzjLwb1kHpFHHEPsnLILo/MpZ5BIEM7sZ46C/sXaBy6WQlMjrLyPU7OrpjzGoW2vEaoq49TYv5yyVDh+6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lz1WgASHEPA0X44O4lXZ8izyH3gOZX9SdR+3QGWNn/g=;
+ b=ePsqtPEj0jV4K9PlHHZBnU5vtk3dJFXzbt3MEnV+U4KvYufOapAduNquMYDLgieP0T+2UIPwt5eXYtTkXrEaO9b8rDaX3hNjJgyXhfMhVklsB3/gZ57bB0fHAdmXd6y/We3dwRW5gF1JPF/79TaMSH3sxpcRmYwlts9ngCAn8R3d+ilrvjtoDBYruNqDJMC12JcePTzt4nRvOk49ovLmgwFTPM9kuqk80nM0iQz7wncF/9DofohYKTsS+azwsFsXy9xUyseFW2NYYatX9JkTlkF66TwS2k2oSuEBsGc0fMAKqREJwnN4qCuD4srs9q5CRmkBV7i7acfGhXahp8Ww+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 217.111.95.7) smtp.rcpttodomain=armlinux.org.uk smtp.mailfrom=arri.de;
+ dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
+ arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pHpgWnyA+4cksK2jdnSyO1l2xWVlwD/uKJzOgotnJTA=;
-        b=m7fQ/X6bXpyvPl4juhvAFLBJuX1Y42anKo16WZ0Ojz3R2+Z9CpTm/6llMEgIpNtnro
-         2ZzYBgJuk2F+e26jMsk2pwJ7v0RhWWAVfghpLnpTdpFucYO8ncj2QRNjwUfN43nbCPTS
-         qHDEFs6mpYyNBbnkfmF2H9EhpUE/89ojloLvDmWc0W+0WRQzrbMvSMRwL+5HPUZaqJxu
-         BqA2Bn0VeC4oJsqO3pYNRISeahC8dyhsivSa+DDBv/axlUxaLrn/P8K5S5GwtkYO6Ry6
-         0COuu5Cy6qaf0mXozXCn1wF6p+At2JBb9+xzhShvrgtl8BidWp7Jjwbc6p0MYtx5q7oN
-         eeog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=pHpgWnyA+4cksK2jdnSyO1l2xWVlwD/uKJzOgotnJTA=;
-        b=JSHAvuZ+Ri2DVVTToywTgZBU5m0Y2WIkAtfY1xqn5ueDZZtDV7APE8DcgSRtBK0MMU
-         yrOx6ZxKf0vJ+zczKkC7PVIzYmS1T5OFJEksHnilaSlG+5MfIl+QT8hE0veiU1he/xAm
-         4YsdqMzSfS+0x+90J0rZxJZIw0+IE/TOJeOedjFfI9X4IYH59R4TC+mN6REnmi3HdMPZ
-         gfuuzLxRdxNhWXxTwV9NzM8SCw/TmJKPhLBRmINCEvJM9lFdK0vSFc5aIc0pEWVTDCnf
-         xob6u0t+dsIvQ3cQp6EBb8R0AsqEQKVFnv1tNdWYIOEk1/J9bQiZuzao7MulLFISE0PN
-         UY9Q==
-X-Gm-Message-State: AOAM532tfPeDDXpHUCdA3VoeRmfCpIUrVwj3pnvRnfv8TtKWoGZc0lVH
-        V/BeEItLd/ajY64zx3uikO6MWw==
-X-Google-Smtp-Source: ABdhPJwsrDQOZo0FtmYLlIizrEgq6CCc9WybkQ6yKegPcKzZT73TPxy8MmY1MlGxrqHQXfUguCBPyQ==
-X-Received: by 2002:a05:6a00:815:b0:4f6:ee04:30af with SMTP id m21-20020a056a00081500b004f6ee0430afmr29866834pfk.15.1647971313454;
-        Tue, 22 Mar 2022 10:48:33 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id w24-20020a639358000000b00385fcbf8e55sm1138666pgm.28.2022.03.22.10.48.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 10:48:32 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 10:48:32 -0700 (PDT)
-X-Google-Original-Date: Tue, 22 Mar 2022 10:48:31 PDT (-0700)
-Subject:     Re: [PATCH] csky: Move to generic ticket-spinlock
-In-Reply-To: <CAJF2gTShUjTQ=7g3uW8JmPzkZSG0fWKK7fXgAsERSUfrCgzA0w@mail.gmail.com>
-CC:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     guoren@kernel.org
-Message-ID: <mhng-382a4c87-1d59-43ba-b567-06c6eb94843e@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lz1WgASHEPA0X44O4lXZ8izyH3gOZX9SdR+3QGWNn/g=;
+ b=aQqgkh1rtfRqNsKWPJRkGoyerFcRZhvDZD7H1eZWX15HkCM7r101bbUzinaIM100D7amQ/0UAjW2sAFWggCSSGPOnc1RYNiny6kGdj+jS88OBKbbe6HvjRPXgYFfovw9zO7CPW8v1DEqWtkOV6I3cb+pCFP0bq6WrlXztvnOGyw=
+Received: from SV0P279CA0031.NORP279.PROD.OUTLOOK.COM (2603:10a6:f10:12::18)
+ by VI1PR0702MB3582.eurprd07.prod.outlook.com (2603:10a6:803:4::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.7; Tue, 22 Mar
+ 2022 17:49:19 +0000
+Received: from HE1EUR02FT060.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:f10:12:cafe::44) by SV0P279CA0031.outlook.office365.com
+ (2603:10a6:f10:12::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16 via Frontend
+ Transport; Tue, 22 Mar 2022 17:49:19 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
+ smtp.mailfrom=arri.de; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arri.de;
+Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
+ designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.111.95.7; helo=mta.arri.de;
+Received: from mta.arri.de (217.111.95.7) by
+ HE1EUR02FT060.mail.protection.outlook.com (10.152.11.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5081.14 via Frontend Transport; Tue, 22 Mar 2022 17:49:18 +0000
+Received: from localhost.localdomain (192.168.54.188) by mta.arri.de
+ (10.10.18.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 22 Mar
+ 2022 18:49:18 +0100
+From:   Christian Eggers <ceggers@arri.de>
+To:     Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: CONFIG_THUMB2_KERNEL=y boot failure after Spectre BHB fixes
+Date:   Tue, 22 Mar 2022 18:49:17 +0100
+Message-ID: <2109354.irdbgypaU6@localhost.localdomain>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X>
+References: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [192.168.54.188]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: daec52f3-af3a-47b1-b7a5-08da0c2c4a2b
+X-MS-TrafficTypeDiagnostic: VI1PR0702MB3582:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0702MB3582572F510EE637C6DE4E7EBF179@VI1PR0702MB3582.eurprd07.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: djoN/lAQ7IKvvVQZzrv7VMurB7NwZ5W/O3XfHylI5QYc4goxoyryrVC9HiszNn8BbHl9NP+pjaL1B8WCPUXvzXgG9P/z+uX5xJAoOTcrg/x+WHsIkOpzt91lfcOKzn0/eXf1yJl43MNN9yJCG2o+F/XNhoXwLDwnRpD87fZqjVKsGZzCCPK6PAF4u6dtBFtLsoWUWdykYfa2W8tA6oBGSVdROaiVWkx5ZZ0SxdyxfKjd9JoZGTLBGSFs+Yjtb/Q4o4Ylvip3gN4Cj0hT2IUaPyz0+z2yB5WNFNhYJqblwDI5V7UbWLR4yAIgYtFqMa5FEOaBl1MxIDfPmhVNtCGvGBzWAfNpA8HsrE41BGKB71DlXNX/Xhw/xHiz+mTqtaafcJ/n23cPZyyF4wuvs30JzjT1vGo6Y2/fYnIbIOetDUw2dnd7V7KMBNljPL5fpiG625jPROAdEJASxwdyWkDXXPhn3YOTJsMZN4EQnRqUAOnY9MPBv4R/KybUGW6AcRHJJNzFiaoUesKZ6TPoXz7RjQDXjziGf23QJPEZankWF7zOTKF/+dhDTMaDF96LOgjA8B5GpNHn0g0wujQKBtZN3V4ACCaEeU6UnnPel3MONyvU8F6D/Kvc37BUHLnbsDG27qs9Lfgw5f5nC70Xxw6a11guAy1hNC8W9Y0DYlGGswuwMXe+DeQ15HMfN1NAMOZd2jaGYmJaOzEhfXUuNkl2qRjMh2Tbkx0qtRGHyAFDfo5ByU0eq8UFyu4M8MxYv81aIA3lzubiRwiMWjbgy5wFCsgnPTnzB9vmxC14W8yIqXFojpBdnigtltxuG9fBZgtSLDhvauH23m27DEAwR/hUCJ1j6ihe5180CH+BCLnHY28BWuaVwCFsE4x7DHwcABXg
+X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(110136005)(54906003)(8676002)(4326008)(508600001)(70206006)(70586007)(316002)(81166007)(2906002)(356005)(186003)(82310400004)(9686003)(16526019)(966005)(26005)(83380400001)(47076005)(40460700003)(5660300002)(8936002)(86362001)(36860700001)(7696005)(36916002)(426003)(336012)(55016003)(39026012)(36900700001)(2101003);DIR:OUT;SFP:1102;
+X-OriginatorOrg: arri.de
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 17:49:18.8096
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: daec52f3-af3a-47b1-b7a5-08da0c2c4a2b
+X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR02FT060.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0702MB3582
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Mar 2022 21:01:49 PDT (-0700), guoren@kernel.org wrote:
-> Hi Palmer,
->
-> On Sat, Mar 19, 2022 at 6:48 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->>
->> On Fri, 18 Mar 2022 01:34:21 PDT (-0700), guoren@kernel.org wrote:
->> > From: Guo Ren <guoren@linux.alibaba.com>
->> >
->> > There is no benefit from custom implementation for ticket-spinlock,
->> > so move to generic ticket-spinlock for easy maintenance.
->> >
->> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
->>
->> Thanks, one less port to look at ;)
->>
->> Looks like there were a few comments on the v1, and I wasn't going to
->> target this at the upcoming merge window anyway because I wanted to give
-> Agree, we needn't so hurry.
->
->> the various RISC-V vendors time to test stuff.  LMK if you want me to
->> add this to the others, but I was planning on posting a stable tag
->> either way so no big deal on my end.
-> Yes, I hope csky's could be in the series. And I updated V2 with
-> Arnd's suggestion, please have a look:
-> https://lore.kernel.org/linux-arch/20220319035457.2214979-1-guoren@kernel.org/T/#t
+Hi Nathan, hi Russel,
 
-Thanks, I'll include the csky stuff next time I re-spin this.
+I stumbled today over the same problem (no output on serial console
+with v5.15.28-rt36). During `git bisect`, I had also some commits
+where a few lines of output were visible.
 
-Looks like there's been some other comments from folks that didn't make 
-your v2, most notably the SOB lines which makes this a bit funny.  I'm 
-also not sure I like merging the two RISC-V patches together, as they'd 
-be nice to be able to test on their own.
+At commit 8d9d651ff227 ("ARM: use LOADADDR() to get load address of
+sections"), the system boots up to here:
 
-I'll go poke around with this some once I'm a bit father into the merge 
-window.  I think we can both keep Arnd's generic header idea and let 
-folks mix/match spin/rw lock flavors, which might also help with some of 
-the other ports.
+start_kernel()
++--setup_arch()
+   +--paging_init()
+      +--devicemaps_init()
+         +--eary_trap_init(vectors_base = 0xC7FFE000)
+            +--copy_from_lma(vectors_base = 0xC7FFE000, __vectors_start=0x0, __vectors_end=0x20)
+               +--__memcpy()
+
+               copy_template.S:113 
+               ldr8w   r1, r3, r4, r5, r6, r7, r8, ip, lr, abort=20f
+               r1 = 0
+              
+
+With the final v5.15.28-rt36 I found out that the system boots fine
+after disabling CONFIG_HARDEN_BRANCH_HISTORY.
+
+Is there anything else I could analyze? My SoC system is a NXP i.MX6LL
+with a ARMv7 core. I have access to a JTAG debugger.
+
+regards
+Christian
 
 
->
->>
->> > ---
->> >  arch/csky/include/asm/Kbuild           |  2 +
->> >  arch/csky/include/asm/spinlock.h       | 82 +-------------------------
->> >  arch/csky/include/asm/spinlock_types.h | 20 +------
->> >  3 files changed, 4 insertions(+), 100 deletions(-)
->> >
->> > diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
->> > index 904a18a818be..d94434288c31 100644
->> > --- a/arch/csky/include/asm/Kbuild
->> > +++ b/arch/csky/include/asm/Kbuild
->> > @@ -3,6 +3,8 @@ generic-y += asm-offsets.h
->> >  generic-y += extable.h
->> >  generic-y += gpio.h
->> >  generic-y += kvm_para.h
->> > +generic-y += ticket-lock.h
->> > +generic-y += ticket-lock-types.h
->> >  generic-y += qrwlock.h
->> >  generic-y += user.h
->> >  generic-y += vmlinux.lds.h
->> > diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
->> > index 69f5aa249c5f..8bc179ba0d8d 100644
->> > --- a/arch/csky/include/asm/spinlock.h
->> > +++ b/arch/csky/include/asm/spinlock.h
->> > @@ -3,87 +3,7 @@
->> >  #ifndef __ASM_CSKY_SPINLOCK_H
->> >  #define __ASM_CSKY_SPINLOCK_H
->> >
->> > -#include <linux/spinlock_types.h>
->> > -#include <asm/barrier.h>
->> > -
->> > -/*
->> > - * Ticket-based spin-locking.
->> > - */
->> > -static inline void arch_spin_lock(arch_spinlock_t *lock)
->> > -{
->> > -     arch_spinlock_t lockval;
->> > -     u32 ticket_next = 1 << TICKET_NEXT;
->> > -     u32 *p = &lock->lock;
->> > -     u32 tmp;
->> > -
->> > -     asm volatile (
->> > -             "1:     ldex.w          %0, (%2) \n"
->> > -             "       mov             %1, %0   \n"
->> > -             "       add             %0, %3   \n"
->> > -             "       stex.w          %0, (%2) \n"
->> > -             "       bez             %0, 1b   \n"
->> > -             : "=&r" (tmp), "=&r" (lockval)
->> > -             : "r"(p), "r"(ticket_next)
->> > -             : "cc");
->> > -
->> > -     while (lockval.tickets.next != lockval.tickets.owner)
->> > -             lockval.tickets.owner = READ_ONCE(lock->tickets.owner);
->> > -
->> > -     smp_mb();
->> > -}
->> > -
->> > -static inline int arch_spin_trylock(arch_spinlock_t *lock)
->> > -{
->> > -     u32 tmp, contended, res;
->> > -     u32 ticket_next = 1 << TICKET_NEXT;
->> > -     u32 *p = &lock->lock;
->> > -
->> > -     do {
->> > -             asm volatile (
->> > -             "       ldex.w          %0, (%3)   \n"
->> > -             "       movi            %2, 1      \n"
->> > -             "       rotli           %1, %0, 16 \n"
->> > -             "       cmpne           %1, %0     \n"
->> > -             "       bt              1f         \n"
->> > -             "       movi            %2, 0      \n"
->> > -             "       add             %0, %0, %4 \n"
->> > -             "       stex.w          %0, (%3)   \n"
->> > -             "1:                                \n"
->> > -             : "=&r" (res), "=&r" (tmp), "=&r" (contended)
->> > -             : "r"(p), "r"(ticket_next)
->> > -             : "cc");
->> > -     } while (!res);
->> > -
->> > -     if (!contended)
->> > -             smp_mb();
->> > -
->> > -     return !contended;
->> > -}
->> > -
->> > -static inline void arch_spin_unlock(arch_spinlock_t *lock)
->> > -{
->> > -     smp_mb();
->> > -     WRITE_ONCE(lock->tickets.owner, lock->tickets.owner + 1);
->> > -}
->> > -
->> > -static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
->> > -{
->> > -     return lock.tickets.owner == lock.tickets.next;
->> > -}
->> > -
->> > -static inline int arch_spin_is_locked(arch_spinlock_t *lock)
->> > -{
->> > -     return !arch_spin_value_unlocked(READ_ONCE(*lock));
->> > -}
->> > -
->> > -static inline int arch_spin_is_contended(arch_spinlock_t *lock)
->> > -{
->> > -     struct __raw_tickets tickets = READ_ONCE(lock->tickets);
->> > -
->> > -     return (tickets.next - tickets.owner) > 1;
->> > -}
->> > -#define arch_spin_is_contended       arch_spin_is_contended
->> > -
->> > +#include <asm/ticket-lock.h>
->> >  #include <asm/qrwlock.h>
->> >
->> >  #endif /* __ASM_CSKY_SPINLOCK_H */
->> > diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
->> > index db87a12c3827..0bb7f6022a3b 100644
->> > --- a/arch/csky/include/asm/spinlock_types.h
->> > +++ b/arch/csky/include/asm/spinlock_types.h
->> > @@ -3,25 +3,7 @@
->> >  #ifndef __ASM_CSKY_SPINLOCK_TYPES_H
->> >  #define __ASM_CSKY_SPINLOCK_TYPES_H
->> >
->> > -#ifndef __LINUX_SPINLOCK_TYPES_RAW_H
->> > -# error "please don't include this file directly"
->> > -#endif
->> > -
->> > -#define TICKET_NEXT  16
->> > -
->> > -typedef struct {
->> > -     union {
->> > -             u32 lock;
->> > -             struct __raw_tickets {
->> > -                     /* little endian */
->> > -                     u16 owner;
->> > -                     u16 next;
->> > -             } tickets;
->> > -     };
->> > -} arch_spinlock_t;
->> > -
->> > -#define __ARCH_SPIN_LOCK_UNLOCKED    { { 0 } }
->> > -
->> > +#include <asm/ticket-lock-types.h>
->> >  #include <asm-generic/qrwlock_types.h>
->> >
->> >  #endif /* __ASM_CSKY_SPINLOCK_TYPES_H */
+On Thursday, 10 March 2022, 20:16:48 CET, Nathan Chancellor wrote:
+> Hi Russell,
+> 
+> Apologies if this has already been reported, I did not see anything when
+> sifting through lore.kernel.org and I can still reproduce this with
+> current mainline (1db333d9a51f).
+> 
+> I noticed a QEMU boot failure with multi_v7_defconfig with
+> CONFIG_THUMB2_KERNEL=y in our continuous integration [1]. It does not
+> appear to be compiler specific, as it reproduces with a bunch of
+> different clang versions and GCC 11.2.0 (I didn't try other GCC
+> versions).
+> 
+> At commit 04e91b732476 ("ARM: early traps initialisation"), everything
+> boots fine.
+> 
+> At commit 8d9d651ff227 ("ARM: use LOADADDR() to get load address of
+> sections"), there is no output from QEMU at all.
+> 
+> At commit b9baf5c8c5c3 ("ARM: Spectre-BHB workaround"), there is some
+> output but the boot still hangs before init. I have included a log of
+> the output of QEMU at this revision along with the command line I am
+> using, which comes from [2]. If I disable CONFIG_HARDEN_BRANCH_HISTORY,
+> the kernel boots.
+> 
+> If there is any further information I can provide or patches I can try,
+> I am happy to do so.
+> 
+> [1]: https://github.com/ClangBuiltLinux/continuous-integration2/runs/5496036256?check_suite_focus=true
+> [2]: https://github.com/ClangBuiltLinux/boot-utils
+> 
+> Cheers,
+> Nathan
+> 
+
+
+
+

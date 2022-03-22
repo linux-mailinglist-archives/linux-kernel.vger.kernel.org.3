@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64AE4E4546
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A544E4549
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239780AbiCVRlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S239789AbiCVRlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239770AbiCVRk5 (ORCPT
+        with ESMTP id S239787AbiCVRlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:40:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619CE887A3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:39:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E759BB81D38
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:39:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B83AC36AEB
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:39:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647970766;
-        bh=8q6r8juMrDBnbfWTc+rVHMGsrIAAdRTfUtHXinUmhWc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jKoC8utb6vQC7JxzlBEup2+AX7aBbfyHynQsN5+F+64vE408VhuXBoRLdaIp0onHX
-         cLVDZCmqzqjmX62Q8geT5nkGkzIvYJj7GfEDuc09mj859qR4C9jfFKWPJybqcxZDmR
-         T9Uz8MPJdezD1UANrBMb7yai0hiMCB2PxpC5yP++t/SHOHAueZAAWwAFVjnLeNjJxm
-         kXRBpt95lK1sBvfcluiTroBzd760fbW31+v/a5nb46bklZWpOqQTLu2EDu3kml/QSG
-         mEdWP2lJ4q16hiixMgSKCzwKenbKqgbtTbuTCgs6aqHJ3EXKT1B1cuuw0eYy3aNctn
-         1/RBOpbLaXqsg==
-Received: by mail-ed1-f44.google.com with SMTP id w25so22552373edi.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:39:26 -0700 (PDT)
-X-Gm-Message-State: AOAM531ANEnFrJfG3a7B+nIrjTk954RZL67SqSqRzcwLWLUK+bWnyVMT
-        EsC04hxMZQbjNMEl7Niiy/RcBt3uYQF1JIlIKe80lg==
-X-Google-Smtp-Source: ABdhPJz7l0qlFBKeBFie+TrVzQ/TBK3pBt0oidyYtw1ppUgJq/0zjb7jE93WaRMBlLa2DXZ0Fd5SSnrUxfju6EPJzCQ=
-X-Received: by 2002:a50:cf48:0:b0:415:df40:9e3d with SMTP id
- d8-20020a50cf48000000b00415df409e3dmr29229293edk.185.1647970764645; Tue, 22
- Mar 2022 10:39:24 -0700 (PDT)
+        Tue, 22 Mar 2022 13:41:10 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97929888ED;
+        Tue, 22 Mar 2022 10:39:39 -0700 (PDT)
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7A9A520DE47A;
+        Tue, 22 Mar 2022 10:39:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A9A520DE47A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1647970779;
+        bh=PtoDzmpopQFbgY2xTih9vlGwSqLfSUwf2Sb2AlNYui8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZFY4mGZeTZxZubHGDUEMEI3uzak1GNiVV7uxJ3M2ACpQgDK88FSTC/razs0NRr/HY
+         PumUlS81DS9EPqFCos4W04o1DJ2f9iVq7b1jSbBHiZd/WlYzpRNaqYEKfGYs7Fh/5o
+         u6jQlQ1UdFqfPsvtfRoK0djRD0w2yaIzeYoq5Dws=
+Date:   Tue, 22 Mar 2022 12:39:32 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v2 1/1] certs: Explain the rationale to call panic()
+Message-ID: <20220322173932.GB7173@sequoia>
+References: <20220322111323.542184-1-mic@digikod.net>
+ <20220322111323.542184-2-mic@digikod.net>
 MIME-Version: 1.0
-References: <20220322145012.1315376-1-milan@mdaverde.com> <ca7b331c-bd35-7d51-3df4-723bc36676f8@isovalent.com>
-In-Reply-To: <ca7b331c-bd35-7d51-3df4-723bc36676f8@isovalent.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 22 Mar 2022 18:39:13 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ49NibikDxgq9BudWu6ieW4ZkiEWCy_yAsJUFtEiS9CEg@mail.gmail.com>
-Message-ID: <CACYkzJ49NibikDxgq9BudWu6ieW4ZkiEWCy_yAsJUFtEiS9CEg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf/bpftool: add unprivileged_bpf_disabled check
- against value of 2
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Milan Landaverde <milan@mdaverde.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Paul Chaignon <paul@isovalent.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220322111323.542184-2-mic@digikod.net>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 4:54 PM Quentin Monnet <quentin@isovalent.com> wrote:
->
-> 2022-03-22 10:49 UTC-0400 ~ Milan Landaverde <milan@mdaverde.com>
-> > In [1], we added a kconfig knob that can set
-> > /proc/sys/kernel/unprivileged_bpf_disabled to 2
-> >
-> > We now check against this value in bpftool feature probe
-> >
-> > [1] https://lore.kernel.org/bpf/74ec548079189e4e4dffaeb42b8987bb3c852eee.1620765074.git.daniel@iogearbox.net
-> >
-> > Signed-off-by: Milan Landaverde <milan@mdaverde.com>
->
-> Acked-by: Quentin Monnet <quentin@isovalent.com>
+On 2022-03-22 12:13:23, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> The blacklist_init() function calls panic() for memory allocation
+> errors.  This change documents the reason why we don't return -ENODEV.
+> 
+> Suggested-by: Paul Moore <paul@paul-moore.com> [1]
+> Requested-by: Jarkko Sakkinen <jarkko@kernel.org> [1]
+> Link: https://lore.kernel.org/r/YjeW2r6Wv55Du0bJ@iki.fi [1]
+> Reviewed-by: Paul Moore <paul@paul-moore.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20220322111323.542184-2-mic@digikod.net
 
-Acked-by: KP Singh <kpsingh@kernel.org>
+Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-Thanks, this is very useful!
+Tyler
+
+> ---
+> 
+> Changes since v1:
+> * Fix commit subject spelling spotted by David Woodhouse.
+> * Reword one sentence as suggested by Paul Moore.
+> * Add Reviewed-by Paul Moore.
+> * Add Reviewed-by Jarkko Sakkinen.
+> ---
+>  certs/blacklist.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/certs/blacklist.c b/certs/blacklist.c
+> index 486ce0dd8e9c..25094ea73600 100644
+> --- a/certs/blacklist.c
+> +++ b/certs/blacklist.c
+> @@ -307,6 +307,15 @@ static int restrict_link_for_blacklist(struct key *dest_keyring,
+>  
+>  /*
+>   * Initialise the blacklist
+> + *
+> + * The blacklist_init() function is registered as an initcall via
+> + * device_initcall().  As a result if the blacklist_init() function fails for
+> + * any reason the kernel continues to execute.  While cleanly returning -ENODEV
+> + * could be acceptable for some non-critical kernel parts, if the blacklist
+> + * keyring fails to load it defeats the certificate/key based deny list for
+> + * signed modules.  If a critical piece of security functionality that users
+> + * expect to be present fails to initialize, panic()ing is likely the right
+> + * thing to do.
+>   */
+>  static int __init blacklist_init(void)
+>  {
+> -- 
+> 2.35.1
+> 

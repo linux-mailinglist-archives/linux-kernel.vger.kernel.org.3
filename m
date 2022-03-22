@@ -2,109 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344BF4E44AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2D64E44B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239356AbiCVRIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S239382AbiCVRJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiCVRIH (ORCPT
+        with ESMTP id S238070AbiCVRJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:08:07 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FA86AA7C;
-        Tue, 22 Mar 2022 10:06:38 -0700 (PDT)
-Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MdwRi-1o6b0t0Zra-00b7Oq; Tue, 22 Mar 2022 18:06:37 +0100
-Received: by mail-wr1-f49.google.com with SMTP id v22so10423937wra.2;
-        Tue, 22 Mar 2022 10:06:37 -0700 (PDT)
-X-Gm-Message-State: AOAM531HT4Ch/uG5ZhcbR5kuU8Q7NyPTyYn5C+Sb8OwItukgQ1dSXfgG
-        E8UeBjs/tpn4VTPLX44eAwEUuc1w3CWTo6FWLQo=
-X-Google-Smtp-Source: ABdhPJzYB6ox3wweLxkaJdVg1CSTqhO684+KAFRluL7iV1tWdFcF/ONdn4ZX1CPYE6vDSSNrGQ2IMjZPkjDxTSOkd/Q=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr15794201wrw.12.1647968796788; Tue, 22
- Mar 2022 10:06:36 -0700 (PDT)
+        Tue, 22 Mar 2022 13:09:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C59971EC9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:07:48 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 16F531F387;
+        Tue, 22 Mar 2022 17:07:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647968867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=m0HZkkkCvfCXgsfLMiVZKxjN0kToTbJd7hKDVBIs6aw=;
+        b=yXztFw54QWyEjaLgsgPWhqqOKkFrluWU7938ub+Z2d1duXcO0guuhmxi7f54qsEy6ozkC5
+        ZuiOesYv/NlU1VLuwtG2uZZ8162OaN7k1uOl+xVdZoLjN+YRwAZ6xYZQ2SAXHcfh8BIJqq
+        Rx+H7ia0S2/KRivAdzVe2IEMvxdxaGk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647968867;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=m0HZkkkCvfCXgsfLMiVZKxjN0kToTbJd7hKDVBIs6aw=;
+        b=GNNkuVErgDbvoXDAHyunnpH0GP9D4G6s997TI+dN8OtjcWuqoLEY/0GCvrCk/2GwL1Eymx
+        N3JuCQ41MdjXX3Aw==
+Received: from alsa1.nue.suse.com (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 0EF0EA3B87;
+        Tue, 22 Mar 2022 17:07:47 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     alsa-devel@alsa-project.org
+Cc:     Hu Jiahui <kirin.say@gmail.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] ALSA: pcm: Fix ioctl races
+Date:   Tue, 22 Mar 2022 18:07:16 +0100
+Message-Id: <20220322170720.3529-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220228114523.03b2f921@canb.auug.org.au> <20220322110925.7b295e54@canb.auug.org.au>
- <8ce9d045-c3c9-c839-7b82-9f5ccdae2d52@gmx.de>
-In-Reply-To: <8ce9d045-c3c9-c839-7b82-9f5ccdae2d52@gmx.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 22 Mar 2022 18:06:20 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3hR0JP-coRBNDytC1onPUfYCUn_q148kMO5-FWvxwgOg@mail.gmail.com>
-Message-ID: <CAK8P3a3hR0JP-coRBNDytC1onPUfYCUn_q148kMO5-FWvxwgOg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the parisc-hd tree with the
- asm-generic tree
-To:     Helge Deller <deller@gmx.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:b7arbufAWiTYFolXORfGQsCYX9SiUGAUTONI9A2Nlj4TyoOF0zf
- ND1U9hnsMYobhHze2QgiYShUwv/Wm8RpBjdIYUZ+NlCJDZ60PBmMojx8mwSSF0z1EEt58HG
- LadnFRWmvoVv3pPhbnulDnWZkzw1V0Ejibmy8kC5rvC/LJwGyBn1/V4lEfrtQIivqY/YBfy
- gqnv8UBCCQLgq5Dd9ofEg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:O1EZIwAfhLY=:ShQmAeFA9GihY9zCn8wNuu
- p10TnwrPoQKQri0fKPeeTFH5OOMKoLD0VWVSsH/ptvt/ZmDzLqRGLQZASdr0w/uR9dTsVLZfR
- xfqtqYFo2ff3ruEPeptyeOA0loBk9V+2d4QCDf/2zVQLhzSxuczV3TO2IzlySU9iUhO3Q1LmK
- qC4U7+hdK8JwT8XklftGKfeA0p2E6RsecRPCk3mg1ka0sURspZ+jH6h/GQZv560J7hxe8pS0O
- qQpajIdFbgEkpEjB9rDNo5MUMiEhQLa3/C2Gd/oYPFKYM0FOVLBs5U0/3vGBMZ6p88hqFDY4t
- u3xGEU98Ru7i0wswik1ZokDfGE27rr/q4QqW9LIg++BF0Dbr/X27skTL0Brp+or1o9JPERjP4
- MPEOFNwG4L/xY5pqV06T/1A5Kffh3kYxxsBYwmKrSPHBlyZZbubdiIjBxPSKzzBZGKK9lHYzq
- 0a4s+pBMCyq/QqD2mY7sC+U9RK2f50GKyQ/QKdlpYFh9jqzVjn9BrlZ1uEv48PHYefnL5gQIU
- dD7oz/kowuGAWXhV6zmJOanH88nYH2UbFK+BfpXMhMWZooV9VevBlYJMSEQRqY2ae8nSWVEqg
- cA7Wn7UYm/y9dg/du/lal/ZDpkWAsyR21/UauX/IRs842LO+hkQTXacn3WPQ1nfDC5TIfFCM1
- PNELxvhBdZ0bRA/q2vSer/ajszcTJMsd4nhVSuNWahg6UxEJQ9hof3CE6kkUjRitAMxI=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 8:34 AM Helge Deller <deller@gmx.de> wrote:
->
-> On 3/22/22 01:09, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > On Mon, 28 Feb 2022 11:45:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >>
-> >> Today's linux-next merge of the parisc-hd tree got a conflict in:
-> >>
-> >>   arch/parisc/lib/memcpy.c
-> >>
-> >> between commit:
-> >>
-> >>   967747bbc084 ("uaccess: remove CONFIG_SET_FS")
-> >>
-> >> from the asm-generic tree and commit:
-> >>
-> >>   d4a767ea8b0e ("parisc: Use constants to encode the space registers like SR_KERNEL")
-> >>
-> >> from the parisc-hd tree.
-> >
-> > This is now a conflict between the asm-generic tree and commit
-> >
-> >   360bd6c65807 ("parisc: Use constants to encode the space registers like SR_KERNEL")
-> >
-> > in Linus' tree.
->
->
-> Arnd,
-> can you please drop the changes in your asm-generic tree for
-> arch/parisc/lib/memcpy.c
-> They are not needed any more.
->
+Hi,
 
-Sorry I missed that earlier when the conflict happened originally.
+this is a patch set to address the recently reported bug for the racy
+PCM ioctls.  In short, the current ALSA PCM core doesn't take enough
+care of concurrent ioctl calls, and the concurrent calls may result in
+a use-after-free.  The reported problem was the concurrent hw_free
+calls, but there can be similar cases with other code paths like
+hw_params, prepare, etc, too.
 
-I can't really rebase my changes on top of your tree now, and just dropping
-the change without a rebase would break mine. I'll make sure to mention
-the conflict in the pull request then and have Linus resolve it.
+The patch set introduces the new runtime->buffer_mutex for protecting
+those.  The first patch is the fix for the reported issue (the races
+with hw_free), while the rest three are more hardening for the other
+similar executions.
 
-       Arnd
+[ Note that the patch 3 was slightly modified from the version I sent
+  to distros list, as I noticed possible lockdep (false-positive)
+  warnings.  The behavior is almost same, just written differently. ]
+
+
+thanks,
+
+Takashi
+
+===
+
+Takashi Iwai (4):
+  ALSA: pcm: Fix races among concurrent hw_params and hw_free calls
+  ALSA: pcm: Fix races among concurrent read/write and buffer changes
+  ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free
+    calls
+  ALSA: pcm: Fix races among concurrent prealloc proc writes
+
+ include/sound/pcm.h     |  1 +
+ sound/core/pcm.c        |  2 +
+ sound/core/pcm_lib.c    |  4 ++
+ sound/core/pcm_memory.c | 11 +++--
+ sound/core/pcm_native.c | 93 +++++++++++++++++++++++++----------------
+ 5 files changed, 71 insertions(+), 40 deletions(-)
+
+-- 
+2.31.1
+

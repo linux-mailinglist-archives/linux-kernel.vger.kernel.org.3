@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D044E3F83
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D55B4E3F7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbiCVN1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S235548AbiCVN2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235524AbiCVN1j (ORCPT
+        with ESMTP id S235577AbiCVN1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:27:39 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DCD85BF2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:26:12 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id k10so7926617oia.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:26:12 -0700 (PDT)
+        Tue, 22 Mar 2022 09:27:49 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FE386E23;
+        Tue, 22 Mar 2022 06:26:16 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so2540412wmj.0;
+        Tue, 22 Mar 2022 06:26:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qRriYz3uEAWC86HBL4/jmG/6boIc75H8VkiBsRFLJyM=;
-        b=VTTeySqwFAmAfQgSbqNPbBBP/uiOQUm12ZemHUgRO5jEUinVaTNB7dVFNUU8UyKCqE
-         p7cs56//RZL1eRJgjvz2H7Fn8Bn8mPfa48gV6R80h9MupTyTNfTAggt5kyiSmrAFxwpw
-         FdQ8gRYYORYmZ00xWLtWA1Fs5ilp2eB74xIwmSS2YiSKCC8gCGyAh1/51e6L9NhYKFQq
-         UZy5G+4yYbOfq39Bxr2zGWP3QBec3+9huXD00KEs9Vs//Z9h5OLdMNsf6c1X8iKtQTOq
-         lmrw82kKxDYONbnALoC81DBzLXTVhfXM/5bTGiE6rAhTUIzrfe50i6Dtrhy0unhX4LD0
-         TwmQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IIdko25aJ8r8oXO9dJcIkuRwywJie0xWlfwcrpolijM=;
+        b=k+Xqm4XEjcNB27dcl8cbdcV2mnDhFAVtfIoMn7Bho9BKtBXi9IRwts13efcC0yHIaO
+         OtrTAG1ol9iF1l3eolv/82D2yUnApnxbirFLo0N5Pnbb6HFPxtCUkx7wMWQXF0qIHLad
+         O1rPYRm+7z+yOaO4Z0t5+qh4aQzYKtij/MIDBIeWyXcTbJJngE8nJpWIiuyL/O69909r
+         1NIWlA2tnXo9b2yM2TbC0UIpJcVtGpBS++HHe2GXPdivECG7raR3fDW6+EbaPIYsqgOX
+         b7TIc9EiimdBEg4pI8svrB7Sb/sq5232sw/hSjHbT+w5+4dFSzfheK1uTSL7glpRxKaY
+         OUtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qRriYz3uEAWC86HBL4/jmG/6boIc75H8VkiBsRFLJyM=;
-        b=L5YDrjG0Zc3h7bdhPWnzp7fwse09AG5nQ1gECeVPa5q+3I6oVCqA4xgNqijrZ5hwEF
-         vj1EZ+uL9zuehA/cDlFrn2DK6G8TUSq6+xse6AT3taUVxGkMDkNd21zW3OXWfe87Vc4k
-         D70sVFOo5PPctqlqi2oST/kq55XgnRYwWeOIdWSxyV9QeE2DUigqv0MI6GZ7hVsaqMMq
-         QAzieMsYSDw7se6TT1fsRAQvIuFqenCQIP5bVVxW5l6TbvZ0bncGeGc/phjcsrUO0AL4
-         aRky/uYp2Do2rS7lijWZCowkCO0JfUUKH4bIgt9jKW1FXN8Lb2WpaWy9jvY4TmSFyFF3
-         kRkA==
-X-Gm-Message-State: AOAM5309iwmpYVG/56Gp6som+ttjW2rbDwp0Mk5gu3Y/V8/JldCh5TA9
-        aRjP1BuKkS9lrM1c5aP1FlIeRjj/X/IQsLRL5Fee2Q==
-X-Google-Smtp-Source: ABdhPJzzERzwVSbJvoochyNR2QybnFyWeZl1KJJqfWVNf0n/EThDYvWPMHekXXjVXKYKiQ1PdInCAdiKA/BUdeKpT/M=
-X-Received: by 2002:a05:6808:1709:b0:2ef:6a5b:4634 with SMTP id
- bc9-20020a056808170900b002ef6a5b4634mr2035861oib.163.1647955571134; Tue, 22
- Mar 2022 06:26:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IIdko25aJ8r8oXO9dJcIkuRwywJie0xWlfwcrpolijM=;
+        b=hjFvrwEj0YEA5QhqAcnzqzVSVsgAs7tQ1j4p7K9E2XgU8IQWzNGyKvHJXh+d4vtnAp
+         7XqHNdrVQYJCCosgtoLgz6mrUf49eCSBJKcvekhZEaaT9iZ+9hi8tyWaF4kY2GnwI0Cq
+         u6dMh0zlX54UU9UXFhiQ0I7Qf+/qy4v7RKLV2nc0o5/ekSdDY+CQoyaeZJ8pbs23+d/m
+         l+q2THWq3OW4wDEuH2ogcsP4JIk+QHWzqsr3xJQ0gp+qDT+SY0MPiepY7/sQyOXH4gWp
+         +czqyRHTrDev2I1nH76rbIz+YcVYFU6WJBp2jBGngcipItHD5sCoMC+gyHUID0c9YKUM
+         PhlQ==
+X-Gm-Message-State: AOAM531pWPpSAhRsV/xctO+2aZFO8bgbW95yVnPvQQYuwcc+DDUUXVze
+        wSvM9PKhcg79ewMPzeXPP7A=
+X-Google-Smtp-Source: ABdhPJwCjEoZaxPfszasxDZYViMDEX1R+a26wY4aZzUJ72h6blx+Qf1X6DlzYk1oWN78GbZIaT+RHQ==
+X-Received: by 2002:a5d:4890:0:b0:1ed:9d4e:f8ef with SMTP id g16-20020a5d4890000000b001ed9d4ef8efmr22733837wrq.595.1647955574998;
+        Tue, 22 Mar 2022 06:26:14 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
+        by smtp.gmail.com with ESMTPSA id x13-20020adfec0d000000b00203ff46f802sm13971386wrn.36.2022.03.22.06.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 06:26:14 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 14:26:13 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v6 17/18] dt-bindings: arm: msm: Convert kpss-gcc driver
+ Documentation to yaml
+Message-ID: <YjnOdYMS+P85pqvF@Ansuel-xps.localdomain>
+References: <20220321231548.14276-1-ansuelsmth@gmail.com>
+ <20220321231548.14276-18-ansuelsmth@gmail.com>
+ <e832516d-277d-6a0b-4588-b32a085185c8@kernel.org>
 MIME-Version: 1.0
-References: <Yjmn/kVblV3TdoAq@elver.google.com>
-In-Reply-To: <Yjmn/kVblV3TdoAq@elver.google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 22 Mar 2022 14:25:59 +0100
-Message-ID: <CACT4Y+Zusg3dMaOZjexExcsyXUaU3Oo9MqgThWd2FG_Jzo=esQ@mail.gmail.com>
-Subject: Re: RFC: Use of user space handler vs. SIG_DFL on forced signals
-To:     Marco Elver <elver@google.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e832516d-277d-6a0b-4588-b32a085185c8@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,162 +78,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 at 11:42, Marco Elver <elver@google.com> wrote:
->
-> Hello,
->
-> Currently force_sig_info_to_task() will always unblock a blocked signal
-> but deliver the signal to SIG_DFL:
->
->         [...]
->          * Note: If we unblock the signal, we always reset it to SIG_DFL,
->          * since we do not want to have a signal handler that was blocked
->          * be invoked when user space had explicitly blocked it.
->         [...]
->
-> Is this requirement part of the POSIX spec? Or is the intent simply to
-> attempt to do the least-bad thing?
->
-> The reason I'm asking is that we've encountered rare crashes with the
-> new SIGTRAP on perf events, due to patterns like this:
->
->         <set up SIGTRAP on a perf event>
->         ...
->         sigset_t s;
->         sigemptyset(&s);
->         sigaddset(&s, SIGTRAP | <and others>);
->         sigprocmask(SIG_BLOCK, &s, ...);
->         ...
->         <perf event triggers>
->
-> When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
-> will force the signal, but revert back to the default handler, thus
-> terminating the task.
->
-> For other types of signals, is the assumption here that if user space
-> blocked the signal, it might not be able to handle it in the first
-> place?
->
-> For SIGTRAP on perf events we found this makes the situation worse,
-> since the cause of the signal wasn't an error condition, but explicitly
-> requested monitoring. In this case, we do in fact want delivery of the
-> signal to user space even if the signal is blocked, i.e.
-> force_sig_perf() should be an unblockable forced synchronous signal to
-> user space!
->
-> If there is no good reason to choose SIG_DFL, our preference would be to
-> allow this kind of "unblockable forced" signal to the user space handler
-> for force_sig_perf() -- with the caveat whoever requests SIGTRAP on perf
-> events must be able to provide a handler that can always run safely. But
-> we think that's better than crashing.
->
-> The below patch would do what we want, but would like to first confirm
-> if this is "within spec".
->
-> Thoughts?
->
-> Thanks,
-> -- Marco
->
-> ------ >8 ------
->
-> From: Marco Elver <elver@google.com>
-> Date: Mon, 21 Mar 2022 22:18:09 +0100
-> Subject: [PATCH RFC] signal: Always unblock signal to user space for
->  force_sig_perf()
->
-> With SIGTRAP on perf events, we have encountered termination of
-> processes due to user space attempting to block delivery of SIGTRAP.
-> Consider this case:
->
->         <set up SIGTRAP on a perf event>
->         ...
->         sigset_t s;
->         sigemptyset(&s);
->         sigaddset(&s, SIGTRAP | <and others>);
->         sigprocmask(SIG_BLOCK, &s, ...);
->         ...
->         <perf event triggers>
->
-> When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
-> will force the signal, but revert back to the default handler, thus
-> terminating the task.
->
-> With forced signals, the whole premise of sigprocmask() is invalidated
-> since the signal is still delivered, only to the default signal handler.
-> The assumption here is that if user space blocked the signal, it might
-> not be able to handle it in the first place.
->
-> However, for SIGTRAP on perf events we found this makes the situation
-> worse, since the cause of the signal wasn't an error condition, but
-> explicitly requested monitoring. In this case, we do in fact want
-> delivery of the signal to user space even if the signal is blocked, i.e.
-> force_sig_perf() should be an unblockable forced synchronous signal to
-> user space.
->
-> Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  kernel/signal.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
->
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index 38602738866e..04b7a178a5f3 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -1303,6 +1303,7 @@ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p
->
->  enum sig_handler {
->         HANDLER_CURRENT, /* If reachable use the current handler */
-> +       HANDLER_UNBLOCK, /* Use the current handler even if blocked */
->         HANDLER_SIG_DFL, /* Always use SIG_DFL handler semantics */
->         HANDLER_EXIT,    /* Only visible as the process exit code */
->  };
-> @@ -1311,9 +1312,11 @@ enum sig_handler {
->   * Force a signal that the process can't ignore: if necessary
->   * we unblock the signal and change any SIG_IGN to SIG_DFL.
->   *
-> - * Note: If we unblock the signal, we always reset it to SIG_DFL,
-> - * since we do not want to have a signal handler that was blocked
-> - * be invoked when user space had explicitly blocked it.
-> + * Note: If we unblock the signal and handler != HANDLER_UNBLOCK, we always
-> + * reset it to SIG_DFL, since we do not want to have a signal handler that was
-> + * blocked be invoked when user space had explicitly blocked it. If handler is
-> + * HANDLER_UNBLOCK, user space will always receive the signal and is expected to
-> + * provide a handler that is safe in all contexts.
->   *
->   * We don't want to have recursive SIGSEGV's etc, for example,
->   * that is why we also clear SIGNAL_UNKILLABLE.
-> @@ -1332,7 +1335,8 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
->         ignored = action->sa.sa_handler == SIG_IGN;
->         blocked = sigismember(&t->blocked, sig);
->         if (blocked || ignored || (handler != HANDLER_CURRENT)) {
-> -               action->sa.sa_handler = SIG_DFL;
-> +               if (handler != HANDLER_UNBLOCK)
-> +                       action->sa.sa_handler = SIG_DFL;
->                 if (handler == HANDLER_EXIT)
->                         action->sa.sa_flags |= SA_IMMUTABLE;
->                 if (blocked) {
-> @@ -1816,7 +1820,11 @@ int force_sig_perf(void __user *addr, u32 type, u64 sig_data)
->         info.si_perf_data = sig_data;
->         info.si_perf_type = type;
->
-> -       return force_sig_info(&info);
-> +       /*
-> +        * Delivering SIGTRAP on perf events must unblock delivery to not
-> +        * kill the task, but attempt delivery to the user space handler.
-> +        */
-> +       return force_sig_info_to_task(&info, current, HANDLER_UNBLOCK);
+On Tue, Mar 22, 2022 at 11:07:26AM +0100, Krzysztof Kozlowski wrote:
+> On 22/03/2022 00:15, Ansuel Smith wrote:
+> > Convert kpss-gcc driver Documentation to yaml. Since kpss-gcc expose a
+> > clock add the required '#clock-cells' binding while converting it.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
+> >  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 69 +++++++++++++++++++
+> >  2 files changed, 69 insertions(+), 44 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> >  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> > deleted file mode 100644
+> > index e628758950e1..000000000000
+> > --- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> > +++ /dev/null
+> > @@ -1,44 +0,0 @@
+> > -Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
+> > -
+> > -PROPERTIES
+> > -
+> > -- compatible:
+> > -	Usage: required
+> > -	Value type: <string>
+> > -	Definition: should be one of the following. The generic compatible
+> > -			"qcom,kpss-gcc" should also be included.
+> > -			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
+> > -			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
+> > -			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
+> > -			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
+> > -
+> > -- reg:
+> > -	Usage: required
+> > -	Value type: <prop-encoded-array>
+> > -	Definition: base address and size of the register region
+> > -
+> > -- clocks:
+> > -	Usage: required
+> > -	Value type: <prop-encoded-array>
+> > -	Definition: reference to the pll parents.
+> > -
+> > -- clock-names:
+> > -	Usage: required
+> > -	Value type: <stringlist>
+> > -	Definition: must be "pll8_vote", "pxo".
+> > -
+> > -- clock-output-names:
+> > -	Usage: required
+> > -	Value type: <string>
+> > -	Definition: Name of the output clock. Typically acpu_l2_aux indicating
+> > -		    an L2 cache auxiliary clock.
+> > -
+> > -Example:
+> > -
+> > -	l2cc: clock-controller@2011000 {
+> > -		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
+> > -		reg = <0x2011000 0x1000>;
+> > -		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
+> > -		clock-names = "pll8_vote", "pxo";
+> > -		clock-output-names = "acpu_l2_aux";
+> > -	};
+> > diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> > new file mode 100644
+> > index 000000000000..7eb852be02c1
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
+> > +
+> > +maintainers:
+> > +  - Ansuel Smith <ansuelsmth@gmail.com>
+> > +
+> > +description: |
+> > +  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
+> > +  to control L2 mux (in the current implementation).
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+> > +          - qcom,kpss-gcc-ipq8064
+> > +          - qcom,kpss-gcc-apq8064
+> > +          - qcom,kpss-gcc-msm8974
+> > +          - qcom,kpss-gcc-msm8960
+> > +      - const: qcom,kpss-gcc
+> > +      - const: syscon
+> 
+> There was no syscon here before. This is not explained in commit msg or
+> patch history, while I asked to document explicitly any deviation from
+> the conversion.
+> 
+> This is not how the process works. You keep making silent/hidden changes
+> to the bindings and to the patch submission process. It's difficult to
+> review and it is even more difficult to trust you that you implement
+> what we ask for. You keep resending versions of the patchset the same
+> day (two versions yesterday, shortly after another one) which does not
+> give time to react and review. Plus then you hide some more changes to
+> regular conversion without explaining them.
+> 
+> NAK. It's really bad process. :(
+> 
+> 
+> Best regards,
+> Krzysztof
 
-It seems that in this case we almost don't use any of the logic in
-force_sig_info_to_task(). It effectively reduces to the call to
-send_signal() protected by the lock. Maybe we should call something
-like do_send_sig_info() directly?
+The thing is that i'm trying to fix all the mess of years of keeping bad
+Documentation and having dts that never followed Documentation. It's
+really nothing silent/hidden. You add review tag to a patch? That won't
+change. The bot alert me of some bugs? I push another revision with the
+bug fixed. (I understand I should not send that much revision in the
+same day but still considering the slow process of reviewing the c code,
+I prefer to keep the Documentation part correct and ready)
 
+If you notice the changes across the different patch, it's very minimal
+and 99% of it has not changed. Nothing silent just me addressing warning
+from the bot. About the trust issue...
+Is it really a syscon addition that bad? Again the original
+Documentation was just bad so why should we care to have a 100% 1:1
+conversion if it should have been not accepted in the first place.
+The addition of this new syscon is because in the current dtsi it's
+there and I assume it's there as this is a global accessor and probably
+other driver would access the same regs (so it's also a syscon)
 
->  }
->
->  /**
-> --
-> 2.35.1.894.gb6a874cedc-goog
->
+I understand the complain about putting too much revision... But NAK
+this cause I'm trying to fix all this mess just because more and more
+problems are coming up and I'm trying to fix them. It's a bit sad.
+Hope you can understand that it's not my interest to push silent changes
+or other nasty stuff. It's just me fixing the mess and trying to at
+least have the Documentation part ready while I wait for c code review.
+
+-- 
+	Ansuel

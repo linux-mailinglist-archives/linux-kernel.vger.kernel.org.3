@@ -2,218 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47EF4E374E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4696B4E375E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235957AbiCVDNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 23:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S236127AbiCVDYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 23:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235955AbiCVDNg (ORCPT
+        with ESMTP id S236060AbiCVDYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 23:13:36 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B856A52E34
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:12:07 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id c4so13545897qtx.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wG5fSZfV4Ui132L8PxZtgVxXrjvZE1zrn5D7t7om3CQ=;
-        b=j+MhUKpC99YlXHJmofUFmvZ7JMm8f1lD1dEv5viTB7yo1w6WsEn9LRkwRmi1udZlBo
-         lbw1PxzP/UzoGGZbdcu+DXrMkyzobI34uZwgD/t6h0mWYPTldfk3E8qx6HEovODviD0B
-         DgNFp/S6SO3uQePK5Xea2muNAMpjhqXZSzvPmPey7PfiVqkzpOwbG7MNUotqcJx28qg9
-         hRbiykT5yVt4nHsmCISYmgHePdMh+hEvl8kn7L6yUHHomu9VFDnJTG/Ezy02wpZw9GFk
-         b+UBkQlsZ3pq+F/DoQAHvXiB4TmJovm7+ta6stuu1yoJD/owNDh7p6WAG2O+ZhsW2Cao
-         d1Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wG5fSZfV4Ui132L8PxZtgVxXrjvZE1zrn5D7t7om3CQ=;
-        b=nTbOMoL5rkbmivHQN8D0q8Yw2l4MlMfduFZ5l3vgT8zVcEMw6r+eCA0xqXgwmupt5r
-         DPVllGgSqsAZErLAMJhzxvQr9+DPEfUzu4J0NitaWy58rJoD96K2JKarnBAUaDSnpDt+
-         w5Kheh74q6bUWq3QbQp6LFzwkCRTStsWf7/JH0G8xIV3C5h3sdN875iFeFm/fw+Py1an
-         MaRaXiHyjnnXUzIKiiVRwmoFwHrF5FypemKu8Qu3MYC5GjMQD6rLgRaDDn5AqCL5mMMy
-         bu8gzEDkWnZ9ux7SXlIMfYR7pNeqrmbTayJPLg9C/SkP5Ecy1D2K97oNXkLLZ1uvf441
-         d50Q==
-X-Gm-Message-State: AOAM533OFyTKMS1W9HKKtddKdTNbOgsT0e9CDFIbhLipEG72JWU/3rfQ
-        L+Kfem02WhuXoPkcqXJlkC4=
-X-Google-Smtp-Source: ABdhPJwzZKQggTLLNuTOg+kQxkzYF5H19omxmoi4DnXhZEUanJJDTiU+sV1zxIxuk1GtpC+shRknig==
-X-Received: by 2002:a05:622a:40a:b0:2e0:7235:f7a9 with SMTP id n10-20020a05622a040a00b002e07235f7a9mr18677883qtx.500.1647918726766;
-        Mon, 21 Mar 2022 20:12:06 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id s19-20020a05622a179300b002e1ceeb21d0sm12911910qtk.97.2022.03.21.20.12.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 20:12:06 -0700 (PDT)
-Message-ID: <62393e86.1c69fb81.bb254.3d1a@mx.google.com>
-X-Google-Original-Message-ID: <20220322031203.GB2326136@cgel.zte@gmail.com>
-Date:   Tue, 22 Mar 2022 03:12:03 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     bsingharora@gmail.com, akpm@linux-foundation.org,
-        yang.yang29@zte.com.cn, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] delayacct: track delays from ksm cow
-References: <20220316133420.2131707-1-yang.yang29@zte.com.cn>
- <412dc01c-8829-eac2-52c7-3f704dbb5a98@redhat.com>
- <6232970f.1c69fb81.4e365.c9f2@mx.google.com>
- <4e76476b-1da0-09c5-7dc4-0b2db796a549@redhat.com>
- <62330402.1c69fb81.d2ba6.0538@mx.google.com>
- <987bd014-c5ab-52cb-627e-2085560cb327@redhat.com>
- <6233e342.1c69fb81.692f.6286@mx.google.com>
- <2bb1c357-5335-9d96-d862-bd51c1014193@redhat.com>
- <6236c600.1c69fb81.7cd4.a900@mx.google.com>
- <0414c610-7f56-2dd2-0d83-ac3a5194eb60@redhat.com>
+        Mon, 21 Mar 2022 23:24:01 -0400
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Mar 2022 20:22:32 PDT
+Received: from valentin-vidic.from.hr (valentin-vidic.from.hr [IPv6:2001:470:1f0b:3b7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC05850449;
+        Mon, 21 Mar 2022 20:22:32 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
+Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
+        id B54F927E4B; Tue, 22 Mar 2022 04:13:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=valentin-vidic.from.hr; s=2020; t=1647918800;
+        bh=aRmYkly1RGZHmy3TH6RlWN9as6ukPrXy80Syj7vfxUc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lzUdIL9jYoTOFPBh1KxcfINx/BcxnxrySaVZPaEpb/dxnzCssKxD49qzaThJao8K5
+         4OW2hyQQi+GC7z8yKH761uqVSXIRadrcalGNQS35iiUraOSCl1Rs7Tgk5k1tH6JYtq
+         jH003YB6RA+3Urk13GNff8vvVlVlqeUFoHEhVd8jZS7RhAkaD4qOV5Eg2XAA43RnEw
+         el0ZIEJu2wt9p39Q/6iDAklGNBhXipfYVfAnwiDEuNsS+Bm8WZn3ebn9oRoDfSArmV
+         pQXjYrSZw9FEAfalpEb7NP8SykwVhsSBi6yiyr8JbRdL0NLojnBFVbjac178o9d5dZ
+         U+gJUhLuK84fu/guc8kC2VYNcbZOxKXUCcRa6YfsJdkEJfi9vRWCX+ILV/GNbYwJMP
+         w0mRTiYOTMTf6HVPNbAKoARcjfGvFYbb1AFoT0v4ui/OC2RkLRvZJoH20Hcq+hUZQG
+         sbEYoHjg+eKOHTB+URVy+fDJFMepV1jT6HTmwDm7oyUSC8p0HpoWy8YEewpNlNJgK9
+         MitpqjRDQIPK6WOGnSWFqwcjg47XMwD3480RXK/5PbcTspoSlYTrE51qkRJZcHCNLv
+         1HMglzUHGY1cdsltSjfvI4ZeBww3uHdGi71Db/ieNOzWop905JTVBWrgpmLCJt8+m+
+         Owh1veLjh0mhD+KmSjamGrRg=
+From:   Valentin Vidic <vvidic@valentin-vidic.from.hr>
+To:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc:     Tuo Li <islituo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
+        Valentin Vidic <vvidic@valentin-vidic.from.hr>,
+        Dayvison <sathlerds@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] ocfs2: quota_local: fix mount crash of filesystems with quota enabled
+Date:   Tue, 22 Mar 2022 04:12:15 +0100
+Message-Id: <20220322031215.1449435-1-vvidic@valentin-vidic.from.hr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0414c610-7f56-2dd2-0d83-ac3a5194eb60@redhat.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 04:45:40PM +0100, David Hildenbrand wrote:
-> On 20.03.22 07:13, CGEL wrote:
-> > On Fri, Mar 18, 2022 at 09:24:44AM +0100, David Hildenbrand wrote:
-> >> On 18.03.22 02:41, CGEL wrote:
-> >>> On Thu, Mar 17, 2022 at 11:05:22AM +0100, David Hildenbrand wrote:
-> >>>> On 17.03.22 10:48, CGEL wrote:
-> >>>>> On Thu, Mar 17, 2022 at 09:17:13AM +0100, David Hildenbrand wrote:
-> >>>>>> On 17.03.22 03:03, CGEL wrote:
-> >>>>>>> On Wed, Mar 16, 2022 at 03:56:23PM +0100, David Hildenbrand wrote:
-> >>>>>>>> On 16.03.22 14:34, cgel.zte@gmail.com wrote:
-> >>>>>>>>> From: Yang Yang <yang.yang29@zte.com.cn>
-> >>>>>>>>>
-> >>>>>>>>> Delay accounting does not track the delay of ksm cow.  When tasks
-> >>>>>>>>> have many ksm pages, it may spend a amount of time waiting for ksm
-> >>>>>>>>> cow.
-> >>>>>>>>>
-> >>>>>>>>> To get the impact of tasks in ksm cow, measure the delay when ksm
-> >>>>>>>>> cow happens. This could help users to decide whether to user ksm
-> >>>>>>>>> or not.
-> >>>>>>>>>
-> >>>>>>>>> Also update tools/accounting/getdelays.c:
-> >>>>>>>>>
-> >>>>>>>>>     / # ./getdelays -dl -p 231
-> >>>>>>>>>     print delayacct stats ON
-> >>>>>>>>>     listen forever
-> >>>>>>>>>     PID     231
-> >>>>>>>>>
-> >>>>>>>>>     CPU             count     real total  virtual total    delay total  delay average
-> >>>>>>>>>                      6247     1859000000     2154070021     1674255063          0.268ms
-> >>>>>>>>>     IO              count    delay total  delay average
-> >>>>>>>>>                         0              0              0ms
-> >>>>>>>>>     SWAP            count    delay total  delay average
-> >>>>>>>>>                         0              0              0ms
-> >>>>>>>>>     RECLAIM         count    delay total  delay average
-> >>>>>>>>>                         0              0              0ms
-> >>>>>>>>>     THRASHING       count    delay total  delay average
-> >>>>>>>>>                         0              0              0ms
-> >>>>>>>>>     KSM             count    delay total  delay average
-> >>>>>>>>>                      3635      271567604              0ms
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> TBH I'm not sure how particularly helpful this is and if we want this.
-> >>>>>>>>
-> >>>>>>> Thanks for replying.
-> >>>>>>>
-> >>>>>>> Users may use ksm by calling madvise(, , MADV_MERGEABLE) when they want
-> >>>>>>> save memory, it's a tradeoff by suffering delay on ksm cow. Users can
-> >>>>>>> get to know how much memory ksm saved by reading
-> >>>>>>> /sys/kernel/mm/ksm/pages_sharing, but they don't know what the costs of
-> >>>>>>> ksm cow delay, and this is important of some delay sensitive tasks. If
-> >>>>>>> users know both saved memory and ksm cow delay, they could better use
-> >>>>>>> madvise(, , MADV_MERGEABLE).
-> >>>>>>
-> >>>>>> But that happens after the effects, no?
-> >>>>>>
-> >>>>>> IOW a user already called madvise(, , MADV_MERGEABLE) and then gets the
-> >>>>>> results.
-> >>>>>>
-> >>>>> Image user are developing or porting their applications on experiment
-> >>>>> machine, they could takes those benchmark as feedback to adjust whether
-> >>>>> to use madvise(, , MADV_MERGEABLE) or it's range.
-> >>>>
-> >>>> And why can't they run it with and without and observe performance using
-> >>>> existing metrics (or even application-specific metrics?)?
-> >>>>
-> >>>>
-> >>> I think the reason why we need this patch, is just like why we need                                                                                                     
-> >>> swap,reclaim,thrashing getdelay information. When system is complex,
-> >>> it's hard to precise tell which kernel activity impact the observe
-> >>> performance or application-specific metrics, preempt? cgroup throttle?
-> >>> swap? reclaim? IO?
-> >>>
-> >>> So if we could get the factor's precise impact data, when we are tunning
-> >>> the factor(for this patch it's ksm), it's more efficient.
-> >>>
-> >>
-> >> I'm not convinced that we want to make or write-fault handler more
-> >> complicated for such a corner case with an unclear, eventual use case.
-> > 
-> > IIRC, KSM is designed for VM. But recently we found KSM works well for
-> > system with many containers(save about 10%~20% of total memroy), and
-> > container technology is more popular today, so KSM may be used more.
-> > 
-> > To reduce the impact for write-fault handler, we may write a new function
-> > with ifdef CONFIG_KSM inside to do this job?
-> 
-> Maybe we just want to catch the impact of the write-fault handler when
-> copying more generally?
->
-We know kernel has different kind of COW, some are transparent for user.
-For example child process may cause COW, and user should not care this
-performance impact, because it's kernel inside mechanism, user is hard
-to do something. But KSM is different, user can do the policy tuning in
-userspace. If we metric all the COW, it may be noise, doesn't it?
-> > 
-> >> IIRC, whenever using KSM you're already agreeing to eventually pay a
-> >> performance price, and the price heavily depends on other factors in the
-> >> system. Simply looking at the number of write-faults might already give
-> >> an indication what changed with KSM being enabled.
-> >>
-> > While saying "you're already agreeing to pay a performance price", I think
-> > this is the shortcoming of KSM that putting off it being used more widely.
-> > It's not easy for user/app to decide how to use madvise(, ,MADV_MERGEABLE).
-> 
-> ... and my point is that the metric you're introducing might absolutely
-> not be expressive for such users playing with MADV_MERGEABLE. IMHO
-> people will look at actual application performance to figure out what
-> "harm" will be done, no?
-> 
-> But I do see value in capturing how many COW we have in general --
-> either via a counter or via a delay as proposed by you.
-> 
-Thanks for your affirmative. As describe above, or we add a vm counter:
-KSM_COW? 
-> > 
-> > Is there a more easy way to use KSM, enjoying memory saving while minimum
-> > the performance price for container? We think it's possible, and are working
-> > for a new patch: provide a knob for cgroup to enable/disable KSM for all tasks
-> > in this cgroup, so if your container is delay sensitive just leave it, and if
-> > not you can easy to enable KSM without modify app code.
-> > 
-> > Before using the new knob, user might want to know the precise impact of KSM.
-> > I think write-faults is indirection. If indirection is good enough, why we need
-> > taskstats and PSI? By the way, getdelays support container statistics.
-> 
-> Would anything speak against making this more generic and capturing the
-> delay for any COW, not just for KSM?
-I think we'd better to export data to userspace that is meaning for user.
-User may no need kernel inside mechanism'data.
+ocfs2_qinfo_lock_res_init is called too early while oinfo->dqi_gi.dqi_sb
+is still a NULL pointer causing a crash on mount when quotas are enabled.
+Restore ocfs2_qinfo_lock_res_init original call location in
+ocfs2_global_read_info after the value of oinfo->dqi_gi.dqi_sb is set.
 
-Thanks.
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
+[  389.111864] ocfs2: Mounting device (254,16) on (node 2, slot 0) with ordered data mode.
+[  389.160182] BUG: kernel NULL pointer dereference, address: 0000000000000398
+[  389.160295] #PF: supervisor read access in kernel mode
+[  389.160343] #PF: error_code(0x0000) - not-present page
+[  389.160390] PGD 0 P4D 0
+[  389.160432] Oops: 0000 [#1] PREEMPT SMP PTI
+[  389.160477] CPU: 0 PID: 836 Comm: mount.ocfs2 Not tainted 5.16.0-4-amd64 #1  Debian 5.16.12-1
+[  389.160591] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+[  389.160714] RIP: 0010:ocfs2_qinfo_lock_res_init+0x44/0x50 [ocfs2]
+[  389.161290] Code: 00 00 00 48 63 b3 b8 01 00 00 e8 87 bb ff ff 49 89 d8 48 89 ee ba 08 00 00 00 48 8b 83 b0 01 00 00 48 c7 c1 a0 e0 dc c0 5b 5d <48> 8b b8 98 03 00 00 e9 70 c4 ff ff 0f 1f 44 00 00 41 56 41 89 ce
+[  389.161460] RSP: 0018:ffffb2c0c0047be8 EFLAGS: 00010282
+[  389.161510] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffffc0dce0a0
+[  389.161619] RDX: 0000000000000008 RSI: ffff8b685c343c30 RDI: ffffb2c0c0047bb8
+[  389.161747] RBP: ffff8b685c343c00 R08: ffff8b685c343c00 R09: 0000000000000000
+[  389.161809] R10: ffffb2c0c0047bb0 R11: ffffffffc0d8f030 R12: ffff8b685c343c18
+[  389.161868] R13: ffff8b68462d3ec8 R14: 0000000000000000 R15: ffff8b6848fb6800
+[  389.161929] FS:  00007f7956901c00(0000) GS:ffff8b687ec00000(0000) knlGS:0000000000000000
+[  389.162009] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  389.162060] CR2: 0000000000000398 CR3: 000000000554a004 CR4: 0000000000370ef0
+[  389.162129] Call Trace:
+[  389.162184]  <TASK>
+[  389.162211]  ocfs2_local_read_info+0xb9/0x6f0 [ocfs2]
+[  389.162479]  ? ocfs2_local_check_quota_file+0x197/0x390 [ocfs2]
+[  389.162774]  dquot_load_quota_sb+0x216/0x470
+[  389.162849]  ? preempt_count_add+0x68/0xa0
+[  389.162895]  dquot_load_quota_inode+0x85/0x100
+[  389.162943]  ocfs2_enable_quotas+0xa0/0x1c0 [ocfs2]
+[  389.163151]  ocfs2_fill_super.cold+0xc8/0x1bf [ocfs2]
+[  389.163374]  mount_bdev+0x185/0x1b0
+[  389.163431]  ? ocfs2_initialize_super.isra.0+0xf40/0xf40 [ocfs2]
+[  389.163673]  legacy_get_tree+0x27/0x40
+[  389.163726]  vfs_get_tree+0x25/0xb0
+[  389.163764]  path_mount+0x465/0xac0
+[  389.163804]  __x64_sys_mount+0x103/0x140
+[  389.163844]  do_syscall_64+0x3b/0xc0
+[  389.163919]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  389.164016] RIP: 0033:0x7f7956e0258a
+[  389.164057] Code: 48 8b 0d e9 28 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b6 28 0d 00 f7 d8 64 89 01 48
+[  389.164206] RSP: 002b:00007fff9be78718 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+[  389.164273] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7956e0258a
+[  389.164334] RDX: 000055bffbe230ae RSI: 000055bffc7ec370 RDI: 000055bffc7f33f0
+[  389.164395] RBP: 00007fff9be788d0 R08: 000055bffc7f3390 R09: 00007fff9be76110
+[  389.164454] R10: 0000000000000000 R11: 0000000000000246 R12: 000055bffbe230ae
+[  389.164514] R13: 000055bffc7ec301 R14: 00007fff9be787c0 R15: 00007fff9be78740
+[  389.166469]  </TASK>
+[  389.168355] Modules linked in: ocfs2 quota_tree ocfs2_dlmfs ocfs2_stack_o2cb ocfs2_dlm ocfs2_nodemanager ocfs2_stackglue sctp ip6_udp_tunnel udp_tunnel libcrc32c intel_rapl_msr intel_rapl_common intel_pmc_core_pltdrv intel_pmc_core kvm_intel kvm irqbypass ghash_clmulni_intel snd_hda_codec_generic ledtrig_audio snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi aesni_intel crypto_simd qxl snd_hda_codec cryptd drm_ttm_helper rapl snd_hda_core ttm snd_hwdep snd_pcm serio_raw snd_timer iTCO_wdt pcspkr intel_pmc_bxt iTCO_vendor_support drm_kms_helper snd virtio_rng rng_core soundcore virtio_balloon virtio_console cec evdev joydev i6300esb rc_core watchdog qemu_fw_cfg button auth_rpcgss sunrpc drm fuse configfs ip_tables x_tables autofs4 ext4 crc16 mbcache jbd2 crc32c_generic hid_generic usbhid hid virtio_net net_failover failover virtio_blk ahci xhci_pci libahci libata xhci_hcd crct10dif_pclmul crct10dif_common crc32_pclmul crc32c_intel virtio_pci virtio_pci_legacy_dev virtio_pci_modern
+ _dev
+[  389.168645]  virtio psmouse usbcore scsi_mod i2c_i801 i2c_smbus scsi_common lpc_ich usb_common virtio_ring
+[  389.187016] CR2: 0000000000000398
+[  389.188963] ---[ end trace 571e3ca036b59855 ]---
+
+Fixes: 6c85c2c72819 ("ocfs2: quota_local: fix possible uninitialized-variable access in ocfs2_local_read_info()")
+Reported-by: Dayvison <sathlerds@gmail.com>
+Link: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1007141
+Cc: stable@vger.kernel.org
+Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+---
+ fs/ocfs2/quota_global.c | 1 +
+ fs/ocfs2/quota_local.c  | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/ocfs2/quota_global.c b/fs/ocfs2/quota_global.c
+index f033de733adb..eda83487c9ec 100644
+--- a/fs/ocfs2/quota_global.c
++++ b/fs/ocfs2/quota_global.c
+@@ -357,6 +357,7 @@ int ocfs2_global_read_info(struct super_block *sb, int type)
+ 	}
+ 	oinfo->dqi_gi.dqi_sb = sb;
+ 	oinfo->dqi_gi.dqi_type = type;
++	ocfs2_qinfo_lock_res_init(&oinfo->dqi_gqlock, oinfo);
+ 	oinfo->dqi_gi.dqi_entry_size = sizeof(struct ocfs2_global_disk_dqblk);
+ 	oinfo->dqi_gi.dqi_ops = &ocfs2_global_ops;
+ 	oinfo->dqi_gqi_bh = NULL;
+diff --git a/fs/ocfs2/quota_local.c b/fs/ocfs2/quota_local.c
+index 0e4b16d4c037..e6037e4a1641 100644
+--- a/fs/ocfs2/quota_local.c
++++ b/fs/ocfs2/quota_local.c
+@@ -703,7 +703,6 @@ static int ocfs2_local_read_info(struct super_block *sb, int type)
+ 	oinfo->dqi_type = type;
+ 	INIT_LIST_HEAD(&oinfo->dqi_chunk);
+ 	oinfo->dqi_gqinode = NULL;
+-	ocfs2_qinfo_lock_res_init(&oinfo->dqi_gqlock, oinfo);
+ 	oinfo->dqi_rec = NULL;
+ 	oinfo->dqi_lqi_bh = NULL;
+ 	oinfo->dqi_libh = NULL;
+-- 
+2.30.2
+

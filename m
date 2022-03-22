@@ -2,231 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5770C4E380A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA234E380D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbiCVEnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 00:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S236539AbiCVEpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 00:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236445AbiCVEnJ (ORCPT
+        with ESMTP id S236445AbiCVEo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 00:43:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67ADA7B10F;
-        Mon, 21 Mar 2022 21:41:42 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22M3fvMp010613;
-        Tue, 22 Mar 2022 04:41:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=wRmUV8/fx86rvKFyaQM2uaHXNLf5kK5AuEdmGQ02xRs=;
- b=gofUOKbgLUnjFLR9hqwtDC61Zss3dJS7MiffTVSHCbCpH5r15wOFjsbiglfmms7065Ye
- aL24BkJ2xyOv3o0tiq14QNcM3rIae8dEG9ojciapZH+uHbXFZ9Aj9F16lXELbj6NyGHq
- 2i+AVPRI/kXY6IMo5EO50fZtFw9TfG4BjMRhICoBkR2e//skTe86YzM0Gk9e9xiYV+1p
- inu0n4/xBpMN69GfZX4+buObYte6wqoPcuP+1h+EylbgqxnoWioRN9D0sukKec1pWBxu
- MF00cQhN4r5qsYtvrZiHCYJYlJGZ5Pi0GIky9hXfYh7Cec1ObDn41aJ2YvbmMeN/gCWO /A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ey6s5rvmv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 04:41:29 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22M4fSel019720;
-        Tue, 22 Mar 2022 04:41:28 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ey6s5rvm6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 04:41:28 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22M4aoBS025945;
-        Tue, 22 Mar 2022 04:41:26 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3ew6t8mjbj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 04:41:25 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22M4fN9P25559442
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Mar 2022 04:41:23 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7AE4D42045;
-        Tue, 22 Mar 2022 04:41:23 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0DB1642041;
-        Tue, 22 Mar 2022 04:41:23 +0000 (GMT)
-Received: from localhost (unknown [9.43.96.176])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 22 Mar 2022 04:41:22 +0000 (GMT)
-Date:   Tue, 22 Mar 2022 10:11:21 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, lczerner@redhat.com,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Subject: Re: [PATCH -next] ext4: fix bug_on in start_this_handle during
- umount filesystem
-Message-ID: <20220322044121.eteluohfun4j4f4y@riteshh-domain>
-References: <20220322012419.725457-1-yebin10@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322012419.725457-1-yebin10@huawei.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rIMNlnvAbnN_GZ4UCRf6DT8rlBNlNGJ2
-X-Proofpoint-GUID: 0xSwtFFsEJOR_bZPJxft_cCgnsXGEmRh
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_10,2022-03-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 clxscore=1011 adultscore=0
- suspectscore=0 priorityscore=1501 bulkscore=0 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203220024
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 00:44:58 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7AF70936
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:43:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B358CE0B22
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 04:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF8E0C340EC;
+        Tue, 22 Mar 2022 04:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647924206;
+        bh=ML/szU6I61ZPF0+phKwmVPit7UhMxQVw9B82pDw3soU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ofIufpjbMwTyGQoULbko+6OuDBS2w7zy8VSlKC6ydcvcU1MCgczQn3ugoeitf+KGn
+         detrTlizm4bVybaJMrVvs4Uo2blzrjlVEzSBuYj8gtuu33H6kCLuAWoqx9223evuow
+         OrKON2me5eds3WkSyxthimliRwqthxutcbSKkpbKqgJ2EkV+1WLoDwAWJ/p14aHFRK
+         aKmPm/J3C3wRmeo9rRtBrHxAHArvgvwa7K8w57mkNAwNrGhDW9xozIJU+U66WoLPxw
+         y+H9vk2LVe+mRZZUy32O5mjvxehWf8/x3RTK5Rn6ooieCmAc9OjfYOtKmoe4aND6K6
+         Et3E/1YQXwWhA==
+Date:   Tue, 22 Mar 2022 13:43:20 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v4 29/45] x86/ibt: Annotate text references
+Message-Id: <20220322134320.1feda670153a7132f78ea417@kernel.org>
+In-Reply-To: <20220308154318.877758523@infradead.org>
+References: <20220308153011.021123062@infradead.org>
+        <20220308154318.877758523@infradead.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/22 09:24AM, Ye Bin wrote:
-> We got issue as follows:
-> ------------[ cut here ]------------
-> kernel BUG at fs/jbd2/transaction.c:389!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> CPU: 9 PID: 131 Comm: kworker/9:1 Not tainted 5.17.0-862.14.0.6.x86_64-00001-g23f87daf7d74-dirty #197
-> Workqueue: events flush_stashed_error_work
-> RIP: 0010:start_this_handle+0x41c/0x1160
-> RSP: 0018:ffff888106b47c20 EFLAGS: 00010202
-> RAX: ffffed10251b8400 RBX: ffff888128dc204c RCX: ffffffffb52972ac
-> RDX: 0000000000000200 RSI: 0000000000000004 RDI: ffff888128dc2050
-> RBP: 0000000000000039 R08: 0000000000000001 R09: ffffed10251b840a
-> R10: ffff888128dc204f R11: ffffed10251b8409 R12: ffff888116d78000
-> R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888128dc2000
-> FS:  0000000000000000(0000) GS:ffff88839d680000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000001620068 CR3: 0000000376c0e000 CR4: 00000000000006e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  jbd2__journal_start+0x38a/0x790
->  jbd2_journal_start+0x19/0x20
->  flush_stashed_error_work+0x110/0x2b3
->  process_one_work+0x688/0x1080
->  worker_thread+0x8b/0xc50
->  kthread+0x26f/0x310
->  ret_from_fork+0x22/0x30
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
->
-> Above issue may happen as follows:
->       umount            read procfs            error_work
-> ext4_put_super
->   flush_work(&sbi->s_error_work);
->
->                       ext4_mb_seq_groups_show
-> 	                ext4_mb_load_buddy_gfp
-> 			  ext4_mb_init_group
-> 			    ext4_mb_init_cache
-> 	                      ext4_read_block_bitmap_nowait
-> 			        ext4_validate_block_bitmap
-> 				  ext4_error
-					^^^^^^^ I am guessing this occurred due to some error
-injection framework? or was it a bad disk?
+On Tue, 08 Mar 2022 16:30:40 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-> 			            ext4_handle_error
-> 			              schedule_work(&EXT4_SB(sb)->s_error_work);
->
->   ext4_unregister_sysfs(sb);
->   jbd2_journal_destroy(sbi->s_journal);
->     journal_kill_thread
->       journal->j_flags |= JBD2_UNMOUNT;
->
->                                           flush_stashed_error_work
-> 				            jbd2_journal_start
-> 					      start_this_handle
-> 					        BUG_ON(journal->j_flags & JBD2_UNMOUNT);
->
-> To solve this issue, we call 'ext4_unregister_sysfs' in 'ext4_put_super' firstly
-> like 'ext4_fill_super' error handle.
+> Annotate away some of the generic code references. This is things
+> where we take the address of a symbol for exception handling or return
+> addresses (eg. context switch).
 
-I don't see a reason why not. In fact to simulate this more reliably and to add
-a fstest around this - we could do following.
-(If we are adding a fstest we might also explore checking other exported sysfs options
-racing with umount/mount or module load/unload).
-Like in past it was journal_task at [1]
+Ah, I got it. I need this annotate lines for rethook too.
 
+Thank you,
 
-Thread-1 												Thread-2
-while [ 1 ]:  							   				while [ 1 ]:
-  echo 1 > /sys/fs/ext4/<dev>/trigger_fs_error            umount /dev/<dev>
-  sleep random 											  sleep random
-  														  mount /dev/<dev> /mnt
-
-Currently we call flush_work(&sbi->s_error_work) and then
-ext4_unregister_sysfs(). So if someone triggered an fs error before
-unregistering from sysfs, it will schedule_work() which might race similar
-to jbd2_journal_destroy() like what you showed above.
-
-So calling ext4_unregister_sysfs() as the first thing in ext4_put_super(),
-looks good to me.
-
-Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
-
-
-[1]: https://lore.kernel.org/all/20200318061301.4320-1-riteshh@linux.ibm.com/
-
-
->
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
->  fs/ext4/super.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
->
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 81749eaddf4c..a673012e35c8 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -1199,20 +1199,25 @@ static void ext4_put_super(struct super_block *sb)
->  	int aborted = 0;
->  	int i, err;
->
-> -	ext4_unregister_li_request(sb);
-> -	ext4_quota_off_umount(sb);
-> -
-> -	flush_work(&sbi->s_error_work);
-> -	destroy_workqueue(sbi->rsv_conversion_wq);
-> -	ext4_release_orphan_info(sb);
-> -
+>  arch/x86/entry/entry_64.S            |    6 ++++++
+>  arch/x86/entry/entry_64_compat.S     |    1 +
+>  arch/x86/kernel/alternative.c        |   10 ++++++++--
+>  arch/x86/kernel/head_64.S            |    4 ++++
+>  arch/x86/kernel/kprobes/core.c       |    1 +
+>  arch/x86/kernel/relocate_kernel_64.S |    2 ++
+>  arch/x86/lib/error-inject.c          |    2 ++
+>  arch/x86/lib/retpoline.S             |    1 +
+>  8 files changed, 25 insertions(+), 2 deletions(-)
+> 
+> --- a/arch/x86/entry/entry_64.S
+> +++ b/arch/x86/entry/entry_64.S
+> @@ -277,6 +277,7 @@ SYM_FUNC_END(__switch_to_asm)
+>  .pushsection .text, "ax"
+>  SYM_CODE_START(ret_from_fork)
+>  	UNWIND_HINT_EMPTY
+> +	ANNOTATE_NOENDBR // copy_thread
+>  	movq	%rax, %rdi
+>  	call	schedule_tail			/* rdi: 'prev' task parameter */
+>  
+> @@ -569,6 +570,7 @@ SYM_CODE_END(\asmsym)
+>  	.align 16
+>  	.globl __irqentry_text_end
+>  __irqentry_text_end:
+> +	ANNOTATE_NOENDBR
+>  
+>  SYM_CODE_START_LOCAL(common_interrupt_return)
+>  SYM_INNER_LABEL(swapgs_restore_regs_and_return_to_usermode, SYM_L_GLOBAL)
+> @@ -650,6 +652,7 @@ SYM_INNER_LABEL(early_xen_iret_patch, SY
+>  #endif
+>  
+>  SYM_INNER_LABEL(native_irq_return_iret, SYM_L_GLOBAL)
+> +	ANNOTATE_NOENDBR // exc_double_fault
 >  	/*
->  	 * Unregister sysfs before destroying jbd2 journal.
->  	 * Since we could still access attr_journal_task attribute via sysfs
->  	 * path which could have sbi->s_journal->j_task as NULL
-> +	 * Unregister sysfs before flush sbi->s_error_work.
-> +	 * Since user may read /proc/fs/ext4/xx/mb_groups during umount, If
-> +	 * read metadata verify failed then will queue error work.
-> +	 * flush_stashed_error_work will call start_this_handle may trigger
-> +	 * BUG_ON.
+>  	 * This may fault.  Non-paranoid faults on return to userspace are
+>  	 * handled by fixup_bad_iret.  These include #SS, #GP, and #NP.
+> @@ -744,6 +747,7 @@ SYM_FUNC_START(asm_load_gs_index)
+>  	FRAME_BEGIN
+>  	swapgs
+>  .Lgs_change:
+> +	ANNOTATE_NOENDBR // error_entry
+>  	movl	%edi, %gs
+>  2:	ALTERNATIVE "", "mfence", X86_BUG_SWAPGS_FENCE
+>  	swapgs
+> @@ -1322,6 +1326,7 @@ SYM_CODE_START(asm_exc_nmi)
+>  #endif
+>  
+>  repeat_nmi:
+> +	ANNOTATE_NOENDBR // this code
+>  	/*
+>  	 * If there was a nested NMI, the first NMI's iret will return
+>  	 * here. But NMIs are still enabled and we can take another
+> @@ -1350,6 +1355,7 @@ SYM_CODE_START(asm_exc_nmi)
+>  	.endr
+>  	subq	$(5*8), %rsp
+>  end_repeat_nmi:
+> +	ANNOTATE_NOENDBR // this code
+>  
+>  	/*
+>  	 * Everything below this point can be preempted by a nested NMI.
+> --- a/arch/x86/entry/entry_64_compat.S
+> +++ b/arch/x86/entry/entry_64_compat.S
+> @@ -148,6 +148,7 @@ SYM_INNER_LABEL(entry_SYSENTER_compat_af
+>  	popfq
+>  	jmp	.Lsysenter_flags_fixed
+>  SYM_INNER_LABEL(__end_entry_SYSENTER_compat, SYM_L_GLOBAL)
+> +	ANNOTATE_NOENDBR // is_sysenter_singlestep
+>  SYM_CODE_END(entry_SYSENTER_compat)
+>  
+>  /*
+> --- a/arch/x86/kernel/alternative.c
+> +++ b/arch/x86/kernel/alternative.c
+> @@ -713,6 +713,7 @@ asm (
+>  "	.pushsection	.init.text, \"ax\", @progbits\n"
+>  "	.type		int3_magic, @function\n"
+>  "int3_magic:\n"
+> +	ANNOTATE_NOENDBR
+>  "	movl	$1, (%" _ASM_ARG1 ")\n"
+>  	ASM_RET
+>  "	.size		int3_magic, .-int3_magic\n"
+> @@ -724,16 +725,19 @@ extern void int3_selftest_ip(void); /* d
+>  static int __init
+>  int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
+>  {
+> +	unsigned long selftest = (unsigned long)&int3_selftest_ip;
+>  	struct die_args *args = data;
+>  	struct pt_regs *regs = args->regs;
+>  
+> +	OPTIMIZER_HIDE_VAR(selftest);
+> +
+>  	if (!regs || user_mode(regs))
+>  		return NOTIFY_DONE;
+>  
+>  	if (val != DIE_INT3)
+>  		return NOTIFY_DONE;
+>  
+> -	if (regs->ip - INT3_INSN_SIZE != (unsigned long)&int3_selftest_ip)
+> +	if (regs->ip - INT3_INSN_SIZE != selftest)
+>  		return NOTIFY_DONE;
+>  
+>  	int3_emulate_call(regs, (unsigned long)&int3_magic);
+> @@ -757,7 +761,9 @@ static void __init int3_selftest(void)
+>  	 * then trigger the INT3, padded with NOPs to match a CALL instruction
+>  	 * length.
 >  	 */
->  	ext4_unregister_sysfs(sb);
->
-> +	ext4_unregister_li_request(sb);
-> +	ext4_quota_off_umount(sb);
-> +
-> +	flush_work(&sbi->s_error_work);
-> +	destroy_workqueue(sbi->rsv_conversion_wq);
-> +	ext4_release_orphan_info(sb);
-> +
->  	if (sbi->s_journal) {
->  		aborted = is_journal_aborted(sbi->s_journal);
->  		err = jbd2_journal_destroy(sbi->s_journal);
-> --
-> 2.31.1
->
+> -	asm volatile ("int3_selftest_ip: int3; nop; nop; nop; nop\n\t"
+> +	asm volatile ("int3_selftest_ip:\n\t"
+> +		      ANNOTATE_NOENDBR
+> +		      "    int3; nop; nop; nop; nop\n\t"
+>  		      : ASM_CALL_CONSTRAINT
+>  		      : __ASM_SEL_RAW(a, D) (&val)
+>  		      : "memory");
+> --- a/arch/x86/kernel/head_64.S
+> +++ b/arch/x86/kernel/head_64.S
+> @@ -99,6 +99,7 @@ SYM_CODE_END(startup_64)
+>  
+>  SYM_CODE_START(secondary_startup_64)
+>  	UNWIND_HINT_EMPTY
+> +	ANNOTATE_NOENDBR
+>  	/*
+>  	 * At this point the CPU runs in 64bit mode CS.L = 1 CS.D = 0,
+>  	 * and someone has loaded a mapped page table.
+> @@ -127,6 +128,7 @@ SYM_CODE_START(secondary_startup_64)
+>  	 */
+>  SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+>  	UNWIND_HINT_EMPTY
+> +	ANNOTATE_NOENDBR
+>  
+>  	/*
+>  	 * Retrieve the modifier (SME encryption mask if SME is active) to be
+> @@ -192,6 +194,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+>  	jmp	*%rax
+>  1:
+>  	UNWIND_HINT_EMPTY
+> +	ANNOTATE_NOENDBR // above
+>  
+>  	/*
+>  	 * We must switch to a new descriptor in kernel space for the GDT
+> @@ -299,6 +302,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+>  	pushq	%rax		# target address in negative space
+>  	lretq
+>  .Lafter_lret:
+> +	ANNOTATE_NOENDBR
+>  SYM_CODE_END(secondary_startup_64)
+>  
+>  #include "verify_cpu.S"
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -1033,6 +1033,7 @@ asm(
+>  	".type __kretprobe_trampoline, @function\n"
+>  	"__kretprobe_trampoline:\n"
+>  #ifdef CONFIG_X86_64
+> +	ANNOTATE_NOENDBR
+>  	/* Push a fake return address to tell the unwinder it's a kretprobe. */
+>  	"	pushq $__kretprobe_trampoline\n"
+>  	UNWIND_HINT_FUNC
+> --- a/arch/x86/kernel/relocate_kernel_64.S
+> +++ b/arch/x86/kernel/relocate_kernel_64.S
+> @@ -42,6 +42,7 @@
+>  	.code64
+>  SYM_CODE_START_NOALIGN(relocate_kernel)
+>  	UNWIND_HINT_EMPTY
+> +	ANNOTATE_NOENDBR
+>  	/*
+>  	 * %rdi indirection_page
+>  	 * %rsi page_list
+> @@ -223,6 +224,7 @@ SYM_CODE_END(identity_mapped)
+>  
+>  SYM_CODE_START_LOCAL_NOALIGN(virtual_mapped)
+>  	UNWIND_HINT_EMPTY
+> +	ANNOTATE_NOENDBR // RET target, above
+>  	movq	RSP(%r8), %rsp
+>  	movq	CR4(%r8), %rax
+>  	movq	%rax, %cr4
+> --- a/arch/x86/lib/error-inject.c
+> +++ b/arch/x86/lib/error-inject.c
+> @@ -3,6 +3,7 @@
+>  #include <linux/linkage.h>
+>  #include <linux/error-injection.h>
+>  #include <linux/kprobes.h>
+> +#include <linux/objtool.h>
+>  
+>  asmlinkage void just_return_func(void);
+>  
+> @@ -11,6 +12,7 @@ asm(
+>  	".type just_return_func, @function\n"
+>  	".globl just_return_func\n"
+>  	"just_return_func:\n"
+> +		ANNOTATE_NOENDBR
+>  		ASM_RET
+>  	".size just_return_func, .-just_return_func\n"
+>  );
+> --- a/arch/x86/lib/retpoline.S
+> +++ b/arch/x86/lib/retpoline.S
+> @@ -55,6 +55,7 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\re
+>  
+>  	.align RETPOLINE_THUNK_SIZE
+>  SYM_CODE_START(__x86_indirect_thunk_array)
+> +	ANNOTATE_NOENDBR // apply_retpolines
+>  
+>  #define GEN(reg) THUNK reg
+>  #include <asm/GEN-for-each-reg.h>
+> 
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

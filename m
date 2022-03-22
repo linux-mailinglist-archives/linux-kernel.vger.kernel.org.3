@@ -2,103 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2797C4E36DD
+	by mail.lfdr.de (Postfix) with ESMTP id BEFFD4E36DF
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiCVCtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S235612AbiCVCvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235634AbiCVCtN (ORCPT
+        with ESMTP id S235577AbiCVCvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:49:13 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E12A4A909;
-        Mon, 21 Mar 2022 19:47:47 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id i65so7286333qkd.7;
-        Mon, 21 Mar 2022 19:47:47 -0700 (PDT)
+        Mon, 21 Mar 2022 22:51:33 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC9D4EF52
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:50:07 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id c2so11648860pga.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:50:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fxbk8zHpadBwqoYmDWUAyGhNym0Al2auQQmaphKtiiI=;
-        b=GdDoCGokDh+u7cg/P9lZNMt+SHdG22s06tywPEdHjucdE1iaWkgO6z5mcrXTCssh3m
-         xddjQhiaAyJ4ztee0l3PHHz8SLECOipWwuo9Z7YzgGZg8l5KBQ0qahNF5OVpsIZnwmRN
-         /3tlnx+ifjbh51aOUahVYMMmmH5G17X+aHFZ5dfw+ul/62LZhaMeVbiIeBh7H8JYfRGu
-         6qCUEvtXAp1iNu1l6mo4Zjgg4OYH3UOnQT4d/dt0x9x+7IL38NuWOm0Gjpd+hvxHab2l
-         itER/2KjWfEteiY0dspt07y7Vu1awvo/eUzsZCoyjyTxH9eXl7xVohcgqD+iRxLuoOgx
-         tPNA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=id351bfFcXjcDLKiqWj1IvJglNtPMr9BFJLybhTc7GM=;
+        b=dKUtvynk+xRhkGYM2Xd0U1xlkpcIKgq0da8OMASRHTkEon4QQe6TEU5RSKK66qTjKh
+         BUL2dMnjQSPJeQ6zVrcpy3hHNBvLMUxoe71aKhpI6Jfj6ENdf16qXPgTtpND0smR2Z+i
+         2cNqi+hXYDgP3Uh3yRiz8UmV6GQN9FCA5PdWAvzq4NAjDOckvqiBUqLrnM6iBBOnqeTe
+         aYr+0lVIXK+soipvdFCi8f6QTPDVBIT4od7Simmn2/QsICQe0ceN++05V9lMVZjPNVlG
+         V3QfEemZaTi7A03KPCQ92xK79C7KPJ5x+Mc6aj/tZZznJfhYz2rPr9FZlwTVvIVP6Mth
+         YVWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Fxbk8zHpadBwqoYmDWUAyGhNym0Al2auQQmaphKtiiI=;
-        b=V1XpMQgJUDG3hWQB9pErp/oecYM5UFyZ9QghLtyLMVz2Usg7D1F7mJk3uQEFq/Ow4x
-         cWKObiJ7NTW+D2scdXxrOZ6n5ZZJPamWyKkc6LcPw8DPFA5uoagsci3II19MdJ1lYYTx
-         anTgTA4C85ucWu8/lNWfmqjQeEUohfxcjSKFDuX95YG/Yih7ZBf9R/fQD6H3L10P/7TZ
-         5E7WK5d9fFe4zFV5SstZtRhOXGVnrjaBeeKkfIkeBZP50R7p2QIC8KraRD73vU5iE7DA
-         RRwzLM3BwozLmO7jsOIrYgA5JBLdbS/SVP3ucP0JuOD8vT/V31ggagu2piPwPYAyJgmB
-         1Xmg==
-X-Gm-Message-State: AOAM532SfLdMKbrZbDhXQepVjixRN8W9SVMCHI9mEo+gErL7a/5680jl
-        51pI7JeyD5tXGiVgN1mGFMA=
-X-Google-Smtp-Source: ABdhPJx14QPIkLwvpLxDulgHQkSvIzJ5/A5iBQZUcX+1EpSqW2syPZ3jYTL4hxxykk4WHJUT26iQDQ==
-X-Received: by 2002:a05:620a:21dc:b0:67b:1209:7530 with SMTP id h28-20020a05620a21dc00b0067b12097530mr14336349qka.111.1647917266687;
-        Mon, 21 Mar 2022 19:47:46 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id k73-20020a37a14c000000b0067b316a4161sm9076188qke.120.2022.03.21.19.47.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=id351bfFcXjcDLKiqWj1IvJglNtPMr9BFJLybhTc7GM=;
+        b=k/NzhbTXeGOxpQPA0eDlTq5CQM1gapP8UzGKEQlvFMcIDDgibI17dZkYO10CdU2Yh6
+         nsgJ88N5flvr4PB8SBFfgLz6rMA5I8YNvEfbPrCKlW5dZSyBSrGgG+EgryGB4VGwezYk
+         gB/MBY26Y51cJ5JeU8iTO+v3Y3+bT2oxPmycurommw8U3Z1g7CNsTsEVW4u6MOlNYtAI
+         TkeH9IXQcHr3StboDXgLwOgalqDyQS8wnMRcgxV0D52ZhKMtv4qzOt70DPtuB00Rn/sW
+         0O5u3/Y8NSdKT5kAFsILAvzguqEQa8RUyVcHnGvVL/f4crI9de0j+5Twn/gNlKJgtBT0
+         HIWA==
+X-Gm-Message-State: AOAM531Yju4uOk/rKBLb49tAlDu1as0OfSGf/KnyOuE8fCDqVpgIMsmz
+        xWDHa2WsqaKwNZaXnZa570w=
+X-Google-Smtp-Source: ABdhPJz42V1dZmz5Je52FVNhkWwZrIOHQz29spKl89Bey+/lDpOYMnrNcOGIDBt6uzwssK9lJWVsTw==
+X-Received: by 2002:a05:6a00:1944:b0:4fa:952b:48cd with SMTP id s4-20020a056a00194400b004fa952b48cdmr9921204pfk.10.1647917406579;
+        Mon, 21 Mar 2022 19:50:06 -0700 (PDT)
+Received: from mi-HP-ProDesk-600-G5-PCI-MT.xiaomi.com ([43.224.245.244])
+        by smtp.gmail.com with ESMTPSA id 22-20020a17090a019600b001c6457e1760sm750024pjc.21.2022.03.21.19.50.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 19:47:45 -0700 (PDT)
-Message-ID: <623938d1.1c69fb81.52716.030f@mx.google.com>
-X-Google-Original-Message-ID: <20220322024742.GA2326136@cgel.zte@gmail.com>
-Date:   Tue, 22 Mar 2022 02:47:42 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
- for file pages
-References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
- <YjiMsGoXoDU+FwsS@cmpxchg.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjiMsGoXoDU+FwsS@cmpxchg.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 19:50:06 -0700 (PDT)
+From:   chenguanyou <chenguanyou9338@gmail.com>
+X-Google-Original-From: chenguanyou <chenguanyou@xiaomi.com>
+To:     gregkh@linuxfoundation.org
+Cc:     chenguanyou9338@gmail.com, dave@stgolabs.net, hdanton@sina.com,
+        jaegeuk@google.com, linux-kernel@vger.kernel.org,
+        longman@redhat.com, mazhenhua@xiaomi.com, mingo@redhat.com,
+        peterz@infradead.org, quic_aiquny@quicinc.com, will@kernel.org
+Subject: Re:[PATCH v5] locking/rwsem: Make handoff bit handling more consistent
+Date:   Tue, 22 Mar 2022 10:49:58 +0800
+Message-Id: <20220322024958.24633-1-chenguanyou@xiaomi.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <Yi73sVutB2w3zxbT@kroah.com>
+References: <Yi73sVutB2w3zxbT@kroah.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:33:20AM -0400, Johannes Weiner wrote:
-> On Wed, Mar 16, 2022 at 06:39:28AM +0000, cgel.zte@gmail.com wrote:
-> > From: Yang Yang <yang.yang29@zte.com.cn>
-> > 
-> > psi tracks the time spent on submitting the IO of refaulting file pages
-> > and anonymous pages[1]. But after we tracks refaulting anonymous pages
-> > in swap_readpage[2][3], there is no need to track refaulting anonymous
-> > pages in submit_bio.
-> > 
-> > So this patch can reduce redundant calling of psi_memstall_enter. And
-> > make it easier to track refaulting file pages and anonymous pages
-> > separately.
-> 
-> I don't think this is an improvement.
-> 
-> psi_memstall_enter() will check current->in_memstall once, detect the
-> nested call, and bail. Your patch checks PageSwapBacked for every page
-> being added. It's more branches for less robust code.
+> What ever happened with this testing?
 
-We are also working for a new patch to classify different reasons cause
-psi_memstall_enter(): reclaim, thrashing, compact, etc. This will help
-user to tuning sysctl, for example, if user see high compact delay, he
-may try do adjust THP sysctl to reduce the compact delay.
+> thanks,
 
-To support that, we should distinguish what's the reason cause psi in
-submit_io(), this patch does the job.
+> greg k-h
+
+We updated android gki, monkey test mini patch.
+Link: https://cs.android.com/android/kernel/superproject/+/common-android12-5.10-2022-03:common/kernel/locking/rwsem.c;l=1290
+
+thanks,
+Guanyou.Chen

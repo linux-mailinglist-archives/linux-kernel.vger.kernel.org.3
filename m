@@ -2,206 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA904E3DC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6934E3DC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbiCVLnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 07:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
+        id S234358AbiCVLne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 07:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbiCVLnB (ORCPT
+        with ESMTP id S234329AbiCVLnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 07:43:01 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6FB7E0BD;
-        Tue, 22 Mar 2022 04:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647949293; x=1679485293;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HvgOL6YZgSy7nSW+sywrpP3lBboqncbKKW+arHb8epo=;
-  b=ig4Pr8BAr22IrjNcBs3FmjOJ1lVUFFJAkffsRfLHkiTPO8v6Qf7J5esW
-   SPSATg94Lrh4hAfDQv/LizwZBUHoC/Wyg5srr8yJPSvRAp4TiWmYxnnYA
-   V+swmUHKuNBbH+Ad01d9912VH7YIOC29z6A5QCSKor2J9k1oVZCBsZ0Fe
-   YMK4GSnIxNX8p8HUcpObz/0YbHop2lk2PVhW23pd1L/fTNgzusDoW3Xmh
-   tNq5QpHHFWairlviS+vFem1gS5p8iyB956S5c/thWWjtsTao6p9N+tGAb
-   s2h2uvkTnWLBgVoxm03qHKeGyMq+oZvhsv8MFy+IwZ8PFb/P94umh88hb
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282631478"
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="282631478"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 04:41:33 -0700
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="646992054"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 04:41:30 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 22 Mar 2022 13:41:27 +0200
-Date:   Tue, 22 Mar 2022 13:41:27 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     joro@8bytes.org, baolu.lu@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, iommu@lists.linux-foundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mario.limonciello@amd.com, hch@lst.de
-Subject: Re: [PATCH v2 2/2] thunderbolt: Make iommu_dma_protection more
- accurate
-Message-ID: <Yjm150r3KPKp/2O4@lahna>
-References: <cover.1647624084.git.robin.murphy@arm.com>
- <0dd14883930c9f55ace22162e23765a37d91a057.1647624084.git.robin.murphy@arm.com>
+        Tue, 22 Mar 2022 07:43:32 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CB57EB35
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 04:42:03 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id m3so17308114lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 04:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ohGkyUku2elxBgQMe+Wzk69ckX2qDwZ29y2rezztfrI=;
+        b=GWJjzP+T8LfzdkC/lgtEgqaH0Q96FYC/C0slY02APC0DRQyOX2KMXoU2kpdD70fSWC
+         e64lf0o5nRn5KYn/CTE3W2OhzxlaFHD/P21CFNNQ1A02Z4f8+Marqmgzt6V0gbJSai6/
+         57PiH9S4xvc0cMdn6MRwPpxYvZYQv6q6lKglYUnIg5uOIQw7f53jtK9E/jFxev+d13P+
+         Kv7lcLNP22kOn4TVFzU1rtWhOYSZfPk1TiCIixL9Zg+kuj7oVBxwvt778gdpWNUbZ/C1
+         qz3rmIJ+h2qU6ssPaSAAK2kgwyZjYvMfINyOdijHoCMhMiPkGZC5qaHD+ROlEBJ/ag02
+         2Jrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ohGkyUku2elxBgQMe+Wzk69ckX2qDwZ29y2rezztfrI=;
+        b=FuhTAygR+wYJ3rllER0Aoyh23A70qjiHEFfFG50o19CxzPyP+9TkqFPh1l40tHXmYv
+         AdlrdFEXB5BeJSblz6AiwjBa6xTdmNO9jNGJGkgoqNn8IZOk6h9+3heBXK9YGz4FVmb9
+         nUgmSJ5PKLT75NLO5V2/LiWJy+0EAhZv9kcZgAy9tuL5sPL7WJdTNJec5EJKd6miBBe/
+         PoJYHXXP232xKw1O9TIQt7SGzA+79/sw1ymv7XgygHI016l6S4vRezzXjp7zWNqmjJC6
+         eHjOlqG8pDceIx+q4pSTPwsrith6IsCfwXpUFQn0DDLjWcLwgEZCzt8t1yWaLPAwru/R
+         9ZKw==
+X-Gm-Message-State: AOAM5335A98yXSng7FiPIik38ZpAxDEGyOPv3qKanE+YgaK7EiCuJf93
+        +LwSxON1NuqUjgNj69zrAT7mUQ==
+X-Google-Smtp-Source: ABdhPJwqSAfEXqQbXnUK0X61C4Eer4DskAuzbJ6jm1N1F9586mdmsWY4vdW+TM2OinTfxpI1TDGBHg==
+X-Received: by 2002:ac2:58f0:0:b0:44a:206c:255d with SMTP id v16-20020ac258f0000000b0044a206c255dmr10010176lfo.124.1647949321742;
+        Tue, 22 Mar 2022 04:42:01 -0700 (PDT)
+Received: from localhost.localdomain (h-155-4-129-34.NA.cust.bahnhof.se. [155.4.129.34])
+        by smtp.gmail.com with ESMTPSA id a1-20020a056512390100b004483b717210sm2175684lfu.79.2022.03.22.04.42.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 04:42:00 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC updates for v5.18
+Date:   Tue, 22 Mar 2022 12:41:59 +0100
+Message-Id: <20220322114159.358997-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0dd14883930c9f55ace22162e23765a37d91a057.1647624084.git.robin.murphy@arm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+Hi Linus,
 
-I tried this now on two Intel systems. One with integrated Thunderbolt
-and one with discrete. There was a small issue, see below but once fixed
-it worked as expected :)
+Here's the PR with the MMC updates for v5.18. There are no updates for MEMSTICK
+this time. Details about the highlights are as usual found in the signed tag.
 
-On Fri, Mar 18, 2022 at 05:42:58PM +0000, Robin Murphy wrote:
-> Between me trying to get rid of iommu_present() and Mario wanting to
-> support the AMD equivalent of DMAR_PLATFORM_OPT_IN, scrutiny has shown
-> that the iommu_dma_protection attribute is being far too optimistic.
-> Even if an IOMMU might be present for some PCI segment in the system,
-> that doesn't necessarily mean it provides translation for the device(s)
-> we care about. Furthermore, all that DMAR_PLATFORM_OPT_IN really does
-> is tell us that memory was protected before the kernel was loaded, and
-> prevent the user from disabling the intel-iommu driver entirely. While
-> that lets us assume kernel integrity, what matters for actual runtime
-> DMA protection is whether we trust individual devices, based on the
-> "external facing" property that we expect firmware to describe for
-> Thunderbolt ports.
-> 
-> It's proven challenging to determine the appropriate ports accurately
-> given the variety of possible topologies, so while still not getting a
-> perfect answer, by putting enough faith in firmware we can at least get
-> a good bit closer. If we can see that any device near a Thunderbolt NHI
-> has all the requisites for Kernel DMA Protection, chances are that it
-> *is* a relevant port, but moreover that implies that firmware is playing
-> the game overall, so we'll use that to assume that all Thunderbolt ports
-> should be correctly marked and thus will end up fully protected.
-> 
-> CC: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
-> 
-> v2: Give up trying to look for specific devices, just look for evidence
->     that firmware cares at all.
-> 
->  drivers/thunderbolt/domain.c | 12 +++--------
->  drivers/thunderbolt/nhi.c    | 41 ++++++++++++++++++++++++++++++++++++
->  include/linux/thunderbolt.h  |  2 ++
->  3 files changed, 46 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-> index 7018d959f775..2889a214dadc 100644
-> --- a/drivers/thunderbolt/domain.c
-> +++ b/drivers/thunderbolt/domain.c
-> @@ -7,9 +7,7 @@
->   */
->  
->  #include <linux/device.h>
-> -#include <linux/dmar.h>
->  #include <linux/idr.h>
-> -#include <linux/iommu.h>
->  #include <linux/module.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/slab.h>
-> @@ -257,13 +255,9 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
->  					 struct device_attribute *attr,
->  					 char *buf)
->  {
-> -	/*
-> -	 * Kernel DMA protection is a feature where Thunderbolt security is
-> -	 * handled natively using IOMMU. It is enabled when IOMMU is
-> -	 * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
-> -	 */
-> -	return sprintf(buf, "%d\n",
-> -		       iommu_present(&pci_bus_type) && dmar_platform_optin());
-> +	struct tb *tb = container_of(dev, struct tb, dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", tb->nhi->iommu_dma_protection);
->  }
->  static DEVICE_ATTR_RO(iommu_dma_protection);
->  
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index c73da0532be4..9e396e283792 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -14,6 +14,7 @@
->  #include <linux/errno.h>
->  #include <linux/pci.h>
->  #include <linux/interrupt.h>
-> +#include <linux/iommu.h>
->  #include <linux/module.h>
->  #include <linux/delay.h>
->  #include <linux/property.h>
-> @@ -1102,6 +1103,45 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
->  		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
->  }
->  
-> +static int nhi_check_iommu_pdev(struct pci_dev *pdev, void *data)
-> +{
-> +	if (!pdev->untrusted ||
-> +	    !dev_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
+Please pull this in!
 
-This one needs to take the pdev->external_facing into account too
-because most of the time there are no existing tunnels when the driver
-is loaded so we only see the PCIe root/downstream port. I think this is
-enough actually:
+Kind regards
+Ulf Hansson
 
-	if (!pdev->external_facing ||
-	    !dev_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
 
-> +		return 0;
-> +	*(bool *)data = true;
-> +	return 1; /* Stop walking */
-> +}
-> +
-> +static void nhi_check_iommu(struct tb_nhi *nhi)
-> +{
-> +	struct pci_bus *bus = nhi->pdev->bus;
-> +	bool port_ok = false;
-> +
-> +	/*
-> +	 * Ideally what we'd do here is grab every PCI device that
-> +	 * represents a tunnelling adapter for this NHI and check their
-> +	 * status directly, but unfortunately USB4 seems to make it
-> +	 * obnoxiously difficult to reliably make any correlation.
-> +	 *
-> +	 * So for now we'll have to bodge it... Hoping that the system
-> +	 * is at least sane enough that an adapter is in the same PCI
-> +	 * segment as its NHI, if we can find *something* on that segment
-> +	 * which meets the requirements for Kernel DMA Protection, we'll
-> +	 * take that to imply that firmware is aware and has (hopefully)
-> +	 * done the right thing in general. We need to know that the PCI
-> +	 * layer has seen the ExternalFacingPort property and propagated
-> +	 * it to the "untrusted" flag that the IOMMU layer will then
-> +	 * enforce, but also that the IOMMU driver itself can be trusted
-> +	 * not to have been subverted by a pre-boot DMA attack.
-> +	 */
-> +	while (bus->parent)
-> +		bus = bus->parent;
-> +
-> +	pci_walk_bus(bus, nhi_check_iommu_pdev, &port_ok);
-> +
-> +	nhi->iommu_dma_protection = port_ok;
+The following changes since commit 1760fdb6fe9f796fbdb9b4106b3e0bbacc16b55c:
 
-I would put here a log debug, something like this:
+  mmc: core: Restore (almost) the busy polling for MMC_SEND_OP_COND (2022-03-07 11:47:39 +0100)
 
-dev_dbg(&nhi->pdev->dev, "IOMMU DMA protection is %sabled\n",
-	port_ok ? "en" : "dis");
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.18
+
+for you to fetch changes up to dc3d879c6ffa25e90875237265898e49b2cabb7e:
+
+  dt-bindings: mmc: renesas,sdhi: Document RZ/G2UL SoC (2022-03-17 11:06:29 +0100)
+
+----------------------------------------------------------------
+MMC core:
+ - Convert to sysfs_emit() in favor of sprintf()
+ - Improve fallback to speed modes if eMMC HS200 fails
+
+MMC host:
+ - dw_mmc: Allow variants to set minimal supported clock rate
+ - dw-mmc-rockchip: Fix problems with invalid clock rates
+ - litex_mmc: Add new DT based driver for the LiteX's LiteSDCard interface
+ - litex_mmc: Add Gabriel Somlo and Joel Stanley as co-maintainers for LiteX
+ - mtk-sd: Add support for the Mediatek MT8186 variant
+ - renesas_sdhi: Add support for RZ/G2UL variant
+ - renesas_sdhi: Add support for RZ/V2L variant
+ - rtsx_pci: Adjust power-on sequence to conform to the SD spec
+ - sdhci-am654: Add support for TI's AM62 variant
+ - sdhci_am654: Fixup support for TI's AM64 variant
+ - sdhci-esdhc-imx: Add support for the imx93 variant
+ - sdhci-msm: Add support for the msm8953 variant
+ - sdhci-pci-gli: Add support for runtime PM for the GL9763E variant
+ - sdhci-pci-gli: Adjustments of the SSC function for the GL975x variants
+ - sdhci-tegra: Add support for wake on SD card event
+ - sunxi-mmc: Add support for Allwinner's F1c100s variant
+ - sunxi-mmc: Add support for D1 MMC variant
+
+----------------------------------------------------------------
+Alexandre Bailon (1):
+      mmc: mtk-sd: Silence delay phase calculation debug log
+
+Allen-KH Cheng (1):
+      dt-bindings: mmc: Add compatible for Mediatek MT8186
+
+Andy Shevchenko (1):
+      mmc: dw_mmc: Use device_property_string_array_count()
+
+Aniruddha Rao (1):
+      mmc: sdhci-tegra: Enable wake on SD card event
+
+Aswath Govindraju (3):
+      mmc: sdhci_am654: Fix the driver data of AM64 SoC
+      dt-bindings: mmc: sdhci-am654: Add compatible string for AM62 SoC
+      mmc: sdhci_am654: Add Support for TI's AM62 SoC
+
+Bean Huo (4):
+      mmc: wmt-sdmmc: Use of_device_get_match_data() helper
+      mmc: sdhci-tegra: Use of_device_get_match_data() helper
+      mmc: sdhci-of-at91: Use of_device_get_match_data() helper
+      mmc: davinci: Use of_device_get_match_data() helper
+
+Ben Chuang (4):
+      mmc: sdhci-pci-gli: Reduce the SSC value at 205MHz for GL9750 and GL9755
+      mmc: sdhci-pci-gli: Enable SSC at 50MHz and 100MHz for GL9750 and GL9755
+      mmc: sdhci-pci-gli: Add a switch to enable/disable SSC for GL9750 and GL9755
+      mmc: sdhci-pci-gli: Add runtime PM for GL9763E
+
+Biju Das (1):
+      dt-bindings: mmc: renesas,sdhi: Document RZ/G2UL SoC
+
+Gabriel Somlo (3):
+      MAINTAINERS: co-maintain LiteX platform
+      dt-bindings: mmc: Add bindings for LiteSDCard
+      mmc: Add driver for LiteX's LiteSDCard interface
+
+Geert Uytterhoeven (2):
+      mmc: sh_mmcif: Simplify division/shift logic
+      mmc: host: Drop commas after SoC match table sentinels
+
+Jesse Taube (1):
+      dt-bindings: mmc: sunxi: add Allwinner F1c100s compatible
+
+Jiasheng Jiang (1):
+      mmc: davinci_mmc: Handle error for clk_enable
+
+Lad Prabhakar (1):
+      dt-bindings: mmc: renesas,sdhi: Document RZ/V2L SoC
+
+Luca Weiss (1):
+      dt-bindings: mmc: sdhci-msm: Add msm8953 compatible
+
+Peng Fan (1):
+      dt-bindings: mmc: imx-esdhc: Add imx93 compatible string
+
+Peter Geis (2):
+      mmc: dw_mmc: Support setting f_min from host drivers
+      mmc: dw-mmc-rockchip: Fix handling invalid clock rates
+
+Ricky WU (1):
+      mmc: rtsx: add 74 Clocks in power on flow
+
+Samuel Holland (2):
+      dt-bindings: mmc: sunxi: Add D1 MMC and eMMC compatibles
+      mmc: sunxi-mmc: Add D1 MMC variant
+
+Sergey Shtylyov (1):
+      mmc: core: use sysfs_emit() instead of sprintf()
+
+Ulf Hansson (5):
+      Merge branch 'fixes' into next
+      Merge branch 'fixes' into next
+      mmc: core: Improve fallback to speed modes if eMMC HS200 fails
+      mmc: host: Return an error when ->enable_sdio_irq() ops is missing
+      mmc: core: Drop HS400 caps unless 8-bit bus is supported too
+
+Wen Zhiwei (1):
+      mmc: dw_mmc: Fix potential null pointer risk
+
+Wolfram Sang (1):
+      mmc: tmio: remove outdated members from host struct
+
+ .../bindings/mmc/allwinner,sun4i-a10-mmc.yaml      |   7 +
+ .../devicetree/bindings/mmc/fsl-imx-esdhc.yaml     |   1 +
+ .../devicetree/bindings/mmc/litex,mmc.yaml         |  78 +++
+ Documentation/devicetree/bindings/mmc/mtk-sd.yaml  |   3 +
+ .../devicetree/bindings/mmc/renesas,sdhi.yaml      |   7 +-
+ .../devicetree/bindings/mmc/sdhci-am654.yaml       |   1 +
+ .../devicetree/bindings/mmc/sdhci-msm.txt          |   1 +
+ MAINTAINERS                                        |   9 +-
+ drivers/mmc/core/bus.c                             |   9 +-
+ drivers/mmc/core/bus.h                             |   3 +-
+ drivers/mmc/core/host.c                            |  24 +-
+ drivers/mmc/core/mmc.c                             |  37 +-
+ drivers/mmc/core/sd.c                              |  25 +-
+ drivers/mmc/core/sdio.c                            |   5 +-
+ drivers/mmc/core/sdio_bus.c                        |   7 +-
+ drivers/mmc/host/Kconfig                           |  13 +
+ drivers/mmc/host/Makefile                          |   1 +
+ drivers/mmc/host/davinci_mmc.c                     |  12 +-
+ drivers/mmc/host/dw_mmc-rockchip.c                 |  27 +-
+ drivers/mmc/host/dw_mmc.c                          |  12 +-
+ drivers/mmc/host/dw_mmc.h                          |   2 +
+ drivers/mmc/host/litex_mmc.c                       | 661 +++++++++++++++++++++
+ drivers/mmc/host/mtk-sd.c                          |   4 +-
+ drivers/mmc/host/renesas_sdhi_internal_dmac.c      |   2 +-
+ drivers/mmc/host/rtsx_pci_sdmmc.c                  |  29 +-
+ drivers/mmc/host/sdhci-of-at91.c                   |   6 +-
+ drivers/mmc/host/sdhci-of-esdhc.c                  |  10 +-
+ drivers/mmc/host/sdhci-pci-gli.c                   | 133 ++++-
+ drivers/mmc/host/sdhci-tegra.c                     |  15 +-
+ drivers/mmc/host/sdhci_am654.c                     |  28 +-
+ drivers/mmc/host/sh_mmcif.c                        |   7 +-
+ drivers/mmc/host/sunxi-mmc.c                       |   9 +
+ drivers/mmc/host/tmio_mmc.h                        |   4 -
+ drivers/mmc/host/wmt-sdmmc.c                       |   7 +-
+ 34 files changed, 1076 insertions(+), 123 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+ create mode 100644 drivers/mmc/host/litex_mmc.c

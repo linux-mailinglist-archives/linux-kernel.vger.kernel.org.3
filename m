@@ -2,96 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8A94E4300
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FEB4E4305
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238510AbiCVPbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
+        id S238520AbiCVPdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235827AbiCVPbQ (ORCPT
+        with ESMTP id S235839AbiCVPdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:31:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468A18BE17;
-        Tue, 22 Mar 2022 08:29:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6FB661156;
-        Tue, 22 Mar 2022 15:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FD2C340EC;
-        Tue, 22 Mar 2022 15:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647962987;
-        bh=/wuEi/uvh9kikMVTzBLXcTmFI7rUcMU9g6h8WZNahOo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EVFcIZdn2T2OgMOmHo6W2hdIUGauN/2ICQ4guSLkCKzKzyqQ8WfXaCbRHHYww3TzJ
-         mXgi7Xjp2AOvOzizJzkInSiM+Pbl2ujkBtKv91xa64shP83PfV7G5E6DI1ye9nN9sb
-         tPUpA8lVMJTmg002dbHBLUXpg93+i4a90S6tlPYc6E3JucrZ311RnYqFqQASpxWnRA
-         yl+iG/L6qhqHt7prt2uMj9r4hwDwQxAsv6UoGpxTazGxrMhU01QKAW7y5G6c25vKOJ
-         Wy/VPs4MpT3QaCbvEc8ju8Zf5yAsCzZKwVbOAZHOyAT9cM8AYAswv90Wp57e0wl0MN
-         q52QnKjboEpng==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] KVM: x86: Fix clang -Wimplicit-fallthrough in do_host_cpuid()
-Date:   Tue, 22 Mar 2022 08:29:06 -0700
-Message-Id: <20220322152906.112164-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 22 Mar 2022 11:33:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85374240A3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:31:36 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647963094;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bBFbvuG1P3ENTldXzdHW0OPm8FUpt+pPGQqmRl21Rso=;
+        b=1ytBCYh24Yo33FRo3xIQd4+MpG8COUes9SSMTCcO8Xj/9njvEl4pFMbkoxlL7c16b5ysEl
+        A+tsDQuIDCJyAaAIL7+9grtGZ7PhlpJc6bES7NJEqfNZrQAQK3tLoW759SZHK/LuWKdy8g
+        KD7Kuv68B6HgNj/GoDJL9eytoQZbYrq3feR8qpTQBXogw/Y/yJIthLaKP1f0Mbc5MnKg+y
+        o4EPzbTxkZn4+WdX6pJ9s/DUi5ClU3sqH2WPP2lOmnIlXsN83ddhC/ITC4UJZNZ3nAYziy
+        U7pKGqAg8SsTA0+pic8SSY8kdOQOfMDHtJ3aigTy5qyLh2dEk2xu8JSL6RAiLw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647963094;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bBFbvuG1P3ENTldXzdHW0OPm8FUpt+pPGQqmRl21Rso=;
+        b=PNWxKerQHdXolJrf/V7DnxS6nhZ2/egOeRxP8urJK6MdVgtTyDyLMGQdjqnmVVpZeHmg+j
+        PaRQQ45sjBTcT/Cw==
+To:     Steven Price <steven.price@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Steven Price <steven.price@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v2] cpu/hotplug: Set st->cpu earlier
+In-Reply-To: <20220316153637.288199-1-steven.price@arm.com>
+References: <20220316153637.288199-1-steven.price@arm.com>
+Date:   Tue, 22 Mar 2022 16:31:33 +0100
+Message-ID: <878rt2atre.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+On Wed, Mar 16 2022 at 15:36, Steven Price wrote:
+> Setting the 'cpu' member of struct cpuhp_cpu_state in cpuhp_create() is
+> too late as other callbacks can be made before that point.
 
-  arch/x86/kvm/cpuid.c:739:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-          default:
-          ^
-  arch/x86/kvm/cpuid.c:739:2: note: insert 'break;' to avoid fall-through
-          default:
-          ^
-          break;
-  1 error generated.
+What?
 
-Clang is a little more pedantic than GCC, which does not warn when
-falling through to a case that is just break or return. Clang's version
-is more in line with the kernel's own stance in deprecated.rst, which
-states that all switch/case blocks must end in either break,
-fallthrough, continue, goto, or return. Add the missing break to silence
-the warning.
+        CPUHP_OFFLINE = 0,
+        CPUHP_CREATE_THREADS,
 
-Fixes: f144c49e8c39 ("KVM: x86: synthesize CPUID leaf 0x80000021h if useful")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/kvm/cpuid.c | 1 +
- 1 file changed, 1 insertion(+)
+The create threads callback is the very first callback which is invoked
+for a to be plugged CPU on the control CPU. So which earlier callback
+can be invoked and fail?
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 58b0b4e0263c..a3c87d2882ad 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -735,6 +735,7 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
- 			if (function > READ_ONCE(max_cpuid_80000000))
- 				return entry;
- 		}
-+		break;
- 
- 	default:
- 		break;
+Thanks,
 
-base-commit: c9b8fecddb5bb4b67e351bbaeaa648a6f7456912
--- 
-2.35.1
-
+        tglx

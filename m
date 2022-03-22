@@ -2,152 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F514E3F62
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5964E3F64
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbiCVNWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S235389AbiCVNXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235381AbiCVNVz (ORCPT
+        with ESMTP id S233598AbiCVNXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:21:55 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15696A028;
-        Tue, 22 Mar 2022 06:20:27 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id p15so36143720ejc.7;
-        Tue, 22 Mar 2022 06:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eDfM6Q9oZjJwK8y7VoDq/V92eKRqzakAI7cbs7aB55g=;
-        b=EJo/OvVx4FAubMDazS9cSiX1m+BgpQxQFd+JZjhjGiIOi09oLUO0SAmjQ1vvzbWJRC
-         fsd1lUlKpnPncc0nZk8UUKpW8xQGbyekrEhlPtaoUi2nhFXUqHnwK7Zk92GSb/ehxcVn
-         ERTq6DOIcr/wbxgNq8T+QnJzz1sEsqtFybk/1iB/qOnzeaby5ZqUY367rAy/e/xMAoTb
-         mfUSDyLo1Jv360NcUVVUqcQQwIu2hjz/Khvv7oVWB3UEl40THHcQTeWfZ6+i83IT/i6b
-         I7dkTmtrL0foFrOjaihJNSW592VmAoTrzbE+eKU+84f67PLB9C3K9N5HHU7G9p7pQEO9
-         X6zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eDfM6Q9oZjJwK8y7VoDq/V92eKRqzakAI7cbs7aB55g=;
-        b=ylH2mP2m7VF/Ez9bmDFz9MhvCra+S6xHpLNQCOiNlwTidHrCpuXlvFkI0Lcyeey8o1
-         esLI43gusnlJeCJPKgqD+KOLzVtRa7NmJiGhxraAtNQyuqFdBVv/+oS+vbGrtao0IdwH
-         OZ7313tE2mJnU6Om3eF+5LXE/m679Czm+I7jo7ur5Gi/rCWXQQnDLj0kYqDfAgDEsgN0
-         QGXdGce0aqvkgEc9aFKYmQD/e/Jn2n4RGYvB7ri+VI+JlWyZQJYi6JVBAxAV4Y4NZ4NL
-         ry9Idf9VlGqkD29YuMholbGKb8TqOd5fB/sK9dk40okVF1p9R96wEuyhQksULWC/VBjM
-         zfNg==
-X-Gm-Message-State: AOAM5319JYvWVyXmFU799CcOyD99/JqDo9kxTlfXxCWzrflT08OWYCKC
-        urOwmqZfFuNCp4kdrpR7yGpwaIZVPWXM+b28LkZ1NPUm
-X-Google-Smtp-Source: ABdhPJxb5ANsjWbNR8ToNX6eU9m7/RTX+9CUZOkJsfhJAh2EYqflwh6spCB+NBGQPdksCYrlH3+Ho9OiHXNYrCI3pmU=
-X-Received: by 2002:a17:907:1ca7:b0:6e0:346:ca6 with SMTP id
- nb39-20020a1709071ca700b006e003460ca6mr9823732ejc.311.1647955226097; Tue, 22
- Mar 2022 06:20:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220222162619.14645-1-christian.gmeiner@gmail.com> <CAH9NwWebh9QJ0VevG5b7pnaRnzJ6XcEmeKYgZ=NPPt9ZxTXUfA@mail.gmail.com>
-In-Reply-To: <CAH9NwWebh9QJ0VevG5b7pnaRnzJ6XcEmeKYgZ=NPPt9ZxTXUfA@mail.gmail.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Tue, 22 Mar 2022 14:20:14 +0100
-Message-ID: <CAH9NwWec6ovS1xQbuPsB5duskJdmK_qv4t+URTK6thCvGNST7w@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: cadence: Enable Controller to respond to received
- PTM Requests
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 09:23:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7ED6A028;
+        Tue, 22 Mar 2022 06:21:41 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 38155210F2;
+        Tue, 22 Mar 2022 13:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647955300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/JoKpF3z7MBf7QUqTBD9HK/zpIQn6GZC430lpurSEQE=;
+        b=Lpojd85MpAWa8d96zqrpkuUkSMBsVsoOU/3Y9PCZwObRK3y6sXJdQNPvE7XVYoXqMTbsSx
+        dL5j6FqY1UuD9sF+l5POI19rbb8wK96DuOXic3qp7GRfdI8PMynvvljcA4kxfDhNTEx+Cy
+        yKr/rjmy+g7zr22CiyQ0WvtbnLSUkJk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647955300;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/JoKpF3z7MBf7QUqTBD9HK/zpIQn6GZC430lpurSEQE=;
+        b=2k+VsAoUglPEf/PakggrFswkcmMUhbN3+FFuUfaFhGtCr6u4VwqQmFz+AHZIzTl5aaI8fJ
+        0/6OUYyFNTH7iFAA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 20086A3B83;
+        Tue, 22 Mar 2022 13:21:40 +0000 (UTC)
+Date:   Tue, 22 Mar 2022 14:21:40 +0100
+Message-ID: <s5hmthixguz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 00/16] Support external boost at CS35l41 ASoC driver
+In-Reply-To: <20220317093120.168534-1-tanureal@opensource.cirrus.com>
+References: <20220317093120.168534-1-tanureal@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Do., 10. M=C3=A4rz 2022 um 13:14 Uhr schrieb Christian Gmeiner
-<christian.gmeiner@gmail.com>:
->
-> Hi all
->
-> > This enables the Controller [RP] to automatically respond with
-> > Response/ResponseD messages if CDNS_PCIE_LM_TPM_CTRL_PTMRSEN
-> > and PCI_PTM_CTRL_ENABLE bits are both set.
-> >
-> > Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-> > ---
-> >  drivers/pci/controller/cadence/pcie-cadence-host.c | 10 ++++++++++
-> >  drivers/pci/controller/cadence/pcie-cadence.h      |  4 ++++
-> >  2 files changed, 14 insertions(+)
-> >
-> > diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drive=
-rs/pci/controller/cadence/pcie-cadence-host.c
-> > index fb96d37a135c..940c7dd701d6 100644
-> > --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> > +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> > @@ -123,6 +123,14 @@ static int cdns_pcie_retrain(struct cdns_pcie *pci=
-e)
-> >         return ret;
-> >  }
-> >
-> > +static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
-> > +{
-> > +       u32 val;
-> > +
-> > +       val =3D cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
-> > +       cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_L=
-M_TPM_CTRL_PTMRSEN);
-> > +}
-> > +
-> >  static int cdns_pcie_host_start_link(struct cdns_pcie_rc *rc)
-> >  {
-> >         struct cdns_pcie *pcie =3D &rc->pcie;
-> > @@ -501,6 +509,8 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
-> >         if (rc->quirk_detect_quiet_flag)
-> >                 cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
-> >
-> > +       cdns_pcie_host_enable_ptm_response(pcie);
-> > +
-> >         ret =3D cdns_pcie_start_link(pcie);
-> >         if (ret) {
-> >                 dev_err(dev, "Failed to start link\n");
-> > diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pc=
-i/controller/cadence/pcie-cadence.h
-> > index c8a27b6290ce..1ffa8fa77a8a 100644
-> > --- a/drivers/pci/controller/cadence/pcie-cadence.h
-> > +++ b/drivers/pci/controller/cadence/pcie-cadence.h
-> > @@ -116,6 +116,10 @@
-> >  #define LM_RC_BAR_CFG_APERTURE(bar, aperture)          \
-> >                                         (((aperture) - 2) << ((bar) * 8=
-))
-> >
-> > +/* PTM Control Register */
-> > +#define CDNS_PCIE_LM_PTM_CTRL  (CDNS_PCIE_LM_BASE + 0x0da8)
-> > +#define CDNS_PCIE_LM_TPM_CTRL_PTMRSEN  BIT(17)
-> > +
-> >  /*
-> >   * Endpoint Function Registers (PCI configuration space for endpoint f=
-unctions)
-> >   */
-> > --
-> > 2.35.1
-> >
->
-> This patch should be ready to land - or is anything missing?
->
+On Thu, 17 Mar 2022 10:31:04 +0100,
+Lucas Tanure wrote:
+> 
+> Move the support for CS35L41 external boost to its shared library
+> for ASoC use.
+> This move resulted in cs35l41_hda_reg_sequence being removed,
+> and its steps were broken down into regmap writes or functions
+> from the library. And hardware configuration struct was unified
+> for its use in the shared lib.
+> While at it, some minor bugs were found and fixed it.
+> 
+> v4 changelog:
+>  - Separated GPIO 1 and 2 function enums
+> 
+> v3 changelog:
+>  - Remove patches already accepted
+>  - Improved logic in documentation patch
+>  - Documentation patch goes before its code
+>  - Fixed missing Signed-off-by
+>  - Fixed subject for HDA patches
+> 
+> v2 changelog:
+>  - Instead of removing the log, playback actions will log the last regmap access.
+>  - Documentation patch with the correct subject line and fixed bug reported by Rob Herring on the
+>  provided example.
+> 
+> Previous versions:
+>  v1: https://lkml.org/lkml/2022/3/3/759
+>  v2: https://lkml.org/lkml/2022/3/4/743
+>  v3: https://lkml.org/lkml/2022/3/8/975
+> 
+> David Rhodes (1):
+>   ASoC: dt-bindings: cs35l41: Document CS35l41 External Boost
+> 
+> Lucas Tanure (15):
+>   sound: cs35l41: Unify hardware configuration
+>   sound: cs35l41: Check hw_config before using it
+>   sound: cs35l41: Move cs35l41_gpio_config to shared lib
+>   ALSA: hda: cs35l41: Fix I2S params comments
+>   ALSA: hda: cs35l41: Always configure the DAI
+>   ALSA: hda: cs35l41: Add Boost type flag
+>   hda: cs35l41: Put the device into safe mode for external boost
+>   hda: cs35l41: Mute the device before shutdown
+>   sound: cs35l41: Enable Internal Boost in shared lib
+>   ALSA: hda: cs35l41: Move boost config to initialization code
+>   ALSA: hda: cs35l41: Remove cs35l41_hda_reg_sequence struct
+>   ALSA: hda: cs35l41: Reorganize log for playback actions
+>   ALSA: hda: cs35l41: Handle all external boost setups the same way
+>   ALSA: hda: cs35l41: Move external boost handling to lib for ASoC use
+>   ASoC: cs35l41: Support external boost
 
-Gentle ping.
+The code changes look OK (but for the issue Rob reported for
+dt-bindings stuff).
 
---=20
-greets
---
-Christian Gmeiner, MSc
+But, could you try to use more consistent prefix for the subject
+lines?  We don't use "sound:" prefix in general unless the patch is
+about (native) OSS drivers.  Instead, use "ALSA:" for the general
+ALSA/ASoC patches.  Also, "hda:" should be "ALSA: hda:" instead.
 
-https://christian-gmeiner.info/privacypolicy
+
+thanks,
+
+Takashi

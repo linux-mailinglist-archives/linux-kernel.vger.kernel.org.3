@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C52B4E398F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA9E4E3995
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237493AbiCVH2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 03:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
+        id S237441AbiCVH3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 03:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237439AbiCVH2Q (ORCPT
+        with ESMTP id S237401AbiCVH32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:28:16 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA79B48E6C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:26:48 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id q20so9804735wmq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:26:48 -0700 (PDT)
+        Tue, 22 Mar 2022 03:29:28 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD1E198
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:28:00 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id m30so13794688wrb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:28:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1ebdiBMBE49ulpNNpKaiXB7dt6wLbc0VTq7GL//3XJ8=;
-        b=XiP0TuYRMwiK5fc/j7mhZxReC+ATSMW0nX67r+NRFxZ3OzK03jyuKjwX5Xdt3QRJUt
-         gA5j+j76DLTpL0hCnv/kLBxTnAXRtDq/X+6WnAvnvvp+6k/RZchmDpjUWDMYhg0Rf7IY
-         QwoTHGyMCFu3I6jYAVAphUHzuhzcvkWy7BBj9QIDS+Jzlj73FgDK5841N04IJwb1F9WJ
-         EMy2FG97HFb5wOEZ+Hwn8MXaVHkNz2j9MSxZiL50g9y4DnwYrZYWD6jJogn2YXgTEYSw
-         CT6gUD3QUkshUk3ALkKsJRaLtUkiGJGFccPvm0qzuXt3Duc2IxkutyqlqqQ+wuDYFH2w
-         VuBA==
+        bh=38s+vFh4hN6ma2OSEAh7532IeRnJs07vXfLx/FtTkeI=;
+        b=vucamHCLCQ2IfBbc8GHxp5tlFQuyNU8dW3Bij+q2zvk5mWjPWiFriQ0nCNUerHF76w
+         etA07VHJUUuBtndKIekxQRZ3AoouuVRcGZiyWY9dz8NelgiXQagbIQH2dKUxde1wutWF
+         yK/y3ahbHCff65xR17gXHvDjSvg2ZEc9/QlsEFO9g8cnvYfX0wy1OoljQtfTxLNXdHyS
+         5rh4+RfVULw2BppPS+qAy7AAfLROY8MXidF6g3uV0V+BjsvZgdVUAAh4Yl3Q9/iJpvHu
+         Knf9mCXbrTb9dSUAvTMZ7OlurxJn8q/nSiNyp/Df6Ly3jgtwmRScxgViIr6wOY1taXXi
+         qX4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=1ebdiBMBE49ulpNNpKaiXB7dt6wLbc0VTq7GL//3XJ8=;
-        b=b+ZrlD8qmzgHpGnFcmE2dXIFJkm25wfIuvl04YkqmgfE566DDNJy+BR5/RJ3FiAQBr
-         hJ/tZ/Cx/fx4gSqFBqvYmYjOAkB+s4oNbvJu7Pnm32tWCltCuA7TUjIE8IAFEvruk8Ac
-         SClP/7LypYE6aA17Xqh1x8ZB1ZajngivO7VWlsEyRRkatp1HlxqsNUAF0B//2Uhrl6Y0
-         G9UlSbxz2JCI4GUGZ71+rYHJTBrIsRyUgPzgA93lFR8bXPPmiSpE3urP68xXVQuN+f+L
-         GnFa8JKO08QFznyEyknxZfQbsAeXxAXJbYNqOyw2AMZ/dxJo8Ws0664yZ1paKCLgf9qg
-         h2pw==
-X-Gm-Message-State: AOAM533/7zSqtCcHqlPRbaIME9Y/TiWMPdWEfVPH0gzux6GPnIENUzbS
-        sDY55faeMSPqMIuWmYJ6zI+aTg==
-X-Google-Smtp-Source: ABdhPJyC/73lv8Erlea0JHSb98XavB/OtlrxxHlezh1m5hzJDvCG9A9XcDT90mpK23W1dLn5RFtapg==
-X-Received: by 2002:a05:600c:1f14:b0:38c:946f:6812 with SMTP id bd20-20020a05600c1f1400b0038c946f6812mr2386550wmb.192.1647934007326;
-        Tue, 22 Mar 2022 00:26:47 -0700 (PDT)
+        bh=38s+vFh4hN6ma2OSEAh7532IeRnJs07vXfLx/FtTkeI=;
+        b=bc8cTwu06QDQfEn2hOO8h9Hfp68/z6+OhWq1F6Ve5Y1opKhkaj54RFxqthMRUSxQyo
+         5kWQgoRL3jnyl3blw9trQuI0SGIOqHwgcobd74wLLvH2mxr2M9OQpN/thx/OxXgCECQk
+         rAtohnm7V407ouVzD3JEswXGLRT7kdC6vMufbhTOwRxXhDwb3b4pfeh/xTqT1/AbVWm5
+         H6R0aZb3icbql/9y8Ty2ZBQYf3X/7KWuYXL7YWggozIfYP1/wp1C612OipSFtJ30Mkv8
+         T6h4lJv2TaySkrxTM6ytgyvZgq8BAL0oetH+wTb1PN+crjgMYWba/RLiH7cOOGKeY4Fx
+         92/A==
+X-Gm-Message-State: AOAM531433/Au3ypSAAWLsYmUPsdtK/50HSEmbDXn0w9RtIXNDYas5pN
+        1D6Od6rjw1fzYEEfFKxusI2T5A==
+X-Google-Smtp-Source: ABdhPJxw76tp7UaWDyAzzlAXHenQ+pVHhGiPNLiCsPef6Wq5fjJ0xKBS3IZng/PGd8GOGsaF9wcHnA==
+X-Received: by 2002:a05:6000:1ac7:b0:1f1:f9ee:7c57 with SMTP id i7-20020a0560001ac700b001f1f9ee7c57mr20441117wry.52.1647934078865;
+        Tue, 22 Mar 2022 00:27:58 -0700 (PDT)
 Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id o9-20020a1c4d09000000b0038ca75056e2sm1829110wmh.45.2022.03.22.00.26.46
+        by smtp.gmail.com with ESMTPSA id j5-20020a05600c1c0500b0038ca4fdf7a5sm2053486wms.9.2022.03.22.00.27.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 00:26:46 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 07:26:45 +0000
+        Tue, 22 Mar 2022 00:27:58 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 07:27:56 +0000
 From:   Lee Jones <lee.jones@linaro.org>
-To:     cgel.zte@gmail.com
-Cc:     linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] mfd: Use platform_get_irq() to get the interrupt
-Message-ID: <Yjl6NdLIjRbwGgFa@google.com>
-References: <20220309035607.2080884-1-chi.minghao@zte.com.cn>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        - <patches@opensource.cirrus.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: mfd: Fix pinctrl node name warnings
+Message-ID: <Yjl6fP2Bylv6ud8W@google.com>
+References: <20220303232350.2591143-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220309035607.2080884-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220303232350.2591143-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,30 +78,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Mar 2022, cgel.zte@gmail.com wrote:
+On Thu, 03 Mar 2022, Rob Herring wrote:
 
-> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> The recent addition pinctrl.yaml in commit c09acbc499e8 ("dt-bindings:
+> pinctrl: use pinctrl.yaml") resulted in some node name warnings:
 > 
-> It is not recommened to use platform_get_resource(pdev, IORESOURCE_IRQ)
-> for requesting IRQ's resources any more, as they can be not ready yet in
-> case of DT-booting.
+> Documentation/devicetree/bindings/mfd/cirrus,lochnagar.example.dt.yaml: \
+>  lochnagar-pinctrl: $nodename:0: 'lochnagar-pinctrl' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+> Documentation/devicetree/bindings/mfd/cirrus,madera.example.dt.yaml: \
+>  codec@1a: $nodename:0: 'codec@1a' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+> Documentation/devicetree/bindings/mfd/brcm,cru.example.dt.yaml: \
+>  pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
 > 
-> platform_get_irq() instead is a recommended way for getting IRQ even if
-> it was not retrieved earlier.
+> Fix the node names to the preferred 'pinctrl'. For cirrus,madera,
+> nothing from pinctrl.yaml schema is used, so just drop the reference.
 > 
-> It also makes code simpler because we're getting "int" value right away
-> and no conversion from resource to int is required.
-> 
-> The print function dev_err() is redundant because platform_get_irq()
-> already prints an error.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> Fixes: c09acbc499e8 ("dt-bindings: pinctrl: use pinctrl.yaml")
+> Cc: Rafał Miłecki <rafal@milecki.pl>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/mfd/ab8500-core.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+> v2:
+>  - Fix lochnagar-pinctrl nodename in example
+> v3:
+>  - And fix lochnagar-pinctrl nodename in 'required'. Sigh...
+> ---
+>  Documentation/devicetree/bindings/mfd/brcm,cru.yaml         | 4 ++--
+>  Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml | 6 +++---
+>  .../devicetree/bindings/pinctrl/cirrus,madera.yaml          | 3 ---
+>  3 files changed, 5 insertions(+), 8 deletions(-)
 
-Applied, thanks.
+Requires rebase.  Doesn't presently apply.
 
 -- 
 Lee Jones [李琼斯]

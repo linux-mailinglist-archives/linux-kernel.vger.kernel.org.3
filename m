@@ -2,176 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7811C4E3AB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0334E3AA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiCVIfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S231261AbiCVIfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiCVIft (ORCPT
+        with ESMTP id S231232AbiCVIfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:35:49 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4A545510;
-        Tue, 22 Mar 2022 01:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1647938013;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ntrq2GDLVZrYGtItjUXPdagiGGLGKRv1C9uWWopglQU=;
-    b=jlYDY1xt9eqCm8cyhDwadLpuygIPvUnrPSRWlrZKufoT9rGv8zvlmdRr11VjewO+mz
-    czpM096lvUC1eBwFWTne5ueeqCprl4lJoXydJdArqbSlkmMa0X8OvLsCbAke7JCp1/aV
-    W1OlanywjKPJVzlQOqgWf0zPYdNnVm66BoMtBO3KdFdFwBCXB4abcTmN/+clZo+NV7/l
-    jtaccaY979cr/zm5CtKV7fXBLGckN8aaDDeK0KDQZSsfGZL0jr7bug2EPBP2AJu4Xm+h
-    4j7UZR6fJZHZeesEFAjkmFl0sUqnfJrPxfO35KugV/cq5Q9677ZXZwpFi+PvEhpqWFYq
-    JXwQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.41.1 AUTH)
-    with ESMTPSA id cc2803y2M8XWDnA
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 22 Mar 2022 09:33:32 +0100 (CET)
-Message-ID: <17c8dc7b-7768-09cb-b48f-a923514f02db@hartkopp.net>
-Date:   Tue, 22 Mar 2022 09:33:31 +0100
+        Tue, 22 Mar 2022 04:35:12 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB2C31904;
+        Tue, 22 Mar 2022 01:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647938024; x=1679474024;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=311fvjJ4soaKRAT/+HaNbAabaAadMCX35bFpYRBPZoE=;
+  b=bHKMkjpVCcgmOVyDyobQ4vFS6Yq1wGd3NgL6w7uiLGLmkL+fQGfI/1am
+   pKDfiUHCN/ml22HZ+z5ZfpdyE9GjeCaY8koqbBbCUwxd2ogSnf/tFj/tw
+   6RBRYVPsyg9rYwz50kV1tnyzmHVV+mP3hwwjkz4NilPf0CPQvO0Z1UY11
+   w=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Mar 2022 01:33:43 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 01:33:43 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 22 Mar 2022 01:33:43 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 22 Mar 2022 01:33:38 -0700
+Date:   Tue, 22 Mar 2022 14:03:35 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+Subject: Re: [PATCH v11 3/5] usb: dwc3: qcom: Add helper functions to
+ enable,disable wake irqs
+Message-ID: <20220322083335.GK23316@hu-pkondeti-hyd.qualcomm.com>
+References: <1647932876-23249-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1647932876-23249-4-git-send-email-quic_c_sanm@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver,
- PCI, platform integration and documentation
-Content-Language: en-US
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz>
- <20220322074622.5gkjhs25epurecvx@pengutronix.de>
- <202203220918.33033.pisa@cmp.felk.cvut.cz>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <202203220918.33033.pisa@cmp.felk.cvut.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1647932876-23249-4-git-send-email-quic_c_sanm@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 22, 2022 at 12:37:54PM +0530, Sandeep Maheswaram wrote:
+> Adding helper functions to enable,disable wake irqs to make
+> the code simple and readable.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 58 ++++++++++++++++++++------------------------
+>  1 file changed, 26 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 6cba990..7352124 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -296,50 +296,44 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+>  	icc_put(qcom->icc_path_apps);
+>  }
+>  
+> +static void dwc3_qcom_enable_wakeup_irq(int irq)
+> +{
+> +	if (!irq)
+> +		return;
+> +
+> +	enable_irq(irq);
+> +	enable_irq_wake(irq);
+> +}
+> +
+> +static void dwc3_qcom_disable_wakeup_irq(int irq)
+> +{
+> +	if (!irq)
+> +		return;
+> +
+> +	disable_irq_wake(irq);
+> +	disable_irq_nosync(irq);
+> +}
+> +
+>  static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+>  {
+> -	if (qcom->hs_phy_irq) {
+> -		disable_irq_wake(qcom->hs_phy_irq);
+> -		disable_irq_nosync(qcom->hs_phy_irq);
+> -	}
+> +	dwc3_qcom_disable_wakeup_irq(qcom->hs_phy_irq);
+>  
+> -	if (qcom->dp_hs_phy_irq) {
+> -		disable_irq_wake(qcom->dp_hs_phy_irq);
+> -		disable_irq_nosync(qcom->dp_hs_phy_irq);
+> -	}
+> +	dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
+>  
+> -	if (qcom->dm_hs_phy_irq) {
+> -		disable_irq_wake(qcom->dm_hs_phy_irq);
+> -		disable_irq_nosync(qcom->dm_hs_phy_irq);
+> -	}
+> +	dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
+>  
+> -	if (qcom->ss_phy_irq) {
+> -		disable_irq_wake(qcom->ss_phy_irq);
+> -		disable_irq_nosync(qcom->ss_phy_irq);
+> -	}
+> +	dwc3_qcom_disable_wakeup_irq(qcom->ss_phy_irq);
+>  }
+>  
+>  static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+>  {
+> -	if (qcom->hs_phy_irq) {
+> -		enable_irq(qcom->hs_phy_irq);
+> -		enable_irq_wake(qcom->hs_phy_irq);
+> -	}
+> +	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq);
+>  
+> -	if (qcom->dp_hs_phy_irq) {
+> -		enable_irq(qcom->dp_hs_phy_irq);
+> -		enable_irq_wake(qcom->dp_hs_phy_irq);
+> -	}
+> +	dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
+>  
+> -	if (qcom->dm_hs_phy_irq) {
+> -		enable_irq(qcom->dm_hs_phy_irq);
+> -		enable_irq_wake(qcom->dm_hs_phy_irq);
+> -	}
+> +	dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
+>  
+> -	if (qcom->ss_phy_irq) {
+> -		enable_irq(qcom->ss_phy_irq);
+> -		enable_irq_wake(qcom->ss_phy_irq);
+> -	}
+> +	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq);
+>  }
+>  
+>  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
 
+Looks good to me.
 
-On 22.03.22 09:18, Pavel Pisa wrote:
-> Hello Marc,
-> 
-> thanks for positive reply for our years effort.
-> 
-> On Tuesday 22 of March 2022 08:46:22 Marc Kleine-Budde wrote:
->> On 22.03.2022 00:32:27, Pavel Pisa wrote:
->>> This driver adds support for the CTU CAN FD open-source IP core.
->>
->> The driver looks much better now. Good work. Please have a look at the
->> TX path of the mcp251xfd driver, especially the tx_stop_queue and
->> tx_wake_queue in mcp251xfd_start_xmit() and mcp251xfd_handle_tefif(). A
->> lockless implementation should work in your hardware, too.
-> 
-> Is this blocker for now? I would like to start with years tested base.
-> 
-> We have HW timestamping implemented for actual stable CTU CAN FD IP core
-> version, support for variable number of TX buffers which count can be
-> parameterized up to 8 in the prepared version and long term desire to
-> configurable-SW defined multi-queue which our HW interface allows to
-> dynamically server by á TX buffers. But plan is to keep combinations
-> of the design and driver compatible from the actual revision.
-> 
-> I would be happy if we can agree on some base/minimal support and get
-> it into mainline and use it as base for the followup patch series.
-
-IMHO I would vote for this approach too.
-
-There are many users of that open source IP CAN core right now and the 
-out-of-tree maintenance is no fun for all of them.
-
-When the driver status is fine from the technical and programming style 
-standpoint we should move the improvements for the lockless 
-transmissions to a later date.
-
-Best regards,
-Oliver
-
-> 
-> I understand that I have sent code late for actual merge window,
-> but I am really loaded by teaching, related RISC-V simulator
-> https://github.com/cvut/qtrvsim , ESA and robotic projects
-> at company. So I would prefer to go step by step and cooperate
-> on updates and testing with my diploma students.
-> 
->> BTW: The PROP_SEG/PHASE_SEG1 issue is known:
->>> +A curious reader will notice that the durations of the segments PROP_SEG
->>> +and PHASE_SEG1 are not determined separately but rather combined and
->>> +then, by default, the resulting TSEG1 is evenly divided between PROP_SEG
->>> +and PHASE_SEG1.
->>
->> and the flexcan IP core in CAN-FD mode has the same problem. When
->> working on the bit timing parameter, I'll plan to have separate
->> PROP_SEG/PHASE_SEG1 min/max in the kernel, so that the bit timing
->> algorithm can take care of this.
-> 
-> Hmm, when I have thought about that years ago I have not noticed real
-> difference when time quanta is move between PROP_SEG and PHASE_SEG1.
-> So for me it had no influence on the algorithm computation and
-> could be done on the chip level when minimal and maximal sum is
-> respected. But may it be I have overlooked something and there is
-> difference for CAN FD.  May it be my colleagues Jiri Novak and
-> Ondrej Ille are more knowable.
-> 
-> As for the optimal timequantas per bit value, I agree that it
-> is not so simple. In the fact SJW and even tipple-sampling
-> should be defined in percentage of bit time and then all should
-> be optimized together and even combination with slight bitrate
-> error should be preferred against other exact matching when
-> there is significant difference in the other parameters values.
-> 
-> But I am not ready to dive into it till our ESA space NanoXplore
-> FPGA project passes final stage...
-> 
-> By the way we have received report from Andrew Dennison about
-> successful integration of CTU CAN FD into Litex based RISC-V
-> system. Tested with the Linux our Linux kernel driver.
-> 
-> The first iteration there, but he reported that some corrections
-> from his actual development needs to be added to the public
-> repo still to be usable out of the box
-> 
->    https://github.com/AndrewD/litecan
-> 
-> Best wishes,
-> 
->                  Pavel Pisa
->      phone:      +420 603531357
->      e-mail:     pisa@cmp.felk.cvut.cz
->      Department of Control Engineering FEE CVUT
->      Karlovo namesti 13, 121 35, Prague 2
->      university: http://dce.fel.cvut.cz/
->      personal:   http://cmp.felk.cvut.cz/~pisa
->      projects:   https://www.openhub.net/accounts/ppisa
->      CAN related:http://canbus.pages.fel.cvut.cz/
->      Open Technologies Research Education and Exchange Services
->      https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-> 
+Thanks,
+Pavan

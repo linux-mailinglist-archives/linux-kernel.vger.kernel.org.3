@@ -2,190 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7D84E446E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186274E4471
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239229AbiCVQnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S239219AbiCVQoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236602AbiCVQnc (ORCPT
+        with ESMTP id S236188AbiCVQoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:43:32 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F0C7463C;
-        Tue, 22 Mar 2022 09:42:04 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id e4so17008603oif.2;
-        Tue, 22 Mar 2022 09:42:04 -0700 (PDT)
+        Tue, 22 Mar 2022 12:44:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D45B17306C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647967365;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pbDUOeqShz33twUSi6DXosV6ZkPSPlcuLCDCl6mkuQM=;
+        b=huV0i6lhVMAF5x92a0od1Jm1e7Lkm1n0WhLmYkhwSEEzWtTqs4DqnWMFK0I+8uzq5KPcql
+        I+Fl9hEJZLPYsFfeTboMbcv7KR3QZnKR+DzfzhKIGhNSJjbmqhWjbqRrR3+wuNWy/J787J
+        nTbm+OQb+F0B1l2nFsVqPEqHxfBG9IQ=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-47-tKWukRRwO1aMQaxsyEzjkQ-1; Tue, 22 Mar 2022 12:42:44 -0400
+X-MC-Unique: tKWukRRwO1aMQaxsyEzjkQ-1
+Received: by mail-wr1-f69.google.com with SMTP id i64-20020adf90c6000000b00203f2b5e090so2150423wri.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:42:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f19PtgxgIFInjc+IlAHkQp6KzpsdEzJgw42yMBWHdQg=;
-        b=kQwgwdEcuemqrF7dnyGxmc0ir6Qoi1GS5OZ0cVJfR5Q7FkCZsYRlPThQoDUuKVBORT
-         XZmJPnpsWyK+MuD+LnqFoQ8emgOsH14FNlj7vtys5k10XsyZ7DXtssOUPeHK6KNyUMKg
-         xxo5EjrBuTyDnJl2hkTBzK5Qb1H7QuAON2DbZGQe0duGwlDYQi/jBt+CLevzIe82I7Gm
-         l9iP2lc0wWgr65BjT5GdEz+Z1yMh6IIXB16ni1TCe84WMk23SGf5F8e5oIoupPViV/8O
-         7ZxAUzn/TGKmjOiz3r/FqkSvbBWMZp+lylm4ETUagQ+ZsbKEIxd2lcWbou0OzbhLXF/c
-         WcYA==
-X-Gm-Message-State: AOAM530CV+bAmYyHZnrSoTiiNtCvA6l29EASPvGwbsDnTfUJ6UsiK7pg
-        Z/5OABcD2v0hs5/8qKaSbw==
-X-Google-Smtp-Source: ABdhPJy77nVIsmtyMrQZ89IidhxzPS7fqu8uM2zZDvVPEioBV9LTEyx/xmCMVJUZEAwG9u6Urw0D7Q==
-X-Received: by 2002:aca:eb58:0:b0:2d9:deea:2014 with SMTP id j85-20020acaeb58000000b002d9deea2014mr2513406oih.83.1647967324171;
-        Tue, 22 Mar 2022 09:42:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s125-20020acaa983000000b002ecdbaf98fesm8932484oie.34.2022.03.22.09.42.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 09:42:03 -0700 (PDT)
-Received: (nullmailer pid 2149693 invoked by uid 1000);
-        Tue, 22 Mar 2022 16:42:01 -0000
-Date:   Tue, 22 Mar 2022 11:42:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Axe Yang <axe.yang@mediatek.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v8 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
- pinctrls properties
-Message-ID: <Yjn8WVBdwiCrstx5@robh.at.kernel.org>
-References: <20220321115133.32121-1-axe.yang@mediatek.com>
- <20220321115133.32121-2-axe.yang@mediatek.com>
- <YjkKURNzg8JPbXcg@robh.at.kernel.org>
- <b03df175f871ee9a6561862f5bd7bceb9cafbde1.camel@mediatek.com>
- <5d9c7655-b05e-aa77-d405-c1ec971daa77@collabora.com>
- <4e7a532814510b03b74455f5a924b50a70699ca1.camel@mediatek.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=pbDUOeqShz33twUSi6DXosV6ZkPSPlcuLCDCl6mkuQM=;
+        b=RvFvb4KSdqCqie2GrqqfpzHPvYKUtLi4MtYcubxSgMj0R0CVDXw9Gp+FTxT5kayRzN
+         2C02o0dE2WuY66Howh9dpC1GGHg6Y258Cp9D2ppNblszL4yZpr1FgMFF3rmz1rF5hIqc
+         wphmKgNKwoFk1apCPJZIYPd1XUrzQ7WwmkCPNTFfa6+tMXzKjx1j/kn+E4hohvlNgx7p
+         rz6dHgHpgfjSGyw2VaGFQZjwk5om8/gb3hNFFeKGUTi8PALgcJn3gRlnxFAhPGzpB1KQ
+         jp1zimIItSopG+Of+oyddJiedsEC7qSt303FGdIqFE87TUXQwkF6PcCzV76dK04fzTcn
+         fDyg==
+X-Gm-Message-State: AOAM532nrCtr+HQIeD9CZMWB7UOGMkYA86wzN0w/luIdJJ9ZfcRW6EjN
+        GUhoBrR+yDG3iVA1ZtiK3rppRzdZZlnSTdzwLLykmVAt97DUzR5q+KdnE43w3O/48I1BAZVZuUR
+        Whnk3B8Mxyf9VcR6CjxUbIGMT
+X-Received: by 2002:adf:f192:0:b0:203:e38f:afa1 with SMTP id h18-20020adff192000000b00203e38fafa1mr22986506wro.120.1647967362968;
+        Tue, 22 Mar 2022 09:42:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwd4H5zsnoSZNx8cpL6j2SFxZOQKMbrXPFzGhHlMfw61cH0xjGomBTtGVrnNwirsHukscpKkQ==
+X-Received: by 2002:adf:f192:0:b0:203:e38f:afa1 with SMTP id h18-20020adff192000000b00203e38fafa1mr22986485wro.120.1647967362657;
+        Tue, 22 Mar 2022 09:42:42 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:de00:549e:e4e4:98df:ff72? (p200300cbc708de00549ee4e498dfff72.dip0.t-ipconnect.de. [2003:cb:c708:de00:549e:e4e4:98df:ff72])
+        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm2243869wmq.46.2022.03.22.09.42.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 09:42:42 -0700 (PDT)
+Message-ID: <a4c81f17-b32c-8873-ff73-a8729171e93f@redhat.com>
+Date:   Tue, 22 Mar 2022 17:42:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e7a532814510b03b74455f5a924b50a70699ca1.camel@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <20220317153733.2171277-1-zi.yan@sent.com>
+ <20220317153733.2171277-3-zi.yan@sent.com>
+ <44a512ba-1707-d9c7-7df3-b81af9b5f0fb@redhat.com>
+ <3379379B-489B-460F-8B01-9A1D584A5036@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v8 2/5] mm: page_isolation: check specified range for
+ unmovable pages
+In-Reply-To: <3379379B-489B-460F-8B01-9A1D584A5036@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 05:33:55PM +0800, Axe Yang wrote:
-> Hello AngeloGioacchino,
+On 21.03.22 19:23, Zi Yan wrote:
+> On 21 Mar 2022, at 13:30, David Hildenbrand wrote:
 > 
-> On Tue, 2022-03-22 at 09:42 +0100, AngeloGioacchino Del Regno wrote:
-> > Il 22/03/22 02:35, Axe Yang ha scritto:
-> > > On Mon, 2022-03-21 at 18:29 -0500, Rob Herring wrote:
-> > > > On Mon, Mar 21, 2022 at 07:51:32PM +0800, Axe Yang wrote:
-> > > > > Extend interrupts and pinctrls for SDIO wakeup interrupt
-> > > > > feature.
-> > > > > This feature allow SDIO devices alarm asynchronous interrupt to
-> > > > > host
-> > > > > even when host stop providing clock to SDIO card. An extra
-> > > > > wakeup
-> > > > > interrupt and pinctrl states for SDIO DAT1 pin state switching
-> > > > > are
-> > > > > required in this scenario.
-> > > > > 
-> > > > > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> > > > > ---
-> > > > >   .../devicetree/bindings/mmc/mtk-sd.yaml       | 23
-> > > > > ++++++++++++++++++-
-> > > > >   1 file changed, 22 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > > index 297ada03e3de..f57774535a1d 100644
-> > > > > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > > @@ -69,12 +69,23 @@ properties:
-> > > > >         - const: ahb_cg
-> > > > >   
-> > > > >     interrupts:
-> > > > > -    maxItems: 1
-> > > > > +    description:
-> > > > > +      Should at least contain MSDC GIC interrupt. To support
-> > > > > SDIO
-> > > > > in-band wakeup, an extended
-> > > > > +      interrupt is required and be configured as wakeup source
-> > > > > irq.
-> > > > > +    minItems: 1
-> > > > > +    maxItems: 2
-> > > > >   
-> > > > >     pinctrl-names:
-> > > > > +    description:
-> > > > > +      Should at least contain default and state_uhs. To
-> > > > > support
-> > > > > SDIO in-band wakeup, dat1 pin
-> > > > > +      will be switched between GPIO mode and SDIO DAT1 mode,
-> > > > > state_eint and state_dat1 are
-> > > > > +      mandatory in this scenarios.
-> > > > > +    minItems: 2
-> > > > >       items:
-> > > > >         - const: default
-> > > > >         - const: state_uhs
-> > > > > +      - const: state_eint
-> > > > > +      - const: state_dat1
-> > > > >   
-> > > > >     pinctrl-0:
-> > > > >       description:
-> > > > > @@ -86,6 +97,16 @@ properties:
-> > > > >         should contain uhs mode pin ctrl.
-> > > > >       maxItems: 1
-> > > > >   
-> > > > > +  pinctrl-2:
-> > > > > +    description:
-> > > > > +      should switch dat1 pin to GPIO mode.
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  pinctrl-3:
-> > > > > +    description:
-> > > > > +      should switch SDIO dat1 pin from GPIO mode back to SDIO
-> > > > > mode.
-> > > > 
-> > > > How is this different than pinctrl-0?
-> > > 
-> > > pinctrl-0 contains default settings for all IO pins(CLK/CMD/DAT).
-> > > pinctrl-1 contains settings for all IO pins(CLK/CMD/DAT) in UHS
-> > > mode.
-> > > pinctrl-3 is lightweight pinctrl-1, only keep SDIO DAT1 pin
-> > > function
-> > > switch part.
-> > > 
-> > 
-> > Is there any particular reason why we cannot simply select pinctrl-1
-> > again
-> > instead of pinctrl-3, apart from the virtually not existent overhead
-> > of one more mmio write?
+>> On 17.03.22 16:37, Zi Yan wrote:
+>>> From: Zi Yan <ziy@nvidia.com>
+>>>
+>>> Enable set_migratetype_isolate() to check specified sub-range for
+>>> unmovable pages during isolation. Page isolation is done
+>>> at max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) granularity, but not all
+>>> pages within that granularity are intended to be isolated. For example,
+>>> alloc_contig_range(), which uses page isolation, allows ranges without
+>>> alignment. This commit makes unmovable page check only look for
+>>> interesting pages, so that page isolation can succeed for any
+>>> non-overlapping ranges.
+>>>
+>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>>> ---
+>>>  include/linux/page-isolation.h | 10 +++++
+>>>  mm/page_alloc.c                | 13 +------
+>>>  mm/page_isolation.c            | 69 ++++++++++++++++++++--------------
+>>>  3 files changed, 51 insertions(+), 41 deletions(-)
+>>>
+>>> diff --git a/include/linux/page-isolation.h b/include/linux/page-isolation.h
+>>> index e14eddf6741a..eb4a208fe907 100644
+>>> --- a/include/linux/page-isolation.h
+>>> +++ b/include/linux/page-isolation.h
+>>> @@ -15,6 +15,16 @@ static inline bool is_migrate_isolate(int migratetype)
+>>>  {
+>>>  	return migratetype == MIGRATE_ISOLATE;
+>>>  }
+>>> +static inline unsigned long pfn_max_align_down(unsigned long pfn)
+>>> +{
+>>> +	return ALIGN_DOWN(pfn, MAX_ORDER_NR_PAGES);
+>>> +}
+>>> +
+>>> +static inline unsigned long pfn_max_align_up(unsigned long pfn)
+>>> +{
+>>> +	return ALIGN(pfn, MAX_ORDER_NR_PAGES);
+>>> +}
+>>> +
+>>>  #else
+>>>  static inline bool has_isolate_pageblock(struct zone *zone)
+>>>  {
+>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>>> index 6de57d058d3d..680580a40a35 100644
+>>> --- a/mm/page_alloc.c
+>>> +++ b/mm/page_alloc.c
+>>> @@ -8937,16 +8937,6 @@ void *__init alloc_large_system_hash(const char *tablename,
+>>>  }
+>>>
+>>>  #ifdef CONFIG_CONTIG_ALLOC
+>>> -static unsigned long pfn_max_align_down(unsigned long pfn)
+>>> -{
+>>> -	return ALIGN_DOWN(pfn, MAX_ORDER_NR_PAGES);
+>>> -}
+>>> -
+>>> -static unsigned long pfn_max_align_up(unsigned long pfn)
+>>> -{
+>>> -	return ALIGN(pfn, MAX_ORDER_NR_PAGES);
+>>> -}
+>>> -
+>>>  #if defined(CONFIG_DYNAMIC_DEBUG) || \
+>>>  	(defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE))
+>>>  /* Usage: See admin-guide/dynamic-debug-howto.rst */
+>>> @@ -9091,8 +9081,7 @@ int alloc_contig_range(unsigned long start, unsigned long end,
+>>>  	 * put back to page allocator so that buddy can use them.
+>>>  	 */
+>>>
+>>> -	ret = start_isolate_page_range(pfn_max_align_down(start),
+>>> -				       pfn_max_align_up(end), migratetype, 0);
+>>> +	ret = start_isolate_page_range(start, end, migratetype, 0);
+>>>  	if (ret)
+>>>  		return ret;
+>>
+>> Shouldn't we similarly adjust undo_isolate_page_range()? IOW, all users
+>> of pfn_max_align_down()/pfn_max_align_up(). would be gone from that file
+>> and you can move these defines into mm/page_isolation.c instead of
+>> include/linux/page-isolation.h?
 > 
-> No, there is no particular reason. 
-> I just want to do the pin function switch quick and clean. 
-> 
-> The intention of pinctrl-1 is to set the most initial state of IO pins
-> in UHS mode. If I don't need to adjust IO settings any longer, it is
-> okay to select pinctrl-1 state instead of pinctrl-3. 
-> But think about this scenarios: after initial SDIO IO pins to UHS mode,
-> I want to adjust some IO related properties, such as driving strength.
-> And I want to keep these settings because with new driving strength,
-> the signal is better. I'd rather to choose pinctrl-3 but not pinctrl-1, 
-> because I do not want the change be restored after next runtime resume.
+> undo_isolate_page_range() faces much simpler situation, just needing
+> to unset migratetype. We can just pass pageblock_nr_pages aligned range
+> to it. For start_isolate_page_range(), start and end are also used for
+> has_unmovable_pages() for precise unmovable page identification, so
+> they cannot be pageblock_nr_pages aligned. But for readability and symmetry,
+> yes, I can change undo_isolate_page_range() too.
+Yeah, we should call both with the same range and any extension of the
+range should be handled internally.
 
-The pinctrl-X properties set modes, they aren't supposed to be a state 
-machine.
+I thought about some corner cases, especially once we relax some (CMA)
+alignment thingies -- then, the CMA area might be placed at weird
+locations. I haven't checked to which degree they apply, but we should
+certainly keep them in mind whenever we're extending the isolation range.
 
-Rob
+We can assume that the contig range we're allocation
+a) Belongs to a single zone
+b) Does not contain any memory holes / mmap holes
+
+Let's double check
+
+
+1) Different zones in extended range
+
+...   ZONE A  ][ ZONE B ....
+[ Pageblock X ][ Pageblock Y ][ Pageblock Z ]
+[        MAX_ORDER - 1       ]
+
+We can never create a higher-order page between X and Y, because they
+are in different zones. Most probably we should *not* extend the range
+to cover pageblock X in case the zones don't match.
+
+The same consideration applies to the end of the range, when extending
+the isolation range.
+
+But I wonder if we can have such a zone layout. At least
+mm/page_alloc.c:find_zone_movable_pfns_for_nodes() makes sure to always
+align the start of ZONE_MOVABLE to MAX_ORDER_NR_PAGES. I hope it applies
+to all other zones as well? :/
+
+Anyhow, it should be easy to check when isolating/un-isolating. Only
+conditionally extend the range if the zones of both pageblocks match.
+
+
+When eventually growing MAX_ORDER_NR_PAGES further, could we be in
+trouble because we could suddenly span multiple zones with a single
+MAX_ORDER - 1 page? Then we'd have to handle that I guess.
+
+
+2) mmap holes
+
+I think that's already covered by the existing __first_valid_page()
+handling.
+
+
+So, I feel like we might have to tackle the zones issue, especially when
+extending MAX_ORDER_NR_PAGES?
+
+-- 
+Thanks,
+
+David / dhildenb
+

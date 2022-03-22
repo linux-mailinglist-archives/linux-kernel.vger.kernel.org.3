@@ -2,84 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE524E37D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A584E37D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236359AbiCVELn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 00:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        id S236308AbiCVEMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 00:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiCVELk (ORCPT
+        with ESMTP id S229574AbiCVEMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 00:11:40 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE98443E1;
-        Mon, 21 Mar 2022 21:10:12 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so1080116pjf.1;
-        Mon, 21 Mar 2022 21:10:12 -0700 (PDT)
+        Tue, 22 Mar 2022 00:12:16 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5AF46B06
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:10:49 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id r7so9641926wmq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YF27/o9OojcIlWSRXUYvT844QPtgp8LqnE9dm5viGDQ=;
-        b=ln3p25fvXLz32myeqm5t0hBcUE6tyk/PEExo8WqpnsfcP5zlqpV1ll671d9e8ZulpU
-         lqusXemHq030YWLjogGgWnDGnYL0cm48TsOkP3kJ+Ppu09gPxXQR6O8pCqHds+7TJITD
-         NaQ9KpeM5/G3c23uTqF2SHe/SF/5rBIaZ2uoM3yqKWz8h8l8wxtagttGDbq3rwY3g6Jg
-         NLL2W5/Gym4XWW5+xpEsUWRIEEcmIIGtidxZwXe/7LkHIP+huczI1wrWMfMVE/Nv+76a
-         YEsWTOvlvfCbnrWOA+E7H/WtgT82LDtjHDHfDWlU0jOk3iLi0o77i7cXOLCn93Ww39Ln
-         WzIQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nLbVl2LHXZOkIJnsyrmmBZZu4oFTyxJKPewSUBSPIWs=;
+        b=NthOy7ZMKYCzGUebBBnjWgYxjV9AZGfYrUzRCKFC6A1kkehncCpBCXpTqCqfAmyWVH
+         9AdfFl9RfM5f7Embr3nIBQ4n+7qQgAkvZLF9CY34UYBSUZLE0gV/hAFf9Oa+eza7wWtC
+         xw2ph1XRHFrzyBIkYGIEWcbCoFhC8FBB4uN/JBZzI2LXkLXPiRuZFYtYLDFpBvXA3YVO
+         RaB9db6hLUGKfeN6WYiNNrasehSHkXFVBhZdRqRN7JexDaqqGOdfmiv6K65ghif+C2Hf
+         9loC+rtkWv2VWkSub6dt4guErJhSUMtnoYsRKIOT2Hr9TvnvJi/5y6wxFa177vR2OkyB
+         Lqlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YF27/o9OojcIlWSRXUYvT844QPtgp8LqnE9dm5viGDQ=;
-        b=utDLmObtwKGbirY/juADl7hjmFqFpuCENl8cvfxdLi0mo/v0Qea59W+9RxVviZBYzr
-         S0LQK7DIDAppKk6DOu1mjyEtWjY8bM0rknqf3itt6/au1vBPFCgcIZ7jsPhg5vUgIdWS
-         lH6l4tT49lhUKsVs4NEifSy2ScorNg1lJryJamCKOqbZT0xqOnPw2VaGXeXb86eyATpn
-         o12bCX1c77naXDU8ppBL7rHwlhrDPGG1Zw5VhFGWD7COlRwbkhR1X0pVenOEmHWMz1bB
-         VdF2vLet2kSeeBG8ywsboYhmBF4HDkEIwQ9OGBupAY7WAHzyORq9K5PYIUsy/585D3PH
-         o26w==
-X-Gm-Message-State: AOAM533ee5cSdGnZHTx6u8JM7s/rl8Di9NlTp8Uv8pj6tbhn3SwBBu/W
-        ljKrDvXqL6li/IVbs6DQuXM=
-X-Google-Smtp-Source: ABdhPJw8K6SJLgXLdJjpWrOAa7EmA/p3qAJ4MfsOv0WC5B8UWGhsRke1K9C1t22yXzXvRnFtjfyYXg==
-X-Received: by 2002:a17:90b:1a8a:b0:1c5:f707:93a6 with SMTP id ng10-20020a17090b1a8a00b001c5f70793a6mr2699198pjb.110.1647922211988;
-        Mon, 21 Mar 2022 21:10:11 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id t71-20020a63784a000000b00380a9f7367asm16932561pgc.77.2022.03.21.21.10.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 21:10:10 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 13:10:08 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 3/5] openrisc: Move to ticket-spinlock
-Message-ID: <YjlMIGKgYaLLpp5T@antec>
-References: <20220316232600.20419-1-palmer@rivosinc.com>
- <20220316232600.20419-4-palmer@rivosinc.com>
- <YjjuOZMzQlnqfLDJ@antec>
- <CAJF2gTSFh0NKLys7kr=UdQWHDyYgg3XmgTJtVaL37Re7QdZ8uw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nLbVl2LHXZOkIJnsyrmmBZZu4oFTyxJKPewSUBSPIWs=;
+        b=TYT4QVG2S4ieC66+npbpRmqw0xJfvZiBMdY8+I2qWM8CYKJ6Wsi5513bGiweUsaMot
+         TzaIb/eTglaMG7pJLQeZSUQAbmeefbw8uYH0zuWYXltdaKTNxKoIdtGqQ5gIOVe6Oszi
+         VAMTb9yD9hvPsCkxPndf/l23HrtjsVZrZ1FpugT41hn4k4s/Pv0GKMHKUJ45VMMeSb1O
+         Mi1g+AYKzBPQNrBvvq1PuMdMzr+Js66lW6LCIBuc7HnwkMVLUdcPqqVteRbGIAlIDlVx
+         oFV/CRe+AdIGl6KubbfO1As2E2EMD1Er9ze8F7B1fUM3YLTtd8P84LK3dfEhGVcVjn41
+         WkVg==
+X-Gm-Message-State: AOAM532EaKxsrX3i+pbxF6w0KaUCBIxkShjYeYKTWyiMtO7xwhej1iwQ
+        w+UMOV2e8ZN2ORySZzLx/SnJEWUXEb/o20pEPnj2bA==
+X-Google-Smtp-Source: ABdhPJzYKzIMfHRYYMLMkDHMUe/IqrQoW3vgcFNbGtwvm0O3tLejBY2XOdVu8cR2PAdw0dqRFkib7uNhHl5VGvDIElI=
+X-Received: by 2002:a1c:f20a:0:b0:38c:74ad:14eb with SMTP id
+ s10-20020a1cf20a000000b0038c74ad14ebmr1913185wmc.44.1647922248071; Mon, 21
+ Mar 2022 21:10:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTSFh0NKLys7kr=UdQWHDyYgg3XmgTJtVaL37Re7QdZ8uw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220319055600.3471875-1-davidgow@google.com> <CAGS_qxpqcc8O2HpmF3qB-uzXZrDNg9=h3nE_f7si=aOxXkRA+Q@mail.gmail.com>
+In-Reply-To: <CAGS_qxpqcc8O2HpmF3qB-uzXZrDNg9=h3nE_f7si=aOxXkRA+Q@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 22 Mar 2022 12:10:37 +0800
+Message-ID: <CABVgOS=sKWiDLN=GgyXQGOdmRn6t35mEA_0C7GrZyEApjVg1Pw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Rework kunit_resource allocation policy
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000003dba7005dac6ccb8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,60 +72,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 11:29:13AM +0800, Guo Ren wrote:
-> On Tue, Mar 22, 2022 at 7:23 AM Stafford Horne <shorne@gmail.com> wrote:
-> >
-> > On Wed, Mar 16, 2022 at 04:25:58PM -0700, Palmer Dabbelt wrote:
-> > > From: Peter Zijlstra <peterz@infradead.org>
-> > >
-> > > We have no indications that openrisc meets the qspinlock requirements,
-> > > so move to ticket-spinlock as that is more likey to be correct.
-> > >
-> > > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > >
-> > > ---
-> > >
-> > > I have specifically not included Peter's SOB on this, as he sent his
-> > > original patch
-> > > <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>
-> > > without one.
-> > > ---
-> > >  arch/openrisc/Kconfig                      | 1 -
-> > >  arch/openrisc/include/asm/Kbuild           | 5 ++---
-> > >  arch/openrisc/include/asm/spinlock.h       | 3 +--
-> > >  arch/openrisc/include/asm/spinlock_types.h | 2 +-
-> > >  4 files changed, 4 insertions(+), 7 deletions(-)
-> >
-> > Hello,
-> >
-> > This series breaks SMP support on OpenRISC.  I haven't traced it down yet, it
-> > seems trivial but I have a few places to check.
-> >
-> > I replied to this on a kbuild warning thread, but also going to reply here with
-> > more information.
-> >
-> >  https://lore.kernel.org/lkml/YjeY7CfaFKjr8IUc@antec/#R
-> >
-> > So far this is what I see:
-> >
-> >   * ticket_lock is stuck trying to lock console_sem
-> >   * it is stuck on atomic_cond_read_acquire
-> >     reading lock value: returns 0    (*lock is 0x10000)
-> >     ticket value: is 1
-> >   * possible issues:
-> >     - OpenRISC is big endian, that seems to impact ticket_unlock, it looks
-> All csky & riscv are little-endian, it seems the series has a bug with
-> big-endian. Is that all right for qemu? (If qemu was all right, but
-> real hardware failed.)
+--0000000000003dba7005dac6ccb8
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Guo Ren,
+On Tue, Mar 22, 2022 at 9:57 AM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> On Sat, Mar 19, 2022 at 12:56 AM David Gow <davidgow@google.com> wrote:
+> >
+> > KUnit's test-managed resources can be created in two ways:
+> > - Using the kunit_add_resource() family of functions, which accept a
+> >   struct kunit_resource pointer, typically allocated statically or on
+> >   the stack during the test.
+> > - Using the kunit_alloc_resource() family of functions, which allocate a
+> >   struct kunit_resource using kzalloc() behind the scenes.
+> >
+> > Both of these families of functions accept a 'free' function to be
+> > called when the resource is finally disposed of.
+> >
+> > At present, KUnit will kfree() the resource if this 'free' function is
+> > specified, and will not if it is NULL. However, this can lead
+> > kunit_alloc_resource() to leak memory (if no 'free' function is passed
+> > in), or kunit_add_resource() to incorrectly kfree() memory which was
+> > allocated by some other means (on the stack, as part of a larger
+> > allocation, etc), if a 'free' function is provided.
+>
+> Trying it with this:
+>
+> static void noop_free_resource(struct kunit_resource *) {}
+>
+> struct kunit_resource global_res;
+>
+> static void example_simple_test(struct kunit *test)
+> {
+>         kunit_add_resource(test, NULL, noop_free_resource, &global_res, test);
+> }
+>
+> Running then with
+> $ run_kunit --kunitconfig=lib/kunit --arch=x86_64
+> --build_dir=kunit_x86/ --kconfig_add=CONFIG_KASAN=y
+>
+> Before:
+> BUG: KASAN: double-free or invalid-free in kunit_cleanup+0x51/0xb0
+>
+> After:
+> Passes
+>
 
-OpenRISC real hardware and QEMU are both big-endian.  It fails on both.
+Phew! :-)
+I'm glad it works.
 
-I replied on patch 1/5 with a suggested patch which fixes the issue for me.
-Please have a look.
+> >
+> > Instead, always kfree() if the resource was allocated with
+> > kunit_alloc_resource(), and never kfree() if it was passed into
+> > kunit_add_resource() by the user. (If the user of kunit_add_resource()
+> > wishes the resource be kfree()ed, they can call kfree() on the resource
+> > from within the 'free' function.
+> >
+> > This is implemented by adding a 'should_free' member to
+>
+> nit: would `should_kfree` be a bit better?
+> `should_free` almost sounds like "should we invoke res->free" (as
+> nonsensical as that might be)
+>
 
-BTW. now I can look into the sparse warnings.
+I think I had it as should_kfree at some point. I agree it's a little
+clearer. I'll rename it back.
 
--Stafford
+The other option I considered was to have a "flags" member, of which
+SHOULD_KFREE could be one. Though I eventually decided to leave that
+until we needed another flag.
 
+> > struct kunit_resource and setting it appropriately. To facilitate this,
+> > the various resource add/alloc functions have been refactored somewhat,
+> > making them all call a __kunit_add_resource() helper after setting the
+> > 'should_free' member appropriately. In the process, all other functions
+> > have been made static inline functions.
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
+>
+> Tested-by: Daniel Latypov <dlatypov@google.com>
+>
+>
+> > ---
+> >  include/kunit/test.h | 135 +++++++++++++++++++++++++++++++++++--------
+> >  lib/kunit/test.c     |  65 +++------------------
+> >  2 files changed, 120 insertions(+), 80 deletions(-)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 00b9ff7783ab..5a3aacbadda2 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -36,11 +36,14 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+> >   * struct kunit_resource - represents a *test managed resource*
+> >   * @data: for the user to store arbitrary data.
+> >   * @name: optional name
+> > - * @free: a user supplied function to free the resource. Populated by
+> > - * kunit_resource_alloc().
+> > + * @free: a user supplied function to free the resource.
+> >   *
+> >   * Represents a *test managed resource*, a resource which will automatically be
+> > - * cleaned up at the end of a test case.
+> > + * cleaned up at the end of a test case. This cleanup is performed by the 'free'
+> > + * function. The resource itself is allocated with kmalloc() and freed with
+> > + * kfree() if created with kunit_alloc_{,and_get_}resource(), otherwise it must
+> > + * be freed by the user, typically with the 'free' function, or automatically if
+> > + * it's allocated on the stack.
+>
+> I'm not a fan of this complexity, but I'm not sure if we have a way
+> around it, esp. w/ stack-allocated data.
+>
+The other option is to make all resources allocated with
+kunit_alloc_resource() require a non-NULL 'free' function which calls
+kfree() itself. This is much simpler on the KUnit side, but does put
+some of that burden on the user (and may prevent a free() function
+from being shared between allocated and non-allocated resources).
+
+> Perhaps this would be a bit easier to read if we tweaked it a bit like:
+> "freed with kfree() if allocated by KUnit (via kunit_alloc..."
+>
+> Maybe we can drop the "or automatically, if it's allocated on the
+> stack" as well.
+
+Yeah: I'm not 100% happy with that wording. I wanted to make it clear
+that there are cases where no automatic freeing is needed, but I agree
+it's really just making things more confusing.
+>
+> A bigger way to simplify: perhaps we should get rid of
+> kunit_alloc_and_get_resource() first?
+> It's only used in KUnit's tests for itself.
+> They could instead use kunit_alloc_resource() +
+> kunit_find_resource(test, kunit_resource_instance_match, data).
+> We could even define the helper with the same name in kunit-test.c
+> (the only place it's used).
+>
+> Alternatively, we could make it an internal helper and define
+> kunit_alloc_resource() as
+>
+> void *kunit_alloc_resource(...)
+> {
+>    struct kunit_resource *res = _kunit_alloc_and_get_resource(...)
+>    if (res) return res->data;
+>    return NULL;
+> }
+>
+> ?
+>
+
+I was thinking about this a bit this morning, and I think we should do
+the opposite: get rid of kunit_alloc_resource() and leave only
+kunit_alloc_and_get_resource().
+Then, split the resource system basically in two:
+- The system for managing "findable" resources, whose main purpose is
+for cases like the KASAN integration and the stub stuff where main
+goal is tying some named bit of data to a test, and reference counting
+it so it can safely be retrieved and used throughout the kernel if
+need be.
+- The simpler "free this on test exit" system, which could be as
+simple as a kunit_defer(func, context) function built on top of the
+former. This wouldn't need detailed tracking of reference counts, etc,
+
+(tl;dr: I think that kunit_alloc_resource() is broken, refcount-wise,
+if we're trying to implement the first kind of system, but useful for
+the second, and this is quite confusing. So kunit_alloc_resource()
+probably shouldn't be used alongside kunit_find_resource(), as there
+could be a potential race condition. Now, this shouldn't happen in
+practice, as most tests are single threaded and none are doing fancy
+things with kunit_remove_resource(), but
+kunit_alloc_and_get_resource() should be safer, as you're not playing
+with a resource you don't have a reference to according to the
+refcount.)
+
+That's a more complicated refactor and redesign of the resources
+system, though, so I'd rather fix this first.
+
+Cheers,
+-- David
+
+--0000000000003dba7005dac6ccb8
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCC
+ka/aO7cUBBHmlYugZL22dGOy2dN5UWW8ArrGdS7DPTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAzMjIwNDEwNDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEANMTA4YgcTHtNyANaE/x7
+mu8YldhWvQw0IPmxRcVgjrfUVMyJXvC7zsSt64hDy7qeOo8TH5+jyMNHCs0B/y8IU5F9VX+m7KeB
+FhSUtARM0IGLTByEIsdPJ/SKU7eugsV0ndbRQZWO15x0YIwFOoIrSaoMrNjBHLMqO0LFU6sJCTpE
+9v1mfirHid+UkR+6L91vV+I7bTys+yPaUxbVAMXUupqtTnawfuyr7wII0TUej7+bzgopuouvMb63
+/y0zaHvzHDovrRWUoA2gfef4U+ZxpaCO+73ZMbAmKYeRWl6fPxFe+od36dqQuB67vgL691fo8+4a
++77XvLp+6DjBMM0paA==
+--0000000000003dba7005dac6ccb8--

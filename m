@@ -2,110 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD9E4E46D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 20:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CFA4E46D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 20:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbiCVTkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 15:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S231791AbiCVTka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 15:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiCVTkF (ORCPT
+        with ESMTP id S231753AbiCVTk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 15:40:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4CF117F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 12:38:37 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MHln0d028926;
-        Tue, 22 Mar 2022 19:38:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=U5sDEkN7/ajTT0RkuVblmkXX0gg8BTa9VfgXgds6LSY=;
- b=cCeDHwpxjFi8Z/GmUd+eHqTQVKq/bhZXFRt2xpedOtInM8dZHP6PSaFJWJg2djzmT/AE
- OpwgG18ci6/8PFze1dEp/JFJU4ElHxHe9NNxnKjvfKDWhkA6wc1kS4SumNt0SX7iwgNU
- dlj2GYv5rMu/vn0tEYNLkGf/gU1WkF5WPziYk0RETQoeP2ADONj5pXoQY2n8kNniBVea
- ckvZ44YeqgWXkMMeVBrt8D1UO3tWSMrQPgCmak/srXwpIYEmkgS5rdkuFNArikhqPnwD
- AgT57Y9SUk7gWxMICfefAtgzJ3hconBXyKV7HmiZWrRMBKnXVWU7kHbn8s0nwT7qKom7 gQ== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eyk2yth0n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 19:38:25 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MJXeS0024748;
-        Tue, 22 Mar 2022 19:38:24 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma03wdc.us.ibm.com with ESMTP id 3ew6t9e9ka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 19:38:23 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22MJcMqX37618016
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Mar 2022 19:38:22 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8DF03124058;
-        Tue, 22 Mar 2022 19:38:22 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6134412405E;
-        Tue, 22 Mar 2022 19:38:21 +0000 (GMT)
-Received: from li-37e927cc-2b02-11b2-a85c-931637a79255.ibm.com.com (unknown [9.160.85.177])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 22 Mar 2022 19:38:21 +0000 (GMT)
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     stefani@seibold.net, torvlds@linux-foundation.org,
-        Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH] kfifo: fix kfifo_init comment about power of 2 rounding
-Date:   Tue, 22 Mar 2022 12:38:13 -0700
-Message-Id: <20220322193813.677697-1-tyreld@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 22 Mar 2022 15:40:28 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162650E07
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 12:39:00 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so3965341wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 12:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PWSgDvDLxoqBfFqAWEkZCTO6LDckGZb0Do7Aleqt0ZM=;
+        b=QJSydARTkFq8NBSIMnTKGwsIssqJp91LrDrK3seC5EBxYQpE5h6CHztkiL/0Fhxd1+
+         xL5HXuLCnuUBEEg5CVRb9vytyIwa+MoCgkAwerTsb2O7BVXUE6bxN/Jx4VvYgH7Y4KFM
+         ylcbeH9MhIMqDXX+A2VeguoFJs393bTTwwphraeYdm8xxXJbPNsKnptWvLTjiEfqaJpR
+         cyDd4f5fvxtGFyv9HHEF2pDM0TuwlYy2I4xfRotBiwjeXpJBJjc5QpCJcIXM1HrCShqG
+         NQAKBpUr/DNUfsBfYhZQ42Pe07kqiDqK6ZyO4zPsey8gwlVU4DC+4INpaTB9xzxW4zrE
+         K8IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PWSgDvDLxoqBfFqAWEkZCTO6LDckGZb0Do7Aleqt0ZM=;
+        b=qPaTqlRyK/A28jRPFbO8A9L2BJZWLBWnZ4pNtEhKD+YybnGi2osDJMjWTYIMR8tVDu
+         Tq9XTIQmSfpOA84dEJmldMbg2h+voAL8bgvRtwlLyVtznzVMeVydZyOh4svXlJ34GgmU
+         JLYp61nTuhGoj4GabyKO/3LdnrGhu/aNUIgtAvhdWQ2uR0qhNcMtfUMcSEK55505AKPx
+         Tka44hJryLTa0vCOOjMwDwUmz2hbM2CuTYoQp491ZbKXk8aDohUXnxRHJxPCHTAInsWt
+         S3d43gGbmtyXzjy5sjfcQfxWas1U4+ewPL3D1Vw4pJH+7Ysj+zOuza4fErWv8hmTgoiS
+         nqlw==
+X-Gm-Message-State: AOAM531Wc/DIjjh2lMaV5bHDKh4qpn6aQbL/8KUKlAQBab+sAo2YJTB1
+        aU2VVv3CqGkSx0y5WBx2T2Y0CA==
+X-Google-Smtp-Source: ABdhPJyFzKK4zlvzEKqOHEC37GKhdvX2QIq+k23ppppIeqB0vMfjHuNNx52y0aqkqo3+pZK6Sat+YQ==
+X-Received: by 2002:a05:600c:4fc4:b0:38b:dd2e:9371 with SMTP id o4-20020a05600c4fc400b0038bdd2e9371mr5260580wmq.86.1647977938433;
+        Tue, 22 Mar 2022 12:38:58 -0700 (PDT)
+Received: from [192.168.2.116] ([109.76.4.19])
+        by smtp.gmail.com with ESMTPSA id l12-20020a056000022c00b00203ee262d12sm12907246wrz.116.2022.03.22.12.38.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 12:38:57 -0700 (PDT)
+Message-ID: <038b9664-2f70-7c32-6565-fbd0f3da789d@conchuod.ie>
+Date:   Tue, 22 Mar 2022 19:38:57 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FnUaEB7BVr-PzIMK3lc4c4L_clpgbZkG
-X-Proofpoint-ORIG-GUID: FnUaEB7BVr-PzIMK3lc4c4L_clpgbZkG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-22_07,2022-03-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- impostorscore=0 adultscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1011 phishscore=0 bulkscore=0 mlxlogscore=854
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203220101
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 0/2] Microchip Polarfire FPGA manager
+Content-Language: en-US
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, conor.dooley@microchip.com, robh+dt@kernel.org,
+        system@metrotek.ru, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220322043219.23770-1-i.bornyakov@metrotek.ru>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220322043219.23770-1-i.bornyakov@metrotek.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since, Commit ab9bb6318b09 ("Partially revert "kfifo: fix kfifo_alloc()
-and kfifo_init()"") kfifo_init() rounds the preallocated buffer size
-down to a power of 2 to determine the number of kfifo elements. The
-documentation around the kfifo_init() macro was not updated to reflect
-this change from the previous behavior that rounded up to a power of 2.
+On 22/03/2022 04:32, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Microchip Polarfire
+> FPGAs over slave SPI interface with .dat formatted bitsream image.
+> 
 
-Fixes: ab9bb6318b09 ("Partially revert "kfifo: fix kfifo_alloc() and kfifo_init()"")
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
----
- include/linux/kfifo.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Finally had a board appear on my desk today with its spi programming
+interface exposed, so should be able to test this at last.
 
-diff --git a/include/linux/kfifo.h b/include/linux/kfifo.h
-index 86249476b57f..123fa759bba9 100644
---- a/include/linux/kfifo.h
-+++ b/include/linux/kfifo.h
-@@ -378,7 +378,7 @@ __kfifo_int_must_check_helper( \
-  *
-  * This macro initializes a fifo using a preallocated buffer.
-  *
-- * The number of elements will be rounded-up to a power of 2.
-+ * The number of elements will be rounded-down to a power of 2.
-  * Return 0 if no error, otherwise an error code.
-  */
- #define kfifo_init(fifo, buffer, size) \
--- 
-2.35.1
+Thanks,
+Conor.
 
+> Changelog:
+>    v1 -> v2: fix printk formating
+>    v2 -> v3:
+>     * replace "microsemi" with "microchip"
+>     * replace prefix "microsemi_fpga_" with "mpf_"
+>     * more sensible .compatible and .name strings
+>     * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+>    v3 -> v4: fix unused variable warning
+>      Put 'mpf_of_ids' definition under conditional compilation, so it
+>      would not hang unused if CONFIG_OF is not enabled.
+>    v4 -> v5:
+>     * prefix defines with MPF_
+>     * mdelay() -> usleep_range()
+>     * formatting fixes
+>     * add DT bindings doc
+>     * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+>       We can't parse image header in write_init() because image header
+>       size is not known beforehand. Thus parsing need to be done in
+>       fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+>       also need to be reenterable. On the other hand,
+>       fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+>       write() callback to write_sg().
+>    v5 -> v6: fix patch applying
+>       I forgot to clean up unrelated local changes which lead to error on
+>       patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+>       applying on vanilla kernel.
+>    v6 ->v7: fix binding doc to pass dt_binding_check
+> 
+> Ivan Bornyakov (2):
+>    fpga: microchip-spi: add Microchip MPF FPGA manager
+>    dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+> 
+>   .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 ++
+>   drivers/fpga/Kconfig                          |  10 +
+>   drivers/fpga/Makefile                         |   1 +
+>   drivers/fpga/microchip-spi.c                  | 448 ++++++++++++++++++
+>   4 files changed, 503 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+>   create mode 100644 drivers/fpga/microchip-spi.c
+> 

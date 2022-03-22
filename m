@@ -2,57 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6594E3538
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA544E351B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbiCVADE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
+        id S233807AbiCVAEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 20:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233451AbiCVADB (ORCPT
+        with ESMTP id S233451AbiCVAEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 20:03:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA584B410;
-        Mon, 21 Mar 2022 17:00:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CE35B81AD0;
-        Tue, 22 Mar 2022 00:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C5480C340F0;
-        Tue, 22 Mar 2022 00:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647907210;
-        bh=7mbnWhk2gsDvVNZ3Wk1nPfvu+lgkukTfJP6wkI3XKXc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=u3BBCmsiv8fqWpc8tMo4CTu5KuyH2c/dsGx5RFw2cOOkxSdJfaPv9cBjoC9TrjTly
-         6uKmgS6hZldcOZv6cOrHwa2T+Z4yi+cfwiSAfloSeVPfhE+gFpvdD3Cn5zhXgUNx5+
-         F89mFpR0bbHnLW8P9BL7DcGABgZFmCDlP0bM1FLKPZz3uow4/ye7uJiif3MXzKbYSR
-         Zejjf5SPUFXnpE1WHLJLmXu7CENP3k39X5jgoPLkOljrORhDDQJm7CnbQ058Z+SNvA
-         TC+PqIZxIBKoqks7OU1c+4iwG/QVn2giSRLlDUvybrQFYGI4knmKDxkVMvgebwxe1A
-         3wEWL4XOpKlyQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A3349EAC096;
-        Tue, 22 Mar 2022 00:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 21 Mar 2022 20:04:21 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430461ADBC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:01:52 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2e5757b57caso173580747b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ywTufhA3FR1/uGbGs9dVJU1wkRSfjG6XIwDZtPklIYU=;
+        b=sNLMReKM2ItpOQlh0a49eKt4IyTU1NVD0wjxZ50uS3Z/lUS3/RqBwBWbFDtWrAjiHv
+         Yw8lcxv6B7ZgLVnIHIlEaASd1HtIG5IhsXeNrXRLJKQq38nDiwnGgUgUXStG2Z7IYZxQ
+         yOpTdOGwyEoptGU7xuBMDIYiwG6hSwINV06i4wog605QayijGdDbTTKO9XCx2yuDN2l5
+         dzqgXIpxo594MF1bk5mAcsbtFNNCDITBM4qqQ+/z8ZLWIozPi7/dlWuet/OrYb9f55Jq
+         CG5vMSlknY9UvTHDOkL09NhG8awlzh/ePDjqGWZTS343e+NsjUMC4o32n6ciNn+9fBTO
+         YM6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ywTufhA3FR1/uGbGs9dVJU1wkRSfjG6XIwDZtPklIYU=;
+        b=TkmK6pTzUa5mpQeyHWSDCf3Imb248LXYlpE1DCJp8MTZSmAaqMUB0pi/ZosqS3UWnT
+         3TkrLHRTim07I5BsXEbOsHfd1K0dgLg8FjII+Jm6BS8gkllx39Is2LjaMHrxha42ezGB
+         u9cMImYEenbwtnOM/RhytG7ccscYL1QeqoTZW1wSUwuGHhgxvQ6X6MokNdic5aRT6mJI
+         oD+Qs0UNcH9CAIw6JBhhx4Ym3TSIE/qJO05ERAixhWKTctKLhagQ0HIyrqyujt3TLoFw
+         gfXpV5W3rRzstBkGOJm0TPalqPmTpZc+oVdHuBMLS5MqPlzzJP6cuQ3R6OOH8A9BvhFa
+         URAA==
+X-Gm-Message-State: AOAM533ntdFT+Dq40Hh4thtfSlzGStQkRHXXIpthAMWZlxQAVm8Qi767
+        HFcPEtHbKXvL4Ec6sIc6zAPxqJx0j8LRSti7mfrFIA==
+X-Google-Smtp-Source: ABdhPJwQPleOGUzzVS5PuXozRt8Rq46qgetZgQA9Bho/3bRRZMg1eV9Y/vVIhEwWfkqe7AdRn/plzXYfKzJmPTJ6Sro=
+X-Received: by 2002:a81:5706:0:b0:2e5:c451:b257 with SMTP id
+ l6-20020a815706000000b002e5c451b257mr23336409ywb.126.1647907294658; Mon, 21
+ Mar 2022 17:01:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: dsa: mv88e6xxx: Fill in STU support for all
- supported chips
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164790721066.15202.17830576160916908515.git-patchwork-notify@kernel.org>
-Date:   Tue, 22 Mar 2022 00:00:10 +0000
-References: <20220319110345.555270-1-tobias@waldekranz.com>
-In-Reply-To: <20220319110345.555270-1-tobias@waldekranz.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, kabel@kernel.org,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, pabeni@redhat.com, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220317225844.1262643-1-linus.walleij@linaro.org>
+ <20220317225844.1262643-3-linus.walleij@linaro.org> <67600921-a4ea-367e-6b45-c4a1a12ae88b@kernel.org>
+ <Yjd5ZFzTHIl+NAWV@robh.at.kernel.org>
+In-Reply-To: <Yjd5ZFzTHIl+NAWV@robh.at.kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 22 Mar 2022 01:01:23 +0100
+Message-ID: <CACRpkdawW5MHN6vYBJ3R4c_t+7Y5hi5u2XV5AWu5mz3UEQnLJQ@mail.gmail.com>
+Subject: Re: [PATCH 3/5 v2] dt-bindings: gnss: Rewrite sirfstar binding in YAML
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,32 +69,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Sun, Mar 20, 2022 at 7:58 PM Rob Herring <robh@kernel.org> wrote:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+> I fixed up both and applied.
 
-On Sat, 19 Mar 2022 12:03:45 +0100 you wrote:
-> Some chips using the split VTU/STU design will not accept VTU entries
-> who's SID points to an invalid STU entry. Therefore, mark all those
-> chips with either the mv88e6352_g1_stu_* or mv88e6390_g1_stu_* ops as
-> appropriate.
-> 
-> Notably, chips for the Opal Plus (6085/6097) era seem to use a
-> different implementation than those from Agate (6352) and onwards,
-> even though their external interface is the same. The former happily
-> accepts VTU entries referencing invalid STU entries, while the latter
-> does not.
-> 
-> [...]
+Thanks for handling this Rob!
 
-Here is the summary with links:
-  - [net-next] net: dsa: mv88e6xxx: Fill in STU support for all supported chips
-    https://git.kernel.org/netdev/net-next/c/c050f5e91b47
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Yours,
+Linus Walleij

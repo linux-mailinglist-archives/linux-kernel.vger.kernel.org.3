@@ -2,123 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65494E3D1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8729B4E3D1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiCVLCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 07:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
+        id S233844AbiCVLEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 07:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiCVLCr (ORCPT
+        with ESMTP id S231920AbiCVLES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 07:02:47 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B1B5A08E;
-        Tue, 22 Mar 2022 04:01:19 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id g24so22215206lja.7;
-        Tue, 22 Mar 2022 04:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Gkv/Enp/IZmxcfofAOCjTBnszxX0aQMOLZxHcfoa6sI=;
-        b=cjd3KI2i21VdxnTAX1vYFQv6InII+4UIOpRkW0Ttkn25FiUgiZzihokuoLn2u36vWj
-         Q3ZcqOqeG+xvuevBbHaGOQjtlM2kZlqMXQpfmCDp5+BFaBIovgfjJvWYTBm+/abwkyMC
-         sUF1AnOXneFlisQihQI5QzuITbgQNp7MbxSJL4CGsdoiW5ou4V6EYBz7zzaswNhIebRI
-         McrLmmO5VoNznl/5PtHFYtSFS3d99FUJFBMnrbl6JezgidCYPNegRQWJuRtlu+OB+qbp
-         xuqAjvzNLJAB8ow04SzHI9MIY4q6hESh0kWlvf0iPg0fSciu0AY/dbli7YUz3IjbpgnT
-         irdQ==
+        Tue, 22 Mar 2022 07:04:18 -0400
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE08F7EA25;
+        Tue, 22 Mar 2022 04:02:51 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id i186so1014146wma.3;
+        Tue, 22 Mar 2022 04:02:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Gkv/Enp/IZmxcfofAOCjTBnszxX0aQMOLZxHcfoa6sI=;
-        b=cztiYhhxCp8w5D8WupBtdEg0kdEKAFwkIWh2Cl1XOVPMX1Haw+OfD9pf+w1VbW9B1B
-         Bd2U3P65E6DuRU6MuEcjGEYWukqpduuInnhCP3GWUHPHoP0ABEV6Pi+RmDmL9cDymIC5
-         68DDCSsclO4JGOh3s90xRSmOr7/bcgkxpJFCZ7XWZaE7+efAxTnB+7S3Um0VDPoRrDfa
-         IKndoFk2oRW9xtH5kCDmY7nxb0cYN9YibK2SEXQUT4gw461FcP13L9Zrr3qeB9y+2OF+
-         hAXaGy9E/vh4nGHbwuNowZ6Xx1Guq4L82EL7WFFYiMAc8/+Iz/1mBetJU+0+8Hl128Ij
-         Ndjw==
-X-Gm-Message-State: AOAM532kClFxeXPchAvCU11RSIpbRG49oGtakw28RAuOEb3Q2dY3xvfH
-        lWwulOcLsIGz2nfqbaRvW50hoFne9f2Qeg==
-X-Google-Smtp-Source: ABdhPJy17WGcM1t+58Ds/55kZB/UVfagy6H7Awrmygrcjn4ZsnGei+mnwfnnX1ZBL1MjhCeUXHA+MQ==
-X-Received: by 2002:a2e:8847:0:b0:249:7d2f:8a26 with SMTP id z7-20020a2e8847000000b002497d2f8a26mr10192677ljj.493.1647946877458;
-        Tue, 22 Mar 2022 04:01:17 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id 5-20020a2e1445000000b002491768821asm2392781lju.49.2022.03.22.04.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 04:01:16 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20220318131943.hc7z52beztqlzwfq@skbuf>
-References: <86lex9hsg0.fsf@gmail.com> <YjNDgnrYaYfviNTi@lunn.ch>
- <20220317153625.2ld5zgtuhoxbcgvo@skbuf> <86ilscr2a4.fsf@gmail.com>
- <20220317161808.psftauoz5iaecduy@skbuf> <8635jg5xe5.fsf@gmail.com>
- <20220317172013.rhjvknre5w7mfmlo@skbuf> <86tubvk24r.fsf@gmail.com>
- <20220318121400.sdc4guu5m4auwoej@skbuf> <86pmmjieyl.fsf@gmail.com>
- <20220318131943.hc7z52beztqlzwfq@skbuf>
-Date:   Tue, 22 Mar 2022 12:01:13 +0100
-Message-ID: <86a6dixnd2.fsf@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0ggFh2/a0C+1lpqeBh9Syc0UkF8/1nYLPIxegFFB/Pc=;
+        b=Nl4lLAgve5vLxwFa9h3fLEcj0+QusBqopMQFYPNoX4lJ6Hj+kuzCCA6s69RioHkZZp
+         NNRSNk/xYS9CQtrPnVTVyccREfPUZJV0iEERqIun2JEzJbzw21Yxd4utbGMCOBjCP395
+         K/XIJ9lPANtbt/FhTQ/lCghZJ3FIgg+fdkBC3UjJe4c6V4cj7Idv6XnEOjff+zEa4G76
+         OnasOrySRAoMKz2xfdGqiF2RHVObwj96y7P1VpUOvZnlYHlmxmzIbwwIMsozqrreAaj3
+         Y/BqGlcKe1GJVCGJswhyFRRaJ2gtdu/C2DFvQy4mGOPAR6o4/oKyLZA/gxax0xO7PKrM
+         HT/w==
+X-Gm-Message-State: AOAM532U2EqcsLXOOsmguBZaF1dTn8ZYKMb0jm/6jH+anRSX1sMSP2KG
+        J+ATI1qeGhFwsVy5RVEtoyvPUz+mOlU=
+X-Google-Smtp-Source: ABdhPJw/w6GpkGUEvPB4iVhhmwX3JFRg3NQctEYzaWFjx0CTAeswStfrvDCu2n5xlN8IfRxa+3jOiQ==
+X-Received: by 2002:adf:fe8d:0:b0:203:e02e:c6c7 with SMTP id l13-20020adffe8d000000b00203e02ec6c7mr22330036wrr.37.1647946968736;
+        Tue, 22 Mar 2022 04:02:48 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id f7-20020a05600c154700b0038c85aade39sm1747828wmg.47.2022.03.22.04.02.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 04:02:48 -0700 (PDT)
+Message-ID: <0bfa2a53-a45f-3691-f473-0e0848a4d7f0@kernel.org>
+Date:   Tue, 22 Mar 2022 12:02:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v11 4/9] dt-bindings: clock: Add bindings for SP7021 clock
+ driver
+Content-Language: en-US
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
+        linux@armlinux.org.uk, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1647928315.git.qinjian@cqplus1.com>
+ <ff9d9a9124f1535dbfe68171359be964f6f4e4e2.1647928316.git.qinjian@cqplus1.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <ff9d9a9124f1535dbfe68171359be964f6f4e4e2.1647928316.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On fre, mar 18, 2022 at 15:19, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Fri, Mar 18, 2022 at 02:10:26PM +0100, Hans Schultz wrote:
->> In the offloaded case there is no difference between static and dynamic
->> flags, which I see as a general issue. (The resulting ATU entry is static
->> in either case.)
->
-> It _is_ a problem. We had the same problem with the is_local bit.
-> Independently of this series, you can add the dynamic bit to struct
-> switchdev_notifier_fdb_info and make drivers reject it.
->
->> These FDB entries are removed when link goes down (soft or hard). The
->> zero DPV entries that the new code introduces age out after 5 minutes,
->> while the locked flagged FDB entries are removed by link down (thus the
->> FDB and the ATU are not in sync in this case).
->
-> Ok, so don't let them disappear from hardware, refresh them from the
-> driver, since user space and the bridge driver expect that they are
-> still there.
+On 22/03/2022 07:16, Qin Jian wrote:
+> Add documentation to describe Sunplus SP7021 clock driver bindings.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-I have now tested with two extra unmanaged switches (each connected to a
-seperate port on our managed switch, and when migrating from one port to
-another, there is member violations, but as the initial entry ages out,
-a new miss violation occurs and the new port adds the locked entry. In
-this case I only see one locked entry, either on the initial port or
-later on the port the host migrated to (via switch).
+Since you did not implement changes I was asking for, you cannot use my
+review-tag.
 
-If I refresh the ATU entries indefinitly, then this migration will for
-sure not work, and with the member violation suppressed, it will be
-silent about it.
+NAK.
 
-So I don't think it is a good idea to refresh the ATU entries
-indefinitely.
 
-Another issue I see, is that there is a deadlock or similar issue when
-receiving violations and running 'bridge fdb show' (it seemed that
-member violations also caused this, but not sure yet...), as the unit
-freezes, not to return...
+Best regards,
+Krzysztof

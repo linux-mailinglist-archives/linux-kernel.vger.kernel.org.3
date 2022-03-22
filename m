@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9C44E39BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 735924E39BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237647AbiCVHgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 03:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S229693AbiCVHl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 03:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237601AbiCVHff (ORCPT
+        with ESMTP id S229882AbiCVHj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:35:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BDA275C8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:34:01 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nWZ1M-0007uz-8w; Tue, 22 Mar 2022 08:33:36 +0100
-Message-ID: <c946cce8-674a-43d2-1000-b57eba4bc45c@pengutronix.de>
-Date:   Tue, 22 Mar 2022 08:33:34 +0100
+        Tue, 22 Mar 2022 03:39:27 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDAA27B05;
+        Tue, 22 Mar 2022 00:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1647934476;
+        bh=Hs+LekFd6E4SGdt8i1Ad3ZnN5tN6xqp8p83T7REJkQ8=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=XA5MZZ4kQSCE87s3wgnN1UAGqNRezIP2Vg1OHovMqT83iImAh0MhTTVDkq1tKgqr1
+         5AlgRgS30XebDTfhY9TIar5O388PTza26gcDrKcfAFO99cPZE86LYw71KQ0OCV0eqx
+         d8GvppfUALbR6fa7KMRT/Q2/ufmZ3ylwZj8IFZQk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.191.132]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mulm5-1oNhzL23ut-00rrDh; Tue, 22
+ Mar 2022 08:34:36 +0100
+Message-ID: <8ce9d045-c3c9-c839-7b82-9f5ccdae2d52@gmx.de>
+Date:   Tue, 22 Mar 2022 08:34:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v6 4/4] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
+ Thunderbird/91.6.2
+Subject: Re: linux-next: manual merge of the parisc-hd tree with the
+ asm-generic tree
 Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, kernel@pengutronix.de,
-        David Gstir <david@sigma-star.at>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20220316164335.1720255-1-a.fatoum@pengutronix.de>
- <20220316164335.1720255-5-a.fatoum@pengutronix.de> <YjeWSx84ev7u/YAi@iki.fi>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <YjeWSx84ev7u/YAi@iki.fi>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Parisc List <linux-parisc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220228114523.03b2f921@canb.auug.org.au>
+ <20220322110925.7b295e54@canb.auug.org.au>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220322110925.7b295e54@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:e5hbO80bo1ozr4PzUgKbhkXQcCIXaFuDpSIEMhxhGqA/g2UhW9O
+ MIb4dwSCoEZBHoHdlZ8eXZR+rRVHCaOtCi21Mpbj6F1n8XqB3IlO9UjtIpg5nDv9AvtSA4M
+ b/gVyECMaJL8gSEzDdeCIJVYvgLCw2UPHIv5Tj7IxpgcIPzoYk506pLllldzYl9cKY2M45i
+ bzkmknm1UxO/mqiZxOeEQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Kd1MJCl/xh4=:d+hPN41aPGL8S+OXZAiPTL
+ X5JMLqvPw7shoytLMFV+mBxt7QNhU3fOVYTtd71MRfe560TuoNXR4MkyAHE56aaSqyjjBNz35
+ Tf65vglLRUz9gmFYa4bmKwOS+6LbtZTTorOeBPnvKYtyfnU7kLnz/AuJW8tsE5ITZJRvXn467
+ 0sRovYl2XPm0DojucscYhrHoG3MHCaf173ffPr6ORpEVjZrpO5kNp6vOSoX4isix2jIGE5omA
+ 1Q5DahOcOQOOMTQQShe+N7BhM127OLyDhgXgaxpXhldAIf9NKH7Bz8NUPKVtN8umlw/JMkiYk
+ UNC42JCckxEinK3srYEwaqBBnFap3Qb985v5UGdOhXmxrv9j3LrOOmBlUjepkYs0KqJNvcYK/
+ 8xOZAQ4Ij26YQh4eAsvR4iU6WF4iP9FIvz4k3lDRXrK3H+bcQ+WN4rzF194xS3Bn+denpb1ZA
+ NAtE+jXZErV9tPma2hDUfZmXF8hOq/8b+sBekTuG6U2m5aLLbqlYQ+BRD0pMHkpVHUWGymP2c
+ 9383GMnz9Yf+yLgiJQV9ibYizThfJIDmZ2e4/0ovjqUDHOhDE8P8vOVCeABF6+BQHVodqV/fx
+ HcqI/HYp5WDT4wsE8DC5/ssuZUxrGWO0PEcl6slPaI2T7deQDCCsJGWBQDMMe8HPppB2ifLT6
+ HQgTAYWz2q7615JWSGKEGjFC57HDgvlcNt2TRZnzWoarerM/+xYxTD1B5/2RtHCDtMejpKwOP
+ RIVCtAV/71e8XuSR38ZWQbIWapmZNtX3grC8+1O2yzbX19MkpFQTuEdPEZLvt18aTOKMPxg5x
+ AOrpmu0KyaXl4fSu7BiJRKxMheicSwlQlMyzrVBjrgYHB63xA1n8DCJIiICw/2fNbVMOfZfv9
+ j32CLiIyoMoy07ewBrtoQpQ5P5mYfl3Aw7bFLJHgWPYjexTnJ4zgaK0jI2W7IX6SHCCj/XgJU
+ LHeHbMJ8cT4SLYNBBtRHbBKpOnlCeU0OGys6D9e5jAPPFA0RvmhxhV7nrIxeU0CZRqGUZl9uR
+ UVkN+wRYdLRDdUCnit/VXBEIcNdPIUbxtFt9jeeKeV5ldq5xuxLYTmeOVRtVeeVAJYkEaFP/7
+ WcsLfgp3ionQcs=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jarkko,
-
-On 20.03.22 22:02, Jarkko Sakkinen wrote:
-> On Wed, Mar 16, 2022 at 05:43:35PM +0100, Ahmad Fatoum wrote:
->> @@ -192,6 +217,19 @@ Usage::
->>  specific to TEE device implementation.  The key length for new keys is always
->>  in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
->>  
->> +Trusted Keys usage: CAAM
->> +------------------------
->> +
->> +Usage::
->> +
->> +    keyctl add trusted name "new keylen" ring
->> +    keyctl add trusted name "load hex_blob" ring
->> +    keyctl print keyid
->> +
->> +"keyctl print" returns an ASCII hex copy of the sealed key, which is in format
->> +specific to CAAM device implementation.  The key length for new keys is always
->> +in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
->> +
->>  Encrypted Keys usage
->>  --------------------
->>  
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 05fd080b82f3..f13382a14967 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -10647,6 +10647,15 @@ S:	Supported
->>  F:	include/keys/trusted_tee.h
->>  F:	security/keys/trusted-keys/trusted_tee.c
->>  
->> +KEYS-TRUSTED-CAAM
->> +M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
->> +R:	Pengutronix Kernel Team <kernel@pengutronix.de>
->> +L:	linux-integrity@vger.kernel.org
->> +L:	keyrings@vger.kernel.org
->> +S:	Maintained
->> +F:	include/keys/trusted_caam.h
->> +F:	security/keys/trusted-keys/trusted_caam.c
->> +
->>  KEYS/KEYRINGS
->>  M:	David Howells <dhowells@redhat.com>
->>  M:	Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> Documentation and MAINTAINERS updates must be separate patches.
-
-I will do so for v7. Does this patch look otherwise ok to you?
-
-Thanks,
-Ahmad
-
-> 
-> BR, Jarkko
-> 
+On 3/22/22 01:09, Stephen Rothwell wrote:
+> Hi all,
+>
+> On Mon, 28 Feb 2022 11:45:23 +1100 Stephen Rothwell <sfr@canb.auug.org.a=
+u> wrote:
+>>
+>> Today's linux-next merge of the parisc-hd tree got a conflict in:
+>>
+>>   arch/parisc/lib/memcpy.c
+>>
+>> between commit:
+>>
+>>   967747bbc084 ("uaccess: remove CONFIG_SET_FS")
+>>
+>> from the asm-generic tree and commit:
+>>
+>>   d4a767ea8b0e ("parisc: Use constants to encode the space registers li=
+ke SR_KERNEL")
+>>
+>> from the parisc-hd tree.
+>
+> This is now a conflict between the asm-generic tree and commit
+>
+>   360bd6c65807 ("parisc: Use constants to encode the space registers lik=
+e SR_KERNEL")
+>
+> in Linus' tree.
 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Arnd,
+can you please drop the changes in your asm-generic tree for
+arch/parisc/lib/memcpy.c
+They are not needed any more.
+
+Helge
+
+diff --git a/arch/parisc/lib/memcpy.c b/arch/parisc/lib/memcpy.c
+index 468704ce8a1c..ea70a0e08321 100644
+=2D-- a/arch/parisc/lib/memcpy.c
++++ b/arch/parisc/lib/memcpy.c
+@@ -13,7 +13,7 @@
+ #include <linux/compiler.h>
+ #include <linux/uaccess.h>
+
+-#define get_user_space() (mfsp(3))
++#define get_user_space() (uaccess_kernel() ? 0 : mfsp(3))
+
+
+
+

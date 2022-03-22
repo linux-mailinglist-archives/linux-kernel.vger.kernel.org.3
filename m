@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0A24E365A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965BB4E365E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235225AbiCVCA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
+        id S235240AbiCVCBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235214AbiCVCAy (ORCPT
+        with ESMTP id S235214AbiCVCBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:00:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B24555BE62
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647914367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sAk9FMAq7G/qGtP6D8AGvXHRXy5lqx/zoAVECLpUuqk=;
-        b=fbtRjgiVnpY3DmUXRqFYoPXm1gkknSAeMjFUXJ/wLWhZRTbzK8llYVmfYtv9W56hkiyLzI
-        quMCdsfjtMNmesduUKfmxjXnxr/JDOWzS/Qv/8dqxWjIe4rp80il4Ri+pqjnza1F6LNf5o
-        lqImrZMwKEN04wata3zpErZd8lSB8Vk=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-af3s_oDDMdqohT8MWzCzbw-1; Mon, 21 Mar 2022 21:59:26 -0400
-X-MC-Unique: af3s_oDDMdqohT8MWzCzbw-1
-Received: by mail-lj1-f200.google.com with SMTP id q5-20020a2e9145000000b002497bf0eaa1so2791252ljg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:59:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sAk9FMAq7G/qGtP6D8AGvXHRXy5lqx/zoAVECLpUuqk=;
-        b=59kgRDpqCe5OyageOq8JYJSGCzRYKjVtuyIteejs34ytgo+zd5mJ/R8Wt+uqR17eFL
-         v3uj6xS9NPImdvYWILjcGSzEea8BfT3B3dLwP8zqb6QQpJM82KHgsiJh0T4ZEYuA4WJR
-         geTb4lGj0sphAjwENfdMe+vjy3Rfu2uXGNt4ym60EqWt+3MXJ6Q1aMd9p8gehlROjX/h
-         +61MGUVuQgNfEl4gST7RLqVl1sy700PsOrkPhq5MitryDaY5R5DT97OFtS+7W+j0E/A8
-         6PJVeRnv/21BjkUfEJa2tvPP6KRgkKVt3HCSB9eHLuODSmWOzx19QvYSBjdO7cVZSIGV
-         Vy5Q==
-X-Gm-Message-State: AOAM532FFdWMxSore5QSDpBaXAOvAQfNxknSFIYMH2jB+mDgZ3ND0yMV
-        CqUy0cjDwbLL3Wx8Y0H/EfXMpnH6MNiG2TefHm5vB0VG7RK0R4Ji+vU/USopWQtUaunI0huSM6J
-        ZTqujLb10bSzH3f+Bnm2hDZjBU2gKVFlsdz2S6Pig
-X-Received: by 2002:a2e:824e:0:b0:249:7e3d:c862 with SMTP id j14-20020a2e824e000000b002497e3dc862mr8338194ljh.97.1647914365113;
-        Mon, 21 Mar 2022 18:59:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxMrcRoYPcVBF7xK+Ox8ekhMvlc3FPY4gYx4yzyrVWKbXtWn7mI1az1lvn2avR+9/0h4SqQyr0XCODkhTkeqNc=
-X-Received: by 2002:a2e:824e:0:b0:249:7e3d:c862 with SMTP id
- j14-20020a2e824e000000b002497e3dc862mr8338187ljh.97.1647914364929; Mon, 21
- Mar 2022 18:59:24 -0700 (PDT)
+        Mon, 21 Mar 2022 22:01:02 -0400
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5995D66F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:59:34 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id B87CC968636
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:59:33 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id WTo5n4PUz9AGSWTo5n1r6W; Mon, 21 Mar 2022 20:59:33 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=OC5mI0xzkany4H/OFUJcNYXc5p1u5zF7zzUPXqUWxoA=; b=lkA/8SsVZid2UsK0LYYVYGcNv3
+        1xwTaoQ2h6Rg9z2dqXF5t0gnSANlDdCLB41V4XxXcUSDeP/pby85Ww4PiDFz993eMwYqqBn72vM9L
+        v207anZb/rGe38IZPdXklsgMgs7ozkjaUPGecQTZCZqFkV8y+8TRKY0zt7qnYKq2E72xBgvooF+F6
+        8XAR4ARSi9/gnPGLwWQxUXVST2bW3hbT3f/i3Nb0xFIJYK+9zcewULhiyjinV5byKP1Zc1R0K1v7I
+        RbJ6hbo09kgCjFRUlLr1xQM1kKj+vIvJ90yuwZpzlzVi+sCNFp+d5uYi6OuSgc2MMESYw9eTHKLHJ
+        /CKHxNLA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57586 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nWTo4-0025rD-TN; Tue, 22 Mar 2022 01:59:33 +0000
+Date:   Mon, 21 Mar 2022 18:59:31 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/57] 4.19.236-rc1 review
+Message-ID: <20220322015931.GC4126967@roeck-us.net>
+References: <20220321133221.984120927@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220321060429.10457-1-jasowang@redhat.com> <20220321085317.3148-1-hdanton@sina.com>
- <CACGkMEvF80FuU0uD+RZMOrySQ0K2RZVh7Pmn4UhNtz_Exs3c2w@mail.gmail.com>
- <CACGkMEvLqox3QZxpxeQdrjBnM6zRr_wGfddoN45RUSsZEOe=bQ@mail.gmail.com> <20220321123420.3207-1-hdanton@sina.com>
-In-Reply-To: <20220321123420.3207-1-hdanton@sina.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 22 Mar 2022 09:59:14 +0800
-Message-ID: <CACGkMEt-PRCsBQ+EJVGeWGikJfLk-0M1dRPMqnp9YC5R4HYAjQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] vdpa: mlx5: prevent cvq work from hogging CPU
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     mst <mst@redhat.com>, Eli Cohen <elic@nvidia.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321133221.984120927@linuxfoundation.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nWTo4-0025rD-TN
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57586
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 41
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 8:34 PM Hillf Danton <hdanton@sina.com> wrote:
->
-> On Mon, 21 Mar 2022 17:00:09 +0800 Jason Wang wrote:
-> >
-> > Ok, speak too fast.
->
-> Frankly I have fun running faster five days a week.
+On Mon, Mar 21, 2022 at 02:51:41PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.236 release.
+> There are 57 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
+> 
 
-:)
+Build results:
+	total: 156 pass: 156 fail: 0
+Qemu test results:
+	total: 425 pass: 425 fail: 0
 
->
-> > So you meant to add a cond_resched() in the loop?
->
-> Yes, it is one liner.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Yes, there will be no "infinite" loop, but since the loop is triggered
-by userspace. It looks to me it will delay the flush/drain of the
-workqueue forever which is still suboptimal.
-
-Thanks
-
->
-> Hillf
->
-
+Guenter

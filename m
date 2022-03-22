@@ -2,151 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86D04E38DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 07:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B5D4E38C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 07:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiCVGZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 02:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        id S236941AbiCVGUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 02:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237048AbiCVGZf (ORCPT
+        with ESMTP id S236880AbiCVGUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 02:25:35 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 664002E9EC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 23:23:57 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7841:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Tue, 22 Mar 2022 14:16:35 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     krzysztof.kozlowski@canonical.com
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
-        linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v11 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
-Date:   Tue, 22 Mar 2022 14:17:00 +0800
-Message-Id: <8372ee2fcf361a3af7233450c4403178052ceee2.1647928316.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1647928315.git.qinjian@cqplus1.com>
-References: <cover.1647928315.git.qinjian@cqplus1.com>
+        Tue, 22 Mar 2022 02:20:08 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE2AE006;
+        Mon, 21 Mar 2022 23:18:40 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V7uWGT3_1647929912;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V7uWGT3_1647929912)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 22 Mar 2022 14:18:38 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     corentin.chary@gmail.com
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] samsung-laptop: Fix an unsigned subtraction which can never be negative
+Date:   Tue, 22 Mar 2022 14:18:30 +0800
+Message-Id: <20220322061830.105579-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add generic Sunplus SP7021 based board defconfig
+Eliminate the follow smatch warnings:
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+drivers/platform/x86/samsung-laptop.c:1124 kbd_led_set() warn: unsigned
+'value' is never less than zero.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- MAINTAINERS                         |  1 +
- arch/arm/configs/multi_v7_defconfig |  1 +
- arch/arm/configs/sp7021_defconfig   | 61 +++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
- create mode 100644 arch/arm/configs/sp7021_defconfig
+ drivers/platform/x86/samsung-laptop.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 38890c055..93f4de6c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2747,6 +2747,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	arch/arm/configs/sp7021_*defconfig
- F:	arch/arm/mach-sunplus/
- F:	drivers/clk/clk-sp7021.c
- F:	drivers/irqchip/irq-sp7021-intc.c
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 8863fa969..a3bd9dbd8 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -86,6 +86,7 @@ CONFIG_MACH_SPEAR1310=y
- CONFIG_MACH_SPEAR1340=y
- CONFIG_ARCH_STI=y
- CONFIG_ARCH_STM32=y
-+CONFIG_ARCH_SUNPLUS=y
- CONFIG_ARCH_SUNXI=y
- CONFIG_ARCH_TEGRA=y
- CONFIG_ARCH_UNIPHIER=y
-diff --git a/arch/arm/configs/sp7021_defconfig b/arch/arm/configs/sp7021_defconfig
-new file mode 100644
-index 000000000..cda16d33a
---- /dev/null
-+++ b/arch/arm/configs/sp7021_defconfig
-@@ -0,0 +1,61 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+# CONFIG_RD_GZIP is not set
-+# CONFIG_RD_BZIP2 is not set
-+# CONFIG_RD_LZMA is not set
-+# CONFIG_RD_XZ is not set
-+# CONFIG_RD_LZO is not set
-+# CONFIG_RD_LZ4 is not set
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_PERF_EVENTS=y
-+CONFIG_SLAB=y
-+CONFIG_ARCH_SUNPLUS=y
-+# CONFIG_VDSO is not set
-+CONFIG_SMP=y
-+CONFIG_HAVE_ARM_ARCH_TIMER=y
-+CONFIG_THUMB2_KERNEL=y
-+CONFIG_FORCE_MAX_ZONEORDER=12
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_INPUT_SPARSEKMAP=y
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_STAGING=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_RESET_CONTROLLER=y
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_FANOTIFY=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
-+CONFIG_EXFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DYNAMIC_DEBUG=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_DEBUG_USER=y
+diff --git a/drivers/platform/x86/samsung-laptop.c b/drivers/platform/x86/samsung-laptop.c
+index c1d9ed9b7b67..19f6b456234f 100644
+--- a/drivers/platform/x86/samsung-laptop.c
++++ b/drivers/platform/x86/samsung-laptop.c
+@@ -1121,8 +1121,6 @@ static void kbd_led_set(struct led_classdev *led_cdev,
+ 
+ 	if (value > samsung->kbd_led.max_brightness)
+ 		value = samsung->kbd_led.max_brightness;
+-	else if (value < 0)
+-		value = 0;
+ 
+ 	samsung->kbd_led_wk = value;
+ 	queue_work(samsung->led_workqueue, &samsung->kbd_led_work);
 -- 
-2.33.1
+2.20.1.7.g153144c
 

@@ -2,121 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3864E3BB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 196F84E3BC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbiCVJ1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 05:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S232582AbiCVJea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 05:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiCVJ1T (ORCPT
+        with ESMTP id S230029AbiCVJe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 05:27:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86ABA5F26D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:25:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C17F0106F;
-        Tue, 22 Mar 2022 02:25:51 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 875863F66F;
-        Tue, 22 Mar 2022 02:25:50 -0700 (PDT)
-Message-ID: <b26b231e-c210-2c7c-8d60-c7e77d688191@arm.com>
-Date:   Tue, 22 Mar 2022 10:25:45 +0100
+        Tue, 22 Mar 2022 05:34:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7DB05E772
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647941577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BKy1pLQQjXRDKusWXgTNYmpYZevqtGteKrlHtGJM80o=;
+        b=eYxz81IyTkL5Fp4CeIa37pNF/cR02TU2lGmxraWil0s3LJWE1YRcY3XbBgmz12sfWImk+L
+        oU36QsffXo6L/UCU+Mz7d1FEIy9UOcK638A42kR5BSjHg4HqdxJ2y8AKo8G+oBA1qawGbC
+        8FTlCMBFcKrgpUOVM1P+/i/GcWmkqpw=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-466-PhZNJgN0Mym_xxYvvPa8mQ-1; Tue, 22 Mar 2022 05:32:56 -0400
+X-MC-Unique: PhZNJgN0Mym_xxYvvPa8mQ-1
+Received: by mail-qv1-f70.google.com with SMTP id x16-20020a0ce250000000b00432ec6eaf85so13297701qvl.15
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:32:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=BKy1pLQQjXRDKusWXgTNYmpYZevqtGteKrlHtGJM80o=;
+        b=2O7PAme5JMiqM5H7pcHHeHTden+R0Va38GEiLRAWcNbNmJxnJOyXbuE/N+6fj9/Rrq
+         SQfbHa40MfaY/F9jRH0jcHrPg8lAWgdgy50DbqVjuvx4uLE/fcUdsJ6qZpygASesZBlf
+         BqWJ0uPLoot7MKBe2q+cl/yz2xvWAQC3MECBA3/nrmzxs5XfFJM/jriLdXEYxdyImi/G
+         jJ+i5k5PxdKg7MkVQZIStqFkK/S7OMhJdwav6vmGb88IjLvSRFJYdcPlaQq75Kil39bB
+         OecMkQAuROcUcpyTEkUySzeQYd+4p/6FzFYn1Hc7EocPX5kS/9DDH9P2+KLCKXgvjAZ/
+         aT+Q==
+X-Gm-Message-State: AOAM532tJtGY/W5wnoJMjhBCpw04CeY2OipA8n7pCPVuTSar+OhR1yTQ
+        WT9Ht2PsAnFTIJvbLyoYIZjmk8Zt3PaAnFoAJcUabLaBAliJn5SSyYJXA4w42XsqCx+shxGWLY3
+        wHrnGZvMyNVj1Tkl7t8BEs0bj
+X-Received: by 2002:a05:620a:24d3:b0:67d:1e2c:7a90 with SMTP id m19-20020a05620a24d300b0067d1e2c7a90mr14843448qkn.12.1647941576181;
+        Tue, 22 Mar 2022 02:32:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzC0nq374AV74jYWo7nKv1tW4SGQEsSlf6rWi1tdBYu16iKC3eEb41G1RI3d2/kGcM55rD4qw==
+X-Received: by 2002:a05:620a:24d3:b0:67d:1e2c:7a90 with SMTP id m19-20020a05620a24d300b0067d1e2c7a90mr14843437qkn.12.1647941575929;
+        Tue, 22 Mar 2022 02:32:55 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-232-135.dyn.eolo.it. [146.241.232.135])
+        by smtp.gmail.com with ESMTPSA id c10-20020ac87dca000000b002e1db1b7b10sm13540695qte.25.2022.03.22.02.32.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 02:32:55 -0700 (PDT)
+Message-ID: <4eb1bcc28e00aeedfe767d3b6afcb864bcdb03b4.camel@redhat.com>
+Subject: Re: [PATCH v2] myri10ge: remove an unneeded NULL check
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, christopher.lee@cspi.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jakobkoschel@gmail.com
+Date:   Tue, 22 Mar 2022 10:32:52 +0100
+In-Reply-To: <20220320044457.13734-1-xiam0nd.tong@gmail.com>
+References: <20220320044457.13734-1-xiam0nd.tong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH v3 6/7] sched/fair: Remove task_util from effective
- utilization in feec()
-To:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, morten.rasmussen@arm.com,
-        chris.redpath@arm.com, qperret@google.com
-References: <20220308181957.280354-1-vincent.donnefort@arm.com>
- <20220308181957.280354-7-vincent.donnefort@arm.com>
-Content-Language: en-US
-In-Reply-To: <20220308181957.280354-7-vincent.donnefort@arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 19:19, Vincent Donnefort wrote:
+Hello,
 
-[...]
+On Sun, 2022-03-20 at 12:44 +0800, Xiaomeng Tong wrote:
+> The define of skb_list_walk_safe(first, skb, next_skb) is:
+>   for ((skb) = (first), (next_skb) = (skb) ? (skb)->next : NULL; (skb);  \
+>      (skb) = (next_skb), (next_skb) = (skb) ? (skb)->next : NULL)
+> 
+> Thus, if the 'segs' passed as 'first' into the skb_list_walk_safe is NULL,
+> the loop will exit immediately. In other words, it can be sure the 'segs'
+> is non-NULL when we run inside the loop. So just remove the unnecessary
+> NULL check. Also remove the unneeded assignmnets.
+> 
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+This is pure net-next material, and we are now into the merge window -
+only fixes allowed. Please repost in 2w, thanks!
 
-LGTM, just a couple of small remarks.
+Paolo
 
-[...]
-
-> @@ -6681,9 +6735,11 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  	unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
->  	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
-
-s/cpu_rq(smp_processor_id())/this_rq()
-
-Maybe you can clean this up with this patch?
-
->  	int cpu, best_energy_cpu = prev_cpu, target = -1;
-> -	unsigned long cpu_cap, util, base_energy = 0;
-> +	unsigned long cpu_cap, cpu_thermal_cap, util;
-
-cpu_cap, cpu_thermal_cap and util can be defined inside the
-`for (; pd; pd = pd->next)` scope below.
-
-[...]
-
-> @@ -6706,6 +6762,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  	if (!task_util_est(p))
->  		goto unlock;
->  
-> +	eenv_task_busy_time(&eenv, p, prev_cpu);
-> +
->  	for (; pd; pd = pd->next) {
->  		unsigned long cur_delta, spare_cap, max_spare_cap = 0;
-
-cpu_cap and spare_cap could be combined into one to save on local
-variables. E.g. cpu_cap
-
-@@ -6908,8 +6908,6 @@ static int find_energy_efficient_cpu(struct
-task_struct *p, int prev_cpu)
-                         util = cpu_util_next(cpu, p, cpu);
-                        cpu_cap = capacity_of(cpu);
--                       spare_cap = cpu_cap;
--                       lsub_positive(&spare_cap, util);
-                         /*
-                         * Skip CPUs that cannot satisfy the capacity
-request.
-@@ -6922,15 +6920,14 @@ static int find_energy_efficient_cpu(struct
-task_struct *p, int prev_cpu)
-                        if (!fits_capacity(util, cpu_cap))
-                                continue;
- +                       lsub_positive(&cpu_cap, util);
-+
-                        if (cpu == prev_cpu) {
-                                /* Always use prev_cpu as a candidate. */
-                                compute_prev_delta = true;
--                       } else if (spare_cap > max_spare_cap) {
--                               /*
--                                * Find the CPU with the maximum spare
-capacity
--                                * in the performance domain.
--                                */
--                               max_spare_cap = spare_cap;
-+                       } else if (cpu_cap > max_spare_cap) {
-+                                /* Find CPU with max spare capacity in
-PD. */
-+                               max_spare_cap = cpu_cap;
-                                max_spare_cap_cpu = cpu;
-                        }
-
-[...]

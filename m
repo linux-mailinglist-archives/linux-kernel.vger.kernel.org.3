@@ -2,167 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8F24E3CBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CCC4E3CB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbiCVKpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S233315AbiCVKox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 06:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbiCVKpK (ORCPT
+        with ESMTP id S233331AbiCVKom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:45:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77F668166C;
-        Tue, 22 Mar 2022 03:43:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D95A1106F;
-        Tue, 22 Mar 2022 03:43:29 -0700 (PDT)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A4C63F66F;
-        Tue, 22 Mar 2022 03:43:28 -0700 (PDT)
-Message-ID: <e890feb0-9f90-c0f2-e5f0-10ed5dbe6d81@arm.com>
-Date:   Tue, 22 Mar 2022 10:43:26 +0000
+        Tue, 22 Mar 2022 06:44:42 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A650780211
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:43:13 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KN7Jg72fqz4wBF;
+        Tue, 22 Mar 2022 18:39:15 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Mar
+ 2022 18:43:10 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <mhocko@suse.com>
+CC:     <kosaki.motohiro@jp.fujitsu.com>, <mgorman@suse.de>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH v3] mm/mempolicy: fix mpol_new leak in shared_policy_replace
+Date:   Tue, 22 Mar 2022 18:43:45 +0800
+Message-ID: <20220322104345.36379-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 00/10] coresight: Add new API to allocate trace source ID
- values
-Content-Language: en-US
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, James Clark <james.clark@arm.com>
-References: <20220308205000.27646-1-mike.leach@linaro.org>
-From:   Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220308205000.27646-1-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Cc: James Clark
+If mpol_new is allocated but not used in restart loop, mpol_new will be
+freed via mpol_put before returning to the caller.  But refcnt is not
+initialized yet, so mpol_put could not do the right things and might leak
+the unused mpol_new. This would happen if mempolicy was updated on the
+shared shmem file while the sp->lock has been dropped during the memory
+allocation.
 
-Hi Mike,
+This issue could be triggered easily with the below code snippet if there
+are many processes doing the below work at the same time:
 
-On 08/03/2022 20:49, Mike Leach wrote:
-> The current method for allocating trace source ID values to sources is
-> to use a fixed algorithm for CPU based sources of (cpu_num * 2 + 0x10).
-> The STM is allocated ID 0x1.
-> 
-> This fixed algorithm is used in both the CoreSight driver code, and by
-> perf when writing the trace metadata in the AUXTRACE_INFO record.
-> 
-> The method needs replacing as currently:-
-> 1. It is inefficient in using available IDs.
-> 2. Does not scale to larger systems with many cores and the algorithm
-> has no limits so will generate invalid trace IDs for cpu number > 44.
+  shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
+  shm = shmat(shmid, 0, 0);
+  loop many times {
+    mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
+    mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask,
+          maxnode, 0);
+  }
 
-Thanks for addressing this issue.
+Fixes: 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Cc: <stable@vger.kernel.org> # 3.8
+---
+v2->v3:
+  enhance commit log and collect Acked-by tag per Michal Hocko. Thanks!
+v1->v2:
+  Add reproducer snippet and Cc stable.
+  Thanks Michal Hocko for review and comment!
+---
+ mm/mempolicy.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Additionally requirements to allocate additional system IDs on some
-> systems have been seen.
-> 
-> This patch set  introduces an API that allows the allocation of trace IDs
-> in a dynamic manner.
-> 
-> Architecturally reserved IDs are never allocated, and the system is
-> limited to allocating only valid IDs.
-> 
-> Each of the current trace sources ETM3.x, ETM4.x and STM is updated to use
-> the new API.
-> 
-> perf handling is changed so that the ID associated with the CPU is read
-> from sysfs. The ID allocator is notified when perf events start and stop
-> so CPU based IDs are kept constant throughout any perf session.
-> 
-> For the ETMx.x devices IDs are allocated on certain events
-> a) When using sysfs, an ID will be allocated on hardware enable, and freed
-> when the sysfs reset is written.
-> b) When using perf, ID is allocated on hardware enable, and freed on
-> hardware disable.
-> 
-> For both cases the ID is allocated when sysfs is read to get the current
-> trace ID. This ensures that consistent decode metadata can be extracted
-> from the system where this read occurs before device enable.
-
-
-> 
-> Note: This patchset breaks backward compatibility for perf record.
-> Because the method for generating the AUXTRACE_INFO meta data has
-> changed, using an older perf record will result in metadata that
-> does not match the trace IDs used in the recorded trace data.
-> This mismatch will cause subsequent decode to fail. Older versions of
-> perf will still be able to decode data generated by the updated system.
-
-I have some concerns over this and the future plans for the dynamic
-allocation per sink. i.e., we are breaking/modifying the perf now to
-accommodate the dynamic nature of the trace id of a given CPU/ETM.
-The proposed approach of exposing this via sysfs may (am not sure if
-this would be the case) break for the trace-id per sink change, as a
-sink could assign different trace-id for a CPU depending.
-
-So, instead if we make the trace-id available in the perf (say, an new
-record format, PERF_RECORD_CS_ETM_TRACEID ?) record, we can rely on the
-new packet for the trace-id, irrespective of how that is allocated and
-remove the locking/linking of the trace-id with that of the sysfs. This
-is not something that exists today. (Ideally it would have been nice to
-have some additional fields in RECORD_AUXINFO, but we don't. Instead of
-breaking/extending that, we could add a new RECORD).
-
-I believe the packet may need to be generated only once for a session
-and that will also allow the flexibility of moving trace-id allocation
-around (to a sink in the future).
-
-Thoughts ?
-
-Kind regards
-Suzuki
-
-
-> 
-> 
-> Applies to coresight/next [b54f53bc11a5]
-> Tested on DB410c
-> 
-> Mike Leach (10):
->    coresight: trace-id: Add API to dynamically assign trace ID values
->    coresight: trace-id: Set up source trace ID map for system
->    coresight: stm: Update STM driver to use Trace ID api
->    coresight: etm4x: Use trace ID API to dynamically allocate trace ID
->    coresight: etm3x: Use trace ID API to allocate IDs
->    coresight: perf: traceid: Add perf notifiers for trace ID
->    perf: cs-etm: Update event to read trace ID from sysfs
->    coresight: Remove legacy Trace ID allocation mechanism
->    coresight: etmX.X: stm: Remove unused legacy source trace ID ops
->    coresight: trace-id: Add debug & test macros to trace id allocation
-> 
->   drivers/hwtracing/coresight/Makefile          |   2 +-
->   drivers/hwtracing/coresight/coresight-core.c  |  64 ++---
->   .../hwtracing/coresight/coresight-etm-perf.c  |  16 +-
->   drivers/hwtracing/coresight/coresight-etm.h   |   3 +-
->   .../coresight/coresight-etm3x-core.c          |  93 ++++---
->   .../coresight/coresight-etm3x-sysfs.c         |  28 +-
->   .../coresight/coresight-etm4x-core.c          |  63 ++++-
->   .../coresight/coresight-etm4x-sysfs.c         |  32 ++-
->   drivers/hwtracing/coresight/coresight-etm4x.h |   3 +
->   drivers/hwtracing/coresight/coresight-priv.h  |   1 +
->   drivers/hwtracing/coresight/coresight-stm.c   |  49 +---
->   .../hwtracing/coresight/coresight-trace-id.c  | 255 ++++++++++++++++++
->   .../hwtracing/coresight/coresight-trace-id.h  |  69 +++++
->   include/linux/coresight-pmu.h                 |  12 -
->   include/linux/coresight.h                     |   3 -
->   tools/perf/arch/arm/util/cs-etm.c             |  12 +-
->   16 files changed, 530 insertions(+), 175 deletions(-)
->   create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
->   create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
-> 
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index a2516d31db6c..4cdd425b2752 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -2733,6 +2733,7 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
+ 	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+ 	if (!mpol_new)
+ 		goto err_out;
++	refcount_set(&mpol_new->refcnt, 1);
+ 	goto restart;
+ }
+ 
+-- 
+2.23.0
 

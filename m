@@ -2,227 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BAA4E4947
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBC64E4948
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbiCVWow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 18:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        id S238345AbiCVWo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 18:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238229AbiCVWos (ORCPT
+        with ESMTP id S238183AbiCVWov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 18:44:48 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA045DA00
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:43:19 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id n16so13450724ile.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=drm0r/PTZ7ubOkgkGBi9eLSIu5ArVOIUaQXVPgE87AY=;
-        b=XknlLv7TdmebHzy9yFDqqH0piVqt3T3ZXQ+HPYmQbGlDH4YwRxIoDgeDp0ZoZW3F72
-         YFfzaMZ9DUIB32yaljw94bnXkHvQ89n8Em/xm/HJHhmPcB6QHF752z5i7+a/86fLpa9j
-         xu4bKVJIwrkmosNPbwdjYsDLJBNTt9gCwhGZ4Uw2iBYPzWiYIWznX5ghaMzTWk9EvFXp
-         607ye0H4LYZufAOnNPq6FQCYWNaSX4y2Cn0xIFC2Fv0gO8rnXYrKRtFP9x3vxSpZkc2P
-         eKSfFlv1qXK4ryO5H+UTdsCtZm+eHJboUH8Y5YD/DCvGy5ktb52nGZN68P/8plGv2VFW
-         RgSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=drm0r/PTZ7ubOkgkGBi9eLSIu5ArVOIUaQXVPgE87AY=;
-        b=hGZUo1gGjnoCxb1gyDAv+/uuh94zzQStIRLFID9qAdyMULE4EZ5+Qzb1ZZN5IO9xb0
-         3IMcFYgBpcHZlKuzYXOVYLSi0F6D/hP8ODlVhRa9L3rxb3gUopCCyqrFhVd0t1E0X1La
-         Fv6Z5yX7MyawFWRlPSTY/MqVVixwCB1q+uqftHzDSUuFVoAxIzvz6bJyluKIxd1jZYiv
-         TJAqreNTG/Qr77LRwHGN17XrQ5d+AFyEWoXMfyFeJXJG3O/NSOo9PBauiXXz/euNY/kM
-         nisFV6BhWIwuavuuDF/0Doitju9sOdYcBI1RmiR52FQoLmsLqrAlnt2gc1hc650kZw1i
-         GqCg==
-X-Gm-Message-State: AOAM532RhsfkIopVm34XRwAVTariHRXMJl1ys2GhB1nLziD9hm6p1IoN
-        wmzkKK8RbimEGUrsB9Hkz9SMTA==
-X-Google-Smtp-Source: ABdhPJysB8brbkgeKvnoTeVG/g7dtRmXqNObqCO/2NcRFKLsIAwo4kytaJ78kIO09+y2li+AsEYP6g==
-X-Received: by 2002:a05:6e02:164b:b0:2c7:f5b9:214e with SMTP id v11-20020a056e02164b00b002c7f5b9214emr11160945ilu.188.1647988998589;
-        Tue, 22 Mar 2022 15:43:18 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id w5-20020a056e021c8500b002c7f39eba1bsm9085186ill.82.2022.03.22.15.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 15:43:17 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 22:43:14 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-Subject: Re: [PATCH v5 02/22] KVM: arm64: Add SDEI virtualization
- infrastructure
-Message-ID: <YjpRArSezR3gVv2K@google.com>
-References: <20220322080710.51727-1-gshan@redhat.com>
- <20220322080710.51727-3-gshan@redhat.com>
+        Tue, 22 Mar 2022 18:44:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD775DA49
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:43:21 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647988999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JiesVq6IcwsewSPf9oFwMhZoa9eRiQyNKVJThYCN4hI=;
+        b=CJIAzv0++gPb36W7qLRpMDIny0u5hh8WDg2Y7SU9wpCh0cZy6KSfrVMoAyGrH9T9IVzUxC
+        eI4j9SKs6E827vjQFbCYGMRjPMjCEPso8DiT7x9eVoge/w6jsS+QzAO8eCJ7eobVsjD4/B
+        NrFntu1RhWfUv1urKIsZwezuuQ5qDVBv73wnPi92qRPzpz60q7zfsnVFMsAp3ST/G51N3N
+        6BUZ8rIxYa428h77Ok+3ok8hKGOWBq07fcFx9LPddfUWW2e7UmUnT3irngAFJy+Q5CLUXN
+        sxRZMFtEJD6yFrjSFrrduuWylC9RkzKy75ulwfM6zAvRbt5S0fIxY0DIMZklGQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647988999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JiesVq6IcwsewSPf9oFwMhZoa9eRiQyNKVJThYCN4hI=;
+        b=2KyBMKpTYljwZYQ6Uqv4VriNPsf6SZJpUuzeo+CkWIrMqzkS5aDbQrjyQIqQPwh7yygnV3
+        jJmJE6+xdGEPKCBQ==
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>,
+        "Herton R . Krzesinski" <herton@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andre Almeida <andrealmeid@collabora.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit
+ and the oom_reaper
+In-Reply-To: <Yjn7FXoXtgGT977T@dhcp22.suse.cz>
+References: <20220318033621.626006-1-npache@redhat.com>
+ <Yjg9ncgep58gFLiN@dhcp22.suse.cz>
+ <20220322004231.rwmnbjpq4ms6fnbi@offworld>
+ <c8bb0b6d-981c-8591-d5b6-17414c934758@redhat.com>
+ <20220322025724.j3japdo5qocwgchz@offworld>
+ <YjmITBkkwsa2O4bg@dhcp22.suse.cz> <87bkxyaufi.ffs@tglx>
+ <Yjn7FXoXtgGT977T@dhcp22.suse.cz>
+Date:   Tue, 22 Mar 2022 23:43:18 +0100
+Message-ID: <87zglha9rt.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322080710.51727-3-gshan@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gavin,
+Michal,
 
-On Tue, Mar 22, 2022 at 04:06:50PM +0800, Gavin Shan wrote:
-> Software Delegated Exception Interface (SDEI) provides a mechanism for
-> registering and servicing system events. Those system events are high
-> priority events, which must be serviced immediately. It's going to be
-> used by Asynchronous Page Fault (APF) to deliver notification from KVM
-> to guest. It's noted that SDEI is defined by ARM DEN0054C specification.
-
-I'm guessing that you're using linked lists for stitching all of this
-together because the specification provides for 24 bits of event
-encoding. However, it seems that there will be a finite number of events
-in KVM. So the APF stuff and a software signaled event.
-
-Given that the number of events in KVM is rather small, would it make
-more sense to do away with the overhead of linked lists and having the
-state just represented in a static or allocated array? I think you can
-cram all of the VM scoped event state into a single structure and hang
-the implementation off of that.
-
-> This introduces SDEI virtualization infrastructure where the SDEI events
-> are registered and manipulated by the guest through hypercall. The SDEI
-> event is delivered to one specific vCPU by KVM once it's raised. This
-> introduces data structures to represent the needed objects to support
-> the feature, which is highlighted as below. As those objects could be
-> migrated between VMs, these data structures are partially exposed to
-> user space.
-> 
->    * kvm_sdei_exposed_event
->      The exposed events are determined and added by VMM through ioctl
->      interface. Only the exposed events can be registered from the
->      guest.
-> 
->    * kvm_sdei_registered_event
->      The events that have been registered from the guest through the
->      SDEI_1_0_FN_SDEI_EVENT_REGISTER hypercall.
-> 
->    * kvm_sdei_vcpu_event
->      The events that have been delivered to the target vCPU.
-> 
->    * kvm_sdei_vcpu
->      Used to save the preempted context when the SDEI event is serviced
->      and delivered. After the SDEI event handling is completed, the
->      execution is resumed from the preempted context.
-> 
->    * kvm_sdei_kvm
->      Place holder for the exposed and registered events.
-
-It might be a good idea to expand these a bit and move them into
-comments on each of the structures.
-
-> The error of SDEI_NOT_SUPPORTED is returned for all SDEI hypercalls for
-> now. They will be supported in the subsequent patches.
-> 
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->  arch/arm64/include/asm/kvm_host.h            |   3 +
->  arch/arm64/include/asm/kvm_sdei.h            | 171 +++++++++++++
->  arch/arm64/include/uapi/asm/kvm.h            |   1 +
->  arch/arm64/include/uapi/asm/kvm_sdei_state.h |  72 ++++++
->  arch/arm64/kvm/Makefile                      |   2 +-
->  arch/arm64/kvm/arm.c                         |   8 +
->  arch/arm64/kvm/hypercalls.c                  |  21 ++
->  arch/arm64/kvm/sdei.c                        | 244 +++++++++++++++++++
->  include/uapi/linux/arm_sdei.h                |   2 +
->  9 files changed, 523 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm64/include/asm/kvm_sdei.h
->  create mode 100644 arch/arm64/include/uapi/asm/kvm_sdei_state.h
->  create mode 100644 arch/arm64/kvm/sdei.c
-> 
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 031e3a2537fc..5d37e046a458 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -113,6 +113,8 @@ struct kvm_arch {
->  	/* Interrupt controller */
->  	struct vgic_dist	vgic;
->  
-> +	struct kvm_sdei_kvm *sdei;
-> +
-
-nit: avoid repeating 'kvm'. struct kvm_sdei should be descriptive enough
-:)
-
->  	/* Mandated version of PSCI */
->  	u32 psci_version;
->  
-> @@ -338,6 +340,7 @@ struct kvm_vcpu_arch {
->  	 * Anything that is not used directly from assembly code goes
->  	 * here.
->  	 */
-> +	struct kvm_sdei_vcpu *sdei;
+On Tue, Mar 22 2022 at 17:36, Michal Hocko wrote:
+> On Tue 22-03-22 16:17:05, Thomas Gleixner wrote:
+>> The task::robust_list pointer is set unconditionally by NPTL for every
+>> thread of a process. It points to the 'list head' which is in the
+>> TLS. But this does not tell whether the task holds a robust futex or
+>> not. That's evaluated in the futex exit handling code.
+>> 
+>> So solution #1 will prevent oom reaping completely simply because the
+>> pointer is set on every user space task.
 >
+> This is really what I was worried about.
+>
+>> Solutions #2 and #3 are incomplete and just awful hacks which cure one
+>> particular case: A single threaded process. Why?
+>> 
+>> The chosen oom reaper victim is a process, so what does it help to check
+>> or cleanup the robust list for _ONE_ thread? Nothing because the other
+>> threads can hold robust futexes and then run into the same problem.
+>> 
+>> Aside of that you seem to believe that the robust list head in the TLS
+>> is the only part which is relevant. That's wrong. The list head is
+>> either NULL or points to the innermost pthread_mutex which is held by a
+>> task. Now look at this example:
+>> 
+>>   TLS:robust_list -> mutex2 -> mutex1
+>> 
+>> mutex1 is the shared one which needs to be released so that other
+>> processes can make progress. mutex2 is a process private one which
+>> resides in a different VMA. So now if you filter the robust list and
+>> refuse to reap the TLS VMA, what prevents the other VMA from being
+>> reaped? If that's reaped then mutex1 is not reachable.
+>> 
+>> Now vs. cleaning up the robust list from the oom reaper context. That
+>> should be doable with a lot of care, but the proposed patch is not even
+>> close to a solution. It's simply broken.
+>
+> My knowledge about robust futexes and how they are implemented is close
+> to zero. My thinking has been that the primary reason for the lockup
+> reported initially is that the oom_reaper will corrupt the memory which
+> is backing the list of locks to be woken up. So if we rule out the
+> oom_reaper for that memory then the exit path can do its proper cleanup.
+> Is that assumption completely off?
 
-nit: put your scoping tokens at the beginning of a symbol name, so
-'struct kvm_vcpu_sdei'.
+All the kernel knows is which VMA contains a robust list head. But it
+does not know where the actual futexes/mutexes reside which might be
+held by a task. Here is the lock chain example again:
 
-[...]
+      TLS:robust_list -> mutex2 -> mutex1
+VMA   Known              Unknown   Shared
 
-> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> index 202b8c455724..3c20fee72bb4 100644
-> --- a/arch/arm64/kvm/hypercalls.c
-> +++ b/arch/arm64/kvm/hypercalls.c
-> @@ -5,6 +5,7 @@
->  #include <linux/kvm_host.h>
->  
->  #include <asm/kvm_emulate.h>
-> +#include <asm/kvm_sdei.h>
->  
->  #include <kvm/arm_hypercalls.h>
->  #include <kvm/arm_psci.h>
-> @@ -151,6 +152,26 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
->  	case ARM_SMCCC_TRNG_RND32:
->  	case ARM_SMCCC_TRNG_RND64:
->  		return kvm_trng_call(vcpu);
-> +	case SDEI_1_0_FN_SDEI_VERSION:
-> +	case SDEI_1_0_FN_SDEI_EVENT_REGISTER:
-> +	case SDEI_1_0_FN_SDEI_EVENT_ENABLE:
-> +	case SDEI_1_0_FN_SDEI_EVENT_DISABLE:
-> +	case SDEI_1_0_FN_SDEI_EVENT_CONTEXT:
-> +	case SDEI_1_0_FN_SDEI_EVENT_COMPLETE:
-> +	case SDEI_1_0_FN_SDEI_EVENT_COMPLETE_AND_RESUME:
-> +	case SDEI_1_0_FN_SDEI_EVENT_UNREGISTER:
-> +	case SDEI_1_0_FN_SDEI_EVENT_STATUS:
-> +	case SDEI_1_0_FN_SDEI_EVENT_GET_INFO:
-> +	case SDEI_1_0_FN_SDEI_EVENT_ROUTING_SET:
-> +	case SDEI_1_0_FN_SDEI_PE_MASK:
-> +	case SDEI_1_0_FN_SDEI_PE_UNMASK:
-> +	case SDEI_1_0_FN_SDEI_INTERRUPT_BIND:
-> +	case SDEI_1_0_FN_SDEI_INTERRUPT_RELEASE:
-> +	case SDEI_1_1_FN_SDEI_EVENT_SIGNAL:
-> +	case SDEI_1_0_FN_SDEI_PRIVATE_RESET:
-> +	case SDEI_1_0_FN_SDEI_SHARED_RESET:
-> +	case SDEI_1_1_FN_SDEI_FEATURES:
+So if TLS and mutex2 sit in two different VMAs and the mutex2 VMA gets
+reaped then mutex1 cannot be reached anymore, which in consequence means
+that it cannot be cleaned up.
 
-Consider only adding switch statements for hypercalls when they're
-actually implemented.
+> I cannot really comment on the futex specific parts of your response but
+> the deadlock on the mmap_lock has been already pointed out, thanks for
+> confirming that.
 
-Additionally, while this isn't directly related to your patch, I do have
-a gripe about kvm_hvc_call_handler(). It is really ugly that we
-enumerate the specific hypercalls we support, and otherwise fall through
-to PSCI.
+It just occured to me that doing the cleanup from a kernel thread is
+completely broken vs. PI futexes, which are also cleaned up by
+futex_cleanup().
 
-IMO, a cleaner approach would be to have kvm_hvc_call_handler() simply
-route a particular service range/service owner to the appropriate
-handler. We can then terminate individual hypercalls in those handlers,
-avoiding a catch-all switch such as this one is currently.
+The PI exit cleanup code _cannot_ be handled by a foreign task at
+all. It will nicely explode in the rtmutex code when it tries to release
+the kernel side rtmutex which represents the held and contended user
+space futex.
 
---
+Cleaning up futexes from a kthread is not going to work at least not
+without creating yet another pile of horrible hacks in the futex and
+rtmutex code. We have enough of them already, so no.
+
+Just for the case that someone thinks we make that a special case for
+non-PI futexes: No, that's not going to happen.
+
+> [...]
+>
+>> But the real questions here are:
+>> 
+>>    Why are we doing this remote reaping at all?
+>
+> Does aac453635549 ("mm, oom: introduce oom reaper") help? In short this
+> is to guarantee that the system is able to make a forward progress under
+> OOM. Sending SIGKILL to the oom victim is not sufficient, really. Tasks
+> can be blocked inside kernel for indefinite amount of time. E.g. being
+> blocked waiting on memory transitively over locks. Reclaiming the
+> anonymous memory from the killed process will allow to free up some
+> memory while the oom victim is blocked and allow to move forward and
+> eventually die and do the proper cleanup. We are focusing on the
+> anonymous memory because under assumption that such a memory is private
+> to the process and the process is dead so the a freed memory is not
+> really visible any more.
+
+Which is correct. But then you have to bite the bullet and accept that
+the futexes cannot be recovered.
+
+>>    What is the condition that a task which is killed with a fatal signal
+>>    does not reach do_exit() and cleans up itself?
+>> 
+>> If the answer is "because", then we should rather make sure that this
+>> gets fixed.
+>
+> While some places can be handled by changing uninterruptible waiting to
+> killable there are places which are not really fixable, e.g. lock
+> chain dependency which leads to memory allocation.
+
+I'm not following. Which lock chain dependency causes memory allocation?
+
+Also aren't oom killed tasks allowed to allocate from emergency buffers
+in order to clean themself up? That's at least what the comments in the
+oom code claim.
+
+Aside of that. Do you have call chains which show in which situation
+such a stuck task is?
+
+>> If there is a legitimate reason why a task cannot handle a fatal signal,
+>> then yes the oom reaper might be necessary, but unleashing the oom
+>> reaper unconditionally is simply a bad idea and results in the problem
+>> which this is trying to paper over.
+>> 
+>> The oom reaper should be the last resort IMO and not racing against the
+>> killed task in the first place. IOW, give the task some time to clean
+>> itself up and if that fails and it is truly stuck and unable to do so,
+>> then reap the mm. But that should be the rare case and then the stuck
+>> futex should be the least of our worries.
+>
+> Yes, the oom_reaper is the last resort indeed. It is true that it can
+> fire later but I do not see how this would solve this particular
+> problem.
+
+Well, it at least solves the problem which is described in the
+changelog. Because that problem clearly is a race between the woken up
+oom reaper and the task which killed itself in #PF due to OOM.
+
+Of course it won't solve the problem of tasks which are stuck forever.
+
+But right now the oom reaper thread is immediately woken after sending
+SIGKILL and the same is true if the oom killer targets a process which
+is already exiting.
+
+IOW, the current implementation is enforcing the race of the oom reaper
+vs. the exiting and/or killed process. With a quite high probability the
+reaper is going to win.
+
+You can easily validate that by doing:
+
+wake_oom_reaper(task)
+   task->reap_time = jiffies + HZ;
+   queue_task(task);
+   wakeup(reaper);
+
+and then:
+
+oom_reap_task(task)
+    now = READ_ONCE(jiffies);
+    if (time_before(now, task->reap_time)
+        schedule_timeout_idle(task->reap_time - now);
+
+before trying to actually reap the mm.
+
+That will prevent the enforced race in most cases and allow the exiting
+and/or killed processes to cleanup themself. Not pretty, but it should
+reduce the chance of the reaper to win the race with the exiting and/or
+killed process significantly.
+
+It's not going to work when the problem is combined with a heavy VM
+overload situation which keeps a guest (or one/some it's vCPUs) away
+from being scheduled. See below for a discussion of guarantees.
+
+If it failed to do so when the sleep returns, then you still can reap
+it.
+
+> It is fundamentally wrong to reap the memory which the exit path
+> really need to do a proper clean up.
+
+Depends on the guarantees you make. If you say preventing OOM starvation
+at the end is more important than a stale futex, then it's fine as long
+as it is properly documented.
+
+That said, the robust list is no guarantee. It's a best effort approach
+which works well most of the time at least for the "normal" issues where
+a task holding a futex dies unexpectedly. But there is no guarantee that
+it works under all circumstances, e.g. OOM.
+
+Sorry Nico, but your understanding
+
+>> On Mon, Mar 21 2022 at 21:09, Nico Pache wrote:
+>> From my understanding, the whole point of the robust futex is to allow forward
+>> progress in an application in which the lock holder CAN
+>> crash/exit/oom.
+
+is based on wishful thinking. There is absolutely no guarantee made by
+robust futexes. Why?
+
+Because the kernel can neither make a guarantee vs. user space
+controlled content nor vs. dealing with user space stupidity, e.g. a
+runaway memory hog.
+
+This is _NOT_ what robust list is about. Robust list was introduced to
+handle the unfortunate case where a task holding a futex dies
+unexpectedly.
+
+Extending this to OOM and expecting it to work under all circumstances
+is really wishful thinking.
+
+>> So semantically nothing is wrong with killing the futex holder... the
+>> whole point of the robustness is to handle these cases.
+
+Wrong. The whole point of robust lists is to handle the "normal" case
+gracefully. A process being OOM killed is _NOT_ in the "normal"
+category.
+
+Neither is it "normal" that a VM is scheduled out long enough to miss a
+1 second deadline. That might be considered normal by cloud folks, but
+that's absolute not normal from an OS POV. Again, that's not a OS
+problem, that's an operator/admin problem.
+
+>> We just have a case were the oom killer is racing with said handling
+>> of the futex, invalidating the memory before the exit path
+>> (handle_futex_death) can awake one of the other waiters.
+
+That case is just a symptom of the overall problem and no, we are not
+curing symptoms. Especially not by introducing problems which did not
+exist before the "cure".
+
+If the kernel has only the choice of making no progress at all or
+leaving a stale futex around occasionally, then the latter is an
+unfortunate collateral damage, but not the end of the world.
+
+The enforced race of the oom reaper is not a collateral damage, that's
+simply stupid. And that's the root cause for the particular symptom.
+which needs be addressed exactly there and nowhere else.
+
+If that does not cover _all_ corner cases, then so be it. You _cannot_
+solve that problem completely ever.
+
+As I said above there is a final choice between not making progress at
+all and a rare stale futex. It's not rocket science to pick the right
+one.
+
+> And just to be clear, this is clearly a bug in the oom_reaper per se.
+> Originally I thought that relaxing the locking (using trylock and
+> retry/bail out on failure) would help but as I've learned earlier this
+> day this is not really possible because of #PF at least. The most self
+> contained solution would be to skip over vmas which are backing the
+> robust list which would allow the regular exit path to do the proper
+> cleanup.
+
+That's not sufficient because you have to guarantee that the relevant
+shared futex is accessible. See the lock chain example above.
+
+OTOH, in combination with delaying the reaper skipping the VMAs, which
+contain a robust list head, might be good enough for the trivial
+cases where the shared futex is the one to which the robust list head
+points to.
+
+Emphasis on VMAs. You need to evaluate every tasks robust list pointer
+of the process not only the one of the task which gets queued for
+reaping.
+
+So let me summarize what I think needs to be done in priority order:
+
+ #1 Delay the oom reaper so the normal case of a process being able to
+    exit is not subject to a pointless race to death.
+
+ #2 If #1 does not result in the desired outcome, reap the mm (which is
+    what we have now).
+
+ #3 If it's expected that #2 will allow the stuck process to make
+    progress on the way towards cleanup, then do not reap any VMA
+    containing a robust list head of a thread which belongs to the
+    exiting and/or killed process.
+
+The remaining cases, i.e. the lock chain example I pointed out above or
+the stuck forever task are going to be rare and fall under the
+collateral damage and no guarantee rule.
+
 Thanks,
-Oliver
+
+        tglx
+---
+P.S.: I so hoped that after my first encounter with the oom killer
+      almost two decades ago I wouldn't have to deal with this horror
+      again. Bah!

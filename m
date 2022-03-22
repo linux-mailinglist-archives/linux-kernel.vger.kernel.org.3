@@ -2,320 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F624E35C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71BA44E35C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbiCVAs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234341AbiCVAs0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234437AbiCVAs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 21 Mar 2022 20:48:26 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A4CF00
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:47:00 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id e5so2377900pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:47:00 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234341AbiCVAsZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 21 Mar 2022 20:48:25 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9453BBBC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:46:59 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id v4so14393359pjh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:46:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZEAhtCrJUXhBfx1FoGP14Q/p+PdLnLauLi6Y8sm/760=;
-        b=o/BMgl9zNdPqkzoshOb4BN3pBKErNJDh3XzX1/tMZ9NzCkJ/ZbXNDx26fRZgONGgQy
-         UHlOMFasMuUeUcWLKEbe+OlDIcbP6nEfc+/uMl+ih9Xgk/10ZsAsbEMK6qnY7FBj9brx
-         CZL0gZHUnWtjpudj595id8UEmGdVUCifVxfIfg10s3tXb3VVDy73Y9XoYtCGXSsTwX3o
-         TQkD2fvSZXY0uTfQFneIYANdAi/zbH86xjyVbhgvMPX0Q1uzSdeJIQW9DuCxS6c1lhSv
-         FxoVabG48tP91Ynm+cGuhUJaZDUVXxolY6AOQWrYoZ/+kIUKCCBwrgIExCu+d1wthw1T
-         YwpA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4NCbf0eeD/oob7o3dgsHdsdJCZNRMgaAgRTMAe2jS9M=;
+        b=KhroE2nIoxYwbVeo47PY/NpMVvm96BuAJ8nJ09HH4bF59VJACQrho/0EHFqKOn6T6n
+         zTgJV1UtLcA8Kynyl7uSjkxi+QUjIOPvB1SmfOt0MbCwH+tCx6uHLqEtRZHfhA94guA0
+         P3kH4NUD+A4WmWSOqpGTEVtNSkuWxtPRw4R3gCfSwzbPpxgi8cpD9leJZfBHSBJ6DCwZ
+         ayaMSkA5PioBmOwS7HkZ/ays40t6psZDCyBPrJdrhZhJaAFxHeeRZxMiGg26Loyyl2uQ
+         j4UceoY+vg2GwsOvbJIa7mry1txOTAtSqKXzkDVgSPbseipI8SqeeXwzzxvJ6nMENX3f
+         eo+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZEAhtCrJUXhBfx1FoGP14Q/p+PdLnLauLi6Y8sm/760=;
-        b=KACme7+RqnrRQXpUzu7HisUzuYiZmbgOUTfS+EOV3oeH6SzqqNEKA/fC8UmlnR1NDq
-         24uY4tkfP9FsI4l25MKX3FKNYMPmM+BLKQ6av6WDJRsMRpXJyndeEE5GHnkjZFNKPQB4
-         4HwKOrBG3Ze+9eRnKFQVaXbj7KBc7zKzuhQ/h+ZHSNri6T1n2OopwuVmbEX8hvsaR8Xf
-         GjxJFIUqLijtqu0ffZbvG4qZmeEpSrlaxCA0kUt6eyi1RD6JgOkNZW/ztohMczQlvDAW
-         N491JB6Ftxg8OvPzDNDVmMI6xabMiNK5Cbrh7EAP5k/7P9GIP0yDZB1KmyfPu5TBKN3k
-         57Yw==
-X-Gm-Message-State: AOAM531aFWi/HRhOlinhyf65IfSIDWVJDbmVaN4jFbAnhhXAkPeTFlUN
-        Oc4v3CMKnbTs7UF7VpgG5S2UNoS8aNBblj2BHYY=
-X-Google-Smtp-Source: ABdhPJwIxH6y1BkKtneP0BlJrp7ZyjYudITDvla33DF12Q0ZgQbsw+L0huwBaOcV9h8Zl89NIPIxey9yQ1dG9Uy7V5M=
-X-Received: by 2002:a17:903:1cd:b0:154:5edf:5704 with SMTP id
- e13-20020a17090301cd00b001545edf5704mr7063631plh.26.1647910019578; Mon, 21
- Mar 2022 17:46:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4NCbf0eeD/oob7o3dgsHdsdJCZNRMgaAgRTMAe2jS9M=;
+        b=KjOxnbshYlgCsG9ufEDalgSxuIYHKnw2rJ7K3r1Xkj6uxkA6MBwdRdD2N0ynw3xqcn
+         2CWB6LpYYdk8Nzli1eXyELuayxg8bc2qE+MIHdyvi71buiOOjYSRQCmz9ZGIhLtomXtC
+         9TikZjaHS8maIRP1FdZR3FVvYn/imowuuy+x0Rz4BTdXvGYkB+mNb/mOXVbjAZs+vCDc
+         OWnYhOjkt9PueLVQ7QR6MOa3LOlrae/I0YSfqMVSOQyWCUWv+3jnzpEx237xzN43IYEO
+         FbK5O7Xc2zstIrXZHwoJdh68+lNjjhpGYpwqm5R3r4fhzwgxR2oPtqUvgnbNgZC5ZJJG
+         1gHw==
+X-Gm-Message-State: AOAM530BbFOQG3NoYgLtPLBAvDZ7JfwSTASapXa0Uk/OGZvIliqLESR0
+        IWDTXoQsLC9N2/xjdzdNNtM=
+X-Google-Smtp-Source: ABdhPJyP/14F3Q68+marHzk4wdinpQzFCPFYXqnlihLvjr2Cfr5wt4oyd1mOF+VKBkH12D7SRAiW8A==
+X-Received: by 2002:a17:90b:4a12:b0:1c7:5aa4:2a72 with SMTP id kk18-20020a17090b4a1200b001c75aa42a72mr766905pjb.201.1647910018999;
+        Mon, 21 Mar 2022 17:46:58 -0700 (PDT)
+Received: from edumazet1.svl.corp.google.com ([2620:15c:2c4:201:c6c2:7860:be83:7d4f])
+        by smtp.gmail.com with ESMTPSA id z14-20020aa7888e000000b004f79f59827asm20950127pfe.139.2022.03.21.17.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 17:46:58 -0700 (PDT)
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        syzbot <syzkaller@googlegroups.com>, Jann Horn <jannh@google.com>
+Subject: [PATCH] watch_queue: Free the page array when watch_queue is dismantled
+Date:   Mon, 21 Mar 2022 17:46:54 -0700
+Message-Id: <20220322004654.618274-1-eric.dumazet@gmail.com>
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
 MIME-Version: 1.0
-References: <20220318051612.271802-1-naoya.horiguchi@linux.dev>
-In-Reply-To: <20220318051612.271802-1-naoya.horiguchi@linux.dev>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 21 Mar 2022 17:46:48 -0700
-Message-ID: <CAHbLzkrYf=jF2ZGLur5JpB_smoUkp51e2x1v5mr3CD5z73D=Ow@mail.gmail.com>
-Subject: Re: [PATCH v5] mm/hwpoison: fix race between hugetlb free/demotion
- and memory_failure_hugetlb()
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 10:16 PM Naoya Horiguchi
-<naoya.horiguchi@linux.dev> wrote:
->
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
->
-> There is a race condition between memory_failure_hugetlb() and hugetlb
-> free/demotion, which causes setting PageHWPoison flag on the wrong page.
-> The one simple result is that wrong processes can be killed, but another
-> (more serious) one is that the actual error is left unhandled, so no one
-> prevents later access to it, and that might lead to more serious results
-> like consuming corrupted data.
->
-> Think about the below race window:
->
->   CPU 1                                   CPU 2
->   memory_failure_hugetlb
->   struct page *head = compound_head(p);
->                                           hugetlb page might be freed to
->                                           buddy, or even changed to another
->                                           compound page.
->
->   get_hwpoison_page -- page is not what we want now...
->
-> The compound_head is called outside hugetlb_lock, so the head is not
-> reliable.
->
-> So set PageHWPoison flag after passing prechecks. And to detect
-> potential violation, this patch also introduces a new action type
-> MF_MSG_DIFFERENT_PAGE_SIZE.
->
-> Reported-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> Cc: <stable@vger.kernel.org>
-> ---
-> ChangeLog v4 -> v5:
-> - call TestSetPageHWPoison() when page_handle_poison() fails.
-> - call TestSetPageHWPoison() for unhandlable cases (MF_MSG_UNKNOWN and
->   MF_MSG_DIFFERENT_PAGE_SIZE).
-> - Set PageHWPoison on the head page only when the error page is surely
->   a hugepage, otherwise set the flag on the raw page.
-> - rebased onto v5.17-rc8-mmotm-2022-03-16-17-42
->
-> ChangeLog v3 -> v4:
-> - squash with "mm/memory-failure.c: fix race with changing page
->   compound again".
-> - update patch subject and description based on it.
->
-> ChangeLog v2 -> v3:
-> - rename the patch because page lock is not the primary factor to
->   solve the reported issue.
-> - updated description in the same manner.
-> - call page_handle_poison() instead of __page_handle_poison() for
->   free hugepage case.
-> - reorder put_page and unlock_page (thanks to Miaohe Lin)
->
-> ChangeLog v1 -> v2:
-> - pass subpage to get_hwpoison_huge_page() instead of head page.
-> - call compound_head() in hugetlb_lock to avoid race with hugetlb
->   demotion/free.
-> ---
->  mm/hugetlb.c        |  8 +++--
->  mm/memory-failure.c | 75 +++++++++++++++++++++++++++------------------
->  2 files changed, 51 insertions(+), 32 deletions(-)
->
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index fbf598bbc4e3..d8ef67c049e4 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6777,14 +6777,16 @@ bool isolate_huge_page(struct page *page, struct list_head *list)
->
->  int get_hwpoison_huge_page(struct page *page, bool *hugetlb)
->  {
-> +       struct page *head;
->         int ret = 0;
->
->         *hugetlb = false;
->         spin_lock_irq(&hugetlb_lock);
-> -       if (PageHeadHuge(page)) {
-> +       head = compound_head(page);
-> +       if (PageHeadHuge(head)) {
->                 *hugetlb = true;
-> -               if (HPageFreed(page) || HPageMigratable(page))
-> -                       ret = get_page_unless_zero(page);
-> +               if (HPageFreed(head) || HPageMigratable(head))
-> +                       ret = get_page_unless_zero(head);
->                 else
->                         ret = -EBUSY;
->         }
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index e939719c0765..9323a5653dec 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1194,7 +1194,7 @@ static int __get_hwpoison_page(struct page *page, unsigned long flags)
->         int ret = 0;
->         bool hugetlb = false;
->
-> -       ret = get_hwpoison_huge_page(head, &hugetlb);
-> +       ret = get_hwpoison_huge_page(page, &hugetlb);
->         if (hugetlb)
->                 return ret;
->
-> @@ -1281,11 +1281,10 @@ static int get_any_page(struct page *p, unsigned long flags)
->
->  static int __get_unpoison_page(struct page *page)
->  {
-> -       struct page *head = compound_head(page);
->         int ret = 0;
->         bool hugetlb = false;
->
-> -       ret = get_hwpoison_huge_page(head, &hugetlb);
-> +       ret = get_hwpoison_huge_page(page, &hugetlb);
->         if (hugetlb)
->                 return ret;
->
-> @@ -1504,39 +1503,38 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
->         struct page *head = compound_head(p);
->         int res;
->         unsigned long page_flags;
-> -
-> -       if (TestSetPageHWPoison(head)) {
-> -               pr_err("Memory failure: %#lx: already hardware poisoned\n",
-> -                      pfn);
-> -               res = -EHWPOISON;
-> -               if (flags & MF_ACTION_REQUIRED)
-> -                       res = kill_accessing_process(current, page_to_pfn(head), flags);
-> -               return res;
-> -       }
-> -
-> -       num_poisoned_pages_inc();
-> +       bool put = false;
-> +       unsigned long already_hwpoisoned = 0;
->
->         if (!(flags & MF_COUNT_INCREASED)) {
->                 res = get_hwpoison_page(p, flags);
->                 if (!res) {
->                         lock_page(head);
->                         if (hwpoison_filter(p)) {
-> -                               if (TestClearPageHWPoison(head))
-> -                                       num_poisoned_pages_dec();
->                                 unlock_page(head);
->                                 return -EOPNOTSUPP;
->                         }
->                         unlock_page(head);
-> -                       res = MF_FAILED;
-> -                       if (__page_handle_poison(p)) {
-> -                               page_ref_inc(p);
-> +                       if (page_handle_poison(p, true, false)) {
->                                 res = MF_RECOVERED;
-> +                       } else {
-> +                               if (TestSetPageHWPoison(head))
-> +                                       already_hwpoisoned = page_to_pfn(head);
-> +                               else
-> +                                       num_poisoned_pages_inc();
-> +                               res = MF_FAILED;
->                         }
->                         action_result(pfn, MF_MSG_FREE_HUGE, res);
-> -                       return res == MF_RECOVERED ? 0 : -EBUSY;
-> +                       res = res == MF_RECOVERED ? 0 : -EBUSY;
-> +                       goto out;
->                 } else if (res < 0) {
-> +                       if (TestSetPageHWPoison(p))
-> +                               already_hwpoisoned = pfn;
-> +                       else
-> +                               num_poisoned_pages_inc();
->                         action_result(pfn, MF_MSG_UNKNOWN, MF_IGNORED);
-> -                       return -EBUSY;
-> +                       res = -EBUSY;
-> +                       goto out;
->                 }
->         }
->
-> @@ -1547,21 +1545,31 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
->          * If this happens just bail out.
->          */
->         if (!PageHuge(p) || compound_head(p) != head) {
-> +               if (TestSetPageHWPoison(p))
-> +                       already_hwpoisoned = pfn;
-> +               else
-> +                       num_poisoned_pages_inc();
->                 action_result(pfn, MF_MSG_DIFFERENT_PAGE_SIZE, MF_IGNORED);
+From: Eric Dumazet <edumazet@google.com>
 
-The commit log says "this patch also introduces a new action type
-MF_MSG_DIFFERENT_PAGE_SIZE", but it is not defined in the patch and it
-is called here. Did I miss something?
+Commit 7ea1a0124b6d ("watch_queue: Free the alloc bitmap
+when the watch_queue is torn down") took care of the bitmap,
+but not the page array.
 
->                 res = -EBUSY;
-> -               goto out;
-> +               goto unlock_page;
->         }
->
->         page_flags = head->flags;
->
->         if (hwpoison_filter(p)) {
-> -               if (TestClearPageHWPoison(head))
-> -                       num_poisoned_pages_dec();
-> -               put_page(p);
-> +               put = true;
->                 res = -EOPNOTSUPP;
-> -               goto out;
-> +               goto unlock_page;
-> +       }
-> +
-> +       if (TestSetPageHWPoison(head)) {
-> +               put = true;
-> +               already_hwpoisoned = page_to_pfn(head);
-> +               goto unlock_page;
->         }
->
-> +       num_poisoned_pages_inc();
-> +
->         /*
->          * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
->          * simply disable it. In order to make it work properly, we need
-> @@ -1574,18 +1582,27 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
->         if (huge_page_size(page_hstate(head)) > PMD_SIZE) {
->                 action_result(pfn, MF_MSG_NON_PMD_HUGE, MF_IGNORED);
->                 res = -EBUSY;
-> -               goto out;
-> +               goto unlock_page;
->         }
->
->         if (!hwpoison_user_mappings(p, pfn, flags, head)) {
->                 action_result(pfn, MF_MSG_UNMAP_FAILED, MF_IGNORED);
->                 res = -EBUSY;
-> -               goto out;
-> +               goto unlock_page;
->         }
->
->         return identify_page_state(pfn, p, page_flags);
-> -out:
-> +unlock_page:
->         unlock_page(head);
-> +out:
-> +       if (put)
-> +               put_page(p);
-> +       if (already_hwpoisoned) {
-> +               pr_err("Memory failure: %#lx: already hardware poisoned\n", pfn);
-> +               res = -EHWPOISON;
-> +               if (flags & MF_ACTION_REQUIRED)
-> +                       res = kill_accessing_process(current, already_hwpoisoned, flags);
-> +       }
->         return res;
->  }
->
-> --
-> 2.25.1
->
+BUG: memory leak
+unreferenced object 0xffff88810d9bc140 (size 32):
+  comm "syz-executor335", pid 3603, jiffies 4294946994 (age 12.840s)
+  hex dump (first 32 bytes):
+    40 a7 40 04 00 ea ff ff 00 00 00 00 00 00 00 00  @.@.............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff81459bff>] kmalloc_array include/linux/slab.h:621 [inline]
+    [<ffffffff81459bff>] kcalloc include/linux/slab.h:652 [inline]
+    [<ffffffff81459bff>] watch_queue_set_size+0x12f/0x2e0 kernel/watch_queue.c:251
+    [<ffffffff8159fcf2>] pipe_ioctl+0x82/0x140 fs/pipe.c:632
+    [<ffffffff815b601c>] vfs_ioctl fs/ioctl.c:51 [inline]
+    [<ffffffff815b601c>] __do_sys_ioctl fs/ioctl.c:874 [inline]
+    [<ffffffff815b601c>] __se_sys_ioctl fs/ioctl.c:860 [inline]
+    [<ffffffff815b601c>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:860
+    [<ffffffff84493a05>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84493a05>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jann Horn <jannh@google.com>
+---
+ kernel/watch_queue.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+index 00703444a21948deaa8b7ac8b57b73528badff0d..58fe68664eb1b0001cb00c8d046e108462df4836 100644
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -370,6 +370,7 @@ static void __put_watch_queue(struct kref *kref)
+ 
+ 	for (i = 0; i < wqueue->nr_pages; i++)
+ 		__free_page(wqueue->notes[i]);
++	kfree(wqueue->notes);
+ 	bitmap_free(wqueue->notes_bitmap);
+ 
+ 	wfilter = rcu_access_pointer(wqueue->filter);
+-- 
+2.35.1.894.gb6a874cedc-goog
+

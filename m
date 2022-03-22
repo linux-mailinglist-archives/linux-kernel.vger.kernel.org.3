@@ -2,82 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CB74E3F67
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925664E3F6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235420AbiCVNXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S235442AbiCVNYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235406AbiCVNXd (ORCPT
+        with ESMTP id S234974AbiCVNYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:23:33 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBAA7E5BE;
-        Tue, 22 Mar 2022 06:22:04 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id q14so10624612ljc.12;
-        Tue, 22 Mar 2022 06:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=AjcCl508/3oBfoVa+HHFPodqa5oQijS6CmLfzMEJ/u4=;
-        b=RbgTHNgJumkKhypcVJzqThV2d98m5yX0RD5BZKNJlLmXSNgMuLiLI24cCu53Me2Y41
-         kFFJPAq2f+tJChxDH/EPhvnv5EnETOgWfdtGRGm2jijKSd2anzrZEG6GYmHaxxLEpNHE
-         ki3QBs951g5pKa6JoS9uSl2NWDERGyfhhT3If/gClFoO0owTBcU+bW5dcSeiVNzrUQr+
-         GYah0ydJN+vLiU7DBBSjo7XlkmcB64QodtXu7Bsssvb0CTNrkR9OhyyK1KDFj5eWVPF2
-         pPfLPxmeUl/JtK3y93wMJRS2xBBYUgp6feZdgCppceRbeg881nn/wlcQSuETg3D0yCWL
-         W3Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=AjcCl508/3oBfoVa+HHFPodqa5oQijS6CmLfzMEJ/u4=;
-        b=Fjliz4ymDuf+8IROMCPXyX+9kIiCeks76f/z46e1J6W7VOv1kX+41bRt2hU0zQ4AaT
-         E1+P983+D6sN3FDTbk8QOupwiz+axBbSgcM9PQeXygyeCmVjTaY2gb+PjzGHiIfEtgjP
-         mZw4zYNBmNp9l1td57Dm6ahU2CKUxd0Siyk3RfVaBq/xSrclzuYwufEtIlw+W+VKZARO
-         KcwIfTwtegkAsh73iPzO/eoBJNPl2bH2n8IbbEL6NX3fPdhoGCn+pId8kWAWJ9eYjnRg
-         hVOlgbAsX6ry4KkoG0a8I7Sa8XoiupjaX2vXLPUQlcaLbO3Yhes2/AcBXwDPsrruMyMA
-         udzQ==
-X-Gm-Message-State: AOAM533dXufsdyFdelTC6wZftaeiUISAwn0GDS5bmAfvmC7cTQm1Muk4
-        0/5UvMZ5r4iTUYz7rJKdDco=
-X-Google-Smtp-Source: ABdhPJzFswqUOAuAWZ/WBTHRItFTQwUGjyxdjYGlpcmIQYC2z/Bnt3kcgiq8Zgmq2gEsp5Ka7wtgyQ==
-X-Received: by 2002:a2e:bf04:0:b0:246:7ace:e157 with SMTP id c4-20020a2ebf04000000b002467acee157mr19388105ljr.241.1647955322452;
-        Tue, 22 Mar 2022 06:22:02 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id x11-20020a19e00b000000b004488bf4137esm2204467lfg.245.2022.03.22.06.21.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 06:22:01 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20220322110806.kbdb362jf6pbtqaf@skbuf>
-References: <20220317153625.2ld5zgtuhoxbcgvo@skbuf>
- <86ilscr2a4.fsf@gmail.com> <20220317161808.psftauoz5iaecduy@skbuf>
- <8635jg5xe5.fsf@gmail.com> <20220317172013.rhjvknre5w7mfmlo@skbuf>
- <86tubvk24r.fsf@gmail.com> <20220318121400.sdc4guu5m4auwoej@skbuf>
- <86pmmjieyl.fsf@gmail.com> <20220318131943.hc7z52beztqlzwfq@skbuf>
- <86a6dixnd2.fsf@gmail.com> <20220322110806.kbdb362jf6pbtqaf@skbuf>
-Date:   Tue, 22 Mar 2022 14:21:58 +0100
-Message-ID: <86ee2ujf61.fsf@gmail.com>
+        Tue, 22 Mar 2022 09:24:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502927E5BE;
+        Tue, 22 Mar 2022 06:22:47 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MCb31f014297;
+        Tue, 22 Mar 2022 13:22:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : reply-to : subject : to : cc : references : from :
+ in-reply-to : content-type : content-transfer-encoding; s=pp1;
+ bh=tw8bVrBgwefDDmwqf4somrVpja5sbtoTlbXKwHJzlZ4=;
+ b=nMWDY4q5r5kUnSPEouNR3EBDgHmqtFRzLSKcij4eBPuHTe0KqiMuJwDrKntxXJct/L+B
+ r7qLI13jD7+WVdrNnmppDli6P7n4cKHjTsd8M4TPU/6IJFpj4Mnfd6f7ymcry4v1Wwd3
+ 7G8E1TQ7ZTpwVOJARb1Wlw6oEaYr9YPI9afHWOxhvq90Vid3iE/UC8KNS9y5y58v1TTb
+ 7AhpwpmWjb1jdtlg84GA8qGZGyzTaIgRB4g8H7V1H3HrOXtj0PYOAFYywSYd44HPjk1d
+ DIVhcLHZbzSXn+YSvwhONTswSvzmi8O0nJGMU/UwOI3kRbXaJaSDGSRjOVAx9tNQ7nXD HA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ey7abjc06-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:22:45 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22MDI8sF001494;
+        Tue, 22 Mar 2022 13:22:44 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ey7abjbyk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:22:44 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MDHFT9027266;
+        Tue, 22 Mar 2022 13:22:43 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma04dal.us.ibm.com with ESMTP id 3ew6t9s9n1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:22:43 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22MDMg8Y31129886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Mar 2022 13:22:42 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38C87C6063;
+        Tue, 22 Mar 2022 13:22:42 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 19360C6066;
+        Tue, 22 Mar 2022 13:22:41 +0000 (GMT)
+Received: from [9.160.96.60] (unknown [9.160.96.60])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Mar 2022 13:22:40 +0000 (GMT)
+Message-ID: <d66ef5e1-9a77-a71c-e182-ca1f3fc17574@linux.ibm.com>
+Date:   Tue, 22 Mar 2022 09:22:40 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Reply-To: jjherne@linux.ibm.com
+Subject: Re: [PATCH v18 14/18] s390/vfio-ap: sysfs attribute to display the
+ guest's matrix
+Content-Language: en-US
+To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
+ <20220215005040.52697-15-akrowiak@linux.ibm.com>
+From:   "Jason J. Herne" <jjherne@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <20220215005040.52697-15-akrowiak@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PwHVyogRqCvjBDe2H8WqKvNirNarm52n
+X-Proofpoint-ORIG-GUID: 7m59dUStEGwCfYmlfumtebxFfpnO3e_x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-22_04,2022-03-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ adultscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0 phishscore=0
+ priorityscore=1501 clxscore=1015 suspectscore=0 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203220076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,53 +101,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On tis, mar 22, 2022 at 13:08, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Tue, Mar 22, 2022 at 12:01:13PM +0100, Hans Schultz wrote:
->> On fre, mar 18, 2022 at 15:19, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Fri, Mar 18, 2022 at 02:10:26PM +0100, Hans Schultz wrote:
->> >> In the offloaded case there is no difference between static and dynamic
->> >> flags, which I see as a general issue. (The resulting ATU entry is static
->> >> in either case.)
->> >
->> > It _is_ a problem. We had the same problem with the is_local bit.
->> > Independently of this series, you can add the dynamic bit to struct
->> > switchdev_notifier_fdb_info and make drivers reject it.
->> >
->> >> These FDB entries are removed when link goes down (soft or hard). The
->> >> zero DPV entries that the new code introduces age out after 5 minutes,
->> >> while the locked flagged FDB entries are removed by link down (thus the
->> >> FDB and the ATU are not in sync in this case).
->> >
->> > Ok, so don't let them disappear from hardware, refresh them from the
->> > driver, since user space and the bridge driver expect that they are
->> > still there.
->> 
->> I have now tested with two extra unmanaged switches (each connected to a
->> seperate port on our managed switch, and when migrating from one port to
->> another, there is member violations, but as the initial entry ages out,
->> a new miss violation occurs and the new port adds the locked entry. In
->> this case I only see one locked entry, either on the initial port or
->> later on the port the host migrated to (via switch).
->> 
->> If I refresh the ATU entries indefinitly, then this migration will for
->> sure not work, and with the member violation suppressed, it will be
->> silent about it.
->
-> Manual says that migrations should trigger miss violations if configured
-> adequately, is this not the case?
->
-Yes, but that depends on the ATU entries ageing out. As it is now, it works.
+On 2/14/22 19:50, Tony Krowiak wrote:
+> The matrix of adapters and domains configured in a guest's APCB may
+> differ from the matrix of adapters and domains assigned to the matrix mdev,
+> so this patch introduces a sysfs attribute to display the matrix of
+> adapters and domains that are or will be assigned to the APCB of a guest
+> that is or will be using the matrix mdev. For a matrix mdev denoted by
+> $uuid, the guest matrix can be displayed as follows:
+> 
+>     cat /sys/devices/vfio_ap/matrix/$uuid/guest_matrix
+My OCD wants you to name this matrix_guest instead of guest_matrix. Simply
+because then "matrix" and "matrix_guest" will be grouped together when doing
+an ls on the parent directory. As a system admin, its the little things that
+make the difference :) Please consider... though I won't withhold an R-b for
+it.
 
->> So I don't think it is a good idea to refresh the ATU entries
->> indefinitely.
->> 
->> Another issue I see, is that there is a deadlock or similar issue when
->> receiving violations and running 'bridge fdb show' (it seemed that
->> member violations also caused this, but not sure yet...), as the unit
->> freezes, not to return...
->
-> Have you enabled lockdep, debug atomic sleep, detect hung tasks, things
-> like that?
+Reviewed-by: Jason J. Herne <jjherne@linux.ibm.com>
 
-No, I haven't looked deeper into it yet. Maybe I was hoping someone had
-an idea... but I guess it cannot be a netlink deadlock?
+-- 
+-- Jason J. Herne (jjherne@linux.ibm.com)

@@ -2,180 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019504E45AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E04D84E45AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240151AbiCVSGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S240152AbiCVSG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240139AbiCVSGQ (ORCPT
+        with ESMTP id S240163AbiCVSGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:06:16 -0400
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D4A68FB3;
-        Tue, 22 Mar 2022 11:04:46 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id r23so22743001edb.0;
-        Tue, 22 Mar 2022 11:04:46 -0700 (PDT)
+        Tue, 22 Mar 2022 14:06:25 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F2B6948D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:04:57 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id r11so12969642ila.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mnfs0TGaLCiuR8+h7Bh7JMBdIzmhOD0lSzxPoaLstY0=;
+        b=Ai5ApELwIGxbAGkA7bjCsyR06EgM1YDueepe43Ht6yQpfzmaehyh2jghZB+UEQXXp+
+         b+yG8TxNPBHJ0lGuUDHKcIy+5RFBdedUl80l+9B1M/CnuJhACvcHwDNTPmMyUoHHurFt
+         TaUwbc9sNQaTF5RbHPk58TCMYSygYYVu4HZSVd0889x8GIjwqkWK3K+uBhrFsXkW645y
+         OaeOFOp7ujmNQJ6VtHXVLUoUe51I723IzUqprOMnhYMgqV8nG56hucbv2Rhy4KwOnGps
+         6O9vq0L+84lmtJ/G4x85esjVcmytLf1zstdDHAJqIgMZzdNG91ghhvfIcWN5gka3rysA
+         pmVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yUGdPChqlMnmJr7+nT7tnY1D50Ebcwr3w5rWWrqf40w=;
-        b=CIOFOZQx4zdOe4d4NIIqpVP5Yq1ty27SDvU6wjlMS8Xj5WQ6fGCmloUrh9KoAbFL46
-         aPVaxfn+ZzGDJCXvptGu6syWlRMRnpPivPMUceJQSXq7fofz1+TDfAW6OQGTOK1ywlXm
-         Q+8W7YebVVqswWLNSdCUgLpqwOVbM9i7P1JD/5lKoGLeBnlIt5Bh/Ejm8ny20yLcaPEX
-         UwfK0gOOg6mfGhAT4qpDeSuBFX/S5ZVoquFtI8BNivU6jpVVdQ0cbmPHu/8YGVO0hxVO
-         uIt5zGI0vvbeg3kiqO4QWDf72H/mRvauX1QOalnWkT4jkKJe3a+bDGZwS5LsA+zFDd4M
-         M6Dg==
-X-Gm-Message-State: AOAM530Ka57UnF4ThBuOPegWqrSrUI5JFGpVcCXcPzS10U9jD9XkdP+n
-        y4wAQDfhe397Qqo+p4ob2AbQyc8S/Y4=
-X-Google-Smtp-Source: ABdhPJxpvvbq796bCqV6STafM0YifNN5hFUdSKEsnrkQBhgt4VCbfYE88mVKE9CnC5U9f10Xh7Zkyg==
-X-Received: by 2002:aa7:d7cb:0:b0:419:43f:efa9 with SMTP id e11-20020aa7d7cb000000b00419043fefa9mr25170220eds.75.1647972284741;
-        Tue, 22 Mar 2022 11:04:44 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id hr13-20020a1709073f8d00b006dff3a69572sm3870244ejc.5.2022.03.22.11.04.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 11:04:44 -0700 (PDT)
-Message-ID: <90ebea0b-1d67-98dc-2b49-a6e3b97a2c4a@kernel.org>
-Date:   Tue, 22 Mar 2022 19:04:43 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mnfs0TGaLCiuR8+h7Bh7JMBdIzmhOD0lSzxPoaLstY0=;
+        b=vJeY/ToKlOeZ41FhIAeOvNkYbcrkwfSiwkYirq3CCOymycuNzOMEHkWevwVzIMpvfw
+         XtSlVWI7HpUCnsJqURzjBtbkOZIkRg1iu7/iTuHdNIUk+FDtcMAs4eXWtwFRqgxVIimO
+         8x7jh/twe7zwpKis2qm6KdfJ0ZfZuzsg4OxwA8SYUpZKAKqGwdsISrk3nO8KbK7NKImL
+         CqXj+IPP9tW6sdUluN3buKKmLvjRuoa1mRkdHapJn7B56r+o8K7asG9bFIgRXtwKW+6N
+         8qi7lQkij017wg35u1G/2DjyPG3UkTmcx08NygrUIeYAwob7JQ27cOXDg0fdRE8zORq4
+         yGUg==
+X-Gm-Message-State: AOAM530h5xSh8VH0TdiCxhNxh9eIPCzSrYuwBEAKxyJdSeHcO5uQdYxZ
+        5PyqcKrGiF3vPEZeTDGKsoIsKg==
+X-Google-Smtp-Source: ABdhPJye2KWFKxhR/JkKla/5EeDb9ty681k7BmUZOKULsq7C/DlrxsaYNUuo5fKFZrXcVmXaz73tVA==
+X-Received: by 2002:a05:6e02:1b09:b0:2c8:3fa3:d7a1 with SMTP id i9-20020a056e021b0900b002c83fa3d7a1mr2564306ilv.173.1647972296912;
+        Tue, 22 Mar 2022 11:04:56 -0700 (PDT)
+Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
+        by smtp.gmail.com with ESMTPSA id 9-20020a056e0220c900b002c8276ca065sm4070180ilq.2.2022.03.22.11.04.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 11:04:56 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 18:04:52 +0000
+From:   Oliver Upton <oupton@google.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
+        linux-kernel@vger.kernel.org, eauger@redhat.com,
+        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
+Subject: Re: [PATCH v5 03/22] KVM: arm64: Support SDEI_VERSION hypercall
+Message-ID: <YjoPxLAMIPobBzS0@google.com>
+References: <20220322080710.51727-1-gshan@redhat.com>
+ <20220322080710.51727-4-gshan@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 21/26] dt-bindings: crypto: convert rockchip-crypto to
- yaml
-Content-Language: en-US
-To:     Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
-        herbert@gondor.apana.org.au, krzk+dt@kernel.org,
-        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-References: <20220321200739.3572792-1-clabbe@baylibre.com>
- <20220321200739.3572792-22-clabbe@baylibre.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220321200739.3572792-22-clabbe@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322080710.51727-4-gshan@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 21:07, Corentin Labbe wrote:
-> Convert rockchip-crypto to yaml
+On Tue, Mar 22, 2022 at 04:06:51PM +0800, Gavin Shan wrote:
+> This supports SDEI_VERSION hypercall by returning v1.1, which is
+> the specification version we're following. The vendor is set to
+> 'KVM'.
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
 > ---
->  .../crypto/rockchip,rk3288-crypto.yaml        | 84 +++++++++++++++++++
->  .../bindings/crypto/rockchip-crypto.txt       | 28 -------
->  2 files changed, 84 insertions(+), 28 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
->  delete mode 100644 Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
+>  arch/arm64/kvm/sdei.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml b/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
-> new file mode 100644
-> index 000000000000..a6be89a1c890
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/crypto/rockchip,rk3288-crypto.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rockchip Electronics And Security Accelerator
-> +
-> +maintainers:
-> +  - Heiko Stuebner <heiko@sntech.de>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,rk3288-crypto
-> +      - rockchip,rk3328-crypto
-> +      - rockchip,rk3399-crypto
+> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
+> index 8a9b477b8977..5a3a64cd6e84 100644
+> --- a/arch/arm64/kvm/sdei.c
+> +++ b/arch/arm64/kvm/sdei.c
+> @@ -118,6 +118,14 @@ static bool remove_all_vcpu_events(struct kvm_vcpu *vcpu,
+>  	return pending;
+>  }
+>  
+> +static unsigned long hypercall_version(struct kvm_vcpu *vcpu)
+> +{
+> +	/* v1.1 and the vendor is KVM */
+> +	return (1UL << SDEI_VERSION_MAJOR_SHIFT) |
+> +	       (1UL << SDEI_VERSION_MINOR_SHIFT) |
+> +	       0x4b564d;
 
-Waaaait, what? Only rockchip,rk3288-crypto is in original bindings.
+It looks like the SDEI specification states that the vendor-defined
+version number is 32 bits. Could we just use one of the
+ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_{0,3} values instead?
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 4
-> +
-> +  clock-names:
-> +    minItems: 4
-> +
-> +  resets:
-> +    maxItems: 1
+ASCII 'KVM' is neat, but in reality guest software will just throw it in
+a macro regardless. Might as well use one of the values we've already
+trained it to use :-)
 
-You missed reset-names.
+Also, it would appear that guest discovery of SDEI relies upon KVM
+reporting a valid SDEI version. IMO, this patch should come at the very
+end when KVM actually implements SDEI.
 
-This patch is quite different than previous, in unexpected way. What
-happened here?
-
-> +
-> +if:
-
-Please define it after "allOf:", so it could be easily extended without
-changing indentation.
-
-> +  properties:
-> +    compatible:
-> +      const: rockchip,rk3399-crypto
-> +then:
-> +  properties:
-> +    reg:
-> +      minItems: 2
-> +    interrupts:
-> +      minItems: 2
-
-List interrupts. This is really different than your v1. It also looks
-different than original bindings and you did not mention any differences
-here, nor in the commit msg. Either explain in commit msg all
-differences (and why) or move them to separate commit.
-
-You seem to change the bindings a lot (new properties, different
-constraints, new compatibles), so this should all go to separate commit.
-Now it is just confusing.
-
-> +    clocks:
-> +      minItems: 6
-
-You need maxItems. Everywhere.
-
-> +    clock-names:
-> +      minItems: 6
-
-List all items.
-
-> +    resets:
-> +      minItems: 6
-> +else:
-> +  if:
-> +    properties:
-> +      compatible:
-> +        const: rockchip,rk3328-crypto
-> +  then:
-> +    properties:
-> +      clocks:
-> +        minItems: 3
-> +      clock-names:
-> +        minItems: 3
-> +
-
-Best regards,
-Krzysztof
+--
+Thanks,
+Oliver

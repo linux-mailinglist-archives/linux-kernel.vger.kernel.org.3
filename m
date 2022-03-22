@@ -2,71 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070A34E3D07
+	by mail.lfdr.de (Postfix) with ESMTP id 529AA4E3D08
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiCVK6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
+        id S233752AbiCVK6n convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Mar 2022 06:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiCVK62 (ORCPT
+        with ESMTP id S233977AbiCVK6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:58:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6088C68FB5;
-        Tue, 22 Mar 2022 03:56:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24E87106F;
-        Tue, 22 Mar 2022 03:56:59 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 496013F66F;
-        Tue, 22 Mar 2022 03:56:57 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 10:56:54 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
-        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v11 0/9] Add Sunplus SP7021 SoC Support
-Message-ID: <YjmrdlQqoqUNcs7R@bogus>
-References: <cover.1647928315.git.qinjian@cqplus1.com>
+        Tue, 22 Mar 2022 06:58:33 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEBE7692B5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:57:05 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-9-Lon-t17yP1qoUoOghi9yew-1; Tue, 22 Mar 2022 10:57:01 +0000
+X-MC-Unique: Lon-t17yP1qoUoOghi9yew-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Tue, 22 Mar 2022 10:57:02 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Tue, 22 Mar 2022 10:57:01 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Ammar Faizi' <ammarfaizi2@gnuweeb.org>, Willy Tarreau <w@1wt.eu>
+CC:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Thread-Topic: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Thread-Index: AQHYPdalMvftIu2CIkSH1LImoy2kmazLOrmQ
+Date:   Tue, 22 Mar 2022 10:57:01 +0000
+Message-ID: <35ec31089f724a74a584f946deac6248@AcuMS.aculab.com>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+ <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1647928315.git.qinjian@cqplus1.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 02:16:51PM +0800, Qin Jian wrote:
-> This patch series add Sunplus SP7021 SoC support.
+From: Ammar Faizi
+> Sent: 22 March 2022 10:21
 > 
-> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
-> peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
-> single chip. It is designed for industrial control.
+> On i386, the 6th argument of syscall goes in %ebp. However, both Clang
+> and GCC cannot use %ebp in the clobber list and in the "r" constraint
+> without using -fomit-frame-pointer. To make it always available for
+> any kind of compilation, the below workaround is implemented.
 > 
-> SP7021 consists of two chips (dies) in a package. One is called C-chip
-> (computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
-> process (22 nm) for high performance computing. The other is called P-
-> chip (peripheral chip). It has many peripherals and an ARM A926 added
-> especially for real-time control. P-chip is made for customers. It adopts
-> low-level process (ex: 0.11 um) to reduce cost.
+> For clang (the Assembly statement can't clobber %ebp):
+>   1) Push the 6-th argument.
+>   2) Push %ebp.
+>   3) Load the 6-th argument from 4(%esp) to %ebp.
+>   4) Do the syscall (int $0x80).
+>   5) Pop %ebp (restore the old value of %ebp).
+>   6) Add %esp by 4 (undo the stack pointer).
+> 
+> For GCC, fortunately it has a #pragma that can force a specific function
+> to be compiled with -fomit-frame-pointer, so it can use "r"(var) where
+> var is a variable bound to %ebp.
 
-Not related to this series, but to the platform in general. You still
-need to resolved the boot/cpu-method for this platform before you add
-support for all the 4 cpus on this platform. I remember discussing about
-CPUIdle on a separate thread. I thought this is best thread to remind that
-so that it is addressed before we see either cpuidle or cpuhotplug support
-on this platform.
+You need to use the 'clang' pattern for gcc.
+#pragma optimise is fundamentally broken.
+What actually happens here is the 'inline' gets lost
+(because of the implied -O0) and you get far worse code
+than you might expect.
 
--- 
-Regards,
-Sudeep
+Since you need the 'clang' version, use it all the time.
+
+	David
+
+> 
+> Cc: x86@kernel.org
+> Cc: llvm@lists.linux.dev
+> Link: https://lore.kernel.org/lkml/2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com
+> Suggested-by: David Laight <David.Laight@ACULAB.COM>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> ---
+> 
+> @@ Changelog:
+> 
+>    Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-4-ammarfaizi2@gnuweeb.org
+>    RFC v1 -> RFC v2:
+>     - Fix %ebp saving method. Don't use redzone, i386 doesn't have a redzone
+>       (comment from David and Alviro).
+> ---
+>  tools/include/nolibc/arch-i386.h | 66 ++++++++++++++++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+> 
+> diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+> index 125a691fc631..9f4dc36e6ac2 100644
+> --- a/tools/include/nolibc/arch-i386.h
+> +++ b/tools/include/nolibc/arch-i386.h
+> @@ -167,6 +167,72 @@ struct sys_stat_struct {
+>  	_ret;                                                                 \
+>  })
+> 
+> +
+> +/*
+> + * Both Clang and GCC cannot use %ebp in the clobber list and in the "r"
+> + * constraint without using -fomit-frame-pointer. To make it always
+> + * available for any kind of compilation, the below workaround is
+> + * implemented.
+> + *
+> + * For clang (the Assembly statement can't clobber %ebp):
+> + *   1) Push the 6-th argument.
+> + *   2) Push %ebp.
+> + *   3) Load the 6-th argument from 4(%esp) to %ebp.
+> + *   4) Do the syscall (int $0x80).
+> + *   5) Pop %ebp (restore the old value of %ebp).
+> + *   6) Add %esp by 4 (undo the stack pointer).
+> + *
+> + * For GCC, fortunately it has a #pragma that can force a specific function
+> + * to be compiled with -fomit-frame-pointer, so it can use "r"(var) where
+> + * var is a variable bound to %ebp.
+> + *
+> + */
+> +#if defined(__clang__)
+> +static inline long ____do_syscall6(long eax, long ebx, long ecx, long edx,
+> +				   long esi, long edi, long ebp)
+> +{
+> +	__asm__ volatile (
+> +		"pushl	%[arg6]\n\t"
+> +		"pushl	%%ebp\n\t"
+> +		"movl	4(%%esp), %%ebp\n\t"
+> +		"int	$0x80\n\t"
+> +		"popl	%%ebp\n\t"
+> +		"addl	$4,%%esp\n\t"
+> +		: "=a"(eax)
+> +		: "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
+> +		  [arg6]"m"(ebp)
+> +		: "memory", "cc"
+> +	);
+> +	return eax;
+> +}
+> +
+> +#else /* #if defined(__clang__) */
+> +#pragma GCC push_options
+> +#pragma GCC optimize "-fomit-frame-pointer"
+> +static long ____do_syscall6(long eax, long ebx, long ecx, long edx, long esi,
+> +			    long edi, long ebp)
+> +{
+> +	register long __ebp __asm__("ebp") = ebp;
+> +	__asm__ volatile (
+> +		"int	$0x80"
+> +		: "=a"(eax)
+> +		: "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
+> +		  "r"(__ebp)
+> +		: "memory", "cc"
+> +	);
+> +	return eax;
+> +}
+> +#pragma GCC pop_options
+> +#endif /* #if defined(__clang__) */
+> +
+> +#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6) (   \
+> +	____do_syscall6((long)(num), (long)(arg1),               \
+> +			(long)(arg2), (long)(arg3),              \
+> +			(long)(arg4), (long)(arg5),              \
+> +			(long)(arg6))                            \
+> +)
+> +
+> +
+>  /* startup code */
+>  /*
+>   * i386 System V ABI mandates:
+> --
+> Ammar Faizi
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

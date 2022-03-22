@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1305F4E37AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB50C4E37AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236197AbiCVDoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 23:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S236221AbiCVDqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 23:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236164AbiCVDoN (ORCPT
+        with ESMTP id S236157AbiCVDqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 23:44:13 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAA6D58;
-        Mon, 21 Mar 2022 20:42:47 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id e6so11722380pgn.2;
-        Mon, 21 Mar 2022 20:42:47 -0700 (PDT)
+        Mon, 21 Mar 2022 23:46:00 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0EF19C20;
+        Mon, 21 Mar 2022 20:44:32 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id kl29so6609514qvb.2;
+        Mon, 21 Mar 2022 20:44:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=2xc5SxBoq4WyWsvCTWJsq+KYX7o7EsIW2a5WZ0HaK6A=;
-        b=pEUP4+kK0Vlm39hzsMw+RMJlp7CjZE5DbPXFIpHRNitwIsxgJi01KxdXq3mBD5vaun
-         6zrCPP+naabqljpA/4DAbqLPBIMt1yI4Fgk0mQnlS5KwzXch+FfVueGef9/fuTcaBo6x
-         NkGonr+EtFmt2wZqAbLmZdrd3T9FDL30c7bHw/kqAQa1UzP8UYEeML91Qosx/m87KfOY
-         NqrigOa/0jYQeZYlEYlAVtrLUL/THlV4WHOSXHu2Kuu5JmJYFX5jWW40zAChmsKl0ovt
-         f03OEQgPSqEsliwJnCqdBVY6ijRmyjcN7I/jkt9MZXhQ2749haXbiQxprLQ0iqwVO4OY
-         lfYg==
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XrmP5QvY9v5GfSMnu4vuXWWsz33rmP/bhFlcHw3wCB0=;
+        b=SCQgrbnQiBATElkNySc+P2EvESrtkrBHSXxGF61YIy9c6z1Jom1CELWcUvzFVrDvRa
+         bAOHUmF+f0GdV+bEpYclmQOXh1fXzZZygS9U/oQ9Rujr/IHQ2blU6WWoFcb/k/fiWmLx
+         CmD8oxNSo1M3rlfA1T1p+5OWTZ3AzwSuqBfDCKmrL+yX5CCyxhCwMJoBJxdVAZp5SAeq
+         7UFeBpOW3HsRN72yU6FT84Auf83Ao3nsnX8FHsxk59piAMHktHzDvcK5hANlsKClDjhI
+         FCriZSIqeDtcFD3hPdyiEOw9MTTF8N1r3LQLP+GnWX21tt1ee1PRV7JqpoSejAlpyxAW
+         Rq6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=2xc5SxBoq4WyWsvCTWJsq+KYX7o7EsIW2a5WZ0HaK6A=;
-        b=Jvrd7jpx+rnj+nnBizLPnWp5Lf1kudHM1EUWXLvbW/Duqi7Ctf2/ISooZNQQDT/VbT
-         H7Thj8FMM0GycixaOQ0Zh352bSCotzVzqGNNSePOY8uH22hSEpDzwgJxOIw4dANQcT6J
-         CGicPh+lw8PptMrDJgvLxW0uA2/QKF2QEFzHAZlcxOvdo0EkcyW4hjEvXELIyrPfB5b9
-         /d6cAotOnl92iZZqYAqsxxGT3ApLXLgv36OvCwJKIn00qDlkN8UB7e3/XlLR+/1FxkY9
-         jFM2KEJF/EIvYydUhE/lHDq625hKnMHsUKXRqDskXl+LOv5djnVy4iyevJSKs9qtOJAj
-         9Yyg==
-X-Gm-Message-State: AOAM532fHNY5cSvfylu9D7xzqSBDw9rn+dTiUXDJlMMQKX6LuUURlAiV
-        6r9DQjyJOMLcXtNgWyNWHcVQVFwXhPM0kAdaPCw=
-X-Google-Smtp-Source: ABdhPJwuUKlr5LwgD0hOQ4fp6yT3xGuGYvRKGA9s8Cnczr4DvSEfpOKUdicz5H16rMPN7MvjJkD2ug==
-X-Received: by 2002:a05:6a00:1a88:b0:4fa:9a8c:c05f with SMTP id e8-20020a056a001a8800b004fa9a8cc05fmr9389075pfv.46.1647920566407;
-        Mon, 21 Mar 2022 20:42:46 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
-        by smtp.gmail.com with ESMTPSA id o7-20020aa79787000000b004f8e44a02e2sm22800575pfp.45.2022.03.21.20.42.40
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XrmP5QvY9v5GfSMnu4vuXWWsz33rmP/bhFlcHw3wCB0=;
+        b=MoQY8AzNPuIevHMRvqBWNjbKl4mfuFZYDEveXTeLO9l4Pe0IGBHQRrybSUIbogZ9wW
+         pxWHIv2i+svfUg1mJ7S9yCSDms2Xm6bHoDaokT+BntHPv04CkTrXBLyLqSdQgY0zhD2k
+         gdaxepuSCOSaNYlX3NmeKACkxpEeCH5IVekqqHsxtNPzMSdeB/sgfPQ++jfz/z/C2dYB
+         8w1KMKLVMMlotP0Ww8kTNYuRPYwem92SfDZMGSdVvapnXCj5qnzRTbWCI5a+iHGukU+u
+         U63WJZXxhvrnCNtChUdVwjrDJB+gfBQKIyy9pLTALAtLycKv5lDGSztUYTUUa75iLTD5
+         UaLg==
+X-Gm-Message-State: AOAM5325oi7mS4hUM9c8eZUbYrqwijyeMlAvV14H7uaZvnnfQtb5z6I4
+        Ve6ZPKuJiA4igu2tTNBIo+o=
+X-Google-Smtp-Source: ABdhPJwVOoAsZhDiZ1fE+whpWR+QfbOW/feKY++VvePGtmd17Yj6x3BU/ZzxppQbTHJgb39Le2LBfg==
+X-Received: by 2002:a05:6214:21aa:b0:440:cd95:323b with SMTP id t10-20020a05621421aa00b00440cd95323bmr18629030qvc.53.1647920672139;
+        Mon, 21 Mar 2022 20:44:32 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id b26-20020a05620a119a00b0067e5a092d45sm5481464qkk.11.2022.03.21.20.44.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 20:42:45 -0700 (PDT)
-Message-ID: <623945b5.1c69fb81.fdd30.e714@mx.google.com>
-Date:   Mon, 21 Mar 2022 20:42:45 -0700 (PDT)
-X-Google-Original-Date: Tue, 22 Mar 2022 03:42:39 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 00/30] 5.10.108-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
+        Mon, 21 Mar 2022 20:44:31 -0700 (PDT)
+Message-ID: <6239461f.1c69fb81.df45.a622@mx.google.com>
+X-Google-Original-Message-ID: <20220322034428.GA2327077@cgel.zte@gmail.com>
+Date:   Tue, 22 Mar 2022 03:44:28 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
+ for file pages
+References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
+ <YjiMsGoXoDU+FwsS@cmpxchg.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjiMsGoXoDU+FwsS@cmpxchg.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,27 +76,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 14:52:30 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.108 release.
-> There are 30 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Mar 21, 2022 at 10:33:20AM -0400, Johannes Weiner wrote:
+> On Wed, Mar 16, 2022 at 06:39:28AM +0000, cgel.zte@gmail.com wrote:
+> > From: Yang Yang <yang.yang29@zte.com.cn>
+> > 
+> > psi tracks the time spent on submitting the IO of refaulting file pages
+> > and anonymous pages[1]. But after we tracks refaulting anonymous pages
+> > in swap_readpage[2][3], there is no need to track refaulting anonymous
+> > pages in submit_bio.
+> > 
+> > So this patch can reduce redundant calling of psi_memstall_enter. And
+> > make it easier to track refaulting file pages and anonymous pages
+> > separately.
 > 
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
+> I don't think this is an improvement.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.108-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> psi_memstall_enter() will check current->in_memstall once, detect the
+> nested call, and bail. Your patch checks PageSwapBacked for every page
+> being added. It's more branches for less robust code.
 
-5.10.108-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
-
+And PageSwapBacked checking is after unlikely(PageWorkingset(page), so I think
+the impact is little.

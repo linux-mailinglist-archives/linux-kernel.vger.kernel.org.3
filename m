@@ -2,56 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD2C4E3DD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A434E3DCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234445AbiCVLxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 07:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S230434AbiCVLuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 07:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbiCVLxg (ORCPT
+        with ESMTP id S231546AbiCVLuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 07:53:36 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3409E8022D;
-        Tue, 22 Mar 2022 04:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=+yXAkHolJgqVk/BtNf4Ef0TWb84m7vRf+K9XWHBKc4Q=; b=ly7pY/NnbBHKXcqHpNl17W1Z37
-        Gecx5+lTJas19UAtgWyPuNbhZDmgsUwZLMAtktWlOJ0OFErpcvHR8urBqd5oTbSGqgI7Q9GAEDENx
-        fICWGT1kE8Wk4fX8WY1DOPC3++56OPXm6tyNCFHtDpbdgkfnVVHcPBnW3mYhUxd/A9Vp7206PRVrN
-        vVYcyGhWhIhmqoCwdV2bYvCwvjH0Yit/85oFfXv0WC+Z9aiTZJzS7DX9oBTUMrzzuF2vacyRC8RSB
-        7ltHfEGyMF/mmBiYYif5dIXgg91qF+49ZvWTtzKFD/Dh325K+9KR30S7ZiEc8eTKuXbG+jmxTXnAA
-        NPODUChA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWd3I-003S9p-PB; Tue, 22 Mar 2022 11:51:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 40AB1300727;
-        Tue, 22 Mar 2022 12:51:50 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id A6EA32D273A03; Tue, 22 Mar 2022 12:51:50 +0100 (CET)
-Message-ID: <20220322115125.811582125@infradead.org>
-User-Agent: quilt/0.66
-Date:   Tue, 22 Mar 2022 12:48:11 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        linux-crypto@vger.kernel.org, ebiggers@google.com,
-        herbert@gondor.apana.org.au, Jason@zx2c4.com,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH 2/2] objtool: Fix IBT tail-call detection
-References: <20220322114809.381992456@infradead.org>
+        Tue, 22 Mar 2022 07:50:19 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A895DE70;
+        Tue, 22 Mar 2022 04:48:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647949731; x=1679485731;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6QjCSLV5pHvUu+Co9Q8F1SIwOXRHIVGiCuCTzOhLowU=;
+  b=IiS5eOcSAbKAwXnij0pxHeEzhEKlnJHgJ1kq9d0fQ1FNXHGTVyzeHi9S
+   1BQWkYVpTXySqJgtqsLyxTKxmBrw5XuuN3O6xctY9PfSMQvgK7AtkWGw+
+   xWg+5Njj9u16/KELflLX9IC78Pn9P+EXBfKtm/201UjaYx20Rc7QZE8Jh
+   FAaB+JaGgWtqMsEo0qBu5mSR4svJUj6xtvvG5z9+4m05+Y48ddMIGzhzo
+   TMHutrOtrFL5Vk0DJy29/MydBLuGSa2TCIOYUy5E52lkonPg0zNm726/O
+   1HCSjc5A75Bg0DL4dKO6IhPxuczA4EteI/dDAzZV1k/sNgb8c83cprWNH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="239954907"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="239954907"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 04:48:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="583228928"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga001.jf.intel.com with ESMTP; 22 Mar 2022 04:48:51 -0700
+Received: from [10.209.120.44] (alwinma-MOBL2.amr.corp.intel.com [10.209.120.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id B9E53580A6C;
+        Tue, 22 Mar 2022 04:48:49 -0700 (PDT)
+Message-ID: <ffd440b7-fef9-a5ae-95b7-73c1f8a212ef@linux.intel.com>
+Date:   Tue, 22 Mar 2022 07:48:48 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] perf parse-events: Move slots only with topdown
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220321223344.1034479-1-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220321223344.1034479-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,79 +81,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Objtool reports:
-
-  arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx() falls through to next function poly1305_blocks_x86_64()
-  arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_emit_avx() falls through to next function poly1305_emit_x86_64()
-  arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx2() falls through to next function poly1305_blocks_x86_64()
-
-Which reads like:
-
-0000000000000040 <poly1305_blocks_x86_64>:
-	 40:       f3 0f 1e fa             endbr64
-	...
-
-0000000000000400 <poly1305_blocks_avx>:
-	400:       f3 0f 1e fa             endbr64
-	404:       44 8b 47 14             mov    0x14(%rdi),%r8d
-	408:       48 81 fa 80 00 00 00    cmp    $0x80,%rdx
-	40f:       73 09                   jae    41a <poly1305_blocks_avx+0x1a>
-	411:       45 85 c0                test   %r8d,%r8d
-	414:       0f 84 2a fc ff ff       je     44 <poly1305_blocks_x86_64+0x4>
-	...
-
-These are simple conditional tail-calls and *should* be recognised as
-such by objtool, however due to a mistake in commit 08f87a93c8ec
-("objtool: Validate IBT assumptions") this is failing.
-
-Specifically, the jump_dest is +4, this means the instruction pointed
-at will not be ENDBR and as such it will fail the second clause of
-is_first_func_insn() that was supposed to capture this exact case.
-
-Instead, have is_first_func_insn() look at the previous instruction.
-
-Fixes: 08f87a93c8ec ("objtool: Validate IBT assumptions")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- tools/objtool/check.c |   19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1239,11 +1239,20 @@ static bool same_function(struct instruc
- 	return insn1->func->pfunc == insn2->func->pfunc;
- }
- 
--static bool is_first_func_insn(struct instruction *insn)
-+static bool is_first_func_insn(struct objtool_file *file, struct instruction *insn)
- {
--	return insn->offset == insn->func->offset ||
--	       (insn->type == INSN_ENDBR &&
--		insn->offset == insn->func->offset + insn->len);
-+	if (insn->offset == insn->func->offset)
-+		return true;
-+
-+	if (ibt) {
-+		struct instruction *prev = prev_insn_same_sym(file, insn);
-+
-+		if (prev && prev->type == INSN_ENDBR &&
-+		    insn->offset == insn->func->offset + prev->len)
-+			return true;
-+	}
-+
-+	return false;
- }
- 
- /*
-@@ -1327,7 +1336,7 @@ static int add_jump_destinations(struct
- 				insn->jump_dest->func->pfunc = insn->func;
- 
- 			} else if (!same_function(insn, insn->jump_dest) &&
--				   is_first_func_insn(insn->jump_dest)) {
-+				   is_first_func_insn(file, insn->jump_dest)) {
- 				/* internal sibling call (without reloc) */
- 				add_call_dest(file, insn, insn->jump_dest->func, true);
- 			}
 
 
+On 3/21/2022 6:33 PM, Ian Rogers wrote:
+> If slots isn't with a topdown event then moving it is unnecessary. For
+> example {instructions, slots} is re-ordered:
+> 
+> $ perf stat -e '{instructions,slots}' -a sleep 1
+> 
+>   Performance counter stats for 'system wide':
+> 
+>         936,600,825      slots
+>         144,440,968      instructions
+> 
+>         1.006061423 seconds time elapsed
+> 
+> Which can break tools expecting the command line order to match the
+> printed order. It is necessary to move the slots event first when it
+> appears with topdown events. Add extra checking so that the slots event
+> is only moved in the case of there being a topdown event like:
+> 
+> $ perf stat -e '{instructions,slots,topdown-fe-bound}' -a sleep 1
+> 
+>   Performance counter stats for 'system wide':
+> 
+>          2427568570      slots
+>           300927614      instructions
+>           551021649      topdown-fe-bound
+> 
+>         1.001771803 seconds time elapsed
+> 
+> Fixes: 94dbfd6781a0 ("perf parse-events: Architecture specific leader override")
+> Reported-by: Kan Liang <kan.liang@linux.intel.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+
+Thanks Ian. The patch works well.
+
+Tested-by: Kan Liang <kan.liang@linux.intel.com>
+
+Thanks,
+Kan
+> ---
+>   tools/perf/arch/x86/util/evlist.c | 18 ++++++++++++++----
+>   1 file changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
+> index 8d9b55959256..cfc208d71f00 100644
+> --- a/tools/perf/arch/x86/util/evlist.c
+> +++ b/tools/perf/arch/x86/util/evlist.c
+> @@ -20,17 +20,27 @@ int arch_evlist__add_default_attrs(struct evlist *evlist)
+>   
+>   struct evsel *arch_evlist__leader(struct list_head *list)
+>   {
+> -	struct evsel *evsel, *first;
+> +	struct evsel *evsel, *first, *slots = NULL;
+> +	bool has_topdown = false;
+>   
+>   	first = list_first_entry(list, struct evsel, core.node);
+>   
+>   	if (!pmu_have_event("cpu", "slots"))
+>   		return first;
+>   
+> +	/* If there is a slots event and a topdown event then the slots event comes first. */
+>   	__evlist__for_each_entry(list, evsel) {
+> -		if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") &&
+> -			evsel->name && strcasestr(evsel->name, "slots"))
+> -			return evsel;
+> +		if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") && evsel->name) {
+> +			if (strcasestr(evsel->name, "slots")) {
+> +				slots = evsel;
+> +				if (slots == first)
+> +					return first;
+> +			}
+> +			if (!strncasecmp(evsel->name, "topdown", 7))
+> +				has_topdown = true;
+> +			if (slots && has_topdown)
+> +				return slots;
+> +		}
+>   	}
+>   	return first;
+>   }

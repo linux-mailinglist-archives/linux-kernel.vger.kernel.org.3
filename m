@@ -2,165 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4934E3F3E
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBD64E3F3D
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234591AbiCVNPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
+        id S234876AbiCVNP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234548AbiCVNPm (ORCPT
+        with ESMTP id S234414AbiCVNPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:15:42 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C883E7657;
-        Tue, 22 Mar 2022 06:14:11 -0700 (PDT)
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MdNPq-1o5i2U0Hse-00ZMsx; Tue, 22 Mar 2022 14:14:10 +0100
-Received: by mail-wm1-f42.google.com with SMTP id r190-20020a1c2bc7000000b0038a1013241dso1677405wmr.1;
-        Tue, 22 Mar 2022 06:14:09 -0700 (PDT)
-X-Gm-Message-State: AOAM533cgpzCjEn8RKb+oacCxiOqclq7sNEBUv1wx13rcYhb0cCZY9Sf
-        6z7GdX4qWofWV4rjg0cCqO99IBmnIu4Xs/+oxWs=
-X-Google-Smtp-Source: ABdhPJyHDWv/mDC8WwrAR2wIUWCLvYl74QCY8Bcoo4lV+G5Q4bMm4glI5YH/lSfsRyVIlxl4wVhx+pOkDz4xDrytxAc=
-X-Received: by 2002:a05:600c:4e11:b0:38c:bd19:e72c with SMTP id
- b17-20020a05600c4e1100b0038cbd19e72cmr1599974wmq.174.1647954849655; Tue, 22
- Mar 2022 06:14:09 -0700 (PDT)
+        Tue, 22 Mar 2022 09:15:54 -0400
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56D1B7EF;
+        Tue, 22 Mar 2022 06:14:26 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id 1so13913848qke.1;
+        Tue, 22 Mar 2022 06:14:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I/adiEo/XzFIdraw7is3qX+sC2P5eNMbIwRzU4EJr7s=;
+        b=aYkL91Otmu5jRTqRCXIGkXR+FNRa4pWrJ5xN5BsmMHtMRHBmqBbeZ98qlg8Q9b7T80
+         l2WUnE2z6DT7rPm21cv9xgrT+rv2jNk+KjY5RqFIeSL5EM7qlH3ZzexiSqAsQxdKneF4
+         tJBUbOsROV1ujWy1p/+XTL2a/3WAG6V7/kM2CE1gmXxtJ8i/L4JCmq0f2G8jlTeUDT1X
+         OV0cFHA5e1qm4IOxT/Sm2XSWQSiSNpJA0YqmiL2KT4q1l7JU0s/943FhWqPFIYA3J+/B
+         s2BxneX5nc/6yX0yfG0zA2BfCiUZ827CoVkONyORh0cttzuElOELa7Gf/dg84OzWg/Dz
+         Ua5Q==
+X-Gm-Message-State: AOAM531PqY+laTLUBjPZeWX6+YbY6d52Xl/L0Od6nY1ioYigBeb1RLyG
+        PDX/NMBgizeQryeHzH9jwYmKRJBANsbB9A==
+X-Google-Smtp-Source: ABdhPJy5MKI3Itee0xd+7KFQZqSHPa2fEFOfkId03Xu1EgI9okxq/n+PzlDdrsEnte+581Jxzx4VNQ==
+X-Received: by 2002:a05:620a:440d:b0:67b:489a:616f with SMTP id v13-20020a05620a440d00b0067b489a616fmr14983782qkp.639.1647954865268;
+        Tue, 22 Mar 2022 06:14:25 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id z6-20020ae9c106000000b0067d3b9ef387sm8836885qki.28.2022.03.22.06.14.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 06:14:25 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2e5e9025c20so106880687b3.7;
+        Tue, 22 Mar 2022 06:14:24 -0700 (PDT)
+X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
+ v133-20020a81618b000000b002dbd9528a39mr29453478ywb.132.1647954864581; Tue, 22
+ Mar 2022 06:14:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220321165049.35985-1-sven@svenpeter.dev> <20220321165049.35985-6-sven@svenpeter.dev>
-In-Reply-To: <20220321165049.35985-6-sven@svenpeter.dev>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 22 Mar 2022 14:13:53 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2VgrWHerXTX4_wS8UU7fpN9-JZ5xESaWrr-WGYqGty=g@mail.gmail.com>
-Message-ID: <CAK8P3a2VgrWHerXTX4_wS8UU7fpN9-JZ5xESaWrr-WGYqGty=g@mail.gmail.com>
-Subject: Re: [PATCH 5/9] soc: apple: Add RTKit IPC library
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org
+References: <20220310150905.1.Ie0a005d7a763d501e03b7abe8ee968ca99d23282@changeid>
+ <CAMRc=McbY6vK_M9fP7Hzg8LE9ANOZKN49hmBFn92YFH+2ToM8w@mail.gmail.com>
+ <CACRpkdb-W10YAQff_dTUL7B-DH01Z9nn7cE71Zv5xjALtDGQ1g@mail.gmail.com> <CA+ASDXOOzECbCBoehKjmFjLTtsssk9AH1NabA=FSRvoVWp8KMQ@mail.gmail.com>
+In-Reply-To: <CA+ASDXOOzECbCBoehKjmFjLTtsssk9AH1NabA=FSRvoVWp8KMQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 22 Mar 2022 14:14:13 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUANNFNt6yuTEcadkdVhKHDmVAVofWOfFpW-r2wkL=vdQ@mail.gmail.com>
+Message-ID: <CAMuHMdUANNFNt6yuTEcadkdVhKHDmVAVofWOfFpW-r2wkL=vdQ@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Drop CONFIG_DEBUG_GPIO
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:2bBe4cyn3++cwdW/0rs3Hoz8DBuyuGh94rq9xa3h/Q6bApTSrfY
- ciBXTMWnVq9a5Xq03Pb3yMhPSS+qsMnk+uHi+2G5tNhkE+nqVZZ0cxS4jOcC+eVIaRgN5t2
- LHCe8O3qi239if3Uuh3SpA4qrmYc8rYmqzxihzkknqPBGqZj7YR9hfVPXBPhV3E3R/FceQr
- DelYM8HEErILnBlgDObhQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8GIhNQ+L9zA=:88M/Tj2uslOfKziF5bGUEx
- ndkAQDGpGYjiNfMnIPDzl+ccdtQUu1Ia4F91AK/cCCjy3QO1lb+MWNou+vrl5baSdfW9yM7Wj
- agfBbSfCXedENbHWA2kEwKfnhsgC/dtTO9ZYGswPyeeh4gqA6vEeXmYf3oAJ6UVI0DR6v5Hwq
- dBGhe1st3MftRG/HH8G/L6P5lM0Pj9b7m0+atjxjz8T7GStEJU0Qxy2/kTTPWzScmZdFzknMX
- S5bFy7OHoIFsscCGGwF7TO02IQJ1qKU0TPWbr1A0w6bMqtcZZjVSeLHkYYIrmmDNImInDEnYl
- /MxexH4G7+lg2f0sSnB0UXn0Idf0dHbfxon7hun6VBjD4JxRvMn7+8cGhEqAPfYwLeZBv+CMJ
- X7G0tRpILH5Gd/N/D3ORxJJVqE5McKK3u4/wjTnwupoEi/vbSiqXCfTa7CtHX1Zf/ZNSmdduT
- Yre8x5U0gesKT9qLFkd6lam7/1f6d7TkjH4280wPiGNuNRMZWlzqGVY/H5MDiO3jVuNl8pl65
- wsT7rQLa+y8M9FGQswGpvEoSMHI18x4jM6p33//1bT5g0VaO5FPQVV/IK6GMTLG5LBZpKv28v
- /osGUKYzcmuhrLLwtfb3P+3LLG+W/gNzfQ3bse+zq+eGftKbD1xSpKtYuT3L+QIb3vsVY7TXi
- J0M0dOyxpIUaG7DEf9gMobC4SogephW1TLy3eRP3jssWj/Qhd4OPehlr2y07/lDbZnUk=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 5:50 PM Sven Peter <sven@svenpeter.dev> wrote:
+Hi Brian,
+
+On Tue, Mar 15, 2022 at 1:19 AM Brian Norris <briannorris@chromium.org> wrote:
+> On Mon, Mar 14, 2022 at 3:23 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Mon, Mar 14, 2022 at 4:00 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > > I like it. It's true we don't see many of those DEBUG constructs
+> > > anymore nowadays and overhead for might_sleep() and WARN_ON() is
+> > > negligible.
+> >
+> > I agree.  I have something similar for pinctrl, maybe that needs to
+> > go too.
 >
-> Apple SoCs such as the M1 come with multiple embedded co-processors
-> running proprietary firmware. Communication with those is established
-> over a simple mailbox using the RTKit IPC protocol.
+> Huh, yeah, CONFIG_DEBUG_PINCTRL does look awfully similar, and I just
+> didn't notice because we don't happen to have it enabled for Chromium
+> kernels. We happen to have CONFIG_DEBUG_GPIO enabled though, and the
+> "new" rockchip-gpio log messages triggered me :)
 >
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> I guess one difference is that CONFIG_DEBUG_PINCTRL is almost
+> exclusively (aside from some renesas drivers?) about extra logging and
+> less about interesting checks that one might want to enable in more
+> general settings. So it's a clearer call to make that people generally
+> want it disabled.
 
-> +
-> +#define rtk_err(format, arg...) dev_err(rtk->dev, "RTKit: " format, ##arg)
-> +#define rtk_warn(format, arg...) dev_warn(rtk->dev, "RTKit: " format, ##arg)
-> +#define rtk_info(format, arg...) dev_info(rtk->dev, "RTKit: " format, ##arg)
-> +#define rtk_dbg(format, arg...) dev_dbg(rtk->dev, "RTKit: " format, ##arg)
+For the Renesas pinctrl drivers, it enables sanity checks on the pin
+control tables, which you definitely do not want in your production
+kernel.
 
-I generally don't like the custom printing macros, please just open-code
-the prints where they are used, that makes it easier for other kernel
-developers to see exactly what is being printed.
+Gr{oetje,eeting}s,
 
-> +enum { APPLE_RTKIT_WORK_MSG,
-> +       APPLE_RTKIT_WORK_REINIT,
-> +};
-> +
-> +enum { APPLE_RTKIT_PWR_STATE_OFF = 0x00,
-> +       APPLE_RTKIT_PWR_STATE_SLEEP = 0x01,
-> +       APPLE_RTKIT_PWR_STATE_GATED = 0x02,
-> +       APPLE_RTKIT_PWR_STATE_QUIESCED = 0x10,
-> +       APPLE_RTKIT_PWR_STATE_ON = 0x20,
-> +};
+                        Geert
 
-This is an odd indentation style, I would insert a newline after the 'enum {'
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> +static int apple_rtkit_worker(void *data)
-> +{
-> +       struct apple_rtkit *rtk = data;
-> +       struct apple_rtkit_work work;
-> +
-> +       while (!kthread_should_stop()) {
-> +               wait_event_interruptible(rtk->wq,
-> +                                        kfifo_len(&rtk->work_fifo) > 0 ||
-> +                                                kthread_should_stop());
-> +
-> +               if (kthread_should_stop())
-> +                       break;
-> +
-> +               while (kfifo_out_spinlocked(&rtk->work_fifo, &work, 1,
-> +                                           &rtk->work_lock) == 1) {
-> +                       switch (work.type) {
-> +                       case APPLE_RTKIT_WORK_MSG:
-> +                               apple_rtkit_rx(rtk, &work.msg);
-> +                               break;
-> +                       case APPLE_RTKIT_WORK_REINIT:
-> +                               apple_rtkit_do_reinit(rtk);
-> +                               break;
-> +                       }
-> +               }
-
-It looks like you add quite a bit of complexity by using a custom
-worker thread implementation. Can you explain what this is
-needed for? Isn't this roughly the same thing that one would
-get more easily with create_singlethread_workqueue()?
-
-> +#if IS_ENABLED(CONFIG_APPLE_RTKIT)
-
-Instead of allowing the interface to be used without CONFIG_APPLE_RTKIT,
-I think it is sufficient to allow the driver itself to be built with
-CONFIG_COMPILE_TEST (as you already do), and then have
-drivers using it marked as 'depends on APPLE_RTKIT'
-unconditionally.
-
-> +/*
-> + * Initializes the internal state required to handle RTKit. This
-> + * should usually be called within _probe.
-> + *
-> + * @dev: Pointer to the device node this coprocessor is assocated with
-> + * @cookie: opaque cookie passed to all functions defined in rtkit_ops
-> + * @mbox_name: mailbox name used to communicate with the co-processor
-> + * @mbox_idx: mailbox index to be used if mbox_name is NULL
-> + * @ops: pointer to rtkit_ops to be used for this co-processor
-> + */
-> +struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
-> +                                    const char *mbox_name, int mbox_idx,
-> +                                    const struct apple_rtkit_ops *ops);
-> +
-> +/*
-> + * Dev-res managed version of apple_rtkit_init.
-> + */
-> +struct apple_rtkit *devm_apple_rtkit_init(struct device *dev, void *cookie,
-> +                                         const char *mbox_name, int mbox_idx,
-> +                                         const struct apple_rtkit_ops *ops);
-
-Do we need to export both of these?
-
-         Arnd
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

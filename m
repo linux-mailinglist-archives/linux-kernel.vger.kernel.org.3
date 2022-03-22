@@ -2,197 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E80C4E3D29
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5831D4E3D31
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233878AbiCVLIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 07:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        id S233915AbiCVLIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 07:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233889AbiCVLHx (ORCPT
+        with ESMTP id S233036AbiCVLIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 07:07:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D00136B086
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 04:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647947184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FCN73VojYTO9kljcWQ13H5/nQPlAxw07sJxBf+2VjUA=;
-        b=H2Zq1cVoJydixIK2B2CsbTdLcTbRe7kxljmiuqaaW/LETNRDoaPEs7LggRGM2BCptnvRsu
-        kR4fff6qf9H5tuG+QS3noE7GmSOjKKlhHi/niNl4OGpQ/6TOD++N2SbEHqEx4/zml199eg
-        mZaTkVscn6WMo5CEzL0X47N6hygNkF4=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-251-Jn43R2x8NNKOLxVdmLMrcQ-1; Tue, 22 Mar 2022 07:06:23 -0400
-X-MC-Unique: Jn43R2x8NNKOLxVdmLMrcQ-1
-Received: by mail-pg1-f197.google.com with SMTP id m8-20020a637d48000000b003820515b5dcso7953586pgn.20
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 04:06:23 -0700 (PDT)
+        Tue, 22 Mar 2022 07:08:44 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398908021D;
+        Tue, 22 Mar 2022 04:07:17 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso1277212wmz.4;
+        Tue, 22 Mar 2022 04:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nuGWDZlXSZNQGXcVqmqYeVN3TUgNMalMalmgFdEvLsg=;
+        b=X4RgYA0+Ajt10eWG3Cch8vH9Av08UbBn9ubtGq13/DWrudpJ9HsL8NBFjPSUVGn6mf
+         NwZdtF8uAnK4t8OaDZfbPuRFUb4M2szufCnJ77oIudRfuZLBsOnsBCXuc3SQ72PreVmi
+         0GJ/rFbF3XQbbIu5UtA/wmNCTc3XeseBSjrjD9iZZc2s30/TIfUnVH0tJsLMwKBduBX2
+         ewi2AwR9tjbRS3WiL/OxG3kh57cl7AM7sScY2C7rjg9503Y7oRUad4M4U7CxJ4HmHe9t
+         qmLv+HZ+Nm5KMpqztfekztjTkYJaz7eW3eNz9JlLspoqijvuTMz5RuSezD7rNbpBR+kz
+         fsOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FCN73VojYTO9kljcWQ13H5/nQPlAxw07sJxBf+2VjUA=;
-        b=Xw+rRqFtF7i6Xh6yuSAEEJxiP9mT4qHXWwi9DCmycMZGeXzMD/oKV7jU69//kPHUNZ
-         bmXIsShSm4DCPFLJXoktK/9T2L+MgQVFdXvXA9O9u1hbVkuapJumAEx899Ck5T7pGX9w
-         ljQ0H5ICm8fXg0x+TC/i5bd9C2afGnWu5hR1UldhzEk4Gtax/UnqjQfQdzfzOvnVoNuw
-         FK1T9iDByAhy6vl3ZtgoijWT8o+SPw6KnkP5GeAxS5F5g1YmML3hLiocz/mBkLniEMxo
-         bJVkzkuWBh/Vx2m8sAfYsWEIgs8g1lIkvXzUpHZ88TtzCyzjRFcwTxbGdVsjQCVJ37jE
-         Iv2w==
-X-Gm-Message-State: AOAM530T64XRE+Z4W9xmx0thZ3fTGusU0BETVbKVQE+2cItEVyXz8eZT
-        w36C2ZWYQYbk2OX8RMDhkE1eg4MVd17ycDWzQi7589eGWW3/4TTPmw/fyvhYu7QT3neg59Ba8bE
-        206nm5z0UCHV4tT04omPYj+uo/ii6aKK7KJbtnpsL
-X-Received: by 2002:a05:6a00:781:b0:4f4:2a:2d89 with SMTP id g1-20020a056a00078100b004f4002a2d89mr28353603pfu.13.1647947182454;
-        Tue, 22 Mar 2022 04:06:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxr+q2ATbHevtxQq+KnIYNOBZEc3a+OTtO21QwUxoenZhXslv90N6P5NwAn9zxlvY4pCldPh/cy5+2PEff6pyY=
-X-Received: by 2002:a05:6a00:781:b0:4f4:2a:2d89 with SMTP id
- g1-20020a056a00078100b004f4002a2d89mr28353561pfu.13.1647947182060; Tue, 22
- Mar 2022 04:06:22 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=nuGWDZlXSZNQGXcVqmqYeVN3TUgNMalMalmgFdEvLsg=;
+        b=DlGi3IbJeAO0unAtcTHLQcc5bFw5qfzrTBdJKSSPVyXfg+M+NjkkAaA8N1vID/ltaZ
+         glG2ydn1/LP/V84VMvXojNSzucNNBeFuRyxJWv/rHws6LTzg5GbNQJ/qaOE5VCGQ287l
+         ruzk4yQP0xdU2Vst9wmC8EMsyyq4GklfgCn08PasF3HK8KsU5MNWwhqafeqpJWWvXFCF
+         4m2Ap57pWVpGJWU9w8avtUieDEKc2QL4rYdTjZ/eFSgBld3IWh7qinQuexepiiv/a8Ig
+         YCBd+O9f5fm8G+rzbNr54JQ69RjEg7nKjD+a0Vjysbv/VwruoMwnzTTZGcmNQxBsSs4Y
+         OIfA==
+X-Gm-Message-State: AOAM531zCU7Vkfih9EikUL89N0cNSQz/tNxlBDi0yyDrdxygiwPC2etk
+        6zt1WqNmr7yWiy3AJ8XMzpF/YVqqZRY=
+X-Google-Smtp-Source: ABdhPJyYkc/0WmhNc7t3CoJMz8icf/aTLLqcf8k5iFIr0sUggSjDbLvekBHQdd0qX0SvqiTcjPEdCQ==
+X-Received: by 2002:adf:e348:0:b0:1f0:537:1807 with SMTP id n8-20020adfe348000000b001f005371807mr22271075wrj.11.1647947235642;
+        Tue, 22 Mar 2022 04:07:15 -0700 (PDT)
+Received: from avogadro.lan ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id f13-20020a05600c4e8d00b0038c949ef0d5sm1746379wmq.8.2022.03.22.04.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 04:07:15 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     mlevitsk@redhat.com, jmattson@google.com
+Subject: [PATCH 0/3] Documentation: KVM: add a place to document API quirks and (x86) CPU errata
+Date:   Tue, 22 Mar 2022 12:07:09 +0100
+Message-Id: <20220322110712.222449-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
- <20220318161528.1531164-3-benjamin.tissoires@redhat.com> <CAPhsuW5qseqVs4=hz3VvSJ2ObqB2kTbKXoaOCh=5vjoU_AXnKQ@mail.gmail.com>
- <CAO-hwJ+WSi645HhNV_BYACoJe2UTc4KZzqH0oHocfnBR8xUYEQ@mail.gmail.com> <CAPhsuW4+b66Keh_f+UoApM8UenhnJ5wD_SaatAFDms9=g7ENyw@mail.gmail.com>
-In-Reply-To: <CAPhsuW4+b66Keh_f+UoApM8UenhnJ5wD_SaatAFDms9=g7ENyw@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 22 Mar 2022 12:06:11 +0100
-Message-ID: <CAO-hwJLAAB=hAffiRAEsv-qgj+GYcLsULQVjQ2i1_ZZTB5dPRw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 02/17] bpf: introduce hid program type
-To:     Song Liu <song@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:52 PM Song Liu <song@kernel.org> wrote:
->
-> On Mon, Mar 21, 2022 at 9:07 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > Hi Song,
-> >
-> > many thanks for the quick response.
-> >
-> > On Fri, Mar 18, 2022 at 9:48 PM Song Liu <song@kernel.org> wrote:
-> [...]
-> > >
-> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > >
-> > > We need to mirror these changes to tools/include/uapi/linux/bpf.h.
-> >
-> > OK. I did that in patch 4/17 but I can bring in the changes there too.
->
-> Let's keep changes to the two files in the same patch. This will make
-> sure they are back ported together.
+Reorganize Documentation/virt/kvm to be less x86-centric, and add a new
+file to document the ways in which x86 emulation is "wrong".  There are
+surely many more, for now just add the skeleton.  Please reply to this
+message with things that you'd like to see documented.
 
-Ack
+While at it add also a section for places where the KVM API is bad or
+returns wrong values.  Please also include them in reply to this message
+if you are interested in seeing them documented.
 
->
-> [...]
-> > > > +enum hid_bpf_event {
-> > > > +       HID_BPF_UNDEF = 0,
-> > > > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
-> > > > +       HID_BPF_RDESC_FIXUP,            /* ................... BPF_HID_RDESC_FIXUP */
-> > > > +       HID_BPF_USER_EVENT,             /* ................... BPF_HID_USER_EVENT */
-> > >
-> > > Why don't we have a DRIVER_EVENT type here?
-> >
-> > For driver event, I want to have a little bit more of information
-> > which tells which event we have:
-> > - HID_BPF_DRIVER_PROBE
-> > - HID_BPF_DRIVER_SUSPEND
-> > - HID_BPF_DRIVER_RAW_REQUEST
-> > - HID_BPF_DRIVER_RAW_REQUEST_ANSWER
-> > - etc...
-> >
-> > However, I am not entirely sure on the implementation of all of those,
-> > so I left them aside for now.
-> >
-> > I'll work on that for v4.
->
-> This set is already pretty big. I guess we can add them in a follow-up set.
->
-> >
-> > >
-> > > >
-> > > [...]
- [...]
-> > > > +
-> > > > +static int hid_bpf_prog_test_run(struct bpf_prog *prog,
-> > > > +                                const union bpf_attr *attr,
-> > > > +                                union bpf_attr __user *uattr)
-> > > > +{
-> > > > +       struct hid_device *hdev = NULL;
-> > > > +       struct bpf_prog_array *progs;
-> > > > +       bool valid_prog = false;
-> > > > +       int i;
-> > > > +       int target_fd, ret;
-> > > > +       void __user *data_out = u64_to_user_ptr(attr->test.data_out);
-> > > > +       void __user *data_in = u64_to_user_ptr(attr->test.data_in);
-> > > > +       u32 user_size_in = attr->test.data_size_in;
-> > > > +       u32 user_size_out = attr->test.data_size_out;
-> > > > +       u32 allocated_size = max(user_size_in, user_size_out);
-> > > > +       struct hid_bpf_ctx_kern ctx = {
-> > > > +               .type = HID_BPF_USER_EVENT,
-> > > > +               .allocated_size = allocated_size,
-> > > > +       };
-> > > > +
-> > > > +       if (!hid_hooks.hdev_from_fd)
-> > > > +               return -EOPNOTSUPP;
-> > > > +
-> > > > +       if (attr->test.ctx_size_in != sizeof(int))
-> > > > +               return -EINVAL;
-> > >
-> > > ctx_size_in is always 4 bytes?
-> >
-> > Yes. Basically what I had in mind is that the "ctx" for
-> > user_prog_test_run is the file descriptor to the sysfs that represent
-> > the HID device.
-> > This seemed to me to be the easiest to handle for users.
-> >
-> > I'm open to suggestions though.
->
-> How about we use data_in? ctx for test_run usually means the program ctx,
-> which is struct hid_bpf_ctx here.
->
+Paolo
 
-I'd rather not use data_in. data_in is forwarded as it is in the ctx
-of the program, so adding a bulky API where the first byte is the
-target_fd doesn't make a lot of sense IMO.
+Paolo Bonzini (3):
+  Documentation: KVM: add separate directories for architecture-specific
+    documentation
+  Documentation: KVM: add virtual CPU errata documentation
+  Documentation: KVM: add API issues section
 
-However, I just managed to achieve what I initially wanted to do
-without luck: just use the struct bpf_prog as the sole argument.
-I thought iterating over all hid devices would be painful, but it
-turns out that is exactly what hid_bpf_fd_to_hdev() was doing, so
-there is no penalty in doing so.
+ Documentation/virt/kvm/api.rst                | 46 +++++++++++++++++++
+ Documentation/virt/kvm/index.rst              | 28 ++++-------
+ Documentation/virt/kvm/s390/index.rst         | 12 +++++
+ .../virt/kvm/{ => s390}/s390-diag.rst         |  0
+ .../virt/kvm/{ => s390}/s390-pv-boot.rst      |  0
+ Documentation/virt/kvm/{ => s390}/s390-pv.rst |  0
+ .../kvm/{ => x86}/amd-memory-encryption.rst   |  0
+ Documentation/virt/kvm/{ => x86}/cpuid.rst    |  0
+ Documentation/virt/kvm/x86/errata.rst         | 39 ++++++++++++++++
+ .../virt/kvm/{ => x86}/halt-polling.rst       |  0
+ .../virt/kvm/{ => x86}/hypercalls.rst         |  0
+ Documentation/virt/kvm/x86/index.rst          | 19 ++++++++
+ Documentation/virt/kvm/{ => x86}/mmu.rst      |  0
+ Documentation/virt/kvm/{ => x86}/msr.rst      |  0
+ .../virt/kvm/{ => x86}/nested-vmx.rst         |  0
+ .../kvm/{ => x86}/running-nested-guests.rst   |  0
+ .../virt/kvm/{ => x86}/timekeeping.rst        |  0
+ 17 files changed, 124 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/virt/kvm/s390/index.rst
+ rename Documentation/virt/kvm/{ => s390}/s390-diag.rst (100%)
+ rename Documentation/virt/kvm/{ => s390}/s390-pv-boot.rst (100%)
+ rename Documentation/virt/kvm/{ => s390}/s390-pv.rst (100%)
+ rename Documentation/virt/kvm/{ => x86}/amd-memory-encryption.rst (100%)
+ rename Documentation/virt/kvm/{ => x86}/cpuid.rst (100%)
+ create mode 100644 Documentation/virt/kvm/x86/errata.rst
+ rename Documentation/virt/kvm/{ => x86}/halt-polling.rst (100%)
+ rename Documentation/virt/kvm/{ => x86}/hypercalls.rst (100%)
+ create mode 100644 Documentation/virt/kvm/x86/index.rst
+ rename Documentation/virt/kvm/{ => x86}/mmu.rst (100%)
+ rename Documentation/virt/kvm/{ => x86}/msr.rst (100%)
+ rename Documentation/virt/kvm/{ => x86}/nested-vmx.rst (100%)
+ rename Documentation/virt/kvm/{ => x86}/running-nested-guests.rst (100%)
+ rename Documentation/virt/kvm/{ => x86}/timekeeping.rst (100%)
 
-Anyway, I'll drop ctx_in in the next version.
-
-Cheers,
-Benjamin
+-- 
+2.35.1
 

@@ -2,102 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE0B4E3F91
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE59C4E3F96
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbiCVNbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S234525AbiCVNcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbiCVNbs (ORCPT
+        with ESMTP id S233715AbiCVNch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:31:48 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB142DD4F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:30:20 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id u3so24031423ljd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version:organization
-         :content-transfer-encoding;
-        bh=9HKooFSzF8EEsT2BEZgeunYRwvAjSyxG2IXK+iRrPEs=;
-        b=29htvhMmpTh4PKGEPvfVlPAUZrleKez8uBO1KBF0exKnC1WyZp6jRTQwDHy/q9a/if
-         R4OwsReo7NGIThGIV7Cil5RrsIpD6Gq6vC1sQxSVfEfj+mIzlK0nKfNpZ9QbNiwlgS8C
-         IAU6K1e3RWdb5GSt7vgRoCkvtWl8/5rV2tcGNYmKwgvSq1+bnrrTogQhTcAQrJIYuQV4
-         c2i+5SZEbLgLKdrjjNhmiO9KDuvbzRn9mfT3oshKO442uXOdu1FxRcxyAka7Iz174Xak
-         A40spqBYtTqd5MC1/e/YiixXhFlC5r4oiPSg7YS+KHOQSiu7YXIEt7T90404opxzbomi
-         bUvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :organization:content-transfer-encoding;
-        bh=9HKooFSzF8EEsT2BEZgeunYRwvAjSyxG2IXK+iRrPEs=;
-        b=ggUtFyTxW3JZj4RisKtGp4TyOEh+hp4f0f3NmI9+sbCBwa+QNBIqts1/SFCacLsLYI
-         mpAQsY4YXcdYNT/ovotEERI/TtfLwkE3W5RTwawx04l3Tcl6JaV4GXAuazse7NQgzZ82
-         j7Bfh1/hVeu3S00fICOkfma3kOUPZx3Qxfr7k82kGQ8lQpjAq7T7OOwJssjXc0ex8lRW
-         KnzNwrD8jY9mSVG8zCv+8t1mZ4HOy9xo24xIqQ13D/nm/7GVHc4yWB/IV5/sk4xL9Wgy
-         olrw3jj7PYG/G9N2bciDIhKysnOpnVYmm+ZX6d/pTyGAxXyRPMVAd2J560qil+NbITgf
-         FTHg==
-X-Gm-Message-State: AOAM531lTLYhOQ5qbZm5vpuWGXF8TAtrgl9tdiRURVtgfEv0bn0yUZ9E
-        /cAT+MTd6U/AjDg+NPnJLOYhyg==
-X-Google-Smtp-Source: ABdhPJxkwrq7ZJvbNzKo/Kac7gQ286RAOZTZyDPHLItZIJZkOra75RUq9+xsw1H+JJrRwUndrhihDg==
-X-Received: by 2002:a2e:a4d1:0:b0:249:8c9c:5ae0 with SMTP id p17-20020a2ea4d1000000b002498c9c5ae0mr4441949ljm.283.1647955817198;
-        Tue, 22 Mar 2022 06:30:17 -0700 (PDT)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id y26-20020a19915a000000b0044a0356abc4sm1779904lfj.220.2022.03.22.06.30.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 06:30:16 -0700 (PDT)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: bridge: mst: Restrict info size queries to bridge ports
-Date:   Tue, 22 Mar 2022 14:30:01 +0100
-Message-Id: <20220322133001.16181-1-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 22 Mar 2022 09:32:37 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B239A2DD5E;
+        Tue, 22 Mar 2022 06:31:07 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MBXLeE018278;
+        Tue, 22 Mar 2022 13:31:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HpA+lBmDwGJzna4wzGRAGzKQulBYXqZmgl9iArsAFEc=;
+ b=lJaWQAiiK3lzj51BoGP6QnFpOiHEL+f+njm+UWQ0UeDofLAuT3pxX+DojE0DSxjiZL6U
+ /OegKzfgbuleIKFFI1Ts7DmO8na2O2r4mxx1ftuTwpE1D9OtrSZHVNnae1Q7T5TCe3SJ
+ X8BXxZ7dWgDGTXy/ZfUjRQvl2tNbhhkV0V63BgGZtTqrUuqBDClIFtcJeTPl0wUms4lR
+ KWw6F8M9khdFJLrIHtrBgSGW+ISnyOQaWUYgRZfpHJUmUhXql0GgZJQKzZqpvA3J9D9a
+ DWFHG7tq10JsR5Irb3JEgmW+DD8f3AIBuRm1TEJtdZcpg/1Im0VK5qJuRUy/aDjIPV4L tg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eyautpnf6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:31:03 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22MDFVj5027042;
+        Tue, 22 Mar 2022 13:31:03 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eyautpnew-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:31:03 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MDHXcl007307;
+        Tue, 22 Mar 2022 13:31:02 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03dal.us.ibm.com with ESMTP id 3ew6t9hbh7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 13:31:02 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22MDV0MJ20709874
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Mar 2022 13:31:00 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 27FDB6E062;
+        Tue, 22 Mar 2022 13:31:00 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F3B3F6E060;
+        Tue, 22 Mar 2022 13:30:58 +0000 (GMT)
+Received: from [9.65.234.56] (unknown [9.65.234.56])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Mar 2022 13:30:58 +0000 (GMT)
+Message-ID: <0f9ab763-9596-c157-8f1e-e65088bf3aab@linux.ibm.com>
+Date:   Tue, 22 Mar 2022 09:30:58 -0400
 MIME-Version: 1.0
-Organization: Westermo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v18 13/18] s390/vfio-ap: implement in-use callback for
+ vfio_ap driver
+Content-Language: en-US
+To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
+ <20220215005040.52697-14-akrowiak@linux.ibm.com>
+ <37e98e6e-35a7-a77a-b057-e19b307c631a@linux.ibm.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <37e98e6e-35a7-a77a-b057-e19b307c631a@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ld6WgwifEOk6QCcEriFpJGHb8n3IZHSk
+X-Proofpoint-ORIG-GUID: KDkUGfMlekwWBt1i2Hg0TIl3E6zSU8Lp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-22_04,2022-03-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203220076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that no bridge masters are ever considered for MST info
-dumping. MST states are only supported on bridge ports, not bridge
-masters - which br_mst_info_size relies on.
 
-Fixes: 122c29486e1f ("net: bridge: mst: Support setting and reporting MST port states")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
----
 
-It turns out that even with Eric's fix, the guard was not restrictive
-enough. Sorry about all the noise around this.
+On 3/22/22 09:13, Jason J. Herne wrote:
+> On 2/14/22 19:50, Tony Krowiak wrote:
+> ...
+>> diff --git a/drivers/s390/crypto/vfio_ap_ops.c 
+>> b/drivers/s390/crypto/vfio_ap_ops.c
+>> index e9f7ec6fc6a5..63dfb9b89581 100644
+>> --- a/drivers/s390/crypto/vfio_ap_ops.c
+>> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+>> @@ -617,10 +617,32 @@ static int 
+>> vfio_ap_mdev_verify_no_sharing(unsigned long *mdev_apm,
+>>       return 0;
+>>   }
+>>   +/**
+>> + * vfio_ap_mdev_validate_masks - verify that the APQNs assigned to 
+>> the mdev are
+>> + *                 not reserved for the default zcrypt driver and
+>> + *                 are not assigned to another mdev.
+>> + *
+>> + * @matrix_mdev: the mdev to which the APQNs being validated are 
+>> assigned.
+>> + *
+>> + * Return: One of the following values:
+>> + * o the error returned from the 
+>> ap_apqn_in_matrix_owned_by_def_drv() function,
+>> + *   most likely -EBUSY indicating the ap_perms_mutex lock is 
+>> already held.
+>> + * o EADDRNOTAVAIL if an APQN assigned to @matrix_mdev is reserved 
+>> for the
+>> + *           zcrypt default driver.
+>> + * o EADDRINUSE if an APQN assigned to @matrix_mdev is assigned to 
+>> another mdev
+>> + * o A zero indicating validation succeeded.
+>> + */
+>>   static int vfio_ap_mdev_validate_masks(struct ap_matrix_mdev 
+>> *matrix_mdev)
+>>   {
+>> -    if (ap_apqn_in_matrix_owned_by_def_drv(matrix_mdev->matrix.apm,
+>> -                           matrix_mdev->matrix.aqm))
+>> +    int ret;
+>> +
+>> +    ret = ap_apqn_in_matrix_owned_by_def_drv(matrix_mdev->matrix.apm,
+>> +                         matrix_mdev->matrix.aqm);
+>> +
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    if (ret == 1)
+>>           return -EADDRNOTAVAIL;
+>
+> I took a look at ap_apqn_in_matrix_owned_by_def_drv(). It appears that 
+> this function
+> can only ever return 0 or 1. This patch is changed to watch for a 
+> negative return
+> value from ap_apqn_in_matrix_owned_by_def_drv(). Am I missing something?
 
- net/bridge/br_netlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That's odd, careless error, I'll fix it.
 
-diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
-index 204472449ec9..200ad05b296f 100644
---- a/net/bridge/br_netlink.c
-+++ b/net/bridge/br_netlink.c
-@@ -119,7 +119,7 @@ static size_t br_get_link_af_size_filtered(const struct net_device *dev,
- 	/* Each VLAN is returned in bridge_vlan_info along with flags */
- 	vinfo_sz += num_vlan_infos * nla_total_size(sizeof(struct bridge_vlan_info));
- 
--	if (vg && (filter_mask & RTEXT_FILTER_MST))
-+	if (p && vg && (filter_mask & RTEXT_FILTER_MST))
- 		vinfo_sz += br_mst_info_size(vg);
- 
- 	if (!(filter_mask & RTEXT_FILTER_CFM_STATUS))
--- 
-2.25.1
+>
+>
 

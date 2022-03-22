@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50134E44E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B1E4E44F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbiCVRV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S239536AbiCVRYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238596AbiCVRV5 (ORCPT
+        with ESMTP id S239525AbiCVRYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:21:57 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA9B275F9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:20:27 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id u16so23388393wru.4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:20:27 -0700 (PDT)
+        Tue, 22 Mar 2022 13:24:40 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9302697
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:23:11 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id h7so13500881lfl.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=klmvLMjbhecm1dnOMFwYg5TFnV3WErf04K5GrMiLkZg=;
-        b=SWuScJCronuoC7Z3TBASO5IIOKWKgRonLFJmfKKtsjkjM1UFU/0a2h0IpH0oNgO61X
-         TKF7993iliLo8MhWH2Pt+lYiVDMnB9hVp/vhHmxA9M/d9kyH8mYyUxpoksfGhekvpVi/
-         AzRR6dbjFmaqSXrSsAfqbQPKfJADZ/EW8aKHPfhAj2YivkFGwX40OxVn/8F1JpQKM7EV
-         140iatXNYUzSgHCLiUEqpPw/wxzoWUgGk0cWHCG6QSti9CGJX07yCVU7rdRtFKrxgc/+
-         DUuylRykw/81EktBzgaDX9d+XzOEGA9XXZOwJQtm7Jnp1ho8afXItg8qIpbBg+Rhdacy
-         oHcg==
+        bh=UI6IdkHO1Ce++v4SaLpwOnJOwU7d+FJPmUdI5pUTRyE=;
+        b=ODOcxjgtnTokJhq+iwqHbWCzeAZBV5BHLUnl+SfPcnQbCPUA32VYdzSgQPu+R0V5Oc
+         LOX36yzr/Ok6oTqeCrrsPc9enhp/AEQ4fLBbhY9IM+kEdjwZ0kheWb9v+kvXcu2eaHu4
+         49yhuMftUCepZufEyK9CKXp+4gagEX4g0EloY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=klmvLMjbhecm1dnOMFwYg5TFnV3WErf04K5GrMiLkZg=;
-        b=MWoEYbsvk91gpEJSevp+GAfKMoN8Vy93bz8kEnYCswP7rT8fuBD5Xeke6gN/svI8z1
-         cbWhRUpWJmG8Fyb3KDdw0YRejooMKogolx0V8E6wEXlRhz9tDj13eepOO9CfvLSevw7s
-         LcNBUSRfIILAr5X/0ckC1heGL3KKITctU+nOoBWowRLU07GLKgznFa34O8IjwCo1Jk9h
-         7NmQ/Lbiomm8Nh6ZMvMLYQ2c9EFJErFCoKordPLd4Yuw2H8GUNqbRFQrf9V7Fwf/i7Fz
-         UYmCc+UgPo5GqUWeapoEuA+fXxkzb+M7MIE3EbQlr964wXZTjEEV7APQaCH74k4qswD6
-         cGnA==
-X-Gm-Message-State: AOAM531727voY/WP7km/dUgPAMvYfkeGgmfCdiFJnnSEmSIRgdOupYXx
-        kuCPFme8i3ZZpXTvONe0pf6wZFfyMloLPMmYicCKH/t1TAg=
-X-Google-Smtp-Source: ABdhPJx/nKEZcJDd/ekvcHdFdncpRSjxaY99nDV82un0XYkxYcgzXA4TsvD4QNobTQevQ91j9X+TyWVj3rJF3EQtbms=
-X-Received: by 2002:a05:6000:1862:b0:204:e417:9cf8 with SMTP id
- d2-20020a056000186200b00204e4179cf8mr3707264wri.593.1647969626263; Tue, 22
- Mar 2022 10:20:26 -0700 (PDT)
+        bh=UI6IdkHO1Ce++v4SaLpwOnJOwU7d+FJPmUdI5pUTRyE=;
+        b=13TKir04ncyzAFiB/5JH8x7JrVxnXlnBJKEq/Eee+TobXz5hjKPy1uXQHMBGC64N/R
+         v2N7w9+gXW6WJNlsAijoHJBEt26MvYD7Qga2Fv9GMKxlpIn77k8aCb9Rrj3xvaNv8uOZ
+         faJz/pLCk9+FsfNIhvqeV+9pgP7UKvOM83wSFQKzHiAtQZq/m8zPkWffl93GmWft4t7d
+         A5Z0MZj0MagBZjU+9u2T61+XIxhxniqddbQGl3eExOVsnuUAhwzWa8kFHzydEuHVxiFB
+         nSeR9KTcgf0nB5IN8xQ/7VwcUckZdCEx5inASSXZqxzmtM8k7Yake4Xi3vupac5txjla
+         1oEA==
+X-Gm-Message-State: AOAM533Iq9gpIJLRAJo/UxTUTQubiLN1biKE0iMiNXJNclgaVpYGnwsN
+        Foe3OFPEOHTwVbMhcwP/61XED+9cD2ecjoEAOQQ=
+X-Google-Smtp-Source: ABdhPJyfPdnQcs25C0axXJ91+8HJ5kK5FxxhFnErxXwz19m+pvfeIeiKO473IJFUlJttHa+SpSYESA==
+X-Received: by 2002:a05:6512:3c96:b0:44a:3c85:ddb0 with SMTP id h22-20020a0565123c9600b0044a3c85ddb0mr2584996lfv.457.1647969788350;
+        Tue, 22 Mar 2022 10:23:08 -0700 (PDT)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
+        by smtp.gmail.com with ESMTPSA id 11-20020a2e154b000000b0024967cd674esm2117503ljv.35.2022.03.22.10.23.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 10:23:07 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id h11so24915698ljb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:23:07 -0700 (PDT)
+X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
+ u16-20020a2e9b10000000b00247f28cffd3mr19288283lji.152.1647969787311; Tue, 22
+ Mar 2022 10:23:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220204035644.734878-1-xiehuan09@gmail.com> <20220208230830.6b8c03c0f4f11c1ed18da236@kernel.org>
- <20220208104806.5272f2ea@gandalf.local.home> <CAEr6+EANLuP1=PpGvB4G1j4a-iM-mM4c69Pvo7j8GtafKPhyPw@mail.gmail.com>
- <20220228110822.4b906204@gandalf.local.home>
-In-Reply-To: <20220228110822.4b906204@gandalf.local.home>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Wed, 23 Mar 2022 01:20:14 +0800
-Message-ID: <CAEr6+EAJqM6py_8xtVyH3BZ9U+vODVecSUkLdZkKu3FN2ZkRtw@mail.gmail.com>
-Subject: Re: [PATCH v9 0/4] trace: Introduce objtrace trigger to trace the
- kernel object
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, mingo@redhat.com,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+References: <YjjihIZuvZpUjaSs@google.com>
+In-Reply-To: <YjjihIZuvZpUjaSs@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 22 Mar 2022 10:22:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgsmvoJFKFWxQ2orEVUOWH1agk9iUNZ=-DFh5OXZL=Ldw@mail.gmail.com>
+Message-ID: <CAHk-=wgsmvoJFKFWxQ2orEVUOWH1agk9iUNZ=-DFh5OXZL=Ldw@mail.gmail.com>
+Subject: Re: [GIT PULL] f2fs for 5.18
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Waiman Long <longman@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi steve,
+On Mon, Mar 21, 2022 at 1:39 PM Jaegeuk Kim <jaegeuk@kernel.org> wrote:
+>
+> In this cycle, f2fs has some performance improvements for Android workloads such
+> as using read-unfair rwsems [...]
 
-On Tue, Mar 1, 2022 at 12:08 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Sun, 27 Feb 2022 00:01:06 +0800
-> Jeff Xie <xiehuan09@gmail.com> wrote:
->
-> > Congratulations on joining google.  Just check out this series when
-> > you are free.
-> >
-> > Please don't get me wrong, I'm not pushing anyone.
-> > It just doesn't feel good that I haven't responded to emails for a long time ;-)
->
-> And keep responding ;-) I want to look at this series, and your emails do
-> remind me (it's still in my patchwork queue, so it wont be forgotten, but
-> it is getting crowded in that queue of "todo"s).
->
-> Yeah, I'm hoping to start being able to do more upstream, but I'm still a
-> bit in the flux of figuring out what I'm suppose to be doing at work ;-)
->
-> -- Steve
+I've pulled this, but that read-unfair rwsem code looks incredibly
+dodgy. Doing your own locking is always a bad sign, and it ahs
+traditionally come back to bite us pretty much every time. At least it
+uses real lock primitives, just in a really odd way.
 
-Hope this series is less crowded in your todo queue ;-)
----
-JeffXie
+The whole notion of making an rwsem unfair to readers sounds really
+really odd.  I mean, the whole and only _point_ of an rwsem is to
+allow concurrent readers, and traditionally if it's unfair it's unfair
+to _writers_ because that tends to be better for throughput (but
+unfairness can cause horrible latency).
+
+So it smells like there's something bad going on in f2fs.
+
+That said, I'm adding Waiman to the cc here in case he would have
+ideas at least for a cleaner interface. Our rw_semaphores are
+explicitly trying to be fair, because unfairness (the other way) was
+such a big problem.
+
+I'm wondering it the optimistic read lock stealing is bothering f2fs?
+
+               Linus

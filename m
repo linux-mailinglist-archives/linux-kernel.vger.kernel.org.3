@@ -2,239 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD93A4E4117
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67DF4E4125
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237814AbiCVOUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
+        id S237823AbiCVOUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237216AbiCVOQj (ORCPT
+        with ESMTP id S237533AbiCVORR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:16:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C0E89CF9;
-        Tue, 22 Mar 2022 07:14:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE038B81D0D;
-        Tue, 22 Mar 2022 14:14:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A94CBC36AE5;
-        Tue, 22 Mar 2022 14:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647958447;
-        bh=q2FxaDAfAnHBclDcB2/yYp0A5ISJF/9lilSDLOkU6dk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m66Hmtm2AuxXNSPq7qAdp4eDke5l80yvnoPMrqFusHQk4l555r1ih0G/+19VpJbLz
-         J9EKtbJiXNW9PQp3jt6dWo+R1pVDT3ZOy0TIVXT+LajeXmdBGXgmvXD+UxjbWC5PtQ
-         op4RLaHlAMOVMN8qe4xHSyp6kIqv++GJKA6LUGp67s3nJBATIMfFnmD592WAbfcPIl
-         AaLLL2nD2GVtimoA5kXyxguuXoFqIEZ2lMwepfwwjxWJ8BSwUbihs+7dIr7viiGIme
-         o7AtwoJouA3+HvyAT7iE9Y63QHJZoK939l67ZfbUP2ULnk9QfrJky34POUtQ16Alp5
-         XSRN0SxhHPGKQ==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     idryomov@gmail.com, xiubli@redhat.com
-Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lhenriques@suse.de
-Subject: [RFC PATCH v11 51/51] ceph: fscrypt support for writepages
-Date:   Tue, 22 Mar 2022 10:13:16 -0400
-Message-Id: <20220322141316.41325-52-jlayton@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220322141316.41325-1-jlayton@kernel.org>
-References: <20220322141316.41325-1-jlayton@kernel.org>
+        Tue, 22 Mar 2022 10:17:17 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3D66CA68
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:14:23 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id bx5so15743631pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KmpoxwlpdTAmi630hXs8vMPAHLsHiDF3ysmYDpSnUTk=;
+        b=JWxzsQssqkgSNvCTgcwwzwsdqz1p75+shTj5YzO8qnOEiIAYKrq9yRyt4y62hW5uwx
+         1VLaJ3pKRVpsclR29L1T5rIj3E+BqAXwWWq+jF90OKXC3niaLCSNvSZh9YF5mKa34AWJ
+         6Tp54RpBjaCtrh9eVbCVrM58OwU3GbGESyf04GnEOXw6xY6aZ2pVEWE4f6lb0yTxwsTr
+         +rCLN9bNmozUETJ/gK3nAwXybZ4+RseB2J/IU71WP1aju3osHxK51DIloW+bqLQ5EUwl
+         kwLx767RVMYLbN6fPCfv8iaxw9Rfe47gNr344YO3vInL4ZH9Wll7gAHR/rgswxH8fLIg
+         P7LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KmpoxwlpdTAmi630hXs8vMPAHLsHiDF3ysmYDpSnUTk=;
+        b=M+TPY1MkUu/NbF6AbS67yEl2QMKqfjFHQqr+eoNV5uPMi8d/tdrEjpAq4b3FAQJgP6
+         SlPPqDhLHCNUD2+/Mpe+iWL5YbN6nVymKLzU69PJTcKtsW+Ub+tLMjWgUtmWmNV7Awm4
+         HQAYldUmHQ9WpEHp3ZnG6r8vjaz4boNdwzWlAEcfTDe5wZdFKyvncf97U4MtfjBYTR5K
+         e97p4getczX3Rpj6a4DMEpbtR/Cl8cGfVA1voG49YM7M7nyLrEq8ZGhyuaq/QeUmmoxV
+         Y5axV1R3Ul4fsZXaaKfkTrclCNDQ3OeZQGl+ryCG75EsHVT2u7tm+fzT/vOKllzWBZJ5
+         wFQw==
+X-Gm-Message-State: AOAM532L0LKNS+1Cc9cSZK/u0lELeu5Y/e2uLPIeT5GkO9c921qwuBA/
+        6q2NWOzbcrejyivzQD8pGiN/Jw==
+X-Google-Smtp-Source: ABdhPJy3vkob5aeMtKN+V8UhtCkWt2UnP72EwVNaLFPfcPOK35s1aHFtUwtyWCN6Veqy2oRF19cNNg==
+X-Received: by 2002:a17:902:d508:b0:154:2f99:a531 with SMTP id b8-20020a170902d50800b001542f99a531mr16804442plg.133.1647958460998;
+        Tue, 22 Mar 2022 07:14:20 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e62:3990:4de5:990f:881e:dd0e? ([2409:8a28:e62:3990:4de5:990f:881e:dd0e])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056a000b8100b004faa79a72e8sm7149447pfj.156.2022.03.22.07.14.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 07:14:20 -0700 (PDT)
+Message-ID: <7807fc23-c6c9-b6a9-62ef-e34e8beefdea@bytedance.com>
+Date:   Tue, 22 Mar 2022 22:14:11 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [External] Re: [PATCH v3 3/3] arm64/ftrace: Make function graph
+ use ftrace directly
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mark.rutland@arm.com, mingo@redhat.com, tglx@linutronix.de,
+        catalin.marinas@arm.com, will@kernel.org,
+        dave.hansen@linux.intel.com, broonie@kernel.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com, qirui.001@bytedance.com
+References: <20220224093251.49971-1-zhouchengming@bytedance.com>
+ <20220224093251.49971-3-zhouchengming@bytedance.com>
+ <c8b7508b-ce2a-c7dc-92c4-ca5f17992844@bytedance.com>
+ <20220322094100.73dc3ad0@gandalf.local.home>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220322094100.73dc3ad0@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the appropriate machinery to write back dirty data with encryption.
+On 2022/3/22 9:41 下午, Steven Rostedt wrote:
+> On Tue, 22 Mar 2022 20:48:00 +0800
+> Chengming Zhou <zhouchengming@bytedance.com> wrote:
+> 
+>> Hello,
+>>
+>> ping... have any comments?
+> 
+> Hi Chengming,
+> 
+> BTW, if you don't hear back for a week, it's OK to send a ping. You don't
+> need to wait a month. Usually, it's just that the maintainers have other
+> priorities and will try to look at it when they get a chance, but then
+> forget to do so :-/
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/ceph/addr.c   | 62 ++++++++++++++++++++++++++++++++++++++----------
- fs/ceph/crypto.h | 18 +++++++++++++-
- 2 files changed, 67 insertions(+), 13 deletions(-)
+Hi Steve, ok, I got it ;-)
 
-diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
-index 403e7a960a4e..cc4f561bd03c 100644
---- a/fs/ceph/addr.c
-+++ b/fs/ceph/addr.c
-@@ -556,10 +556,12 @@ static u64 get_writepages_data_length(struct inode *inode,
- 				      struct page *page, u64 start)
- {
- 	struct ceph_inode_info *ci = ceph_inode(inode);
--	struct ceph_snap_context *snapc = page_snap_context(page);
-+	struct ceph_snap_context *snapc;
- 	struct ceph_cap_snap *capsnap = NULL;
- 	u64 end = i_size_read(inode);
-+	u64 ret;
- 
-+	snapc = page_snap_context(ceph_fscrypt_pagecache_page(page));
- 	if (snapc != ci->i_head_snapc) {
- 		bool found = false;
- 		spin_lock(&ci->i_ceph_lock);
-@@ -574,9 +576,12 @@ static u64 get_writepages_data_length(struct inode *inode,
- 		spin_unlock(&ci->i_ceph_lock);
- 		WARN_ON(!found);
- 	}
--	if (end > page_offset(page) + thp_size(page))
--		end = page_offset(page) + thp_size(page);
--	return end > start ? end - start : 0;
-+	if (end > ceph_fscrypt_page_offset(page) + thp_size(page))
-+		end = ceph_fscrypt_page_offset(page) + thp_size(page);
-+	ret = end > start ? end - start : 0;
-+	if (ret && fscrypt_is_bounce_page(page))
-+		ret = round_up(ret, CEPH_FSCRYPT_BLOCK_SIZE);
-+	return ret;
- }
- 
- /*
-@@ -792,6 +797,11 @@ static void writepages_finish(struct ceph_osd_request *req)
- 		total_pages += num_pages;
- 		for (j = 0; j < num_pages; j++) {
- 			page = osd_data->pages[j];
-+			if (fscrypt_is_bounce_page(page)) {
-+				page = fscrypt_pagecache_page(page);
-+				fscrypt_free_bounce_page(osd_data->pages[j]);
-+				osd_data->pages[j] = page;
-+			}
- 			BUG_ON(!page);
- 			WARN_ON(!PageUptodate(page));
- 
-@@ -1050,10 +1060,28 @@ static int ceph_writepages_start(struct address_space *mapping,
- 						  BLK_RW_ASYNC);
- 			}
- 
-+			if (IS_ENCRYPTED(inode)) {
-+				pages[locked_pages] =
-+					fscrypt_encrypt_pagecache_blocks(page,
-+						PAGE_SIZE, 0,
-+						locked_pages ? GFP_NOWAIT : GFP_NOFS);
-+				if (IS_ERR(pages[locked_pages])) {
-+					if (PTR_ERR(pages[locked_pages]) == -EINVAL)
-+						pr_err("%s: inode->i_blkbits=%hhu\n",
-+							__func__, inode->i_blkbits);
-+					/* better not fail on first page! */
-+					BUG_ON(locked_pages == 0);
-+					pages[locked_pages] = NULL;
-+					redirty_page_for_writepage(wbc, page);
-+					unlock_page(page);
-+					break;
-+				}
-+				++locked_pages;
-+			} else {
-+				pages[locked_pages++] = page;
-+			}
- 
--			pages[locked_pages++] = page;
- 			pvec.pages[i] = NULL;
--
- 			len += thp_size(page);
- 		}
- 
-@@ -1081,7 +1109,7 @@ static int ceph_writepages_start(struct address_space *mapping,
- 		}
- 
- new_request:
--		offset = page_offset(pages[0]);
-+		offset = ceph_fscrypt_page_offset(pages[0]);
- 		len = wsize;
- 
- 		req = ceph_osdc_new_request(&fsc->client->osdc,
-@@ -1102,8 +1130,8 @@ static int ceph_writepages_start(struct address_space *mapping,
- 						ceph_wbc.truncate_size, true);
- 			BUG_ON(IS_ERR(req));
- 		}
--		BUG_ON(len < page_offset(pages[locked_pages - 1]) +
--			     thp_size(page) - offset);
-+		BUG_ON(len < ceph_fscrypt_page_offset(pages[locked_pages - 1]) +
-+			     thp_size(pages[locked_pages - 1]) - offset);
- 
- 		req->r_callback = writepages_finish;
- 		req->r_inode = inode;
-@@ -1113,7 +1141,9 @@ static int ceph_writepages_start(struct address_space *mapping,
- 		data_pages = pages;
- 		op_idx = 0;
- 		for (i = 0; i < locked_pages; i++) {
--			u64 cur_offset = page_offset(pages[i]);
-+			struct page *page = ceph_fscrypt_pagecache_page(pages[i]);
-+
-+			u64 cur_offset = page_offset(page);
- 			/*
- 			 * Discontinuity in page range? Ceph can handle that by just passing
- 			 * multiple extents in the write op.
-@@ -1142,9 +1172,9 @@ static int ceph_writepages_start(struct address_space *mapping,
- 				op_idx++;
- 			}
- 
--			set_page_writeback(pages[i]);
-+			set_page_writeback(page);
- 			if (caching)
--				ceph_set_page_fscache(pages[i]);
-+				ceph_set_page_fscache(page);
- 			len += thp_size(page);
- 		}
- 		ceph_fscache_write_to_cache(inode, offset, len, caching);
-@@ -1160,8 +1190,16 @@ static int ceph_writepages_start(struct address_space *mapping,
- 							 offset);
- 			len = max(len, min_len);
- 		}
-+		if (IS_ENCRYPTED(inode))
-+			len = round_up(len, CEPH_FSCRYPT_BLOCK_SIZE);
-+
- 		dout("writepages got pages at %llu~%llu\n", offset, len);
- 
-+		if (IS_ENCRYPTED(inode) &&
-+		    ((offset | len) & ~CEPH_FSCRYPT_BLOCK_MASK))
-+			pr_warn("%s: bad encrypted write offset=%lld len=%llu\n",
-+				__func__, offset, len);
-+
- 		osd_req_op_extent_osd_data_pages(req, op_idx, data_pages, len,
- 						 0, from_pool, false);
- 		osd_req_op_extent_update(req, op_idx, len);
-diff --git a/fs/ceph/crypto.h b/fs/ceph/crypto.h
-index 92a7b221a975..0cf526f07567 100644
---- a/fs/ceph/crypto.h
-+++ b/fs/ceph/crypto.h
-@@ -146,6 +146,12 @@ int ceph_fscrypt_decrypt_extents(struct inode *inode, struct page **page, u64 of
- 				 struct ceph_sparse_extent *map, u32 ext_cnt);
- int ceph_fscrypt_encrypt_pages(struct inode *inode, struct page **page, u64 off,
- 				int len, gfp_t gfp);
-+
-+static inline struct page *ceph_fscrypt_pagecache_page(struct page *page)
-+{
-+	return fscrypt_is_bounce_page(page) ?  fscrypt_pagecache_page(page) : page;
-+}
-+
- #else /* CONFIG_FS_ENCRYPTION */
- 
- static inline void ceph_fscrypt_set_ops(struct super_block *sb)
-@@ -235,6 +241,16 @@ static inline int ceph_fscrypt_encrypt_pages(struct inode *inode, struct page **
- {
- 	return 0;
- }
-+
-+static inline struct page *ceph_fscrypt_pagecache_page(struct page *page)
-+{
-+	return page;
-+}
- #endif /* CONFIG_FS_ENCRYPTION */
- 
--#endif
-+static inline loff_t ceph_fscrypt_page_offset(struct page *page)
-+{
-+	return page_offset(ceph_fscrypt_pagecache_page(page));
-+}
-+
-+#endif /* _CEPH_CRYPTO_H */
--- 
-2.35.1
+> 
+> 
+>>
+>> Thanks.
+>>
+>> On 2022/2/24 5:32 下午, Chengming Zhou wrote:
+>>> As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
+>>> use ftrace directly"), we don't need special hook for graph tracer,
+>>> but instead we use graph_ops:func function to install return_hooker.
+>>>
+>>> Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
+>>> implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
+>>> the same cleanup on arm64. And this cleanup only changes the
+>>> FTRACE_WITH_REGS implementation, so the mcount-based implementation
+>>> is unaffected.
+>>>
+>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>>> ---
+>>> Changes in v3:
+>>>  - Add comments in ftrace_graph_func() as suggested by Steve.
+>>>
+>>> Changes in v2:
+>>>  - Remove FTRACE_WITH_REGS ftrace_graph_caller asm as suggested by Mark.
+>>> ---
+>>>  arch/arm64/include/asm/ftrace.h  |  7 +++++++
+>>>  arch/arm64/kernel/entry-ftrace.S | 17 -----------------
+>>>  arch/arm64/kernel/ftrace.c       | 17 +++++++++++++++++
+>>>  3 files changed, 24 insertions(+), 17 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+>>> index 1494cfa8639b..dbc45a4157fa 100644
+>>> --- a/arch/arm64/include/asm/ftrace.h
+>>> +++ b/arch/arm64/include/asm/ftrace.h
+>>> @@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
+>>>  
+>>>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>>>  struct dyn_ftrace;
+>>> +struct ftrace_ops;
+>>> +struct ftrace_regs;
+>>> +
+>>>  int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+>>>  #define ftrace_init_nop ftrace_init_nop
+>>> +
+>>> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>>> +		       struct ftrace_ops *op, struct ftrace_regs *fregs);
+>>> +#define ftrace_graph_func ftrace_graph_func
+>>>  #endif
+>>>  
+>>>  #define ftrace_return_address(n) return_address(n)
+>>> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+>>> index e535480a4069..d42a205ef625 100644
+>>> --- a/arch/arm64/kernel/entry-ftrace.S
+>>> +++ b/arch/arm64/kernel/entry-ftrace.S
+>>> @@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
+>>>  SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
+>>>  	bl	ftrace_stub
+>>>  
+>>> -#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>>> -SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
+>>> -	nop				// If enabled, this will be replaced
+>>> -					// "b ftrace_graph_caller"
+>>> -#endif
+>>> -
+>>>  /*
+>>>   * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
+>>>   * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
+>>> @@ -127,17 +121,6 @@ ftrace_common_return:
+>>>  	ret	x9
+>>>  SYM_CODE_END(ftrace_common)
+>>>  
+>>> -#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>>> -SYM_CODE_START(ftrace_graph_caller)
+>>> -	ldr	x0, [sp, #S_PC]
+>>> -	sub	x0, x0, #AARCH64_INSN_SIZE	// ip (callsite's BL insn)
+>>> -	add	x1, sp, #S_LR			// parent_ip (callsite's LR)
+>>> -	ldr	x2, [sp, #PT_REGS_SIZE]	   	// parent fp (callsite's FP)
+>>> -	bl	prepare_ftrace_return
+>>> -	b	ftrace_common_return
+>>> -SYM_CODE_END(ftrace_graph_caller)
+>>> -#endif
+>>> -
+>>>  #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>>>  
+>>>  /*
+>>> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+>>> index 4506c4a90ac1..35eb7c9b5e53 100644
+>>> --- a/arch/arm64/kernel/ftrace.c
+>>> +++ b/arch/arm64/kernel/ftrace.c
+>>> @@ -268,6 +268,22 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
+>>>  }
+>>>  
+>>>  #ifdef CONFIG_DYNAMIC_FTRACE
+>>> +
+>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> 
+> Is there a case were we have DYNAMIC_FTRACE but not
+> DYNAMIC_FTRACE_WITH_REGS?
 
+Yes, when HAVE_DYNAMIC_FTRACE_WITH_REGS is not selected because of low gcc version.
+
+> 
+>>> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>>> +		       struct ftrace_ops *op, struct ftrace_regs *fregs)
+>>> +{
+>>> +	/*
+>>> +	 * Athough graph_ops doesn't have FTRACE_OPS_FL_SAVE_REGS set in flags,
+>>> +	 * regs can't be NULL in DYNAMIC_FTRACE_WITH_REGS. By design, it should
+>>> +	 * be fixed when DYNAMIC_FTRACE_WITH_ARGS is implemented.
+>>> +	 */
+>>> +	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
+>>> +	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
+>>> +
+>>> +	prepare_ftrace_return(ip, parent, frame_pointer(regs));
+>>> +}
+>>> +#else
+> 
+> You deleted ftrace_graph_caller above from entry-ftrace.S, if we can get
+> here with some options, wouldn't that break the build?
+
+The above ftrace_graph_caller deleted is only for CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+and I tried using a low gcc version that doesn't select HAVE_DYNAMIC_FTRACE_WITH_REGS,
+it can build success.
+
+Thanks.
+
+> 
+> -- Steve
+> 
+> 
+>>>  /*
+>>>   * Turn on/off the call to ftrace_graph_caller() in ftrace_caller()
+>>>   * depending on @enable.
+>>> @@ -297,5 +313,6 @@ int ftrace_disable_ftrace_graph_caller(void)
+>>>  {
+>>>  	return ftrace_modify_graph_caller(false);
+>>>  }
+>>> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>>>  #endif /* CONFIG_DYNAMIC_FTRACE */
+>>>  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */  
+> 

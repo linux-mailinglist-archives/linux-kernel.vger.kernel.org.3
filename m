@@ -2,66 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D25F4E3742
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AD94E3748
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236034AbiCVDI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 23:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S236028AbiCVDLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 23:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236017AbiCVDIy (ORCPT
+        with ESMTP id S235997AbiCVDLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 23:08:54 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DD83FDBF
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:07:27 -0700 (PDT)
-Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KMxHB2qKtz1GCpk;
-        Tue, 22 Mar 2022 11:07:18 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 22 Mar 2022 11:07:24 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 22 Mar 2022 11:07:23 +0800
-Message-ID: <d5c5e2fa-a09b-bf1b-295b-8ed99fc85e57@huawei.com>
-Date:   Tue, 22 Mar 2022 11:07:22 +0800
+        Mon, 21 Mar 2022 23:11:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0FCB1B7B7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:09:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647918590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DBtHCrAqM8PwKsCvhHfbFfAvk2Wqf5blryM4kHsbRbI=;
+        b=RCGELxqEwIljF5MraCQZv2CXmRQeZ1+FlnFwikdbiji12DEUeK+FaydYuCawZZ4t/7N1RM
+        YJb8qaffkOEalnAwr/f425GMKUjkwHryI+vXrA37kJPqdq5AXd4rl8uLXYUAizjqjeI/Q9
+        XecRUOz2rnn0rM/lhcxYHlyMLl6MCd4=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-505-3bdkyZwHPUW3pzUPugxRYQ-1; Mon, 21 Mar 2022 23:09:49 -0400
+X-MC-Unique: 3bdkyZwHPUW3pzUPugxRYQ-1
+Received: by mail-io1-f72.google.com with SMTP id z10-20020a056602080a00b00645b9fdc630so11671210iow.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:09:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:cc:in-reply-to
+         :content-transfer-encoding;
+        bh=DBtHCrAqM8PwKsCvhHfbFfAvk2Wqf5blryM4kHsbRbI=;
+        b=uoFi69ulSltgQ4oUOayNYpI2kJGASxIew4IDXtmDWlqgaaePRokwINqWeL7+R5NrGU
+         E+024ujGtBcRa6NddBBCJT4DLnblyQagshqLlshKjQ8y4hM3ytq3p0uYZ+23R7fiL2bN
+         gpJRuk4emWh1ktJoIL7cO2ueZ0LaJPhZ7IkR9y/kwXbi/HGtZuu2ZNCYmrXMletTHuGF
+         qXz8V8IBMnmyIx8jvGusEq/pSRYHm6VEouUsPTEBWYuMxKuQDLhBSZVRWaJf9mFjwbxF
+         j0rC/acc+jRvERMOKHagvB5BM9qxSIYjPiaLgEaQ8j9vSDm4tvjMuZLFDJYnFoFCsL84
+         mPlw==
+X-Gm-Message-State: AOAM532IXFwU7B7cOlOjPp6BTZUVNaL1sVfB8EFxUa0C3UP4x37fIFAL
+        yrLfpLgLdzoKvaU4+Pwd3Bet5XdodiRh2Re8okHmrzEcixneBIk0PUyTqNMqSF/5ru3HGCq1OmZ
+        RXkj91xu630OINGP7eGyvwShD
+X-Received: by 2002:a92:9406:0:b0:2be:6ace:7510 with SMTP id c6-20020a929406000000b002be6ace7510mr10721171ili.291.1647918588742;
+        Mon, 21 Mar 2022 20:09:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyvveSDS6+Wk3t25fD33XZkALpAjB2gIMNBsXYlv9C/guBU/azXhcdbQe9c8WLlaAPMh2jOsA==
+X-Received: by 2002:a92:9406:0:b0:2be:6ace:7510 with SMTP id c6-20020a929406000000b002be6ace7510mr10721153ili.291.1647918588534;
+        Mon, 21 Mar 2022 20:09:48 -0700 (PDT)
+Received: from ?IPV6:2601:280:4400:a2e0:7336:512c:930d:4f0e? ([2601:280:4400:a2e0:7336:512c:930d:4f0e])
+        by smtp.gmail.com with ESMTPSA id d14-20020a056602328e00b006494aa126c2sm7889638ioz.11.2022.03.21.20.09.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 20:09:48 -0700 (PDT)
+Message-ID: <0d0fb94a-ff66-ac31-e126-0eaf4dca0d6a@redhat.com>
+Date:   Mon, 21 Mar 2022 21:09:46 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH -next 3/4] arm64: mm: add support for page table check
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit and
+ the oom_reaper
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>, Davidlohr Bueso <dave@stgolabs.net>
+References: <20220318033621.626006-1-npache@redhat.com>
+ <Yjg9ncgep58gFLiN@dhcp22.suse.cz> <20220322004231.rwmnbjpq4ms6fnbi@offworld>
+ <c8bb0b6d-981c-8591-d5b6-17414c934758@redhat.com>
+ <20220322025724.j3japdo5qocwgchz@offworld>
+From:   Nico Pache <npache@redhat.com>
+Cc:     linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Will Deacon" <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20220317141203.3646253-1-tongtiangen@huawei.com>
- <20220317141203.3646253-4-tongtiangen@huawei.com> <YjOFNEvj7EfBasCI@arm.com>
- <cb91532b-c0cd-034c-2f93-4f76fabf5fc1@huawei.com> <YjS+2FVpq8D4Gx0S@arm.com>
- <d3006048-f737-439e-b985-cfbab69c4167@huawei.com> <Yjiqm6tQB5To5Jd9@arm.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <Yjiqm6tQB5To5Jd9@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>,
+        "Herton R . Krzesinski" <herton@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andre Almeida <andrealmeid@collabora.com>,
+        David Rientjes <rientjes@google.com>
+In-Reply-To: <20220322025724.j3japdo5qocwgchz@offworld>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,44 +100,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2022/3/22 0:40, Catalin Marinas 写道:
-> On Mon, Mar 21, 2022 at 02:15:36PM +0800, Tong Tiangen wrote:
->> Considering all your suggestions, The final logic should be:
->>
->> +#define pte_user(pte)          (!!(pte_val(pte) & PTE_USER))
->>
->> +#define pmd_user(pmd)		pte_user(pmd_pte(pmd))
->> +#define pmd_user_exec(pmd)	pte_user_exec(pmd_pte(pmd))
->>
->> +#define pud_user(pud)          pte_user(pud_pte(pud))
->>
->> +static inline bool pte_user_accessible_page(pte_t pte)
->> +{
->> +	return pte_present(pte) && (pte_user(pte)|| pte_user_exec(pte));
->> +}
+On 3/21/22 20:57, Davidlohr Bueso wrote:
+> On Mon, 21 Mar 2022, Nico Pache wrote:
 > 
-> This is fine.
+>> We could proceed with the V3 approach; however if we are able to find a complete
+>> solution that keeps both functionalities (Concurrent OOM Reaping & Robust Futex)
+>> working, I dont see why we wouldnt go for it.
 > 
->> +static inline bool pmd_user_accessible_page(pmd_t pmd)
->> +{
->> +	return pmd_present(pmd) && (pmd_user(pmd)|| pmd_user_exec(pmd));
->> +}
-> 
-> That's fine as well assuming that the function is only called on the
-> set_pmd_at() path where we know that the pmd would be a block mapping
-> (huge page). I think that's the case from a quick look at the current
-> x86 implementation.
+> Because semantically killing the process is, imo, the wrong thing to do. My
+> performance argument before however is bogus as the overhead of robust futexes
+> is pretty negligible within the lifetime of a lock. That said, the users still
+> have good(?) reasons for not wanting the lock holder to crash on them.
 
-Yeah, PTC only check pmd block mapping(huge page) and pud is similar.
-These code logic will be included in V2.
+From my understanding, the whole point of the robust futex is to allow forward
+progress in an application in which the lock holder CAN crash/exit/oom. So
+semantically nothing is wrong with killing the futex holder... the whole point
+of the robustness is to handle these cases. We just have a case were the oom
+killer is racing with said handling of the futex, invalidating the memory before
+the exit path (handle_futex_death) can awake one of the other waiters.
 
-Thanks.
+-- Nico
+> 
+> Thanks,
+> Davidlohr
+> 
 
-> 
->> +static inline bool pud_user_accessible_page(pud_t pud)
->> +{
->> +	return pud_present(pud) && pud_user(pud);
->> +}
-> 
-> Same here.
-> 

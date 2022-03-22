@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C1D4E4502
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DD74E4505
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239579AbiCVRZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S239597AbiCVRZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239576AbiCVRZS (ORCPT
+        with ESMTP id S239608AbiCVRZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:25:18 -0400
-Received: from rosenzweig.io (rosenzweig.io [138.197.143.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9AC2983A;
-        Tue, 22 Mar 2022 10:23:44 -0700 (PDT)
-Received: by rosenzweig.io (Postfix, from userid 1000)
-        id 54B6341E2D; Tue, 22 Mar 2022 17:23:43 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 17:23:43 +0000
-From:   Alyssa Rosenzweig <alyssa@rosenzweig.io>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Hector Martin <marcan@marcan.st>, Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 5/9] soc: apple: Add RTKit IPC library
-Message-ID: <YjoGH2JYd7cvx844@rosenzweig.io>
-References: <20220321165049.35985-1-sven@svenpeter.dev>
- <20220321165049.35985-6-sven@svenpeter.dev>
+        Tue, 22 Mar 2022 13:25:21 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BE02A723;
+        Tue, 22 Mar 2022 10:23:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=o19S8ciBSx0T1mNtvpS/R5JIv5JbexuH29sfTLf8nsk=; b=I7JNU6XuZOvA5rXNhbxQFTveIq
+        CFuMhu5azIlbgraq8ry+A+sS3Sm3MGbQHDxofEEWIoj2Kw07vGXLkKEeIZhIRv7sE2H5WLm57D2kq
+        K299pHLgmc4UR4bXHtuwWJoqB9SpDImo4AyY7qXSeXrE0Vp9xBzUv2+EQ5CiseDJKW8trq6nEBIcv
+        Te1ba1VaCQ7VQLWZVm8cv9GnSeVQ5AG6p/LDEWIpj4mIMXpLDHxRyMMPEjxI6JygjNAIbgTeTsorc
+        ASn2iUrRqtXjBL9crbkq8OgXTy0DoSuj23suKDMJ/lm1oDBIRgNTg1Gp/j+xGrhswGqUJ0IFF0GKP
+        X9L4su+A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWiEZ-00BibQ-5z; Tue, 22 Mar 2022 17:23:51 +0000
+Date:   Tue, 22 Mar 2022 10:23:51 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Tomlin <atomlin@redhat.com>
+Subject: Re: [PATCH v4 0/4] Miscellaneous cleanups
+Message-ID: <YjoGJ+zDBTPfeQ46@bombadil.infradead.org>
+References: <cover.1645605431.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321165049.35985-6-sven@svenpeter.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cover.1645605431.git.christophe.leroy@csgroup.eu>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +enum { APPLE_RTKIT_PWR_STATE_OFF = 0x00,
-> +	APPLE_RTKIT_PWR_STATE_SLEEP = 0x01,
-> +	APPLE_RTKIT_PWR_STATE_GATED = 0x02,
-> +	APPLE_RTKIT_PWR_STATE_QUIESCED = 0x10,
-> +	APPLE_RTKIT_PWR_STATE_ON = 0x20,
-> +};
+On Wed, Feb 23, 2022 at 10:00:57AM +0100, Christophe Leroy wrote:
+> This series applies on top of Aaron's series "module: core code clean up" v8.
 
-It would be great to get comments added explaining what these states
-are. It's not obvious how off/sleep/gated/quiesced differ, and it's not
-obvious from the code (doesn't look like GATED is used here at all?).
-Are these Apple names or r/e'd names or a mix?
+Queued onto modules-testing, thanks!
 
-> +	if (!rtk->syslog_buffer.size) {
-> +		rtk_warn(
-> +			"received syslog message but syslog_buffer.size is zero");
-> +		goto done;
-> +	}
-> +	if (!rtk->syslog_buffer.buffer && !rtk->syslog_buffer.iomem) {
-> +		rtk_warn("received syslog message but no syslog_buffer.buffer or syslog_buffer.iomem");
-> +		goto done;
-> +	}
-
-Nit: Wrapping is inconsistent between these two warns.
+  Luis

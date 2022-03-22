@@ -2,96 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E16D4E3EE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D85884E3EFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234839AbiCVM6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
+        id S235091AbiCVNAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234029AbiCVM6h (ORCPT
+        with ESMTP id S232736AbiCVNA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:58:37 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D153180211;
-        Tue, 22 Mar 2022 05:57:06 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id w127so19351974oig.10;
-        Tue, 22 Mar 2022 05:57:06 -0700 (PDT)
+        Tue, 22 Mar 2022 09:00:26 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1635DE46
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:58:59 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id j15so21922235eje.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=fdnG00+FVnrNPc7pRJZUf6p0lTeWtkmJlgm0eIX6kX4=;
+        b=AjNPKZIAqwx1xa9dhSiLiycGummqAab3uazQK7DKrwe4jObs6/BzrY3gxWNhbARWYA
+         hVNgYlQWf0qCGbhYxIsv5oba6QFc4dqbH4rVwMM63GJC+ZYcFQu8a9yfPLTJFtebEnvq
+         sS7TBQzwsITHfW0WlkcFqkMk1QckKj0PPIq++Nyvh30ESPvmnbwBBUoOt7bFvweLvZdB
+         w/lllBznyKU8j0PhZDsnxxdukqmUvbUT+TXMDDH4nTzZQSODMf8zRUFxktw8DUru0TN2
+         5ePBJm2QDozZZ+PV1buKYCWqMUNMkO6ABcF5+0IpVF09tAgWda+ewU0kKFbTVxSEqsMo
+         lT+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=pl/BJ9q+YsDBv49alBkTvA+Fq5IMYwC01bJf59GIEQ4=;
-        b=YF1+bRfLqLwGs9Wv9704z1JkYfL9kpBN9JYP9/WyJaRW+MQRfmeKxH/VPXbMEIvJlj
-         64W4eNiFs4MWRnlzVmy1vYwK0aSPq+Eti4Bu/wqX5vomNqzQrn+iPVcXKdxK6vmg67xw
-         2vRFtzQ9vXoEku5l3zAFlRqCVLtNU3LIJTWJm1LBtmtTb3yGteasbt+7oG5kEBwMYo7w
-         cjmmJMTaq5+ki8vsDNO3kInBEGG3PUdecN+6kngdQVEwXI738/zuh3JmWrBW3KI+WO94
-         IGFIUokOmE0Z3tRPpvw0VCjk4zyiczoK7ywjtUGY2SJ8ezj/n/h2hXXu9lsuku639AlP
-         a8eQ==
-X-Gm-Message-State: AOAM530yJs/W/b+dUufOIxm3YV+XueBDOBI+tlN7+C86Jc/aMMmwKtR3
-        h2IgzJRJ6oApi1EWAi53RQ==
-X-Google-Smtp-Source: ABdhPJx3WzhGPyoHLx2nFXw2TYGFCsRSGzOwQwTcz4duy4GzTSSG97skkKNPovKJvmJPCMHJuUIshQ==
-X-Received: by 2002:a54:4384:0:b0:2ec:f432:59bf with SMTP id u4-20020a544384000000b002ecf43259bfmr1984468oiv.278.1647953825768;
-        Tue, 22 Mar 2022 05:57:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 184-20020a4a03c1000000b003240492fc15sm8127148ooi.36.2022.03.22.05.57.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 05:57:04 -0700 (PDT)
-Received: (nullmailer pid 1840076 invoked by uid 1000);
-        Tue, 22 Mar 2022 12:57:03 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     devicetree@vger.kernel.org, linux-fpga@vger.kernel.org,
-        hao.wu@intel.com, linux-kernel@vger.kernel.org, mdf@kernel.org,
-        conor.dooley@microchip.com, trix@redhat.com, robh+dt@kernel.org,
-        yilun.xu@intel.com, system@metrotek.ru
-In-Reply-To: <20220322043219.23770-3-i.bornyakov@metrotek.ru>
-References: <20220322043219.23770-1-i.bornyakov@metrotek.ru> <20220322043219.23770-3-i.bornyakov@metrotek.ru>
-Subject: Re: [PATCH v7 2/2] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-Date:   Tue, 22 Mar 2022 07:57:03 -0500
-Message-Id: <1647953823.568706.1840075.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=fdnG00+FVnrNPc7pRJZUf6p0lTeWtkmJlgm0eIX6kX4=;
+        b=YamMQXdzpOYl8WOeXsjSEP1tFDChHqASrLuv77PY8HE4O7f7YEX9e37ulKacROgMAJ
+         AJx/aPH50SttR9KBr/I69fW7uYysnE4khQDjap3QuycyV8lbXmz6IZHZCWWAaOaz1Ozx
+         n13y9suqCPqMDw6JMmPU2v7g9sWgLpyFFYRlb0PbPeTAATAUW0ucLDbgIc9dKjrijwmJ
+         iDUcifAQnTTlAp4VOenjiQM9oEkR6dXK9TY/aUCX+J4t9dW5HCaDEBYETOM5L+FW+wzD
+         aQRx8EPmXxH1Hru9wtzaUaL+Fvoe9xu4qjv0dlbkjrR+aWd/qjsnhB4aozMo6kRpspTx
+         i93A==
+X-Gm-Message-State: AOAM532BuBKUSHg6Izd4lltjO/EvSBhWFtccAYh+I5Ktno22Ct4hBsYm
+        vHV3Co9u+tzSeVe/V09M4Wjip+HSksw8rIS6+as=
+X-Google-Smtp-Source: ABdhPJxJ5gfI3ASPs1ZQLPJ5mqeDxFjPhL/TbK+nPa5kjecR/ZD6LUe2SEjX0DqHf5k94THAgBevjCd50OdAmJ5sdEE=
+X-Received: by 2002:a17:907:d27:b0:6db:d928:a976 with SMTP id
+ gn39-20020a1709070d2700b006dbd928a976mr25969197ejc.24.1647953935879; Tue, 22
+ Mar 2022 05:58:55 -0700 (PDT)
+MIME-Version: 1.0
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Tue, 22 Mar 2022 12:58:46 +0000
+Message-ID: <CAHpNFcNnW_gYDy4m-cVqta_hux0cW5O7hhOP=fDEN5Tbuxk=NA@mail.gmail.com>
+Subject: Reference Kernel Security: https://science.n-helix.com/2019/06/kernel.html
+To:     bandwidthalliance@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 07:32:19 +0300, Ivan Bornyakov wrote:
-> Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-> slave SPI to load .dat formatted bitstream image.
-> 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> ---
->  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-> 
+  https://science.n-helix.com/2019/06/kernel.html
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Trace ID : Kernel & Bios HASH Reference
+https://lkml.org/lkml/2022/3/22/446
 
-yamllint warnings/errors:
+Jumpless Security HASH
+https://lkml.org/lkml/2022/3/22/440
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.example.dts:20.21-29.11: Warning (unit_address_vs_reg): /example-0/spi@2008000: node has a unit name, but no reg or ranges property
+SPE Decode & Encode
+https://lkml.org/lkml/2022/3/22/415
 
-doc reference errors (make refcheckdocs):
+*****
 
-See https://patchwork.ozlabs.org/patch/1608028
+VM Virtual Call Frame : Security Aspect Leaf HASH Identifiers : Rupert S
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Leaf HASH Identifiers in 16Bit/32Bit/64Bit : RS
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+With this example in mind 16Bit HASH Values & identifiers make sense.
 
-pip3 install dtschema --upgrade
+16Bit HASH Reasoning Table: based upon Leaf HASH Identifiers in
+16Bit/32Bit/64Bit
 
-Please check and re-submit.
+16Bit Leaf HASH, Compatible max RAM) : 4GB Large Page
 
+16 Million HASH groups for identifiers with 128MB RAM per HASH Master group..
+
+256 HASH master Table
+256 HASH Per Group
+
+16:32MB up to 4GB(16Bit Leaf HASH, Compatible max RAM) : RAM per group
+
+16Bit Hash identifier tables load into 16KB of processor cache
+Load, Save & Store can be done in a higher Bit depth; 32Bit for example
+SiMD can operate in Half, Single & Double Float capacity
+
+Micro work loads such as motion & video & 3D Tessellation
+
+*
+
+VM Virtual Call Frame : Security Aspect Leaf HASH Identifiers in
+16Bit/32Bit/64Bit : RS
+
+If the CPU Manager can call Compression & Cypher independently on TASK Call,
+If the Processor Manager can call from Virtualisation functions for
+each secure task group.
+
+Security Aspect : With CPU Cache in the 8MB+ Region Leaf HASH
+Identifiers can be stored:
+
+Compressed if Processor has Compression such as BZip
+Encrypted Compressed if Processor has Compression such as AES
+
+In a Secure &+ Work Isolation Container : WIC or SWIC contained L2
+(Compress Store Small Identifier List)
+
+In a Secure &+ Work Isolation Container : WIC or SWIC contained L3
+(larger identifier lists),
+
+(c)Rupert S
+
+Reference Kernel Security:
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+
+Leaf HASH Identifier Paths to clear logic:
+
+Performance issues related to handheld would be solved with the use of:
+
+FP16 packed pixel
+FP16 background object maths
+FP/Int8/4 Machine learning adaptive code...
+Compute Shaders
+Compression > DOT Image format
+
+With these resources available, We can potentially do more!
+
+https://science.n-helix.com/2019/06/vulkan-stack.html
+https://science.n-helix.com/2022/03/fsr-focal-length.html
+https://science.n-helix.com/2021/09/temporal-aliasing-image-shaping-polygon.html
+https://science.n-helix.com/2022/03/simd-render.html
+
+*
+https://science.n-helix.com/2019/06/kernel.html
+
+Trace ID : Kernel & Bios HASH Reference
+https://lkml.org/lkml/2022/3/22/446
+
+Jumpless Security HASH
+https://lkml.org/lkml/2022/3/22/440
+
+SPE Decode & Encode
+https://lkml.org/lkml/2022/3/22/415
+*
+
+As you know in my studies i found that 16x AA rarely has a performance
+hit on all verified hardware since RX200 3GB (and the RX560) & even
+the RX5770 1GB.The NVidia 1080 can manage most of this & i optimised
+Elite Dangerous for the 1080 & RX200 market.
+
+
+A lot of the performance issues related to handheld would be solved
+with the use of:
+
+FP16 packed pixel
+FP16 background object maths
+FP/Int8/4 Machine learning adaptive code...
+Compute Shaders
+Compression > DOT Image format
+
+With these resources available, We can potentially do more!
+
+*
+
+"Apex Legends : I get the feeling that the lower final precision on
+the screen output is the result of a 4x Anti Aliasing layer and lower
+Image compression settings,"
+
+*
+
+Elite Dangerous Reference
+Videos:https://www.youtube.com/watch?v=JmMQPS_azJA&list=PL8DNvgnwiUU1cezx_Y9DraHjyqJxnrrN7
+
+ML & Game performance improvement
+
+Rupert S
+
+The Handheld market performance ratings are :
+
+Snapdragon (often used & is good)
+
+High quality option based upon Notebook expectations
+
+AMD Chipset
+NVidia
+
+My studies concluded that both NVidia and AMD have little to worry
+about AA performance upto 16x and it makes almost no performance
+advantage to use less in my performance tuning...
+
+I am frequently in possession of older hardware; Like many users i
+cannot always afford all the best gear,
+
+However there are examples of things that make a bigger hit:
+
+16x tessellation rarely causes a problem (RX200 3GB+)24 & 32 both
+dynamically jiggle FPS around heavy asteroids & space stations in
+frontier elite..
+
+but looks amazing!
+
+Multisampling is manageable at 2x on RX200 on elite dangerous
+
+(a quite intense graphic space MMO)
+4x MultiSampling does involve a 20% frame rate drop, Quality is
+preferred but i went for 2x as it rarely causes issues.
+
+Texture Image compression format optimisation is a priority NO.1 Priority..
+
+You save a lot of space & heavy usage of DOT 1 > 5 compression
+management is advised..
+10Bit sampling is perfectly logical.
+
+https://www.nintendolife.com/news/2021/03/video_check_out_this_side-by-side_comparison_of_apex_legends_running_on_switch_and_ps4_pro
+
+https://www.youtube.com/watch?v=uGrPwt_KHRE
+
+Elite Dangerous 64Bit PvP Arena DeathMatch 4Q 2xMultiSampling.mp4
+(93.26 MB) https://mirrorace.org/m/6qr3y
+
+Elite Dangerous 64 Sub.FM Rastafari PvP 2016-04-23 19-27-22-552.mp4
+(89.27 MB) https://mirrorace.org/m/54waA
+
+EliteDangerous - CQC PvP Arena - Bloody is the bath of kings -
+2016-05-05 14-30-27-909.mp4 (277.04 MB) https://mirrorace.org/m/3IO7p
+
+yes cloudflare apex_eoso.nx7v.icu apex_eu.nx7v.icu apex_wes.nx7v.icu
+apex_eas.nx7v.icu
+
+USA: pop: apex_sv1.nx7v.icu apex_sv2.nx7v.icu apex_sv3.nx7v.icu

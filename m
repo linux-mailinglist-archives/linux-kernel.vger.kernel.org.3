@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EE14E3C1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601914E3C1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbiCVKDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        id S232274AbiCVKEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 06:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbiCVKDQ (ORCPT
+        with ESMTP id S232181AbiCVKEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:03:16 -0400
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6EC7C79D;
-        Tue, 22 Mar 2022 03:01:48 -0700 (PDT)
-Received: by mail-wm1-f50.google.com with SMTP id r7so10152875wmq.2;
-        Tue, 22 Mar 2022 03:01:48 -0700 (PDT)
+        Tue, 22 Mar 2022 06:04:37 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670DD11A0D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:03:09 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id yy13so35086224ejb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Jr6+3DLiK22UGPA/4UCdBp/K4JK2YnXWo0BRCRlc9P4=;
+        b=oua8H4T2ABH4Fxb1AEHnQqs0+Nd/DRrkBFpa5TciYJATj1RP0krVsGQpLeZsaxvYF0
+         N+Urr+Hx/Kh6pC+k2QptfrGexg2ley1p7XYCdfZWE8Ivu73f9AgKKmG7hf8lkXf8bzw/
+         Z0NpdKYwpTQ+sJ9mMM5PlAZ0202v6wMvFE1o21BYlWi/zNDQglcErQlVwqDDxe4Js9dl
+         fj2WRHeMhjOc4rbk/7y4lwFGU3IDEhGkHDXbNd5e70/+yzvGNxFbETpiUdqHdrImVWZg
+         g1I7jnZOvGlJaiRe/ibZpxZ/cfu/Dupp8Eab0RUVMo1OJaBEk82skw39t9scygaCuyfe
+         8a3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j/qgdjKwccf8EPOidmwJ3w5TF8yoynAyS/lxz3nLGS8=;
-        b=5Xu6KACnQx7m4B9ZRYAccCJjbBKGrzAwrKwMZFqffPNDfaHysMUS/TGndXYSj/2jcx
-         +OFPsxgwmdhPkR+Lx5IWggE6Xzz7Gr73p16BgikDz3gBhLw1LCDfoaPQ0WJOiDRWXzkM
-         6oLUrSzCYoqAyEFLxYz4/E0ebSYoyWxDDNMks6zt6JEHYFMKZB6NSyhY540q1k/2OwF6
-         24NMO3SCBwX7PyWfs/zOB3ZZYX2yGnJcQkQdVfFjHWbnX+4svnBCcZT9P0/D1LsdYW9K
-         Ptdm6vVqPiBETC6jtlSilfg4d9sZNMR8C6UN0uFZ6KZ8XZn5riN880Yze4oIj6zXvS1/
-         0Whg==
-X-Gm-Message-State: AOAM533hgjf4fTGlBF859FQJutQ+sxPBn2vJyYBg06hLGx04nEzmZrHA
-        pSdRze2S+49z8xc1oxb+lNs=
-X-Google-Smtp-Source: ABdhPJy4XHyMtIM442pgEfYm42wdqDd8trn7iJ9ILqvcyqLt8QdybwbOUvTXfhm04dhJ/5udG8Tdxw==
-X-Received: by 2002:a5d:5886:0:b0:204:85e:5a3a with SMTP id n6-20020a5d5886000000b00204085e5a3amr9701385wrf.434.1647943307366;
-        Tue, 22 Mar 2022 03:01:47 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id r4-20020a1c2b04000000b0038a0e15ee13sm1568576wmr.8.2022.03.22.03.01.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 03:01:46 -0700 (PDT)
-Message-ID: <9bcd0548-ff5b-78f2-9fb7-7b15755a049f@kernel.org>
-Date:   Tue, 22 Mar 2022 11:01:45 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Jr6+3DLiK22UGPA/4UCdBp/K4JK2YnXWo0BRCRlc9P4=;
+        b=muARSrBiOKoTV5umV6/rIT9j5qwY+5LiP9kEnNwIMGm5NlNnvLCxKFknOipZoAjT/L
+         ST6QKlmGcg162oYt6o9Y4+6H0nYTV2JrOoVvAqDYI6XV89OE96yOUQGOR1DYs90/Polp
+         1M6Emh0vfE/tOTfdASr9S9LDaDYD8y18AWcHDtZyByWvP2tm1emtZ0H8VbVmrLtuhAJ7
+         /y9FKhJBlRlrvqw1RVjt1BwhWfTw94MCGTNHqq2o9nffydqT5+61ZlyjEPPZB9UvYE6u
+         bf6HCZWbniRQ9HUL1NX26XiADpCKJs4KZraO/v3bXetf+x6+IJAsYockl4VO3uUqobhG
+         bInQ==
+X-Gm-Message-State: AOAM530CBgIIgLxcojGs+e0eLhqOFwF4yvlKN5xWSbcyflmgpwSEnMhp
+        XWSKDOzx0NlzAFQsDllbq4oaRQ==
+X-Google-Smtp-Source: ABdhPJwSJoDYsl+ypeZ55jb14aW2EgS7Ir7T4NruIJDojVC2fATtynQ+pT99XhjRyuMJT6TZzCejFw==
+X-Received: by 2002:a17:907:6092:b0:6db:ab31:96a2 with SMTP id ht18-20020a170907609200b006dbab3196a2mr23916489ejc.361.1647943386426;
+        Tue, 22 Mar 2022 03:03:06 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id sd33-20020a1709076e2100b006e0339b4a5asm1216694ejc.109.2022.03.22.03.03.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 03:03:06 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 10:02:41 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC 10/11] iommu: Make IOPF handling framework generic
+Message-ID: <YjmeweWTTUtPztYz@myrica>
+References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
+ <20220320064030.2936936-11-baolu.lu@linux.intel.com>
+ <BL1PR11MB5271DE11A868204D2E0D5B548C169@BL1PR11MB5271.namprd11.prod.outlook.com>
+ <YjhkmDEGwF4EcM8R@myrica>
+ <20220321124346.GP11336@nvidia.com>
+ <64fa931b-ea2d-f425-5baa-654216bac779@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 18/18] ARM: dts: qcom: qcom-ipq8064: add missing
- krait-cc compatible and clocks
-Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20220321231548.14276-1-ansuelsmth@gmail.com>
- <20220321231548.14276-19-ansuelsmth@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220321231548.14276-19-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64fa931b-ea2d-f425-5baa-654216bac779@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 00:15, Ansuel Smith wrote:
-> Add missing krait-cc clock-controller and define missing aux clock for
-> CPUs. Also change phandle for l2cc node to point to pxo_board instead
-> of gcc PXO_SRC. This should align ipq8064 dtsi to the new changes in
-> the Documentation.
+On Tue, Mar 22, 2022 at 01:03:14PM +0800, Lu Baolu wrote:
+> On 2022/3/21 20:43, Jason Gunthorpe wrote:
+> > On Mon, Mar 21, 2022 at 11:42:16AM +0000, Jean-Philippe Brucker wrote:
+> > 
+> > > I tend to disagree with that last part. The fault is caused by a specific
+> > > device accessing shared page tables. We should keep that device
+> > > information throughout the fault handling, so that we can report it to the
+> > > driver when things go wrong.
+> > SVA faults should never be reported to drivers??
+> > 
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  arch/arm/boot/dts/qcom-ipq8064.dtsi | 24 ++++++++++++++++++++++--
->  1 file changed, 22 insertions(+), 2 deletions(-)
-> 
+> When things go wrong, the corresponding response code will be responded
+> to the device through iommu_page_response(). The hardware should then
+> report the failure to the device driver and the device driver will
+> handle it in the device-specific way. There's no need to propagate the
+> I/O page faults to the device driver in any case. Do I understand it
+> right?
 
-It should not be the last patch in series because now it is impossible
-to judge whether you actually fixed Rob's robot reports or not. You
-still have warnings as answer to patch #17.
+In theory yes, but devices don't necessarily have the ability to report
+precise errors, we may have more information.
 
+Thanks,
+Jean
 
-Best regards,
-Krzysztof

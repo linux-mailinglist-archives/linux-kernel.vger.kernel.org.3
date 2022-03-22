@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD084E3740
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D25F4E3742
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236013AbiCVDIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 23:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S236034AbiCVDI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 23:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235872AbiCVDIt (ORCPT
+        with ESMTP id S236017AbiCVDIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 23:08:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2E9140F4;
-        Mon, 21 Mar 2022 20:07:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF37EB81B41;
-        Tue, 22 Mar 2022 03:07:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80126C340E8;
-        Tue, 22 Mar 2022 03:07:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647918440;
-        bh=JbminCrwvlKeHI7BEmFEsF5mDATqt+IS8qjcZ0/Jt9M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QXAmVA5wzyUI2A1gidTxf5+Lo6mDAbigvc7Oy0OmXaaB60pzd2ZM3RZzXh1ONfLiQ
-         rcm70kJ/Ci2YoNfEesX6/y+NDr/MfTm7yzMJcVfqf5rppfBhzFhpYm3soqnr8vyEqY
-         0T9J/oRiVAWY51zw2o99VDzbxSp85Gx2cfDifP5vWxNS/tMHx13Ea+2/y90cvg03l5
-         6gAp8I2yarUR5IZlxfxhCsGvLMrXZeLHenIZlvc706Alb8DGCG8hGWzfBl0t1Me22X
-         omXtfJopIWR+aXYBRHLZKCZK3ZkqQ73ONWYFzfcorVZgEMzViOXN3wifI1BFd32Ulv
-         JiY+QggjG5riw==
-Received: by mail-vs1-f41.google.com with SMTP id 2so9784745vse.4;
-        Mon, 21 Mar 2022 20:07:20 -0700 (PDT)
-X-Gm-Message-State: AOAM531aCzh68XRbmaPpJ+FEO+ZW9rMf/PBCYllqnCNNjpVHOJJ2ZfBK
-        NApFte2jWFdiHEXUbfg/fIdhYsGJQiSR/jFfPkU=
-X-Google-Smtp-Source: ABdhPJx4+oH0hOgpdvstgqFyVbmteIBIBzG7Uewe8HbwCzcGggSv3RFh+6z7krU1v8KMTHuDPkzMCzfD1G8XtTDEGEY=
-X-Received: by 2002:a05:6102:2e5:b0:325:30d7:c452 with SMTP id
- j5-20020a05610202e500b0032530d7c452mr1451473vsj.67.1647918439548; Mon, 21 Mar
- 2022 20:07:19 -0700 (PDT)
+        Mon, 21 Mar 2022 23:08:54 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DD83FDBF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:07:27 -0700 (PDT)
+Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KMxHB2qKtz1GCpk;
+        Tue, 22 Mar 2022 11:07:18 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 11:07:24 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 11:07:23 +0800
+Message-ID: <d5c5e2fa-a09b-bf1b-295b-8ed99fc85e57@huawei.com>
+Date:   Tue, 22 Mar 2022 11:07:22 +0800
 MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-4-chenhuacai@loongson.cn>
- <CAK8P3a1ST1hBnhepvoQ9UTbAM=56JEU=-OiBAFQeK2rgaZ5aWw@mail.gmail.com>
-In-Reply-To: <CAK8P3a1ST1hBnhepvoQ9UTbAM=56JEU=-OiBAFQeK2rgaZ5aWw@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 22 Mar 2022 11:07:11 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7akp8RNyw=7qJPgWeApAzf0u4kBNbOHzgQN9Mx3PfzcQ@mail.gmail.com>
-Message-ID: <CAAhV-H7akp8RNyw=7qJPgWeApAzf0u4kBNbOHzgQN9Mx3PfzcQ@mail.gmail.com>
-Subject: Re: [PATCH V8 11/22] LoongArch: Add process management
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH -next 3/4] arm64: mm: add support for page table check
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "Will Deacon" <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>
+References: <20220317141203.3646253-1-tongtiangen@huawei.com>
+ <20220317141203.3646253-4-tongtiangen@huawei.com> <YjOFNEvj7EfBasCI@arm.com>
+ <cb91532b-c0cd-034c-2f93-4f76fabf5fc1@huawei.com> <YjS+2FVpq8D4Gx0S@arm.com>
+ <d3006048-f737-439e-b985-cfbab69c4167@huawei.com> <Yjiqm6tQB5To5Jd9@arm.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <Yjiqm6tQB5To5Jd9@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd,
 
-On Mon, Mar 21, 2022 at 4:43 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> > +#ifdef CONFIG_PAGE_SIZE_64KB
-> > +#define THREAD_SIZE_ORDER (0)
-> > +#endif
-> > +
-> > +#define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
-> > +#define THREAD_MASK (THREAD_SIZE - 1UL)
-> > +
->
-> Having a 64KB stack area is rather wasteful. I think you should use a sub-page
-> allocation in this configuration, or possibly disallow 64KB page configuration
-> entirely.
->
-> Note that you have to use full pages when using CONFIG_VMAP_STACK, but
-> you don't seem to support that at the moment, so allocating only 16KB stacks
-> on a 64KB page config should still work.
-I think using a 16KB stack for all configurations (4KB/16KB/64KB) is
-the simplest way. Right?
 
-Huacai
->
->        Arnd
+在 2022/3/22 0:40, Catalin Marinas 写道:
+> On Mon, Mar 21, 2022 at 02:15:36PM +0800, Tong Tiangen wrote:
+>> Considering all your suggestions, The final logic should be:
+>>
+>> +#define pte_user(pte)          (!!(pte_val(pte) & PTE_USER))
+>>
+>> +#define pmd_user(pmd)		pte_user(pmd_pte(pmd))
+>> +#define pmd_user_exec(pmd)	pte_user_exec(pmd_pte(pmd))
+>>
+>> +#define pud_user(pud)          pte_user(pud_pte(pud))
+>>
+>> +static inline bool pte_user_accessible_page(pte_t pte)
+>> +{
+>> +	return pte_present(pte) && (pte_user(pte)|| pte_user_exec(pte));
+>> +}
+> 
+> This is fine.
+> 
+>> +static inline bool pmd_user_accessible_page(pmd_t pmd)
+>> +{
+>> +	return pmd_present(pmd) && (pmd_user(pmd)|| pmd_user_exec(pmd));
+>> +}
+> 
+> That's fine as well assuming that the function is only called on the
+> set_pmd_at() path where we know that the pmd would be a block mapping
+> (huge page). I think that's the case from a quick look at the current
+> x86 implementation.
+
+Yeah, PTC only check pmd block mapping(huge page) and pud is similar.
+These code logic will be included in V2.
+
+Thanks.
+
+> 
+>> +static inline bool pud_user_accessible_page(pud_t pud)
+>> +{
+>> +	return pud_present(pud) && pud_user(pud);
+>> +}
+> 
+> Same here.
+> 

@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEC74E355A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 823DF4E3564
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233886AbiCVANx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S233748AbiCVATC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 20:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233876AbiCVANu (ORCPT
+        with ESMTP id S233905AbiCVAS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 20:13:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CC52D4D7A;
-        Mon, 21 Mar 2022 17:11:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMsKy5bk3z4xL3;
-        Tue, 22 Mar 2022 11:09:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647907767;
-        bh=4nqnqth803i/Xf8RxS2LPdwAs0gytBUqS/Ki9UbFU/o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WkyHmOlGWeOcConUsOwGb5wtziOlfFWgr3Pqf1iBP9uPQ9AhTO3RafUR7aldIjINl
-         RtIxaFZkziB5SMLc4FofJ8dBOhnd4pa5WqDssv+yEH37otNPV0G4evYR+Y+3Qc92KP
-         qhMAYyWc5qVPPQYpQAfFpK6SW2PQLVZwQDgfEctjWZEqu5ankEEmoxPnppTwyCVilF
-         nidqkuMoT8b5S28dTvugDeApUpiLudT0PVamTRxSlKXpTk/i30feDdwuIDsfwMXBd7
-         39CFr463iSLpEPnRyWv92UFOYuE/FGODRi5eXJ0+koyZymRYpdDTg6jntu19Z4gWSa
-         5e5+TDK3Cq6dA==
-Date:   Tue, 22 Mar 2022 11:09:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the parisc-hd tree with the
- asm-generic tree
-Message-ID: <20220322110925.7b295e54@canb.auug.org.au>
-In-Reply-To: <20220228114523.03b2f921@canb.auug.org.au>
-References: <20220228114523.03b2f921@canb.auug.org.au>
+        Mon, 21 Mar 2022 20:18:59 -0400
+Received: from out199-3.us.a.mail.aliyun.com (out199-3.us.a.mail.aliyun.com [47.90.199.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96103DE905;
+        Mon, 21 Mar 2022 17:16:15 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V7sYEL4_1647907898;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7sYEL4_1647907898)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 22 Mar 2022 08:11:39 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] xfs: clean up some inconsistent indenting
+Date:   Tue, 22 Mar 2022 08:11:37 +0800
+Message-Id: <20220322001137.96594-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JECP/m+MkvZbCsBV3x2wGku";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/JECP/m+MkvZbCsBV3x2wGku
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Eliminate the follow smatch warning:
+fs/xfs/xfs_log.c:3702 xlog_verify_tail_lsn() warn: inconsistent
+indenting
 
-Hi all,
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/xfs/xfs_log.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-On Mon, 28 Feb 2022 11:45:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the parisc-hd tree got a conflict in:
->=20
->   arch/parisc/lib/memcpy.c
->=20
-> between commit:
->=20
->   967747bbc084 ("uaccess: remove CONFIG_SET_FS")
->=20
-> from the asm-generic tree and commit:
->=20
->   d4a767ea8b0e ("parisc: Use constants to encode the space registers like=
- SR_KERNEL")
->=20
-> from the parisc-hd tree.
+diff --git a/fs/xfs/xfs_log.c b/fs/xfs/xfs_log.c
+index a8034c0afdf2..5c8843026468 100644
+--- a/fs/xfs/xfs_log.c
++++ b/fs/xfs/xfs_log.c
+@@ -3699,21 +3699,21 @@ xlog_verify_tail_lsn(
+ 	xfs_lsn_t	tail_lsn = be64_to_cpu(iclog->ic_header.h_tail_lsn);
+ 	int		blocks;
+ 
+-    if (CYCLE_LSN(tail_lsn) == log->l_prev_cycle) {
+-	blocks =
+-	    log->l_logBBsize - (log->l_prev_block - BLOCK_LSN(tail_lsn));
++	if (CYCLE_LSN(tail_lsn) == log->l_prev_cycle) {
++		blocks = log->l_logBBsize -
++			(log->l_prev_block - BLOCK_LSN(tail_lsn));
+ 	if (blocks < BTOBB(iclog->ic_offset)+BTOBB(log->l_iclog_hsize))
+ 		xfs_emerg(log->l_mp, "%s: ran out of log space", __func__);
+-    } else {
+-	ASSERT(CYCLE_LSN(tail_lsn)+1 == log->l_prev_cycle);
++	} else {
++		ASSERT(CYCLE_LSN(tail_lsn)+1 == log->l_prev_cycle);
+ 
+-	if (BLOCK_LSN(tail_lsn) == log->l_prev_block)
+-		xfs_emerg(log->l_mp, "%s: tail wrapped", __func__);
++		if (BLOCK_LSN(tail_lsn) == log->l_prev_block)
++			xfs_emerg(log->l_mp, "%s: tail wrapped", __func__);
+ 
+-	blocks = BLOCK_LSN(tail_lsn) - log->l_prev_block;
+-	if (blocks < BTOBB(iclog->ic_offset) + 1)
+-		xfs_emerg(log->l_mp, "%s: ran out of log space", __func__);
+-    }
++		blocks = BLOCK_LSN(tail_lsn) - log->l_prev_block;
++		if (blocks < BTOBB(iclog->ic_offset) + 1)
++			xfs_emerg(log->l_mp, "%s: ran out of log space", __func__);
++	}
+ }
+ 
+ /*
+-- 
+2.20.1.7.g153144c
 
-This is now a conflict between the asm-generic tree and commit
-
-  360bd6c65807 ("parisc: Use constants to encode the space registers like S=
-R_KERNEL")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/JECP/m+MkvZbCsBV3x2wGku
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI5E7UACgkQAVBC80lX
-0GxbDggAn6FQaXTvpmAOqqfelYM0EN747gukeBKFXbUP64zbqUjQg9wzpSULUR0I
-bIrR4kAJEmic2i5goPHE5c/KgG+pGC80muNBL2KXtEPwSBk5cJHv0v7tUC9SYgSD
-ePEI75xwHjd2fc6iWjXTewd8CTEcfw+n+DSHsF9GHBD30+JG76OfdbgU3Bjx+NZq
-guwsbqCaoqkBGF4lmj+tWi0dopokNfCRkXzVx7RxHuvQSsGyYbSSzp6a5SjUfxQH
-0ferJuYWLMTNO13pyhxdMhlHsnzVabnFh61/uGsZNp3pdKC6y0O6Hs+j409edwR+
-FiuFT1zPrK+48+jZTqfOQZPIRsDKoQ==
-=FBOi
------END PGP SIGNATURE-----
-
---Sig_/JECP/m+MkvZbCsBV3x2wGku--

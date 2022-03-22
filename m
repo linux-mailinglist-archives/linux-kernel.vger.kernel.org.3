@@ -2,91 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E9E4E3584
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A8C4E3596
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbiCVAcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S234563AbiCVAdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 20:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbiCVAcI (ORCPT
+        with ESMTP id S234309AbiCVAcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 20:32:08 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7ED383550
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647909041; x=1679445041;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=MxIe4PGTTft2J960yldrK0fqL+jHfZA6g3WPcxrTYBs=;
-  b=DCZg1b3/H1+KwDoriPsvBuRBn13Zn5Ks8VxutGdb9JkSi2Vg5OSvsJez
-   PuCV/ldAzsFES2lToeFH/BQhmCPeH982ETwmcL45+EEcPBqm5p4hLfc3y
-   H8225u0WXRFqqC6Opx/vNEIVNbW6gfdigWId5Ph3wS3a/nQxwED2MNijN
-   GrqQbaIXNZaj8XvkEjSwEHCMUHl7oKW3cYrzZqQsycMF+iwMxJdRRTmRs
-   z7LD6u0/RKPgPjKFmgoC9w80t7AqwFmIhBUOPL498T8bY1ZZQKduVU7Lo
-   6YcAoRW9gOWEW6jDDXLem3jU8I/dltmbBdaiwvQlE2IGJgQPviUB/Iswg
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="320886408"
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="320886408"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:30:41 -0700
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="716701467"
-Received: from jwu59-mobl1.ccr.corp.intel.com (HELO [10.255.30.60]) ([10.255.30.60])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:30:40 -0700
-Subject: Re: [kbuild-all] Re: arch/arm/mach-ixp4xx/common-pci.c:143:5:
- warning: no previous prototype for 'ixp4xx_pci_write'
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202203200849.3dFXVKxt-lkp@intel.com>
- <CACRpkdaorR-mhZ9g2SraJJJ3sVw9yR5PgzGZOP16scQTC8+D8Q@mail.gmail.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <1252951b-cb9d-0d76-09f1-37d2b364b02c@intel.com>
-Date:   Tue, 22 Mar 2022 08:30:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <CACRpkdaorR-mhZ9g2SraJJJ3sVw9yR5PgzGZOP16scQTC8+D8Q@mail.gmail.com>
+        Mon, 21 Mar 2022 20:32:42 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31F838D755
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:31:14 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id l8so16924999pfu.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XM+TgxL8NHgpPQL8bNe7xChjlBYLCqdsfBPXoOydz/4=;
+        b=s0Fu9HWt/+zWpGu6X8LA5mlRPC2raz0O4wG31dfI7nUvlDL2JyI/6eG2SfoilMIQeP
+         lIt+3IRsR7pVtUmx4lATqbzn2hxjETQo3aHqxVfmbngEo/nEHMLfbhL3zEk/MS59fuyx
+         iNf5UU8g4GEL9+4zTuIjJk6sJLKPsR2hmCKFBsjbmWtSv23OOInMbj1tfjN/Y9cSD6vl
+         ewtGEB6JK6D4eWQOgHc5GI4ANOdgFiLWQ6w4uKssd7XSNcal1uz8qb2ywUgvxkFXTXRi
+         AhZUG7/LE82C1zlMGtoQkoWedXeMKAGXd5wTBgmQACiG7XvTixbV4b/tNffzdkNVfRch
+         2RAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=XM+TgxL8NHgpPQL8bNe7xChjlBYLCqdsfBPXoOydz/4=;
+        b=8Ch44vwHS5pFzxrFaFafmHHV5GWD3w8BCvXA3mRSpfNWX1ClvNPQg/WJjSod7HOSHZ
+         BgIfc96ugRG1CtWy6V0f0jUfcHEEBf8Q5kzgmQ8guyU/zMOULIc32tMl9iMIxym314wh
+         DgAXbBOau5Snt+RTwri+YeEBxzUTa87JiTfzlbGWLmEdkCSOSnhM0Yl+uoYnuLxljuAL
+         FI/Zj1i3Hlfu8h92v7S3LwcEvEq5UeotT798kB01bpdlIXvgGyJToeF78nxVju6NldZh
+         /vfZNChl+fLdQThtjYnWexTo5ZuhodKE/121cwCrAZ3XCXtt5JSgcrTdCR7m/lMbndFv
+         Hc3A==
+X-Gm-Message-State: AOAM530RybtGVS9CUCq4zoEJhL80iAqpAsWdERvhi8dqDFMrJFXLVdH9
+        IRcNy/qUXJiqSgxD4t6RyrgT0g==
+X-Google-Smtp-Source: ABdhPJxf8rrrAYGNrfInbsQntDvoeDQOh3KjS8VS/BtItwV2lILWmyam/HWUReGDbcNmSPGzvmDCwA==
+X-Received: by 2002:a63:1248:0:b0:381:54c9:1a1a with SMTP id 8-20020a631248000000b0038154c91a1amr19652958pgs.185.1647909074036;
+        Mon, 21 Mar 2022 17:31:14 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id lp4-20020a17090b4a8400b001bedba2df04sm535823pjb.30.2022.03.21.17.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 17:31:13 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 17:31:13 -0700 (PDT)
+X-Google-Original-Date: Mon, 21 Mar 2022 17:31:11 PDT (-0700)
+Subject:     Re: [PATCH] MAINTAINERS: sifive: drop Yash Shah
+In-Reply-To: <ef965982-0c21-9cc7-1e5a-69726671ba1f@canonical.com>
+CC:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, aou@eecs.berkeley.edu,
+        p.zabel@pengutronix.de, sagar.kadam@sifive.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     krzysztof.kozlowski@canonical.com
+Message-ID: <mhng-9e915473-a905-42ef-908d-2d84b08a3023@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 10 Mar 2022 23:33:54 PST (-0800), krzysztof.kozlowski@canonical.com wrote:
+> On 11/03/2022 04:14, Palmer Dabbelt wrote:
+>> On Mon, 14 Feb 2022 00:23:49 PST (-0800), krzysztof.kozlowski@canonical.com wrote:
+>>> Emails to Yash Shah bounce with "The email account that you tried to
+>>> reach does not exist.", so drop him from all maintainer entries.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/gpio/sifive,gpio.yaml     | 1 -
+>>>  Documentation/devicetree/bindings/pwm/pwm-sifive.yaml       | 1 -
+>>>  .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 1 -
+>>>  MAINTAINERS                                                 | 6 ------
+>>>  4 files changed, 9 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+>>> index e04349567eeb..427c5873f96a 100644
+>>> --- a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+>>> +++ b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+>>> @@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>  title: SiFive GPIO controller
+>>>
+>>>  maintainers:
+>>> -  - Yash Shah <yash.shah@sifive.com>
+>>>    - Paul Walmsley <paul.walmsley@sifive.com>
+>>>
+>>>  properties:
+>>> diff --git a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+>>> index 676b2160bada..605c1766dba8 100644
+>>> --- a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+>>> +++ b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+>>> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>  title: SiFive PWM controller
+>>>
+>>>  maintainers:
+>>> -  - Yash Shah <yash.shah@sifive.com>
+>>>    - Sagar Kadam <sagar.kadam@sifive.com>
+>>>    - Paul Walmsley <paul.walmsley@sifive.com>
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+>>> index 2b1f91603897..e2d330bd4608 100644
+>>> --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+>>> +++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+>>> @@ -9,7 +9,6 @@ title: SiFive L2 Cache Controller
+>>>
+>>>  maintainers:
+>>>    - Sagar Kadam <sagar.kadam@sifive.com>
+>>> -  - Yash Shah <yash.shah@sifive.com>
+>>>    - Paul Walmsley  <paul.walmsley@sifive.com>
+>>>
+>>>  description:
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index ebf7a75a6bec..87eeac970ca2 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -7090,12 +7090,6 @@ L:	linux-edac@vger.kernel.org
+>>>  S:	Maintained
+>>>  F:	drivers/edac/sb_edac.c
+>>>
+>>> -EDAC-SIFIVE
+>>> -M:	Yash Shah <yash.shah@sifive.com>
+>>> -L:	linux-edac@vger.kernel.org
+>>> -S:	Supported
+>>> -F:	drivers/edac/sifive_edac.c
+>>
+>> Looks like that leaves this unmaintained?  I'm happy to volunteer, I've
+>> got the boards lying around somewhere and sort of feel on the hook to
+>> keep this stuff alive given that whatever's in there is partially my
+>> fault.  That said, I'm happy to stay out of it so if it's OK to have
+>> otherwise unmaintained EDAC drivers that works for me so
+>>
+>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>
+> The patch was already merged. EDAC SiFive is now covered by generic EDAC
+> and SIFIVE entries. Feel free to restore the entry with yourself.
 
+Sorry for being vague there, I'd seen it get merged.
 
-On 3/21/2022 11:34 PM, Linus Walleij wrote:
-> On Sun, Mar 20, 2022 at 1:07 AM kernel test robot <lkp@intel.com> wrote:
-> 
->> FYI, the error/warning still remains.
-> 
-> As I have repeated three times, this file goes away in the next merge window.
-> 
-> I suppose I am talking to an AI, because the hammering seems pretty dumb.
+If having it covered via some generic MAINTAINERS entries is OK for the 
+EDAC folks then that's fine with me, I just don't want to get into a 
+spot where this driver is going to get removed because nobody's more 
+explicitly maintaining it.  These SiFive boards are still the only ones 
+that run a normal-smelling upstream Linux (at least until we can get the 
+D1 issues sorted out, which is hopefully soon) and I'd hate to start 
+dropping stuff if we don't need to.
 
-Hi Linus,
+So if it's fine for the EDAC forks to have things in the state the are 
+after this patch was merged, that's great for me.
 
-Sorry for the noise, the report is repeated almost once a month until 
-issue fixed, we'll ignore the reports about commit d5d9f7ac58 to avoid
-disturbing you.
-
-Best Regards,
-Rong Chen
-
-> 
-> Linus Walleij
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> 
+> Best regards,
+> Krzysztof

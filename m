@@ -2,143 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAE24E4326
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 823CE4E432B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235926AbiCVPkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        id S238632AbiCVPmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiCVPkj (ORCPT
+        with ESMTP id S238499AbiCVPmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:40:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DACA606F0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=lEHQr9MFDVRybsndbZDyXYT1aET9Z4Ka7yxHnPlx84Q=; b=KrRSfV215S6/eudAsgON0tFVGR
-        YnYqmbTnfVE+kg497gwJZxPC7V8GQapq70MrAOyWZQjY/9X7qukDlghSzs+Vh0+Rcjc3OfIfeCW9S
-        FB3qE6Z3182DQ7aFxEAgqk8EdiA46jZOdqfw5+qihx5O8BvIpsVwZo74tnrz84ImO23pLCrjjTg9v
-        OnvLVlcfaVhaXGNT5f5I4fbetj3p4Ub28rAorBCueKl8q3BI0n3/bIVazphLJDKYSDKxTyFdO7T50
-        SK1140ncI2YiEOsELwcgSGwwT8pXwD8tNoSBa63jYb+XVATrrfeLnFiT07OkkGowkps6nkGRykSWx
-        VrTirN2g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWgbB-00Bik7-KP; Tue, 22 Mar 2022 15:39:05 +0000
-Message-ID: <8ef010a1-d28a-a9f0-78cc-1ad8c40cfb59@infradead.org>
-Date:   Tue, 22 Mar 2022 08:39:00 -0700
+        Tue, 22 Mar 2022 11:42:06 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289C988B3B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:40:37 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KNG0N11Qbz9sTY;
+        Tue, 22 Mar 2022 16:40:36 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LJyfPn8qiIjw; Tue, 22 Mar 2022 16:40:36 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KNG0N08jSz9sTJ;
+        Tue, 22 Mar 2022 16:40:36 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E72108B779;
+        Tue, 22 Mar 2022 16:40:35 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id gP6_4JIIv282; Tue, 22 Mar 2022 16:40:35 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.14])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 995098B773;
+        Tue, 22 Mar 2022 16:40:35 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22MFeRuf1513362
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 16:40:27 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22MFeO8K1513360;
+        Tue, 22 Mar 2022 16:40:24 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v1 0/4] Kill the time spent in patch_instruction()
+Date:   Tue, 22 Mar 2022 16:40:17 +0100
+Message-Id: <cover.1647962456.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [GIT PULL] scheduler updates for v5.18
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <YjhZUezhnamHAl0H@gmail.com>
- <YjiddAnoCCz7Tbt3@dev-arch.thelio-3990X> <YjmAzX9kSeSjumKd@gmail.com>
- <YjnsJkUl5mO22mzg@dev-arch.thelio-3990X>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YjnsJkUl5mO22mzg@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1647963619; l=1293; s=20211009; h=from:subject:message-id; bh=zVm3jdRSxZZDB2iHVRkd9NIm3qIwHXvhJgaUbMNYDAM=; b=cAZozjNy5AjYFtKZakL2xbyzBzJARaXbCmSCQcKJaWZKMTflOHOKntyWCOdCLRSi1k8Cmfq1zeNZ duXkISWMCFx/XGeTYRC1Pg/RYtMHvq74s6B1Mpu2lfcyZ8zfQJVv
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series reduces by 70% the time required to activate
+ftrace on an 8xx with CONFIG_STRICT_KERNEL_RWX.
 
+Measure is performed in function ftrace_replace_code() using mftb()
+around the loop.
 
-On 3/22/22 08:32, Nathan Chancellor wrote:
-> On Tue, Mar 22, 2022 at 08:54:53AM +0100, Ingo Molnar wrote:
->>
->> * Nathan Chancellor <nathan@kernel.org> wrote:
->>
->>> Hi Ingo,
->>>
->>> On Mon, Mar 21, 2022 at 11:54:09AM +0100, Ingo Molnar wrote:
->>>> Ingo Molnar (17):
->>>>       sched/headers: Fix header to build standalone: <linux/sched_clock.h>
->>>>       sched/headers: Add header guard to kernel/sched/sched.h
->>>>       sched/headers: Add header guard to kernel/sched/stats.h and kernel/sched/autogroup.h
->>>>       sched/headers: sched/clock: Mark all functions 'notrace', remove CC_FLAGS_FTRACE build asymmetry
->>>>       sched/headers: Add initial new headers as identity mappings
->>>>       sched/headers: Fix comment typo in kernel/sched/cpudeadline.c
->>>>       sched/headers: Make the <linux/sched/deadline.h> header build standalone
->>>>       sched/headers: Introduce kernel/sched/build_utility.c and build multiple .c files there
->>>>       sched/headers: Introduce kernel/sched/build_policy.c and build multiple .c files there
->>>>       sched/headers: Standardize kernel/sched/sched.h header dependencies
->>>>       sched/headers: Reorganize, clean up and optimize kernel/sched/core.c dependencies
->>>>       sched/headers: Reorganize, clean up and optimize kernel/sched/fair.c dependencies
->>>>       sched/headers: Reorganize, clean up and optimize kernel/sched/build_policy.c dependencies
->>>>       sched/headers: Reorganize, clean up and optimize kernel/sched/build_utility.c dependencies
->>>>       sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies
->>>>       sched/headers: Only include <linux/entry-common.h> when CONFIG_GENERIC_ENTRY=y
->>>>       headers/prep: Fix header to build standalone: <linux/psi.h>
->>>
->>> This series regresses ARCH=arm allmodconfig:
->>>
->>> $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- mrproper allmodconfig kernel/sched/
->>> In file included from kernel/sched/fair.c:52:
->>> kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
->>>    87 | # include <asm/paravirt_api_clock.h>
->>>       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
->>> compilation terminated.
->>> make[3]: *** [scripts/Makefile.build:288: kernel/sched/fair.o] Error 1
->>> In file included from kernel/sched/core.c:81:
->>> kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
->>>    87 | # include <asm/paravirt_api_clock.h>
->>>       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
->>> compilation terminated.
->>> make[3]: *** [scripts/Makefile.build:288: kernel/sched/core.o] Error 1
->>> In file included from kernel/sched/build_policy.c:33:
->>> kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
->>>    87 | # include <asm/paravirt_api_clock.h>
->>>       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
->>> compilation terminated.
->>> make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_policy.o] Error 1
->>> In file included from kernel/sched/build_utility.c:52:
->>> kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
->>>    87 | # include <asm/paravirt_api_clock.h>
->>>       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
->>> compilation terminated.
->>> make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_utility.o] Error 1
->>> make[3]: Target '__build' not remade because of errors.
->>> make[2]: *** [scripts/Makefile.build:550: kernel/sched] Error 2
->>>
->>> Randy Dunlap has sent a patch that fixes it, which I just reviewed:
->>>
->>> https://lore.kernel.org/r/20220316204146.14000-1-rdunlap@infradead.org/
->>
->> Applied, thanks Nathan!
->>
->>> It would be nice if this could be taken with the pull (or submitted with
->>> the pull in a v2 as I see Qian's comment) to avoid regressing the build.
->>
->> Will do.
-> 
-> Thank you a lot for the quick response and fix, I appreciate it!
+With the series,
+- Without CONFIG_STRICT_KERNEL_RWX, 416000 TB ticks are measured.
+- With CONFIG_STRICT_KERNEL_RWX, 546000 TB ticks are measured.
 
-and my thanks to both of you for taking care of that.
+Before this series,
+- Without CONFIG_STRICT_KERNEL_RWX, 427000 TB ticks are measured.
+- With CONFIG_STRICT_KERNEL_RWX, 1744000 TB ticks are measured.
+
+Before the series, CONFIG_STRICT_KERNEL_RWX multiplies the time
+required for ftrace activation by more than 4.
+
+With the series, CONFIG_STRICT_KERNEL_RWX increases the time
+required for ftrace activation by only 30%
+
+Christophe Leroy (4):
+  powerpc/code-patching: Don't call is_vmalloc_or_module_addr() without
+    CONFIG_MODULES
+  powerpc/code-patching: Speed up page mapping/unmapping
+  powerpc/code-patching: Use jump_label for testing freed initmem
+  powerpc/code-patching: Use jump_label to check if poking_init() is
+    done
+
+ arch/powerpc/include/asm/code-patching.h |  2 ++
+ arch/powerpc/lib/code-patching.c         | 37 +++++++++++++++---------
+ arch/powerpc/mm/mem.c                    |  2 ++
+ 3 files changed, 28 insertions(+), 13 deletions(-)
 
 -- 
-~Randy
+2.35.1
+

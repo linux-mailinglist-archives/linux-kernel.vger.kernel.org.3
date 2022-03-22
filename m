@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240344E3F90
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE0B4E3F91
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235650AbiCVNan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        id S235622AbiCVNbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235633AbiCVNah (ORCPT
+        with ESMTP id S233715AbiCVNbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:30:37 -0400
-Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3104227CDA
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:29:05 -0700 (PDT)
-Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
-        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 22MDT0Km001060
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:29:01 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
-        q=dns/txt; i=@ics.forth.gr; t=1647955736; x=1650547736;
-        h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=c2YIwja29O1WBS129ebO6CkccAwpqLVJQ1HQcp3TXN0=;
-        b=EFoyRNR4AObZg/WhT450pv9k9/cyaQZXT0c/TCKa7WxdhcYAL0g87FiwAMhDRlKi
-        gibP9NTTskZ/DXQN87gDte0mZ39qgtYPWjAxasfQWHBF5izs30Jh77tomqTNEE67
-        uMsOy0Qu0GwyqXtCoDPORtpdaZ855ANoJ11+ovJ0AuTKsOFGYYZ1BeUBvyZxNqDy
-        f4lY/kv45l8UuLlJgUjuiRK8kcjUbzGtIF4kEQbY31FeTo+//3N0dU4HD46tucS5
-        ku2SV0SpMVBiJKoL6nSvTTOaFKV/ytGo6vZFosN+hgtxABArWKOlYsbhCxUN9zuL
-        xhx6ff+32Ko8q3TVWZQbJw==;
-X-AuditID: 8b5b014d-f0a8d700000035db-42-6239cf1827f6
-Received: from enigma.ics.forth.gr (webmail.ics.forth.gr [139.91.151.35])
-        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id 68.A4.13787.81FC9326; Tue, 22 Mar 2022 15:28:56 +0200 (EET)
-X-ICS-AUTH-INFO: Authenticated user: mick@ics.forth.gr at ics.forth.gr
-From:   Nick Kossifidis <mick@ics.forth.gr>
-To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nick Kossifidis <mick@ics.forth.gr>
-Subject: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
-Date:   Tue, 22 Mar 2022 15:28:39 +0200
-Message-Id: <20220322132839.3653682-1-mick@ics.forth.gr>
-X-Mailer: git-send-email 2.34.1
+        Tue, 22 Mar 2022 09:31:48 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB142DD4F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:30:20 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id u3so24031423ljd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version:organization
+         :content-transfer-encoding;
+        bh=9HKooFSzF8EEsT2BEZgeunYRwvAjSyxG2IXK+iRrPEs=;
+        b=29htvhMmpTh4PKGEPvfVlPAUZrleKez8uBO1KBF0exKnC1WyZp6jRTQwDHy/q9a/if
+         R4OwsReo7NGIThGIV7Cil5RrsIpD6Gq6vC1sQxSVfEfj+mIzlK0nKfNpZ9QbNiwlgS8C
+         IAU6K1e3RWdb5GSt7vgRoCkvtWl8/5rV2tcGNYmKwgvSq1+bnrrTogQhTcAQrJIYuQV4
+         c2i+5SZEbLgLKdrjjNhmiO9KDuvbzRn9mfT3oshKO442uXOdu1FxRcxyAka7Iz174Xak
+         A40spqBYtTqd5MC1/e/YiixXhFlC5r4oiPSg7YS+KHOQSiu7YXIEt7T90404opxzbomi
+         bUvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :organization:content-transfer-encoding;
+        bh=9HKooFSzF8EEsT2BEZgeunYRwvAjSyxG2IXK+iRrPEs=;
+        b=ggUtFyTxW3JZj4RisKtGp4TyOEh+hp4f0f3NmI9+sbCBwa+QNBIqts1/SFCacLsLYI
+         mpAQsY4YXcdYNT/ovotEERI/TtfLwkE3W5RTwawx04l3Tcl6JaV4GXAuazse7NQgzZ82
+         j7Bfh1/hVeu3S00fICOkfma3kOUPZx3Qxfr7k82kGQ8lQpjAq7T7OOwJssjXc0ex8lRW
+         KnzNwrD8jY9mSVG8zCv+8t1mZ4HOy9xo24xIqQ13D/nm/7GVHc4yWB/IV5/sk4xL9Wgy
+         olrw3jj7PYG/G9N2bciDIhKysnOpnVYmm+ZX6d/pTyGAxXyRPMVAd2J560qil+NbITgf
+         FTHg==
+X-Gm-Message-State: AOAM531lTLYhOQ5qbZm5vpuWGXF8TAtrgl9tdiRURVtgfEv0bn0yUZ9E
+        /cAT+MTd6U/AjDg+NPnJLOYhyg==
+X-Google-Smtp-Source: ABdhPJxkwrq7ZJvbNzKo/Kac7gQ286RAOZTZyDPHLItZIJZkOra75RUq9+xsw1H+JJrRwUndrhihDg==
+X-Received: by 2002:a2e:a4d1:0:b0:249:8c9c:5ae0 with SMTP id p17-20020a2ea4d1000000b002498c9c5ae0mr4441949ljm.283.1647955817198;
+        Tue, 22 Mar 2022 06:30:17 -0700 (PDT)
+Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id y26-20020a19915a000000b0044a0356abc4sm1779904lfj.220.2022.03.22.06.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 06:30:16 -0700 (PDT)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: bridge: mst: Restrict info size queries to bridge ports
+Date:   Tue, 22 Mar 2022 14:30:01 +0100
+Message-Id: <20220322133001.16181-1-tobias@waldekranz.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Organization: Westermo
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupiluLIzCtJLcpLzFFi42Lpjp6urCtx3jLJoPGvmMXW37PYLS7vmsNm
-        se1zC5tF87tz7BYvL/cwW7TN4ndg83jz8iWLx+GOL+weDzddYvLYvKTe41LzdXaPz5vkAtii
-        uGxSUnMyy1KL9O0SuDJmrDUsOChQMfX5D5YGxuu8XYycHBICJhJ9u9rZuhi5OIQEjjJKNF/a
-        zQ6RcJO4fX8nK4jNJqApMf/SQRYQW0TAXWL15D9MIDazQL7Eti/nmEFsYQFPie27f4D1sgio
-        SsxauYQRxOYVsJDYu/o/I8RMeYn9B88yQ8QFJU7OfMICMUdeonnrbOYJjDyzkKRmIUktYGRa
-        xSiQWGasl5lcrJeWX1SSoZdetIkRHFyMvjsYb29+q3eIkYmD8RCjBAezkgjvv9/GSUK8KYmV
-        ValF+fFFpTmpxYcYpTlYlMR5Wa7JJAkJpCeWpGanphakFsFkmTg4pRqYuIPyDi+Y9UCNo/Hu
-        uZPGlhda3acaf5UM3CZwpTfsfZnFvg+hFx1sVx7+N+Pay6CEuV3Sct/fN61a8L4ydQWbgHn9
-        AcGz6hzC0bM5mYPe6Tzam3ni4j15OR82/gNGRy1Eup9Iz42O4clcEbp9hbFhuOG93kO6XafK
-        d9kLydl+uugtdNy1P/hZmHxt2ISNmg9FmV1mev2NdZA68eWoZHjPu01/Nzl8XFckpPKrxiNC
-        dSdf8Pob6+pl4kU2XpslPv+Pw7S0ebXr+e20zliyLvzwpjPxU/zX48/XtETyRy17FBG84Z+U
-        iNKMCtuCWfP0Dttr9axcz3+6a42Y2dLF/7ftlE58fsroTk7ifa+Aw0G+SizFGYmGWsxFxYkA
-        rj6lgJ0CAAA=
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case the DTB provided by the bootloader/BootROM is before the kernel
-image or outside /memory, we won't be able to access it through the
-linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
-relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
-is not specified), and it's also not the most portable approach since
-the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
-at a specific offset that may not be available. To avoid this situation
-copy DTB so that it's visible through the linear mapping.
+Ensure that no bridge masters are ever considered for MST info
+dumping. MST states are only supported on bridge ports, not bridge
+masters - which br_mst_info_size relies on.
 
-Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
+Fixes: 122c29486e1f ("net: bridge: mst: Support setting and reporting MST port states")
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 ---
- arch/riscv/mm/init.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 0d588032d..697a9aed4 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -206,8 +206,25 @@ static void __init setup_bootmem(void)
- 	 * early_init_fdt_reserve_self() since __pa() does
- 	 * not work for DTB pointers that are fixmap addresses
- 	 */
--	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
--		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
-+	if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
-+		/*
-+		 * In case the DTB is not located in a memory region we won't
-+		 * be able to locate it later on via the linear mapping and
-+		 * get a segfault when accessing it via __va(dtb_early_pa).
-+		 * To avoid this situation copy DTB to a memory region.
-+		 * Note that memblock_phys_alloc will also reserve DTB region.
-+		 */
-+		if (!memblock_is_memory(dtb_early_pa)) {
-+			size_t fdt_size = fdt_totalsize(dtb_early_va);
-+			phys_addr_t new_dtb_early_pa = memblock_phys_alloc(fdt_size, PAGE_SIZE);
-+			void *new_dtb_early_va = early_memremap(new_dtb_early_pa, fdt_size);
-+
-+			memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
-+			early_memunmap(new_dtb_early_va, fdt_size);
-+			_dtb_early_pa = new_dtb_early_pa;
-+		} else
-+			memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
-+	}
+It turns out that even with Eric's fix, the guard was not restrictive
+enough. Sorry about all the noise around this.
+
+ net/bridge/br_netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+index 204472449ec9..200ad05b296f 100644
+--- a/net/bridge/br_netlink.c
++++ b/net/bridge/br_netlink.c
+@@ -119,7 +119,7 @@ static size_t br_get_link_af_size_filtered(const struct net_device *dev,
+ 	/* Each VLAN is returned in bridge_vlan_info along with flags */
+ 	vinfo_sz += num_vlan_infos * nla_total_size(sizeof(struct bridge_vlan_info));
  
- 	early_init_fdt_scan_reserved_mem();
- 	dma_contiguous_reserve(dma32_phys_limit);
+-	if (vg && (filter_mask & RTEXT_FILTER_MST))
++	if (p && vg && (filter_mask & RTEXT_FILTER_MST))
+ 		vinfo_sz += br_mst_info_size(vg);
+ 
+ 	if (!(filter_mask & RTEXT_FILTER_CFM_STATUS))
 -- 
-2.34.1
+2.25.1
 

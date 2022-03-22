@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937854E3F8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C714E3F89
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235599AbiCVNa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S235588AbiCVN3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235495AbiCVNaY (ORCPT
+        with ESMTP id S235495AbiCVN32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:30:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2B5624BE8;
-        Tue, 22 Mar 2022 06:28:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A68D1042;
-        Tue, 22 Mar 2022 06:28:56 -0700 (PDT)
-Received: from [10.1.39.145] (e127744.cambridge.arm.com [10.1.39.145])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9636B3F73B;
-        Tue, 22 Mar 2022 06:28:54 -0700 (PDT)
-Subject: Re: [PATCH v2 1/1] perf test arm64: Test unwinding using fame-pointer
- (fp) mode
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        namhyung@kernel.org, leo.yan@linaro.org, Alexandre.Truong@arm.com,
-        Jiri Olsa <jolsa@kernel.org>
-References: <20220316172015.98000-1-german.gomez@arm.com>
- <592a32d6-b618-951c-9db9-711d022ff85e@arm.com>
- <b2ff473a-f252-89c9-78b3-bacff2876869@arm.com> <YjjlohvNAL8lKlV+@kernel.org>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <cebb404f-b40c-35f9-0395-32cb28a34ab6@arm.com>
-Date:   Tue, 22 Mar 2022 13:27:52 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 22 Mar 2022 09:29:28 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3797F286E8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:28:00 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id kl29so7362293qvb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F6f3afV4tqtncF73mZhO2dGGO3BMaajonDRieyQCctk=;
+        b=Bkl2XAz6E8KGmYNmKGhq2KqHYHZulnIzry2lGn5C0jSspo+Oj1bGpBF7hRebnGm1ro
+         gUxe+Z1iIWvYN+soEo1YYLxJG0AYb1JzTDdMxHFwPfhu0vJQahs6KAl0X7HZSZS+HGDZ
+         RQDPlBS0zxYVzblUj9IltsrR2Q6xsv+HbHSAQ2OpYkQoN3c/TpI4QY7FrS3Du1MHHEk5
+         xMfrQmvwR2JNO29BzZ8MWEOTFEeSFqDOO0eN+AdmssOkpO6tMjoKKPv58LWUzBYWJKw3
+         RHopVEXO8j8Xl/DZZKB7zfPr67zMIlXhVKSZSmK8BDrnpRnukEMqe55+Sqz+ojEx9aW0
+         wyGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F6f3afV4tqtncF73mZhO2dGGO3BMaajonDRieyQCctk=;
+        b=lQ6rfLx/we7WOLV+4/wp+MieZjfFFOx1tjOcxxIlTpQNAtgeE5nY/ez+oyvm9s3QPN
+         Ogmo19CqJtkprfTJYA1RpBd23purm6qFC7dLUrh3AWWHRC/abh3V+H3Q93yLtl2lAAl7
+         ybkb+kZhXESemrZNdmyDnifvh79F3kGp/cHeAEKaAdoUCoo027BmZ7dFHdVAUiZVmy3j
+         L0xykvHXEGGWVn7aDkCI3Rn1iKFotyQiKdOMnuchhYdAW2/xyJWNAY4gU6BiRMAvvQYp
+         XSqv+CGlAOM9Rs3mBU/oDwgxnUjr2Xx10wmrKrvGrU2iodocdRaLcRJJOsUKy9caXnpv
+         dYLw==
+X-Gm-Message-State: AOAM533dy/gUO3aN6dBTk/GxTf5zmdro+dAGA83VW1rVJl7idvS4tsRq
+        0bPp8C1tRek8SriDcglwXiqG7g==
+X-Google-Smtp-Source: ABdhPJxyu3mAkevGNq3TrkT+TrWR/F8CTnpZC9QiUtL8T0XWIE+cAVlAe4rnnsYArb7XiDZ32JeJUQ==
+X-Received: by 2002:a0c:fc46:0:b0:440:f78f:f4c4 with SMTP id w6-20020a0cfc46000000b00440f78ff4c4mr16130924qvp.108.1647955679440;
+        Tue, 22 Mar 2022 06:27:59 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id l126-20020a37bb84000000b0067b3c2bcc0dsm9349493qkf.1.2022.03.22.06.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 06:27:59 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 09:27:58 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
+ for file pages
+Message-ID: <YjnO3p6vvAjeMCFC@cmpxchg.org>
+References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
+ <YjiMsGoXoDU+FwsS@cmpxchg.org>
+ <623938d1.1c69fb81.52716.030f@mx.google.com>
 MIME-Version: 1.0
-In-Reply-To: <YjjlohvNAL8lKlV+@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <623938d1.1c69fb81.52716.030f@mx.google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 22, 2022 at 02:47:42AM +0000, CGEL wrote:
+> On Mon, Mar 21, 2022 at 10:33:20AM -0400, Johannes Weiner wrote:
+> > On Wed, Mar 16, 2022 at 06:39:28AM +0000, cgel.zte@gmail.com wrote:
+> > > From: Yang Yang <yang.yang29@zte.com.cn>
+> > > 
+> > > psi tracks the time spent on submitting the IO of refaulting file pages
+> > > and anonymous pages[1]. But after we tracks refaulting anonymous pages
+> > > in swap_readpage[2][3], there is no need to track refaulting anonymous
+> > > pages in submit_bio.
+> > > 
+> > > So this patch can reduce redundant calling of psi_memstall_enter. And
+> > > make it easier to track refaulting file pages and anonymous pages
+> > > separately.
+> > 
+> > I don't think this is an improvement.
+> > 
+> > psi_memstall_enter() will check current->in_memstall once, detect the
+> > nested call, and bail. Your patch checks PageSwapBacked for every page
+> > being added. It's more branches for less robust code.
+> 
+> We are also working for a new patch to classify different reasons cause
+> psi_memstall_enter(): reclaim, thrashing, compact, etc. This will help
+> user to tuning sysctl, for example, if user see high compact delay, he
+> may try do adjust THP sysctl to reduce the compact delay.
+> 
+> To support that, we should distinguish what's the reason cause psi in
+> submit_io(), this patch does the job.
 
-On 21/03/2022 20:52, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Mar 16, 2022 at 05:48:50PM +0000, German Gomez escreveu:
->> On 16/03/2022 17:30, James Clark wrote:
->>> On 16/03/2022 17:20, German Gomez wrote:
->>>> Add a shell script to check that the call-graphs generated using frame
->>>> pointers (--call-graph fp) are complete and not missing leaf functions:
->>>>
->>>>   | $ perf test 88 -v
->>>>   |  88: Check Arm64 callgraphs are complete in fp mode                  :
->>>>   | --- start ---
->>>>   | test child forked, pid 8734
->>>>   |  + Compiling test program (/tmp/test_program.Cz3yL)...
->>>>   |  + Recording (PID=8749)...
->>>>   |  + Stopping perf-record...
->>>>   | test_program.Cz
->>>>   |                  728 leaf
->>>>   |                  753 parent
->>>>   |                  76c main
->>>>   | test child finished with 0
->>>>   | ---- end ----
->>>>   | Check Arm SPE callgraphs are complete in fp mode: Ok
->>>>
->>> Ran it on N1SDP and it passes, and it fails if b9f6fbb3b2c2 isn't applied.
->> I forgot to mention in the notes that it's supposed to work with both unwinders:
->>
->> $ make                # for libunwind (default)
->> $ make NO_LIBUNWIND=1 # for libdw
-> I'll add it to the cset commit log, and also will fix this:
->
-> ⬢[acme@toolbox perf]$        git am ./v2_20220316_german_gomez_perf_test_arm64_test_unwinding_using_fame_pointer_fp_mode.mbx
-> Applying: perf test arm64: Test unwinding using fame-pointer (fp) mode
-> .git/rebase-apply/patch:72: trailing whitespace.
-> # program
-> warning: 1 line adds whitespace errors.
-> tools/perf/tests/shell/test_arm_callgraph_fp.sh:58: trailing whitespace.
-> +# program
-> ⬢[acme@toolbox perf]$
->  
-
-Thanks Arnaldo, I forgot to run the checkpatch script.
-
->>> Reviewed-by: James Clark <james.clark@arm.com>
->>>
->>>> Fixes: b9f6fbb3b2c2 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'")
->>>> Suggested-by: Jiri Olsa <jolsa@kernel.org>
->>>> Signed-off-by: German Gomez <german.gomez@arm.com>
+Please submit these patches together then. On its own, this patch
+isn't desirable.

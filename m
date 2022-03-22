@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6793F4E4640
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE024E4625
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbiCVStV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S240780AbiCVSkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiCVStS (ORCPT
+        with ESMTP id S240778AbiCVSka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:49:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C4B8F997;
-        Tue, 22 Mar 2022 11:47:50 -0700 (PDT)
+        Tue, 22 Mar 2022 14:40:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C461BEB8;
+        Tue, 22 Mar 2022 11:39:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 765E7B81D56;
-        Tue, 22 Mar 2022 18:47:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6132C340F2;
-        Tue, 22 Mar 2022 18:47:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6BF0612FC;
+        Tue, 22 Mar 2022 18:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E19C340EC;
+        Tue, 22 Mar 2022 18:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647974868;
-        bh=AcegB2MSlk0Godl3h3BGMTVyZS57blUmDblLAtl/clg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LlaF4DNAzwPr0LgXTNCSLJOEE0JPp1SozzqeK4vUuXOJOg5uqje3Lc+PlIzS173is
-         bTp+UV9jOj3Tnarge3xhS2TGGXLBJJ3upx2YWsIeUwAYc28y+8SkU3KxdD+cwleqRi
-         QLAo/tmP4gyNJHDljUSYzn+Xr5aEZAfLbisxVf4F8ClZTQ1mZVbmgfi/wu2cpYYnCn
-         6DlHV3dwBd4mLvSA9d3XM1pH1caj1/1+Q8gKdJqvZ1fom5jpUshJuJSYbjSwvJIO05
-         2vE/Tjya1rp/Hw5g0GesY5kDdeccU4SuIXTj1YvzJJbGw5fq91uAPY8aquetlqpSsJ
-         T+6LTDq1vS5/g==
-Received: by pali.im (Postfix)
-        id 56C07843; Tue, 22 Mar 2022 19:47:44 +0100 (CET)
-Date:   Tue, 22 Mar 2022 19:47:44 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marek.behun@nic.cz
-Subject: Re: [PATCH v2 1/2] arm64: dts: uDPU: update partition table
-Message-ID: <20220322184744.pbiv3puccs2wb3lu@pali>
-References: <20220322105857.1107016-1-robert.marko@sartura.hr>
+        s=k20201202; t=1647974341;
+        bh=83MxWvJXMMxW++0FlJkhqDhlQdcZsuRg4UGE2d3K+6w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=il+PF/5lDTVALM0N2qoPSMPAqqGIuPjE3GYn6jbjRxPVk21cRep1A/IVxKET0tZXt
+         sok4x4hv+Lh0rwFR3UKK6eWuelqsBJFGzl7qOA2UtFoOPnjgwsArNBNKek24j7c6yF
+         OSZ2y7T7z/AuvmoYvDYfjT0ZQrj+sRjLGfCkjH9rccfZQll7np7/Mi+KWyQGwzEeUP
+         9KtwvNggDbbr20wGckoy0tkAvpT20UFRuDV8S2rN8vE2dYJwo8sRmaXjrMS2diN5Hk
+         oRPSNtCtdgeFMw8jeUtq9Rckgu8yIa1AgXa5OsE9ZLabnmWbYoU59DZ1JCP8IvZNXi
+         6+3RcNzP/PHpg==
+Date:   Tue, 22 Mar 2022 13:48:02 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [GIT PULL] flexible-array transformations for 5.18-rc1
+Message-ID: <20220322184802.GA2533969@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220322105857.1107016-1-robert.marko@sartura.hr>
-User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,70 +53,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 22 March 2022 11:58:56 Robert Marko wrote:
-> Partition currently called "uboot" does not only contain U-boot, but
-> rather it contains TF-A, U-boot and U-boot environment.
-> 
-> So, to avoid accidentally deleting the U-boot environment which is
-> located at 0x180000 split the partition.
-> 
-> "uboot" is not the correct name as you can't boot these boards with U-boot
-> only, TF-A must be present as well, so rename the "uboot" partition to
-> "firmware".
-> 
-> While we are here, describe the NOR node as "spi-flash@0" instead of
-> "m25p80@0" which is the old SPI-NOR driver name.
-> 
-> This won't break booting for existing devices as the SoC-s BootROM is not
-> partition aware at all, it will simply try booting from 0x0 of the
-> boot device that is set by bootstrap pins.
-> 
-> This will however prevent accidental or automated flashing of just U-boot
-> to the partition.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
 
-> ---
-> Changes in v2:
-> * Update the commit description by adressing ABI breaking concerns
-> ---
->  arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> index 95d46e8d081c..ac64949bb53e 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> +++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> @@ -99,7 +99,7 @@ &spi0 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&spi_quad_pins>;
->  
-> -	m25p80@0 {
-> +	spi-flash@0 {
->  		compatible = "jedec,spi-nor";
->  		reg = <0>;
->  		spi-max-frequency = <54000000>;
-> @@ -108,10 +108,15 @@ partitions {
->  			compatible = "fixed-partitions";
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> -			/* only bootloader is located on the SPI */
-> +
->  			partition@0 {
-> -				label = "uboot";
-> -				reg = <0 0x400000>;
-> +				label = "firmware";
-> +				reg = <0x0 0x180000>;
-> +			};
-> +
-> +			partition@180000 {
-> +				label = "u-boot-env";
-> +				reg = <0x180000 0x10000>;
->  			};
->  		};
->  	};
-> -- 
-> 2.35.1
-> 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git tags/flexible-array-transformations-5.18-rc1
+
+for you to fetch changes up to 5224f79096170bf7b92cc8fe42a12f44b91e5f62:
+
+  treewide: Replace zero-length arrays with flexible-array members (2022-02-17 07:00:39 -0600)
+
+----------------------------------------------------------------
+flexible-array transformations for 5.18-rc1
+
+Hi Linus,
+
+Please, pull the following treewide patch that replaces zero-length arrays with
+flexible-array members. This patch has been baking in linux-next for a
+whole development cycle.
+
+Thanks
+--
+Gustavo
+
+----------------------------------------------------------------
+Gustavo A. R. Silva (1):
+      treewide: Replace zero-length arrays with flexible-array members
+
+ arch/alpha/include/asm/hwrpb.h                       |  2 +-
+ arch/ia64/include/asm/sal.h                          |  2 +-
+ arch/s390/include/asm/ccwgroup.h                     |  2 +-
+ arch/s390/include/asm/chsc.h                         |  2 +-
+ arch/s390/include/asm/eadm.h                         |  2 +-
+ arch/s390/include/asm/fcx.h                          |  4 ++--
+ arch/s390/include/asm/idals.h                        |  2 +-
+ arch/s390/include/asm/sclp.h                         |  2 +-
+ arch/s390/include/asm/sysinfo.h                      |  6 +++---
+ arch/sh/include/asm/thread_info.h                    |  2 +-
+ arch/sparc/include/asm/vio.h                         | 10 +++++-----
+ arch/um/include/shared/net_kern.h                    |  2 +-
+ arch/x86/include/asm/microcode_amd.h                 |  2 +-
+ arch/x86/include/asm/microcode_intel.h               |  4 ++--
+ arch/x86/include/asm/pci.h                           |  2 +-
+ arch/x86/include/asm/pci_x86.h                       |  2 +-
+ arch/xtensa/include/asm/bootparam.h                  |  2 +-
+ drivers/crypto/caam/pdb.h                            |  2 +-
+ drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c           |  2 +-
+ drivers/gpu/drm/nouveau/include/nvfw/hs.h            |  2 +-
+ drivers/hwtracing/coresight/coresight-config.h       |  2 +-
+ drivers/misc/bcm-vk/bcm_vk.h                         |  2 +-
+ drivers/misc/habanalabs/include/common/cpucp_if.h    |  6 +++---
+ .../misc/habanalabs/include/gaudi/gaudi_packets.h    |  4 ++--
+ drivers/misc/habanalabs/include/goya/goya_packets.h  |  4 ++--
+ drivers/net/ethernet/freescale/enetc/enetc_hw.h      |  2 +-
+ drivers/net/ethernet/i825xx/sun3_82586.h             |  2 +-
+ drivers/net/ethernet/marvell/octeontx2/af/npc.h      |  6 +++---
+ drivers/net/ethernet/qlogic/qed/qed_mfw_hsi.h        |  2 +-
+ drivers/net/ethernet/ti/davinci_mdio.c               |  2 +-
+ drivers/scsi/dpt/dpti_i2o.h                          |  2 +-
+ drivers/scsi/elx/libefc_sli/sli4.h                   | 20 ++++++++++----------
+ drivers/scsi/mpi3mr/mpi3mr.h                         |  2 +-
+ drivers/scsi/qla2xxx/qla_bsg.h                       |  4 ++--
+ drivers/scsi/qla2xxx/qla_def.h                       |  2 +-
+ drivers/scsi/qla2xxx/qla_edif_bsg.h                  |  4 ++--
+ drivers/scsi/qla2xxx/qla_fw.h                        |  2 +-
+ drivers/scsi/qla4xxx/ql4_fw.h                        |  2 +-
+ drivers/staging/r8188eu/include/rtw_cmd.h            | 10 +++++-----
+ drivers/staging/rtl8712/rtl871x_cmd.h                |  8 ++++----
+ drivers/staging/rtl8723bs/include/ieee80211.h        |  2 +-
+ drivers/staging/rtl8723bs/include/rtw_cmd.h          |  2 +-
+ .../vc04_services/include/linux/raspberrypi/vchiq.h  |  2 +-
+ drivers/visorbus/vbuschannel.h                       |  2 +-
+ fs/cifs/ntlmssp.h                                    |  2 +-
+ fs/ext4/fast_commit.h                                |  4 ++--
+ fs/ksmbd/ksmbd_netlink.h                             |  2 +-
+ fs/ksmbd/ntlmssp.h                                   |  6 +++---
+ fs/ksmbd/smb2pdu.h                                   |  8 ++++----
+ fs/ksmbd/transport_rdma.c                            |  2 +-
+ fs/ksmbd/xattr.h                                     |  2 +-
+ fs/xfs/scrub/attr.h                                  |  2 +-
+ include/asm-generic/tlb.h                            |  4 ++--
+ include/linux/greybus/greybus_manifest.h             |  4 ++--
+ include/linux/greybus/hd.h                           |  2 +-
+ include/linux/greybus/module.h                       |  2 +-
+ include/linux/i3c/ccc.h                              |  6 +++---
+ include/linux/platform_data/brcmfmac.h               |  2 +-
+ include/linux/platform_data/cros_ec_commands.h       |  2 +-
+ include/net/bluetooth/mgmt.h                         |  2 +-
+ include/net/ioam6.h                                  |  2 +-
+ include/sound/sof/channel_map.h                      |  4 ++--
+ scripts/dtc/libfdt/fdt.h                             |  4 ++--
+ sound/soc/intel/atom/sst-mfld-dsp.h                  |  4 ++--
+ sound/soc/intel/skylake/skl-topology.h               |  2 +-
+ tools/lib/perf/include/perf/event.h                  |  2 +-
+ 66 files changed, 111 insertions(+), 111 deletions(-)

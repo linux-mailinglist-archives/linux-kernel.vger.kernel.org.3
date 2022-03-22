@@ -2,131 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F87E4E3811
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38C84E3821
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236518AbiCVEwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 00:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        id S236595AbiCVExe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 00:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236495AbiCVEwV (ORCPT
+        with ESMTP id S236545AbiCVExc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 00:52:21 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393FB107839
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647924653; x=1679460653;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cTZrAGX+t69jJcCH7JXAi2XQzqRxygaDZLgYJyVhgpM=;
-  b=jh96nUWM1ZuuX6hfl63PEnyVzTQ4JdBl58x4pz3UgiTc/6KOcZ0DlcWc
-   iKMmDtXx2qvGnhdmwWg/XEUx3wOhr50vDza6YqvV+mc5JdL7BMjyKG6vB
-   5HDzNPTKarvwMQC98BAalOP6O2sjtn/yK+vd1XDaDBmug+31ziAXBbtv5
-   ImfYVtFFI1tKIpOcJ9F/2cruF8arGxlEb+lOj1Iuxi1li00/utWNLlNOt
-   j42VDlTY3U4r7DUvFhYAuJfIi7AYw5S4bi6GqgEaInweA/zHBeGmgUaNE
-   VtM5mTSFp+6ibyvkF/e1YtcjLGeQ4laK9EjVSOcZwxN5kKSczs24LyUQV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="256542391"
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="256542391"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 21:50:52 -0700
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="518724693"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.209.186]) ([10.254.209.186])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 21:50:47 -0700
-Message-ID: <966d28f6-3b87-45c5-e758-f38eb339e3c6@linux.intel.com>
-Date:   Tue, 22 Mar 2022 12:50:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 09/11] iommu: Add iommu_get_domain_for_dev_pasid()
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-10-baolu.lu@linux.intel.com>
- <20220321124058.GO11336@nvidia.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220321124058.GO11336@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 22 Mar 2022 00:53:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E96BB188D;
+        Mon, 21 Mar 2022 21:52:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C177CB81B7D;
+        Tue, 22 Mar 2022 04:51:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72538C340EC;
+        Tue, 22 Mar 2022 04:51:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647924718;
+        bh=eKcLWgpHdf9XPGlZN+BHHdUf5YEZfdRlI78wdT/+Xg4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oUA2kdr5H79czLwPSKctVD/I+r/J0wt8ZbNJUSZPjKx2IF/9UfbirKRI+ZjTJWZla
+         5GsmxvxkkHqwZtibJx3CE16a/2dUP8zDcnFZIxNJrrrAtw9N+HH3cKntzbesgez7Wm
+         63O/bOiS8QaRh79TLD9lbgJYAhPXOud+bo4sLEjCOxz0hLHFFyZtSVL4Z/PAC1bkMF
+         6TQ05OTRVwdaT49VLHoqkXku7T8bZTohwq4E151IhzG0YYW/GUCbrlo09FeFJtgAXc
+         Li6rkKj/uQ77BgX+QOP+aaSxYQ3aDpSx4tg2uGHq+mjfogVu8tF90NAUTahOm4i/Gc
+         38lfIxP+tmOiw==
+Date:   Tue, 22 Mar 2022 13:51:51 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-Id: <20220322135151.307e7d7c478d1263e0eef43e@kernel.org>
+In-Reply-To: <CAADnVQKg7GPVpg-22B2Ym5HFVoGaquoFZDEkRwTDgXzm+L8OOw@mail.gmail.com>
+References: <20220321140327.777f9554@canb.auug.org.au>
+        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+        <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
+        <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
+        <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
+        <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
+        <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
+        <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
+        <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
+        <20220322090541.7d06c8cb@canb.auug.org.au>
+        <CAADnVQJnZpQjUv-dw7SU-WwTOn_tZ8xmy5ydRn=g_m-9UyS2kw@mail.gmail.com>
+        <20220322094526.436ca4f7@elm.ozlabs.ibm.com>
+        <CAADnVQKg7GPVpg-22B2Ym5HFVoGaquoFZDEkRwTDgXzm+L8OOw@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/21 20:40, Jason Gunthorpe wrote:
-> On Sun, Mar 20, 2022 at 02:40:28PM +0800, Lu Baolu wrote:
->> @@ -3098,7 +3101,16 @@ int iommu_attach_device_pasid(struct iommu_domain *domain,
->>   	if (iommu_group_device_count(group) != 1)
->>   		goto out_unlock;
->>   
->> +	xa_lock(&group->pasid_array);
->> +	curr = __xa_cmpxchg(&group->pasid_array, pasid, NULL,
->> +			    domain, GFP_KERNEL);
->> +	xa_unlock(&group->pasid_array);
->> +	if (curr)
+On Mon, 21 Mar 2022 15:50:17 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+
+> On Mon, Mar 21, 2022 at 3:46 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi Alexei,
+> >
+> > On Mon, 21 Mar 2022 15:12:05 -0700 Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > That makes little sense. It's not an unusual merge conflict.
+> > > Peter's endbr series conflict with Masami's fprobe.
+> > > Peter has a trivial patch that fixes objtool warning.
+> > > The question is how to land that patch.
+> > > I think the best is for Linus to apply it after bpf-next->net-next gets
+> > > merged.
+> >
+> > Peter has other concerns, please read the thread and consider them.
 > 
-> curr can be an xa_err that should be propogated.
+> Masami is an expert in kprobe. He copy pasted a bit of kprobe logic
+> to make it into 'multi kprobe' (he calls it fprobe).
+> I believe he knows what he's doing.
+> Steven reviewed and tested that set.
+> We've tested it as well and don't have any correctness or api concerns.
 
-Yes, should check xa_err().
+Sorry, that's my mistake to not Ccing to arch maintainers for the arch
+dependent patches. Let me update and send v13 for this fprobe series.
 
-> 
->> +		goto out_unlock;
->> +
->>   	ret = domain->ops->attach_dev_pasid(domain, dev, pasid);
->> +	if (ret)
->> +		xa_erase(&group->pasid_array, pasid);
->>   
->>   out_unlock:
->>   	mutex_unlock(&group->mutex);
->> @@ -3118,6 +3130,25 @@ void iommu_detach_device_pasid(struct iommu_domain *domain,
->>   
->>   	mutex_lock(&group->mutex);
->>   	domain->ops->detach_dev_pasid(domain, dev, pasid);
->> +	xa_erase(&group->pasid_array, pasid);
->> +	mutex_unlock(&group->mutex);
->> +	iommu_group_put(group);
->> +}
->> +
->> +struct iommu_domain *
->> +iommu_get_domain_for_dev_pasid(struct device *dev, ioasid_t pasid)
->> +{
->> +	struct iommu_domain *domain;
->> +	struct iommu_group *group;
->> +
->> +	group = iommu_group_get(dev);
->> +	if (!group)
->> +		return NULL;
->> +
->> +	mutex_lock(&group->mutex);
->> +	domain = xa_load(&group->pasid_array, pasid);
->>   	mutex_unlock(&group->mutex);
->>   	iommu_group_put(group);
-> 
-> This whole API seems sketchy - what is the lifecycle of the returned
-> iommu_domain and what prevents it from being concurrently freed after
-> unlocking?
+Thank you,
 
-Agreed. The domain could be used in page fault handling thread, hence
-need a mechanism to guarantee the concurrence.
-
-Best regards,
-baolu
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

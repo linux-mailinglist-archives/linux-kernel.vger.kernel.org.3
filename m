@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A859C4E482D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 066BE4E4833
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiCVVQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 17:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
+        id S235404AbiCVVTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 17:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235311AbiCVVQi (ORCPT
+        with ESMTP id S235371AbiCVVTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 17:16:38 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91487396A4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:15:09 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id s4-20020a92c5c4000000b002c7884b8608so9852566ilt.21
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:15:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=MG5Y8xILdnFlJljeDRhJEgQB6FlTo+9PoQNjAE5QtFg=;
-        b=FwOT5qzDZ8y36L/Zwnw6h+DEvc1q8OPSWlHYCVJAvNzBkmc9GB/4QwG+nkxIgOcENw
-         EH/de6zHaO/T8ygmzpU3W7vn0J3vExZfgN2rfrzI0wQJlZOEVRsNATgRnnskXjA3oFUl
-         hbNEwvmYrCAAEjONEUrH9Isd3WrHt3cil7BgTYDYgddr2Ws9F5joaHFvGJS+HkoQsvum
-         /F38r7d6/f6WA0iOumR8TEDDtIeD84qYbT2Xj4bzNMqU6Pw1Uk5rntvLDDY2zWYAaa2w
-         oAG5RhrgWDoPZ8j+cvSJDWTqmxp2Mynqx7iA6b+I5hjUw59gN4iKKM0qUU0Fwm7GIi1o
-         7bGA==
-X-Gm-Message-State: AOAM530YJixziYRPrbAq6eKi0qJM1fcowyVbZ5xnJXhDV8KhAMBz1GGy
-        0hkcyxXP6jFIfQn/DSwVya94L104c74gPDJPDL2grpkvE35w
-X-Google-Smtp-Source: ABdhPJzTvsmDj8F2NfYsv6RQxGTEFIkU5OHFdqWqiIQHfiW3AlzdeqdQlJ/DXbOuA/B92prR6jT/PoV0AmcCO+DnykKKdH6Hytq8
+        Tue, 22 Mar 2022 17:19:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F594CD68;
+        Tue, 22 Mar 2022 14:18:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A05E361738;
+        Tue, 22 Mar 2022 21:18:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A08C340EC;
+        Tue, 22 Mar 2022 21:18:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647983887;
+        bh=qu1c7+Ii5BsYAa2sP4C74HSLagMCHKqz89qfsp7IEPM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rrl7fk/i2ZdfaY5TYB3n5sVUoWZtbfkfnIU60Em5Ara/n6pehOYBbtQrnavcnB5L7
+         ukY9e30NIm1xdNlQLBe4x/7nlC9yxKbLVJr8GgPxkX+bjSXPMw2e0inEYTqTUs8ajt
+         frf4UnPcVnw2knyqN0OmKgowzegSLa3sanxBLpEQ2dVB/c8S9KU6BBzVZwJ/cxRhPe
+         PLu/taGj1brKen7IFkvO4v1zkqeUWAQGMOCj9IfHqCfWjw+CW/exssEB87n9QstNBx
+         rod84+9ceDJmt8lR9Tn03cxk4Kl5YU2LhXwPo0qeigV2pUt66JGEDVRI3VsCDSe18y
+         qFuwN1Q7bLJBg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 447B240407; Tue, 22 Mar 2022 18:18:03 -0300 (-03)
+Date:   Tue, 22 Mar 2022 18:18:03 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ali Saidi <alisaidi@amazon.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        leo.yan@linaro.org, benh@kernel.crashing.org,
+        Nick.Forrington@arm.com, alexander.shishkin@linux.intel.com,
+        andrew.kilroy@arm.com, james.clark@arm.com, john.garry@huawei.com,
+        jolsa@kernel.org, kjain@linux.ibm.com, lihuafei1@huawei.com,
+        mark.rutland@arm.com, mathieu.poirier@linaro.org, mingo@redhat.com,
+        namhyung@kernel.org, peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v3 1/3] perf arm-spe: Use SPE data source for neoverse
+ cores
+Message-ID: <Yjo9Czzg26a5OF5o@kernel.org>
+References: <20220318195913.17459-1-alisaidi@amazon.com>
+ <20220318195913.17459-2-alisaidi@amazon.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2f04:b0:648:cfb5:974a with SMTP id
- q4-20020a0566022f0400b00648cfb5974amr13360299iow.187.1647983709020; Tue, 22
- Mar 2022 14:15:09 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 14:15:09 -0700
-In-Reply-To: <5cd8d8f7-b172-12a1-5c4f-f9933b576208@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000092671e05dad51b08@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in add_wait_queue
-From:   syzbot <syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220318195913.17459-2-alisaidi@amazon.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +66,310 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Em Fri, Mar 18, 2022 at 07:59:11PM +0000, Ali Saidi escreveu:
+> When synthesizing data from SPE, augment the type with source information
+> for Arm Neoverse cores. The field is IMPLDEF but the Neoverse cores all use
+> the same encoding. I can't find encoding information for any other SPE
+> implementations to unify their choices with Arm's thus that is left for
+> future work.
+> 
+> This change populates the mem_lvl_num for Neoverse cores instead of the
+> deprecated mem_lvl namespace.
+> 
+> Signed-off-by: Ali Saidi <alisaidi@amazon.com>
+> ---
+>  .../util/arm-spe-decoder/arm-spe-decoder.c    |   1 +
+>  .../util/arm-spe-decoder/arm-spe-decoder.h    |  12 ++
+>  tools/perf/util/arm-spe.c                     | 109 +++++++++++++++---
+>  3 files changed, 108 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> index 5e390a1a79ab..091987dd3966 100644
+> --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> @@ -220,6 +220,7 @@ static int arm_spe_read_record(struct arm_spe_decoder *decoder)
+>  
+>  			break;
+>  		case ARM_SPE_DATA_SOURCE:
+> +			decoder->record.source = payload;
+>  			break;
+>  		case ARM_SPE_BAD:
+>  			break;
+> diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> index 69b31084d6be..c81bf90c0996 100644
+> --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> @@ -29,6 +29,17 @@ enum arm_spe_op_type {
+>  	ARM_SPE_ST		= 1 << 1,
+>  };
+>  
+> +enum arm_spe_neoverse_data_source {
+> +	ARM_SPE_NV_L1D        = 0x0,
+> +	ARM_SPE_NV_L2         = 0x8,
+> +	ARM_SPE_NV_PEER_CORE  = 0x9,
+> +	ARM_SPE_NV_LCL_CLSTR  = 0xa,
+> +	ARM_SPE_NV_SYS_CACHE  = 0xb,
+> +	ARM_SPE_NV_PEER_CLSTR = 0xc,
+> +	ARM_SPE_NV_REMOTE     = 0xd,
+> +	ARM_SPE_NV_DRAM       = 0xe,
+> +};
+> +
+>  struct arm_spe_record {
+>  	enum arm_spe_sample_type type;
+>  	int err;
+> @@ -40,6 +51,7 @@ struct arm_spe_record {
+>  	u64 virt_addr;
+>  	u64 phys_addr;
+>  	u64 context_id;
+> +	u16 source;
+>  };
+>  
+>  struct arm_spe_insn;
+> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+> index d2b64e3f588b..a45d638d2f06 100644
+> --- a/tools/perf/util/arm-spe.c
+> +++ b/tools/perf/util/arm-spe.c
+> @@ -34,6 +34,7 @@
+>  #include "arm-spe-decoder/arm-spe-decoder.h"
+>  #include "arm-spe-decoder/arm-spe-pkt-decoder.h"
+>  
+> +#include <../../../arch/arm64/include/asm/cputype.h>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+This isn't working for me:
 
-Reported-and-tested-by: syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com
+⬢[acme@toolbox perf]$ make BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin
+<SNIP>
+  CC      /tmp/build/perf/util/parse-events-flex.o
+  CC      /tmp/build/perf/util/expr-flex.o
+  CC      /tmp/build/perf/util/expr.o
+  LD      /tmp/build/perf/util/intel-pt-decoder/perf-in.o
+In file included from util/arm-spe.c:37:
+/var/home/acme/git/perf/tools/include/uapi/../../../arch/arm64/include/asm/cputype.h:173:10: fatal error: asm/sysreg.h: No such file or directory
+  173 | #include <asm/sysreg.h>
+      |          ^~~~~~~~~~~~~~
+compilation terminated.
+make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/arm-spe.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+make[3]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:139: util] Error 2
+make[2]: *** [Makefile.perf:665: /tmp/build/perf/perf-in.o] Error 2
+make[1]: *** [Makefile.perf:240: sub-make] Error 2
+make: *** [Makefile:113: install-bin] Error 2
+make: Leaving directory '/var/home/acme/git/perf/tools/perf'
 
-Tested on:
 
-commit:         7d58de1a io_uring: don't recycle provided buffer if pu..
-git tree:       git://git.kernel.dk/linux-block for-5.18/io_uring
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3172c0bf8614827
-dashboard link: https://syzkaller.appspot.com/bug?extid=950cee6d91e62329be2c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Can you please take a look?
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+What I have is in my tmp.perf/core branch, pending further tests to move
+to perf/core at git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+
+I see:
+
+You're getting out of tools/
+
+⬢[acme@toolbox perf]$ realpath /var/home/acme/git/perf/tools/include/uapi/../../../arch/arm64/include/asm/cputype.h
+/var/home/acme/git/perf/arch/arm64/include/asm/cputype.h
+⬢[acme@toolbox perf]$
+
+You can't include things from outside tools/ into tools code. See this:
+
+-rw-r--r--. 1 acme acme 44506 Mar 14 17:55 tools/arch/arm64/include/asm/sysreg.h
+⬢[acme@toolbox perf]$ git log tools/arch/arm64/include/asm/sysreg.h
+commit 272a067df3c89f6f2176a350f88661625a2c8b3b
+Author: Raghavendra Rao Ananta <rananta@google.com>
+Date:   Thu Oct 7 23:34:26 2021 +0000
+
+    tools: arm64: Import sysreg.h
+
+    Bring-in the kernel's arch/arm64/include/asm/sysreg.h
+    into tools/ for arm64 to make use of all the standard
+    register definitions in consistence with the kernel.
+
+    Make use of the register read/write definitions from
+    sysreg.h, instead of the existing definitions. A syntax
+    correction is needed for the files that use write_sysreg()
+    to make it compliant with the new (kernel's) syntax.
+
+    Reviewed-by: Andrew Jones <drjones@redhat.com>
+    Reviewed-by: Oliver Upton <oupton@google.com>
+    Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+    [maz: squashed two commits in order to keep the series bisectable]
+    Signed-off-by: Marc Zyngier <maz@kernel.org>
+    Link: https://lore.kernel.org/r/20211007233439.1826892-3-rananta@google.com
+    Link: https://lore.kernel.org/r/20211007233439.1826892-4-rananta@google.com
+⬢[acme@toolbox perf]$
+
+So we need to bring asm/cputype.h as well.
+
+Please try adding that one as a prep patch before these three and then
+test it and resubmit,
+
+Thanks,
+
+- Arnaldo
+
+>  #define MAX_TIMESTAMP (~0ULL)
+>  
+>  struct arm_spe {
+> @@ -45,6 +46,7 @@ struct arm_spe {
+>  	struct perf_session		*session;
+>  	struct machine			*machine;
+>  	u32				pmu_type;
+> +	u64				midr;
+>  
+>  	struct perf_tsc_conversion	tc;
+>  
+> @@ -399,33 +401,109 @@ static bool arm_spe__is_memory_event(enum arm_spe_sample_type type)
+>  	return false;
+>  }
+>  
+> -static u64 arm_spe__synth_data_source(const struct arm_spe_record *record)
+> +static const struct midr_range neoverse_spe[] = {
+> +	MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N1),
+> +	MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N2),
+> +	{},
+> +};
+> +
+> +
+> +static void arm_spe__synth_data_source_neoverse(const struct arm_spe_record *record,
+> +						union perf_mem_data_src *data_src)
+>  {
+> -	union perf_mem_data_src	data_src = { 0 };
+> +	/*
+> +	 * Even though four levels of cache hierarchy are possible, no known
+> +	 * production Neoverse systems currently include more than three levels
+> +	 * so for the time being we assume three exist. If a production system
+> +	 * is built with four the this function would have to be changed to
+> +	 * detect the number of levels for reporting.
+> +	 */
+>  
+> -	if (record->op == ARM_SPE_LD)
+> -		data_src.mem_op = PERF_MEM_OP_LOAD;
+> -	else
+> -		data_src.mem_op = PERF_MEM_OP_STORE;
+> +	switch (record->source) {
+> +	case ARM_SPE_NV_L1D:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L1;
+> +		break;
+> +	case ARM_SPE_NV_L2:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L2;
+> +		break;
+> +	case ARM_SPE_NV_PEER_CORE:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_HITM;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_ANY_CACHE;
+> +		break;
+> +	/*
+> +	 * We don't know if this is L1, L2 but we do know it was a cache-2-cache
+> +	 * transfer, so set SNOOP_HITM
+> +	 */
+> +	case ARM_SPE_NV_LCL_CLSTR:
+> +	case ARM_SPE_NV_PEER_CLSTR:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_HITM;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_ANY_CACHE;
+> +		break;
+> +	/*
+> +	 * System cache is assumed to be L3
+> +	 */
+> +	case ARM_SPE_NV_SYS_CACHE:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L3;
+> +		break;
+> +	/*
+> +	 * We don't know what level it hit in, except it came from the other
+> +	 * socket
+> +	 */
+> +	case ARM_SPE_NV_REMOTE:
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_HITM;
+> +		data_src->mem_remote = PERF_MEM_REMOTE_REMOTE;
+> +		break;
+> +	case ARM_SPE_NV_DRAM:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_RAM;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+>  
+> +static void arm_spe__synth_data_source_generic(const struct arm_spe_record *record,
+> +						union perf_mem_data_src *data_src)
+> +{
+>  	if (record->type & (ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS)) {
+> -		data_src.mem_lvl = PERF_MEM_LVL_L3;
+> +		data_src->mem_lvl = PERF_MEM_LVL_L3;
+>  
+>  		if (record->type & ARM_SPE_LLC_MISS)
+> -			data_src.mem_lvl |= PERF_MEM_LVL_MISS;
+> +			data_src->mem_lvl |= PERF_MEM_LVL_MISS;
+>  		else
+> -			data_src.mem_lvl |= PERF_MEM_LVL_HIT;
+> +			data_src->mem_lvl |= PERF_MEM_LVL_HIT;
+>  	} else if (record->type & (ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS)) {
+> -		data_src.mem_lvl = PERF_MEM_LVL_L1;
+> +		data_src->mem_lvl = PERF_MEM_LVL_L1;
+>  
+>  		if (record->type & ARM_SPE_L1D_MISS)
+> -			data_src.mem_lvl |= PERF_MEM_LVL_MISS;
+> +			data_src->mem_lvl |= PERF_MEM_LVL_MISS;
+>  		else
+> -			data_src.mem_lvl |= PERF_MEM_LVL_HIT;
+> +			data_src->mem_lvl |= PERF_MEM_LVL_HIT;
+>  	}
+>  
+>  	if (record->type & ARM_SPE_REMOTE_ACCESS)
+> -		data_src.mem_lvl |= PERF_MEM_LVL_REM_CCE1;
+> +		data_src->mem_lvl |= PERF_MEM_LVL_REM_CCE1;
+> +}
+> +
+> +static u64 arm_spe__synth_data_source(const struct arm_spe_record *record, u64 midr)
+> +{
+> +	union perf_mem_data_src	data_src = { 0 };
+> +	bool is_neoverse = is_midr_in_range(midr, neoverse_spe);
+> +
+> +	if (record->op & ARM_SPE_LD)
+> +		data_src.mem_op = PERF_MEM_OP_LOAD;
+> +	else
+> +		data_src.mem_op = PERF_MEM_OP_STORE;
+> +
+> +	if (is_neoverse)
+> +		arm_spe__synth_data_source_neoverse(record, &data_src);
+> +	else
+> +		arm_spe__synth_data_source_generic(record, &data_src);
+>  
+>  	if (record->type & (ARM_SPE_TLB_ACCESS | ARM_SPE_TLB_MISS)) {
+>  		data_src.mem_dtlb = PERF_MEM_TLB_WK;
+> @@ -446,7 +524,7 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
+>  	u64 data_src;
+>  	int err;
+>  
+> -	data_src = arm_spe__synth_data_source(record);
+> +	data_src = arm_spe__synth_data_source(record, spe->midr);
+>  
+>  	if (spe->sample_flc) {
+>  		if (record->type & ARM_SPE_L1D_MISS) {
+> @@ -1183,6 +1261,8 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+>  	struct perf_record_auxtrace_info *auxtrace_info = &event->auxtrace_info;
+>  	size_t min_sz = sizeof(u64) * ARM_SPE_AUXTRACE_PRIV_MAX;
+>  	struct perf_record_time_conv *tc = &session->time_conv;
+> +	const char *cpuid = perf_env__cpuid(session->evlist->env);
+> +	u64 midr = strtol(cpuid, NULL, 16);
+>  	struct arm_spe *spe;
+>  	int err;
+>  
+> @@ -1202,6 +1282,7 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+>  	spe->machine = &session->machines.host; /* No kvm support */
+>  	spe->auxtrace_type = auxtrace_info->type;
+>  	spe->pmu_type = auxtrace_info->priv[ARM_SPE_PMU_TYPE];
+> +	spe->midr = midr;
+>  
+>  	spe->timeless_decoding = arm_spe__is_timeless_decoding(spe);
+>  
+> -- 
+> 2.32.0
+
+-- 
+
+- Arnaldo

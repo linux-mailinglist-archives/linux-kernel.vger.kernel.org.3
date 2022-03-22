@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8497E4E3C7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832BD4E3C7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbiCVKch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        id S232579AbiCVKeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 06:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiCVKcg (ORCPT
+        with ESMTP id S232517AbiCVKd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:32:36 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CA15C354;
-        Tue, 22 Mar 2022 03:31:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 1033B1F43122
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647945067;
-        bh=wsuVdARlaeRl+D4+nBJjwWfODrGAZGldOBP9V39TNIU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mBWT5adqZ+p0KfBLO4NV3PK/6NkAUyxZl0PG1AM3d8aV5YDxPBm0AttaQlJudAKdK
-         7FLb80e0w/hPFeD1ojdxJgvjZ5TMty8ta37TMXcKN4/SX/9n0WiYFFbnYcMHsduZG+
-         O/oMiKpGZ0LQ59JRlWkEYSfaJG2pYNoocVuiMOm7MCAO7btxRFYRByilCYyQNjFnqz
-         x3YCHm2NT8lzB1u0SLXzhYUply3LN4rQ/wxpHBplW4sfRp7ROYL33DOLFBT8LQh9/a
-         aC8+ZnpiBnG4Vv4+46i8NmcFrCyFDF3ZA2mov9GVFeuhqnBkYLFVE5dCWTa8wk6pUq
-         tufK8+7JiN97w==
-Message-ID: <555f4a78-dd7a-59f3-e1db-f040c97c61b4@collabora.com>
-Date:   Tue, 22 Mar 2022 11:31:04 +0100
+        Tue, 22 Mar 2022 06:33:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC515C358
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:32:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91FE4B81B67
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF1AC340EC;
+        Tue, 22 Mar 2022 10:32:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647945147;
+        bh=4vRfTKQYtgyUB3FKZacyM7oyLXrvgTFjMYsTjUSXKDg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PxmMRf3HTtDzvtAo/AKdcGvlPJFvhun1kKsI1kashCqdLg+Gop2Y4rfloWtVop9AH
+         P3XXAtCs+EEa64rMv4eLb/JhDRF+f0S4dQwnrpOvg/GsEssDOPH4ZWym/u3jYGtRGO
+         2R4cC0lyhzb7KLzdjR2GGE664kphyodARO5nYuj3alZMD5RB3WWcd6n1IR1eXTAJB+
+         alwYwpsJQyMGAgkD45/8ev02f44hySjxrDSkqjG3Psl8B4wL5ysbgtpmJGguWgxl68
+         oq8WbU07i9zFRgIZ08A1hf7Vi/kv/Jcd7j+Dyb5CeIXuDLd1f4snxPpqOZsaAzBVKg
+         bbWoGtnKs/FXA==
+Date:   Tue, 22 Mar 2022 11:32:24 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 4/4] rcu: Name internal polling flag
+Message-ID: <20220322103224.GA701946@lothringen>
+References: <20220316144255.336021-1-frederic@kernel.org>
+ <20220316144255.336021-5-frederic@kernel.org>
+ <20220322021107.GP4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v11 0/3] Add basic SoC support for mediatek mt8195
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        ryder.lee@kernel.org, wenst@chromium.org, chunfeng.yun@mediatek.com
-References: <20220216113131.13145-1-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220216113131.13145-1-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322021107.GP4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,41 +59,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/02/22 12:31, Tinghan Shen ha scritto:
-> This series adds basic SoC support for Mediatek's SoC MT8195.
-> ---
-> Changes in v11:
->    - rebase on 5.17-rc4
+On Mon, Mar 21, 2022 at 07:11:07PM -0700, Paul E. McKenney wrote:
+> On Wed, Mar 16, 2022 at 03:42:55PM +0100, Frederic Weisbecker wrote:
+> > Give a proper self-explanatory name to the expedited grace period
+> > internal polling flag.
+> > 
+> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> > Cc: Joel Fernandes <joel@joelfernandes.org>
+> > ---
+> >  kernel/rcu/rcu.h      | 5 +++++
+> >  kernel/rcu/tree.c     | 2 +-
+> >  kernel/rcu/tree_exp.h | 9 +++++----
+> >  3 files changed, 11 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> > index eccbdbdaa02e..8a62bb416ba4 100644
+> > --- a/kernel/rcu/rcu.h
+> > +++ b/kernel/rcu/rcu.h
+> > @@ -30,6 +30,11 @@
+> >  #define RCU_GET_STATE_USE_NORMAL	0x2
+> >  #define RCU_GET_STATE_BAD_FOR_NORMAL	(RCU_GET_STATE_FROM_EXPEDITED | RCU_GET_STATE_USE_NORMAL)
+> >  
+> > +/*
+> > + * Low-order bit definitions for polled grace-period internals.
+> > + */
+> > +#define RCU_EXP_SEQ_POLL_DONE 0x1
+> > +
+> >  /*
+> >   * Return the counter portion of a sequence number previously returned
+> >   * by rcu_seq_snap() or rcu_seq_current().
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index 5da381a3cbe5..b3223b365f9f 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -4679,7 +4679,7 @@ static void __init rcu_init_one(void)
+> >  			spin_lock_init(&rnp->exp_lock);
+> >  			mutex_init(&rnp->boost_kthread_mutex);
+> >  			raw_spin_lock_init(&rnp->exp_poll_lock);
+> > -			rnp->exp_seq_poll_rq = 0x1;
+> > +			rnp->exp_seq_poll_rq = RCU_EXP_SEQ_POLL_DONE;
+> >  			INIT_WORK(&rnp->exp_poll_wq, sync_rcu_do_polled_gp);
+> >  		}
+> >  	}
+> > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> > index c4a19c6a83cf..7ccb909d6355 100644
+> > --- a/kernel/rcu/tree_exp.h
+> > +++ b/kernel/rcu/tree_exp.h
+> > @@ -910,14 +910,14 @@ static void sync_rcu_do_polled_gp(struct work_struct *wp)
+> >  	unsigned long s;
+> >  
+> >  	s = READ_ONCE(rnp->exp_seq_poll_rq);
+> > -	if (s & 0x1)
+> > +	if (s & RCU_EXP_SEQ_POLL_DONE)
+> >  		return;
+> >  	while (!sync_exp_work_done(s))
+> >  		__synchronize_rcu_expedited(true);
+> 
+> One additional question.  If we re-read rnp->exp_seq_poll_rq on each pass
+> through the loop, wouldn't we have less trouble with counter wrap?
 
-..snip...
-
-Hello Matthias,
-
-this series introducing very basic support for this new SoC is definitely
-ready to be merged and well tested.
-
-Can you please pick it?
-
-P.S.: Patch 2/3 (pinctrl binding) was already picked by Linux Walleij,
-and it's already upstream.
-
-Thank you,
-Angelo
+We can indeed do that, though it won't eliminate the possibility of wrapping.
 
 > 
-> Tinghan Shen (3):
->    dt-bindings: arm: mediatek: Add mt8195 pericfg compatible
->    dt-bindings: pinctrl: mt8195: Add mediatek,drive-strength-adv property
->    arm64: dts: Add mediatek SoC mt8195 and evaluation board
+> 							Thanx, Paul
 > 
->   .../arm/mediatek/mediatek,pericfg.yaml        |    1 +
->   .../bindings/pinctrl/pinctrl-mt8195.yaml      |   35 +
->   arch/arm64/boot/dts/mediatek/Makefile         |    1 +
->   arch/arm64/boot/dts/mediatek/mt8195-evb.dts   |  161 +++
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 1049 +++++++++++++++++
->   5 files changed, 1247 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> 
-
-
+> >  	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+> >  	s = rnp->exp_seq_poll_rq;
+> > -	if (!(s & 0x1) && sync_exp_work_done(s))
+> > -		WRITE_ONCE(rnp->exp_seq_poll_rq, s | 0x1);
+> > +	if (!(s & RCU_EXP_SEQ_POLL_DONE) && sync_exp_work_done(s))
+> > +		WRITE_ONCE(rnp->exp_seq_poll_rq, s | RCU_EXP_SEQ_POLL_DONE);
+> >  	raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
+> >  }
+> >  
+> > @@ -946,7 +946,8 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
+> >  	rnp = rdp->mynode;
+> >  	if (rcu_init_invoked())
+> >  		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+> > -	if ((rnp->exp_seq_poll_rq & 0x1) || ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
+> > +	if ((rnp->exp_seq_poll_rq & RCU_EXP_SEQ_POLL_DONE) ||
+> > +	    ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
+> >  		WRITE_ONCE(rnp->exp_seq_poll_rq, s);
+> >  		if (rcu_init_invoked())
+> >  			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
+> > -- 
+> > 2.25.1
+> > 

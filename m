@@ -2,184 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1414E474F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8D44E4745
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbiCVUP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S233027AbiCVUNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiCVUPs (ORCPT
+        with ESMTP id S232988AbiCVUNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:15:48 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2060.outbound.protection.outlook.com [40.92.20.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97BFDF63;
-        Tue, 22 Mar 2022 13:14:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TR7OdXqul9SIZcI+DMr4egApol6kZ4fz2N1rQKGYQNKkljxP3quBi7fpmoSaPtbLpX35QBx1wlJJVKjtMOp3gkIilQKJCC3ov7I8aGMkQJXgcIHxVeew/3B1yiS1xQjx9zeBwg3YXsRDU/pqEQf6IxYkOVJPBYT2B9Ucik8WZ92O8a8La2Ofl59Zr7ptViiMrCBZaXr9TvQ8YnMYPlNWdP9Js/SeDwKHIuD8aW9cCex84Bbc74TH1o97DZh5m9WIVqYunIdsMY2K78GF3HIqxLENkSTp+ZQE0kZxov+1ky8BxCGzfmFGyQlPTJZ1TKl2NKCrsZxECY0d0aO7gb9vyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nFbvMZoEnRIj1hXG53utVqyxuf4e5prW49IEdyuFKYQ=;
- b=L2ulqK1EkSZAWNKkHvSO7x3EyKADc5glXOzlIBE7vii665cPkjRPf+5g52mC05PSaOiC6pz1HSFJd6+j/Y0KKpQECGDt37H8xfhqwa8Q2XQBOzgJBVL/O39NotKR1bsatz2JxoJ5LxsfVGbqCO0HyDSgVTOJSJLX+vOyoVNkO41j02xMXrjal3rzx4OnEgrkpBMAb/hOhvmMKHMkNsBmoikDTZBemZzqrMZv9jmDqjyvr0FCsEdqy3EAr1hWNzasW7uzUuqCOj17xRfb7GFDdXSE/Qv89ulRrqMqLLxAfsOo89gdtaax5na+uoSsbHKLLa3oW5TNrme27HVES1xbTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from CY4PR04MB0567.namprd04.prod.outlook.com (2603:10b6:903:b1::20)
- by BN6PR04MB0660.namprd04.prod.outlook.com (2603:10b6:404:d9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Tue, 22 Mar
- 2022 20:14:19 +0000
-Received: from CY4PR04MB0567.namprd04.prod.outlook.com
- ([fe80::451b:e5ed:c1a3:4070]) by CY4PR04MB0567.namprd04.prod.outlook.com
- ([fe80::451b:e5ed:c1a3:4070%5]) with mapi id 15.20.5102.016; Tue, 22 Mar 2022
- 20:14:19 +0000
-From:   Jonathan Bakker <xc-racer2@live.ca>
-To:     krzk@kernel.org, alim.akhtar@samsung.com
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH 1/7] ARM: dts: s5pv210: Split memory nodes to match spec
-Date:   Tue, 22 Mar 2022 13:11:38 -0700
-Message-ID: <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220322201144.20320-1-xc-racer2@live.ca>
-References: <20220322201144.20320-1-xc-racer2@live.ca>
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-TMN:  [aP9eTJQxIdQImTd5NrhT45+PVcU3gxJ5RsCTJrxYvYv1VlDKIOSiS0ygtlMyf+PZ]
-X-ClientProxiedBy: MWHPR17CA0094.namprd17.prod.outlook.com
- (2603:10b6:300:c2::32) To CY4PR04MB0567.namprd04.prod.outlook.com
- (2603:10b6:903:b1::20)
-X-Microsoft-Original-Message-ID: <20220322201144.20320-2-xc-racer2@live.ca>
+        Tue, 22 Mar 2022 16:13:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98CB69CC4;
+        Tue, 22 Mar 2022 13:11:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67781616C6;
+        Tue, 22 Mar 2022 20:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6850EC340EC;
+        Tue, 22 Mar 2022 20:11:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="S+qu6etc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1647979907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LGxhNs6syTgAQkmDH5Xf0lVNC+PZFSBXYRSBv5AiVEA=;
+        b=S+qu6etcxIO5ns2EJ3VPuXm6xJtT5RMXtMQPVHhSkszz0TsStLx7dE/lvkZa9F5cpCHfzq
+        6QyTK7wjcTOjJf960cTwfIGU1NdcGKBEKG1ObIPIZNblGFs6w3KCoCjjXrcTzxSg9zrDnU
+        CFkhjjCx04lsy+aJKRijTXXhGO+bOmk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7df72291 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 22 Mar 2022 20:11:47 +0000 (UTC)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2e592e700acso204137497b3.5;
+        Tue, 22 Mar 2022 13:11:47 -0700 (PDT)
+X-Gm-Message-State: AOAM530yJ4VdXIfNdc5wxxbXUcIA3e8YkHXFU9ZtzPrUCxWi1QIk7bUU
+        KXhsbeivwT93O4FFrtbwJ4dkQHhreBPKYpV6/hw=
+X-Google-Smtp-Source: ABdhPJyV6N9zcsJlxnOI3YYRy1eTAlslombqvZiB+iMgzQOgy48+yY/h7duvef+r0nQ4lW6SO846hEmi0VowfwhzvIo=
+X-Received: by 2002:a0d:d508:0:b0:2e5:d9ec:d668 with SMTP id
+ x8-20020a0dd508000000b002e5d9ecd668mr24763243ywd.499.1647979905391; Tue, 22
+ Mar 2022 13:11:45 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3e0647f0-0ac6-4f90-cc13-08da0c408b52
-X-MS-TrafficTypeDiagnostic: BN6PR04MB0660:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DmlgAVCS9tJFo/ucG26D/nZ0N++V27bcz+vAnOlEe2eT4mfPoTCjKg7GXqn0iNhGMry6EIAxi3wXRizVok25gcQ0ujawS7JhZALtKTsXZ9pm0uQniyvYE5SynlkapEDhlDxzPHvUX3jNSEblx23GqYfzi8yRCKEm4R0hcUJdYxLUTvuZXMtuaGeEZ5pH0WNcpmzhIGqD7jbVFsD/k1nnOczGN2/WoQ2GYHM2LNQCc0M8Als0JB8KCbSr6jQMvMrc42lL89pjiZb1bT9B9cmM9/q3Txq+0GcSTW5xKI5P7B/Qg5lXpp0c38r2QvmfxqJzlz+gBHpf/A7HVbMx9cXCYobxMtyq/8ttH0EtaKUuUrmFl5XRvzj3EztrC7r14X9IoQ3OKkzn2+q5r1NEWul7sGGxvaY+0xKloQUrzpcYPL5pJ8HMVrwdtzfqEuNlgX9VyXGkr8qsMWGIaY3uZ3NgC9/MOyylsAcd7p1wmi2rY/ui3oAyIYswRBLWiXmrvOTaAiHBJ4PrVVsJG5cf+WAebJzCKN65cciq2XoMcBWGZI9CeHYTfHumkqIr2vzZRXYpp4OZNkWYiwyH1RyffEBSuQ==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?en81dzpjnJHzrGFX8dNHWvMFv5RkTyJaGwGPiaaH3ayeQO5BkqG3x7xOsuyd?=
- =?us-ascii?Q?mZxT8PKNjeJuviXIyirTVJ0MTOG81b8StQJklQKaUqZ/vQlBqrGQnYtvtM+x?=
- =?us-ascii?Q?BdhjwPyHki0Accmn0fuK4XhQbSWdwPE/jvv57dwipVBHhMfFASfQk15QE/d2?=
- =?us-ascii?Q?gR7lM8ta6/J7hlVJKeiokwYnmuK+cSFYzFwAQ2JFiB62vwtMUWkOBJopJCVu?=
- =?us-ascii?Q?rf0galT02bDCxPFkV3U2/pylMh4Tip0A1VFIgkOkLSI7Hp6elcZNVPOZsoFr?=
- =?us-ascii?Q?FyzKtm6J/eaJtS0B5HUGoFKk9ibRLLocVJcbxoTY2KuLSdoqxpDlXliAtWYS?=
- =?us-ascii?Q?00N5bmqR0qOfDWnx8z4/zxWS5ECOome4I/PdZLdYpH3PpnG6D0/SwObOpeYK?=
- =?us-ascii?Q?Gk+loq4MEa9UvTX3ZI3UqRILnSbuSm73GQ5szekuC8RvWr2AV3m7Uqc8jtBc?=
- =?us-ascii?Q?kAXZ3at1as8NQVwwBT62mXJRL6u+BmYC88L0zsw7BETnrTvxuzUJD8K94iDN?=
- =?us-ascii?Q?X5Tc7Mru8+hRS/s/cl/h0DgjpAPLdWXywPj2UizTt61PwOJlC+mftTXE2rQZ?=
- =?us-ascii?Q?7yglNZjWRByro0LxuGuaqB7sDvvYkmH/KZRMLSZIO8Ifxc20YwTSBa34E5C6?=
- =?us-ascii?Q?nAJ57afJdJofLWRmKBpeb5kOf7bjoqusY4XdgaYri+E7VLexw4XqGi/tsknN?=
- =?us-ascii?Q?AElxRu5BgA7L4J8zDG1aoZeArNQA2w4wNJjrbyaRSq54CSl3hxmJusqtAbI3?=
- =?us-ascii?Q?v2MZxyhNXZvGnbRqC2oalA7aJ6bPOUulafLnvNOzy+XSny5XGwEfHcYct9lu?=
- =?us-ascii?Q?J7bFeD6BTsaMbgwV7qRv8/ncVqHs6fPvWgsTjSTG+7Oy8OnpwjeNE71uVXvr?=
- =?us-ascii?Q?XpF/urSxP2SogDe6SXqIyOp2lh9HtPjp4XGMJpXlncth8YSohD5I4S13wJE/?=
- =?us-ascii?Q?7rxuJMNpiF/UHnVy/aJBO+cNrQ+ELf8phCuHkqNAu/ZTYaTfn2pLZOEjEYO0?=
- =?us-ascii?Q?mgShJvQzQKgWPFFCOiYR13WYb9hf82r7LitxWZoFN1Fg2soOBNEo/I/9tAvh?=
- =?us-ascii?Q?Uvh7hE9zJAhvpDQHQMSyfZ/wxYSSxFPq6148XYS6Snc4p/ty770Ymnpxjwt7?=
- =?us-ascii?Q?HAvdpumeNiJVMzG933w8FvJqSp9aVkXIbcuRZxSa6+BA/Ob8mqePN200YCdR?=
- =?us-ascii?Q?u4M9q/vadOKpnF4Wmt/B5bkmqnCuyhV3DeGimQ=3D=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-edb50.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e0647f0-0ac6-4f90-cc13-08da0c408b52
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB0567.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 20:14:19.3120
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR04MB0660
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:4707:b0:171:cd8f:b3d2 with HTTP; Tue, 22 Mar 2022
+ 13:11:44 -0700 (PDT)
+In-Reply-To: <PH0PR21MB30253A8BA8B189686B8E65EAD7179@PH0PR21MB3025.namprd21.prod.outlook.com>
+References: <CAHmME9qHnvwrxEue4Pdm_E1qZQGXFuR9orJSKCWj8fH5TSh6fA@mail.gmail.com>
+ <20220228183355.9090-1-Jason@zx2c4.com> <CAHp75VcjrD3kwN1BfWpjKXaVpG7MHfftMUscSGhcJfStm4b-Xg@mail.gmail.com>
+ <CAMj1kXFmEAKJRHCiuXyGECCmOs0+xX9AVeBDxfuD0XuX2TQ2Uw@mail.gmail.com>
+ <Yh0+LA8B1jw8tnl9@smile.fi.intel.com> <CAHmME9qW4EiYU6_kTffMdK5ijJY1DF6YRt=gDjj1vKqDxB0Raw@mail.gmail.com>
+ <MN0PR21MB3098981B77F513976A62CA57D7019@MN0PR21MB3098.namprd21.prod.outlook.com>
+ <CAMj1kXFZZoOeXnjxdU+gOJTN=Szn=eiXgRhSS9_nnHgwADNHjA@mail.gmail.com>
+ <MN0PR21MB3098EC13B4E8488E692DB28AD7019@MN0PR21MB3098.namprd21.prod.outlook.com>
+ <CAMj1kXFe-B=n1zp6M0yBuqJmmfOXTFbkzj29iK+QpPGK=LxRmA@mail.gmail.com> <PH0PR21MB30253A8BA8B189686B8E65EAD7179@PH0PR21MB3025.namprd21.prod.outlook.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 22 Mar 2022 14:11:44 -0600
+X-Gmail-Original-Message-ID: <CAHmME9pYObVqAPoGxTmvKhj31NFLO=_G7WECYDC0vb9nDTBhuw@mail.gmail.com>
+Message-ID: <CAHmME9pYObVqAPoGxTmvKhj31NFLO=_G7WECYDC0vb9nDTBhuw@mail.gmail.com>
+Subject: Re: [PATCH 2/3 v6] ACPI: allow longer device IDs
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-crypto <linux-crypto@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Memory nodes should only have a singular reg property in them, so
-split the memory nodes such that there is only per node.
+Hi Michael,
 
-Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
----
- arch/arm/boot/dts/s5pv210-aquila.dts |  8 ++++++--
- arch/arm/boot/dts/s5pv210-aries.dtsi | 14 +++++++++++---
- arch/arm/boot/dts/s5pv210-goni.dts   | 14 +++++++++++---
- 3 files changed, 28 insertions(+), 8 deletions(-)
+On 3/22/22, Michael Kelley (LINUX) <mikelley@microsoft.com> wrote:
+> From: Ard Biesheuvel <ardb@kernel.org> Sent: Monday, February 28, 2022 2:47
+> PM
+>>
+>> On Mon, 28 Feb 2022 at 23:38, Michael Kelley (LINUX)
+>> <mikelley@microsoft.com> wrote:
+>> >
+>> > From: Ard Biesheuvel <ardb@kernel.org> Sent: Monday, February 28, 2022
+>> > 2:22 PM
+>> > >
+>> > > On Mon, 28 Feb 2022 at 23:14, Michael Kelley (LINUX)
+>> > > <mikelley@microsoft.com> wrote:
+>> > > >
+>> > > > From: Jason A. Donenfeld <Jason@zx2c4.com> Sent: Monday, February
+>> > > > 28, 2022
+>> > > 1:55 PM
+>> > > > >
+>> > > > > Hi Andy,
+>> > > > >
+>> > > > > On Mon, Feb 28, 2022 at 10:28 PM Andy Shevchenko
+>> > > > > <andy.shevchenko@gmail.com> wrote:
+>> > > > > > My point is that this is clear abuse of the spec and:
+>> > > > > > 1) we have to enable the broken, because it is already in the
+>> > > > > > wild with
+>> > > > > >    the comment that this is an issue
+>> > > > > >
+>> > > > > > AND
+>> > > > > >
+>> > > > > > 2) issue an ECR / work with MS to make sure they understand the
+>> > > > > > problem.
+>> > > > > >
+>> > > > > > This can be done in parallel. What I meant as a prerequisite is
+>> > > > > > to start doing
+>> > > > > > 2) while we have 1) on table.
+>> > > > >
+>> > > > > Oh, okay, that makes sense. If you want to get (2) going, by all
+>> > > > > means
+>> > > > > go for it. I have no idea how to do this myself; Ard said
+>> > > > > something
+>> > > > > about joining the UEFI forum as an individual something or another
+>> > > > > but
+>> > > > > I don't think I'm the man for the job there. Is this something
+>> > > > > that
+>> > > > > Intel can do with their existing membership (is that the right
+>> > > > > term?)
+>> > > > > at the UEFI forum? Or maybe a Microsoft engineer on the list?
+>> > > >
+>> > > > My team at Microsoft, which works on Linux, filed a bug on this
+>> > > > issue against the Hyper-V team about a year ago, probably when the
+>> > > > issue
+>> > > > was raised during the previous attempt to implement the
+>> > > > functionality
+>> > > > in Linux.  I've talked with the Hyper-V dev manager, and they
+>> > > > acknowledge
+>> > > > that the ACPI entry Hyper-V provides to guest VMs violates the spec.
+>> > > >  But
+>> > > > changing to an identifier that meets the spec is problematic
+>> > > > because
+>> > > > of backwards compatibility with Windows guests on Hyper-V that
+>> > > > consume the current identifier.  There's no practical way to have
+>> > > > Hyper-V
+>> > > > provide a conformant identifier AND fix all the Windows guests out
+>> > > > in
+>> > > > the wild to consume the new identifier.   As a result, at this point
+>> > > > Hyper-V
+>> > > > is not planning to change anything.
+>> > > >
+>> > > > It's a lousy state-of-affairs, but as mentioned previously in this
+>> > > > thread,
+>> > > > it seems to be one that we will have to live with.
+>> > > >
+>> > >
+>> > > Thanks for chiming in.
+>> > >
+>> > > Why not do something like
+>> > >
+>> > > Name (_CID, Package (2) { "VM_GEN_COUNTER", "VMGENCTR" } )
+>> > >
+>> > > ?
+>> > >
+>> > > That way, older clients can match on the existing _CID and new
+>> > > clients
+>> > > can match on the spec compliant one.
+>> >
+>> > I'll run this by the Hyper-V guys.  I don't have the ACPI expertise to
+>> > disagree
+>> > with them when they say they can't change it. :-(
+>> >
+>>
+>> Yes, please, even if it makes no difference for this particular patch.
+>
+> The Hyper-V guys pass along their thanks for your suggestion.  They have
+> created an internal build with the change and verified that it preserves
+> compatibility with Windows guests.  I've tested with Linux guests and
+> Jason's new driver (modified to look for "VMGENCTR"), and it all looks
+> good.
+> It will take a little while to wend its way through the Windows/Hyper-V
+> release system, but they are planning to take the change.
+>
+> Michael
+>
 
-diff --git a/arch/arm/boot/dts/s5pv210-aquila.dts b/arch/arm/boot/dts/s5pv210-aquila.dts
-index 6423348034b6..6984479ddba3 100644
---- a/arch/arm/boot/dts/s5pv210-aquila.dts
-+++ b/arch/arm/boot/dts/s5pv210-aquila.dts
-@@ -29,8 +29,12 @@
- 
- 	memory@30000000 {
- 		device_type = "memory";
--		reg = <0x30000000 0x05000000
--			0x40000000 0x18000000>;
-+		reg = <0x30000000 0x05000000>;
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0x40000000 0x18000000>;
- 	};
- 
- 	pmic_ap_clk: clock-0 {
-diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
-index 160f8cd9a68d..70ff56daf4cb 100644
---- a/arch/arm/boot/dts/s5pv210-aries.dtsi
-+++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
-@@ -24,9 +24,17 @@
- 
- 	memory@30000000 {
- 		device_type = "memory";
--		reg = <0x30000000 0x05000000
--			0x40000000 0x10000000
--			0x50000000 0x08000000>;
-+		reg = <0x30000000 0x05000000>;
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0x40000000 0x10000000>;
-+	};
-+
-+	memory@50000000 {
-+		device_type = "memory";
-+		reg = <0x50000000 0x08000000>;
- 	};
- 
- 	reserved-memory {
-diff --git a/arch/arm/boot/dts/s5pv210-goni.dts b/arch/arm/boot/dts/s5pv210-goni.dts
-index c6f39147cb96..2c66ec5cbfbb 100644
---- a/arch/arm/boot/dts/s5pv210-goni.dts
-+++ b/arch/arm/boot/dts/s5pv210-goni.dts
-@@ -30,9 +30,17 @@
- 
- 	memory@30000000 {
- 		device_type = "memory";
--		reg = <0x30000000 0x05000000
--			0x40000000 0x10000000
--			0x50000000 0x08000000>;
-+		reg = <0x30000000 0x05000000>;
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0x40000000 0x10000000>;
-+	};
-+
-+	memory@50000000 {
-+		device_type = "memory";
-+		reg = <0x50000000 0x08000000>;
- 	};
- 
- 	pmic_ap_clk: clock-0 {
--- 
-2.20.1
+Do you want to send a patch against the crng/random.git tree adding that new id?
 
+Jason

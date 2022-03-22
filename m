@@ -2,165 +2,550 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697A94E4445
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57214E4446
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236584AbiCVQfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S239118AbiCVQhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbiCVQfd (ORCPT
+        with ESMTP id S235517AbiCVQhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:35:33 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38384614A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:34:06 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id g3so1281653plo.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:34:06 -0700 (PDT)
+        Tue, 22 Mar 2022 12:37:45 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E3C6589
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:36:16 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id qx21so37328104ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=brcU2nO6QqDCnc/aKXyKE9+waR5SCKo3rxSe1BMuA1o=;
-        b=kiS1cCGL/REUt0zXeKlAJyrQljUCqBSXBlRoawnyoX2QZ4zSaq+sJGic9bWkowfZgq
-         v9qFMYULiQ9PJk0DPDmdVvuXBZ45Ph4HC+Dj2t4RebruXLVLcbWwixC5QMLFerdRlS4d
-         7CSd1BGXlwuMGR+Vhdf9qeuJbm70fKhq016LLnDZNkyRTdaltOEOQdfbxaoVJ0UoWAX0
-         y92Z5gbUxyq44KoBxb6dMh6Kl48MMbzHWsSXnrRE2hhYHchX1F9Jzn2z/FVIsB9UB4SM
-         lOUl+whpRZFKIuuBFJNa/4SImd6ANdsP2P7NZ9ZiyydfO39bVNoNsY+G2zowMvMojsw1
-         GIIg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=C7djnx+kSMxx0S+f3Z9Vcjv8Sa+/we2u0AZS5vUqrVo=;
+        b=EDtN8jEBCibGuy/wzfPQA1F1VfMD1GfilpnP9A7vXpuo+igj6ByUoSmN5TFzsSPaPe
+         Bfb8cHGO5OqPHlpCPNvCOZWFd0lOWVucocAeMNsOqeeHOMxB3DooSwwNYM1S9YYHK+zw
+         QHVk+N4f8NWtCJz0eEpKKCe3nOYfaNkCAPGyAumVBTiygs/BZeEvnCi0YKTIu+17upWw
+         oN9KNc0/a+7awHzMwESy3tolNdh2VkHtEt5UxsZNtiRsHpm4zuYPaIEvRKnargUV73wZ
+         KpisxaTaRSadsZtxdGgnAr/amEzMFKv1LTPCpjjZWtdR7L0gOhY0BbfuQbDjUNklOieB
+         BNQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=brcU2nO6QqDCnc/aKXyKE9+waR5SCKo3rxSe1BMuA1o=;
-        b=Zp5odTWQ958IA44vKjW7TdVbCgSx+A0giu/8Fn1p5dG0fYyKcKBWKJdPmaaepGk9gA
-         qXInPSYaD124zPe03iNHgp8neXnDsArs41s5dl8iKsfA/XYKGpWSejFVR63GwhO/MYdF
-         cpLf9xwR2fyR43uFnZlGyRyPGB8/X3gqxykBGAnSo6qBBooe89au6k0PMcvpueDu/f6N
-         VAvExHWlPyCwt2s3InoU1Akfv1qbr6DiPTgDNzLIIdIBHcrgapT7s6ZNZ8R9NHieXm4o
-         jtbXoKh4MshetWJcVFcN7K5iMHgij8ZoEFw9sdm4PZgL3oJDDx/pKxB5c7LYp0Tz2DYO
-         dRiw==
-X-Gm-Message-State: AOAM533MX+KbNP6L8egaA2sjxlB/bDe8y8LrrRAikjZXUg1xYTPWp+C3
-        bzghXt6GpWO8zlfWJOt+aHV+sg==
-X-Google-Smtp-Source: ABdhPJwoMM9MGKG2rXVenoOC5R+VXbKPwEtztHPeW46UMwsmabaAwA7Rr0HVo7PJYSn7B44Usq7fbw==
-X-Received: by 2002:a17:902:8f94:b0:14f:d9b3:52c2 with SMTP id z20-20020a1709028f9400b0014fd9b352c2mr18826905plo.103.1647966845737;
-        Tue, 22 Mar 2022 09:34:05 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e62:3990:a113:6fc:a7b4:4226? ([2409:8a28:e62:3990:a113:6fc:a7b4:4226])
-        by smtp.gmail.com with ESMTPSA id u10-20020a63b54a000000b00380ea901cd2sm17584716pgo.6.2022.03.22.09.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 09:34:05 -0700 (PDT)
-Message-ID: <0a7ebd49-cfdd-911e-3982-44f594320b0f@bytedance.com>
-Date:   Wed, 23 Mar 2022 00:33:51 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=C7djnx+kSMxx0S+f3Z9Vcjv8Sa+/we2u0AZS5vUqrVo=;
+        b=U0rzVWCPsoiZhBBoJ1YKSstMw0RzTZnF9Vjg2wdmtpyN7uCYjHcADGLFXGBzQKpdAQ
+         L7I0bLSjXxE4gd0ylnbHAG6uZNqZbOPHFLY30WkFRkfNZXWJfgU53T46xadN7+dcY301
+         bY8m+C+PGfo7Gxu9tCh01ak9CK+m5/UzoVL25US1/46garQV3FLGHdkJ28C5Rg5u/Tam
+         GuvYWR+siYtHNzcHcVlSs7G7QslkKvCP9S4bL1d+H/MGIg+y9DIySu3b9uAAmJnpTY4Q
+         K1/Piwipxn2YB6TSCIjspo+P8Xc+k40rzRhViL/AP6LZCcy9+Algkb8Z9zNo8F/5Av67
+         4wzQ==
+X-Gm-Message-State: AOAM531Qg9Y1ST4LZfeAtyOsVi24O7MSbCnIC4R41pa3ugiV1dsxRbOQ
+        jKEoOCd66eAgTSFPu6y/rA3C1R0SFCJwFobQPUtb+Q==
+X-Google-Smtp-Source: ABdhPJwYKokAmOdIz1jatBtt+CuPGpw+cjogoGu3zuluNRajkHPgvFNiLqJycv8qO2FmpAO2N+fgCzce/VgX1ItHNCY=
+X-Received: by 2002:a17:906:5d06:b0:6df:b0ac:59c2 with SMTP id
+ g6-20020a1709065d0600b006dfb0ac59c2mr22156468ejt.758.1647966974640; Tue, 22
+ Mar 2022 09:36:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [External] Re: [PATCH v2 2/6] perf/core: Introduce percpu
- perf_cgroup
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, eranian@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-References: <20220322120834.98637-1-zhouchengming@bytedance.com>
- <20220322120834.98637-3-zhouchengming@bytedance.com>
- <YjnIpn/PCM6wKpOC@hirez.programming.kicks-ass.net>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <YjnIpn/PCM6wKpOC@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220314195458.271430-1-wonchung@google.com>
+In-Reply-To: <20220314195458.271430-1-wonchung@google.com>
+From:   Won Chung <wonchung@google.com>
+Date:   Tue, 22 Mar 2022 09:36:02 -0700
+Message-ID: <CAOvb9yguWiJgeYBb1eTnAUpNQ-f5f-tQDnDNw+XzBXRx0H156g@mail.gmail.com>
+Subject: Re: [PATCH v6] driver core: Add sysfs support for physical location
+ of a device
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/22 9:01 下午, Peter Zijlstra wrote:
-> On Tue, Mar 22, 2022 at 08:08:30PM +0800, Chengming Zhou wrote:
->> Although we don't have incosistency problem any more, we can
->> have other problem like:
->>
->> CPU1					CPU2
->> (in context_switch)			(attach running task)
->> 					prev->cgroups = cgrp2
->> perf_cgroup_sched_switch(prev, next)
->> 	cgrp2 == cgrp2 is True
->>
-> 
-> Again, I'm not following, how can you attach to a running task from
-> another CPU ?
+On Mon, Mar 14, 2022 at 12:55 PM Won Chung <wonchung@google.com> wrote:
+>
+> When ACPI table includes _PLD fields for a device, create a new
+> directory (physical_location) in sysfs to share _PLD fields.
+>
+> Currently without PLD information, when there are multiple of same
+> devices, it is hard to distinguish which device corresponds to which
+> physical device at which location. For example, when there are two Type
+> C connectors, it is hard to find out which connector corresponds to the
+> Type C port on the left panel versus the Type C port on the right panel.
+> With PLD information provided, we can determine which specific device at
+> which location is doing what.
+>
+> _PLD output includes much more fields, but only generic fields are added
+> and exposed to sysfs, so that non-ACPI devices can also support it in
+> the future. The minimal generic fields needed for locating a device are
+> the following.
+> - panel
+> - vertical_position
+> - horizontal_position
+> - dock
+> - lid
+>
+> Signed-off-by: Won Chung <wonchung@google.com>
+> ---
+>
+> Changes from v5
+> - Remove physical_location directory only if physical_location is present=
+.
+> - Free memory for physical_location in device when device is removed.
+>
+> Changes from v4
+> - Remove physical_location directory when device is deleted.
+> - Correctly handle error from adding physical_location in
+>   device_add_attrs().
+>
+> Changes from v3
+> - Move dev_add_physical_location() and dev_attr_physical_location_group
+>   to driver/base/physical_location.h.
+> - Use pointer and reorder physical_location in struct device to pack its
+>   bytes. (checked using pahole)
+> - Unify naming to physical_location since the name location is used in
+>   some places like USB port for different information.
+>
+> Changes from v2
+> - Use sysfs_emit to create files.
+> - Correct mix of spaces and tabs.
+>
+> Changes from v1
+> - Correct directory names in Documentation.
+> - Clarify namings in core.c
+>
+>  .../testing/sysfs-devices-physical_location   |  42 ++++++
+>  drivers/base/Makefile                         |   1 +
+>  drivers/base/core.c                           |  15 ++
+>  drivers/base/physical_location.c              | 137 ++++++++++++++++++
+>  drivers/base/physical_location.h              |  16 ++
+>  include/linux/device.h                        |  73 ++++++++++
+>  6 files changed, 284 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_loca=
+tion
+>  create mode 100644 drivers/base/physical_location.c
+>  create mode 100644 drivers/base/physical_location.h
+>
+> diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/=
+Documentation/ABI/testing/sysfs-devices-physical_location
+> new file mode 100644
+> index 000000000000..202324b87083
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-devices-physical_location
+> @@ -0,0 +1,42 @@
+> +What:          /sys/devices/.../physical_location
+> +Date:          March 2022
+> +Contact:       Won Chung <wonchung@google.com>
+> +Description:
+> +               This directory contains information on physical location =
+of
+> +               the device connection point with respect to the system's
+> +               housing.
+> +
+> +What:          /sys/devices/.../physical_location/panel
+> +Date:          March 2022
+> +Contact:       Won Chung <wonchung@google.com>
+> +Description:
+> +               Describes which panel surface of the system=E2=80=99s hou=
+sing the
+> +               device connection point resides on.
+> +
+> +What:          /sys/devices/.../physical_location/vertical_position
+> +Date:          March 2022
+> +Contact:       Won Chung <wonchung@google.com>
+> +Description:
+> +               Describes vertical position of the device connection poin=
+t on
+> +               the panel surface.
+> +
+> +What:          /sys/devices/.../physical_location/horizontal_position
+> +Date:          March 2022
+> +Contact:       Won Chung <wonchung@google.com>
+> +Description:
+> +               Describes horizontal position of the device connection po=
+int on
+> +               the panel surface.
+> +
+> +What:          /sys/devices/.../physical_location/dock
+> +Date:          March 2022
+> +Contact:       Won Chung <wonchung@google.com>
+> +Description:
+> +               "Yes" if the device connection point resides in a docking
+> +               station or a port replicator. "No" otherwise.
+> +
+> +What:          /sys/devices/.../physical_location/lid
+> +Date:          March 2022
+> +Contact:       Won Chung <wonchung@google.com>
+> +Description:
+> +               "Yes" if the device connection point resides on the lid o=
+f
+> +               laptop system. "No" otherwise.
+> diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+> index 02f7f1358e86..83217d243c25 100644
+> --- a/drivers/base/Makefile
+> +++ b/drivers/base/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_DEV_COREDUMP) +=3D devcoredump.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) +=3D platform-msi.o
+>  obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) +=3D arch_topology.o
+>  obj-$(CONFIG_GENERIC_ARCH_NUMA) +=3D arch_numa.o
+> +obj-$(CONFIG_ACPI) +=3D physical_location.o
+>
+>  obj-y                  +=3D test/
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 7bb957b11861..64d4d8646c12 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/dma-map-ops.h> /* for dma_default_coherent */
+>
+>  #include "base.h"
+> +#include "physical_location.h"
+>  #include "power/power.h"
+>
+>  #ifdef CONFIG_SYSFS_DEPRECATED
+> @@ -2649,8 +2650,17 @@ static int device_add_attrs(struct device *dev)
+>                         goto err_remove_dev_waiting_for_supplier;
+>         }
+>
+> +       if (dev_add_physical_location(dev)) {
+> +               error =3D device_add_group(dev,
+> +                       &dev_attr_physical_location_group);
+> +               if (error)
+> +                       goto err_remove_dev_removable;
+> +       }
+> +
+>         return 0;
+>
+> + err_remove_dev_removable:
+> +       device_remove_file(dev, &dev_attr_removable);
+>   err_remove_dev_waiting_for_supplier:
+>         device_remove_file(dev, &dev_attr_waiting_for_supplier);
+>   err_remove_dev_online:
+> @@ -2672,6 +2682,11 @@ static void device_remove_attrs(struct device *dev=
+)
+>         struct class *class =3D dev->class;
+>         const struct device_type *type =3D dev->type;
+>
+> +       if (dev->physical_location) {
+> +               device_remove_group(dev, &dev_attr_physical_location_grou=
+p);
+> +               kfree(dev->physical_location);
+> +       }
+> +
+>         device_remove_file(dev, &dev_attr_removable);
+>         device_remove_file(dev, &dev_attr_waiting_for_supplier);
+>         device_remove_file(dev, &dev_attr_online);
+> diff --git a/drivers/base/physical_location.c b/drivers/base/physical_loc=
+ation.c
+> new file mode 100644
+> index 000000000000..4c1a52ecd7f6
+> --- /dev/null
+> +++ b/drivers/base/physical_location.c
+> @@ -0,0 +1,137 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Device physical location support
+> + *
+> + * Author: Won Chung <wonchung@google.com>
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/sysfs.h>
+> +
+> +#include "physical_location.h"
+> +
+> +bool dev_add_physical_location(struct device *dev)
+> +{
+> +       struct acpi_pld_info *pld;
+> +       acpi_status status;
+> +
+> +       if (!has_acpi_companion(dev))
+> +               return false;
+> +
+> +       status =3D acpi_get_physical_device_location(ACPI_HANDLE(dev), &p=
+ld);
+> +       if (ACPI_FAILURE(status))
+> +               return false;
+> +
+> +       dev->physical_location =3D
+> +               kzalloc(sizeof(*dev->physical_location), GFP_KERNEL);
+> +       dev->physical_location->panel =3D pld->panel;
+> +       dev->physical_location->vertical_position =3D pld->vertical_posit=
+ion;
+> +       dev->physical_location->horizontal_position =3D pld->horizontal_p=
+osition;
+> +       dev->physical_location->dock =3D pld->dock;
+> +       dev->physical_location->lid =3D pld->lid;
+> +
+> +       return true;
+> +}
+> +
+> +static ssize_t panel_show(struct device *dev, struct device_attribute *a=
+ttr,
+> +       char *buf)
+> +{
+> +       const char *panel;
+> +
+> +       switch (dev->physical_location->panel) {
+> +       case DEVICE_PANEL_TOP:
+> +               panel =3D "top";
+> +               break;
+> +       case DEVICE_PANEL_BOTTOM:
+> +               panel =3D "bottom";
+> +               break;
+> +       case DEVICE_PANEL_LEFT:
+> +               panel =3D "left";
+> +               break;
+> +       case DEVICE_PANEL_RIGHT:
+> +               panel =3D "right";
+> +               break;
+> +       case DEVICE_PANEL_FRONT:
+> +               panel =3D "front";
+> +               break;
+> +       default:
+> +               panel =3D "unknown";
+> +       }
+> +       return sysfs_emit(buf, "%s\n", panel);
+> +}
+> +static DEVICE_ATTR_RO(panel);
+> +
+> +static ssize_t vertical_position_show(struct device *dev,
+> +       struct device_attribute *attr, char *buf)
+> +{
+> +       const char *vertical_position;
+> +
+> +       switch (dev->physical_location->vertical_position) {
+> +       case DEVICE_VERT_POS_UPPER:
+> +               vertical_position =3D "upper";
+> +               break;
+> +       case DEVICE_VERT_POS_CENTER:
+> +               vertical_position =3D "center";
+> +               break;
+> +       case DEVICE_VERT_POS_LOWER:
+> +               vertical_position =3D "lower";
+> +               break;
+> +       default:
+> +               vertical_position =3D "unknown";
+> +       }
+> +       return sysfs_emit(buf, "%s\n", vertical_position);
+> +}
+> +static DEVICE_ATTR_RO(vertical_position);
+> +
+> +static ssize_t horizontal_position_show(struct device *dev,
+> +       struct device_attribute *attr, char *buf)
+> +{
+> +       const char *horizontal_position;
+> +
+> +       switch (dev->physical_location->horizontal_position) {
+> +       case DEVICE_HORI_POS_LEFT:
+> +               horizontal_position =3D "left";
+> +               break;
+> +       case DEVICE_HORI_POS_CENTER:
+> +               horizontal_position =3D "center";
+> +               break;
+> +       case DEVICE_HORI_POS_RIGHT:
+> +               horizontal_position =3D "right";
+> +               break;
+> +       default:
+> +               horizontal_position =3D "unknown";
+> +       }
+> +       return sysfs_emit(buf, "%s\n", horizontal_position);
+> +}
+> +static DEVICE_ATTR_RO(horizontal_position);
+> +
+> +static ssize_t dock_show(struct device *dev, struct device_attribute *at=
+tr,
+> +       char *buf)
+> +{
+> +       return sysfs_emit(buf, "%s\n",
+> +               dev->physical_location->dock ? "yes" : "no");
+> +}
+> +static DEVICE_ATTR_RO(dock);
+> +
+> +static ssize_t lid_show(struct device *dev, struct device_attribute *att=
+r,
+> +       char *buf)
+> +{
+> +       return sysfs_emit(buf, "%s\n",
+> +               dev->physical_location->lid ? "yes" : "no");
+> +}
+> +static DEVICE_ATTR_RO(lid);
+> +
+> +static struct attribute *dev_attr_physical_location[] =3D {
+> +       &dev_attr_panel.attr,
+> +       &dev_attr_vertical_position.attr,
+> +       &dev_attr_horizontal_position.attr,
+> +       &dev_attr_dock.attr,
+> +       &dev_attr_lid.attr,
+> +       NULL,
+> +};
+> +
+> +const struct attribute_group dev_attr_physical_location_group =3D {
+> +       .name =3D "physical_location",
+> +       .attrs =3D dev_attr_physical_location,
+> +};
+> +
+> diff --git a/drivers/base/physical_location.h b/drivers/base/physical_loc=
+ation.h
+> new file mode 100644
+> index 000000000000..82cde9f1b161
+> --- /dev/null
+> +++ b/drivers/base/physical_location.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Device physical location support
+> + *
+> + * Author: Won Chung <wonchung@google.com>
+> + */
+> +
+> +#include <linux/device.h>
+> +
+> +#ifdef CONFIG_ACPI
+> +extern bool dev_add_physical_location(struct device *dev);
+> +extern const struct attribute_group dev_attr_physical_location_group;
+> +#else
+> +static inline bool dev_add_physical_location(struct device *dev) { retur=
+n false; };
+> +static const struct attribute_group dev_attr_physical_location_group =3D=
+ {};
+> +#endif
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 93459724dcde..766fbea6ca83 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -386,6 +386,75 @@ struct dev_msi_info {
+>  #endif
+>  };
+>
+> +/**
+> + * enum device_physical_location_panel - Describes which panel surface o=
+f the
+> + * system's housing the device connection point resides on.
+> + * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
+> + * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
+> + * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
+> + * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
+> + * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
+> + * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
+> + * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unkn=
+own.
+> + */
+> +enum device_physical_location_panel {
+> +       DEVICE_PANEL_TOP,
+> +       DEVICE_PANEL_BOTTOM,
+> +       DEVICE_PANEL_LEFT,
+> +       DEVICE_PANEL_RIGHT,
+> +       DEVICE_PANEL_FRONT,
+> +       DEVICE_PANEL_BACK,
+> +       DEVICE_PANEL_UNKNOWN,
+> +};
+> +
+> +/**
+> + * enum device_physical_location_vertical_position - Describes vertical
+> + * position of the device connection point on the panel surface.
+> + * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of p=
+anel.
+> + * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of=
+ panel.
+> + * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of p=
+anel.
+> + */
+> +enum device_physical_location_vertical_position {
+> +       DEVICE_VERT_POS_UPPER,
+> +       DEVICE_VERT_POS_CENTER,
+> +       DEVICE_VERT_POS_LOWER,
+> +};
+> +
+> +/**
+> + * enum device_physical_location_horizontal_position - Describes horizon=
+tal
+> + * position of the device connection point on the panel surface.
+> + * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of pan=
+el.
+> + * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of=
+ panel.
+> + * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of p=
+anel.
+> + */
+> +enum device_physical_location_horizontal_position {
+> +       DEVICE_HORI_POS_LEFT,
+> +       DEVICE_HORI_POS_CENTER,
+> +       DEVICE_HORI_POS_RIGHT,
+> +};
+> +
+> +/**
+> + * struct device_physical_location - Device data related to physical loc=
+ation
+> + * of the device connection point.
+> + * @panel: Panel surface of the system's housing that the device connect=
+ion
+> + *         point resides on.
+> + * @vertical_position: Vertical position of the device connection point =
+within
+> + *                     the panel.
+> + * @horizontal_position: Horizontal position of the device connection po=
+int
+> + *                       within the panel.
+> + * @dock: Set if the device connection point resides in a docking statio=
+n or
+> + *        port replicator.
+> + * @lid: Set if this device connection point resides on the lid of lapto=
+p
+> + *       system.
+> + */
+> +struct device_physical_location {
+> +       enum device_physical_location_panel panel;
+> +       enum device_physical_location_vertical_position vertical_position=
+;
+> +       enum device_physical_location_horizontal_position horizontal_posi=
+tion;
+> +       bool dock;
+> +       bool lid;
+> +};
+> +
+>  /**
+>   * struct device - The basic device structure
+>   * @parent:    The device's "parent" device, the device to which it is a=
+ttached.
+> @@ -453,6 +522,8 @@ struct dev_msi_info {
+>   *             device (i.e. the bus driver that discovered the device).
+>   * @iommu_group: IOMMU group the device belongs to.
+>   * @iommu:     Per device generic IOMMU runtime data
+> + * @physical_location: Describes physical location of the device connect=
+ion
+> + *             point in the system housing.
+>   * @removable:  Whether the device can be removed from the system. This
+>   *              should be set by the subsystem / bus driver that discove=
+red
+>   *              the device.
+> @@ -567,6 +638,8 @@ struct device {
+>         struct iommu_group      *iommu_group;
+>         struct dev_iommu        *iommu;
+>
+> +       struct device_physical_location *physical_location;
+> +
+>         enum device_removable   removable;
+>
+>         bool                    offline_disabled:1;
+> --
+> 2.35.1.723.g4982287a31-goog
+>
 
-Hi Peter, I make a little testcase which can reproduce the race
-problem, on system with PSI disabled. Because when PSI enabled,
-cgroup_move_task() will hold rq lock to assign task->cgroups.
+Hi Greg,
 
-```
-#!/bin/bash
+I am sorry to keep bothering you with this, but can you take a look at
+this patch for a review when you have time? Thank you very much!
 
-cd /sys/fs/cgroup/perf_event
-
-mkdir cg1
-mkdir cg2
-
-perf stat -e cycles --cgroup /cg1 &
-
-cg_run()
-{
-        cg=$1
-        shift
-        echo $BASHPID > $cg/cgroup.procs
-        $@
-}
-
-cg_run cg1 schbench -r 100 &
-cg_run cg2 schbench -r 100 &
-
-while true; do
-        for i in $(cat cg1/cgroup.procs); do
-                echo $i > cg2/cgroup.procs
-        done
-        for i in $(cat cg2/cgroup.procs); do
-                echo $i > cg1/cgroup.procs
-        done
-done
-```
-
-Some seconds later, dmesg will show the WARNING message:
-
-[   51.777830] WARNING: CPU: 2 PID: 1849 at kernel/events/core.c:869 perf_cgroup_switch+0x246/0x290
-[   51.779167] Modules linked in:
-[   51.779696] CPU: 2 PID: 1849 Comm: schbench Not tainted 5.17.0-rc8 #28
-[   51.780691] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
-[   51.782353] RIP: 0010:perf_cgroup_switch+0x246/0x290
-[   51.783145] Code: 0f 0b e9 0b ff ff ff 48 83 7c 24 08 00 74 0c e8 00 7e f7 ff fb 66 0f 1f 44 00 00 48 83 c4 10 5b 5d 41 5c 41 5d 41 5e 41 5f c3 <0f> 0b e9 4f fe ff ff e8 be 7e f7 ff e8 a9 1f 93 00 89 c0 49 c7 c5
-[   51.785804] RSP: 0018:ffffba4440fcbd80 EFLAGS: 00010086
-[   51.786617] RAX: 0000000000000002 RBX: ffff8d78eb8b7200 RCX: 0000000000000000
-[   51.787696] RDX: 0000000000000000 RSI: ffffffffae1c83db RDI: ffffffffae185a69
-[   51.788777] RBP: ffff8d78eb8aad40 R08: 0000000000000001 R09: 0000000000000001
-[   51.789854] R10: 0000000000000000 R11: ffff8d78eb8b7220 R12: ffff8d78eb8b7208
-[   51.790929] R13: ffff8d78eb8aafa0 R14: ffff8d74cd6bb600 R15: 0000000000000000
-[   51.792006] FS:  00007fedaaffd700(0000) GS:ffff8d78eb880000(0000) knlGS:0000000000000000
-[   51.793223] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   51.794122] CR2: 000055e4bf2b696c CR3: 00000001128a2003 CR4: 0000000000370ee0
-[   51.795209] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   51.796292] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   51.797375] Call Trace:
-[   51.797828]  <TASK>
-[   51.798229]  __perf_event_task_sched_in+0x151/0x350
-[   51.799009]  ? lock_release+0x1ed/0x2e0
-[   51.799640]  finish_task_switch+0x1d3/0x2e0
-[   51.800328]  ? __switch_to+0x136/0x4b0
-[   51.800953]  __schedule+0x33e/0xae0
-[   51.801535]  schedule+0x4e/0xc0
-[   51.802080]  exit_to_user_mode_prepare+0x172/0x2a0
-[   51.802850]  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
-[   51.803675]  irqentry_exit_to_user_mode+0x5/0x40
-[   51.804413]  sysvec_apic_timer_interrupt+0x5c/0xd0
-[   51.805183]  asm_sysvec_apic_timer_interrupt+0x12/0x20
-
-Thanks.
-
+Won

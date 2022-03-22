@@ -2,108 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636A84E36C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523EC4E36E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235571AbiCVCm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S235596AbiCVCri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbiCVCmZ (ORCPT
+        with ESMTP id S235577AbiCVCrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:42:25 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BE413F53
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:40:58 -0700 (PDT)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWUS6-00FB9i-7g; Tue, 22 Mar 2022 02:40:54 +0000
-Date:   Tue, 22 Mar 2022 02:40:54 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Imran Khan <imran.f.khan@oracle.com>, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v7 7/8] kernfs: Replace per-fs rwsem with hashed
- rwsems.
-Message-ID: <Yjk3Nqft/U6vDvd1@zeniv-ca.linux.org.uk>
-References: <20220317072612.163143-1-imran.f.khan@oracle.com>
- <20220317072612.163143-8-imran.f.khan@oracle.com>
- <YjPNOQJf/Wxa4YeV@zeniv-ca.linux.org.uk>
- <536f2392-45d2-2f43-5e9d-01ef50e33126@oracle.com>
- <YjgpaeFfFandY999@zeniv-ca.linux.org.uk>
- <Yjir/d5S3J1PTiux@slm.duckdns.org>
- <Yji8KT2K7ZKOQ+6S@zeniv-ca.linux.org.uk>
- <YjjP5ldCCGYqD+UV@slm.duckdns.org>
+        Mon, 21 Mar 2022 22:47:37 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81AB1BE80
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:46:10 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id bn33so22293033ljb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dITYxImMre4m5PN82mo0sCzas+UoEJc6AOZpn6FSwxQ=;
+        b=IL1wvzqx+4Lo1FOTH8olL4GS/wlIhvER2KuNoDOv3LJtDseEqabMTtePVLjrZpVBet
+         op/Zi0NlqCCC40yye4rRV6uRxhWlxxZHbpGqjodgKIw8Vxay6zIL19ynspcgj2AKrD8S
+         eBFsLkRO49G0oNgu602vzcKlSS94BZU94Oi08=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dITYxImMre4m5PN82mo0sCzas+UoEJc6AOZpn6FSwxQ=;
+        b=DitKkQi3dxp0cGB+G/d96voZ5lNb1J/NQvLruuOOwPQHgpyjF0gaUOtxUelDz12jbg
+         QqLzA5MApqvSGk0TwmAPNIiD5IOL+uOEp17Zg+uFXodUY/a+umUwkDsWX1Z5mAC/zPQZ
+         lVTY0dlDAtFzTgpHJ0+iMO6Ufl9IyMP7UFpas9xT84HBBlxql9vQYTPTNaYGMdhEt6ki
+         sRgPOnmbyfVrMsg5xklVrdC8Kit+T5PqvGYA8KhDpA5Fq8DtFVfW+s16IHJIYxhg4G5m
+         Hdx0yLrOPZB6jEm7FmNh/sTqHDbECOPq+Els5cWCXms90efDCUnd6SGi6acNz35kWhDg
+         7IYw==
+X-Gm-Message-State: AOAM530m/rybnVqVckBuxxxJMnqDHGnYfQAkFsPcW2eL+CZE7d24b1X4
+        aDkclUpE9VNOvphIdRyfPh0HWwpS8fjz3YJuhMk=
+X-Google-Smtp-Source: ABdhPJx48jk1PBoGJdTONz23EcoPNX6qCkYHkLr1rzRbJFatP4u3CTYCkqemYiVcGgpAtAj9pgDMag==
+X-Received: by 2002:a05:651c:d0:b0:249:85ad:537 with SMTP id 16-20020a05651c00d000b0024985ad0537mr5551219ljr.289.1647917168818;
+        Mon, 21 Mar 2022 19:46:08 -0700 (PDT)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id f11-20020a0565123b0b00b0044a2809c621sm594320lfv.29.2022.03.21.19.46.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 19:46:08 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id q14so9000022ljc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:46:07 -0700 (PDT)
+X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
+ i19-20020a05651c121300b00247e2d9cddamr17734349lja.443.1647917167490; Mon, 21
+ Mar 2022 19:46:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjjP5ldCCGYqD+UV@slm.duckdns.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202203210806.78B1156916@keescook>
+In-Reply-To: <202203210806.78B1156916@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 21 Mar 2022 19:45:51 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whtmuyBzuHULNWcP3==ixcb8yCb-QVEokZeDJESG_TEbA@mail.gmail.com>
+Message-ID: <CAHk-=whtmuyBzuHULNWcP3==ixcb8yCb-QVEokZeDJESG_TEbA@mail.gmail.com>
+Subject: Re: [GIT PULL] seccomp update for v5.18-rc1
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 09:20:06AM -1000, Tejun Heo wrote:
-> Hello,
-> 
-> On Mon, Mar 21, 2022 at 05:55:53PM +0000, Al Viro wrote:
-> > Why bother with rwsem, when we don't need anything blocking under it?
-> > DEFINE_RWLOCK instead of DEFINE_SPINLOCK and don't make it static.
-> 
-> Oh I mean, in case the common readers get way too hot, percpu_rwsem is a
-> relatively easy way to shift the burder from the readers to the writers. I
-> doubt we'll need that.
-> 
-> > kernfs_walk_ns() - this is fucking insane; on the surface, it needs to
-> > be exclusive due to the use of the same static buffer.  It uses that
-> > buffer to generate a pathname, *THEN* walks over it with strsep().
-> > That's an... interesting approach, for the lack of other printable
-> > terms - we walk the chain of ancestors, concatenating their names
-> > into a buffer and separating those names with slashes, then we walk
-> > that buffer, searching for slashes...  WTF?
-> 
-> It takes the @parent to walk string @path from. Where does it generate the
-> pathname?
+On Mon, Mar 21, 2022 at 8:07 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Please pull this tiny seccomp update for v5.18-rc1.
 
-Sorry, misread that thing - the reason it copies the damn thing at all is
-the use of strsep().  Yecch...  Rule of the thumb regarding strsep() use,
-be it in kernel or in the userland: don't.  It's almost never the right
-primitive to use.
+Well, that *really* didn't work at all.
 
-Lookups should use qstr; it has both the length and place for hash.
-Switch kernfs_find_ns() to that (and lift the calculation of length
-into the callers that do not have it - note that kernfs_iop_lookup()
-does) and you don't need the strsep() shite (or copying) anymore.
+  In file included from samples/seccomp/dropper.c:29:
+  usr/include/linux/ptrace.h:50: warning: "PTRACE_GETREGSET" redefined
+     50 | #define PTRACE_GETREGSET        0x4204
+        |
+   In file included from samples/seccomp/dropper.c:24:
+  /usr/include/sys/ptrace.h:153: note: this is the location of the
+previous definition
+    153 | #define PTRACE_GETREGSET PTRACE_GETREGSET
+        |
+  [...]
 
-That would allow for kernfs_walk_ns() to take kernfs_rename_lock shared.
+.. and a lot of similar warnings.
 
-HOWEVER, that's not the only lock needed there and this patchset is
-broken in that respect - it locks the starting node, then walks the
-path.  Complete with lookups in rbtrees of children in the descendents
-of that node and those are *not* locked.
+Yeah, that sample code is horrible, and mixes kernel headers with
+regular user-space headers.
 
-> > Wait a sec; what happens if e.g. kernfs_path_from_node() races with
-> > __kernfs_remove()?  We do _not_ clear ->parent, but we do drop references
-> > that used to pin what it used to point to, unless I'm misreading that
-> > code...  Or is it somehow prevented by drain-related logics?  Seeing
-> > that it seems to be possible to have kernfs_path_from_node() called from
-> > an interrupt context, that could be delicate...
-> 
-> kernfs_remove() is akin to freeing of the node and all its descendants. The
-> caller shouldn't be racing that against any other operations in the subtree.
+It did that before too, it just does it much more now, and simply
+doesn't work. I'm sure this probably only happens on some distros, but
+that's what you get when you play those kinds of broken games.
 
-That's interesting...  My impression had been that some of these functions
-could be called from interrupt contexts (judging by the spin_lock_irqsave()
-in there).  What kind of async contexts those are, and what do you use to
-make sure they don't leak into overlap with kernfs_remove()?
+Pulled and immediately unpulled. That sample probably needs to just be removed.
 
-In particular, if you ever use those from RCU callbacks, you need to make
-sure that you have a grace period somewhere; the wait_event() you have in
-kernfs_drain() won't do it.
-
-I've tried to track the callchains that could lead there, but it gets
-hairy fast.
+                     Linus

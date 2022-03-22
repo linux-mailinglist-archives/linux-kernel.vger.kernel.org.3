@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B084E3C5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A28B4E3C5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiCVKXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S232970AbiCVKXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 06:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbiCVKXH (ORCPT
+        with ESMTP id S232891AbiCVKXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:23:07 -0400
+        Tue, 22 Mar 2022 06:23:12 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F617EB3B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:21:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021CE80206
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:21:46 -0700 (PDT)
 Received: from integral2.. (unknown [182.2.69.158])
-        by gnuweeb.org (Postfix) with ESMTPSA id 64C1B7E308;
-        Tue, 22 Mar 2022 10:21:36 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 5684D7E333;
+        Tue, 22 Mar 2022 10:21:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1647944500;
-        bh=Y2yOZug2HGJL8VFMD6EqH4ZMxTYA+8NhLWRdkoEiaiI=;
+        s=default; t=1647944505;
+        bh=dIEcw13d58BgwsAsKr9aSvq4e+T/YoaDZ/K+GATzEMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iU1ZJPKJ6OWuXzbkmXhjXlHLVN4GyQDrbU48G2W/1KGHQV0QAHqrc1/z0dJ43rDql
-         DfHracclBX+ZX2sAsx2bVZ+nI5wZO5CiVd/lcgfmiPB4hVFRPVg9ZxRoiXrOf5cOPF
-         tfxJ0P4OFxBqLjee9lxqOl7Z9NMgFg3i3pw5w6ndmidjveU46MBw6M90u1KeF7Oo82
-         KoNNkfr9Cor7zJ1DNim0nSE4qkxmHJ7wSN9QWAdcUAjOOk2T3LYyt4I/6MmwiUK3F8
-         sYMykrXoqDE2mGkWynu80NPF+vZSOOHGfIuygTmQFmfMFlA1yqsTD7UQHR0hfnNGPE
-         j6okpatS7+61A==
+        b=QZexaRnht7B/2rtHCZZKPWmZStsWAr7sC+7MfIHszEaGUn64SWrsVVwW7HPL8w9/q
+         KZYqcFu8U8uiubFOfCuZq5WG1q3RMqDOc0vO1HjMtP0wX05X+LuCoSCkq2cimr5MI+
+         kh1WqEvM/8aLv5FgILZ4kmkfBZBgWYqeKzYMloAuuRxeoe+qRcwx5VJ3V+GmVt0qQB
+         r2dNYnisQwaR5IBq35gzpCQMbQAONpz+Oz3B9tL06rAO9RAPCt8bJx8YW+pqK6q4oY
+         pT9gcnC85RsDmUxn3vQ4GHcZzE4Y8OYyQifp/IcZXABdMcN6YpWqGtYpIE3obQtxH6
+         aJ/E9994dz62w==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
@@ -35,11 +35,11 @@ Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Nugraha <richiisei@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>, llvm@lists.linux.dev,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [RFC PATCH v2 2/8] tools/nolibc: Remove .global _start from the entry point code
-Date:   Tue, 22 Mar 2022 17:21:09 +0700
-Message-Id: <20220322102115.186179-3-ammarfaizi2@gnuweeb.org>
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>, x86@kernel.org,
+        llvm@lists.linux.dev, David Laight <David.Laight@ACULAB.COM>
+Subject: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6 arguments
+Date:   Tue, 22 Mar 2022 17:21:10 +0700
+Message-Id: <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
 References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
@@ -54,108 +54,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building with clang yields the following error:
-```
-  <inline asm>:3:1: error: _start changed binding to STB_GLOBAL
-  .global _start
-  ^
-  1 error generated.
-```
-Make sure only specify one between `.global _start` and `.weak _start`.
-Removing `.global _start`.
+On i386, the 6th argument of syscall goes in %ebp. However, both Clang
+and GCC cannot use %ebp in the clobber list and in the "r" constraint
+without using -fomit-frame-pointer. To make it always available for
+any kind of compilation, the below workaround is implemented.
 
+For clang (the Assembly statement can't clobber %ebp):
+  1) Push the 6-th argument.
+  2) Push %ebp.
+  3) Load the 6-th argument from 4(%esp) to %ebp.
+  4) Do the syscall (int $0x80).
+  5) Pop %ebp (restore the old value of %ebp).
+  6) Add %esp by 4 (undo the stack pointer).
+
+For GCC, fortunately it has a #pragma that can force a specific function
+to be compiled with -fomit-frame-pointer, so it can use "r"(var) where
+var is a variable bound to %ebp.
+
+Cc: x86@kernel.org
 Cc: llvm@lists.linux.dev
-Cc: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/lkml/2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com
+Suggested-by: David Laight <David.Laight@ACULAB.COM>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
 
 @@ Changelog:
 
-   Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-3-ammarfaizi2@gnuweeb.org
+   Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-4-ammarfaizi2@gnuweeb.org
    RFC v1 -> RFC v2:
-    - Remove all `.global _start` for all build (GCC and Clang) instead of
-      removing all `.weak _start` for clang build (Comment from Willy).
+    - Fix %ebp saving method. Don't use redzone, i386 doesn't have a redzone
+      (comment from David and Alviro).
 ---
- tools/include/nolibc/arch-aarch64.h | 1 -
- tools/include/nolibc/arch-arm.h     | 1 -
- tools/include/nolibc/arch-i386.h    | 1 -
- tools/include/nolibc/arch-mips.h    | 1 -
- tools/include/nolibc/arch-riscv.h   | 1 -
- tools/include/nolibc/arch-x86_64.h  | 1 -
- 6 files changed, 6 deletions(-)
+ tools/include/nolibc/arch-i386.h | 66 ++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
-index 87d9e434820c..2dbd80d633cb 100644
---- a/tools/include/nolibc/arch-aarch64.h
-+++ b/tools/include/nolibc/arch-aarch64.h
-@@ -184,7 +184,6 @@ struct sys_stat_struct {
- /* startup code */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
-     "ldr x0, [sp]\n"              // argc (x0) was in the stack
-     "add x1, sp, 8\n"             // argv (x1) = sp
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 001a3c8c9ad5..1191395b5acd 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -177,7 +177,6 @@ struct sys_stat_struct {
- /* startup code */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
- #if defined(__THUMBEB__) || defined(__THUMBEL__)
-     /* We enter here in 32-bit mode but if some previous functions were in
 diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index d7e4d53325a3..125a691fc631 100644
+index 125a691fc631..9f4dc36e6ac2 100644
 --- a/tools/include/nolibc/arch-i386.h
 +++ b/tools/include/nolibc/arch-i386.h
-@@ -176,7 +176,6 @@ struct sys_stat_struct {
-  */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
-     "pop %eax\n"                // argc   (first arg, %eax)
-     "mov %esp, %ebx\n"          // argv[] (second arg, %ebx)
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index c9a6aac87c6d..1a124790c99f 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -192,7 +192,6 @@ struct sys_stat_struct {
- asm(".section .text\n"
-     ".weak __start\n"
-     ".set nomips16\n"
--    ".global __start\n"
-     ".set    noreorder\n"
-     ".option pic0\n"
-     ".ent __start\n"
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index bc10b7b5706d..511d67fc534e 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -185,7 +185,6 @@ struct sys_stat_struct {
+@@ -167,6 +167,72 @@ struct sys_stat_struct {
+ 	_ret;                                                                 \
+ })
+ 
++
++/*
++ * Both Clang and GCC cannot use %ebp in the clobber list and in the "r"
++ * constraint without using -fomit-frame-pointer. To make it always
++ * available for any kind of compilation, the below workaround is
++ * implemented.
++ *
++ * For clang (the Assembly statement can't clobber %ebp):
++ *   1) Push the 6-th argument.
++ *   2) Push %ebp.
++ *   3) Load the 6-th argument from 4(%esp) to %ebp.
++ *   4) Do the syscall (int $0x80).
++ *   5) Pop %ebp (restore the old value of %ebp).
++ *   6) Add %esp by 4 (undo the stack pointer).
++ *
++ * For GCC, fortunately it has a #pragma that can force a specific function
++ * to be compiled with -fomit-frame-pointer, so it can use "r"(var) where
++ * var is a variable bound to %ebp.
++ *
++ */
++#if defined(__clang__)
++static inline long ____do_syscall6(long eax, long ebx, long ecx, long edx,
++				   long esi, long edi, long ebp)
++{
++	__asm__ volatile (
++		"pushl	%[arg6]\n\t"
++		"pushl	%%ebp\n\t"
++		"movl	4(%%esp), %%ebp\n\t"
++		"int	$0x80\n\t"
++		"popl	%%ebp\n\t"
++		"addl	$4,%%esp\n\t"
++		: "=a"(eax)
++		: "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
++		  [arg6]"m"(ebp)
++		: "memory", "cc"
++	);
++	return eax;
++}
++
++#else /* #if defined(__clang__) */
++#pragma GCC push_options
++#pragma GCC optimize "-fomit-frame-pointer"
++static long ____do_syscall6(long eax, long ebx, long ecx, long edx, long esi,
++			    long edi, long ebp)
++{
++	register long __ebp __asm__("ebp") = ebp;
++	__asm__ volatile (
++		"int	$0x80"
++		: "=a"(eax)
++		: "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
++		  "r"(__ebp)
++		: "memory", "cc"
++	);
++	return eax;
++}
++#pragma GCC pop_options
++#endif /* #if defined(__clang__) */
++
++#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6) (   \
++	____do_syscall6((long)(num), (long)(arg1),               \
++			(long)(arg2), (long)(arg3),              \
++			(long)(arg4), (long)(arg5),              \
++			(long)(arg6))                            \
++)
++
++
  /* startup code */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
-     ".option push\n"
-     ".option norelax\n"
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index a7b70ea51b68..84c174181425 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -199,7 +199,6 @@ struct sys_stat_struct {
-  */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
-     "pop %rdi\n"                // argc   (first arg, %rdi)
-     "mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
+ /*
+  * i386 System V ABI mandates:
 -- 
 Ammar Faizi
 

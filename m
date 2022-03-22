@@ -2,104 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23AA4E3F2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D044E3F30
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbiCVNKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S234327AbiCVNMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235323AbiCVNJ6 (ORCPT
+        with ESMTP id S232743AbiCVNMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:09:58 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE7ADF25;
-        Tue, 22 Mar 2022 06:08:30 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 14C5B32013BE;
-        Tue, 22 Mar 2022 09:08:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 22 Mar 2022 09:08:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=OMRHkwKrqTNPvZ
-        BpmQ6WmDl0jpezKoqEw5HOCaOA9RA=; b=1idvj3QIH5becCDN3HXGsuHjLnIx+N
-        Yp+XgaUvfFJQXqIqX97fxmFuVjg7L3ubqZTCwJAcKdO2sTKsNdiBQy8XDotZU6er
-        p1pq8BwLR2qjv12m5dGlo67r0Ty8ybYgs9LmBprvS028NZ7UWTIIVbwIZ+sCsA9F
-        thIPZgbwlidWszPPe4EvNfTtGowJyKiJhSfEydGOo7S/kbZQOWYwmkS3VTIQKRXe
-        ImCBXLYFX+L5lv1m9YAocGtiz+KSf2/XjczfmKPiqSPwXODIZdB+TZrLVfr80yfG
-        lLWH6cZzBewcji3LX02JNQiL/ImdUFJNv7vGEf25eQu8OeHCRrgnu/BQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=OMRHkwKrqTNPvZBpmQ6WmDl0jpezKoqEw5HOCaOA9
-        RA=; b=CdhKh+gH3iao6fjugrlhu46nlpKbPxrVe+7FTGVnBDNGMVqFsrZzDGebl
-        ioYHjXX44CEAEC8xmbQyX6sb/7uWxwsOEtlv7a5BS4EGYvs7q4DdYng9oRst0C0n
-        jQ7pKKJdSVfqQGjG2y80jT/wzEPaMmoVGo7G4hoMI3WCFcrD+iV4skS0dgU1sg8o
-        oXuO+OBduByIrKXgFXaaFOg8yVGxumsST8FRHOaOm68P76ekE8jy4PTj6fUPLrRS
-        ebu5jK3kGoRYLPYRAFQPWCGZpQX7/JNxGmNHdzp2rlS5W99IXGlThfgdKDXMTtzc
-        VZSbBD4aeHCLw5P9taNda1IkOgO7Q==
-X-ME-Sender: <xms:Sco5YiAhS-n9sjVu45L98Aqrg4UKe2ytx1UMVblIwS-lUccz0vSCnw>
-    <xme:Sco5Ysj2NWbepEO_akFofkrUC2RManEz5zyUhlpXB-SLn-FYYyd21JXGYnj9rHCCa
-    dp2F2ej_yZIQjsIko8>
-X-ME-Received: <xmr:Sco5YlkbcujgErZLOU43fbSqV6WRBpsp_EoWsfmeke45cESbxCzcsGOpcNIXePk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeghedggeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
-    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:Sco5YgwHFyaoWi1CZloJlE_TTBFuNSAjw6ZUpPbLeJntkOE7C1gvzw>
-    <xmx:Sco5YnSMdgs9nMV2VyYdXHAHNxPaQh7r5djQRegOyLGfGAd0uxtcfw>
-    <xmx:Sco5YrahgPdgJLyN3L05ZMsdW2mg_r2oeub8DiX9_5gFJUxsnkrb-g>
-    <xmx:S8o5YmBLB-TAVq4lraZedTXhXPLWDNep5MnRXmghRbAPYvRJ_RZRwA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Mar 2022 09:08:23 -0400 (EDT)
-Message-ID: <66ae2436-aa86-f583-85b4-d652273188e9@flygoat.com>
-Date:   Tue, 22 Mar 2022 13:08:22 +0000
+        Tue, 22 Mar 2022 09:12:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F5C63521;
+        Tue, 22 Mar 2022 06:10:41 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AA371DFA;
+        Tue, 22 Mar 2022 14:10:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1647954638;
+        bh=4/zDggOfdRrl+UUfNTaaa9LlWfBAHXPBbJUpBU72Ais=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d09MxOhzbYU4/sEvMW+7fm2xLqi0xkXExEgBJBkcIqzSiG/tVNhXbvIkYEsSrinKx
+         OOpGI7f7JQ/rO3xh7qfp70Y2SBsUhBcYdOlSvaYCvvyJMmwwS4a0MSjAT0WIAAAN6X
+         2b8MuBeZ4t+TQlsa0vEbRK1UgbE3jlxDrYAKw6fk=
+Date:   Tue, 22 Mar 2022 15:10:21 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] uvc: fix missing check to determine if element is found
+ in list
+Message-ID: <YjnKvQZot2wnljmW@pendragon.ideasonboard.com>
+References: <20220319102222.3079-1-xiam0nd.tong@gmail.com>
+ <CANiDSCugwwNc8HjqNX2Mp8GdFN0s=jgPkT_2d4kiVygp=XZa4w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
- controller
-Content-Language: en-GB
-To:     Sui Jingfeng <15330273260@189.cn>, Rob Herring <robh@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-6-15330273260@189.cn>
- <YjkITWpbnCmhKaX+@robh.at.kernel.org>
- <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CANiDSCugwwNc8HjqNX2Mp8GdFN0s=jgPkT_2d4kiVygp=XZa4w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,36 +48,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 22, 2022 at 01:40:07PM +0100, Ricardo Ribalda wrote:
+> Hi Xiaomeng
+> 
+> Thanks for the patch. Maybe it would be better to just make a function
+> to find the ITERM entity with a given id?
 
+We already have a uvc_entity_by_id() which could be used for that, but
+only for the second loop iteration. The first one finds any input
+terminal. Also, the second loop restricts the search to a chain, while
+uvc_entity_by_id() it global to the device. I think the proposed patch
+is fine.
 
-在 2022/3/22 2:33, Sui Jingfeng 写道:
->
-> On 2022/3/22 07:20, Rob Herring wrote:
->> On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
->>> From: suijingfeng <suijingfeng@loongson.cn>
->>>
->> Needs a commit message.
->>
->>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> Same person? Don't need both emails.
->
-> Yes,  suijingfeng@loongson.cn is my company's email. But it can not be 
-> used to send patches to dri-devel,
->
-> when send patches with this email, the patch will not be shown on 
-> patch works.
->
-> Emails  are either blocked or got  rejected  by loongson's mail 
-> server.  It can only receive emails
->
-> from you and other people, but not dri-devel. so have to use my 
-> personal email(15330273260@189.cn) to send patches.
-In this case you can just use your company's email to sign-off
-code and sending with your personal email. It's common practice.
+> On Mon, 21 Mar 2022 at 16:33, Xiaomeng Tong wrote:
+> >
+> > The list iterator will point to a bogus position containing HEAD if
+> > the list is empty or the element is not found in list. This case
+> > should be checked before any use of the iterator, otherwise it will
+> > lead to a invalid memory access. The missing check here is before
+> > "pin = iterm->id;", just add check here to fix the security bug.
+> >
+> > In addition, the list iterator value will *always* be set and non-NULL
+> > by list_for_each_entry(), so it is incorrect to assume that the iterator
+> > value will be NULL if the element is not found in list, considering
+> > the (mis)use here: "if (iterm == NULL".
+> >
+> > Use a new value 'it' as the list iterator, while use the old value
+> > 'iterm' as a dedicated pointer to point to the found element, which
+> > 1. can fix this bug, due to 'iterm' is NULL only if it's not found.
+> > 2. do not need to change all the uses of 'iterm' after the loop.
+> > 3. can also limit the scope of the list iterator 'it' *only inside*
+> >    the traversal loop by simply declaring 'it' inside the loop in the
+> >    future, as usage of the iterator outside of the list_for_each_entry
+> >    is considered harmful. https://lkml.org/lkml/2022/2/17/1032
 
-If you don't want to receiving kernel email in your company mailbox,
-you can add a entry in .mailmap .
+Looking forward to that :-)
 
-Thanks.
-- Jiaxun
+> > Fixes: d5e90b7a6cd1c ("[media] uvcvideo: Move to video_ioctl2")
+> > Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> > ---
+> >  drivers/media/usb/uvc/uvc_v4l2.c | 20 +++++++++++++-------
+> >  1 file changed, 13 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> > index 711556d13d03..e7cdc01ad277 100644
+> > --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> > @@ -871,6 +871,7 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
+> >         struct uvc_video_chain *chain = handle->chain;
+> >         const struct uvc_entity *selector = chain->selector;
+> >         struct uvc_entity *iterm = NULL;
+> > +       struct uvc_entity *it;
+> >         u32 index = input->index;
+> >         int pin = 0;
+> >
+> > @@ -878,22 +879,27 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
+> >             (chain->dev->quirks & UVC_QUIRK_IGNORE_SELECTOR_UNIT)) {
+> >                 if (index != 0)
+> >                         return -EINVAL;
+> > -               list_for_each_entry(iterm, &chain->entities, chain) {
+> > -                       if (UVC_ENTITY_IS_ITERM(iterm))
+> > +               list_for_each_entry(it, &chain->entities, chain) {
+> > +                       if (UVC_ENTITY_IS_ITERM(it)) {
+> > +                               iterm = it;
+> >                                 break;
+> > +                       }
+> >                 }
+> > -               pin = iterm->id;
+> > +               if (iterm)
+> > +                       pin = iterm->id;
+
+You can drop this, pin is not used anymore in the rest of the function.
+
+> >         } else if (index < selector->bNrInPins) {
+> >                 pin = selector->baSourceID[index];
+> > -               list_for_each_entry(iterm, &chain->entities, chain) {
+> > -                       if (!UVC_ENTITY_IS_ITERM(iterm))
+> > +               list_for_each_entry(it, &chain->entities, chain) {
+> > +                       if (!UVC_ENTITY_IS_ITERM(it))
+> >                                 continue;
+> > -                       if (iterm->id == pin)
+> > +                       if (it->id == pin) {
+
+And here you could use
+			if (it->id == selector->baSourceID[index]) {
+
+and drop the local pin variable.
+
+If you're fine with those small changes I can handle them when applying
+the patch to my tree.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> > +                               iterm = it;
+> >                                 break;
+> > +                       }
+> >                 }
+> >         }
+> >
+> > -       if (iterm == NULL || iterm->id != pin)
+> > +       if (iterm == NULL)
+> >                 return -EINVAL;
+> >
+> >         memset(input, 0, sizeof(*input));
+
+-- 
+Regards,
+
+Laurent Pinchart

@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DB24E35CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818424E35CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234460AbiCVAyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S234524AbiCVAyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 20:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234415AbiCVAyh (ORCPT
+        with ESMTP id S234389AbiCVAyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 20:54:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821601B79B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:53:10 -0700 (PDT)
+        Mon, 21 Mar 2022 20:54:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD8635A83;
+        Mon, 21 Mar 2022 17:53:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7596615C1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:53:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE94C340E8;
-        Tue, 22 Mar 2022 00:53:08 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LaVEh2GN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1647910387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UNqa91jv85g1W+RoXaL5qHyr70XERnNNsnCLvPt0CwM=;
-        b=LaVEh2GNUF3W2I+UctON+bK+ZHwPklX8T89pfmDdDnElPruvFdH/Ieg0a/kGJoy+/rSrD0
-        wQ12t+SSN+p+GX6IWclKI0VL8Gnhy13woXazIq7PMa9UzoRwY306nke4LVlcyCw1Vc0TM3
-        QpEK1C2GiEhgOH8f/J1aLlNCEnY4PV0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 77ea47f6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 22 Mar 2022 00:53:06 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux@dominikbrodowski.net
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] random: skip fast_init if hwrng provides large chunk of entropy
-Date:   Mon, 21 Mar 2022 18:52:56 -0600
-Message-Id: <20220322005256.3787-1-Jason@zx2c4.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7FFEB818E8;
+        Tue, 22 Mar 2022 00:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02F2C340E8;
+        Tue, 22 Mar 2022 00:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647910400;
+        bh=co2AhEZBjrG0YC8cOCHbNUYbB/sH2wrgeISR4+AdtrY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=owNgB45nvPnEVhNdk6DfAYDry+J5nUgh9BueEj/WtSG16MFT1Yc+ni1nd5/H8lYCk
+         w9O2DbXO84otWrSv6bSVgF0xoatXaqLPFgGaUphCSUO1onSe888tK7HfFY+sWb7DEv
+         7XPNOWnyiapwcWSguHqFt6oAm9W7XWWcb6X7tEC6xEKNQCXwClLHgsLwMHoRMWmxlu
+         lgnYLWuXnx3IN8Nu8MJS4R7fC859s+nlwA13pmWb/JkPzv0HRD39533HhkYTMBwRAi
+         M6Ayd1SyQsy6LiyS52mY5iWGYVMm+E5t4lRIFvjUGW1RmchtNDkhxe+UPnPBDSUBLv
+         gygesIdSdx06w==
+Date:   Tue, 22 Mar 2022 09:53:15 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next 0/2] bpf: Fix kprobe_multi return probe
+ backtrace
+Message-Id: <20220322095315.3753d18ef8b3dfb69e0a995d@kernel.org>
+In-Reply-To: <20220321070113.1449167-1-jolsa@kernel.org>
+References: <20220321070113.1449167-1-jolsa@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,38 +63,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At boot time, EFI calls add_bootloader_randomness(), which in turn calls
-add_hwgenerator_randomness(). Currently add_hwgenerator_randomness()
-feeds the first 64 bytes of randomness to the "fast init"
-non-crypto-grade phase. But if add_hwgenerator_randomness() gets called
-with more than POOL_MIN_BITS of entropy, there's no point in passing it
-off to the "fast init" stage, since that's enough entropy to bootstrap
-the real RNG. The "fast init" stage is just there to provide _something_
-in the case where we don't have enough entropy to properly bootstrap the
-RNG. But if we do have enough entropy to bootstrap the RNG, the current
-logic doesn't serve a purpose. So, in the case where we're passed
-greater than or equal to POOL_MIN_BITS of entropy, this commit makes us
-skip the "fast init" phase.
+On Mon, 21 Mar 2022 08:01:11 +0100
+Jiri Olsa <jolsa@kernel.org> wrote:
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> hi,
+> Andrii reported that backtraces from kprobe_multi program attached
+> as return probes are not complete and showing just initial entry [1].
+> 
+> Sending the fix together with bpf_get_func_ip inline revert, which is
+> no longer suitable.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 0bdefada7453..78e0ed46a7cb 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1118,7 +1118,7 @@ void rand_initialize_disk(struct gendisk *disk)
- void add_hwgenerator_randomness(const void *buffer, size_t count,
- 				size_t entropy)
- {
--	if (unlikely(crng_init == 0)) {
-+	if (unlikely(crng_init == 0 && entropy < POOL_MIN_BITS)) {
- 		size_t ret = crng_pre_init_inject(buffer, count, true);
- 		mix_pool_bytes(buffer, ret);
- 		count -= ret;
+OK, this series looks good to me.
+
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you,
+
+> 
+> thanks,
+> jirka
+> 
+> 
+> ---
+> [1] https://lore.kernel.org/bpf/CAEf4BzZDDqK24rSKwXNp7XL3ErGD4bZa1M6c_c4EvDSt3jrZcg@mail.gmail.com/T/#m8d1301c0ea0892ddf9dc6fba57a57b8cf11b8c51
+> 
+> Jiri Olsa (2):
+>       Revert "bpf: Add support to inline bpf_get_func_ip helper on x86"
+>       bpf: Fix kprobe_multi return probe backtrace
+> 
+>  kernel/bpf/verifier.c    | 21 +--------------------
+>  kernel/trace/bpf_trace.c | 68 +++++++++++++++++++++++++++++++++++++-------------------------------
+>  2 files changed, 38 insertions(+), 51 deletions(-)
+
+
 -- 
-2.35.1
-
+Masami Hiramatsu <mhiramat@kernel.org>

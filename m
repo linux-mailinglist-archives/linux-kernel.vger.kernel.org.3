@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993F64E3F07
+	by mail.lfdr.de (Postfix) with ESMTP id 00C934E3F05
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiCVNBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
+        id S235125AbiCVNBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiCVNBQ (ORCPT
+        with ESMTP id S234488AbiCVNBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:01:16 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD4285BC4;
-        Tue, 22 Mar 2022 05:59:48 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so2319962wmb.4;
-        Tue, 22 Mar 2022 05:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qO/1Rt3njaG7Cco/tf6+2tDr5ALwB1QCxifmvtUKji4=;
-        b=UqxL2xUbVS1QuLy5m+nvhpsu4YOvbeZnNHuSXt2w861LqKPdoD3VUd9ULsyiZde43T
-         LjLRlM6kRG4U804KLzY/F4e+2ZdLhhEiSfJLARkecUXObwAA2RofhR+UIin1hoNEfkQI
-         yJgrZ+1xWphWQVdhwGkESDqgG6Uw7B75KzlHFgCsu5M21chFC3WPiqDW4RiIEQDCWupz
-         Zv8GTRE/wwaQ5lGIdzVgJvUZEwsiNaSJGzTA1GkJQ06K9UWV8ldRPsoz9WslixCEL6Ve
-         /fIlnVkhgoXpaz8zUWqDCVIFSoMDdlXi6GAyDGggxZ3s93WiZ6erEa7UCZ6lF5Tz0Gol
-         K1dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qO/1Rt3njaG7Cco/tf6+2tDr5ALwB1QCxifmvtUKji4=;
-        b=oPb5P9gb6XL1WCYmJMTziVopUhuvorh7xQfonvMO60eOmqm+Zes20ogurZSSsgoKZr
-         PfbIs7lSXhO5NubSNIgv5bcU9+9TVlP726R3GTfpBbFXmcAgMIrtYj2cs/ae9Z4XxW1o
-         b21bAQbSQpPYEYkcYgy3Xghrv6rzn7tWDwwhs8YmaJ5k3ECnzHpq8xygjBeyzpp+wA9k
-         6+CqnMO3bUb1P+Tw05oEX+7P5RLHBNMYvJ/vxmMuTXq3fnagFRGQ6l660GeKzdjPRyON
-         Vc5iGCoEI+DWvrXCgpVY9Z3YMqslYr0btFF36vsZrP9KrydRc8Gn6OWohJ4vsnPrOt8C
-         L1uA==
-X-Gm-Message-State: AOAM530uWkl3tJXAxxHcQVJzFskUHm0IZOBf/67aHXE4SAvr6G56XzQK
-        Om9Q3eyO3qPZzHMUvdZLSBk=
-X-Google-Smtp-Source: ABdhPJwn51IFuKX1TYbQ/ZSHl3GYWfbHAG3LmMAgE9tK5a+XKZsSVlicmx2Pr/Uz5jTvjAJO0giNpQ==
-X-Received: by 2002:adf:dc92:0:b0:203:f998:7f10 with SMTP id r18-20020adfdc92000000b00203f9987f10mr15660124wrj.567.1647953986596;
-        Tue, 22 Mar 2022 05:59:46 -0700 (PDT)
-Received: from [10.168.10.170] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id g6-20020adfd1e6000000b0020581602ddesm6054wrd.67.2022.03.22.05.59.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 05:59:46 -0700 (PDT)
-Message-ID: <456bc9a8-cb58-c9ef-b1b3-3671ac34a2dc@gmail.com>
-Date:   Tue, 22 Mar 2022 13:59:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [patch] console_codes.4: ffix
-Content-Language: en-US
-To:     nick black <dankamongmen@gmail.com>
-Cc:     "G. Branden Robinson" <g.branden.robinson@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
-References: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
- <CAN4uE+p-uKzHNYry2YhCMfEFBQ2jUqpDAGx=+eha01w-L4fAjg@mail.gmail.com>
- <20220320160217.gws42lklp6ishzub@localhost.localdomain>
- <fd0b3fea-4b40-ffba-442f-00908a5335a9@gmail.com>
- <Yjg3jXCAsjQVHJAi@schwarzgerat.orthanc>
- <809c40c4-068b-8296-57d9-024e6623362d@gmail.com>
- <YjnHmiYL50SqHCW/@schwarzgerat.orthanc>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-In-Reply-To: <YjnHmiYL50SqHCW/@schwarzgerat.orthanc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 09:01:37 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF265EBF2;
+        Tue, 22 Mar 2022 06:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647954010; x=1679490010;
+  h=from:to:cc:subject:date:message-id;
+  bh=W6HrUcctbXcPAIYg27em+LKpxhgknfKqvMEsQfwhYmg=;
+  b=BMeQkIIdzOvxwkha3tT98WSjSWcXA+2MzdbKaAk4tt9jB16ltB3DSjmX
+   yJ6MZy67Rw4/QngCWSC9h6g4nkjNCd9XjgtJGOnuPEm4zPWDf/q2I+6+3
+   uA62QyDvfOkEPtfxY/HEujo3LPzpRyTp+ld3KMpzBFpzolHJbwBBoTg8m
+   eF2UkPlzN1+bebSGkDMaH0Z0PsRFvXTvwWR+4mt3ec17SL/mq1r9pP5Ba
+   tJ5iaidBGzWMqHWJF/142b7/DZqJBwy0P5HFi8/pCGQvdzmYEpyvxORMx
+   kYMT72fpGQ4aIyG/qbuQDK3QDMpwYVO83OB8mklTcSlAttoKyqzqF+Q4/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282645693"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="282645693"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 06:00:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="552087563"
+Received: from gio-01395267463.iind.intel.com ([10.49.4.124])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Mar 2022 06:00:06 -0700
+From:   shruthi.sanil@intel.com
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, mgross@linux.intel.com,
+        srikanth.thokala@intel.com, lakshmi.bai.raja.subramanian@intel.com,
+        mallikarjunappa.sangannavar@intel.com, shruthi.sanil@intel.com
+Subject: [PATCH v10 0/2] Add the driver for Intel Keem Bay SoC timer block
+Date:   Tue, 22 Mar 2022 18:30:03 +0530
+Message-Id: <20220322130005.16045-1-shruthi.sanil@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/22 13:56, nick black wrote:
-> Alejandro Colomar (man-pages) left as an exercise for the reader:
->> Patch applied.
->> However, it's weird:  I had to apply the following to your patch before
->> applying it with `git am`:
->>
->> /^diff --git/s, man4, a/man4,
->> /^diff --git/s, man4, b/man4,
->> /^--- man4/s, man4, a/man4,
->> /^+++ man4/s, man4, b/man4,
->>
->> I'm curious, how did you generate the patch?
-> 
-> i bounced this out from ~/Mail/sent, and have no idea how i
-> originally created it, sorry =\. i'm assuming git email-send?
-> 
+From: Shruthi Sanil <shruthi.sanil@intel.com>
 
-Yeah, I guessed that you used git format-patch && git send-email, 
-especially since there's a git version at the end of the patch.  The 
-weird thing is that git always (AFAIK) writes (and needs) those a/ and 
-b/ prefixes, so... I don't know.
+The timer block supports 1 64-bit free running counter
+and 8 32-bit general purpose timers.
 
-If it repeats, I'll try to investigate the reason.
+Patch 1 holds the device tree binding documentation.
+Patch 2 holds the device driver.
 
-Thanks!
+This driver is tested on the Keem Bay evaluation module board.
 
-Alex
+Changes since v9:
+- Updated the error message with the macro FW_BUG wherever applicable.
 
+Changes since v8:
+- The clockevent stucture has been declared as a global static variable,
+  rather than allocating memory using kzalloc during probing.
+- Updated the print statement indicating the configuration missing as the FW Bug.
+- Updated the comments in the function keembay_timer_isr().
+- Updated the dt-binding to remove 'oneOf' as there is only 1 entry.
+- Updated the dt-binding description clearly indicating that
+  the descrption is about the undelying HW.
+
+Changes since v7:
+- Added back the compatible string "intel,keembay-gpt-creg"
+  as an enum to the mfd device node in the device tree bindings.
+- As the timer is used as a broadcast timer during CPU idle,
+  only one timer is needed. Hence updated the driver accordingly
+  incorporating the review comments.
+
+Changes since v6:
+- Removed the unused compatible string from the mfd device node
+  to fix the error thrown by the make dt-binding command.
+
+Changes since v5:
+- Created a MFD device for the common configuration register
+  in the device tree bindings.
+- Updated the timer driver with the MFD framework to access the
+  common configuration register.
+
+Changes since v4:
+- Updated the description in the device tree bindings.
+- Updated the unit address of all the timers and counter
+  in the device tree binding.
+
+Changes since v3:
+- Update in KConfig file to support COMPILE_TEST for Keem Bay timer.
+- Update in device tree bindings to remove status field.
+- Update in device tree bindings to remove 64-bit address space for
+  the child nodes by using non-empty ranges.
+
+Changes since v2:
+- Add multi timer support.
+- Update in the device tree binding to support multi timers.
+- Code optimization.
+
+Changes since v1:
+- Add support for KEEMBAY_TIMER to get selected through Kconfig.platforms.
+- Add CLOCK_EVT_FEAT_DYNIRQ as part of clockevent feature.
+- Avoid overlapping reg regions across 2 device nodes.
+- Simplify 2 device nodes as 1 because both are from same IP block.
+- Adapt the driver code according to the new simplified devicetree.
+
+Shruthi Sanil (2):
+  dt-bindings: timer: Add bindings for Intel Keem Bay SoC Timer
+  clocksource: Add Intel Keem Bay timer support
+
+ .../bindings/timer/intel,keembay-timer.yaml   | 125 ++++++++++
+ MAINTAINERS                                   |   6 +
+ drivers/clocksource/Kconfig                   |  11 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-keembay.c           | 226 ++++++++++++++++++
+ 5 files changed, 369 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/timer/intel,keembay-timer.yaml
+ create mode 100644 drivers/clocksource/timer-keembay.c
+
+
+base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
 -- 
-Alejandro Colomar
-Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
-http://www.alejandro-colomar.es/
+2.17.1
+

@@ -2,154 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE4E4E43D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF6B4E43E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237470AbiCVQFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S236329AbiCVQIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbiCVQF3 (ORCPT
+        with ESMTP id S238925AbiCVQIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:05:29 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467B86F483;
-        Tue, 22 Mar 2022 09:03:59 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id fd475ee49fd01f3e; Tue, 22 Mar 2022 17:03:57 +0100
-Received: from kreacher.localnet (unknown [213.134.175.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 87B6666BA74;
-        Tue, 22 Mar 2022 17:03:56 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: [PATCH v1 2/2] ACPI: CPPC: Change default error code and clean up debug messages in probe
-Date:   Tue, 22 Mar 2022 17:03:23 +0100
-Message-ID: <2233747.ElGaqSPkdT@kreacher>
-In-Reply-To: <5552457.DvuYhMxLoT@kreacher>
-References: <5552457.DvuYhMxLoT@kreacher>
+        Tue, 22 Mar 2022 12:08:02 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6440589CE8;
+        Tue, 22 Mar 2022 09:06:34 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id C5C443200A16;
+        Tue, 22 Mar 2022 12:06:29 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 22 Mar 2022 12:06:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=njLfScwfSIsbRp
+        wMMXOHvEwf47Gc3N9QuE3MOOyufO8=; b=mrSOWK9B2wHgPPy1DjT/rNR51S7XHT
+        CkZ4vt2wVT5PXr3stz55S5GIETYKh6XAsh0YFBjz/R7Ytx9lrl31W84ccKHdPGbS
+        OTzenxHaxJTbQ21k3XR9ibecctCZqlzw/G6Lkd+LZ3JO/+3Y4w9YY8BLLAI0Dv2y
+        nOdhNkLl94o5RTUwRbQWAjxcSkewGZhPiDKZCnl0PNTrZQlGQXoN3oRyej41v6Sm
+        4IxUFMLyY1YhVoT2/8BL1scF9z3sAVipc9m9wmiX3bI55VtFfxqzZ3hjF0idyFUQ
+        KL8UzWfPvbV1BB+D40sDiOqJSCD+nTNarnJUG0yt2FjOaaJOmID01l/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=njLfScwfSIsbRpwMMXOHvEwf47Gc3N9QuE3MOOyuf
+        O8=; b=T2z74KWnSjzmYsvP1FFaLsySkMOYkhg4dK5Hwn0Z7ZUogqIhBTfd+osc8
+        u1lVrYcuSlGmWkdGao4yAmUYmh2GpPLAY+jCrEuRZbtLKWgOciulSywchyyYy1dr
+        brKPp98QXd/3NNhAMfqNGFfcbF7SouTI8eGSd9MLYhK1jBeh7q087BQy1T7Jdlsd
+        0V1SRFvKHEmSVGkrFHxP4/7sVzyQYT+eDPb4s7kT0R2y28WRaZatrLe01eOBsR30
+        pG1QCeCurPaTj5TgE865iEzDMWXghyz3DrAGvFlKeqFXshwY1wTcB5B+dMdG0NNY
+        ldOiOr6/UnmsBafFsjsOqDggP5tcQ==
+X-ME-Sender: <xms:AfQ5YnSCAHTJqsAkcgC_Gk8HphAS02P0mHFSXDjvdqMeojxt46vAGQ>
+    <xme:AfQ5YozfUfyZanc4v7379uYngHqaa96AR0bDm68oyx8r3i7kXE8ius3sA4lCqTdF6
+    p7CoEASUdfPy4GSNlw>
+X-ME-Received: <xmr:AfQ5Ys1OJHJYuq63v9YGmQmD4hoqy-3YYlQ7t76IHS_H_3HRT5JbAZ2f6_mc9YY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeghedgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
+    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:AvQ5YnAnIeinxahWnfN-0m_a3Zif53vigXpLmye0-GlYbAndSNCURg>
+    <xmx:AvQ5YggvEFfvOnO72nGuBKigfQl2fTqJE4VfdT4z-RlZyR-slW5Ggg>
+    <xmx:AvQ5YrrSa2iP10W6NrEzz42nyPie965Z11_ec1NeMvkAs0_-HWxDRQ>
+    <xmx:BfQ5YrTmy1c9Rg6aGLAQ6QcT2ssLU_tT9xeyFByrQ6xHA6u4lKjP-Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Mar 2022 12:06:23 -0400 (EDT)
+Message-ID: <005099b5-33ed-4cb7-f8e4-10e1de780311@flygoat.com>
+Date:   Tue, 22 Mar 2022 16:06:21 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.187
-X-CLIENT-HOSTNAME: 213.134.175.187
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeghedgkedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudejhedrudekjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrddukeejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidr
- ihhnthgvlhdrtghomhdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtohepihhonhgvlhgrrdhvohhinhgvshgtuhesrghrmhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v11 2/7] MIPS: Loongson64: dts: introduce ls3A4000
+ evaluation board
+Content-Language: en-GB
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-3-15330273260@189.cn>
+ <2644866a-8db2-923e-4227-2aa6d8e375fe@flygoat.com>
+ <2c671752-6684-f87b-7b2d-90568d36adde@189.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <2c671752-6684-f87b-7b2d-90568d36adde@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Change the default error code returned by acpi_cppc_processor_probe()
-from -EFAULT (which is completely inadequate) to -ENODATA and change
-the debug messages printed by it to contain more information and be
-more consistent.
-
-While at it, format some white space to follow the coding style.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/cppc_acpi.c |   27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
-
-Index: linux-pm/drivers/acpi/cppc_acpi.c
-===================================================================
---- linux-pm.orig/drivers/acpi/cppc_acpi.c
-+++ linux-pm/drivers/acpi/cppc_acpi.c
-@@ -654,7 +654,7 @@ int acpi_cppc_processor_probe(struct acp
- 	unsigned int num_ent, i, cpc_rev;
- 	int pcc_subspace_id = -1;
- 	acpi_status status;
--	int ret = -EFAULT;
-+	int ret = -ENODATA;
- 
- 	if (osc_sb_cppc_not_supported)
- 		return -ENODEV;
-@@ -685,8 +685,8 @@ int acpi_cppc_processor_probe(struct acp
- 			goto out_free;
- 		}
- 	} else {
--		pr_debug("Unexpected entry type(%d) for NumEntries\n",
--				cpc_obj->type);
-+		pr_debug("Unexpected _CPC NumEntries entry type (%d) for CPU:%d\n",
-+			 cpc_obj->type, pr->id);
- 		goto out_free;
- 	}
- 	cpc_ptr->num_entries = num_ent;
-@@ -696,8 +696,8 @@ int acpi_cppc_processor_probe(struct acp
- 	if (cpc_obj->type == ACPI_TYPE_INTEGER)	{
- 		cpc_rev = cpc_obj->integer.value;
- 	} else {
--		pr_debug("Unexpected entry type(%d) for Revision\n",
--				cpc_obj->type);
-+		pr_debug("Unexpected _CPC Revision entry type (%d) for CPU:%d\n",
-+			 cpc_obj->type, pr->id);
- 		goto out_free;
- 	}
- 	cpc_ptr->version = cpc_rev;
-@@ -728,7 +728,8 @@ int acpi_cppc_processor_probe(struct acp
- 					if (pcc_data_alloc(pcc_subspace_id))
- 						goto out_free;
- 				} else if (pcc_subspace_id != gas_t->access_width) {
--					pr_debug("Mismatched PCC ids.\n");
-+					pr_debug("Mismatched PCC ids in _CPC for CPU:%d\n",
-+						 pr->id);
- 					goto out_free;
- 				}
- 			} else if (gas_t->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-@@ -747,20 +748,21 @@ int acpi_cppc_processor_probe(struct acp
- 					 * SystemIO doesn't implement 64-bit
- 					 * registers.
- 					 */
--					pr_debug("Invalid access width %d for SystemIO register\n",
--						gas_t->access_width);
-+					pr_debug("Invalid access width %d for SystemIO register in _CPC\n",
-+						 gas_t->access_width);
- 					goto out_free;
- 				}
- 				if (gas_t->address & OVER_16BTS_MASK) {
- 					/* SystemIO registers use 16-bit integer addresses */
--					pr_debug("Invalid IO port %llu for SystemIO register\n",
--						gas_t->address);
-+					pr_debug("Invalid IO port %llu for SystemIO register in _CPC\n",
-+						 gas_t->address);
- 					goto out_free;
- 				}
- 			} else {
- 				if (gas_t->space_id != ACPI_ADR_SPACE_FIXED_HARDWARE || !cpc_ffh_supported()) {
- 					/* Support only PCC, SystemMemory, SystemIO, and FFH type regs. */
--					pr_debug("Unsupported register type: %d\n", gas_t->space_id);
-+					pr_debug("Unsupported register type (%d) in _CPC\n",
-+						 gas_t->space_id);
- 					goto out_free;
- 				}
- 			}
-@@ -768,7 +770,8 @@ int acpi_cppc_processor_probe(struct acp
- 			cpc_ptr->cpc_regs[i-2].type = ACPI_TYPE_BUFFER;
- 			memcpy(&cpc_ptr->cpc_regs[i-2].cpc_entry.reg, gas_t, sizeof(*gas_t));
- 		} else {
--			pr_debug("Err in entry:%d in CPC table of CPU:%d\n", i, pr->id);
-+			pr_debug("Invalid entry type (%d) in _CPC for CPU:%d\n",
-+				 i, pr->id);
- 			goto out_free;
- 		}
- 	}
 
 
+在 2022/3/22 13:38, Sui Jingfeng 写道:
+>
+> On 2022/3/22 21:05, Jiaxun Yang wrote:
+>>
+>>
+>> 在 2022/3/21 16:29, Sui Jingfeng 写道:
+>>> From: suijingfeng <suijingfeng@loongson.cn>
+>>>
+>>> The board name is LS3A4000_7A1000_EVB_BOARD_V1.4, it consist of 1.8Ghz
+>>> mips64r5 4-core CPU and LS7A1000 bridge chip. It has PCIe GEN2 x8 slot,
+>>> therefore can play with discrete graphics card.
+>>
+>> Hi Jingfeng,
+>>
+>> As we've discussed before if you are going to introduce new dts then 
+>> you *MUST*
+>> include it in makefile and wire it up in code.
+>>
+>> A dts file doing nothing lying in the tree is just suspicious.
+>>
+>> Thanks.
+>> - Jiaxun
+>>
+> Hi, Jiaxun,
+>
+> I know what you means, but it is the kernel side developer's job.
+> I am just a naive graphic driver developer,I can not care so much.
+> Below is my private patch which can be used to built specific dts
+> into the linux kernel, therefore make the verification easier.
+Hi Jingfeng,
+
+In kernel world we take care all the stuff we touched ourself :-)
+
+If you are not confident with them please drop those DTS from the patchset
+besides the generic one. I can do the rest for you after getting this 
+set merged.
+
+Thanks.
+- Jiaxun
 

@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3402C4E42D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB954E42DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238486AbiCVPXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S238498AbiCVPXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237034AbiCVPXG (ORCPT
+        with ESMTP id S238380AbiCVPXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:23:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8102026579
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:21:39 -0700 (PDT)
+        Tue, 22 Mar 2022 11:23:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 122735D1BB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647962498;
+        s=mimecast20190719; t=1647962500;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=szKE9b5zifr5pUQVERSCwG97tFibKXOBRDyf0aS4yKI=;
-        b=GvP17zavD1RbRy+GCwsHgzPQb3u8HiQP6pRskiFwcELprPjXFZKZZF4Wb4sD/fG1SwcfwU
-        kpnQWBbtx8KsobTXu9AZhTuaaVqaLgI1NM/NhvCeqeTH9Z35zYMrO37ArybFHCDGibeN8Z
-        1RB606ZmExHjUXe9Aqd5FAQKfNO0epU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=gAuFrsj1h4Cg7KfoKxWaVEp6NQvks0mc1AOVzBtu78M=;
+        b=VOfIrapbwsf/SOOicQZk/x+x6lEgBvXXwcBmRMPs4JMPkToVSieB8B8Qpp4A2Mb8a+xvy7
+        QUQ20EAx0PmTL2summUZDeyypK4vhOTIlzmcZyvKdwzKRMRAD47VswZA0jCLKtuMRgzGqD
+        sW9HgQYC4kQ9859+//MpQBSchLd3u2k=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-e7uUO6AwN-aejqJ1IBpXng-1; Tue, 22 Mar 2022 11:21:35 -0400
-X-MC-Unique: e7uUO6AwN-aejqJ1IBpXng-1
+ us-mta-597-_dhxCymSNGeKx_wRoWWAig-1; Tue, 22 Mar 2022 11:21:36 -0400
+X-MC-Unique: _dhxCymSNGeKx_wRoWWAig-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED53082A682;
-        Tue, 22 Mar 2022 15:21:34 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 252323C01C05;
+        Tue, 22 Mar 2022 15:21:36 +0000 (UTC)
 Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BE9784010A02;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 01D0540D2822;
         Tue, 22 Mar 2022 15:21:34 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 2/3] locking/rwsem: Conditionally wake waiters in reader/writer slowpaths
-Date:   Tue, 22 Mar 2022 11:20:58 -0400
-Message-Id: <20220322152059.2182333-3-longman@redhat.com>
+Subject: [PATCH v2 3/3] locking/rwsem: Always try to wake waiters in out_nolock path
+Date:   Tue, 22 Mar 2022 11:20:59 -0400
+Message-Id: <20220322152059.2182333-4-longman@redhat.com>
 In-Reply-To: <20220322152059.2182333-1-longman@redhat.com>
 References: <20220322152059.2182333-1-longman@redhat.com>
 MIME-Version: 1.0
@@ -53,7 +53,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,145 +61,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an analysis of a recent vmcore, a reader-owned rwsem was found with
-385 readers but no writer in the wait queue. That is kind of unusual
-but it may be caused by some race conditions that we have not fully
-understood yet. In such a case, all the readers in the wait queue should
-join the other reader-owners and acquire the read lock.
+For writers, the out_nolock path will always attempt to wake up waiters.
+This may not be really necessary if the waiter to be removed is not the
+first one.
 
-In rwsem_down_write_slowpath(), an incoming writer will try to
-wake up the front readers under such circumstance. That is not
-the case for rwsem_down_read_slowpath(), add a new helper function
-rwsem_cond_wake_waiter() to do wakeup and use it in both reader and
-writer slowpaths to have a consistent and correct behavior.
+For readers, no attempt to wake up waiter is being made. However, if
+the HANDOFF bit is set and the reader to be removed is the first waiter,
+the waiter behind it will inherit the HANDOFF bit and for a write lock
+waiter waking it up will allow it to spin on the lock to acquire it
+faster. So it can be beneficial to do a wakeup in this case.
+
+Add a new rwsem_del_wake_waiter() helper function to do that consistently
+for both reader and writer out_nolock paths.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/locking/rwsem.c | 68 ++++++++++++++++++++----------------------
- 1 file changed, 32 insertions(+), 36 deletions(-)
+ kernel/locking/rwsem.c | 44 ++++++++++++++++++++++++++++++++----------
+ 1 file changed, 34 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index f71a9693d05a..b4864dea66c4 100644
+index b4864dea66c4..45c1dc753269 100644
 --- a/kernel/locking/rwsem.c
 +++ b/kernel/locking/rwsem.c
-@@ -901,7 +901,7 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
+@@ -375,16 +375,19 @@ rwsem_add_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter)
+  *
+  * Both rwsem_mark_wake() and rwsem_try_write_lock() contain a full 'copy' of
+  * this function. Modify with care.
++ *
++ * Return: true if wait_list isn't empty and false otherwise
   */
- static inline void clear_nonspinnable(struct rw_semaphore *sem)
+-static inline void
++static inline bool
+ rwsem_del_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter)
  {
--	if (rwsem_test_oflags(sem, RWSEM_NONSPINNABLE))
-+	if (unlikely(rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)))
- 		atomic_long_andnot(RWSEM_NONSPINNABLE, &sem->owner);
+ 	lockdep_assert_held(&sem->wait_lock);
+ 	list_del(&waiter->list);
+ 	if (likely(!list_empty(&sem->wait_list)))
+-		return;
++		return true;
+ 
+ 	atomic_long_andnot(RWSEM_FLAG_HANDOFF | RWSEM_FLAG_WAITERS, &sem->count);
++	return false;
  }
  
-@@ -925,6 +925,31 @@ rwsem_spin_on_owner(struct rw_semaphore *sem)
+ /*
+@@ -558,6 +561,33 @@ static void rwsem_mark_wake(struct rw_semaphore *sem,
+ 	}
  }
- #endif
  
 +/*
-+ * Prepare to wake up waiter(s) in the wait queue by putting them into the
-+ * given wake_q if the rwsem lock owner isn't a writer. If rwsem is likely
-+ * reader-owned, wake up read lock waiters in queue front or wake up any
-+ * front waiter otherwise.
-+
-+ * This is being called from both reader and writer slow paths.
++ * Remove a waiter and try to wake up other waiters in the wait queue
++ * This function is called from the out_nolock path of both the reader and
++ * writer slowpaths with wait_lock held. It releases the wait_lock and
++ * optionally wake up waiters before it returns.
 + */
-+static inline void rwsem_cond_wake_waiter(struct rw_semaphore *sem, long count,
-+					  struct wake_q_head *wake_q)
++static inline void
++rwsem_del_wake_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter,
++		      struct wake_q_head *wake_q)
++		      __releases(&sem->wait_lock)
 +{
-+	enum rwsem_wake_type wake_type;
++	bool first = rwsem_first_waiter(sem) == waiter;
 +
-+	if (count & RWSEM_WRITER_MASK)
-+		return;
++	wake_q_init(wake_q);
 +
-+	if (count & RWSEM_READER_MASK) {
-+		wake_type = RWSEM_WAKE_READERS;
-+	} else {
-+		wake_type = RWSEM_WAKE_ANY;
-+		clear_nonspinnable(sem);
-+	}
-+	rwsem_mark_wake(sem, wake_type, wake_q);
++	/*
++	 * If the wait_list isn't empty and the waiter to be deleted is
++	 * the first waiter, we wake up the remaining waiters as they may
++	 * be eligible to acquire or spin on the lock.
++	 */
++	if (rwsem_del_waiter(sem, waiter) && first)
++		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, wake_q);
++	raw_spin_unlock_irq(&sem->wait_lock);
++	if (!wake_q_empty(wake_q))
++		wake_up_q(wake_q);
 +}
 +
  /*
-  * Wait for the read lock to be granted
-  */
-@@ -935,7 +960,6 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 	long rcnt = (count >> RWSEM_READER_SHIFT);
- 	struct rwsem_waiter waiter;
- 	DEFINE_WAKE_Q(wake_q);
--	bool wake = false;
+  * This function must be called with the sem->wait_lock held to prevent
+  * race conditions between checking the rwsem wait list and setting the
+@@ -1050,8 +1080,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
+ 	return sem;
  
- 	/*
- 	 * To prevent a constant stream of readers from starving a sleeping
-@@ -996,22 +1020,11 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 	/* we're now waiting on the lock, but no longer actively locking */
- 	count = atomic_long_add_return(adjustment, &sem->count);
- 
--	/*
--	 * If there are no active locks, wake the front queued process(es).
--	 *
--	 * If there are no writers and we are first in the queue,
--	 * wake our own waiter to join the existing active readers !
--	 */
--	if (!(count & RWSEM_LOCK_MASK)) {
--		clear_nonspinnable(sem);
--		wake = true;
--	}
--	if (wake || (!(count & RWSEM_WRITER_MASK) &&
--		    (adjustment & RWSEM_FLAG_WAITERS)))
+ out_nolock:
+-	rwsem_del_waiter(sem, &waiter);
+-	raw_spin_unlock_irq(&sem->wait_lock);
++	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
+ 	__set_current_state(TASK_RUNNING);
+ 	lockevent_inc(rwsem_rlock_fail);
+ 	return ERR_PTR(-EINTR);
+@@ -1095,7 +1124,6 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+ 			 */
+ 			raw_spin_unlock_irq(&sem->wait_lock);
+ 			wake_up_q(&wake_q);
+-			wake_q_init(&wake_q);	/* Used again, reinit */
+ 			raw_spin_lock_irq(&sem->wait_lock);
+ 		}
+ 	} else {
+@@ -1148,11 +1176,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+ out_nolock:
+ 	__set_current_state(TASK_RUNNING);
+ 	raw_spin_lock_irq(&sem->wait_lock);
+-	rwsem_del_waiter(sem, &waiter);
+-	if (!list_empty(&sem->wait_list))
 -		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, &wake_q);
--
-+	rwsem_cond_wake_waiter(sem, count, &wake_q);
- 	raw_spin_unlock_irq(&sem->wait_lock);
+-	raw_spin_unlock_irq(&sem->wait_lock);
 -	wake_up_q(&wake_q);
-+
-+	if (!wake_q_empty(&wake_q))
-+		wake_up_q(&wake_q);
- 
- 	/* wait to be given the lock */
- 	for (;;) {
-@@ -1050,7 +1063,6 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- static struct rw_semaphore *
- rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- {
--	long count;
- 	struct rwsem_waiter waiter;
- 	DEFINE_WAKE_Q(wake_q);
- 
-@@ -1074,23 +1086,8 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 
- 	/* we're now waiting on the lock */
- 	if (rwsem_first_waiter(sem) != &waiter) {
--		count = atomic_long_read(&sem->count);
--
--		/*
--		 * If there were already threads queued before us and:
--		 *  1) there are no active locks, wake the front
--		 *     queued process(es) as the handoff bit might be set.
--		 *  2) there are no active writers and some readers, the lock
--		 *     must be read owned; so we try to wake any read lock
--		 *     waiters that were queued ahead of us.
--		 */
--		if (count & RWSEM_WRITER_MASK)
--			goto wait;
--
--		rwsem_mark_wake(sem, (count & RWSEM_READER_MASK)
--					? RWSEM_WAKE_READERS
--					: RWSEM_WAKE_ANY, &wake_q);
--
-+		rwsem_cond_wake_waiter(sem, atomic_long_read(&sem->count),
-+				       &wake_q);
- 		if (!wake_q_empty(&wake_q)) {
- 			/*
- 			 * We want to minimize wait_lock hold time especially
-@@ -1105,7 +1102,6 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 		atomic_long_or(RWSEM_FLAG_WAITERS, &sem->count);
- 	}
- 
--wait:
- 	/* wait until we successfully acquire the lock */
- 	set_current_state(state);
- 	for (;;) {
++	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
+ 	lockevent_inc(rwsem_wlock_fail);
+ 	return ERR_PTR(-EINTR);
+ }
 -- 
 2.27.0
 

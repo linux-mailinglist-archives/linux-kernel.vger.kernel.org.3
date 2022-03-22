@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315D04E4908
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D73C04E4902
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237747AbiCVWRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 18:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S237745AbiCVWRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 18:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237780AbiCVWRY (ORCPT
+        with ESMTP id S237806AbiCVWRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Mar 2022 18:17:24 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCE7546B2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:45 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e5bcae3665so133049267b3.16
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:45 -0700 (PDT)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742C654BD9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:48 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e5db04460cso107023327b3.17
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=x5KPGBSUSbYd8r6Fxn0mzFbKXE7+7xB0auo11QNIbWU=;
-        b=QLdsZED2n4IqW8UKETQ8GKP2zRviwfaK8u+UJCNNX/EOS5b5PRE4DBTaE2edFLbtV7
-         AJUk6+u1351fvM95T4Rk6c7p1Nm4K+AR5LoufJBbvGzLsXNQB54gQjTjBogO5ZtluMu4
-         nFNONXZzu469cpjKIJiIpFauUQ1OMOgDwnyrWAO+XIVE9/y4joINUlrLxn0FkynJcX0E
-         9ziIMHvJE5PaVIOOuyT8Li4D2jEuezPz3qrNgtA/e6L11x4lX2EZHY3I/niv5HuFCPq8
-         xsd3+S1IIQn/oFYWLHuCbT8s4H1ADuf76irwyeDYRXa1K+R21u3EDa7geMqAkbNFlZwI
-         FazA==
+        bh=ZQAAS74opi8sj3DsdS3WYbPGk9CAmygqU3vFxd41V8g=;
+        b=V+8Arq7RPuNgR78gOc2Lgu0jG8uK8Q5I/dG5j+tMJq3wK7We+b3Pyxb9WBoD/mkyN4
+         Z51hmsYgbQdw+CV2cnJlEf/wqKaTBl2AqdDtTalFXign7/AgYpV+OLaBJ2D7ek2k4Jtk
+         u7iDVBCPIkGmRRwdkFNWlhFZD7YSCN9q5+PhfHilKW3kOBAamvpMhgmHu8FzVDMI3KQz
+         elvSfFzlWdlJjf6rkjUd0l8JSfjx6Tx9ibn3ymuMP1nLxF0Hku2suY/5BDG3UXLRYBJ0
+         Mts2OfT7o/+61dR16OIs9/nitAXIzS2s48QOYl1IkL11eD3VGiOqywl+JHmRxIS84Z5g
+         X4Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=x5KPGBSUSbYd8r6Fxn0mzFbKXE7+7xB0auo11QNIbWU=;
-        b=beCu3PCRVfuIlySbZCyn93Ow55lbG7C0YO/fBxGfKbld3k7XtZmVhwWhoO3bxq5euq
-         svh2ianrjww7H0hOSUyaf41c3kkdNqPlLEXedi7JBvAdGbcAFclZ7xYRQg6v08EXwNvk
-         JwMl/Tq0xYeUE2qHjvJBLaB0kj5pIKd7im5KTBUEESUfc/dEtfATe3Dsix2dw/URacss
-         WS9ieXOFAfpO2H4F/ouy4756GVCEaO7ovekb4PUz/xHiS8sSslKBmawVqhpsIqXMECxG
-         cLGp2vHmD+JD/iUztLgVCQ5u8CZYR5j1RXIU1MyFhdmnA06CliDUx9ZkqxJgkRQLOMS+
-         qLYQ==
-X-Gm-Message-State: AOAM533tNzFYhK9kpuAQgUKsO9GD7Paiym5OeCUquDt3T4gvmcvRluIn
-        mkpCJibMOclWLtICgXPy7xupbkM7awoRLWu+bW9h7UKC0Bb0PLrMs0VkU5lotvP/eMBnnX4pE7R
-        XZt5ybsPCLkOFLx+kB1aQ5Vjk/wYebmyP7dkgX8KgZxJvlgHoVA+sUwXswElZUwiWhe1G35fD
-X-Google-Smtp-Source: ABdhPJzSL9g/xvSn9I3A0Fn3susXUMd/DqEzperr0Rp1LQzVJ6gC9KCObJzOOKppSekjWHIifoJvEeUd+zLZ
+        bh=ZQAAS74opi8sj3DsdS3WYbPGk9CAmygqU3vFxd41V8g=;
+        b=GAwNQXP2hKR6sH99hmmGF7s5kZJsx0SNjA2XkJHLJG8FPOkhmejcjfvCLSw0X5KXau
+         rspvYwCO8+jcEbrgicNRAlHkswuOVAnmcTGB/7qsgcHPeP1dx3JusskAYxrXX5NQyYCi
+         6eRUhhDdZtdDG69N4miKbQnWKyi6mE0hdDbVyhsul4OImfJuVzzD2QXUL70x6GIXP50s
+         8lE4g0ht+tQG9huEJAE0E6k0EjRXU49vBW51z1eTogguxhDoNrbSsan0UJfhmxx5sn1/
+         +MjF1iRPEufpnmF/RLu+601PO9M/xWjxN8hxYncI5GjwZNnppAteU/VxlotOt4mMhzQ2
+         fqPw==
+X-Gm-Message-State: AOAM5306RwhSDfNBRx9ttTl6weX71Q2sowFXiAUI/SohqfcXjr1NOhY5
+        YlIWA5iezannKqWWPvf9qlAOBNyLanZ/tNNI/llyLki6MAWroFCvpTIoHsvYjLcYeowpNjKmHSJ
+        zPVRbte/yWDK1bhIZFqbmqnViv1DCi7fUXSIW0dk0akRxVDyR0ys9twwh6WlFVK7TlMR1HWuY
+X-Google-Smtp-Source: ABdhPJxRkohH32T3Vy8NMLmcvAC4ShJI4tOMfhoCBl6l0+MyCv0wQ6aE9Jo8WwCiF3YSAzK41a9gIkgEROkv
 X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:1817:acc9:c45f:d133])
- (user=eranian job=sendgmr) by 2002:a81:39d7:0:b0:2e5:2b46:1963 with SMTP id
- g206-20020a8139d7000000b002e52b461963mr31224365ywa.372.1647987345029; Tue, 22
- Mar 2022 15:15:45 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 15:15:12 -0700
+ (user=eranian job=sendgmr) by 2002:a25:86cf:0:b0:633:8702:1bb3 with SMTP id
+ y15-20020a2586cf000000b0063387021bb3mr29936265ybm.515.1647987347460; Tue, 22
+ Mar 2022 15:15:47 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 15:15:13 -0700
 In-Reply-To: <20220322221517.2510440-1-eranian@google.com>
-Message-Id: <20220322221517.2510440-9-eranian@google.com>
+Message-Id: <20220322221517.2510440-10-eranian@google.com>
 Mime-Version: 1.0
 References: <20220322221517.2510440-1-eranian@google.com>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH v7 08/13] ACPI: add perf low power callback
+Subject: [PATCH v7 09/13] perf/x86/amd: add idle hooks for branch sampling
 From:   Stephane Eranian <eranian@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
@@ -70,90 +70,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an optional callback needed by some PMU features, e.g., AMD
-BRS, to give a chance to the perf_events code to change its state before
-a CPU goes to low power and after it comes back.
+On AMD Fam19h Zen3, the branch sampling (BRS) feature must be disabled before
+entering low power and re-enabled (if was active) when returning from low
+power. Otherwise, the NMI interrupt may be held up for too long and cause
+problems. Stopping BRS will cause the NMI to be delivered if it was held up.
 
-The callback is void when the PERF_NEEDS_LOPWR_CB flag is not set.
-This flag must be set in arch specific perf_event.h header whenever needed.
-When not set, there is no impact on the ACPI code.
+Define a perf_amd_brs_lopwr_cb() callback to stop/restart BRS.  The callback
+is protected by a jump label which is enabled only when AMD BRS is detected.
+In all other cases, the callback is never called.
 
 Signed-off-by: Stephane Eranian <eranian@google.com>
 ---
- drivers/acpi/acpi_pad.c       | 6 ++++++
- drivers/acpi/processor_idle.c | 5 +++++
- include/linux/perf_event.h    | 6 ++++++
- 3 files changed, 17 insertions(+)
+ arch/x86/events/amd/brs.c         | 32 +++++++++++++++++++++++++++++++
+ arch/x86/events/amd/core.c        |  4 ++++
+ arch/x86/events/perf_event.h      |  1 +
+ arch/x86/include/asm/perf_event.h | 21 ++++++++++++++++++++
+ 4 files changed, 58 insertions(+)
 
-diff --git a/drivers/acpi/acpi_pad.c b/drivers/acpi/acpi_pad.c
-index f45979aa2d64..a306a07a60b5 100644
---- a/drivers/acpi/acpi_pad.c
-+++ b/drivers/acpi/acpi_pad.c
-@@ -164,6 +164,9 @@ static int power_saving_thread(void *data)
- 				tsc_marked_unstable = 1;
- 			}
- 			local_irq_disable();
-+
-+			perf_lopwr_cb(true);
-+
- 			tick_broadcast_enable();
- 			tick_broadcast_enter();
- 			stop_critical_timings();
-@@ -172,6 +175,9 @@ static int power_saving_thread(void *data)
- 
- 			start_critical_timings();
- 			tick_broadcast_exit();
-+
-+			perf_lopwr_cb(false);
-+
- 			local_irq_enable();
- 
- 			if (time_before(expire_time, jiffies)) {
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index f8e9fa82cb9b..f83596960d9a 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -21,6 +21,7 @@
- #include <linux/cpuidle.h>
- #include <linux/cpu.h>
- #include <linux/minmax.h>
-+#include <linux/perf_event.h>
- #include <acpi/processor.h>
- 
- /*
-@@ -549,6 +550,8 @@ static void wait_for_freeze(void)
+diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
+index 40461c3ce714..185a58cea917 100644
+--- a/arch/x86/events/amd/brs.c
++++ b/arch/x86/events/amd/brs.c
+@@ -7,6 +7,7 @@
+  * Contributed by Stephane Eranian <eranian@google.com>
   */
- static void __cpuidle acpi_idle_do_entry(struct acpi_processor_cx *cx)
- {
-+	perf_lopwr_cb(true);
-+
- 	if (cx->entry_method == ACPI_CSTATE_FFH) {
- 		/* Call into architectural FFH based C-state */
- 		acpi_processor_ffh_cstate_enter(cx);
-@@ -559,6 +562,8 @@ static void __cpuidle acpi_idle_do_entry(struct acpi_processor_cx *cx)
- 		inb(cx->address);
- 		wait_for_freeze();
- 	}
-+
-+	perf_lopwr_cb(false);
+ #include <linux/kernel.h>
++#include <linux/jump_label.h>
+ #include <asm/msr.h>
+ #include <asm/cpufeature.h>
+ 
+@@ -329,3 +330,34 @@ void amd_pmu_brs_sched_task(struct perf_event_context *ctx, bool sched_in)
+ 	if (sched_in)
+ 		amd_brs_poison_buffer();
  }
++
++DEFINE_STATIC_KEY_FALSE(perf_lopwr_needed);
++
++/*
++ * called from ACPI processor_idle.c or acpi_pad.c
++ * with interrupts disabled
++ */
++void perf_amd_brs_lopwr_cb(bool lopwr_in)
++{
++	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
++	union amd_debug_extn_cfg cfg;
++
++	/*
++	 * on mwait in, we may end up in non C0 state.
++	 * we must disable branch sampling to avoid holding the NMI
++	 * for too long. We disable it in hardware but we
++	 * keep the state in cpuc, so we can re-enable.
++	 *
++	 * The hardware will deliver the NMI if needed when brsmen cleared
++	 */
++	if (cpuc->brs_active) {
++		cfg.val = get_debug_extn_cfg();
++		cfg.brsmen = !lopwr_in;
++		set_debug_extn_cfg(cfg.val);
++	}
++}
++
++void __init amd_brs_lopwr_init(void)
++{
++	static_branch_enable(&perf_lopwr_needed);
++}
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index f7bce8364fe4..8e1e818f8195 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include <linux/perf_event.h>
++#include <linux/jump_label.h>
+ #include <linux/export.h>
+ #include <linux/types.h>
+ #include <linux/init.h>
+@@ -1225,6 +1226,9 @@ static int __init amd_core_pmu_init(void)
+ 		/*
+ 		 * put_event_constraints callback same as Fam17h, set above
+ 		 */
++
++		/* branch sampling must be stopped when entering low power */
++		amd_brs_lopwr_init();
+ 	}
  
- /**
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 496eb6aa6e54..1b98e46588bc 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1676,4 +1676,10 @@ typedef int (perf_snapshot_branch_stack_t)(struct perf_branch_entry *entries,
- 					   unsigned int cnt);
- DECLARE_STATIC_CALL(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
- 
-+#ifndef PERF_NEEDS_LOPWR_CB
+ 	x86_pmu.attr_update = amd_attr_update;
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 4d050579dcbd..2ed7bf5b51b1 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1226,6 +1226,7 @@ void amd_brs_enable(void);
+ void amd_brs_enable_all(void);
+ void amd_brs_disable_all(void);
+ void amd_brs_drain(void);
++void amd_brs_lopwr_init(void);
+ void amd_brs_disable_all(void);
+ int amd_brs_setup_filter(struct perf_event *event);
+ void amd_brs_reset(void);
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index 58d9e4b1fa0a..42753a9dc3ed 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -513,6 +513,27 @@ static inline void intel_pt_handle_vmx(int on)
+ #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_AMD)
+  extern void amd_pmu_enable_virt(void);
+  extern void amd_pmu_disable_virt(void);
++
++#if defined(CONFIG_PERF_EVENTS_AMD_BRS)
++
++#define PERF_NEEDS_LOPWR_CB 1
++
++/*
++ * architectural low power callback impacts
++ * drivers/acpi/processor_idle.c
++ * drivers/acpi/acpi_pad.c
++ */
++extern void perf_amd_brs_lopwr_cb(bool lopwr_in);
++DECLARE_STATIC_KEY_FALSE(perf_lopwr_needed);
++
 +static inline void perf_lopwr_cb(bool mode)
 +{
++	/* key enabled only when BRS is available */
++	if (static_branch_unlikely(&perf_lopwr_needed))
++		perf_amd_brs_lopwr_cb(mode);
 +}
-+#endif
++#endif /* PERF_NEEDS_LOPWR_CB */
 +
- #endif /* _LINUX_PERF_EVENT_H */
+ #else
+  static inline void amd_pmu_enable_virt(void) { }
+  static inline void amd_pmu_disable_virt(void) { }
 -- 
 2.35.1.894.gb6a874cedc-goog
 

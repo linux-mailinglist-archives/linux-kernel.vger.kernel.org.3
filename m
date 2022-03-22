@@ -2,161 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F72E4E3A06
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1964E3A07
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiCVIEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S229763AbiCVIEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiCVIEF (ORCPT
+        with ESMTP id S229681AbiCVIEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:04:05 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2123.outbound.protection.outlook.com [40.107.220.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF372AE0B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:02:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ewUGWayJ5RLkZILeLyBRiD9iyJmshOxEqNBdEj61YoRX49LjtOqhzSXe7e9QlRNammQ01Y9e8Wr1m1KISSgm/VpIyhQ4feKxTTcuqU90wjQVqCvBmBd4rDMPGVuVJHeu2GlXQ8Q2lUZDM6y97wsijRMCY3ioDiYhg7a5AnQN0udXFQKNdXMi5W7Hs7+RSLbLVd8/6thbdoJ9s8tVUD+KFw2GqalX8Kv2/qL5biLPT6I+Aenc6+hERooJLMAWEfqjHAH96HsQ4Gt6e36KyWGDbQ4dAAX84tQYgp9s6pUgHHTMcCQD8JMJpdA27/5WKXDdS5ofKK1zXCVXvmpGLEJaYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D2oA1+qp+tRRGIfs5G4Mf54Q58uF3cKWrP/uiYASqz8=;
- b=lmUtwcHX16IWN36yo9fU0Q/ojdrrWTH+0I3dZEr89KHY430XHW9lqcuLbh5TZgV7SpZdXpwrsTVBxDTwbDQw0pJZU+BXxK0iujX4TTLa/B8Y7M8VeRj+kfRrRAcbKFoQN6l2yjyxZ5j8G0gUg/waI+CsBcT33p+IZ5g63SJgrri8/QdJrtFBXPRS3s4PGGpyxDTrBAc/WGJf67ooSDtXVfFkDqMrIBmjtapcxRUOICSpLFgLeNHVIzfmRknjJ2PJoja8VjDafwmFl3h8+mUapIpT9dKtG7qCpxDMpI0qlhs998lYqLTaBOy4ELK2oaXBmZ1GOrg4y47PJat1mjJeuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D2oA1+qp+tRRGIfs5G4Mf54Q58uF3cKWrP/uiYASqz8=;
- b=bpzhoNN5dln/cfZvVoHGqNR6PvZh2pyPPtkgflNV8Xqv/UpqUXE25PXolrvlJzovCVt0J8xlQ8vMKXXE3b7gb/gTKpVprv5vIFfuoNe9yFAxjawFRhPcDQ9pl2ALpO4azZENvxD4HVw7KSraBdO9JRKAocIcZOsAOTaUzqs0/9I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by MN2PR04MB6351.namprd04.prod.outlook.com (2603:10b6:208:1a3::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Tue, 22 Mar
- 2022 08:02:37 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5102.016; Tue, 22 Mar 2022
- 08:02:37 +0000
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        treapking@chromium.org, pihsun@chromium.org, tzungbi@google.com,
-        hsinyi@chromium.org, Xin Ji <xji@analogixsemi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/bridge: anx7625: Set downstream sink into normal status
-Date:   Tue, 22 Mar 2022 16:02:12 +0800
-Message-Id: <20220322080213.1487134-1-xji@analogixsemi.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK0PR03CA0111.apcprd03.prod.outlook.com
- (2603:1096:203:b0::27) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+        Tue, 22 Mar 2022 04:04:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D965A5BC;
+        Tue, 22 Mar 2022 01:02:47 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 08:02:44 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647936165;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bvNTkPDhQaPj8s0AF0E3t0QPzl8IltwCX/h7rPka7HA=;
+        b=ZLmaaveylD0Btpd3hQ1O0OZ8UDj5Gz0Pk0uNTqZXIELvLvdS908LQO1EJf9FtZOU+WI4fw
+        KIPQXg8k0KVp6PVEE9b7qiQUpwXz3wulgFQK7BishaHCS+7HTBbyriGQmc5t+jDL/NieDe
+        7Z76aB44rlW4pblE6Stp/JBu1j53i6nAYF3hEA82Ry1iPjaFVa+Y75Ij66r839ZIKGzZkZ
+        0iwMQknJGcbPrHvhXB8y7EYtEvCioMj52Ejg7ebkppx8qIoatCeDBwD8+u2G9yqvDBbmqq
+        xp3oDKdyGTuIssprP9pbXvU3kQi+QM9YkaouQTCkEw1NAuw1o7j4s0lh5WcJDg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647936165;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bvNTkPDhQaPj8s0AF0E3t0QPzl8IltwCX/h7rPka7HA=;
+        b=28LtrR+8Ifh0+4kksUbzTAWGfgAoI4sexUoolfbhD7SGkg5/5KNtE7BOGUcm0N1RNpk8pF
+        aSlNQ/8U02tNwqAQ==
+From:   "tip-bot2 for Randy Dunlap" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/headers: ARM needs asm/paravirt_api_clock.h too
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220316204146.14000-1-rdunlap@infradead.org>
+References: <20220316204146.14000-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 083ccef6-513a-414b-120a-08da0bda5461
-X-MS-TrafficTypeDiagnostic: MN2PR04MB6351:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR04MB6351FA3442ED8C24BDCAE945C7179@MN2PR04MB6351.namprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /EDf+702vw2vPxBNE/Fbyi9M69mCreKVRGnMO77Gcfq2nUKEuAR4XMsK10JjvT8IqoP4AQFr6DzsSTofvBxfo57+vbP0qhRhZwcGcF3uCrfYaEE61jBCcWPW3PU7TNvH7ij2DEdt55aimYzfE4Fyf5YKIBYOLsztogAVYn93IXolV38VtIH3aPUpeJOPoF40MdDRDDAGArWwqmbqDzn5QHWNPH40MOehFrcz2rzK5m9VpauGdX1raWzqwl10w9spmW1mIb1a+QEX4neA9IFQ1oz3yKpWcdxxLI7Az2SXAB5WUycWLYsnw6Ue5qTra/d3lA1vCFONJXEirGo/ulYxAwlOWLRMw9S3ETZFxD+Swlt5nMRN4MoUKbwuW7zdyIBqOrAtO7292ckjlNQqdcNaeol9L4VF005qADG0AXlhJcWjyPV4Mj7q+Rta9nE3SkDjcUTwixjrE3eA8puWXeQ3htLNtQ+csWP5DdUWAlZWdCEBaNOnckWjTwVjw3MPTwFhnvzKiU+M+U+yrR7J2DISOEQ/QNMOk2PGbT/yVMYFgGyID0NzlvG0MFKcasFeuLXR9A4LiX8IasQGKt+CjyPQSVigl1d6Cep374kZ3oDlt8XMcguKiMQYutTNDV8F+3PxYi5619iW30S4FCBsQdcLl/dmC6IM17SqSa+MppaROCh9LLUkoHOcsSS6vqfUDmIJxo9eZtLLay6HYLWBZgKH7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(26005)(83380400001)(86362001)(6506007)(66946007)(6666004)(110136005)(66476007)(316002)(6486002)(38100700002)(5660300002)(38350700002)(2616005)(7416002)(8936002)(4326008)(2906002)(8676002)(6512007)(55236004)(36756003)(66556008)(52116002)(1076003)(508600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kiKNyGQiLVBS20ua7zWBFY5q8jANew9GFnj+69PpDzJb2QFgsSk2GtaS6Lrs?=
- =?us-ascii?Q?CIXZ/fVz3YsA1tkktf/LfUaLcSU8rv4BnyLgiHaWUcaXhlFG+hL3bCW7BVa7?=
- =?us-ascii?Q?YKjbX9aw7VnaLoRaxyiQpnelDcSK05BWm9l5oZJI2WeGG9Ee3eQ31WqmS6z9?=
- =?us-ascii?Q?M6y4fzdi12plw7vN8qFk00+2l38DNPjW8zDghUF1XxrhpCDtteZmmBkHtjUn?=
- =?us-ascii?Q?WXc8unwhL7WnMqwP0OCHdX813PWb9Na8syL9temTrVrQGqmyik00vaqo3FNl?=
- =?us-ascii?Q?hYsqhlwel6JqQGZ4nmYu02W6cJnMrVQ4Y96a5IgdBwdajcPNHOZJO01ZtKI8?=
- =?us-ascii?Q?5VaGT/HeerCQqfY5YH8PHOv4YYcJbR77DihfzvBIWuD1lYLj1B8n7yyvu8bO?=
- =?us-ascii?Q?QHTiPQ/a07EtqKCjXS3k8uaj5JsI4F4w2J9AVVu+ELye1I0qKHZRoeY+thx7?=
- =?us-ascii?Q?B8pI7q2fcTMADAYkPQdIy5TLuWn7muuFqp0wM/yVs9qj+TxNB1ujiXeeicc8?=
- =?us-ascii?Q?Ljn8QWp014jYGhhvjE7fVVEFCL/VRXxq6ULlY3XoBKJjKCYeZ9xX45PUmYgv?=
- =?us-ascii?Q?y6B6G9C1atClroLqJjeJRG9u6nV10rK7SMiHjtHLLJb/FwK6NV1wH2Qwcgnb?=
- =?us-ascii?Q?N5lamfYp/y7pZMh7Ii06zfpdJ2+fh8JVWAt/e4NACiLjlMMbQ6B+VrVG1SYf?=
- =?us-ascii?Q?TuObtyCLek595wlUdrc3HiFBLuH+JJ24DsOU6MhdVDBy9FbeYnWBLC++q4sc?=
- =?us-ascii?Q?CHoYD3qhAG/wJqIshx/oBu+QjQANdvHS9IdG0rOTCe/qUOxdde9BBZo7A61q?=
- =?us-ascii?Q?VTql9JWfCbv0qp9zTAykBCu7Q+LPaG++PqVgJGNsPttU5lzmvCc85eraaeMz?=
- =?us-ascii?Q?EpYGNY7f4UtZO/hbHoFQ08ZRuNYL4cODuSmwFsBpOrob8kdITiYhQjKWjP50?=
- =?us-ascii?Q?hE6Jyjpi15yrvT8m12wIvjLuiZTBovsqaIX24bjLQ4bXSk2mrFVe7nepfJDR?=
- =?us-ascii?Q?H44Ki2XZnCjUIprQPjKBko4WPhfSQ3xByFoM+b+yW4AreJ0SV2qLM8CULDRw?=
- =?us-ascii?Q?BiXdmDhviaat0POMHCIzK9LXmM3qQi+UYS75fE28bwnuSzb6sjzpjoK0D2kG?=
- =?us-ascii?Q?RX7M+Be/51BaOUYlqxkKjJqTXRxrn2oAPJXF6T2sPu6Fz7Or4MMeXXe9bcQL?=
- =?us-ascii?Q?p+kEHN1+UR4adgRZY1Ws0qXLXioAOq+riYetz1nimOO3djYtSVMNE7pw7BvV?=
- =?us-ascii?Q?co50QCquuUvgn5kCVObV1F/gdDUNO7fOlU8SyInyXZk55gAroElzlTWhLRB7?=
- =?us-ascii?Q?PKjy7ddAbk6wo6U6zxjKMSYaV//KJtm55IJr41GCgLq4+tubo9grKbtYXcMu?=
- =?us-ascii?Q?CkhrApc3ECARI/vsGWbfnPvwR6v9f5A3rnYU84AfYZtCVi+f//zVkTnYdUW1?=
- =?us-ascii?Q?bygU4F3nE5vPnqvvDd5GxTLtbPQARj88?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 083ccef6-513a-414b-120a-08da0bda5461
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 08:02:37.5425
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6vMhnmwUxFwC8jCG12+3mT/K6MwfDsC0tcuDw65bTp+46txYNIhL0sCIQ1LgyHeqlURAznEe31BlSge7oila5Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6351
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164793616404.389.16948202920332556272.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As downstream sink was set into standby mode while bridge disabled,
-this patch used for setting downstream sink into normal status
-while enable bridge.
+The following commit has been merged into the sched/core branch of tip:
 
-Signed-off-by: Xin Ji <xji@analogixsemi.com>
-Reviewed-by: Pin-Yen Lin <treapking@chromium.org>
+Commit-ID:     ffea9fb319360b9ead8befac6bb2db2b54fd53e6
+Gitweb:        https://git.kernel.org/tip/ffea9fb319360b9ead8befac6bb2db2b54fd53e6
+Author:        Randy Dunlap <rdunlap@infradead.org>
+AuthorDate:    Wed, 16 Mar 2022 13:41:46 -07:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Tue, 22 Mar 2022 08:53:10 +01:00
 
+sched/headers: ARM needs asm/paravirt_api_clock.h too
+
+Add <asm/paravirt_api_clock.h> for arch/arm/, mapped to <asm/paravirt.h>,
+to simplify #ifdeffery in generic code.
+
+Fixes this build error introduced by the scheduler tree:
+
+  In file included from ../kernel/sched/core.c:81:
+  ../kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+     87 | # include <asm/paravirt_api_clock.h>
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Fixes: 4ff8f2ca6ccd ("sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20220316204146.14000-1-rdunlap@infradead.org
 ---
-V1 -> V2: use dev_dbg replace of dev_info
----
- drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm/include/asm/paravirt_api_clock.h | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 arch/arm/include/asm/paravirt_api_clock.h
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 9a2a19ad4202..dcf3275a00fe 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -924,12 +924,20 @@ static void anx7625_dp_start(struct anx7625_data *ctx)
- {
- 	int ret;
- 	struct device *dev = &ctx->client->dev;
-+	u8 data;
- 
- 	if (!ctx->display_timing_valid) {
- 		DRM_DEV_ERROR(dev, "mipi not set display timing yet.\n");
- 		return;
- 	}
- 
-+	dev_dbg(dev, "set downstream sink into normal\n");
-+	/* Downstream sink enter into normal mode */
-+	data = 1;
-+	ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
-+	if (ret < 0)
-+		dev_err(dev, "IO error : set sink into normal mode fail\n");
-+
- 	/* Disable HDCP */
- 	anx7625_write_and(ctx, ctx->i2c.rx_p1_client, 0xee, 0x9f);
- 
--- 
-2.25.1
-
+diff --git a/arch/arm/include/asm/paravirt_api_clock.h b/arch/arm/include/asm/paravirt_api_clock.h
+new file mode 100644
+index 0000000..65ac7ce
+--- /dev/null
++++ b/arch/arm/include/asm/paravirt_api_clock.h
+@@ -0,0 +1 @@
++#include <asm/paravirt.h>

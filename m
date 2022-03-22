@@ -2,220 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BA74E44CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8544E44CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239434AbiCVRNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
+        id S239441AbiCVROb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236471AbiCVRNV (ORCPT
+        with ESMTP id S239279AbiCVRO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:13:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A57A98A335
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:11:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647969112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FnfZQdkwW5dihtTgqyz06MglxhoHBi2vvWX4st2kjQw=;
-        b=Qec37p0j+oTcjQZk7kccm+EXDMQAG1j+Mzfh0yogoCYB6R4KRSpwVC0XqWnxfkDRcf76o4
-        PyQBjRsJuwnOL45XTXdmJAWn+1Zch4pHsASxQI+LTjxrA2I+avNP1zV3qvoeBJ8bKNGFOL
-        mwE/7CMfQ/f20EHZ2ee2JOao36dU2pE=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-48-pc5ZAnfyNd6ZHAF2CyBzOQ-1; Tue, 22 Mar 2022 13:11:51 -0400
-X-MC-Unique: pc5ZAnfyNd6ZHAF2CyBzOQ-1
-Received: by mail-qv1-f70.google.com with SMTP id x6-20020ad44626000000b0044119c7bf4aso5952423qvv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:11:51 -0700 (PDT)
+        Tue, 22 Mar 2022 13:14:29 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382123BC;
+        Tue, 22 Mar 2022 10:13:01 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id yy13so37659526ejb.2;
+        Tue, 22 Mar 2022 10:13:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=FnfZQdkwW5dihtTgqyz06MglxhoHBi2vvWX4st2kjQw=;
-        b=fGrm9ma7bhvp2pqvw6i8sQSmoTBMfyjthWdm3+7Jzc6uxSwpa9YoyT35Rj5cJbzRaw
-         gZ+gAGgGGrOX9s+0sYFiXuZjJAJoYzxP2qJOjD4pNBABGOkGamjYsomYNebtYqbaUAId
-         o75ldxxfc6MSCl6ej5YpyY7UVv4/3ewSrubt25vhZ5oGlRaq2Eqe8PyG83H/Hxf6wnwN
-         uIaLO8x+Q+X8kr7Wkitry+KEnigkuPBlYXL4fUd0s7dXT6ycoOdzYKYjFNglK26bWu3C
-         z3fVD9guUzXDAsAo3zyXu23ahLpPtNQO0Yc/7P1o5YsZirkqXiLbWz3bJ1wCa7VqvoeD
-         SHkA==
-X-Gm-Message-State: AOAM532rsUEpRg5pwPCkiw0PnxXQeXQnn0YpIP2gcRnXQB7ExhPC139A
-        US6ScxiwY2bRL+kv1mahU4wOAS8k8mKPKGNqbj8/hMqyXPnc8eQ8FyImTeEqqzHmtRWsNGQj4ZL
-        jKRyaXzUPOZN/N6nJ+nIkfQf+
-X-Received: by 2002:a05:622a:1742:b0:2e1:ecf4:900c with SMTP id l2-20020a05622a174200b002e1ecf4900cmr20877241qtk.473.1647969111060;
-        Tue, 22 Mar 2022 10:11:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzTqkdeotbR+nVjUJ0XbMNpYDChyjCG9RGlT1P9GYGEPw1eh6FSLHW6zPJa2Fvxl9ybteTx2Q==
-X-Received: by 2002:a05:622a:1742:b0:2e1:ecf4:900c with SMTP id l2-20020a05622a174200b002e1ecf4900cmr20877224qtk.473.1647969110797;
-        Tue, 22 Mar 2022 10:11:50 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id e7-20020a37ac07000000b0067d7cd47af4sm9327602qkm.31.2022.03.22.10.11.48
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QmMg/EKl0xW35GBff0jTfkrQ8CFh3/OigBZ5YvVUReU=;
+        b=jtSTADFjdJuSvZWBDAmW6G/s1zf5oHTB5mDzfygCkDS5N1NoDCJ2nAHFcUfJsr+9YH
+         F4rvLrISfSnSPojA9V85BrrMFDuS3vjwByYLxtYR4/aBNRqI2WE9vagT8L9QzgKwht5u
+         wrMyhunKtM/xM/iadqVxcpwcQ4EYA8n/QC+cb/tQ/i9ZWBom9JGg4gDvRc2dkQvVP6HK
+         Xgtr4IMDCZ9zf4R0RnhMCR6mJ/dhq0uaY6XLOS1Vsln2QW99VsVtyVYqK4QuLLKY02+X
+         lEJCyysGeV7EKKAKZk6Ruj8dB66aG/H4wPqOOQLoJKqO3j92voa9iGsZum1RQijrPZOH
+         RBhQ==
+X-Gm-Message-State: AOAM5323lE/q6YG83Gg7NCPkw23kdmLm5zAg20FxuU5E1DaVIQftLnVz
+        Z5MoqDstVnu3nZyZlJIDliA=
+X-Google-Smtp-Source: ABdhPJxWdW95mHvyeWIKeZhKft9eNVv0dZhvZT4MHND9OWy+6l7gJbnt1Tx4cTshSto/2gJnQdZpEg==
+X-Received: by 2002:a17:907:608c:b0:6e0:5204:7454 with SMTP id ht12-20020a170907608c00b006e052047454mr2415804ejc.225.1647969179633;
+        Tue, 22 Mar 2022 10:12:59 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id p12-20020a17090635cc00b006e055c9c91esm490106ejb.101.2022.03.22.10.12.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 10:11:50 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] Documentation: fpga: dfl: add PCI Identification
- documentation
-To:     matthew.gerlach@linux.intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Cc:     hao.wu@intel.com, yilun.xu@intel.com,
-        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org, corbet@lwn.net,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dan.j.williams@intel.com,
-        ashok.raj@intel.com, tianfei.zhang@intel.com
-References: <20220303003534.3307971-1-matthew.gerlach@linux.intel.com>
- <20220303003534.3307971-2-matthew.gerlach@linux.intel.com>
- <6448f21f-7ce1-d9ce-1048-29aca14f9d3d@redhat.com>
- <bc41bc12-0d88-771f-7e78-4e29361fcfd8@intel.com>
- <alpine.DEB.2.22.394.2203041021240.3408681@rhweight-WRK1>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <6c943903-0fb2-324c-5831-d569d53a7a4c@redhat.com>
-Date:   Tue, 22 Mar 2022 10:11:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 22 Mar 2022 10:12:59 -0700 (PDT)
+Message-ID: <3c345ba1-8339-e8c2-8d14-b75d1264bb4d@kernel.org>
+Date:   Tue, 22 Mar 2022 18:12:58 +0100
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.22.394.2203041021240.3408681@rhweight-WRK1>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/4] usb: host: export symbols for xhci hooks usage
 Content-Language: en-US
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220321090204epcas2p31e39a4b8b6fc803ceecac5d19e6e39e9@epcas2p3.samsung.com>
+ <1647853194-62147-2-git-send-email-dh10.jung@samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1647853194-62147-2-git-send-email-dh10.jung@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/03/2022 09:59, Daehwan Jung wrote:
+> Export symbols for xhci hooks usage:
+>     xhci_get_slot_ctx
+>     xhci_get_endpoint_address
+>     - Allow xhci hook to get ep_ctx from the xhci_container_ctx for
+>       getting the ep_ctx information to know which ep is offloading and
+>       comparing the context in remote subsystem memory if needed.
+> 
+>     xhci_ring_alloc
+>     - Allow xhci hook to allocate vendor specific ring.
+> 
+>     xhci_trb_virt_to_dma
+>     - Used to retrieve the DMA address of vendor specific ring.
+> 
+>     xhci_segment_free
+>     xhci_link_segments
+>     - Allow xhci hook to handle vendor specific segment.
+> 
+>     xhci_initialize_ring_info
+>     - Allow xhci hook to initialize vendor specific ring.
+> 
+>     xhci_check_trb_in_td_math
+>     - Allow xhci hook to Check TRB math for validation.
+> 
+>     xhci_address_device
+>     - Allow override to give configuration info to Co-processor.
+> 
+>     xhci_bus_suspend
+>     xhci_bus_resume
+>     - Allow override of suspend and resume for power scenario.
+> 
+>     xhci_remove_stream_mapping
+>     - Allow xhci hook to remove stream mapping.
+> 
 
-On 3/4/22 10:30 AM, matthew.gerlach@linux.intel.com wrote:
->
->
-> On Fri, 4 Mar 2022, Russ Weight wrote:
->
->>
->>
->> On 3/3/22 14:04, Tom Rix wrote:
->>>
->>> On 3/2/22 4:35 PM, matthew.gerlach@linux.intel.com wrote:
->>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>
->>>> Add documentation on identifying FPGA based PCI cards prompted
->>>> by discussion on the linux-fpga@vger.kernel.org mailing list.
->>>>
->>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>> ---
->>>> v2: Introduced in v2.
->>>> ---
->>>>   Documentation/fpga/dfl.rst | 20 ++++++++++++++++++++
->>>>   1 file changed, 20 insertions(+)
->>>>
->>>> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
->>>> index ef9eec71f6f3..5fb2ca8e76d7 100644
->>>> --- a/Documentation/fpga/dfl.rst
->>>> +++ b/Documentation/fpga/dfl.rst
->>>> @@ -502,6 +502,26 @@ Developer only needs to provide a sub feature 
->>>> driver with matched feature id.
->>>>   FME Partial Reconfiguration Sub Feature driver (see 
->>>> drivers/fpga/dfl-fme-pr.c)
->>>>   could be a reference.
->>>>   +PCI Device Identification
->>>> +================================
->>>> +Since FPGA based PCI cards can be reconfigured to a perform a 
->>>> completely
->>>> +new function at runtime, properly identifying such cards and 
->>>> binding the
->>>> +correct driver can be challenging. In many use cases, deployed 
->>>> FPGA based
->>>> +PCI cards are essentially static and the PCI Product ID and Vendor 
->>>> ID pair
->>>> +is sufficient to identify the card.  The DFL framework helps with the
->>>> +dynamic case of deployed FPGA cards changing at run time by providing
->>>> +more detailed information about card discoverable at runtime.
->>>> +
->>>> +At one level, the DFL on a PCI card describes the function of the 
->>>> card.
->>>> +However, the same DFL could be instantiated on different physical 
->>>> cards.
->>>> +Conversely, different DFLs could be instantiated on the same 
->>>> physical card.
->>>> +Practical management of a cloud containing a heterogeneous set of 
->>>> such cards
->>>> +requires a PCI level of card identification. While the PCI Product 
->>>> ID and
->>>> +Vendor ID may be sufficient to bind the dfl-pci driver, it is 
->>>> expected
->>>> +that FPGA PCI cards would advertise suitable Subsystem ID and 
->>>> Subsystem
->>>> +Vendor ID values. PCI Vital Product Data (VPD) can also be used for
->>>> +more granular information about the board.
->>>
->>> This describes a bit more of the problem, it should describe it wrt 
->>> ofs dev id. The introduction of the ofs dev should be explicitly 
->>> called out as a generic pci id.
->
-> The problem I'm describing exists for all FPGA based PCI cards; so I 
-> am purposely trying to be abstract as much as possible.
->
->>>
->>> Why couldn't one of the old pci id's be reused ?
->
-> Yes, old pci id's could be reused, and people have done just that.  We 
-> thought a new PCI ID would minimize confusion with cards that have 
-> already been deployed.
->
->>>
->>> How will the subvendor/subid be enforced ?
->
-> Subvendor and Subid are managed just like any other PCI card with or 
-> without a FPGA.
+NAK, because you ignored my comments from previous submission. It seems
+you prefer to silently skip answering to them, not CC me and then hope I
+will not remember what I asked for.
 
-Reviewing how the kernel uses subvendor and subsystem shows it is not 
-widely used.
+I am sorry, but that is not how it works. This is not how Linux kernel
+is developed. Please answer my questions. If they are unclear, ask for
+explanation. Ignoring all my questions/comments and resending without CC
+is a NAK.
 
-And when it is, it is used to isolate small variations or hw problems in 
-the device, not completely unique cards
 
-There are very few subsytem/subvendor's in pci_id.h, the usual case 
-seems to be hardcoded hex.
-
-So there is no enforcement.
-
-I can not see how this generic id would not be abused by vendors nor how 
-it would not be confusing to the end users.
-
-Tom
-
->
->>>
->>> Is the current security manager patchset smart enough to save the 
->>> board from being bricked when a user doesn't look beyond the pci id ?
->>
->> Yes - the security manager is invoked based of DFL feature ID and 
->> revision, and the functionality is differentiated based on the same 
->> information.
->>
->>>
->>> What happens if a board uses this device id but doesn't have a max10 
->>> to do the update ?
->
-> If a board doesn't have a max10, then there will be no DFH for a max10 
-> in the board's DFLs.  Presumeably, the board would need some update 
-> process, and an approprate DFH would be in that board's DFL.
->
->>>
->>> Tom
->>>
->>>> +
->>>>   Location of DFLs on a PCI Device
->>>>   ================================
->>>>   The original method for finding a DFL on a PCI device assumed the 
->>>> start of the
->>>
->>
->>
-
+Best regards,
+Krzysztof

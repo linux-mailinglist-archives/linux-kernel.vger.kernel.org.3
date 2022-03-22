@@ -2,82 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCBD4E39B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7414E39A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237554AbiCVHdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 03:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        id S237577AbiCVHdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 03:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237518AbiCVHdR (ORCPT
+        with ESMTP id S237562AbiCVHdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:33:17 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8EC1CFCD;
-        Tue, 22 Mar 2022 00:31:50 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id v4so14960610pjh.2;
-        Tue, 22 Mar 2022 00:31:50 -0700 (PDT)
+        Tue, 22 Mar 2022 03:33:52 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3E41D0E8;
+        Tue, 22 Mar 2022 00:32:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=r4xA4YpWvDAW9lMA2GfpmJRYpPh3E38DjIkUV0HV+uY=;
-        b=XNxhv4/i9m6xgW7eDDhyYG5Ouj06COWiugANv4Hkgo/bnHhuClzi/M1F8FtdhuUz1Z
-         /H3sM5jaLVfiRLC/RbTSr2MQt4XDfMmPFlyOQ2bXzz/wIGD+kba5AY4rDD04iDgxk7S0
-         WL+pt8MqZ22r8E9Y/WzOT3H84OufyyXg1FW8TJCB2VssakOsljaCIFdQZHDiklMp65cD
-         EG3mxmqPc6YnxE+zmv+JY/wbwJeEhliVwN5Eu8oXvTj15G5tjOkdatnEjOZA41ygJCdr
-         ZzqWfUrdxqcEyTQBWAcnr580fWrRaowZuJlqGQO4mY/jqp188491P3DmC9kikYcaYYGx
-         0AlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=r4xA4YpWvDAW9lMA2GfpmJRYpPh3E38DjIkUV0HV+uY=;
-        b=mnPvFZxGn86s33RQuh+Fcz9Yl3IMCHYJVKH54/1RSXju5fVsV/YOA3LnRhSXh/FwH/
-         KVH6cmAP15A4vORabc+jyxh4/Nk+Yuuc6g/bIAi/+X0bfqnKtuNV/SmWTAUz/b2phn8r
-         lCDZpgW7XuXX8UcFPSuUr4+FtlYMJlQfnG2a7TtJPtUVurZZeHP0z6Mr/Hl+7l01Csl0
-         SUHY8haU6mYeJRFdQWzX1eMfF9igQTA9CEpsCdJjGxL1OOA+gcdnx9rSpjFL+dfzxFRy
-         ai3Hw+x8kVS0RV8wA/1jGl77/dF0L0427pSiJeB9POXhHmEbdOAeU9OCQHzfeUhLo1Ix
-         nm7w==
-X-Gm-Message-State: AOAM533715zWRndaoS7zbx6CNL8NxDTabhZbyxEvvkmDAI1XMSibLvS6
-        CoQAIjXkyfA37GflXHY14zE=
-X-Google-Smtp-Source: ABdhPJw37CzyUc9LRpoPZhJ7Cqz1Vq5kO/UE+2fGyOYqk66Y101+bDEBftdrZmW6wzUiUmdiS8rH7w==
-X-Received: by 2002:a17:902:f683:b0:153:ee22:18b7 with SMTP id l3-20020a170902f68300b00153ee2218b7mr16451640plg.159.1647934310027;
-        Tue, 22 Mar 2022 00:31:50 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.112])
-        by smtp.gmail.com with ESMTPSA id t8-20020aa79468000000b004f764340d8bsm23806525pfq.92.2022.03.22.00.31.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 00:31:49 -0700 (PDT)
-Message-ID: <7c3c082c-2cad-44ae-1b66-6b1ab73dc11e@gmail.com>
-Date:   Tue, 22 Mar 2022 15:31:43 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH 7/7] kvm: x86/cpuid: Fix Architectural Performance
- Monitoring support
-Content-Language: en-US
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        pbonzini@redhat.com, jmattson@google.com, eranian@google.com,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com, kvm list <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, x86@kernel.org
-References: <cover.1647498015.git.sandipan.das@amd.com>
- <bc58ac02d642ea1fcbd04a525046dfe978e9f323.1647498015.git.sandipan.das@amd.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <bc58ac02d642ea1fcbd04a525046dfe978e9f323.1647498015.git.sandipan.das@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647934344; x=1679470344;
+  h=from:to:cc:subject:date:message-id;
+  bh=bRNWpg+p75m8VUEO5mpqu7xiwCamh4vnnXXnJwBus9U=;
+  b=dfR/CcLrcklrZ8h9CY/+dRIK7pxUbrZOGNwias5EPXzRMJCWu8Ha/5y7
+   b1Cxvm+LwtYCmynSPCEE7YZGrEOAZcTgtjfmnH2eDkCvsRQX5Ocm7sRDC
+   U2O3QkQneMqrH98gTsgXRPZoV1YhKc/iJY6SsB7F5TXJuPFa5EOvTg/JK
+   w=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 22 Mar 2022 00:32:24 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Mar 2022 00:32:23 -0700
+X-QCInternal: smtphost
+Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 22 Mar 2022 13:02:10 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 8E2A944A2; Tue, 22 Mar 2022 13:02:09 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, quic_dkammath@quicinc.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH] drivers/tty/serial/qcom-geni-serial: Remove uart frequency table. Instead, find suitable frequency with call to clk_round_rate.
+Date:   Tue, 22 Mar 2022 13:01:55 +0530
+Message-Id: <1647934315-5189-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,47 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/3/2022 2:28 pm, Sandipan Das wrote:
-> CPUID 0xA provides information on Architectural Performance
-> Monitoring features on some x86 processors. It advertises a
-> PMU version which Qemu uses to determine the availability of
-> additional MSRs to manage the PMCs.
-> 
-> Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
-> the same, the kernel constructs return values based on the
-> x86_pmu_capability irrespective of the vendor.
-> 
-> This CPUID function and additional MSRs are not supported on
-> AMD processors. If PerfMonV2 is detected, the PMU version is
-> set to 2 and guest startup breaks because of an attempt to
-> access a non-existent MSR. Return zeros to avoid this.
-> 
-> Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
-> Reported-by: Vasant Hegde <vasant.hegde@amd.com>
+[Why]
+This change is part of resolving feedback for an earlier
+patch. The UART frequency table is to be replaced with a
+call to clk_round_rate so it would work regardless of
+what the clk driver supports for the particular SoC.
 
-The new 0003 patch introduces this issue (and more kvm issues)
-due to "x86_pmu.version = 2", so this is not a fix in the strictest sense.
+[How]
+Try to find a frequency and divider that exactly matches
+the required rate. If not found, return the closest
+possible frequency and set divider to 1.
 
-Btw, do you need my effort to virtualize AMD PerfMonV2 ?
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+ drivers/tty/serial/qcom_geni_serial.c | 57 ++++++++++++++++++++---------------
+ 1 file changed, 33 insertions(+), 24 deletions(-)
 
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> ---
->   arch/x86/kvm/cpuid.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index b8f8d268d058..1d9ca5726167 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -865,6 +865,11 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->   		union cpuid10_eax eax;
->   		union cpuid10_edx edx;
->   
-> +		if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
-> +			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-> +			break;
-> +		}
-> +
->   		perf_get_x86_pmu_capability(&cap);
->   
->   		/*
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index aedc388..5226673 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -149,12 +149,6 @@ static unsigned int qcom_geni_serial_tx_empty(struct uart_port *port);
+ static void qcom_geni_serial_stop_rx(struct uart_port *uport);
+ static void qcom_geni_serial_handle_rx(struct uart_port *uport, bool drop);
+ 
+-static const unsigned long root_freq[] = {7372800, 14745600, 19200000, 29491200,
+-					32000000, 48000000, 51200000, 64000000,
+-					80000000, 96000000, 100000000,
+-					102400000, 112000000, 120000000,
+-					128000000};
+-
+ #define to_dev_port(ptr, member) \
+ 		container_of(ptr, struct qcom_geni_serial_port, member)
+ 
+@@ -946,32 +940,46 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
+ 	return 0;
+ }
+ 
+-static unsigned long get_clk_cfg(unsigned long clk_freq)
+-{
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(root_freq); i++) {
+-		if (!(root_freq[i] % clk_freq))
+-			return root_freq[i];
+-	}
+-	return 0;
+-}
+-
+-static unsigned long get_clk_div_rate(unsigned int baud,
++static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+ 			unsigned int sampling_rate, unsigned int *clk_div)
+ {
+ 	unsigned long ser_clk;
+ 	unsigned long desired_clk;
++	unsigned long freq, prev, freq_first;
++
++	if (!clk) {
++		pr_err("%s: Invalid clock handle\n", __func__);
++		return 0;
++	}
+ 
+ 	desired_clk = baud * sampling_rate;
+-	ser_clk = get_clk_cfg(desired_clk);
+-	if (!ser_clk) {
+-		pr_err("%s: Can't find matching DFS entry for baud %d\n",
+-								__func__, baud);
+-		return ser_clk;
++	if (!desired_clk) {
++		pr_err("%s: Invalid frequency\n", __func__);
++		return 0;
+ 	}
+ 
++	freq_first = 0;
++	prev = desired_clk;
++	freq = desired_clk - 1;
++	do {
++		if (freq != (desired_clk - 1))
++			prev = freq;
++
++		freq = clk_round_rate(clk, (freq + 1));
++
++		if (!freq_first)
++			freq_first = freq;
++	} while ((freq % desired_clk) && (freq > 0) && (freq != prev));
++
++	if (!(freq % desired_clk))
++		ser_clk = freq;
++	else
++		ser_clk = freq_first;
++
+ 	*clk_div = ser_clk / desired_clk;
++	if ((ser_clk) && (!(*clk_div)))
++		*clk_div = 1;
++
+ 	return ser_clk;
+ }
+ 
+@@ -1003,7 +1011,8 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+ 	if (ver >= QUP_SE_VERSION_2_5)
+ 		sampling_rate /= 2;
+ 
+-	clk_rate = get_clk_div_rate(baud, sampling_rate, &clk_div);
++	clk_rate = get_clk_div_rate((port->se).clk, baud,
++		sampling_rate, &clk_div);
+ 	if (!clk_rate)
+ 		goto out_restart_rx;
+ 
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+

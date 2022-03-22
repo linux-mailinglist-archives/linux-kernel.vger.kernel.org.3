@@ -2,224 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A074E3CAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19BB4E3CB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbiCVKno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S233274AbiCVKoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 06:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiCVKnl (ORCPT
+        with ESMTP id S233267AbiCVKn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:43:41 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC87A80239
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:42:13 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so1497099wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:42:13 -0700 (PDT)
+        Tue, 22 Mar 2022 06:43:59 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6CD81192
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:42:26 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id j13-20020a05600c1c0d00b0038c8f94aac2so1483809wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=vCQ8yvQZrq5DlVAWjFgARpvOjjNUPnfe4PnTinAQEg4=;
-        b=OSq+o0I6V4hvpejOocVKh4QvbV7PukShyPEtAAfowSaUdbtPIE+DDmHXFr9MCKbCID
-         f5swJriUB6SJnYMOOr9x7ilJzNHzbxkd7yoOeYPR5uI5ADkpAGWnchmWj6ozM63VjDux
-         CP1f3oaPfFN6FA+gjOQf6pPb3WAic3QoS3H3mujxo+Q+GHDJP+nVM0iGwCfBwELdt7It
-         K1c5j2f/PHj35YntxQBS+Z/C29OzupM5g33K7BTG6/w5NgFkZWddLKlCNgyAd36AjknK
-         vXfAJaTZLyUkLeqZi/2waAqALHoPQsOflDauHnpN8I3K9uMMbHy/FNUWO1d1rMKI803k
-         TBPQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DFfOJE9o2HqAJOSqBaJFQFfutWgZMKV4kI/WYj73AZY=;
+        b=WkdbAVUeg++bdea+vhZthWfIKaO5ibIym7B19DfJlss0ygAzE8WtcxGgk3Rq9sfFed
+         UwgqLMLZKc6Y5I+J0KyeK+hsrns5AZtsO4FdBKxgXLtHgiGpPPS6eYt4h5NuD+eqzrs8
+         RLLj0Gz4hLS8zETFMySV+vWfhFXY5tlf1zSLiPqTs5B62TnVhn+jFjDyu77AyJ6j/UaZ
+         5xMfZNuKmut2DhAcvKoRWuqv6jjpfmj9nmbrHqpIc/4/So2tfdOZbdQZNfONwnZPj4hC
+         vIyxAzVxXxI1zAMtF4rg90j5QD4xanY1EHUcO/HsV4bsTH4VQTWmnFs6nz4SUmxImV5Q
+         nsgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=vCQ8yvQZrq5DlVAWjFgARpvOjjNUPnfe4PnTinAQEg4=;
-        b=bgB6XvPQhje0zrFOJRnmRsXhAPG1EUfWmVUhRzHuogEOIENpN5l+py/b0PNXvTZXFo
-         OZVC7hrG6IIoUWj0u3/a7ypiZV8AnuSiz58WtMKpO6Ig4xtRo5W9KOXRYwrKikz4PxsM
-         0UUla+z+oNYucnNI+fhfnJ/RV0GkDvi5/C0aOAY+2qpjWaePHVLAYAm6yYES1VoEE+9r
-         PYQedOP8+7w8+BEwxja5T513PpRdzi8wHNzf2/OQIeI0SFXzAmo9GRSRE9MPQL3Ky9rx
-         IL/wPNAhUgmoPYdKsifWxCCh5TBT4FOnh2KHjPcG0lIZyjo+5SvW4MLXUDsQCd5McBHN
-         /hww==
-X-Gm-Message-State: AOAM533PYIien/MUdTVAGKH7g2d+F1qBzFlDziEGMV9lgq25Dq5ht4A0
-        5uxh+la4/sDLh5obVb5DM6SKaQ==
-X-Google-Smtp-Source: ABdhPJzBs9zqbxV4VovtzRunQCoQQapJqNzsmcJBCU0RZJ/hPmh0128AGwMJWw+sRlqnT96Om2IoMQ==
-X-Received: by 2002:a5d:5504:0:b0:203:e3be:518b with SMTP id b4-20020a5d5504000000b00203e3be518bmr21741803wrv.462.1647945732046;
-        Tue, 22 Mar 2022 03:42:12 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:3aa9:ba1f:ba59:87ba])
-        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm1584774wmq.46.2022.03.22.03.42.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DFfOJE9o2HqAJOSqBaJFQFfutWgZMKV4kI/WYj73AZY=;
+        b=CvdLoBRrw8D9n3eyZKHWy3SfFSPS1qrMTQsseHJlzXvkUwiD26kyDfqQ6FP45TVV5K
+         bUuslvjPacR7JueSw2ujnMucYgRyRB7ZFWinVHujPsSK4PyzZZokvk8OOP5js04CfFDd
+         aokwgER6+U0zlhRVcSstV5KrOry56Bt02/feY1+hqHV5LCltd097RwTWdoj9ruRsZQdy
+         VB4+RZbqqdjKLBsArSXz9tkaha9NNN819ArIbTqYjNRN68U6M9/SeqP2NB91lXZiC4sE
+         0bXpE2gOwZDZ1FtrwViYbI9gVU1BvvEEP7TnLRMgmFjVdxf81QWgp0UQj5Yz7VpZoWaC
+         zdpA==
+X-Gm-Message-State: AOAM531uxpKszMipvMSf/9ZI+d3d0z8gBV+bo+KxbR65gHN6JYvO1GoE
+        DVsbtyckl/x7OT+5pGlbH2U=
+X-Google-Smtp-Source: ABdhPJx81q0d4bF09rUxEJOf+ippZhBk0x9Q/jaLlDzPBAcA10A2VFYKheCupIeUBtiYMxr654a3Ww==
+X-Received: by 2002:adf:db4b:0:b0:203:e76f:fc45 with SMTP id f11-20020adfdb4b000000b00203e76ffc45mr20818549wrj.549.1647945744429;
+        Tue, 22 Mar 2022 03:42:24 -0700 (PDT)
+Received: from leap.localnet (host-79-37-100-169.retail.telecomitalia.it. [79.37.100.169])
+        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm1903414wmq.35.2022.03.22.03.42.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 03:42:11 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 11:42:06 +0100
-From:   Marco Elver <elver@google.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: RFC: Use of user space handler vs. SIG_DFL on forced signals
-Message-ID: <Yjmn/kVblV3TdoAq@elver.google.com>
+        Tue, 22 Mar 2022 03:42:23 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Sathish Kumar <skumark1902@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: rtl8712: Fix CamelCase warnings
+Date:   Tue, 22 Mar 2022 11:42:21 +0100
+Message-ID: <1786742.atdPhlSkOF@leap>
+In-Reply-To: <3a85ae64-00c1-6483-f1d7-c12abdd3ff3a@gmail.com>
+References: <20220318101440.13887-1-skumark1902@gmail.com> <YjRswrHu0JUm9331@kroah.com> <3a85ae64-00c1-6483-f1d7-c12abdd3ff3a@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On marted=C3=AC 22 marzo 2022 05:30:29 CET Sathish Kumar wrote:
+> On 18/03/22 4:58 pm, Greg KH wrote:
+> > On Fri, Mar 18, 2022 at 03:44:40PM +0530, Sathish Kumar wrote:
+> >> This patch fixes the checkpatch.pl warnings like:
+> >> CHECK: Avoid CamelCase: <blnEnableRxFF0Filter>
+> >> +   u8 blnEnableRxFF0Filter;
+> >>
+> >> Signed-off-by: Sathish Kumar <skumark1902@gmail.com>
+> >> ---
+> >> Changes in v2:
+> >>      - Remove the "bln" prefix
+> >> ---
+> >>   drivers/staging/rtl8712/drv_types.h   | 2 +-
+> >>   drivers/staging/rtl8712/rtl871x_cmd.c | 2 +-
+> >>   drivers/staging/rtl8712/xmit_linux.c  | 4 ++--
+> >>   3 files changed, 4 insertions(+), 4 deletions(-)
+> >>
+> >> [...]
+> >>
+> >>   	do {
+> >>   		msleep(100);
+> >> -	} while (adapter->blnEnableRxFF0Filter =3D=3D 1);
+> >> +	} while (adapter->enable_rx_ff0_filter =3D=3D 1);
+> > Ah, that's funny.  It's amazing it works at all and that the compiler
+> > doesn't optimize this away.  This isn't a good pattern to use in kernel
+> Do you mean the following code is not a good pattern in kernel?
+> do {
+> msleep();
+> } while(condition);
 
-Currently force_sig_info_to_task() will always unblock a blocked signal
-but deliver the signal to SIG_DFL:
+Exactly, this is not a pattern that works as you expect :)
 
-	[...]
-	 * Note: If we unblock the signal, we always reset it to SIG_DFL,
-	 * since we do not want to have a signal handler that was blocked
-	 * be invoked when user space had explicitly blocked it.
-	[...]
+I was waiting for Greg to detail something more about this subject but,=20
+since it looks like he has no time yet to respond, I'll try to interpret=20
+his words.
 
-Is this requirement part of the POSIX spec? Or is the intent simply to
-attempt to do the least-bad thing?
+(@Greg, please forgive me if I saying something different from what you
+intended to convey :)).
 
-The reason I'm asking is that we've encountered rare crashes with the
-new SIGTRAP on perf events, due to patterns like this:
+The reason why this pattern does not work as expected is too long to be
+explained here. However, I think that Greg is suggesting to you to research
+and use what are called "Condition variables".
 
-	<set up SIGTRAP on a perf event>
-	...
-	sigset_t s;
-	sigemptyset(&s);
-	sigaddset(&s, SIGTRAP | <and others>);
-	sigprocmask(SIG_BLOCK, &s, ...);
-	...
-	<perf event triggers>
+Take some time to research and understand what the Linuc kernel uses for
+waiting for completion or state changes: struct completion,=20
+wait_for_completion(), complete(), and others.
 
-When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
-will force the signal, but revert back to the default handler, thus
-terminating the task.
+Another related mechanism are the Linux kernel "Wait Queues". Do some=20
+research and understand how to use wait_event{,_interruptible,timeout}=20
+and wake_up{,all,interruptible,interruptible_all}.
 
-For other types of signals, is the assumption here that if user space
-blocked the signal, it might not be able to handle it in the first
-place?
+If I recall correctly you may find one or more of my own patches to
+r8188eu where I use those API (git-log is your friend).
 
-For SIGTRAP on perf events we found this makes the situation worse,
-since the cause of the signal wasn't an error condition, but explicitly
-requested monitoring. In this case, we do in fact want delivery of the
-signal to user space even if the signal is blocked, i.e.
-force_sig_perf() should be an unblockable forced synchronous signal to
-user space!
+I hope that all the above will be sufficient to start with.
 
-If there is no good reason to choose SIG_DFL, our preference would be to
-allow this kind of "unblockable forced" signal to the user space handler
-for force_sig_perf() -- with the caveat whoever requests SIGTRAP on perf
-events must be able to provide a handler that can always run safely. But
-we think that's better than crashing.
-
-The below patch would do what we want, but would like to first confirm
-if this is "within spec".
-
-Thoughts?
+Again, Greg please correct my words if I'm misinterpreting what you
+requested to Sathish.
 
 Thanks,
--- Marco
 
------- >8 ------
+=46abio M. De Francesco
 
-From: Marco Elver <elver@google.com>
-Date: Mon, 21 Mar 2022 22:18:09 +0100
-Subject: [PATCH RFC] signal: Always unblock signal to user space for
- force_sig_perf()
+> > I know it's not caused by your change here, but perhaps you might
+> > want to fix this up to work properly?
+> >
+> > thanks,
+> >
+> > greg k-h
+>=20
+> Do i need to replace the above code with some other mechanism?
+>=20
+> If yes, please let me know which mechanism i should use? Or what should=20
+> I do here?
+>=20
+> Note : I am new to Linux kernel development and looking forward to learn=
+=20
+> and contribute.
+>=20
+> Thanks,
+> Sathish
+>=20
+>=20
 
-With SIGTRAP on perf events, we have encountered termination of
-processes due to user space attempting to block delivery of SIGTRAP.
-Consider this case:
 
-	<set up SIGTRAP on a perf event>
-	...
-	sigset_t s;
-	sigemptyset(&s);
-	sigaddset(&s, SIGTRAP | <and others>);
-	sigprocmask(SIG_BLOCK, &s, ...);
-	...
-	<perf event triggers>
 
-When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
-will force the signal, but revert back to the default handler, thus
-terminating the task.
-
-With forced signals, the whole premise of sigprocmask() is invalidated
-since the signal is still delivered, only to the default signal handler.
-The assumption here is that if user space blocked the signal, it might
-not be able to handle it in the first place.
-
-However, for SIGTRAP on perf events we found this makes the situation
-worse, since the cause of the signal wasn't an error condition, but
-explicitly requested monitoring. In this case, we do in fact want
-delivery of the signal to user space even if the signal is blocked, i.e.
-force_sig_perf() should be an unblockable forced synchronous signal to
-user space.
-
-Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
-Signed-off-by: Marco Elver <elver@google.com>
----
- kernel/signal.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 38602738866e..04b7a178a5f3 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1303,6 +1303,7 @@ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p
- 
- enum sig_handler {
- 	HANDLER_CURRENT, /* If reachable use the current handler */
-+	HANDLER_UNBLOCK, /* Use the current handler even if blocked */
- 	HANDLER_SIG_DFL, /* Always use SIG_DFL handler semantics */
- 	HANDLER_EXIT,	 /* Only visible as the process exit code */
- };
-@@ -1311,9 +1312,11 @@ enum sig_handler {
-  * Force a signal that the process can't ignore: if necessary
-  * we unblock the signal and change any SIG_IGN to SIG_DFL.
-  *
-- * Note: If we unblock the signal, we always reset it to SIG_DFL,
-- * since we do not want to have a signal handler that was blocked
-- * be invoked when user space had explicitly blocked it.
-+ * Note: If we unblock the signal and handler != HANDLER_UNBLOCK, we always
-+ * reset it to SIG_DFL, since we do not want to have a signal handler that was
-+ * blocked be invoked when user space had explicitly blocked it. If handler is
-+ * HANDLER_UNBLOCK, user space will always receive the signal and is expected to
-+ * provide a handler that is safe in all contexts.
-  *
-  * We don't want to have recursive SIGSEGV's etc, for example,
-  * that is why we also clear SIGNAL_UNKILLABLE.
-@@ -1332,7 +1335,8 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
- 	ignored = action->sa.sa_handler == SIG_IGN;
- 	blocked = sigismember(&t->blocked, sig);
- 	if (blocked || ignored || (handler != HANDLER_CURRENT)) {
--		action->sa.sa_handler = SIG_DFL;
-+		if (handler != HANDLER_UNBLOCK)
-+			action->sa.sa_handler = SIG_DFL;
- 		if (handler == HANDLER_EXIT)
- 			action->sa.sa_flags |= SA_IMMUTABLE;
- 		if (blocked) {
-@@ -1816,7 +1820,11 @@ int force_sig_perf(void __user *addr, u32 type, u64 sig_data)
- 	info.si_perf_data = sig_data;
- 	info.si_perf_type = type;
- 
--	return force_sig_info(&info);
-+	/*
-+	 * Delivering SIGTRAP on perf events must unblock delivery to not
-+	 * kill the task, but attempt delivery to the user space handler.
-+	 */
-+	return force_sig_info_to_task(&info, current, HANDLER_UNBLOCK);
- }
- 
- /**
--- 
-2.35.1.894.gb6a874cedc-goog
 

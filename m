@@ -2,87 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295EC4E41D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E5B4E421B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238051AbiCVOnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S238100AbiCVOoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238095AbiCVOml (ORCPT
+        with ESMTP id S238254AbiCVOnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:42:41 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227E78930C;
-        Tue, 22 Mar 2022 07:41:09 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id x34so20762162ede.8;
-        Tue, 22 Mar 2022 07:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OzyTaasiO8jKwxHbdxBCj4qwgrblVvgvVf/SVRqTgd0=;
-        b=ekdWaU3QDKePVgnBed2hzRqhGz5Qeu/183EdI12go49UJyJ1bFqc57tT9tW5TaDytI
-         3s82S4vVZoTzakk/CpjzL4O75/EzxiAWdzEwMiWgf2Lta4QhLu0Lsl0j3znXGlkTOIaf
-         srM79z7DK/H/SNs2gRUYhVno/Gvozxqee6t0KB99t3/7+V8GPQKq8/jwpq9aaATb7Jjl
-         ZokV6pTht5oV3wdv07eko4EOO2yhKue98E8Xfh3eQVki0CcUj1/rESZmGMC5Ny4dsbRk
-         oASc4jJIhraUepd+cQpasQWk+8w/EqIgDIuvgIpZIe1EQhb70HABDGOk3J4pOOPX1zu4
-         Eelg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OzyTaasiO8jKwxHbdxBCj4qwgrblVvgvVf/SVRqTgd0=;
-        b=WneydY55qWXO2Bj06IhFHOJsKfPlBhBOhXhN+EHXn7A6gPov3NsTO+NlpPKGbG1LTM
-         ZcsdpHDq/cgYBunBzBGekbRHgJY46AQ+PmIPmC8KISoxSytRkjP4hJHmM4JQ7F17Jfti
-         gNTX0icOnQGshDJ8k9DTrillPzwDpetj8QSnvMJ/mLcDRBJ9Ailylj10uNJwmdLTonGv
-         /WXVl+UJFmGXMOaLUfsIl7Dhk7mMh+00u3MOKhbyRbt8MIrxKo+dj1qIWRaG06nNtP1L
-         SoT/2fes3O4afU8XVHg1t75eI+rXob+QFDBvJmA39ILPzXbmcj6QVf3gW8A15UIbNqLp
-         9pMA==
-X-Gm-Message-State: AOAM533rJUpK0Dr5HTkr7hC300pl2/gDGv8HP4oCUcWDdJiCx3LYPtii
-        Lw5x8axWUOLAM/f5SA0tlZBcCyoMzazCYXAjdSM=
-X-Google-Smtp-Source: ABdhPJzdAIkFASoexhx9ghd9uoqOIfZ4rY1nnGow0Ezbv59oe8/Dpew/t5rSUL6LsutpjDZX15IsCS0wdmCoxBamQiw=
-X-Received: by 2002:a05:6402:d7:b0:413:673:ba2f with SMTP id
- i23-20020a05640200d700b004130673ba2fmr28858146edu.29.1647960067499; Tue, 22
- Mar 2022 07:41:07 -0700 (PDT)
+        Tue, 22 Mar 2022 10:43:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6282C6AA52;
+        Tue, 22 Mar 2022 07:41:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1369CB81D08;
+        Tue, 22 Mar 2022 14:41:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC2B2C340EC;
+        Tue, 22 Mar 2022 14:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647960104;
+        bh=0gzQGGxdHWRt9A+64eem+dLQzBOPjB9Pfn9kxqzAZaI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CpikaUWuQt56x1sx9EXwKtcq6scEeta+u7wRO4aGANqT0USCNDCqzgJnWqma8zQjw
+         DaeEWdV/uqRzKCRUqcq+/UScLNmBwObdYenLG0hwjuUu5ttah1dXGhFKt2hWfPNNBo
+         KDe6xISHwnDIwgW8bz8Y3ZPqJ9cM+Xw+ygmkd+1E1Rgnw086H1yWIfs3+0mSCqIjeI
+         o5/mcKdoW0rO8xKkD3IBVBFhNNRkNhWbDBsY6uynB6zKvLeUV/6992AZlzG5dRDHdh
+         9tABuHiGzLThbMFH45ixkzChZ3afonhVK7Bv/ZBhiixYpGsF0xR8Dq2/N64JpfqXgz
+         p6D/p4pQTjmSA==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, hch@lst.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V9 14/20] riscv: compat: Add elf.h implementation
+Date:   Tue, 22 Mar 2022 22:39:57 +0800
+Message-Id: <20220322144003.2357128-15-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220322144003.2357128-1-guoren@kernel.org>
+References: <20220322144003.2357128-1-guoren@kernel.org>
 MIME-Version: 1.0
-References: <20220310150905.1.Ie0a005d7a763d501e03b7abe8ee968ca99d23282@changeid>
- <CAMRc=McbY6vK_M9fP7Hzg8LE9ANOZKN49hmBFn92YFH+2ToM8w@mail.gmail.com>
-In-Reply-To: <CAMRc=McbY6vK_M9fP7Hzg8LE9ANOZKN49hmBFn92YFH+2ToM8w@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 22 Mar 2022 16:39:57 +0200
-Message-ID: <CAHp75Vf8ktdCYTAULz2j-3CPON75707TpwV0FDL36V_GQ4Ttgw@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Drop CONFIG_DEBUG_GPIO
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Brian Norris <briannorris@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 6:35 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> On Fri, Mar 11, 2022 at 12:09 AM Brian Norris <briannorris@chromium.org> wrote:
+From: Guo Ren <guoren@linux.alibaba.com>
 
-> I like it. It's true we don't see many of those DEBUG constructs
-> anymore nowadays and overhead for might_sleep() and WARN_ON() is
-> negligible.
+Implement necessary type and macro for compat elf. See the code
+comment for detail.
 
-I don't like the part about removing -DDEBUG at all.
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+---
+ arch/riscv/include/asm/elf.h | 41 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
-> Applied, thanks!
-
-Shall I send a partial revert?
-
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index f53c40026c7a..a234656cfb5d 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -8,6 +8,8 @@
+ #ifndef _ASM_RISCV_ELF_H
+ #define _ASM_RISCV_ELF_H
+ 
++#include <uapi/linux/elf.h>
++#include <linux/compat.h>
+ #include <uapi/asm/elf.h>
+ #include <asm/auxvec.h>
+ #include <asm/byteorder.h>
+@@ -18,11 +20,13 @@
+  */
+ #define ELF_ARCH	EM_RISCV
+ 
++#ifndef ELF_CLASS
+ #ifdef CONFIG_64BIT
+ #define ELF_CLASS	ELFCLASS64
+ #else
+ #define ELF_CLASS	ELFCLASS32
+ #endif
++#endif
+ 
+ #define ELF_DATA	ELFDATA2LSB
+ 
+@@ -31,6 +35,8 @@
+  */
+ #define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+ 
++#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
++
+ #define CORE_DUMP_USE_REGSET
+ #define ELF_EXEC_PAGESIZE	(PAGE_SIZE)
+ 
+@@ -43,8 +49,14 @@
+ #define ELF_ET_DYN_BASE		((TASK_SIZE / 3) * 2)
+ 
+ #ifdef CONFIG_64BIT
++#ifdef CONFIG_COMPAT
++#define STACK_RND_MASK		(test_thread_flag(TIF_32BIT) ? \
++				 0x7ff >> (PAGE_SHIFT - 12) : \
++				 0x3ffff >> (PAGE_SHIFT - 12))
++#else
+ #define STACK_RND_MASK		(0x3ffff >> (PAGE_SHIFT - 12))
+ #endif
++#endif
+ /*
+  * This yields a mask that user programs can use to figure out what
+  * instruction set this CPU supports.  This could be done in user space,
+@@ -60,11 +72,19 @@ extern unsigned long elf_hwcap;
+  */
+ #define ELF_PLATFORM	(NULL)
+ 
++#define COMPAT_ELF_PLATFORM	(NULL)
++
+ #ifdef CONFIG_MMU
+ #define ARCH_DLINFO						\
+ do {								\
++	/*							\
++	 * Note that we add ulong after elf_addr_t because	\
++	 * casting current->mm->context.vdso triggers a cast	\
++	 * warning of cast from pointer to integer for		\
++	 * COMPAT ELFCLASS32.					\
++	 */							\
+ 	NEW_AUX_ENT(AT_SYSINFO_EHDR,				\
+-		(elf_addr_t)current->mm->context.vdso);		\
++		(elf_addr_t)(ulong)current->mm->context.vdso);	\
+ 	NEW_AUX_ENT(AT_L1I_CACHESIZE,				\
+ 		get_cache_size(1, CACHE_TYPE_INST));		\
+ 	NEW_AUX_ENT(AT_L1I_CACHEGEOMETRY,			\
+@@ -90,4 +110,23 @@ do {							\
+ 		*(struct user_regs_struct *)regs;	\
+ } while (0);
+ 
++#ifdef CONFIG_COMPAT
++
++#define SET_PERSONALITY(ex)					\
++do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)		\
++		set_thread_flag(TIF_32BIT);			\
++	else							\
++		clear_thread_flag(TIF_32BIT);			\
++	if (personality(current->personality) != PER_LINUX32)	\
++		set_personality(PER_LINUX |			\
++			(current->personality & (~PER_MASK)));	\
++} while (0)
++
++#define COMPAT_ELF_ET_DYN_BASE		((TASK_SIZE_32 / 3) * 2)
++
++/* rv32 registers */
++typedef compat_ulong_t			compat_elf_greg_t;
++typedef compat_elf_greg_t		compat_elf_gregset_t[ELF_NGREG];
++
++#endif /* CONFIG_COMPAT */
+ #endif /* _ASM_RISCV_ELF_H */
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

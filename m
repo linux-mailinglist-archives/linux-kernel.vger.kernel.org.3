@@ -2,140 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5189F4E47FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1550D4E4805
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234850AbiCVVCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 17:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S235137AbiCVVDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 17:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiCVVBy (ORCPT
+        with ESMTP id S235087AbiCVVCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 17:01:54 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CC549FA6;
-        Tue, 22 Mar 2022 14:00:26 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id w17-20020a056830111100b005b22c584b93so13361441otq.11;
-        Tue, 22 Mar 2022 14:00:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eWrxir0SCucnCeRksK5ciUanQNtfuZVTYICxGR86kfU=;
-        b=OfjV47PRyefKJ6oV8LpQwwHaqfr6XfiViI0Q8vEBGKDNxjPUmOLsWw6nXiQ8zLBDwU
-         NEfvsBZ+QJUdnj+srUsm3z54NLf9YmqH+++tZaOwNUZhLl8qg1u/ZZGv1hsE131iQNWZ
-         i97zQcMJVr6ev70b1DNSeuQ7+YTbCge6V0dnNDObK8neUFXe2VIg0aHN3FRdHR1gm41M
-         FHGbWTD2IOfOnwElaKbA4xrR8n8FJfJvG5pRH0lewaBOh3B9V98Wpb32ais1qxyqalS0
-         AwvfjsvrGh3USIKzaAeeGJcfXXe4prBJYJ3aJF28bsZZOhoX575rf803jTpah7FfyvHS
-         crIw==
-X-Gm-Message-State: AOAM531HyO1fnifqsR792QBWdJzO9qj0m2kqY5oEf/unHYxXmTeuYlR3
-        vfgWJMJic86v3Abf/+foK/hIAhymzw==
-X-Google-Smtp-Source: ABdhPJySomTvR7UHgMNwORSbREz8D4fKteTz8sVVbudUJNOk/baydeHAjdQ5mX6dr0LBd2AdAP6wtw==
-X-Received: by 2002:a9d:70da:0:b0:5b2:4dcf:fc74 with SMTP id w26-20020a9d70da000000b005b24dcffc74mr10484475otj.376.1647982825779;
-        Tue, 22 Mar 2022 14:00:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bc36-20020a05682016a400b003240a532a1csm8388702oob.29.2022.03.22.14.00.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 14:00:24 -0700 (PDT)
-Received: (nullmailer pid 2498482 invoked by uid 1000);
-        Tue, 22 Mar 2022 21:00:22 -0000
-Date:   Tue, 22 Mar 2022 16:00:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     dann frazier <dann.frazier@canonical.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
-Message-ID: <Yjo45hHe7eBrD/Ff@robh.at.kernel.org>
-References: <20220321104843.949645-1-maz@kernel.org>
- <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
- <YjiewB5Nz5CyFuI0@xps13.dannf>
- <Yjii9LUC+u/gmijj@robh.at.kernel.org>
- <Yjj9CLyRdFVWxin0@xps13.dannf>
+        Tue, 22 Mar 2022 17:02:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7472B52E0F;
+        Tue, 22 Mar 2022 14:01:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C86DDB81DAB;
+        Tue, 22 Mar 2022 21:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 404D9C340EE;
+        Tue, 22 Mar 2022 21:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647982875;
+        bh=mXcy1351Q+KX/ctUS80CaNY82irKPeqQR5GkcO7LZc0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rqryPQpq3tMfs6fciTQ6wuFbdyUwHo7e533740fhC+9QYD5iYeZzJVTdjxnZSZPPE
+         SDGiRA42cebAjEEtH9Z52TZjrFpEpZsvuOvsmut3LDPbMOcem8E+hWA69ZN/NbTPAJ
+         uLeet+4pdhrukGD8lhS2hO0iA8a+6W8NKYb4BEAbMMbYJkLicn3LBXV40BWwfQNmH3
+         xUBGifQhLXxxkZSvxwOPnvUsg3AKFeYQ7rKjVYnumRhtYAjnmQKBQUpVl8HgXFe4lQ
+         DVUlOTijR8RW2NuKvOlR4ei8Pu9syb5/LqEdSe85RnvVJVxmp84A4I0oa81PBN5DTU
+         cVWBAFrz/+z/Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5659940407; Tue, 22 Mar 2022 18:01:12 -0300 (-03)
+Date:   Tue, 22 Mar 2022 18:01:12 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     kan.liang@linux.intel.com
+Cc:     mingo@redhat.com, peterz@infradead.org, jolsa@redhat.com,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
+        ahmad.yasin@intel.com, zhengjun.xing@linux.intel.com
+Subject: Re: [PATCH] perf script: Add 'brstackinsnlen' for branch stacks
+Message-ID: <Yjo5GGbRUcnzRoGI@kernel.org>
+References: <1647871212-184070-1-git-send-email-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yjj9CLyRdFVWxin0@xps13.dannf>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1647871212-184070-1-git-send-email-kan.liang@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 04:32:40PM -0600, dann frazier wrote:
-> On Mon, Mar 21, 2022 at 11:08:20AM -0500, Rob Herring wrote:
-> > On Mon, Mar 21, 2022 at 09:50:24AM -0600, dann frazier wrote:
-> > > On Mon, Mar 21, 2022 at 10:17:34AM -0500, Rob Herring wrote:
-> > > > On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > > >
-> > > > > Since 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup") was
-> > > > > merged in the 5.5 time frame, PCIe on the venerable XGene platform has
-> > > > > been unusable: 6dce5aa59e0b broke both XGene-1 (Mustang and m400) and
-> > > > > XGene-2 (Merlin), while the addition of c7a75d07827a ("PCI: xgene: Fix
-> > > > > IB window setup") fixed XGene-2, but left the rest of the zoo
-> > > > > unusable.
-> > > > >
-> > > > > It is understood that this systems come with "creative" DTs that don't
-> > > > > match the expectations of modern kernels. However, there is little to
-> > > > > be gained by forcing these changes on users -- the firmware is not
-> > > > > upgradable, and the current owner of the IP will deny that these
-> > > > > machines have ever existed.
-> > > > 
-> > > > The gain for fixing this properly is not having drivers do their own
-> > > > dma-ranges parsing. We've seen what happens when drivers do their own
-> > > > parsing of standard properties (e.g. interrupt-map). Currently, we
-> > > > don't have any drivers doing their own parsing:
-> > > > 
-> > > > $ git grep of_pci_dma_range_parser_init
-> > > > drivers/of/address.c:int of_pci_dma_range_parser_init(struct
-> > > > of_pci_range_parser *parser,
-> > > > drivers/of/address.c:EXPORT_SYMBOL_GPL(of_pci_dma_range_parser_init);
-> > > > drivers/of/address.c:#define of_dma_range_parser_init
-> > > > of_pci_dma_range_parser_init
-> > > > drivers/of/unittest.c:  if (of_pci_dma_range_parser_init(&parser, np)) {
-> > > > drivers/pci/of.c:       err = of_pci_dma_range_parser_init(&parser, dev_node);
-> > > > include/linux/of_address.h:extern int
-> > > > of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
-> > > > include/linux/of_address.h:static inline int
-> > > > of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
-> > > > 
-> > > > And we can probably further refactor this to be private to drivers/pci/of.c.
-> > > > 
-> > > > For XGene-2 the issue is simply that the driver depends on the order
-> > > > of dma-ranges entries.
-> > > > 
-> > > > For XGene-1, I'd still like to understand what the issue is. Reverting
-> > > > the first fix and fixing 'dma-ranges' should have fixed it. I need a
-> > > > dump of how the IB registers are initialized in both cases.
-> > > 
-> > > Happy to provide that for the m400 if told how :)
-> > 
-> > Something like the below patch. This should be with the 'dma-ranges' 
-> > DT change and only c7a75d07827a reverted.
+Em Mon, Mar 21, 2022 at 07:00:12AM -0700, kan.liang@linux.intel.com escreveu:
+> From: Kan Liang <kan.liang@linux.intel.com>
 > 
-> https://paste.ubuntu.com/p/RHzBd5jT6v/
+> When analyzing with the perf script, it's useful to understand the
+> captured instruction and the next sequential instruction. To calculate
+> the address of the next sequential instruction, the length of the
+> captured instruction is required. For example, you can’t know the next
+> sequential instruction after an unconditional branch unless you
+> calculate that based on its length.
 > 
-> Note that networking does come up with this setup. That surprised me
-> because I thought I'd tested this combo before, but apparently what
-> I'd tested before was 6dce5aa59e0b reverted + the dtb change:
->   https://lore.kernel.org/linux-pci/YgXG838iMrS1l8SC@xps13.dannf/
+> For branch stacks, the current perf script only prints the instruction
+> bytes with 'brstackinsn', but lack of instruction length.
+> 
+> Add 'brstackinsnlen' to print the instruction length.
+> 
+> $perf script -F ip,brstackinsn,brstackinsnlen --xed
+>      7fa555be8f75
+>         _start:
+>         00007fa555be8090        mov %rsp, %rdi          ilen: 3
+>         00007fa555be8093        callq  0x7fa555be8ea0   ilen: 5 # PRED
+> 102 cycles [102] 0.02 IPC
+>         _dl_start+38:
+>         00007fa555be8ec6        movq  %rdx,0x227853(%rip)       ilen: 7
+>         00007fa555be8ecd        leaq  0x227f94(%rip),%rdx       ilen: 7
+> 
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 
-That doesn't make sense. I just noticed there's an error in what I 
-told you to do for dma-ranges. I fixed the wrong cell as it should be:
+You forgot to update tools/perf/Documentation/perf-script.txt, I added
+it this time.
 
-- dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
-+ dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x42000000 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+Thanks, applied.
 
-Rob
+- Arnaldo
+
+> ---
+>  tools/perf/builtin-script.c | 44 ++++++++++++++++++++++++++++++++------------
+>  1 file changed, 32 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index fa478dd..5a7b2b0 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -124,6 +124,7 @@ enum perf_output_field {
+>  	PERF_OUTPUT_DATA_PAGE_SIZE  = 1ULL << 33,
+>  	PERF_OUTPUT_CODE_PAGE_SIZE  = 1ULL << 34,
+>  	PERF_OUTPUT_INS_LAT         = 1ULL << 35,
+> +	PERF_OUTPUT_BRSTACKINSNLEN  = 1ULL << 36,
+>  };
+>  
+>  struct perf_script {
+> @@ -191,6 +192,7 @@ struct output_option {
+>  	{.str = "data_page_size", .field = PERF_OUTPUT_DATA_PAGE_SIZE},
+>  	{.str = "code_page_size", .field = PERF_OUTPUT_CODE_PAGE_SIZE},
+>  	{.str = "ins_lat", .field = PERF_OUTPUT_INS_LAT},
+> +	{.str = "brstackinsnlen", .field = PERF_OUTPUT_BRSTACKINSNLEN},
+>  };
+>  
+>  enum {
+> @@ -488,7 +490,7 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
+>  		       "selected. Hence, no address to lookup the source line number.\n");
+>  		return -EINVAL;
+>  	}
+> -	if (PRINT_FIELD(BRSTACKINSN) && !allow_user_set &&
+> +	if ((PRINT_FIELD(BRSTACKINSN) || PRINT_FIELD(BRSTACKINSNLEN)) && !allow_user_set &&
+>  	    !(evlist__combined_branch_type(session->evlist) & PERF_SAMPLE_BRANCH_ANY)) {
+>  		pr_err("Display of branch stack assembler requested, but non all-branch filter set\n"
+>  		       "Hint: run 'perf record -b ...'\n");
+> @@ -1122,10 +1124,17 @@ static int print_srccode(struct thread *thread, u8 cpumode, uint64_t addr)
+>  
+>  static int ip__fprintf_jump(uint64_t ip, struct branch_entry *en,
+>  			    struct perf_insn *x, u8 *inbuf, int len,
+> -			    int insn, FILE *fp, int *total_cycles)
+> +			    int insn, FILE *fp, int *total_cycles,
+> +			    struct perf_event_attr *attr)
+>  {
+> -	int printed = fprintf(fp, "\t%016" PRIx64 "\t%-30s\t#%s%s%s%s", ip,
+> -			      dump_insn(x, ip, inbuf, len, NULL),
+> +	int ilen = 0;
+> +	int printed = fprintf(fp, "\t%016" PRIx64 "\t%-30s\t", ip,
+> +			      dump_insn(x, ip, inbuf, len, &ilen));
+> +
+> +	if (PRINT_FIELD(BRSTACKINSNLEN))
+> +		printed += fprintf(fp, "ilen: %d\t", ilen);
+> +
+> +	printed += fprintf(fp, "#%s%s%s%s",
+>  			      en->flags.predicted ? " PRED" : "",
+>  			      en->flags.mispred ? " MISPRED" : "",
+>  			      en->flags.in_tx ? " INTX" : "",
+> @@ -1211,7 +1220,8 @@ static int perf_sample__fprintf_brstackinsn(struct perf_sample *sample,
+>  		printed += ip__fprintf_sym(entries[nr - 1].from, thread,
+>  					   x.cpumode, x.cpu, &lastsym, attr, fp);
+>  		printed += ip__fprintf_jump(entries[nr - 1].from, &entries[nr - 1],
+> -					    &x, buffer, len, 0, fp, &total_cycles);
+> +					    &x, buffer, len, 0, fp, &total_cycles,
+> +					    attr);
+>  		if (PRINT_FIELD(SRCCODE))
+>  			printed += print_srccode(thread, x.cpumode, entries[nr - 1].from);
+>  	}
+> @@ -1242,14 +1252,17 @@ static int perf_sample__fprintf_brstackinsn(struct perf_sample *sample,
+>  			printed += ip__fprintf_sym(ip, thread, x.cpumode, x.cpu, &lastsym, attr, fp);
+>  			if (ip == end) {
+>  				printed += ip__fprintf_jump(ip, &entries[i], &x, buffer + off, len - off, ++insn, fp,
+> -							    &total_cycles);
+> +							    &total_cycles, attr);
+>  				if (PRINT_FIELD(SRCCODE))
+>  					printed += print_srccode(thread, x.cpumode, ip);
+>  				break;
+>  			} else {
+>  				ilen = 0;
+> -				printed += fprintf(fp, "\t%016" PRIx64 "\t%s\n", ip,
+> +				printed += fprintf(fp, "\t%016" PRIx64 "\t%s", ip,
+>  						   dump_insn(&x, ip, buffer + off, len - off, &ilen));
+> +				if (PRINT_FIELD(BRSTACKINSNLEN))
+> +					printed += fprintf(fp, "\tilen: %d", ilen);
+> +				printed += fprintf(fp, "\n");
+>  				if (ilen == 0)
+>  					break;
+>  				if (PRINT_FIELD(SRCCODE))
+> @@ -1292,16 +1305,23 @@ static int perf_sample__fprintf_brstackinsn(struct perf_sample *sample,
+>  			      machine, thread, &x.is64bit, &x.cpumode, false);
+>  		if (len <= 0)
+>  			goto out;
+> -		printed += fprintf(fp, "\t%016" PRIx64 "\t%s\n", sample->ip,
+> -			dump_insn(&x, sample->ip, buffer, len, NULL));
+> +		ilen = 0;
+> +		printed += fprintf(fp, "\t%016" PRIx64 "\t%s", sample->ip,
+> +			dump_insn(&x, sample->ip, buffer, len, &ilen));
+> +		if (PRINT_FIELD(BRSTACKINSNLEN))
+> +			printed += fprintf(fp, "\tilen: %d", ilen);
+> +		printed += fprintf(fp, "\n");
+>  		if (PRINT_FIELD(SRCCODE))
+>  			print_srccode(thread, x.cpumode, sample->ip);
+>  		goto out;
+>  	}
+>  	for (off = 0; off <= end - start; off += ilen) {
+>  		ilen = 0;
+> -		printed += fprintf(fp, "\t%016" PRIx64 "\t%s\n", start + off,
+> +		printed += fprintf(fp, "\t%016" PRIx64 "\t%s", start + off,
+>  				   dump_insn(&x, start + off, buffer + off, len - off, &ilen));
+> +		if (PRINT_FIELD(BRSTACKINSNLEN))
+> +			printed += fprintf(fp, "\tilen: %d", ilen);
+> +		printed += fprintf(fp, "\n");
+>  		if (ilen == 0)
+>  			break;
+>  		if (arch_is_branch(buffer + off, len - off, x.is64bit) && start + off != sample->ip) {
+> @@ -1459,7 +1479,7 @@ static int perf_sample__fprintf_insn(struct perf_sample *sample,
+>  		for (i = 0; i < sample->insn_len; i++)
+>  			printed += fprintf(fp, " %02x", (unsigned char)sample->insn[i]);
+>  	}
+> -	if (PRINT_FIELD(BRSTACKINSN))
+> +	if (PRINT_FIELD(BRSTACKINSN) || PRINT_FIELD(BRSTACKINSNLEN))
+>  		printed += perf_sample__fprintf_brstackinsn(sample, thread, attr, machine, fp);
+>  
+>  	return printed;
+> @@ -3716,7 +3736,7 @@ int cmd_script(int argc, const char **argv)
+>  		     "Valid types: hw,sw,trace,raw,synth. "
+>  		     "Fields: comm,tid,pid,time,cpu,event,trace,ip,sym,dso,"
+>  		     "addr,symoff,srcline,period,iregs,uregs,brstack,"
+> -		     "brstacksym,flags,bpf-output,brstackinsn,brstackoff,"
+> +		     "brstacksym,flags,bpf-output,brstackinsn,brstackinsnlen,brstackoff,"
+>  		     "callindent,insn,insnlen,synth,phys_addr,metric,misc,ipc,tod,"
+>  		     "data_page_size,code_page_size,ins_lat",
+>  		     parse_output_fields),
+> -- 
+> 2.7.4
+
+-- 
+
+- Arnaldo

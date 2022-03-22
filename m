@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828944E47D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BD14E47D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbiCVUza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S234478AbiCVU4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234275AbiCVUz3 (ORCPT
+        with ESMTP id S234388AbiCVU4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:55:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7A91014;
-        Tue, 22 Mar 2022 13:54:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB50DB81DAA;
-        Tue, 22 Mar 2022 20:53:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D891C340EC;
-        Tue, 22 Mar 2022 20:53:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647982438;
-        bh=9jAuSLmCJPwj8SV8wuPWyMh09qiLPip8v2vrMjaG1os=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oElMREgC1PdzF7SzFMF9dVMinsYT4Jbh17rKIRaWXonaPOmsbZDKIK8WjB+gay46/
-         HTrOKY2VN7UVHUYTg0PjJIkP6P/fjAwT5oFTjVKlJB0r6h+kbTfzRR8tnGl+HmcTpy
-         u4gDPhzDhjM7LJaHNE5RQnDjUSw0XZivfk8q99OYa7vjOH58ldN4D4biz8TYCTUwet
-         VLoTjQAJwFUkS+mtt8XeFWYhALEqT4zzYdREw2XXqvSp4KpTTDaAzIhwPFGIOMcbcR
-         Ao9K55BTL2Z/0aCAyZXXWGPep+U+Uq7VVXNbTp60/FTX+nxPZEylPyLFkD7B0ET66b
-         SJKbyrR08I3Xg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E2A5940407; Tue, 22 Mar 2022 17:53:55 -0300 (-03)
-Date:   Tue, 22 Mar 2022 17:53:55 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] perf parse-events: Move slots only with topdown
-Message-ID: <Yjo3Y+zLljKU1lVO@kernel.org>
-References: <20220321223344.1034479-1-irogers@google.com>
- <ffd440b7-fef9-a5ae-95b7-73c1f8a212ef@linux.intel.com>
+        Tue, 22 Mar 2022 16:56:14 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DC56403;
+        Tue, 22 Mar 2022 13:54:45 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id r13so10069182wrr.9;
+        Tue, 22 Mar 2022 13:54:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Nm9kNxWjn7RnZBv7T0y2dpcp4X3ccJqY0HeY/D2prMg=;
+        b=1wO5oV1GR/340cKtiuLmWpMy55MVgiNSDIkRt9YEFULoDGrvn2WXh97x8HjNNObCdu
+         7iNPiT/Zw4FkEubhrWh5ApmkcsnSWA/vZogi0W6mwaGAkQktu6eXlcjblWhAKvf7s4kt
+         yK33UQz9zan2nY52vZMCRrbXUD2aggc3Hxrzdb+qjxzN8KDAsmZ30G6GjYZ/dMdpXPLe
+         PLcWR4IWjrfXkPpQaiHULIJnuAAb0s9gPLPZqd1hisfHg3p6wBmohqghq8aWiDqVt8+O
+         DMoPSnmabnKrB5qdDYSC5RktUIKYDq7LFnVRuYLz4Qu0qM+6FMn/G7UDQdz8AWSG1A51
+         4gUg==
+X-Gm-Message-State: AOAM53117JlCX4RJtgCABCt+x3qfnnqtMXIjFU+ZlAMkhaH41R2Fj6rS
+        SxGbduC6pV7goqDHLLK8Gdw=
+X-Google-Smtp-Source: ABdhPJwMUpIb65NG6U4I7fCjG65Ju2blPyHep4hjnE+vnv2JJ/FNBvgFYbvAPI7Rc9Z9Uki0aR2gbw==
+X-Received: by 2002:adf:f881:0:b0:203:f9b1:a6ab with SMTP id u1-20020adff881000000b00203f9b1a6abmr17046504wrp.410.1647982483671;
+        Tue, 22 Mar 2022 13:54:43 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b0038c90f61942sm2624524wmq.28.2022.03.22.13.54.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 13:54:43 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 20:54:41 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
+Subject: [GIT PULL] Hyper-V next for 5.18
+Message-ID: <20220322205441.ah7k6aj7csdwa3b6@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ffd440b7-fef9-a5ae-95b7-73c1f8a212ef@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Mar 22, 2022 at 07:48:48AM -0400, Liang, Kan escreveu:
-> On 3/21/2022 6:33 PM, Ian Rogers wrote:
-> > If slots isn't with a topdown event then moving it is unnecessary. For
-> > example {instructions, slots} is re-ordered:
-> > 
-> > $ perf stat -e '{instructions,slots}' -a sleep 1
-> > 
-> >   Performance counter stats for 'system wide':
-> > 
-> >         936,600,825      slots
-> >         144,440,968      instructions
-> > 
-> >         1.006061423 seconds time elapsed
-> > 
-> > Which can break tools expecting the command line order to match the
-> > printed order. It is necessary to move the slots event first when it
-> > appears with topdown events. Add extra checking so that the slots event
-> > is only moved in the case of there being a topdown event like:
-> > 
-> > $ perf stat -e '{instructions,slots,topdown-fe-bound}' -a sleep 1
-> > 
-> >   Performance counter stats for 'system wide':
-> > 
-> >          2427568570      slots
-> >           300927614      instructions
-> >           551021649      topdown-fe-bound
-> > 
-> >         1.001771803 seconds time elapsed
-> > 
-> > Fixes: 94dbfd6781a0 ("perf parse-events: Architecture specific leader override")
-> > Reported-by: Kan Liang <kan.liang@linux.intel.com>
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> 
-> Thanks Ian. The patch works well.
-> 
-> Tested-by: Kan Liang <kan.liang@linux.intel.com>
+Hi Linus,
 
-Thanks, applied.
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
 
-- Arnaldo
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
 
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20220322
+
+for you to fetch changes up to eeda29db98f429a3b6473117e6ce1c213ab614f2:
+
+  x86/hyperv: Output host build info as normal Windows version number (2022-03-08 20:44:50 +0000)
+
+----------------------------------------------------------------
+hyperv-next for 5.18
+  - Minor patches from various people
+----------------------------------------------------------------
+Anssi Hannula (1):
+      hv_balloon: rate-limit "Unhandled message" warning
+
+Gustavo A. R. Silva (1):
+      Drivers: hv: vmbus: Use struct_size() helper in kmalloc()
+
+Michael Kelley (2):
+      hv_utils: Add comment about max VMbus packet size in VSS driver
+      x86/hyperv: Output host build info as normal Windows version number
+
+Stephen Brennan (1):
+      drivers: hv: log when enabling crash_kexec_post_notifiers
+
+Vitaly Kuznetsov (2):
+      Drivers: hv: Rename 'alloced' to 'allocated'
+      Drivers: hv: Compare cpumasks and not their weights in init_vp_index()
+
+ arch/x86/kernel/cpu/mshyperv.c |  8 ++++----
+ drivers/hv/channel_mgmt.c      | 19 +++++++++----------
+ drivers/hv/hv_balloon.c        |  2 +-
+ drivers/hv/hv_common.c         |  4 +++-
+ drivers/hv/hv_snapshot.c       |  7 +++++--
+ drivers/hv/hyperv_vmbus.h      | 14 +++++++-------
+ drivers/hv/vmbus_drv.c         |  4 ++--
+ include/uapi/linux/hyperv.h    | 11 +++++++++++
+ 8 files changed, 42 insertions(+), 27 deletions(-)

@@ -2,235 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D675A4E4400
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8451F4E4407
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238981AbiCVQPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        id S238998AbiCVQQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233231AbiCVQPg (ORCPT
+        with ESMTP id S233231AbiCVQQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:15:36 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568DF49CB7;
-        Tue, 22 Mar 2022 09:14:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X4/nv3AlvFd3o16+0nxS5E7hHExSqEGVtcYKGGr60weGOp7Q428x010Dt8/4hPbRxrXxM3D9qbgRBUXp3jxcN+24zMdR3jr/8Wo6QVa4+ik3lU//2YQxih3Mjl1WLGEvCYoFE/Yy9feAU0+QEiXtdWu7txY3YUT5zrjeDiGPDpU0OUJfg3rxzFbOayvgBH3EGN1OoIHk4TwMRJb8R9+7GuyeLwdAWnkTGh9jC1vbl3YKkO/04bjaBTFVCgmxxw/w2rgKwPp2ZsZHwiBQOEUwejyaG85++XyyfBI/3O7B8VWoIrr+yrmm+koDHL9xC7ReigHXIDDI8/uc8NasjiZP6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W9xET6mUzfWozV/f+H+x6SHFPsUUjfZkVxSQUYtZSmQ=;
- b=Doi5vsffUHci0n29cvMiLNu/eQCfbIFIxxrjvk6oaVRbX9NFp3ldTOqLvNDt9M0nIZ73m6Wo/ZNyx6qS5MdYgZ4BWWZt1760x3Cjtgh0vS7ab/GL/rrGOnbYnwFwcw1hVWIT2LbjNjE35E5ClWVTpZUHDiunJUxHg4jowR+8k5jcdHq1raNyFkyF+OU3VXPXmFSeX17JQest5uVlxgTC3F284GOjcp7SL4F/+0xAUlvB9oiVc+WxJ+xPyK+uvcsBv4KULGUcGkje94JHs3Fdr0B2Ymbq75IaVmsIWXJJpyeUcZZxsAeSHzNw/B+2VYSK1gZZ8AIUBxSGytpl9y+q5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W9xET6mUzfWozV/f+H+x6SHFPsUUjfZkVxSQUYtZSmQ=;
- b=VpxU4zoT1PWtaxfot3UlZNaaypiAmMlkP/IMeNCqzCSvkvSsTAGhNkO9SpLi+J6RAe3859u63HPAxn+UcubC6u1UWCLDNnOalR0JxOPCD/2ZtFhRw3koURFMn84OX65T5IPoUHtifh6wFfu1x2SDCXTyrXpkOKzRVwmnoymy1mqNBaBbw3XVKH8jfoWcWUnnvQslvqDknY3KJTty+Jp5O3Tpzg0h+mZUKPyXayPavBVNtDI1Xpy2gh4FVtluc0noOFzvBCDFNW6CdNHixk1ELeAOEU7ndNlzjAVdctiBz8/4/UrRjnhaSGDGSBrym3zQlwUHRljIggswX82B72w1NA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA0PR12MB4349.namprd12.prod.outlook.com (2603:10b6:806:98::21)
- by MN2PR12MB4989.namprd12.prod.outlook.com (2603:10b6:208:38::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Tue, 22 Mar
- 2022 16:14:06 +0000
-Received: from SA0PR12MB4349.namprd12.prod.outlook.com
- ([fe80::e15c:41ca:1c76:2ef]) by SA0PR12MB4349.namprd12.prod.outlook.com
- ([fe80::e15c:41ca:1c76:2ef%3]) with mapi id 15.20.5081.023; Tue, 22 Mar 2022
- 16:14:06 +0000
-Message-ID: <051e316d-c89e-2b7f-63da-c96026fcb671@nvidia.com>
-Date:   Tue, 22 Mar 2022 21:43:52 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v5 1/4] memory: tegra: Add memory controller channels
- support
-Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220316092525.4554-1-amhetre@nvidia.com>
- <20220316092525.4554-2-amhetre@nvidia.com>
- <83bc4c12-13e3-d239-3845-a3541b1fbb2a@gmail.com>
-From:   Ashish Mhetre <amhetre@nvidia.com>
-In-Reply-To: <83bc4c12-13e3-d239-3845-a3541b1fbb2a@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MAXPR0101CA0028.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:d::14) To SA0PR12MB4349.namprd12.prod.outlook.com
- (2603:10b6:806:98::21)
+        Tue, 22 Mar 2022 12:16:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AF858397;
+        Tue, 22 Mar 2022 09:15:17 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MFJ3AY003676;
+        Tue, 22 Mar 2022 16:15:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Tg4iRva/8rsOMLevdE6PLQwqdqhLmmHsLjsQ/hVp3PM=;
+ b=JpHbSEd/9cimWiQ8rBklml9haSIxqaRL+1x7fUgE3+gm7wOWt/XW51fgCkhSF076Hsyj
+ J5VEFKxmzPAcXOtUF8OKfQbFwJx+RodbeYwrelvjQTYttsdynX0+4oYzD+W/LopL3nUb
+ oktFgJiKu+BpaOOyxVJwCjWbQuHnciyLIVYWPzrPm3Ykd7CCKaatwszdBor0NOWjELet
+ c3IFF3JVNAyX93gcYyBtoc7QlLoh3XMYAebccJ2/6RObuiDXQdjKc+AUBDu2CGkQSAwt
+ in59/6OunFMDsbq1sj3UvgNaNjA/koBRV8otMnQgGa9oxFs8Lu6tmzyPzaUBluv+DObg ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3eybm6scyc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 16:15:16 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22MFL1Ra008686;
+        Tue, 22 Mar 2022 16:15:16 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3eybm6scxv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 16:15:16 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MFx1Pm017855;
+        Tue, 22 Mar 2022 16:15:14 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ew6ehxmqq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 16:15:14 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22MGFBxH39649658
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Mar 2022 16:15:11 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2768B52057;
+        Tue, 22 Mar 2022 16:15:11 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.2.232])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7900452051;
+        Tue, 22 Mar 2022 16:15:10 +0000 (GMT)
+Date:   Tue, 22 Mar 2022 17:15:08 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: s390: Fix lockdep issue in vm memop
+Message-ID: <20220322171508.4c0f7ef7@p-imbrenda>
+In-Reply-To: <20220322153204.2637400-1-scgl@linux.ibm.com>
+References: <20220322153204.2637400-1-scgl@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c82eaf8a-bb08-4520-a72f-08da0c1efcb9
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4989:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB498979CBE4533581D66501AACA179@MN2PR12MB4989.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tleke+y8jF840/C4ZNZ+KgIJY07vMbyMULsxEyg0fN94g8+WctG5IAZUblhQNLGPkufpVwb+EQO3O7hiV2oY0tR+TGhCBvuuo2L4CcqHYfYtPo5lBMUwsss2cch8ZKETHsZej6MNJK9B7AW7U8jiZbKo84OuAYeTEs5qUCnukch1kMxrGCxw/sXlQu8NPv5lTLuxYoOL/EvW/TPoifC6mMhZDmvhRQLw6XY9Y3nnYyvQ8FLDmmb8ABtJJXf1Dq+Xbg3NZZrpR7nZEdi+Fp3hlvhdyT0sKp9FfKSBfzAJAh8xuE9rbwblPeH9N4pLNB15+tfhEXLrWkVhzDbA16U4q5gaNE76FQW7pwyxXF4JSBzlfCbn54eDBCZQrOWt5dclFAv5n/e2I0w2SBV3oQOC2Ex0BWXs87/Fa5Ng9U8lM02oZyT9V8xg0KSgyssUFAP3EdrObJqn478Nb6MLIO+gdtO9Y20hOkPE42/367keS46bRZCnCGmGZcOvECjZOHy+X+kewjwmoDSwNden1KZwSFk9lHEwEC3zupkmT2J/gW7Jr/j1aTqUAIpyfDwbJT01NGM5bE01oE0doSOBRTZVQKtpA/qMy4T0kPH/8NE8W58a50/JqaAvRbfs1i1z9xn80dS2wc9U2Q2gQAAeA4RZXusjpfotOdilrbulR39UTkr7eD2p0atHFN71RACOjnusz1bVKN5P7+d2GOO2wfPQlPtzI8P0oF1+vBe91heaTmo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4349.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55236004)(53546011)(6666004)(6506007)(6512007)(8676002)(66946007)(4326008)(6486002)(107886003)(508600001)(66556008)(31686004)(66476007)(186003)(26005)(83380400001)(38100700002)(8936002)(36756003)(316002)(31696002)(86362001)(5660300002)(2616005)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3dDeENicHF2WnR3K21ib3A0ZTFYTmlPZ2IyNTNPUmlBM2YvTWU0dm56alU4?=
- =?utf-8?B?U21ENUFsTjVBWGVnM1RCWVJ0MEc2NURMZW1TcjFZSDlvVFUwbG42Rjc4OExL?=
- =?utf-8?B?U1ZZWi8wTjNNYnRyblJYRER1N25YcFJEaGlWalFETGpWYThsKzF3TTdxR1lz?=
- =?utf-8?B?VWg0TTk5bTZzUmxycHZydVpKRjJ5SGxiSW1ta3pqVURXUnFaS2hIbnpVUHBO?=
- =?utf-8?B?MXlXcmdhRUhIR0M0TVo4ZGdieWY0VEl3dkFicHZPaFR5ZlFldTNDT0JkM0I1?=
- =?utf-8?B?d0tOMm9sVTY0NHpFSWlSN0J0RW5XSmw2N2M1YlRsZFVJZVYzUkUwak9Da2sy?=
- =?utf-8?B?SEhid3NCWGFRQXVvS0F3cllRV0kxdmh4cG1KbGhMTktMeTA1VThwYlNweGp6?=
- =?utf-8?B?UUpPd3B6cVJsTUV4SDlJQ2Q0dC9PUENsUHZ3amNoa0h3L0VYaHYrdUpGNmpC?=
- =?utf-8?B?MkI4emNIT1NrVjIxUWZOM0RwUlZCUWJrR2x6bXVzYjIyRTRLL3lIaDI4NTdt?=
- =?utf-8?B?a0RWaXRZYlJwMXcrQlk3TktSZ3dNQ0VZeHR5T1ZSMHFvOHk2cUZVcjFKbG5j?=
- =?utf-8?B?SEk5REpOYXI1SFR0WThuTy9jcTNldkpGRDRwbEk3WTZRZURTSkVnaDhKNEpP?=
- =?utf-8?B?UmdzeGNuYXpQWTliUWF3WmdubmlSUDFzOFpKY0JpU3BteGFUOFNvMERkaXVS?=
- =?utf-8?B?VUlVQjBkNzlwRUxRVHVjSlpMN3ArV2U3MFl6TEdWc0h1MUtUeC9zNmdieDNQ?=
- =?utf-8?B?SnU0T2NsZG9vZUYxSGFTWHBML0g0TVkvZElOdGJscVBWUkg0Mzk4WFRBaCtW?=
- =?utf-8?B?dDRDUXZ5OEd4cmNTdVBBVFZwTUlKblVaYWpUOXI0QmtsRXptTkZaaUttd1VD?=
- =?utf-8?B?bFROSmdqMXdQNkFiM0U0akViQjN3Z0JnYXpyUVdoemM1MmNlWEdLcDBlRnY0?=
- =?utf-8?B?M2RGenErRWcxREg3bW1sL1dmeEpnSmd5Y3YrUW1zSHFTTmJDa0pZVTVRUXRs?=
- =?utf-8?B?cEZBRytVc3BVNDhSdXF4R0FlZzVtdXlCcG1Eek45ZkZmenNXWEVnbm9Xb3Fw?=
- =?utf-8?B?VEozYU0zOTJ6N2hWZDBiL3RZN0x3bE10ODUxSFpnTndjL2NWRXViU0gxclVD?=
- =?utf-8?B?eGp6dmd5ZjJQZ1QxK0MwWGV1bWdYOWVpM0g2RWNmaXRnSVNwTUk4Rkh3NTVW?=
- =?utf-8?B?T00zQmt2NGxtdHF1b0JCOEVXbTNERmQ1MkYxTjQyK3haWW1UcEFZMmVwMHJz?=
- =?utf-8?B?WWdCcXo2U2FQbzY5aVduYmJBUG1zYjd6VTYvbVR6WE9FNGJRYmF5bzZpSVla?=
- =?utf-8?B?M2FTTzhmT2JBZ3NTTGdreWlXcUxENXlMNFE2U1dZQzNWelJ5RlgxdGhOYkFj?=
- =?utf-8?B?ZDB6ZjhxODJOM1pHaHNFYVdHSHkwVjNFWFZjNFYxSmxNcGxIQ3NONTIvR0hm?=
- =?utf-8?B?ZWR1MzBwanJyZFlnbEtQblZIRXRCWlZlLzJRb3M4LzZnRm9rSWh1MGRsZUpW?=
- =?utf-8?B?YlFsVVBTTm1NbmZPSVVQdHRQOHNKT2ZpWm9Qalc1eDl4bW5YbDM3cG8zcEZv?=
- =?utf-8?B?dVB2UG15dTlQWUc0TGlGcjNGc2NLcnBsMlRLYXJpY0VNQk9FVk9Salo1ZmVu?=
- =?utf-8?B?SzlMcnhtdHdtS2I0MHJFem9jNHpqODlqRXJrSFA1WkJPWXptQ0RYV0VpZkV6?=
- =?utf-8?B?azhvQk12ZkxqQm83RnN4azE2VCtpWGRYYjFDM1EyZjJmN2NUMmxKY0ZIRlkr?=
- =?utf-8?B?VHUwblA2NGsyV3ArekxrT1pKRXN2dDZQV1dmWXNMTm9Db0pqOVpBR2JPdVFI?=
- =?utf-8?B?M1phU2RtOW1GbE9rYmgySjFQbEQ3UkVtZ2JuYzA0ZHZ5NU1LTmVsUnhiSEly?=
- =?utf-8?B?dzZFdjl5Y2hLTGFwWjliQlAveWZ3b2dZejZrY3FkRW1ka2dyVXhiaXFMLzhj?=
- =?utf-8?Q?FrkexrFjc66khbbKB+OYmY6wOZIfvfcT?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c82eaf8a-bb08-4520-a72f-08da0c1efcb9
-X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4349.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 16:14:05.9142
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: osELJvvlOC0NQn1UBcAerpU5vGywpeHaK3xLIp0r56vDjVg9xCwBKIk/Hj+tk1t816SBpUY6zBRAOdw54rCiHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4989
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NhUnhAe_WFN6MI5dQ5APoUIladAO-R_R
+X-Proofpoint-GUID: IzBr1jjtoKqXYLpSruS-LL78P-zqe25R
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-22_07,2022-03-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 impostorscore=0 phishscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203220090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 22 Mar 2022 16:32:04 +0100
+Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
 
+> Issuing a memop on a protected vm does not make sense,
+> neither is the memory readable/writable, nor does it make sense to check
+> storage keys. This is why the ioctl will return -EINVAL when it detects
+> the vm to be protected. However, in order to ensure that the vm cannot
+> become protected during the memop, the kvm->lock would need to be taken
+> for the duration of the ioctl. This is also required because
+> kvm_s390_pv_is_protected asserts that the lock must be held.
+> Instead, don't try to prevent this. If user space enables secure
+> execution concurrently with a memop it must accecpt the possibility of
+> the memop failing.
+> Still check if the vm is currently protected, but without locking and
+> consider it a heuristic.
+> 
+> Fixes: ef11c9463ae0 ("KVM: s390: Add vm IOCTL for key checked guest absolute memory access")
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 
-On 3/19/2022 9:12 PM, Dmitry Osipenko wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> 16.03.2022 12:25, Ashish Mhetre пишет:
->>  From tegra186 onwards, memory controller support multiple channels.
->> Add support for mapping address spaces of these channels.
->> Make sure that number of channels are as expected on each SOC.
->> During error interrupts from memory controller, appropriate registers
->> from these channels need to be accessed for logging error info.
->>
->> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
->> ---
->>   drivers/memory/tegra/mc.c       |  6 ++++
->>   drivers/memory/tegra/tegra186.c | 52 +++++++++++++++++++++++++++++++++
->>   drivers/memory/tegra/tegra194.c |  1 +
->>   drivers/memory/tegra/tegra234.c |  1 +
->>   include/soc/tegra/mc.h          |  7 +++++
->>   5 files changed, 67 insertions(+)
->>
->> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
->> index bf3abb6d8354..3cda1d9ad32a 100644
->> --- a/drivers/memory/tegra/mc.c
->> +++ b/drivers/memory/tegra/mc.c
->> @@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device *pdev)
->>        if (IS_ERR(mc->regs))
->>                return PTR_ERR(mc->regs);
->>
->> +     if (mc->soc->ops && mc->soc->ops->map_regs) {
->> +             err = mc->soc->ops->map_regs(mc, pdev);
->> +             if (err < 0)
->> +                     return err;
->> +     }
->> +
->>        mc->debugfs.root = debugfs_create_dir("mc", NULL);
->>
->>        if (mc->soc->ops && mc->soc->ops->probe) {
->> diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
->> index 3d153881abc1..a8a45e6ff1f1 100644
->> --- a/drivers/memory/tegra/tegra186.c
->> +++ b/drivers/memory/tegra/tegra186.c
->> @@ -139,11 +139,62 @@ static int tegra186_mc_probe_device(struct tegra_mc *mc, struct device *dev)
->>        return 0;
->>   }
->>
->> +static int tegra186_mc_map_regs(struct tegra_mc *mc,
->> +                             struct platform_device *pdev)
->> +{
->> +     struct device_node *np = pdev->dev.parent->of_node;
->> +     int num_dt_channels, reg_cells = 0;
->> +     struct resource *res;
->> +     int i, ret;
->> +     u32 val;
->> +
->> +     ret = of_property_read_u32(np, "#address-cells", &val);
->> +     if (ret) {
->> +             dev_err(&pdev->dev, "missing #address-cells property\n");
->> +             return ret;
->> +     }
->> +
->> +     reg_cells = val;
->> +
->> +     ret = of_property_read_u32(np, "#size-cells", &val);
->> +     if (ret) {
->> +             dev_err(&pdev->dev, "missing #size-cells property\n");
->> +             return ret;
->> +     }
->> +
->> +     reg_cells += val;
->> +
->> +     num_dt_channels = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
->> +                                                       reg_cells * sizeof(u32));
->> +     /*
->> +      * On tegra186 onwards, memory controller support multiple channels.
->> +      * Apart from regular memory controller channels, there is one broadcast
->> +      * channel and one for stream-id registers.
->> +      */
->> +     if (num_dt_channels < mc->soc->num_channels + 2) {
->> +             dev_warn(&pdev->dev, "MC channels are missing, please update\n");
-> 
-> Update what >
-"Update memory controller DT node with MC channels". Yes, it's unclear.
-I will update in next version.
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
->> +             return 0;
->> +     }
->> +
->> +     mc->mcb_regs = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+> ---
+>  arch/s390/kvm/kvm-s390.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> Can't we name each reg bank individually in the DT and then use
-> devm_platform_ioremap_resource_byname()?
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index ca96f84db2cc..53adbe86a68f 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -2385,7 +2385,16 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>  		return -EINVAL;
+>  	if (mop->size > MEM_OP_MAX_SIZE)
+>  		return -E2BIG;
+> -	if (kvm_s390_pv_is_protected(kvm))
+> +	/*
+> +	 * This is technically a heuristic only, if the kvm->lock is not
+> +	 * taken, it is not guaranteed that the vm is/remains non-protected.
+> +	 * This is ok from a kernel perspective, wrongdoing is detected
+> +	 * on the access, -EFAULT is returned and the vm may crash the
+> +	 * next time it accesses the memory in question.
+> +	 * There is no sane usecase to do switching and a memop on two
+> +	 * different CPUs at the same time.
+> +	 */
+> +	if (kvm_s390_pv_get_handle(kvm))
+>  		return -EINVAL;
+>  	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+>  		if (access_key_invalid(mop->key))
 > 
-> ...
->> @@ -212,6 +217,8 @@ struct tegra_mc {
->>        struct tegra_smmu *smmu;
->>        struct gart_device *gart;
->>        void __iomem *regs;
->> +     void __iomem *mcb_regs;
->> +     void __iomem *mc_regs[MC_MAX_CHANNELS];
-> 
-> s/mc_regs/ch_regs/ ?
-Sure, will update in next version.
+> base-commit: c9b8fecddb5bb4b67e351bbaeaa648a6f7456912
+

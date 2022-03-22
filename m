@@ -2,87 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326F84E4541
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E64AE4E4546
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239596AbiCVRjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
+        id S239780AbiCVRlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239623AbiCVRjI (ORCPT
+        with ESMTP id S239770AbiCVRk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:39:08 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC5050E25;
-        Tue, 22 Mar 2022 10:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zVXKwBc1JcWHQCoSSK+DrgoMAyqc1wIUN0g4y2t1xXU=; b=FM6OAmOQAamX1rwFcjPZhLhkv9
-        JPdM78sMnPU3Wfz+ph/B/NHi/dGZHoK9a0D0YtFwhbsUGKlOfhH8jxv6JplGJ/Mwt5+6Xu8B5INLs
-        onq5r4RHi2ml+v43GbK13NcQFTHwMt3kxwRpmflaKyZiSRTMKwhTp42Z548wataFM4GJ6GSAhoTeR
-        JK5piU/Zv+uxpzp/ktuxAC4dBhfCgMSjW0rCTzKZQXI09zkC3GOw7hgzC7Zt+lkpsSDAiH+r0Asoe
-        3ruJuIvYxVv2Q7JXV8Cbu/guJ88QGP74ZN18VGCD2+OVQ+FU7lzz2JRIKUUFUQTXDQXKUIxIRrjJo
-        FfKsuj4w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWiRi-00BkYT-6u; Tue, 22 Mar 2022 17:37:26 +0000
-Date:   Tue, 22 Mar 2022 10:37:26 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Philipp Rudo <prudo@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>,
-        James Morse <james.morse@arm.com>,
-        Dave Young <dyoung@redhat.com>,
-        Kairui Song <kasong@redhat.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-modules@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        stable@kernel.org, Eric Snowberg <eric.snowberg@oracle.com>
-Subject: Re: [PATCH 4/4] module, KEYS: Make use of platform keyring for
- signature verification
-Message-ID: <YjoJVnTuaw/3l7Xp@bombadil.infradead.org>
-References: <cover.1644953683.git.msuchanek@suse.de>
- <840433bc93a58d6dfc4d96c34c0c3b158a0e669d.1644953683.git.msuchanek@suse.de>
- <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
- <20220215204730.GQ3113@kunlun.suse.cz>
- <c3f6f6c8a9db34cc1cdc1000f9272c2b36445e15.camel@linux.ibm.com>
- <20220216105645.GS3113@kunlun.suse.cz>
- <edb305079c28e49021166423af0378f8d218f269.camel@linux.ibm.com>
- <20220216120911.GT3113@kunlun.suse.cz>
+        Tue, 22 Mar 2022 13:40:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619CE887A3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:39:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E759BB81D38
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:39:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B83AC36AEB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647970766;
+        bh=8q6r8juMrDBnbfWTc+rVHMGsrIAAdRTfUtHXinUmhWc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jKoC8utb6vQC7JxzlBEup2+AX7aBbfyHynQsN5+F+64vE408VhuXBoRLdaIp0onHX
+         cLVDZCmqzqjmX62Q8geT5nkGkzIvYJj7GfEDuc09mj859qR4C9jfFKWPJybqcxZDmR
+         T9Uz8MPJdezD1UANrBMb7yai0hiMCB2PxpC5yP++t/SHOHAueZAAWwAFVjnLeNjJxm
+         kXRBpt95lK1sBvfcluiTroBzd760fbW31+v/a5nb46bklZWpOqQTLu2EDu3kml/QSG
+         mEdWP2lJ4q16hiixMgSKCzwKenbKqgbtTbuTCgs6aqHJ3EXKT1B1cuuw0eYy3aNctn
+         1/RBOpbLaXqsg==
+Received: by mail-ed1-f44.google.com with SMTP id w25so22552373edi.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:39:26 -0700 (PDT)
+X-Gm-Message-State: AOAM531ANEnFrJfG3a7B+nIrjTk954RZL67SqSqRzcwLWLUK+bWnyVMT
+        EsC04hxMZQbjNMEl7Niiy/RcBt3uYQF1JIlIKe80lg==
+X-Google-Smtp-Source: ABdhPJz7l0qlFBKeBFie+TrVzQ/TBK3pBt0oidyYtw1ppUgJq/0zjb7jE93WaRMBlLa2DXZ0Fd5SSnrUxfju6EPJzCQ=
+X-Received: by 2002:a50:cf48:0:b0:415:df40:9e3d with SMTP id
+ d8-20020a50cf48000000b00415df409e3dmr29229293edk.185.1647970764645; Tue, 22
+ Mar 2022 10:39:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216120911.GT3113@kunlun.suse.cz>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220322145012.1315376-1-milan@mdaverde.com> <ca7b331c-bd35-7d51-3df4-723bc36676f8@isovalent.com>
+In-Reply-To: <ca7b331c-bd35-7d51-3df4-723bc36676f8@isovalent.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 22 Mar 2022 18:39:13 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ49NibikDxgq9BudWu6ieW4ZkiEWCy_yAsJUFtEiS9CEg@mail.gmail.com>
+Message-ID: <CACYkzJ49NibikDxgq9BudWu6ieW4ZkiEWCy_yAsJUFtEiS9CEg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf/bpftool: add unprivileged_bpf_disabled check
+ against value of 2
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Milan Landaverde <milan@mdaverde.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Paul Chaignon <paul@isovalent.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 22, 2022 at 4:54 PM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> 2022-03-22 10:49 UTC-0400 ~ Milan Landaverde <milan@mdaverde.com>
+> > In [1], we added a kconfig knob that can set
+> > /proc/sys/kernel/unprivileged_bpf_disabled to 2
+> >
+> > We now check against this value in bpftool feature probe
+> >
+> > [1] https://lore.kernel.org/bpf/74ec548079189e4e4dffaeb42b8987bb3c852eee.1620765074.git.daniel@iogearbox.net
+> >
+> > Signed-off-by: Milan Landaverde <milan@mdaverde.com>
+>
+> Acked-by: Quentin Monnet <quentin@isovalent.com>
 
-How's this series going? Did you and Mimi sort things out? Either way,
-just wanted to let you kow you can base your changes on modules-testing
-[0] if you want to resubmit for v5.19 (v5.18 will be too late already).
-Once testing is done what is on modules-testing will go to modules-next
-for testing for v5.19. There are no changes planned for v5.18 other than
-fixes and so far there are none.
+Acked-by: KP Singh <kpsingh@kernel.org>
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
-
-  Luis
+Thanks, this is very useful!

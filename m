@@ -2,217 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489804E383A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 06:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E14A34E3842
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 06:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbiCVFLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 01:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S236700AbiCVFVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 01:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236658AbiCVFLU (ORCPT
+        with ESMTP id S236708AbiCVFVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 01:11:20 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1746FD30
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:09:53 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id mz9-20020a17090b378900b001c657559290so1450612pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:09:53 -0700 (PDT)
+        Tue, 22 Mar 2022 01:21:33 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF81B29C;
+        Mon, 21 Mar 2022 22:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fDXhm+RK1m7fZKaYwZIMM/iMGbp4yJhf9o4ZO9CuiVk=;
-        b=SA+0u2ZCsN1JRGN+8G3kO6l6TsM2azbqy9m2SrLcGM+Z3VRCD65kSn/GyWoixd9pAA
-         wLPESxr9lCruhs2fYkKM8ahUnKh9yCJBvcaXUCuc+f38QprYFpn5xH1jGBhQE18/5qKP
-         zYqccsV/8DYrOY3lDgspa3+jJvZ37bjR9GiOifgvy3mABx9ul1NY3It3sBKaLxN4+3yW
-         bO52D1xVn3L/OQooNi/Vjp2pczt98WXXblCqrC+pCjP7Sfkp+mFeYydCzLvKzsox1KuC
-         VV8G4JPpO+/AZxkMUfj3YlVYrn8RMQu10Ej+Gpj1ruCt3SwQMSoFeieSkqL7E6EnmCxV
-         lwNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fDXhm+RK1m7fZKaYwZIMM/iMGbp4yJhf9o4ZO9CuiVk=;
-        b=TAnpYN6EcYVFGAhb51Du3fmUzHj740W7kie5+oG1a2Za51UP+hCCKvvGZnbEX8YPJ4
-         PB05imsoXtPK5uqSriZGAQ6eMRaFpf9W+sjAG0G0/z+fXM0c4L7HRZB7vnNy0kD26Mkw
-         CHQ9woFQ96UaWnjgOWzvGMGuytEdkVTzdNqwJ1uru4iCj9DSDeBn0VyzBhpudvXNTqLI
-         cH/WJBAqKUumWpRRTmEY+pecY6Dj8dZpABvoaZTsOD/Y5MNcXS65SXCYvCYG4vyyLYIQ
-         pLBILJAeMuXOVOKd4tT06k4eduCuiOJ4RH36609RlZZATSZ3QmwcgAuKayZoF0pUSChn
-         Q87g==
-X-Gm-Message-State: AOAM532/CYcEnGn0PjOwQ46XkVW3d9DPrGJBKn+0Fnf4cD8vI2rn5uE3
-        nYtA6KxRfaiGe+SzncPnlQJzug==
-X-Google-Smtp-Source: ABdhPJyWOul9rH4gEUGO0dkMiJm3kpCidirNUAvNTHdQPi0DS1qZINZVbIPMvc7iQ0an04fRSqSGBw==
-X-Received: by 2002:a17:90a:a390:b0:1c6:ed76:f555 with SMTP id x16-20020a17090aa39000b001c6ed76f555mr2883292pjp.65.1647925793030;
-        Mon, 21 Mar 2022 22:09:53 -0700 (PDT)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id u25-20020a62ed19000000b004f140515d56sm21081801pfh.46.2022.03.21.22.09.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 22:09:52 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 05:09:48 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>, Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 4/4] selftests: KVM: use dirty logging to check if page
- stats work correctly
-Message-ID: <YjlaHLUcvb3ZPgS1@google.com>
-References: <20220321002638.379672-1-mizhang@google.com>
- <20220321002638.379672-5-mizhang@google.com>
- <CANgfPd8feg_4vhNJqhFViDaMfvp_C4PdtEGMGOJ-Z8smQuf3rQ@mail.gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647926405; x=1679462405;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mxwNRxhZXnEhaBLVuTqpNgMwfQI6b2+lXrJsxhkw+1A=;
+  b=E8D/ED2bdKxMQqCu/OG4RKtdIPvSSfEmXwDivdfBfk751zVtbkK6lNVI
+   N2cOEbE3FVeFxrUsSnUv8mHy0zSe2oJE9m3MmTAjJsGgVobrIP+1hhJ6d
+   wg+YDpZ17zs/OMUnMS4ZNnryLtBBsxZ1XTA2xe20W1mDep9XGHL4fdE5+
+   M=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Mar 2022 22:20:05 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 22:20:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 21 Mar 2022 22:20:04 -0700
+Received: from [10.216.14.252] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 21 Mar
+ 2022 22:20:00 -0700
+Message-ID: <72b4183b-2ec7-dc73-0c21-b12f342860d4@quicinc.com>
+Date:   Tue, 22 Mar 2022 10:49:56 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANgfPd8feg_4vhNJqhFViDaMfvp_C4PdtEGMGOJ-Z8smQuf3rQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
+ process_madvise
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+CC:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, <surenb@google.com>,
+        <vbabka@suse.cz>, <rientjes@google.com>, <sfr@canb.auug.org.au>,
+        <edgararriaga@google.com>, <nadav.amit@gmail.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        "# 5 . 10+" <stable@vger.kernel.org>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+ <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
+ <YjEaFBWterxc3Nzf@google.com>
+ <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
+ <YjFAzuLKWw5eadtf@google.com>
+ <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+ <YjiTn+7vw2rXA6K/@dhcp22.suse.cz>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <YjiTn+7vw2rXA6K/@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022, Ben Gardon wrote:
-> On Sun, Mar 20, 2022 at 5:26 PM Mingwei Zhang <mizhang@google.com> wrote:
-> >
-> > When dirty logging is enabled, KVM splits the all hugepage mapping in
-> > NPT/EPT into the smallest 4K size. This property could be used to check if
-> > the page stats metrics work properly in KVM mmu. At the same time, this
-> > logic might be used the other way around: using page stats to verify if
-> > dirty logging really splits all huge pages. Moreover, when dirty logging is
-> > disabled, KVM zaps corresponding SPTEs and we could check whether the large
-> > pages come back when guest touches the pages again.
-> >
-> > So add page stats checking in dirty logging performance selftest. In
-> > particular, add checks in three locations:
-> >  - just after vm is created;
-> >  - after populating memory into vm but before enabling dirty logging;
-> >  - just after turning on dirty logging.
-> >  - after one final iteration after turning off dirty logging.
-> >
-> > Tested using commands:
-> >  - ./dirty_log_perf_test -s anonymous_hugetlb_1gb
-> >  - ./dirty_log_perf_test -s anonymous_thp
-> >
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Cc: David Matlack <dmatlack@google.com>
-> > Cc: Jing Zhang <jingzhangos@google.com>
-> > Cc: Peter Xu <peterx@redhat.com>
-> >
-> > Suggested-by: Ben Gardon <bgorden@google.com>
-> 
-> Woops, got a mail bounce from this. Should be:
-> Suggested-by: Ben Gardon <bgardon@google.com>
-> 
 
-Oh... sorry about that. Will discuss with you offline. Really want to
-avoid this in the future.
+On 3/21/2022 8:32 PM, Michal Hocko wrote:
+>> It can return EINTR when:
+>> -------------------------
+>> 1) PTRACE_MODE_READ is being checked in mm_access() where it is waiting
+>> on task->signal->exec_update_lock. EINTR returned from here guarantees
+>> that process_madvise() didn't event start processing.
+>> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1264 -->
+>> https://elixir.bootlin.com/linux/v5.16.14/source/kernel/fork.c#L1318
+>>
+>> 2) The process_madvise() started processing VMA's but the required
+>> behavior on a VMA needs mmap_write_lock_killable(), from where EINTR is
+>> returned.
+> Please note this will happen if the task has been killed. The return
+> value doesn't really matter because the process won't run in userspace.
 
-> > Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> > ---
-> >  .../selftests/kvm/dirty_log_perf_test.c       | 52 +++++++++++++++++++
-> >  1 file changed, 52 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> > index 1954b964d1cf..ab0457d91658 100644
-> > --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> > +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> > @@ -19,6 +19,10 @@
-> >  #include "perf_test_util.h"
-> >  #include "guest_modes.h"
-> >
-> > +#ifdef __x86_64__
-> > +#include "processor.h"
-> > +#endif
-> > +
-> >  /* How many host loops to run by default (one KVM_GET_DIRTY_LOG for each loop)*/
-> >  #define TEST_HOST_LOOP_N               2UL
-> >
-> > @@ -185,6 +189,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >                                  p->slots, p->backing_src,
-> >                                  p->partition_vcpu_memory_access);
-> >
-> > +#ifdef __x86_64__
-> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") == 0,
-> > +                   "4K page is non zero");
-> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
-> > +                   "2M page is non zero");
-> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
-> > +                   "1G page is non zero");
-> > +#endif
-> >         perf_test_set_wr_fract(vm, p->wr_fract);
-> >
-> >         guest_num_pages = (nr_vcpus * guest_percpu_mem_size) >> vm_get_page_shift(vm);
-> > @@ -222,6 +234,16 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >         pr_info("Populate memory time: %ld.%.9lds\n",
-> >                 ts_diff.tv_sec, ts_diff.tv_nsec);
-> >
-> > +#ifdef __x86_64__
-> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
-> > +                   "4K page is zero");
-> > +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP)
-> > +               TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
-> > +                           "2M page is zero");
-> > +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
-> > +               TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
-> > +                           "1G page is zero");
-> > +#endif
-> >         /* Enable dirty logging */
-> >         clock_gettime(CLOCK_MONOTONIC, &start);
-> >         enable_dirty_logging(vm, p->slots);
-> > @@ -267,6 +289,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >                                 iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
-> >                 }
-> >         }
-> > +#ifdef __x86_64__
-> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
-> > +                   "4K page is zero after dirty logging");
-> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
-> > +                   "2M page is non-zero after dirty logging");
-> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
-> > +                   "1G page is non-zero after dirty logging");
-> > +#endif
-> >
-> >         /* Disable dirty logging */
-> >         clock_gettime(CLOCK_MONOTONIC, &start);
-> > @@ -275,6 +305,28 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >         pr_info("Disabling dirty logging time: %ld.%.9lds\n",
-> >                 ts_diff.tv_sec, ts_diff.tv_nsec);
-> >
-> > +#ifdef __x86_64__
-> > +       /*
-> > +        * Increment iteration to run the vcpus again to verify if huge pages
-> > +        * come back.
-> > +        */
-> > +       iteration++;
-> > +       pr_info("Starting the final iteration to verify page stats\n");
-> > +
-> > +       for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
-> > +               while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
-> > +                      != iteration)
-> > +                       ;
-> > +       }
-> > +
-> > +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP)
-> > +               TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
-> > +                           "2M page is zero");
-> > +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
-> > +               TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
-> > +                           "1G page is zero");
-> > +#endif
-> > +
-> >         /* Tell the vcpu thread to quit */
-> >         host_quit = true;
-> >         perf_test_join_vcpu_threads(nr_vcpus);
-> > --
-> > 2.35.1.894.gb6a874cedc-goog
-> >
+Okay, thanks here.
+
+> 
+>> The current behaviours supported by process_madvise(),
+>> MADV_COLD, PAGEOUT, WILLNEED, just need read lock here.
+>> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1164
+>>  **Thus I think no way for EINTR can be returned by process_madvise() in
+>> the middle of processing.** . No?
+> Maybe not with the current implementation but I can easily imagine that
+> there is a requirement to break out early when there is a signal pending
+> (e.g. to support terminating madvise on a large memory rage). You would
+> get EINTR then somehow need to communicate that to the userspace.
+
+Agree. Will implement this.
+

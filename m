@@ -2,119 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E454E4740
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3304E474E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiCVUM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S233183AbiCVUPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232970AbiCVUMt (ORCPT
+        with ESMTP id S233396AbiCVUPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:12:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E5142EE2;
-        Tue, 22 Mar 2022 13:11:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2AB0616B4;
-        Tue, 22 Mar 2022 20:11:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E14A2C340EC;
-        Tue, 22 Mar 2022 20:11:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647979880;
-        bh=cvZLjZSrlMWpzpNsliNWbCv6RnObT7KD71mdI7Ouk0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f3YK1mzA7uy9itbbNhbMTkbuxlPamacpjzK9EMmZYVohrjKtrHkljfsKYA2aIhIV4
-         nUh93fygLMFhTq9R5FS9rCRj0hTY0YTOjVBnNS1LROYIywEsmTjl/phIaXby9SL1iZ
-         sVpNKHB56OysJmWozm0TU4ZlLndbzKGj0DBneErLgA4qc6vpChVbnst9NVy4JBomyY
-         1iOr8gse8HboUGdejEeStUN1mP77fWXIVhK3Egs7jM1RhHc2dcgc8D72O2ATJ0gMYR
-         kJqhKB/rfbj1OXnZdbyk1Lt22fh8LZ0JzPf7sDyW54plr6wmD8Z4KmyT8ou+Zo9Rac
-         Tn2f80UxZb/Sg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9DA0D40407; Tue, 22 Mar 2022 17:11:16 -0300 (-03)
-Date:   Tue, 22 Mar 2022 17:11:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: perf version issues
-Message-ID: <YjotZExyiwhnX6ev@kernel.org>
-References: <8a75f3b1-2b99-1233-3a70-070311b6ebc1@huawei.com>
+        Tue, 22 Mar 2022 16:15:48 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2060.outbound.protection.outlook.com [40.92.20.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51234E084;
+        Tue, 22 Mar 2022 13:14:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AcliExBMkOmk5hs6PCFreLYPLB5Fury1Ljhz+m0+Dv1YGzCc+LZnrTIYDpX34Yl1m+B4s75AlTpB2EobQEY4PMWkTcT2bJKG9Tw88TV/SnKEdZZU/03q8kxwt4b0RYrTVxyBYCqZB1fydc3Dl8X/Ad21gYuw+A5wbvqtysQZTNnmbYYgYyV1zM0Oc9NRxFM0hiMAdj7ac4tNON4g3TQWX+GwFLDUqunPeOoLnajpOUgRM9kYFBaf3M9MK9k2yqjC/Vz6yFyPd7VeSQPldJhz+sf5jVGCcRuhv/c0MP+OkwSJFyQ6EeQeecHblCGPwDAFKFp5U3Be4KvQLp332DIu5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MDaL7ddZ1/etRra8Mk/HJzC5cq5iMdvg6aCSXdnZfGE=;
+ b=dxXl01v6Rek9Nt9XT+6JV0K23jeNqrus1QobvMumxFlqzx7EqsHswGOdUf5x2Q49CDMLE5xlkzDsYrPfysaK9+cQrVLYRJxDWegFeOvs6LLzJ1/sbenBaukihmyKuglBgZnF2uk2sM0o95+5BICbROw1rM64ica5e2NJstY21lVbdyE4TlhnisSPud7jn5zJ3Y8VgCl8YCQOAUqxiWjSJ6KogUaQkOM0wCDMd8+tf4H3bUROxSfidMjzESRHs1uCEbrp2KN+VZ1KQefvnArB4TSzHNMqenzXsMA3EqLB3uNGvHm3zE+J+GjELC0UW9JuX0iP2lKuu1Fn4MLs7sRxYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from CY4PR04MB0567.namprd04.prod.outlook.com (2603:10b6:903:b1::20)
+ by BN6PR04MB0660.namprd04.prod.outlook.com (2603:10b6:404:d9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Tue, 22 Mar
+ 2022 20:14:17 +0000
+Received: from CY4PR04MB0567.namprd04.prod.outlook.com
+ ([fe80::451b:e5ed:c1a3:4070]) by CY4PR04MB0567.namprd04.prod.outlook.com
+ ([fe80::451b:e5ed:c1a3:4070%5]) with mapi id 15.20.5102.016; Tue, 22 Mar 2022
+ 20:14:17 +0000
+From:   Jonathan Bakker <xc-racer2@live.ca>
+To:     krzk@kernel.org, alim.akhtar@samsung.com
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Bakker <xc-racer2@live.ca>
+Subject: [PATCH 0/7] ARM: dts: s5pv210: Bugfixes, features, and improvements
+Date:   Tue, 22 Mar 2022 13:11:37 -0700
+Message-ID: <CY4PR04MB05677B4C4E26A8A179F6ABC0CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
+X-Mailer: git-send-email 2.20.1
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-TMN:  [/tFiGYUTJpR9E41DVPyPQ0IqJGOc5YzunLU9jZDWajdeKTikKkZWsk2Db92xHm34]
+X-ClientProxiedBy: MWHPR17CA0094.namprd17.prod.outlook.com
+ (2603:10b6:300:c2::32) To CY4PR04MB0567.namprd04.prod.outlook.com
+ (2603:10b6:903:b1::20)
+X-Microsoft-Original-Message-ID: <20220322201144.20320-1-xc-racer2@live.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8a75f3b1-2b99-1233-3a70-070311b6ebc1@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5c5d531a-dbfd-40d0-75c4-08da0c408a96
+X-MS-TrafficTypeDiagnostic: BN6PR04MB0660:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7nPbVRSBM8jbqhoFP4WrOu0QHwymPCZnvJHxS1Rgm20vSY4mxunf8Dmkt/nWS1AQlKsOTwE1/t30zNUjLhdgYCvKhebEu0PbHfSpiWaPepApd0vKKTB8qlDrbnX+0HtdGLdMJHoysBIR8NQhq3sy51mzLNtg/UtXcMsqHJD7pvQu10vdU0YEqFT54fFhMyMPO0Cnn44rWvDCqlX2Z94oiYKwQ/2DXs2TaTMK+8awZNHq3Kg2cZ2rgyG1SScGHxtmVhjQU0mmQX0ckfCSmhqaesrSWI8tPN0eS9B7x+TbiZ7HHEQPbf8+cw08ztXmyiDtln7cGE2PP5Jps31CdqP2eS1ZPgOuvQDu/WjVxdysboDYcwQs1tniT4mY9l4hDwdhGDwlcQKSHNfst2nTLf7nxp8NgSF4eYHimCcVy+RJ9OPW0mvsmFWz+YRlw5AD/ftjB6bya7v/PmXM4ooRoxPSsYAvGoazNIK+00Q/Ot5ZSidvNJqsQHcTUI0/clMe6S+cmmLqwclzYVanZXpWFt9t8DUGUTrXNGhY9pa7BGOQrh6x/LT9zTDmC5eM7bXWr0+vLRT8rNq4WvRoYZpJY7yOUg==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/yIthz6WTa019gnKpEcgX18qN0yDyqEsWYlVnNcMA7VKQFY7rkgOHRGzPN+9?=
+ =?us-ascii?Q?i1zsdAAWIm0eq2NIffE90HA+u1UanRMwXO+97SIHtFa2dQabGcgG+emTOXZm?=
+ =?us-ascii?Q?igwd/IGwuLatErfrwc1Oa1tqKoSgFQIQ4w9HHr5d+WlJElS4ieq5LimCtdwU?=
+ =?us-ascii?Q?qDvEOe7geFMnz8J7Fn9vZXE+NAlqel886z7/JAlN0JVB8qtxwV8Goz89FQdW?=
+ =?us-ascii?Q?VH+Ohq5/Tyb4Z80zjY6Lw/X31BpI+HWK+Gq3zcDDuNbIY5mxh+MkHE90nG1H?=
+ =?us-ascii?Q?6r525y/HmhnlqVePrLTQcGQE7sxD+6yrR7I5/hjjT0nquhTWkPoQfqzS/vSO?=
+ =?us-ascii?Q?3kefLYXu2bL8nMsNwXh8reRyfATvoVeBdvToP9EtoKb8JOHwjbD9YcboAvSJ?=
+ =?us-ascii?Q?hZMBu+JtTn6HfoMhLtgA2mTaYa7zx74Pa+jm1rw+RZh5Da53dYphEu1KCKF7?=
+ =?us-ascii?Q?cCFNuKllnTt39gG+ZXG7clpYWbYtrkeLTmIuPplu3gLI6HEBfDU2szeOygOA?=
+ =?us-ascii?Q?Z8dPDQ4SAslyUjQIVwIk3N+IiecDgFoCcDj5VYFVX2B7Ss8CD9qEd4gLKWi4?=
+ =?us-ascii?Q?LSm7GqreIZytOHTP+spYGvujmdbeGi7XFh5MGn7tPNHnuVYrfs/yQFWJFls7?=
+ =?us-ascii?Q?EL6XBs5grtPThSy0eF/cL9S2T/WsFVEklCy7IsnbLr7xsPvLlV2fNU3FjCel?=
+ =?us-ascii?Q?RLvCXF6sLZ+MARmCS4M8S5Kjhx/eOu4ZeXd7gAXuV0gWwEVAgnGhrYkc46gU?=
+ =?us-ascii?Q?65rz9ORcz/4zoc2sA8LgL0j/gI7Js4UH1dPMaM5IVeYfxj2e364e9aXXFBw9?=
+ =?us-ascii?Q?zldkI0HHzCaw0LwNeO75Ul25wZPGobrzRvXduhn6dYP0OG1uR37aDSy9Nl4v?=
+ =?us-ascii?Q?tU/7E2RdLJBizcP77ZsaPV7YcV51ouy1KVB7vcqeqBlWPgctvh24DID7pZOx?=
+ =?us-ascii?Q?TDg4uEAQmYeapjlR0Ovc8/QsRZ/vkNX6w0oEq5w7ik9i8PcWvWc9x0blFDsG?=
+ =?us-ascii?Q?IwH/f5YJ6xW7U2KnesoHswUAhsBPgyZSf7E5EzNjoqTXEltUJL/MVfXxXwVV?=
+ =?us-ascii?Q?X/HqMhguP6NmVrIMBYxil2FWeU9vhd2i+8FbwxGjbLzClFTDnfqjfV0nGgEa?=
+ =?us-ascii?Q?ym2ofKWe8T6VileR8NgjAdGP+7nDmFfTu6zuUJObBlPlsRTZeCQxFLtpLJHl?=
+ =?us-ascii?Q?yL+x94Itc8isp7OSb58NiNcB3NT7H+emRUeaxQ=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-edb50.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c5d531a-dbfd-40d0-75c4-08da0c408a96
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB0567.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 20:14:17.4840
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR04MB0660
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re-adding lkml and Ian, Jiri, as I found some strange behaviour with
-'git cherry-pick'.
+Various cleanups to fix warnings when running make dtbs_check are included,
+as are bugfixes for the panel CS pin and bluetooth interrupt name on Aries.
 
-Em Mon, Mar 21, 2022 at 08:43:26AM +0000, John Garry escreveu:
-> Hi Arnaldo,
-> 
-> I have been finding that during my development that the output from "perf
-> -v" may be incorrect in certain circumstances. I sent some patches to fix it
-> up:
-> https://lore.kernel.org/linux-perf-users/1645449409-158238-1-git-send-email-john.garry@huawei.com/T/#mf7234d2e331a53370c148eb4a0633d405a5c6832
-> 
-> Is there some issue that these cannot be processed?
+The new feature is charging support for Aries board, note that the galaxys
+(i9000) and fascinate4g (SGH-T959P) have slightly different batteries,
+and so the DTS can't be shared.
 
-So, while testing it I noticed that if we use 'git cherry-pick' it
-doesn't trigger a rebuild, even having a new head :-\
+Jonathan Bakker (7):
+  ARM: dts: s5pv210: Split memory nodes to match spec
+  ARM: dts: s5pv210: Adjust I2S entries to match spec
+  ARM: dts: s5pv210: Adjust DMA node names to match spec
+  ARM: dts: s5pv210: Remove spi-cs-high on panel in Aries
+  ARM: dts: s5pv210: Correct interrupt name for bluetooth in Aries
+  ARM: dts: s5pv210: Add charger regulator to max8998 in Aries
+  ARM: dts: s5pv210: Add charger support in Aries
 
-I.e. with the two patches in at the HEAD, try:
+ arch/arm/boot/dts/s5pv210-aquila.dts      |   8 +-
+ arch/arm/boot/dts/s5pv210-aries.dtsi      |  25 +++-
+ arch/arm/boot/dts/s5pv210-fascinate4g.dts | 162 ++++++++++++++++++++++
+ arch/arm/boot/dts/s5pv210-galaxys.dts     | 144 +++++++++++++++++++
+ arch/arm/boot/dts/s5pv210-goni.dts        |  14 +-
+ arch/arm/boot/dts/s5pv210.dtsi            |  24 ++--
+ 6 files changed, 354 insertions(+), 23 deletions(-)
 
-  $ git log --oneline -2
-  cb66befccba18fac (HEAD -> perf/core) perf tools: Fix version kernel tag
-  4e666cdb06eede20 perf tools: Fix dependency for version file creation
-  $ make -C tools/perf O=/tmp/build/perf install-bin
-  $ perf -v
-  perf version 5.17.rc8.gcb66befccba1
+-- 
+2.20.1
 
-Ok so far, now lets remove HEAD and leave just the first patch, that has
-the ORIG_HEAD dependency to trigger a rebuild:
-
-  $ git reset --hard HEAD~
-  HEAD is now at 4e666cdb06eede20 perf tools: Fix dependency for version file creation
-  $ make -C tools/perf O=/tmp/build/perf install-bin
-  $ perf -v
-  perf version 5.17.rc8.g4e666cdb06ee
-
-Ok, detected and rebuilt, perf -v works as expected.
-
-Now lets try cherry picking your second patch:
-
-$ git cherry-pick cb66befccba18fac
-  [perf/core 8ff6a6c06a90a362] perf tools: Fix version kernel tag
-   Author: John Garry <john.garry@huawei.com>
-   Date: Mon Feb 21 21:16:49 2022 +0800
-   1 file changed, 4 insertions(+), 9 deletions(-)
-  $ make -C tools/perf O=/tmp/build/perf install-bin
-  $ perf -v
-  perf version 5.17.rc8.g4e666cdb06ee
-
-Now it doesn´t notice it and there is no automatic rebuild triggered, we
-stay with the cset from before the cherry-pick :-\
-
-$ git log --oneline -2
-8ff6a6c06a90a362 (HEAD -> perf/core) perf tools: Fix version kernel tag
-4e666cdb06eede20 perf tools: Fix dependency for version file creation
-$
-
-Anyway, your patch works for some cases, so its an improvement and I'll
-apply it, we can continue from there.
-
-- Arnaldo

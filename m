@@ -2,140 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2642D4E4729
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561D44E472D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbiCVUEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
+        id S232656AbiCVUEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbiCVUE3 (ORCPT
+        with ESMTP id S232601AbiCVUEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:04:29 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A934EF41
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:02:59 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id q1-20020a17090a4f8100b001c6575ae105so2616171pjh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9z2OhjirVkz2pUbqaGLshsVzbhbV6ISeuMuKyH7hsWQ=;
-        b=K2Z9Zm7zGkxEMQYec2pWhgy2XOQfPvprN/HESKZHkKo7Ap1wOflyxcYFVKuQSFNTtJ
-         b9eFHIu5L4AWWJc2rbAjlYQK/tgMamITSdBIPTLzdCBvH8/DXHUfNKDYKSV7uYAznF90
-         5FxANI/+CMn1ACq4S2PDBARc6QZrHnYt+JDhpLr4w8ewc+e7OZeymUewObip6OUr83bx
-         ISHC6wAzK0V580zpUIfhQ0ipyyDhSG+fqlhmjqKrcby6Xp2j4oPkxHvlbuOTiWi5cEHr
-         onyxLF1gkS/IltPtPUFuIQ6wdwtukxWWzPL22YWYSAJ3n74leqv6DMiSscTz9OOEhs1N
-         LAvg==
+        Tue, 22 Mar 2022 16:04:47 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF5C27CD2;
+        Tue, 22 Mar 2022 13:03:19 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-dacc470e03so2806869fac.5;
+        Tue, 22 Mar 2022 13:03:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=9z2OhjirVkz2pUbqaGLshsVzbhbV6ISeuMuKyH7hsWQ=;
-        b=dCHHs1dsEwQ7bBUy6j7mde8Vo4ww1nbtQ0ivV2UINAu0/JhhXFjGrhuNp6kgvgmy+p
-         1BnnND31UJln1nJYhw7L/CLIDoI1nWSTULGxL2JCAtl6YjjPDA5R1Dtf+qy28fr0UINh
-         cop54rOyeWNMVCIkvM5Yr7uH9bKR6+DpDQJDnH9TgiCkC7k6Xn1NufJvu+O2+4NDUshg
-         Xd8wIiZmd+CaFve51VcxpSuAxCDxDy6D8UlwYD/krEoEyXDGdQJpFDUbJioOha18aCXc
-         NREBXf+hsJtbN6bemfM6bg+qT2+q15Uomqm7E5eUxckKVtCJl87ouBmKzXz70AVkxAhB
-         O6GA==
-X-Gm-Message-State: AOAM532sxyHf8qsevBvIx0tGmkQu+m0RFQE4nUnjeGHnPnUe1yvfmy2l
-        yrZHHl8ND8rgJ1euyazcjlbrrQ==
-X-Google-Smtp-Source: ABdhPJxGBLZF1jlZKcKbjlOflMXaW/vAHBWu7fR9pPGvxm7TO7lO3LkOEzMtr4yuUNUKm16mJIbDEQ==
-X-Received: by 2002:a17:902:e88e:b0:154:7562:176d with SMTP id w14-20020a170902e88e00b001547562176dmr8166892plg.13.1647979378618;
-        Tue, 22 Mar 2022 13:02:58 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm24451135pfi.170.2022.03.22.13.02.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Fq1z4Ed84ZuWdkW2m9jYI7sM6QJam+q9K1arrVbgWws=;
+        b=HzR5KHgBJZX4QzPydA7vo7tY9/5VR+Qlv6HaHpazIh6RFMoxebS3ta9FfLDdSuwND8
+         Z/Wx3x3aoEUANdoZVkyiDCVE9uMuX1fVVLdk6lKwpAg169tqEV4jdUJaFcLL0Tt1mlns
+         NGzJsH7jR7wh52GrblG+84WVAmt/9hhVCFMpplAtlXk8fm8SjK3FhyP3l5hxC0eEYyQJ
+         5zC/htQuWWr9vGvI7v66lWPV3E5w2HP4qgF2ukU6EQNZ+WD/rEZusb+ZQaZWh0Z0y0M4
+         y3u/KRCHQ7LGWetFY/9QOfQVoCokx7qQPt79oT0BZml4dWkKdWvjUD9G0dOXq4ZivxyP
+         nThw==
+X-Gm-Message-State: AOAM532gito9orADE27tNf+NTmoF6qX6Ta8Np5UIzCjAiQq2DTN/Kpvj
+        LGpkQNrYC6KvWLogMrCZiw==
+X-Google-Smtp-Source: ABdhPJy4AIzdw7CM09sm8WiJu7yAMWYZnT7kqu9E09l5bnyx+c0wfi4rPWwDeKMKI6b9WUwXAQwTQQ==
+X-Received: by 2002:a05:6870:b52c:b0:dd:ddfa:3161 with SMTP id v44-20020a056870b52c00b000ddddfa3161mr2430238oap.61.1647979398908;
+        Tue, 22 Mar 2022 13:03:18 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 21-20020a056870115500b000dda3a0cb91sm3110524oag.54.2022.03.22.13.03.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 13:02:58 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 13:02:58 -0700 (PDT)
-X-Google-Original-Date: Tue, 22 Mar 2022 13:02:56 PDT (-0700)
-Subject:     Re: [PATCH 0/5] Generic Ticket Spinlocks
-In-Reply-To: <c0328672-6dd1-b65b-1e2f-6f2562084f2d@conchuod.ie>
-CC:     linux-riscv@lists.infradead.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        mingo@redhat.com, Will Deacon <will@kernel.org>,
-        longman@redhat.com, boqun.feng@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        jszhang@kernel.org, wangkefeng.wang@huawei.com,
-        openrisc@lists.librecores.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, peterz@infradead.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     mail@conchuod.ie
-Message-ID: <mhng-f97b1e7d-1523-4ae5-923b-e73a8db48824@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 22 Mar 2022 13:03:17 -0700 (PDT)
+Received: (nullmailer pid 2415318 invoked by uid 1000);
+        Tue, 22 Mar 2022 20:03:15 -0000
+Date:   Tue, 22 Mar 2022 15:03:15 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
+ controller
+Message-ID: <Yjorg4taoTVAr8ML@robh.at.kernel.org>
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-6-15330273260@189.cn>
+ <YjkITWpbnCmhKaX+@robh.at.kernel.org>
+ <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
+ <66ae2436-aa86-f583-85b4-d652273188e9@flygoat.com>
+ <629311ac-f847-dd57-689e-eaa97aae8480@189.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <629311ac-f847-dd57-689e-eaa97aae8480@189.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 11:18:18 PDT (-0700), mail@conchuod.ie wrote:
-> On 16/03/2022 23:25, Palmer Dabbelt wrote:
->> Peter sent an RFC out about a year ago
->> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>,
->> but after a spirited discussion it looks like we lost track of things.
->> IIRC there was broad consensus on this being the way to go, but there
->> was a lot of discussion so I wasn't sure.  Given that it's been a year,
->> I figured it'd be best to just send this out again formatted a bit more
->> explicitly as a patch.
->>
->> This has had almost no testing (just a build test on RISC-V defconfig),
->> but I wanted to send it out largely as-is because I didn't have a SOB
->> from Peter on the code.  I had sent around something sort of similar in
->> spirit, but this looks completely re-written.  Just to play it safe I
->> wanted to send out almost exactly as it was posted.  I'd probably rename
->> this tspinlock and tspinlock_types, as the mis-match kind of makes my
->> eyes go funny, but I don't really care that much.  I'll also go through
->> the other ports and see if there's any more candidates, I seem to
->> remember there having been more than just OpenRISC but it's been a
->> while.
->>
->> I'm in no big rush for this and given the complex HW dependencies I
->> think it's best to target it for 5.19, that'd give us a full merge
->> window for folks to test/benchmark it on their systems to make sure it's
->> OK.
->
-> Is there a specific way you have been testing/benching things, or is it
-> just a case of test what we ourselves care about?
+On Tue, Mar 22, 2022 at 09:54:08PM +0800, Sui Jingfeng wrote:
+> 
+> On 2022/3/22 21:08, Jiaxun Yang wrote:
+> > 
+> > 
+> > 在 2022/3/22 2:33, Sui Jingfeng 写道:
+> > > 
+> > > On 2022/3/22 07:20, Rob Herring wrote:
+> > > > On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
+> > > > > From: suijingfeng <suijingfeng@loongson.cn>
+> > > > > 
+> > > > Needs a commit message.
+> > > > 
+> > > > > Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+> > > > > Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> > > > Same person? Don't need both emails.
+> > > 
+> > > Yes,  suijingfeng@loongson.cn is my company's email. But it can not
+> > > be used to send patches to dri-devel,
+> > > 
+> > > when send patches with this email, the patch will not be shown on
+> > > patch works.
+> > > 
+> > > Emails  are either blocked or got  rejected  by loongson's mail
+> > > server.  It can only receive emails
+> > > 
+> > > from you and other people, but not dri-devel. so have to use my
+> > > personal email(15330273260@189.cn) to send patches.
+> > In this case you can just use your company's email to sign-off
+> > code and sending with your personal email. It's common practice.
+> > 
+> > If you don't want to receiving kernel email in your company mailbox,
+> > you can add a entry in .mailmap .
+> > 
+> |I'm using `git send-email -7 --cover-letter --annotate -v11` command to
+> send patches, it will automatically sign off patches with the my private
+> emails. |
 
-I do a bunch of functional testing in QEMU (it's all in my 
-riscv-systems-ci repo, but that's not really fit for human consumption 
-so I don't tell folks to use it).  That's pretty much useless for 
-something like this: sure it'd find something just straight-up broken in 
-the lock implementation, but the stuff I'm really worried about here 
-would be poor interactions with hardware that wasn't designed/tested 
-against this flavor of locks.
+I think that is only if you set your git config author to your private 
+email. Pretty much anything git might automatically do can be turned 
+off.
 
-I don't currently do any regular testing on HW, but there's a handful of 
-folks who do.  If you've got HW you care about then the best bet is to 
-give this a shot on it.  There's already been some boot test reports, so 
-it's at least mostly there (on RISC-V, last I saw it was breaking 
-OpenRISC so there's probably some lurking issue somewhere).  I was 
-hoping we'd get enough coverage that way to have confidence in this, but 
-if not then I've got a bunch of RISC-V hardware lying around that I can 
-spin up to fill the gaps.
+Rob
 
-As far as what workloads, I really don't know here.  At least on RISC-V, 
-I think any lock microbenchmarks would be essentially meaningless: this 
-is fair, so even if lock/unlock is a bit slower that's probably a win 
-for real workloads.  That said, I'm not sure any of the existing 
-hardware runs any workloads that I'm personally interested in so unless 
-this is some massive hit to just general system responsiveness or 
-make/GCC then I'm probably not going to find anything.
-
-Happy to hear if anyone has ideas, though.
-
->
-> Thanks,
-> Conor.
->
->> RISC-V has a forward progress guarantee so we should be safe, but
->> these can always trip things up.

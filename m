@@ -2,68 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C744E4157
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2914E4158
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236859AbiCVOb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
+        id S237184AbiCVOcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234994AbiCVObt (ORCPT
+        with ESMTP id S233837AbiCVObw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:31:49 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151E96A033;
-        Tue, 22 Mar 2022 07:30:21 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id o10so17845373ejd.1;
-        Tue, 22 Mar 2022 07:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=n8t1dnR803GS4DcmePZxEgPndEBN5PcTpexwHu5EiSc=;
-        b=dmizTs7zxk1hhLYRs9AwGQJ8/OyjsLl5o8Jyy3Q7IxgnA1GokvStcSDZYMKLDkY0WK
-         csSZBYQCTuxRyYJoCYTfl6+Rq+hrw/Hy4jEB8YtvEoxgHKd2M3Z6dw2dLpEGl61pE5j9
-         xBLW4Jf6LcR3HTlRT2dacIGnVo+nCNhuCIbhW+IrfTeOBuYco/+NZG+CYAtVND5vSU8P
-         NResCI34R2TUAhCoRz4Qo00rDZ/pxQFx7MokCYVyoQJJgcw/Y1q8oU4c3rRI29CCLzTb
-         WKgM2WCHc6f0OBz2pL1BWQE5mUceVOiVQeM0veSkapVqO4y7K0NDxfdCuNkZddUhNi2n
-         b7rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=n8t1dnR803GS4DcmePZxEgPndEBN5PcTpexwHu5EiSc=;
-        b=nNqiP6pjRFtNc9PBaOTCwtSfjPGSDHzaSi3MrH8OjfNUXXr+1BSyJbO1d2ozIFyvXM
-         1d8+UtbuolFV/nUS7odJF/CHE5pX5Ovt4tqjCWPqEhG1ilJFKKX0SX1dpKu5lEEZHZe0
-         ve3RV+yIZ2XxJWOFRD/HQDprUTdiFV+nPnYYta19EFO/LMKUd4ym5YTaVYRcexovF3ah
-         3vMp8/mxc2AUP+LjNtXgojx6UvBLPOgXL7OlIh2KEn3sYzfZB2kClTQEUJdswCV8tLdl
-         z1C49iYC35kLFzTZmUxk0BYQ8ZxRJHiRXO7Y9rQev+MtbKZvhAVFBDXa81KDeT5TOXnJ
-         /Ghw==
-X-Gm-Message-State: AOAM532L53IWcg8rqsXEALEVHByWh3Ffpp7OgwlC3+KCQjfGcntZwogl
-        7fxHZolNhoA546uwe3jwTFLLB9/+GG1bTmTiZarGqcGGUfo=
-X-Google-Smtp-Source: ABdhPJwso+n07HmH0IlW7nmSddH3CFAMkpKeaBLNQSuPhMe+Dv5Q1yIHYUNDWIcP8/xVQPODOApVZrgkpW/gONfjLSs=
-X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
- hd14-20020a170907968e00b006dbaed543c8mr25687772ejc.636.1647959419419; Tue, 22
- Mar 2022 07:30:19 -0700 (PDT)
+        Tue, 22 Mar 2022 10:31:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F0B6A053;
+        Tue, 22 Mar 2022 07:30:24 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MCrPt3020389;
+        Tue, 22 Mar 2022 14:29:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+JUqREg8t44nEfQ2HVmmV0k84OjTE9fFx3uMTgNT6c8=;
+ b=DohYysYsSe0lIChowg4PiJ64Nou932rXu87EjNWEcTP/Kx1aA92r9l3SkQGmPjo2fINp
+ yvz4upRhS4wsW236WjgC18dCww5BUVwteZo1OLpCJdHsy3XZ6RJhVg0YVAkasv/aa8vD
+ giYuIwCAm9tGK7SopnrWb8U4d8LaRI2B6584mG/nzJDliFdTQnKdKmg5NH4D3PD86nSD
+ CQhVr3v91noj2UK/x6vUhLO+2vb9s+9Jg00aDP993pEswd6vYeXgCiBazN4mhueiYUzb
+ KAw9xr5K/V9Pkrf9hIyRTxfPUyLDySfJXZFWxNO2GBm4JelSGLidF3joEZ00adA7jVTe iw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eyc20pbby-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 14:29:45 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MEHEvf015607;
+        Tue, 22 Mar 2022 14:29:43 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ew6ehxerq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 14:29:43 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22METee036831610
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Mar 2022 14:29:40 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 139634C046;
+        Tue, 22 Mar 2022 14:29:40 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 960E04C044;
+        Tue, 22 Mar 2022 14:29:34 +0000 (GMT)
+Received: from [9.43.105.112] (unknown [9.43.105.112])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Mar 2022 14:29:34 +0000 (GMT)
+Message-ID: <c198a1b5-cc7e-4e51-533b-a5794f506b17@linux.ibm.com>
+Date:   Tue, 22 Mar 2022 19:59:33 +0530
 MIME-Version: 1.0
-References: <20220321163055.4058-1-pali@kernel.org>
-In-Reply-To: <20220321163055.4058-1-pali@kernel.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 22 Mar 2022 16:29:08 +0200
-Message-ID: <CAHp75VddDG-ZJpbAb5ZhKaMpP0L+CMEx2pcYy3FOMiaxNydCWA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] serial: Fix support for UPF_SPD_* flags
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
+ CONFIG_PERF_EVENTS is not set
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux MM <linux-mm@kvack.org>
+References: <20220318114133.113627-1-kjain@linux.ibm.com>
+ <20220318114133.113627-2-kjain@linux.ibm.com>
+ <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+From:   kajoljain <kjain@linux.ibm.com>
+In-Reply-To: <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Iy28N7SpHGz-D1RAEQMseTZ42pbzCxD-
+X-Proofpoint-GUID: Iy28N7SpHGz-D1RAEQMseTZ42pbzCxD-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-22_06,2022-03-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=999 clxscore=1015
+ phishscore=0 mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2203220082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,46 +103,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 11:07 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
->
-> Support for UPF_SPD_* flags is currently broken in more drivers for two
-> reasons. First one is that uart_update_timeout() function does not
 
-the uart_update_timeout()
 
-> calculate timeout for UPF_SPD_CUST flag correctly. Second reason is that
-> userspace termios structre is modified by most drivers after each
+On 3/22/22 03:09, Dan Williams wrote:
+> On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
+>>
+>> The following build failure occures when CONFIG_PERF_EVENTS is not set
+>> as generic pmu functions are not visible in that scenario.
+>>
+>> arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: ‘struct perf_event’ has no member named ‘attr’
+>>          p->nvdimm_events_map[event->attr.config],
+>>                                    ^~
+>> In file included from ./include/linux/list.h:5,
+>>                  from ./include/linux/kobject.h:19,
+>>                  from ./include/linux/of.h:17,
+>>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+>> arch/powerpc/platforms/pseries/papr_scm.c: In function ‘papr_scm_pmu_event_init’:
+>> arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: ‘struct perf_event’ has no member named ‘pmu’
+>>   struct nvdimm_pmu *nd_pmu = to_nvdimm_pmu(event->pmu);
+>>                                                  ^~
+>> ./include/linux/container_of.h:18:26: note: in definition of macro ‘container_of’
+>>   void *__mptr = (void *)(ptr);     \
+>>                           ^~~
+>> arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion of macro ‘to_nvdimm_pmu’
+>>   struct nvdimm_pmu *nd_pmu = to_nvdimm_pmu(event->pmu);
+>>                               ^~~~~~~~~~~~~
+>> In file included from ./include/linux/bits.h:22,
+>>                  from ./include/linux/bitops.h:6,
+>>                  from ./include/linux/of.h:15,
+>>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+>>
+>> Fix the build issue by adding check for CONFIG_PERF_EVENTS config option
+>> and disabling the papr_scm perf interface support incase this config
+>> is not set
+>>
+>> Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") (Commit id
+>> based on linux-next tree)
+>> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+>> ---
+>>  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
+> 
+> This is a bit messier than I would have liked mainly because it dumps
+> a bunch of ifdefery into a C file contrary to coding style, "Wherever
+> possible, don't use preprocessor conditionals (#if, #ifdef) in .c
+> files". I would expect this all to move to an organization like:
 
-structure
+Hi Dan,
+      Thanks for reviewing the patches. Inorder to avoid the multiple
+ifdefs checks, we can also add stub function for papr_scm_pmu_register.
+With that change we will just have one ifdef check for
+CONFIG_PERF_EVENTS config in both papr_scm.c and nd.h file. Hence we can
+avoid adding new files specific for papr_scm perf interface.
 
-...
+Below is the code snippet for that change, let me know if looks fine to
+you. I tested it
+with set/unset PAPR_SCM config value and set/unset PERF_EVENTS config
+value combinations.
 
-> (error handling was ommited for simplification)
+diff --git a/arch/powerpc/platforms/pseries/papr_scm.c
+b/arch/powerpc/platforms/pseries/papr_scm.c
+index 4dd513d7c029..38fabb44d3c3 100644
+--- a/arch/powerpc/platforms/pseries/papr_scm.c
++++ b/arch/powerpc/platforms/pseries/papr_scm.c
+@@ -69,8 +69,6 @@
+ #define PAPR_SCM_PERF_STATS_EYECATCHER __stringify(SCMSTATS)
+ #define PAPR_SCM_PERF_STATS_VERSION 0x1
 
-omitted
+-#define to_nvdimm_pmu(_pmu)    container_of(_pmu, struct nvdimm_pmu, pmu)
+-
+ /* Struct holding a single performance metric */
+ struct papr_scm_perf_stat {
+        u8 stat_id[8];
+@@ -346,6 +344,9 @@ static ssize_t drc_pmem_query_stats(struct
+papr_scm_priv *p,
+        return 0;
+ }
 
-> After calling set_active_spd_cust_baud() function SPD custom divisor
-> should be active and therefore is_spd_cust_active() should return true.
->
-> But it is not active (cfgetospeed does not return B38400) and this patch
-> series should fix it. I have tested it with 8250 driver.
++#ifdef CONFIG_PERF_EVENTS
++#define to_nvdimm_pmu(_pmu)    container_of(_pmu, struct nvdimm_pmu, pmu)
++
+ static int papr_scm_pmu_get_value(struct perf_event *event, struct
+device *dev, u64 *count)
+ {
+        struct papr_scm_perf_stat *stat;
+@@ -558,6 +559,10 @@ static void papr_scm_pmu_register(struct
+papr_scm_priv *p)
+        dev_info(&p->pdev->dev, "nvdimm pmu didn't register rc=%d\n", rc);
+ }
 
-drivers
++#else
++static inline void papr_scm_pmu_register(struct papr_scm_priv *p) { }
++#endif
++
+ /*
+  * Issue hcall to retrieve dimm health info and populate papr_scm_priv
+with the
+  * health information.
+diff --git a/drivers/nvdimm/Makefile b/drivers/nvdimm/Makefile
+index 3fb806748716..ba0296dca9db 100644
+--- a/drivers/nvdimm/Makefile
++++ b/drivers/nvdimm/Makefile
+@@ -15,7 +15,7 @@ nd_e820-y := e820.o
+ libnvdimm-y := core.o
+ libnvdimm-y += bus.o
+ libnvdimm-y += dimm_devs.o
+-libnvdimm-y += nd_perf.o
++libnvdimm-$(CONFIG_PERF_EVENTS) += nd_perf.o
+ libnvdimm-y += dimm.o
+ libnvdimm-y += region_devs.o
+ libnvdimm-y += region.o
+diff --git a/include/linux/nd.h b/include/linux/nd.h
+index 7b2ccbdc1cbc..a387e2b630ad 100644
+--- a/include/linux/nd.h
++++ b/include/linux/nd.h
+@@ -57,15 +57,22 @@ struct nvdimm_pmu {
+        struct cpumask arch_cpumask;
+ };
 
-> Originally Johan Hovold reported that there may be issue with these
-> ASYNC_SPD_FLAGS in email:
-> https://lore.kernel.org/linux-serial/20211007133146.28949-1-johan@kernel.=
-org/
->
->
-> Johan, Greg, could you please test these patches if there is not any
-> regression?
++#ifdef CONFIG_PERF_EVENTS
+ extern ssize_t nvdimm_events_sysfs_show(struct device *dev,
+                                        struct device_attribute *attr,
+                                        char *page);
 
-I'm wondering why we are still supporting this ugly hack?
-Doesn't BOTHER work for you?
+ int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm, struct
+platform_device *pdev);
+ void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu);
+-void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu);
+-int perf_pmu_register(struct pmu *pmu, const char *name, int type);
+-void perf_pmu_unregister(struct pmu *pmu);
++
++#else
++static inline int register_nvdimm_pmu(struct nvdimm_pmu *nd_pmu, struct
+platform_device *pdev)
++{
++       return -ENXIO;
++}
++
++static inline void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu) { }
++#endif
 
-I would rather expect to have this removed completely.
+ struct nd_device_driver {
+        struct device_driver drv;
+> 
+> arch/powerpc/platforms/pseries/papr_scm/main.c
+> arch/powerpc/platforms/pseries/papr_scm/perf.c
+> 
+> ...and a new config symbol like:
+> 
+> config PAPR_SCM_PERF
+>        depends on PAPR_SCM && PERF_EVENTS
+>        def_bool y
+> 
+> ...with wrappers in header files to make everything compile away
+> without any need for main.c to carry an ifdef.
+> 
+> Can you turn a patch like that in the next couple days? Otherwise, I
+> think if Linus saw me sending a late breaking compile fix that threw
+> coding style out the window he'd have cause to just drop the pull
+> request entirely.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Sure Dan, I will work on the patches and send it asap once we finalized
+the changes.
+
+Thanks,
+Kajol Jain

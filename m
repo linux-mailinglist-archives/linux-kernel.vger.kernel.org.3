@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF614E37F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B61B64E37ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 05:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236363AbiCVEbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 00:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
+        id S236410AbiCVEbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 00:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236427AbiCVEbU (ORCPT
+        with ESMTP id S236363AbiCVEbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 00:31:20 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C6F186C9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:29:53 -0700 (PDT)
+        Tue, 22 Mar 2022 00:31:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F38B1408C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 21:29:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647923393; x=1679459393;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+vZF8mD3EtUV+YWqAgVvtqCMdtdZsAaFJbUF+BnC+I0=;
-  b=GIxP5O1ph1jwEhmyCV5LE5wi6SvQHkeunqBrVfMePnxtkbWb3fqWgqtt
-   gRG4FCRfkgUF4KN4ly/jfo9V8+aANt92r/nHyDZV6utPTqFd73A+x/bIA
-   EyY4jgLm0iLb/TUioR8or+tfnFK/ZVLmakM6LCu66bVa8tBZsxyiY9crE
-   Od5NyB+wRt/fap1EqI7QfG+gSeIE6ZHDGEpFltAlWiAxPIVicvg0/dMHV
-   hzwXMuilSQQCZXN/Y0+Fks/iiIcwZbmqTYdmtnFj4Rq9MJzuXosz+JANj
-   vG2sULWT8QX23J5DrMQ5ZP8yQdajzD255BqMgVd1OHbtOmZN00pSAsqlB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="318428029"
+  t=1647923387; x=1679459387;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=e1W86sXEli1RnC50Lifh7zwKkpipBaeccg3PcImsLsw=;
+  b=ck+BZ7PLCOdFTPPGI353q+vIdU+Plw81S5dz1ka9z6sd7x7coJ2NYX0p
+   pVfZQK8YL7NP0iU0nS/ijUy777rx1E/GpUDbb267he4wzycYIAIuaFnl5
+   zwRYlrKRzUQ/TDQ/TaMoW7i8BS/Z3Bc1Rw2UVyKnW80EyGL8O4qoTYQqN
+   N2Ej8RWHRrzxkgL6InM02eaYdRIgkcwYiAZ8w24ZiC4fObi/tUsRMK3mJ
+   F20vj58msuA8QtMLdyq0mafa9HB19AYo1UktJRSLRP5uFr1vKl9G3CmFn
+   EkE7fgz75dAgokKC4dSepDwbg8LUiHLSPWTt31QhHn5jiQim32F1SrO98
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257667672"
 X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="318428029"
+   d="scan'208";a="257667672"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 21:29:53 -0700
-X-ExtLoop1: 1
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 21:29:47 -0700
 X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="518718737"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 21 Mar 2022 21:29:51 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWW9X-000ITm-24; Tue, 22 Mar 2022 04:29:51 +0000
-Date:   Tue, 22 Mar 2022 12:29:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:iommufd 7/13]
- drivers/iommu/iommufd/io_pagetable.c:486:14: warning: comparison of distinct
- pointer types ('typeof (iova) (aka 'unsigned long and 'typeof (length - 1)
- (aka 'unsigned int
-Message-ID: <202203221253.Vhpboxoj-lkp@intel.com>
+   d="scan'208";a="518718729"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.209.186]) ([10.254.209.186])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 21:29:42 -0700
+Message-ID: <ba9802c5-2a45-9a85-2e0b-ebbc84870dc8@linux.intel.com>
+Date:   Tue, 22 Mar 2022 12:29:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 06/11] iommu/sva: Use attach/detach_pasid_dev in SVA
+ interfaces
+Content-Language: en-US
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
+ <20220320064030.2936936-7-baolu.lu@linux.intel.com> <YjhiohZAbN1ornmB@myrica>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <YjhiohZAbN1ornmB@myrica>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,276 +73,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   fc388f906088fe5f5f2db6a36931e00124f52042
-commit: 1af524ce30ddf820ec974c8635d3299caefc72ed [7/13] iommufd: Data struc=
-ture to provide IOVA to PFN mapping
-config: mips-randconfig-c004-20220322 (https://download.01.org/0day-ci/arch=
-ive/20220322/202203221253.Vhpboxoj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2=
-687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/jgunthorpe/linux/commit/1af524ce30ddf820ec974c=
-8635d3299caefc72ed
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout 1af524ce30ddf820ec974c8635d3299caefc72ed
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 ARCH=3Dmips=20
+On 2022/3/21 19:33, Jean-Philippe Brucker wrote:
+> On Sun, Mar 20, 2022 at 02:40:25PM +0800, Lu Baolu wrote:
+>> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+>> index 106506143896..47cf98e661ff 100644
+>> --- a/drivers/iommu/iommu-sva-lib.c
+>> +++ b/drivers/iommu/iommu-sva-lib.c
+>> @@ -3,6 +3,8 @@
+>>    * Helpers for IOMMU drivers implementing SVA
+>>    */
+>>   #include <linux/mutex.h>
+>> +#include <linux/iommu.h>
+>> +#include <linux/slab.h>
+>>   #include <linux/sched/mm.h>
+>>   
+>>   #include "iommu-sva-lib.h"
+>> @@ -69,3 +71,101 @@ struct mm_struct *iommu_sva_find(ioasid_t pasid)
+>>   	return ioasid_find(&iommu_sva_pasid, pasid, __mmget_not_zero);
+>>   }
+>>   EXPORT_SYMBOL_GPL(iommu_sva_find);
+>> +
+>> +static struct iommu_domain *iommu_sva_domain_alloc(struct device *dev)
+>> +{
+>> +	struct bus_type *bus = dev->bus;
+>> +	struct iommu_domain *domain;
+>> +
+>> +	if (!bus || !bus->iommu_ops)
+>> +		return NULL;
+>> +
+>> +	domain = bus->iommu_ops->domain_alloc(IOMMU_DOMAIN_SVA);
+>> +	if (domain)
+>> +		domain->type = IOMMU_DOMAIN_SVA;
+>> +
+>> +	return domain;
+>> +}
+>> +
+>> +/**
+>> + * iommu_sva_bind_device() - Bind a process address space to a device
+>> + * @dev: the device
+>> + * @mm: the mm to bind, caller must hold a reference to it
+>> + * @drvdata: opaque data pointer to pass to bind callback
+>> + *
+>> + * Create a bond between device and address space, allowing the device to access
+>> + * the mm using the returned PASID. If a bond already exists between @device and
+>> + * @mm, it is returned and an additional reference is taken.
+> This is not true anymore, we return a different structure for each call.
+> 
+>> Caller must call
+>> + * iommu_sva_unbind_device() to release each reference.
+>> + *
+>> + * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
+>> + * initialize the required SVA features.
+>> + *
+>> + * On error, returns an ERR_PTR value.
+>> + */
+>> +struct iommu_sva *
+>> +iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
+>> +{
+>> +	int ret = -EINVAL;
+>> +	struct iommu_sva *handle;
+>> +	struct iommu_domain *domain;
+>> +
+>> +	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
+>> +	if (!handle)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	ret = iommu_sva_alloc_pasid(mm, 1, (1U << dev->iommu->pasid_bits) - 1);
+>> +	if (ret)
+>> +		goto out;
+>> +
+>> +	domain = iommu_sva_domain_alloc(dev);
+>> +	if (!domain) {
+>> +		ret = -ENOMEM;
+>> +		goto out;
+>> +	}
+>> +	domain->sva_cookie = mm;
+>> +
+>> +	ret = iommu_attach_device_pasid(domain, dev, mm->pasid);
+>> +	if (ret)
+>> +		goto out_free_domain;
+>> +
+>> +	handle->dev = dev;
+>> +	handle->domain = domain;
+>> +	handle->pasid = mm->pasid;
+>> +
+>> +	return handle;
+>> +
+>> +out_free_domain:
+>> +	iommu_domain_free(domain);
+>> +out:
+>> +	kfree(handle);
+>> +
+>> +	return ERR_PTR(ret);
+>> +}
+>> +EXPORT_SYMBOL_GPL(iommu_sva_bind_device);
+>> +
+>> +/**
+>> + * iommu_sva_unbind_device() - Remove a bond created with iommu_sva_bind_device
+>> + * @handle: the handle returned by iommu_sva_bind_device()
+>> + *
+>> + * Put reference to a bond between device and address space.
+> Same here. But I'd prefer keeping the old behavior so device drivers don't
+> have to keep track of {dev, mm} pairs themselves.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Okay. Thank you for pointing this out. Let me figure it out in the next
+version.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/iommu/iommufd/io_pagetable.c:486:14: warning: comparison of dist=
-inct pointer types ('typeof (iova) (aka 'unsigned long and 'typeof (length =
-- 1) (aka 'unsigned int
-   WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_ove=
-rflow'
-   (void) (&__a =3D=3D &__b); ~~~~ ^ ~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-   int __ret_warn_on =3D ^~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( , ## __VA_ARGS__) ) )
-   ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_va=
-r'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) (cond) : __trac=
-e_if_value(cond))
-   ^~~~
->> drivers/iommu/iommufd/io_pagetable.c:486:14: warning: comparison of dist=
-inct pointer types ('typeof (iova) (aka 'unsigned long and 'typeof (length =
-- 1) (aka 'unsigned int
-   WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_ove=
-rflow'
-   (void) (&__a =3D=3D &__b); ~~~~ ^ ~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-   int __ret_warn_on =3D ^~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( , ## __VA_ARGS__) ) )
-   ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_va=
-r'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) (cond) : __trac=
-e_if_value(cond))
-   ^~~~
->> drivers/iommu/iommufd/io_pagetable.c:486:14: warning: comparison of dist=
-inct pointer types ('typeof (iova) (aka 'unsigned long and 'typeof (length =
-- 1) (aka 'unsigned int
-   WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_ove=
-rflow'
-   (void) (&__a =3D=3D &__b); ~~~~ ^ ~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-   int __ret_warn_on =3D ^~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( , ## __VA_ARGS__) ) )
-   ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_va=
-r'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) (cond) : __trac=
-e_if_value(cond))
-   ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_val=
-ue'
-   (cond) ^~~~
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/atomic.h", .line =3D 156, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $1, $2 # atomic_fetch_sub
-   subu $0, $1, $3
-   sc $0, $2
-   beqz $0, 1b
-   .set pop
-   move $0, $1
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,drivers/iommu/iommufd/.io_pagetable=
-=2Eo.d -nostdinc -Iarch/mips/include -I./arch/mips/include/generated -Iincl=
-ude -I./include -Iarch/mips/include/uapi -I./arch/mips/include/generated/ua=
-pi -Iinclude/uapi -I./include/generated/uapi -include include/linux/compile=
-r-version.h -include include/linux/kconfig.h -include include/linux/compile=
-r_types.h -D__KERNEL__ -DVMLINUX_LOAD_ADDRESS=3D0xffffffff84000000 -DLINKER=
-_LOAD_ADDRESS=3D0x84000000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-pref=
-ix-map=3D=3D -DKBUILD_EXTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes=
- -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -We=
-rror=3Dimplicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dretur=
-n-type -Wno-format-security -std=3Dgnu89 --target=3Dmips-linux -fintegrated=
--as -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-argumen=
-t -mno-check-zero-division -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -ms=
-oft-float -DGAS_HAS_SET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EB -fno-=
-stack-check -march=3Dmips32 -Wa,-mips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIR=
-T -Iarch/mips/include/asm/mach-bcm63xx/ -Iarch/mips/include/asm/mach-generi=
-c -fno-asynchronous-unwind-tables -fno-delete-null-pointer-checks -Wno-fram=
-e-address -Wno-address-of-packed-member -Os -Wframe-larger-than=3D1024 -fno=
--stack-protector -Wimplicit-fallthrough -Wno-gnu -mno-global-merge -Wno-unu=
-sed-but-set-variable -Wno-unused-const-variable -ftrivial-auto-var-init=3Dp=
-attern -fno-stack-clash-protection -pg -Wdeclaration-after-statement -Wvla =
--Wno-pointer-sign -Wcast-function-type -Wno-array-bounds -fno-strict-overfl=
-ow -fno-stack-check -Werror=3Ddate-time -Werror=3Dincompatible-pointer-type=
-s -Wextra -Wunused -Wno-unused-parameter -Wmissing-declarations -Wmissing-f=
-ormat-attribute -Wmissing-prototypes -Wold-style-definition -Wmissing-inclu=
-de-dirs -Wunused-but-set-variable -Wunused-const-variable -Wno-missing-fiel=
-d-initializers -Wno-sign-compare -Wno-type-limits -fsanitize=3Darray-bounds=
- -fsanitize=3Dshift -fsanitize=3Dinteger-divide-by-zero -fsanitize-coverage=
-=3Dtrace-pc -I drivers/iommu/iommufd -I ./drivers/iommu/iommufd -DKBUILD_MO=
-DFILE=3D"drivers/iommu/iommufd/iommufd" -DKBUILD_BASENAME=3D"io_pagetable" =
--DKBUILD_MODNAME=3D"iommufd" -D__KBUILD_MODNAME=3Dkmod_iommufd -c -o driver=
-s/iommu/iommufd/io_pagetable.o drivers/iommu/iommufd/io_pagetable.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'drivers/iommu/iommufd=
-/io_pagetable.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@iopt_map_user_page=
-s'
-   #0 0x00005635c4ce26bf Signals.cpp:0:0
-   #1 0x00005635c4ce059c llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-85e9b2687a/bin/clang-15+0x349f59c)
-   #2 0x00005635c4c1ffc7 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-85e9b2687a/bin/clang-15+0x33defc7)
-   #3 0x00005635c4cd8c4e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-85e9b2687a/bin/clang-15+0x3497c4e)
-   #4 0x00005635c28dd18b (/opt/cross/clang-85e9b2687a/bin/clang-15+0x109c18=
-b)
-   #5 0x00005635c4c26aec llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-85e9b2687a/bin/clang-15+0x33e5aec)
-   #6 0x00005635c5943880 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-85e9b2687a/bin/clang-15+0x4102880)
-   #7 0x00005635c593f744 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-85e9b2687a/bin/clang-15+0x40fe744)
-   #8 0x00005635c33587a7 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-85e9b2687a/bin/clang-15+0x1b177a7)
-   #9 0x00005635c4022cbd llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x00005635c446a857 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-85e9b2687a/bin/clang-15+0x2c29857)
-   #11 0x00005635c446a9d1 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-85e9b2687a/bin/clang-15+0x2c299d1)
-   #12 0x00005635c446b54f llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-85e9b2687a/bin/clang-15+0x2c2a54f)
-   #13 0x00005635c5001f47 clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-85e9b2687a/bin/clang-15+0x37c0=
-f47)
-   #14 0x00005635c5c642e3 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-85e9b2687a/bin/clang-15+0x44232e3)
-   #15 0x00005635c6777b71 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-85e9b2687a/bin/clang-15+0x4f36b71)
-   #16 0x00005635c5c639c5 clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-85e9b2687a/bin/clang-15+0x44229c5)
-   #17 0x00005635c565cec1 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-85e9b2687a/bin/clang-15+0x3e1bec1)
-   #18 0x00005635c55f2d1a clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-85e9b2687a/bin/clang-15+0x3db1d1a)
-   #19 0x00005635c57227bb (/opt/cross/clang-85e9b2687a/bin/clang-15+0x3ee17=
-bb)
-   #20 0x00005635c28de73c cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-85e9b2687a/bin/clang-15+0x109d73c)
-   #21 0x00005635c28db40b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x00005635c548a0a5 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x00005635c4c1fe83 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-85e9b2687a/bin/clang-15+0x33dee83)
-   #24 0x00005635c548a99e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x00005635c545f2e7 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-85e=
-9b2687a/bin/clang-15+0x3c1e2e7)
-   #26 0x00005635c545fcc7 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-85e9b2687a/bin/clang-15+0x3c1ecc7)
-   #27 0x00005635c5469369 clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-85e9b2687a/bin/clang-15+0x3c28369)
-   #28 0x00005635c282891f main (/opt/cross/clang-85e9b2687a/bin/clang-15+0x=
-fe791f)
-   #29 0x00007fab4e98fd0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x26d0a)
-   #30 0x00005635c28daf2a _start (/opt/cross/clang-85e9b2687a/bin/clang-15+=
-0x1099f2a)
-   clang-15: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project 85e9b2687a13d1908aa86=
-d1b89c5ce398a06cd39)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-85e9b2687a/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers include kernel mm net nr_bisected scripts source u=
-sr
-
-
-vim +486 drivers/iommu/iommufd/io_pagetable.c
-
-   468=09
-   469	/**
-   470	 * iopt_unaccess_pages() - Undo iopt_access_pages
-   471	 * @iopt: io_pagetable to act on
-   472	 * @iova: Starting IOVA
-   473	 * @length:- Number of bytes to access
-   474	 *
-   475	 * Return the struct page's. The caller must stop accessing them bef=
-ore calling
-   476	 * this. The iova/length must exactly match the one provided to acce=
-ss_pages.
-   477	 */
-   478	void iopt_unaccess_pages(struct io_pagetable *iopt, unsigned long io=
-va,
-   479				 size_t length)
-   480	{
-   481		unsigned long cur_iova =3D iova;
-   482		unsigned long last_iova;
-   483		struct iopt_area *area;
-   484=09
-   485		if (WARN_ON(!length) ||
- > 486		    WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
-   487			return;
-   488=09
-   489		down_read(&iopt->iova_rwsem);
-   490		for (area =3D iopt_area_iter_first(iopt, iova, last_iova); area;
-   491		     area =3D iopt_area_iter_next(area, iova, last_iova)) {
-   492			unsigned long last =3D min(last_iova, iopt_area_last_iova(area));
-   493			int num_users;
-   494=09
-   495			iopt_pages_remove_user(area->pages,
-   496					       iopt_area_iova_to_index(area, cur_iova),
-   497					       iopt_area_iova_to_index(area, last));
-   498			if (last =3D=3D last_iova)
-   499				break;
-   500			cur_iova =3D last + 1;
-   501			num_users =3D atomic_dec_return(&area->num_users);
-   502			WARN_ON(num_users < 0);
-   503		}
-   504		up_read(&iopt->iova_rwsem);
-   505	}
-   506=09
-
---=20
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+baolu

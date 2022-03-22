@@ -2,140 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313DA4E36FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 967C54E3702
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235788AbiCVC62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S235794AbiCVC7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbiCVC6S (ORCPT
+        with ESMTP id S235789AbiCVC7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:58:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3143FFD74;
-        Mon, 21 Mar 2022 19:56:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A02D6113C;
-        Tue, 22 Mar 2022 02:56:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE42EC340F3;
-        Tue, 22 Mar 2022 02:56:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647917801;
-        bh=YEpuCp2P6kjoBndK4Ea4E+BlNtN1oBALS8HZJrXyV2c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mDfQjkS2M5e69HcKlS1E5oQpk1kuGQsmejHzx93zyfw1Nm2XFLSavr5tZhJTifykA
-         Z+AlC41AgnKpW0TH0GbCklwrbKffWX3EQCZ8nzGyZcuSdrE/q1OWFMUWhBJw1G4CC5
-         4cjYXe3h2/hPuKrQSa1KIk87zKVXlJ54sn1suUhzCPmOhKka1YsvAD0ZZyIfoZEolJ
-         /i4TJ+Ch3OJlH3Nk2D6J+jB/TQqwOVFoeAL2fEF/NW8zF4hBgGbe8YJX0Bmph7cOsV
-         EzT8JqdZW+2CpsOEvvwqI1nYy7DGcYyy/BTYimGfMetUsIpVpFpnabZz6/a4nljUdH
-         J+Gd+ALJnv+zQ==
-Received: by mail-ua1-f52.google.com with SMTP id o26so6508913uap.4;
-        Mon, 21 Mar 2022 19:56:41 -0700 (PDT)
-X-Gm-Message-State: AOAM531v/UWOfMXo++ObBRYR4ZkHF7alpPGmN9B7MvGssh0Z6UuU2/RG
-        NQjbRw7lcGqK+zZSADF7TzfwymquS5ZtcBnWpkA=
-X-Google-Smtp-Source: ABdhPJyU1p4psTJi1hIstGjzXfKNega2swCJ9tyW4pUhSWqG4ugHLcm62ysTivsRm40bGreCnbkX6d5oIyShkJ+Hsuk=
-X-Received: by 2002:ab0:30b8:0:b0:356:c867:9283 with SMTP id
- b24-20020ab030b8000000b00356c8679283mr3724666uam.118.1647917800908; Mon, 21
- Mar 2022 19:56:40 -0700 (PDT)
+        Mon, 21 Mar 2022 22:59:19 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD1C33EEDB;
+        Mon, 21 Mar 2022 19:57:51 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V7tXCnQ_1647917867;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V7tXCnQ_1647917867)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 22 Mar 2022 10:57:49 +0800
+Date:   Tue, 22 Mar 2022 10:57:47 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     xfs <linux-xfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] xfs: some end COW remapping optimization
+Message-ID: <Yjk7K2yTqpJZLsx5@B-P7TQMD6M-0146.local>
+Mail-Followup-To: "Darrick J. Wong" <djwong@kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220216030854.30180-1-hsiangkao@linux.alibaba.com>
+ <20220321222125.GN8241@magnolia>
 MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-6-chenhuacai@loongson.cn>
- <CAK8P3a2kroHVN3fTabuFVMz08SXytz-SC8X11BxxszsUCksJ4g@mail.gmail.com>
- <CAAhV-H6zE7p6Tq8rg1Fq5cK5L38z-VHjxsZ+qm8+Cp5x=u_bUQ@mail.gmail.com> <CAK8P3a38nUyAt8gGEYregqivdP7NsXS0RuU1NX4_EAVvwGQBWA@mail.gmail.com>
-In-Reply-To: <CAK8P3a38nUyAt8gGEYregqivdP7NsXS0RuU1NX4_EAVvwGQBWA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 22 Mar 2022 10:56:32 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H67o+6zkw4pvDb46c=b4UNtKesog08yGf_hhhXAbLoZGA@mail.gmail.com>
-Message-ID: <CAAhV-H67o+6zkw4pvDb46c=b4UNtKesog08yGf_hhhXAbLoZGA@mail.gmail.com>
-Subject: Re: [PATCH V8 13/22] LoongArch: Add system call support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220321222125.GN8241@magnolia>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd,
+Hi Darrick,
 
-On Mon, Mar 21, 2022 at 5:48 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Mar 21, 2022 at 10:41 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > On Mon, Mar 21, 2022 at 5:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > > >
-> > > > This patch adds system call support and related uaccess.h for LoongArch.
-> > > >
-> > > > Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
-> > > > A: Until the latest glibc release (2.34), statx is only used for 32-bit
-> > > >    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
-> > > >    bit platforms still use newstat now.
-> > > >
-> > > > Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
-> > > > A: The latest glibc release (2.34) has some basic support for clone3 but
-> > > >    it isn't complete. E.g., pthread_create() and spawni() have converted
-> > > >    to use clone3 but fork() will still use clone. Moreover, some seccomp
-> > > >    related applications can still not work perfectly with clone3.
-> > >
-> > > Please leave those out of the mainline kernel support though: Any users
-> > > of existing glibc binaries can keep using patched kernels for the moment,
-> > > and then later drop those pages when the proper glibc support gets
-> > > merged.
-> > The glibc commit d8ea0d0168b190bdf138a20358293c939509367f ("Add an
-> > internal wrapper for clone, clone2 and clone3") modified nearly
-> > everything in order to move to clone3(), except arch_fork() which used
-> > by fork(). And I cannot find any submitted patches to solve it. So I
-> > don't think this is just a forget, maybe there are other fundamental
-> > problems?
->
-> I don't think there are fundamental issues, they probably did not consider
-> it necessary because so far all architectures supported clone().
->
-> Adding Christian Brauner and H.J. Lu for clarificatoin.
-OK, wait a response, if arch_fork() will be moved to clone3(), then I
-will remove __ARCH_WANT_SYS_CLONE.
+On Mon, Mar 21, 2022 at 03:21:25PM -0700, Darrick J. Wong wrote:
+> On Wed, Feb 16, 2022 at 11:08:51AM +0800, Gao Xiang wrote:
+> > Hi folks,
+> > 
+> > Currently, xfs_reflink_end_cow_extent() will unconditionally unmap an
+> > extent from DATA fork and then remap an extent from COW fork. It seems
+> > somewhat ineffective since for many cases we could update real bmbt
+> > records directly by sightly enhancing old
+> > xfs_bmap_add_extent_unwritten_real() implementation, thus reduce some
+> > measurable extra metadata overhead.
+> 
+> Does it work with rmap enabled?
 
-Huacai
->
-> > > > +#define __get_user(x, ptr) \
-> > > > +({                                                                     \
-> > > > +       int __gu_err = 0;                                               \
-> > > > +                                                                       \
-> > > > +       __chk_user_ptr(ptr);                                            \
-> > > > +       __get_user_common((x), sizeof(*(ptr)), ptr);                    \
-> > > > +       __gu_err;                                                       \
-> > > > +})
-> > >
-> > > It would be good to also provide a
-> > > __kernel_kernel_nofault()/__put_kernel_nofault()
-> > > implementation, as the default based on __get_user()/__put_user is not
-> > > ideal.
-> > They are provided in this file below.
->
-> Ok, I see them now, not sure what I did wrong when I looked earlier.
->
->         Arnd
+Yeah, I've tested with rmap enabled. But for now, I have to prioritize
+`erofs over fscache' stuff since it's really needed for cloud vendors and
+cloud-native ecosystem to achieve high-dense and proformance image
+solution for runC and Kata containers. And this patchset still left
+some work to do (since our tester found some cases could cause
+performance degration but I haven't checked/confirm it yet.)
+
+> Reading between the lines, I'm guessing the performance boost might
+> come from avoiding a transaction roll and (possibly) reducing the need
+> to log bmbt updates?  Particularly in the worst case where we split the
+> bmbt only to rejoin the blocks immediately after.
+> 
+> Recently, Dave and Allison have been pondering making an addition to the
+> deferred log item code so that we could ->finish_item the first defer op
+> in the same transaction that logs the caller's deferred operations.
+> Might that get you most of the speed advantage that you're seeking?
+
+Ok, I will recheck later after my container stuff are almost done..
+
+> 
+> > It's important to us since, actually, we're planing to use a modified
+> > alway-cow like atomic write approach internally for database
+> > applications, therefore it'd be nice to do some optimization over
+> > simple end COW approach. Also I think it's still generic and can
+> > benefit other reflink use cases as well.
+> 
+> Hmm, that sounds /awfully/ similar to what sqlite does with f2fs' atomic
+> write ioctls.
+> 
+> Alternately, would this[1] feature that's been sitting around in
+> djwong-dev since late 2019 help?
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/?h=atomic-file-updates
+> 
+
+The problem is that, for example, mysql directly uses direct I/O to
+write data, and we don't want to touch applications (since there are
+still old e.g. mysql versions in production.) so a transparent COW
+atomic write would be much helpful for products (yeah, I admit it's a
+bit tricky, but until applications choose to use swapext, we still
+need some way that we don't need to touch database apps).
+
+Thanks for the reply and the time!
+
+Thanks,
+Gao Xiang 
+
+> --D
+> 
+> > 
+> > I did some tests with ramdisk in order to measure metadata overhead:
+> > 
+> > echo 1 > /sys/fs/xfs/debug/always_cow
+> > mkfs.xfs -f -mreflink=1 /dev/ram0
+> > mount /dev/ram0 testdir
+> > fio -filename=testdir/1 -size=1G -ioengine=psync -bs=4k -rw=randwrite -overwrite=1 -direct=1 -end_fsync=1 -name=job1
+> > 
+> > Test results as below:
+> > Vanilla:
+> > (1)   iops        : min= 7986, max=16434, avg=12505.76, stdev=2400.05, samples=41
+> > (2)   iops        : min= 7636, max=16376, avg=12474.19, stdev=2258.18, samples=42
+> > (3)   iops        : min= 8346, max=16439, avg=12227.95, stdev=2432.12, samples=42
+> > (4)   iops        : min= 8580, max=16496, avg=12779.41, stdev=2297.42, samples=41
+> > (5)   iops        : min= 8286, max=16556, avg=12500.76, stdev=2123.90, samples=41
+> > 
+> > Patched:
+> > (1)   iops        : min= 7086, max=17132, avg=12931.20, stdev=2729.10, samples=40
+> > (2)   iops        : min= 7704, max=17508, avg=13204.62, stdev=2507.70, samples=39
+> > (3)   iops        : min= 8736, max=17634, avg=13253.08, stdev=2545.18, samples=39
+> > (4)   iops        : min= 7188, max=17550, avg=12928.40, stdev=2633.64, samples=40
+> > (5)   iops        : min= 8268, max=17446, avg=12837.55, stdev=2717.98, samples=40
+> > 
+> > xfstests seems survived. Comments are much welcomed and
+> > thanks for your time!
+> > 
+> > Thanks,
+> > Gao Xiang
+> > 
+> > Changes since v1:
+> >  - fix missing tmp_logflags initialization;
+> >  - drop unnecessary realtime inode check pointed out by Darrick.
+> > 
+> > Gao Xiang (3):
+> >   xfs: get rid of LEFT, RIGHT, PREV in
+> >     xfs_bmap_add_extent_unwritten_real()
+> >   xfs: introduce xfs_bmap_update_extent_real()
+> >   xfs: introduce xfs_bremapi_from_cowfork()
+> > 
+> >  fs/xfs/libxfs/xfs_bmap.c | 377 +++++++++++++++++++++++++--------------
+> >  fs/xfs/libxfs/xfs_bmap.h |   7 +-
+> >  fs/xfs/xfs_reflink.c     |  24 +--
+> >  3 files changed, 252 insertions(+), 156 deletions(-)
+> > 
+> > -- 
+> > 2.24.4
+> > 

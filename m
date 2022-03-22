@@ -2,117 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165C64E3FCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7FC4E3FD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235853AbiCVNrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        id S235884AbiCVNxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235823AbiCVNrj (ORCPT
+        with ESMTP id S235876AbiCVNwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:47:39 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF77C2612A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:46:10 -0700 (PDT)
-Received: from [192.168.12.80] (unknown [182.2.69.158])
-        by gnuweeb.org (Postfix) with ESMTPSA id E54737E2FC;
-        Tue, 22 Mar 2022 13:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1647956770;
-        bh=HKgnPToOKuDtMd2JSw/Bl1HQmJatv90FvRD6l9jl9jY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pCTjxSUhL5rr31ViBmr/RMoiC2r2s4CGvgFgDjmMFypfINpuGHuLjS+2DNiJ2CiYu
-         ahBjCo6pi3R3OngD0DX5g8J9yHOhi9iw5CxPs5eQPFtCh6R8K1v+ay7Nhpktm3b2Bn
-         RxkI+I4Ylea+1tv9WjC9PSAHF3IpV+fJuQRNffqoJrNOS7jSApYEFCrBpKknwHp5AH
-         VNL0U1x9VGzgXLRFiAINDchQKgTx09w0pcdMqJrGI3eWbSgoN6g5FASYimW2g1jSp4
-         +NYHTsF+XIuEyOqqtb+fwpd6HYkXQ89udqUekqH32ASo0xTvV6JKKk1aBJWFCbMuCb
-         Yr4IDbYt7jGPA==
-Message-ID: <9cfcb296-9dfe-aef1-4209-20a3a95c50ba@gnuweeb.org>
-Date:   Tue, 22 Mar 2022 20:45:59 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
- arguments
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>, David Laight <David.Laight@aculab.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Nugraha <richiisei@gmail.com>,
+        Tue, 22 Mar 2022 09:52:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF9650B07;
+        Tue, 22 Mar 2022 06:51:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6D0CACE1E18;
+        Tue, 22 Mar 2022 13:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D78C340EC;
+        Tue, 22 Mar 2022 13:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647957084;
+        bh=+PcSzqlfSr4quKABCcRJgSwsi7LZhav0meRk6eGzyQk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FdatOK5EsCCKNSnd0SFBfhCB1ogmnUyN25HzjzgibJkE8MGgn40+e8L/IOlsBXcEJ
+         HMrA0modxfnFK4pVridEsoQREyNK44MG/If1ZkUJh1d+8MYgKmupFlpE3rY//nXs0K
+         ZvQ+DZfvR6W2vDeaCzZ9QCJqkTpRsj1ZqKBXFS8rxAu8MBIYQDsXEyGq7ssz3WENOU
+         8DSxM+7R10paiWeViNMFJbu5uU0Ulj0GswYgV+N4JJPnJBH+rf9AljCATLTAE9YUUX
+         XiJMzjq03TNToclXEXlkhNm9G+E2juwvKLEPI0p4V6UnVnTPiCNz8d9K8EaVBRA6H4
+         SzRxDhwH0LBFQ==
+Date:   Tue, 22 Mar 2022 22:51:18 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
- <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
- <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
- <20220322121338.GD10306@1wt.eu>
- <81569a1c-a6d3-ceb2-a1f1-f229a024d684@gnuweeb.org>
- <20220322133413.GG10306@1wt.eu>
- <58cb5455-d065-b508-b328-20b57c3a67a7@gnuweeb.org>
- <3b8984ecfbcd4c93aeb468d01728cd74@AcuMS.aculab.com>
- <20220322134100.GH10306@1wt.eu>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220322134100.GH10306@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        rostedt@goodmis.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-Id: <20220322225118.ec33bf93e19d40f27d73c8d1@kernel.org>
+In-Reply-To: <YjnMDlS/6a4UWFQm@FVFF77S0Q05N>
+References: <20220321140327.777f9554@canb.auug.org.au>
+        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+        <YjisdqdofbDIYj2U@hirez.programming.kicks-ass.net>
+        <20220322143136.0e78366c3521b54b7b9385b8@kernel.org>
+        <YjnMDlS/6a4UWFQm@FVFF77S0Q05N>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/22 8:41 PM, Willy Tarreau wrote:
-[...]
->>> When you pushl %ebp, the %esp changes, N(%esp) no longer points to the
->>> 6-th argument.
->>
->> Yep - that is why I wrote the 'push arg6'.
+On Tue, 22 Mar 2022 13:15:58 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
+
+> On Tue, Mar 22, 2022 at 02:31:36PM +0900, Masami Hiramatsu wrote:
+> > On Mon, 21 Mar 2022 17:48:54 +0100
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> > 
+> > > On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
+> > > > On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
+> > > > > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
+> > > > > > Hi all,
+> > > > > > 
+> > > > > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
+> > > > > > produced these new warnings:
+> > > > > > 
+> > > > > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > 
+> > > > > Hurmph, lemme go figure out where that code comes from, I've not seen
+> > > > > those.
+> > > > 
+> > > > Ahh, something tracing. I'll go do some patches on top of it.
+> > > 
+> > > The below gets rid of the objtool warnings.
+> > 
+> > Yes, I confirmed that.
+> > 
+> > > But I still think it's fairly terrible to get a (flawed) carbon copy of
+> > > the kretprobe code.
+> > 
+> > Indeed. I would like to replace the trampoline code of kretprobe with
+> > rethook, eventually. There is no reason why we keep the clone.
+> > (But I need more arch maintainers help for that, there are too many
+> >  archs implemented kretprobes)
 > 
-> Got it and you're right indeed, sorry for the noise :-)
+> FWIW, I'm more than happy to help on the arm64 side if you could Cc me for
+> that; I'm aware of other things in this area I'd like to clean up for
+> backtracing, too.
 
-Uggh... it seems I hit a GCC bug when playing with -m32 (32-bit code).
-I am on Linux x86-64. Compiling without optimization causing GCC stuck
-in an endless loop with 100% CPU usage.
+Thank you for your warm help. OK, let me update and submit the rethook
+for arm64 :-)
 
-I will try to narrow it down and see if I can create a simple reproducer
-on this issue.
-
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ gcc --version
-gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
-Copyright (C) 2021 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-^C
-
-real	0m46.696s
-user	0m0.000s
-sys	0m0.002s
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O1 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-
-real	0m0.054s
-user	0m0.046s
-sys	0m0.008s
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O2 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-
-real	0m0.079s
-user	0m0.067s
-sys	0m0.012s
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$ time taskset -c 0 gcc -O3 -m32 -ffreestanding -nostdlib -nostartfiles test.c -o test -lgcc
-
-real	0m0.110s
-user	0m0.097s
-sys	0m0.013s
-ammarfaizi2@integral2:~/work/linux.work/tools/include/nolibc$
-
+Thanks.
 
 -- 
-Ammar Faizi
+Masami Hiramatsu <mhiramat@kernel.org>

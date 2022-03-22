@@ -2,45 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E594E45F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7151C4E45F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240424AbiCVS1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S240467AbiCVS1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240470AbiCVS1C (ORCPT
+        with ESMTP id S240468AbiCVS1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Mar 2022 14:27:02 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F27592D12
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:24:58 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 22MIOmmq011881;
-        Tue, 22 Mar 2022 19:24:48 +0100
-Date:   Tue, 22 Mar 2022 19:24:48 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 2/8] tools/nolibc: Remove .global _start from the
- entry point code
-Message-ID: <20220322182448.GQ10306@1wt.eu>
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-3-ammarfaizi2@gnuweeb.org>
- <CAKwvOdkEwkzT0uf9a5SokCScDTY4gbhNFZ+fLxsti9innaEZRQ@mail.gmail.com>
- <20220322172550.GL10306@1wt.eu>
- <CAKwvOdmr6u-zNynUDAg4pmwerQFUkG+eD0QhpzDED9eg+U2pfA@mail.gmail.com>
- <20220322175816.GN10306@1wt.eu>
- <CAKwvOd=LvBL4NTUWMc0rJ-3K+MU5rv-p+j2pfbuseGdiA2ccJw@mail.gmail.com>
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF69C90246;
+        Tue, 22 Mar 2022 11:24:57 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id d10so38035146eje.10;
+        Tue, 22 Mar 2022 11:24:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=Ch4dJTVoF+0WgswAjEagoD6pjUX2twqhfq32t6y2FNg=;
+        b=03YAq3M7YBzGok+qLOdAqEl3PyQX1oJ1a8+nmcS9fQrKpkUh/9u/csbx6C6qaGSobN
+         Ir9Z8xXPfaJ5iGIWath1HWr+dw+jVZ0JrZLx1oKZsY4u7C2dValx/bmw5x/ndoA4yhzX
+         gtXDvpqkToUX4+f5lR9uW3Wxrg5U3GU+A4FjQk7jfHokqv0wYoE/nvteD3X/bd22zY1X
+         lglnKKTg7jUx5jtCSNF2NYROKN4CVYH/qWx/4iVSkogJsLerwy8FNtZZAkHvjNKTeXbu
+         iJyOjXUB8m7IQEaVu+gg+oT8mDVflQAarJWnhr4h3ocWmF387KKWZGwMUWdU1IczYhcj
+         unSQ==
+X-Gm-Message-State: AOAM532zbFp0zsOpsbhi+7Jzzc0VA7y4swwA6XBYrlzbtVfeIJ7eEgvv
+        35bPnI3r1oUbGVhuLyVzs6zSTCjUV+zWqQ==
+X-Google-Smtp-Source: ABdhPJwL2NYcf2QiGHS83/NbI8qe3jXBrTCPq7ILCOT4zC/SEv+zL+ze1H5U2Fk53Nuz0/Hj3GaDLQ==
+X-Received: by 2002:a17:907:2cc7:b0:6df:b76d:940d with SMTP id hg7-20020a1709072cc700b006dfb76d940dmr20180783ejc.742.1647973496135;
+        Tue, 22 Mar 2022 11:24:56 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id u18-20020a17090617d200b006db07a16cf5sm8685155eje.77.2022.03.22.11.24.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 11:24:55 -0700 (PDT)
+Message-ID: <1096bc5a-5b0f-54a8-93aa-403c39e58283@kernel.org>
+Date:   Tue, 22 Mar 2022 19:24:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=LvBL4NTUWMc0rJ-3K+MU5rv-p+j2pfbuseGdiA2ccJw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [Patch v5 1/4] memory: tegra: Add memory controller channels
+ support
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, robh+dt@kernel.org,
+        thierry.reding@gmail.com, digetx@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220316092525.4554-1-amhetre@nvidia.com>
+ <20220316092525.4554-2-amhetre@nvidia.com>
+ <81aa7be7-0bfa-05e6-624a-393e6810dc61@kernel.org>
+ <5259de16-6243-42f6-8252-40a23cd67798@nvidia.com>
+In-Reply-To: <5259de16-6243-42f6-8252-40a23cd67798@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,75 +70,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 11:07:17AM -0700, Nick Desaulniers wrote:
-> > First, the usual static printf("hello world!\n"):
-> >
-> >   $ ll hello-*libc
-> >   -rwxrwxr-x 1 willy dev 719232 Mar 22 18:50 hello-glibc*
-> >   -rwxrwxr-x 1 willy dev   1248 Mar 22 18:51 hello-nolibc*
+On 22/03/2022 19:04, Ashish Mhetre wrote:
 > 
-> ! What! Are those both statically linked?
-
-Yes:
-
-  $ file hello-nolibc 
-  hello-nolibc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, stripped
-
-  (rebuilding without stripping)
-  $ nm --size hello-nolibc 
-  000000000000000f T main
-  0000000000000053 t u64toa_r
-  0000000000000280 t printf.constprop.0
-  $ nm hello-nolibc 
-  00000000004013c5 R __bss_start
-  00000000004013c5 R _edata
-  00000000004013c8 R _end
-  00000000004000bf W _start
-  00000000004000b0 T main
-  0000000000400130 t printf.constprop.0
-  00000000004000dd t u64toa_r
-
-> > This one supports ~30-40 simple commands (mount/unmount, mknod, ls, ln),
-> > a tar extractor, multi-level braces, and boolean expression evaluation,
-> > variable expansion, and a config file parser to script all this. The code
-> > is 20 years old and is really ugly (even uglier than you think). But that
-> > gives an idea. 20 years ago the init was much simpler and 800 bytes (my
-> > constraint was for single floppies containing kernel+rootfs) and strings
-> > were manually merged by tails and put in .text to drop .rodata.
 > 
-> Oh, so nolibc has been around for a while then?
+> On 3/20/2022 6:01 PM, Krzysztof Kozlowski wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 16/03/2022 10:25, Ashish Mhetre wrote:
+>>>  From tegra186 onwards, memory controller support multiple channels.
+>>> Add support for mapping address spaces of these channels.
+>>> Make sure that number of channels are as expected on each SOC.
+>>> During error interrupts from memory controller, appropriate registers
+>>> from these channels need to be accessed for logging error info.
+>>>
+>>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+>>> ---
+>>>   drivers/memory/tegra/mc.c       |  6 ++++
+>>>   drivers/memory/tegra/tegra186.c | 52 +++++++++++++++++++++++++++++++++
+>>>   drivers/memory/tegra/tegra194.c |  1 +
+>>>   drivers/memory/tegra/tegra234.c |  1 +
+>>>   include/soc/tegra/mc.h          |  7 +++++
+>>>   5 files changed, 67 insertions(+)
+>>>
+>>> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
+>>> index bf3abb6d8354..3cda1d9ad32a 100644
+>>> --- a/drivers/memory/tegra/mc.c
+>>> +++ b/drivers/memory/tegra/mc.c
+>>> @@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device *pdev)
+>>>        if (IS_ERR(mc->regs))
+>>>                return PTR_ERR(mc->regs);
+>>>
+>>> +     if (mc->soc->ops && mc->soc->ops->map_regs) {
+>>> +             err = mc->soc->ops->map_regs(mc, pdev);
+>>> +             if (err < 0)
+>>> +                     return err;
+>>> +     }
+>>> +
+>>>        mc->debugfs.root = debugfs_create_dir("mc", NULL);
+>>>
+>>>        if (mc->soc->ops && mc->soc->ops->probe) {
+>>> diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
+>>> index 3d153881abc1..a8a45e6ff1f1 100644
+>>> --- a/drivers/memory/tegra/tegra186.c
+>>> +++ b/drivers/memory/tegra/tegra186.c
+>>> @@ -139,11 +139,62 @@ static int tegra186_mc_probe_device(struct tegra_mc *mc, struct device *dev)
+>>>        return 0;
+>>>   }
+>>>
+>>> +static int tegra186_mc_map_regs(struct tegra_mc *mc,
+>>> +                             struct platform_device *pdev)
+>>> +{
+>>> +     struct device_node *np = pdev->dev.parent->of_node;
+>>> +     int num_dt_channels, reg_cells = 0;
+>>> +     struct resource *res;
+>>> +     int i, ret;
+>>> +     u32 val;
+>>> +
+>>> +     ret = of_property_read_u32(np, "#address-cells", &val);
+>>> +     if (ret) {
+>>> +             dev_err(&pdev->dev, "missing #address-cells property\n");
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     reg_cells = val;
+>>> +
+>>> +     ret = of_property_read_u32(np, "#size-cells", &val);
+>>> +     if (ret) {
+>>> +             dev_err(&pdev->dev, "missing #size-cells property\n");
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     reg_cells += val;
+>>> +
+>>> +     num_dt_channels = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
+>>> +                                                       reg_cells * sizeof(u32));
+>>> +     /*
+>>> +      * On tegra186 onwards, memory controller support multiple channels.
+>>> +      * Apart from regular memory controller channels, there is one broadcast
+>>> +      * channel and one for stream-id registers.
+>>> +      */
+>>> +     if (num_dt_channels < mc->soc->num_channels + 2) {
+>>> +             dev_warn(&pdev->dev, "MC channels are missing, please update\n");
+>>
+>> How did you address our previous comments about ABI break? I really do
+>> not see it.
+>>
+> In v4 patch, error was returned from here and probe failed causing ABI
+> break. In v5, we are checking if number of reg items in DT is as
+> expected or not. If number of reg items are less then we are just
+> printing warning to update DT and returning 0. So probe won't fail and
+> driver will work as expected.
+> Also I had tested just driver patches with existing DT and it worked
+> fine.
 
-Not exactly. Over time I collected some of my stuff out of preinit to
-make more reusable code for other tools, and eventually created a separate
-project for it 5 years ago [1]. I then changed my mind a few times on how
-to arrange all this and over time it became a bit easier to use. One day
-Paul asked how to make less invasive static binaries for rcutorture and I
-found that it was the perfect match so we agreed to integrate it there. It
-was still a single file by then. And as usual when some code starts to get
-more exposure it receives more contribs and feature requests ;-)
+Ah, right, thanks. I missed the return 0. Looks good, thanks for the
+changes and for explanation.
 
-> ld.lld will do string merging in that fashion at -O2 (the linker can
-> accept and optimization level).  I did have a kernel patch for that
-> somewhere, need to update it for CC_OPTIMIZE_FOR_SIZE...
 
-Ah I didn't know, that's good to know!
-
-> I guess the tradeoff with strings in .text is that now the strings
-> themselves are r+x and not just r?
-
-Yes but when you're writing a small shell to allow you to manually
-mount your rootfs from the kernel, you don't really care if someone
-might try to use some of your strings as code gadgets for ROP exploits :-)
-
-I would really not want to see this used for general programs, but it
-does fit well with hacking stuff for initramfs, and what lies in the
-selftests directory in general I guess.
-
-What I particularly like is that I don't need a full toolchain, so if
-I can build a kernel with the bare-metal compilers from kernel.org then
-I know I can also build my initramfs that's packaged in it using the
-exact same compiler. This significantly simplifies the build process.
-
-Willy
-
-[1] https://github.com/wtarreau/nolibc
+Best regards,
+Krzysztof

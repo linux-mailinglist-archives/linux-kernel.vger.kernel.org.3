@@ -2,142 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5CB4E42DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470F14E42DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238495AbiCVPWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S238426AbiCVPXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238426AbiCVPVq (ORCPT
+        with ESMTP id S234092AbiCVPXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:21:46 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6158B6C5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:20:00 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso8867025ejc.22
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=IJFULH6pKDrAUy1ZQEAU8LTsS220SswLQoRQfxb9psg=;
-        b=YFUn96dr37yG0lQeXq/lDO95znaH8jW2VOFdk+L86Mg83BObCFxjdq8YnJFleyb0pq
-         cULhfsNu/0JB+CFnzxXxtV0VIMZQdSkyYRNulowbWsaeCvz8uPhL7B/et4Wizq0fCikK
-         yTaw7DgW766ReatUBDQCTTChgqW9xD2Ynxx/GayEf9Agklkj2R5ERpGCy1n/qUjvbDzH
-         TurXiH/dTM6/HuzX1m/e1l8CdAZzysLKZs/eDrZXxWbQ5LUIzqKHP2QDBIbkJ4L/a9yD
-         gWd5c0WB/ayGXRmsmhbNt/Yky+Bk4Fc+hnVCMVJuYuVQPFLQHBeDPradPMyxEK+T5fMI
-         xHwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=IJFULH6pKDrAUy1ZQEAU8LTsS220SswLQoRQfxb9psg=;
-        b=sFWIER2STfEIhIReojYYF0jZlp2WgEY+Vzg3bRJZAKcy6jESb4U5LnBe4VKUoiDChl
-         UdcyKoTfWv84TeLDZLMmCPHI+zbYgM7Z64Kymb/D52ILsYiOgIsmY8MJ0BflwKgyPPoF
-         c1lUaIwsMxWRnq/yY+Pp93r2ZLgH+ZEo8F4AOeUwpUFnmnQaxTW9Jw9sbCe8T/wO5mjX
-         zqnm4yxvNHoDiLVYKwMv/RaIyUAqo6mgeWb8zGyiF1XkYuiDynDoI679w6Cpr42Bcsey
-         yOKJ3bPpgRqVSHrsTptA2/DEnQe8sw4ETCJcKtkj2CQeKEU5ocx3dKQZeMoQ7raJ3G65
-         GOaA==
-X-Gm-Message-State: AOAM531k5l1rg3cBppV/VY45TQj16/WOiu0iRE9ZgvPK3pM8dixJWMpr
-        e6EnPRaOk7NEhtSxf+5u8E3PGMf2Vw==
-X-Google-Smtp-Source: ABdhPJxLeI2hnE89muaiQsoyzcHH44WDxqYrvusIyoe0uFU8N/jP01aruiXkOUGBs4/g8QolztLfnVbwEg==
-X-Received: from keirf.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:29e7])
- (user=keirf job=sendgmr) by 2002:a17:906:99c3:b0:6df:a289:ed3a with SMTP id
- s3-20020a17090699c300b006dfa289ed3amr23196242ejn.660.1647962398266; Tue, 22
- Mar 2022 08:19:58 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 15:19:52 +0000
-Message-Id: <20220322151952.2950143-1-keirf@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH v2] virtio: pci: sanity check bar indexes
-From:   Keir Fraser <keirf@google.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     kernel-team@android.com, Keir Fraser <keirf@google.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Tue, 22 Mar 2022 11:23:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9A4E4CD49
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:21:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647962497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pXHPWXKwW6dA2VH85GvT6aXK+VO1evC+jnd2BN9ct3E=;
+        b=ObKVt4C+Oyxcw51cSiCY4eSt4qB1/x0KuIu8yY5kMT1h0dMQfkwQR+DL14D1SCbf62hbNx
+        pTPUvsz2zHLEaXnXKOnNl8pnEU/P61B1fgFWJs7eQtpkC9YaEizJZbdp3g8nSmKc3WUI8a
+        HJr0Oa7CdsVW2TF/gqXtxL9Ts4DlDoA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-111-st6ri318Pt2CkPyZOi6bag-1; Tue, 22 Mar 2022 11:21:35 -0400
+X-MC-Unique: st6ri318Pt2CkPyZOi6bag-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7EE8585A5BE;
+        Tue, 22 Mar 2022 15:21:34 +0000 (UTC)
+Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 49A3B40D2822;
+        Tue, 22 Mar 2022 15:21:34 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 0/3] locking/rwsem: Miscellaneous cleanup and fix
+Date:   Tue, 22 Mar 2022 11:20:56 -0400
+Message-Id: <20220322152059.2182333-1-longman@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bar index is used as an index into the device's resource list
-and should be checked as within range for a standard bar.
+Patch 1 is just a simple cleanup patch. Patches 2 and 3 applies the same
+consistent rules to optionally wake up waiters in reader & writers
+slowpaths as well as in the out_nolock paths.
 
-Also clean up an existing check to consistently use PCI_STD_NUM_BARS.
+Waiman Long (3):
+  locking/rwsem: No need to check for handoff bit if wait queue empty
+  locking/rwsem: Conditionally wake waiters in reader/writer slowpaths
+  locking/rwsem: Always try to wake waiters in out_nolock path
 
-Signed-off-by: Keir Fraser <keirf@google.com>
----
- drivers/virtio/virtio_pci_modern.c     | 10 ++++++++--
- drivers/virtio/virtio_pci_modern_dev.c |  8 +++++++-
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ kernel/locking/rwsem.c | 121 ++++++++++++++++++++++++-----------------
+ 1 file changed, 70 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-index 5455bc041fb6..84bace98dff5 100644
---- a/drivers/virtio/virtio_pci_modern.c
-+++ b/drivers/virtio/virtio_pci_modern.c
-@@ -293,7 +293,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
- 
- 	for (pos = pci_find_capability(dev, PCI_CAP_ID_VNDR); pos > 0;
- 	     pos = pci_find_next_capability(dev, pos, PCI_CAP_ID_VNDR)) {
--		u8 type, cap_len, id;
-+		u8 type, cap_len, id, res_bar;
- 		u32 tmp32;
- 		u64 res_offset, res_length;
- 
-@@ -317,7 +317,12 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
- 
- 		/* Type, and ID match, looks good */
- 		pci_read_config_byte(dev, pos + offsetof(struct virtio_pci_cap,
--							 bar), bar);
-+							 bar), &res_bar);
-+		if (res_bar >= PCI_STD_NUM_BARS) {
-+			dev_err(&dev->dev, "%s: shm cap with bad bar: %d\n",
-+				__func__, res_bar);
-+			continue;
-+		}
- 
- 		/* Read the lower 32bit of length and offset */
- 		pci_read_config_dword(dev, pos + offsetof(struct virtio_pci_cap,
-@@ -337,6 +342,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
- 						     length_hi), &tmp32);
- 		res_length |= ((u64)tmp32) << 32;
- 
-+		*bar = res_bar;
- 		*offset = res_offset;
- 		*len = res_length;
- 
-diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
-index e8b3ff2b9fbc..a6911d1e212a 100644
---- a/drivers/virtio/virtio_pci_modern_dev.c
-+++ b/drivers/virtio/virtio_pci_modern_dev.c
-@@ -35,6 +35,12 @@ vp_modern_map_capability(struct virtio_pci_modern_device *mdev, int off,
- 	pci_read_config_dword(dev, off + offsetof(struct virtio_pci_cap, length),
- 			      &length);
- 
-+	if (bar >= PCI_STD_NUM_BARS) {
-+		dev_err(&dev->dev,
-+			"virtio_pci: bad capability bar %u\n", bar);
-+		return NULL;
-+	}
-+
- 	if (length <= start) {
- 		dev_err(&dev->dev,
- 			"virtio_pci: bad capability len %u (>%u expected)\n",
-@@ -120,7 +126,7 @@ static inline int virtio_pci_find_capability(struct pci_dev *dev, u8 cfg_type,
- 				     &bar);
- 
- 		/* Ignore structures with reserved BAR values */
--		if (bar > 0x5)
-+		if (bar >= PCI_STD_NUM_BARS)
- 			continue;
- 
- 		if (type == cfg_type) {
 -- 
-2.35.1.894.gb6a874cedc-goog
+2.27.0
 

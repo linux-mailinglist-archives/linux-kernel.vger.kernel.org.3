@@ -2,152 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738854E4923
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E5D4E4928
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237930AbiCVW1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 18:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S237956AbiCVW3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 18:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237921AbiCVW1L (ORCPT
+        with ESMTP id S229755AbiCVW3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 18:27:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA5E56217;
-        Tue, 22 Mar 2022 15:25:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 380DC60C8F;
-        Tue, 22 Mar 2022 22:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA69C340ED;
-        Tue, 22 Mar 2022 22:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647987937;
-        bh=Ed0nMIb/RBckBNQpKd5NUVBf2jhmICvp28BlhuI3xbE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Nq+FuN1atoKl8SfjOIFNVqa0ZoNLbORB99O19R34+IQior+WudfejNM6YcD0Q3Zsx
-         ksZlZGVWy3t1RvC2ByrjNCbS12rYTiS3snxtU5PcL2NTDQ8c6wnAaahCeBVkvURwE4
-         92FSwL3ZuxZ5J3AYYx8eHjU6tDV66Zs1SCMCzj0QnP+c9c4f1iATceie+TJ7rLSTgF
-         +PwQezeFUtPLImmynxffrx3tn60TO0sbtbeKx1oH7Tv7PnDwzvaMjKtuBXAJ3vPNij
-         AMcj4ZQsMJaAVotPf5nLARjE7qs261QjktQYkbSGKSRQTIO0Sl3R5CatRi+pZi3o87
-         Hh6Lq1Cpip7+Q==
-Date:   Tue, 22 Mar 2022 15:25:36 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <davem@davemloft.net>, <michael@walle.cc>,
-        <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next v2 3/4] net: lan966x: Add FDMA functionality
-Message-ID: <20220322152536.4460aea2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220322210402.ebr2zghcisrqz4ju@soft-dev3-1.localhost>
-References: <20220318204750.1864134-1-horatiu.vultur@microchip.com>
-        <20220318204750.1864134-4-horatiu.vultur@microchip.com>
-        <20220321230123.4d38ad5f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20220322210402.ebr2zghcisrqz4ju@soft-dev3-1.localhost>
+        Tue, 22 Mar 2022 18:29:33 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E3048E49;
+        Tue, 22 Mar 2022 15:28:04 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id g21so20648760vsp.6;
+        Tue, 22 Mar 2022 15:28:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HjP+WYgkuquMP9HLNm0D3kb+9NTb8P2x7yQwd4RNgpQ=;
+        b=aH3Em2Ln7Yyh931WTdExYFWl/LYNVEPDi2+0dPgdzm8nrlyrNGgYU6uiYnJHMg1OcI
+         zzlWkhTVpGKj7MKenfW0CQVLGGCqIzE08ozETz/ruaR8RdPsabJzPK1VJrxzcwzKXb8q
+         5zh1I5Ufw0j/KhViKfNfAYx2sPcQJy2Z74wX7iMFnR/TY+qayywwWnI+jmk3nU7B7RWG
+         0XCxHBZ3DfC0xrTJ0JP565aQJ8lt2TuShs8wdf8IusCQ4wQe3BzHehCq9MnXD0pEvXXx
+         viPERF716BvAe2iuwhRFFJDg0ZRC/W1fTeuFd+ROFz5C1YMnu+ntnaDd6uSWLoKRUhI1
+         EfRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HjP+WYgkuquMP9HLNm0D3kb+9NTb8P2x7yQwd4RNgpQ=;
+        b=LfW17BYBXKpum6kTD8U0KvBR5yVoVieAh/3GC9ccrUgaHnw/74bJNIg/Fyu8hpzHxR
+         MQ17RWEhcZdo1SgrFFTSq6mxggQVzvMeWGC3QE/SLxRlG9mI1aTynwcJw3srI6cdZrbW
+         xEHiznau9dlTqNhWHpVxL9wGsdcVXUYPL+qSGrcjfaBKVFcPYx4OJfXTHPpjyxdZz2lC
+         Jt58mujCFTD5sgRr2JALDj6vrxwH+/+wAfYMkNaM8M7Gf4HCscBurT7cjwNkKsoNisk2
+         Bi1Gdg9vKfh1ZopELEJG1hB3hVkNlbwpGWOpxvYT3Yg6XmNHNjfn2tBhnjB9ytyPxDAF
+         6Rgg==
+X-Gm-Message-State: AOAM530v3cBcvL36WgzI8uvWs2rR6DE28Whh1p6m4BxFQllcqJKq6RYN
+        Svt5bJGTzP/aVByQFuIkhcGSq0+zYvtGJt3gwf0=
+X-Google-Smtp-Source: ABdhPJxavs/AEHRq5EzJNKwgi55bRPwWQ4fu9Cx2wzgWmN9Ra3rM6mqBRbogaT7+kB58XPj3D8U2s3nmDbUhuxLxmtc=
+X-Received: by 2002:a05:6102:83c:b0:324:e435:eb01 with SMTP id
+ k28-20020a056102083c00b00324e435eb01mr8046903vsb.13.1647988083767; Tue, 22
+ Mar 2022 15:28:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <f8f1f383c4533a91a6025b1db5827ed6aaab002f.1647980983.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <f8f1f383c4533a91a6025b1db5827ed6aaab002f.1647980983.git.christophe.jaillet@wanadoo.fr>
+From:   Hyunchul Lee <hyc.lee@gmail.com>
+Date:   Wed, 23 Mar 2022 07:27:52 +0900
+Message-ID: <CANFS6bZGXA_9eMo=Wv=H6BG4kt5-mKuK8A=m-P3VqKKxamnK2w@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: Remove a redundant zeroing of memory
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steve French <sfrench@samba.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        linux-cifs <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 22:04:02 +0100 Horatiu Vultur wrote:
-> > > +static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx)
-> > > +{
-> > > +     struct lan966x *lan966x = rx->lan966x;
-> > > +     u64 src_port, timestamp;
-> > > +     struct sk_buff *new_skb;
-> > > +     struct lan966x_db *db;
-> > > +     struct sk_buff *skb;
-> > > +
-> > > +     /* Check if there is any data */
-> > > +     db = &rx->dcbs[rx->dcb_index].db[rx->db_index];
-> > > +     if (unlikely(!(db->status & FDMA_DCB_STATUS_DONE)))
-> > > +             return NULL;
-> > > +
-> > > +     /* Get the received frame and unmap it */
-> > > +     skb = rx->skb[rx->dcb_index][rx->db_index];
-> > > +     dma_unmap_single(lan966x->dev, (dma_addr_t)db->dataptr,
-> > > +                      FDMA_DCB_STATUS_BLOCKL(db->status),
-> > > +                      DMA_FROM_DEVICE);
-> > > +
-> > > +     /* Allocate a new skb and map it */
-> > > +     new_skb = lan966x_fdma_rx_alloc_skb(rx, db);
-> > > +     if (unlikely(!new_skb))
-> > > +             return NULL;  
-> > 
-> > So how is memory pressure handled, exactly? Looks like it's handled
-> > the same as if the ring was empty, so the IRQ is going to get re-raise
-> > immediately, or never raised again?  
-> 
-> That is correct, the IRQ is going to get re-raised.
-> But I am not sure that this is correct approach. Do you have any
-> suggestions how it should be?
+Acked-by: Hyunchul Lee <hyc.lee@gmail.com>
 
-In my experience it's better to let the ring drain and have a service
-task kick in some form of refill. Usually when machine is out of memory
-last thing it needs is getting stormed by network IRQs. Some form of
-back off would be good, at least?
+2022=EB=85=84 3=EC=9B=94 23=EC=9D=BC (=EC=88=98) =EC=98=A4=EC=A0=84 5:29, C=
+hristophe JAILLET
+<christophe.jaillet@wanadoo.fr>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> fill_transform_hdr() already call memset(0) on its 1st argument, so there
+> is no need to clear it explicitly before calling this function.
+>
+> Use kmalloc() instead of kzalloc() to save a few cycles.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Alternatively, fill_transform_hdr() has only one caller. So its memset()
+> could be removed instead and this kzalloc() left as is.
+> ---
+>  fs/ksmbd/smb2pdu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+> index bcb98109bac9..0e4f819e5859 100644
+> --- a/fs/ksmbd/smb2pdu.c
+> +++ b/fs/ksmbd/smb2pdu.c
+> @@ -8434,7 +8434,7 @@ int smb3_encrypt_resp(struct ksmbd_work *work)
+>         if (ARRAY_SIZE(iov) < rq_nvec)
+>                 return -ENOMEM;
+>
+> -       work->tr_buf =3D kzalloc(sizeof(struct smb2_transform_hdr) + 4, G=
+FP_KERNEL);
+> +       work->tr_buf =3D kmalloc(sizeof(struct smb2_transform_hdr) + 4, G=
+FP_KERNEL);
+>         if (!work->tr_buf)
+>                 return rc;
+>
+> --
+> 2.32.0
+>
 
-> > > +     return counter;
-> > > +}
-> > > +
-> > > +irqreturn_t lan966x_fdma_irq_handler(int irq, void *args)
-> > > +{
-> > > +     struct lan966x *lan966x = args;
-> > > +     u32 db, err, err_type;
-> > > +
-> > > +     db = lan_rd(lan966x, FDMA_INTR_DB);
-> > > +     err = lan_rd(lan966x, FDMA_INTR_ERR);  
-> > 
-> > Hm, IIUC you request a threaded IRQ for this. Why?
-> > The register accesses can't sleep because you poke
-> > them from napi_poll as well...  
-> 
-> Good point. What about the WARN?
 
-which one? Did something generate a warning without the threaded IRQ?
-
-> > > +int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
-> > > +{
-> > > +     struct lan966x_port *port = netdev_priv(dev);
-> > > +     struct lan966x *lan966x = port->lan966x;
-> > > +     struct lan966x_tx_dcb_buf *next_dcb_buf;
-> > > +     struct lan966x_tx_dcb *next_dcb, *dcb;
-> > > +     struct lan966x_tx *tx = &lan966x->tx;
-> > > +     struct lan966x_db *next_db;
-> > > +     int needed_headroom;
-> > > +     int needed_tailroom;
-> > > +     dma_addr_t dma_addr;
-> > > +     int next_to_use;
-> > > +     int err;
-> > > +
-> > > +     /* Get next index */
-> > > +     next_to_use = lan966x_fdma_get_next_dcb(tx);
-> > > +     if (next_to_use < 0) {
-> > > +             netif_stop_queue(dev);
-> > > +             err = NETDEV_TX_BUSY;
-> > > +             goto out;
-> > > +     }
-> > > +
-> > > +     if (skb_put_padto(skb, ETH_ZLEN)) {
-> > > +             dev->stats.tx_dropped++;  
-> > 
-> > It's preferred not to use the old dev->stats, but I guess you already
-> > do so :( This is under some locks, right? No chance for another queue
-> > or port to try to touch those stats at the same time?  
-> 
-> What is the preffered way of doing it?
-> Yes, it is under a lock.
-
-Drivers can put counters they need in their own structures and then
-implement ndo_get_stats64 to copy it to the expected format.
-If you have locks and there's no risk of races - I guess it's fine.
-Unlikely we'll ever convert all the drivers, anyway.
+--=20
+Thanks,
+Hyunchul

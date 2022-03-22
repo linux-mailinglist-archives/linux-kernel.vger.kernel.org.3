@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBC44E35BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7814E35B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbiCVAvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 20:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S234478AbiCVAua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 20:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbiCVAve (ORCPT
+        with ESMTP id S234456AbiCVAu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 20:51:34 -0400
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695CB116E;
-        Mon, 21 Mar 2022 17:50:07 -0700 (PDT)
-Received: by mail-pj1-f43.google.com with SMTP id b8so14374361pjb.4;
-        Mon, 21 Mar 2022 17:50:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0wglNJyRHwtUAggnzMNHl+7ASKue+VasSxZXhnwJJfc=;
-        b=cuoyFmhbHkuuLummvHbbJUJVBgF64b5jSQAzt3K8o8gY6E/HG7QcVuEpXB20cZBmxQ
-         Gzhqr4sTOwUv/rtfd+3OXka69F/R9MOL0XS/UhvGDZYsPsb5Uq2pMIF0LkxNW3MJU13T
-         Geg+cLgXd9clfXsCNFCYkTIKtEvP++YUWMBDIkS+C2jnEGelDBtypMmJ4mQR0fU3klN3
-         Yg8OqmMF8+0GiqtTopGFTm4/jQN0I9zzSqiYFXeI0Cot+90tutU/wyDf83F5PAdMUVTn
-         AkIREUYUv3UlzwTYnUdxfaOr6v350UcVY+lAFE1DhtOgx9t0LP1sfue/lwozHEIx3hnA
-         d5GA==
-X-Gm-Message-State: AOAM532Ge/umGjtNTiPyqpUdvkyULuX2ffyDGcreTHzI3oBqGf97u7XU
-        3czrtddGxyvAduGiqAqLEZSEUdhqx/M=
-X-Google-Smtp-Source: ABdhPJzsH93eWargkXdsI8zOEnpGFISqGM4SB413BAVvMt1gQJVxEI+qHXy31+5cJ2KcMbeIJtlN6g==
-X-Received: by 2002:a17:90b:38cf:b0:1bf:42ee:6fa with SMTP id nn15-20020a17090b38cf00b001bf42ee06famr1934480pjb.9.1647910206618;
-        Mon, 21 Mar 2022 17:50:06 -0700 (PDT)
-Received: from localhost.localdomain ([61.74.27.164])
-        by smtp.gmail.com with ESMTPSA id z14-20020aa7888e000000b004f79f59827asm20953779pfe.139.2022.03.21.17.50.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 17:50:05 -0700 (PDT)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-To:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH] MAINTAINERS: ksmbd: switch Sergey to reviewer
-Date:   Tue, 22 Mar 2022 09:48:40 +0900
-Message-Id: <20220322004840.142176-1-linkinjeon@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 21 Mar 2022 20:50:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01B02F3BD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 17:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647910142; x=1679446142;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0x7qIpjv0NuBVYWXT9Tw0mEj9Ru1y7+aMXqGBkCgSwc=;
+  b=Ag6g7MDhLCmplK7Jes7zPXCvDBAbApNYYb0bLlwdlfSgxEWX1jE8c+ai
+   p3a7q7IlHshEviy3dZhbQQ0hL2m8VT18hUgWcrsN3LiLfVXup844sufP6
+   UvuobO4C1e+fIMWhgFUPO9wvqRN6hE5rCWgcHiDgiGrgrvNqAbxRGwnSB
+   eD2sVePyJg7XeRSURHh1RdgSsmFOUQMSVwF70z9y/m/qp40y0fz/beIxG
+   vmazL9lc1/bI4koQWNTyUkpb2CfDyrmw+dqLJvhb8snm07EGvAFwjzrXi
+   qzz69Uc+GnFKeTS1Zu5fyaABgeFFBVFQ0Qc5APZo89HHC6wTBXTnSLsPs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282517335"
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="282517335"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:49:02 -0700
+X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
+   d="scan'208";a="560120071"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.208.85]) ([10.254.208.85])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 17:48:59 -0700
+Message-ID: <85d61ad6-0cf0-ac65-3312-32d0cdeb1b27@linux.intel.com>
+Date:   Tue, 22 Mar 2022 08:48:57 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC 01/11] iommu: Add pasid_bits field in struct dev_iommu
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>
+References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
+ <20220320064030.2936936-2-baolu.lu@linux.intel.com>
+ <BL1PR11MB527130BAAC3B4F48E4901F5D8C169@BL1PR11MB5271.namprd11.prod.outlook.com>
+ <7de05f5e-864f-175e-5604-29561d330884@linux.intel.com>
+ <BN9PR11MB5276981B9328F10E5FC89B728C179@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276981B9328F10E5FC89B728C179@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sergey don't have the time to work ksmbd. He will continue to review
-ksmbd works at free time. This patch switches him from maintainer
-to reviewer.
+On 2022/3/22 8:26, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Monday, March 21, 2022 6:22 PM
+>>>> -				if (features >= 0)
+>>>> +				if (features >= 0) {
+>>>>    					info->pasid_supported = features | 1;
+>>>> +					dev->iommu->pasid_bits =
+>>>> +						fls(pci_max_pasids(pdev)) - 1;
+>>> Original intel_svm_alloc_pasid() covers both PCI and non-PCI devices:
+>>>
+>>> 	ioasid_t max_pasid = dev_is_pci(dev) ?
+>>> 		pci_max_pasids(to_pci_dev(dev)) : intel_pasid_max_id;
+>>>
+>>> though I'm not sure whether non-PCI SVA has been supported indeed, this
+>>> patch implies a functional change here.
+>>>
+>>
+>> The info->pasid_supported is only set for PCI devices. So the status is
+>> that non-PCI SVA hasn't been supported. No functional change here from
+>> this point of view.
+>>
+> 
+> Then this information should be included in the commit msg.
 
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sure.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 69a2935daf6c..6a8a6baac29c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10453,9 +10453,9 @@ F:	tools/testing/selftests/
- 
- KERNEL SMB3 SERVER (KSMBD)
- M:	Namjae Jeon <linkinjeon@kernel.org>
--M:	Sergey Senozhatsky <senozhatsky@chromium.org>
- M:	Steve French <sfrench@samba.org>
- M:	Hyunchul Lee <hyc.lee@gmail.com>
-+R:	Sergey Senozhatsky <senozhatsky@chromium.org>
- L:	linux-cifs@vger.kernel.org
- S:	Maintained
- T:	git git://git.samba.org/ksmbd.git
--- 
-2.25.1
-
+Best regards,
+baolu

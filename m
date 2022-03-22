@@ -2,269 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660454E43A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F974E43C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbiCVP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
+        id S234909AbiCVQBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238862AbiCVP6r (ORCPT
+        with ESMTP id S238932AbiCVQAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:58:47 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE686E78E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:57:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647964639; x=1679500639;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/ARhdtteEwaxQdr5SdKWh9n5s/BmVOP7qAMW6inUGBg=;
-  b=nIlK5SHrIB4awZ/Emow1gmzTMZ/dd7ZrpwvDCqhE9F1/ZJdQP0X2Xe4N
-   Mq5LJeK+bo+eK8A8viwralbkpclx0h0SVheS47Az2cQG8LsgL68bpmolR
-   y69zBYLT9hWkJZ2UAl+iG71JNg+ORiUUvLy5aoIhfIdDFkQjaI69S8Cg6
-   MbyOaCNs+nBqXktGouCeaL61RNM8wGYf/KJVtIzLQYFeoSwyf+Z5wD0ex
-   /B80rLOeQDw8cNe5BK6fow21pHwMxwa6iF+VYT5iPZn/amqZyQZjdwUYm
-   RxzAZxifm0xs511EFX7hKJXSScMm7jnsVltOb7Qi3jVzA+YKvfAhyGhR4
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="282695737"
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="282695737"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 08:57:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="515395638"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 22 Mar 2022 08:57:10 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWgsf-000Ixk-MF; Tue, 22 Mar 2022 15:57:09 +0000
-Date:   Tue, 22 Mar 2022 23:56:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Michael Yan <michael.yan@starfivetech.com>,
-        Jenny Zhang <jenny.zhang@starfivetech.com>
-Subject: [esmil:visionfive 46/61] sound/soc/starfive/pwmdac-pcm.c:84:6:
- warning: variable 'substream' is used uninitialized whenever 'if' condition
- is false
-Message-ID: <202203222347.77QCVbYU-lkp@intel.com>
+        Tue, 22 Mar 2022 12:00:11 -0400
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5D427CC4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:58:24 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 0AD8FC7244D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:58:24 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id WgtrnQQA922u3WgtrnqWYV; Tue, 22 Mar 2022 10:58:24 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=FmnYj8XY37ozsL1ncMDDe7VB7cs7ym+XNgIT3Nh/4mw=; b=Kw0GKrzk9B0sN5VlG6Annzh8cf
+        rq7p+wcAyXObM/5XIdD+jQnafNsb9MldsbS2dJ220mIzfYucD5gyd2BTWJ1gpWkppysQ9fiAJi43d
+        BZAxCn7tC4ErJB0O5csom3VWJFd6gGICvZlBbyT7zyxaxeTYWgYz6N7I3Na8EVNS7DSGHhDWLW1+S
+        YB2J+I8uZOLSahLR36ZwEOvxctQs0PAKcfC13I9vB/n0xn9FiwrCUy9b+FVwwf2Z2uaiDssdV4bpm
+        wvUSKJMPsLbrcH0E3CmeuJRS1Zb83L9dNx1usrPbQhd9JrJ8hhfcqWzzinJMvHfqr8kp1KItot6Fn
+        u2oobCLw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57610 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nWgtq-000tfT-Ls; Tue, 22 Mar 2022 15:58:22 +0000
+Date:   Tue, 22 Mar 2022 08:58:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <20220322155820.GA1745955@roeck-us.net>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220217162848.303601-1-Jason@zx2c4.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nWgtq-000tfT-Ls
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57610
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 38
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   243ce759ed5821edf38bf93ce7325e232b805547
-commit: 7c3b27a272448a123087494f7ade3e84a92543c6 [46/61] ASoC: starfive: Add StarFive JH7100 audio drivers
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220322/202203222347.77QCVbYU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/esmil/linux/commit/7c3b27a272448a123087494f7ade3e84a92543c6
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 7c3b27a272448a123087494f7ade3e84a92543c6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/starfive/
+On Thu, Feb 17, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
+> This topic has come up countless times, and usually doesn't go anywhere.
+> This time I thought I'd bring it up with a slightly narrower focus,
+> updated for some developments over the last three years: we finally can
+> make /dev/urandom always secure, in light of the fact that our RNG is
+> now always seeded.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[ ... ]
 
-All warnings (new ones prefixed by >>):
+This patch (or a later version of it) made it into mainline and causes a
+large number of qemu boot test failures for various architectures (arm,
+m68k, microblaze, sparc32, xtensa are the ones I observed). Common
+denominator is that boot hangs at "Saving random seed:". A sample bisect
+log is attached. Reverting this patch fixes the problem.
 
->> sound/soc/starfive/pwmdac-pcm.c:84:6: warning: variable 'substream' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (push)
-               ^~~~
-   sound/soc/starfive/pwmdac-pcm.c:87:11: note: uninitialized use occurs here
-           active = substream && snd_pcm_running(substream);
-                    ^~~~~~~~~
-   sound/soc/starfive/pwmdac-pcm.c:84:2: note: remove the 'if' if its condition is always true
-           if (push)
-           ^~~~~~~~~
-   sound/soc/starfive/pwmdac-pcm.c:80:37: note: initialize the variable 'substream' to silence this warning
-           struct snd_pcm_substream *substream;
-                                              ^
-                                               = NULL
->> sound/soc/starfive/pwmdac-pcm.c:92:7: warning: variable 'period_elapsed' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (push) {
-                       ^~~~
-   sound/soc/starfive/pwmdac-pcm.c:99:7: note: uninitialized use occurs here
-                   if (period_elapsed)
-                       ^~~~~~~~~~~~~~
-   sound/soc/starfive/pwmdac-pcm.c:92:3: note: remove the 'if' if its condition is always true
-                   if (push) {
-                   ^~~~~~~~~~
-   sound/soc/starfive/pwmdac-pcm.c:81:29: note: initialize the variable 'period_elapsed' to silence this warning
-           bool active, period_elapsed;
-                                      ^
-                                       = 0
->> sound/soc/starfive/pwmdac-pcm.c:202:6: warning: variable 'pos' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/starfive/pwmdac-pcm.c:205:9: note: uninitialized use occurs here
-           return pos < runtime->buffer_size ? pos : 0;
-                  ^~~
-   sound/soc/starfive/pwmdac-pcm.c:202:2: note: remove the 'if' if its condition is always true
-           if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/starfive/pwmdac-pcm.c:200:23: note: initialize the variable 'pos' to silence this warning
-           snd_pcm_uframes_t pos;
-                                ^
-                                 = 0
-   3 warnings generated.
+Guenter
 
-
-vim +84 sound/soc/starfive/pwmdac-pcm.c
-
-    77	
-    78	static void sf_pcm_transfer(struct sf_pwmdac_dev *dev, bool push)
-    79	{
-    80		struct snd_pcm_substream *substream;
-    81		bool active, period_elapsed;
-    82	
-    83		rcu_read_lock();
-  > 84		if (push)
-    85			substream = rcu_dereference(dev->tx_substream);
-    86	
-    87		active = substream && snd_pcm_running(substream);
-    88		if (active) {
-    89			unsigned int ptr;
-    90			unsigned int new_ptr;
-    91	
-  > 92			if (push) {
-    93				ptr = READ_ONCE(dev->tx_ptr);
-    94				new_ptr = dev->tx_fn(dev, substream->runtime, ptr,
-    95						&period_elapsed);
-    96				cmpxchg(&dev->tx_ptr, ptr, new_ptr);
-    97			}
-    98	
-    99			if (period_elapsed)
-   100				snd_pcm_period_elapsed(substream);
-   101		}
-   102		rcu_read_unlock();
-   103	}
-   104	
-   105	void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev)
-   106	{
-   107		sf_pcm_transfer(dev, true);
-   108	}
-   109	
-   110	
-   111	static int sf_pcm_open(struct snd_soc_component *component,
-   112				struct snd_pcm_substream *substream)
-   113	{
-   114		struct snd_pcm_runtime *runtime = substream->runtime;
-   115		struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-   116		struct sf_pwmdac_dev *dev = snd_soc_dai_get_drvdata(asoc_rtd_to_cpu(rtd, 0));
-   117	
-   118		snd_soc_set_runtime_hwparams(substream, &sf_pcm_hardware);
-   119		snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
-   120		runtime->private_data = dev;
-   121	
-   122		return 0;
-   123	}
-   124	
-   125	
-   126	static int sf_pcm_close(struct snd_soc_component *component,
-   127				struct snd_pcm_substream *substream)
-   128	{
-   129		synchronize_rcu();
-   130		return 0;
-   131	}
-   132	
-   133	static int sf_pcm_hw_params(struct snd_soc_component *component,
-   134				struct snd_pcm_substream *substream,
-   135				struct snd_pcm_hw_params *hw_params)
-   136	{
-   137		struct snd_pcm_runtime *runtime = substream->runtime;
-   138		struct sf_pwmdac_dev *dev = runtime->private_data;
-   139	
-   140		switch (params_channels(hw_params)) {
-   141		case 2:
-   142			break;
-   143		default:
-   144			dev_err(dev->dev, "invalid channels number\n");
-   145			return -EINVAL;
-   146		}
-   147	
-   148		switch (params_format(hw_params)) {
-   149		case SNDRV_PCM_FORMAT_U8:
-   150		case SNDRV_PCM_FORMAT_S8:
-   151			dev->tx_fn = sf_pwmdac_pcm_tx_8;
-   152			break;
-   153		case SNDRV_PCM_FORMAT_S16_LE:
-   154			dev->tx_fn = sf_pwmdac_pcm_tx_16;
-   155			break;
-   156		default:
-   157			dev_err(dev->dev, "invalid format\n");
-   158			return -EINVAL;
-   159		}
-   160	
-   161			return 0;
-   162	}
-   163	
-   164	
-   165	static int sf_pcm_trigger(struct snd_soc_component *component,
-   166				struct snd_pcm_substream *substream, int cmd)
-   167	{
-   168		struct snd_pcm_runtime *runtime = substream->runtime;
-   169		struct sf_pwmdac_dev *dev = runtime->private_data;
-   170		int ret = 0;
-   171	
-   172		switch (cmd) {
-   173		case SNDRV_PCM_TRIGGER_START:
-   174		case SNDRV_PCM_TRIGGER_RESUME:
-   175		case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-   176			if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
-   177				WRITE_ONCE(dev->tx_ptr, 0);
-   178				rcu_assign_pointer(dev->tx_substream, substream);
-   179			}
-   180			break;
-   181		case SNDRV_PCM_TRIGGER_STOP:
-   182		case SNDRV_PCM_TRIGGER_SUSPEND:
-   183		case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-   184			if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
-   185				rcu_assign_pointer(dev->tx_substream, NULL);
-   186			break;
-   187		default:
-   188			ret = -EINVAL;
-   189			break;
-   190		}
-   191	
-   192		return ret;
-   193	}
-   194	
-   195	static snd_pcm_uframes_t sf_pcm_pointer(struct snd_soc_component *component,
-   196				struct snd_pcm_substream *substream)
-   197	{
-   198		struct snd_pcm_runtime *runtime = substream->runtime;
-   199		struct sf_pwmdac_dev *dev = runtime->private_data;
-   200		snd_pcm_uframes_t pos;
-   201	
- > 202		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
-   203			pos = READ_ONCE(dev->tx_ptr);
-   204	
-   205		return pos < runtime->buffer_size ? pos : 0;
-   206	}
-   207	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+---
+# bad: [8565d64430f8278bea38dab0a3ab60b4e11c71e4] Merge tag 'bounds-fixes-v5.18-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux
+# good: [f443e374ae131c168a065ea1748feac6b2e76613] Linux 5.17
+git bisect start 'HEAD' 'v5.17'
+# bad: [5628b8de1228436d47491c662dc521bc138a3d43] Merge tag 'random-5.18-rc1-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/crng/random
+git bisect bad 5628b8de1228436d47491c662dc521bc138a3d43
+# good: [a04b1bf574e1f4875ea91f5c62ca051666443200] Merge tag 'for-5.18/parisc-1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux
+git bisect good a04b1bf574e1f4875ea91f5c62ca051666443200
+# good: [242ba6656d604aa8dc87451fc08143cb28d5a587] Merge tag 'acpi-5.18-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+git bisect good 242ba6656d604aa8dc87451fc08143cb28d5a587
+# good: [02b82b02c34321dde10d003aafcd831a769b2a8a] Merge tag 'pm-5.18-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+git bisect good 02b82b02c34321dde10d003aafcd831a769b2a8a
+# bad: [77553cf8f44863b31da242cf24671d76ddb61597] random: don't let 644 read-only sysctls be written to
+git bisect bad 77553cf8f44863b31da242cf24671d76ddb61597
+# good: [a07fdae346c35c6ba286af1c88e0effcfa330bf9] random: add proper SPDX header
+git bisect good a07fdae346c35c6ba286af1c88e0effcfa330bf9
+# good: [58340f8e952b613e0ead0bed58b97b05bf4743c5] random: defer fast pool mixing to worker
+git bisect good 58340f8e952b613e0ead0bed58b97b05bf4743c5
+# good: [da3951ebdcd1cb1d5c750e08cd05aee7b0c04d9a] random: round-robin registers as ulong, not u32
+git bisect good da3951ebdcd1cb1d5c750e08cd05aee7b0c04d9a
+# good: [abded93ec1e9692920fe309f07f40bd1035f2940] random: unify cycles_t and jiffies usage and types
+git bisect good abded93ec1e9692920fe309f07f40bd1035f2940
+# bad: [6f98a4bfee72c22f50aedb39fb761567969865fe] random: block in /dev/urandom
+git bisect bad 6f98a4bfee72c22f50aedb39fb761567969865fe
+# good: [c2a7de4feb6e09f23af7accc0f882a8fa92e7ae5] random: do crng pre-init loading in worker rather than irq
+git bisect good c2a7de4feb6e09f23af7accc0f882a8fa92e7ae5
+# first bad commit: [6f98a4bfee72c22f50aedb39fb761567969865fe] random: block in /dev/urandom

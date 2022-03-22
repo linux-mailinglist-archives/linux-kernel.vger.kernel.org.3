@@ -2,86 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940F64E3E6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B078C4E3E75
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234833AbiCVMXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S233533AbiCVM3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbiCVMX3 (ORCPT
+        with ESMTP id S232782AbiCVM3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:23:29 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8828985671
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:22:02 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 22MCLqxg010791;
-        Tue, 22 Mar 2022 13:21:52 +0100
-Date:   Tue, 22 Mar 2022 13:21:52 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Ammar Faizi'" <ammarfaizi2@gnuweeb.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Nugraha <richiisei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [RFC PATCH v2 6/8] tools/nolibc/stdlib: Implement `malloc()`,
- `calloc()`, `realloc()` and `free()`
-Message-ID: <20220322122152.GE10306@1wt.eu>
-References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
- <20220322102115.186179-7-ammarfaizi2@gnuweeb.org>
- <56935393241242adab6f32c50dd74c23@AcuMS.aculab.com>
+        Tue, 22 Mar 2022 08:29:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B8A7DA8C;
+        Tue, 22 Mar 2022 05:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647952053; x=1679488053;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=odqputHphRLEGTlFQVeQHC2Df4Gj0dQyFtRFLzNNbhY=;
+  b=F0G340R9k9AmYY+KygMQ6IgbmuqDtS2Yq98Pwq9c46zryFKtD0MlObtV
+   AewBbsEYDbprfd8W8H2vVanKMVKpgB6HfIr0XQ74LChoYTXN7dTXENqEe
+   ZY4wFhs6IfK70sI9PheHoIO6ZW1QaVVamcLZmV5LvigvpYHoo2/6hMdk/
+   Ht/l1Tehr+f4GAY5Ij1b4RCvmub1ST7I3YUWhBqa5S1H4z7mGWnBaKl1N
+   unoLLKFuNiGEN21pUaYEvKrFpzEhfA+xOWcx4DaAeEZJIFic4yip+tJ3q
+   lWPhuVW+RYFOtTRkzL8xC+OpH1J8DcCHDcy7rOfKnULpoUZLLpUoqd0Lb
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="245278821"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="245278821"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 05:27:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="583238545"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 22 Mar 2022 05:27:28 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWdbj-000Im3-R3; Tue, 22 Mar 2022 12:27:27 +0000
+Date:   Tue, 22 Mar 2022 20:27:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Atish Patra <atish.patra@wdc.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Anup Patel <anup@brainfault.org>, linux-doc@vger.kernel.org
+Subject: [ammarfaizi2-block:palmer/linux/riscv-pmu 10/15]
+ drivers/perf/riscv_pmu_legacy.c:76: warning: This comment starts with '/**',
+ but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202203222043.1RKgCxBP-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <56935393241242adab6f32c50dd74c23@AcuMS.aculab.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 11:52:43AM +0000, David Laight wrote:
-> > +struct nolibc_heap {
-> > +	size_t	len;
-> > +	char	user_p[] __attribute__((__aligned__));
-> 
-> Doesn't that need (number) in the attribute?
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-pmu
+head:   33363c336516e4beb9dd7e8265b369ff96d07dcb
+commit: 9b3e150e310ee71d7bae1e31c38a300cfa5e951b [10/15] RISC-V: Add a simple platform driver for RISC-V legacy perf
+config: riscv-randconfig-r006-20220320 (https://download.01.org/0day-ci/archive/20220322/202203222043.1RKgCxBP-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/9b3e150e310ee71d7bae1e31c38a300cfa5e951b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-pmu
+        git checkout 9b3e150e310ee71d7bae1e31c38a300cfa5e951b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash drivers/perf/
 
-That was my question in the previous review but Ammar pointed me to
-the doc indicating that without value it's "large enough for any type"
-(i.e. the usual double-long stuff). So that's fine.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > +static __attribute__((unused))
-> > +void *malloc(size_t len)
-> > +{
-> > +	struct nolibc_heap *heap;
-> 
-> If you do (say):
-> 	len = ROUNDUP(len + sizeof *heap, 4096)
-> you can optimise a lot of the realloc() calls.
+All warnings (new ones prefixed by >>):
 
-Could be, but do we *really* care ? Again, I didn't even intend to
-implement dynamic allocation at all for the targetted use cases.
+>> drivers/perf/riscv_pmu_legacy.c:76: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * This is just a simple implementation to allow legacy implementations
 
-> I actually wonder if compiling a mini-libc.a
-> and then linking the programs against it might
-> be better than all these static functions?
-> -ffunction-sections can help a bit (where supported).
 
-That was really not the intent when I started this project this
-a few years ago. Instead the purpose precisely was *not* to have
-to depend on any pre-compiled stuff and it seems a few of us find
-this lack of dependency convenient. Right now using bare-metal
-compilers from kernel.org/pub/tools/crosstool works out of the
-box and is very convenient for testing and for pre-init stuff; if
-the compiler can build the kernel, it can also build your userland
-code.
+vim +76 drivers/perf/riscv_pmu_legacy.c
 
-Willy
+    74	
+    75	/**
+  > 76	 * This is just a simple implementation to allow legacy implementations
+    77	 * compatible with new RISC-V PMU driver framework.
+    78	 * This driver only allows reading two counters i.e CYCLE & INSTRET.
+    79	 * However, it can not start or stop the counter. Thus, it is not very useful
+    80	 * will be removed in future.
+    81	 */
+    82	static void pmu_legacy_init(struct riscv_pmu *pmu)
+    83	{
+    84		pr_info("Legacy PMU implementation is available\n");
+    85	
+    86		pmu->num_counters = RISCV_PMU_LEGACY_NUM_CTR;
+    87		pmu->ctr_start = pmu_legacy_ctr_start;
+    88		pmu->ctr_stop = NULL;
+    89		pmu->event_map = pmu_legacy_event_map;
+    90		pmu->ctr_get_idx = pmu_legacy_ctr_get_idx;
+    91		pmu->ctr_get_width = NULL;
+    92		pmu->ctr_clear_idx = NULL;
+    93		pmu->ctr_read = pmu_legacy_read_ctr;
+    94	
+    95		perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
+    96	}
+    97	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

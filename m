@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E8C4E3A64
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4E04E3A6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiCVIUI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Mar 2022 04:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
+        id S230324AbiCVIUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiCVIUG (ORCPT
+        with ESMTP id S229971AbiCVIUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:20:06 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F15A5A3;
-        Tue, 22 Mar 2022 01:18:36 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 3027330AE012;
-        Tue, 22 Mar 2022 09:18:35 +0100 (CET)
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 41F7530AE000;
-        Tue, 22 Mar 2022 09:18:34 +0100 (CET)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 22M8IYRq010948;
-        Tue, 22 Mar 2022 09:18:34 +0100
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 22M8IXBX010947;
-        Tue, 22 Mar 2022 09:18:33 +0100
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
-Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver, PCI, platform integration and documentation
-Date:   Tue, 22 Mar 2022 09:18:32 +0100
-User-Agent: KMail/1.9.10
-Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz> <20220322074622.5gkjhs25epurecvx@pengutronix.de>
-In-Reply-To: <20220322074622.5gkjhs25epurecvx@pengutronix.de>
-X-KMail-QuotePrefix: > 
+        Tue, 22 Mar 2022 04:20:32 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C3B5EDD4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647937145; x=1679473145;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=x1YD9my+L35IteAZDqbEgYROw0JzwAUiseR0i+LHqww=;
+  b=klcKSWF5u/G108lMJoCoYQOgv7gtk+DtBISSeRMwko8rQig9mXsFBLqZ
+   7kzPXeVvZG52iUPZIMSZJVGU4S/1U+cjZWr8+UjK5mch7126jGcvbjX51
+   BkclN2LbEi0CUtn+0qq0Yq85fuob/T7bPYow1vHbgQv/HGnvhNg0bEofl
+   6AqgSkNIBnA5W+XAAYL47yPFAh2uVM4Y4c8iaS53LM5ck583XqURB0jKy
+   CM00Qay4lEJkLiln5SKALd3nqmC1HEWjjignRTH/Y0fJUiCn+/4yQXfAm
+   A9rGHcNLX0kBy7ebaLZ7ULyLsarPmIW+Cv7pTS5rvMyVNthh+cFwDOx8P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257708565"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="257708565"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 01:19:04 -0700
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="518789896"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 01:18:59 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [GIT PULL] scheduler updates for v5.18
+References: <YjhZUezhnamHAl0H@gmail.com> <Yjh58h8cpcPERVZA@qian>
+        <CAHk-=whrqeX-8yHEdSCGFUyyC2sj=OLyeFR9civUiswR=A+PwA@mail.gmail.com>
+        <Yjl8Lk2uPiZkXoM9@gmail.com> <Yjl/T0SBCo1zfkkS@gmail.com>
+Date:   Tue, 22 Mar 2022 16:18:57 +0800
+In-Reply-To: <Yjl/T0SBCo1zfkkS@gmail.com> (Ingo Molnar's message of "Tue, 22
+        Mar 2022 08:48:31 +0100")
+Message-ID: <871qyu5rim.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-Content-Disposition: inline
-Message-Id: <202203220918.33033.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,87 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marc,
+Hi, Ingo,
 
-thanks for positive reply for our years effort.
+Ingo Molnar <mingo@kernel.org> writes:
 
-On Tuesday 22 of March 2022 08:46:22 Marc Kleine-Budde wrote:
-> On 22.03.2022 00:32:27, Pavel Pisa wrote:
-> > This driver adds support for the CTU CAN FD open-source IP core.
+> * Ingo Molnar <mingo@kernel.org> wrote:
 >
-> The driver looks much better now. Good work. Please have a look at the
-> TX path of the mcp251xfd driver, especially the tx_stop_queue and
-> tx_wake_queue in mcp251xfd_start_xmit() and mcp251xfd_handle_tefif(). A
-> lockless implementation should work in your hardware, too.
-
-Is this blocker for now? I would like to start with years tested base.
-
-We have HW timestamping implemented for actual stable CTU CAN FD IP core 
-version, support for variable number of TX buffers which count can be 
-parameterized up to 8 in the prepared version and long term desire to 
-configurable-SW defined multi-queue which our HW interface allows to 
-dynamically server by á TX buffers. But plan is to keep combinations
-of the design and driver compatible from the actual revision.
-
-I would be happy if we can agree on some base/minimal support and get
-it into mainline and use it as base for the followup patch series.
-
-I understand that I have sent code late for actual merge window,
-but I am really loaded by teaching, related RISC-V simulator
-https://github.com/cvut/qtrvsim , ESA and robotic projects
-at company. So I would prefer to go step by step and cooperate
-on updates and testing with my diploma students.
-
-> BTW: The PROP_SEG/PHASE_SEG1 issue is known:
-> > +A curious reader will notice that the durations of the segments PROP_SEG
-> > +and PHASE_SEG1 are not determined separately but rather combined and
-> > +then, by default, the resulting TSEG1 is evenly divided between PROP_SEG
-> > +and PHASE_SEG1.
+>> 
+>> * Linus Torvalds <torvalds@linux-foundation.org> wrote:
+>> 
+>> > On Mon, Mar 21, 2022 at 6:13 AM Qian Cai <quic_qiancai@quicinc.com> wrote:
+>> > >
+>> > > On Mon, Mar 21, 2022 at 11:54:09AM +0100, Ingo Molnar wrote:
+>> > > > Huang Ying (3):
+>> > > >       sched/numa-balancing: Move some document to make it consistent with the code
+>> > > >       sched/numa: Fix NUMA topology for systems with CPU-less nodes
+>> > > >       sched/numa: Avoid migrating task to CPU-less node
+>> > >
+>> > > Linus, I don't think you want to merge this as-is. This will introduce a
+>> > > kernel crash on arm64 NUMA as mentioned in this thread,
+>> > 
+>> > Ok, dropped from my queue. Thanks,
+>> 
+>> I've reverted the broken commit & will send another pull request after 
+>> some testing. Sorry about that!
 >
-> and the flexcan IP core in CAN-FD mode has the same problem. When
-> working on the bit timing parameter, I'll plan to have separate
-> PROP_SEG/PHASE_SEG1 min/max in the kernel, so that the bit timing
-> algorithm can take care of this.
+> Ended up using the fix below instead - it's tested already on the affected 
+> system.
+>
 
-Hmm, when I have thought about that years ago I have not noticed real
-difference when time quanta is move between PROP_SEG and PHASE_SEG1.
-So for me it had no influence on the algorithm computation and
-could be done on the chip level when minimal and maximal sum is
-respected. But may it be I have overlooked something and there is
-difference for CAN FD.  May it be my colleagues Jiri Novak and 
-Ondrej Ille are more knowable.
+Thanks a lot for your help!
 
-As for the optimal timequantas per bit value, I agree that it
-is not so simple. In the fact SJW and even tipple-sampling
-should be defined in percentage of bit time and then all should
-be optimized together and even combination with slight bitrate
-error should be preferred against other exact matching when
-there is significant difference in the other parameters values.
+Is it a general rule to send a fixing patch for the bug of a patch
+merged by tip tree?  Or a new version of the patch is acceptable too?
 
-But I am not ready to dive into it till our ESA space NanoXplore
-FPGA project passes final stage... 
-
-By the way we have received report from Andrew Dennison about
-successful integration of CTU CAN FD into Litex based RISC-V
-system. Tested with the Linux our Linux kernel driver.
-
-The first iteration there, but he reported that some corrections
-from his actual development needs to be added to the public
-repo still to be usable out of the box
-
-  https://github.com/AndrewD/litecan
-
-Best wishes,
-
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://dce.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-
+Best Regards,
+Huang, Ying

@@ -2,134 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561D44E472D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275384E4732
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbiCVUEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
+        id S232717AbiCVUGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiCVUEr (ORCPT
+        with ESMTP id S232662AbiCVUGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:04:47 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF5C27CD2;
-        Tue, 22 Mar 2022 13:03:19 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-dacc470e03so2806869fac.5;
-        Tue, 22 Mar 2022 13:03:19 -0700 (PDT)
+        Tue, 22 Mar 2022 16:06:15 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647964EA20;
+        Tue, 22 Mar 2022 13:04:47 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bu29so31721705lfb.0;
+        Tue, 22 Mar 2022 13:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iUZGUL8Gi2Ppt7yy31rOC+YSZzvaBz5owptCNe6gYkY=;
+        b=oV2YZ3Ejy3RjJi2itI649lz1+hsG6QWWYX0wozfToncoiqs6v182m72C2NcQ8y5/lG
+         ChdqZIsVeWiBE7HeHRZ9mc/TRKJ8horLM7HWoKzV+JLUu6nUGHOVDknM2/C4CxgO49Pb
+         U3J1XZT6j4OYlS2l1roZ4uyccGZm6OBWKfRGofyKfs8z1fKOfhEbR2z99lrnHdM2u5zb
+         PKYQrMIDu0w7Rx4Kf9Twcm65yIDGUYzq5dBblFR3gyypAykapHxL2l0roUfSmsQS0T9U
+         STgLZ3uWyiuM4UeVNAIJ6dpJfHx6p3ykuT3TlDyrl9FlV7Gt1uk6AyVt17cOgXPM0mzo
+         Ot4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Fq1z4Ed84ZuWdkW2m9jYI7sM6QJam+q9K1arrVbgWws=;
-        b=HzR5KHgBJZX4QzPydA7vo7tY9/5VR+Qlv6HaHpazIh6RFMoxebS3ta9FfLDdSuwND8
-         Z/Wx3x3aoEUANdoZVkyiDCVE9uMuX1fVVLdk6lKwpAg169tqEV4jdUJaFcLL0Tt1mlns
-         NGzJsH7jR7wh52GrblG+84WVAmt/9hhVCFMpplAtlXk8fm8SjK3FhyP3l5hxC0eEYyQJ
-         5zC/htQuWWr9vGvI7v66lWPV3E5w2HP4qgF2ukU6EQNZ+WD/rEZusb+ZQaZWh0Z0y0M4
-         y3u/KRCHQ7LGWetFY/9QOfQVoCokx7qQPt79oT0BZml4dWkKdWvjUD9G0dOXq4ZivxyP
-         nThw==
-X-Gm-Message-State: AOAM532gito9orADE27tNf+NTmoF6qX6Ta8Np5UIzCjAiQq2DTN/Kpvj
-        LGpkQNrYC6KvWLogMrCZiw==
-X-Google-Smtp-Source: ABdhPJy4AIzdw7CM09sm8WiJu7yAMWYZnT7kqu9E09l5bnyx+c0wfi4rPWwDeKMKI6b9WUwXAQwTQQ==
-X-Received: by 2002:a05:6870:b52c:b0:dd:ddfa:3161 with SMTP id v44-20020a056870b52c00b000ddddfa3161mr2430238oap.61.1647979398908;
-        Tue, 22 Mar 2022 13:03:18 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 21-20020a056870115500b000dda3a0cb91sm3110524oag.54.2022.03.22.13.03.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iUZGUL8Gi2Ppt7yy31rOC+YSZzvaBz5owptCNe6gYkY=;
+        b=pyPIS4bpzIT+dJeytyBzNzkG6ikKQ/nlvc0FpQOnyI3IJGK5ykm13L5ZYCnMPYDvZC
+         XUDviWC0Z3dnB0TU6y0qylSsGeQJrEFTrvScRg9DR7hXR9Z7QCFt3QCohaLpWLGZnq0t
+         SF6AbI/YQ6HBUaGx1WwufuvYTKUNApdubbg6FM6mN7HX1IGoGcto+oHQsQXAzkqJDNOi
+         DdksCp2FHRMioDk4N/mfN+FJsdX2lT4DgNG9YNcQIldgNE3JxUKrPuHk4zb2SWcav7F/
+         r5y/vaVYgByb9xvgDEuFRQVA3lN0qmrclK5swmtKw82cPtX9S6yrwSJGwkrf2R602t3/
+         JH7Q==
+X-Gm-Message-State: AOAM532QDfroiamA2SQoj33hHdDWu0HNIf+3vT1km9gw+wdlOLmU9j4C
+        IOASGBj09n4TzR/CuV7DbdQ=
+X-Google-Smtp-Source: ABdhPJy3cQEbdob9qsqC3FESc/ERco2MNW6fDTTTdfm7ITBEAu2CuQ+PFlRdCTlFaMpr6r4lsSuGcA==
+X-Received: by 2002:a05:6512:1111:b0:44a:1035:7a1f with SMTP id l17-20020a056512111100b0044a10357a1fmr13573158lfg.182.1647979485544;
+        Tue, 22 Mar 2022 13:04:45 -0700 (PDT)
+Received: from localhost.localdomain ([46.235.67.145])
+        by smtp.gmail.com with ESMTPSA id p12-20020a056512138c00b0044833f1cd85sm2301795lfa.62.2022.03.22.13.04.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 13:03:17 -0700 (PDT)
-Received: (nullmailer pid 2415318 invoked by uid 1000);
-        Tue, 22 Mar 2022 20:03:15 -0000
-Date:   Tue, 22 Mar 2022 15:03:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
- controller
-Message-ID: <Yjorg4taoTVAr8ML@robh.at.kernel.org>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-6-15330273260@189.cn>
- <YjkITWpbnCmhKaX+@robh.at.kernel.org>
- <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
- <66ae2436-aa86-f583-85b4-d652273188e9@flygoat.com>
- <629311ac-f847-dd57-689e-eaa97aae8480@189.cn>
+        Tue, 22 Mar 2022 13:04:45 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     bernie@plugable.com, deller@gmx.de
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
+Subject: [PATCH] fbdev: udlfb: properly check endpoint type
+Date:   Tue, 22 Mar 2022 23:04:38 +0300
+Message-Id: <20220322200438.17998-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <629311ac-f847-dd57-689e-eaa97aae8480@189.cn>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 09:54:08PM +0800, Sui Jingfeng wrote:
-> 
-> On 2022/3/22 21:08, Jiaxun Yang wrote:
-> > 
-> > 
-> > 在 2022/3/22 2:33, Sui Jingfeng 写道:
-> > > 
-> > > On 2022/3/22 07:20, Rob Herring wrote:
-> > > > On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
-> > > > > From: suijingfeng <suijingfeng@loongson.cn>
-> > > > > 
-> > > > Needs a commit message.
-> > > > 
-> > > > > Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
-> > > > > Signed-off-by: Sui Jingfeng <15330273260@189.cn>
-> > > > Same person? Don't need both emails.
-> > > 
-> > > Yes,  suijingfeng@loongson.cn is my company's email. But it can not
-> > > be used to send patches to dri-devel,
-> > > 
-> > > when send patches with this email, the patch will not be shown on
-> > > patch works.
-> > > 
-> > > Emails  are either blocked or got  rejected  by loongson's mail
-> > > server.  It can only receive emails
-> > > 
-> > > from you and other people, but not dri-devel. so have to use my
-> > > personal email(15330273260@189.cn) to send patches.
-> > In this case you can just use your company's email to sign-off
-> > code and sending with your personal email. It's common practice.
-> > 
-> > If you don't want to receiving kernel email in your company mailbox,
-> > you can add a entry in .mailmap .
-> > 
-> |I'm using `git send-email -7 --cover-letter --annotate -v11` command to
-> send patches, it will automatically sign off patches with the my private
-> emails. |
+syzbot reported warning in usb_submit_urb, which is caused by wrong
+endpoint type.
 
-I think that is only if you set your git config author to your private 
-email. Pretty much anything git might automatically do can be turned 
-off.
+This driver uses out bulk endpoint for communication, so
+let's check if this endpoint is present and bail out early if not.
 
-Rob
+Fail log:
+
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 4822 at drivers/usb/core/urb.c:493 usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
+Modules linked in:
+CPU: 0 PID: 4822 Comm: kworker/0:3 Tainted: G        W         5.13.0-syzkaller #0
+...
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
+...
+Call Trace:
+ dlfb_submit_urb+0x89/0x160 drivers/video/fbdev/udlfb.c:1969
+ dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
+ dlfb_ops_set_par+0x2a3/0x840 drivers/video/fbdev/udlfb.c:1110
+ dlfb_usb_probe.cold+0x113e/0x1f4a drivers/video/fbdev/udlfb.c:1732
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+
+Fixes: 88e58b1a42f8 ("Staging: add udlfb driver")
+Reported-and-tested-by: syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+ drivers/video/fbdev/udlfb.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
+index b9cdd02c1000..2343c7955747 100644
+--- a/drivers/video/fbdev/udlfb.c
++++ b/drivers/video/fbdev/udlfb.c
+@@ -1649,8 +1649,9 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	const struct device_attribute *attr;
+ 	struct dlfb_data *dlfb;
+ 	struct fb_info *info;
+-	int retval = -ENOMEM;
++	int retval;
+ 	struct usb_device *usbdev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *out;
+ 
+ 	/* usb initialization */
+ 	dlfb = kzalloc(sizeof(*dlfb), GFP_KERNEL);
+@@ -1664,6 +1665,12 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	dlfb->udev = usb_get_dev(usbdev);
+ 	usb_set_intfdata(intf, dlfb);
+ 
++	retval = usb_find_common_endpoints(intf->cur_altsetting, NULL, &out, NULL, NULL);
++	if (retval) {
++		dev_err(&intf->dev, "Device should have at lease 1 bulk endpoint!\n");
++		goto error;
++	}
++
+ 	dev_dbg(&intf->dev, "console enable=%d\n", console);
+ 	dev_dbg(&intf->dev, "fb_defio enable=%d\n", fb_defio);
+ 	dev_dbg(&intf->dev, "shadow enable=%d\n", shadow);
+@@ -1673,6 +1680,7 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	if (!dlfb_parse_vendor_descriptor(dlfb, intf)) {
+ 		dev_err(&intf->dev,
+ 			"firmware not recognized, incompatible device?\n");
++		retval = -ENODEV;
+ 		goto error;
+ 	}
+ 
+@@ -1686,8 +1694,10 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 
+ 	/* allocates framebuffer driver structure, not framebuffer memory */
+ 	info = framebuffer_alloc(0, &dlfb->udev->dev);
+-	if (!info)
++	if (!info) {
++		retval = -ENOMEM;
+ 		goto error;
++	}
+ 
+ 	dlfb->info = info;
+ 	info->par = dlfb;
+-- 
+2.35.1
 

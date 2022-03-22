@@ -2,147 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88C14E4335
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4A44E4337
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbiCVPmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S238695AbiCVPnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238753AbiCVPmw (ORCPT
+        with ESMTP id S235839AbiCVPnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:42:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C67C8BF70;
-        Tue, 22 Mar 2022 08:41:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 22 Mar 2022 11:43:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1BC8BE3F;
+        Tue, 22 Mar 2022 08:41:42 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 700E11F388;
+        Tue, 22 Mar 2022 15:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647963701; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mfmika1iV2aAvCfMUhFBPtl1sq+JgagrgKPtK9yM2As=;
+        b=wzGNFp9SrZgPiLRRdz/5cogvunqvIWO31hA4ZtVLQuFKBsHSiCGH5T0PWQpqcLHwT9ri5B
+        WwXN9HM+lyzkPhu83K4oRWfg1KgZ1LWVMe2Wf935qcq/QKdwy1IFgRx1nNHx2DKwV5hafJ
+        mhia749yXsr7KkWwTELsFWn79MioT7s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647963701;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mfmika1iV2aAvCfMUhFBPtl1sq+JgagrgKPtK9yM2As=;
+        b=J4/DDMFERwCjZNeEt3OPY0LwtLGzLkHo2/RQmSy+5o++/3lysxhaPHyT5hPCt1oopC8Qot
+        PP3N6mZcZswrdgCw==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FFEEB81BC2;
-        Tue, 22 Mar 2022 15:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0A0C340F0;
-        Tue, 22 Mar 2022 15:41:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647963680;
-        bh=9lulS55rYge/f8W4ZmQhmOklPUPvVcTI/5fpSeo3QfU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fp+8gdct1DJvbNMsy39hAXeyD9lXCvxA3iEOwKO572M19fRn3QP/St5RrWWK3KP3Y
-         CQ1DaQ5x0zUaMxrDl1AWLIwhkeEVGQFIFxyziNBLYOPJgh9RvO6lKQokoKekCuRGvz
-         QF5d8J18mW7aXCw8HNLiwIk0eZVWM9nJicBrEp5nA5q0BuB+X1karYG8oOnzmB8gMe
-         Yg/C7+6Z0cuIahWHjk13kYBhPWeJx3fYqs9zaMzQoXTVDx2QDgxpUeweJJwbgl4dQu
-         O5T+mHXlvgy6EyVxp2LIiXQenuYedgXeiKgVHH6oNgJEpTxIVblHKXxNy3YgdUMpNz
-         FTfk7k8NLj7Sg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nWgdH-00GJ9a-PK; Tue, 22 Mar 2022 15:41:16 +0000
-Date:   Tue, 22 Mar 2022 15:41:15 +0000
-Message-ID: <87bkxyxaec.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        dann frazier <dann.frazier@canonical.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?B?U3TDqXBo?= =?UTF-8?B?YW5l?= Graber 
-        <stgraber@ubuntu.com>,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
-In-Reply-To: <Yjnfr7V6egc1sewb@robh.at.kernel.org>
-References: <20220321104843.949645-1-maz@kernel.org>
-        <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
-        <87h77rxnyl.wl-maz@kernel.org>
-        <CAL_JsqK57KpZmzCE=86dLcHK4Ws_0w0ga4_qoYUe2GwFNpDzRw@mail.gmail.com>
-        <87fsnbxgau.wl-maz@kernel.org>
-        <e52c8cbd-031b-848f-3d78-dff8b93bd416@arm.com>
-        <61809b8f-acaa-bae2-ac5e-aa47c55eea23@arm.com>
-        <Yjnfr7V6egc1sewb@robh.at.kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: robh@kernel.org, robin.murphy@arm.com, dann.frazier@canonical.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, toan@os.amperecomputing.com, lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com, stgraber@ubuntu.com, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by relay2.suse.de (Postfix) with ESMTPS id 99A38A3B92;
+        Tue, 22 Mar 2022 15:41:40 +0000 (UTC)
+Date:   Tue, 22 Mar 2022 16:41:39 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, cl@linux.com,
+        mbenes@suse.cz, akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
+        joe@perches.com, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com,
+        daniel.thompson@linaro.org, hch@infradead.org
+Subject: Re: [PATCH v12 00/14] module: core code clean up
+Message-ID: <20220322154139.GS163591@kunlun.suse.cz>
+References: <20220322140344.556474-1-atomlin@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220322140344.556474-1-atomlin@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 14:39:43 +0000,
-Rob Herring <robh@kernel.org> wrote:
->=20
-> On Tue, Mar 22, 2022 at 01:16:35PM +0000, Robin Murphy wrote:
-> > On 2022-03-21 20:06, Robin Murphy wrote:
-> > > On 2022-03-21 19:21, Marc Zyngier wrote:
-> > > > On Mon, 21 Mar 2022 18:03:27 +0000,
-> > > > Rob Herring <robh@kernel.org> wrote:
-> > > > >=20
-> > > > > On Mon, Mar 21, 2022 at 11:36 AM Marc Zyngier <maz@kernel.org> wr=
-ote:
-> > > > > >=20
-> > > > > > On Mon, 21 Mar 2022 15:17:34 +0000,
-> > > > > > Rob Herring <robh@kernel.org> wrote:
-> > > > > > >=20
-> > > > > > > On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org>=
- wrote:
-> > > > > > > >=20
-> > > > > > > For XGene-1, I'd still like to understand what the issue is. =
-Reverting
-> > > > > > > the first fix and fixing 'dma-ranges' should have fixed it. I=
- need a
-> > > > > > > dump of how the IB registers are initialized in both cases. I=
-'m not
-> > > > > > > saying changing 'dma-ranges' in the firmware is going to be r=
-equired
-> > > > > > > here. There's a couple of other ways we could fix that withou=
-t a
-> > > > > > > firmware change, but first I need to understand why it broke.
-> > > > > >=20
-> > > > > > Reverting 6dce5aa59e0b was enough for me, without changing anyt=
-hing
-> > > > > > else.
-> > > > >=20
-> > > > > Meaning c7a75d07827a didn't matter for you. I'm not sure that it =
-would.
-> > > > >=20
-> > > > > Can you tell me what 'dma-ranges' contains on your system?
-> > > >=20
-> > > > Each pcie node (all 5 of them) has:
-> > > >=20
-> > > > dma-ranges =3D <0x42000000 0x80 0x00 0x80 0x00 0x00 0x80000000
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 0x42000000 0x00 0x00 0x00 0x00 0x80 0x00>;
->=20
-> This is the same as what St=C3=A9phane has for Merlin. So c7a75d07827a ("=
-PCI:=20
-> xgene: Fix IB window setup") should have fixed Mustang.
+Hello,
 
-Should, but didn't. The DT also carries additional properties:
+On Tue, Mar 22, 2022 at 02:03:30PM +0000, Aaron Tomlin wrote:
+> Hi Luis,
+> 
+> As per your suggestion [1], this is an attempt to refactor and split
+> optional code out of core module support code into separate components.
+> This version is based on Linus' commit b47d5a4f6b8d ("Merge tag
+> 'audit-pr-20220321' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit").
 
-ib-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00
-             0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+git complains when applying this series:
+Applying: module: Move sysfs support into a separate file
+.git/rebase-apply/patch:44: space before tab in indent.
+                                  const struct load_info *info,
+.git/rebase-apply/patch:45: space before tab in indent.
+                                  struct kernel_param *kparam,
+.git/rebase-apply/patch:46: space before tab in indent.
+                                  unsigned int num_params)
+warning: 3 lines add whitespace errors.
 
-which the driver ignores, but that could be relevant. FWIW, I've
-stashed the DT at [1].
+Maybe this could be addressed when applying the series.
 
-	M.
+Thanks
 
-[1] http://www.loen.fr/tmp/mustang.dts
+Michal
 
---=20
-Without deviation from the norm, progress is not possible.
+> 
+> No changes in this iteration. Each patch has the same In-Reply-To.
+> 
+> Changes since v10 [2]
+>  - Removed kdb_modules as it is now redundant
+>    (Christophe Leroy)
+>  - Removed the include of linux/module.h from any source file
+>    under kernel/debug/kdb
+>  - Addressed minor style notice i.e. missing a blank line after
+>    declarations
+> 
+> Changes since v9 [3]
+>  - Updated MAINTAINERS to include kernel/module/livepatch.c
+>    and kernel/module/kdb.c, respectively
+>  - Moved kdb module related code i.e. support for the 'lsmod',
+>    out of core/or main kdb code into its own file under
+>    kernel/module
+>  - Ensured is_module_sig_enforced(), as a stub, is available
+>    when Kconfig CONFIG_MODULE_SIG is not enabled/or selected
+>    (Christophe Leroy)
+> 
+> Changes since v8 [4]
+> 
+>  - Resolved the reported lockdep warnings in kernel/module/kallsyms.c
+>    (Petr Mladek)
+> 
+> Changes since v7 [5]
+> 
+>  - Removed redundant ifdef CONFIG_MODULES and endif pairing from
+>    kernel/module/Makefile
+> 
+> Changes since v6 [6]
+> 
+>  - Moved KCOV_INSTRUMENT_module.o out of kernel/Makefile into
+>    kernel/module/Makefile (Christophe Leroy)
+>  - Moved kernel/module/signature.c back into kernel/
+>    (Christophe Leroy)
+>  - Fixed Oops in add_kallsyms() due to an invalid pointer assignment
+>    (Christophe Leroy)
+> 
+> Changes since v5 [7]:
+> 
+>  - Updated MAINTAINERS to include the entire kernel/module/ directory
+>    (Christophe Leroy)
+>  - Reintroduce commit a97ac8cb24a3 ("module: fix signature check failures
+>    when using in-kernel decompression") (Michal Suchánek)
+>  - Refactored code to address some (i.e.
+>    --ignore=MULTIPLE_ASSIGNMENTS,ASSIGN_IN_IF was used) style violations
+>    e.g. "Alignment should match open parenthesis", reported by
+>    scripts/checkpatch.pl --strict (Christophe Leroy)
+>  - Used PAGE_ALIGN() and PAGE_ALIGNED() instead (Christophe Leroy)
+>  - Removed sig_enforce from include/linux/module.h as it is only
+>    used in kernel/module/signing.c (Christophe Leroy)
+>  - Added static keyword for anything not used outside a source file
+>    (Christophe Leroy)
+>  - Moved mod_sysfs_teardown() to kernel/module/sysfs.c (Christophe Leroy)
+>  - Removed kdb_modules from kernel/debug/kdb/kdb_private.h
+>    (Christophe Leroy)
+> 
+> Changes since v4 [7]:
+> 
+>  - Moved is_livepatch_module() and set_livepatch_module() to
+>    kernel/module/livepatch.c
+>  - Addressed minor compiler warning concerning
+>    kernel/module/internal.h (0-day)
+>  - Resolved style violations reported by scripts/checkpatch.pl
+>  - Dropped patch 5 [8] so external patch [9] can be applied at
+>    a later date post merge into module-next (Christophe Leroy)
+> 
+> Changes since v3 [10]:
+> 
+>  - Refactored both is_livepatch_module() and set_livepatch_module(),
+>    respectively, to use IS_ENABLED(CONFIG_LIVEPATCH) (Joe Perches)
+>  - Addressed various compiler warnings e.g., no previous prototype (0-day)
+> 
+> Changes since v2 [11]:
+> 
+>  - Moved module decompress support to a separate file
+>  - Made check_modinfo_livepatch() generic (Petr Mladek)
+>  - Removed filename from each newly created file (Luis Chamberlain)
+>  - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
+>    minor scripts/checkpatch.pl concerns e.g., use strscpy over
+>    strlcpy and missing a blank line after declarations (Allen)
+> 
+> Changes since v1 [12]:
+> 
+>   - Moved module version support code into a new file
+> 
+> [1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+> [2]: https://lore.kernel.org/lkml/20220307174509.2887714-1-atomlin@redhat.com/
+> [3]: https://lore.kernel.org/lkml/20220228234322.2073104-1-atomlin@redhat.com/
+> [4]: https://lore.kernel.org/all/20220222141303.1392190-2-atomlin@redhat.com/
+> [5]: https://lore.kernel.org/lkml/20220222130911.1348513-1-atomlin@redhat.com/
+> [6]: https://lore.kernel.org/lkml/20220218212511.887059-1-atomlin@redhat.com/
+> [7]: https://lore.kernel.org/lkml/20220209170358.3266629-1-atomlin@redhat.com/
+> [8]: https://lore.kernel.org/lkml/20220130213214.1042497-1-atomlin@redhat.com/
+> [9]: https://lore.kernel.org/lkml/20220130213214.1042497-6-atomlin@redhat.com/
+> [10]: https://lore.kernel.org/lkml/203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu/
+> [11]: https://lore.kernel.org/lkml/20220128203934.600247-1-atomlin@redhat.com/
+> [12]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
+> [13]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
+> 
+> 
+> Aaron Tomlin (14):
+>   module: Move all into module/
+>   module: Simple refactor in preparation for split
+>   module: Make internal.h and decompress.c more compliant
+>   module: Move livepatch support to a separate file
+>   module: Move latched RB-tree support to a separate file
+>   module: Move strict rwx support to a separate file
+>   module: Move extra signature support out of core code
+>   module: Move kmemleak support to a separate file
+>   module: Move kallsyms support into a separate file
+>   module: kallsyms: Fix suspicious rcu usage
+>   module: Move procfs support into a separate file
+>   module: Move sysfs support into a separate file
+>   module: Move kdb module related code out of main kdb code
+>   module: Move version support into a separate file
+> 
+>  MAINTAINERS                                   |    4 +-
+>  include/linux/kdb.h                           |    1 +
+>  include/linux/module.h                        |   21 +-
+>  kernel/Makefile                               |    5 +-
+>  kernel/debug/kdb/kdb_io.c                     |    1 -
+>  kernel/debug/kdb/kdb_keyboard.c               |    1 -
+>  kernel/debug/kdb/kdb_main.c                   |   49 -
+>  kernel/debug/kdb/kdb_private.h                |    4 -
+>  kernel/debug/kdb/kdb_support.c                |    1 -
+>  kernel/module-internal.h                      |   50 -
+>  kernel/module/Makefile                        |   21 +
+>  kernel/module/debug_kmemleak.c                |   30 +
+>  .../decompress.c}                             |    5 +-
+>  kernel/module/internal.h                      |  275 +++
+>  kernel/module/kallsyms.c                      |  512 +++++
+>  kernel/module/kdb.c                           |   56 +
+>  kernel/module/livepatch.c                     |   74 +
+>  kernel/{module.c => module/main.c}            | 1856 +----------------
+>  kernel/module/procfs.c                        |  142 ++
+>  kernel/module/signing.c                       |  122 ++
+>  kernel/module/strict_rwx.c                    |   85 +
+>  kernel/module/sysfs.c                         |  436 ++++
+>  kernel/module/tree_lookup.c                   |  109 +
+>  kernel/module/version.c                       |  109 +
+>  kernel/module_signing.c                       |   45 -
+>  25 files changed, 2075 insertions(+), 1939 deletions(-)
+>  delete mode 100644 kernel/module-internal.h
+>  create mode 100644 kernel/module/Makefile
+>  create mode 100644 kernel/module/debug_kmemleak.c
+>  rename kernel/{module_decompress.c => module/decompress.c} (99%)
+>  create mode 100644 kernel/module/internal.h
+>  create mode 100644 kernel/module/kallsyms.c
+>  create mode 100644 kernel/module/kdb.c
+>  create mode 100644 kernel/module/livepatch.c
+>  rename kernel/{module.c => module/main.c} (64%)
+>  create mode 100644 kernel/module/procfs.c
+>  create mode 100644 kernel/module/signing.c
+>  create mode 100644 kernel/module/strict_rwx.c
+>  create mode 100644 kernel/module/sysfs.c
+>  create mode 100644 kernel/module/tree_lookup.c
+>  create mode 100644 kernel/module/version.c
+>  delete mode 100644 kernel/module_signing.c
+> 
+> 
+> base-commit: b47d5a4f6b8d42f8a8fbe891b36215e4fddc53be
+> -- 
+> 2.34.1
+> 

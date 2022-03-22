@@ -2,92 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975374E3EBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0043E4E3EC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbiCVMsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S235021AbiCVMtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbiCVMsF (ORCPT
+        with ESMTP id S233454AbiCVMte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:48:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665401B7B4;
-        Tue, 22 Mar 2022 05:46:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9C8DCE1DE9;
-        Tue, 22 Mar 2022 12:46:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14E7C340EC;
-        Tue, 22 Mar 2022 12:46:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647953195;
-        bh=wZ3oIwVDZDmNROUcHtUdRyFl6dXJ+VpbUzC1mZmGrmc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=muAtEfcagfShZa7+gWpyrzfPnx4sXjQXQFwVLQvC6ubXFFW/0cp1m/mYtM0/ajpPt
-         u7HqTrzTAWnk5nOHD2WmnsfmoMIdv9O5kAI7JoSaGlrNEz+DjFbQc6S8xbx2NrSg/b
-         JPNxbVKFHqcJcqBGPOpc5e01gvPIRUx9WK89A5txGJgpxPvrqMQO/0/J4lfQB65ksS
-         V5JpShqoy7nErJeRQri/Mm08KQ2Uk8+UnEk4yc63cSXzKHfZ4hVEe10r3+GjthNBxN
-         N2sSBsGBHZE5OQUCCcbfRH6gr31TxiV+gGPYk729iBrLl6zCTvJL7iLnCUMjMTzZDu
-         qg5++8QToB6ZQ==
-Date:   Tue, 22 Mar 2022 21:46:29 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        rostedt@goodmis.org, ast@kernel.org, hjl.tools@gmail.com,
-        rick.p.edgecombe@intel.com, rppt@kernel.org,
-        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
-        ndesaulniers@google.com
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-Id: <20220322214629.2bf40306e3beba23d88d509f@kernel.org>
-In-Reply-To: <Yjm+TmKyO+HDOBgN@hirez.programming.kicks-ass.net>
-References: <20220321140327.777f9554@canb.auug.org.au>
-        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
-        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
-        <YjisdqdofbDIYj2U@hirez.programming.kicks-ass.net>
-        <20220322143136.0e78366c3521b54b7b9385b8@kernel.org>
-        <Yjm+TmKyO+HDOBgN@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 08:49:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67BFD1086
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647953285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u9yrNlkYpunaRytWgUY4ikU4zuFUDmjdz1rHYai2Yfg=;
+        b=gi4fV1o3CkBnlsZhL6RWSoejt42nleJUK00nOkLLnCt0speDZ14xAlqC6zNQNHN8T5l9lF
+        T414HfYQSVu7aT+XhS/HCLquAeYtQjUtsymzI8HXQZ1AGqOWM5pBds2vZagz3yjoVrFNaN
+        q3mXwTfIXX4jnWzRZw/5TyDFWgQToHY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-223-xYX6jujvMuuAdZk3_5mHyA-1; Tue, 22 Mar 2022 08:48:03 -0400
+X-MC-Unique: xYX6jujvMuuAdZk3_5mHyA-1
+Received: by mail-wm1-f69.google.com with SMTP id bg28-20020a05600c3c9c00b0038c8da4d9b3so1209443wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:48:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u9yrNlkYpunaRytWgUY4ikU4zuFUDmjdz1rHYai2Yfg=;
+        b=FRLTzzcxF8QmLg5YpCliUJ6LXpSbkvNuXRpetQ4VQcvwgQ4zyVm7qJiTZmMHyLQpxO
+         dF7oI4D+yoEPQ/nKjXIIgdUWo3PQ+v8zn3gAqYKTcXD43vTKWvBYPcHgGG81sPBbjlff
+         VmVQwRm6DNBtyQyr9x1KUZ0m1d+/+9G8PVzbGThBJkLZwIkdH9lAEZCM9DzUVBnwggBs
+         5IO88YnypiEKzLXBymO4YizvYFZ3kEMPhOg0Ct/12UB4/CkUryG2tQlFiEkKNVI08Y9E
+         5rEbCB3Fcg/k0xDDavmX1cFUpwswLloAEknBXJ4+Gg/R4F8HRIcs64bLSsXbb+Re1ssj
+         4zjg==
+X-Gm-Message-State: AOAM5301FCdeAQfUbzM9APWAyMyc5oZnLYUoVPAaizHSjkO2YeIgBTJH
+        o1pfPkOjptJwix5+kB9FlqwJVYrpLguquu41IyY3nogbe+ZEM2PK/FuL+068Sh4svxgij3C+2hG
+        4pt3nugRIAahdmsgkkqBueg+8whMrGa66BsQyBhAvIdCKHAHu+KU3j6lYzxPrxLzQ7nJEIMmI5H
+        8=
+X-Received: by 2002:a05:600c:5021:b0:38c:70c0:80e9 with SMTP id n33-20020a05600c502100b0038c70c080e9mr3610565wmr.91.1647953282604;
+        Tue, 22 Mar 2022 05:48:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyb73Jj3kArrdOmr4xNJ2g6A2tODfvNxCiROA57ukRjloP9coQ4ogSvUIco5W02naEshguG4A==
+X-Received: by 2002:a05:600c:5021:b0:38c:70c0:80e9 with SMTP id n33-20020a05600c502100b0038c70c080e9mr3610550wmr.91.1647953282389;
+        Tue, 22 Mar 2022 05:48:02 -0700 (PDT)
+Received: from kherbst.pingu.com ([31.16.187.72])
+        by smtp.gmail.com with ESMTPSA id s17-20020adfdb11000000b001f02d5fea43sm16823291wri.98.2022.03.22.05.48.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 05:48:01 -0700 (PDT)
+From:   Karol Herbst <kherbst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Karol Herbst <kherbst@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        stable@vger.kernel.org
+Subject: [PATCH] drm/nouveau/pmu: Add missing callbacks for Tegra devices
+Date:   Tue, 22 Mar 2022 13:48:00 +0100
+Message-Id: <20220322124800.2605463-1-kherbst@redhat.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 13:17:18 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+Fixes a crash booting on those platforms with nouveau.
 
-> On Tue, Mar 22, 2022 at 02:31:36PM +0900, Masami Hiramatsu wrote:
-> 
-> > > But I still think it's fairly terrible to get a (flawed) carbon copy of
-> > > the kretprobe code.
-> > 
-> > Indeed. I would like to replace the trampoline code of kretprobe with
-> > rethook, eventually. There is no reason why we keep the clone.
-> > (But I need more arch maintainers help for that, there are too many
-> >  archs implemented kretprobes)
-> 
-> CONFIG_KPROBE_ON_RETHOOK - and then implement archs one by one?
+Fixes: 4cdd2450bf73 ("drm/nouveau/pmu/gm200-: use alternate falcon reset sequence")
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: Karol Herbst <kherbst@redhat.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: nouveau@lists.freedesktop.org
+Cc: <stable@vger.kernel.org> # v5.17+
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c | 1 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c | 2 +-
+ drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c | 1 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h  | 1 +
+ 4 files changed, 4 insertions(+), 1 deletion(-)
 
-Sounds good! Maybe we will see different data structure fields
-which depends on that config, but those are internal fields, so
-user will not access it.
-
-Thank you,
-
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c
+index e1772211b0a4..612310d5d481 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c
+@@ -216,6 +216,7 @@ gm20b_pmu = {
+ 	.intr = gt215_pmu_intr,
+ 	.recv = gm20b_pmu_recv,
+ 	.initmsg = gm20b_pmu_initmsg,
++	.reset = gf100_pmu_reset,
+ };
+ 
+ #if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c
+index 6bf7fc1bd1e3..1a6f9c3af5ec 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c
+@@ -23,7 +23,7 @@
+  */
+ #include "priv.h"
+ 
+-static void
++void
+ gp102_pmu_reset(struct nvkm_pmu *pmu)
+ {
+ 	struct nvkm_device *device = pmu->subdev.device;
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c
+index ba1583bb618b..94cfb1791af6 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c
+@@ -83,6 +83,7 @@ gp10b_pmu = {
+ 	.intr = gt215_pmu_intr,
+ 	.recv = gm20b_pmu_recv,
+ 	.initmsg = gm20b_pmu_initmsg,
++	.reset = gp102_pmu_reset,
+ };
+ 
+ #if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h
+index bcaade758ff7..21abf31f4442 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h
+@@ -41,6 +41,7 @@ int gt215_pmu_send(struct nvkm_pmu *, u32[2], u32, u32, u32, u32);
+ 
+ bool gf100_pmu_enabled(struct nvkm_pmu *);
+ void gf100_pmu_reset(struct nvkm_pmu *);
++void gp102_pmu_reset(struct nvkm_pmu *pmu);
+ 
+ void gk110_pmu_pgob(struct nvkm_pmu *, bool);
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.35.1
+

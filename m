@@ -2,361 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBC64E4948
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068064E494E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 23:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbiCVWo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 18:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S238366AbiCVWqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 18:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238183AbiCVWov (ORCPT
+        with ESMTP id S229778AbiCVWqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 18:44:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD775DA49
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:43:21 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647988999;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JiesVq6IcwsewSPf9oFwMhZoa9eRiQyNKVJThYCN4hI=;
-        b=CJIAzv0++gPb36W7qLRpMDIny0u5hh8WDg2Y7SU9wpCh0cZy6KSfrVMoAyGrH9T9IVzUxC
-        eI4j9SKs6E827vjQFbCYGMRjPMjCEPso8DiT7x9eVoge/w6jsS+QzAO8eCJ7eobVsjD4/B
-        NrFntu1RhWfUv1urKIsZwezuuQ5qDVBv73wnPi92qRPzpz60q7zfsnVFMsAp3ST/G51N3N
-        6BUZ8rIxYa428h77Ok+3ok8hKGOWBq07fcFx9LPddfUWW2e7UmUnT3irngAFJy+Q5CLUXN
-        sxRZMFtEJD6yFrjSFrrduuWylC9RkzKy75ulwfM6zAvRbt5S0fIxY0DIMZklGQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647988999;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JiesVq6IcwsewSPf9oFwMhZoa9eRiQyNKVJThYCN4hI=;
-        b=2KyBMKpTYljwZYQ6Uqv4VriNPsf6SZJpUuzeo+CkWIrMqzkS5aDbQrjyQIqQPwh7yygnV3
-        jJmJE6+xdGEPKCBQ==
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andre Almeida <andrealmeid@collabora.com>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit
- and the oom_reaper
-In-Reply-To: <Yjn7FXoXtgGT977T@dhcp22.suse.cz>
-References: <20220318033621.626006-1-npache@redhat.com>
- <Yjg9ncgep58gFLiN@dhcp22.suse.cz>
- <20220322004231.rwmnbjpq4ms6fnbi@offworld>
- <c8bb0b6d-981c-8591-d5b6-17414c934758@redhat.com>
- <20220322025724.j3japdo5qocwgchz@offworld>
- <YjmITBkkwsa2O4bg@dhcp22.suse.cz> <87bkxyaufi.ffs@tglx>
- <Yjn7FXoXtgGT977T@dhcp22.suse.cz>
-Date:   Tue, 22 Mar 2022 23:43:18 +0100
-Message-ID: <87zglha9rt.ffs@tglx>
+        Tue, 22 Mar 2022 18:46:46 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC94558B;
+        Tue, 22 Mar 2022 15:45:18 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MKxfah009756;
+        Tue, 22 Mar 2022 22:45:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=IiRmBsJ/ioc9fqW7EjtsNPzfuBiSkg11hCNt9tw3ynk=;
+ b=BfqI3/V5F/MHQh3TV3ZJOhQDKHm6ibt4L93h4BRls5YrWr6yAt6PacHz3LxRBX6mI1Cv
+ jvwA+vbTTacpBuisaIz/tDHnNTAU18fGiPCe8KmoOoXiCow87BZpPjCTk0BZMwCjk76J
+ CmojleqEDTWIr0L56l7YJeWfVJ9DDKBWD9ORQ+ySnuJZw8PfpcB+n2c8R3XbOaw0MrSf
+ tC1kZmEJoYDde7jGpCBLonu11N+QxnlEpl9WBsutOcAkuzwjYgERoSEy/1iaN8zhcSom
+ 0/O0+Owo26KkXC9iqNcEFeYwPD+XuoiTVqiDTnj2YYd67MtHwGuRbZE2mTGeL2RNN7xv 3w== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ew7qt81g6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Mar 2022 22:45:05 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22MMRF57124098;
+        Tue, 22 Mar 2022 22:45:04 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2103.outbound.protection.outlook.com [104.47.70.103])
+        by userp3020.oracle.com with ESMTP id 3exawhw64a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Mar 2022 22:45:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eFSwQoUDtXGAzYl/OwzkpSnZ9fWbMb2KNYGIdqgU27E+Pikj8a2V1Gl1gIV2PVJdG+7vKH2uTe1YlDHhtlYp7lBGH1XveEPEg6wggDBkqHKVo4ta1Ib7qlho+aEpgEZubexuN82kIyOxcfX2OxaI9LYQ0HOkuSj9E99tGrthCwpszJXSHA1jPwnMCf78n3ARu2u1eGdH1YytYJlafJ6o76/jRPLgOIasX5zUTz3Zmj9CYXtV0Y9DcXA3qLOiLE7+HFVvPn/4siDYU85j+cWTnBC0pEcnL/DyK8yOH4J/2He42UxK9jcMZekREkXGekz7jMr1yQ+z51jwjCgvhFFSPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IiRmBsJ/ioc9fqW7EjtsNPzfuBiSkg11hCNt9tw3ynk=;
+ b=BaeNCQWta7TVNqzXB0wABgbAQibM6YRYXOW1NfPgVmEVvxL5D+qTg7tvsG3HBPvbe7F7GWmTcttnv36hhKWOj3BrHQOiID2GYnp9a0auM75lllcOKCxWV+zeI8OiypBaSZgRInazN0LpJxYUJV/NVd8dn7ivDAjuKBsMiZ2/LZBZbfldPlnXzdM9NPEzZkt3aOK8Tyn83PU5rzxva1FeTT4yKJ3eHi6naCkOg521v+FhECwqgZXzFb/2fKWEHITUD2vFR/9N9hAjLSrxBtsxDRh0TmAbxQrBrG2FOrujRHNISkLwjGyBi7EBqhfw8z60rUxpiFigReAQDeEVvohIXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IiRmBsJ/ioc9fqW7EjtsNPzfuBiSkg11hCNt9tw3ynk=;
+ b=xtpQsEepuS8sFg4m3dfD3MXVRhChqGBxV9u0AyRcB7ZE7+nUNyIZFVnFN7Udmm21TLBYoyUC8fCsrnkKq9gfAqdMdSxIlaa8m2kA9rzdWklrlLS0Z67rnu8waETM1uQ0AzdEYzi6PDtkY1BH2fOFbVmepQaUnmqig+1LQSlfqCs=
+Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
+ by DM6PR10MB3962.namprd10.prod.outlook.com (2603:10b6:5:1fb::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Tue, 22 Mar
+ 2022 22:45:01 +0000
+Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
+ ([fe80::2092:8e36:64c0:a336]) by SJ0PR10MB4429.namprd10.prod.outlook.com
+ ([fe80::2092:8e36:64c0:a336%7]) with mapi id 15.20.5102.016; Tue, 22 Mar 2022
+ 22:45:01 +0000
+From:   Jane Chu <jane.chu@oracle.com>
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     "david@fromorbit.com" <david@fromorbit.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "dave.jiang@intel.com" <dave.jiang@intel.com>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>
+Subject: Re: [PATCH v6 3/6] mce: fix set_mce_nospec to always unmap the whole
+ page
+Thread-Topic: [PATCH v6 3/6] mce: fix set_mce_nospec to always unmap the whole
+ page
+Thread-Index: AQHYO1qo97Ua/3iJEUWuhawaHD7cIazLG0oAgADq7oA=
+Date:   Tue, 22 Mar 2022 22:45:01 +0000
+Message-ID: <fb1ca254-3e7d-0931-2bfa-8f7f27b7d4fd@oracle.com>
+References: <20220319062833.3136528-1-jane.chu@oracle.com>
+ <20220319062833.3136528-4-jane.chu@oracle.com>
+ <YjmMWvDRUHE08T+a@infradead.org>
+In-Reply-To: <YjmMWvDRUHE08T+a@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 87a385aa-e96a-4b26-5021-08da0c5599d1
+x-ms-traffictypediagnostic: DM6PR10MB3962:EE_
+x-microsoft-antispam-prvs: <DM6PR10MB39625EFA02DE512E3B6F170FF3179@DM6PR10MB3962.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ETSYTVFdjesuLr8GHCuPkIqMwftlVN8zHgQtFRUYdhsZtWkkQPM2Tl2J+ZY+HH2V2QTJJ3TBKxssDQ1ge+K8YMd/rrpq7/SG0ecRL47NHfk7M0Xlh78KaqKauQWAPBoErIiMXI5fyxzHaBQzL1yUTshKs80pZL7UDmC+2NugYp9B67TMzSIx8k2/9PCMJimzw/z04Noyk1TEVXlT5hNxE5b/Rq2JA9mkbi649CIeOBrl44vF2fX55U6j8JcZobBDWQTbfMUkEXc2Hu9TtdVy7zsKn39+SyGLHRyG3faUvSmVWsgnDd/5NbBYzi8GMxGGhzGTVYbtdn12hOkY4RGHmHcO+0s1v4V55mMJWdijtdWj8W5yKf972P5UkEBpUeqe8IU9k/TJFVJ9YRsRin6ukfnzFiMGvrjiJzimwlipbc77thK72dzkZq4d9dnDVv4mZSgaEurIIqw0sQcmAHvKBdHpC3hR6VXn/Cm20h72JGxF7i+cw4paAquYFqrLX5j1tgGs4UW4WS9mSWYzaX4REnZi6qdtGATnO89vS6IBHyWQn7s2yRgM9EjsvBHsKYOY8nqdEoOj/lCyqAqt6EhuSduvivNVve+D4zk1AwiJJSgB1NBMMUHnnEkZo+ys02Ru18j5KRT0fHOGAwJv4bftL7vG5lxolBWCWGfwZHVz5mfQ7qYUaGBb9hPWSlJPTUFGquk58s7y1zqlo+wxjakZJZR/UZJjTNLmqwlwOEFjs5fKFijlJV/cXu8SG0BFe6cp6FueRpxQmKwdVFdlJEpegGRdeWsFzdSLuRfBI5G1XNF9+i40K4+Y+sir+bxVEO0FJA8MCIRBRO7MfMLG98MLDDUiY1dCHdA+22CGEKQDx08=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(54906003)(6916009)(38070700005)(2616005)(316002)(66946007)(26005)(186003)(76116006)(8676002)(66556008)(86362001)(66446008)(64756008)(31696002)(4326008)(66476007)(71200400001)(2906002)(508600001)(5660300002)(966005)(6486002)(6512007)(122000001)(53546011)(6506007)(8936002)(7416002)(4744005)(31686004)(36756003)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b3F5OXB5VEhRV1d4Z2NhNVJBMUN0K2twcms0Z2ViVEp6RU1QMGh1MlRsMW1v?=
+ =?utf-8?B?K3VVZTNNRXR3NjVsa2lyVWlWY2lBQ1htSXI3bURSRE5QWUNjdGR4dGR2MWtE?=
+ =?utf-8?B?eS9vODIyWXh2UndEZ2FuN3VGd1F0Q0FsRHdoU2J6TjFnaDZKcHViUENNcXVp?=
+ =?utf-8?B?SWhIaTdzSEpxYnIreDhmbk9SV2x5Y1lwT0Y3b09xbktoMHlJZ0xDZy96N1d1?=
+ =?utf-8?B?L0ZESk53b0NaZmlNYk14QlQrUVg0QTlIdWhnclJid09qY1hQWWVPQzVCOXZi?=
+ =?utf-8?B?eklsdG1tYVdWeXVkYzRvZzljUXN5RzJpeWlXT25TcDJDZDdqYUxCOW8rTndJ?=
+ =?utf-8?B?VFk2RVRIOEozRzBhUllTRGJqNUhxRW9CTVZPK2I3U0NNNVVrbENUblZ1VE1j?=
+ =?utf-8?B?eFRUdWlhSkRwQWhpU2Jucmw0WWZJQkxFd2RkTjU0WUVnQTdFOEtZK0FwbDhk?=
+ =?utf-8?B?RHJnQXNHalcwWi9jZ2habnhldjUzODEzdE0zeDFneUpDTTh6NEJhMHVGV2lN?=
+ =?utf-8?B?WGh3YkxGeWVOVy9ML3ZmVnJ3akZNQ0JManJPWDN2ejBkS3BXMzMrY3FaY0xP?=
+ =?utf-8?B?NHQyRGZ2RHh5NkIxaGI0UmpzUmJNT2h1UzZzbHViQ1RwMTl6bjBnRFM5MFBw?=
+ =?utf-8?B?Q205NHY2Z01KMGhaNlhQV2VUVFE2Nmp6Nk9nUk1ScThPM1RMZWJGOEtva3ll?=
+ =?utf-8?B?WHovcGVGNkYvdTZTei9OM2UvQjQzN29UQnVRU2l3czVzbUIyUnV6N0tsa3Vp?=
+ =?utf-8?B?UE5iZkhzWWFsRHJtQ01iZ3BvNlp5Y2JGNGJTSE5heEJJZjJ4MkxEVFFrdlBX?=
+ =?utf-8?B?Z0dUYTNsV3ZNUXpHTldyeXNaNUhWTGEvVGJnQ0lQTTlwZDZWS3I2OVUyMU1C?=
+ =?utf-8?B?eDdFaFhTTG10bkxSVkNESkxJVm9nSWJBN0VYNkxtNDRSUENkOWZtWGlHU2lo?=
+ =?utf-8?B?MjNqKzgyWUZTcTBJalQrblIwYVQzWVFxUHdIclNMb2RKbW9tRlkwcjVwdlNp?=
+ =?utf-8?B?MXhsaUE5SDlmYVZIUnRUUTdzTktNYzFKL0Q5dENScDVvRGpOQWxnYk43elFp?=
+ =?utf-8?B?czFnalM4bCtGaUNmUFVkbW80SW8wZ0xJR09WSXM5UDZ1REhGM1Y0a1RScGhU?=
+ =?utf-8?B?MUxmeWc4UVhyNWFrS1NXRVkwbktjZ0xMOUR6Nnl0M3JkcFpxMWFVN0dXL1lS?=
+ =?utf-8?B?U1hJbmgvTlhCUU80SmdEL1VOVWV4ZVRxTjBEUmNqUXRvd0F5dlpUNkVyS3FG?=
+ =?utf-8?B?T3F4TVBoT25USUJLbTR4S1NIUFR1dzVrRnU5QUxIWGVEUFQ3MmlDcjRSdFhp?=
+ =?utf-8?B?Y1BFYkpodGFadjlPaHJWQUs1ZDdONk1ZSmQyVmRQT09DR0RNK3p5RFNYUVNp?=
+ =?utf-8?B?UEdwa2lkM0QwOVhOTTV5azBjRzZzdzZkOFgzcEFaYWZwdDVMQTFoSm9QZkZw?=
+ =?utf-8?B?UndreGFPUm5xakhtSEdQQ25JK0duL1VFMWQ0U2FnV2krL0ZnY2tGd08yVjc1?=
+ =?utf-8?B?RGhtWWJrMzNUb0hNL3Aremc1NUhJems2RUJVbWRyMEZTRFlJdGV6bkdjQXBZ?=
+ =?utf-8?B?VE9tOFl6ajgvODQ1UXlqdmNWNXN0WDV1N1BYSm8vRlNKSVFDcnpqbXRWNFVy?=
+ =?utf-8?B?K3lOMmxVU3U5U0RWeGNQZG9qZEJPTzVHaDRzQlB1NFl6R2pzNVZVelBJOSs4?=
+ =?utf-8?B?Ujl5c0g0aVRhblgzL0E3QXY5M005UjZUQjd1L3NQWTFtdGQ4WDRITDBZYlNF?=
+ =?utf-8?B?SjRsUHBEeEgvdGtBOFlDMHhkdE1XT0NnajlrN25zbDlrb2lQWkJmaWowQlVV?=
+ =?utf-8?B?RHgyUENUTlc1TTJ4NVN2eUlzU3RUY3EvMFhrdkVRM1Izb1lWSnJFMjJCZENY?=
+ =?utf-8?B?UzdCdGFVb0ZoOTUvcGYyU1RET1MxOXVlbk1BMDJKQXdKR1FZS3pCdDhWNVpW?=
+ =?utf-8?Q?cQw2pxNG5WXY3+uDJTxugr753LP8qjUP?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7994CE8F9771B646B18C620474D3926F@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87a385aa-e96a-4b26-5021-08da0c5599d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2022 22:45:01.7950
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hfYfq+vqtxoP83FsFQtmHslbIiVfyv+YCtoJWJ1wE9rRAv6lPt2jskstaIPRyVP5JC2QtBmMqnrlpTPj8E/Kyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3962
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10294 signatures=694350
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ mlxlogscore=973 adultscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203220113
+X-Proofpoint-GUID: jghG1jYHWYVY4M8JLUBdUXEtirWA9OUL
+X-Proofpoint-ORIG-GUID: jghG1jYHWYVY4M8JLUBdUXEtirWA9OUL
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal,
-
-On Tue, Mar 22 2022 at 17:36, Michal Hocko wrote:
-> On Tue 22-03-22 16:17:05, Thomas Gleixner wrote:
->> The task::robust_list pointer is set unconditionally by NPTL for every
->> thread of a process. It points to the 'list head' which is in the
->> TLS. But this does not tell whether the task holds a robust futex or
->> not. That's evaluated in the futex exit handling code.
->> 
->> So solution #1 will prevent oom reaping completely simply because the
->> pointer is set on every user space task.
->
-> This is really what I was worried about.
->
->> Solutions #2 and #3 are incomplete and just awful hacks which cure one
->> particular case: A single threaded process. Why?
->> 
->> The chosen oom reaper victim is a process, so what does it help to check
->> or cleanup the robust list for _ONE_ thread? Nothing because the other
->> threads can hold robust futexes and then run into the same problem.
->> 
->> Aside of that you seem to believe that the robust list head in the TLS
->> is the only part which is relevant. That's wrong. The list head is
->> either NULL or points to the innermost pthread_mutex which is held by a
->> task. Now look at this example:
->> 
->>   TLS:robust_list -> mutex2 -> mutex1
->> 
->> mutex1 is the shared one which needs to be released so that other
->> processes can make progress. mutex2 is a process private one which
->> resides in a different VMA. So now if you filter the robust list and
->> refuse to reap the TLS VMA, what prevents the other VMA from being
->> reaped? If that's reaped then mutex1 is not reachable.
->> 
->> Now vs. cleaning up the robust list from the oom reaper context. That
->> should be doable with a lot of care, but the proposed patch is not even
->> close to a solution. It's simply broken.
->
-> My knowledge about robust futexes and how they are implemented is close
-> to zero. My thinking has been that the primary reason for the lockup
-> reported initially is that the oom_reaper will corrupt the memory which
-> is backing the list of locks to be woken up. So if we rule out the
-> oom_reaper for that memory then the exit path can do its proper cleanup.
-> Is that assumption completely off?
-
-All the kernel knows is which VMA contains a robust list head. But it
-does not know where the actual futexes/mutexes reside which might be
-held by a task. Here is the lock chain example again:
-
-      TLS:robust_list -> mutex2 -> mutex1
-VMA   Known              Unknown   Shared
-
-So if TLS and mutex2 sit in two different VMAs and the mutex2 VMA gets
-reaped then mutex1 cannot be reached anymore, which in consequence means
-that it cannot be cleaned up.
-
-> I cannot really comment on the futex specific parts of your response but
-> the deadlock on the mmap_lock has been already pointed out, thanks for
-> confirming that.
-
-It just occured to me that doing the cleanup from a kernel thread is
-completely broken vs. PI futexes, which are also cleaned up by
-futex_cleanup().
-
-The PI exit cleanup code _cannot_ be handled by a foreign task at
-all. It will nicely explode in the rtmutex code when it tries to release
-the kernel side rtmutex which represents the held and contended user
-space futex.
-
-Cleaning up futexes from a kthread is not going to work at least not
-without creating yet another pile of horrible hacks in the futex and
-rtmutex code. We have enough of them already, so no.
-
-Just for the case that someone thinks we make that a special case for
-non-PI futexes: No, that's not going to happen.
-
-> [...]
->
->> But the real questions here are:
->> 
->>    Why are we doing this remote reaping at all?
->
-> Does aac453635549 ("mm, oom: introduce oom reaper") help? In short this
-> is to guarantee that the system is able to make a forward progress under
-> OOM. Sending SIGKILL to the oom victim is not sufficient, really. Tasks
-> can be blocked inside kernel for indefinite amount of time. E.g. being
-> blocked waiting on memory transitively over locks. Reclaiming the
-> anonymous memory from the killed process will allow to free up some
-> memory while the oom victim is blocked and allow to move forward and
-> eventually die and do the proper cleanup. We are focusing on the
-> anonymous memory because under assumption that such a memory is private
-> to the process and the process is dead so the a freed memory is not
-> really visible any more.
-
-Which is correct. But then you have to bite the bullet and accept that
-the futexes cannot be recovered.
-
->>    What is the condition that a task which is killed with a fatal signal
->>    does not reach do_exit() and cleans up itself?
->> 
->> If the answer is "because", then we should rather make sure that this
->> gets fixed.
->
-> While some places can be handled by changing uninterruptible waiting to
-> killable there are places which are not really fixable, e.g. lock
-> chain dependency which leads to memory allocation.
-
-I'm not following. Which lock chain dependency causes memory allocation?
-
-Also aren't oom killed tasks allowed to allocate from emergency buffers
-in order to clean themself up? That's at least what the comments in the
-oom code claim.
-
-Aside of that. Do you have call chains which show in which situation
-such a stuck task is?
-
->> If there is a legitimate reason why a task cannot handle a fatal signal,
->> then yes the oom reaper might be necessary, but unleashing the oom
->> reaper unconditionally is simply a bad idea and results in the problem
->> which this is trying to paper over.
->> 
->> The oom reaper should be the last resort IMO and not racing against the
->> killed task in the first place. IOW, give the task some time to clean
->> itself up and if that fails and it is truly stuck and unable to do so,
->> then reap the mm. But that should be the rare case and then the stuck
->> futex should be the least of our worries.
->
-> Yes, the oom_reaper is the last resort indeed. It is true that it can
-> fire later but I do not see how this would solve this particular
-> problem.
-
-Well, it at least solves the problem which is described in the
-changelog. Because that problem clearly is a race between the woken up
-oom reaper and the task which killed itself in #PF due to OOM.
-
-Of course it won't solve the problem of tasks which are stuck forever.
-
-But right now the oom reaper thread is immediately woken after sending
-SIGKILL and the same is true if the oom killer targets a process which
-is already exiting.
-
-IOW, the current implementation is enforcing the race of the oom reaper
-vs. the exiting and/or killed process. With a quite high probability the
-reaper is going to win.
-
-You can easily validate that by doing:
-
-wake_oom_reaper(task)
-   task->reap_time = jiffies + HZ;
-   queue_task(task);
-   wakeup(reaper);
-
-and then:
-
-oom_reap_task(task)
-    now = READ_ONCE(jiffies);
-    if (time_before(now, task->reap_time)
-        schedule_timeout_idle(task->reap_time - now);
-
-before trying to actually reap the mm.
-
-That will prevent the enforced race in most cases and allow the exiting
-and/or killed processes to cleanup themself. Not pretty, but it should
-reduce the chance of the reaper to win the race with the exiting and/or
-killed process significantly.
-
-It's not going to work when the problem is combined with a heavy VM
-overload situation which keeps a guest (or one/some it's vCPUs) away
-from being scheduled. See below for a discussion of guarantees.
-
-If it failed to do so when the sleep returns, then you still can reap
-it.
-
-> It is fundamentally wrong to reap the memory which the exit path
-> really need to do a proper clean up.
-
-Depends on the guarantees you make. If you say preventing OOM starvation
-at the end is more important than a stale futex, then it's fine as long
-as it is properly documented.
-
-That said, the robust list is no guarantee. It's a best effort approach
-which works well most of the time at least for the "normal" issues where
-a task holding a futex dies unexpectedly. But there is no guarantee that
-it works under all circumstances, e.g. OOM.
-
-Sorry Nico, but your understanding
-
->> On Mon, Mar 21 2022 at 21:09, Nico Pache wrote:
->> From my understanding, the whole point of the robust futex is to allow forward
->> progress in an application in which the lock holder CAN
->> crash/exit/oom.
-
-is based on wishful thinking. There is absolutely no guarantee made by
-robust futexes. Why?
-
-Because the kernel can neither make a guarantee vs. user space
-controlled content nor vs. dealing with user space stupidity, e.g. a
-runaway memory hog.
-
-This is _NOT_ what robust list is about. Robust list was introduced to
-handle the unfortunate case where a task holding a futex dies
-unexpectedly.
-
-Extending this to OOM and expecting it to work under all circumstances
-is really wishful thinking.
-
->> So semantically nothing is wrong with killing the futex holder... the
->> whole point of the robustness is to handle these cases.
-
-Wrong. The whole point of robust lists is to handle the "normal" case
-gracefully. A process being OOM killed is _NOT_ in the "normal"
-category.
-
-Neither is it "normal" that a VM is scheduled out long enough to miss a
-1 second deadline. That might be considered normal by cloud folks, but
-that's absolute not normal from an OS POV. Again, that's not a OS
-problem, that's an operator/admin problem.
-
->> We just have a case were the oom killer is racing with said handling
->> of the futex, invalidating the memory before the exit path
->> (handle_futex_death) can awake one of the other waiters.
-
-That case is just a symptom of the overall problem and no, we are not
-curing symptoms. Especially not by introducing problems which did not
-exist before the "cure".
-
-If the kernel has only the choice of making no progress at all or
-leaving a stale futex around occasionally, then the latter is an
-unfortunate collateral damage, but not the end of the world.
-
-The enforced race of the oom reaper is not a collateral damage, that's
-simply stupid. And that's the root cause for the particular symptom.
-which needs be addressed exactly there and nowhere else.
-
-If that does not cover _all_ corner cases, then so be it. You _cannot_
-solve that problem completely ever.
-
-As I said above there is a final choice between not making progress at
-all and a rare stale futex. It's not rocket science to pick the right
-one.
-
-> And just to be clear, this is clearly a bug in the oom_reaper per se.
-> Originally I thought that relaxing the locking (using trylock and
-> retry/bail out on failure) would help but as I've learned earlier this
-> day this is not really possible because of #PF at least. The most self
-> contained solution would be to skip over vmas which are backing the
-> robust list which would allow the regular exit path to do the proper
-> cleanup.
-
-That's not sufficient because you have to guarantee that the relevant
-shared futex is accessible. See the lock chain example above.
-
-OTOH, in combination with delaying the reaper skipping the VMAs, which
-contain a robust list head, might be good enough for the trivial
-cases where the shared futex is the one to which the robust list head
-points to.
-
-Emphasis on VMAs. You need to evaluate every tasks robust list pointer
-of the process not only the one of the task which gets queued for
-reaping.
-
-So let me summarize what I think needs to be done in priority order:
-
- #1 Delay the oom reaper so the normal case of a process being able to
-    exit is not subject to a pointless race to death.
-
- #2 If #1 does not result in the desired outcome, reap the mm (which is
-    what we have now).
-
- #3 If it's expected that #2 will allow the stuck process to make
-    progress on the way towards cleanup, then do not reap any VMA
-    containing a robust list head of a thread which belongs to the
-    exiting and/or killed process.
-
-The remaining cases, i.e. the lock chain example I pointed out above or
-the stuck forever task are going to be rare and fall under the
-collateral damage and no guarantee rule.
-
-Thanks,
-
-        tglx
----
-P.S.: I so hoped that after my first encounter with the oom killer
-      almost two decades ago I wouldn't have to deal with this horror
-      again. Bah!
+T24gMy8yMi8yMDIyIDE6NDQgQU0sIENocmlzdG9waCBIZWxsd2lnIHdyb3RlOg0KPiBPbiBTYXQs
+IE1hciAxOSwgMjAyMiBhdCAxMjoyODozMEFNIC0wNjAwLCBKYW5lIENodSB3cm90ZToNCj4+IE1h
+cmsgcG9pc29uZWQgcGFnZSBhcyBub3QgcHJlc2VudCwgYW5kIHRvIHJldmVyc2UgdGhlICducCcg
+ZWZmZWN0LA0KPj4gcmVzdGF0ZSB0aGUgX1BBR0VfUFJFU0VOVCBiaXQuIFBsZWFzZSByZWZlciB0
+byBkaXNjdXNzaW9ucyBoZXJlIGZvcg0KPj4gcmVhc29uIGJlaGluZCB0aGUgZGVjaXNpb24uDQo+
+PiBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvQ0FQY3l2NGhyWFBiMXRBU0JaVWctR2dkVnMw
+T09GS1hNWExpSG1rdGdfa0ZpN1lCTXlRQG1haWwuZ21haWwuY29tLw0KPiANCj4gSSB0aGluayBp
+dCB3b3VsZCBiZSBnb29kIHRvIHN1bW1hcml6ZSB0aGUgY29uY2x1c2lvbiBoZXJlIGluc3RlYWQg
+b2YNCj4ganVzdCBsaW5raW5nIHRvIGl0Lg0KDQpTdXJlLCB3aWxsIGRvLg0KDQo+IA0KPj4gK3N0
+YXRpYyBpbnQgX3NldF9tZW1vcnlfcHJlc2VudCh1bnNpZ25lZCBsb25nIGFkZHIsIGludCBudW1w
+YWdlcykNCj4+ICt7DQo+PiArCXJldHVybiBjaGFuZ2VfcGFnZV9hdHRyX3NldCgmYWRkciwgbnVt
+cGFnZXMsIF9fcGdwcm90KF9QQUdFX1BSRVNFTlQpLCAwKTsNCj4+ICt9DQo+IA0KPiBXaGF0IGlz
+IHRoZSBwb2ludCBvZiB0aGlzIHRyaXZpYWwgaGVscGVyIHdpdGggYSBzaW5nbGUgY2FsbGVyPw0K
+PiANCg0KT2theSwgd2lsbCByZW1vdmUgdGhlIGhlbHBlci4NCg0KdGhhbmtzIQ0KLWphbmUNCg0K
+DQo=

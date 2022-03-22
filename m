@@ -2,239 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927C74E39AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C034E39A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237547AbiCVHdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 03:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S237580AbiCVHei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 03:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237518AbiCVHdt (ORCPT
+        with ESMTP id S237568AbiCVHef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:33:49 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91181D0E8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:32:21 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22M7WBb2071859;
-        Tue, 22 Mar 2022 02:32:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1647934331;
-        bh=JRlgwQNcHIvUegKc8BpIBbPxG9WUaR3kB8dj7pMCOgs=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ffbZOrVJS20wCouUKcklHHTF806Jh/BYhOrrG81p1RQNRi9pDuxDMYwuud9qMb1UZ
-         W0s2YU8kPwaAm2IO1t0sNgcNuGAY0xsDtaZhMPGmQWAzx6DeIALDuhlyr310fRoazc
-         OTQsXayAbGMveuqoxbaiGdyghCakYvkvzCuwso6k=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22M7WBIl001498
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Mar 2022 02:32:11 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
- Mar 2022 02:32:11 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 22 Mar 2022 02:32:10 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22M7WAHg051389;
-        Tue, 22 Mar 2022 02:32:10 -0500
-Date:   Tue, 22 Mar 2022 13:02:09 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <nicolas.ferre@microchip.com>
-Subject: Re: [PATCH v2 4/8] mtd: spi-nor: core: Introduce method for RDID op
-Message-ID: <20220322073209.26m2udmftiaxxtcq@ti.com>
-References: <20220228111712.111737-1-tudor.ambarus@microchip.com>
- <20220228111712.111737-5-tudor.ambarus@microchip.com>
- <0bdbe6ad8f39996df6345bb249e4a2e8@walle.cc>
+        Tue, 22 Mar 2022 03:34:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3E51FCE3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:33:07 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nWZ0U-0007ql-Hp; Tue, 22 Mar 2022 08:32:42 +0100
+Message-ID: <23cd140f-1046-7059-c9bd-ca4aac1d5183@pengutronix.de>
+Date:   Tue, 22 Mar 2022 08:32:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <0bdbe6ad8f39996df6345bb249e4a2e8@walle.cc>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [EXT] [PATCH v6 3/4] crypto: caam - add in-kernel interface for
+ blob generator
+Content-Language: en-US
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        David Gstir <david@sigma-star.at>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+References: <20220316164335.1720255-1-a.fatoum@pengutronix.de>
+ <20220316164335.1720255-4-a.fatoum@pengutronix.de>
+ <DU2PR04MB86302DB35042F4DAE7C27FA695179@DU2PR04MB8630.eurprd04.prod.outlook.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <DU2PR04MB86302DB35042F4DAE7C27FA695179@DU2PR04MB8630.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/22 11:56PM, Michael Walle wrote:
-> Am 2022-02-28 12:17, schrieb Tudor Ambarus:
-> > RDID is used in the core to auto detect the flash, but also by some
-> > manufacturer drivers that contain flashes that support Octal DTR mode,
-> > so that they can read the flash ID after the switch to Octal DTR was
-> > made
-> > to test if the switch was successful. Introduce a core method for RDID
-> > op
-> > to avoid code duplication.
-> 
-> Some or all? Is that specific to the flash or can we just check that
-> readid works in spi_nor_octal_dtr_enable()? That way we could also
-> just get rid of the proto parameter for the read_id because it can
-> be called after we set the reg_proto.
+Hello Pankaj,
 
-It is specific to the flash. Not all flashes support RDID in 8D mode. 
-And the RDID command is also different in 8D mode for various flashes. 
-For example, Micron MT35XU512ABA flash expects 8 dummy cycles and 0 
-address cycles. Cypress S28HS512T expects 4 address cycles and 3 dummy 
-cycles.
+On 22.03.22 07:25, Pankaj Gupta wrote:
+> Hi Ahmad,
+> 
+> Suggested to define macro with more details.
+> Please find comments in-line.
+> 
 
-The octal_dtr_enable hook would know what parameters to use but it is 
-harder for the core to know since this information is not discoverable 
-via SFDP.
+> len = 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 + 
+>>>>> + CAAM_PTR_SZ_MAX) + 4;
+> 
+>> +/* header + (key mod immediate) + 2x seq_intlen pointers + op */
+>> +#define CAAM_BLOB_DESC_BYTES_MAX \
+>> +       (CAAM_CMD_SZ + \
+>> +        CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH + \
+>> +        2 * (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \
+>> +        CAAM_CMD_SZ)
+>> +
+> 
+> Suggested to replace the above macro like below:
+> 
+> +#define CAAM_BLOB_DESC_BYTES_MAX \			
+> +       (CAAM_CMD_SZ + \					/* Command to initialize & stating length of  descriptor */
+> +        CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH + \	/* Command to append the key-modifier + followed by the key-modifier data */
+> +        (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \		/* Command to include input plain key and pointer to the input key */
+> +        (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \		/* Command to include output-key blob and pointer to the output-key blob */
+> +        CAAM_CMD_SZ)						/* Command describing the Operation to perform */
 
-> 
-> -michael
-> 
-> > 
-> > Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> > ---
-> >  drivers/mtd/spi-nor/core.c | 58 ++++++++++++++++++++++++++------------
-> >  drivers/mtd/spi-nor/core.h |  9 ++++++
-> >  2 files changed, 49 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> > index b1d6fa65417d..281e3d25f74c 100644
-> > --- a/drivers/mtd/spi-nor/core.c
-> > +++ b/drivers/mtd/spi-nor/core.c
-> > @@ -369,6 +369,41 @@ int spi_nor_write_disable(struct spi_nor *nor)
-> >  	return ret;
-> >  }
-> > 
-> > +/**
-> > + * spi_nor_read_id() - Read the JEDEC ID.
-> > + * @nor:	pointer to 'struct spi_nor'.
-> > + * @naddr:	number of address bytes to send. Can be zero if the
-> > operation
-> > + *		does not need to send an address.
-> > + * @ndummy:	number of dummy bytes to send after an opcode or address.
-> > Can
-> > + *		be zero if the operation does not require dummy bytes.
-> > + * @id:		pointer to a DMA-able buffer where the value of the JEDEC ID
-> > + *		will be written.
-> > + * @reg_proto:	the SPI protocol for register operation.
-> > + *
-> > + * Return: 0 on success, -errno otherwise.
-> > + */
-> > +int spi_nor_read_id(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
-> > +		    enum spi_nor_protocol reg_proto)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (nor->spimem) {
-> > +		struct spi_mem_op op =
-> > +			SPI_NOR_READID_OP(naddr, ndummy, id, SPI_NOR_MAX_ID_LEN);
-> > +
-> > +		spi_nor_spimem_setup_op(nor, &op, reg_proto);
-> > +		ret = spi_mem_exec_op(nor->spimem, &op);
-> > +	} else {
-> > +		ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
-> > +						    SPI_NOR_MAX_ID_LEN);
-> > +	}
-> > +
-> > +	if (ret)
-> > +		dev_dbg(nor->dev, "error %d reading JEDEC ID\n", ret);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> >  /**
-> >   * spi_nor_read_sr() - Read the Status Register.
-> >   * @nor:	pointer to 'struct spi_nor'.
-> > @@ -1649,28 +1684,15 @@ static const struct flash_info
-> > *spi_nor_match_id(struct spi_nor *nor,
-> >  	return NULL;
-> >  }
-> > 
-> > -static const struct flash_info *spi_nor_read_id(struct spi_nor *nor)
-> > +static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
-> >  {
-> >  	const struct flash_info *info;
-> >  	u8 *id = nor->bouncebuf;
-> >  	int ret;
-> > 
-> > -	if (nor->spimem) {
-> > -		struct spi_mem_op op =
-> > -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
-> > -				   SPI_MEM_OP_NO_ADDR,
-> > -				   SPI_MEM_OP_NO_DUMMY,
-> > -				   SPI_MEM_OP_DATA_IN(SPI_NOR_MAX_ID_LEN, id, 1));
-> > -
-> > -		ret = spi_mem_exec_op(nor->spimem, &op);
-> > -	} else {
-> > -		ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
-> > -						    SPI_NOR_MAX_ID_LEN);
-> > -	}
-> > -	if (ret) {
-> > -		dev_dbg(nor->dev, "error %d reading JEDEC ID\n", ret);
-> > +	ret = spi_nor_read_id(nor, 0, 0, id, nor->reg_proto);
-> > +	if (ret)
-> >  		return ERR_PTR(ret);
-> > -	}
-> > 
-> >  	info = spi_nor_match_id(nor, id);
-> >  	if (!info) {
-> > @@ -2900,7 +2922,7 @@ static const struct flash_info
-> > *spi_nor_get_flash_info(struct spi_nor *nor,
-> >  		info = spi_nor_match_name(nor, name);
-> >  	/* Try to auto-detect if chip name wasn't specified or not found */
-> >  	if (!info) {
-> > -		detected_info = spi_nor_read_id(nor);
-> > +		detected_info = spi_nor_detect(nor);
-> >  		info = detected_info;
-> >  	}
-> >  	if (IS_ERR_OR_NULL(info))
-> > @@ -2913,7 +2935,7 @@ static const struct flash_info
-> > *spi_nor_get_flash_info(struct spi_nor *nor,
-> >  	if (name && !detected_info && info->id_len) {
-> >  		const struct flash_info *jinfo;
-> > 
-> > -		jinfo = spi_nor_read_id(nor);
-> > +		jinfo = spi_nor_detect(nor);
-> >  		if (IS_ERR(jinfo)) {
-> >  			return jinfo;
-> >  		} else if (jinfo != info) {
-> > diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> > index b7fd760e3b47..f952061d5c24 100644
-> > --- a/drivers/mtd/spi-nor/core.h
-> > +++ b/drivers/mtd/spi-nor/core.h
-> > @@ -11,6 +11,13 @@
-> > 
-> >  #define SPI_NOR_MAX_ID_LEN	6
-> > 
-> > +/* Standard SPI NOR flash operations. */
-> > +#define SPI_NOR_READID_OP(naddr, ndummy, buf, len)			\
-> > +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 0),			\
-> > +		   SPI_MEM_OP_ADDR(naddr, 0, 0),			\
-> > +		   SPI_MEM_OP_DUMMY(ndummy, 0),				\
-> > +		   SPI_MEM_OP_DATA_IN(len, buf, 0))
-> > +
-> >  enum spi_nor_option_flags {
-> >  	SNOR_F_HAS_SR_TB	= BIT(0),
-> >  	SNOR_F_NO_OP_CHIP_ERASE	= BIT(1),
-> > @@ -534,6 +541,8 @@ void spi_nor_unlock_and_unprep(struct spi_nor *nor);
-> >  int spi_nor_sr1_bit6_quad_enable(struct spi_nor *nor);
-> >  int spi_nor_sr2_bit1_quad_enable(struct spi_nor *nor);
-> >  int spi_nor_sr2_bit7_quad_enable(struct spi_nor *nor);
-> > +int spi_nor_read_id(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
-> > +		    enum spi_nor_protocol reg_proto);
-> >  int spi_nor_read_sr(struct spi_nor *nor, u8 *sr);
-> >  int spi_nor_sr_ready(struct spi_nor *nor);
-> >  int spi_nor_read_cr(struct spi_nor *nor, u8 *cr);
-> 
-> -- 
-> -michael
+
+Sure thing, will do for v7. Otherwise, if all looks good to you,
+can I have your Reviewed-by?
+
+Thanks,
+Ahmad
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

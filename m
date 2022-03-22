@@ -2,127 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F674E4631
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4396F4E4638
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240792AbiCVSoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
+        id S240430AbiCVSo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240800AbiCVSn5 (ORCPT
+        with ESMTP id S240797AbiCVSov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:43:57 -0400
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEB19156D;
-        Tue, 22 Mar 2022 11:42:27 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id c62so3296340edf.5;
-        Tue, 22 Mar 2022 11:42:27 -0700 (PDT)
+        Tue, 22 Mar 2022 14:44:51 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058DD25586
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:43:23 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id p9so24669268wra.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 11:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PTw1Ngb/5IGZJfySo52s6yL6EQYSBf4xK9vWZzdHvqA=;
+        b=OpP1yr+zy1OjfHROi7aD3NDxRfVNU5xYU5sKI6GfLagMM2/XUgbjQyj+ubE8Ph92IB
+         7qarV5iq5TMCXv9UJsTaZavEFNsCReJsVV7g8oEUUYvLaLpIcY1PNEN/N3Kv6lSnUjur
+         aVungH7taEPjAY6OZNBJQCkyc3DQai5kSEK8U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jmg2q4syeLne/1r7gmtu68by9oPMiShvZ+PkjYKZz8o=;
-        b=BwIUPwP1QiVpkVuGyoh0AyqrDlgpgl2az5+bo5TYfo5tDFa/IZngSvdyOSkirGty3R
-         O+/v0cLlhYqt9EIGKfjNBQjb0jomyArjTTtwNdGMCPyTz0w9yLrWn2pPTUxHSPnqK+8Z
-         IZESUhUTkejFhAOs6ZkpyOiWf7phPVoJQCzS0RZMs9gUIg2B2Spn/w3tIOC28Btmtwgv
-         6Mpa+3CidcdBYhVMomqSqbJ+7HB40I8prWMvMkbpsy3FV/nQSZ3OvCRerthAEFCsXk1U
-         Sypl4B7PahPLsPFiRPZJvDQ4vSoA47tCADhIqnGOObJJAek8ighq8t6XBi46ykWophrx
-         fmog==
-X-Gm-Message-State: AOAM533AWD0+N3wN1yTutNKqOBcsCQBZeaCRta4pCSVgycHu91p1kmv5
-        WcZ10KAD9dAQ5TuZrijmLlA=
-X-Google-Smtp-Source: ABdhPJxJuJYtbm+Py4ZRcZImQ/eCDCzzY4Ghp+eDk6BpA8azMvEnPHZDjGuRUc2og3w9kQ66OyibYg==
-X-Received: by 2002:a05:6402:40d5:b0:419:496b:5ab0 with SMTP id z21-20020a05640240d500b00419496b5ab0mr9879853edb.284.1647974545888;
-        Tue, 22 Mar 2022 11:42:25 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id rv11-20020a17090710cb00b006d5c0cd5e0dsm8617228ejb.82.2022.03.22.11.42.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 11:42:25 -0700 (PDT)
-Message-ID: <81745773-bc8b-2669-3fdb-47890613f166@kernel.org>
-Date:   Tue, 22 Mar 2022 19:42:24 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PTw1Ngb/5IGZJfySo52s6yL6EQYSBf4xK9vWZzdHvqA=;
+        b=b6mIwVDJT3idnUG1/f2tIHthKWAA3C1jrZrJJqXHsc/DwbBJ9C3k5hkBIzOZL6h4gn
+         dt4hoFsLJZ1hDMN/M7X0ZBobCDgY1csuTjtHYyQa9isEjU8wHJCwmLNVPQAWpjNU7tne
+         Xt1kAd4TDHnnb8w1vlm0R5whgSba41A7lwpQniv5etL/6Oq6KHsPCXGg+z1hRHSl4jbI
+         ThENxkGUuv2bO+5lk6gZuzZNHA7RP1Wj3BxFTLyHBilA3hrypUHdbzwMjoWI7BDxqIIo
+         4jvJtfupW1qkhPI9/lp5bne+rxnpntb+vOEeHtnDY+qrFhG8SVO3Zfd/G06OZ5eNKk18
+         igyw==
+X-Gm-Message-State: AOAM531EURgxFtz/ZZ2AYJL3sx+QopHWuxz+vGV4xuf4GNv1tX21Xnmz
+        qgRtrcwZ3ndzRvAjMrd+YT7n3g==
+X-Google-Smtp-Source: ABdhPJxWJhc/mrUfLmxDPc/wDdSNZS4bI61hMpAh3233GY9QkpMhRpVU8f/XIxdk6ptlwsw1crMHLA==
+X-Received: by 2002:adf:fccc:0:b0:203:fe14:e316 with SMTP id f12-20020adffccc000000b00203fe14e316mr15173047wrs.42.1647974601600;
+        Tue, 22 Mar 2022 11:43:21 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-56-61.cust.vodafonedsl.it. [188.217.56.61])
+        by smtp.gmail.com with ESMTPSA id f7-20020a5d64c7000000b0020415e54576sm5136826wri.69.2022.03.22.11.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 11:43:21 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 19:43:19 +0100
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm/nouveau/bios: Rename prom_init() and friends
+ functions
+Message-ID: <20220322184319.GA2353627@tom-ThinkPad-T14s-Gen-2i>
+References: <7e0612b61511ec8030e3b2dcbfaa7751781c8b91.1647684507.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Patch v5 3/4] dt-bindings: memory: Update reg maxitems for
- tegra186
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>, robh+dt@kernel.org,
-        thierry.reding@gmail.com, digetx@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220316092525.4554-1-amhetre@nvidia.com>
- <20220316092525.4554-4-amhetre@nvidia.com>
- <74db8a20-7cce-ff86-7ae4-466416443ba9@canonical.com>
- <66a3f996-ac12-9165-93c9-e1fa93b80eed@nvidia.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <66a3f996-ac12-9165-93c9-e1fa93b80eed@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e0612b61511ec8030e3b2dcbfaa7751781c8b91.1647684507.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 19:12, Ashish Mhetre wrote:
+On Sat, Mar 19, 2022 at 11:27:51AM +0100, Christophe Leroy wrote:
+> While working at fixing powerpc headers, I ended up with the
+> following error.
 > 
+> 	drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowrom.c:48:1: error: conflicting types for 'prom_init'; have 'void *(struct nvkm_bios *, const char *)'
+> 	make[5]: *** [scripts/Makefile.build:288: drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowrom.o] Error 1
 > 
-> On 3/20/2022 6:12 PM, Krzysztof Kozlowski wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> On 16/03/2022 10:25, Ashish Mhetre wrote:
->>>  From tegra186 onwards, memory controller support multiple channels.
->>> Reg items are updated with address and size of these channels.
->>> Tegra186 has overall 5 memory controller channels. Tegra194 and tegra234
->>> have overall 17 memory controller channels each.
->>> There is 1 reg item for memory controller stream-id registers.
->>> So update the reg maxItems to 18 in tegra186 devicetree documentation.
->>>
->>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
->>> ---
->>>   .../nvidia,tegra186-mc.yaml                   | 20 +++++++++++++------
->>>   1 file changed, 14 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>> index 13c4c82fd0d3..3c4e231dc1de 100644
->>> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>> @@ -34,8 +34,8 @@ properties:
->>>             - nvidia,tegra234-mc
->>>
->>>     reg:
->>> -    minItems: 1
->>> -    maxItems: 3
->>> +    minItems: 6
->>> +    maxItems: 18
->>
->> Still ABI break and now the in-kernel DTS will report dt check errors.
->>
-> The dt check error is because I mistakenly updated example in EMC node
-> instead of MC. I'll fix it in next version.
-
-The existing DTS will start failing with:
-nvidia,tegra186-mc.example.dtb: memory-controller@2c00000: reg: [[0,
-46137344, 0, 720896]] is too short
-
-
-because you require now length of 6 minimum.
-
+> powerpc and a few other architectures have a prom_init() global function.
+> One day or another it will conflict with the one in shadowrom.c
 > 
->> I think you ignored the comments you got about breaking ABI.
->>
-> No, I took care of the ABI break in v5. I have updated details about
-> how we took care of it in first patch.
+> Those being static, they can easily be renamed. Do it.
+> 
+> While at it, also rename the ops structure as 'nvbios_prom' instead of
+> 'nvbios_rom' in order to make it clear that it refers to the
+> NV_PROM device.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+> v2: using nvbios_prom prefix instead of nvbios_rom. Changed structure name to keep things consistant.
+> 
+>  drivers/gpu/drm/nouveau/nvkm/subdev/bios/priv.h    |  2 +-
+>  drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c  |  2 +-
+>  .../gpu/drm/nouveau/nvkm/subdev/bios/shadowrom.c   | 14 +++++++-------
+>  3 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/priv.h b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/priv.h
+> index fac1bff1311b..cfa8a0c356dd 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/priv.h
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/priv.h
+> @@ -19,7 +19,7 @@ struct nvbios_source {
+>  int nvbios_extend(struct nvkm_bios *, u32 length);
+>  int nvbios_shadow(struct nvkm_bios *);
+>  
+> -extern const struct nvbios_source nvbios_rom;
+> +extern const struct nvbios_source nvbios_prom;
+>  extern const struct nvbios_source nvbios_ramin;
+>  extern const struct nvbios_source nvbios_acpi_fast;
+>  extern const struct nvbios_source nvbios_acpi_slow;
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
+> index 4b571cc6bc70..19188683c8fc 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
+> @@ -171,7 +171,7 @@ nvbios_shadow(struct nvkm_bios *bios)
+>  	struct shadow mthds[] = {
+>  		{ 0, &nvbios_of },
+>  		{ 0, &nvbios_ramin },
+> -		{ 0, &nvbios_rom },
+> +		{ 0, &nvbios_prom },
+>  		{ 0, &nvbios_acpi_fast },
+>  		{ 4, &nvbios_acpi_slow },
+>  		{ 1, &nvbios_pcirom },
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowrom.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowrom.c
+> index ffa4b395220a..39144ceb117b 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowrom.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowrom.c
+> @@ -25,7 +25,7 @@
+>  #include <subdev/pci.h>
+>  
+>  static u32
+> -prom_read(void *data, u32 offset, u32 length, struct nvkm_bios *bios)
+> +nvbios_prom_read(void *data, u32 offset, u32 length, struct nvkm_bios *bios)
+>  {
+>  	struct nvkm_device *device = data;
+>  	u32 i;
+> @@ -38,14 +38,14 @@ prom_read(void *data, u32 offset, u32 length, struct nvkm_bios *bios)
+>  }
+>  
+>  static void
+> -prom_fini(void *data)
+> +nvbios_prom_fini(void *data)
+>  {
+>  	struct nvkm_device *device = data;
+>  	nvkm_pci_rom_shadow(device->pci, true);
+>  }
+>  
+>  static void *
+> -prom_init(struct nvkm_bios *bios, const char *name)
+> +nvbios_prom_init(struct nvkm_bios *bios, const char *name)
+>  {
+>  	struct nvkm_device *device = bios->subdev.device;
+>  	if (device->card_type == NV_40 && device->chipset >= 0x4c)
+> @@ -55,10 +55,10 @@ prom_init(struct nvkm_bios *bios, const char *name)
+>  }
+>  
+>  const struct nvbios_source
+> -nvbios_rom = {
+> +nvbios_prom = {
+>  	.name = "PROM",
+> -	.init = prom_init,
+> -	.fini = prom_fini,
+> -	.read = prom_read,
+> +	.init = nvbios_prom_init,
+> +	.fini = nvbios_prom_fini,
+> +	.read = nvbios_prom_read,
+>  	.rw = false,
+>  };
+> -- 
+> 2.35.1
+> 
 
-Right, driver part looks ok.
+Look's good.
 
+Tommaso
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
 
-Best regards,
-Krzysztof
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

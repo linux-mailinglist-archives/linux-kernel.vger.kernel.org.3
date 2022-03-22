@@ -2,172 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C860E4E402D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BC64E4035
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbiCVOHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S234480AbiCVOJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234614AbiCVOHk (ORCPT
+        with ESMTP id S236344AbiCVOJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:07:40 -0400
+        Tue, 22 Mar 2022 10:09:41 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D55714C7A5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:05:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A39960D9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:07:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647957909;
+        s=mimecast20190719; t=1647958035;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=WWSu3wiWy99oqRDajCtjPLsUAPwXYFjyrn/okc9AKDQ=;
-        b=H5ZiV1IkQCjx6eGQNVr/k4FINcyvTodsF77ZDZ9bXi9L7Ra6bTmsJbnHiTWO1Q4fZhE+1C
-        flhzLj6FnYFG2FBMbX8jRN+Ua5GOU6pnELyRKU6uxcxnt6ApQQVNUW59DLz6w3grHMZvOJ
-        U3xK+PnT2AWFTT4Sn/1b7A8pc0J33F4=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=lKHL9IfU8rsbWgmlsBY7UeKDRyHZ9mbeqT00XEDZRos=;
+        b=jNz1vfgoV3suy73GnW5D883muVvYV67iKSqImmdVNsOC6WXRSw6AzLvW1fbUk7Gmoxp7bf
+        MWpZdumrKkd5O9g4qj9k0WW9+Oysyima1HcafDuLIH7847rOd9DR9+7eEsxoISb9K77sH3
+        kKwry6r2aO5mU/Q+M5WhGi3hOj1thF8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-182-w5IOy1khNk-DSHQRLXyjXA-1; Tue, 22 Mar 2022 10:05:07 -0400
-X-MC-Unique: w5IOy1khNk-DSHQRLXyjXA-1
-Received: by mail-qk1-f199.google.com with SMTP id c19-20020a05620a0cf300b005f17891c015so11818461qkj.18
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:05:07 -0700 (PDT)
+ us-mta-664-2bBCQytOPR6p-t5ziwnITQ-1; Tue, 22 Mar 2022 10:07:13 -0400
+X-MC-Unique: 2bBCQytOPR6p-t5ziwnITQ-1
+Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b003815245c642so1352957wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:07:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WWSu3wiWy99oqRDajCtjPLsUAPwXYFjyrn/okc9AKDQ=;
-        b=mH+vy06qnDEfJ/PRjOPnBW8xmu4ufzfY5p/3yTHBnkvH4kRaJvp9Ty87PMO9WB4iZU
-         rmB9YYdj+iXYVCqicQBcOJpuf6VyQp1d5hVKLoICCBdQ/bhTKe/167bBmV6v2Uj4uTVr
-         T7QqsQgVmAajn3wXBdUBU4Mekf4URtLO8um+x8fD6CD5U+zwgtRdnsYMN7JRsHzcLIZy
-         3pQzW/3yLDSbFKtNQa7Y8yV/wi42BMRo+y59+JHcF4BNcMJHkWWDTd/QgYmTHm+ZkZXM
-         e54ffRs5w7yTK+ARZAqLtnQcXAaUbv4ZItRnRVJeJFk797V/l2vnr8j2eE9wNgb7xo/l
-         bR5g==
-X-Gm-Message-State: AOAM533Hc7npC5FhwjM3dr9dmnOdY8vSu01F/w/LXb0M8qcljIfg1zf3
-        iLbqfWhyglM2K+i6c3cTyekZNg1DXwJHFYVGCFZEI2hjnK/QgR+9vlIPL0FwJAdUEjfTu42FNuw
-        Va4wjRR9nEV2PvnzmW1q5y03N
-X-Received: by 2002:a05:6214:e87:b0:441:a5d:681c with SMTP id hf7-20020a0562140e8700b004410a5d681cmr12300777qvb.38.1647957907071;
-        Tue, 22 Mar 2022 07:05:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy8/P7gBREOiebiPL6hs1ySKYG/JtpPyzM46Q58fFbmK5VNi/3+BC5pcuLrkbzn9AowdZrExg==
-X-Received: by 2002:a05:6214:e87:b0:441:a5d:681c with SMTP id hf7-20020a0562140e8700b004410a5d681cmr12300737qvb.38.1647957906751;
-        Tue, 22 Mar 2022 07:05:06 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-12-25-114.business.telecomitalia.it. [87.12.25.114])
-        by smtp.gmail.com with ESMTPSA id l8-20020a05622a174800b002e1e3f7d4easm14583649qtk.86.2022.03.22.07.05.04
+        bh=lKHL9IfU8rsbWgmlsBY7UeKDRyHZ9mbeqT00XEDZRos=;
+        b=wK/jUl58+lLeEUi4wtAVYQlJPsEGIL4cfUtotNd3lWvouicsM30JusKfPQXg8CKG9z
+         llJlOI5jcLCHqjNVilVQcjqS9wrMkpuNxGKyXJJ2NeZBculfVlqyPl81ikLjCjj762YY
+         dimGpoCdEFOKJd63r4ELw1CCdOUG51V05sefl3mFiG9fy17WezoXi4/6DZtpnRIfQDok
+         lHwVXo+dlltRpaBETQuFVPU3vbtcFBeob9bEbAWHLn3VlRNDmFpNLxfhqATjYu8IqxrL
+         7tuu41f9rCwEGfTNnkMIv0csKxHwf5GdCeuXzp5C009wOJKlkvo8IXGlYXSLm234Q9i3
+         r7Vg==
+X-Gm-Message-State: AOAM533DPe29uB/A/+TSF9sILMTDah3imZKhFb4TZgwswGx/k97mjBad
+        biwRGm5pffQ4XLqybdDJ1+OHAMBxPHBcGlmWbMBbauJuGrnjnqp6j8lpwhyQ0r+uTVrTEOf1072
+        tnpqjvZax9TLq7nUDUvNmx32t
+X-Received: by 2002:a5d:40c8:0:b0:205:2a3b:c2c with SMTP id b8-20020a5d40c8000000b002052a3b0c2cmr2630284wrq.13.1647958031628;
+        Tue, 22 Mar 2022 07:07:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxpUT4GTrICCXrARvwlWmXcr/WqvuOsVfXAI5wRSHV+YMDxvpl+mz5oT10MHN/wvskk0SFTJw==
+X-Received: by 2002:a5d:40c8:0:b0:205:2a3b:c2c with SMTP id b8-20020a5d40c8000000b002052a3b0c2cmr2630265wrq.13.1647958031363;
+        Tue, 22 Mar 2022 07:07:11 -0700 (PDT)
+Received: from redhat.com ([2.55.132.0])
+        by smtp.gmail.com with ESMTPSA id r15-20020a5d6c6f000000b002040552e88esm9357838wrz.29.2022.03.22.07.07.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 07:05:06 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 15:05:00 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net] vsock/virtio: enable VQs early on probe
-Message-ID: <20220322140500.bn5yrqj5ljckhcdb@sgarzare-redhat>
-References: <20220322103823.83411-1-sgarzare@redhat.com>
- <20220322092723-mutt-send-email-mst@kernel.org>
+        Tue, 22 Mar 2022 07:07:10 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 10:07:08 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>
+Subject: Re: [PATCH] virtio: use virtio_device_ready() in
+ virtio_device_restore()
+Message-ID: <20220322100635-mutt-send-email-mst@kernel.org>
+References: <20220322114313.116516-1-sgarzare@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220322092723-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220322114313.116516-1-sgarzare@redhat.com>
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 09:36:14AM -0400, Michael S. Tsirkin wrote:
->On Tue, Mar 22, 2022 at 11:38:23AM +0100, Stefano Garzarella wrote:
->> virtio spec requires drivers to set DRIVER_OK before using VQs.
->> This is set automatically after probe returns, but virtio-vsock
->> driver uses VQs in the probe function to fill rx and event VQs
->> with new buffers.
->
->
->So this is a spec violation. absolutely.
->
->> Let's fix this, calling virtio_device_ready() before using VQs
->> in the probe function.
->>
->> Fixes: 0ea9e1d3a9e3 ("VSOCK: Introduce virtio_transport.ko")
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> ---
->>  net/vmw_vsock/virtio_transport.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
->> index 5afc194a58bb..b1962f8cd502 100644
->> --- a/net/vmw_vsock/virtio_transport.c
->> +++ b/net/vmw_vsock/virtio_transport.c
->> @@ -622,6 +622,8 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
->>  	INIT_WORK(&vsock->event_work, virtio_transport_event_work);
->>  	INIT_WORK(&vsock->send_pkt_work, virtio_transport_send_pkt_work);
->>
->> +	virtio_device_ready(vdev);
->> +
->>  	mutex_lock(&vsock->tx_lock);
->>  	vsock->tx_run = true;
->>  	mutex_unlock(&vsock->tx_lock);
->
->Here's the whole code snippet:
->
->
->        mutex_lock(&vsock->tx_lock);
->        vsock->tx_run = true;
->        mutex_unlock(&vsock->tx_lock);
->
->        mutex_lock(&vsock->rx_lock);
->        virtio_vsock_rx_fill(vsock);
->        vsock->rx_run = true;
->        mutex_unlock(&vsock->rx_lock);
->
->        mutex_lock(&vsock->event_lock);
->        virtio_vsock_event_fill(vsock);
->        vsock->event_run = true;
->        mutex_unlock(&vsock->event_lock);
->
->        if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
->                vsock->seqpacket_allow = true;
->
->        vdev->priv = vsock;
->        rcu_assign_pointer(the_virtio_vsock, vsock);
->
->        mutex_unlock(&the_virtio_vsock_mutex);
->
->
->I worry that this is not the only problem here:
->seqpacket_allow and setting of vdev->priv at least after
->device is active look suspicious.
+On Tue, Mar 22, 2022 at 12:43:13PM +0100, Stefano Garzarella wrote:
+> After waking up a suspended VM, the kernel prints the following trace
+> for virtio drivers which do not directly call virtio_device_ready() in
+> the .restore:
+> 
+>     PM: suspend exit
+>     irq 22: nobody cared (try booting with the "irqpoll" option)
+>     Call Trace:
+>      <IRQ>
+>      dump_stack_lvl+0x38/0x49
+>      dump_stack+0x10/0x12
+>      __report_bad_irq+0x3a/0xaf
+>      note_interrupt.cold+0xb/0x60
+>      handle_irq_event+0x71/0x80
+>      handle_fasteoi_irq+0x95/0x1e0
+>      __common_interrupt+0x6b/0x110
+>      common_interrupt+0x63/0xe0
+>      asm_common_interrupt+0x1e/0x40
+>      ? __do_softirq+0x75/0x2f3
+>      irq_exit_rcu+0x93/0xe0
+>      sysvec_apic_timer_interrupt+0xac/0xd0
+>      </IRQ>
+>      <TASK>
+>      asm_sysvec_apic_timer_interrupt+0x12/0x20
+>      arch_cpu_idle+0x12/0x20
+>      default_idle_call+0x39/0xf0
+>      do_idle+0x1b5/0x210
+>      cpu_startup_entry+0x20/0x30
+>      start_secondary+0xf3/0x100
+>      secondary_startup_64_no_verify+0xc3/0xcb
+>      </TASK>
+>     handlers:
+>     [<000000008f9bac49>] vp_interrupt
+>     [<000000008f9bac49>] vp_interrupt
+>     Disabling IRQ #22
+> 
+> This happens because we don't invoke .enable_cbs callback in
+> virtio_device_restore(). That callback is used by some transports
+> (e.g. virtio-pci) to enable interrupts.
+> 
+> Let's fix it, by calling virtio_device_ready() as we do in
+> virtio_dev_probe(). This function calls .enable_cts callback and sets
+> DRIVER_OK status bit.
+> 
+> This fix also avoids setting DRIVER_OK twice for those drivers that
+> call virtio_device_ready() in the .restore.
+> 
+> Fixes: d50497eb4e55 ("virtio_config: introduce a new .enable_cbs method")
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+> 
+> I'm not sure about the fixes tag. That one is more generic, but the
+> following one I think introduced the issue.
+> 
+> Fixes: 9e35276a5344 ("virtio_pci: harden MSI-X interrupts")
 
-Right, so if you agree I'll move these before virtio_device_ready().
+Jason what should we do about this one BTW? Just revert? We have other
+issues ...
 
->E.g.:
->
->static void virtio_vsock_event_done(struct virtqueue *vq)
->{
->        struct virtio_vsock *vsock = vq->vdev->priv;
->
->        if (!vsock)
->                return;
->        queue_work(virtio_vsock_workqueue, &vsock->event_work);
->}
->
->looks like it will miss events now they will be reported earlier.
->One might say that since vq has been kicked it might send
->interrupts earlier too so not a new problem, but
->there's a chance device actually waits until DRIVER_OK
->to start operating.
 
-Yes I see, should I break into 2 patches (one where I move the code 
-already present and this one)?
-
-Maybe a single patch is fine since it's the complete solution.
-
-Thank you for the detailed explanation,
-Stefano
+> Thanks,
+> Stefano
+> ---
+>  drivers/virtio/virtio.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index 22f15f444f75..75c8d560bbd3 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -526,8 +526,9 @@ int virtio_device_restore(struct virtio_device *dev)
+>  			goto err;
+>  	}
+>  
+> -	/* Finally, tell the device we're all set */
+> -	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER_OK);
+> +	/* If restore didn't do it, mark device DRIVER_OK ourselves. */
+> +	if (!(dev->config->get_status(dev) & VIRTIO_CONFIG_S_DRIVER_OK))
+> +		virtio_device_ready(dev);
+>  
+>  	virtio_config_enable(dev);
+>  
+> -- 
+> 2.35.1
 

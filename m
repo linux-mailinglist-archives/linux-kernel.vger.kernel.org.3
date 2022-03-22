@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B904E36BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13B14E36B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235485AbiCVCgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
+        id S235523AbiCVChG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235297AbiCVCgu (ORCPT
+        with ESMTP id S235473AbiCVChE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:36:50 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE83913F83
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:35:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V7tl0.B_1647916519;
-Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V7tl0.B_1647916519)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 22 Mar 2022 10:35:21 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-To:     kbusch@kernel.org
-Cc:     axboe@fb.com, hch@lst.de, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nvme-pci: make use_threaded_interrupts mod-param read-only
-Date:   Tue, 22 Mar 2022 10:35:12 +0800
-Message-Id: <20220322023512.98644-1-xhao@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
+        Mon, 21 Mar 2022 22:37:04 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3D91D336
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:35:37 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id k10so6329948edj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9U+Osd0Ywd7K3Q5dzjNP1l5cw5z550AZ4vENcKfoJTI=;
+        b=hPhRJKwpCtvaJRJ5ORxoXh/YpcExsBn6BCoOQ1fC5K3xC4ibXYRa/+JIiwpG7UqQnl
+         og3vOm6xY2vogsMHLP2MND6ONWDDrhj/oRlPKWGMQ+OJbEsw/tiVhGhkeQ3mdifI4zG5
+         cMFPD2G32t5pVc7oQD6XJDUck4f2/nbDY0/4g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9U+Osd0Ywd7K3Q5dzjNP1l5cw5z550AZ4vENcKfoJTI=;
+        b=QN4j/31/880rTrbHD4Nis0zVJy/NnzlhXwFLw/xBadSW4LjteZGf7cXH2MYkg88KGf
+         nX+6vftnSxfGYmWrefBTTgAT/FNorpnd+gJEdy+aF2sVV2nUiCsj9M/zA91LQYFj8tlq
+         Eziz4o259CNAg6JZtxIb4IuRNo1JTThmV7wh+x/U2ySkgtK33FQ+YL9gSzS+Q5Pte4PD
+         kUSm4QMPU+OqiZI93RmCuAbp0OlCO+F5azwL7E7HQ8rRbI47fF9GiZpfHybpzEawbScp
+         YkTVWGLJWQzZ0CbRLmazW8CHHfi/00Kk7jlLRZIwmX5GDO8WGfnf3pnAxc25PnLBM+fn
+         MiGA==
+X-Gm-Message-State: AOAM5321IEoo4u4FH/z6vcJsc6bBus3Trvb5myehU2s9jaMYnAXKkKbW
+        dFqPBwIee56MduT97u2XdQDYJLwPwOuJVKcZWb9LQA==
+X-Google-Smtp-Source: ABdhPJwAWZr4dSQPkIi4kcb7ZF+mdJ/97ynQL1DHvgNE5S0Npt9H/NohER38+Qxw8+xN+RkulppxmTdJDfyIMWPo7Ec=
+X-Received: by 2002:a05:6402:207a:b0:419:3e9f:494f with SMTP id
+ bd26-20020a056402207a00b004193e9f494fmr8125843edb.397.1647916535965; Mon, 21
+ Mar 2022 19:35:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1647894991.git.dsterba@suse.com>
+In-Reply-To: <cover.1647894991.git.dsterba@suse.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 21 Mar 2022 19:35:25 -0700
+Message-ID: <CAADWXX96p7Np92nJfVTd-yWbgqETyzYMC+kBbyjxmCXfi+trTg@mail.gmail.com>
+Subject: Re: [GIT PULL] Btrfs updates for 5.18
+To:     David Sterba <dsterba@suse.com>
+Cc:     linux-btrfs <linux-btrfs@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When I execute "insmod nvme.ko use_threaded_interrupts=1",
-I find it difficult to determine whether it is successful
-or not, So I want to add read-only parameter to
-'/sys/module/nvme/parameters/use_threaded_interrupts',
-When insmoded successfully.
-    # cat /sys/module/nvme/parameters/use_threaded_interrupts
-    # 1
+On Mon, Mar 21, 2022 at 2:37 PM David Sterba <dsterba@suse.com> wrote:
+>
+> this update contains feature updates, performance improvements,
+> preparatory and core work and some related VFS updates.  Please pull,
+> thanks.
 
-Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
----
- drivers/nvme/host/pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hmm. This was marked as spam for me.
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 6a99ed680915..27cd20130021 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -44,7 +44,7 @@
- #define NVME_MAX_SEGS	127
+Not sure why - the email looks fine, and has proper DKIM and SPF records.
 
- static int use_threaded_interrupts;
--module_param(use_threaded_interrupts, int, 0);
-+module_param(use_threaded_interrupts, int, 0444);
-
- static bool use_cmb_sqes = true;
- module_param(use_cmb_sqes, bool, 0444);
---
-2.31.0
+              Linus

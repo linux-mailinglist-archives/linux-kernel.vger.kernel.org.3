@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A854E3E2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6124E3E29
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiCVMMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S234715AbiCVMMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbiCVMME (ORCPT
+        with ESMTP id S234693AbiCVMME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Mar 2022 08:12:04 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A1F85659
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:10:27 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id e6so12473009pgn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:10:27 -0700 (PDT)
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C654D8567A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:10:34 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso2486900pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:10:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uePDHamTg8Aaje9cV7GXZKI4UAeGuCXRnl2ENUUEXxk=;
-        b=FsRTO4RlcjR5SvPCtQOCwI3kpAD3W7w49KGuO99dqINQ6uOWZ5gOIMsgNsI6jxy9Uz
-         QSCMtlPoMeim6YGW8OkevyocYuF/DBt28S6HI1X+CAidRFCDU9fJZc/XNpuAAXEslwpm
-         MD1wTijilB06RSk200EmVDcbKzgWhOF3W3kILccXJCG46DTFvKTbFTHYC4tgb/ONeh/h
-         G0l+INhk24k4SzX4HTlxzbuqMok45TzQGdon9rrL6losB9H0wWpTEArGsFSqIKO3OuWb
-         UxSgpXULxwsvVnj0i/ff5ZkKHE9EpnJbUO+MjLpDReoR0eUp6kCZJjB9EBleJC/iiR6z
-         zm9w==
+        bh=O/7NZbomHJNevRDviLAq47WogxJXAVWPPfKEsGLaM2Q=;
+        b=u+N3p9kTmRnGrXL314WMH5VKZQw2nEgT4xoBO1regbTW10qO9UIqkNynJKqT6hJTQI
+         GfE7w63Iyvv6FpRThYj5q1G6+loA64m2+EqaBgdw4tNHxFu2u7d90d5asSWZXnxF23bG
+         ZsMTHS7CN4uLkCKYbBNYFmTP8sr4Ok1yodh7ZhdNGts6aWPMBVE4Lz2wIc0PBRP1g1Cx
+         aHFwhyYcQNpwDnmqNls6pMAVG50I1fcCb1R4B+V0kMZVJdSbE98mqY0MkmRyBGyepID5
+         u0ST1DHgNNRuXMPo0APBXThcgYAs8w3cnhfGw7CscQ/Ah9fyysaw89ORGlgdwn5Fh2PI
+         vqTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uePDHamTg8Aaje9cV7GXZKI4UAeGuCXRnl2ENUUEXxk=;
-        b=xLSKS4vbcThOk6hNwNZimYIPKL/VYgCmznvKHHJ/+TM9zeMdC0A2UXOuf8Dm7BSkI1
-         r5brJSbl5DKRaKM6heu9uNNW76OA4OiGrZjcuZlbd6h9m1DphkJV4HOLA/baHbUtVVW4
-         XsTAupf3ZlNR38nHE8J2ka4bhCjQxRdk/PbVtfsox2pzW/fjGz1EaALrKAxKLbRleBp+
-         WurkdrZ8hxJQi2pwqSr13RxEF682wQGLEJyeaQK10McFd2YwndgsTpgaSo2kd0zw/lTP
-         OZfwrDYppzGjS39YQUThLyPLur14B8qxr6u/hz+I8Y6uB7XNO+UQP2Nv4kUTK1UTQSKb
-         oCcQ==
-X-Gm-Message-State: AOAM532TazW103CIooqDPovFISIoIQhM1cWSzcNHqV+txDZog01XRK6r
-        8tXcC0fYQBDiVuUvhJC2Hb//et3FHpXRS63S
-X-Google-Smtp-Source: ABdhPJzdsnGKnRy+ZLFU+RCMb/c6l9MPuXmGqraFSCQJyAYNskxfSG2QUnuOF5/VdE382cVcf+ByYQ==
-X-Received: by 2002:a05:6a00:26cf:b0:4f6:fc52:7b6a with SMTP id p15-20020a056a0026cf00b004f6fc527b6amr28841152pfw.39.1647951026185;
-        Tue, 22 Mar 2022 05:10:26 -0700 (PDT)
+        bh=O/7NZbomHJNevRDviLAq47WogxJXAVWPPfKEsGLaM2Q=;
+        b=G1lYuS/4digQgOz++fkNtrGmD2YgeYUTj3L6z0LVtoRDnxVSVu8RC9UraAKU2CuNNd
+         YhYvQyODcuEkO6EXcDQ2vBMtfaVwEUPCOv67Z3is0zJo45rJ7RzK7bFJYXtC87Hti2Y4
+         vGvyIu3wLIaK5HGd21Bp3P/j8rzMdPo0PQEpE27UmRQAELc39Yj9d1Cj8t9U3Y7lV+v0
+         fTdHOP0YS5VrMtMBeu0yvvvX8lLL4GbXTFYKCxmdzRxUwBiI1YFRXT3NFxEDLESOvRJy
+         0S6bHSw0ss3KJyRxOk53xjFbOrRtqiyo/B0s0r04tUz3dEMyJzi97CEgtvZwN60FVfVA
+         GLVg==
+X-Gm-Message-State: AOAM532tSVEqiNzz4BL1R1PjCMtQw1X0kV1F2tsRt7bUT0+J2nhpN3ir
+        b/EMIUM8L8W6qIflMoEUwF+whg==
+X-Google-Smtp-Source: ABdhPJxjr0Mbq/yQ/Er0makurPOudwZPK8zCr3U/6Orououfw/iFmcSMXQY4it/+KgCKOLrzKVLcFw==
+X-Received: by 2002:a17:90a:1197:b0:1bf:65ff:f542 with SMTP id e23-20020a17090a119700b001bf65fff542mr4610157pja.5.1647951034367;
+        Tue, 22 Mar 2022 05:10:34 -0700 (PDT)
 Received: from localhost.localdomain ([2409:8a28:e62:3990:75d0:8573:b73c:e6b4])
-        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004e03b051040sm24833850pfj.112.2022.03.22.05.10.18
+        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004e03b051040sm24833850pfj.112.2022.03.22.05.10.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 05:10:25 -0700 (PDT)
+        Tue, 22 Mar 2022 05:10:34 -0700 (PDT)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
         mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
@@ -55,9 +55,9 @@ To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
 Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         duanxiongchun@bytedance.com, songmuchun@bytedance.com,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v2 5/6] perf/core: Always set cpuctx cgrp when enable cgroup event
-Date:   Tue, 22 Mar 2022 20:08:33 +0800
-Message-Id: <20220322120834.98637-6-zhouchengming@bytedance.com>
+Subject: [PATCH v2 6/6] perf/core: Don't need event_filter_match when merge_sched_in()
+Date:   Tue, 22 Mar 2022 20:08:34 +0800
+Message-Id: <20220322120834.98637-7-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220322120834.98637-1-zhouchengming@bytedance.com>
 References: <20220322120834.98637-1-zhouchengming@bytedance.com>
@@ -73,70 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When enable a cgroup event, cpuctx->cgrp setting is conditional
-on the current task cgrp matching the event's cgroup, so have to
-do it for every new event. It brings complexity but no advantage.
+There are two obselete comments in perf_cgroup_switch(), since
+we don't use event_filter_match() when event_sched_out(). And
+found we needn't to use event_filter_match() when sched_in too.
 
-To keep it simple, this patch would always set cpuctx->cgrp
-when enable the first cgroup event, and reset to NULL when disable
-the last cgroup event.
+Because now we use the perf_event groups RB-tree to get the
+exact matched perf_events, don't need to go through the
+event_filter_match() to check if matched.
 
-In this way, perf_cgroup_match() won't see cpuctx->cgrp == NULL if
-it's a cgroup event, so add a WARN_ON_ONCE(!cpuctx->cgrp) there.
+We can remove it in merge_sched_in() actually, but this patch
+changes it to a WARN_ON_ONCE for debug purpose, and found
+no warning in our stress test.
 
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 ---
- kernel/events/core.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+ kernel/events/core.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 849a81299906..4c8657b08301 100644
+index 4c8657b08301..744078fe2819 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -703,7 +703,7 @@ perf_cgroup_match(struct perf_event *event)
- 		return true;
+@@ -860,15 +860,11 @@ static void perf_cgroup_switch(struct task_struct *task)
+ 		perf_pmu_disable(cpuctx->ctx.pmu);
  
- 	/* wants specific cgroup scope but @cpuctx isn't associated with any */
--	if (!cpuctx->cgrp)
-+	if (WARN_ON_ONCE(!cpuctx->cgrp))
- 		return false;
+ 		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
+-		/*
+-		 * must not be done before ctxswout due
+-		 * to event_filter_match() in event_sched_out()
+-		 */
+ 		cpuctx->cgrp = cgrp;
+ 		/*
+ 		 * set cgrp before ctxsw in to allow
+-		 * event_filter_match() to not have to pass
+-		 * task around
++		 * visit_groups_merge() to find matched
++		 * cgroup events
+ 		 */
+ 		cpu_ctx_sched_in(cpuctx, EVENT_ALL);
  
- 	/*
-@@ -975,22 +975,10 @@ perf_cgroup_event_enable(struct perf_event *event, struct perf_event_context *ct
- 	 */
- 	cpuctx = container_of(ctx, struct perf_cpu_context, ctx);
+@@ -3729,7 +3725,7 @@ static int merge_sched_in(struct perf_event *event, void *data)
+ 	if (event->state <= PERF_EVENT_STATE_OFF)
+ 		return 0;
  
--	/*
--	 * Since setting cpuctx->cgrp is conditional on the current @cgrp
--	 * matching the event's cgroup, we must do this for every new event,
--	 * because if the first would mismatch, the second would not try again
--	 * and we would leave cpuctx->cgrp unset.
--	 */
--	if (ctx->is_active && !cpuctx->cgrp) {
--		struct perf_cgroup *cgrp = perf_cgroup_from_task(current, ctx);
--
--		if (cgroup_is_descendant(cgrp->css.cgroup, event->cgrp->css.cgroup))
--			cpuctx->cgrp = cgrp;
--	}
--
- 	if (ctx->nr_cgroups++)
- 		return;
+-	if (!event_filter_match(event))
++	if (WARN_ON_ONCE(!event_filter_match(event)))
+ 		return 0;
  
-+	cpuctx->cgrp = perf_cgroup_from_task(current, ctx);
- 	list_add(&cpuctx->cgrp_cpuctx_entry,
- 			per_cpu_ptr(&cgrp_cpuctx_list, event->cpu));
- }
-@@ -1012,9 +1000,7 @@ perf_cgroup_event_disable(struct perf_event *event, struct perf_event_context *c
- 	if (--ctx->nr_cgroups)
- 		return;
- 
--	if (ctx->is_active && cpuctx->cgrp)
--		cpuctx->cgrp = NULL;
--
-+	cpuctx->cgrp = NULL;
- 	list_del(&cpuctx->cgrp_cpuctx_entry);
- 
- 	if (list_empty(per_cpu_ptr(&cgrp_cpuctx_list, event->cpu)))
+ 	if (group_can_go_on(event, cpuctx, *can_add_hw)) {
 -- 
 2.20.1
 

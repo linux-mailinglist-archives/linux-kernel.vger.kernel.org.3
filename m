@@ -2,197 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C4F4E44E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10A14E44E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239503AbiCVRUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S239505AbiCVRVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239496AbiCVRUU (ORCPT
+        with ESMTP id S239502AbiCVRU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:20:20 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EF8275FE;
-        Tue, 22 Mar 2022 10:18:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XE2InLqALM19y2jK9BrfHYl4oMM+Nm6Jtt3Qd2JnNryFHjvucf4+Bwg5edpIddsQwsmeBfROhxIycbqj6amw5C6laeR/XNnBP79wz0HUMX6TTNSbLVKVKbekKCoMXPzDJsnyrvSNNbM0wiDcktHp9a8rBCNSPINSD/ei66d6kgUBsdejun7MWIUujK0HiijjzBOUBawYEIJ17Pr7cImyvF2BOZdN+fFj1NkGSdihKGkkKzLUa1mm/vEgoU0rixf2py9s0pHenZUZuQGMHU+Mpn+woYlNS7KS4XqeHKrL1ePxWZui3Gb8ue0W8TFrJEeFjjYO5Bngj7knwggOMvSaLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nVtTgbHsc90fzXfoEVy09CXgpO+HLKSp0zFUH7+CPFE=;
- b=eArubhg2UR4fQiffL+ok9APlwxJVDbs7QBASK+NR+RTVDpQl3XqdF+bZBtgwAZfIWZWsNY+Fs3dHnPxH2ifyREHZCpk+C9R/pZA3oRmKj2L33aXsvYb/yDPjv7vfP1GD7YBlyIpzSU9anhndi+qIaiFU/Oi6XHAqdGczwjEUZgPje7+F59bYM/bGyePR29ormRMAkQze638di6HYUhKCFqPDk94gUkw5xsYZ4ve6HlDbRXz9XlzRAzz83toYm39yZ8jjHxKdW4UWrqRBmSIJb9mBNJDUvOwWpsxF+W87Bzh8JRJSqNSK7CJTMA846D8FGd/H8B5mcjfYcgtm5Nax0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=opensource.cirrus.com
- smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
+        Tue, 22 Mar 2022 13:20:59 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986A127CDE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:19:29 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id r22so24894031ljd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:19:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nVtTgbHsc90fzXfoEVy09CXgpO+HLKSp0zFUH7+CPFE=;
- b=Q3MSZq20TekkJc5mKehjka3w8owXz81AZI63LGmR+KTC2y/WRLdKVXmkF+8Z44O1h2dWy7X2Hf2gep3HNTAE2XeoH8oT5/Q1kCn6OH0tzpqiORmgFVhcknpW9O+KOK2ulyaPwrYpxhzUgxo4+ymuuamXW1KfAIJSRxIknFD4oHE=
-Received: from DM5PR12CA0008.namprd12.prod.outlook.com (2603:10b6:4:1::18) by
- BL0PR02MB5650.namprd02.prod.outlook.com (2603:10b6:208:83::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5102.16; Tue, 22 Mar 2022 17:18:48 +0000
-Received: from DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
- (2603:10b6:4:1:cafe::3c) by DM5PR12CA0008.outlook.office365.com
- (2603:10b6:4:1::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.23 via Frontend
- Transport; Tue, 22 Mar 2022 17:18:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT013.mail.protection.outlook.com (10.13.5.126) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5081.14 via Frontend Transport; Tue, 22 Mar 2022 17:18:47 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 22 Mar 2022 10:18:47 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 22 Mar 2022 10:18:47 -0700
-Envelope-to: tanureal@opensource.cirrus.com,
- linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- patches@opensource.cirrus.com
-Received: from [10.254.241.50] (port=58266)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1nWi9e-000CFf-Pn; Tue, 22 Mar 2022 10:18:47 -0700
-Message-ID: <08dc1f90-586a-a47a-7c13-bce0405c13d6@xilinx.com>
-Date:   Tue, 22 Mar 2022 18:18:44 +0100
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TWrLQlhghP36NrYUE7OTdGLeaRuvPVmKunaV7kLXB3s=;
+        b=MN2jSxUkfZLt3GwoOVdJh1xPPczQv9dff/HXY1Wq5fEvIMQFlYYew86a2dkRe6IQA3
+         owW//XHUSRjcI1EK+no8l0jJYcI/glDOmAXxjWUJ9y1GOj6zX4lzUNQbs+tZmRnyhlze
+         t4LBHWbEgZxBsj5SRxtgaZDZ6yHxiRQqcuNQn/1tWHI1AHJiy4Erz7tfgTdS2rrPwnqM
+         gdDP7xwzRD1un+RWQ3EQr3P9oFlPug5yWZ2LzZhut3/5X2uwP4H89i6Fsd6lxtmlviNt
+         P8aZ2nDSMZ+cS0n00uZCKYzcCU0RsT6/xIpzFP3Qwl6H++xC4mUgJ70xvMD4FtBmh2Sq
+         wUUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TWrLQlhghP36NrYUE7OTdGLeaRuvPVmKunaV7kLXB3s=;
+        b=pGwx4GnXbMsgq2To27g4TZ1MZG8duRAr5mXwzOiNb7uRP8G48nUozC5rTrMVqBKMln
+         HtAUhuxTI9rJL6aDZfiCNKauSl/O/L8Ozq9x72V3oIuJo4R3QxnFGiNpo6s5qxXgNwjb
+         q5FIeZAjXIVlI0KvDjVFJ//wC403P3v9M8vFcx4h+77JIb2+ALZLXKh+Byhmn09Egrbn
+         gVwzfrGj/JHkg9U1O3XUQOVGc/SMkwQXhDrD4LC43Sy+348LnwhwMf/r234ubKrf8zua
+         5FoaWmnUQg444YVV2cDzLS/NVKzU+rpghUkztnhypSfkHO5CUFKQImG9ekvrZZIUkYcy
+         ijXA==
+X-Gm-Message-State: AOAM532lzKBBNVJQXDgH/GmXxi25WBQsKm1Iw69seDz9mn6DTd9t3zK8
+        saiq2BlDG9inichSLBRuMlJEhq80k7MuQLDIdinbsg==
+X-Google-Smtp-Source: ABdhPJwS/1ZVBJTdMLl/Hk7nhVyvCHZ01feHNTbqxvng49pwR5uWfzheYUYjpb0MlPYi7TlPLUgs9mjiozk6/4FuC4E=
+X-Received: by 2002:a2e:611a:0:b0:249:83e5:9f9b with SMTP id
+ v26-20020a2e611a000000b0024983e59f9bmr8629823ljb.165.1647969566185; Tue, 22
+ Mar 2022 10:19:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] i2c: cadence: Increase timeout per message if necessary
-Content-Language: en-US
-To:     <tanureal@opensource.cirrus.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20220309093147.102385-1-tanureal@opensource.cirrus.com>
- <dd26fa4a-870e-d969-04df-1f42487e2b54@xilinx.com>
- <4af9c968-b837-e984-1051-2dcd240f2c08@opensource.cirrus.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <4af9c968-b837-e984-1051-2dcd240f2c08@opensource.cirrus.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6fa863f0-d39d-47c5-0aa9-08da0c2806d5
-X-MS-TrafficTypeDiagnostic: BL0PR02MB5650:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB5650B97C295EACE2476BB4C8C6179@BL0PR02MB5650.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4ag7UY1DsrjoHfG7UNaFB9g3IOIu+bdvDYE24k4JjapPAsZKvLVssXjRzU6GJ1qvBG5xkaeal9A8yM13AYL5iU7pFHzjfqt2jFDGqTnJJy1Pv3EIBbzqd/TqPOx1RtYMFOXI/BOFoYLbRCzR1CKUzUqpB251e7alQyRtVUpgmxPw8r5z/f/NrR7FXqcx3VzLQAOSHdzg0LBNs0O/JqI5iKoOASafz3Pbxa2K1T/NwJo6dnZrLNWqnZpMcwZNfaA7qonKdsJrWl8H9kNQw/X7PgN8PHZ/1uRX2W+2YmbXYEY7wLrViZD9AkjImv0h1uEdO3+1eZ4J/68/gf3JAcYPBvpc/am3a//Zvh16CtMPUu3U+Bb/TMiQb6HxOWxC+8gUHznOpgEUpwqE6L0fCKaOhpu2nO2nigBNDwnIbM/L7TVWEDz+HLNu9vHupR3yg9jP+Gz4FyVBKDdvALpU+ksJnpVgZnPy2t7iWx8ecW3pwveOJKB162r5LhkBVOaf0dwNZDDX7ObfpAkyt2eFpu3xn4SAJcvhUSIoKLsOhanwcLECvKISxS25sU6cx+NkH4Nft9gcpW0frUej7iTZuD3ho0Mv5qmDlL2A3zZyQo1AGT/IXHSCfOAFcLh0Ta6IXcuHR5lRuUDARWDvurG0WMuomHLEflWxna4Kyq7J9Py4YIwOrsAymSvULUKdRqLMczkB2i89mkpNRI5TZQvpWII8k3FAg4kcuzOS5Ws6KtPFaKUpJak/BEPSkMxW7LDLa3B8
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(508600001)(53546011)(9786002)(8936002)(82310400004)(15650500001)(26005)(186003)(83380400001)(44832011)(7636003)(6666004)(5660300002)(356005)(2616005)(336012)(426003)(2906002)(31696002)(40460700003)(8676002)(36860700001)(47076005)(110136005)(70206006)(31686004)(36756003)(316002)(70586007)(50156003)(2101003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 17:18:47.8415
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6fa863f0-d39d-47c5-0aa9-08da0c2806d5
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB5650
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220306223016.2239094-1-ctshao@google.com> <CAKwvOdnmtRYnSx3VvG=PEnzpzWa8f=0bn1xDymjER5EShS2tmw@mail.gmail.com>
+ <YiaMJCHOOuujHwiK@google.com> <CAK7LNAS-=Fne6fyiqzQ6DwNLOdF-HAY9Libn10uyV9GmQQMUKQ@mail.gmail.com>
+ <YjFQvhv7I6w8xjbK@google.com> <CAK7LNATmPXs6f-Oe4XmfcZSRPsCsuexSebA=4-jyNsMYHu9cag@mail.gmail.com>
+In-Reply-To: <CAK7LNATmPXs6f-Oe4XmfcZSRPsCsuexSebA=4-jyNsMYHu9cag@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 22 Mar 2022 10:19:14 -0700
+Message-ID: <CAKwvOd=D22k53yXFC=E=VkJotn6q-AYCu5QsaFPmH_v+fWGVwA@mail.gmail.com>
+Subject: Re: [PATCH v4] config: Allow kernel installation packaging to
+ override pkg-config
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Chun-Tse Shao <ctshao@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        keyrings@vger.kernel.org, DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 22, 2022 at 12:44 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Wed, Mar 16, 2022 at 11:51 AM Chun-Tse Shao <ctshao@google.com> wrote:
+> >
+> > Tue, Mar 08, 2022 at 01:01:45PM +0900, Masahiro Yamada wrote:
+> > > On Tue, Mar 8, 2022 at 7:50 AM Chun-Tse Shao <ctshao@google.com> wrote:
+> > > >
+> > > > On Mon, Mar 07, 2022 at 10:17:17AM -0800, Nick Desaulniers wrote:
+> > > > > On Sun, Mar 6, 2022 at 2:39 PM Chun-Tse Shao <ctshao@google.com> wrote:
+> > > > > >
+> > > > > > Add HOSTPKG_CONFIG to allow tooling that builds the kernel to override
+> > > > > > what pkg-config and parameters are used.
+> > > > >
+> > > > > Sorry, kind a late thought here for v4, but we don't seem to prefix
+> > > > > many other host side tools with HOST_, i.e. LEX, YACC, AWK, PERL,
+> > > > > PYTHON3, etc.  Maybe just having the variable identifier be simply
+> > > > > PKGCONFIG rather than HOSTPKG_CONFIG then put it at the end of the
+> > > > > list in the top level Makefile after ZSTD (i.e. the list of host
+> > > > > tools)?  There's HOST_ prefixes when there's more than one tool
+> > > > > involved (i.e. host compiler vs target compiler), but I suspect
+> > > > > there's no such distinction for the existing uses of pkg-config?
+> > > > >
+> > > > Thanks for your suggestion, Nick! Yes I think it makes sense with PKGCONFIG
+> > > > instead of HOSTPKG_CONFIG since there is only one tool involved. I will
+> > > > work on it and submit a new patch.
+> > > >
+> > >
+> > > Please hold on.
+> > >
+> > > I was also wondering what to do with the "HOST" prefix.
+> > >
+> > > Libraries are usually arch-dependent.
+> > > (in other words, pkg-config should return different library paths
+> > > for $(CC) and $(HOSTCC) )
+> > >
+> > > You already understood this, so you added "HOST" prefix.
+> > >
+> > >
+> > > Please let me take time for further discussion.
+> > > I will come back to this when I get some time.
+> > >
+> > >
+> >
+> > Hi Mashiro,
+> >
+> > I was wondering if you were able to look more into this.
+> >
+> > Thank you!
+> >
+> > -CT
+> >
+> > > In the meantime,
+> > >   a8a5cd8b472ca20e5b8fa649c43b3756867322f8
+> > > as reference info if you have not seen it.
+> > >
+> > >
+> > > How many distros support something like
+> > > "aarch64-linux-gnu-pkg-config"  ?
+> > >
+> > > Ubuntu 18.04 and 20.04 seem to support it.
+> > > I do not know for others.
+> > >
+> > >
+> > >
+> > >
+>
+>
+>
+> Sorry for the delay.
+> I am OK with the idea of allowing users to override the pkg-config command,
+> but I tend to take time before making a decision.
+>
+>
+>
+>
+> Does anybody have any insight / thoughts about the following points?
+>
+>
+>
+>
+>
+>
+> [Q1]   with/without "HOST" prefix
+>
+>
+> Apparently, "pkg-config" should return different libs/cflags
+> for $(CC) and $(HOSTCC).
+>
+> I think the non-prefixed macro name "PKG_CONFIG" should be
+> reserved for $(CC)  (building for the target system).
 
+Ok. I retract my comment on v4 about removing the HOST prefix then.
 
-On 3/22/22 16:34, tanureal@opensource.cirrus.com wrote:
-> On 3/21/22 3:57 PM, Michal Simek <michal.simek@xilinx.com> wrote:
->> +Shubhrajyoti
->>
->> On 3/9/22 10:31, Lucas Tanure wrote:
->> > Timeout as 1 second sets a upper limit on the length of
->> > the transfer executed, but there is no maximum length of
->> > a write or read message set in i2c_adapter_quirks for this
->> > controller.
->>
->> nit: I would expect that you have run any test and you reached an issue.
->> Would be good to describe what exactly you have tried on which configuration 
->> to make it super clear.
->>
->> >
->> > To remove that limitation calculate the minimal time
->> > necessary, plus some wiggle room, for every message
->> > and use it instead of the default one second, if
->> > more than one second.
->> >
->> > Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
->> > ---
->> >   drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
->> >   1 file changed, 10 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/drivers/i2c/busses/i2c-cadence.c > 
->> b/drivers/i2c/busses/i2c-cadence.c
->> > index 805c77143a0f..b4c1ad19cdae 100644
->> > --- a/drivers/i2c/busses/i2c-cadence.c
->> > +++ b/drivers/i2c/busses/i2c-cadence.c
->> > @@ -760,7 +760,7 @@ static void cdns_i2c_master_reset(struct > i2c_adapter 
->> *adap)
->> >   static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg > *msg,
->> >           struct i2c_adapter *adap)
->> >   {
->> > -    unsigned long time_left;
->> > +    unsigned long time_left, msg_timeout;
->> >       u32 reg;
->> >       id->p_msg = msg;
->> > @@ -785,8 +785,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c > *id, 
->> struct i2c_msg *msg,
->> >       else
->> >           cdns_i2c_msend(id);
->> > +    /* Minimal time to execute this message */
->> > +    msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) > / 
->> id->i2c_clk);
->> > +    /* Plus some wiggle room */
->> > +    msg_timeout += msecs_to_jiffies(500);
->> > +
->> > +    if (msg_timeout < adap->timeout)
->> > +        msg_timeout = adap->timeout;
->> > +
->> >       /* Wait for the signal of completion */
->> > -    time_left = wait_for_completion_timeout(&id->xfer_done, > adap->timeout);
->> > +    time_left = wait_for_completion_timeout(&id->xfer_done, > msg_timeout);
->> >       if (time_left == 0) {
->> >           cdns_i2c_master_reset(adap);
->> >           dev_err(id->adap.dev.parent,
->>
->>
->> If my assumption is right and there is any actual issue you had please send v2 
->> and feel free to add there my:
->> Acked-by: Michal Simek <michal.simek@xilinx.com>
->>
->> Thanks,
->> Michal
->>
->>
->>
-> The issue happens for I2C devices that have firmware, which will send a big I2C 
-> message, but the I2C controller will timeout on it.
-> That happened for CS35L41 DSP firmware tests, so no particular configuration, 
-> just a driver sending firmware blob over I2C.
+>
+> "HOSTPKG_CONFIG" looks unbalanced
+> due to the underscore.
+>
+> Perhaps, "HOST_PKG_CONFIG" might be better?
 
-How big is it?
+I'm fine with HOSTPKG_CONFIG (what's in v4); follows the style of
+HOSTCC and HOSTCXX.
 
-M
+>
+>
+>
+>
+> [Q2]    "pkg-config" vs "pkgconf"
+>
+> The traditional pkg-config implementation [1] is not actively
+> maintained these days.
+> The last commit was more than one year ago.
+>
+> The alternative one 'pkgconf' [2] is more active.
+>
+> In fact, Fedora already switched to 'pkgconf' [3].
+> Now 'pkg-config' is just a wrapper of 'pkgconf'.
+> Many distributions already support pkgconf.
+>
+>
+> I considered the shorter macro name "HOSTPKGCONF" and
+>
+>    HOSTPKGCONF  = pkgconf
+>
+> but I am not sure if this is the right decision.
+> Maybe we should stick to "PKG_CONFIG" / "HOST_PKG_CONFIG"
+> for the macro names.
+>
+>
+>   [1]  https://gitlab.freedesktop.org/pkg-config/pkg-config.git
+>   [2]  https://github.com/pkgconf/pkgconf.git
+>   [3]  https://fedoraproject.org/wiki/Changes/pkgconf_as_system_pkg-config_implementation
+
+If the folks sending this are working on CrOS, better find what's in
+their build system. Chun-Tse?
+
+(I feel like I'm behind the times again, like when `apt-get install`
+became old news in favor of `apt install`...)
+
+>
+>
+>
+>
+>
+> [Q3] What is the trend of handling cross-compile by pkg-config (or pkgconf).
+>
+>
+> By default, pkg-config returns the libs/cflags for native builds.
+>
+> For cross builds, the search paths for the *.pc files must be changed
+> via the "PKG_CONFIG_LIBDIR" environment variable.
+>
+> To ease this, some distributions provide  <triplet>-pkg-config
+> (for example,   aarch64-linux-gnu-pkg-config).
+> This became the nationale for tools/build/feature/Makefile defining:
+>
+>    PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+>
+> But, this wrapper shell script is not always available.
+> I do not know how to do it with the LLVM tool suite.
+> I am not quite sure if this is the global solution.
+>
+>
+> These days, pkgconf supports another way, .personality file [4]
+> to specify the .pc search paths for cross builds.
+>
+> Is it reasonable to use an option to distinguish native / cross builds
+> and use the same macro   "PKG_CONFIG = pkg-config" everywhere ?
+>
+>
+> [4] http://manpages.ubuntu.com/manpages/focal/en/man5/pkgconf-personality.5.html
+
+I'm not sure, but do we need to cross that bridge for this patch if
+it's just adding support for the HOST? No cross pkg-config necessary,
+yet. (Famous last words).
+-- 
+Thanks,
+~Nick Desaulniers

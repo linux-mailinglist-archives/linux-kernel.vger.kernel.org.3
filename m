@@ -2,229 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF724E4575
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9AC4E4577
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239873AbiCVRuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S239884AbiCVRuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239857AbiCVRt5 (ORCPT
+        with ESMTP id S239843AbiCVRuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:49:57 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E226A409
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:48:28 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id m4-20020a924b04000000b002c851e73720so572470ilg.23
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:48:28 -0700 (PDT)
+        Tue, 22 Mar 2022 13:50:02 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EF7240A0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:48:34 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id s8so18736622pfk.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pHpgWnyA+4cksK2jdnSyO1l2xWVlwD/uKJzOgotnJTA=;
+        b=m7fQ/X6bXpyvPl4juhvAFLBJuX1Y42anKo16WZ0Ojz3R2+Z9CpTm/6llMEgIpNtnro
+         2ZzYBgJuk2F+e26jMsk2pwJ7v0RhWWAVfghpLnpTdpFucYO8ncj2QRNjwUfN43nbCPTS
+         qHDEFs6mpYyNBbnkfmF2H9EhpUE/89ojloLvDmWc0W+0WRQzrbMvSMRwL+5HPUZaqJxu
+         BqA2Bn0VeC4oJsqO3pYNRISeahC8dyhsivSa+DDBv/axlUxaLrn/P8K5S5GwtkYO6Ry6
+         0COuu5Cy6qaf0mXozXCn1wF6p+At2JBb9+xzhShvrgtl8BidWp7Jjwbc6p0MYtx5q7oN
+         eeog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=oJZwdz9JBhGCcPSjS6Q2DkZuk26UljH41dYN2tYJ6/o=;
-        b=BmLrUhG8Lj+Bp0xgIoiSWHFz1+AIpKxOsCCha/Nrdl7yDB96Plf6CyV+3T1RnmiWNe
-         aK2SqlvE4u50k3/gR3DrjhyFQ5kvZnAxRTZUJoHx6GQNFaI+/4dSqQcVtrRXj0zNd8CN
-         QEmnjzVWJYRJ2XMxGIrBRu+xmF8RHliZRjWjNZJp057vI3Q04apsRkm5RaB9Rz851UfC
-         ySrtsrBxH5DkR0ik6u01AHvHyk+L/6/Ak02f5fIFEewQ/sG7l4wgivW9+d3jXXnuYYV+
-         o8IRfObVtMWfgOkMQcx465hBm3oD+2x9khjVaNFMn1pqqY+h/HetmfIkkE7YDNrfSlEf
-         0vkw==
-X-Gm-Message-State: AOAM532FymhTuBAbGNEb1rPwHonlFUcX2XPjOAneTuo/kEihMmXgi9yB
-        4CZfyqVRol+xWAf3mfBdvFI0HSEAHq+HwVcckeM/n3lc6IRa
-X-Google-Smtp-Source: ABdhPJxj8Xx14kXROYrnmWuUfRsUsK+uhpWsT94Q50nrQTkLGclj9PsxAD1OncBeU3+Sq4zEgJAwCMWFn0Tdt0jwqDND6lp8HWT+
-MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1491:b0:648:cd01:9ba9 with SMTP id
- a17-20020a056602149100b00648cd019ba9mr13042234iow.195.1647971308022; Tue, 22
- Mar 2022 10:48:28 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 10:48:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006a354705dad2387e@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in tty_release
-From:   syzbot <syzbot+09ad4050dd3a120bfccd@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk,
-        gregkh@linuxfoundation.org, io-uring@vger.kernel.org,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=pHpgWnyA+4cksK2jdnSyO1l2xWVlwD/uKJzOgotnJTA=;
+        b=JSHAvuZ+Ri2DVVTToywTgZBU5m0Y2WIkAtfY1xqn5ueDZZtDV7APE8DcgSRtBK0MMU
+         yrOx6ZxKf0vJ+zczKkC7PVIzYmS1T5OFJEksHnilaSlG+5MfIl+QT8hE0veiU1he/xAm
+         4YsdqMzSfS+0x+90J0rZxJZIw0+IE/TOJeOedjFfI9X4IYH59R4TC+mN6REnmi3HdMPZ
+         gfuuzLxRdxNhWXxTwV9NzM8SCw/TmJKPhLBRmINCEvJM9lFdK0vSFc5aIc0pEWVTDCnf
+         xob6u0t+dsIvQ3cQp6EBb8R0AsqEQKVFnv1tNdWYIOEk1/J9bQiZuzao7MulLFISE0PN
+         UY9Q==
+X-Gm-Message-State: AOAM532tfPeDDXpHUCdA3VoeRmfCpIUrVwj3pnvRnfv8TtKWoGZc0lVH
+        V/BeEItLd/ajY64zx3uikO6MWw==
+X-Google-Smtp-Source: ABdhPJwsrDQOZo0FtmYLlIizrEgq6CCc9WybkQ6yKegPcKzZT73TPxy8MmY1MlGxrqHQXfUguCBPyQ==
+X-Received: by 2002:a05:6a00:815:b0:4f6:ee04:30af with SMTP id m21-20020a056a00081500b004f6ee0430afmr29866834pfk.15.1647971313454;
+        Tue, 22 Mar 2022 10:48:33 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id w24-20020a639358000000b00385fcbf8e55sm1138666pgm.28.2022.03.22.10.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 10:48:32 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 10:48:32 -0700 (PDT)
+X-Google-Original-Date: Tue, 22 Mar 2022 10:48:31 PDT (-0700)
+Subject:     Re: [PATCH] csky: Move to generic ticket-spinlock
+In-Reply-To: <CAJF2gTShUjTQ=7g3uW8JmPzkZSG0fWKK7fXgAsERSUfrCgzA0w@mail.gmail.com>
+CC:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-382a4c87-1d59-43ba-b567-06c6eb94843e@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 18 Mar 2022 21:01:49 PDT (-0700), guoren@kernel.org wrote:
+> Hi Palmer,
+>
+> On Sat, Mar 19, 2022 at 6:48 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>>
+>> On Fri, 18 Mar 2022 01:34:21 PDT (-0700), guoren@kernel.org wrote:
+>> > From: Guo Ren <guoren@linux.alibaba.com>
+>> >
+>> > There is no benefit from custom implementation for ticket-spinlock,
+>> > so move to generic ticket-spinlock for easy maintenance.
+>> >
+>> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> Thanks, one less port to look at ;)
+>>
+>> Looks like there were a few comments on the v1, and I wasn't going to
+>> target this at the upcoming merge window anyway because I wanted to give
+> Agree, we needn't so hurry.
+>
+>> the various RISC-V vendors time to test stuff.  LMK if you want me to
+>> add this to the others, but I was planning on posting a stable tag
+>> either way so no big deal on my end.
+> Yes, I hope csky's could be in the series. And I updated V2 with
+> Arnd's suggestion, please have a look:
+> https://lore.kernel.org/linux-arch/20220319035457.2214979-1-guoren@kernel.org/T/#t
 
-syzbot found the following issue on:
+Thanks, I'll include the csky stuff next time I re-spin this.
 
-HEAD commit:    8565d64430f8 Merge tag 'bounds-fixes-v5.18-rc1' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=118a7913700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=89040bbe61f60a52
-dashboard link: https://syzkaller.appspot.com/bug?extid=09ad4050dd3a120bfccd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=124eed75700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11fbbb35700000
+Looks like there's been some other comments from folks that didn't make 
+your v2, most notably the SOB lines which makes this a bit funny.  I'm 
+also not sure I like merging the two RISC-V patches together, as they'd 
+be nice to be able to test on their own.
 
-The issue was bisected to:
-
-commit 91eac1c69c202d9dad8bf717ae5b92db70bfe5cf
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Wed Mar 16 22:59:10 2022 +0000
-
-    io_uring: cache poll/double-poll state with a request flag
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12e4ae0b700000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11e4ae0b700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e4ae0b700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+09ad4050dd3a120bfccd@syzkaller.appspotmail.com
-Fixes: 91eac1c69c20 ("io_uring: cache poll/double-poll state with a request flag")
-
-==================================================================
-BUG: KASAN: use-after-free in __wake_up_common+0x637/0x650 kernel/sched/wait.c:101
-Read of size 8 at addr ffff888011e8a130 by task syz-executor413/3618
-
-CPU: 0 PID: 3618 Comm: syz-executor413 Tainted: G        W         5.17.0-syzkaller-01402-g8565d64430f8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- __wake_up_common+0x637/0x650 kernel/sched/wait.c:101
- __wake_up_common_lock+0xd0/0x130 kernel/sched/wait.c:138
- tty_release+0x657/0x1200 drivers/tty/tty_io.c:1781
- __fput+0x286/0x9f0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:32 [inline]
- do_exit+0xaff/0x29d0 kernel/exit.c:806
- do_group_exit+0xd2/0x2f0 kernel/exit.c:936
- __do_sys_exit_group kernel/exit.c:947 [inline]
- __se_sys_exit_group kernel/exit.c:945 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:945
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f439a1fac69
-Code: Unable to access opcode bytes at RIP 0x7f439a1fac3f.
-RSP: 002b:00007ffd9df32928 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f439a26f330 RCX: 00007f439a1fac69
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000030000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f439a26f330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-
-Allocated by task 3610:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
- kasan_kmalloc include/linux/kasan.h:249 [inline]
- kmem_cache_alloc_trace+0x1ea/0x4a0 mm/slab.c:3567
- kmalloc include/linux/slab.h:581 [inline]
- io_arm_poll_handler+0x39d/0x940 fs/io_uring.c:6248
- io_queue_sqe_arm_apoll+0x6d/0x430 fs/io_uring.c:7499
- __io_queue_sqe fs/io_uring.c:7541 [inline]
- io_queue_sqe fs/io_uring.c:7568 [inline]
- io_submit_sqe fs/io_uring.c:7776 [inline]
- io_submit_sqes+0x7dda/0x9310 fs/io_uring.c:7882
- __do_sys_io_uring_enter+0x9f1/0x1520 fs/io_uring.c:10924
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 3610:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:215 [inline]
- __cache_free mm/slab.c:3437 [inline]
- kfree+0xf8/0x2b0 mm/slab.c:3794
- io_clean_op+0x20a/0xd90 fs/io_uring.c:7137
- io_dismantle_req fs/io_uring.c:2270 [inline]
- __io_req_complete_post+0x88c/0xc90 fs/io_uring.c:2108
- io_req_complete_post+0x56/0x1d0 fs/io_uring.c:2121
- io_apoll_task_func+0x1df/0x230 fs/io_uring.c:6003
- handle_tw_list fs/io_uring.c:2480 [inline]
- tctx_task_work+0x1a2/0x1380 fs/io_uring.c:2514
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:32 [inline]
- do_exit+0xaff/0x29d0 kernel/exit.c:806
- do_group_exit+0xd2/0x2f0 kernel/exit.c:936
- __do_sys_exit_group kernel/exit.c:947 [inline]
- __se_sys_exit_group kernel/exit.c:945 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:945
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff888011e8a100
- which belongs to the cache kmalloc-96 of size 96
-The buggy address is located 48 bytes inside of
- 96-byte region [ffff888011e8a100, ffff888011e8a160)
-The buggy address belongs to the page:
-page:ffffea000047a280 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888011e8a480 pfn:0x11e8a
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea000079fc08 ffffea0001f1d088 ffff888010c40300
-raw: ffff888011e8a480 ffff888011e8a000 000000010000001e 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 1, ts 3360715486, free_ts 0
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- __alloc_pages_node include/linux/gfp.h:572 [inline]
- kmem_getpages mm/slab.c:1378 [inline]
- cache_grow_begin+0x75/0x390 mm/slab.c:2584
- cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
- ____cache_alloc mm/slab.c:3040 [inline]
- ____cache_alloc mm/slab.c:3023 [inline]
- __do_cache_alloc mm/slab.c:3267 [inline]
- slab_alloc mm/slab.c:3308 [inline]
- kmem_cache_alloc_trace+0x380/0x4a0 mm/slab.c:3565
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- hugetlbfs_init_fs_context+0x41/0x420 fs/hugetlbfs/inode.c:1402
- alloc_fs_context+0x582/0xa00 fs/fs_context.c:290
- mount_one_hugetlbfs+0x1d/0x14d fs/hugetlbfs/inode.c:1507
- init_hugetlbfs_fs+0xd5/0x311 fs/hugetlbfs/inode.c:1546
- do_one_initcall+0x103/0x650 init/main.c:1300
- do_initcall_level init/main.c:1373 [inline]
- do_initcalls init/main.c:1389 [inline]
- do_basic_setup init/main.c:1408 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1613
- kernel_init+0x1a/0x1d0 init/main.c:1502
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff888011e8a000: 00 00 00 00 00 00 00 00 00 05 fc fc fc fc fc fc
- ffff888011e8a080: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
->ffff888011e8a100: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-                                     ^
- ffff888011e8a180: 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc
- ffff888011e8a200: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
-==================================================================
+I'll go poke around with this some once I'm a bit father into the merge 
+window.  I think we can both keep Arnd's generic header idea and let 
+folks mix/match spin/rw lock flavors, which might also help with some of 
+the other ports.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>
+>>
+>> > ---
+>> >  arch/csky/include/asm/Kbuild           |  2 +
+>> >  arch/csky/include/asm/spinlock.h       | 82 +-------------------------
+>> >  arch/csky/include/asm/spinlock_types.h | 20 +------
+>> >  3 files changed, 4 insertions(+), 100 deletions(-)
+>> >
+>> > diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
+>> > index 904a18a818be..d94434288c31 100644
+>> > --- a/arch/csky/include/asm/Kbuild
+>> > +++ b/arch/csky/include/asm/Kbuild
+>> > @@ -3,6 +3,8 @@ generic-y += asm-offsets.h
+>> >  generic-y += extable.h
+>> >  generic-y += gpio.h
+>> >  generic-y += kvm_para.h
+>> > +generic-y += ticket-lock.h
+>> > +generic-y += ticket-lock-types.h
+>> >  generic-y += qrwlock.h
+>> >  generic-y += user.h
+>> >  generic-y += vmlinux.lds.h
+>> > diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
+>> > index 69f5aa249c5f..8bc179ba0d8d 100644
+>> > --- a/arch/csky/include/asm/spinlock.h
+>> > +++ b/arch/csky/include/asm/spinlock.h
+>> > @@ -3,87 +3,7 @@
+>> >  #ifndef __ASM_CSKY_SPINLOCK_H
+>> >  #define __ASM_CSKY_SPINLOCK_H
+>> >
+>> > -#include <linux/spinlock_types.h>
+>> > -#include <asm/barrier.h>
+>> > -
+>> > -/*
+>> > - * Ticket-based spin-locking.
+>> > - */
+>> > -static inline void arch_spin_lock(arch_spinlock_t *lock)
+>> > -{
+>> > -     arch_spinlock_t lockval;
+>> > -     u32 ticket_next = 1 << TICKET_NEXT;
+>> > -     u32 *p = &lock->lock;
+>> > -     u32 tmp;
+>> > -
+>> > -     asm volatile (
+>> > -             "1:     ldex.w          %0, (%2) \n"
+>> > -             "       mov             %1, %0   \n"
+>> > -             "       add             %0, %3   \n"
+>> > -             "       stex.w          %0, (%2) \n"
+>> > -             "       bez             %0, 1b   \n"
+>> > -             : "=&r" (tmp), "=&r" (lockval)
+>> > -             : "r"(p), "r"(ticket_next)
+>> > -             : "cc");
+>> > -
+>> > -     while (lockval.tickets.next != lockval.tickets.owner)
+>> > -             lockval.tickets.owner = READ_ONCE(lock->tickets.owner);
+>> > -
+>> > -     smp_mb();
+>> > -}
+>> > -
+>> > -static inline int arch_spin_trylock(arch_spinlock_t *lock)
+>> > -{
+>> > -     u32 tmp, contended, res;
+>> > -     u32 ticket_next = 1 << TICKET_NEXT;
+>> > -     u32 *p = &lock->lock;
+>> > -
+>> > -     do {
+>> > -             asm volatile (
+>> > -             "       ldex.w          %0, (%3)   \n"
+>> > -             "       movi            %2, 1      \n"
+>> > -             "       rotli           %1, %0, 16 \n"
+>> > -             "       cmpne           %1, %0     \n"
+>> > -             "       bt              1f         \n"
+>> > -             "       movi            %2, 0      \n"
+>> > -             "       add             %0, %0, %4 \n"
+>> > -             "       stex.w          %0, (%3)   \n"
+>> > -             "1:                                \n"
+>> > -             : "=&r" (res), "=&r" (tmp), "=&r" (contended)
+>> > -             : "r"(p), "r"(ticket_next)
+>> > -             : "cc");
+>> > -     } while (!res);
+>> > -
+>> > -     if (!contended)
+>> > -             smp_mb();
+>> > -
+>> > -     return !contended;
+>> > -}
+>> > -
+>> > -static inline void arch_spin_unlock(arch_spinlock_t *lock)
+>> > -{
+>> > -     smp_mb();
+>> > -     WRITE_ONCE(lock->tickets.owner, lock->tickets.owner + 1);
+>> > -}
+>> > -
+>> > -static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+>> > -{
+>> > -     return lock.tickets.owner == lock.tickets.next;
+>> > -}
+>> > -
+>> > -static inline int arch_spin_is_locked(arch_spinlock_t *lock)
+>> > -{
+>> > -     return !arch_spin_value_unlocked(READ_ONCE(*lock));
+>> > -}
+>> > -
+>> > -static inline int arch_spin_is_contended(arch_spinlock_t *lock)
+>> > -{
+>> > -     struct __raw_tickets tickets = READ_ONCE(lock->tickets);
+>> > -
+>> > -     return (tickets.next - tickets.owner) > 1;
+>> > -}
+>> > -#define arch_spin_is_contended       arch_spin_is_contended
+>> > -
+>> > +#include <asm/ticket-lock.h>
+>> >  #include <asm/qrwlock.h>
+>> >
+>> >  #endif /* __ASM_CSKY_SPINLOCK_H */
+>> > diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
+>> > index db87a12c3827..0bb7f6022a3b 100644
+>> > --- a/arch/csky/include/asm/spinlock_types.h
+>> > +++ b/arch/csky/include/asm/spinlock_types.h
+>> > @@ -3,25 +3,7 @@
+>> >  #ifndef __ASM_CSKY_SPINLOCK_TYPES_H
+>> >  #define __ASM_CSKY_SPINLOCK_TYPES_H
+>> >
+>> > -#ifndef __LINUX_SPINLOCK_TYPES_RAW_H
+>> > -# error "please don't include this file directly"
+>> > -#endif
+>> > -
+>> > -#define TICKET_NEXT  16
+>> > -
+>> > -typedef struct {
+>> > -     union {
+>> > -             u32 lock;
+>> > -             struct __raw_tickets {
+>> > -                     /* little endian */
+>> > -                     u16 owner;
+>> > -                     u16 next;
+>> > -             } tickets;
+>> > -     };
+>> > -} arch_spinlock_t;
+>> > -
+>> > -#define __ARCH_SPIN_LOCK_UNLOCKED    { { 0 } }
+>> > -
+>> > +#include <asm/ticket-lock-types.h>
+>> >  #include <asm-generic/qrwlock_types.h>
+>> >
+>> >  #endif /* __ASM_CSKY_SPINLOCK_TYPES_H */

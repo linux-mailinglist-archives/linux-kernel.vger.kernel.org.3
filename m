@@ -2,198 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CB04E3674
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E184E3677
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbiCVCMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
+        id S235401AbiCVCMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235223AbiCVCMi (ORCPT
+        with ESMTP id S235223AbiCVCMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:12:38 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359231CFCD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:11:07 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o6-20020a17090a9f8600b001c6562049d9so900754pjp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gGZp+MDIUzKlsOtQAo2TyTq0vVOirk1X0NOX9ev9OMc=;
-        b=jsl5hTKisonrNJYTeMtNHzyDFdCfEUgD/ujMhDJCupZnphMkfd0uzKApmqk/n3FaED
-         i46ZTIJ+Lj99NIG2v73jtrSrTVhoCDEpoHo9w7f4fY0L5l88DtDWVG91DqRej+vdmVzy
-         Xp6pL5ctDPnLYuyosqtk4O/t+86XwfOHd3CCYIEVOeCa0p5eOsaD1qEqq8a0aXbxvWHf
-         gX803FBk8yWx2Q0ft0SZnpgZ40r22BPfvagHhSHp0vKlLkzolVbE4jP+k1HbJAXZQKRY
-         0piuCSEkh7Hwa3M83oI+taVZYG/M22LqqoyUtOWoKSK3WFjcvR01ygKRGV4swgcRolZg
-         Dgeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gGZp+MDIUzKlsOtQAo2TyTq0vVOirk1X0NOX9ev9OMc=;
-        b=mn0lhATSJav+4jy20Wy6WsKYDj7l8P/+POKK//+ebp7fcrj+e6gdXMSdp5URrweg44
-         scq/GVEDcroW9+AF9sF3HllG88bfDXTocIdGOjrEoZ+WwRW6DUC7Ez/KSUi4THjY6NSC
-         abDWMLzuhFKPA/wk+oQwb+Z1vgbiG8yyz/9gWo/xp+BBO4eXqRpXrCk006Kp0e/lYNZF
-         BxAlF0raHXJVbHhgpQQVZATKTsVh1eLuUIAIECmpBMoXkbI9YGTpq3idGODmWhZqttTh
-         aKyqGq8I1EhcCJiNMb9atZJHQ50r5cQhXTg84I1NMa8d7DtX6+DuXwx5yytjqT9r9Ek4
-         WUcg==
-X-Gm-Message-State: AOAM532qfZnc6ck/7UVagAzLSVP6G4hfBdpTA9+QD/Mw7e5aFluKUhaJ
-        JaxYlxUWVrUTW9DkuQeJwOAZvRKZDjawsGNbf1cCBA==
-X-Google-Smtp-Source: ABdhPJygUAsAdOWYyNjrdBLj+QkLKtyI/POLyJ7Ul6xPNIok2S+vw4/PZsNEToVHKjT2+REJe94s9PJMZnnk/6DQ+mw=
-X-Received: by 2002:a17:90a:430d:b0:1bc:f340:8096 with SMTP id
- q13-20020a17090a430d00b001bcf3408096mr2221086pjg.93.1647915066682; Mon, 21
- Mar 2022 19:11:06 -0700 (PDT)
+        Mon, 21 Mar 2022 22:12:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410C1CB06
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 19:11:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4510B81AE0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:11:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD9AC340E8;
+        Tue, 22 Mar 2022 02:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647915067;
+        bh=ZrxLXRhM3mxDqqJZNGvTwPsH16QGmdS/mf/Xwqyv5D0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WdScZefFstQM1cDUnyJhBwRDLl+5WiYpNa6YxwNK+W8CSBj8IOWe9xEDcfBPUkAe0
+         1fbBl1ZdlxUGTIu77j0A8K1AOjlbmLqLM0z1xRgqgVtpWz382jnCsF+Wko2shiYlHc
+         tw7jszc270AJlKQJ3IMH6sD4IKmtTWks/aa5IjPQkAmt1Bvf1Y2ehqquUYesijzCRH
+         Zy7q22ha8NNaPlcfbQmSvrVukURUr9NbZKnamFto45VnbCVqQWBKI6As7oDQHCzwkI
+         ppujKvLBKsOqdCMJvEgQCGkJvQgkW5Jy+g9GD2jILLCVSsItmf51Ul3YXRpXPo8qPc
+         AfCyO/5zR8obQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3576C5C04AB; Mon, 21 Mar 2022 19:11:07 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 19:11:07 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 4/4] rcu: Name internal polling flag
+Message-ID: <20220322021107.GP4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220316144255.336021-1-frederic@kernel.org>
+ <20220316144255.336021-5-frederic@kernel.org>
 MIME-Version: 1.0
-References: <20220318114133.113627-1-kjain@linux.ibm.com>
-In-Reply-To: <20220318114133.113627-1-kjain@linux.ibm.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 21 Mar 2022 19:10:59 -0700
-Message-ID: <CAPcyv4jNJy70b6jK6S9TYDrLLZxzSNQxfN7-bzOpVa+ffZN3hw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drivers/nvdimm: Fix build failure when
- CONFIG_PERF_EVENTS is not set
-To:     Kajol Jain <kjain@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
-        rnsastry@linux.ibm.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux MM <linux-mm@kvack.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316144255.336021-5-frederic@kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
->
-> The following build failure occures when CONFIG_PERF_EVENTS is not set
-> as generic pmu functions are not visible in that scenario.
->
-> |-- s390-randconfig-r044-20220313
-> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_migrate_context
-> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_register
-> |   `-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_unregister
->
-> Similar build failure in nds32 architecture:
-> nd_perf.c:(.text+0x21e): undefined reference to `perf_pmu_migrate_context'
-> nd_perf.c:(.text+0x434): undefined reference to `perf_pmu_register'
-> nd_perf.c:(.text+0x57c): undefined reference to `perf_pmu_unregister'
->
-> Fix this issue by adding check for CONFIG_PERF_EVENTS config option
-> and disabling the nvdimm perf interface incase this config is not set.
->
-> Also removed function declaration of perf_pmu_migrate_context,
-> perf_pmu_register, perf_pmu_unregister functions from nd.h as these are
-> common pmu functions which are part of perf_event.h and since we
-> are disabling nvdimm perf interface incase CONFIG_PERF_EVENTS option
-> is not set, we not need to declare them in nd.h
->
-> Fixes: 0fab1ba6ad6b ("drivers/nvdimm: Add perf interface to expose
-> nvdimm performance stats") (Commit id based on linux-next tree)
-> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
-> Link: https://lore.kernel.org/all/62317124.YBQFU33+s%2FwdvWGj%25lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
+On Wed, Mar 16, 2022 at 03:42:55PM +0100, Frederic Weisbecker wrote:
+> Give a proper self-explanatory name to the expedited grace period
+> internal polling flag.
+> 
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
 > ---
->  drivers/nvdimm/Makefile | 2 +-
->  include/linux/nd.h      | 7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> ---
-> - This fix patch changes are added and tested on top of linux-next tree
->   on the 'next-20220315' branch.
-> ---
-> diff --git a/drivers/nvdimm/Makefile b/drivers/nvdimm/Makefile
-> index 3fb806748716..ba0296dca9db 100644
-> --- a/drivers/nvdimm/Makefile
-> +++ b/drivers/nvdimm/Makefile
-> @@ -15,7 +15,7 @@ nd_e820-y := e820.o
->  libnvdimm-y := core.o
->  libnvdimm-y += bus.o
->  libnvdimm-y += dimm_devs.o
-> -libnvdimm-y += nd_perf.o
-> +libnvdimm-$(CONFIG_PERF_EVENTS) += nd_perf.o
->  libnvdimm-y += dimm.o
->  libnvdimm-y += region_devs.o
->  libnvdimm-y += region.o
-> diff --git a/include/linux/nd.h b/include/linux/nd.h
-> index 7b2ccbdc1cbc..a4265eaf5ae8 100644
-> --- a/include/linux/nd.h
-> +++ b/include/linux/nd.h
-> @@ -8,8 +8,10 @@
->  #include <linux/ndctl.h>
->  #include <linux/device.h>
->  #include <linux/badblocks.h>
-> +#ifdef CONFIG_PERF_EVENTS
->  #include <linux/perf_event.h>
+>  kernel/rcu/rcu.h      | 5 +++++
+>  kernel/rcu/tree.c     | 2 +-
+>  kernel/rcu/tree_exp.h | 9 +++++----
+>  3 files changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> index eccbdbdaa02e..8a62bb416ba4 100644
+> --- a/kernel/rcu/rcu.h
+> +++ b/kernel/rcu/rcu.h
+> @@ -30,6 +30,11 @@
+>  #define RCU_GET_STATE_USE_NORMAL	0x2
+>  #define RCU_GET_STATE_BAD_FOR_NORMAL	(RCU_GET_STATE_FROM_EXPEDITED | RCU_GET_STATE_USE_NORMAL)
+>  
+> +/*
+> + * Low-order bit definitions for polled grace-period internals.
+> + */
+> +#define RCU_EXP_SEQ_POLL_DONE 0x1
+> +
+>  /*
+>   * Return the counter portion of a sequence number previously returned
+>   * by rcu_seq_snap() or rcu_seq_current().
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 5da381a3cbe5..b3223b365f9f 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -4679,7 +4679,7 @@ static void __init rcu_init_one(void)
+>  			spin_lock_init(&rnp->exp_lock);
+>  			mutex_init(&rnp->boost_kthread_mutex);
+>  			raw_spin_lock_init(&rnp->exp_poll_lock);
+> -			rnp->exp_seq_poll_rq = 0x1;
+> +			rnp->exp_seq_poll_rq = RCU_EXP_SEQ_POLL_DONE;
+>  			INIT_WORK(&rnp->exp_poll_wq, sync_rcu_do_polled_gp);
+>  		}
+>  	}
+> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> index c4a19c6a83cf..7ccb909d6355 100644
+> --- a/kernel/rcu/tree_exp.h
+> +++ b/kernel/rcu/tree_exp.h
+> @@ -910,14 +910,14 @@ static void sync_rcu_do_polled_gp(struct work_struct *wp)
+>  	unsigned long s;
+>  
+>  	s = READ_ONCE(rnp->exp_seq_poll_rq);
+> -	if (s & 0x1)
+> +	if (s & RCU_EXP_SEQ_POLL_DONE)
+>  		return;
+>  	while (!sync_exp_work_done(s))
+>  		__synchronize_rcu_expedited(true);
 
-Why must this not be included? Doesn't it already handle the
-CONFIG_PERF_EVENTS=n case internally?
+One additional question.  If we re-read rnp->exp_seq_poll_rq on each pass
+through the loop, wouldn't we have less trouble with counter wrap?
 
->  #include <linux/platform_device.h>
+							Thanx, Paul
 
-I notice now that this platform-device header should have never been
-added in the first place, just forward declare:
-
-struct platform_device;
-
-> +#endif
->
->  enum nvdimm_event {
->         NVDIMM_REVALIDATE_POISON,
-> @@ -25,6 +27,7 @@ enum nvdimm_claim_class {
->         NVDIMM_CCLASS_UNKNOWN,
->  };
->
-> +#ifdef CONFIG_PERF_EVENTS
->  #define NVDIMM_EVENT_VAR(_id)  event_attr_##_id
->  #define NVDIMM_EVENT_PTR(_id)  (&event_attr_##_id.attr.attr)
-
-Why must these be inside the ifdef guard?
-
->
-> @@ -63,9 +66,7 @@ extern ssize_t nvdimm_events_sysfs_show(struct device *dev,
->
->  int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm, struct platform_device *pdev);
->  void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu);
-
-Shouldn't there also be stub functions in the CONFIG_PERF_EVENTS=n case?
-
-static inline int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm,
-struct platform_device *pdev)
-{
-    return -ENXIO;
-}
-
-static inline void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu)
-{
-}
-
-> -void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu);
-> -int perf_pmu_register(struct pmu *pmu, const char *name, int type);
-> -void perf_pmu_unregister(struct pmu *pmu);
-
-Yeah, I should have caught these earlier.
-
-> +#endif
->
->  struct nd_device_driver {
->         struct device_driver drv;
-> --
-> 2.31.1
->
+>  	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+>  	s = rnp->exp_seq_poll_rq;
+> -	if (!(s & 0x1) && sync_exp_work_done(s))
+> -		WRITE_ONCE(rnp->exp_seq_poll_rq, s | 0x1);
+> +	if (!(s & RCU_EXP_SEQ_POLL_DONE) && sync_exp_work_done(s))
+> +		WRITE_ONCE(rnp->exp_seq_poll_rq, s | RCU_EXP_SEQ_POLL_DONE);
+>  	raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
+>  }
+>  
+> @@ -946,7 +946,8 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
+>  	rnp = rdp->mynode;
+>  	if (rcu_init_invoked())
+>  		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+> -	if ((rnp->exp_seq_poll_rq & 0x1) || ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
+> +	if ((rnp->exp_seq_poll_rq & RCU_EXP_SEQ_POLL_DONE) ||
+> +	    ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
+>  		WRITE_ONCE(rnp->exp_seq_poll_rq, s);
+>  		if (rcu_init_invoked())
+>  			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
+> -- 
+> 2.25.1
+> 

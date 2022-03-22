@@ -2,172 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D7C4E36B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51134E36B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 03:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235514AbiCVCd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 22:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S235458AbiCVCf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 22:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235571AbiCVCdw (ORCPT
+        with ESMTP id S235297AbiCVCfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 22:33:52 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2127.outbound.protection.outlook.com [40.107.255.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD63410D3;
-        Mon, 21 Mar 2022 19:32:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HbQ9OHgzbXPkbXwaHavYb3WE6cSi4S9NCT9WyNPloKFtwPB+QXrB2R41wdOIa6CEa0TjtaKZKR+kCRx0m1a4pD70LFO3UFmL3EOTJ3NfjklEWW3L6Pq0C66Z4OYg38+J+YVmiExp8PQpsAhJcf1lUe6jusKx0gtGFrkznKKFR+n80tz7D8Q5dWJvK6uciLKvofIrgGEelaInhNsL3A8dv3eiMrzyWsOrcpQ7ILWmfh98OLv8BLGl2u3sboEG4VkfN5TdgnMHjotXofYe2WP6WI0SVv4oetAEblPqh9kjV2T9TcC22CrKekU80LO0nP5UwupykwQ/e+Yis4vvct6UNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OwtJUXWLhkNlM18AorWiAiM4iTP6qVAYLMh0PeiKRZI=;
- b=PPOodD5o66HPrMRlkdqy/MSF5/8YAGX8inZN1n92uo/0GWDTfZYL3forH+fOFMOp2BEO00EQaMEg9widbIu7IpzYxQPeV7aaMAmX0tujUy0HOxbVD0V23KopLyjgUEc9YXjP3TINSJncnIl/KfYNpXYiRAHPd4eyDtSRk/z4//e43qT+YiyCHwrTWwn0tHBgTt5c/1B6qFNPdaEEf9emYmDg1Iw6rESWc4PDTyjW5hrBRXFA7jg9UHWsbTaVyp3crrPXbkB8H706u2Q5jlc4I7xS8lRFjHLu3wDeTdkcXcP/dN3zoY+9g88njJelx7+5Z+g3SbEXAiYXnKIqgHnZLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OwtJUXWLhkNlM18AorWiAiM4iTP6qVAYLMh0PeiKRZI=;
- b=lQeiBCh4reeSJ3G85I0HIPFeWhR7Koy8H8WpbSmWcgT2OUFH7kKe5j1Wg9iqfgtU2074hZEWDoFCFb+o6QXGAED4uqEFMawxZwhUTGHd/N1v1NzDunu+L6XJrbo7+qg+dO5N+1pnj2Xha53qfFMxn0CQ2qdnY5nz5t0yJlvNBexaXsuRmyW0vcICS3Wr+8tCl8tFEWe4VryOmWvmejIkNVCKIHmivcswxyYXtDSzrBA/AeGdlF3NzvTvP7Y5/fnzFFwvazNZc5xr5wbfR1qTRp5W6YeZMpa80dBCnA8oZ7gcd7mc2TE83A52ltTZTqKKfQ/NIh0+aAXZ8PdsO2FWCQ==
-Received: from HK0PR06MB2834.apcprd06.prod.outlook.com (2603:1096:203:5c::20)
- by PU1PR06MB2391.apcprd06.prod.outlook.com (2603:1096:803:2c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.16; Tue, 22 Mar
- 2022 02:32:14 +0000
-Received: from HK0PR06MB2834.apcprd06.prod.outlook.com
- ([fe80::e175:c8be:f868:447]) by HK0PR06MB2834.apcprd06.prod.outlook.com
- ([fe80::e175:c8be:f868:447%5]) with mapi id 15.20.5081.023; Tue, 22 Mar 2022
- 02:32:14 +0000
-From:   Dylan Hung <dylan_hung@aspeedtech.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     BMC-SW <BMC-SW@aspeedtech.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2 3/3] ARM: dts: aspeed: add reset properties into MDIO
- nodes
-Thread-Topic: [PATCH v2 3/3] ARM: dts: aspeed: add reset properties into MDIO
- nodes
-Thread-Index: AQHYPQnwNYsxHNQRykGxCSuH1L0VZ6zJ/XGAgACv7MA=
-Date:   Tue, 22 Mar 2022 02:32:13 +0000
-Message-ID: <HK0PR06MB2834CFADF087A439B06F87C29C179@HK0PR06MB2834.apcprd06.prod.outlook.com>
-References: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
- <20220321095648.4760-4-dylan_hung@aspeedtech.com>
- <eefe6dd8-6542-a5c2-6bdf-2c3ffe06e06b@kernel.org>
-In-Reply-To: <eefe6dd8-6542-a5c2-6bdf-2c3ffe06e06b@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bda2ba3a-66e4-4c2c-848c-08da0bac2cea
-x-ms-traffictypediagnostic: PU1PR06MB2391:EE_
-x-microsoft-antispam-prvs: <PU1PR06MB239134962E520073F2869E0A9C179@PU1PR06MB2391.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dnD4sUTiUaKUrV8AysQOq1Rp/mFUvuBuy5FhhepPy6J3ECSaJs5xYMJUnRI65ROAqRvSQN+wilka5R0VvXBEzy40844b60u9ECUiX1xfGJr2Piloh5eGuWeHafvSMi6Z1+ix5FemDImFwu1YRlHXxvypg4xDLI6bML5UD6AJxdxb9garioOwps6Q9cTgIGrPkEnp15VFeIDKlMAvwKWJOikGke5dTMf/vjzBraoKtSsS6lItaSL9OPodWrZ51ngAZUvmO3WfuMC4L6lSIjXsHJgfEe1xUF9x1wD1U2dONt8eZqu3zgH8LqNaZRqrrh21m93OTzmfMPZF9iYUkqet+TF2KDuWUlPNON+JrERDyWyOouYz5QH+Lghl/x8QFZ93lez3p5W6ZXecrD5YsDw/ZzTNuCcwwhJg6xpwwnjb+nAlgT0iWxEr2msSVHJHVfzXn7h9SCdSbotXykdG/7ieqPW0tGkhYWDi4Ap15OiR0jnPzMHWY2JryveikPyKtRAV0Nz4PFeEgy6b0vLkgk0u6iz/Es5hjk6wkxCF2DZ0mnPYJwnaWiK/V1RZ+8yBLI3CDhPFdoQVoqnlr7zKMqLTqQqHPbR/35lGFE8IMHnpJV4V50LrWarZWVmtK+agDiI6EGG0i+ynwnmbAbZbLLEPDXFKW6QHiU5/Oiz6rLMSizlRc/VYfRw5iYgjkxnszPAto3aOsYXVTSAwJXWXSPDtAPhla2RC2bCTdqYcbC8WXvQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB2834.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(39840400004)(136003)(346002)(366004)(396003)(26005)(33656002)(71200400001)(6506007)(7696005)(508600001)(316002)(54906003)(110136005)(8936002)(122000001)(38100700002)(66946007)(66556008)(5660300002)(7416002)(921005)(186003)(66446008)(66476007)(53546011)(4326008)(8676002)(83380400001)(38070700005)(2906002)(9686003)(52536014)(55016003)(86362001)(64756008)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlNPVlhNWkdibUd5clhMOTNleEFhU3dnUVZ5WFJuMGtoNk9uRW9zdmdxSnhO?=
- =?utf-8?B?T1oxazdXWVdVNytta0NPamlmVGtOWjlJemVVU1A3TmdvbWk0d2dYOXU1MFBP?=
- =?utf-8?B?aVI0bVIvZFRwUkRmQVB0S2d3cTRoRHZMcWNjSjJUR2xZMlBJalU1NnBtcFhQ?=
- =?utf-8?B?VkkzR0k4K21uQ2JianFKV0Jsa0VOS0RVOTkwdVMwckVWaFJXQ0FqUVRuTDJ5?=
- =?utf-8?B?UWxMSUFHb3RqQVpjS2xZR0xCVGxUSi9qcHYyaklCbTQ5aWJxbGNNSUI4LzBZ?=
- =?utf-8?B?Y1VMU01NbWhlbTdoTmhWSjB4WS9IRERlaU9pMzJHYXVNU1pvZmZsUzJkSE44?=
- =?utf-8?B?RmRPT3U3WWp2dWRsek5JUHVNUGlKOC9BaFA3aTA1MitMaGJLYitsVVhCQWFX?=
- =?utf-8?B?Z3JEeFpFeWkzTTJHaDBsbzBTWmY1YTFtSkt6R3d3MVJwT3hGdkorbXRrNXRD?=
- =?utf-8?B?WmNWdkdnbU1NYlFkYkQra0d1OHpTODdNaENEQkY1YUYrSC9VcENDYmZzcjli?=
- =?utf-8?B?K3RQR2R2dlJoNUN0V0RSUTNZcjNydUR6YityZG8vQmc3QnNYVFY5YTRaR1Jj?=
- =?utf-8?B?dUZHTGJQQ0RnZmNSdGVQc21UQTBYUGZaVkljMjR6S0gzTmR6b1NrYnJrUzd0?=
- =?utf-8?B?Q05HU0dMNUNuYk04eWptcUwvUVFWaDFHYnZpcGdSVFdsV1h2bkplOG9lN1dz?=
- =?utf-8?B?ZnNOR2pjckxCNUFqMi9rK2t6MzBqU0tneUVLWFJQUXFoVHRyTXBCcFFmTmVy?=
- =?utf-8?B?SC8vWkhHMEZHdmhoeTlQVkNiaEJ5bWFIcGZDZlhSdVEyR2hYNEovTSt0UmdE?=
- =?utf-8?B?Nk5VZDZRTExkU042Z2NuTGo5NjVXS08wK29mTW56U21abW00TnBUeGwyOFZX?=
- =?utf-8?B?TXZGQlMycTNEVlZOYXJsTkROS0o1MTJBYVdmb2pGMHdScVF6bllpREZ6Q1h5?=
- =?utf-8?B?aVBLQ3FsSUlLSE9EU2dlOHlQOFlneUp5THloK2g2bjd0YWd0NEU4RHI4YzU2?=
- =?utf-8?B?SWIyRzV5RGlPMDF1eFk5YjR3NHZha0lSRC9KVFNIYkNTSVpKaWNhSzg5YmtM?=
- =?utf-8?B?dFhOK1hOUC9ybk1yM2JxZ3FocjhUNXdiejVrK0ZES0Jtb0dDTmx1UUN2aXcy?=
- =?utf-8?B?K0VpbW92Z1JNMFExeFlOWENSK3lhRVZrMkZmaEpib3h5WkN4SWRzRGM3VzV6?=
- =?utf-8?B?ZmNhcEJvMUh6VEhTZjFMK21jQmVRb3JQaTU5dWJnckhoeG1ZUm9xYWFqKzFG?=
- =?utf-8?B?YUw0TzBXNS9yNUhWOEdvZmpMS1NkOVdFYURTdGZxM2x3T3Nqc0I1a3BHRExM?=
- =?utf-8?B?OEpmdjlINlUzSWtoaVpUVVVwbjZMd0NJZkppN0lGQTBqMFVyeHVEOWZHTTl6?=
- =?utf-8?B?TDcyQnpLTnFzMEl3SlhZM2kzTkhib3lMaGFCVkc4NCtBcDBFclpwOVhkeWFl?=
- =?utf-8?B?aXlNZzFmU0k1NUkyV2FuUjMvYUJXOHdTdXJpNUJJQVU1VmhEUElzeGdhSzB5?=
- =?utf-8?B?bjAwcTZoYjg1VHVNTFgvQTZmNEpnQ2VMeDY0aEVvTGR3RXBwS2ZJVi9KKytY?=
- =?utf-8?B?S2habXZRdEpnWk4wOG5IeVY3a3hCY01Na2MrYTEzTjZNeWlhYmg4TXpOaVdW?=
- =?utf-8?B?LzN2RWNNL2VKaXNvdS85OFF6YzNRbWptN0dHSXJQTUkvM1ZvMCtBdDJTdExi?=
- =?utf-8?B?dVhCNE9EWEZjeDRyRWEwcm55WmJSbmFURkZuTG1ZM2JzcXZBT2tydUthUWNp?=
- =?utf-8?B?OXY3UFhUL1NZS0pMMnBORTFPNlBDZWkvU2podmR6emFGUU4wN0NaNWNWWUE0?=
- =?utf-8?B?RHJjWmxiRGxneE1iejVxb0ZKdWhmTVFPZFdjQ00rRldXNVV4L2RsejJiN0JV?=
- =?utf-8?B?b2tUa0lpNUovYnNldnZZV1ozQXFoazZCN0RuMDZNRVczYXJiUkR5a2xJVnFo?=
- =?utf-8?B?dGxHNVVvdUdxRjZKMnhoVktiaXg3UVFDQUxha1Q1eVBQbk5hSzBmVHhEb3hi?=
- =?utf-8?B?UUdGSjd2b05nPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 21 Mar 2022 22:35:24 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75411DFA3;
+        Mon, 21 Mar 2022 19:33:55 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:48144.976236044
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 784681002BB;
+        Tue, 22 Mar 2022 10:33:48 +0800 (CST)
+Received: from  ([172.27.8.53])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id f99435236ca14be49c68a89810849220 for robh@kernel.org;
+        Tue, 22 Mar 2022 10:33:54 CST
+X-Transaction-ID: f99435236ca14be49c68a89810849220
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 172.27.8.53
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
+Date:   Tue, 22 Mar 2022 10:33:45 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB2834.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bda2ba3a-66e4-4c2c-848c-08da0bac2cea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2022 02:32:14.0006
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: olsn1SA3ynW5f8LklYaK5DyHKyunHpSKCf+UA3K5XRUNipkJyYByeyau0CVPT1YZwCvTiyleeV7bSw4iayMJUqCnIo6ygpNDdBNHirZ7eao=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1PR06MB2391
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
+ controller
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-6-15330273260@189.cn>
+ <YjkITWpbnCmhKaX+@robh.at.kernel.org>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <YjkITWpbnCmhKaX+@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tp
-IFttYWlsdG86a3J6a0BrZXJuZWwub3JnXQ0KPiBTZW50OiAyMDIy5bm0M+aciDIx5pelIDExOjUz
-IFBNDQo+IFRvOiBEeWxhbiBIdW5nIDxkeWxhbl9odW5nQGFzcGVlZHRlY2guY29tPjsgcm9iaCtk
-dEBrZXJuZWwub3JnOw0KPiBqb2VsQGptcy5pZC5hdTsgYW5kcmV3QGFqLmlkLmF1OyBhbmRyZXdA
-bHVubi5jaDsgaGthbGx3ZWl0MUBnbWFpbC5jb207DQo+IGxpbnV4QGFybWxpbnV4Lm9yZy51azsg
-ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsga3ViYUBrZXJuZWwub3JnOw0KPiBwYWJlbmlAcmVkaGF0LmNv
-bTsgcC56YWJlbEBwZW5ndXRyb25peC5kZTsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7DQo+
-IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgtYXNwZWVkQGxpc3Rz
-Lm96bGFicy5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2Vy
-Lmtlcm5lbC5vcmcNCj4gQ2M6IEJNQy1TVyA8Qk1DLVNXQGFzcGVlZHRlY2guY29tPjsgc3RhYmxl
-QHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYyIDMvM10gQVJNOiBkdHM6
-IGFzcGVlZDogYWRkIHJlc2V0IHByb3BlcnRpZXMgaW50byBNRElPDQo+IG5vZGVzDQo+IA0KPiBP
-biAyMS8wMy8yMDIyIDEwOjU2LCBEeWxhbiBIdW5nIHdyb3RlOg0KPiA+IEFkZCByZXNldCBjb250
-cm9sIHByb3BlcnRpZXMgaW50byBNRElPIG5vZGVzLiAgVGhlIDQgTURJTyBjb250cm9sbGVycyBp
-bg0KPiA+IEFTVDI2MDAgU09DIHNoYXJlIG9uZSByZXNldCBjb250cm9sIGJpdCBTQ1U1MFszXS4N
-Cj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IER5bGFuIEh1bmcgPGR5bGFuX2h1bmdAYXNwZWVkdGVj
-aC5jb20+DQo+ID4gQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcNCj4gDQo+IFBsZWFzZSBkZXNj
-cmliZSB0aGUgYnVnIGJlaW5nIGZpeGVkLiBTZWUgc3RhYmxlLWtlcm5lbC1ydWxlcy4NCg0KVGhh
-bmsgeW91IGZvciB5b3VyIGNvbW1lbnQuDQpUaGUgcmVzZXQgZGVhc3NlcnRpb24gb2YgdGhlIE1E
-SU8gZGV2aWNlIHdhcyB1c3VhbGx5IGRvbmUgYnkgdGhlIGJvb3Rsb2FkZXIgKHUtYm9vdCkuDQpI
-b3dldmVyLCBvbmUgb2Ygb3VyIGNsaWVudHMgdXNlcyBwcm9wcmlldGFyeSBib290bG9hZGVyIGFu
-ZCBkb2Vzbid0IGRlYXNzZXJ0IHRoZSBNRElPDQpyZXNldCBzbyBmYWlsZWQgdG8gYWNjZXNzIHRo
-ZSBIVyBpbiBrZXJuZWwgZHJpdmVyLiAgVGhlIHJlc2V0IGRlYXNzZXJ0aW9uIGlzIG1pc3Npbmcg
-aW4gdGhlDQprZXJuZWwgZHJpdmVyIHNpbmNlIGl0IHdhcyBjcmVhdGVkLCBzaG91bGQgSSBhZGQg
-YSBCdWdGaXggZm9yIHRoZSBmaXJzdCBjb21taXQgb2YgdGhpcyBkcml2ZXI/DQpPciB3b3VsZCBp
-dCBiZSBiZXR0ZXIgaWYgSSByZW1vdmUgIiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZyI/DQoN
-Cj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQo=
+
+On 2022/3/22 07:20, Rob Herring wrote:
+> On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
+>> From: suijingfeng <suijingfeng@loongson.cn>
+>>
+> Needs a commit message.
+>
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> Same person? Don't need both emails.
+
+Yes,  suijingfeng@loongson.cn is my company's email. But it can not be 
+used to send patches to dri-devel,
+
+when send patches with this email, the patch will not be shown on patch 
+works.
+
+Emails  are either blocked or got  rejected  by loongson's mail server.  
+It can only receive emails
+
+from you and other people, but not dri-devel. so have to use my personal 
+email(15330273260@189.cn) to send patches.
+
+>> ---
+>>   .../loongson/loongson,display-controller.yaml | 230 ++++++++++++++++++
+>>   1 file changed, 230 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>> new file mode 100644
+>> index 000000000000..7be63346289e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>> @@ -0,0 +1,230 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Sui Jingfeng <suijingfeng@loongson.cn>
+>> +
+>> +description: |+
+>> +
+>> +  Loongson display controllers are simple which require scanout buffers
+>> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
+>> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
+>> +  with a dedicated video RAM which is 64MB or more, precise size can be
+>> +  read from the PCI BAR 2 of the GPU device(0x0014:0x7A15) in the bridge
+>> +  chip.
+>> +
+>> +  LSDC has two display pipes, each way has a DVO interface which provide
+>> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
+>> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
+>> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
+>> +
+>> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
+>> +  located at the DC register space. They are used to emulate two way i2c,
+>> +  One for DVO0, another for DVO1.
+>> +
+>> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
+>> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
+>> +
+>> +  LSDC's display pipeline have several components as below description,
+>> +
+>> +  The display controller in LS7A1000:
+>> +     ___________________                                     _________
+>> +    |            -------|                                   |         |
+>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+>> +    |  _   _     -------|        ^             ^            |_________|
+>> +    | | | | |    -------|        |             |
+>> +    | |_| |_|    | i2c0 <--------+-------------+
+>> +    |            -------|
+>> +    |   DC IN LS7A1000  |
+>> +    |  _   _     -------|
+>> +    | | | | |    | i2c1 <--------+-------------+
+>> +    | |_| |_|    -------|        |             |             _________
+>> +    |            -------|        |             |            |         |
+>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+>> +    |            -------|                                   |_________|
+>> +    |___________________|
+>> +
+>> +  Simple usage of LS7A1000 with LS3A4000 CPU:
+>> +
+>> +    +------+            +-----------------------------------+
+>> +    | DDR4 |            |  +-------------------+            |
+>> +    +------+            |  | PCIe Root complex |   LS7A1000 |
+>> +       || MC0           |  +--++---------++----+            |
+>> +  +----------+  HT 3.0  |     ||         ||                 |
+>> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+>> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+>> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+>> +       || MC1           +---------------|--|----------------+
+>> +    +------+                            |  |
+>> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+>> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+>> +                      +-------+                      +------+
+>> +
+>> +  The display controller in LS2K1000/LS2K0500:
+>> +     ___________________                                     _________
+>> +    |            -------|                                   |         |
+>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+>> +    |  _   _     -------|        ^              ^           |_________|
+>> +    | | | | |           |        |              |
+>> +    | |_| |_|           |     +------+          |
+>> +    |                   <---->| i2c0 |<---------+
+>> +    |   DC IN LS2K1000  |     +------+
+>> +    |  _   _            |     +------+
+>> +    | | | | |           <---->| i2c1 |----------+
+>> +    | |_| |_|           |     +------+          |            _________
+>> +    |            -------|        |              |           |         |
+>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+>> +    |            -------|                                   |_________|
+>> +    |___________________|
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
+>> +
+>> +  compatible:
+>> +    oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - loongson,ls7a1000-dc
+>> +              - loongson,ls2k1000-dc
+>> +              - loongson,ls2k0500-dc
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+>> +
+>> +  i2c-gpio@0:
+>> +    description: |
+>> +      Built-in GPIO emulate i2c exported for external display bridge
+> If you have i2c-gpio, that belongs at the DT top-level, not here.
+>
+>> +      configuration, onitor detection and edid read back etc, for ls7a1000
+>> +      only. Its compatible must be lsdc,i2c-gpio-0. The reg property can be
+> No, there's a defined i2c-gpio compatible already.
+
+This is different from the i2c-gpio already defined under drivers/i2c/busses/i2c-gpio.c,
+By design, my i2c-gpio is vendor specific properties, lsdc device driver create the i2c
+adapter at runtime. These are 4 dedicated GPIOs whose control register is located at the
+LSDC register space, not general purpose GPIOs with separate control register resource.
+So i think it is the child node of display-controller@6,1, it belongs to LSDC.
+It seems that put it at the DT top-level break the hierarchy and relationship.
+
+>> +      used to specify a I2c adapter bus number, if you don't specify one
+>> +      i2c driver core will dynamically assign a bus number. Please specify
+> Bus numbers are a linux detail not relevant to DT binding.
+>
+>> +      it only when its bus number matters. Bus number greater than 6 is safe
+>> +      because ls7a1000 bridge have 6 hardware I2C controller integrated.
+>> +
+>> +  i2c-gpio@1:
+>> +    description: |
+>> +      Built-in GPIO emulate i2c exported for external display bridge
+>> +      configuration, onitor detection and edid read back etc, for ls7a1000
+>> +      only. Its compatible must be lsdc,i2c-gpio-1.
+>> +
+>> +  ports:
+>> +    $ref: /schemas/graph.yaml#/properties/ports
+>> +
+>> +    properties:
+>> +      port@0:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
+>> +
+>> +      port@1:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
+>> +
+>> +    required:
+>> +      - port@0
+>> +      - port@1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - ports
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    bus {
+>> +
+>> +        #address-cells = <3>;
+>> +        #size-cells = <2>;
+>> +        #interrupt-cells = <2>;
+>> +
+>> +        display-controller@6,1 {
+>> +            compatible = "loongson,ls7a1000-dc";
+>> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+>> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +
+>> +            i2c-gpio@0 {
+>> +                compatible = "lsdc,i2c-gpio-0";
+>> +                reg = <6>;
+>> +                sda = <0>;
+>> +                scl = <1>;
+>> +            };
+>> +
+>> +            i2c-gpio@1 {
+>> +                compatible = "lsdc,i2c-gpio-1";
+>> +                reg = <7>;
+>> +                sda = <2>;
+>> +                scl = <3>;
+>> +            };
+>> +
+>> +            ports {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +                port@0 {
+>> +                    reg = <0>;
+>> +                    endpoint {
+>> +                            remote-endpoint = <&vga_encoder_in>;
+>> +                    };
+>> +                };
+>> +                port@1 {
+>> +                    reg = <1>;
+>> +                    endpoint {
+>> +                            remote-endpoint = <&dvi_encoder_in>;
+>> +                    };
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    bus {
+>> +
+>> +        #address-cells = <3>;
+>> +        #size-cells = <2>;
+>> +        #interrupt-cells = <2>;
+>> +
+>> +        display-controller@6,0 {
+>> +            compatible = "loongson,ls2k1000-dc";
+>> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+>> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +            ports {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +                port@0 {
+>> +                    reg = <0>;
+>> +                    endpoint {
+>> +                            remote-endpoint = <&panel_in>;
+>> +                    };
+>> +                };
+>> +                port@1 {
+>> +                    reg = <1>;
+>> +                    endpoint {
+>> +                            remote-endpoint = <&hdmi_encoder_in>;
+>> +                    };
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +...
+>> -- 
+>> 2.25.1
+>>
+>>

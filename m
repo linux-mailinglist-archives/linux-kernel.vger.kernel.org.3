@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C714E3F89
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240344E3F90
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235588AbiCVN3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S235650AbiCVNan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235495AbiCVN32 (ORCPT
+        with ESMTP id S235633AbiCVNah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:29:28 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3797F286E8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:28:00 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id kl29so7362293qvb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F6f3afV4tqtncF73mZhO2dGGO3BMaajonDRieyQCctk=;
-        b=Bkl2XAz6E8KGmYNmKGhq2KqHYHZulnIzry2lGn5C0jSspo+Oj1bGpBF7hRebnGm1ro
-         gUxe+Z1iIWvYN+soEo1YYLxJG0AYb1JzTDdMxHFwPfhu0vJQahs6KAl0X7HZSZS+HGDZ
-         RQDPlBS0zxYVzblUj9IltsrR2Q6xsv+HbHSAQ2OpYkQoN3c/TpI4QY7FrS3Du1MHHEk5
-         xMfrQmvwR2JNO29BzZ8MWEOTFEeSFqDOO0eN+AdmssOkpO6tMjoKKPv58LWUzBYWJKw3
-         RHopVEXO8j8Xl/DZZKB7zfPr67zMIlXhVKSZSmK8BDrnpRnukEMqe55+Sqz+ojEx9aW0
-         wyGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F6f3afV4tqtncF73mZhO2dGGO3BMaajonDRieyQCctk=;
-        b=lQ6rfLx/we7WOLV+4/wp+MieZjfFFOx1tjOcxxIlTpQNAtgeE5nY/ez+oyvm9s3QPN
-         Ogmo19CqJtkprfTJYA1RpBd23purm6qFC7dLUrh3AWWHRC/abh3V+H3Q93yLtl2lAAl7
-         ybkb+kZhXESemrZNdmyDnifvh79F3kGp/cHeAEKaAdoUCoo027BmZ7dFHdVAUiZVmy3j
-         L0xykvHXEGGWVn7aDkCI3Rn1iKFotyQiKdOMnuchhYdAW2/xyJWNAY4gU6BiRMAvvQYp
-         XSqv+CGlAOM9Rs3mBU/oDwgxnUjr2Xx10wmrKrvGrU2iodocdRaLcRJJOsUKy9caXnpv
-         dYLw==
-X-Gm-Message-State: AOAM533dy/gUO3aN6dBTk/GxTf5zmdro+dAGA83VW1rVJl7idvS4tsRq
-        0bPp8C1tRek8SriDcglwXiqG7g==
-X-Google-Smtp-Source: ABdhPJxyu3mAkevGNq3TrkT+TrWR/F8CTnpZC9QiUtL8T0XWIE+cAVlAe4rnnsYArb7XiDZ32JeJUQ==
-X-Received: by 2002:a0c:fc46:0:b0:440:f78f:f4c4 with SMTP id w6-20020a0cfc46000000b00440f78ff4c4mr16130924qvp.108.1647955679440;
-        Tue, 22 Mar 2022 06:27:59 -0700 (PDT)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id l126-20020a37bb84000000b0067b3c2bcc0dsm9349493qkf.1.2022.03.22.06.27.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 06:27:59 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 09:27:58 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
- for file pages
-Message-ID: <YjnO3p6vvAjeMCFC@cmpxchg.org>
-References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
- <YjiMsGoXoDU+FwsS@cmpxchg.org>
- <623938d1.1c69fb81.52716.030f@mx.google.com>
+        Tue, 22 Mar 2022 09:30:37 -0400
+Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3104227CDA
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 06:29:05 -0700 (PDT)
+Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
+        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 22MDT0Km001060
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:29:01 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
+        q=dns/txt; i=@ics.forth.gr; t=1647955736; x=1650547736;
+        h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=c2YIwja29O1WBS129ebO6CkccAwpqLVJQ1HQcp3TXN0=;
+        b=EFoyRNR4AObZg/WhT450pv9k9/cyaQZXT0c/TCKa7WxdhcYAL0g87FiwAMhDRlKi
+        gibP9NTTskZ/DXQN87gDte0mZ39qgtYPWjAxasfQWHBF5izs30Jh77tomqTNEE67
+        uMsOy0Qu0GwyqXtCoDPORtpdaZ855ANoJ11+ovJ0AuTKsOFGYYZ1BeUBvyZxNqDy
+        f4lY/kv45l8UuLlJgUjuiRK8kcjUbzGtIF4kEQbY31FeTo+//3N0dU4HD46tucS5
+        ku2SV0SpMVBiJKoL6nSvTTOaFKV/ytGo6vZFosN+hgtxABArWKOlYsbhCxUN9zuL
+        xhx6ff+32Ko8q3TVWZQbJw==;
+X-AuditID: 8b5b014d-f0a8d700000035db-42-6239cf1827f6
+Received: from enigma.ics.forth.gr (webmail.ics.forth.gr [139.91.151.35])
+        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id 68.A4.13787.81FC9326; Tue, 22 Mar 2022 15:28:56 +0200 (EET)
+X-ICS-AUTH-INFO: Authenticated user: mick@ics.forth.gr at ics.forth.gr
+From:   Nick Kossifidis <mick@ics.forth.gr>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nick Kossifidis <mick@ics.forth.gr>
+Subject: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
+Date:   Tue, 22 Mar 2022 15:28:39 +0200
+Message-Id: <20220322132839.3653682-1-mick@ics.forth.gr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <623938d1.1c69fb81.52716.030f@mx.google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupiluLIzCtJLcpLzFFi42Lpjp6urCtx3jLJoPGvmMXW37PYLS7vmsNm
+        se1zC5tF87tz7BYvL/cwW7TN4ndg83jz8iWLx+GOL+weDzddYvLYvKTe41LzdXaPz5vkAtii
+        uGxSUnMyy1KL9O0SuDJmrDUsOChQMfX5D5YGxuu8XYycHBICJhJ9u9rZuhi5OIQEjjJKNF/a
+        zQ6RcJO4fX8nK4jNJqApMf/SQRYQW0TAXWL15D9MIDazQL7Eti/nmEFsYQFPie27f4D1sgio
+        SsxauYQRxOYVsJDYu/o/I8RMeYn9B88yQ8QFJU7OfMICMUdeonnrbOYJjDyzkKRmIUktYGRa
+        xSiQWGasl5lcrJeWX1SSoZdetIkRHFyMvjsYb29+q3eIkYmD8RCjBAezkgjvv9/GSUK8KYmV
+        ValF+fFFpTmpxYcYpTlYlMR5Wa7JJAkJpCeWpGanphakFsFkmTg4pRqYuIPyDi+Y9UCNo/Hu
+        uZPGlhda3acaf5UM3CZwpTfsfZnFvg+hFx1sVx7+N+Pay6CEuV3Sct/fN61a8L4ydQWbgHn9
+        AcGz6hzC0bM5mYPe6Tzam3ni4j15OR82/gNGRy1Eup9Iz42O4clcEbp9hbFhuOG93kO6XafK
+        d9kLydl+uugtdNy1P/hZmHxt2ISNmg9FmV1mev2NdZA68eWoZHjPu01/Nzl8XFckpPKrxiNC
+        dSdf8Pob6+pl4kU2XpslPv+Pw7S0ebXr+e20zliyLvzwpjPxU/zX48/XtETyRy17FBG84Z+U
+        iNKMCtuCWfP0Dttr9axcz3+6a42Y2dLF/7ftlE58fsroTk7ifa+Aw0G+SizFGYmGWsxFxYkA
+        rj6lgJ0CAAA=
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 02:47:42AM +0000, CGEL wrote:
-> On Mon, Mar 21, 2022 at 10:33:20AM -0400, Johannes Weiner wrote:
-> > On Wed, Mar 16, 2022 at 06:39:28AM +0000, cgel.zte@gmail.com wrote:
-> > > From: Yang Yang <yang.yang29@zte.com.cn>
-> > > 
-> > > psi tracks the time spent on submitting the IO of refaulting file pages
-> > > and anonymous pages[1]. But after we tracks refaulting anonymous pages
-> > > in swap_readpage[2][3], there is no need to track refaulting anonymous
-> > > pages in submit_bio.
-> > > 
-> > > So this patch can reduce redundant calling of psi_memstall_enter. And
-> > > make it easier to track refaulting file pages and anonymous pages
-> > > separately.
-> > 
-> > I don't think this is an improvement.
-> > 
-> > psi_memstall_enter() will check current->in_memstall once, detect the
-> > nested call, and bail. Your patch checks PageSwapBacked for every page
-> > being added. It's more branches for less robust code.
-> 
-> We are also working for a new patch to classify different reasons cause
-> psi_memstall_enter(): reclaim, thrashing, compact, etc. This will help
-> user to tuning sysctl, for example, if user see high compact delay, he
-> may try do adjust THP sysctl to reduce the compact delay.
-> 
-> To support that, we should distinguish what's the reason cause psi in
-> submit_io(), this patch does the job.
+In case the DTB provided by the bootloader/BootROM is before the kernel
+image or outside /memory, we won't be able to access it through the
+linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
+relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
+is not specified), and it's also not the most portable approach since
+the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
+at a specific offset that may not be available. To avoid this situation
+copy DTB so that it's visible through the linear mapping.
 
-Please submit these patches together then. On its own, this patch
-isn't desirable.
+Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
+---
+ arch/riscv/mm/init.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 0d588032d..697a9aed4 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -206,8 +206,25 @@ static void __init setup_bootmem(void)
+ 	 * early_init_fdt_reserve_self() since __pa() does
+ 	 * not work for DTB pointers that are fixmap addresses
+ 	 */
+-	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
+-		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
++	if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
++		/*
++		 * In case the DTB is not located in a memory region we won't
++		 * be able to locate it later on via the linear mapping and
++		 * get a segfault when accessing it via __va(dtb_early_pa).
++		 * To avoid this situation copy DTB to a memory region.
++		 * Note that memblock_phys_alloc will also reserve DTB region.
++		 */
++		if (!memblock_is_memory(dtb_early_pa)) {
++			size_t fdt_size = fdt_totalsize(dtb_early_va);
++			phys_addr_t new_dtb_early_pa = memblock_phys_alloc(fdt_size, PAGE_SIZE);
++			void *new_dtb_early_va = early_memremap(new_dtb_early_pa, fdt_size);
++
++			memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
++			early_memunmap(new_dtb_early_va, fdt_size);
++			_dtb_early_pa = new_dtb_early_pa;
++		} else
++			memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
++	}
+ 
+ 	early_init_fdt_scan_reserved_mem();
+ 	dma_contiguous_reserve(dma32_phys_limit);
+-- 
+2.34.1
+

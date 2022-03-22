@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD6D4E4827
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0344E482B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 22:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbiCVVOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 17:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S235290AbiCVVPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 17:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235209AbiCVVOq (ORCPT
+        with ESMTP id S235266AbiCVVPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 17:14:46 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F1F11A2D;
-        Tue, 22 Mar 2022 14:13:17 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id l8so19280269pfu.1;
-        Tue, 22 Mar 2022 14:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=03tYtiA5KKmFTpDLZLnqLpWtIG1hK5GKwEWKVkVUCGM=;
-        b=AymEJ3DLGTRyadwp2af38C6hVt6EF5qW0et5KZg3nCgeQNz5X4yY2EGTqECzqlvkhX
-         VKpCXWGL9an+EFgF1DcbyC/4zZa5JFRser4DLlEt938uP3Zj1owzzE4Z8bqrEnkhp1yk
-         Ev7E/diLUu+ITuMxWWbPG53krPRQbuURR98qGKMxulWz9CGw/qpFOv4wfGde8ORnIxcS
-         Bl8Q8p0pVoJWXTW/ZuEutbTzPplBZ+C0+EOR6XdLQmYtALY+SlNKJ2IxLGy5QAQPdwNa
-         Sahxs2DsIyOK239Cuc87dCJquzxveRbcO00pPP3WqYfE5w9es4c+BibGbzb9GzYA0Gj8
-         GOww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=03tYtiA5KKmFTpDLZLnqLpWtIG1hK5GKwEWKVkVUCGM=;
-        b=umm8+yNfGXAanocBPP7r/Yf2eaIfQ4RyFbteBaPm7toZOQyUgDpeCSqowWZ3fg3vnW
-         vPNCUkU+bKQqV8SX529XMXBrKXoZNTiwvYweY1DCrRJzTImOkRciMiqta8ISpS/KL8d8
-         s57lgaJ+XrZoaSFW6D/083kMxGL5GRUS4M0yiGTrMB5aHZivOE8dumz+5zLAbnzSi0B/
-         yi0o3S40kOGNxcHI1WK4uiYZIhE8Dk3AeVIECTtIPMv3dSIK5NMcfSEbEwE9ARyVSeI7
-         GyFu2g+MbKFSYJxiNVREaOxLJ0yNP+iqCuinvEepfliOMaMtQpxV2GjjWUU8E+9ExHeC
-         EQUg==
-X-Gm-Message-State: AOAM533rcUgsNxlHWvJH8IRioLvn3fS8Zr5cK512CaTQ/LSxPMFSDWqM
-        hDpv4tYtznjymK3trRAWtEk=
-X-Google-Smtp-Source: ABdhPJwDqReX6cCd1yPNLAr6G/6vxoxQ+ACIXmA+YyRvFv8WA+XFEnDNCwAOpDMr0gNEp5BJzHkr7g==
-X-Received: by 2002:a05:6a00:2310:b0:4fa:7eb1:e855 with SMTP id h16-20020a056a00231000b004fa7eb1e855mr19416543pfh.14.1647983591745;
-        Tue, 22 Mar 2022 14:13:11 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:f2c8:5487:5fb6:3ab8])
-        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f70d5e92basm24208931pfx.34.2022.03.22.14.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 14:13:11 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 22 Mar 2022 14:13:09 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: [PATCH] zram: Add a huge_idle writeback mode
-Message-ID: <Yjo75atYTpXqCM4g@google.com>
-References: <20220315172221.9522-1-bgeffon@google.com>
- <20220321145037.1024083-1-bgeffon@google.com>
+        Tue, 22 Mar 2022 17:15:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C00FA48E49
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647983651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SIVLkwlhPM3w906YxQwZL+nXYzlTqcHmn11/FV0IJ2I=;
+        b=Vo0jLs4Et8LNC/vvncdtyRc9LmfTrqI+CxTG+Foa9/PZbx991eKw62bvfd27KlZvpC2LQp
+        8fDY2pO1fTQ6sWb7+OBteX+IdvbRleJUeiFYu2hWynWImOZVgFwVIqOblrPByU3xo8doke
+        IjxuBxtsEmkxIIUQOaaHu29zJlIS9lM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-444-gAQqERV8OKCorngkS2_1Ew-1; Tue, 22 Mar 2022 17:14:06 -0400
+X-MC-Unique: gAQqERV8OKCorngkS2_1Ew-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5727803B22;
+        Tue, 22 Mar 2022 21:14:05 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 793A440D0166;
+        Tue, 22 Mar 2022 21:14:05 +0000 (UTC)
+Message-ID: <cbf542d9-d3d4-9de8-5a96-4d5fcea69f6a@redhat.com>
+Date:   Tue, 22 Mar 2022 17:14:05 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321145037.1024083-1-bgeffon@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [OpenRISC] [PATCH V2 1/5] asm-generic: ticket-lock: New generic
+ ticket-based spinlock
+Content-Language: en-US
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        boqun.feng@gmail.com, peterz@infradead.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        linux-riscv@lists.infradead.org
+References: <20220319035457.2214979-1-guoren@kernel.org>
+ <20220319035457.2214979-2-guoren@kernel.org> <Yjk+LGwhc50zvsk2@antec>
+ <54d6221d-0c4f-9329-042d-4f74c4ea288f@redhat.com> <Yjo6bI+DWolVT/bQ@antec>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Yjo6bI+DWolVT/bQ@antec>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,48 +72,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 07:50:37AM -0700, Brian Geffon wrote:
-> Today it's only possible to write back as a page, idle, or huge.
-> A user might want to writeback pages which are huge and idle first
-> as these idle pages do not require decompression and make a good
-> first pass for writeback.
-> 
-> Idle writeback specifically has the advantage that a refault is
-> unlikely given that the page has been swapped for some amount of
-> time without being refaulted.
-> 
-> Huge writeback has the advantage that you're guaranteed to get
-> the maximum benefit from a single page writeback, that is, you're
-> reclaiming one full page of memory. Pages which are compressed in
-> zram being written back result in some benefit which is always
-> less than a page size because of the fact that it was compressed.
-> 
-> This change allows for users to write back huge pages which are
-> also idle.
+On 3/22/22 17:06, Stafford Horne wrote:
+> On Tue, Mar 22, 2022 at 11:54:37AM -0400, Waiman Long wrote:
+>> On 3/21/22 23:10, Stafford Horne wrote:
+>>> Hello,
+>>>
+>>> There is a problem with this patch on Big Endian machines, see below.
+>>>
+>>> On Sat, Mar 19, 2022 at 11:54:53AM +0800, guoren@kernel.org wrote:
+>>>> From: Peter Zijlstra <peterz@infradead.org>
+>>>>
+>>>> This is a simple, fair spinlock.  Specifically it doesn't have all the
+>>>> subtle memory model dependencies that qspinlock has, which makes it more
+>>>> suitable for simple systems as it is more likely to be correct.
+>>>>
+>>>> [Palmer: commit text]
+>>>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>>>
+>>>> --
+>>>>
+>>>> I have specifically not included Peter's SOB on this, as he sent his
+>>>> original patch
+>>>> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>
+>>>> without one.
+>>>> ---
+>>>>    include/asm-generic/spinlock.h          | 11 +++-
+>>>>    include/asm-generic/spinlock_types.h    | 15 +++++
+>>>>    include/asm-generic/ticket-lock-types.h | 11 ++++
+>>>>    include/asm-generic/ticket-lock.h       | 86 +++++++++++++++++++++++++
+>>>>    4 files changed, 120 insertions(+), 3 deletions(-)
+>>>>    create mode 100644 include/asm-generic/spinlock_types.h
+>>>>    create mode 100644 include/asm-generic/ticket-lock-types.h
+>>>>    create mode 100644 include/asm-generic/ticket-lock.h
+>>>>
+>>>> diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
+>>>> new file mode 100644
+>>>> index 000000000000..59373de3e32a
+>>>> --- /dev/null
+>>>> +++ b/include/asm-generic/ticket-lock.h
+>>> ...
+>>>
+>>>> +static __always_inline void ticket_unlock(arch_spinlock_t *lock)
+>>>> +{
+>>>> +	u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
+>>> As mentioned, this patch series breaks SMP on OpenRISC.  I traced it to this
+>>> line.  The above `__is_defined(__BIG_ENDIAN)`  does not return 1 as expected
+>>> even on BIG_ENDIAN machines.  This works:
+>>>
+>>>
+>>> diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
+>>> index 59373de3e32a..52b5dc9ffdba 100644
+>>> --- a/include/asm-generic/ticket-lock.h
+>>> +++ b/include/asm-generic/ticket-lock.h
+>>> @@ -26,6 +26,7 @@
+>>>    #define __ASM_GENERIC_TICKET_LOCK_H
+>>>    #include <linux/atomic.h>
+>>> +#include <linux/kconfig.h>
+>>>    #include <asm-generic/ticket-lock-types.h>
+>>>    static __always_inline void ticket_lock(arch_spinlock_t *lock)
+>>> @@ -51,7 +52,7 @@ static __always_inline bool ticket_trylock(arch_spinlock_t *lock)
+>>>    static __always_inline void ticket_unlock(arch_spinlock_t *lock)
+>>>    {
+>>> -       u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
+>>> +       u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
+>>>           u32 val = atomic_read(lock);
+>>>           smp_store_release(ptr, (u16)val + 1);
+>>>
+>>>
+>>>> +	u32 val = atomic_read(lock);
+>>>> +
+>>>> +	smp_store_release(ptr, (u16)val + 1);
+>>>> +}
+>>>> +
+>> __BIG_ENDIAN is defined in <linux/kconfig.h>. I believe that if you include
+>> <linux/kconfig.h>, the second hunk is not really needed and vice versa.
+> I thought so too, but it doesn't seem to work.  I think __is_defined is not
+> doing what we think in this context.  It looks like __is_defined works when a
+> macro is defined as 1, in this case we have __BIG_ENDIAN 4321.
 
-Hey Brian,
+You are right. __is_defined() only for 1 or not 1. So it can't be used 
+for __BIG_ENDIAN.
 
-I really want to add your explanation about the storage endurance
-because it's real issue.
+I was not aware of that. Anyway, the <linux/kconfig.h> include is not 
+really needed then.
 
-So, could't you add up below in the description?
+Cheers,
+Longman
 
-From your previous reply
-"
-we're trying to be very sensitive to our devices storage endurance,
-for this reason we will have a fairly conservative writeback limit.
-Given that, we want to make sure we're maximizing what lands on disk
-while still minimizing the refault time. We could take the approach
-where we always writeback huge pages but then we may result in very
-quick refaults which would be a huge waste of time. So idle writeback
-is a must for us and being able to writeback the pages which have
-maximum value (huge) would be very useful
-"
-
-> 
-> Signed-off-by: Brian Geffon <bgeffon@google.com>
-
-Other than that, feel free to add my
-Acked-by: Minchan Kim <minchan@kernel.org>
-
-Thanks.

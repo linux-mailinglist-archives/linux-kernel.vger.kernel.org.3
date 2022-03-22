@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B874E4448
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109804E444D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 17:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239123AbiCVQiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 12:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
+        id S239135AbiCVQiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 12:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234290AbiCVQiI (ORCPT
+        with ESMTP id S239125AbiCVQiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 12:38:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F0620F5F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:36:40 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id EB8CD1F387;
-        Tue, 22 Mar 2022 16:36:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647966998; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KwM8KlEt8kSDrXZ+QkYns1W8OFULNsUqleTjXxjLXmw=;
-        b=Fcgw4dbIOLtFOLqZlJ4MTEmbm0T4OQrxzS5onoS/VxFZuQ7YnGM0hKICBZXk/R3KDpRCRn
-        4rrlAMoYz/S/Zv+mqdUx0qxe8zQYTTOxOWMKJsx+Cj9sC3GbFvrqfaACyMkP8hTZ5dNUqk
-        c0sL+mbxgqkjQj9GXCl9MKUdWjyVZI8=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 22 Mar 2022 12:38:20 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8AD5C369;
+        Tue, 22 Mar 2022 09:36:51 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-100-34-nat.elisa-mobile.fi [85.76.100.34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 78C6EA3B88;
-        Tue, 22 Mar 2022 16:36:38 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 17:36:37 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andre Almeida <andrealmeid@collabora.com>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit
- and the oom_reaper
-Message-ID: <Yjn7FXoXtgGT977T@dhcp22.suse.cz>
-References: <20220318033621.626006-1-npache@redhat.com>
- <Yjg9ncgep58gFLiN@dhcp22.suse.cz>
- <20220322004231.rwmnbjpq4ms6fnbi@offworld>
- <c8bb0b6d-981c-8591-d5b6-17414c934758@redhat.com>
- <20220322025724.j3japdo5qocwgchz@offworld>
- <YjmITBkkwsa2O4bg@dhcp22.suse.cz>
- <87bkxyaufi.ffs@tglx>
+        (Authenticated sender: aaro.koskinen)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 789CC1B002D3;
+        Tue, 22 Mar 2022 18:36:47 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1647967008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RNrNBemsZsaG7NZqTZ3MCUPdFOPCvyRw2+V4JUFQ0Nk=;
+        b=AwQeGd4204Vkw2568/3IwnUQBQ0Fh1dXtTS6xgcE5LdH4O44DDujrzanA3Ztya+Ibx1nNf
+        JyapZaT+3E4mNaK8XtkSDXDB4EOWkTPjxDydWRqxlICq5KxJc4eqJlxzrXJLF/cRCqUZrf
+        x4V7AZ7+tzZWU7IpoqcaUskfjCf21Cvwh6CbaQYH+dl1lDUZXPkGNKy/1HmHSFgmnTEtOb
+        4fWa4oUd/Q4vKk4vsxACXhQWFTAyBKri4h7BCo+I5SwR22alCGwKCC9yJ0V8bjJVMa2Lpk
+        fdc0v0hlSPhAK45pi8KQOJBm4PA8QpjZqXf8MUxhJR91vUyxj8Sjq5tyvPaPdg==
+Date:   Tue, 22 Mar 2022 18:36:46 +0200
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-mmc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to
+ CCF
+Message-ID: <20220322163646.GD297526@darkstar.musicnaut.iki.fi>
+References: <20220310233307.99220-3-jmkrzyszt@gmail.com>
+ <20220321215416.236250-1-jmkrzyszt@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87bkxyaufi.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220321215416.236250-1-jmkrzyszt@gmail.com>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1647967008; a=rsa-sha256;
+        cv=none;
+        b=l2ZnGsGINPS9lZ5lJlSl6lZOgGL7Q607SYPV0J7WR6YGktBvdwhgSHlOmX5wRAHk7ZfcLc
+        zWtjZl9vuQ8iZacCUsrqZ+A1kGWNR+XopLUfhq6z4OojVlDNVy+DO6pAEkD2VsFi4gdBwY
+        gW1AKxorc7PrNyH1dQJmHyt53UaFPwYDrpa/8uLCUJ2vjL9PcWxdevZZwdnAwYmepKjI5R
+        ZnmhP+hd3sLudvP2V9GtzwtgGlUhnU+ZbFcY+J9r/BScbaJCeFfyYojSKrAbgB7XAN0pWq
+        tZWDfB/LL1en0FbHwSw/DMl44aemO9uXJeoIXxxlUkebpSB6zKugvTu7ZJELXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1647967008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RNrNBemsZsaG7NZqTZ3MCUPdFOPCvyRw2+V4JUFQ0Nk=;
+        b=oL/5cvCYEppmlz4BJVPwqBpl81I2Z6QgKsr1OROeI8lunAjaoDigGvxhxH32vZ/zvJS32+
+        BDZ6ooMIZE1UsrSiwxmWSUbT6Tcu93Suy4+zbuXo+nXdRIg5GRwRx6SMS/LmjsCoLo6HyT
+        9u0ITw35hSb4Mznr2j+ojp6dBv1OoviG8VOl390BQiNhGlXtYN9C3FU1pZU2iWPeFSdReh
+        X7PkfpGOPTbfe12YpZz7gagw/3UkqPdBSW+ZvgjsMxxfpG/ZH+1H4Ig2hPZqt2oD/iZml7
+        V6yDtD0vk6EH9/pO08Zsx2Bjsa+ZOpz2OGYNEdzkbYnttQmBh8szxuKjg2mMEw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,138 +88,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 22-03-22 16:17:05, Thomas Gleixner wrote:
-> On Tue, Mar 22 2022 at 09:26, Michal Hocko wrote:
-> > On Mon 21-03-22 19:57:24, Davidlohr Bueso wrote:
-> >> On Mon, 21 Mar 2022, Nico Pache wrote:
-> >> 
-> >> > We could proceed with the V3 approach; however if we are able to find a complete
-> >> > solution that keeps both functionalities (Concurrent OOM Reaping & Robust Futex)
-> >> > working, I dont see why we wouldnt go for it.
-> 
-> See below.
-> 
-> >> Because semantically killing the process is, imo, the wrong thing to do.
-> >
-> > I am not sure I follow. The task has been killed by the oom killer. All
-> > we are discussing here is how to preserve the robust list metadata
-> > stored in the memory which is normally unmapped by the oom_reaper to
-> > guarantee a further progress. 
-> >
-> > I can see we have 4 potential solutions:
-> > 1) do not oom_reap oom victims with robust futex metadata in anonymous
-> >    memory. Easy enough but it could lead to excessive oom killing in
-> >    case the victim gets stuck in the kernel and cannot terminate.
-> > 2) clean up robust list from the oom_reaper context. Seems tricky due to
-> >    #PF handling from the oom_reaper context which would need to be
-> >    non-blocking
-> > 3) filter vmas which contain robust list. Simple check for the vma
-> >    range
-> > 4) internally mark vmas which have to preserve the state during
-> >    oom_reaping. Futex code would somehow have to mark those mappings.
-> >    While more generic solution. I am not sure this is a practical
-> >    approach. 
-> 
-> And all of that is based on wishful thinking, really. Let me explain.
-> 
-> The task::robust_list pointer is set unconditionally by NPTL for every
-> thread of a process. It points to the 'list head' which is in the
-> TLS. But this does not tell whether the task holds a robust futex or
-> not. That's evaluated in the futex exit handling code.
-> 
-> So solution #1 will prevent oom reaping completely simply because the
-> pointer is set on every user space task.
+Hi,
 
-This is really what I was worried about.
-
-> Solutions #2 and #3 are incomplete and just awful hacks which cure one
-> particular case: A single threaded process. Why?
+On Mon, Mar 21, 2022 at 10:54:16PM +0100, Janusz Krzysztofik wrote:
+> In preparation for conversion of OMAP1 clocks to common clock framework,
+> identify users of those clocks which don't call clk_prepare/unprepare()
+> and update them to call clk_prepare_enable/clk_disable_unprepare() instead
+> of just clk_enable/disable(), as required by CCF implementation of clock
+> API.
 > 
-> The chosen oom reaper victim is a process, so what does it help to check
-> or cleanup the robust list for _ONE_ thread? Nothing because the other
-> threads can hold robust futexes and then run into the same problem.
-> 
-> Aside of that you seem to believe that the robust list head in the TLS
-> is the only part which is relevant. That's wrong. The list head is
-> either NULL or points to the innermost pthread_mutex which is held by a
-> task. Now look at this example:
-> 
->   TLS:robust_list -> mutex2 -> mutex1
-> 
-> mutex1 is the shared one which needs to be released so that other
-> processes can make progress. mutex2 is a process private one which
-> resides in a different VMA. So now if you filter the robust list and
-> refuse to reap the TLS VMA, what prevents the other VMA from being
-> reaped? If that's reaped then mutex1 is not reachable.
-> 
-> Now vs. cleaning up the robust list from the oom reaper context. That
-> should be doable with a lot of care, but the proposed patch is not even
-> close to a solution. It's simply broken.
+> v2: update still a few more OMAP specific drivers missed in v1,
+>   - call clk_prepare/unprepare() just after/before clk_get/put() where it
+>     can make more sense than merging prepare/unprepare with enable/disable.
 
-My knowledge about robust futexes and how they are implemented is close
-to zero. My thinking has been that the primary reason for the lockup
-reported initially is that the oom_reaper will corrupt the memory which
-is backing the list of locks to be woken up. So if we rule out the
-oom_reaper for that memory then the exit path can do its proper cleanup.
-Is that assumption completely off?
+Something is still broken. When doing kexec (using CCF kernel), the
+kexec'ed kernel now hangs early (on 770):
 
-I cannot really comment on the futex specific parts of your response but
-the deadlock on the mmap_lock has been already pointed out, thanks for
-confirming that.
+[    0.853912] MUX: initialized W4_USB_PUEN
+[    0.858001] MUX: initialized V6_USB0_TXD
+[    0.862060] MUX: initialized W5_USB0_SE0
+[    0.866210] MUX: initialized Y5_USB0_RCV
+[    0.870269] MUX: initialized AA9_USB0_VP
+[    0.874389] MUX: initialized R9_USB0_VM
+[    0.878356] USB: hmc 16, usb0 6 wires (dev), Mini-AB on usb0
+[    0.886230] initcall customize_machine+0x0/0x30 returned 0 after 29296 usecs
+[    0.893707] calling  init_atags_procfs+0x0/0xe8 @ 1
+[    0.898864] initcall init_atags_procfs+0x0/0xe8 returned 0 after 0 usecs
+[    0.905883] calling  exceptions_init+0x0/0x8c @ 1
+[    0.910797] initcall exceptions_init+0x0/0x8c returned 0 after 0 usecs
+[    0.917602] calling  omap_init+0x0/0xc @ 1
+[    0.922393] initcall omap_init+0x0/0xc returned 0 after 9765 usecs
+[    0.928863] calling  omap1_init_devices+0x0/0x2c @ 1
+[    2.568664] random: fast init done
 
-[...]
+Probably something is now disabled that has been previously always
+enabled by default/bootloader. I'll try adding some printk()s to see
+the exact place where it hangs...
 
-> But the real questions here are:
-> 
->    Why are we doing this remote reaping at all?
-
-Does aac453635549 ("mm, oom: introduce oom reaper") help? In short this
-is to guarantee that the system is able to make a forward progress under
-OOM. Sending SIGKILL to the oom victim is not sufficient, really. Tasks
-can be blocked inside kernel for indefinite amount of time. E.g. being
-blocked waiting on memory transitively over locks. Reclaiming the
-anonymous memory from the killed process will allow to free up some
-memory while the oom victim is blocked and allow to move forward and
-eventually die and do the proper cleanup. We are focusing on the
-anonymous memory because under assumption that such a memory is private
-to the process and the process is dead so the a freed memory is not
-really visible any more.
-
->    What is the condition that a task which is killed with a fatal signal
->    does not reach do_exit() and cleans up itself?
-> 
-> If the answer is "because", then we should rather make sure that this
-> gets fixed.
-
-While some places can be handled by changing uninterruptible waiting to
-killable there are places which are not really fixable, e.g. lock
-chain dependency which leads to memory allocation.
-
-> If there is a legitimate reason why a task cannot handle a fatal signal,
-> then yes the oom reaper might be necessary, but unleashing the oom
-> reaper unconditionally is simply a bad idea and results in the problem
-> which this is trying to paper over.
-> 
-> The oom reaper should be the last resort IMO and not racing against the
-> killed task in the first place. IOW, give the task some time to clean
-> itself up and if that fails and it is truly stuck and unable to do so,
-> then reap the mm. But that should be the rare case and then the stuck
-> futex should be the least of our worries.
-
-Yes, the oom_reaper is the last resort indeed. It is true that it can
-fire later but I do not see how this would solve this particular
-problem. It is fundamentally wrong to reap the memory which the exit
-path really need to do a proper clean up.
-
-And just to be clear, this is clearly a bug in the oom_reaper per se.
-Originally I thought that relaxing the locking (using trylock and
-retry/bail out on failure) would help but as I've learned earlier this
-day this is not really possible because of #PF at least. The most self
-contained solution would be to skip over vmas which are backing the
-robust list which would allow the regular exit path to do the proper
-cleanup.
-
-Thanks!
--- 
-Michal Hocko
-SUSE Labs
+A.

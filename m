@@ -2,138 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBBAE4E4312
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD3F4E4315
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238552AbiCVPeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S238571AbiCVPfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238559AbiCVPee (ORCPT
+        with ESMTP id S230480AbiCVPfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:34:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928E353B41
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:33:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7411B81CD8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:33:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E5DC340EC;
-        Tue, 22 Mar 2022 15:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647963181;
-        bh=nCxXH4UKeu6WJJkK1TsRbqUD6rSI7uvJcCZ1DUtXMTA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tiXeW4T3PrjoxDEYOSdlGSwI5MzWXkvw2pW2Kua0vTUmlcPnSZfFQXZtbsNaRbjzl
-         JiDgxWhvAKa7uiGA01ytREW5lkBMqsiFsauB28r3IDUQ8Xb6m/5tB0EXmSu9cEFV+v
-         bWL83ojRET3tewxlckFRLVAtxvUCMNbj4+8fmrcno4Xa8j0ceRIdvG08C5a3eaFSwT
-         pPlbV6yffj3MZ68y9RAc81BJJjGT3ZZAQNIeC+9ZXeIrkM3xlwx2ycBtkwtfSGxGET
-         KRBa+sE2J0n2YAWsa4csWnimZhqsZWOQ8z8QqLrbRRg/0KiRAkFXzbQcmCDk8vx9Z/
-         WBt5aRjyYAcAg==
-Date:   Tue, 22 Mar 2022 08:32:54 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [GIT PULL] scheduler updates for v5.18
-Message-ID: <YjnsJkUl5mO22mzg@dev-arch.thelio-3990X>
-References: <YjhZUezhnamHAl0H@gmail.com>
- <YjiddAnoCCz7Tbt3@dev-arch.thelio-3990X>
- <YjmAzX9kSeSjumKd@gmail.com>
+        Tue, 22 Mar 2022 11:35:51 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4067A7657;
+        Tue, 22 Mar 2022 08:34:24 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22M6Uded028345;
+        Tue, 22 Mar 2022 10:34:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : from : to : subject : references : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=upK7DUmmkbilSM17+qCH8ByFFRfmgzAlmJJPbV6wPcQ=;
+ b=IwNYwKZrUJRoGOVnY9x7XRMb68QQaLxXSY4f+GCZ+ZVaenrIfbDCqJ8EMXou3QXCbNws
+ wtkM9rK/QmGFxYPuMTwRV54GSV9L94yh54TH39qkSuXcU9Zs3W7zKPmovRgSbd4gtbzd
+ SHNKTyPPvXCZZzijq+TPQ6CS45E0J3OLuDN0VDY77YVFmGWIJTUu1skImlcFz5+i5lQm
+ QjgXdY+LJeMwLa08TqqGEMDzOE2Lw5kwl7kUX5UsP/y5NwgL2QjwQUetxt42NjjOkkwo
+ WRr5h2JuKKbFFp/Ah77jBpesuSnSTNaKd7oCxLvZeoB3eb/RBZmh1VcVG7e818vEaLSH aw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ewbknc1cw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 22 Mar 2022 10:34:16 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 22 Mar
+ 2022 15:34:14 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Tue, 22 Mar 2022 15:34:14 +0000
+Received: from [198.61.65.125] (unknown [198.61.65.125])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id ACD04459;
+        Tue, 22 Mar 2022 15:34:14 +0000 (UTC)
+Message-ID: <4af9c968-b837-e984-1051-2dcd240f2c08@opensource.cirrus.com>
+Date:   Tue, 22 Mar 2022 15:34:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjmAzX9kSeSjumKd@gmail.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   <tanureal@opensource.cirrus.com>
+To:     Michal Simek <michal.simek@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH] i2c: cadence: Increase timeout per message if necessary
+References: <20220309093147.102385-1-tanureal@opensource.cirrus.com>
+ <dd26fa4a-870e-d969-04df-1f42487e2b54@xilinx.com>
+In-Reply-To: <dd26fa4a-870e-d969-04df-1f42487e2b54@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: yqLQYoH5P1JHIOAXFMFqgTan2b_5Wf5L
+X-Proofpoint-GUID: yqLQYoH5P1JHIOAXFMFqgTan2b_5Wf5L
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 08:54:53AM +0100, Ingo Molnar wrote:
+On 3/21/22 3:57 PM, Michal Simek <michal.simek@xilinx.com> wrote:
+> +Shubhrajyoti
 > 
-> * Nathan Chancellor <nathan@kernel.org> wrote:
+> On 3/9/22 10:31, Lucas Tanure wrote:
+> > Timeout as 1 second sets a upper limit on the length of
+> > the transfer executed, but there is no maximum length of
+> > a write or read message set in i2c_adapter_quirks for this
+> > controller.
 > 
-> > Hi Ingo,
-> > 
-> > On Mon, Mar 21, 2022 at 11:54:09AM +0100, Ingo Molnar wrote:
-> > > Ingo Molnar (17):
-> > >       sched/headers: Fix header to build standalone: <linux/sched_clock.h>
-> > >       sched/headers: Add header guard to kernel/sched/sched.h
-> > >       sched/headers: Add header guard to kernel/sched/stats.h and kernel/sched/autogroup.h
-> > >       sched/headers: sched/clock: Mark all functions 'notrace', remove CC_FLAGS_FTRACE build asymmetry
-> > >       sched/headers: Add initial new headers as identity mappings
-> > >       sched/headers: Fix comment typo in kernel/sched/cpudeadline.c
-> > >       sched/headers: Make the <linux/sched/deadline.h> header build standalone
-> > >       sched/headers: Introduce kernel/sched/build_utility.c and build multiple .c files there
-> > >       sched/headers: Introduce kernel/sched/build_policy.c and build multiple .c files there
-> > >       sched/headers: Standardize kernel/sched/sched.h header dependencies
-> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/core.c dependencies
-> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/fair.c dependencies
-> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/build_policy.c dependencies
-> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/build_utility.c dependencies
-> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies
-> > >       sched/headers: Only include <linux/entry-common.h> when CONFIG_GENERIC_ENTRY=y
-> > >       headers/prep: Fix header to build standalone: <linux/psi.h>
-> > 
-> > This series regresses ARCH=arm allmodconfig:
-> > 
-> > $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- mrproper allmodconfig kernel/sched/
-> > In file included from kernel/sched/fair.c:52:
-> > kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
-> >    87 | # include <asm/paravirt_api_clock.h>
-> >       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > compilation terminated.
-> > make[3]: *** [scripts/Makefile.build:288: kernel/sched/fair.o] Error 1
-> > In file included from kernel/sched/core.c:81:
-> > kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
-> >    87 | # include <asm/paravirt_api_clock.h>
-> >       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > compilation terminated.
-> > make[3]: *** [scripts/Makefile.build:288: kernel/sched/core.o] Error 1
-> > In file included from kernel/sched/build_policy.c:33:
-> > kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
-> >    87 | # include <asm/paravirt_api_clock.h>
-> >       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > compilation terminated.
-> > make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_policy.o] Error 1
-> > In file included from kernel/sched/build_utility.c:52:
-> > kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
-> >    87 | # include <asm/paravirt_api_clock.h>
-> >       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > compilation terminated.
-> > make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_utility.o] Error 1
-> > make[3]: Target '__build' not remade because of errors.
-> > make[2]: *** [scripts/Makefile.build:550: kernel/sched] Error 2
-> > 
-> > Randy Dunlap has sent a patch that fixes it, which I just reviewed:
-> > 
-> > https://lore.kernel.org/r/20220316204146.14000-1-rdunlap@infradead.org/
+> nit: I would expect that you have run any test and you reached an issue.
+> Would be good to describe what exactly you have tried on which 
+> configuration to make it super clear.
 > 
-> Applied, thanks Nathan!
+> >
+> > To remove that limitation calculate the minimal time
+> > necessary, plus some wiggle room, for every message
+> > and use it instead of the default one second, if
+> > more than one second.
+> >
+> > Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> > ---
+> >   drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
+> >   1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-cadence.c 
+> > b/drivers/i2c/busses/i2c-cadence.c
+> > index 805c77143a0f..b4c1ad19cdae 100644
+> > --- a/drivers/i2c/busses/i2c-cadence.c
+> > +++ b/drivers/i2c/busses/i2c-cadence.c
+> > @@ -760,7 +760,7 @@ static void cdns_i2c_master_reset(struct 
+> > i2c_adapter *adap)
+> >   static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg 
+> > *msg,
+> >           struct i2c_adapter *adap)
+> >   {
+> > -    unsigned long time_left;
+> > +    unsigned long time_left, msg_timeout;
+> >       u32 reg;
+> >       id->p_msg = msg;
+> > @@ -785,8 +785,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c 
+> > *id, struct i2c_msg *msg,
+> >       else
+> >           cdns_i2c_msend(id);
+> > +    /* Minimal time to execute this message */
+> > +    msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) 
+> > / id->i2c_clk);
+> > +    /* Plus some wiggle room */
+> > +    msg_timeout += msecs_to_jiffies(500);
+> > +
+> > +    if (msg_timeout < adap->timeout)
+> > +        msg_timeout = adap->timeout;
+> > +
+> >       /* Wait for the signal of completion */
+> > -    time_left = wait_for_completion_timeout(&id->xfer_done, 
+> > adap->timeout);
+> > +    time_left = wait_for_completion_timeout(&id->xfer_done, 
+> > msg_timeout);
+> >       if (time_left == 0) {
+> >           cdns_i2c_master_reset(adap);
+> >           dev_err(id->adap.dev.parent,
 > 
-> > It would be nice if this could be taken with the pull (or submitted with
-> > the pull in a v2 as I see Qian's comment) to avoid regressing the build.
 > 
-> Will do.
+> If my assumption is right and there is any actual issue you had please 
+> send v2 and feel free to add there my:
+> Acked-by: Michal Simek <michal.simek@xilinx.com>
+> 
+> Thanks,
+> Michal
+> 
+> 
+> 
+The issue happens for I2C devices that have firmware, which will send a big I2C message, but the I2C controller will timeout on it.
+That happened for CS35L41 DSP firmware tests, so no particular configuration, just a driver sending firmware blob over I2C.
 
-Thank you a lot for the quick response and fix, I appreciate it!
-
-Cheers,
-Nathan
+Thanks,
+Lucas

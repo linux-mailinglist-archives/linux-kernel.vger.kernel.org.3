@@ -2,81 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8BB4E4150
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C744E4157
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236981AbiCVObC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S236859AbiCVOb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233837AbiCVOa5 (ORCPT
+        with ESMTP id S234994AbiCVObt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:30:57 -0400
-Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E4C9654A1;
-        Tue, 22 Mar 2022 07:29:29 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha.nfschina.com (Postfix) with ESMTP id 345A31E80D6B;
-        Tue, 22 Mar 2022 22:28:40 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha.nfschina.com ([127.0.0.1])
-        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9lyuXtfIkRuj; Tue, 22 Mar 2022 22:28:37 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by ha.nfschina.com (Postfix) with ESMTPA id 3586C1E80D24;
-        Tue, 22 Mar 2022 22:28:37 +0800 (CST)
-From:   liqiong <liqiong@nfschina.com>
-To:     naoya.horiguchi@nec.com, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, yuzhe@nfschina.com,
-        renyu@nfschina.com, liqiong <liqiong@nfschina.com>
-Subject: [PATCH] mm: remove unnecessary (void*) conversions.
-Date:   Tue, 22 Mar 2022 22:28:26 +0800
-Message-Id: <20220322142826.25939-1-liqiong@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20220322121338.27428-1-liqiong@nfschina.com>
-References: <20220322121338.27428-1-liqiong@nfschina.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 10:31:49 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151E96A033;
+        Tue, 22 Mar 2022 07:30:21 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id o10so17845373ejd.1;
+        Tue, 22 Mar 2022 07:30:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=n8t1dnR803GS4DcmePZxEgPndEBN5PcTpexwHu5EiSc=;
+        b=dmizTs7zxk1hhLYRs9AwGQJ8/OyjsLl5o8Jyy3Q7IxgnA1GokvStcSDZYMKLDkY0WK
+         csSZBYQCTuxRyYJoCYTfl6+Rq+hrw/Hy4jEB8YtvEoxgHKd2M3Z6dw2dLpEGl61pE5j9
+         xBLW4Jf6LcR3HTlRT2dacIGnVo+nCNhuCIbhW+IrfTeOBuYco/+NZG+CYAtVND5vSU8P
+         NResCI34R2TUAhCoRz4Qo00rDZ/pxQFx7MokCYVyoQJJgcw/Y1q8oU4c3rRI29CCLzTb
+         WKgM2WCHc6f0OBz2pL1BWQE5mUceVOiVQeM0veSkapVqO4y7K0NDxfdCuNkZddUhNi2n
+         b7rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=n8t1dnR803GS4DcmePZxEgPndEBN5PcTpexwHu5EiSc=;
+        b=nNqiP6pjRFtNc9PBaOTCwtSfjPGSDHzaSi3MrH8OjfNUXXr+1BSyJbO1d2ozIFyvXM
+         1d8+UtbuolFV/nUS7odJF/CHE5pX5Ovt4tqjCWPqEhG1ilJFKKX0SX1dpKu5lEEZHZe0
+         ve3RV+yIZ2XxJWOFRD/HQDprUTdiFV+nPnYYta19EFO/LMKUd4ym5YTaVYRcexovF3ah
+         3vMp8/mxc2AUP+LjNtXgojx6UvBLPOgXL7OlIh2KEn3sYzfZB2kClTQEUJdswCV8tLdl
+         z1C49iYC35kLFzTZmUxk0BYQ8ZxRJHiRXO7Y9rQev+MtbKZvhAVFBDXa81KDeT5TOXnJ
+         /Ghw==
+X-Gm-Message-State: AOAM532L53IWcg8rqsXEALEVHByWh3Ffpp7OgwlC3+KCQjfGcntZwogl
+        7fxHZolNhoA546uwe3jwTFLLB9/+GG1bTmTiZarGqcGGUfo=
+X-Google-Smtp-Source: ABdhPJwso+n07HmH0IlW7nmSddH3CFAMkpKeaBLNQSuPhMe+Dv5Q1yIHYUNDWIcP8/xVQPODOApVZrgkpW/gONfjLSs=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr25687772ejc.636.1647959419419; Tue, 22
+ Mar 2022 07:30:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220321163055.4058-1-pali@kernel.org>
+In-Reply-To: <20220321163055.4058-1-pali@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 22 Mar 2022 16:29:08 +0200
+Message-ID: <CAHp75VddDG-ZJpbAb5ZhKaMpP0L+CMEx2pcYy3FOMiaxNydCWA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] serial: Fix support for UPF_SPD_* flags
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need cast (void*) to (struct hwp_walk*).
+On Mon, Mar 21, 2022 at 11:07 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>
+> Support for UPF_SPD_* flags is currently broken in more drivers for two
+> reasons. First one is that uart_update_timeout() function does not
 
-Signed-off-by: liqiong <liqiong@nfschina.com>
-Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
----
- mm/memory-failure.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+the uart_update_timeout()
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 97a9ed8f87a9..4ed0dcf03659 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -630,7 +630,7 @@ static int check_hwpoisoned_pmd_entry(pmd_t *pmdp, unsigned long addr,
- static int hwpoison_pte_range(pmd_t *pmdp, unsigned long addr,
- 			      unsigned long end, struct mm_walk *walk)
- {
--	struct hwp_walk *hwp = (struct hwp_walk *)walk->private;
-+	struct hwp_walk *hwp = walk->private;
- 	int ret = 0;
- 	pte_t *ptep, *mapped_pte;
- 	spinlock_t *ptl;
-@@ -664,7 +664,7 @@ static int hwpoison_hugetlb_range(pte_t *ptep, unsigned long hmask,
- 			    unsigned long addr, unsigned long end,
- 			    struct mm_walk *walk)
- {
--	struct hwp_walk *hwp = (struct hwp_walk *)walk->private;
-+	struct hwp_walk *hwp = walk->private;
- 	pte_t pte = huge_ptep_get(ptep);
- 	struct hstate *h = hstate_vma(walk->vma);
- 
--- 
-2.11.0
+> calculate timeout for UPF_SPD_CUST flag correctly. Second reason is that
+> userspace termios structre is modified by most drivers after each
 
+structure
+
+...
+
+> (error handling was ommited for simplification)
+
+omitted
+
+> After calling set_active_spd_cust_baud() function SPD custom divisor
+> should be active and therefore is_spd_cust_active() should return true.
+>
+> But it is not active (cfgetospeed does not return B38400) and this patch
+> series should fix it. I have tested it with 8250 driver.
+
+drivers
+
+> Originally Johan Hovold reported that there may be issue with these
+> ASYNC_SPD_FLAGS in email:
+> https://lore.kernel.org/linux-serial/20211007133146.28949-1-johan@kernel.=
+org/
+>
+>
+> Johan, Greg, could you please test these patches if there is not any
+> regression?
+
+I'm wondering why we are still supporting this ugly hack?
+Doesn't BOTHER work for you?
+
+I would rather expect to have this removed completely.
+
+--=20
+With Best Regards,
+Andy Shevchenko

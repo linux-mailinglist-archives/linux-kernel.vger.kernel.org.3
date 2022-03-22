@@ -2,140 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6514E3C27
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357064E3C2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 11:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbiCVKIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 06:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S232766AbiCVKI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 06:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiCVKIJ (ORCPT
+        with ESMTP id S232340AbiCVKI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:08:09 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EF24131C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:06:41 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m26-20020a05600c3b1a00b0038c8b999f58so1285176wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 03:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1PPlSdu6SJbMd88ecCAMnsK5O5gk90YXV6AjFTf/9W4=;
-        b=e3hHzf4ibX5io970YXLoJEDxZJW3LESP/5JVdX3m1Pu+MDi/bX0fgd0HO/4CNqbniz
-         XplxXB10KhO0jPOpj2MSFM0S+HZYQ4qiwyTC6Je8dKZLFk4wPnJhwNZQHXDw+FrLL+4X
-         1+p5m8/o8FxxQXy56I4VDrr8cgPSnVucID2A5Uc8JQfEijGyxsGS6uMde5u/5Hulf0oO
-         wo7LzFPhb8DNYT8P/dOl1DNGKoBYHFhrVO/bZAfV6DFpGSVQmc09bpFYdcIo6XW3yPNm
-         m7ZrSy18qz7Mi/RJMVyIMBFN8MHOzmTV1s7DvmOTQcRSVhQW6gnYtK8ZIWY5NOnEogg8
-         fQqQ==
+        Tue, 22 Mar 2022 06:08:57 -0400
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12AE6BDD8;
+        Tue, 22 Mar 2022 03:07:29 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso1078101wmz.4;
+        Tue, 22 Mar 2022 03:07:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1PPlSdu6SJbMd88ecCAMnsK5O5gk90YXV6AjFTf/9W4=;
-        b=PCRUl8XeomZar0mlcTGGmSpdPEFBoGNt6yIJ1xQuRdfX+9r91g0QBP7jts9rU0l5oI
-         XqhujKHcW5EUP43qzVyh+kPeYxRljj20RrgjxcImL/q2pJtOa5UayPqtE/4dkCK7uBOn
-         gjiGVYrgzpYDfCfWtIITbNFkOjRx7gFC9Hdp/Sp8U/GpV9KehNk+IM9ZgmjRKmrEyuVN
-         chYCBO5PA+SIW04WPvQH3LPocY7ncWG0eYFzW0xo5cV+wgf0KUs9Y8SNZQWXvY0Pifvo
-         fGNQVNwAik3eUcHmSw5Tq60k0f5Gvchny7K8t0BokHUeg/D7QExYyQx7+n3iPzit6TsQ
-         JUsQ==
-X-Gm-Message-State: AOAM5330baUZGP/5LQLgQ5/2oBZNUkBX6nZlSZ0iotS/+FXb7UaFzpcd
-        7K4qs169syqnZzxx3dlO3GM08g==
-X-Google-Smtp-Source: ABdhPJyLXu0xHdHXUhFQd0plssBfQL6O0HwMPeQyS6jDpo5e99ED+JqNH/XUFEbehtDo1kcC4q+7+Q==
-X-Received: by 2002:a5d:6e0c:0:b0:1ef:7cbb:a5aa with SMTP id h12-20020a5d6e0c000000b001ef7cbba5aamr21752063wrz.5.1647943599593;
-        Tue, 22 Mar 2022 03:06:39 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id v124-20020a1cac82000000b0037c3d08e0e7sm1502463wme.29.2022.03.22.03.06.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 03:06:39 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 10:06:14 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC 10/11] iommu: Make IOPF handling framework generic
-Message-ID: <YjmflimaXyM/IZhk@myrica>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-11-baolu.lu@linux.intel.com>
- <BL1PR11MB5271DE11A868204D2E0D5B548C169@BL1PR11MB5271.namprd11.prod.outlook.com>
- <YjhkmDEGwF4EcM8R@myrica>
- <BN9PR11MB52769EBCAE7E3EBB6D6AF1328C179@BN9PR11MB5276.namprd11.prod.outlook.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nxkHql0HWJQRQ4pgsgQezZ/SXR7pQJpqc3zlVYSmcFI=;
+        b=PlbcBjpZIyW164R2aPmKdN2mQb4X0ZxzzN9HH/BAV3WYeoosI/gw+pn+8CXGK5BGEi
+         KJr/7+jBL8ttlqgyv2PBRhXj49JoD3JhWR6JxkW2dvtFtoPZ5TMLb5LySqdg2wlQOTej
+         RNnfuNQchmROMRDFWYNoqGFA4nj9P42E1q8jBX1Hqkpz20QZIR8uDOs2l7GxuvVRSDEl
+         88YJNhPC2PERz09x1TFu80+yD/Z3wNMuM3gK3cfZPHt02j/1fnTUQFLzmahbS+tHCV+2
+         CKZ7ZJNt+slSsShPK6fCuS0upD4yM4ZYEacWu0brJBO+8R5IC5OQYi9YqatruppyFXCT
+         Gfeg==
+X-Gm-Message-State: AOAM530HjygM5jg333jtb19e31UyNGnyxLvsYLmB/TP0vJjgNiIwoJyM
+        WDzZSWTpF1YuoG0ZEsVCt6TUFMTmEqI=
+X-Google-Smtp-Source: ABdhPJxZjihx+VVlTR9wkGEPyaSuGSkGOArifZkQYuk5XQceVD5FvAjEXolvy07jpONYlPGQ7jcBOQ==
+X-Received: by 2002:a1c:4e02:0:b0:38c:8a10:e899 with SMTP id g2-20020a1c4e02000000b0038c8a10e899mr2897142wmh.125.1647943648021;
+        Tue, 22 Mar 2022 03:07:28 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id p8-20020a5d59a8000000b00204178688d3sm4337142wrr.100.2022.03.22.03.07.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 03:07:27 -0700 (PDT)
+Message-ID: <e832516d-277d-6a0b-4588-b32a085185c8@kernel.org>
+Date:   Tue, 22 Mar 2022 11:07:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BN9PR11MB52769EBCAE7E3EBB6D6AF1328C179@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 17/18] dt-bindings: arm: msm: Convert kpss-gcc driver
+ Documentation to yaml
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20220321231548.14276-1-ansuelsmth@gmail.com>
+ <20220321231548.14276-18-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220321231548.14276-18-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 01:00:08AM +0000, Tian, Kevin wrote:
-> > From: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> > Sent: Monday, March 21, 2022 7:42 PM
-> > 
-> > Hi Kevin,
-> > 
-> > On Mon, Mar 21, 2022 at 08:09:36AM +0000, Tian, Kevin wrote:
-> > > > From: Lu Baolu <baolu.lu@linux.intel.com>
-> > > > Sent: Sunday, March 20, 2022 2:40 PM
-> > > >
-> > > > The existing IOPF handling framework only handles the I/O page faults for
-> > > > SVA. Ginven that we are able to link iommu domain with each I/O page
-> > fault,
-> > > > we can now make the I/O page fault handling framework more general
-> > for
-> > > > more types of page faults.
-> > >
-> > > "make ... generic" in subject line is kind of confusing. Reading this patch I
-> > > think you really meant changing from per-device fault handling to per-
-> > domain
-> > > fault handling. This is more accurate in concept since the fault is caused by
-> > > the domain page table. 😊
-> > 
-> > I tend to disagree with that last part. The fault is caused by a specific
-> > device accessing shared page tables. We should keep that device
-> > information throughout the fault handling, so that we can report it to the
-> > driver when things go wrong. A process can have multiple threads bound to
-> > different devices, they share the same mm so if the driver wanted to
-> > signal a misbehaving thread, similarly to a SEGV on the CPU side, it would
-> > need the device information to precisely report it to userspace.
-> > 
+On 22/03/2022 00:15, Ansuel Smith wrote:
+> Convert kpss-gcc driver Documentation to yaml. Since kpss-gcc expose a
+> clock add the required '#clock-cells' binding while converting it.
 > 
-> iommu driver can include the device information in the fault data. But
-> in concept the IOPF should be reported per domain.
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
+>  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 69 +++++++++++++++++++
+>  2 files changed, 69 insertions(+), 44 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+>  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> deleted file mode 100644
+> index e628758950e1..000000000000
+> --- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
+> -
+> -PROPERTIES
+> -
+> -- compatible:
+> -	Usage: required
+> -	Value type: <string>
+> -	Definition: should be one of the following. The generic compatible
+> -			"qcom,kpss-gcc" should also be included.
+> -			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
+> -			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
+> -			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
+> -			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
+> -
+> -- reg:
+> -	Usage: required
+> -	Value type: <prop-encoded-array>
+> -	Definition: base address and size of the register region
+> -
+> -- clocks:
+> -	Usage: required
+> -	Value type: <prop-encoded-array>
+> -	Definition: reference to the pll parents.
+> -
+> -- clock-names:
+> -	Usage: required
+> -	Value type: <stringlist>
+> -	Definition: must be "pll8_vote", "pxo".
+> -
+> -- clock-output-names:
+> -	Usage: required
+> -	Value type: <string>
+> -	Definition: Name of the output clock. Typically acpu_l2_aux indicating
+> -		    an L2 cache auxiliary clock.
+> -
+> -Example:
+> -
+> -	l2cc: clock-controller@2011000 {
+> -		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
+> -		reg = <0x2011000 0x1000>;
+> -		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
+> -		clock-names = "pll8_vote", "pxo";
+> -		clock-output-names = "acpu_l2_aux";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> new file mode 100644
+> index 000000000000..7eb852be02c1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
+> +
+> +maintainers:
+> +  - Ansuel Smith <ansuelsmth@gmail.com>
+> +
+> +description: |
+> +  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
+> +  to control L2 mux (in the current implementation).
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,kpss-gcc-ipq8064
+> +          - qcom,kpss-gcc-apq8064
+> +          - qcom,kpss-gcc-msm8974
+> +          - qcom,kpss-gcc-msm8960
+> +      - const: qcom,kpss-gcc
+> +      - const: syscon
 
-So I don't remember where we left off on that topic, what about fault
-injection into guests?  In that case device info is more than just
-diagnostic, fault injection can't work without it. I think we talked about
-passing a device cookie to userspace, just want to make sure.
+There was no syscon here before. This is not explained in commit msg or
+patch history, while I asked to document explicitly any deviation from
+the conversion.
 
-> and I agree with Jason that at most we can send SEGV to the entire thread
-> group since there is no way to associate a DMA back to a thread which 
-> initiates the DMA.
+This is not how the process works. You keep making silent/hidden changes
+to the bindings and to the patch submission process. It's difficult to
+review and it is even more difficult to trust you that you implement
+what we ask for. You keep resending versions of the patchset the same
+day (two versions yesterday, shortly after another one) which does not
+give time to react and review. Plus then you hide some more changes to
+regular conversion without explaining them.
 
-The point is providing the most accurate information to the device driver
-for diagnostics and debugging. A process opens multiple queues to
-different devices, then if one of the queues issues invalid DMA, the
-driver won't even know which queue is broken if you only report the target
-mm and not the source dev. I don't think we gain anything from discarding
-the device information from the fault path.
+NAK. It's really bad process. :(
 
-Thanks,
-Jean
+
+Best regards,
+Krzysztof

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2C64E3A35
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B675D4E3A39
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiCVILW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:11:22 -0400
+        id S230129AbiCVILa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:11:30 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiCVILQ (ORCPT
+        with ESMTP id S230088AbiCVILX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:11:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0308BB7EB
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:09:47 -0700 (PDT)
+        Tue, 22 Mar 2022 04:11:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1821317AA8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:09:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647936587;
+        s=mimecast20190719; t=1647936595;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KDBG9hheIqOVlljCf2sb5fT6Csq9yFBt9fZvXIcLh5A=;
-        b=LFYC2VGEFThpNRS6KuFWp2LDatyHp/mIWZdo9tv+ZBCIaAqheRwi7v+gkAdolWYmSq0Lly
-        5y+dpDLjUtBUZQn8qqAFZ3Ox5HfFxrjFClexzngv0g4fB77Zd+m+zh6tEqjKcBqfV0kUjr
-        t9zGP2gwQhGsrsMfURr3cvbiGSzBdi8=
+        bh=tBV53gfAtLB3fP5o321O7+SQMgvVIUsp841j85CAZrU=;
+        b=eOdwpFvM2V3JnEHZiQILgYKXqmYOU+tZ/CWebpL2kZjtaEpJUDzYL0VJOcvJAPKM14S79L
+        gVYanVU5BUcxUBWbGkCHgm6uGbh6HJtq8QgxhQgiRZK3qnmnN9F1oeRjRSNeiNkoSrEHMZ
+        k+RFxVlIBy2HO2nSlbg7MBIGBCJJ8oc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-19-fw8RiBStPEioOqaJUno_BA-1; Tue, 22 Mar 2022 04:09:43 -0400
-X-MC-Unique: fw8RiBStPEioOqaJUno_BA-1
+ us-mta-446-PO0S3A_wOziZB4dY8nXkWw-1; Tue, 22 Mar 2022 04:09:52 -0400
+X-MC-Unique: PO0S3A_wOziZB4dY8nXkWw-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B6FB85A5BC;
-        Tue, 22 Mar 2022 08:09:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 47F80899EC4;
+        Tue, 22 Mar 2022 08:09:51 +0000 (UTC)
 Received: from gshan.redhat.com (ovpn-12-33.pek2.redhat.com [10.72.12.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5D33F1121324;
-        Tue, 22 Mar 2022 08:09:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1A89D1121324;
+        Tue, 22 Mar 2022 08:09:43 +0000 (UTC)
 From:   Gavin Shan <gshan@redhat.com>
 To:     kvmarm@lists.cs.columbia.edu
 Cc:     linux-kernel@vger.kernel.org, eauger@redhat.com,
@@ -45,9 +45,9 @@ Cc:     linux-kernel@vger.kernel.org, eauger@redhat.com,
         Jonathan.Cameron@huawei.com, will@kernel.org, pbonzini@redhat.com,
         james.morse@arm.com, mark.rutland@arm.com, drjones@redhat.com,
         vkuznets@redhat.com, shan.gavin@gmail.com
-Subject: [PATCH v5 12/22] KVM: arm64: Support SDEI_{PRIVATE, SHARED}_RESET
-Date:   Tue, 22 Mar 2022 16:07:00 +0800
-Message-Id: <20220322080710.51727-13-gshan@redhat.com>
+Subject: [PATCH v5 13/22] KVM: arm64: Support SDEI_FEATURES hypercall
+Date:   Tue, 22 Mar 2022 16:07:01 +0800
+Message-Id: <20220322080710.51727-14-gshan@redhat.com>
 In-Reply-To: <20220322080710.51727-1-gshan@redhat.com>
 References: <20220322080710.51727-1-gshan@redhat.com>
 MIME-Version: 1.0
@@ -56,7 +56,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,66 +64,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This supports SDEI_{PRIVATE, SHARED}_RESET. They are used by the
-guest to reset the private events on the calling vCPU or the
-shared events on all vCPUs.
+This supports SDEI_FEATURES hypercall. It's used by the guest to
+retrieve the supported features, which are number of binding slots
+and relative mode for the event handler. Currently, none of them
+is supported.
 
 Signed-off-by: Gavin Shan <gshan@redhat.com>
 ---
- arch/arm64/kvm/sdei.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ arch/arm64/kvm/sdei.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
-index b2a916724cfa..0dec35a0eed1 100644
+index 0dec35a0eed1..1e0ca9022eaa 100644
 --- a/arch/arm64/kvm/sdei.c
 +++ b/arch/arm64/kvm/sdei.c
-@@ -637,6 +637,31 @@ static unsigned long hypercall_mask(struct kvm_vcpu *vcpu, bool mask)
+@@ -662,6 +662,20 @@ static unsigned long hypercall_reset(struct kvm_vcpu *vcpu, bool private)
  	return ret;
  }
  
-+static unsigned long hypercall_reset(struct kvm_vcpu *vcpu, bool private)
++static unsigned long hypercall_features(struct kvm_vcpu *vcpu)
 +{
-+	struct kvm *kvm = vcpu->kvm;
-+	struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
-+	struct kvm_sdei_exposed_event *exposed_event;
-+	struct kvm_sdei_registered_event *registered_event, *tmp;
-+	unsigned long r, ret = SDEI_SUCCESS;
++	unsigned long feature = smccc_get_arg1(vcpu);
 +
-+	spin_lock(&ksdei->lock);
-+
-+	list_for_each_entry_safe(registered_event, tmp,
-+				 &ksdei->registered_events, link) {
-+		exposed_event = registered_event->exposed_event;
-+		if (private ^ kvm_sdei_is_shared(exposed_event->state.type))
-+			continue;
-+
-+		r = unregister_one_event(kvm, NULL, registered_event);
-+		ret = (r == SDEI_SUCCESS) ? ret : r;
++	switch (feature) {
++	case 0: /* BIND_SLOTS */
++		return 0;
++	case 1: /* RELATIVE_MODE */
++		return 0;
 +	}
 +
-+	spin_unlock(&ksdei->lock);
-+
-+	return ret;
++	return SDEI_INVALID_PARAMETERS;
 +}
 +
  int kvm_sdei_hypercall(struct kvm_vcpu *vcpu)
  {
  	struct kvm *kvm = vcpu->kvm;
-@@ -700,8 +725,14 @@ int kvm_sdei_hypercall(struct kvm_vcpu *vcpu)
- 	case SDEI_1_0_FN_SDEI_INTERRUPT_BIND:
- 	case SDEI_1_0_FN_SDEI_INTERRUPT_RELEASE:
- 	case SDEI_1_1_FN_SDEI_EVENT_SIGNAL:
-+		ret = SDEI_NOT_SUPPORTED;
-+		break;
- 	case SDEI_1_0_FN_SDEI_PRIVATE_RESET:
-+		ret = hypercall_reset(vcpu, true);
-+		break;
- 	case SDEI_1_0_FN_SDEI_SHARED_RESET:
-+		ret = hypercall_reset(vcpu, false);
-+		break;
+@@ -734,6 +748,8 @@ int kvm_sdei_hypercall(struct kvm_vcpu *vcpu)
+ 		ret = hypercall_reset(vcpu, false);
+ 		break;
  	case SDEI_1_1_FN_SDEI_FEATURES:
++		ret = hypercall_features(vcpu);
++		break;
  	default:
  		ret = SDEI_NOT_SUPPORTED;
+ 	}
 -- 
 2.23.0
 

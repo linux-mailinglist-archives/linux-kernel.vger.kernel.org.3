@@ -2,179 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0194E3BC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AA14E3BCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiCVJff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 05:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S232615AbiCVJiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 05:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbiCVJfb (ORCPT
+        with ESMTP id S231836AbiCVJis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 05:35:31 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90DC2BD9;
-        Tue, 22 Mar 2022 02:34:02 -0700 (PDT)
-X-UUID: 46a6609a7c0344a881cf0174cf2a8715-20220322
-X-UUID: 46a6609a7c0344a881cf0174cf2a8715-20220322
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 845900133; Tue, 22 Mar 2022 17:33:58 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 22 Mar 2022 17:33:56 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 22 Mar 2022 17:33:55 +0800
-Message-ID: <4e7a532814510b03b74455f5a924b50a70699ca1.camel@mediatek.com>
-Subject: Re: [PATCH v8 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
- pinctrls properties
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Rob Herring" <robh@kernel.org>
-CC:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        "Eric Biggers" <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Tue, 22 Mar 2022 17:33:55 +0800
-In-Reply-To: <5d9c7655-b05e-aa77-d405-c1ec971daa77@collabora.com>
-References: <20220321115133.32121-1-axe.yang@mediatek.com>
-         <20220321115133.32121-2-axe.yang@mediatek.com>
-         <YjkKURNzg8JPbXcg@robh.at.kernel.org>
-         <b03df175f871ee9a6561862f5bd7bceb9cafbde1.camel@mediatek.com>
-         <5d9c7655-b05e-aa77-d405-c1ec971daa77@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 22 Mar 2022 05:38:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0755F88
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:37:20 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nWawt-0006Jj-Mp; Tue, 22 Mar 2022 10:37:07 +0100
+Message-ID: <828a8d00-ab9a-a7eb-4ad0-f95a63c7fb39@pengutronix.de>
+Date:   Tue, 22 Mar 2022 10:37:02 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [EXT] [PATCH v6 3/4] crypto: caam - add in-kernel interface for
+ blob generator
+Content-Language: en-US
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        David Gstir <david@sigma-star.at>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Richard Weinberger <richard@nod.at>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+References: <20220316164335.1720255-1-a.fatoum@pengutronix.de>
+ <20220316164335.1720255-4-a.fatoum@pengutronix.de>
+ <DU2PR04MB86302DB35042F4DAE7C27FA695179@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <23cd140f-1046-7059-c9bd-ca4aac1d5183@pengutronix.de>
+In-Reply-To: <23cd140f-1046-7059-c9bd-ca4aac1d5183@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello AngeloGioacchino,
+Hello Pankaj,
 
-On Tue, 2022-03-22 at 09:42 +0100, AngeloGioacchino Del Regno wrote:
-> Il 22/03/22 02:35, Axe Yang ha scritto:
-> > On Mon, 2022-03-21 at 18:29 -0500, Rob Herring wrote:
-> > > On Mon, Mar 21, 2022 at 07:51:32PM +0800, Axe Yang wrote:
-> > > > Extend interrupts and pinctrls for SDIO wakeup interrupt
-> > > > feature.
-> > > > This feature allow SDIO devices alarm asynchronous interrupt to
-> > > > host
-> > > > even when host stop providing clock to SDIO card. An extra
-> > > > wakeup
-> > > > interrupt and pinctrl states for SDIO DAT1 pin state switching
-> > > > are
-> > > > required in this scenario.
-> > > > 
-> > > > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> > > > ---
-> > > >   .../devicetree/bindings/mmc/mtk-sd.yaml       | 23
-> > > > ++++++++++++++++++-
-> > > >   1 file changed, 22 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > index 297ada03e3de..f57774535a1d 100644
-> > > > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > @@ -69,12 +69,23 @@ properties:
-> > > >         - const: ahb_cg
-> > > >   
-> > > >     interrupts:
-> > > > -    maxItems: 1
-> > > > +    description:
-> > > > +      Should at least contain MSDC GIC interrupt. To support
-> > > > SDIO
-> > > > in-band wakeup, an extended
-> > > > +      interrupt is required and be configured as wakeup source
-> > > > irq.
-> > > > +    minItems: 1
-> > > > +    maxItems: 2
-> > > >   
-> > > >     pinctrl-names:
-> > > > +    description:
-> > > > +      Should at least contain default and state_uhs. To
-> > > > support
-> > > > SDIO in-band wakeup, dat1 pin
-> > > > +      will be switched between GPIO mode and SDIO DAT1 mode,
-> > > > state_eint and state_dat1 are
-> > > > +      mandatory in this scenarios.
-> > > > +    minItems: 2
-> > > >       items:
-> > > >         - const: default
-> > > >         - const: state_uhs
-> > > > +      - const: state_eint
-> > > > +      - const: state_dat1
-> > > >   
-> > > >     pinctrl-0:
-> > > >       description:
-> > > > @@ -86,6 +97,16 @@ properties:
-> > > >         should contain uhs mode pin ctrl.
-> > > >       maxItems: 1
-> > > >   
-> > > > +  pinctrl-2:
-> > > > +    description:
-> > > > +      should switch dat1 pin to GPIO mode.
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  pinctrl-3:
-> > > > +    description:
-> > > > +      should switch SDIO dat1 pin from GPIO mode back to SDIO
-> > > > mode.
-> > > 
-> > > How is this different than pinctrl-0?
-> > 
-> > pinctrl-0 contains default settings for all IO pins(CLK/CMD/DAT).
-> > pinctrl-1 contains settings for all IO pins(CLK/CMD/DAT) in UHS
-> > mode.
-> > pinctrl-3 is lightweight pinctrl-1, only keep SDIO DAT1 pin
-> > function
-> > switch part.
-> > 
+On 22.03.22 08:32, Ahmad Fatoum wrote:
+> Hello Pankaj,
 > 
-> Is there any particular reason why we cannot simply select pinctrl-1
-> again
-> instead of pinctrl-3, apart from the virtually not existent overhead
-> of one more mmio write?
+> On 22.03.22 07:25, Pankaj Gupta wrote:
+>> Hi Ahmad,
+>>
+>> Suggested to define macro with more details.
+>> Please find comments in-line.
+>>
+> 
+>> len = 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 + 
+>>>>>> + CAAM_PTR_SZ_MAX) + 4;
+>>
+>>> +/* header + (key mod immediate) + 2x seq_intlen pointers + op */
+>>> +#define CAAM_BLOB_DESC_BYTES_MAX \
+>>> +       (CAAM_CMD_SZ + \
+>>> +        CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH + \
+>>> +        2 * (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \
+>>> +        CAAM_CMD_SZ)
+>>> +
+>>
+>> Suggested to replace the above macro like below:
+>>
+>> +#define CAAM_BLOB_DESC_BYTES_MAX \			
+>> +       (CAAM_CMD_SZ + \					/* Command to initialize & stating length of  descriptor */
+>> +        CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH + \	/* Command to append the key-modifier + followed by the key-modifier data */
+>> +        (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \		/* Command to include input plain key and pointer to the input key */
+>> +        (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \		/* Command to include output-key blob and pointer to the output-key blob */
+>> +        CAAM_CMD_SZ)						/* Command describing the Operation to perform */
+> 
+> 
+> Sure thing, will do for v7. Otherwise, if all looks good to you,
+> can I have your Reviewed-by?
+This doesn't compile as-is and it leads to quite long lines.
+The description isn't accurate also, because what's plain and what's blob
+changes depending on whether we encapsulate or decapsulate.
 
-No, there is no particular reason. 
-I just want to do the pin function switch quick and clean. 
+Here's my revised macro version:
 
-The intention of pinctrl-1 is to set the most initial state of IO pins
-in UHS mode. If I don't need to adjust IO settings any longer, it is
-okay to select pinctrl-1 state instead of pinctrl-3. 
-But think about this scenarios: after initial SDIO IO pins to UHS mode,
-I want to adjust some IO related properties, such as driving strength.
-And I want to keep these settings because with new driving strength,
-the signal is better. I'd rather to choose pinctrl-3 but not pinctrl-1, 
-because I do not want the change be restored after next runtime resume.
+#define CAAM_BLOB_DESC_BYTES_MAX                                        \
+        /* Command to initialize & stating length of descriptor */      \
+        (CAAM_CMD_SZ +                                                  \
+        /* Command to append the key-modifier + key-modifier data */    \
+         CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH +                        \
+        /* Command to include input key + pointer to the input key */   \
+         CAAM_CMD_SZ + CAAM_PTR_SZ_MAX +                                \
+        /* Command to include output key + pointer to the output key */ \
+         CAAM_CMD_SZ + CAAM_PTR_SZ_MAX +                                \
+        /* Command describing the Operation to perform */               \
+         CAAM_CMD_SZ)
 
-Regards,
-Axe
+Alternatively, I can change it back into a function:
+
+static inline u32 *caam_blob_desc_alloc(void)
+{
+        size_t size = 0;
+
+        /* Command to initialize & stating length of descriptor */
+        size += CAAM_CMD_SZ;
+        /* Command to append the key-modifier + key-modifier data */
+        size += CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH;
+        /* Command to include input plain key + pointer to the input key */
+        size += CAAM_CMD_SZ + CAAM_PTR_SZ_MAX;
+        /* Command to include output-key blob + pointer to the output key */
+        size += CAAM_CMD_SZ + CAAM_PTR_SZ_MAX;
+        /* Command describing the Operation to perform */
+        size += CAAM_CMD_SZ;
+
+        return kzalloc(size, GFP_KERNEL | GFP_DMA);
+}
+
+Let me know what works better for you.
+
+Cheers,
+Ahmad
+
+> 
+> Thanks,
+> Ahmad
+> 
 
 
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

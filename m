@@ -2,94 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D4F4E428A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE294E428B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238316AbiCVPMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S238335AbiCVPMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233694AbiCVPMP (ORCPT
+        with ESMTP id S234842AbiCVPMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:12:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1B4245BD;
-        Tue, 22 Mar 2022 08:10:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 22 Mar 2022 11:12:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498A5245BD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:10:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C244B81D14;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E8CEB1F387;
         Tue, 22 Mar 2022 15:10:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6F8C340F8;
-        Tue, 22 Mar 2022 15:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647961845;
-        bh=iD3r2C8ohus5StZzu+HIHENCtSsyhMruFFh9RM7/ok0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lTfrr6Xx5T7dbCIZGWoVSA4ezDO8SPB4V6YiBOHileBU/8ywOv7AWeMUKIdBFO6mz
-         MvY51MObY0A/m/xTXiyLMLUAPYZ6+actWLn4LlYJqH3g/L4jHHzy1wCWg70oZIXspZ
-         U6x970s8lT3VvnYOpTRHlqx2tDKXxKQ8DwacUVkUrJ627HzygQZjwNdf37sragLX6I
-         bv5f/jPoJ3qdHmRLPmHthWGXr32polEsPw4OQWIeCq8MGYMWb/SYtKycLUnFl/f0w3
-         gU4qi+iDUfcOw13fViapVaP64M1Fj7vJK1yygwrMI30M63p4q3O58w9LVF3z2np3Le
-         yUcdLHGQehvQQ==
-Received: by mail-ej1-f48.google.com with SMTP id p15so36862235ejc.7;
-        Tue, 22 Mar 2022 08:10:45 -0700 (PDT)
-X-Gm-Message-State: AOAM531XSdB6/OWFAEaTqiF0zfcNM5lVuxjgPZXdnvcd8qGySgbFTyr9
-        txTki9x94MqUVpkO/HDZhsKqEE6CMN06Kin/yA==
-X-Google-Smtp-Source: ABdhPJwcstYlhae/VDeErmYlaX8hBZSodjccbiEArN1YhP3mCzfkMUHmbq6+FoN7ayATI+AtiuwrK2GB7QQaqZOLugM=
-X-Received: by 2002:a17:907:97c9:b0:6db:ab53:1fdf with SMTP id
- js9-20020a17090797c900b006dbab531fdfmr26610884ejc.406.1647961843159; Tue, 22
- Mar 2022 08:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647961846; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JrK610/hsvwwJB9dGPvgOWZ0Ncfc9HGrOcQXY/62VNE=;
+        b=FoeJffCYkfOs9GZORCCTR9/VbjoFH/MNUWVN25oRg60P0I1m5GQtIAgE0NDUE9iIzdt3wa
+        uoDCeXQADznpo97tUssC2CChCfEsVjMhkboVzCqHZQUYUDX98OlKAjNzlW27aJEFXl12FZ
+        Rs1jhE6IwsWMWgLVkv0yJi2MPKJNZSg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647961846;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JrK610/hsvwwJB9dGPvgOWZ0Ncfc9HGrOcQXY/62VNE=;
+        b=pRUTZLwzDQYqzBfbzU86ul0y/0k7SUypabmg/leJVPr+Ewu8r95b4+BE4UTvoNxwfgGPr0
+        ZYiYoOIZVZp+OQAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C3982133B6;
+        Tue, 22 Mar 2022 15:10:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yPonL/bmOWIwQwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 22 Mar 2022 15:10:46 +0000
+Message-ID: <11814119-0e5c-3e4f-29c4-d2e9b8dfb622@suse.cz>
+Date:   Tue, 22 Mar 2022 16:10:46 +0100
 MIME-Version: 1.0
-References: <20220317143926.15835-1-moudy.ho@mediatek.com> <20220317143926.15835-4-moudy.ho@mediatek.com>
- <Yjj8CanzmdHeX7qz@robh.at.kernel.org>
-In-Reply-To: <Yjj8CanzmdHeX7qz@robh.at.kernel.org>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Tue, 22 Mar 2022 23:10:32 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-nTojmt44ts2VtXU3_kNpbn=CniHJh8dDeM0bPj8ouRA@mail.gmail.com>
-Message-ID: <CAAOTY_-nTojmt44ts2VtXU3_kNpbn=CniHJh8dDeM0bPj8ouRA@mail.gmail.com>
-Subject: Re: [PATCH v14 3/6] dt-bindings: soc: mediatek: move out common
- module from display folder
-To:     Rob Herring <robh@kernel.org>
-Cc:     Moudy Ho <moudy.ho@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        river.cheng@mediatek.com,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        roy-cw.yeh@mediatek.com,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Pi-Hsun Shih <pihsun@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Hsin-Yi Wang <hsinyi@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        randy.wu@mediatek.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        allen-kh.cheng@mediatek.com,
-        =?UTF-8?B?U2ogSHVhbmcgKOm7g+S/oeeSiyk=?= <sj.huang@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        menghui.lin@mediatek.com,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Rob Landley <rob@landley.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] mm/page_owner.c: introduce vmalloc allocator for
+ page_owner
+Content-Language: en-US
+To:     Yinan Zhang <zhangyinan2019@email.szu.edu.cn>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, william.kucharski@oracle.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        yejiajian2018@email.szu.edu.cn, hanshenghong2019@email.szu.edu.cn,
+        caoyixuan2019@email.szu.edu.cn, zhaochongxi2019@email.szu.edu.cn,
+        yuhongf@szu.edu.cn
+References: <20220322032225.1402992-1-zhangyinan2019@email.szu.edu.cn>
+ <YjlCTOrCUHnVxIqj@casper.infradead.org>
+ <299aef9a-dd57-2197-f3cf-6b08c441f755@email.szu.edu.cn>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <299aef9a-dd57-2197-f3cf-6b08c441f755@email.szu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,23 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B43=E6=9C=8822=E6=97=A5 =
-=E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=886:28=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Thu, 17 Mar 2022 22:39:23 +0800, Moudy Ho wrote:
-> > In order to share the same hardware information with MDP3,
-> > change the MUTEX dt-binding to the path "soc/mediatek".
+On 3/22/22 15:48, Yinan Zhang wrote:
+> on 2022/3/22 11:28, Matthew Wilcox wrote:
+> 
+>> On Tue, Mar 22, 2022 at 11:22:24AM +0800, Yinan Zhang wrote:
+>>> An application's memory consumption is high and keeps increasing,
+>>> then it is suspected of having memory leak. There are several
+>>> commonly used memory allocators: slab, cma, vmalloc, etc. The memory
+>>> leak identification can be speed up if page information allocated
+>>> by an individual allocator are analyzed individually. This patch
+>>> introduce vmalloc allocator for page_owner.
+>> Why is /proc/vmallocinfo not enough?
+> 
+> There is only one owner information in /proc/vmallocinfo: caller.
+> While there are plenty of owner information in page owner,
+> besides caller, it includes task id (pid), process id (tgid),
+> and other useful information, which enables us for more comprehensive
+> page allocation/release relevant statistics and analysis.
+> 
+> Adding allocator infomation can augment page owner for tracking about
+> who allocates each page. And this patch adds vmalloc allocator infomation.
 
-Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Hm but page_owner has the whole stack trace of allocation so it should be
+easy to determine vmalloc from slab etc? How exactly would this extra field
+help?
 
-> >
-> > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> > ---
-> >  .../bindings/{display =3D> soc}/mediatek/mediatek,mutex.yaml      | 2 =
-+-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >  rename Documentation/devicetree/bindings/{display =3D> soc}/mediatek/m=
-ediatek,mutex.yaml (97%)
-> >
->
-> Acked-by: Rob Herring <robh@kernel.org>
+

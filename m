@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71824E3B6E
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC414E3B6D
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 10:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbiCVJF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 05:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S232183AbiCVJGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 05:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbiCVJFq (ORCPT
+        with ESMTP id S231578AbiCVJFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 05:05:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67AA44A2D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:04:19 -0700 (PDT)
+        Tue, 22 Mar 2022 05:05:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC7046668
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 02:04:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D7D4B81C16
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:04:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C83D2C340EE;
-        Tue, 22 Mar 2022 09:04:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B075361658
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 09:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1DE9C340EE;
+        Tue, 22 Mar 2022 09:04:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647939857;
-        bh=bATFr0wq7Cf/1RkRBizWVvZl0hCoNH8ejbumoz6bjao=;
+        s=korg; t=1647939860;
+        bh=E7kgiCH6KC61WFNUuFqMt1ZzIW1CD6iDp319+kmnUr0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vr2C7oc0EQ5iqRCtm3aE6rhKGaJ42gHatF7i8FMLy6ZHnyK0tpMpho+KPuj+ov6FS
-         xZsS0s620vkSt6Kak2CPgn3FARjH3w/O34yKzJrhJnmdscG5WoOHwOqFO7xB9UZiKs
-         ouauTcvv3lDLdpvOHKnKDLVTxbeGjkd6bxP2kMgA=
-Date:   Tue, 22 Mar 2022 09:47:29 +0100
+        b=hP85i/2dfhMiZlecOUXNTkuYtTJmi42dvZ5sBLxd9MhpNr5ebuTs3xxFqSSbOI2XQ
+         kPePMBOZFm1lhjfBrITLl0XHuA++/irJ0HnV7qeJ9jiMGNJfnQTvUb1KJn1P6rbhlM
+         q7eDksrHRhkef9lUjALnQ3C4R3686mcDOGgQVMIs=
+Date:   Tue, 22 Mar 2022 09:48:28 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
 Cc:     David Kershner <david.kershner@unisys.com>,
@@ -37,7 +37,7 @@ Cc:     David Kershner <david.kershner@unisys.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] staging: unisys: Properly test debugfs_create_dir()
  return values
-Message-ID: <YjmNIX4RsbG8LpyF@kroah.com>
+Message-ID: <YjmNXFlt9+waf94q@kroah.com>
 References: <20220322083858.16887-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -76,10 +76,19 @@ On Tue, Mar 22, 2022 at 09:38:58AM +0100, Fabio M. De Francesco wrote:
 >  						      visornic_debugfs_dir);
 > -	if (!devdata->eth_debugfs_dir) {
 > +	if (IS_ERR(devdata->eth_debugfs_dir)) {
+>  		dev_err(&dev->device,
+>  			"%s debugfs_create_dir %s failed\n",
+>  			__func__, netdev->name);
+> -		err = -ENOMEM;
+> +		err = PTR_ERR(devdata->eth_debugfs_dir);
+>  		goto cleanup_register_netdev;
+>  	}
 
-We really shouldn't be checking this value at all.  There's no reason to
-check the return value of a debugfs_* call.  Can you fix up the code to
-do that instead?
+Also, why does this variable have to be saved off at all?  It should
+only be used later when removing the directory, and we can just look it
+up at that point in time, right?
+
+Also, what happens if the network device name changes?
 
 thanks,
 

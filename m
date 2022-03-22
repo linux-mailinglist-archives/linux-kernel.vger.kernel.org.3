@@ -2,75 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2084E4789
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE18D4E478D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiCVUbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S233812AbiCVUdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbiCVUbX (ORCPT
+        with ESMTP id S231282AbiCVUdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:31:23 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAB3CC2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 13:29:55 -0700 (PDT)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id Wl8anBpiiIQAdWl8an8q7V; Tue, 22 Mar 2022 21:29:53 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 22 Mar 2022 21:29:53 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steve French <sfrench@samba.org>,
-        Hyunchul Lee <hyc.lee@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-cifs@vger.kernel.org
-Subject: [PATCH] ksmbd: Remove a redundant zeroing of memory
-Date:   Tue, 22 Mar 2022 21:29:51 +0100
-Message-Id: <f8f1f383c4533a91a6025b1db5827ed6aaab002f.1647980983.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Tue, 22 Mar 2022 16:33:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E6BCC2;
+        Tue, 22 Mar 2022 13:32:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A37B616F6;
+        Tue, 22 Mar 2022 20:32:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64379C340EC;
+        Tue, 22 Mar 2022 20:32:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647981133;
+        bh=o3E0Y08RPMj1egwbWNbnzxUc/jwp9wDcfpxs75c2JQ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ontDsE0ma8rQ6pUD/sa6Q9cAXKh9FhrP8mGAWHHEmq0wEDG92pqmJrhnXP4NviOQ+
+         90NY8lR0hbLWLGfsZSK6v4pw158Ipcliq9q5NwvZUPTUFN67ZflLz/Y6SLfZ+7lEQC
+         U1rHhKx6ygQWnf+XpUe0Qh2SFLwMOvgLFfhwLVD7DzF6zDVPWLI91XuQLhPNhg9oth
+         ZMhgAnG/c+Hqu0j+rUNuGqohfwhdxLQjuqfnzFv0TIbWp0xH2f+N8eJMuA7cDaMf+o
+         DQugWz7ATJaFSeDyz7jCqrs9L0HWlZ+UlO4q7uGKoZNx9KUf2WaNEubvEmAOSc9fwa
+         jmhHZPhvJyHYQ==
+Date:   Tue, 22 Mar 2022 22:31:19 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v2 1/1] certs: Explain the rationale to call panic()
+Message-ID: <YjoyF02zD5WdAMOW@iki.fi>
+References: <20220322111323.542184-1-mic@digikod.net>
+ <20220322111323.542184-2-mic@digikod.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220322111323.542184-2-mic@digikod.net>
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fill_transform_hdr() already call memset(0) on its 1st argument, so there
-is no need to clear it explicitly before calling this function.
+On Tue, Mar 22, 2022 at 12:13:23PM +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> The blacklist_init() function calls panic() for memory allocation
+> errors.  This change documents the reason why we don't return -ENODEV.
+> 
+> Suggested-by: Paul Moore <paul@paul-moore.com> [1]
+> Requested-by: Jarkko Sakkinen <jarkko@kernel.org> [1]
+> Link: https://lore.kernel.org/r/YjeW2r6Wv55Du0bJ@iki.fi [1]
+> Reviewed-by: Paul Moore <paul@paul-moore.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20220322111323.542184-2-mic@digikod.net
+> ---
+> 
+> Changes since v1:
+> * Fix commit subject spelling spotted by David Woodhouse.
+> * Reword one sentence as suggested by Paul Moore.
+> * Add Reviewed-by Paul Moore.
+> * Add Reviewed-by Jarkko Sakkinen.
+> ---
+>  certs/blacklist.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/certs/blacklist.c b/certs/blacklist.c
+> index 486ce0dd8e9c..25094ea73600 100644
+> --- a/certs/blacklist.c
+> +++ b/certs/blacklist.c
+> @@ -307,6 +307,15 @@ static int restrict_link_for_blacklist(struct key *dest_keyring,
+>  
+>  /*
+>   * Initialise the blacklist
+> + *
+> + * The blacklist_init() function is registered as an initcall via
+> + * device_initcall().  As a result if the blacklist_init() function fails for
+> + * any reason the kernel continues to execute.  While cleanly returning -ENODEV
+> + * could be acceptable for some non-critical kernel parts, if the blacklist
+> + * keyring fails to load it defeats the certificate/key based deny list for
+> + * signed modules.  If a critical piece of security functionality that users
+> + * expect to be present fails to initialize, panic()ing is likely the right
+> + * thing to do.
+>   */
+>  static int __init blacklist_init(void)
+>  {
+> -- 
+> 2.35.1
+> 
 
-Use kmalloc() instead of kzalloc() to save a few cycles.
+Thank you, I'll put this into my "queue" folder and apply as soon I have
+bandwidth.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Alternatively, fill_transform_hdr() has only one caller. So its memset()
-could be removed instead and this kzalloc() left as is.
----
- fs/ksmbd/smb2pdu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index bcb98109bac9..0e4f819e5859 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -8434,7 +8434,7 @@ int smb3_encrypt_resp(struct ksmbd_work *work)
- 	if (ARRAY_SIZE(iov) < rq_nvec)
- 		return -ENOMEM;
- 
--	work->tr_buf = kzalloc(sizeof(struct smb2_transform_hdr) + 4, GFP_KERNEL);
-+	work->tr_buf = kmalloc(sizeof(struct smb2_transform_hdr) + 4, GFP_KERNEL);
- 	if (!work->tr_buf)
- 		return rc;
- 
--- 
-2.32.0
-
+BR, Jarkko

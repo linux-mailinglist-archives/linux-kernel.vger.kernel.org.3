@@ -2,77 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDA64E3E38
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A474E3E36
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 13:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbiCVMQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 08:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
+        id S233399AbiCVMPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 08:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiCVMQX (ORCPT
+        with ESMTP id S230488AbiCVMPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:16:23 -0400
-Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B74C6AA5A;
-        Tue, 22 Mar 2022 05:14:54 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha.nfschina.com (Postfix) with ESMTP id 7E5F51E80D24;
-        Tue, 22 Mar 2022 20:14:04 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha.nfschina.com ([127.0.0.1])
-        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0eSG7M0PoPWY; Tue, 22 Mar 2022 20:14:01 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by ha.nfschina.com (Postfix) with ESMTPA id 3C0DE1E80D06;
-        Tue, 22 Mar 2022 20:14:01 +0800 (CST)
-From:   liqiong <liqiong@nfschina.com>
-To:     naoya.horiguchi@nec.com, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, yuzhe@nfschina.com,
-        renyu@nfschina.com, liqiong <liqiong@nfschina.com>
-Subject: [PATCH] mm: remove unnecessary (void*) conversions.
-Date:   Tue, 22 Mar 2022 20:13:38 +0800
-Message-Id: <20220322121338.27428-1-liqiong@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 08:15:23 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FFB26AA59
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 05:13:55 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 22MCDceW010766;
+        Tue, 22 Mar 2022 13:13:38 +0100
+Date:   Tue, 22 Mar 2022 13:13:38 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     David Laight <David.Laight@ACULAB.COM>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Message-ID: <20220322121338.GD10306@1wt.eu>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+ <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
+ <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
+ <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need cast (void*) to (struct hwp_walk*).
+On Tue, Mar 22, 2022 at 07:02:53PM +0700, Ammar Faizi wrote:
+> I propose the
+> following macro (this is not so much different with other my_syscall macro),
+> expect the 6th argument can be in reg or mem.
+> 
+> The "rm" constraint here gives the opportunity for the compiler to use %ebp
+> instead of memory if -fomit-frame-pointer is turned on.
+> 
+> #define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6) \
+> ({                                                         \
+>     long _ret;                                             \
+>     register long _num asm("eax") = (num);                 \
+>     register long _arg1 asm("ebx") = (long)(arg1);         \
+>     register long _arg2 asm("ecx") = (long)(arg2);         \
+>     register long _arg3 asm("edx") = (long)(arg3);         \
+>     register long _arg4 asm("esi") = (long)(arg4);         \
+>     register long _arg5 asm("edi") = (long)(arg5);         \
+>     long _arg6 = (long)(arg6); /* Might be in memory */    \
+>                                                            \
+>     asm volatile (                                         \
+>         "pushl  %[_arg6]\n\t"                              \
+>         "pushl  %%ebp\n\t"                                 \
+>         "movl   4(%%esp), %%ebp\n\t"                       \
+>         "int    $0x80\n\t"                                 \
+>         "popl   %%ebp\n\t"                                 \
+>         "addl   $4,%%esp\n\t"                              \
+>         : "=a"(_ret)                                       \
+>         : "r"(_num), "r"(_arg1), "r"(_arg2), "r"(_arg3),   \
+>           "r"(_arg4),"r"(_arg5), [_arg6]"rm"(_arg6)        \
+>         : "memory", "cc"                                   \
+>     );                                                     \
+>     _ret;                                                  \
+> })
+> 
+> What do you think?
 
-Signed-off-by: liqiong <liqiong@nfschina.com>
----
- mm/memory-failure.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hmmm indeed that comes back to the existing constructs and is certainly
+more in line with the rest of the code (plus it will not be affected by
+-O0).
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 97a9ed8f87a9..4ed0dcf03659 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -630,7 +630,7 @@ static int check_hwpoisoned_pmd_entry(pmd_t *pmdp, unsigned long addr,
- static int hwpoison_pte_range(pmd_t *pmdp, unsigned long addr,
- 			      unsigned long end, struct mm_walk *walk)
- {
--	struct hwp_walk *hwp = (struct hwp_walk *)walk->private;
-+	struct hwp_walk *hwp = walk->private;
- 	int ret = 0;
- 	pte_t *ptep, *mapped_pte;
- 	spinlock_t *ptl;
-@@ -664,7 +664,7 @@ static int hwpoison_hugetlb_range(pte_t *ptep, unsigned long hmask,
- 			    unsigned long addr, unsigned long end,
- 			    struct mm_walk *walk)
- {
--	struct hwp_walk *hwp = (struct hwp_walk *)walk->private;
-+	struct hwp_walk *hwp = walk->private;
- 	pte_t pte = huge_ptep_get(ptep);
- 	struct hstate *h = hstate_vma(walk->vma);
- 
--- 
-2.11.0
+I seem to remember a register allocation issue which kept me away from
+implementing it this way on i386 back then, but given that my focus was
+not as much on i386 as it was on other platforms, it's likely that I have
+not insisted too much and not tried this one which looks like the way to
+go to me.
 
+Willy

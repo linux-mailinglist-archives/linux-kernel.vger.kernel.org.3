@@ -2,68 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8885F4E3A8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67E84E3A8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiCVI2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S230481AbiCVI3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiCVI2V (ORCPT
+        with ESMTP id S229706AbiCVI3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:28:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E67E29CA0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:26:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 36C9D1F385;
-        Tue, 22 Mar 2022 08:26:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647937613; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hnywj9CfLzgrCfLN6HUiL0MSzOUyCXY5DawdGkBu/Ko=;
-        b=RrPr5pIqwbWx5Oswh6AE6IGKP9DCOpxWnRLxLcd96mxdzohUNSlvpMdr5OPZNjLBHGkl1o
-        J/CZK95W9jlnxuTkJCoGU2x55sUWHKmEQ0xlWdVqDW6oTFnR3moZzW6MIyQ92bc7b0vgWH
-        QFAsT55DJaMQ09nbSZMkjSR1doNXplc=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E5830A3B81;
-        Tue, 22 Mar 2022 08:26:52 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 09:26:52 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andre Almeida <andrealmeid@collabora.com>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit
- and the oom_reaper
-Message-ID: <YjmITBkkwsa2O4bg@dhcp22.suse.cz>
-References: <20220318033621.626006-1-npache@redhat.com>
- <Yjg9ncgep58gFLiN@dhcp22.suse.cz>
- <20220322004231.rwmnbjpq4ms6fnbi@offworld>
- <c8bb0b6d-981c-8591-d5b6-17414c934758@redhat.com>
- <20220322025724.j3japdo5qocwgchz@offworld>
+        Tue, 22 Mar 2022 04:29:43 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15875BD3F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 01:28:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V7v6BSf_1647937689;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V7v6BSf_1647937689)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 22 Mar 2022 16:28:11 +0800
+Date:   Tue, 22 Mar 2022 16:28:09 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     xkernel.wang@foxmail.com
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] erofs: fix a potential NULL dereference of alloc_pages()
+Message-ID: <YjmImXwknNx4WXDb@B-P7TQMD6M-0146.local>
+References: <tencent_010A807048A5F97F0A900866A35C648E2E07@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220322025724.j3japdo5qocwgchz@offworld>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <tencent_010A807048A5F97F0A900866A35C648E2E07@qq.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,32 +42,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 21-03-22 19:57:24, Davidlohr Bueso wrote:
-> On Mon, 21 Mar 2022, Nico Pache wrote:
+On Tue, Mar 22, 2022 at 04:08:12PM +0800, xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
 > 
-> > We could proceed with the V3 approach; however if we are able to find a complete
-> > solution that keeps both functionalities (Concurrent OOM Reaping & Robust Futex)
-> > working, I dont see why we wouldnt go for it.
+> alloc_pages() returns the page on success or NULL if allocation fails,
+> while set_page_private() will dereference `newpage`. So it is better to
+> catch the memory error in case other errors happen.
 > 
-> Because semantically killing the process is, imo, the wrong thing to do.
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+>  fs/erofs/zdata.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index 11c7a1a..36a5421 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -735,11 +735,15 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+>  		struct page *const newpage =
+>  				alloc_page(GFP_NOFS | __GFP_NOFAIL);
+>  
 
-I am not sure I follow. The task has been killed by the oom killer. All
-we are discussing here is how to preserve the robust list metadata
-stored in the memory which is normally unmapped by the oom_reaper to
-guarantee a further progress. 
+It's really a nofail allocation, am I missing something?
 
-I can see we have 4 potential solutions:
-1) do not oom_reap oom victims with robust futex metadata in anonymous
-   memory. Easy enough but it could lead to excessive oom killing in
-   case the victim gets stuck in the kernel and cannot terminate.
-2) clean up robust list from the oom_reaper context. Seems tricky due to
-   #PF handling from the oom_reaper context which would need to be
-   non-blocking
-3) filter vmas which contain robust list. Simple check for the vma range
-4) internally mark vmas which have to preserve the state during
-   oom_reaping. Futex code would somehow have to mark those mappings.
-   While more generic solution. I am not sure this is a practical
-   approach. 
--- 
-Michal Hocko
-SUSE Labs
+Thanks,
+Gao Xiang
+
+> -		set_page_private(newpage, Z_EROFS_SHORTLIVED_PAGE);
+> -		err = z_erofs_attach_page(clt, newpage,
+> -					  Z_EROFS_PAGE_TYPE_EXCLUSIVE);
+> -		if (!err)
+> -			goto retry;
+> +		if (!newpage) {
+> +			err = -ENOMEM;
+> +		} else {
+> +			set_page_private(newpage, Z_EROFS_SHORTLIVED_PAGE);
+> +			err = z_erofs_attach_page(clt, newpage,
+> +						Z_EROFS_PAGE_TYPE_EXCLUSIVE);
+> +			if (!err)
+> +				goto retry;
+> +		}
+>  	}
+>  
+>  	if (err)
+> -- 

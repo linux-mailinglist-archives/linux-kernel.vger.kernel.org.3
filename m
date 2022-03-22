@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90214E3F50
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EF34E3F4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 14:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbiCVNS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 09:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S235074AbiCVNSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 09:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbiCVNSq (ORCPT
+        with ESMTP id S235271AbiCVNSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:18:46 -0400
+        Tue, 22 Mar 2022 09:18:47 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45FD64712;
-        Tue, 22 Mar 2022 06:17:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E54162BC7;
+        Tue, 22 Mar 2022 06:17:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647955038; x=1679491038;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dAcxrMAdYGWi8WSTjO6a3fMaU21hxA6oy2q2nk6xPPc=;
-  b=dZs5xOzUCW1TpjMvTbS9UluzpgVIuu5dS4IVYTVQVUIkR7kZeLk1+xdn
-   hv0Ya2wwNO4IZop33ERGUfYTjI+DQxF3y7X0BbBqIQ3rjtND0Hh402u8f
-   rleea1KXPdeAY2WyuYcPRZCyz6EeOrjOrgH/DB+KIyWeqt34taim7xDjN
-   kRFJ7tBJPYC0KYa+KQ2MJ2JfqHeyQNuh6tdkg4MyaOp/Ne8RS0akYoqbV
-   RU2OlQLJGBuHBJex/XcsRim1R4MhPZS2yaLDnEyzsfbUF5HHjoxuO0ykE
-   XHmrJJ6T7OO2a0msl/Wup4kBVtQ8yN0u9Gx/rs36+LRCcQktJpRzKUR+R
+  t=1647955039; x=1679491039;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Cpk+shOeGdSGFqEXVzHLawI+cKG3RcvZqECFgMwDU5I=;
+  b=d2WCe2z3FEAnSCzoYyq/s3kNDhNt25aqK/HE/JO1F0lFd76g/EXlDR+l
+   U5MZVV6rGxknHVbRFJqUdfupNuBG6rfhhMLpw+C+gul1nq1o+/xDMadVe
+   yAI/5olYZbpZ+Vf1/qrfsIQyMofOZLEZWL56CJujXOpsCXRVDK02OwlQO
+   CTc5ZXSt1idl/ZxAcePSu7cRRx3+8LAUZI4NR+MuoFr2f9255u5pVjp9h
+   KmUre6zPFY+X9Iq/XR8vEUgz0/29DyGR8GL0XCMtghBM0WnGTk7v1k5sb
+   mx2x0MXfIoZYouXwORfkjDgFpUIr9wm03pwhK5xo2KVI2ksKL1bAOH4iQ
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="237755597"
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="237755602"
 X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="237755597"
+   d="scan'208";a="237755602"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 06:17:17 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 06:17:19 -0700
 X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="543686431"
+   d="scan'208";a="543686439"
 Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 06:17:16 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 06:17:17 -0700
 From:   Zqiang <qiang1.zhang@intel.com>
 To:     paulmck@kernel.org, frederic@kernel.org
 Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/2] rcu: Deoffload rdp if rcuop/rcuog kthreads spawn failed
-Date:   Tue, 22 Mar 2022 21:17:51 +0800
-Message-Id: <20220322131753.1680329-1-qiang1.zhang@intel.com>
+Subject: [PATCH v4 1/2] rcu: Call rcu_nocb_rdp_deoffload() directly after rcuog/op kthreads spawn failed
+Date:   Tue, 22 Mar 2022 21:17:52 +0800
+Message-Id: <20220322131753.1680329-2-qiang1.zhang@intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220322131753.1680329-1-qiang1.zhang@intel.com>
+References: <20220322131753.1680329-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,33 +58,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_RCU_NOCB_CPU is enabled and 'rcu_nocbs' is set, the rcuop
-and rcuog kthreads is created. however the rcuop or rcuog kthreads
-creation may fail, if failed, deoffload the offloaded rdp.
+If the rcuog/op kthreads spawn failed, the offload rdp need to
+be deoffload, otherwise because target rdp is considered offloaded
+but nothing actually handles the callbacks.
 
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 ---
- v1->v2:
- Invert the locking dependency order between rcu_state.barrier_mutex
- and hotplug lock.
+ kernel/rcu/tree_nocb.h | 77 +++++++++++++++++++++++++++++++++---------
+ 1 file changed, 61 insertions(+), 16 deletions(-)
 
- Holding nocb_gp_kthread_mutex, ensure that the nocb_gp_kthread exists.
-
- v2->v3:
- Adjust the position of the nocb_gp_kthread_mutex, in rdp_gp->nocb_gp_kthread
- check upper lock nocb_gp_kthread_mutex.
-
- Do the locking order change in a separate patch.
-
- v3->v4:
- Protect SEGCBLIST_KTHREAD_CB flags clear with rcu_nocb lock.
-
- Zqiang(2):
- rcu: Call rcu_nocb_rdp_deoffload() directly after rcuog/op kthreads spawn failed
- rcu: Invert the locking dependency order between rcu_state.barrier_mutex and hotplug lock
-
- kernel/rcu/tree_nocb.h | 85 ++++++++++++++++++++++++++++++++----------
- 1 file changed, 65 insertions(+), 20 deletions(-)
-
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 46694e13398a..154934f3daa9 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -972,10 +972,7 @@ static int rdp_offload_toggle(struct rcu_data *rdp,
+ 	}
+ 	raw_spin_unlock_irqrestore(&rdp_gp->nocb_gp_lock, flags);
+ 
+-	if (wake_gp)
+-		wake_up_process(rdp_gp->nocb_gp_kthread);
+-
+-	return 0;
++	return wake_gp;
+ }
+ 
+ static long rcu_nocb_rdp_deoffload(void *arg)
+@@ -983,9 +980,18 @@ static long rcu_nocb_rdp_deoffload(void *arg)
+ 	struct rcu_data *rdp = arg;
+ 	struct rcu_segcblist *cblist = &rdp->cblist;
+ 	unsigned long flags;
+-	int ret;
++	int wake_gp;
++	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
++	int condition;
+ 
+-	WARN_ON_ONCE(rdp->cpu != raw_smp_processor_id());
++	/*
++	 * The rcu_nocb_rdp_deoffload() will be called directly when
++	 * rcuog/op spawn failed, because at this time the rdp->cpu
++	 * is not online(cpu_online(rdp->cpu) return false), the deoffload
++	 * operation was not performed on rdp->cpu, to avoid warnings
++	 * add cpu_online(rdp->cpu) condition judgment.
++	 */
++	WARN_ON_ONCE((rdp->cpu != raw_smp_processor_id()) && cpu_online(rdp->cpu));
+ 
+ 	pr_info("De-offloading %d\n", rdp->cpu);
+ 
+@@ -1009,10 +1015,35 @@ static long rcu_nocb_rdp_deoffload(void *arg)
+ 	 */
+ 	rcu_segcblist_set_flags(cblist, SEGCBLIST_RCU_CORE);
+ 	invoke_rcu_core();
+-	ret = rdp_offload_toggle(rdp, false, flags);
+-	swait_event_exclusive(rdp->nocb_state_wq,
+-			      !rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB |
+-							SEGCBLIST_KTHREAD_GP));
++	wake_gp = rdp_offload_toggle(rdp, false, flags);
++
++	mutex_lock(&rdp_gp->nocb_gp_kthread_mutex);
++	if (rdp_gp->nocb_gp_kthread) {
++		if (wake_gp)
++			wake_up_process(rdp_gp->nocb_gp_kthread);
++
++		if (rdp->nocb_cb_kthread) {
++			condition = SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP;
++		} else {
++			/*
++			 *If rcuop kthread spawn failed, direct remove SEGCBLIST_KTHREAD_CB
++			 *just wait SEGCBLIST_KTHREAD_GP to be cleared.
++			 */
++			condition = SEGCBLIST_KTHREAD_GP;
++			rcu_nocb_lock_irqsave(rdp, flags);
++			rcu_segcblist_clear_flags(cblist, SEGCBLIST_KTHREAD_CB);
++			rcu_nocb_unlock_irqrestore(rdp, flags);
++		}
++		swait_event_exclusive(rdp->nocb_state_wq,
++					!rcu_segcblist_test_flags(cblist, condition));
++	} else {
++		rcu_nocb_lock_irqsave(rdp, flags);
++		rcu_segcblist_clear_flags(cblist,
++				SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
++		rcu_nocb_unlock_irqrestore(rdp, flags);
++	}
++	mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
++
+ 	/* Stop nocb_gp_wait() from iterating over this structure. */
+ 	list_del_rcu(&rdp->nocb_entry_rdp);
+ 	/*
+@@ -1035,7 +1066,7 @@ static long rcu_nocb_rdp_deoffload(void *arg)
+ 	WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
+ 
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ int rcu_nocb_cpu_deoffload(int cpu)
+@@ -1067,7 +1098,8 @@ static long rcu_nocb_rdp_offload(void *arg)
+ 	struct rcu_data *rdp = arg;
+ 	struct rcu_segcblist *cblist = &rdp->cblist;
+ 	unsigned long flags;
+-	int ret;
++	int wake_gp;
++	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
+ 
+ 	WARN_ON_ONCE(rdp->cpu != raw_smp_processor_id());
+ 	/*
+@@ -1077,6 +1109,9 @@ static long rcu_nocb_rdp_offload(void *arg)
+ 	if (!rdp->nocb_gp_rdp)
+ 		return -EINVAL;
+ 
++	if (WARN_ON_ONCE(!rdp_gp->nocb_gp_kthread))
++		return -EINVAL;
++
+ 	pr_info("Offloading %d\n", rdp->cpu);
+ 
+ 	/*
+@@ -1111,7 +1146,9 @@ static long rcu_nocb_rdp_offload(void *arg)
+ 	 *      WRITE flags               READ callbacks
+ 	 *      rcu_nocb_unlock()         rcu_nocb_unlock()
+ 	 */
+-	ret = rdp_offload_toggle(rdp, true, flags);
++	wake_gp = rdp_offload_toggle(rdp, true, flags);
++	if (wake_gp)
++		wake_up_process(rdp_gp->nocb_gp_kthread);
+ 	swait_event_exclusive(rdp->nocb_state_wq,
+ 			      rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB) &&
+ 			      rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP));
+@@ -1124,7 +1161,7 @@ static long rcu_nocb_rdp_offload(void *arg)
+ 	rcu_segcblist_clear_flags(cblist, SEGCBLIST_RCU_CORE);
+ 	rcu_nocb_unlock_irqrestore(rdp, flags);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ int rcu_nocb_cpu_offload(int cpu)
+@@ -1246,7 +1283,7 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+ 				"rcuog/%d", rdp_gp->cpu);
+ 		if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo GP kthread, OOM is now expected behavior\n", __func__)) {
+ 			mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+-			return;
++			goto end;
+ 		}
+ 		WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
+ 		if (kthread_prio)
+@@ -1258,12 +1295,20 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+ 	t = kthread_run(rcu_nocb_cb_kthread, rdp,
+ 			"rcuo%c/%d", rcu_state.abbr, cpu);
+ 	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
+-		return;
++		goto end;
+ 
+ 	if (kthread_prio)
+ 		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+ 	WRITE_ONCE(rdp->nocb_cb_kthread, t);
+ 	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
++	return;
++end:
++	mutex_lock(&rcu_state.barrier_mutex);
++	if (rcu_rdp_is_offloaded(rdp)) {
++		rcu_nocb_rdp_deoffload(rdp);
++		cpumask_clear_cpu(cpu, rcu_nocb_mask);
++	}
++	mutex_unlock(&rcu_state.barrier_mutex);
+ }
+ 
+ /* How many CB CPU IDs per GP kthread?  Default of -1 for sqrt(nr_cpu_ids). */
 -- 
 2.25.1
 

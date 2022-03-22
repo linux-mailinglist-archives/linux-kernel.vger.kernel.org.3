@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96F14E39C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B3F4E39C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 08:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiCVHpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 03:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S229940AbiCVHq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 03:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbiCVHob (ORCPT
+        with ESMTP id S229688AbiCVHqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:44:31 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5F66E7AD
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:37:24 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id z8so32154264ybh.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Mb+xIEW59K1ZB7JeQIqggKVm6yQ70+u2EGq5PySJ9L0=;
-        b=zXlZqTgqZoDxNOA0MJjXq4WWfpvRgUImx6SnOY8s6b9gF4bb1S2E5uuxbw7/TJ2u3M
-         pcDxMyhlO4n8gUfJfzZecrWiJQDoSlFXQzxiteXgVjAxGXT3tQNAPuGX4beq3lymspW/
-         VMlqR2s+arUpSskLZjspfndI8csXkNkkEr0NZ2mDFVJslYftWcMLGZbNrF6AUdfasNQY
-         8o419MNY++AHlgjr00dD+ildrgPnnxCS2VVHuDFaqp2EkSAMM+rA3A8zqOe1S+JkLnQR
-         JxpwAKetqFDwDrddy+OTZCSiZIsoW0wlQIIgTQUPn6HS5iFpAW6OcuKZM+uYgn42EMEV
-         B61Q==
+        Tue, 22 Mar 2022 03:46:21 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2733206A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:40:21 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id u25-20020a5d8199000000b006421bd641bbso11973073ion.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 00:40:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Mb+xIEW59K1ZB7JeQIqggKVm6yQ70+u2EGq5PySJ9L0=;
-        b=oeIyK6hh9s7/YK1Fr8n6IzGas6jqW9GC+SuiGtSiXNJ9ucQNVuaQ/QetqbFP8MDsi1
-         N0KnxZLHzBeTz0WGPTKKzJML4QHVjsjO0Db7cF5WEDPoh81v21OL8pzlAo31dwRHiVtr
-         awaU5tngPJtGjBbPTikqiHFkSv/Mzxu6QDKgjioYnjY9I7jGbhzN5aF5RZUTV7RF8Hix
-         hhC4756CwUGiJmLZjtOvNM+/aboS/7Lh8xtjgv/IZyAs54qY/7xckuMYoWyRL3oGDJ2q
-         HoyexeBLxB89fo26ROAPkFpgfPCnJhMKEPY33NQNb9O+WFFhEluhh9BuTiJEywZLdtkL
-         utOQ==
-X-Gm-Message-State: AOAM532bmDpLrQTtjYyWdcyT+RoLdHz1JbKEiomop1MNI2w4xzHbwsgM
-        XSW2G09yu6C5uwbK0K2E7nBCyrRXUELiWaLdsZFD46G1cdemgh9N
-X-Google-Smtp-Source: ABdhPJxluSKeXS66jhWemtnQAJQY0JcIr5zVe3IkwMjQoQOUhcV8E/b9uGRg4t9T9qgGJTOa3zVDCNKEhHg3jStcF4M=
-X-Received: by 2002:a25:a0c5:0:b0:633:63da:5ead with SMTP id
- i5-20020a25a0c5000000b0063363da5eadmr26371770ybm.412.1647934642439; Tue, 22
- Mar 2022 00:37:22 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to:cc;
+        bh=qjyUq3UvrUF6WB1/L7bAEcw6CUa1YZwskiEvT860kDo=;
+        b=w+my9Sa4iJ0CZi3U3wP5E9IEs3z8GiFpLqubpKPmnlQr6yYEtpraHq6N5p3zT4o1F/
+         Em8enEpReNt6NGda3R6Na/cl1OK5UMEd4MsKNubZ26je4TH0sbVMT4WlbxsifszaIMpG
+         DgPb7Jeukh69l+N3/I9gPAMrBGAb0yIh/qm/5qIRTaB5lmB8bId/qBtbHfgr66+ezQUC
+         66zzoN3eXpGaEGRu0Xq74ZWbCIqxN2xOeP2Wbc7do2gTiARFovStA5E3Nky0tDTyEM9K
+         xV9PqZNIQu1tYTtPonOz3znSbRHb2J+WVd00LuT8jdK80QU4lNXnn18VLtXlsWgaaV/+
+         gbrw==
+X-Gm-Message-State: AOAM531YdIZ5T5/V5y3Nd3bWmbyg0tMAgXO9ljWdb0LcpP69ovK3gfhD
+        T8CYo5MNjXS0rctzkxNIZtHU8hmL9ARoLNI25JtIjtffBcxx
+X-Google-Smtp-Source: ABdhPJx2Meqp7NP2Wl+MA4N+QFrIKllBtvtmMEMSXsQtiwO+2MkasV/83ruSL2d7Dn15GAogdHDI7N32KvI4qUiDuW2SIq7NUbx2
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 22 Mar 2022 13:07:11 +0530
-Message-ID: <CA+G9fYv6_mytUwaa9bgQTuMUhrGfkg-yFKC0u_Ujh7sRTtgNfw@mail.gmail.com>
-Subject: WARNING: possible recursive locking detected - lock(&irq_desc_lock_class);
-To:     open list <linux-kernel@vger.kernel.org>,
-        rcu <rcu@vger.kernel.org>, linux-remoteproc@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Vinod Koul <vinod.koul@linaro.org>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+X-Received: by 2002:a05:6e02:1d03:b0:2c7:e33f:2557 with SMTP id
+ i3-20020a056e021d0300b002c7e33f2557mr11826827ila.15.1647934821146; Tue, 22
+ Mar 2022 00:40:21 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 00:40:21 -0700
+In-Reply-To: <20220322074002.3294-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a0a41d05dac9b99d@google.com>
+Subject: Re: INFO: rcu detected stall in smp_call_function
+From:   syzbot <syzbot+cb3b69ae80afd6535b0e@syzkaller.appspotmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,140 +56,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While booting linux mainline kernel v5.17.0 on arm64 dragonboard 845c
-the following kernel deadlock warning was noticed.
+> On Sun, 06 Sep 2020 11:40:17 -0700
+>> syzbot has found a reproducer for the following issue on:
+>> 
+>> HEAD commit:    dd9fb9bb Merge tags 'auxdisplay-for-linus-v5.9-rc4', 'clan..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=124893e1900000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=bd46548257448703
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=cb3b69ae80afd6535b0e
+>> compiler:       gcc (GCC) 10.1.0-syz 20200507
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13727231900000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=132c9fc9900000
+>> 
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+cb3b69ae80afd6535b0e@syzkaller.appspotmail.com
+>> 
+>> rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+>> rcu: 	0-....: (1 GPs behind) idle=932/1/0x4000000000000002 softirq=9344/9345 fqs=5247 
+>> 	(detected by 1, t=10502 jiffies, g=10529, q=124891)
+>> Sending NMI from CPU 1 to CPUs 0:
+>> NMI backtrace for cpu 0
+>> CPU: 0 PID: 8110 Comm: syz-executor267 Not tainted 5.9.0-rc3-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> RIP: 0010:bytes_is_nonzero mm/kasan/generic.c:91 [inline]
+>> RIP: 0010:memory_is_nonzero mm/kasan/generic.c:108 [inline]
+>> RIP: 0010:memory_is_poisoned_n mm/kasan/generic.c:134 [inline]
+>> RIP: 0010:memory_is_poisoned mm/kasan/generic.c:165 [inline]
+>> RIP: 0010:check_memory_region_inline mm/kasan/generic.c:183 [inline]
+>> RIP: 0010:check_memory_region+0xdb/0x180 mm/kasan/generic.c:192
+>> Code: 80 38 00 74 f2 48 89 c2 b8 01 00 00 00 48 85 d2 75 56 5b 5d 41 5c c3 48 85 d2 74 5e 48 01 ea eb 09 48 83 c0 01 48 39 d0 74 50 <80> 38 00 74 f2 eb d4 41 bc 08 00 00 00 48 89 ea 45 29 dc 4d 8d 1c
+>> RSP: 0018:ffffc90000007090 EFLAGS: 00000086
+>> RAX: fffff52000000e30 RBX: fffff52000000e3c RCX: ffffffff81339c7a
+>> RDX: fffff52000000e3c RSI: 0000000000000060 RDI: ffffc90000007180
+>> RBP: fffff52000000e30 R08: 0000000000000001 R09: ffffc900000071df
+>> R10: fffff52000000e3b R11: 0000000000000001 R12: 0000000000000060
+>> R13: 0000000000000000 R14: 000000000000007f R15: ffffc90000007180
+>> FS:  0000000000cf9880(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 000000000008319c CR3: 000000009f579000 CR4: 00000000001506f0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>  <IRQ>
+>>  memset+0x20/0x40 mm/kasan/common.c:84
+>>  memset include/linux/string.h:391 [inline]
+>>  __unwind_start+0x2a/0x800 arch/x86/kernel/unwind_orc.c:630
+>>  unwind_start arch/x86/include/asm/unwind.h:60 [inline]
+>>  perf_callchain_kernel+0x2f0/0x6a0 arch/x86/events/core.c:2447
+>>  get_perf_callchain+0x16e/0x620 kernel/events/callchain.c:200
+>>  perf_callchain+0x165/0x1c0 kernel/events/core.c:6985
+>>  perf_prepare_sample+0x8fd/0x1d40 kernel/events/core.c:7012
+>>  __perf_event_output kernel/events/core.c:7170 [inline]
+>>  perf_event_output_forward+0xf3/0x270 kernel/events/core.c:7190
+>>  __perf_event_overflow+0x13c/0x370 kernel/events/core.c:8845
+>>  perf_swevent_overflow kernel/events/core.c:8921 [inline]
+>>  perf_swevent_event+0x347/0x550 kernel/events/core.c:8949
+>>  perf_tp_event+0x2e4/0xb50 kernel/events/core.c:9377
+>>  perf_trace_run_bpf_submit+0x11c/0x200 kernel/events/core.c:9351
+>>  perf_trace_preemptirq_template+0x289/0x440 include/trace/events/preemptirq.h:14
+>>  trace_irq_enable_rcuidle include/trace/events/preemptirq.h:40 [inline]
+>>  trace_irq_enable_rcuidle include/trace/events/preemptirq.h:40 [inline]
+>>  trace_hardirqs_on+0x18a/0x220 kernel/trace/trace_preemptirq.c:44
+>>  asm_sysvec_irq_work+0x12/0x20 arch/x86/include/asm/idtentry.h:611
+>> RIP: 0010:arch_local_irq_restore arch/x86/include/asm/paravirt.h:770 [inline]
+>> RIP: 0010:rcu_read_unlock_special kernel/rcu/tree_plugin.h:630 [inline]
+>> RIP: 0010:__rcu_read_unlock+0x26e/0x530 kernel/rcu/tree_plugin.h:395
+>> Code: ba 00 00 00 00 00 fc ff df 48 c1 e8 03 80 3c 10 00 0f 85 a3 02 00 00 48 83 3d d5 9c 54 08 00 0f 84 18 02 00 00 4c 89 e7 57 9d <0f> 1f 44 00 00 e9 07 fe ff ff 0f 0b e9 41 fe ff ff e8 5c b1 52 00
+>> RSP: 0018:ffffc90000007b40 EFLAGS: 00000282
+>> RAX: 1ffffffff136c789 RBX: ffffffff89bd9a80 RCX: 0000000000000002
+>> RDX: dffffc0000000000 RSI: 0000000000000101 RDI: 0000000000000282
+>> RBP: 0000000000000001 R08: 0000000000000001 R09: ffffffff8c5f4a97
+>> R10: fffffbfff18be952 R11: 0000000000000001 R12: 0000000000000282
+>> R13: 0000000000000200 R14: ffff8880ae636c00 R15: 0000000000000000
+>>  rcu_read_unlock include/linux/rcupdate.h:687 [inline]
+>>  mld_sendpack+0x742/0xdb0 net/ipv6/mcast.c:1690
+>>  mld_send_initial_cr.part.0+0x106/0x150 net/ipv6/mcast.c:2096
+>>  mld_send_initial_cr net/ipv6/mcast.c:1191 [inline]
+>>  mld_dad_timer_expire+0x1c7/0x6a0 net/ipv6/mcast.c:2115
+>>  call_timer_fn+0x1ac/0x760 kernel/time/timer.c:1413
+>>  expire_timers kernel/time/timer.c:1458 [inline]
+>>  __run_timers.part.0+0x67c/0xaa0 kernel/time/timer.c:1755
+>>  __run_timers kernel/time/timer.c:1736 [inline]
+>>  run_timer_softirq+0xae/0x1a0 kernel/time/timer.c:1768
+>>  __do_softirq+0x1f7/0xa91 kernel/softirq.c:298
+>>  asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:706
+>>  </IRQ>
+>>  __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
+>>  run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
+>>  do_softirq_own_stack+0x9d/0xd0 arch/x86/kernel/irq_64.c:77
+>>  invoke_softirq kernel/softirq.c:393 [inline]
+>>  __irq_exit_rcu kernel/softirq.c:423 [inline]
+>>  irq_exit_rcu+0x235/0x280 kernel/softirq.c:435
+>>  sysvec_apic_timer_interrupt+0x51/0xf0 arch/x86/kernel/apic/apic.c:1091
+>>  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:581
+>> RIP: 0010:arch_local_irq_restore arch/x86/include/asm/paravirt.h:770 [inline]
+>> RIP: 0010:generic_exec_single+0x2b6/0x430 kernel/smp.c:172
+>> Code: 00 fc ff df 48 c1 e8 03 80 3c 10 00 0f 85 2d 01 00 00 48 83 3d 82 fd 4c 08 00 0f 84 f3 00 00 00 e8 2f 0c 0b 00 48 89 df 57 9d <0f> 1f 44 00 00 45 31 e4 e9 34 fe ff ff e8 18 0c 0b 00 0f 0b e9 95
+>> RSP: 0018:ffffc90009cbfb08 EFLAGS: 00000293
+>> RAX: 0000000000000000 RBX: 0000000000000293 RCX: 0000000000000006
+>> RDX: ffff88809054a380 RSI: ffffffff81693ed1 RDI: 0000000000000293
+>> RBP: 0000000000000200 R08: 0000000000000001 R09: ffffffff8c5f4ab7
+>> R10: fffffbfff18be956 R11: 0000000000000001 R12: ffffc90009cbfb80
+>> R13: ffffffff818dc1d0 R14: ffffc90009cbfc48 R15: 1ffff92001397f9e
+>>  smp_call_function_single+0x186/0x4f0 kernel/smp.c:379
+>>  task_function_call+0xd7/0x160 kernel/events/core.c:116
+>>  perf_install_in_context+0x2cb/0x550 kernel/events/core.c:2895
+>>  __do_sys_perf_event_open+0x1c31/0x2cb0 kernel/events/core.c:11992
+>>  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+>>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>> RIP: 0033:0x443f79
+>> Code: e8 2c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 0b 09 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+>> RSP: 002b:00007fffe1fb0778 EFLAGS: 00000246 ORIG_RAX: 000000000000012a
+>> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000443f79
+>> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000100
+>> RBP: 000000000008319c R08: 0000000000000000 R09: 0000000100000009
+>> R10: 00000000ffffffff R11: 0000000000000246 R12: 0000000000000000
+>> R13: 0000000000404da0 R14: 0000000000000000 R15: 0000000000000000
+>> INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 0.000 msecs
+>
+> See if it has any link to csd_lock_wait upstream with info printed about
+> cpu1 that detected rcu stall on cpu0.
+>
+> Hillf
+>
+> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git  master
 
-This build config is generated by kselftest-merge configs.
+This bug is already marked as fixed. No point in testing.
 
-[   11.472323] qcom_q6v5_pas remoteproc-adsp: supply cx not found,
-using dummy regulator
-[   11.482690] qcom_q6v5_pas remoteproc-adsp: supply px not found,
-using dummy regulator
-[   11.643728] qcom,slim-ngd-ctrl 171c0000.slim: Adding to iommu group 1
-[   11.647956] NET: Registered PF_QIPCRTR protocol family
-[   11.655652] failed to send lookup registration: -19
-[   11.679730] remoteproc remoteproc0: remoteproc-adsp is available
-[   11.688073] remoteproc remoteproc0: Direct firmware load for
-qcom/sdm845/adsp.mbn failed with error -2
-[   11.698131] remoteproc remoteproc0: powering up remoteproc-adsp
-[   11.704730] remoteproc remoteproc0: Direct firmware load for
-qcom/sdm845/adsp.mbn failed with error -2
-[   11.714571] remoteproc remoteproc0: request_firmware failed: -2
-[   11.753156] cpu cpu0: EM: created perf domain
-[   11.773034]
-[   11.774570] ============================================
-[   11.779933] WARNING: possible recursive locking detected
-[   11.785303] 5.17.0 #1 Not tainted
-[   11.788662] --------------------------------------------
-[   11.794029] kworker/u16:2/80 is trying to acquire lock:
-[   11.798293] qcom_q6v5_pas remoteproc-cdsp: supply cx not found,
-using dummy regulator
-[   11.799312] ffff7e0cc11b28f8 (&irq_desc_lock_class){-.-.}-{2:2},
-at: __irq_get_desc_lock+0x64/0xa4
-[   11.816285]
-[   11.816285] but task is already holding lock:
-[   11.822173] ffff7e0cc0fd38f8 (&irq_desc_lock_class){-.-.}-{2:2},
-at: __irq_get_desc_lock+0x64/0xa4
-[   11.823425] qcom_q6v5_pas remoteproc-cdsp: supply px not found,
-using dummy regulator
-[   11.831231]
-[   11.831231] other info that might help us debug this:
-[   11.831234]  Possible unsafe locking scenario:
-[   11.831234]
-[   11.831236]        CPU0
-[   11.831238]        ----
-[   11.831240]   lock(&irq_desc_lock_class);
-[   11.831245]   lock(&irq_desc_lock_class);
-[   11.831251]
-[   11.831251]  *** DEADLOCK ***
-[   11.831251]
-[   11.831253]  May be due to missing lock nesting notation
-[   11.831253]
-[   11.831255] 6 locks held by kworker/u16:2/80:
-[   11.831259]  #0: ffff7e0cc0018d38
-((wq_completion)events_unbound){+.+.}-{0:0}, at:
-process_one_work+0x1e8/0x6f4
-[   11.862787] cfg80211: Loading compiled-in X.509 certificates for
-regulatory database
-[   11.864788]  #1: ffff800008673dd0
-(deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x1e8/0x6f4
-[   11.864808]  #2: ffff7e0cc12bf188 (&dev->mutex
-[   11.882336] cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
-[   11.892239] ){....}-{3:3}, at: __device_attach+0x44/0x1c0
-[   11.892255]  #3: ffffb99e189d0870 (cpu_hotplug_lock){++++}-{0:0},
-at: cpus_read_lock+0x1c/0x30
-[   11.892276]  #4:
-[   11.900398] platform regulatory.0: Direct firmware load for
-regulatory.db failed with error -2
-[   11.909407] ffff7e0cc0f98918 (subsys mutex#8){+.+.}-{3:3}, at:
-subsys_interface_register+0x64/0x150
-[   11.909429]  #5: ffff7e0cc0fd38f8
-(&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x64/0xa4
-[   11.913956] cfg80211: failed to load regulatory.db
-[   11.920518]
-[   11.920518] stack backtrace:
-[   11.920523] CPU: 4 PID: 80 Comm: kworker/u16:2 Not tainted 5.17.0 #1
-[   11.920530] Hardware name: Thundercomm Dragonboard 845c (DT)
-[   11.920535] Workqueue: events_unbound deferred_probe_work_func
-[   11.957146] remoteproc remoteproc1: remoteproc-cdsp is available
-[   11.963917]
-[   11.963921] Call trace:
-[   11.963924]  dump_backtrace+0xf8/0x130
-[   11.963933]  show_stack+0x24/0x80
-[   11.963937]  dump_stack_lvl+0x8c/0xb8
-[   11.963948]  dump_stack+0x18/0x34
-[   11.985142] remoteproc remoteproc1: Direct firmware load for
-qcom/sdm845/cdsp.mbn failed with error -2
-[   11.985323]  __lock_acquire+0xbc8/0x20cc
-[   11.991270] remoteproc remoteproc1: powering up remoteproc-cdsp
-[   11.997292]  lock_acquire.part.0+0xe0/0x230
-[   11.997301]  lock_acquire+0x68/0x84
-[   11.997309]  _raw_spin_lock_irqsave+0x88/0x150
-[   11.997317]  __irq_get_desc_lock+0x64/0xa4
-[   11.997324]  enable_irq+0x40/0xb0
-[   11.998891] remoteproc remoteproc1: Direct firmware load for
-qcom/sdm845/cdsp.mbn failed with error -2
-[   12.001316]  lmh_enable_interrupt+0x38/0x44 [lmh]
-[   12.001329]  irq_enable+0x4c/0xa0
-[   12.001337]  __irq_startup+0x80/0xb0
-[   12.005282] remoteproc remoteproc1: request_firmware failed: -2
-[   12.008487]  irq_startup+0x84/0x174
-[   12.008495]  __enable_irq+0x7c/0x90
-[   12.008501]  enable_irq+0x54/0xb0
-[   12.008508]  qcom_cpufreq_ready+0x2c/0x3c
-[   12.096152]  cpufreq_online+0x5a8/0xa60
-[   12.096160]  cpufreq_add_dev+0xc8/0xe0
-[   12.096167]  subsys_interface_register+0x138/0x150
-[   12.096176]  cpufreq_register_driver+0x180/0x300
- OK   Started udev Coldplug all Devices.[   12.113357]
-qcom_cpufreq_hw_driver_probe+0xe0/0x150
-[   12.123101]  platform_probe+0x74/0xf0
-[   12.126994]  really_probe+0x1c4/0x440
-[   12.130706]  __driver_probe_device+0x11c/0x190
-[   12.135201]  driver_probe_device+0x48/0x104
-[   12.139429]  __device_attach_driver+0xa4/0x140
-[   12.143927]  bus_for_each_drv+0x84/0xe0
-[   12.147810]  __device_attach+0xe4/0x1c0
-[   12.151695]  device_initial_probe+0x20/0x30
-[   12.155934]  bus_probe_device+0xac/0xb4
-[   12.159817]  deferred_probe_work_func+0xc8/0x120
-[   12.164486]  process_one_work+0x280/0x6f4
-[   12.168540]  worker_thread+0x80/0x450
-[   12.172256]  kthread+0x10c/0x120
-[   12.172264]  ret_from_fork+0x10/0x20
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: f443e374ae131c168a065ea1748feac6b2e76613
-  git_describe: v5.17
-  kernel_version: 5.17.0
-  kernel-config: https://builds.tuxbuild.com/26fPPSbBmMfOqElIN3NGgvUWHeW/config
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
-[1] https://lkft.validation.linaro.org/scheduler/job/4754457#L3342

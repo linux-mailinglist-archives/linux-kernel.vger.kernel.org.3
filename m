@@ -2,241 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EA64E3619
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0634E362D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235168AbiCVBsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 21:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51352 "EHLO
+        id S235141AbiCVBv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 21:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235381AbiCVBs0 (ORCPT
+        with ESMTP id S235114AbiCVBv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 21:48:26 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC5F377CA;
-        Mon, 21 Mar 2022 18:46:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1647913617; x=1679449617;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=LXdAWfbEEyMtMPiS0cq35JyKZEaDBL+llZxzocq1lNE=;
-  b=AAAI85nzhHSrQK+pcI1rvgT3yWNAxPCnGpDN7fWTWhkb4XxR8GFGcx6T
-   ZCtGkibFHtLNX3Fl1wJMoKbqqVi6ucfxEfmrSTFY9v9eMoW/bq3YruA8r
-   ZHNvXHXQ5qMUeb8InMRHvnH0k87JNUeRuy9UneGuIXHXTmueVd4yk4fWx
-   M=;
-X-IronPort-AV: E=Sophos;i="5.90,200,1643673600"; 
-   d="scan'208";a="183544633"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-ff3df2fe.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 22 Mar 2022 01:46:55 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-ff3df2fe.us-west-2.amazon.com (Postfix) with ESMTPS id 947E440BC2;
-        Tue, 22 Mar 2022 01:46:54 +0000 (UTC)
-Received: from EX13D05UWC004.ant.amazon.com (10.43.162.223) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Tue, 22 Mar 2022 01:46:54 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13D05UWC004.ant.amazon.com (10.43.162.223) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Tue, 22 Mar 2022 01:46:53 +0000
-Received: from localhost (10.187.171.8) by mail-relay.amazon.com
- (10.43.61.169) with Microsoft SMTP Server id 15.0.1497.32 via Frontend
- Transport; Tue, 22 Mar 2022 01:46:53 +0000
-From:   Eduardo Valentin <eduval@amazon.com>
-To:     Guenter Roeck <linux@roeck-us.net>, <eduval@amazon.com>
-CC:     Jean Delvare <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eduardo Valentin <evalenti@kernel.org>
-Subject: [PATCH 1/1] drivers: hwmon: pmbus: register with thermal for PSC_TEMPERATURE
-Date:   Mon, 21 Mar 2022 18:46:50 -0700
-Message-ID: <20220322014650.14956-1-eduval@amazon.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 21 Mar 2022 21:51:57 -0400
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.146.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04DE3BA54
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:50:30 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 012B66D1F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:50:30 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id WTdMnmipnHnotWTdNnrXgC; Mon, 21 Mar 2022 20:48:29 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=uywUMPoBYXp6PjZ9nM9SBumqFsG3gbfJp1KNVLB3onA=; b=4gTC9WJ7KGNBp7piv1YTtUa3lw
+        zLkOpNlQGAfi6oNWBaU+2qz0Cwg6xK2vbmA3X9jjkzdYj3OoXdFH02dQTAdVh8aenAQ0V2c1bDASh
+        4NUTQ06Gj9ymwWxBHnonpZI1WJWHn6+iRDyCm59aaw3hxIGDZ9vP1h0Tbanq2ELpdxcRO0MeJZnNJ
+        75rqt5K+62bPy2zSXFOb74fzzOp9mDkkH+wleqpt1E+3hjMqmCm5XD+tOWEC3JzLnfEiEqdfelZZF
+        38Q4I8uQ1I1p3epGbWPnzHuetZeq3J7Tt5IL1gNVpdILyqv+tqo4E78aM/Mbz12howATwzSyAS3IO
+        DqMcCM5A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54388)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nWTdM-001yfU-Lc; Tue, 22 Mar 2022 01:48:28 +0000
+Message-ID: <b3830750-f534-0c1c-f09b-3cce7fc6208b@roeck-us.net>
+Date:   Mon, 21 Mar 2022 18:48:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [GIT PULL] hwmon updates for v5.18
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220320231317.2171300-1-linux@roeck-us.net>
+ <CAHk-=wgM1uHH1WJ47Zt5OGK5qjtFkvVCZLff+TKA2ahXAM1xQg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAHk-=wgM1uHH1WJ47Zt5OGK5qjtFkvVCZLff+TKA2ahXAM1xQg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nWTdM-001yfU-Lc
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54388
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 1
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some pmbus device drivers have device tree support and
-may want to use of-thermal to register a thermal zone
-OF sensor for those device drivers.
+On 3/21/22 18:21, Linus Torvalds wrote:
+> On Sun, Mar 20, 2022 at 4:13 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Improvements to existing drivers:
+>> - adt7x10: Convert to use regmap, convert to use with_info API,
+>>    use hwmon_notify_event, and other cleanup
+>> - aquacomputer_d5next: Add support for Aquacomputer Farbwerk 360
+>> - asus_wmi_sensors: Add ASUS ROG STRIX B450-F GAMING II
+>> - asus_wmi_ec_sensors: Support T_Sensor on Prime X570-Pro
+>>    Deprecate driver (replaced by new driver)
+> [...]
+> 
+> To make my life easier, can I ask you to try to format these things a
+> bit more sanely and legibly?
+> 
+> You had this odd mix of sometimes using new lines to separate
+> different things (eg that asus_wmi_ec_sensors entry), and sometimes
+> just multiple different things in a list that then had line-breaks in
+> the middle.
+> 
+> That kind of stuff is _very_ hard to parse as anything but a random
+> jumble of words all crammed together.
+> 
+> Whitespace to separate things is good, and some kind of consistent
+> indentation makes it more legible. I edited it all up (hopefully
+> correctly), but it would be nice to get it in a readable form to begin
+> with..
+> 
+> Yeah, if everything does well, nobody will ever need to read that
+> merge message, but let's try to aim for nice and informative commit
+> messages anyway.
+> 
 
-This way we allow describing device tree thermal zones
-for pmbus device drivers with device tree support.
+Sorry for that. I'll use your reformatting as example and use
+the same format in the future.
 
-This patch achieves this by registering pmbus sensors
-with thermal subsystem if they are PSC_TEMPERATURE
-and are providing _input hwmon interface.
-
-Cc: Guenter Roeck <linux@roeck-us.net> (maintainer:PMBUS HARDWARE MONITORING DRIVERS)
-Cc: Jean Delvare <jdelvare@suse.com> (maintainer:HARDWARE MONITORING)
-Cc: linux-hwmon@vger.kernel.org (open list:PMBUS HARDWARE MONITORING DRIVERS)
-Cc: linux-kernel@vger.kernel.org (open list)
-Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-Signed-off-by: Eduardo Valentin <evalenti@kernel.org>
----
- drivers/hwmon/pmbus/pmbus_core.c | 88 +++++++++++++++++++++++++++++---
- 1 file changed, 80 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be2..a51cdfab1c3e 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -19,6 +19,8 @@
- #include <linux/pmbus.h>
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
-+#include <linux/of.h>
-+#include <linux/thermal.h>
- #include "pmbus.h"
- 
- /*
-@@ -1078,7 +1080,71 @@ static int pmbus_add_boolean(struct pmbus_data *data,
- 	return pmbus_add_attribute(data, &a->dev_attr.attr);
- }
- 
--static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
-+/* of thermal for pmbus temperature sensors */
-+struct pmbus_thermal_data {
-+	struct i2c_client *client;
-+	struct pmbus_sensor *sensor;
-+};
-+
-+static int pmbus_thermal_get_temp(void *data, int *temp)
-+{
-+	struct pmbus_thermal_data *tdata = data;
-+	struct i2c_client *client = tdata->client;
-+	struct pmbus_sensor *sensor = tdata->sensor;
-+	struct pmbus_data *pmbus_data = i2c_get_clientdata(client);
-+	struct device *dev = pmbus_data->hwmon_dev;
-+	int ret = 0;
-+
-+	if (!dev) {
-+		/* May not even get to hwmon yet */
-+		*temp = 0;
-+		return 0;
-+	}
-+
-+	mutex_lock(&pmbus_data->update_lock);
-+	pmbus_update_sensor_data(client, sensor);
-+	if (sensor->data < 0)
-+		ret = sensor->data;
-+	else
-+		*temp = (int)pmbus_reg2data(pmbus_data, sensor);
-+	mutex_unlock(&pmbus_data->update_lock);
-+
-+	return ret;
-+}
-+
-+static const struct thermal_zone_of_device_ops pmbus_thermal_ops = {
-+	.get_temp = pmbus_thermal_get_temp,
-+};
-+
-+static int pmbus_thermal_add_sensor(struct i2c_client *client,
-+				    struct pmbus_data *pmbus_data,
-+				    struct pmbus_sensor *sensor, int index)
-+{
-+	struct device *dev = pmbus_data->dev;
-+	struct pmbus_thermal_data *tdata;
-+	struct thermal_zone_device *tzd;
-+
-+	tdata = devm_kzalloc(dev, sizeof(*tdata), GFP_KERNEL);
-+	if (!tdata)
-+		return -ENOMEM;
-+
-+	tdata->sensor = sensor;
-+	tdata->client = client;
-+
-+	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
-+						   &pmbus_thermal_ops);
-+	/*
-+	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
-+	 * so ignore that error but forward any other error.
-+	 */
-+	if (IS_ERR(tzd) && (PTR_ERR(tzd) != -ENODEV))
-+		return PTR_ERR(tzd);
-+
-+	return 0;
-+}
-+
-+static struct pmbus_sensor *pmbus_add_sensor(struct i2c_client *client,
-+					     struct pmbus_data *data,
- 					     const char *name, const char *type,
- 					     int seq, int page, int phase,
- 					     int reg,
-@@ -1121,6 +1187,10 @@ static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
- 	sensor->next = data->sensors;
- 	data->sensors = sensor;
- 
-+	/* temperature sensors with _input values are registered with thermal */
-+	if (class == PSC_TEMPERATURE && strcmp(type, "input") == 0)
-+		pmbus_thermal_add_sensor(client, data, sensor, seq);
-+
- 	return sensor;
- }
- 
-@@ -1216,8 +1286,9 @@ static int pmbus_add_limit_attrs(struct i2c_client *client,
- 
- 	for (i = 0; i < nlimit; i++) {
- 		if (pmbus_check_word_register(client, page, l->reg)) {
--			curr = pmbus_add_sensor(data, name, l->attr, index,
--						page, 0xff, l->reg, attr->class,
-+			curr = pmbus_add_sensor(client, data, name, l->attr,
-+						index, page, 0xff, l->reg,
-+						attr->class,
- 						attr->update || l->update,
- 						false, true);
- 			if (!curr)
-@@ -1258,7 +1329,7 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
- 		if (ret)
- 			return ret;
- 	}
--	base = pmbus_add_sensor(data, name, "input", index, page, phase,
-+	base = pmbus_add_sensor(client, data, name, "input", index, page, phase,
- 				attr->reg, attr->class, true, true, true);
- 	if (!base)
- 		return -ENOMEM;
-@@ -1887,7 +1958,7 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
- {
- 	struct pmbus_sensor *sensor;
- 
--	sensor = pmbus_add_sensor(data, "fan", "target", index, page,
-+	sensor = pmbus_add_sensor(client, data, "fan", "target", index, page,
- 				  0xff, PMBUS_VIRT_FAN_TARGET_1 + id, PSC_FAN,
- 				  false, false, true);
- 
-@@ -1898,14 +1969,14 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
- 			(data->info->func[page] & PMBUS_HAVE_PWM34)))
- 		return 0;
- 
--	sensor = pmbus_add_sensor(data, "pwm", NULL, index, page,
-+	sensor = pmbus_add_sensor(client, data, "pwm", NULL, index, page,
- 				  0xff, PMBUS_VIRT_PWM_1 + id, PSC_PWM,
- 				  false, false, true);
- 
- 	if (!sensor)
- 		return -ENOMEM;
- 
--	sensor = pmbus_add_sensor(data, "pwm", "enable", index, page,
-+	sensor = pmbus_add_sensor(client, data, "pwm", "enable", index, page,
- 				  0xff, PMBUS_VIRT_PWM_ENABLE_1 + id, PSC_PWM,
- 				  true, false, false);
- 
-@@ -1947,7 +2018,8 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
- 			    (!(regval & (PB_FAN_1_INSTALLED >> ((f & 1) * 4)))))
- 				continue;
- 
--			if (pmbus_add_sensor(data, "fan", "input", index,
-+			if (pmbus_add_sensor(client, data, "fan",
-+					     "input", index,
- 					     page, 0xff, pmbus_fan_registers[f],
- 					     PSC_FAN, true, true, true) == NULL)
- 				return -ENOMEM;
--- 
-2.17.1
-
+Guenter

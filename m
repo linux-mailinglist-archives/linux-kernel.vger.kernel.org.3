@@ -2,53 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9164E3ADA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3445B4E3ADE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 09:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbiCVIm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 04:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
+        id S231565AbiCVImo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 04:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiCVImZ (ORCPT
+        with ESMTP id S231502AbiCVImh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:42:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B65125D8;
-        Tue, 22 Mar 2022 01:40:58 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 417CF210F3;
-        Tue, 22 Mar 2022 08:40:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647938457; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0wkneNYxu4+l2f/BwLiRAlini3J7bunPFDGOTKdmMbo=;
-        b=aq6Tcn/s2XSpyqv94Jpi3whbz2A0f6QZQd2Mffhvu70LiPOkVlLzqRbyCxMnVLMHji6MN0
-        +Syv9J3Ia7u2PStho5upOeSuYxDUJ4DOK2Pv4eDq5ZByXJKn1vtZvYDNPihvve6RxrdPAo
-        1fLCAPZix2NZhePzVsOxCCItV6HGLaI=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D8E3EA3B88;
-        Tue, 22 Mar 2022 08:40:56 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 09:40:56 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, surenb@google.com, vbabka@suse.cz,
-        rientjes@google.com, sfr@canb.auug.org.au, edgararriaga@google.com,
-        minchan@kernel.org, nadav.amit@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, "# 5 . 10+" <stable@vger.kernel.org>
-Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
- process_madvise
-Message-ID: <YjmLmBUmROr+hshO@dhcp22.suse.cz>
-References: <cover.1647008754.git.quic_charante@quicinc.com>
- <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
- <Yjia8AzhgWh4KPbp@dhcp22.suse.cz>
- <7207b2f5-6b3e-aea4-aa1b-9c6d849abe34@quicinc.com>
+        Tue, 22 Mar 2022 04:42:37 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99CE6BDD1;
+        Tue, 22 Mar 2022 01:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647938468; x=1679474468;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nijQD/zlc5+xUJ+OIlvFTQfbS4iCg/CX/NvW4jL1NHY=;
+  b=IzRqD4+BN1Gtp9FKWKiOZhFBtwvOfvmSEVP1nJgYpo3uTFgy7ffMGfO9
+   hBD6hpnVODEwMrBUByswgbZXhtl72OPz7S9Z/9IVxD+SFVB/qc9AbtbKo
+   bfQ0fBiXmepuX9wDVK7e8rBeHeKYd1UuLxiFx5kMneEFqRy0wJSr1+ygg
+   8=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Mar 2022 01:41:08 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 01:41:08 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 22 Mar 2022 01:41:07 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 22 Mar 2022 01:41:03 -0700
+Date:   Tue, 22 Mar 2022 14:10:59 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_kriskura@quicinc.com>
+Subject: Re: [PATCH v11 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <20220322084059.GN23316@hu-pkondeti-hyd.qualcomm.com>
+References: <1647932876-23249-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1647932876-23249-3-git-send-email-quic_c_sanm@quicinc.com>
+ <20220322083221.GJ23316@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <7207b2f5-6b3e-aea4-aa1b-9c6d849abe34@quicinc.com>
+In-Reply-To: <20220322083221.GJ23316@hu-pkondeti-hyd.qualcomm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -59,49 +76,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 22-03-22 12:40:24, Charan Teja Kalla wrote:
-> Thanks Michal for the inputs.
-> 
-> On 3/21/2022 9:04 PM, Michal Hocko wrote:
-> > On Fri 11-03-22 20:59:06, Charan Teja Kalla wrote:
-> >> The process_madvise() system call is expected to skip holes in vma
-> >> passed through 'struct iovec' vector list.
-> > Where is this assumption coming from? From the man page I can see:
-> > : The advice might be applied to only a part of iovec if one of its
-> > : elements points to an invalid memory region in the remote
-> > : process.  No further elements will be processed beyond that
-> > : point.  
-> 
-> I assumed this while processing a single element of a iovec. In a
-> scenario where a range passed contains multiple VMA's + holes, on
-> encountering the VMA with VM_LOCKED|VM_HUGETLB|VM_PFNMAP, we are
-> immediately stopping further processing of that iovec element with
-> EINVAL return. Where as on encountering a hole, we are simply
-> remembering it as ENOMEM but continues processing that iovec element and
-> in the end returns ENOMEM. This means that complete range is processed
-> but still returning ENOMEM, hence the assumption of skipping holes in a
-> vma.
-> 
-> The other problem is, in an individual iovec element, though some bytes
-> are processed we may still endup in returning EINVAL which is hard for
-> the user to take decisions i.e. he doesn't know at which address it is
-> exactly failed to advise.
-> 
-> Anyway, both these will be addressed in the next version of this patch
-> with the suggestions from minchan [1] where it mentioned that: "it
-> should represent exact bytes it addressed with exacts ranges like
-> process_vm_readv/writev. Poviding valid ranges is responsiblity from the
-> user."
+Hi Sandeep,
 
-I would tend to agree that the userspace should be providing sensible
-ranges (either subsets or full existing mappings). Whenever multiple
-vmas are defined by a single iovec, things get more complicated. IMO
-process_madvise should mimic the madvise semantic applied to each iovec.
-That means to bail out on an error. That applies to ENOMEM even when the
-last iovec has been processed completely.
+On Tue, Mar 22, 2022 at 02:02:21PM +0530, Pavan Kondeti wrote:
+> Hi Sandeep,
+> 
+> On Tue, Mar 22, 2022 at 12:37:53PM +0530, Sandeep Maheswaram wrote:
+> > During suspend read the status of all port and make sure the PHYs
+> > are in the correct mode based on current speed.
+> > Phy interrupt masks are set based on this mode. Keep track of the mode
+> > of the HS PHY to be able to configure wakeup properly.
+> > 
+> > Also check during suspend if any wakeup capable devices are
+> > connected to the controller (directly or through hubs), if there
+> > are none set a flag to indicate that the PHY is powered
+> > down during suspend.
+> > 
+> > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > ---
+> >  drivers/usb/dwc3/core.c | 54 ++++++++++++++++++++++++++++++++++++++++---------
+> >  1 file changed, 45 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 1170b80..232a734 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -32,12 +32,14 @@
+> >  #include <linux/usb/gadget.h>
+> >  #include <linux/usb/of.h>
+> >  #include <linux/usb/otg.h>
+> > +#include <linux/usb/hcd.h>
+> >  
+> >  #include "core.h"
+> >  #include "gadget.h"
+> >  #include "io.h"
+> >  
+> >  #include "debug.h"
+> > +#include "../host/xhci.h"
+> >  
+> >  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
+> >  
+> > @@ -1861,10 +1863,36 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
+> >  	return ret;
+> >  }
+> >  
+> > +static void dwc3_set_phy_speed_mode(struct dwc3 *dwc)
+> > +{
+> > +
+> > +	int i, num_ports;
+> > +	u32 reg;
+> > +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+> > +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+> > +
+> > +	dwc->hs_phy_mode = 0;
+> > +
+Sorry, My bad. I did not notice that the flags are cleared here.
 
-This would allow to learn about address space change that the caller is
-not aware of. That being said, your first patch should be good enough.
--- 
-Michal Hocko
-SUSE Labs
+Thanks,
+Pavan

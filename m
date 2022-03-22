@@ -2,55 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488B24E37A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 04:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EB44E382C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 06:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236181AbiCVDls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 23:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S236643AbiCVFD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 01:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236157AbiCVDlp (ORCPT
+        with ESMTP id S236781AbiCVFDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 23:41:45 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E0F12AE8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 20:40:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647920419; x=1679456419;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vu6HQ1OwxkKp1e9igqpO+JQtyjs4wSWiUv3uUuz4EIw=;
-  b=ApXOOW0+3oVCRB1FPNjGL/fSyb/7boAj6kZ/bUJSGIH/38iJgM2kzeSo
-   4YOVy//dcdO7warBd7LxgOeOp8IJbdQWEPBEXg2V7UokBUyTcMDqVamyx
-   XJmy2Cdwaf8hxxUHLTUZu3DY8QZIt5/OzzyRRfL4Qg85sJHj3w0Sz8x9t
-   zVfus7nhDcJfQMtugPKARPssmhEmeT8JAIa5YEq1jUVB4yzP32NxNcQWY
-   Ff01RBqaJGqZItlAC8m0TRfePv6tukgB9HyoZ6RkD1RjVG/U0rmWHIYuS
-   jaGgwMtHjgiGoRft/KEuSpCp8P8iW7ZMqJpHXAhdjzIZktJxqsZ/umO5M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="318422534"
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="318422534"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 20:40:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="500411042"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.87])
-  by orsmga003.jf.intel.com with ESMTP; 21 Mar 2022 20:40:16 -0700
-From:   kah.jing.lee@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, radu.bacrau@intel.com,
-        tien.sung.ang@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>
-Subject: [PATCH v3] firmware: stratix10-rsu: extend RSU driver to get DCMF status
-Date:   Tue, 22 Mar 2022 19:39:27 +0800
-Message-Id: <20220322113926.397901-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 22 Mar 2022 01:03:06 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2D26579
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:01:36 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id a5so17307397pfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=X7NAKB7l6ViXJ0oZ4Jc2ZumZYNmi/rHjpDXtyPmV2R8=;
+        b=g3/FoHiUazbAID4UONDlWu0/MFcvOTjt9030xcuq1geqmbWVNd/30+8N+0Oq7SlHTQ
+         ShCcylTQvBgkiQhwzYfo5uScmvDKsVnbyySjOT2pbNoCI3xoA3fnr6tPR1ZEdVxc4yIZ
+         GIiJtUdyGRRRkTMwyZLEQ08d9UimWCk+vEFVav0Ns8PqF8gF30oyJr64lVacOqhA7QU+
+         94WGw+cAt1enuJ+pweCAio+S3tSISIDTnVjB5zSkbSMH3FUDkVPrzuEoF0mnL2dhKJn7
+         NpFhMLlVELoHr8QI17ihOXH6prwb3uB0EeX+dIVmRcfndFphCCumALz+UoTJAE8hgbvr
+         9Q0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X7NAKB7l6ViXJ0oZ4Jc2ZumZYNmi/rHjpDXtyPmV2R8=;
+        b=wk3alOjATx1He92u9YXmQWTNqOEEH0/CcRgCt9pPa86urSUQ7wCfR4i0x4DVLJbj8g
+         SkheTuSSKBvo7FQPfaIL84POCrUpFYU8TN8frPaBMRLEzloj6wN3Yr+ALQFitlKrs9/C
+         dRk3r7g58KdpEciyN/WKQZfIK1doZ1nD6UxUPZvuNPPd+qHVmEBMn1fqYxb4BQ5pRrp0
+         1VDNCseN59W3ZCLvFD2DUHOGcm8YnD9EsumQQ6FQIIy0EvR7C+P5gTNjWp5eAvGAgT/F
+         gaO/TXK6FLywL2eT75K0+pltGEwn5LV8sBpWw3sHF2bV87eC7eC9rtN17+/df5HJMxpa
+         ymDQ==
+X-Gm-Message-State: AOAM532rB72wUy4wGzJwQMAO1DTYs/e/xLmtvoJws6vc9ht1Dodn+p8e
+        ZFzYpHBIM7Z0meGmgfhbzBlZzA==
+X-Google-Smtp-Source: ABdhPJzt9VhT99JCPNGQbNxfYbd88mc9ChDYiwlMJJzkif6FI7OPNEL8/Z5Py4ThKgwR7DUAkqvplA==
+X-Received: by 2002:a63:2204:0:b0:378:9f08:206d with SMTP id i4-20020a632204000000b003789f08206dmr21032801pgi.3.1647925296250;
+        Mon, 21 Mar 2022 22:01:36 -0700 (PDT)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id l20-20020a056a00141400b004f65cedfb09sm21201478pfu.48.2022.03.21.22.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 22:01:35 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 05:01:32 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Peter Xu <peterx@redhat.com>, Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 4/4] selftests: KVM: use dirty logging to check if page
+ stats work correctly
+Message-ID: <YjlYLEwR9iUUXCWd@google.com>
+References: <20220321002638.379672-1-mizhang@google.com>
+ <20220321002638.379672-5-mizhang@google.com>
+ <CANgfPd-Q_a5kc9on3Lcps=1tghAGvacbojPu9uS37bspupskGg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANgfPd-Q_a5kc9on3Lcps=1tghAGvacbojPu9uS37bspupskGg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,288 +81,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kah Jing Lee <kah.jing.lee@intel.com>
+On Mon, Mar 21, 2022, Ben Gardon wrote:
+> On Sun, Mar 20, 2022 at 5:26 PM Mingwei Zhang <mizhang@google.com> wrote:
+> >
+> > When dirty logging is enabled, KVM splits the all hugepage mapping in
+> > NPT/EPT into the smallest 4K size. This property could be used to check if
+> 
+> Note this is only true if eager page splitting is enabled. It would be
+> more accurate to say:
+> "While dirty logging is enabled, KVM will re-map any accessed page in
+> NPT/EPT at 4K."
+> 
+> > the page stats metrics work properly in KVM mmu. At the same time, this
+> > logic might be used the other way around: using page stats to verify if
+> > dirty logging really splits all huge pages. Moreover, when dirty logging is
+> 
+> It might be worth having a follow up commit which checks if eager
+> splitting is enabled and changes the assertions accordingly.
 
-Extend RSU driver to get DCMF status.
+So eager splitting is still pending for review, right? But yes, I can
+add one after the feature get merged.
 
-The status of each DCMF is reported. The currently used DCMF is used as
-reference, while the other three are compared against it to determine if
-they are corrupted.
+> 
+> > disabled, KVM zaps corresponding SPTEs and we could check whether the large
+> > pages come back when guest touches the pages again.
+> >
+> > So add page stats checking in dirty logging performance selftest. In
+> > particular, add checks in three locations:
+> >  - just after vm is created;
+> >  - after populating memory into vm but before enabling dirty logging;
+> >  - just after turning on dirty logging.
+> 
+> Note a key stage here is after dirty logging is enabled, and then the
+> VM touches all the memory in the data region.
+> I believe that's the point at which you're making the assertion that
+> all mappings are 4k currently, which is the right place if eager
+> splitting is not enabled.
 
-DCMF = Decision Configuration Management Firmware.
-RSU = Remote System Update
+Oh, sorry. This one should be after dirty logging is done, not 'just
+after turning on dirty logging'. Will update it.
 
-Signed-off-by: Radu Bacrau <radu.bacrau@intel.com>
-Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
----
-Changelog v2:
-* Fix the compilation error missing header file for COMMAND_RSU_DCMF_STATUS
----
-Changelog v3:
-* Resent, miss spacing
----
- drivers/firmware/stratix10-rsu.c              | 131 +++++++++++++++++-
- .../firmware/intel/stratix10-svc-client.h     |   4 +-
- 2 files changed, 128 insertions(+), 7 deletions(-)
+> 
+> >  - after one final iteration after turning off dirty logging.
+> >
+> > Tested using commands:
+> >  - ./dirty_log_perf_test -s anonymous_hugetlb_1gb
+> >  - ./dirty_log_perf_test -s anonymous_thp
+> >
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: David Matlack <dmatlack@google.com>
+> > Cc: Jing Zhang <jingzhangos@google.com>
+> > Cc: Peter Xu <peterx@redhat.com>
+> >
+> > Suggested-by: Ben Gardon <bgorden@google.com>
+> > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > ---
+> >  .../selftests/kvm/dirty_log_perf_test.c       | 52 +++++++++++++++++++
+> >  1 file changed, 52 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > index 1954b964d1cf..ab0457d91658 100644
+> > --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > @@ -19,6 +19,10 @@
+> >  #include "perf_test_util.h"
+> >  #include "guest_modes.h"
+> >
+> > +#ifdef __x86_64__
+> > +#include "processor.h"
+> > +#endif
+> > +
+> >  /* How many host loops to run by default (one KVM_GET_DIRTY_LOG for each loop)*/
+> >  #define TEST_HOST_LOOP_N               2UL
+> >
+> > @@ -185,6 +189,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >                                  p->slots, p->backing_src,
+> >                                  p->partition_vcpu_memory_access);
+> >
+> > +#ifdef __x86_64__
+> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") == 0,
+> > +                   "4K page is non zero");
+> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
+> > +                   "2M page is non zero");
+> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
+> > +                   "1G page is non zero");
+> > +#endif
+> >         perf_test_set_wr_fract(vm, p->wr_fract);
+> >
+> >         guest_num_pages = (nr_vcpus * guest_percpu_mem_size) >> vm_get_page_shift(vm);
+> > @@ -222,6 +234,16 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >         pr_info("Populate memory time: %ld.%.9lds\n",
+> >                 ts_diff.tv_sec, ts_diff.tv_nsec);
+> >
+> > +#ifdef __x86_64__
+> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
+> > +                   "4K page is zero");
+> > +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP)
+> 
+> This should also handle 2M hugetlb memory.
+> I think there might be a library function to translate backing src
+> type to page size too, which could make this check cleaner.
 
-diff --git a/drivers/firmware/stratix10-rsu.c b/drivers/firmware/stratix10-rsu.c
-index 9378075d04e9..856bc03ca07c 100644
---- a/drivers/firmware/stratix10-rsu.c
-+++ b/drivers/firmware/stratix10-rsu.c
-@@ -24,12 +24,16 @@
- #define RSU_DCMF1_MASK			GENMASK_ULL(63, 32)
- #define RSU_DCMF2_MASK			GENMASK_ULL(31, 0)
- #define RSU_DCMF3_MASK			GENMASK_ULL(63, 32)
-+#define RSU_DCMF0_STATUS_MASK		GENMASK_ULL(15, 0)
-+#define RSU_DCMF1_STATUS_MASK		GENMASK_ULL(31, 16)
-+#define RSU_DCMF2_STATUS_MASK		GENMASK_ULL(47, 32)
-+#define RSU_DCMF3_STATUS_MASK		GENMASK_ULL(63, 48)
- 
- #define RSU_TIMEOUT	(msecs_to_jiffies(SVC_RSU_REQUEST_TIMEOUT_MS))
- 
- #define INVALID_RETRY_COUNTER		0xFF
- #define INVALID_DCMF_VERSION		0xFF
--
-+#define INVALID_DCMF_STATUS		0xFFFFFFFF
- 
- typedef void (*rsu_callback)(struct stratix10_svc_client *client,
- 			     struct stratix10_svc_cb_data *data);
-@@ -49,6 +53,10 @@ typedef void (*rsu_callback)(struct stratix10_svc_client *client,
-  * @dcmf_version.dcmf1: Quartus dcmf1 version
-  * @dcmf_version.dcmf2: Quartus dcmf2 version
-  * @dcmf_version.dcmf3: Quartus dcmf3 version
-+ * @dcmf_status.dcmf0: dcmf0 status
-+ * @dcmf_status.dcmf1: dcmf1 status
-+ * @dcmf_status.dcmf2: dcmf2 status
-+ * @dcmf_status.dcmf3: dcmf3 status
-  * @retry_counter: the current image's retry counter
-  * @max_retry: the preset max retry value
-  */
-@@ -73,6 +81,13 @@ struct stratix10_rsu_priv {
- 		unsigned int dcmf3;
- 	} dcmf_version;
- 
-+	struct {
-+		unsigned int dcmf0;
-+		unsigned int dcmf1;
-+		unsigned int dcmf2;
-+		unsigned int dcmf3;
-+	} dcmf_status;
-+
- 	unsigned int retry_counter;
- 	unsigned int max_retry;
- };
-@@ -129,7 +144,7 @@ static void rsu_command_callback(struct stratix10_svc_client *client,
- 	struct stratix10_rsu_priv *priv = client->priv;
- 
- 	if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support notify\n");
-+		dev_warn(client->dev, "Secure FW doesn't support notify\n");
- 	else if (data->status == BIT(SVC_STATUS_ERROR))
- 		dev_err(client->dev, "Failure, returned status is %lu\n",
- 			BIT(data->status));
-@@ -139,7 +154,7 @@ static void rsu_command_callback(struct stratix10_svc_client *client,
- 
- /**
-  * rsu_retry_callback() - Callback from Intel service layer for getting
-- * the current image's retry counter from the firmware
-+ * the current image's retry counter from firmware
-  * @client: pointer to client
-  * @data: pointer to callback data structure
-  *
-@@ -156,7 +171,7 @@ static void rsu_retry_callback(struct stratix10_svc_client *client,
- 	if (data->status == BIT(SVC_STATUS_OK))
- 		priv->retry_counter = *counter;
- 	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support retry\n");
-+		dev_warn(client->dev, "Secure FW doesn't support retry\n");
- 	else
- 		dev_err(client->dev, "Failed to get retry counter %lu\n",
- 			BIT(data->status));
-@@ -181,7 +196,7 @@ static void rsu_max_retry_callback(struct stratix10_svc_client *client,
- 	if (data->status == BIT(SVC_STATUS_OK))
- 		priv->max_retry = *max_retry;
- 	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support max retry\n");
-+		dev_warn(client->dev, "Secure FW doesn't support max retry\n");
- 	else
- 		dev_err(client->dev, "Failed to get max retry %lu\n",
- 			BIT(data->status));
-@@ -215,6 +230,35 @@ static void rsu_dcmf_version_callback(struct stratix10_svc_client *client,
- 	complete(&priv->completion);
- }
- 
-+/**
-+ * rsu_dcmf_status_callback() - Callback from Intel service layer for getting
-+ * the DCMF status
-+ * @client: pointer to client
-+ * @data: pointer to callback data structure
-+ *
-+ * Callback from Intel service layer for DCMF status
-+ */
-+static void rsu_dcmf_status_callback(struct stratix10_svc_client *client,
-+				     struct stratix10_svc_cb_data *data)
-+{
-+	struct stratix10_rsu_priv *priv = client->priv;
-+	unsigned long long *value = (unsigned long long *)data->kaddr1;
-+
-+	if (data->status == BIT(SVC_STATUS_OK)) {
-+		priv->dcmf_status.dcmf0 = FIELD_GET(RSU_DCMF0_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf1 = FIELD_GET(RSU_DCMF1_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf2 = FIELD_GET(RSU_DCMF2_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf3 = FIELD_GET(RSU_DCMF3_STATUS_MASK,
-+						    *value);
-+	} else
-+		dev_err(client->dev, "failed to get DCMF status\n");
-+
-+	complete(&priv->completion);
-+}
-+
- /**
-  * rsu_send_msg() - send a message to Intel service layer
-  * @priv: pointer to rsu private data
-@@ -361,7 +405,8 @@ static ssize_t max_retry_show(struct device *dev,
- 	if (!priv)
- 		return -ENODEV;
- 
--	return sprintf(buf, "0x%08x\n", priv->max_retry);
-+	return scnprintf(buf, sizeof(priv->max_retry),
-+			 "0x%08x\n", priv->max_retry);
- }
- 
- static ssize_t dcmf0_show(struct device *dev,
-@@ -408,6 +453,61 @@ static ssize_t dcmf3_show(struct device *dev,
- 	return sprintf(buf, "0x%08x\n", priv->dcmf_version.dcmf3);
- }
- 
-+static ssize_t dcmf0_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf0 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf0);
-+}
-+
-+static ssize_t dcmf1_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf1 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf1);
-+}
-+
-+static ssize_t dcmf2_status_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf2 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf2);
-+}
-+
-+static ssize_t dcmf3_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf3 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf3);
-+}
- static ssize_t reboot_image_store(struct device *dev,
- 				  struct device_attribute *attr,
- 				  const char *buf, size_t count)
-@@ -484,6 +584,10 @@ static DEVICE_ATTR_RO(dcmf0);
- static DEVICE_ATTR_RO(dcmf1);
- static DEVICE_ATTR_RO(dcmf2);
- static DEVICE_ATTR_RO(dcmf3);
-+static DEVICE_ATTR_RO(dcmf0_status);
-+static DEVICE_ATTR_RO(dcmf1_status);
-+static DEVICE_ATTR_RO(dcmf2_status);
-+static DEVICE_ATTR_RO(dcmf3_status);
- static DEVICE_ATTR_WO(reboot_image);
- static DEVICE_ATTR_WO(notify);
- 
-@@ -500,6 +604,10 @@ static struct attribute *rsu_attrs[] = {
- 	&dev_attr_dcmf1.attr,
- 	&dev_attr_dcmf2.attr,
- 	&dev_attr_dcmf3.attr,
-+	&dev_attr_dcmf0_status.attr,
-+	&dev_attr_dcmf1_status.attr,
-+	&dev_attr_dcmf2_status.attr,
-+	&dev_attr_dcmf3_status.attr,
- 	&dev_attr_reboot_image.attr,
- 	&dev_attr_notify.attr,
- 	NULL
-@@ -532,6 +640,10 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
- 	priv->dcmf_version.dcmf2 = INVALID_DCMF_VERSION;
- 	priv->dcmf_version.dcmf3 = INVALID_DCMF_VERSION;
- 	priv->max_retry = INVALID_RETRY_COUNTER;
-+	priv->dcmf_status.dcmf0 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf1 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf2 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf3 = INVALID_DCMF_STATUS;
- 
- 	mutex_init(&priv->lock);
- 	priv->chan = stratix10_svc_request_channel_byname(&priv->client,
-@@ -561,6 +673,13 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
- 		stratix10_svc_free_channel(priv->chan);
- 	}
- 
-+	ret = rsu_send_msg(priv, COMMAND_RSU_DCMF_STATUS,
-+			   0, rsu_dcmf_status_callback);
-+	if (ret) {
-+		dev_err(dev, "Error, getting DCMF status %i\n", ret);
-+		stratix10_svc_free_channel(priv->chan);
-+	}
-+
- 	ret = rsu_send_msg(priv, COMMAND_RSU_RETRY, 0, rsu_retry_callback);
- 	if (ret) {
- 		dev_err(dev, "Error, getting RSU retry %i\n", ret);
-diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
-index 19781b0f6429..1e413f8a3f6f 100644
---- a/include/linux/firmware/intel/stratix10-svc-client.h
-+++ b/include/linux/firmware/intel/stratix10-svc-client.h
-@@ -111,12 +111,14 @@ enum stratix10_svc_command_code {
- 	COMMAND_RECONFIG_DATA_SUBMIT,
- 	COMMAND_RECONFIG_DATA_CLAIM,
- 	COMMAND_RECONFIG_STATUS,
--	COMMAND_RSU_STATUS,
-+	/* for RSU */
-+	COMMAND_RSU_STATUS = 10,
- 	COMMAND_RSU_UPDATE,
- 	COMMAND_RSU_NOTIFY,
- 	COMMAND_RSU_RETRY,
- 	COMMAND_RSU_MAX_RETRY,
- 	COMMAND_RSU_DCMF_VERSION,
-+	COMMAND_RSU_DCMF_STATUS,
- };
- 
- /**
--- 
-2.26.2
-
+Ack.
+> 
+> > +               TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
+> > +                           "2M page is zero");
+> > +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
+> > +               TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
+> > +                           "1G page is zero");
+> > +#endif
+> >         /* Enable dirty logging */
+> >         clock_gettime(CLOCK_MONOTONIC, &start);
+> >         enable_dirty_logging(vm, p->slots);
+> > @@ -267,6 +289,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >                                 iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+> >                 }
+> >         }
+> > +#ifdef __x86_64__
+> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
+> > +                   "4K page is zero after dirty logging");
+> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
+> > +                   "2M page is non-zero after dirty logging");
+> > +       TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
+> > +                   "1G page is non-zero after dirty logging");
+> > +#endif
+> 
+> Note this is after dirty logging has been enabled, AND all pages in
+> the data region have been written by the guest.
+> 
+> >
+> >         /* Disable dirty logging */
+> >         clock_gettime(CLOCK_MONOTONIC, &start);
+> > @@ -275,6 +305,28 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >         pr_info("Disabling dirty logging time: %ld.%.9lds\n",
+> >                 ts_diff.tv_sec, ts_diff.tv_nsec);
+> >
+> > +#ifdef __x86_64__
+> > +       /*
+> > +        * Increment iteration to run the vcpus again to verify if huge pages
+> > +        * come back.
+> > +        */
+> > +       iteration++;
+> > +       pr_info("Starting the final iteration to verify page stats\n");
+> > +
+> > +       for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+> > +               while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
+> > +                      != iteration)
+> > +                       ;
+> > +       }
+> 
+> We might as well do this on all archs. Even without the stats, it at
+> least validates that disabling dirty logging doesn't break the VM.
+> 
+Ack.
+> > +
+> > +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP)
+> > +               TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
+> > +                           "2M page is zero");
+> > +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
+> > +               TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
+> > +                           "1G page is zero");
+> > +#endif
+> > +
+> >         /* Tell the vcpu thread to quit */
+> >         host_quit = true;
+> >         perf_test_join_vcpu_threads(nr_vcpus);
+> > --
+> > 2.35.1.894.gb6a874cedc-goog
+> >

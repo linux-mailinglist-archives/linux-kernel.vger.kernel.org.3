@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2504E4311
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBAE4E4312
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 16:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238553AbiCVPe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 11:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S238552AbiCVPeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 11:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbiCVPeX (ORCPT
+        with ESMTP id S238559AbiCVPee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:34:23 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4A382D1B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:32:53 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id y142so34238245ybe.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tqDPM5RlgpXSQi1Ee2XnXishFimAHDqmADlb12IdHGI=;
-        b=yeTDYvrn200X+80eXdUJtJ1yM+FmFqDC2clNaFSxGxu/DPOvhJCpKD6uZvWu9DUeHf
-         j4EQLVr6R0+9uVHTaxUYz1bMwnmDIjkQPO/r5TVYMIyZo7FKNYThRrL6VM12mQBkVdjF
-         WQKrbiD1YuwAntBEWGAgziO/yMAYWAH+3gEhBcb3hov7lHGniKWPh0LHSTUkHRQ9IL16
-         o1ypIQo3iF0XwRnEfxI5Lllqinm89HNPTKNjopuXLTJe5jQM+i2BzbGg/j9tXD/SZhot
-         Zh+jycNEhJhiNBYZKZ3a0Wmx5ozxn4oznybrTRmlYXlLmhrXYRYodHRvCVRSvUwnX7FO
-         admA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tqDPM5RlgpXSQi1Ee2XnXishFimAHDqmADlb12IdHGI=;
-        b=F9nfQXzZyJPEIlFyGU70FLaY6+bfH6RRj8vFPLXc2LZo1FHCEfZoFqtmHw5shNe3P7
-         NYPkw2GQUUwv//BstZCrG1l+Dx5JVaCj28ste56WDY9bmNPXRGu9SZQE/c6FfG9ySHT0
-         IFIDGrTg2ZJmC3xYDwl87zOHzWL/rreIlqvp4FgPpB3tHxoFxQYGakvvwvVuWiWPKmDs
-         XCmU3Vy6BS0XMxancMM8bDDhj0pqYxH5pQzC6jOS6LRMyOV8wIg+9BRsqN/W8f6dIiRS
-         YZ9UuR6gvNtAoBbcpJeEohfYcyi5ZMI4FJhCLTJz5c2nhfxqOaBPU6567EBq4phqAZxA
-         8O2g==
-X-Gm-Message-State: AOAM532D9s6LCs/Oupn0a8x/H2EEZuyheEAkkqBgkur4kfd/txL9Is5f
-        oJitRxskLMGL2gXSSIudcR4VobVZSuAcqqtdzOvxBg==
-X-Google-Smtp-Source: ABdhPJx/oh3K4UCmXLO5BuBjsTgL2X9Ol2SqzDRFLnaCkRwITbus2a6io3xJ6+SrfhNofe6YIZWMU/q2CVjkezGEOeY=
-X-Received: by 2002:a25:9846:0:b0:61a:3deb:4d39 with SMTP id
- k6-20020a259846000000b0061a3deb4d39mr27461840ybo.537.1647963172547; Tue, 22
- Mar 2022 08:32:52 -0700 (PDT)
+        Tue, 22 Mar 2022 11:34:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928E353B41
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 08:33:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7411B81CD8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 15:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E5DC340EC;
+        Tue, 22 Mar 2022 15:33:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647963181;
+        bh=nCxXH4UKeu6WJJkK1TsRbqUD6rSI7uvJcCZ1DUtXMTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tiXeW4T3PrjoxDEYOSdlGSwI5MzWXkvw2pW2Kua0vTUmlcPnSZfFQXZtbsNaRbjzl
+         JiDgxWhvAKa7uiGA01ytREW5lkBMqsiFsauB28r3IDUQ8Xb6m/5tB0EXmSu9cEFV+v
+         bWL83ojRET3tewxlckFRLVAtxvUCMNbj4+8fmrcno4Xa8j0ceRIdvG08C5a3eaFSwT
+         pPlbV6yffj3MZ68y9RAc81BJJjGT3ZZAQNIeC+9ZXeIrkM3xlwx2ycBtkwtfSGxGET
+         KRBa+sE2J0n2YAWsa4csWnimZhqsZWOQ8z8QqLrbRRg/0KiRAkFXzbQcmCDk8vx9Z/
+         WBt5aRjyYAcAg==
+Date:   Tue, 22 Mar 2022 08:32:54 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [GIT PULL] scheduler updates for v5.18
+Message-ID: <YjnsJkUl5mO22mzg@dev-arch.thelio-3990X>
+References: <YjhZUezhnamHAl0H@gmail.com>
+ <YjiddAnoCCz7Tbt3@dev-arch.thelio-3990X>
+ <YjmAzX9kSeSjumKd@gmail.com>
 MIME-Version: 1.0
-References: <20220321133216.648316863@linuxfoundation.org>
-In-Reply-To: <20220321133216.648316863@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 22 Mar 2022 21:02:41 +0530
-Message-ID: <CA+G9fYvNXydpNH_oymBx3PHbVu=_HtqSCOrF-x0usPSpWJcJdQ@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/16] 4.9.308-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjmAzX9kSeSjumKd@gmail.com>
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,157 +66,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 19:21, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.308 release.
-> There are 16 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.308-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Mar 22, 2022 at 08:54:53AM +0100, Ingo Molnar wrote:
+> 
+> * Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > Hi Ingo,
+> > 
+> > On Mon, Mar 21, 2022 at 11:54:09AM +0100, Ingo Molnar wrote:
+> > > Ingo Molnar (17):
+> > >       sched/headers: Fix header to build standalone: <linux/sched_clock.h>
+> > >       sched/headers: Add header guard to kernel/sched/sched.h
+> > >       sched/headers: Add header guard to kernel/sched/stats.h and kernel/sched/autogroup.h
+> > >       sched/headers: sched/clock: Mark all functions 'notrace', remove CC_FLAGS_FTRACE build asymmetry
+> > >       sched/headers: Add initial new headers as identity mappings
+> > >       sched/headers: Fix comment typo in kernel/sched/cpudeadline.c
+> > >       sched/headers: Make the <linux/sched/deadline.h> header build standalone
+> > >       sched/headers: Introduce kernel/sched/build_utility.c and build multiple .c files there
+> > >       sched/headers: Introduce kernel/sched/build_policy.c and build multiple .c files there
+> > >       sched/headers: Standardize kernel/sched/sched.h header dependencies
+> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/core.c dependencies
+> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/fair.c dependencies
+> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/build_policy.c dependencies
+> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/build_utility.c dependencies
+> > >       sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies
+> > >       sched/headers: Only include <linux/entry-common.h> when CONFIG_GENERIC_ENTRY=y
+> > >       headers/prep: Fix header to build standalone: <linux/psi.h>
+> > 
+> > This series regresses ARCH=arm allmodconfig:
+> > 
+> > $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- mrproper allmodconfig kernel/sched/
+> > In file included from kernel/sched/fair.c:52:
+> > kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+> >    87 | # include <asm/paravirt_api_clock.h>
+> >       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+> > make[3]: *** [scripts/Makefile.build:288: kernel/sched/fair.o] Error 1
+> > In file included from kernel/sched/core.c:81:
+> > kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+> >    87 | # include <asm/paravirt_api_clock.h>
+> >       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+> > make[3]: *** [scripts/Makefile.build:288: kernel/sched/core.o] Error 1
+> > In file included from kernel/sched/build_policy.c:33:
+> > kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+> >    87 | # include <asm/paravirt_api_clock.h>
+> >       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+> > make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_policy.o] Error 1
+> > In file included from kernel/sched/build_utility.c:52:
+> > kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+> >    87 | # include <asm/paravirt_api_clock.h>
+> >       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+> > make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_utility.o] Error 1
+> > make[3]: Target '__build' not remade because of errors.
+> > make[2]: *** [scripts/Makefile.build:550: kernel/sched] Error 2
+> > 
+> > Randy Dunlap has sent a patch that fixes it, which I just reviewed:
+> > 
+> > https://lore.kernel.org/r/20220316204146.14000-1-rdunlap@infradead.org/
+> 
+> Applied, thanks Nathan!
+> 
+> > It would be nice if this could be taken with the pull (or submitted with
+> > the pull in a v2 as I see Qian's comment) to avoid regressing the build.
+> 
+> Will do.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Thank you a lot for the quick response and fix, I appreciate it!
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.9.308-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.9.y
-* git commit: 9edf1c247ba23173e6a105911ccdd3491f0f1a7e
-* git describe: v4.9.307-17-g9edf1c247ba2
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
-07-17-g9edf1c247ba2
-
-## Test Regressions (compared to v4.9.307-12-g907431a01b50)
-No test regressions found.
-
-## Metric Regressions (compared to v4.9.307-12-g907431a01b50)
-No metric regressions found.
-
-## Test Fixes (compared to v4.9.307-12-g907431a01b50)
-No test fixes found.
-
-## Metric Fixes (compared to v4.9.307-12-g907431a01b50)
-No metric fixes found.
-
-## Test result summary
-total: 51902, pass: 42014, fail: 393, skip: 8470, xfail: 1025
-
-## Build Summary
-* arm: 254 total, 238 passed, 16 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 18 passed, 1 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Cheers,
+Nathan

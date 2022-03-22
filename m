@@ -2,198 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790914E45C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D584E45CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 19:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240267AbiCVSPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 14:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
+        id S234189AbiCVSQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 14:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbiCVSPj (ORCPT
+        with ESMTP id S231956AbiCVSQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 14:15:39 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C544193C1;
-        Tue, 22 Mar 2022 11:14:12 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id w4so22680361edc.7;
-        Tue, 22 Mar 2022 11:14:12 -0700 (PDT)
+        Tue, 22 Mar 2022 14:16:17 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50759193C3;
+        Tue, 22 Mar 2022 11:14:49 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id bi12so38084857ejb.3;
+        Tue, 22 Mar 2022 11:14:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=YSNtfm2I+E7ZPtbQKZG0Nrw6hi+P+RYiX3Pd+JP3Ab4=;
-        b=lU2Ya6Ec2j4EQTNwBZDB1kO0YT3zjgAbZVU2jIOh9B2ONxJKVuHBCbkSiPldvIJ/cg
-         dsddPzrLVmPXdpaWEccSQk7vAJKWh/egYVeLAJQP+65vsBfq+W3i/1MK5L8QMwLD2fJm
-         BUTfrJl9XJ74gnxXFEZ4jEILy+2T7858DYG/JLjMFlxdRR++gaybucA04gn7snSowYRk
-         gFnzF2c5c4joyNsuiOh8RDft+o75zissG7GfiIIVeA4ImJBxBqX8w6numCc9f3RMAJsJ
-         zNm69p/rsB9XBJmkdE7C6wZk3FCeaWYpxrPcjJ4n1zoXeLPT1ws9D3lmydHGPFw7bP0j
-         7Txw==
-X-Gm-Message-State: AOAM530UQqkCIMM7sfr0DxoADfMBZ3oKbpgE2Ph6nWcS5mgHe8HYLpXw
-        6LA+Ce4pY94NHGtk1pCIdXrfTmnBZcA/Vg==
-X-Google-Smtp-Source: ABdhPJwdUri/i8z1B7zh8yu0O1Iy/wywZGubvdSv0lI+ID/JVL2IS4yIxLLkfnX8yWWh3ln4JtofCQ==
-X-Received: by 2002:a50:c00a:0:b0:418:f10f:b27c with SMTP id r10-20020a50c00a000000b00418f10fb27cmr29450490edb.204.1647972850517;
-        Tue, 22 Mar 2022 11:14:10 -0700 (PDT)
+        bh=Vt2MdOIvO+8bb+Sz5q5lOmyC+uo7DuGX9AtMkx/1wOc=;
+        b=B6m9purulAZyK7w+/eKZT0x6/XayzUZJyxt6MaVU7xPhKl2edRp9yfOAMfCn94niP+
+         omHoiwbCWu+81YQ33Av/tDRztAZQSstwrZ54Xtz8Sx1vci/fAxY/+vcqSRPvNMjCXSx4
+         Qmrs/tmnk+NYh27nd+Ilnzfa1Km4rxtbDuwITwsBBCv9F0DL8n/jXfMIiEwGrfYRUN3J
+         +I3Enqj+1Kj6gteerqHpJcesi6LLDmpkTNz+h2fqdjiYyKWAaul0XnN5U+AChpaFa4KF
+         5Ooo+KTEtXsI0EISDaTdmBacsEhPWLKeRKDsRccRSAUdTweKhGnb55QaPtpHyS7r0QrW
+         JYVg==
+X-Gm-Message-State: AOAM530nCfsQ1dri/X8pUQmosxjNdJLvBTu++Z48CzzBnA2njhsgjlsT
+        3ahsPJxhxl3rD18JhB0iqNU=
+X-Google-Smtp-Source: ABdhPJwvfxkUsLUDEMUk3Ex27al/N+zUIRbGoflNKTlVjZQhTaUURCK/BKEDch7RqueWAUDWMXi2RQ==
+X-Received: by 2002:a17:906:d204:b0:6d6:df17:835e with SMTP id w4-20020a170906d20400b006d6df17835emr26366667ejz.20.1647972887741;
+        Tue, 22 Mar 2022 11:14:47 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id n24-20020a17090673d800b006df8ec24712sm7481201ejl.215.2022.03.22.11.14.09
+        by smtp.googlemail.com with ESMTPSA id j18-20020a170906535200b006e007fa9d0fsm3354554ejo.149.2022.03.22.11.14.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 11:14:09 -0700 (PDT)
-Message-ID: <55e161d1-face-6958-1d86-8a85b82e8485@kernel.org>
-Date:   Tue, 22 Mar 2022 19:14:08 +0100
+        Tue, 22 Mar 2022 11:14:47 -0700 (PDT)
+Message-ID: <bd07c344-87cd-b64f-8418-d2b767a424b7@kernel.org>
+Date:   Tue, 22 Mar 2022 19:14:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [RFC] arm64: dts: ti: introduce a minimal am642 device tree
+From:   'Krzysztof Kozlowski' <krzk@kernel.org>
+Subject: Re: [PATCH v2] ufs: qcom: drop custom Android boot parameters
 Content-Language: en-US
-To:     Bryan Brattlof <bb@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        'Andy Gross' <agross@kernel.org>,
+        'Bjorn Andersson' <bjorn.andersson@linaro.org>,
+        'Avri Altman' <avri.altman@wdc.com>,
+        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
+        "'Martin K. Petersen'" <martin.petersen@oracle.com>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220321155417.13267-1-bb@ti.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220321155417.13267-1-bb@ti.com>
+Cc:     'Amit Pundir' <amit.pundir@linaro.org>,
+        'Luca Weiss' <luca.weiss@fairphone.com>,
+        'Brian Masney' <bmasney@redhat.com>
+References: <CGME20220321151913epcas5p45ad53c827e3c87633acd29443322d0b5@epcas5p4.samsung.com>
+ <20220321151853.24138-1-krzk@kernel.org>
+ <004d01d83d39$fe7859c0$fb690d40$@samsung.com>
+In-Reply-To: <004d01d83d39$fe7859c0$fb690d40$@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 16:54, Bryan Brattlof wrote:
-> Texas Instrument's am642 is one of many k3 based, low cost, low power,
-> chips designed to work in a wide range of applications spanning an even
-> wider range of industries that TI is actively developing
+On 21/03/2022 16:40, Alim Akhtar wrote:
 > 
-> With its pin-mux and peripheral rich designs, these chips will likely
-> have a multitude of custom device trees that range wildly from one
-> another and (hopefully) guarantee an influx of variants into the kernel
-> in the coming years
 > 
-> With overlays no longer a thing, I wanted to ask for opinions on how
-> we can best help integrate these dt files as they begin to be developed
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski [mailto:krzk@kernel.org]
+>> Sent: Monday, March 21, 2022 8:49 PM
+>> To: Andy Gross <agross@kernel.org>; Bjorn Andersson
+>> <bjorn.andersson@linaro.org>; Alim Akhtar <alim.akhtar@samsung.com>;
+>> Avri Altman <avri.altman@wdc.com>; James E.J. Bottomley
+>> <jejb@linux.ibm.com>; Martin K. Petersen <martin.petersen@oracle.com>;
+>> linux-arm-msm@vger.kernel.org; linux-scsi@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Cc: Krzysztof Kozlowski <krzk@kernel.org>; Amit Pundir
+>> <amit.pundir@linaro.org>; Luca Weiss <luca.weiss@fairphone.com>; Brian
+>> Masney <bmasney@redhat.com>
+>> Subject: [PATCH v2] ufs: qcom: drop custom Android boot parameters
+>>
+>> The QCOM UFS driver requires an androidboot.bootdevice command line
+>> argument matching the UFS device name.  If the name is different, it
+> refuses
+>> to probe.  This androidboot.bootdevice is provided by stock/vendor (from an
+>> Android-based device) bootloader.
+>>
+>> This does not make sense from Linux point of view.  Driver should be able
+> to
+>> boot regardless of bootloader.  Driver should not depend on some Android
+>> custom environment data.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+>> Tested-by: Amit Pundir <amit.pundir@linaro.org>
+>> Tested-by: Luca Weiss <luca.weiss@fairphone.com>
+>> Reviewed-by: Brian Masney <bmasney@redhat.com>
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>
 > 
-> I also wanted to introduce a skeletonized (nothing but uart) device tree
-> to give others a good starting point while developing their projects.
+> Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-Real hardware as DTS please. There is no need to add some skeleton for
-specific SoC. What if every SoC goes that way?
-
-Feel free to create re-usable components in DTSI ways, still reflecting
-some hardware parts.
-
-> 
-> Let me know what you think :)
-> 
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
-> ---
->  .../devicetree/bindings/arm/ti/k3.yaml        |   1 +
->  arch/arm64/boot/dts/ti/Makefile               |   1 +
->  arch/arm64/boot/dts/ti/k3-am642-skeleton.dts  | 335 ++++++++++++++++++
->  3 files changed, 337 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am642-skeleton.dts
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
-> index 61c6ab4f52e26..e65053d6465bd 100644
-> --- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
-> +++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
-> @@ -55,6 +55,7 @@ properties:
->        - description: K3 AM642 SoC
->          items:
->            - enum:
-> +              - ti,am642-generic
-
-Real hardware is needed.
-
->                - ti,am642-evm
->                - ti,am642-sk
->            - const: ti,am642
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index 02e5d80344d00..df7bdf087558c 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -19,6 +19,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
->  
->  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
->  
-> +dtb-$(CONFIG_ARCH_K3) += k3-am642-skeleton.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
->  
-> diff --git a/arch/arm64/boot/dts/ti/k3-am642-skeleton.dts b/arch/arm64/boot/dts/ti/k3-am642-skeleton.dts
-> new file mode 100644
-> index 0000000000000..2b789c9c25ced
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am642-skeleton.dts
-> @@ -0,0 +1,335 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * The absolute minimum DTS file needed for an AM642
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/pinctrl/k3.h>
-> +#include "k3-am642.dtsi"
-> +
-> +/ {
-> +	compatible = "ti,am642-generic", "ti,am642";
-> +	model = "Texas Instruments AM642 Generic";
-> +
-> +	chosen {
-> +		stdout-path = "serial2:115200n8";
-> +		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000";
-
-
-No development bootargs.
-
-> +	};
-> +
-> +	cpus {
-> +		/delete-node/ cpu@1;
-
-A bit weird... especially without any comment.
-
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x00000000 0x20000000 0x00000000 0x20000000>;
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		secure_ddr: optee@9e800000 {
-> +			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
-> +			alignment = <0x1000>;
-> +			no-map;
-> +		};
-> +	};
-> +};
-> +
-> +/* reserved for mcu firmware */
-> +&mcu_gpio0 {
-> +	status = "reserved";
-> +};
-> +
-> +&mcu_i2c0 {
-> +	status = "disabled";
-> +};
-> +
-
-Judging by this file - several disabled or reserved blocks - this does
-not look at all usable. What's the point? How does it even help anyone?
+Ah, sorry, I think I missed your Rb from v1.
 
 
 Best regards,

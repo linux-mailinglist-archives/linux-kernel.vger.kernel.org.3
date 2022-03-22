@@ -2,74 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D063C4E4571
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF724E4575
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 18:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239672AbiCVRts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 13:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S239873AbiCVRuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 13:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235001AbiCVRtq (ORCPT
+        with ESMTP id S239857AbiCVRt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:49:46 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BAD240A0;
-        Tue, 22 Mar 2022 10:48:16 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id pv16so37940533ejb.0;
-        Tue, 22 Mar 2022 10:48:16 -0700 (PDT)
+        Tue, 22 Mar 2022 13:49:57 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E226A409
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:48:28 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id m4-20020a924b04000000b002c851e73720so572470ilg.23
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 10:48:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uhQ60+s/3h+jWyIIuuE2dKB2Qu2RlBZBG+mrPMGhNO0=;
-        b=IQJx0BhZypEqUlCv6wZJYzRLLpP6+9tn6vqxIj4FI+ddHS5JvR2Si36JHXNOjwjMCd
-         jfSgpKro9BM2TUo3rkN4jvSePw6IBOAbnQphNd7ji4igywOnEtGP2vMqDJ3w6BfOFAM5
-         2PFmKb3G0hqcrxOAm8/RiwxQbVk7ePqqGix5E8gfPW62RDIUyc2o3ojMEYCWUGICr1XB
-         HCjJGcLjwFsaTWJU/5SSm8PBYOOO/bd+z/X+Piu9bNn05b2qfT3TIVZEtqJNC76KE3W5
-         tFEpP7wvrgXO951vPzz6/n4kfamfsa1j6AaXttFU+AHP3HpCnVEbs5HQ1Nxh7UJpSk6i
-         EvYg==
-X-Gm-Message-State: AOAM532R7xRoT6hxn7fvw6Mpsf2cko3/QtfZlUvtqLYh7OdN3qLUMkF/
-        PFGYt6U5BrTFrXgW/JWiL8I=
-X-Google-Smtp-Source: ABdhPJycUOk9rRb2GuofivM9xoyn+LbIOOZZs3dpx0RScfAcbmeWMozoq+USKgXgG5Iq7J8cXRyXfQ==
-X-Received: by 2002:a17:907:9703:b0:6da:6412:508a with SMTP id jg3-20020a170907970300b006da6412508amr27385513ejc.77.1647971294747;
-        Tue, 22 Mar 2022 10:48:14 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id l20-20020a1709062a9400b006ce71a88bf5sm8494260eje.183.2022.03.22.10.48.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 10:48:13 -0700 (PDT)
-Message-ID: <4ca669ea-fdf0-f4bb-7c68-47a26e72a4ce@kernel.org>
-Date:   Tue, 22 Mar 2022 18:48:12 +0100
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=oJZwdz9JBhGCcPSjS6Q2DkZuk26UljH41dYN2tYJ6/o=;
+        b=BmLrUhG8Lj+Bp0xgIoiSWHFz1+AIpKxOsCCha/Nrdl7yDB96Plf6CyV+3T1RnmiWNe
+         aK2SqlvE4u50k3/gR3DrjhyFQ5kvZnAxRTZUJoHx6GQNFaI+/4dSqQcVtrRXj0zNd8CN
+         QEmnjzVWJYRJ2XMxGIrBRu+xmF8RHliZRjWjNZJp057vI3Q04apsRkm5RaB9Rz851UfC
+         ySrtsrBxH5DkR0ik6u01AHvHyk+L/6/Ak02f5fIFEewQ/sG7l4wgivW9+d3jXXnuYYV+
+         o8IRfObVtMWfgOkMQcx465hBm3oD+2x9khjVaNFMn1pqqY+h/HetmfIkkE7YDNrfSlEf
+         0vkw==
+X-Gm-Message-State: AOAM532FymhTuBAbGNEb1rPwHonlFUcX2XPjOAneTuo/kEihMmXgi9yB
+        4CZfyqVRol+xWAf3mfBdvFI0HSEAHq+HwVcckeM/n3lc6IRa
+X-Google-Smtp-Source: ABdhPJxj8Xx14kXROYrnmWuUfRsUsK+uhpWsT94Q50nrQTkLGclj9PsxAD1OncBeU3+Sq4zEgJAwCMWFn0Tdt0jwqDND6lp8HWT+
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] thermal: exynos: Add support for ARTPEC-8
-Content-Language: en-US
-To:     hypmean.kim@samsung.com, "bzolnier@gmail.com" <bzolnier@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220322075638.110056-1-hypmean.kim@samsung.com>
- <CGME20220322075618epcas1p3c63582c62099312db6d40d71cfbee15b@epcms2p5>
- <20220322082242epcms2p5b5e9e24a947e1d6c4b77fb9c95baf992@epcms2p5>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220322082242epcms2p5b5e9e24a947e1d6c4b77fb9c95baf992@epcms2p5>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Received: by 2002:a05:6602:1491:b0:648:cd01:9ba9 with SMTP id
+ a17-20020a056602149100b00648cd019ba9mr13042234iow.195.1647971308022; Tue, 22
+ Mar 2022 10:48:28 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 10:48:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006a354705dad2387e@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in tty_release
+From:   syzbot <syzbot+09ad4050dd3a120bfccd@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk,
+        gregkh@linuxfoundation.org, io-uring@vger.kernel.org,
+        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,565 +55,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 09:22, Sang Min Kim wrote:
-> Add support thermal management for Axis ARTPEC-8 SoC.
-> ARTPEC-8 is the SoC platform of Axis Communications.
-> In the existing thermal management function of exynos, functions that support
-> remote sensors have been added.
->  
-> Signed-off-by: sangmin kim <hypmean.kim@samsung.com>
-> ---
->  drivers/thermal/samsung/exynos_tmu.c | 666 ++++++++++++++++++++++++++++++++---
->  1 file changed, 616 insertions(+), 50 deletions(-)
->  
-> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> index f4ab4c5..9837f42 100644
-> --- a/drivers/thermal/samsung/exynos_tmu.c
-> +++ b/drivers/thermal/samsung/exynos_tmu.c
-> @@ -14,6 +14,7 @@
->  #include <linux/clk.h>
->  #include <linux/io.h>
->  #include <linux/interrupt.h>
-> +#include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/of_address.h>
-> @@ -124,6 +125,77 @@
->  
->  #define MCELSIUS        1000
->  
-> +/* Artpec8 specific registers */
-Pu all defines just after Exynos specific bits, so before MCELSIUS.
+Hello,
 
-> +#define ARTPEC8_TMU_REG_TRIMINFO        0x0
-> +#define ARTPEC8_TMU_REG_TRIMINFO1        0x4
-> +#define ARTPEC8_TMU_REG_TRIMINFO2        0x8
-> +#define ARTPEC8_TMU_REG_TRIMINFO3        0xC
-> +#define ARTPEC8_TMU_REG_TRIMINFO4        0x10
-> +#define ARTPEC8_TMU_REG_TRIMINFO5        0x14
-> +#define ARTPEC8_TMU_REG_CONTROL                0x20
-> +#define ARTPEC8_TMU_REG_CONTROL1        0x24
-> +#define ARTPEC8_TMU_REG_STATUS                0x28
-> +
-> +#define ARTPEC8_TMU_REG_AVG_CONTROL        0x38
-> +#define ARTPEC8_TMU_REG_TMU_TRIM0        0x3C
-> +
-> +#define ARTPEC8_TMU_REG_EMUL_CON        0x160
-> +#define NUM_PROBE_OFFSET                16
+syzbot found the following issue on:
 
-This is not prefixed with artpec and is very cryptic. Please document
-this and other defines which are not obvious, comparing to current code.
+HEAD commit:    8565d64430f8 Merge tag 'bounds-fixes-v5.18-rc1' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=118a7913700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=89040bbe61f60a52
+dashboard link: https://syzkaller.appspot.com/bug?extid=09ad4050dd3a120bfccd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=124eed75700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11fbbb35700000
 
-> +
-> +#define ARTPEC8_FIRST_POINT_TRIM        25
-> +#define ARTPEC8_SECOND_POINT_TRIM        105
-> +
-> +#define ARTPEC8_EMUL_EN                        1
-> +#define ARTPEC8_TIME_OFFSET                16
+The issue was bisected to:
 
-Don't duplicate defines with existing ones. Define only differences.
-This applies to all other defines as well.
+commit 91eac1c69c202d9dad8bf717ae5b92db70bfe5cf
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Wed Mar 16 22:59:10 2022 +0000
 
-> +#define ARTPEC8_EMUL_NEXT_TIME                (0x4e20 << ARTPEC8_TIME_OFFSET)
-> +
-> +#define ARTPEC8_TMU_TEMP_MASK                0x1ff
-> +#define ARTPEC8_CALIB_SEL_SHIFT                23
-> +
-> +#define ARTPEC8_EMUL_DATA_SHIFT                7
-> +
-> +#define ARTPEC8_T_BUF_VREF_SEL_SHIFT        18
-> +#define ARTPEC8_T_BUF_SLOPE_SEL_SHIFT        18
-> +#define ARTPEC8_INTEN_TRIPPING_SHIFT        7
-> +#define ARTPEC8_INTEN_CLOCKDOWN_SHIFT        8
-> +#define ARTPEC8_TRIMINFO_105_SHIFT        9
-> +#define ARTPEC8_INTEN_FALL0_SHIFT        16
-> +#define ARTPEC8_TMU_REF_VOLTAGE_SHIFT        24
-> +#define ARTPEC8_TMU_REF_VOLTAGE_MASK        0x1f
-> +#define ARTPEC8_TMU_BUF_SLOPE_SEL_SHIFT        8
-> +#define ARTPEC8_TMU_BUF_SLOPE_SEL_MASK        0xf
-> +
-> +#define ARTPEC8_TMU_CONTROL_CORE_EN        1
-> +#define ARTPEC8_TMU_CONTROL_AUTO_MODE        2
-> +#define ARTPEC8_TMU_CONTROL_TRIP_EN        (1 << 12)
-> +#define ARTPEC8_LPI_MODE_EN                (1 << 10)
-> +
-> +#define ARTPEC8_TRIM0_BGR_I_SHIFT        20
-> +#define ARTPEC8_TRIM0_VREF_SHIFT        12
-> +#define ARTPEC8_TRIM0_VBE_I_SHIFT        8
-> +
-> +#define INTPEND_RISE_MASK                0xff
-> +#define INTPEND_FALL_MASK                0xff0000
+    io_uring: cache poll/double-poll state with a request flag
 
-prefix
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12e4ae0b700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11e4ae0b700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e4ae0b700000
 
-> +#define ARTPEC8_TRIM0_MASK                0xf
-> +#define ARTPEC8_TRIM2_MASK                0x7
-> +
-> +#define ARTPEC8_TRIMINFO_TRIM0_SHIFT        18
-> +
-> +#define LOW_TEMP_WEIGHT                        9203
-> +#define HIGH_TEMP_WEIGHT                9745
-> +#define TEMP_WEIGHT                        10000
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+09ad4050dd3a120bfccd@syzkaller.appspotmail.com
+Fixes: 91eac1c69c20 ("io_uring: cache poll/double-poll state with a request flag")
 
-All these need explanation why/what/how did you get these values.
+==================================================================
+BUG: KASAN: use-after-free in __wake_up_common+0x637/0x650 kernel/sched/wait.c:101
+Read of size 8 at addr ffff888011e8a130 by task syz-executor413/3618
 
-> +
-> +struct sensor_offset {
+CPU: 0 PID: 3618 Comm: syz-executor413 Tainted: G        W         5.17.0-syzkaller-01402-g8565d64430f8 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ __wake_up_common+0x637/0x650 kernel/sched/wait.c:101
+ __wake_up_common_lock+0xd0/0x130 kernel/sched/wait.c:138
+ tty_release+0x657/0x1200 drivers/tty/tty_io.c:1781
+ __fput+0x286/0x9f0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xaff/0x29d0 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:936
+ __do_sys_exit_group kernel/exit.c:947 [inline]
+ __se_sys_exit_group kernel/exit.c:945 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:945
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f439a1fac69
+Code: Unable to access opcode bytes at RIP 0x7f439a1fac3f.
+RSP: 002b:00007ffd9df32928 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f439a26f330 RCX: 00007f439a1fac69
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000030000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f439a26f330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
 
-kerneldoc needed
+Allocated by task 3610:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+ kasan_kmalloc include/linux/kasan.h:249 [inline]
+ kmem_cache_alloc_trace+0x1ea/0x4a0 mm/slab.c:3567
+ kmalloc include/linux/slab.h:581 [inline]
+ io_arm_poll_handler+0x39d/0x940 fs/io_uring.c:6248
+ io_queue_sqe_arm_apoll+0x6d/0x430 fs/io_uring.c:7499
+ __io_queue_sqe fs/io_uring.c:7541 [inline]
+ io_queue_sqe fs/io_uring.c:7568 [inline]
+ io_submit_sqe fs/io_uring.c:7776 [inline]
+ io_submit_sqes+0x7dda/0x9310 fs/io_uring.c:7882
+ __do_sys_io_uring_enter+0x9f1/0x1520 fs/io_uring.c:10924
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-> +        u32 trim_offset;
-> +        u32 temp_offset;
-> +        u32 temp_reg_shift;
-> +        u32 rise_offset;
-> +        u32 fall_offset;
-> +        u32 past_offset;
-> +        u32 inten;
-> +        u32 intpend;
-> +};
-> +
->  enum soc_type {
->          SOC_ARCH_EXYNOS3250 = 1,
->          SOC_ARCH_EXYNOS4210,
-> @@ -134,6 +206,63 @@ enum soc_type {
->          SOC_ARCH_EXYNOS5420_TRIMINFO,
->          SOC_ARCH_EXYNOS5433,
->          SOC_ARCH_EXYNOS7,
-> +        SOC_ARCH_ARTPEC8,
+Freed by task 3610:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:215 [inline]
+ __cache_free mm/slab.c:3437 [inline]
+ kfree+0xf8/0x2b0 mm/slab.c:3794
+ io_clean_op+0x20a/0xd90 fs/io_uring.c:7137
+ io_dismantle_req fs/io_uring.c:2270 [inline]
+ __io_req_complete_post+0x88c/0xc90 fs/io_uring.c:2108
+ io_req_complete_post+0x56/0x1d0 fs/io_uring.c:2121
+ io_apoll_task_func+0x1df/0x230 fs/io_uring.c:6003
+ handle_tw_list fs/io_uring.c:2480 [inline]
+ tctx_task_work+0x1a2/0x1380 fs/io_uring.c:2514
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xaff/0x29d0 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:936
+ __do_sys_exit_group kernel/exit.c:947 [inline]
+ __se_sys_exit_group kernel/exit.c:945 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:945
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Put it alphabetically.
+The buggy address belongs to the object at ffff888011e8a100
+ which belongs to the cache kmalloc-96 of size 96
+The buggy address is located 48 bytes inside of
+ 96-byte region [ffff888011e8a100, ffff888011e8a160)
+The buggy address belongs to the page:
+page:ffffea000047a280 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888011e8a480 pfn:0x11e8a
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea000079fc08 ffffea0001f1d088 ffff888010c40300
+raw: ffff888011e8a480 ffff888011e8a000 000000010000001e 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 1, ts 3360715486, free_ts 0
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
+ __alloc_pages_node include/linux/gfp.h:572 [inline]
+ kmem_getpages mm/slab.c:1378 [inline]
+ cache_grow_begin+0x75/0x390 mm/slab.c:2584
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
+ ____cache_alloc mm/slab.c:3040 [inline]
+ ____cache_alloc mm/slab.c:3023 [inline]
+ __do_cache_alloc mm/slab.c:3267 [inline]
+ slab_alloc mm/slab.c:3308 [inline]
+ kmem_cache_alloc_trace+0x380/0x4a0 mm/slab.c:3565
+ kmalloc include/linux/slab.h:581 [inline]
+ kzalloc include/linux/slab.h:714 [inline]
+ hugetlbfs_init_fs_context+0x41/0x420 fs/hugetlbfs/inode.c:1402
+ alloc_fs_context+0x582/0xa00 fs/fs_context.c:290
+ mount_one_hugetlbfs+0x1d/0x14d fs/hugetlbfs/inode.c:1507
+ init_hugetlbfs_fs+0xd5/0x311 fs/hugetlbfs/inode.c:1546
+ do_one_initcall+0x103/0x650 init/main.c:1300
+ do_initcall_level init/main.c:1373 [inline]
+ do_initcalls init/main.c:1389 [inline]
+ do_basic_setup init/main.c:1408 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1613
+ kernel_init+0x1a/0x1d0 init/main.c:1502
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+page_owner free stack trace missing
 
-> +};
-> +
-> +#define SENSOR(_tr, _te, _sh, _ri, _fa, _pa, _en, _pend)        \
-> +        {                                        \
-> +                .trim_offset        = _tr,                \
-> +                .temp_offset        = _te,                \
-> +                .temp_reg_shift        = _sh,                \
-> +                .rise_offset        = _ri,                \
-> +                .fall_offset        = _fa,                \
-> +                .past_offset        = _pa,                \
-> +                .inten                = _en,                \
-> +                .intpend        = _pend,                \
-> +        }
-> +
-> +static const struct sensor_offset artpec8_sensors[] = {
-> +        SENSOR(0x0,        0x40,        0,  0x50,        0x60,        0x70,        0x110,        0x118),
-
-0x118 is existing value, right?
-All these should be using rather a macro - either dedicated defines or
-offset-based macros.
-
-> +        SENSOR(0x4,        0x40,        9,  0x170,        0x180,        0x90,        0x120,        0x128),
-
-Here and further it looks like you have all registers distributed
-according to specific pattern. Define macro, probably with an offset
-based on first sensor.
-
-> +        SENSOR(0x8,        0x44,        0,  0x190,        0x1a0,        0xb0,        0x130,        0x138),
-> +        SENSOR(0xc,        0x44,        9,  0x1b0,        0x1c0,        0xd0,        0x140,        0x148),
-> +        SENSOR(0x10,        0x44,        18, 0x1d0,        0x1e0,        0xf0,        0x150,        0x158),
-> +        SENSOR(0x14,        0x48,        0,  0x1f0,        0x200,        0x250,        0x310,        0x318),
-> +};
-> +
-> +/**
-> + * struct artpec8_sensor: A structure to hold the private data of the sensor
-> + * @tmudev: The tmu device which this sensor is connected.
-> + * @tzd: Thermal zonde device pointer to register this sensor.
-> + * @id: Identifier of the one instance of the thermal sensor.
-> + * @ntrip: Number of threshols for this sensor.
-> + * @triminfo_25: OTP information to trim temperature sensor error for 25C
-> + * @triminfo_105: OTP information to trim temperature sensor error for 105C
-> + * @trim_offset: Offset of triminfo register.
-> + * @temp_offset: Offset of current temperature. The temperature values of
-> + *                2 to 3 remote sensors are stored in this register.
-> + * @temp_reg_shift: start location of each tempt in temp_off
-> + * @rise_offset: Offset of rising threshold level 6 and 7.
-> + * @fall_offset: Offset of falling thershold level 6 and 7.
-> + * @past_offset: Offset of Past temperature 0,1.
-> + * @inten: Offset of interrupt enable sfr.
-> + * @intpend: Offset of interrupt pending sfr.
-> + */
-> +struct artpec8_sensor {
-> +        struct exynos_tmu_data *tmudev;
-> +        struct thermal_zone_device *tzd;
-
-Why does the sensor duplicate struct exynos_tmu_data?
-
-> +        int id;
-> +        unsigned int ntrip;
-> +        u16 triminfo_25;
-> +        u16 triminfo_105;
-> +        u32 trim_offset;
-> +        u32 temp_offset;
-> +        u32 temp_reg_shift;
-> +        u32 rise_offset;
-> +        u32 fall_offset;
-> +        u32 past_offset;
-> +        u32 inten;
-> +        u32 intpend;
-
-You have all these in sensor_offset, don't you? Why do you need them
-second time?
-
->  };
->  
->  /**
-> @@ -193,6 +322,7 @@ struct exynos_tmu_data {
->          struct thermal_zone_device *tzd;
->          unsigned int ntrip;
->          bool enabled;
-> +        u32 nr_remote;
-
-Missing doc. Did you compile your code with W=1?
-
->  
->          void (*tmu_set_trip_temp)(struct exynos_tmu_data *data, int trip,
->                                   u8 temp);
-> @@ -203,6 +333,8 @@ struct exynos_tmu_data {
->          int (*tmu_read)(struct exynos_tmu_data *data);
->          void (*tmu_set_emulation)(struct exynos_tmu_data *data, int temp);
->          void (*tmu_clear_irqs)(struct exynos_tmu_data *data);
-> +
-> +        struct artpec8_sensor sensor[0];
-
-No artpec8_sensor, but Exynos sensor. You need to convert existing code
-for working with 1 sensors and X sensors. Don't just add X sensors
-duplicating parts of driver.
-
-Also - why this is array of [0]?
-
->  };
->  
->  /*
-> @@ -220,6 +352,28 @@ static int temp_to_code(struct exynos_tmu_data *data, u8 temp)
->                  data->temp_error1;
->  }
->  
-> +static u16 artpec8_temp_to_code(struct artpec8_sensor *sensor, int temp)
-
-Maintain consistent code with existing implementation. Why types are
-different than temp_to_code()? Maybe temp_to_code() is not good?
-
-> +{
-> +        int code;
-> +        int weight;
-> +
-> +        if (sensor->tmudev->cal_type == TYPE_ONE_POINT_TRIMMING)
-> +                return temp + sensor->triminfo_25 - ARTPEC8_FIRST_POINT_TRIM;
-> +
-> +        if (temp > ARTPEC8_FIRST_POINT_TRIM)
-> +                weight = HIGH_TEMP_WEIGHT;
-> +        else
-> +                weight = LOW_TEMP_WEIGHT;
-> +
-> +        code = DIV_ROUND_CLOSEST((temp - ARTPEC8_FIRST_POINT_TRIM) *
-> +                (sensor->triminfo_105 - sensor->triminfo_25) * TEMP_WEIGHT,
-> +                (ARTPEC8_SECOND_POINT_TRIM - ARTPEC8_FIRST_POINT_TRIM) *
-> +                weight);
-> +        code += sensor->triminfo_25;
-> +
-> +        return (u16)code;
-> +}
-> +
->  /*
->   * Calculate a temperature value from a temperature code.
->   * The unit of the temperature is degree Celsius.
-> @@ -235,6 +389,27 @@ static int code_to_temp(struct exynos_tmu_data *data, u16 temp_code)
->                  EXYNOS_FIRST_POINT_TRIM;
->  }
->  
-> +static int artpec8_code_to_temp(struct artpec8_sensor *sensor, u16 code)
-> +{
-> +        int temp;
-> +        int weight;
-> +
-> +        if (sensor->tmudev->cal_type == TYPE_ONE_POINT_TRIMMING)
-> +                return code - sensor->triminfo_25 + ARTPEC8_FIRST_POINT_TRIM;
-> +
-> +        if (code > sensor->triminfo_25)
-> +                weight = HIGH_TEMP_WEIGHT;
-> +        else
-> +                weight = LOW_TEMP_WEIGHT;
-> +
-> +        temp = DIV_ROUND_CLOSEST((code - sensor->triminfo_25) *
-> +                (ARTPEC8_SECOND_POINT_TRIM - ARTPEC8_FIRST_POINT_TRIM) * weight,
-> +                (sensor->triminfo_105 - sensor->triminfo_25) * TEMP_WEIGHT);
-> +        temp += ARTPEC8_FIRST_POINT_TRIM;
-> +
-> +        return temp;
-> +}
-> +
->  static void sanitize_temp_error(struct exynos_tmu_data *data, u32 trim_info)
->  {
->          u16 tmu_temp_mask =
-> @@ -338,7 +513,8 @@ static u32 get_con_reg(struct exynos_tmu_data *data, u32 con)
->          con &= ~(EXYNOS_TMU_REF_VOLTAGE_MASK << EXYNOS_TMU_REF_VOLTAGE_SHIFT);
->          con |= data->reference_voltage << EXYNOS_TMU_REF_VOLTAGE_SHIFT;
->  
-> -        con &= ~(EXYNOS_TMU_BUF_SLOPE_SEL_MASK << EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
-> +        con &= ~(EXYNOS_TMU_BUF_SLOPE_SEL_MASK <<
-> +                        EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
-
-How is this related?
-
->          con |= (data->gain << EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
->  
->          con &= ~(EXYNOS_TMU_TRIP_MODE_MASK << EXYNOS_TMU_TRIP_MODE_SHIFT);
-> @@ -558,6 +734,120 @@ static void exynos7_tmu_initialize(struct platform_device *pdev)
->          sanitize_temp_error(data, trim_info);
->  }
->  
-> +static void artpec8_tmu_set_trip_temp(struct exynos_tmu_data *data,
-> +                int trip, int temp, int remote)
-> +{
-> +        unsigned int reg_off, bit_off;
-> +        u32 th;
-> +        struct artpec8_sensor *sensor;
-> +        unsigned int temp_rise;
-> +
-> +        sensor = &data->sensor[remote];
-> +        temp_rise = sensor->rise_offset;
-> +
-> +        reg_off = ((7 - trip) / 2) * 4;
-> +        bit_off = ((8 - trip) % 2);
-Please explain the offsets in comment.
-
-> +
-> +        th = readl(data->base + temp_rise + reg_off);
-> +        th &= ~(ARTPEC8_TMU_TEMP_MASK << (16 * bit_off));
-> +        th |= artpec8_temp_to_code(sensor, temp) << (16 * bit_off);
-> +        writel(th, data->base + temp_rise + reg_off);
-> +}
-> +
-> +static void artpec8_tmu_set_trip_hyst(struct exynos_tmu_data *data,
-> +                int trip, int temp, int hyst, int remote)
-> +{
-> +        unsigned int reg_off, bit_off;
-> +        u32 th;
-> +        struct artpec8_sensor *sensor;
-> +        unsigned int temp_fall;
-> +
-> +        sensor = &data->sensor[remote];
-> +        temp_fall = sensor->fall_offset;
-> +
-> +        reg_off = ((7 - trip) / 2) * 4;
-> +        bit_off = ((8 - trip) % 2);
-> +
-> +        th = readl(data->base + temp_fall + reg_off);
-> +        th &= ~(ARTPEC8_TMU_TEMP_MASK << (16 * bit_off));
-> +        th |= artpec8_temp_to_code(sensor, temp - hyst) << (16 * bit_off);
-> +        writel(th, data->base + temp_fall + reg_off);
-> +}
-> +
-> +static void artpec8_tmu_clear_irqs(struct exynos_tmu_data *data, int i)
-> +{
-> +        u32 intp = readl(data->base + data->sensor[i].intpend);
-> +
-> +        writel(intp, data->base + data->sensor[i].intpend);
-> +}
-> +
-
-I'll skip reviewing this part. Half of it will be gone once you convert
-driver to have uniform approach to sensors.
-
-(...)
-
-> +static int artpec8_register_tzd(struct platform_device *pdev)
-> +{
-> +        struct exynos_tmu_data *data = platform_get_drvdata(pdev);
-> +        struct artpec8_sensor *sensor;
-> +        struct device *dev = &pdev->dev;
-> +        int sensor_idx, ret = 0;
-> +        struct thermal_zone_device *tzd;
-> +        const struct thermal_trip *trips;
-> +
-> +        for (sensor_idx = 0; sensor_idx < data->nr_remote; sensor_idx++) {
-> +                sensor = &data->sensor[sensor_idx];
-> +
-> +                ret = artpec8_map_sensor_data(data, sensor_idx, sensor);
-> +                if (ret)
-> +                        break;
-> +
-> +                tzd = devm_thermal_zone_of_sensor_register(dev,
-> +                                sensor_idx, sensor, &artpec8_ops);
-> +                if (IS_ERR(tzd))
-> +                        continue;
-> +
-> +                sensor->tzd = tzd;
-> +                trips = of_thermal_get_trip_points(tzd);
-> +                if (!trips) {
-> +                        dev_warn(dev,
-> +                                "Cannot get trip points from device tree!\n");
-> +                        ret = -ENODEV;
-> +                        break;
-> +                }
-> +                sensor->ntrip = of_thermal_get_ntrips(tzd);
-> +        }
-> +
-> +        return ret;
-> +}
-> +
->  static int exynos_tmu_probe(struct platform_device *pdev)
->  {
->          struct exynos_tmu_data *data;
->          int ret;
-> +        int sensor_idx;
-> +        int nr_remote = 0;
-> +        struct device *dev;
-> +        const struct of_device_id *dev_id;
->  
-> -        data = devm_kzalloc(&pdev->dev, sizeof(struct exynos_tmu_data),
-> -                                        GFP_KERNEL);
-> +        if (pdev->dev.of_node)
-> +                dev = &pdev->dev;
-> +        else
-> +                dev = pdev->dev.parent;
-
-Whaaaaat?
-
-> +
-> +        dev_id = of_match_node(exynos_tmu_match, dev->of_node);
-> +        if (dev_id) {
-> +              �� data = (struct exynos_tmu_data *)dev_id->data;
-
-Some unusual characters appeared here.
-
-Did you run checkpatch, smatch and sparse?
-
-> +        } else {
-> +                dev_warn(dev, "dev id error\n");
-
-Is it possible?
-
-> +                return -EINVAL;
-> +        }
-> +
-> +        ret = of_property_read_u32(dev->of_node, "remote_sensors", &nr_remote);
-
-Do not add undocumented properties.
-
-> +        if (ret < 0)
-> +                data = devm_kzalloc(&pdev->dev, sizeof(struct exynos_tmu_data),
-> +                                    GFP_KERNEL);
-> +        else
-> +                data = devm_kzalloc(dev, sizeof(struct exynos_tmu_data) +
-> +                        (sizeof(struct artpec8_sensor) * nr_remote),
-> +                        GFP_KERNEL);
->          if (!data)
->                  return -ENOMEM;
->  
->          platform_set_drvdata(pdev, data);
->          mutex_init(&data->lock);
->  
-> +        if (data->soc != SOC_ARCH_ARTPEC8) {
->          /*
->           * Try enabling the regulator if found
->           * TODO: Add regulator as an SOC feature, so that regulator enable
->           * is a compulsory call.
->           */
-
-Does not look like proper indentation.
-
-> -        data->regulator = devm_regulator_get_optional(&pdev->dev, "vtmu");
-> -        if (!IS_ERR(data->regulator)) {
-> -                ret = regulator_enable(data->regulator);
-> -                if (ret) {
-> -                        dev_err(&pdev->dev, "failed to enable vtmu\n");
-> -                        return ret;
-> +                data->regulator = devm_regulator_get_optional(&pdev->dev, "vtmu");
-> +                if (!IS_ERR(data->regulator)) {
-> +                        ret = regulator_enable(data->regulator);
-> +                        if (ret) {
-> +                                dev_err(&pdev->dev, "failed to enable vtmu\n");
-> +                                return ret;
-> +                        }
-> +                } else {
-> +                        if (PTR_ERR(data->regulator) == -EPROBE_DEFER)
-> +                                return -EPROBE_DEFER;
-> +                        dev_info(&pdev->dev, "Regulator node (vtmu) not found\n");
->                  }
-> -        } else {
-> -                if (PTR_ERR(data->regulator) == -EPROBE_DEFER)
-> -                        return -EPROBE_DEFER;
-> -                dev_info(&pdev->dev, "Regulator node (vtmu) not found\n");
->          }
->  
->          ret = exynos_map_dt_data(pdev);
->          if (ret)
->                  goto err_sensor;
->  
-> -        INIT_WORK(&data->irq_work, exynos_tmu_work);
-> +        if (data->soc == SOC_ARCH_ARTPEC8) {
-> +                ret = artpec8_register_tzd(pdev);
-> +                if (ret)
-> +                        return -EINVAL;
-> +
-> +                INIT_WORK(&data->irq_work, artpec8_tmu_work);
-> +        } else {
-> +                INIT_WORK(&data->irq_work, exynos_tmu_work);
-> +        }
-
-No, this should be parametrized via ops in exynos_tmu_data (one more op
-for "work").
-
->  
->          data->clk = devm_clk_get(&pdev->dev, "tmu_apbif");
->          if (IS_ERR(data->clk)) {
-> @@ -1046,18 +1590,21 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->                  goto err_sensor;
->          }
->  
-> -        data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
-> -        if (IS_ERR(data->clk_sec)) {
-> -                if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
-> -                        dev_err(&pdev->dev, "Failed to get triminfo clock\n");
-> -                        ret = PTR_ERR(data->clk_sec);
-> -                        goto err_sensor;
-> -                }
-> -        } else {
-> -                ret = clk_prepare(data->clk_sec);
-> -                if (ret) {
-> -                        dev_err(&pdev->dev, "Failed to get clock\n");
-> -                        goto err_sensor;
-> +        if (data->soc != SOC_ARCH_ARTPEC8) {
-> +                data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
-> +                if (IS_ERR(data->clk_sec)) {
-> +                        if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
-> +                                dev_err(&pdev->dev,
-> +                                        "Failed to get triminfo clock\n");
-> +                                ret = PTR_ERR(data->clk_sec);
-> +                                goto err_sensor;
-> +                        }
-> +                } else {
-> +                        ret = clk_prepare(data->clk_sec);
-> +                        if (ret) {
-> +                                dev_err(&pdev->dev, "Failed to get clock\n");
-> +                                goto err_sensor;
-> +                        }
->                  }
->          }
->  
-> @@ -1070,6 +1617,7 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->          switch (data->soc) {
->          case SOC_ARCH_EXYNOS5433:
->          case SOC_ARCH_EXYNOS7:
-> +        case SOC_ARCH_ARTPEC8:
->                  data->sclk = devm_clk_get(&pdev->dev, "tmu_sclk");
->                  if (IS_ERR(data->sclk)) {
->                          dev_err(&pdev->dev, "Failed to get sclk\n");
-> @@ -1087,24 +1635,26 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->                  break;
->          }
->  
-> +        if (data->soc != SOC_ARCH_ARTPEC8) {
->          /*
->           * data->tzd must be registered before calling exynos_tmu_initialize(),
->           * requesting irq and calling exynos_tmu_control().
->           */
-
-Again wrong indentation.
+Memory state around the buggy address:
+ ffff888011e8a000: 00 00 00 00 00 00 00 00 00 05 fc fc fc fc fc fc
+ ffff888011e8a080: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+>ffff888011e8a100: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+                                     ^
+ ffff888011e8a180: 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc
+ ffff888011e8a200: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
+==================================================================
 
 
-Best regards,
-Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

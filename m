@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4733E4E424D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4274E425C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 15:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbiCVOva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 10:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S235311AbiCVOy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 10:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbiCVOv2 (ORCPT
+        with ESMTP id S233916AbiCVOyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:51:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB658565D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:50:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C27E9616D7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 14:49:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD113C340EC;
-        Tue, 22 Mar 2022 14:49:57 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 10:49:56 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mark.rutland@arm.com, mingo@redhat.com, tglx@linutronix.de,
-        catalin.marinas@arm.com, will@kernel.org,
-        dave.hansen@linux.intel.com, broonie@kernel.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, qirui.001@bytedance.com
-Subject: Re: [External] Re: [PATCH v3 3/3] arm64/ftrace: Make function graph
- use ftrace directly
-Message-ID: <20220322104956.42203163@gandalf.local.home>
-In-Reply-To: <7807fc23-c6c9-b6a9-62ef-e34e8beefdea@bytedance.com>
-References: <20220224093251.49971-1-zhouchengming@bytedance.com>
-        <20220224093251.49971-3-zhouchengming@bytedance.com>
-        <c8b7508b-ce2a-c7dc-92c4-ca5f17992844@bytedance.com>
-        <20220322094100.73dc3ad0@gandalf.local.home>
-        <7807fc23-c6c9-b6a9-62ef-e34e8beefdea@bytedance.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 22 Mar 2022 10:54:54 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0783525D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:53:26 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id o10so17994280ejd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 07:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CTZu+aAjGtXbM3jBypGogmPu5vUABzZBTRhCCSqoFwc=;
+        b=fCZjD/FlPyo91HLM3S5Xv48gNzf9IYzMQtgPIPjHfvZ8JuuhVINkE/8wj+OwFkJ68N
+         3X85MRvQAnvo4jpNcVwzlbeYFY0pzy6rdCf1mJYEIGnCo1xfX1T0tQaMhMCDPTUnU4pB
+         5KYpF1Tu1o+dVn9usYerGsCCPhTN53Q89Tuiz7stPwpcPhIF2y6tU2qmE/b0PVsAwql0
+         pB8ngzOAtJoUX4qqfJz5mJedeGTBzo6f9Z25PU3CclCeGQLHAo2LltOzdqeXwTbv+dS5
+         5NOYdtdH3hDBm8GxKYe8Cqgtm8Tj5YhyAqNdydyota3BDDm2FsroiV2xf8pTMhw6wC6c
+         8KQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CTZu+aAjGtXbM3jBypGogmPu5vUABzZBTRhCCSqoFwc=;
+        b=cjgrpCBZ0pF1zYcX3rw6ES5YIlqyJ+xCQhC+W4IabLYzlnKn8Ih170vySVj4hrxUNK
+         zwbuyYjwRlUYlPRLOAYrgTPoYwkQAzzs9jOBYPEEzNhsYAT3hGlfKflDkrOZfk5D+r3+
+         3lXrT4fw78xx0AvRF/8HrZe5fq4pdlfky3p4J8bEY3mN6Bca3fXCcOk20T8Q6JKJIBU6
+         MpEA1SvNlSlWVReVxiMhZPA4ZcBWHum5JmFWqj6L+lF7YYwokMeD3D/UNJ/wUQlJbBks
+         yfje5u1eVMZvEiJkpmuKHLmlKtOFERkk2xLjidaFUCXTKR6/gKiwA8Mn1PhvBek1Qd0U
+         hwDw==
+X-Gm-Message-State: AOAM530Dcr/sZS0pbj4gMsKXrN8gcxvWsV7i3TelVb7RbQHOQflZI349
+        RwOtGWzXFuuKRGfYHmkETw1gmXnayh89V9cWt+A=
+X-Google-Smtp-Source: ABdhPJyPff7VNNo/pyyZyW4uwLzi9OXTzypmZtjrYfVjwsI42OcUC/mIG6ZfC2gepDdJHzQFcgBZCxo3kr/Zl5v4Irg=
+X-Received: by 2002:a17:907:e8d:b0:6e0:19e7:9549 with SMTP id
+ ho13-20020a1709070e8d00b006e019e79549mr8735310ejc.44.1647960804724; Tue, 22
+ Mar 2022 07:53:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220320064529.12827-1-sensor1010@163.com>
+In-Reply-To: <20220320064529.12827-1-sensor1010@163.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 22 Mar 2022 16:52:14 +0200
+Message-ID: <CAHp75VfkDbO3J=MgTdRF_UyMvZ9XCJEQcEOUEBuyqEwnrNwbsA@mail.gmail.com>
+Subject: Re: [PATCH] drivers/bus/brcmstb_gisb.c : Remove the
+ suppress_bind_attrs attribute of the driver
+To:     lizhe <sensor1010@163.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 22:14:11 +0800
-Chengming Zhou <zhouchengming@bytedance.com> wrote:
+On Tue, Mar 22, 2022 at 12:41 AM lizhe <sensor1010@163.com> wrote:
+>
+> Even if platform_driver does not set suppress_bind_attrs attribute,
+> when registering with platform_driver_probe,  the value of
+> suppress_bind_attrs is still true, see __platform_driver_probe()
 
-> > You deleted ftrace_graph_caller above from entry-ftrace.S, if we can get
-> > here with some options, wouldn't that break the build?  
-> 
-> The above ftrace_graph_caller deleted is only for CONFIG_DYNAMIC_FTRACE_WITH_REGS,
-> and I tried using a low gcc version that doesn't select HAVE_DYNAMIC_FTRACE_WITH_REGS,
-> it can build success.
+Any reasons it can't be switched to builtin_platform_driver() macro
+and hence constification the driver structure?
 
-OK, I didn't look too deep into this.
-
-I don't have an issue with this patch, but it needs to go through the arm64
-tree.
-
--- Steve
+-- 
+With Best Regards,
+Andy Shevchenko

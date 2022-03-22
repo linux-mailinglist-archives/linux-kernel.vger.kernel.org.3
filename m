@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2414E476D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2654E476C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 21:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiCVUZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 16:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
+        id S233437AbiCVUZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 16:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233398AbiCVUZg (ORCPT
+        with ESMTP id S229616AbiCVUZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:25:36 -0400
+        Tue, 22 Mar 2022 16:25:34 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B7C6623B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2478466600;
         Tue, 22 Mar 2022 13:24:02 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 20:23:59 -0000
+Date:   Tue, 22 Mar 2022 20:24:00 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647980640;
+        s=2020; t=1647980641;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OU+9MCdRKjPoheduOcb7ol1j9uyfiPT/49iygn0hpfM=;
-        b=AT+L+48YUJErfQY+IvMDD6m2dgI9HffaCtIVDEyWZK74OPwNsVO7XgtydUqIXev9931X9z
-        2KJWsxArLTI8uvAxyG7oecL1BhB9SIKC51jhhhjSk6r2dfKdbJNON92e5nv1HUbpHvQTnw
-        pvM5l4/0aGWkWFM2yRCq6TdKxLiNASrNaACTR5hSwvJ484RFwVDtQTrQ6Fv5OMVBeZd96X
-        ilodyaSp6UiTRZgwr6ecyiLQO4pco/Bf9icfJJzE2tm4p7P5HiKluJW58OGvQeYEORC6o2
-        xwhWQtdeC7VRsGS0gAXjY7+xvaAucLPCwbsyXCcON6mmItJRVD3fcAXoqs4j1A==
+        bh=8kywFf8VlHS1oYms1GMJtOQogL6li1B/8ObC7yvuhbs=;
+        b=y3zbldPaze5+Km/rPpWLwW2kC7HLgiHlkCS+jOA18Ajjd9O9h3LRpFFL9WU4JBK2/jLsTm
+        RqpdxSAyAdLSzgkQB9GIf0utr/IOKKYv3qXScsf/MAflS81eiqxSkMlRTHeG+aJsmSTeve
+        woncraxwjVwxId6tLMOblYk+2mqBBbV6oLwSsAsVwVLhyidWgtxvin6tUGZpFp0+Dl5a+H
+        HrT3eMEMcP81mssvodbdBawkiolX4PTGE45o9OAwpY9eJsWzgjvAdWG+G9V15onW1R2AZJ
+        WZ0Lb0RAwxyh4DFq8+JZkBEsEeMDPdQCsO1PMLb44Lld1m2Kvwo/dzGBUhdYmg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647980640;
+        s=2020e; t=1647980641;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OU+9MCdRKjPoheduOcb7ol1j9uyfiPT/49iygn0hpfM=;
-        b=tSzteDW/T/M09lGP/EUdmBKfiNiO6FER0wH5LfKJneeQXK/ee0jKJ9torZYnRj3RpwqcY7
-        VI+24xpJlJ5Y1jBA==
+        bh=8kywFf8VlHS1oYms1GMJtOQogL6li1B/8ObC7yvuhbs=;
+        b=AXC7c4XTGYpf0kKSb7ZrLwgJj7B/AVeR8tCkXQma+iCPR2iuRPVE73UlzyKp7szN5psXFa
+        RKNlfQ+VMQH8X7Bg==
 From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/Kconfig: Only allow CONFIG_X86_KERNEL_IBT with
- ld.lld >= 14.0.0
+Subject: [tip: x86/core] x86/Kconfig: Only enable CONFIG_CC_HAS_IBT for clang
+ >= 14.0.0
 Cc:     Nathan Chancellor <nathan@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220318230747.3900772-3-nathan@kernel.org>
-References: <20220318230747.3900772-3-nathan@kernel.org>
+In-Reply-To: <20220318230747.3900772-2-nathan@kernel.org>
+References: <20220318230747.3900772-2-nathan@kernel.org>
 MIME-Version: 1.0
-Message-ID: <164798063954.389.10917139884144168372.tip-bot2@tip-bot2>
+Message-ID: <164798064053.389.15506291444001135104.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,41 +68,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     f6a2c2b2de817078ac5a7e58c10e746165e7825d
-Gitweb:        https://git.kernel.org/tip/f6a2c2b2de817078ac5a7e58c10e746165e7825d
+Commit-ID:     262448f3d18959d175b10e28a3b65f41d1d7313f
+Gitweb:        https://git.kernel.org/tip/262448f3d18959d175b10e28a3b65f41d1d7313f
 Author:        Nathan Chancellor <nathan@kernel.org>
-AuthorDate:    Fri, 18 Mar 2022 16:07:47 -07:00
+AuthorDate:    Fri, 18 Mar 2022 16:07:46 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 22 Mar 2022 21:12:13 +01:00
 
-x86/Kconfig: Only allow CONFIG_X86_KERNEL_IBT with ld.lld >= 14.0.0
+x86/Kconfig: Only enable CONFIG_CC_HAS_IBT for clang >= 14.0.0
 
-With CONFIG_X86_KERNEL_IBT=y and a version of ld.lld prior to 14.0.0,
-there are numerous objtool warnings along the lines of:
+Commit 156ff4a544ae ("x86/ibt: Base IBT bits") added a check for a crash
+with 'clang -fcf-protection=branch -mfentry -pg', which intended to
+exclude Clang versions older than 14.0.0 from selecting
+CONFIG_X86_KERNEL_IBT.
 
-  warning: objtool: .plt+0x6: indirect jump found in RETPOLINE build
+clang-11 does not have the issue that the check is testing for, so
+CONFIG_X86_KERNEL_IBT is selectable. Unfortunately, there is a different
+crash in clang-11 that was fixed in clang-12. To make matters worse,
+that crash does not appear to be entirely deterministic, as the same
+input to the compiler will sometimes crash and other times not, which
+makes dynamically checking for the crash like the '-pg' one unreliable.
 
-This is a known issue that has been resolved in ld.lld 14.0.0. Prevent
-CONFIG_X86_KERNEL_IBT from being selectable when using one of these
-problematic ld.lld versions.
+To make everything work properly for all common versions of clang, use a
+hard version check of 14.0.0, as that will be the first release upstream
+that has both bugs properly fixed.
 
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220318230747.3900772-3-nathan@kernel.org
+Link: https://lore.kernel.org/r/20220318230747.3900772-2-nathan@kernel.org
 ---
- arch/x86/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/Kconfig | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 921e4eb..8757926 100644
+index 0f0672d..921e4eb 100644
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -1875,6 +1875,8 @@ config X86_KERNEL_IBT
- 	prompt "Indirect Branch Tracking"
- 	bool
- 	depends on X86_64 && CC_HAS_IBT && STACK_VALIDATION
-+	# https://github.com/llvm/llvm-project/commit/9d7001eba9c4cb311e03cd8cdc231f9e579f2d0f
-+	depends on !LD_IS_LLD || LLD_VERSION >= 140000
- 	help
- 	  Build the kernel with support for Indirect Branch Tracking, a
- 	  hardware support course-grain forward-edge Control Flow Integrity
+@@ -1865,9 +1865,10 @@ config CC_HAS_IBT
+ 	# GCC >= 9 and binutils >= 2.29
+ 	# Retpoline check to work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93654
+ 	# Clang/LLVM >= 14
+-	# fentry check to work around https://reviews.llvm.org/D111108
++	# https://github.com/llvm/llvm-project/commit/e0b89df2e0f0130881bf6c39bf31d7f6aac00e0f
++	# https://github.com/llvm/llvm-project/commit/dfcf69770bc522b9e411c66454934a37c1f35332
+ 	def_bool ((CC_IS_GCC && $(cc-option, -fcf-protection=branch -mindirect-branch-register)) || \
+-		  (CC_IS_CLANG && $(success,echo "void a(void) {}" | $(CC) -Werror $(CLANG_FLAGS) -fcf-protection=branch -mfentry -pg -x c - -c -o /dev/null))) && \
++		  (CC_IS_CLANG && CLANG_VERSION >= 140000)) && \
+ 		  $(as-instr,endbr64)
+ 
+ config X86_KERNEL_IBT

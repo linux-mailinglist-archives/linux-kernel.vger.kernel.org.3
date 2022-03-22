@@ -2,162 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A434E3DCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B324E3DD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 12:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiCVLuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 07:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S234431AbiCVLxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 07:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiCVLuT (ORCPT
+        with ESMTP id S231484AbiCVLxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 07:50:19 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A895DE70;
-        Tue, 22 Mar 2022 04:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647949731; x=1679485731;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6QjCSLV5pHvUu+Co9Q8F1SIwOXRHIVGiCuCTzOhLowU=;
-  b=IiS5eOcSAbKAwXnij0pxHeEzhEKlnJHgJ1kq9d0fQ1FNXHGTVyzeHi9S
-   1BQWkYVpTXySqJgtqsLyxTKxmBrw5XuuN3O6xctY9PfSMQvgK7AtkWGw+
-   xWg+5Njj9u16/KELflLX9IC78Pn9P+EXBfKtm/201UjaYx20Rc7QZE8Jh
-   FAaB+JaGgWtqMsEo0qBu5mSR4svJUj6xtvvG5z9+4m05+Y48ddMIGzhzo
-   TMHutrOtrFL5Vk0DJy29/MydBLuGSa2TCIOYUy5E52lkonPg0zNm726/O
-   1HCSjc5A75Bg0DL4dKO6IhPxuczA4EteI/dDAzZV1k/sNgb8c83cprWNH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="239954907"
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="239954907"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 04:48:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="583228928"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 22 Mar 2022 04:48:51 -0700
-Received: from [10.209.120.44] (alwinma-MOBL2.amr.corp.intel.com [10.209.120.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id B9E53580A6C;
-        Tue, 22 Mar 2022 04:48:49 -0700 (PDT)
-Message-ID: <ffd440b7-fef9-a5ae-95b7-73c1f8a212ef@linux.intel.com>
-Date:   Tue, 22 Mar 2022 07:48:48 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] perf parse-events: Move slots only with topdown
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220321223344.1034479-1-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220321223344.1034479-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 22 Mar 2022 07:53:34 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E68D8022C;
+        Tue, 22 Mar 2022 04:52:06 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id j13so5334216plj.8;
+        Tue, 22 Mar 2022 04:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:organization;
+        bh=YQr4wEg51EwC/v7lwXtLcMJn8sCdqqPgFeB/1p6d61k=;
+        b=VdyPkytt/KroavdVQ49PIc3j20+4tFQ6G6OV2wUgxi2w2T0CWaeOZPh2Vd3OcMKhYn
+         PVepYlBwYhtTJTtwI6x7GmgGVAA3mLGqhafLal6oQ15wJP4eV/b7bX7Ol1dJvmCYluTs
+         /IGRnnpmTb40hiMRJmssxO4T6iNEibz9LjLVJm+Sl4eLvWgmRZyN7OQq3lsJbKcYiIx8
+         p8RwATIM3qPZUYjXl2Q/pdRivUT0smVT+KJM4cqDF3r/PDztbDy+3Zj1nby6CWnbb4aW
+         UM71Bnkg/xH1KcSFbNPjbhciBeX0ORMKqhJbnQTOxHakxJdvLskSz4LUh+fmb313EoGS
+         67hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:organization;
+        bh=YQr4wEg51EwC/v7lwXtLcMJn8sCdqqPgFeB/1p6d61k=;
+        b=ntsQi/VHhRee5cHnxVvndQtAkmBcKj5350RCJb5tHYYUA7QVpqZmZVIHsfu2H0RB7M
+         3CKW2co604E3SjX+syMBf2cpVWP1NpogIy5HNT+urAyxO2o9Hz6CLvNTzDEYx9+iZdU7
+         OgxCxNEF+PKjeoXendOuOd1ZZdHEr3Y8GffcPYj+QUbdRH6WU2Z9YISKYg9v1CsE6eUo
+         JhhI7H63eRyn6vysWn7mi5V2a3vLMnOa8YJrSbIL1GVoMbuUHuPI0qkZAk/IDGovTMMD
+         KcttYF1gfiVyQLoXZrMD6tYpKcqI7MKpoybVq46/xUFGjZvR1n/qT7lVDmn5xQrlHL1K
+         xo+w==
+X-Gm-Message-State: AOAM53209ABGk+ro9reHUCf7VZrKOjw317dxT7FCata2u50S0pJmaWDU
+        +d5FXhSHp9kC/MVuamxsqIPzvogFiYFK9A==
+X-Google-Smtp-Source: ABdhPJxU113mcucMtQpIgvQPz7jTXOHWTqrqWsK/j5R28m2kVaotD0dsNj7PkyqDmuaVZNqJtDhBIQ==
+X-Received: by 2002:a17:90a:2e0e:b0:1bc:dbe:2d04 with SMTP id q14-20020a17090a2e0e00b001bc0dbe2d04mr4627984pjd.74.1647949925692;
+        Tue, 22 Mar 2022 04:52:05 -0700 (PDT)
+Received: from localhost.localdomain ([2409:4053:719:67ea:fc62:7f30:7002:e0c2])
+        by smtp.googlemail.com with ESMTPSA id h17-20020a63df51000000b0036b9776ae5bsm17147274pgj.85.2022.03.22.04.52.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 04:52:05 -0700 (PDT)
+From:   Dharmendra Singh <dharamhans87@gmail.com>
+To:     miklos@szeredi.hu
+Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
+        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] FUSE: Implement atomic lookup + open 
+Date:   Tue, 22 Mar 2022 17:21:46 +0530
+Message-Id: <20220322115148.3870-1-dharamhans87@gmail.com>
+X-Mailer: git-send-email 2.17.1
+Organization: DDN STORAGE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In FUSE, as of now, uncached lookups are expensive over the wire. 
+E.g additional latencies and stressing (meta data) servers from 
+thousands of clients. These lookup calls possibly can be avoided
+in some cases. Incoming two patches addresses this issue.
+
+First patch handles the case where we open first time a file/dir or create
+a file (O_CREAT) but do a lookup first on it. After lookup is performed
+we make another call into libfuse to open the file. Now these two separate
+calls into libfuse can be combined and performed as a single call into
+libfuse.
+
+Second patch handles the case when we are opening an already existing file
+(positive dentry). Before this open call, we re-validate the inode and
+this re-validation does a lookup on the file and verify the inode.
+This separate lookup also can be avoided (for non-dir) and combined
+with open call into libfuse.
+
+Here is the link to the libfuse pull request which implements atomic open
+https://github.com/libfuse/libfuse/pull/644
+
+I am going to post performance results shortly.
 
 
-On 3/21/2022 6:33 PM, Ian Rogers wrote:
-> If slots isn't with a topdown event then moving it is unnecessary. For
-> example {instructions, slots} is re-ordered:
-> 
-> $ perf stat -e '{instructions,slots}' -a sleep 1
-> 
->   Performance counter stats for 'system wide':
-> 
->         936,600,825      slots
->         144,440,968      instructions
-> 
->         1.006061423 seconds time elapsed
-> 
-> Which can break tools expecting the command line order to match the
-> printed order. It is necessary to move the slots event first when it
-> appears with topdown events. Add extra checking so that the slots event
-> is only moved in the case of there being a topdown event like:
-> 
-> $ perf stat -e '{instructions,slots,topdown-fe-bound}' -a sleep 1
-> 
->   Performance counter stats for 'system wide':
-> 
->          2427568570      slots
->           300927614      instructions
->           551021649      topdown-fe-bound
-> 
->         1.001771803 seconds time elapsed
-> 
-> Fixes: 94dbfd6781a0 ("perf parse-events: Architecture specific leader override")
-> Reported-by: Kan Liang <kan.liang@linux.intel.com>
-> Signed-off-by: Ian Rogers <irogers@google.com>
+Dharmendra Singh (2):
+  FUSE: Implement atomic lookup + open
+  FUSE: Avoid lookup in d_revalidate()
 
-Thanks Ian. The patch works well.
+ fs/fuse/dir.c             | 179 +++++++++++++++++++++++++++++++++-----
+ fs/fuse/file.c            |  30 ++++++-
+ fs/fuse/fuse_i.h          |  13 ++-
+ fs/fuse/inode.c           |   4 +-
+ fs/fuse/ioctl.c           |   2 +-
+ include/uapi/linux/fuse.h |   2 +
+ 6 files changed, 204 insertions(+), 26 deletions(-)
 
-Tested-by: Kan Liang <kan.liang@linux.intel.com>
+-- 
+2.17.1
 
-Thanks,
-Kan
-> ---
->   tools/perf/arch/x86/util/evlist.c | 18 ++++++++++++++----
->   1 file changed, 14 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-> index 8d9b55959256..cfc208d71f00 100644
-> --- a/tools/perf/arch/x86/util/evlist.c
-> +++ b/tools/perf/arch/x86/util/evlist.c
-> @@ -20,17 +20,27 @@ int arch_evlist__add_default_attrs(struct evlist *evlist)
->   
->   struct evsel *arch_evlist__leader(struct list_head *list)
->   {
-> -	struct evsel *evsel, *first;
-> +	struct evsel *evsel, *first, *slots = NULL;
-> +	bool has_topdown = false;
->   
->   	first = list_first_entry(list, struct evsel, core.node);
->   
->   	if (!pmu_have_event("cpu", "slots"))
->   		return first;
->   
-> +	/* If there is a slots event and a topdown event then the slots event comes first. */
->   	__evlist__for_each_entry(list, evsel) {
-> -		if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") &&
-> -			evsel->name && strcasestr(evsel->name, "slots"))
-> -			return evsel;
-> +		if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") && evsel->name) {
-> +			if (strcasestr(evsel->name, "slots")) {
-> +				slots = evsel;
-> +				if (slots == first)
-> +					return first;
-> +			}
-> +			if (!strncasecmp(evsel->name, "topdown", 7))
-> +				has_topdown = true;
-> +			if (slots && has_topdown)
-> +				return slots;
-> +		}
->   	}
->   	return first;
->   }

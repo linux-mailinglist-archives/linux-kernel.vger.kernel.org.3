@@ -2,58 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8BC4E56E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E114E56DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245572AbiCWQuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
+        id S245538AbiCWQtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245583AbiCWQuA (ORCPT
+        with ESMTP id S245532AbiCWQtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:50:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66BCBBE2E;
-        Wed, 23 Mar 2022 09:48:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB7C8D6E;
-        Wed, 23 Mar 2022 09:48:20 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C04A03F73D;
-        Wed, 23 Mar 2022 09:48:17 -0700 (PDT)
+        Wed, 23 Mar 2022 12:49:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CB93AC;
+        Wed, 23 Mar 2022 09:48:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6921B81FB1;
+        Wed, 23 Mar 2022 16:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED4CFC340EE;
+        Wed, 23 Mar 2022 16:47:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648054077;
+        bh=GXavJvlaiTb+T7WbLpkUjW9/g2S2PtTfhMx/DZ2gdnw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iYLqcQY9fwH8klPGFWwIoTHUfdDXPptnOuiTYbBc9P2iQNEy5ogUKMUNnfahgrBzR
+         gZnc1BHLGxeh9uTkFpMzf79YD2oxsga2QlJZcHb3TCuzr/Et6xNXciF0UXqjeUvmiF
+         iKhBz4HzJGsGhsK3nKVnHZfHBek/8v/4rZkZ9FXDejX1XWKtqy863A7GO3ANf4PG4C
+         SUuYH03MkI2ODKlmKqA5Dj1frfYKD54pl4llZKJs8PSuPx2gqvv0VwxoRFhcSNi3KJ
+         yDyFyBe/IHh35tz3nQzCLWH317az/oz0mHGw7SGtlQNQLCe2tXfFTF3tN1rnaCBASP
+         /e3eRd7xwp5Pw==
 Date:   Wed, 23 Mar 2022 16:47:48 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>, catalin.marinas@arm.com,
-        will@kernel.org
-Subject: Re: [PATCH v13 bpf-next 0/1] fprobe: Introduce fprobe function
- entry/exit probe
-Message-ID: <YjtPNAFQZ15NY0sp@lakrids>
-References: <164800288611.1716332.7053663723617614668.stgit@devnote2>
- <YjssQKblWeKqr/x8@lakrids>
- <20220323235539.644ad8ace98347467de3e897@kernel.org>
+From:   Mark Brown <broonie@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <YjtPNI2ZQFgVML6L@sirena.org.uk>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net>
+ <YjoUU+8zrzB02pW7@sirena.org.uk>
+ <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
+ <YjsOHmvDgAxwLFMg@sirena.org.uk>
+ <ebafdf77-5d96-556b-0197-a172b656bb01@roeck-us.net>
+ <CAK8P3a1hzmXTTMsGcCA2ekEHnff+M7GrYSQDN4bVfVk6Ui=Apw@mail.gmail.com>
+ <YjtIVymPEZ4t16tP@sirena.org.uk>
+ <CAK8P3a0Fzryo8Wi2exbQz=qXKGOGU6yxP0FGowa-fJkr0aGJFg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sQdCBG94vBDiG872"
 Content-Disposition: inline
-In-Reply-To: <20220323235539.644ad8ace98347467de3e897@kernel.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAK8P3a0Fzryo8Wi2exbQz=qXKGOGU6yxP0FGowa-fJkr0aGJFg@mail.gmail.com>
+X-Cookie: Nice guys get sick.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,68 +90,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 11:55:39PM +0900, Masami Hiramatsu wrote:
-> On Wed, 23 Mar 2022 14:18:40 +0000
-> Mark Rutland <mark.rutland@arm.com> wrote:
-> 
-> > On Wed, Mar 23, 2022 at 11:34:46AM +0900, Masami Hiramatsu wrote:
-> > > Hi,
-> > 
-> > Hi Masami,
-> > 
-> > > Here is the 13th version of rethook x86 port. This is developed for a part
-> > > of fprobe series [1] for hooking function return. But since I forgot to send
-> > > it to arch maintainers, that caused conflict with IBT and SLS mitigation series.
-> > > Now I picked the x86 rethook part and send it to x86 maintainers to be
-> > > reviewed.
-> > > 
-> > > [1] https://lore.kernel.org/all/164735281449.1084943.12438881786173547153.stgit@devnote2/T/#u
-> > 
-> > As mentioned elsewhere, I have similar (though not identical) concerns
-> > to Peter for the arm64 patch, which was equally unreviewed by
-> > maintainers, and the overall structure.
-> 
-> Yes, those should be reviewed by arch maintainers.
-> 
-> > > Note that this patch is still for the bpf-next since the rethook itself
-> > > is on the bpf-next tree. But since this also uses the ANNOTATE_NOENDBR
-> > > macro which has been introduced by IBT/ENDBR patch, to build this series
-> > > you need to merge the tip/master branch with the bpf-next.
-> > > (hopefully, it is rebased soon)
-> > 
-> > I thought we were going to drop the series from the bpf-next tree so
-> > that this could all go through review it had missed thusfar.
-> > 
-> > Is that still the plan? What's going on?
-> 
-> Now the arm64 (and other arch) port is reverted from bpf-next.
-> I'll send those to you soon.
 
-Ah; thanks for confirming!
+--sQdCBG94vBDiG872
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Since bpf-next is focusing on x86 at first, I chose this for review in
-> this version. Sorry for confusion.
+On Wed, Mar 23, 2022 at 05:41:01PM +0100, Arnd Bergmann wrote:
+> On Wed, Mar 23, 2022 at 5:18 PM Mark Brown <broonie@kernel.org> wrote:
 
-No problem; I think the confusion is all my own, so nothing to apologise
-for! :)
+> > and I'd be surprised if virtio devices made it through with a specific
+> > platform emulation.
 
-> > > The fprobe itself is for providing the function entry/exit probe
-> > > with multiple probe point. The rethook is a sub-feature to hook the
-> > > function return as same as kretprobe does. Eventually, I would like
-> > > to replace the kretprobe's trampoline with this rethook.
-> > 
-> > Can we please start by converting each architecture to rethook?
-> 
-> Yes. As Peter pointed, I'm planning to add a kretprobe patches to use
-> rethook if available in that series. let me prepare it.
-> 
-> > Ideally we'd unify things such that each architecture only needs *one*
-> > return trampoline that both ftrace and krpboes can use, which'd be
-> > significantly easier to get right and manage.
-> 
-> Agreed :-)
+> In general they do: virtio devices appear as regular PCI devices
+> and get probed from there, as long as the drivers are available.
 
-Great!
+> It looks like the PCI driver does not get initialized here though,
+> presumably because it's not enabled in versatile_defconfig.
+> It used to also not be enabled in multi_v5_defconfig, but I have
+> merged a patch from Anders that enables it in 5.18 for the
+> multi_v5_defconfig.
 
-Thanks,
-Mark.
+Ah, I thought Versatile was like the other older Arm reference platforms
+and didn't have PCI.
+
+--sQdCBG94vBDiG872
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI7TzQACgkQJNaLcl1U
+h9BjvAf/duSXw3LO6eKiw2GKSb5qNFkM7yPR4P7dmSrFcL3EotKV9wPef1AAKRWF
+p3DuYX1BoatfsHDiaTIzTDxaX9ao5E15uASqAy1Yd+V1LRa5HUobpSbDVonf+Kfw
+CG0Sh3gfmkRU8EAvDmFQZPBZ2hQAGENSpMHb1OBcTf3aras8a6bU9t9qHqpjlw2L
+gHrYYjlDm5V6iseTYAiNevPXyAh8XSHYJLfxjKquQTJ/nbe+2pcfYYsdz6Aqv+TF
+r6wGJR8dz+CXFNJHXyTRUpUyClPpFTqb8zEp4aTLMUgtf0ZyrIKpomR2Z5+kQkSd
+qraSPCepNqe5SiAsn8BY88A719I1Og==
+=d+d/
+-----END PGP SIGNATURE-----
+
+--sQdCBG94vBDiG872--

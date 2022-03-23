@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E1C4E4E17
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE8A4E4E1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242632AbiCWIWo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Mar 2022 04:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S242635AbiCWIYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242624AbiCWIWl (ORCPT
+        with ESMTP id S242609AbiCWIYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:22:41 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F08A75201;
-        Wed, 23 Mar 2022 01:21:09 -0700 (PDT)
-Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N1M4p-1oCHeB1LRL-012mDR; Wed, 23 Mar 2022 09:21:08 +0100
-Received: by mail-wm1-f46.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so480665wmp.5;
-        Wed, 23 Mar 2022 01:21:08 -0700 (PDT)
-X-Gm-Message-State: AOAM533GJ09L3LVWERS8Y48wrgahB+HbdO4fkNbMYx8hFRPs96NdXn8z
-        /wqApL5m66evneso+dKoS8dRj2oVZ+gHHo76QUk=
-X-Google-Smtp-Source: ABdhPJzZaEXlOkd+esyGRakeaMwED9DToYdSxV9NNtJQVS/LaQNhwvFQWaJyk53MNgkII5DhV1C2fpJBh5AycjwaHOQ=
-X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
- s25-20020a1cf219000000b0038c782c03bbmr7911838wmc.94.1648023667977; Wed, 23
- Mar 2022 01:21:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1647928315.git.qinjian@cqplus1.com> <8372ee2fcf361a3af7233450c4403178052ceee2.1647928316.git.qinjian@cqplus1.com>
- <CAK8P3a1H2xM1PdDwKPWHD0fqZ0q_o-KZTLvSXdm9jjqTWcX-hA@mail.gmail.com> <d79dd7655c964f88a58d8bf403da39be@cqplus1.com>
-In-Reply-To: <d79dd7655c964f88a58d8bf403da39be@cqplus1.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Mar 2022 09:20:51 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a10rsxpzd4eJbSJmRUDEMbOO+=6+=6Eu-7EY86+xw8V6g@mail.gmail.com>
-Message-ID: <CAK8P3a10rsxpzd4eJbSJmRUDEMbOO+=6+=6Eu-7EY86+xw8V6g@mail.gmail.com>
-Subject: Re: [PATCH v11 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
-To:     =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:lTtBG+5RV6V1/aOEk688MfNsHWHJcRo+jtzt1jC19bNgxRCv/gr
- MZZYe8oKi6FYe4/rTIRXGsMK2jKafA5gMzeYS1VHuH0tILr7l+1qr5UwkEevDMhAjS4eZjP
- +cVZAP5r1KjtMEhFlJ8B2Ji5lcv9Ha/J4qhDvkaA+kHqzbwmostd4AX9OV9hh6o/xZFegPV
- fOdGWpknF/hs4DfDtRzbg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:X6MBMGnF+us=:i6xhtLOnMKWlpQYbjimQCB
- s4WDXdizDiUNNO7SpzhDVPSBjRrDkP1tiFR+2z/5t9XF5/84T6A9oW1AkdgmtvxSJHDwzhHX7
- pcfXGWNJEA4CON5Fe2OHx0DnqBDThP5qjmgP3O/P2AKq1dYCaGDLPI+lPBftLZPiHX0NAuhHC
- 35JvCHggYdBbkuvNPM7CMwrWOKKhbuwV7Q62o+Ea4lkD+SQgBZ8G6tfotJN/gsUR4HZjxziJD
- Dfh46G8PR1ajCIpCU6zC0mzgs1lFpIH5KslDvaICUPv3omfFN7lbtnQpTe6Vd/PIPVlTRNKLR
- dWKLB3/xp6jSxqP17xN/EAtfunjP8qu6HL0jBml/ySo+ylFGioPNulF8s+sUJN9VB6zaqN+XY
- SoKjgWI8gm60kDIuUZMmgPlb8AbNBTjEOEbBv6A90aWUmy3+Qaj4lO7a7GZxcTuVMuYDpqQ9T
- ZHCRnW05hhMoa5LC5k6zEudNIG9fcGXB3f9P9wdB9vnjLindq/BVhk5/abCem7vYJBi657Q7j
- Fi6wGyTKqfSg13vXMcjCtFxLD/tRcq0f1rKvimdlO2/MIvIV2Y1yWGIuAwPpIfFnihZJLplbJ
- HVrYXPPTbKv3LM38swWqIejEt4VQJ4GugSyxCNcFoogHEvVXLO17fsmt5XSp5x9cHnnXQ0fcD
- elAoM9OpLHgog8HS0gBVgR51Dhru9uLEvVz44a7rtnEZqgUK2DfzMx2pskDG4Izok5Gk=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Mar 2022 04:24:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436E374DD0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:22:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id F35DF210E9;
+        Wed, 23 Mar 2022 08:22:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648023765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ZmkgvDoKDCQZ2h9qaaOHjbLOj4BbTIwjU6OdYK/Va4=;
+        b=heYXWTiKgBjmPiFKpwLeBTsJmkEL/c+uSl/D5ZaVxqGZ5Z3SUm//IsHDLeuI3I4ItPclCc
+        VLCGhrIrsfTi87pVJdIgwyRa1/Dsr5sH1Ga0eTwUnAn6KoCCgDx57Yja83ZecZcNIUIhgb
+        WaIgIUi12e+nmJ07Um+Ydot1iMh1lYM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648023765;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ZmkgvDoKDCQZ2h9qaaOHjbLOj4BbTIwjU6OdYK/Va4=;
+        b=5O17Guzm+VTHgZvssM5XEafjAcxG1nasnDWL6feCvL2dXX8kfh/7V/M/wVPfBaSCfZNDQu
+        1zisIPXzkOKzExAA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id ED2EDA3B8A;
+        Wed, 23 Mar 2022 08:22:44 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 09:22:44 +0100
+Message-ID: <s5hv8w5ulgr.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Amadeusz SX2awiX4ski <amadeuszx.slawinski@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, Hu Jiahui <kirin.say@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+In-Reply-To: <s5hy211ult4.wl-tiwai@suse.de>
+References: <20220322170720.3529-1-tiwai@suse.de>
+        <20220322170720.3529-4-tiwai@suse.de>
+        <db933c9e-bf7b-dec6-8022-75074f9cebf7@linux.intel.com>
+        <s5hy211ult4.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 2:41 AM qinjian[覃健] <qinjian@cqplus1.com> wrote:
-> > On Tue, Mar 22, 2022 at 7:17 AM Qin Jian <qinjian@cqplus1.com> wrote:
-> >
-> > It was a while ago though, so I don't remember the details, if we did
-> > conclude the review, can you link to the lore.kernel.org thread in
-> > the next version? Please also check the other patches on which
-> > you added a 'Reviewed-by' tag from someone to ensure that they
-> > actually provided that tag, rather than just providing review comments.
->
-> In patch 6, I fixed all your comments.
->
-> I got a reply from you: https://lore.kernel.org/all/CAK8P3a1Doh8GY9iFZsvmd6wASHoPqyR+roXx0G5XidnmHNkGaA@mail.gmail.com/
-> > This looks all good to me now, it just needs a review for the clk,
-> > reset  and irqchip drivers. ...
->
-> If these not means you reviewed, I'll remove your review-tag.
+On Wed, 23 Mar 2022 09:15:19 +0100,
+Takashi Iwai wrote:
+> 
+> On Wed, 23 Mar 2022 09:08:25 +0100,
+> Amadeusz SX2awiX4ski wrote:
+> > 
+> > On 3/22/2022 6:07 PM, Takashi Iwai wrote:
+> > > Like the previous fixes to hw_params and hw_free ioctl races, we need
+> > > to paper over the concurrent prepare ioctl calls against hw_params and
+> > > hw_free, too.
+> > >
+> > > This patch implements the locking with the existing
+> > > runtime->buffer_mutex for prepare ioctls.  Unlike the previous case
+> > > for snd_pcm_hw_hw_params() and snd_pcm_hw_free(), snd_pcm_prepare() is
+> > > performed to the linked streams, hence the lock can't be applied
+> > > simply on the top.  For tracking the lock in each linked substream, we
+> > > modify snd_pcm_action_group() slightly and apply the buffer_mutex for
+> > > the case stream_lock=false (formerly there was no lock applied)
+> > > there.
+> > >
+> > > Cc: <stable@vger.kernel.org>
+> > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > > ---
+> > >   sound/core/pcm_native.c | 32 ++++++++++++++++++--------------
+> > >   1 file changed, 18 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/sound/core/pcm_native.c b/sound/core/pcm_native.c
+> > > index 266895374b83..0e4fbf5fd87b 100644
+> > > --- a/sound/core/pcm_native.c
+> > > +++ b/sound/core/pcm_native.c
+> > > @@ -1190,15 +1190,17 @@ struct action_ops {
+> > >   static int snd_pcm_action_group(const struct action_ops *ops,
+> > >   				struct snd_pcm_substream *substream,
+> > >   				snd_pcm_state_t state,
+> > > -				bool do_lock)
+> > > +				bool stream_lock)
+> > >   {
+> > >   	struct snd_pcm_substream *s = NULL;
+> > >   	struct snd_pcm_substream *s1;
+> > >   	int res = 0, depth = 1;
+> > >     	snd_pcm_group_for_each_entry(s, substream) {
+> > > -		if (do_lock && s != substream) {
+> > > -			if (s->pcm->nonatomic)
+> > > +		if (s != substream) {
+> > > +			if (!stream_lock)
+> > > +				mutex_lock_nested(&s->runtime->buffer_mutex, depth);
+> > > +			else if (s->pcm->nonatomic)
+> > >   				mutex_lock_nested(&s->self_group.mutex, depth);
+> > >   			else
+> > >   				spin_lock_nested(&s->self_group.lock, depth);
+> > 
+> > Maybe
+> > 	if (!stream_lock)
+> > 		mutex_lock_nested(&s->runtime->buffer_mutex, depth);
+> > 	else
+> > 		snd_pcm_group_lock(&s->self_group, s->pcm->nonatomic);
+> > ?
+> 
+> No, it must be nested locks with the given subclass.
 
-You can only add Reviewed-by tags that have been explicitly given,
-see the documentation at [1] for details. What I wrote was a less
-formal acknowledgement that does not have the specific meaning.
+FWIW, the reason is that lockdep would complain otherwise as if it
+were a deadlock.  That is, this is a workaround for avoiding false
+lockdep warnings.
 
-      Arnd
 
-[1] https://www.kernel.org/doc/html/latest/translations/zh_TW/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
+Takashi

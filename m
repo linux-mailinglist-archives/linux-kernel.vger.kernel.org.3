@@ -2,205 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5394B4E5947
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FC24E594C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344341AbiCWTmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
+        id S1344353AbiCWTnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238649AbiCWTms (ORCPT
+        with ESMTP id S1344334AbiCWTnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:42:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAB8186E2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:41:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0612861524
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:41:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF7CC340ED;
-        Wed, 23 Mar 2022 19:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648064477;
-        bh=OyjlJzJfIVp7HiKk4ACH/tuEz4i5DlpA3FsJmafSM2M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nSkZm+DX9pLULF7Ja/imieggcbTcYtgRSSpaMwEUfIUr6ici/r3BmCzp/CTHRV4Tw
-         8gkY30+fV5ZSjDEoACoHh3ZluxDtBiDnKriphgNTwHnciH8xf/05G4TpiEj5c0O23x
-         cICmhI1ZhSAy5hRHPaMLvx4oHrqQiTWnb4Ve4Kj/MtQbPrF7ytIyhy4o+Zp6Fgk1+U
-         WrTxdOBCwR07JeLBRF81oB3Ajh5k1+TLZyI8jRO+JduA2IyuDhy92SjdbYBRewODO0
-         So1KmKQHsB2DgJh/txz763fUOKgMNDhRx1GBqKAIE0DZAC77p+wCVEn1xSGPE929/q
-         iCJ4jKYUAYE3A==
-Date:   Wed, 23 Mar 2022 12:41:10 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eduard-Gabriel Munteanu <maxdamage@aladin.ro>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH 1/1] um: fix error return code in winch_tramp()
-Message-ID: <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
-References: <20210508032239.2177-1-thunder.leizhen@huawei.com>
+        Wed, 23 Mar 2022 15:43:15 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F858BE00
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:41:45 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id q5so3321366ljb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kQrBGFwucrBKBVfXucD62w2ROKP/3gosyL/mFvFuauw=;
+        b=SBbwCPeyER6bdPDyzhQl8Ssg5BBoNYoxM4wuCfgnDMBpBaTxeqvdt/O+JMNniz4Myr
+         AdkoKTp8pj5cEZ7B1s7i22BAAMAln1zN/s5LGOGGUaXqkEyoeXmpJZGsd41WBh8obao9
+         pYKhcJps1P+IYJoqKMNmjNrvkWb20OvKGDggaxBL0ZGg9vSo1RzjWYXyLsF1PerHnr2c
+         nsO8JOb+kjtiZDBdztqa00hyErV3EmCPRUTp3rN2xNNIbbqRgWpKrkDPz/uLFOdiCcjQ
+         jkNlTUj3B8eSsD8dx+YpoFkZcoeocthFtBuffFjS9zUnTUK3XTXSLwCp7gYoYqVSHr4R
+         5bkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kQrBGFwucrBKBVfXucD62w2ROKP/3gosyL/mFvFuauw=;
+        b=H1/JYsq1ZKUyN1TMKOJ9uccxOfwviBAW81w3C1Q2MPPn5vFz7bA0UOLXklLzIw8CRN
+         uqpYUadiwXw/gd5XD2Aw+4cXRl1xWAXJJL2zTzBF0Pw7VeVQU/SlGRbKL3C4RHJa/HWC
+         IhJ9Oe09fJw4PzB3Ql7y2SCokQD1AAjdiVcwMWxlAYwVSzlubmoLZeohrRn35DEvjbTT
+         SVSml5dIYdULojedlouvzBx3Uz9VdF4QhzzjPPiLhNgp8cYm4pfA44f+lm9dw237aGO0
+         5w2DwcDh3a0i7skSm4+aNUIPYUaOGECpAGNC6e8WeGMdpWZHZgZX1E9Y6RkXqtg922Fi
+         bzyQ==
+X-Gm-Message-State: AOAM530RDr9NVM0HXk1HfXPEdCjJVXNPkWjLCvSvoP2cGMuUanhJKQnH
+        dGamyO6pXKJ91c8CYB+ljR44iwC0rNFM1nXLAnjArg==
+X-Google-Smtp-Source: ABdhPJyPxaAkqjgQxr5Z0ufChFc+QxnVh2jtJFdKm1AViJ4raOtJ6ZSMiIycQXnGSjwQAoCxO1pVGEbNU+SzucsBVqo=
+X-Received: by 2002:a2e:904c:0:b0:23e:d7ad:3fdd with SMTP id
+ n12-20020a2e904c000000b0023ed7ad3fddmr1318780ljg.239.1648064503179; Wed, 23
+ Mar 2022 12:41:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210508032239.2177-1-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com>
+In-Reply-To: <CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 23 Mar 2022 12:41:31 -0700
+Message-ID: <CAKwvOdmSV3Nse+tGMBXvN=QvnOs6-ODZRJB0OF5Pd6BVb-scFw@mail.gmail.com>
+Subject: Re: [PATCH] x86: bug.h: merge annotate_reachable into _BUG_FLAGS for __WARN_FLAGS
+To:     Charlemagne Lasse <charlemagnelasse@gmail.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        jpoimboe@redhat.com
+Cc:     adobriyan@gmail.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, linux-kernel@vger.kernel.org,
+        linux-sparse@vger.kernel.org, llvm@lists.linux.dev,
+        luc.vanoostenryck@gmail.com, mingo@redhat.com, nathan@kernel.org,
+        peterz@infradead.org, tglx@linutronix.de, x86@kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Mar 23, 2022 at 12:30 PM Charlemagne Lasse
+<charlemagnelasse@gmail.com> wrote:
+>
+> > @@ -75,9 +77,9 @@ do {                                \
+> >   */
+> >  #define __WARN_FLAGS(flags)                    \
+> >  do {                                \
+> > +    __auto_type f = BUGFLAG_WARNING|(flags);        \
+> >      instrumentation_begin();                \
+> > -    _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));        \
+> > -    annotate_reachable();                    \
+> > +    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
+> >      instrumentation_end();                    \
+> >  } while (0)
+>
+> This causes following sparse warning on x86:
+>
+> make allnoconfig && touch init/version.c && make CHECK="sparse
+> -Wshadow"  C=1 init/version.o
+> #
+> # No change to .config
+> #
+>  CALL    scripts/checksyscalls.sh
+>  CALL    scripts/atomic/check-atomics.sh
+>  CHK     include/generated/compile.h
+>  CC      init/version.o
+>  CHECK   init/version.c
+> init/version.c: note: in included file (through
+> include/linux/rculist.h, include/linux/pid.h, include/linux/sched.h,
+> include/linux/utsname.h):
+> ./include/linux/rcupdate.h:1007:9: warning: symbol 'f' shadows an earlier one
+> ./include/linux/rcupdate.h:1001:47: originally declared here
 
-On Sat, May 08, 2021 at 11:22:39AM +0800, Zhen Lei wrote:
-> Fix to return a negative error code from the error handling case instead
-> of 0, as done elsewhere in this function.
-> 
-> Fixes: 89df6bfc0405 ("uml: DEBUG_SHIRQ fixes")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  arch/um/drivers/chan_user.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/um/drivers/chan_user.c b/arch/um/drivers/chan_user.c
-> index d8845d4aac6a..6040817c036f 100644
-> --- a/arch/um/drivers/chan_user.c
-> +++ b/arch/um/drivers/chan_user.c
-> @@ -256,7 +256,8 @@ static int winch_tramp(int fd, struct tty_port *port, int *fd_out,
->  		goto out_close;
->  	}
->  
-> -	if (os_set_fd_block(*fd_out, 0)) {
-> +	err = os_set_fd_block(*fd_out, 0);
-> +	if (err) {
->  		printk(UM_KERN_ERR "winch_tramp: failed to set thread_fd "
->  		       "non-blocking.\n");
->  		goto out_close;
-> -- 
-> 2.25.1
-> 
-> 
-> 
+Thanks for the report. There was already a fix sent for this:
+https://lore.kernel.org/lkml/20220317065743.8467-1-mailhol.vincent@wanadoo.fr/
+but it doesn't mention that sparse is warning about this, too.
 
-Sorry for the necro bump but this patch as commit ccf1236ecac4 ("um: fix
-error return code in winch_tramp()") prevents UML from exiting cleanly
-when it is called from within in a shell script. It is still
-reproducible at next-20220323. I did see a patch from Richard that
-touches this area but that patch does not make a difference:
+I think if Vincent sent a v3 that mentioned that sparse is warning
+about this, too, and cc'ed you, you could then supply
+signed-off/tested-by tags (or just do so on v2, though it doesn't
+mention sparse), and maybe Josh would be so kind as to pick that up?
 
-https://lore.kernel.org/r/20220101215810.13260-3-richard@nod.at/
+>
+>
+> Affected versions (from the ones on kernel.org):
+>
+> * 5.17 - bfb1a7c91fb7 ("x86/bug: Merge annotate_reachable() into
+> _BUG_FLAGS() asm")
+> * 5.16.17 - fe0c95903a68 ("x86/bug: Merge annotate_reachable() into
+> _BUG_FLAGS() asm")
+>
+> Cannot be seen when changing the variable name:
+>
+> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+> index bab883c0b6fe..cbd11e38252a 100644
+> --- a/arch/x86/include/asm/bug.h
+> +++ b/arch/x86/include/asm/bug.h
+> @@ -77,9 +77,9 @@ do {                                \
+>   */
+>  #define __WARN_FLAGS(flags)                    \
+>  do {                                \
+> -    __auto_type f = BUGFLAG_WARNING|(flags);        \
+> +    __auto_type __f = BUGFLAG_WARNING|(flags);        \
+>      instrumentation_begin();                \
+> -    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
+> +    _BUG_FLAGS(ASM_UD2, __f, ASM_REACHABLE);            \
+>      instrumentation_end();                    \
+>  } while (0)
 
-My bisect log:
 
-# bad: [7d2a07b769330c34b4deabeed939325c77a7ec2f] Linux 5.14
-# good: [62fb9874f5da54fdb243003b386128037319b219] Linux 5.13
-git bisect start 'v5.14' 'v5.13'
-# good: [406254918b232db198ed60f5bf1f8b84d96bca00] Merge tag 'perf-tools-for-v5.14-2021-07-01' of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux
-git bisect good 406254918b232db198ed60f5bf1f8b84d96bca00
-# good: [4ea90317956718e0648e1f87e56530db809a5a04] Merge tag 'for-linus-5.14-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip
-git bisect good 4ea90317956718e0648e1f87e56530db809a5a04
-# bad: [65ca89c2b12cca0d473f3dd54267568ad3af55cc] ASoC: intel: atom: Fix breakage for PCM buffer address setup
-git bisect bad 65ca89c2b12cca0d473f3dd54267568ad3af55cc
-# bad: [6e207b882159ed3e35a4cd4ff0fc155cce5e3cbc] Merge tag 'arm-soc-5.14' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-git bisect bad 6e207b882159ed3e35a4cd4ff0fc155cce5e3cbc
-# good: [f55966571d5eb2876a11e48e798b4592fa1ffbb7] Merge tag 'drm-next-2021-07-08-1' of git://anongit.freedesktop.org/drm/drm
-git bisect good f55966571d5eb2876a11e48e798b4592fa1ffbb7
-# bad: [1459718d7d79013a4814275c466e0b32da6a26bc] Merge tag 'powerpc-5.14-2' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
-git bisect bad 1459718d7d79013a4814275c466e0b32da6a26bc
-# good: [227c4d507c71acb7bece298a98d83e5b44433f62] Merge tag 'f2fs-for-5.14-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs
-git bisect good 227c4d507c71acb7bece298a98d83e5b44433f62
-# good: [96890bc2eaa1f6bfc1b194e0f0815a10824352a4] Merge tag 'nfs-for-5.14-1' of git://git.linux-nfs.org/projects/trondmy/linux-nfs
-git bisect good 96890bc2eaa1f6bfc1b194e0f0815a10824352a4
-# good: [e49d68ce7cc5a865ce14c1e57938438ab01c3ce3] Merge tag 'ext4_for_linus_stable' of git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4
-git bisect good e49d68ce7cc5a865ce14c1e57938438ab01c3ce3
-# bad: [ccf1236ecac476d9d2704866d9a476c86e387971] um: fix error return code in winch_tramp()
-git bisect bad ccf1236ecac476d9d2704866d9a476c86e387971
-# good: [68f5d3f3b6543266b29e047cfaf9842333019b4c] um: add PCI over virtio emulation driver
-git bisect good 68f5d3f3b6543266b29e047cfaf9842333019b4c
-# good: [c0ecca6604b80e438b032578634c6e133c7028f6] um: enable the use of optimized xor routines in UML
-git bisect good c0ecca6604b80e438b032578634c6e133c7028f6
-# good: [80f849bf541ef9b633a9c08ac208f9c9afd14eb9] um: implement flush_cache_vmap/flush_cache_vunmap
-git bisect good 80f849bf541ef9b633a9c08ac208f9c9afd14eb9
-# good: [b77e81fbe5f5fb4ad9a61ec80f6d1e30b6da093a] um: fix error return code in slip_open()
-git bisect good b77e81fbe5f5fb4ad9a61ec80f6d1e30b6da093a
-# first bad commit: [ccf1236ecac476d9d2704866d9a476c86e387971] um: fix error return code in winch_tramp()
 
-$ make -skj"$(nproc)" ARCH=um mrproper defconfig all
-
-$ ./linux ubd0=...
-...
-Run /sbin/init as init process
-EXT4-fs (ubda): re-mounted. Quota mode: none.
-Starting syslogd: OK
-Starting klogd: OK
-Running sysctl: OK
-Initializing random number generator: OK
-Saving random seed: OK
-Starting network: OK
-Linux version 5.17.0-next-20220323 (nathan@dev-arch.thelio-3990X) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38) #1 Wed Mar 23 12:05:22 MST 2022
-Stopping network: OK
-Saving random seed: OK
-Stopping klogd: OK
-Stopping syslogd: OK
-EXT4-fs (ubda): re-mounted. Quota mode: none.
-The system is going down NOW!
-Sent SIGTERM to all processes
-Sent SIGKILL to all processes
-Requesting system poweroff
-reboot: System halted
-
-$ echo $?
-0
-
-$ cat test.sh
-#!/usr/bin/env bash
-
-./linux ubd0=...
-
-$ ./test.sh
-...
-Run /sbin/init as init process
-EXT4-fs (ubda): re-mounted. Quota mode: none.
-Starting syslogd: OK
-Starting klogd: OK
-Running sysctl: OK
-Initializing random number generator: OK
-Saving random seed: OK
-Starting network: OK
-Linux version 5.17.0-next-20220323 (nathan@dev-arch.thelio-3990X) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38) #1 Wed Mar 23 12:10:31 MST 2022
-Stopping network: OK
-Saving random seed: OK
-Stopping klogd: OK
-Stopping syslogd: OK
-EXT4-fs (ubda): re-mounted. Quota mode: none.
-The system is going down NOW!
-Sent SIGTERM to all processes
-Sent SIGKILL to all processes
-Requesting system poweroff
-reboot: System halted
-./test.sh: line 5: 970978 Killed                  ./linux ubd0=...
-
-$ echo $?
-137
-
-The rootfs is a simple Buildroot image, which just prints the version
-string then runs "poweroff". It is available at:
-
-https://github.com/nathanchance/boot-utils/raw/bd4b962ee12e00f666eef12e3413a79d334a0685/images/x86_64/rootfs.ext4.zst
-
-in case it helps. I am happy to provide more information or test patches
-as necessary.
-
-Cheers,
-Nathan
+-- 
+Thanks,
+~Nick Desaulniers

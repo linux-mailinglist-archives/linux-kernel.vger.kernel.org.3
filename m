@@ -2,154 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835D94E49E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 01:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90CE4E49F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 01:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240842AbiCWAG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 20:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S240879AbiCWAJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 20:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiCWAGY (ORCPT
+        with ESMTP id S230174AbiCWAJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 20:06:24 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAD85DE77
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:04:55 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 84CD05D113
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 19:04:54 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id WoUgnFB2wHnotWoUgnIP9W; Tue, 22 Mar 2022 19:04:54 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9qinQlsidghVtceQvZk5+L7j2X96kkQsiTPjZ9J4fcM=; b=IWO9tUoOpc7Z5gIPbS6ezytqOs
-        4XCl8BtLmQHx/kksQGGQxk41pi91aZCOzDs9Q6kkVhAQX0UQwMEoQOLmXAf4iTDqkQKmo/Xh16R7f
-        BliKmD3DMno9dIe2v+y998HTAEg4uzs3djJoqRYsirTAK3ZpuLdaq3CELNxlawOU48I+hAWfIXMEd
-        uZfG+tiBppuXm6wcnCiP80aPkJBui0BSQ9Xrh5CUjZ7FjoPxrkKyqOnLg7E1/xTfw8wwVypnxcjGk
-        hkB+fgXhgHAJuYqHXdbznGKWDrqhqgtyO7Zoza0NAIndPTvUUzDmai3jfpkTElsHT8OSyDVARNzpR
-        fcocgXgA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54408)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nWoUg-002pNL-2q; Wed, 23 Mar 2022 00:04:54 +0000
-Message-ID: <8b41a486-92af-2f2d-ba05-205650a90ee2@roeck-us.net>
-Date:   Tue, 22 Mar 2022 17:04:53 -0700
+        Tue, 22 Mar 2022 20:09:47 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E390513F51
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:08:18 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id i11so78422plr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=sAxPWh/aZhdCOlaJj0vWLLg1UzQ/98ltp1ezFXemBlI=;
+        b=qVHK6QFE2tfGVj/rS+smA3KWjMSFaH4R2TYoaXm0WZDYO28TXTNCoPOeS/wBcqP1oq
+         1u3737eLdEy5wqMnm09mUgdBnt3CZAGbl09t9P0Za3qrbEit0t/I83hLJLm5gBXaMivV
+         AJNjuV3LAeVBrDlWvln+B7ZBDnpfYAllF7WjvhYA5OtO2Z/53tItpuEb/qQl2C2gyFeW
+         Ky7RMxG7c/fX9pXBJTCPKy22qQuN+zSY0wjUZ0JhXamHvhxsNLBKTCzxFvvqjdPuphe/
+         YJY//zi6o33EcXYstIT90GdFal0CBLmgf0wWuO6L1lCMJR1h3c77c9KWQzcHbZpTGFC0
+         kmBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sAxPWh/aZhdCOlaJj0vWLLg1UzQ/98ltp1ezFXemBlI=;
+        b=kyPHE/NhA8dUc9sxK5qrhd7Q57/0x9RPmDYHeYrES6E0KH9QieY+p9Zkap9OOxusrR
+         4zxw0/WcIJ3DhAwLGzruMywJ9M1UOg7QxAkvYEtDQRTbntf0c1JvGxSc7ekpL46tlaBi
+         Gq0XCGvNjZjmS394CEjN4PrLPpfjm74A4uQpsEKh1FCCRS3RWkTPk3TtwHNXssdS5XmC
+         G2XaeJZggKJ6esqZvqVlXpW5fS1k8ulzVAI2mRkcxCuQ6NkA3ThJkTO31UtKJOivmsG6
+         O0lfCg7Yrs7hNQKli7NqhWJLdV+e1pQpnHgKJtus4F2Fj7y7oc4lUSDuSsGoGYchSH3Q
+         Pd/g==
+X-Gm-Message-State: AOAM5309Qy+nGAlAzuVbhqEiQW7r44FJ/X7ToaT6hqQGg0NX01f8EdBL
+        42/aer2H7j4kVv2iKJkXLDh1ag==
+X-Google-Smtp-Source: ABdhPJzi1azK51h/jovWI3Bh8IoUHKOYQ9P+MerXKCYJ0DUUhQF8t0tEK9wzi3LQAmayjCTyRNGhfw==
+X-Received: by 2002:a17:90b:388c:b0:1bf:4047:c7c6 with SMTP id mu12-20020a17090b388c00b001bf4047c7c6mr8189328pjb.24.1647994098389;
+        Tue, 22 Mar 2022 17:08:18 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id o7-20020aa79787000000b004f8e44a02e2sm26461527pfp.45.2022.03.22.17.08.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 17:08:17 -0700 (PDT)
+Message-ID: <8bcf2234-983e-171f-90dd-ff0c07412b46@kernel.dk>
+Date:   Tue, 22 Mar 2022 18:08:16 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [syzbot] KASAN: use-after-free Read in add_wait_queue
 Content-Language: en-US
-To:     Tobias Waldekranz <tobias@waldekranz.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220322222911.519238-1-tobias@waldekranz.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] watchdog: gpio_wdt: Support GPO lines with the toggle
- algorithm
-In-Reply-To: <20220322222911.519238-1-tobias@waldekranz.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     syzbot <syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, gregkh@linuxfoundation.org,
+        io-uring@vger.kernel.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000042c81b05dad717e6@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <00000000000042c81b05dad717e6@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nWoUg-002pNL-2q
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54408
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/22 15:29, Tobias Waldekranz wrote:
-> Support using GPO lines (i.e. GPIOs that are output-only) with
-> gpio_wdt using the "toggle" algorithm.
+On 3/22/22 5:37 PM, syzbot wrote:
+> syzbot has bisected this issue to:
 > 
-> Since its inception, gpio_wdt has configured its GPIO line as an input
-> when using the "toggle" algorithm, even though it is used as an output
-> when kicking. This needlessly barred hardware with output-only pins
-> from using the driver.
+> commit 91eac1c69c202d9dad8bf717ae5b92db70bfe5cf
+> Author: Jens Axboe <axboe@kernel.dk>
+> Date:   Wed Mar 16 22:59:10 2022 +0000
 > 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
+>     io_uring: cache poll/double-poll state with a request flag
 > 
-> Hi,
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1280c825700000
+> start commit:   b47d5a4f6b8d Merge tag 'audit-pr-20220321' of git://git.ke..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1180c825700000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1680c825700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=63af44f0631a5c3a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=950cee6d91e62329be2c
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14506ddb700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=139b2093700000
 > 
-> This patch has been in our downstream tree for a long time. We need it
-> because our kick GPIO can't be used as an input.
+> Reported-by: syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com
+> Fixes: 91eac1c69c20 ("io_uring: cache poll/double-poll state with a request flag")
 > 
-> What I really can't figure out is why the driver would request the pin
-> as in input, when it's always going to end up being used as an output
-> anyway.
-> 
-> So I thought I'd send it upstream in the hopes of either getting it
-> merged, or an explanation as to why it is needed.
-> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-I _think_ the assumption / idea was that "toggle" implies that the output
-is connected to a pull-up resistor and that the pin either floats or is
-pulled down to ground, causing the signal to toggle. I don't know if/how
-that works in practice, though.
+#syz test: git://git.kernel.dk/linux-block for-5.18/io_uring
 
-Guenter
+All three reports are the same thing...
 
->   drivers/watchdog/gpio_wdt.c | 13 +++++--------
->   1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
-> index 0923201ce874..f7686688e0e2 100644
-> --- a/drivers/watchdog/gpio_wdt.c
-> +++ b/drivers/watchdog/gpio_wdt.c
-> @@ -108,7 +108,6 @@ static int gpio_wdt_probe(struct platform_device *pdev)
->   	struct device *dev = &pdev->dev;
->   	struct device_node *np = dev->of_node;
->   	struct gpio_wdt_priv *priv;
-> -	enum gpiod_flags gflags;
->   	unsigned int hw_margin;
->   	const char *algo;
->   	int ret;
-> @@ -122,17 +121,15 @@ static int gpio_wdt_probe(struct platform_device *pdev)
->   	ret = of_property_read_string(np, "hw_algo", &algo);
->   	if (ret)
->   		return ret;
-> -	if (!strcmp(algo, "toggle")) {
-> +
-> +	if (!strcmp(algo, "toggle"))
->   		priv->hw_algo = HW_ALGO_TOGGLE;
-> -		gflags = GPIOD_IN;
-> -	} else if (!strcmp(algo, "level")) {
-> +	else if (!strcmp(algo, "level"))
->   		priv->hw_algo = HW_ALGO_LEVEL;
-> -		gflags = GPIOD_OUT_LOW;
-> -	} else {
-> +	else
->   		return -EINVAL;
-> -	}
->   
-> -	priv->gpiod = devm_gpiod_get(dev, NULL, gflags);
-> +	priv->gpiod = devm_gpiod_get(dev, NULL, GPIOD_OUT_LOW);
->   	if (IS_ERR(priv->gpiod))
->   		return PTR_ERR(priv->gpiod);
->   
+-- 
+Jens Axboe
 

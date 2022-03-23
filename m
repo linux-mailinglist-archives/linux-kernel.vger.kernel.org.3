@@ -2,170 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE2E4E5194
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125564E51A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244005AbiCWLuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S244011AbiCWLz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbiCWLuB (ORCPT
+        with ESMTP id S232988AbiCWLz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:50:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685A620198
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:48:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AFF561F37F;
-        Wed, 23 Mar 2022 11:48:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648036110; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8PjZDyXTMEaHn2duElkoOX449JsJoEUnBONEtu7w2ec=;
-        b=due7XOdwWAhr4mm91mYQhKVwvAMCG2rQKP2uXlTwqfKfl4ku+qD1DsAib8OrR55mnx+ZY7
-        Jd4TR5wNe0iP0z6c+r4kPl5VbHs3RK71Gjl+6/w5lbIkRVhKJ/AZt60wCgLTT9sahzgQWX
-        GTUbNeoRADoV9ynIrIuZQdLONgSHCkE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648036110;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8PjZDyXTMEaHn2duElkoOX449JsJoEUnBONEtu7w2ec=;
-        b=DNkYmWTOmcSlx4Nc5GwO5uYnK/Ad6vKfQeZQf9Z1wFc36uOnRNLB6P/+2yJ0a4xmliCUxM
-        dS8jETBVmqgPScBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38B4413A78;
-        Wed, 23 Mar 2022 11:48:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CqUDDA4JO2IdcgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 23 Mar 2022 11:48:30 +0000
-Message-ID: <63704e10-18cf-9a82-cffb-052c6046ba7d@suse.cz>
-Date:   Wed, 23 Mar 2022 12:48:29 +0100
+        Wed, 23 Mar 2022 07:55:56 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D84762A0;
+        Wed, 23 Mar 2022 04:54:23 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id r13so2325490ejd.5;
+        Wed, 23 Mar 2022 04:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tjXHN/eiBOH25O5STfPTfLcMinZ5HpozLUsy3qwmmWQ=;
+        b=In1lSLjOxNHM4lD+mv/8ysYHAWkl7ETBHGwMnp4xudlx8mi44elGLdb08B5eEJSRlu
+         k+iECO8zs1svCZSfH4zbgyfFRAvnMe3vyv6q82h6/+/IXlukfE2oLslpiPBYzHaXtdkj
+         kaLB+YrriT+JdvU/D3xm7ZTyiuPei5ti+aDRpHp+B1f7CWoQQ0QauEUpOqYkiMe+fkQy
+         mD67albiSCRCVe0v1H3qySwvrUJsTgaRmiYcs1P5gXkIX1jRxChiFmcyN1ZWi06TxHRs
+         64AnXEgUCSupTx+TEEBR/YUY227lWtixDt2APmAM7LPtMh/O/CepNNQlzPCYj4kfV1zH
+         fk7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tjXHN/eiBOH25O5STfPTfLcMinZ5HpozLUsy3qwmmWQ=;
+        b=LMrLBUHU/2ro4kkADgW/FnDc80EzZ3jLe4gFfwLSq3sMoeD1V4KiKEvRhxUBxIa3se
+         +HQjEcwkTK6uxU/F1YKNRc8TiH2orYW3baqD1MMx/+eNgAr3kxg9qsQiktUMxBqoh8NM
+         ryrKmk626xJhcxxSvnWTVPI0KGK7PViNARACbOHRZbw8Z/0tBNz0nDOSsJ2Ste7+Favq
+         SqmxYHJ0LVGGl8WbT46/T19zf4+M0YdnWZlewKOX+l+ONp71wYsV6XvsT4Nd7IyukD56
+         Dmcob1kuV6QQkg4X5fk9iyZai4qvlkTZ78kE44/3vJ6Cpu5HPolJclPPkDzQtim/+HH9
+         lh9A==
+X-Gm-Message-State: AOAM532v0QcAhW/yEZBt//BlLv6PZiL8gneqFARNubzOnTfnyq5Zm3M7
+        //YN3Styd3VOp8K3zz9liXc=
+X-Google-Smtp-Source: ABdhPJzQdK6GZGqgS6tUs7KA2VUiibYqbOoA4gUyryiq0os00EyiyyvnXylRtnBUGjSvy1PZNlmCnQ==
+X-Received: by 2002:a17:906:c211:b0:6ce:e221:4c21 with SMTP id d17-20020a170906c21100b006cee2214c21mr30817095ejz.691.1648036461593;
+        Wed, 23 Mar 2022 04:54:21 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id j17-20020a05640211d100b00419357a2647sm5517586edw.25.2022.03.23.04.54.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 04:54:20 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 13:54:19 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20220323115419.svxnbcqqd7pyargn@skbuf>
+References: <20220318121400.sdc4guu5m4auwoej@skbuf>
+ <86pmmjieyl.fsf@gmail.com>
+ <20220318131943.hc7z52beztqlzwfq@skbuf>
+ <86a6dixnd2.fsf@gmail.com>
+ <20220322110806.kbdb362jf6pbtqaf@skbuf>
+ <86fsn90ye8.fsf@gmail.com>
+ <20220323101643.kum3nuqctunakcfo@skbuf>
+ <864k3p5437.fsf@gmail.com>
+ <20220323112116.q6shx2g4r23ungtc@skbuf>
+ <86tuboao8o.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 27/39] kasan, mm: only define ___GFP_SKIP_KASAN_POISON
- with HW_TAGS
-Content-Language: en-US
-To:     andrey.konovalov@linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-References: <cover.1643047180.git.andreyknvl@google.com>
- <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86tuboao8o.fsf@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 19:05, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
+On Wed, Mar 23, 2022 at 12:43:03PM +0100, Hans Schultz wrote:
+> On ons, mar 23, 2022 at 13:21, Vladimir Oltean <olteanv@gmail.com> wrote:
+> > On Wed, Mar 23, 2022 at 11:57:16AM +0100, Hans Schultz wrote:
+> >> >> >> Another issue I see, is that there is a deadlock or similar issue when
+> >> >> >> receiving violations and running 'bridge fdb show' (it seemed that
+> >> >> >> member violations also caused this, but not sure yet...), as the unit
+> >> >> >> freezes, not to return...
+> >> >> >
+> >> >> > Have you enabled lockdep, debug atomic sleep, detect hung tasks, things
+> >> >> > like that?
+> >> >> 
+> >> >> I have now determined that it is the rtnl_lock() that causes the
+> >> >> "deadlock". The doit() in rtnetlink.c is under rtnl_lock() and is what
+> >> >> takes care of getting the fdb entries when running 'bridge fdb show'. In
+> >> >> principle there should be no problem with this, but I don't know if some
+> >> >> interrupt queue is getting jammed as they are blocked from rtnetlink.c?
+> >> >
+> >> > Sorry, I forgot to respond yesterday to this.
+> >> > By any chance do you maybe have an AB/BA lock inversion, where from the
+> >> > ATU interrupt handler you do mv88e6xxx_reg_lock() -> rtnl_lock(), while
+> >> > from the port_fdb_dump() handler you do rtnl_lock() -> mv88e6xxx_reg_lock()?
+> >> 
+> >> If I release the mv88e6xxx_reg_lock() before calling the handler, I need
+> >> to get it again for the mv88e6xxx_g1_atu_loadpurge() call at least. But
+> >> maybe the vtu_walk also needs the mv88e6xxx_reg_lock()?
+> >> I could also just release the mv88e6xxx_reg_lock() before the
+> >> call_switchdev_notifiers() call and reacquire it immediately after?
+> >
+> > The cleanest way to go about this would be to have the call_switchdev_notifiers()
+> > portion of the ATU interrupt handling at the very end of mv88e6xxx_g1_atu_prob_irq_thread_fn(),
+> > with no hardware access needed, and therefore no reg_lock() held.
 > 
-> Only define the ___GFP_SKIP_KASAN_POISON flag when CONFIG_KASAN_HW_TAGS
-> is enabled.
-> 
-> This patch it not useful by itself, but it prepares the code for
-> additions of new KASAN-specific GFP patches.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> 
-> ---
-> 
-> Changes v3->v4:
-> - This is a new patch.
-> ---
->  include/linux/gfp.h            |  8 +++++++-
->  include/trace/events/mmflags.h | 12 +++++++++---
->  2 files changed, 16 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index 581a1f47b8a2..96f707931770 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -54,7 +54,11 @@ struct vm_area_struct;
->  #define ___GFP_THISNODE		0x200000u
->  #define ___GFP_ACCOUNT		0x400000u
->  #define ___GFP_ZEROTAGS		0x800000u
-> +#ifdef CONFIG_KASAN_HW_TAGS
->  #define ___GFP_SKIP_KASAN_POISON	0x1000000u
-> +#else
-> +#define ___GFP_SKIP_KASAN_POISON	0
-> +#endif
->  #ifdef CONFIG_LOCKDEP
->  #define ___GFP_NOLOCKDEP	0x2000000u
->  #else
-> @@ -251,7 +255,9 @@ struct vm_area_struct;
->  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
->  
->  /* Room for N __GFP_FOO bits */
-> -#define __GFP_BITS_SHIFT (25 + IS_ENABLED(CONFIG_LOCKDEP))
-> +#define __GFP_BITS_SHIFT (24 +					\
-> +			  IS_ENABLED(CONFIG_KASAN_HW_TAGS) +	\
-> +			  IS_ENABLED(CONFIG_LOCKDEP))
+> So something like?
+> 	mv88e6xxx_reg_unlock(chip);
+> 	rtnl_lock();
+> 	err = call_switchdev_notifiers(SWITCHDEV_FDB_ADD_TO_BRIDGE, brport, &info.info, NULL);
+> 	rtnl_unlock();
+> 	mv88e6xxx_reg_lock(chip);
 
-This breaks __GFP_NOLOCKDEP, see:
-https://lore.kernel.org/all/YjoJ4CzB3yfWSV1F@linutronix.de/
-
->  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
->  
->  /**
-> diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
-> index 116ed4d5d0f8..cb4520374e2c 100644
-> --- a/include/trace/events/mmflags.h
-> +++ b/include/trace/events/mmflags.h
-> @@ -49,12 +49,18 @@
->  	{(unsigned long)__GFP_RECLAIM,		"__GFP_RECLAIM"},	\
->  	{(unsigned long)__GFP_DIRECT_RECLAIM,	"__GFP_DIRECT_RECLAIM"},\
->  	{(unsigned long)__GFP_KSWAPD_RECLAIM,	"__GFP_KSWAPD_RECLAIM"},\
-> -	{(unsigned long)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"},	\
-> -	{(unsigned long)__GFP_SKIP_KASAN_POISON,"__GFP_SKIP_KASAN_POISON"}\
-> +	{(unsigned long)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"}	\
-> +
-> +#ifdef CONFIG_KASAN_HW_TAGS
-> +#define __def_gfpflag_names_kasan					      \
-> +	, {(unsigned long)__GFP_SKIP_KASAN_POISON, "__GFP_SKIP_KASAN_POISON"}
-> +#else
-> +#define __def_gfpflag_names_kasan
-> +#endif
->  
->  #define show_gfp_flags(flags)						\
->  	(flags) ? __print_flags(flags, "|",				\
-> -	__def_gfpflag_names						\
-> +	__def_gfpflag_names __def_gfpflag_names_kasan			\
->  	) : "none"
->  
->  #ifdef CONFIG_MMU
-
+No, call_switchdev_notifiers() should be the very end, no reg_lock() afterwards.
+Do all the hardware handling you need, populate some variables to denote
+that you need to notify switchdev, and if you do, lock the rtnetlink
+mutex and do it.

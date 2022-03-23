@@ -2,122 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1F94E534F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 792A64E5352
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243877AbiCWNlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S244382AbiCWNlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236678AbiCWNlD (ORCPT
+        with ESMTP id S236678AbiCWNlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:41:03 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619156FA33;
-        Wed, 23 Mar 2022 06:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648042773; x=1679578773;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v2X5IinRsrjsst3cRYDQVGHehfFp8moOElKTZPrxT00=;
-  b=XSth00u+lBjsU7PLMkFpBk5I77Eo9zl3E/pAfS/lVkirDmDblijeVbTw
-   QaGq5UAFLlh+aUUxNJyDAzWn+iZyBUqxfRyqd3lu9y/EWIzOqlO/tpjE7
-   sl0HnDhtn3peEK5ZWoATsiAK/U+SVoCThPzSnYKgr902pTU+Nb+5Kdp+x
-   znu7EPT0OUqOUi1p5a9bec950Hqt43skLbdeDNvuAllHUmncL05UgRNGk
-   RgMfJpgfGXbr4EFoiTa27eJr/xRJvH5ncYCgUdK1mf1rx2lebgJT0d+kk
-   qiVGIc2J8Mg7FwOSZ3Ow+c/C2ZzzA81Y3z/CuD8qxRKdd0G7DU0iErsz2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="238715177"
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="238715177"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 06:39:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="637463597"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Mar 2022 06:39:30 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nX1D0-000K5q-5M; Wed, 23 Mar 2022 13:39:30 +0000
-Date:   Wed, 23 Mar 2022 21:38:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Haowen Bai <baihaowen@meizu.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Haowen Bai <baihaowen@meizu.com>
-Subject: Re: [PATCH] net: l2tp: Fix duplicate included trace.h
-Message-ID: <202203232123.4w2jlskl-lkp@intel.com>
-References: <1648006705-30269-1-git-send-email-baihaowen@meizu.com>
+        Wed, 23 Mar 2022 09:41:21 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378E77D020
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:39:52 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-d39f741b2bso1690746fac.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=HjeihxJTxzkbTZ2MqJZoma1iPJVLD30cD4qsp7lAs6w=;
+        b=oEImOIhT5C3E28uXYK9NnqSlOFJxjnVSRc6tZFmXPk2XNUHwU1vgiYdWWY8FkHgYCE
+         sZrVFUWXHXlVPty1egPFmsAyF+c0UQo3YYLikhOgtVKosj8IGhlWTU6PeLq0daZCxXTE
+         BeZB7uWPxLNtnySthS/2c4KVxzKSOKOrHuB4pXnwtOdaVd1Lfi8mHSzkG1HepFjQsQkp
+         bQeshgMOxc98OuAX7rRBRHf+JHguKLaTmaKfddms2rb7/biX+JSqGuUgNxlg6663When
+         xXbIymeF0r/GlS1zK0FuEz3Ib4VDtKWM0xt82XHihChzTTlRDv3wnxy3ugNKFT2z/KBJ
+         XJAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=HjeihxJTxzkbTZ2MqJZoma1iPJVLD30cD4qsp7lAs6w=;
+        b=TD3vKUerZmWvREqkYcKHdAA8Gwwf768vFeEqt8xusbVJ3xCT9HO+ve8VlUa+1SoHzU
+         n2UGTalHQkJOUeoM3uPW+WXOyizAS0LSiQ7OA9NgQHJJsXGh4JQbUY4N0EmM2zbfJdz3
+         mapqYQa81MpbLW+oko0FaxNp6RehU5qxFu5H0pM6p8mWoz/0OBQ7YxvMXi2gHO1O2FoM
+         pkxx+oFEttRNpzK/Q8nehoZgCiTT1lTlHfjDDAmVduodNV6e1as0r72AfspZmYVwGxHn
+         cCdZ3FkG6EhC1fwxRAtLRcqKgwRevoLAAnmsHYQqxWBZH4rJDU0Uvke1YUDo63Plbmcs
+         drTg==
+X-Gm-Message-State: AOAM531fOM4qkRZZ4SgFbCp888sClUak2tHlcIYLFMRDTbIsiJFvVTIS
+        6/4DYgW/1eps+cZO/ytcqrU0fGsTKnm7LCwFSG8=
+X-Google-Smtp-Source: ABdhPJxUG4TrxEiZQS8OFRNPKhUesFncxq6PC2GQPBlp8BXWId+K+uSHGJFQ1j4u9UPloo2JXzuIn2ikZXDcYN7gPdg=
+X-Received: by 2002:a05:6870:5627:b0:dd:d3ad:c573 with SMTP id
+ m39-20020a056870562700b000ddd3adc573mr4082009oao.46.1648042791405; Wed, 23
+ Mar 2022 06:39:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1648006705-30269-1-git-send-email-baihaowen@meizu.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6839:2196:0:0:0:0 with HTTP; Wed, 23 Mar 2022 06:39:51
+ -0700 (PDT)
+Reply-To: michellegoodman035@gmail.com
+From:   Shayma <shaymamarwan07@gmail.com>
+Date:   Wed, 23 Mar 2022 13:39:51 +0000
+Message-ID: <CAAgEbk=cMyCDkK8o429A532e7dL29DrhH8GKtdLQMO4+xjQx_Q@mail.gmail.com>
+Subject: Danke
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [shaymamarwan07[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [michellegoodman035[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [shaymamarwan07[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Haowen,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-[also build test ERROR on net/master horms-ipvs/master linus/master v5.17 next-20220323]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Haowen-Bai/net-l2tp-Fix-duplicate-included-trace-h/20220323-114023
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 4a0cb83ba6e0cd73a50fa4f84736846bf0029f2b
-config: riscv-randconfig-r034-20220323 (https://download.01.org/0day-ci/archive/20220323/202203232123.4w2jlskl-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/d079f4f8992c56c4d970665bad819349d4916c46
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Haowen-Bai/net-l2tp-Fix-duplicate-included-trace-h/20220323-114023
-        git checkout d079f4f8992c56c4d970665bad819349d4916c46
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: __tracepoint_delete_session
-   >>> referenced by l2tp_core.c
-   >>> l2tp/l2tp_core.o:(trace_delete_session) in archive net/built-in.a
-   >>> referenced by l2tp_core.c
-   >>> l2tp/l2tp_core.o:(__jump_table+0x44) in archive net/built-in.a
---
->> ld.lld: error: undefined symbol: __traceiter_delete_session
-   >>> referenced by l2tp_core.c
-   >>> l2tp/l2tp_core.o:(trace_delete_session) in archive net/built-in.a
---
->> ld.lld: error: undefined symbol: __tracepoint_delete_tunnel
-   >>> referenced by l2tp_core.c
-   >>> l2tp/l2tp_core.o:(trace_delete_tunnel) in archive net/built-in.a
-   >>> referenced by l2tp_core.c
-   >>> l2tp/l2tp_core.o:(__jump_table+0x38) in archive net/built-in.a
---
->> ld.lld: error: undefined symbol: __traceiter_delete_tunnel
-   >>> referenced by l2tp_core.c
-   >>> l2tp/l2tp_core.o:(trace_delete_tunnel) in archive net/built-in.a
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hallo Schatz, bitte hoffe du hast meine Nachricht bekommen
+Ich brauche dringend eine Antwort
+Danke
+Michelle

@@ -2,130 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED244E5327
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8794E533C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244298AbiCWNdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
+        id S244317AbiCWNiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236083AbiCWNdh (ORCPT
+        with ESMTP id S244322AbiCWNiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:33:37 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C15475C2C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:32:07 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id v13so1010386qkv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:32:07 -0700 (PDT)
+        Wed, 23 Mar 2022 09:38:01 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A6A71EC0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:36:31 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id k10so1874598edj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nPGspUnXDfSSjkwMaGFzPZOYPt1+G1sJy9ZdXHVCp+8=;
-        b=Cr6TDAC63Uli7HQZ9nYheNpDiEzDDtVl9wd6iUyAqKes9XcIcVheNz/MbiPidhndJm
-         d22sDoKrdyJxG/hbX8XM9lGTKhYvbyQmi4AdUQWymBaGa7MsCImsgrXTvT+hPw/6iULK
-         kxomLZlBnF6wb3dQT7O7jtEj7/fdfwnCo7kpA=
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=eoJL8/ssTz//H6D1ky8wIdZCZtyYwQOapMLC4rpTJK4=;
+        b=bNAXkMThypJ8Fp6kfoI5Ak+DXC/qipME9qq62aGmE5rQINI4bXll1STdm+yJBTY1XJ
+         MAB6Colidi9wkqYkm7XWQwOKwYmnk4N/8QwaoLXdCBDgbO31bDjqhqNM7981z02PuoO3
+         M5L7fKggjZfAXBPxbyqoGJX8NduefdgX+vtezqdHOYoYD18Z5xNXH5mk1vIXUsDfCfO/
+         dURe8v8nEofP406hTLidblrYU8cfLUmEEdN7mt1/VBpZE2j2IUxhkmXtSwrxT0EowZJY
+         MteICWcMF6ES9/2/i6lSw8Gu7YZwdZjcjbUzz6HU0lS5Vrt7EMjMCphuPwK0KJ+6ciVZ
+         NmNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nPGspUnXDfSSjkwMaGFzPZOYPt1+G1sJy9ZdXHVCp+8=;
-        b=HdIWBuiCYDRhvkErtXX6dkUoMEFEykCS4vFFhUapGBcU48yvgv898j8wVGaeTFPH8m
-         ZLRSor0U4FlJcIAw2SrnrEq26UHbry+psRGOBzEwRwnR9B5eqVX2eSo5ihetuxUSEAv5
-         cfPEU2MosuFtdScRs9s4GDnfkpOM4dg7UGRJ42dF+X/PQ3S1kVAkNraBK1NCARpyAzHg
-         SE4plr/1/uj1ht63f7piyDDNzDnge+YnbqIxqQLkxNl2TS19o9QkfPr01sFM6kbq1zkY
-         iljRGI6Mff2URLdlcUSHCgKRzgfclH0VPdbA/f7jMxCSAZlWI/af11A4aFIK0PdZMY3G
-         faAg==
-X-Gm-Message-State: AOAM530nVnWmSEavGkv+KCyEes19pWKlLnt74QkuSQgoNJozJvDjNS5W
-        wgwjsgXhmiCgY67Kjk6bScrhR5Y1SyNjqEcC
-X-Google-Smtp-Source: ABdhPJzoo4UXmqA2kFsY4AxIOGuvgy0FfwekMuH1JcPG1w1Ujia1jCE5tPW3sGPBb6+u7rvXG496XA==
-X-Received: by 2002:a05:620a:108f:b0:67b:465f:56ba with SMTP id g15-20020a05620a108f00b0067b465f56bamr18542419qkk.297.1648042326089;
-        Wed, 23 Mar 2022 06:32:06 -0700 (PDT)
-Received: from bill-the-cat (2603-6081-7b01-cbda-2ef0-5dff-fedb-a8ba.res6.spectrum.com. [2603:6081:7b01:cbda:2ef0:5dff:fedb:a8ba])
-        by smtp.gmail.com with ESMTPSA id o13-20020ac87c4d000000b002e1e732dea5sm23955qtv.70.2022.03.23.06.32.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 06:32:05 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 09:32:03 -0400
-From:   Tom Rini <trini@konsulko.com>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ricardo Salveti <ricardo@foundries.io>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Jorge Ramirez-Ortiz <jorge@foundries.io>,
-        Sean Anderson <seanga2@gmail.com>, devicetree@vger.kernel.org,
-        u-boot@lists.denx.de, linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V3] dt-bindings: nvmem: add U-Boot environment variables
- binding
-Message-ID: <20220323133203.GD2226424@bill-the-cat>
-References: <20220228131250.16943-1-zajec5@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=eoJL8/ssTz//H6D1ky8wIdZCZtyYwQOapMLC4rpTJK4=;
+        b=b6IjmsboN2wkYRG3dkRNNmJR4KJSsePjc1LMIU4aIfYVYaTz0kjz0Ru6kS7ogk28PL
+         DI37Cbi3uYD2ciBd8dxUmOa7M7TO5u7tn2Fx0sEKVDmeCh/WXh+4h4ScWbqyWPZt2H/F
+         +D7S4mn3HxQnR2dbH7qmrOGkfkJ5shWomQoT0Cc3MDfsoFBu1wugUUx+HAVYf9l663ze
+         mwwJqf0t4KnZAf4o38HXHc0hy5PJWk+lmc2j1lsnCnLOwVt07bmPljZdn0s+qHQkB1VC
+         Z5b3/4/Y9eaIbjnXjffZONh5xTU3S3/SgOJcgnbr5VQc5Z5uG3UJdsl/jhrZGSqELD12
+         Vq2w==
+X-Gm-Message-State: AOAM532byHBv2TlWg00aq9hRePU5NUvILCQuHx83kt+gXdZJxbnsPUDm
+        iH3mKQx6GHQJe1X3fogZE7sj/uEzGdpq4eRv32w=
+X-Google-Smtp-Source: ABdhPJwFcJm7rfKsAySs+0vGMiLsgkerhO1IJaAaoI5nIsMNewFDbxma8gXpcBnrN9wIhl6vxQwOyxG97McgmzXPrzY=
+X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
+ n13-20020a5099cd000000b00418d6c22405mr67804edb.342.1648042590389; Wed, 23 Mar
+ 2022 06:36:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dicp5grlxus9uUnk"
-Content-Disposition: inline
-In-Reply-To: <20220228131250.16943-1-zajec5@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 23 Mar 2022 13:36:22 +0000
+Message-ID: <CAHpNFcM8p5hZ=wC5s+5JOw03yJbC-ZqApX0Cqpa48p=QdszTeg@mail.gmail.com>
+Subject: Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you
+ trade markerz ***** Dukes Of THRUST ******
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+***** Dukes Of THRUST ******
 
---dicp5grlxus9uUnk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
 
-On Mon, Feb 28, 2022 at 02:12:50PM +0100, Rafa=C5=82 Mi=C5=82ecki wrote:
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
 
-> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
->=20
-> U-Boot uses environment variables for storing device setup data. It
-> usually needs to be accessed by a bootloader, kernel and often
-> user-space.
->=20
-> This binding allows describing environment data located in a raw flash
-> partition. It's treated as NVMEM device and can be reused later for
-> other storage devices.
->=20
-> Using DT should be cleaner than hardcoding & duplicating such info in
-> multiple places. Bootloader & kernel can share DTS and user-space can
-> try reading it too or just have correct data exposed by a kernel.
->=20
-> A custom "compatible" string allows system to automatically load
-> relevant NVMEM driver but phandle can be also used for reading raw
-> location.
->=20
-> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+Microchip clock abd 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
 
-Reviewed-by: Tom Rini <trini@konsulko.com>
+channel Key selection based on unique..
 
---=20
-Tom
+Crystal time Quartz with Synced Tick (Regulated & modular)
 
---dicp5grlxus9uUnk
-Content-Type: application/pgp-signature; name="signature.asc"
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
 
------BEGIN PGP SIGNATURE-----
+(c)Rupert S
 
-iQGzBAABCgAdFiEEGjx/cOCPqxcHgJu/FHw5/5Y0tywFAmI7IVIACgkQFHw5/5Y0
-tyzRfQwAt3O0IvBGs764YvWeHo1sL/8xI1tMnKQnfo+cZmVJBI60nE+Ghmu0Y3Rn
-Me445fR/Ill/NBVMdUnp2bhPUWUI/puej7VqfB1t5mm3xCaeD2BRl+BVwIue73FX
-vNf9Sk3tIBNrh8mDihG5XMNMq8UWkms+FDk/zjv2I7pfJ//Wpgo3nDlX5Wyle1hp
-YDK3JlsgMI3wYMJQZ5g7+EknBgtTPndJ0DyjO2gCuZEOh688Tf3eXmC21+0aW/o/
-2ErUXJmux8BxvRZqHH2bpH00sY/377FSlGowlI09GlR8VYvGFIfWIX0NFE4gauKG
-wSavW952MP1pYMulvQIDBtg2aQNnigugCUM7Xm1xVHlvZQATqqdtIgusvEozkuKk
-VSGnyWhYPANUINk7FORtIctrGkmNWe8JOeBtjMsLtmYJiRiCwvrYkNxfPGUuWYK2
-10CnEzryX9Flx8ez8Sg/ywniMD77fwub90QQv9fqaKta/EqKSt08wruLoAtp/c12
-mgGwY0fX
-=rCXN
------END PGP SIGNATURE-----
+***** Dukes Of THRUST ******
 
---dicp5grlxus9uUnk--
+Autism, Deafness & the hard of hearing : In need of ANC & Active audio
+clarification or correction 2022-01
+
+Sony & a few others make noise cancelling headphones that are suitable
+for people with Acute disfunction to brain function for ear drums ...
+Attention deficit or Autism,
+The newer Sony headsets are theoretically enablers of a clear
+confusion free world for Autistic people..
+Reaching out to a larger audience of people simply annoyed by a
+confusing world; While they listen to music..
+Can and does protect a small percentage of people who are confused &
+harassed by major discord located in all jurisdictions of life...
+
+Crazy noise levels, Or simply drowned in HISSING Static:
+
+Search for active voice enhanced noise cancellation today.
+
+Rupert S https://science.n-helix.com
+
+
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/

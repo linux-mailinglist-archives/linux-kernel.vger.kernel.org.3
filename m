@@ -2,123 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482D14E4E57
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA144E4E5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242730AbiCWIiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 04:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S236449AbiCWIit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiCWIiT (ORCPT
+        with ESMTP id S232197AbiCWIil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:38:19 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D95312639;
-        Wed, 23 Mar 2022 01:36:49 -0700 (PDT)
-Received: from [192.168.0.7] (ip5f5ae903.dynamic.kabel-deutschland.de [95.90.233.3])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id BC0B461E6478B;
-        Wed, 23 Mar 2022 09:36:47 +0100 (CET)
-Message-ID: <b3e4435d-335c-1aba-1920-c225b46d09e7@molgen.mpg.de>
-Date:   Wed, 23 Mar 2022 09:36:47 +0100
+        Wed, 23 Mar 2022 04:38:41 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A99B13D71;
+        Wed, 23 Mar 2022 01:37:12 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id dr20so1331918ejc.6;
+        Wed, 23 Mar 2022 01:37:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=2uwWKangGrfoNqiPlNGeHQBRLV7j3l1qJ3zQHU/H6fU=;
+        b=GQ1L73waSRYfPH5ts+D9PciPM/VMlW00UjnQsAN9e4aZS/OBUtp3e03akDCjDM7fL6
+         dwz36aH0NzX7OZ0CECHoRkCR2uxNh3TYnm1VSvyBR+OVjxeoh+Q2XLPGxT7NJrHv/Dpy
+         QsKWn/4wOnZq/NdFZvwFSe5fwIOX2YiDqe3b0n2GJ92x7Pm0eJJTSVtPhZJL7KSh95eI
+         bohTpQHNlPlVuRuthLHneZRdLVcXAGoo4r0zhE457PGtr0AvhU0GBAA8melmHLmqBy5U
+         7i8Nr7srGasyCv5EIzXdvgw5gjHBu+/GlFY4LzGD2PZb+iE6w7jsuhs+nnBHfj9Yatfz
+         e4IA==
+X-Gm-Message-State: AOAM533i8Wgw1xHhi9nh/TTGS093NxbLW9g0owKWS59M5xrha5FvyTr5
+        jgRlgoZgAqUOspUTjxKU4SUU1KN89oAQhA==
+X-Google-Smtp-Source: ABdhPJx8Z6gP0ujGPYONx0mp8t8f7WVWrxoGqsdueiAH/ANAeGjjooorJgxwu+9tMzipbAWKORJ4DQ==
+X-Received: by 2002:a17:906:c148:b0:6e0:2196:9251 with SMTP id dp8-20020a170906c14800b006e021969251mr11945441ejc.180.1648024630977;
+        Wed, 23 Mar 2022 01:37:10 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id go40-20020a1709070da800b006dfc3945312sm6458473ejc.202.2022.03.23.01.37.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 01:37:10 -0700 (PDT)
+Message-ID: <6dbeda18-a11c-609d-7a8f-bf2e6f27aea7@kernel.org>
+Date:   Wed, 23 Mar 2022 09:37:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 3/3] ata: ahci: Skip 200 ms debounce delay for AMD 300
- Series Chipset SATA Controller
+ Thunderbird/91.5.0
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v11 2/9] dt-bindings: reset: Add bindings for SP7021 reset
+ driver
 Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Mario Limonciello <Mario.Limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-ide@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Nehal-bakulchandra Shah <Nehal-bakulchandra.Shah@amd.com>
-References: <20220321212431.13717-1-pmenzel@molgen.mpg.de>
- <20220321212431.13717-3-pmenzel@molgen.mpg.de>
- <BL1PR12MB5157DDFD5E75360F032346D3E2169@BL1PR12MB5157.namprd12.prod.outlook.com>
- <cc7b4426-f6a6-e6b1-4aaf-0a713ee3d388@opensource.wdc.com>
- <5fb6af7b-d84f-cbae-7eb1-543f3a7e53e4@molgen.mpg.de>
- <d9837420-1cbb-ed5e-7043-985d9eb9d065@opensource.wdc.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <d9837420-1cbb-ed5e-7043-985d9eb9d065@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+References: <cover.1647928315.git.qinjian@cqplus1.com>
+ <55db801055793f43678e902395913330ecb8fbbf.1647928316.git.qinjian@cqplus1.com>
+ <a7194fbf-8423-9b49-1443-68dd33e23783@kernel.org>
+ <678d1f84d9d240b9983f9d3b82db17d4@cqplus1.com>
+In-Reply-To: <678d1f84d9d240b9983f9d3b82db17d4@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Damien,
-
-
-Am 23.03.22 um 09:24 schrieb Damien Le Moal:
-> On 3/23/22 15:55, Paul Menzel wrote:
-
->> Am 23.03.22 um 06:01 schrieb Damien Le Moal:
->>> On 3/22/22 06:51, Limonciello, Mario wrote:
-
->>>>> -----Original Message-----
->>>>> From: Paul Menzel <pmenzel@molgen.mpg.de>
->>>>> Sent: Monday, March 21, 2022 16:25
+On 23/03/2022 02:54, qinjian[覃健] wrote:
+>>> +examples:
+>>> +  - |
+>>> +    rstc: reset@9c000054 {
+>>> +      compatible = "sunplus,sp7021-reset";
+>>> +      #reset-cells = <1>;
+>>> +      reg = <0x9c000054 0x28>;
 >>
->> […]
+>> I asked you to put the reg after compatible in all DTS code and
+>> examples. If you do not agree with a comment, please respond. Ignoring
+>> it is not cooperative.
 >>
->>>> I seem to recall that we were talking about trying to drop the debounce delay for
->>>> everything, weren't we?
->>>>
->>>> So perhaps it would be right to add a 4th patch in the series to do just that.  Then
->>>> If this turns out to be problematic for anything other than the controllers in the
->>>> series that you identified as not problematic then that 4th patch can potentially
->>>> be reverted alone?
->>>
->>> Not quite everything :) But you are right, let's try to switch the default
->>> to no delay. I will be posting patches today for that.
->>>
->>> Paul,
->>>
->>> With these patches, your patches are not necessary anymore as the AMD
->>> chipset falls under the default no-delay.
->>
->> I am all for improving the situation for all devices, but I am unable to
->> judge the regression potential of changing this, as it affects a lot of
->> devices. I guess it’d would go through the next tree, and hopefully the
->> company QA teams can give it a good spin. I hoped that my patches, as I
->> have tested them, and AMD will hopefully too, could go into the current
->> merge window.
 > 
-> Yes, correct, the plan is to get the generic series queued as soon as rc1
-> so that it can spend plenty of time in linux-next for people to test. That
-> will hopefully reduce the risk of breaking things in the field. Same for
-> the default LPM change.
-
-But 5.18 or 5.19? If 5.18, sounds good to me, if 5.19, I’d be great if 
-my patches go into 5.18 cycle, as they have been tested, and it would 
-mean the whole change gets tested more widely already.
-
-> With the default removal of the debounce delay, your patches addressing
-> only the AMD adapter are not needed anymore: this adapter will not have a
-> debounce delay unless the ATA_LFLAG_DEBOUNCE_DELAY flag is set.
-
-Yes, I understand.
-
->>> It would be nice if you can test though.
+> Your  reply: https://lore.kernel.org/all/d3ac3e2f-71fd-b2b4-7c7e-bb43c681d14e@canonical.com/
+>>> +  - |
+>>> +
+>>> +    clkc: clock-controller@9c000000 {
+>>> +      compatible = "sunplus,sp7021-clkc";
+>>> +      #clock-cells = <1>;
+>>> +      reg = <0x9c000000 0x280>;
 >>
->> Of course, I am going to that either way.
+>> In DTS code, please put reg after compatible. In all your examples and
+>> DTS patches.
+>>
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > 
-> Series posted with you on CC. Please test !
+> I see your review-tag. So, I misunderstand your comments.
+> Did you means 'reg' must directly after the 'compatible', like this?
+>     clkc: clock-controller@9c000000 {
+>       #clock-cells = <1>;
+>       compatible = "sunplus,sp7021-clkc";
+>       reg = <0x9c000000 0x280>;
 
-Thank you. I am going to test it in the coming days, and report back.
+You moved now compatible so not. First goes compatible, then goes reg.
 
-Maybe more people should be put in Cc (Dell, Lenovo, IBM, x86 subsystem) 
-with a request to test this?
+clock-controller@.... {
+  compatible = ....;
+  reg = ...;
+  here goes the rest;
+}
 
+My review tag was conditional because I asked to change the code. Such
+review tag should be used by you if you implement what I asked for.
 
-Kind regards,
-
-Paul
+Best regards,
+Krzysztof

@@ -2,110 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11864E5475
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EF24E547C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244853AbiCWOon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
+        id S237319AbiCWOq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiCWOol (ORCPT
+        with ESMTP id S229827AbiCWOq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:44:41 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09585F56;
-        Wed, 23 Mar 2022 07:43:10 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id j15so3265985eje.9;
-        Wed, 23 Mar 2022 07:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Hpxed2/jWw1SnL0rgO1qfgfRqMtI3k981lUGVm09vkU=;
-        b=O2BqoSAh8gk1zLk+rTW6Ok7XPTKVbiDZpl3IsitPRospP8Ri04nFQm3HmjmxWD8esZ
-         TXlNJRszB3c+JWkthBN0VqA68eeZNepKxhkBr/i6KRJ0mjx0O83AaS1wxvPJtGncuWbf
-         2ioHKTZBpE1JeMuH5lWQmzVAw18gaQUjfSvRNysQbBEA2TAjHJZlPm30ZkCIVy03ALNU
-         1ByYkDchELaUiRr9VHUFbLPb7AQWOeloXV4Dw6A1+gwGf/nVEQm6Jwd+SbR2pxBhl0ax
-         tpdpy1ZjS5rouUd5ItbkvxVQJHNzQx7NOZeJzU6uousyu3EiPEFktr2bh53oRTJ9kaSI
-         fmnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Hpxed2/jWw1SnL0rgO1qfgfRqMtI3k981lUGVm09vkU=;
-        b=bvNtkVWGJkyDHihos6fj26hvlU/j/e1xuqsmq4mzE6u9VGpnDrSVpS5UTaVSn4t8vC
-         nzr2H0PhbkWyjN6bWFtj15EDZYY8NXaWZlOCb7ypcnwSsiZJc14hdiMXcUGZND/yUYkK
-         Ue8vOUpdHUjNaWx5Km3qof7s2kLtijeM8AEXqpFPhL66oiHyMo+LCbaoQaKjerzWaZnr
-         5NeNdcZoagOg8vLeTr8BP9o7oqvq7mGFVYFUbcqMY+XHgQwWAgBahM1TvmJh0o5ukQrc
-         Jg1KElxy/9/9TjhleZtf7jejNxddgQTwR0JXLq0zLKRCaU9C7F1WiUi6DCkjq3e19yjv
-         8KMw==
-X-Gm-Message-State: AOAM530WwpAoxiIPqDePOlkp2ALRYkbHfz+twBTpyRKuNxscIg8atQ4y
-        SrQDcc9a1o8ZZTstEvunkPI=
-X-Google-Smtp-Source: ABdhPJwyOwLyZClpvoP74uQ8L+CTpqUUUT4k9yf6eYbUGuuYrVf6B+0SSNew3VD7cWqS01XglgyBgw==
-X-Received: by 2002:a17:907:b590:b0:6cf:48a4:9a4c with SMTP id qx16-20020a170907b59000b006cf48a49a4cmr329020ejc.6.1648046587068;
-        Wed, 23 Mar 2022 07:43:07 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id n2-20020a17090673c200b006db8ec59b30sm24449ejl.136.2022.03.23.07.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 07:43:06 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 16:43:04 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
- offloading of fdb locked flag
-Message-ID: <20220323144304.4uqst3hapvzg3ej6@skbuf>
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-3-schultz.hans+netdev@gmail.com>
- <86o81whmwv.fsf@gmail.com>
- <20220323123534.i2whyau3doq2xdxg@skbuf>
- <86wngkbzqb.fsf@gmail.com>
+        Wed, 23 Mar 2022 10:46:57 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8500C5FCC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:45:24 -0700 (PDT)
+X-UUID: 56b4d3a0e5e7492c91058946e594226a-20220323
+X-UUID: 56b4d3a0e5e7492c91058946e594226a-20220323
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1627690054; Wed, 23 Mar 2022 22:45:17 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 23 Mar 2022 22:45:16 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 23 Mar 2022 22:45:16 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     <rostedt@goodmis.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <lkp@intel.com>,
+        <lkp@lists.01.org>, <mark-pk.tsai@mediatek.com>,
+        <matthias.bgg@gmail.com>, <mingo@redhat.com>,
+        <oliver.sang@intel.com>, <yj.chiang@mediatek.com>
+Subject: Re: [PATCH] tracing: Avoid adding duplicated tracer options when update_tracer_options is running in parallel
+Date:   Wed, 23 Mar 2022 22:45:16 +0800
+Message-ID: <20220323144516.6602-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220323102831.1cf884d6@gandalf.local.home>
+References: <20220323102831.1cf884d6@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86wngkbzqb.fsf@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 01:49:32PM +0100, Hans Schultz wrote:
-> >> Does someone have an idea why there at this point is no option to add a
-> >> dynamic fdb entry?
-> >> 
-> >> The fdb added entries here do not age out, while the ATU entries do
-> >> (after 5 min), resulting in unsynced ATU vs fdb.
-> >
-> > I think the expectation is to use br_fdb_external_learn_del() if the
-> > externally learned entry expires. The bridge should not age by itself
-> > FDB entries learned externally.
-> >
+> On Wed, 23 Mar 2022 22:21:29 +0800
+> Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
 > 
-> It seems to me that something is missing then?
-> My tests using trafgen that I gave a report on to Lunn generated massive
-> amounts of fdb entries, but after a while the ATU was clean and the fdb
-> was still full of random entries...
+> > > On Wed, 23 Mar 2022 11:24:42 +0800
+> > > Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
+> > >   
+> > > > When update_tracer_options is running in parallel,
+> > > > tr->tops might be updated before the trace_types list traversal.
+> > > > Let update_tracer_options traverse the trace_types list safely in
+> > > > kernel init time and avoid the tr->tops update before it finish.  
+> > > 
+> > > ??? Have you seen a bug here? I'm totally confused by this.  
+> > 
+> > Sorry to make you confused.
+> > 
+> > After the below patch, update_tracer_options might be executed later than registering
+> > hwlat_tracer, which is in late_initcall.
+> > 
+> > https://lore.kernel.org/lkml/20220316151639.9216-1-mark-pk.tsai@mediatek.com/
+> 
+> If you send patches that depend on patches that are not in the tree, you
+> need to explicitly state that.
 
-I'm no longer sure where you are, sorry..
-I think we discussed that you need to enable ATU age interrupts in order
-to keep the ATU in sync with the bridge FDB? Which means either to
-delete the locked FDB entries from the bridge when they age out in the
-ATU, or to keep refreshing locked ATU entries.
-So it seems that you're doing neither of those 2 things if you end up
-with bridge FDB entries which are no longer in the ATU.
+Got it.
+
+> 
+> 
+> > 
+> > The init_hwlat_tracer initcall will put hwlat_tracer to tr->tops.
+> > Then when the later arrived __update_tracer_options is trying to
+> > update all the tracer options, create_trace_option_files show the
+> > below warning because hwlat_tracer is already in the list.
+> > 
+> > [ 6.680068 ][ T7 ] WARNING: CPU: 0 PID: 7 at kernel/trace/trace.c:8899 create_trace_option_files (kernel/trace/trace.c:8899 (discriminator 1))
+> > 
+> > full log: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
+> 
+> So this is all dependent on patches not in the tree?
+
+Yes...
+
+> 
+> > 
+> > 
+> > >   
+> > > > 
+> > > > Link: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
+> > > > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > > Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> > > > ---
+> > > >  kernel/trace/trace.c | 7 +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > > 
+> > > > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> > > > index adb37e437a05..2974ae056068 100644
+> > > > --- a/kernel/trace/trace.c
+> > > > +++ b/kernel/trace/trace.c
+> > > > @@ -6317,12 +6317,18 @@ static void tracing_set_nop(struct trace_array *tr)
+> > > >  	tr->current_trace = &nop_trace;
+> > > >  }
+> > > >  
+> > > > +static bool tracer_options_updated;
+> > > > +
+> > > >  static void add_tracer_options(struct trace_array *tr, struct tracer *t)
+> > > >  {
+> > > >  	/* Only enable if the directory has been created already. */
+> > > >  	if (!tr->dir)
+> > > >  		return;
+> > > >  
+> > > > +	/* Only create trace option files after update_tracer_options finish */
+> > > > +	if (!tracer_options_updated)
+> > > > +		return;
+> > > > +
+> > > >  	create_trace_option_files(tr, t);
+> > > >  }
+> > > >  
+> > > > @@ -9133,6 +9139,7 @@ static void update_tracer_options(struct trace_array *tr)
+> > > >  {
+> > > >  	mutex_lock(&trace_types_lock);  
+> > > 
+> > > How is update_trace_options run in parallel?
+> > > 
+> > > There's a mutex that protects it. 
+> > >   
+> > 
+> > Oh sorry.
+> > What I trying to tell is that update_trace_options is run in parallel with
+> > the initcall thread after:
+> > 
+> > https://lore.kernel.org/lkml/20220316151639.9216-1-mark-pk.tsai@mediatek.com/
+> > 
+> 
+> Again, this is not in the tree, so it should be part of that patch series,
+> which I haven't yet been able to fully review.
+
+Got it, I will collect these two patches in patch series v3 and rewrite the bad commit message.
+Thanks!
+
+> 
+> -- Steve
+
+

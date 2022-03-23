@@ -2,38 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF7D4E57FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD274E57FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343879AbiCWR7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S1343888AbiCWR7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343670AbiCWR66 (ORCPT
+        with ESMTP id S1343876AbiCWR66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Mar 2022 13:58:58 -0400
-X-Greylist: delayed 2775 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Mar 2022 10:57:27 PDT
 Received: from Serexfront03.nas.gov.ua (nas.gov.ua [194.44.29.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7017FBC11
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:57:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17AC51585
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:57:28 -0700 (PDT)
 Received: from serex3.nas.gov.ua (10.0.0.9) by Serexfront03.nas.gov.ua
  (10.0.0.2) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Wed, 23 Mar
- 2022 12:42:41 +0200
+ 2022 13:04:07 +0200
 Received: from serex3.nas.gov.ua (10.0.0.9) by serex3.nas.gov.ua (10.0.0.9)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Wed, 23 Mar
- 2022 12:42:39 +0200
+ 2022 13:04:06 +0200
 Received: from serex3.nas.gov.ua ([::1]) by serex3.nas.gov.ua ([::1]) with
- mapi id 15.01.1261.039; Wed, 23 Mar 2022 12:42:39 +0200
+ mapi id 15.01.1261.039; Wed, 23 Mar 2022 13:04:06 +0200
 From:   =?utf-8?B?0JHRg9GA0LjQu9C+0LIg0KHQtdGA0LPRltC5INCS0L7Qu9C+0LTQuNC80Lg=?=
          =?utf-8?B?0YDQvtCy0LjRhw==?= <S.Burylov@nas.gov.ua>
 To:     "NO-REPLY@MICROSOFT.NET" <NO-REPLY@MICROSOFT.NET>
 Subject: WYMAGANA WERYFIKACJA MICROSOFT
 Thread-Topic: WYMAGANA WERYFIKACJA MICROSOFT
-Thread-Index: AQHYPqHftGnhJo9fQUGEn0OCka5cFQ==
-Date:   Wed, 23 Mar 2022 10:42:36 +0000
-Message-ID: <fa95efe6e9ec4174a71f945c0c7ca53d@nas.gov.ua>
+Thread-Index: AQHYPqSJDLSaxpy6PEyuOPeNG0Vpyw==
+Date:   Wed, 23 Mar 2022 11:04:06 +0000
+Message-ID: <6a1050a102a347b7b074ee8819a544b8@nas.gov.ua>
 Accept-Language: ru-RU, en-US
 Content-Language: ru-RU
 X-MS-Has-Attach: 

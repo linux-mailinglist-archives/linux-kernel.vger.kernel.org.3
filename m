@@ -2,148 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DBA4E509A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9AE4E509E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234981AbiCWKsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
+        id S235188AbiCWKtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 06:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiCWKs2 (ORCPT
+        with ESMTP id S233371AbiCWKtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:48:28 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887326E7A8;
-        Wed, 23 Mar 2022 03:46:58 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id l20so1961294lfg.12;
-        Wed, 23 Mar 2022 03:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Pu11LzVwuByfb36IZDoOrF20LUpwOjWGCIQG1Ta8jIk=;
-        b=Ntiazh9dgiTE4IwJgyUwQMnIG/ORs4kK1bZSFbSQydrSo/iK8bqJMWdRu/tsA3bDqG
-         IoTMbmyQGQKSwc7re78cg6+wSgvrdWFZKBtGnE1ELpFS90Cxutl6ccSGIHp0OYvyqOuM
-         d/BLjJwBQrtiqW4AFg99q/dh4ZEhJ5cJbdwIphqhcP4LGkjrgw5YMKVgnazbiLXpnf7E
-         Joyliu8uqdz9KbVNSLnjKhtNvl5TCLXC2pyj449YPVK+J3D/ymqYNhR/wukKVYDsfsmS
-         eaPCjYt4cZxsI8AiV6likmQID2ZhEISyR/JVfS/4s+cQnwyb+DJe3c+S8J5ZI9yIes4c
-         exYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Pu11LzVwuByfb36IZDoOrF20LUpwOjWGCIQG1Ta8jIk=;
-        b=2vV16y727oTUvTBbJtP8DAfNzMJplcNRLzipDjLIV2EqNNWGg9gtPjkDMH31WmSv/b
-         9MPanzzjczwLWElqwPra41jP0JArxEtibvA2G3jdTLmdihESWIcx/+b0MuOHJRpdNtFp
-         h6LeOtv0Zwl3z4Ier4eh6wxkX7F/N30y48Hik6WHd8UboPfkEsc/K7R9fxM8Qyem8Abs
-         ktlOUUu9mKS0Huxuhd59DgivgT6ppSNuuXSsGXEuF05SR2afZRZ8hQpiDjKrfREEntdp
-         s88iKH4+HPJMiXvbj+gqw0OQ6OFqx13234A8rjkrEJngyaF2LqNo9JZeaWYv93tjwVp8
-         oQ9A==
-X-Gm-Message-State: AOAM530ueGVjZ5rmYQT2KxKr7wNVepG8GH/LAuib9RuT5ouY6Q1y19SV
-        AwJkkx3KuT3jzyyN/9J2v6A=
-X-Google-Smtp-Source: ABdhPJwS+x43AwVdf/Sg4bgW4u+6IvcsrHVM8+aAaoQWmLJD4WKc4uQK5ia9Z5ZW/bb2U0c4Qv33gQ==
-X-Received: by 2002:a05:6512:c23:b0:44a:2c00:1a08 with SMTP id z35-20020a0565120c2300b0044a2c001a08mr10346655lfu.468.1648032416918;
-        Wed, 23 Mar 2022 03:46:56 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id p12-20020a056512138c00b0044833f1cd85sm2495587lfa.62.2022.03.23.03.46.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 03:46:56 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20220323101643.kum3nuqctunakcfo@skbuf>
-References: <20220317161808.psftauoz5iaecduy@skbuf>
- <8635jg5xe5.fsf@gmail.com> <20220317172013.rhjvknre5w7mfmlo@skbuf>
- <86tubvk24r.fsf@gmail.com> <20220318121400.sdc4guu5m4auwoej@skbuf>
- <86pmmjieyl.fsf@gmail.com> <20220318131943.hc7z52beztqlzwfq@skbuf>
- <86a6dixnd2.fsf@gmail.com> <20220322110806.kbdb362jf6pbtqaf@skbuf>
- <86fsn90ye8.fsf@gmail.com> <20220323101643.kum3nuqctunakcfo@skbuf>
-Date:   Wed, 23 Mar 2022 11:46:53 +0100
-Message-ID: <86h77px7xe.fsf@gmail.com>
+        Wed, 23 Mar 2022 06:49:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BE06E7A8;
+        Wed, 23 Mar 2022 03:47:47 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7408E1F37F;
+        Wed, 23 Mar 2022 10:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648032466; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sV8gc67IEX2Aqshis/YI2l47gOyPhzY//i9RC4JmthA=;
+        b=iAi5WdRDuW3ZibosRdjjab33T+dE8Sfq60Jrhm1kyuNk5+CrNGNVqy4TbmnIvCtniiGf/Z
+        bDI8JNt1tx3uE7RQbLO7AxtXV+zg0BUk1AzZbwxWIr/SLhj8SM050Lcnlf2uFfy9mrsVjq
+        3MAefOlzDo0HQgtfXqnvreGXQi1FI38=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648032466;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sV8gc67IEX2Aqshis/YI2l47gOyPhzY//i9RC4JmthA=;
+        b=GzR67TNWgg7vqcBtlQ3N1w4iczkpXKw0iiAjUXLYk3WaWJ8sLAwbEMSNex43MxJhILze/q
+        d7TQ6y+1YoIiVDDw==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 234E0A3B87;
+        Wed, 23 Mar 2022 10:47:46 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id A5C2FA0610; Wed, 23 Mar 2022 11:47:45 +0100 (CET)
+Date:   Wed, 23 Mar 2022 11:47:45 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, lczerner@redhat.com
+Subject: Re: [PATCH -next] ext4: fix use-after-free in ext4_search_dir
+Message-ID: <20220323104745.76u3uhdn745jaw4j@quack3.lan>
+References: <20220323034304.3597652-1-yebin10@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323034304.3597652-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ons, mar 23, 2022 at 12:16, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Wed, Mar 23, 2022 at 11:13:51AM +0100, Hans Schultz wrote:
->> On tis, mar 22, 2022 at 13:08, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Tue, Mar 22, 2022 at 12:01:13PM +0100, Hans Schultz wrote:
->> >> On fre, mar 18, 2022 at 15:19, Vladimir Oltean <olteanv@gmail.com> wrote:
->> >> > On Fri, Mar 18, 2022 at 02:10:26PM +0100, Hans Schultz wrote:
->> >> >> In the offloaded case there is no difference between static and dynamic
->> >> >> flags, which I see as a general issue. (The resulting ATU entry is static
->> >> >> in either case.)
->> >> >
->> >> > It _is_ a problem. We had the same problem with the is_local bit.
->> >> > Independently of this series, you can add the dynamic bit to struct
->> >> > switchdev_notifier_fdb_info and make drivers reject it.
->> >> >
->> >> >> These FDB entries are removed when link goes down (soft or hard). The
->> >> >> zero DPV entries that the new code introduces age out after 5 minutes,
->> >> >> while the locked flagged FDB entries are removed by link down (thus the
->> >> >> FDB and the ATU are not in sync in this case).
->> >> >
->> >> > Ok, so don't let them disappear from hardware, refresh them from the
->> >> > driver, since user space and the bridge driver expect that they are
->> >> > still there.
->> >> 
->> >> I have now tested with two extra unmanaged switches (each connected to a
->> >> seperate port on our managed switch, and when migrating from one port to
->> >> another, there is member violations, but as the initial entry ages out,
->> >> a new miss violation occurs and the new port adds the locked entry. In
->> >> this case I only see one locked entry, either on the initial port or
->> >> later on the port the host migrated to (via switch).
->> >> 
->> >> If I refresh the ATU entries indefinitly, then this migration will for
->> >> sure not work, and with the member violation suppressed, it will be
->> >> silent about it.
->> >
->> > Manual says that migrations should trigger miss violations if configured
->> > adequately, is this not the case?
->> >
->> >> So I don't think it is a good idea to refresh the ATU entries
->> >> indefinitely.
->> >> 
->> >> Another issue I see, is that there is a deadlock or similar issue when
->> >> receiving violations and running 'bridge fdb show' (it seemed that
->> >> member violations also caused this, but not sure yet...), as the unit
->> >> freezes, not to return...
->> >
->> > Have you enabled lockdep, debug atomic sleep, detect hung tasks, things
->> > like that?
->> 
->> I have now determined that it is the rtnl_lock() that causes the
->> "deadlock". The doit() in rtnetlink.c is under rtnl_lock() and is what
->> takes care of getting the fdb entries when running 'bridge fdb show'. In
->> principle there should be no problem with this, but I don't know if some
->> interrupt queue is getting jammed as they are blocked from rtnetlink.c?
->
-> Sorry, I forgot to respond yesterday to this.
-> By any chance do you maybe have an AB/BA lock inversion, where from the
-> ATU interrupt handler you do mv88e6xxx_reg_lock() -> rtnl_lock(), while
-> from the port_fdb_dump() handler you do rtnl_lock() -> mv88e6xxx_reg_lock()?
+On Wed 23-03-22 11:43:04, Ye Bin wrote:
+> We got issue as follows:
+> EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+> ==================================================================
+> BUG: KASAN: use-after-free in ext4_search_dir fs/ext4/namei.c:1394 [inline]
+> BUG: KASAN: use-after-free in search_dirblock fs/ext4/namei.c:1199 [inline]
+> BUG: KASAN: use-after-free in __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
+> Read of size 1 at addr ffff8881317c3005 by task syz-executor117/2331
+> 
+> CPU: 1 PID: 2331 Comm: syz-executor117 Not tainted 5.10.0+ #1
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:83 [inline]
+>  dump_stack+0x144/0x187 lib/dump_stack.c:124
+>  print_address_description+0x7d/0x630 mm/kasan/report.c:387
+>  __kasan_report+0x132/0x190 mm/kasan/report.c:547
+>  kasan_report+0x47/0x60 mm/kasan/report.c:564
+>  ext4_search_dir fs/ext4/namei.c:1394 [inline]
+>  search_dirblock fs/ext4/namei.c:1199 [inline]
+>  __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
+>  ext4_lookup_entry fs/ext4/namei.c:1622 [inline]
+>  ext4_lookup+0xb8/0x3a0 fs/ext4/namei.c:1690
+>  __lookup_hash+0xc5/0x190 fs/namei.c:1451
+>  do_rmdir+0x19e/0x310 fs/namei.c:3760
+>  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x445e59
+> Code: 4d c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 1b c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+> RSP: 002b:00007fff2277fac8 EFLAGS: 00000246 ORIG_RAX: 0000000000000054
+> RAX: ffffffffffffffda RBX: 0000000000400280 RCX: 0000000000445e59
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200000c0
+> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000002
+> R10: 00007fff2277f990 R11: 0000000000000246 R12: 0000000000000000
+> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+> 
+> The buggy address belongs to the page:
+> page:0000000048cd3304 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1317c3
+> flags: 0x200000000000000()
+> raw: 0200000000000000 ffffea0004526588 ffffea0004528088 0000000000000000
+> raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> 
+> Memory state around the buggy address:
+>  ffff8881317c2f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>  ffff8881317c2f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> >ffff8881317c3000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>                    ^
+>  ffff8881317c3080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  ffff8881317c3100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> ==================================================================
+> 
+> ext4_search_dir:
+>   ...
+>   de = (struct ext4_dir_entry_2 *)search_buf;
+>   dlimit = search_buf + buf_size;
+>   while ((char *) de < dlimit) {
+>   ...
+>     if ((char *) de + de->name_len <= dlimit &&
+> 	 ext4_match(dir, fname, de)) {
+> 	    ...
+>     }
+>   ...
+>     de_len = ext4_rec_len_from_disk(de->rec_len, dir->i_sb->s_blocksize);
+>     if (de_len <= 0)
+>       return -1;
+>     offset += de_len;
+>     de = (struct ext4_dir_entry_2 *) ((char *) de + de_len);
+>   }
+> 
+> Assume:
+> de=0xffff8881317c2fff
+> dlimit=0x0xffff8881317c3000
+> 
+> If read 'de->name_len' which address is 0xffff8881317c3005, obviously is
+> out of range, then will trigger use-after-free.
+> To solve this issue, 'dlimit' must reserve 8 bytes, as we will read
+> 'de->name_len' to judge if '(char *) de + de->name_len' out of range.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Yes, I forgot that the whole handler is under mv88e6xxx_reg_lock(). I
-hope then that I can release the mv88e6xxx_reg_lock() before calling the
-handler function with issues?
+Oh, good catch.
+
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 3f87cca49f0c..276683f7ab77 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -2273,6 +2273,10 @@ static inline int ext4_forced_shutdown(struct ext4_sb_info *sbi)
+>   * Structure of a directory entry
+>   */
+>  #define EXT4_NAME_LEN 255
+> +/*
+> + * Base length of ext4_dir_entry_2 and ext4_dir_entry exclude name
+> + */
+> +#define EXT4_BASE_DIR_LEN 8
+
+I'd rather use (sizeof(struct ext4_dir_entry_2) - EXT4_NAME_LEN) here...
+
+>  struct ext4_dir_entry {
+>  	__le32	inode;			/* Inode number */
+> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> index e37da8d5cd0c..4739a5aa13aa 100644
+> --- a/fs/ext4/namei.c
+> +++ b/fs/ext4/namei.c
+> @@ -1465,7 +1465,7 @@ int ext4_search_dir(struct buffer_head *bh, char *search_buf, int buf_size,
+>  	int de_len;
+>  
+>  	de = (struct ext4_dir_entry_2 *)search_buf;
+> -	dlimit = search_buf + buf_size;
+> +	dlimit = search_buf + buf_size - EXT4_BASE_DIR_LEN;
+>  	while ((char *) de < dlimit) {
+>  		/* this code is executed quadratically often */
+>  		/* do minimal checking `by hand' */
+
+This looks wrong because a bit later we use dlimit to verify
+de+de->name_len and that can certainly go upto bufsize. You need to modify
+only the condition in the while loop like:
+
+  	while ((char *) de < dlimit - EXT4_BASE_DIR_LEN) {
+
+									Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

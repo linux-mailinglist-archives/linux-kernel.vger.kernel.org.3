@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536914E5236
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 044154E5244
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236251AbiCWMdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S242654AbiCWMhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbiCWMdq (ORCPT
+        with ESMTP id S231716AbiCWMhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:33:46 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940B57B54D;
-        Wed, 23 Mar 2022 05:32:16 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 22NCVt8l013239
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 08:31:55 -0400
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id E977015C0038; Wed, 23 Mar 2022 08:31:54 -0400 (EDT)
-Date:   Wed, 23 Mar 2022 08:31:54 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH] random: allow writes to /dev/urandom to influence fast
- init
-Message-ID: <YjsTOsqiNaURZQLM@mit.edu>
-References: <20220322191436.110963-1-Jason@zx2c4.com>
- <YjqVemCkZCU1pOzj@mit.edu>
- <YjqbcQbYHCOpgqGg@zx2c4.com>
+        Wed, 23 Mar 2022 08:37:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13E97B54C;
+        Wed, 23 Mar 2022 05:35:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CrfM5P6uQxUgoVxVGucVUuZlS+SIBC3DY3b2Hzvq/N8=; b=eHGDgEWUrAEh/h/uGdBgZzUPRH
+        E2Kp9T0tjRBRrthBXloHB4LoTJ4Hhrn5vH0yzofryiU8eKW/Dm6KuR27nZzFwDZKj4dig/51VpznY
+        vO8RV9JJcYNqHT1LVNH5nyQGRsDwISqbumMrmVyGDaw0zM4fON//yeo64Bn36bDZpaz4jOGAFRDxQ
+        IPA6fSwHrRBKvynnM61kDPAA8m8ILcHFB7CAHPEEfIIIYWkED/Q5rlWyJ7lcib78lECZ/K968pJj2
+        UPbW4wRS/uIvAYCbMJOmkXvpxTiwfE9EuCWneWbA4gmIowWqU39R7N9nyqNNOJov1rAhK+ocIUKt3
+        9pfaUkgA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nX0CW-003lG5-Dy; Wed, 23 Mar 2022 12:34:56 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 318A99861FD; Wed, 23 Mar 2022 13:34:54 +0100 (CET)
+Date:   Wed, 23 Mar 2022 13:34:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v13 bpf-next 1/1] rethook: x86: Add rethook x86
+ implementation
+Message-ID: <20220323123454.GW8939@worktop.programming.kicks-ass.net>
+References: <164800288611.1716332.7053663723617614668.stgit@devnote2>
+ <164800289923.1716332.9772144337267953560.stgit@devnote2>
+ <YjrUxmABaohh1I8W@hirez.programming.kicks-ass.net>
+ <20220323204119.1feac1af0a1d58b8e63acd5d@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YjqbcQbYHCOpgqGg@zx2c4.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220323204119.1feac1af0a1d58b8e63acd5d@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 10:00:49PM -0600, Jason A. Donenfeld wrote:
+On Wed, Mar 23, 2022 at 08:41:19PM +0900, Masami Hiramatsu wrote:
+
+> > Also, what's rethook for anyway?
 > 
-> Another variation on that would be to do what this current patch does,
-> but only crng_pre_init_inject() on CAP_SYS_ADMIN. But this has the same
-> pitfall of only working as intended at cnrg_init=0 but not crng_init=1.
-> That's better than nothing, but it's not perfect, and it introduces that
-> problem with RNDADDTOENTCNT.
+> Rethook is a feature which hooks the function return. Most of the
+> logic came from the kretprobe. Simply to say, 'kretprobe - kprobe' is 
+> the rethook :)
 
-Well, one could argue that "RNDADDTOENTCNT" is a problem that has
-always been there, and it already requires CAP_SYS_ADMIN.  So I'm not
-sure it makes it any worse.
-
-> > > And perhaps we might consider attempting to deprecate RNDADDTOENTCNT at
-> > > some point in the future.
-> >
-> > That would be a good idea.  :-)
-> 
-> Oh cool, I'm glad you agree. Let's do that then. Have a preferred path?
-> Maybe just a pr_once() saying not to use it?
-
-Probably.  We could get more aggressive (e.g., WARN), but the first
-Google search on RNDADDTOENTCNT returned:
-
-	https://github.com/jumpnow/rndaddtoentcnt
-
-So I'm now regretting not silently making it vanish a decade or more ago...
-
-       	   	      	  	   	     - Ted
+I got that far, but why did you take the bother to do these patches? Why
+wasn't 'use kretprobe' a good enough option?

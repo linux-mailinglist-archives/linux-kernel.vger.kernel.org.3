@@ -2,108 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE8E4E5AC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489144E5ACD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344967AbiCWVn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
+        id S1344985AbiCWVqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234033AbiCWVn6 (ORCPT
+        with ESMTP id S239441AbiCWVqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:43:58 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1540E85952
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:42:28 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so1996459otj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gauJU+/Ukt87qElnbOCar/GeP644jnPenO1H+olAZxI=;
-        b=cswYNs/WyXAL6DSvgYLR3dF6cUIcVKCxSQGRNXV786efwrusYDE0bclQvwL/1eYS9t
-         vThDuK/9GhGm5Ws+5z71Qd6WANakCW1IxYdEHRVO7aP16V8R06I2LqJrdw4RATCO1HP0
-         UUGnJhwwcsp+xk/fmmMo/rX+1/XfoPXgN3W38qwm7MH+c8m3HzAOcpFmrbcAhGuFJHfX
-         Vw5+f9RS596X3GChcf3jnVR4yHuJTrMPuhPEsnm8gzpHE3KwO/joTbHm5QXM0P67HP7h
-         kV7tMbBorXJ887ivq0y7jr9VBFPDYpcw9XRIV3B7VBq9qM221sxbmH/8tVfi1WkmyQp0
-         i0dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gauJU+/Ukt87qElnbOCar/GeP644jnPenO1H+olAZxI=;
-        b=50h7k0kKQ+JdkpR0dWkCgvHNv7G93l0ocIBsJ3UHD/vvRbtFxF8C+OMJuC6B1+wiPF
-         RYgKbC3/eTlJ7cZASAUOBnYg8U4Ptp+qyqfJWm6sZYXMasTDm5gnhdbr/HivfRKQutaF
-         ZELvcgTp9HviwGf5v5MQxob29vC8QbUKXKaex58mXXKs3BLC3OEZA/HSlKqhrsEORnar
-         //yKNIcY11lXS+mXpSOqO8/rlRQwAYptvvfGcIXq5BZ4QeDTCBWTCDB/3zq9wdPjZa/6
-         1a2E4rXm2CJPqCLf+hRN99yZUe69PP45XO85zkTk7Ph39VPzkOPYy4z/e4+ZVLf+Z0hp
-         tKKQ==
-X-Gm-Message-State: AOAM533TZvhRuKov+8YV+9It3xDR00H4YIBPh30KMwFvM5KYoLIO1vAn
-        PT1bTtnlglFsdZgx1C6oyqZTmrkTYAWu2kR9Z8o=
-X-Google-Smtp-Source: ABdhPJxUgqnvMju0kQuK4cFRp3woy6+I3sh81LdOzyl9ntgr/e/GmMKsqkaDy48Yz3SiqBg8bmw7SQ3TapKKosYD62I=
-X-Received: by 2002:a05:6830:10c3:b0:5cd:481a:148a with SMTP id
- z3-20020a05683010c300b005cd481a148amr913080oto.200.1648071747457; Wed, 23 Mar
- 2022 14:42:27 -0700 (PDT)
+        Wed, 23 Mar 2022 17:46:06 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561B18CD99;
+        Wed, 23 Mar 2022 14:44:35 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 14:44:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1648071872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XY5kMoTXHmqmiVy2HYgdwsUIAUgV0f+WD3Zq9NZ1rig=;
+        b=tIkhyUwCj21h679R74DUEqJYdwnu60YleSAUF//3fNmiqt+PYVpSZRINK+Jhl6RkUQIqws
+        q7cnt3gzzC1vcMomxCfEn/iGbAeykyC28Ki3sc7uHV5FoNBJJar3asnQl+BeYWwl12EbDB
+        hjQEpEuUhpu0HrV0NM+eJwzG3K2B00c=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Tejun Heo <tj@kernel.org>, Chris Down <chris@chrisdown.name>
+Subject: Re: [RFC PATCH] mm: memcg: Do not count memory.low reclaim if it
+ does not happen
+Message-ID: <YjuUuLW+8iRtYOmP@carbon.dhcp.thefacebook.com>
+References: <20220322182248.29121-1-mkoutny@suse.com>
 MIME-Version: 1.0
-References: <1647943132-31250-1-git-send-email-baihaowen@meizu.com>
-In-Reply-To: <1647943132-31250-1-git-send-email-baihaowen@meizu.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 23 Mar 2022 17:42:16 -0400
-Message-ID: <CADnq5_PB-SOvbJJiRGvGpeLwfYpuYHPT8_0HRW1R6WUJ8vwKiw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: use NULL instead of using plain integer
- as pointer
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     "Wentland, Harry" <harry.wentland@amd.com>,
-        "Leo (Sunpeng) Li" <sunpeng.li@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220322182248.29121-1-mkoutny@suse.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the patches.  I've already applied fixes from others for
-these issues.
+On Tue, Mar 22, 2022 at 07:22:48PM +0100, Michal Koutny wrote:
+> This was observed with memcontrol selftest/new LTP test but can be also
+> reproduced in simplified setup of two siblings:
+> 
+> 	`parent .low=50M
+> 	  ` s1	.low=50M  .current=50M+ε
+> 	  ` s2  .low=0M   .current=50M
+> 
+> The expectation is that s2/memory.events:low will be zero under outer
+> reclaimer since no protection should be given to cgroup s2 (even with
+> memory_recursiveprot).
+> 
+> However, this does not happen. The apparent reason is that when s1 is
+> considered for (proportional) reclaim the scanned proportion is rounded
+> up to SWAP_CLUSTER_MAX and slightly over-proportional amount is
+> reclaimed. Consequently, when the effective low value of s2 is
+> calculated, it observes unclaimed parent's protection from s1
+> (ε-SWAP_CLUSTER_MAX in theory) and effectively appropriates it.
+> The effect is slightly regularized protection (workload dependent)
+> between siblings and misreported MEMCG_LOW event when reclaiming s2 with
+> this protection.
+> 
+> Fix the behavior by not reporting breached memory.low in such
+> situations. (This affects also setups where all siblings have
+> memory.low=0, parent's memory.events:low will still be non-zero when
+> parent's memory.low is breached but it will be reduced by the events
+> originated in children.)
+> 
+> Fixes: 8a931f801340 ("mm: memcontrol: recursive memory.low protection")
+> Reported-by: Richard Palethorpe <rpalethorpe@suse.com>
+> Link: https://lore.kernel.org/all/20220321101429.3703-1-rpalethorpe@suse.com/
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
 
-Alex
+Hi Michal!
 
-On Tue, Mar 22, 2022 at 9:05 AM Haowen Bai <baihaowen@meizu.com> wrote:
->
-> This fixes the following sparse warnings:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:71:40: warning: Using
-> plain integer as NULL pointer
->
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
-> index ec636d0..ef75eb7 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
-> @@ -68,7 +68,7 @@ static void get_qp_set(qp_set qps, enum colour_mode cm, enum bits_per_comp bpc,
->         int sel = table_hash(mode, bpc, max_min);
->         int table_size = 0;
->         int index;
-> -       const struct qp_entry *table = 0L;
-> +       const struct qp_entry *table = NULL;
->
->         // alias enum
->         enum { min = DAL_MM_MIN, max = DAL_MM_MAX };
-> --
-> 2.7.4
->
+Does it mean that in the following configuration:
+	`parent .low=50M
+	  ` s1	.low=0M   .current=50M
+	  ` s2  .low=0M   .current=50M
+there will be no memory.events::low at all? (assuming the recursive thing is on)
+
+Thanks!

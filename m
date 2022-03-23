@@ -2,175 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD95E4E4A83
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BF74E4A81
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbiCWBef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 21:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S236102AbiCWBd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 21:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbiCWBea (ORCPT
+        with ESMTP id S229844AbiCWBdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 21:34:30 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA7399
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:32:56 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220323013254epoutp03ef0aac814eee4810894413d4a05f6bf4~e3oR7sqqV0279802798epoutp03G
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:32:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220323013254epoutp03ef0aac814eee4810894413d4a05f6bf4~e3oR7sqqV0279802798epoutp03G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647999174;
-        bh=LgQSLT75+DUMGhM7hoYPhQN7NhaB4BUtmQGeP73ahco=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y2o/1037mJr6cbDEMRQIWbEQsDCbzBdFs9GflOwqGsNPIBmweKB8nBCUYZcJ149MG
-         N9BDHbe7pFdfC2JeOq5OJmTxuBTvQB5XtuDVh/2/DIVQYwDDTxFFPvt+0LmwS7KICP
-         xqFopgbdJPdajpYHqjcAsVh/LyzlEdQi43DPNp4k=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220323013253epcas2p23426b56e21b85892285ec88ec588e6a6~e3oRU2IfD2005720057epcas2p2Q;
-        Wed, 23 Mar 2022 01:32:53 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4KNW7l4TsTz4x9QC; Wed, 23 Mar
-        2022 01:32:51 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9C.8F.10444.1C87A326; Wed, 23 Mar 2022 10:32:49 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220323013249epcas2p375139160b6f653bb3d19153b47a4c796~e3oNE34eI1180511805epcas2p3r;
-        Wed, 23 Mar 2022 01:32:49 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220323013249epsmtrp18cd6e2dadec88b8f1087f12657b062f8~e3oNEItQE2088120881epsmtrp1v;
-        Wed, 23 Mar 2022 01:32:49 +0000 (GMT)
-X-AuditID: b6c32a45-4fdff700000228cc-67-623a78c1a8bf
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        16.DC.03370.0C87A326; Wed, 23 Mar 2022 10:32:48 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220323013248epsmtip27cf307613fb762d3ce533d4d7ddafc23~e3oM6tmQA0788507885epsmtip2u;
-        Wed, 23 Mar 2022 01:32:48 +0000 (GMT)
-Date:   Wed, 23 Mar 2022 10:31:30 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
-Subject: Re: [PATCH v3 0/4] support USB offload feature
-Message-ID: <20220323013130.GB19041@ubuntu>
-MIME-Version: 1.0
-In-Reply-To: <CAJKOXPdmSUqs+d3CuJ9px=vWPPdgP0scAZvKJkKDrs5O+sw6yA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLJsWRmVeSWpSXmKPExsWy7bCmhe7BCqskgxPPpS2eHFnEbtG8eD2b
-        xfU/7xkt2p9fYLM4f34Du8XlXXPYLBYta2W2aN40hdVi5lpli667NxgduDwu9/UyeSzYVOqx
-        eM9LJo9NqzrZPPbPXcPu0bdlFaPH501yAexR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYG
-        hrqGlhbmSgp5ibmptkouPgG6bpk5QNcpKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtS
-        cgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEKE7Iz9r7oYixo5an4+Xo3WwPjJc4uRk4OCQETialv
-        p7N0MXJxCAnsYJSY8nE3G4TziVFiz/pdTBDOZ0aJCfM+sHYxcoC17GmWgojvYpRYc/oHO4Tz
-        hFHi9MxZbCBzWQRUJd7PfM8IYrMJaEnc+3GCGcQWEdCUuP73OytIA7PAYyaJjq63TCAJYQFz
-        idlT+thBbF4BbYlTJxezQNiCEidnPmEB2cwpECjx55IyiCkqoCLx6mA9xAsLOSRmTTeFsF0k
-        lm0+yQxhC0u8Or6FHcKWknjZ3wZlF0vs+tQK9piEQAOjROODE1ANxhKznrWD3cwskClxvWki
-        I8TDyhJHbrFAhPkkOg7/ZYcI80p0tAlBdCpLTL88gRXClpQ4+Poc1EQPiWnN86HB85dJ4vK0
-        bUwTGOVnIXlsFpJtELaOxILdn9hmAa1gFpCWWP6PA8LUlFi/S38BI+sqRrHUguLc9NRiowJD
-        eFwn5+duYgSnWy3XHYyT337QO8TIxMF4iFGCg1lJhHfxB/MkId6UxMqq1KL8+KLSnNTiQ4ym
-        wGiayCwlmpwPTPh5JfGGJpYGJmZmhuZGpgbmSuK8XikbEoUE0hNLUrNTUwtSi2D6mDg4pRqY
-        9O+rcp5llHReNPOlSabyzrDfN3bVswZPD43MeHpmoZf3n4/zjaRuPqy42FvMWVsQ99wzMm6B
-        8IY1AmVFd6bfWXLb7uBUX8+/4szyx848+Zde1dDRY5rZ6JZcq6emtOvDuzP6N45sW/M34+TG
-        BcsWL1QWvO3LweviWOE2+9NV5Qn561nVA26cXLkpsT2pqr5KtP+y4eVnH5jnP2s+FPv6c7oA
-        h4/2huVauUUmh9Td1qUXxM/z+SecXXrmTy+T748r4SvfJMSELDkxVWFmW9DJV2ns5+/pit35
-        wuXTE/FIca71M5kjlmE52uFrnllE7709zyymoCL5liTjaufjGc+tfi39aryohY9pc9JtFfuz
-        SizFGYmGWsxFxYkAKo6l+0AEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMLMWRmVeSWpSXmKPExsWy7bCSvO6BCqskg8kLrC2eHFnEbtG8eD2b
-        xfU/7xkt2p9fYLM4f34Du8XlXXPYLBYta2W2aN40hdVi5lpli667NxgduDwu9/UyeSzYVOqx
-        eM9LJo9NqzrZPPbPXcPu0bdlFaPH501yAexRXDYpqTmZZalF+nYJXBmv3i5kKzjEWbFpyh2W
-        BsYV7F2MHBwSAiYSe5qluhi5OIQEdjBKvHk+hbGLkRMoLimxdO4NdghbWOJ+yxFWiKJHjBL/
-        Jl5jAkmwCKhKvJ/5HqyBTUBL4t6PE8wgtoiApsT1v9/BGpgFnjJJHDt0EGySsIC5xOwpfWA2
-        r4C2xKmTi1kgpjYyS2y994QVIiEocXLmExYQmxlo6o1/L5lATmUWkJZY/o8DxOQUCJT4c0kZ
-        xBQVUJF4dbB+AqPgLCS9s5D0zkLoXcDIvIpRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cT
-        IzhetLR2MO5Z9UHvECMTB+MhRgkOZiUR3sUfzJOEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817o
-        OhkvJJCeWJKanZpakFoEk2Xi4JRqYDpZrptqcEs6uLnGZJ7Z9FciBkrTIrY9rTKZEf7u7bpU
-        Hd35zQ8+ZanbHtGOCPGYaNj+41lypadqp94954dayxZZhe/8vTerQkN5iafclqK/8tOnTbnL
-        YHzjxKRVjFML34Wx7js3S4VFSeLNtLp1G9elPCsQPHdd7erZOauzV2n6eD86zVd8W/zW44Ti
-        tgvG59PcKhbe/vn2kp3MsZyJtikOF/dMebRco2bxxqR9iobZ76fPbFM+PO/rphf93/I9Pu2S
-        5I+8ovx9cvr/Y7+2fs3advDjpPVN4hOnmsU/cHj43+1pz6yv71XCQqp/19+xvSK81oA/PN92
-        2gNTXv+M2H3Ls4xYcqffvTjtZWLHW7nvSizFGYmGWsxFxYkA1lPlsAYDAAA=
-X-CMS-MailID: 20220323013249epcas2p375139160b6f653bb3d19153b47a4c796
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----_7s4r-glDYfHz5mV2FGmC11V_HCNsCeqJGxaGPxgMNZjUkbW=_237fad_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c
-References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
-        <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
-        <YjhB7+AaEXvuUmdi@kroah.com> <20220321092409.GA62265@ubuntu>
-        <YjhGKVKuPsKG80wZ@kroah.com> <20220321100631.GB62265@ubuntu>
-        <YjhQg4I7eYWXIfgr@kroah.com>
-        <CAJKOXPdmSUqs+d3CuJ9px=vWPPdgP0scAZvKJkKDrs5O+sw6yA@mail.gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 21:33:51 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C600A6FA14
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:32:21 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id b15so290052pfm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:32:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rMjHIushB4ybeX1DyU7G56cAY5nqd2UeavqSztK6ww4=;
+        b=BJgjURSESLE5/2Sq0NpAPHrXCmsa1IE7v1upAVBUlaci6jvsgPSPUz6+OF78gVz/cE
+         /yZH6uN4UK0g3YpiquQhos3otbEb/MFlecf38dqnV19zqoDU5G+dKN3FocR77I8eHm8F
+         zqCrrkA8p7UIykU5IMQmBM8c+aPAArgzA6igL1nILu4U2WAxR7C/Agsc3lxlPWwPbfQf
+         21OT/5CEQz7JI0QCa7/uSX6sCKh+QDDGJpTYU3RyaJBslw3X2JaVHq7+TW2405H9Fdzt
+         e9TzZQpLIwUrLUdmADi9ZT2vK25umiupSFrSaWW9t4W9opqzoHT5dVsDu/7PaV3Cvxhl
+         ArOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=rMjHIushB4ybeX1DyU7G56cAY5nqd2UeavqSztK6ww4=;
+        b=JAThyWmJ7BIupA5zFfXA+APOOBimF3uS66zVrghqbAIL/BFvzSWDkiofo4+TJap6UD
+         wsduEjn9aelQT5TRiDDOhQR9pg+2arLCGRNLRDA19Ay0exGJ1+aW7/kU7+E44PvuH98H
+         YvpPaSZzcBKQnIGDZ4Qq3a9pcsMdtL2JMt4b0vPmGleYJrt24tdicKnNj8GUl13JEIwC
+         UKJfo6EgUR1cHLMdQ2hWCA2LOXFZZlUI4ie0UyTHSB9dHau6WenQ9o/Yc6VXV21jWnZ9
+         UlaqPECj7o/aycCcubExLYsiopzsRYk/uTpOSihfr+UM5RPHfVLVeB8RSGi2RV3KQN6W
+         +seQ==
+X-Gm-Message-State: AOAM533gMm5bw05bXgoRiY7TiyfdNGwEvgSHB0N7aIvggRMYoXuSFjTD
+        7slIHwvgsIjwfDozn7DgcSrLWQ==
+X-Google-Smtp-Source: ABdhPJy2u6eJd1YQslyskpxe00dwJIhEwrLPQVCByPTJHb1IxI//l93v7Nc+VNGIajJi06MWmolgaw==
+X-Received: by 2002:a63:d44c:0:b0:380:8c48:e040 with SMTP id i12-20020a63d44c000000b003808c48e040mr24326876pgj.14.1647999141159;
+        Tue, 22 Mar 2022 18:32:21 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id p7-20020a17090a2d8700b001c785d6c1ffsm325231pjd.28.2022.03.22.18.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 18:32:20 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 18:32:20 -0700 (PDT)
+X-Google-Original-Date: Tue, 22 Mar 2022 18:32:15 PDT (-0700)
+Subject:     Re: [RFC PATCH V2 1/1] riscv/efi_stub: Add support for RISCV_EFI_BOOT_PROTOCOL
+In-Reply-To: <20220303145944.307321-2-sunilvl@ventanamicro.com>
+CC:     ardb@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, heinrich.schuchardt@canonical.com,
+        Atish Patra <atishp@rivosinc.com>, apatel@ventanamicro.com,
+        abner.chang@hpe.com, jrtc27@jrtc27.com, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        sunilvl@ventanamicro.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     sunilvl@ventanamicro.com
+Message-ID: <mhng-8685b269-d3cf-4dbb-b2d2-bd79266ac477@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------_7s4r-glDYfHz5mV2FGmC11V_HCNsCeqJGxaGPxgMNZjUkbW=_237fad_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+On Thu, 03 Mar 2022 06:59:44 PST (-0800), sunilvl@ventanamicro.com wrote:
+> This patch adds the support for getting the boot hart ID in
+> Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL. This protocol
+> is preferred method over existing DT based solution since it
+> works irrespective of DT or ACPI.
+>
+> The specification of the protocol is hosted at:
+> https://github.com/riscv-non-isa/riscv-uefi
+>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> ---
+>  drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
+>  drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
+>  include/linux/efi.h                       |  1 +
+>  3 files changed, 32 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+> index edb77b0621ea..aced62a0907e 100644
+> --- a/drivers/firmware/efi/libstub/efistub.h
+> +++ b/drivers/firmware/efi/libstub/efistub.h
+> @@ -720,6 +720,13 @@ union efi_tcg2_protocol {
+>  	} mixed_mode;
+>  };
+>
+> +struct riscv_efi_boot_protocol {
+> +	u64 revision;
+> +
+> +	efi_status_t (__efiapi * get_boot_hartid)(struct riscv_efi_boot_protocol *this,
+> +						  size_t *boot_hartid);
+> +};
+> +
+>  typedef union efi_load_file_protocol efi_load_file_protocol_t;
+>  typedef union efi_load_file_protocol efi_load_file2_protocol_t;
+>
+> diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
+> index 9c460843442f..915ad209d004 100644
+> --- a/drivers/firmware/efi/libstub/riscv-stub.c
+> +++ b/drivers/firmware/efi/libstub/riscv-stub.c
+> @@ -23,7 +23,7 @@
+>
+>  typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
+>
+> -static u32 hartid;
+> +static size_t hartid;
+>
+>  static int get_boot_hartid_from_fdt(void)
+>  {
+> @@ -47,14 +47,33 @@ static int get_boot_hartid_from_fdt(void)
+>  	return 0;
+>  }
+>
+> +static efi_status_t get_boot_hartid_from_efi(void)
+> +{
+> +	efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
+> +	efi_status_t status;
+> +	struct riscv_efi_boot_protocol *boot_protocol;
+> +
+> +	status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
+> +			     (void **)&boot_protocol);
+> +	if (status == EFI_SUCCESS) {
+> +		status = efi_call_proto(boot_protocol,
+> +					get_boot_hartid, &hartid);
+> +	}
+> +	return status;
+> +}
+> +
+>  efi_status_t check_platform_features(void)
+>  {
+>  	int ret;
+> +	efi_status_t status;
+>
+> -	ret = get_boot_hartid_from_fdt();
+> -	if (ret) {
+> -		efi_err("/chosen/boot-hartid missing or invalid!\n");
+> -		return EFI_UNSUPPORTED;
+> +	status = get_boot_hartid_from_efi();
+> +	if (status != EFI_SUCCESS) {
+> +		ret = get_boot_hartid_from_fdt();
+> +		if (ret) {
+> +			efi_err("/chosen/boot-hartid missing or invalid!\n");
 
-On Tue, Mar 22, 2022 at 06:05:49PM +0100, Krzysztof Kozlowski wrote:
-> On Mon, 21 Mar 2022 at 11:16, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > [v3, 0/4] add xhci-exynos driver
-> > >
-> > > This patchset is for support xhci-exynos driver....
-> > > ....
-> > >
-> > >   usb: host: export symbols for xhci-exynos to use xhci hooks
-> > >   usb: host: add xhci hooks for xhci-exynos
-> > >   usb: host: add some to xhci overrides for xhci-exynos
-> > >   usb: host: add xhci-exynos driver
-> >
-> > Yes, that makes much more sense.  What would you want to see if you had
-> > to review such a series?
-> 
-> Unfortunately it might not make more sense, because last time
-> xhci-exynos driver was a fake driver, not for submission. It did not
-> compile, it did not work in mainline.
-> 
-xhci-exynos driver wasn't compiled on v1,v2 but can be compiled on v3 series.
+Is that the right error message?  IIUC it doesn't really make sense in 
+an ACPI context, that's a DT-ism.
 
-> That driver was not even sent to proper mailing lists, as pointed out
-> by get_maintainers.pl, maybe because it was not developed on the
-> mainline kernel, so there is no MAINTAINERS file?
-
-There's no MAINTAINERS file yet as you guess.
-
-Best Regards,
-Jung Daehwan
-
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-
-
-------_7s4r-glDYfHz5mV2FGmC11V_HCNsCeqJGxaGPxgMNZjUkbW=_237fad_
-Content-Type: text/plain; charset="utf-8"
-
-
-------_7s4r-glDYfHz5mV2FGmC11V_HCNsCeqJGxaGPxgMNZjUkbW=_237fad_--
+> +			return EFI_UNSUPPORTED;
+> +		}
+>  	}
+>  	return EFI_SUCCESS;
+>  }
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index ccd4d3f91c98..9822c730207c 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
+>  #define EFI_CONSOLE_OUT_DEVICE_GUID		EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
+>  #define APPLE_PROPERTIES_PROTOCOL_GUID		EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
+>  #define EFI_TCG2_PROTOCOL_GUID			EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
+> +#define RISCV_EFI_BOOT_PROTOCOL_GUID		EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
+>  #define EFI_LOAD_FILE_PROTOCOL_GUID		EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
+>  #define EFI_LOAD_FILE2_PROTOCOL_GUID		EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
+>  #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)

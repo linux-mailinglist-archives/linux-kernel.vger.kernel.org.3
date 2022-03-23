@@ -2,57 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C714E4AFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 03:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8F24E4B05
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 03:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241345AbiCWCix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 22:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S241394AbiCWCqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 22:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241735AbiCWCip (ORCPT
+        with ESMTP id S240812AbiCWCqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 22:38:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC6370857;
-        Tue, 22 Mar 2022 19:37:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA434614D1;
-        Wed, 23 Mar 2022 02:37:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC36C340EC;
-        Wed, 23 Mar 2022 02:37:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648003036;
-        bh=lidTMFrvgsD4QNxlYdNfhfYSm5MsACsoLgJwIQ3WW6I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=QJWgbJaKhND3p8maoI9Bjz9VY0auADyH0KFPYaLcCYy6fC8PuTUakQRgw8aTfDCB3
-         m8tbXe4UdlAXTJ84jVqmQwpebyGCrNBCVkkZjwGXS/R7pUtQZiCOMV7pt4ThkuJ7BY
-         9HRD51pyi1lSm8Yx+ij+o8j9Fyeji7fF37z6ywu8TCX/Ok+PZdOrcKJNow92AwjCP4
-         +/Vla3UiUsKkrNP6i/8i25Gmchy85p4I3z34evPt+ixn009tqvHujKd/r95e0yA5E+
-         qGOoO+O5qkEGeU4A9t5kNYavFSMfmSU5xIs2WjX/cC25r7V6Ji6VytyU22HVXPeVM3
-         qeRSfoDXl0TeQ==
-Date:   Tue, 22 Mar 2022 21:37:14 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: cadence: Enable Controller to respond to
- received PTM Requests
-Message-ID: <20220323023714.GA1244184@bhelgaas>
+        Tue, 22 Mar 2022 22:46:11 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EAA36F4BE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 19:44:33 -0700 (PDT)
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7832:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Wed, 23 Mar 2022 10:40:26 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Wed, 23 Mar 2022 10:40:52 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2375.018; Wed, 23 Mar 2022 10:40:52 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     "krzysztof.kozlowski@canonical.com" 
+        <krzysztof.kozlowski@canonical.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Subject: RE: [PATCH v11 0/9] Add Sunplus SP7021 SoC Support
+Thread-Topic: [PATCH v11 0/9] Add Sunplus SP7021 SoC Support
+Thread-Index: AQHYPbV1SsKXsmp1VUKTEITYbA9OsKzKtY4AgAGLvVA=
+Date:   Wed, 23 Mar 2022 02:40:51 +0000
+Message-ID: <be7f6ea70a5146a190c750695aead7f5@cqplus1.com>
+References: <cover.1647928315.git.qinjian@cqplus1.com>
+ <YjmrdlQqoqUNcs7R@bogus>
+In-Reply-To: <YjmrdlQqoqUNcs7R@bogus>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAH9NwWec6ovS1xQbuPsB5duskJdmK_qv4t+URTK6thCvGNST7w@mail.gmail.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,86 +68,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 02:20:14PM +0100, Christian Gmeiner wrote:
-> Am Do., 10. März 2022 um 13:14 Uhr schrieb Christian Gmeiner
-> <christian.gmeiner@gmail.com>:
-> >
-> > Hi all
-> >
-> > > This enables the Controller [RP] to automatically respond with
-> > > Response/ResponseD messages if CDNS_PCIE_LM_TPM_CTRL_PTMRSEN
-> > > and PCI_PTM_CTRL_ENABLE bits are both set.
-> > >
-> > > Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-
-We're in the middle of the merge window right now, but I'm sure
-Lorenzo will be able to look at it after -rc1.  This looks fine to me.
-
-> > > ---
-> > >  drivers/pci/controller/cadence/pcie-cadence-host.c | 10 ++++++++++
-> > >  drivers/pci/controller/cadence/pcie-cadence.h      |  4 ++++
-> > >  2 files changed, 14 insertions(+)
-> > >
-> > > diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> > > index fb96d37a135c..940c7dd701d6 100644
-> > > --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> > > +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> > > @@ -123,6 +123,14 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
-> > >         return ret;
-> > >  }
-> > >
-> > > +static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
-> > > +{
-> > > +       u32 val;
-> > > +
-> > > +       val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
-> > > +       cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
-
-Lorenzo will likely wrap this line to fit in 80 columns like the rest
-of the file, or if you rebase to v5.18-rc1 and post a v3, you could do
-so.
-
-> > > +}
-> > > +
-> > >  static int cdns_pcie_host_start_link(struct cdns_pcie_rc *rc)
-> > >  {
-> > >         struct cdns_pcie *pcie = &rc->pcie;
-> > > @@ -501,6 +509,8 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
-> > >         if (rc->quirk_detect_quiet_flag)
-> > >                 cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
-> > >
-> > > +       cdns_pcie_host_enable_ptm_response(pcie);
-> > > +
-> > >         ret = cdns_pcie_start_link(pcie);
-> > >         if (ret) {
-> > >                 dev_err(dev, "Failed to start link\n");
-> > > diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-> > > index c8a27b6290ce..1ffa8fa77a8a 100644
-> > > --- a/drivers/pci/controller/cadence/pcie-cadence.h
-> > > +++ b/drivers/pci/controller/cadence/pcie-cadence.h
-> > > @@ -116,6 +116,10 @@
-> > >  #define LM_RC_BAR_CFG_APERTURE(bar, aperture)          \
-> > >                                         (((aperture) - 2) << ((bar) * 8))
-> > >
-> > > +/* PTM Control Register */
-> > > +#define CDNS_PCIE_LM_PTM_CTRL  (CDNS_PCIE_LM_BASE + 0x0da8)
-> > > +#define CDNS_PCIE_LM_TPM_CTRL_PTMRSEN  BIT(17)
-> > > +
-> > >  /*
-> > >   * Endpoint Function Registers (PCI configuration space for endpoint functions)
-> > >   */
-> > > --
-> > > 2.35.1
-> > >
-> >
-> > This patch should be ready to land - or is anything missing?
-> >
-> 
-> Gentle ping.
-> 
-> -- 
-> greets
-> --
-> Christian Gmeiner, MSc
-> 
-> https://christian-gmeiner.info/privacypolicy
+PiANCj4gTm90IHJlbGF0ZWQgdG8gdGhpcyBzZXJpZXMsIGJ1dCB0byB0aGUgcGxhdGZvcm0gaW4g
+Z2VuZXJhbC4gWW91IHN0aWxsDQo+IG5lZWQgdG8gcmVzb2x2ZWQgdGhlIGJvb3QvY3B1LW1ldGhv
+ZCBmb3IgdGhpcyBwbGF0Zm9ybSBiZWZvcmUgeW91IGFkZA0KPiBzdXBwb3J0IGZvciBhbGwgdGhl
+IDQgY3B1cyBvbiB0aGlzIHBsYXRmb3JtLiBJIHJlbWVtYmVyIGRpc2N1c3NpbmcgYWJvdXQNCj4g
+Q1BVSWRsZSBvbiBhIHNlcGFyYXRlIHRocmVhZC4gSSB0aG91Z2h0IHRoaXMgaXMgYmVzdCB0aHJl
+YWQgdG8gcmVtaW5kIHRoYXQNCj4gc28gdGhhdCBpdCBpcyBhZGRyZXNzZWQgYmVmb3JlIHdlIHNl
+ZSBlaXRoZXIgY3B1aWRsZSBvciBjcHVob3RwbHVnIHN1cHBvcnQNCj4gb24gdGhpcyBwbGF0Zm9y
+bS4NCj4gDQo+IC0tDQo+IFJlZ2FyZHMsDQo+IFN1ZGVlcA0KDQpUaGFua3MgZm9yIHlvdXIgY29t
+bWVudHMuDQpDdXJyZW50bHksICB3ZSBib290IGFsbCA0IGNvcmVzIHZpYSBwc2NpIHN1Y2Nlc3Nm
+dWxseS4NCg0K

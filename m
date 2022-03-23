@@ -2,153 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3584E5100
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A704E5106
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235553AbiCWLIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S235636AbiCWLLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiCWLIr (ORCPT
+        with ESMTP id S230331AbiCWLLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:08:47 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CBF4E3A6;
-        Wed, 23 Mar 2022 04:07:16 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so5059282wmb.4;
-        Wed, 23 Mar 2022 04:07:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hq6nUZV0XlZ/RqsQtO+1fxY1+aGbEavx3CUfaMrCtqI=;
-        b=W5Lm58iCHqMzkYrrimwPH4ozcanhfBCwxVoWXLB3TKywim4JmnNxkC2aMaZAcxxDcn
-         sjgb+85gwS5Ks/tUfac9K5ZWTJwEOchKr/fZhqdmkMKHU8WchPd3MgUkkQ2qEYOFq1bD
-         lMYSHd8zcldJuKE+FdcWS4erfzg6WyduWKyBdTC/Lx2UZCx4Hn2p1nA+oORpW2D+jL7c
-         sEjRhjHEwPnf6H8LFCPGCHQ5Nh0FU6bx4Nj+ygsskIA+jNDnyxc6FGXadtFLiNXZbd2W
-         sfQ5n36w6SZ9Tkli1QJ8/gzZhlSwvD7W4b5kUQKyCx1E7o0hj8rzh2W5cx6W1loqhDPz
-         6nxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hq6nUZV0XlZ/RqsQtO+1fxY1+aGbEavx3CUfaMrCtqI=;
-        b=Og+Qk65aXb5JUSFFHivAHiiXI1JeVPx9phUuBSIuPzqWQ4TDQOpgqvn4v7BLF/WKxV
-         OOjclHOPsJb3K32FR7WCDnKsiqcM5Rs8e8zfRV+duNgrV0Tq4x5mFADh8GLdMrITpral
-         OCu7nklwCTpc1sT/atA+oAl6XXTOuQj/suGr/hnoPWDuWl0cxj2SR2eauRts3AfeUBSG
-         3X997y00jMvdax2iNv6TfYDjPK8P25dR9fgTusV9YUHeVQGshziGASfh96zNGjlVQXm2
-         PE104NiWzazA8Pmss2utqrenSylOkLtb9Swjska13Tx1KMfQUSNbSLTiBVor1+z766iw
-         1tzg==
-X-Gm-Message-State: AOAM533RtA5rkghHKSDxHc4Z0+xLEHMnkhdCan5ss0B0vqrLf2dOeo0S
-        RcJMUp+oUOScfp/BQBdm5lo=
-X-Google-Smtp-Source: ABdhPJyTUuxn6mww8BxvM5Gj2TBPwrcWMqm4VQUhQpPOG3lvoLzN1+5YHIhEOh6ocsHUs/6zcHGbtA==
-X-Received: by 2002:a7b:ce02:0:b0:381:2007:f75c with SMTP id m2-20020a7bce02000000b003812007f75cmr8885502wmc.6.1648033635128;
-        Wed, 23 Mar 2022 04:07:15 -0700 (PDT)
-Received: from krava (80-254-69-70.dynamic.monzoon.net. [80.254.69.70])
-        by smtp.gmail.com with ESMTPSA id 189-20020a1c02c6000000b0038c57df82aasm3880723wmc.20.2022.03.23.04.07.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 04:07:14 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 12:07:11 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, namhyung@kernel.org, gor@linux.ibm.com,
-        acme@redhat.com, svens@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com
-Subject: Re: [PATCH] perf/stat: Fix perf stat for forked applications
-Message-ID: <Yjr/X+Cuunyo84S3@krava>
-References: <20220317155346.577384-1-tmricht@linux.ibm.com>
+        Wed, 23 Mar 2022 07:11:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F5675C36
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:09:42 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 12:09:40 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648033781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y/9QlDKkQgJIDKLYV7PPTv1CBQEArmZvtFf+nq36eLQ=;
+        b=VCuJqmw4XFfaZutmSwF5amYHYfC1m76r7PhRsHgIhfcogPDP8f2u9lZ5tWWME1oILrqTem
+        ZmFvQHTQZaOKeckDMGLynD8NCTtNEyp2r35N1D2JmXDD6MbEy5AAmV7y80O60V0i1tLNd8
+        dn6z54ABxTkLUPa1aWX9aHdU7E1K1EuwwIWM8Yj1NrA4E5qehIUWv8Phat8O5L+p7s3U/O
+        e5xWdHDo1H/rd5EOzLD0nx98rE/tVve/ppBAuhn/vlJsJ+zXPBTRxcxdAebmVODrGQXZW0
+        M8bt7Zb/vkXNgn7JypQszCOU1kXsZS/9vnZGL+NPp719rG0o2a1qYP4Djm2HSg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648033781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y/9QlDKkQgJIDKLYV7PPTv1CBQEArmZvtFf+nq36eLQ=;
+        b=f2flnjoxpv42V4Isvy48bFJS9P6bMY4ZORKXpweyTqNP3wGNq4aFPqqEyv53r+gZFS79gG
+        ai5pyve9T6BsGEBA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] locking/local_lock: Pretend to use the per-CPU variable if
+ not needed.
+Message-ID: <Yjr/9ATrCDxr/0hq@linutronix.de>
+References: <YjhdcJB4FaLfsoyO@gmail.com>
+ <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
+ <YjpLiKRUIB4TGJm0@zn.tnic>
+ <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
+ <YjrIDlUePHQtIV4K@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220317155346.577384-1-tmricht@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YjrIDlUePHQtIV4K@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 04:53:46PM +0100, Thomas Richter wrote:
-> I have run into the following issue:
-> 
->  # perf stat -a -e new_pmu/INSTRUCTION_7/ --  mytest -c1 7
-> 
->  Performance counter stats for 'system wide':
-> 
->                  0      new_pmu/INSTRUCTION_7/
-> 
->        0.000366428 seconds time elapsed
->  #
-> 
-> The new PMU for s390 counts the execution of certain CPU instructions.
-> The root cause is the extremely small run time of the
-> mytest program. It just executes some assembly instructions
-> and then exits. In above invocation the instruction is executed
-> exactly one time (-c1 option). The PMU is expected to report this one
-> time execution by a counter value of one, but fails to do so
-> in some cases, not all.
-> 
-> Debugging reveals the invocation of the child process is done
-> *before* the counter events are installed and enabled. Tracing
-> reveals that sometimes the child process starts and exits before
-> the event is installed on all CPUs. The more CPUs the machine has,
-> the more often this miscount happens.
-> 
-> Fix this by reversing the start of the work load after the events
-> have been installed on the specified CPUs. Now the comment also
-> matches the code.
-> 
-> Output after:
->  # perf stat -a -e new_pmu/INSTRUCTION_7/ --  mytest -c1 7
-> 
->  Performance counter stats for 'system wide':
-> 
->                  1      new_pmu/INSTRUCTION_7/
-> 
->        0.000366428 seconds time elapsed
->  #
-> 
-> Now the correct result is reported rock solid all the time regardless
-> how many CPUs are online.
-> 
-> Fixes:  acf2892270dc ("perf stat: Use perf_evlist__prepare/start_workload())
-> 
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/builtin-stat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 3f98689dd687..60baa3dadc4b 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -955,10 +955,10 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
->  	 * Enable counters and exec the command:
->  	 */
->  	if (forks) {
-> -		evlist__start_workload(evsel_list);
->  		err = enable_counters();
->  		if (err)
->  			return -1;
-> +		evlist__start_workload(evsel_list);
+In the !RT && !LOCKDEP case the per-CPU variables aren't used. The commit
+mentioned below tried to avoid the usage of this_cpu_ptr() because it
+generates code, clobbers registers which is not needed.
+This change generated so little reference to the variable that llvm
+assumed that it is not used and created a warning.
 
-right, without -a the event has enable_on_exec so the race does not
-matter, but it's a problem for system wide with fork
+Revert local_lock_*() to its previous static inline implementation for
+type checking.
+Replace this_cpu_ptr() with __ll_cpu_ptr() which points to
+this_cpu_ptr() when it is used.
+In the !RT && !LOCKDEP case use per_cpu_ptr(, 0) which does not leave
+any code behind and llvm does not complain either. It also ensures that
+it is a per-CPU pointer. The assembly output in this case is unchanged.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Fixes: 9983a9d577db4 ("locking/local_lock: Make the empty local_lock_*() function a macro.")
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ include/linux/local_lock_internal.h | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-thanks,
-jirka
+diff --git a/include/linux/local_lock_internal.h b/include/linux/local_lock_internal.h
+index 6d635e8306d64..e671ead5fbad5 100644
+--- a/include/linux/local_lock_internal.h
++++ b/include/linux/local_lock_internal.h
+@@ -24,6 +24,8 @@ typedef struct {
+ 	},						\
+ 	.owner = NULL,
+ 
++#define __ll_cpu_ptr(__ll_cpuptr) (this_cpu_ptr(__ll_cpuptr))
++
+ static inline void local_lock_acquire(local_lock_t *l)
+ {
+ 	lock_map_acquire(&l->dep_map);
+@@ -44,9 +46,10 @@ static inline void local_lock_debug_init(local_lock_t *l)
+ }
+ #else /* CONFIG_DEBUG_LOCK_ALLOC */
+ # define LOCAL_LOCK_DEBUG_INIT(lockname)
+-# define local_lock_acquire(__ll)  do { typecheck(local_lock_t *, __ll); } while (0)
+-# define local_lock_release(__ll)  do { typecheck(local_lock_t *, __ll); } while (0)
+-# define local_lock_debug_init(__ll)  do { typecheck(local_lock_t *, __ll); } while (0)
++# define __ll_cpu_ptr(__ll_cpuptr) per_cpu_ptr(__ll_cpuptr, 0)
++static inline void local_lock_acquire(local_lock_t *l) { }
++static inline void local_lock_release(local_lock_t *l) { }
++static inline void local_lock_debug_init(local_lock_t *l) { }
+ #endif /* !CONFIG_DEBUG_LOCK_ALLOC */
+ 
+ #define INIT_LOCAL_LOCK(lockname)	{ LOCAL_LOCK_DEBUG_INIT(lockname) }
+@@ -65,36 +68,36 @@ do {								\
+ #define __local_lock(lock)					\
+ 	do {							\
+ 		preempt_disable();				\
+-		local_lock_acquire(this_cpu_ptr(lock));		\
++		local_lock_acquire(__ll_cpu_ptr(lock));		\
+ 	} while (0)
+ 
+ #define __local_lock_irq(lock)					\
+ 	do {							\
+ 		local_irq_disable();				\
+-		local_lock_acquire(this_cpu_ptr(lock));		\
++		local_lock_acquire(__ll_cpu_ptr(lock));		\
+ 	} while (0)
+ 
+ #define __local_lock_irqsave(lock, flags)			\
+ 	do {							\
+ 		local_irq_save(flags);				\
+-		local_lock_acquire(this_cpu_ptr(lock));		\
++		local_lock_acquire(__ll_cpu_ptr(lock));		\
+ 	} while (0)
+ 
+ #define __local_unlock(lock)					\
+ 	do {							\
+-		local_lock_release(this_cpu_ptr(lock));		\
++		local_lock_release(__ll_cpu_ptr(lock));		\
+ 		preempt_enable();				\
+ 	} while (0)
+ 
+ #define __local_unlock_irq(lock)				\
+ 	do {							\
+-		local_lock_release(this_cpu_ptr(lock));		\
++		local_lock_release(__ll_cpu_ptr(lock));		\
+ 		local_irq_enable();				\
+ 	} while (0)
+ 
+ #define __local_unlock_irqrestore(lock, flags)			\
+ 	do {							\
+-		local_lock_release(this_cpu_ptr(lock));		\
++		local_lock_release(__ll_cpu_ptr(lock));		\
+ 		local_irq_restore(flags);			\
+ 	} while (0)
+ 
+-- 
+2.35.1
 
->  
->  		t0 = rdclock();
->  		clock_gettime(CLOCK_MONOTONIC, &ref_time);
-> -- 
-> 2.35.1
-> 

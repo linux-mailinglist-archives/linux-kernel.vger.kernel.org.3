@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184264E5011
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB7C4E504D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbiCWKMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S243522AbiCWK3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 06:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiCWKMV (ORCPT
+        with ESMTP id S243513AbiCWK3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:12:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A0987666C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 03:10:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0DD823A;
-        Wed, 23 Mar 2022 03:10:49 -0700 (PDT)
-Received: from [10.57.39.153] (unknown [10.57.39.153])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 29DB73F73B;
-        Wed, 23 Mar 2022 03:10:48 -0700 (PDT)
-Message-ID: <a704e21e-c1a6-6ffd-439c-e715a2633319@arm.com>
-Date:   Wed, 23 Mar 2022 10:10:46 +0000
+        Wed, 23 Mar 2022 06:29:32 -0400
+X-Greylist: delayed 1023 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Mar 2022 03:28:02 PDT
+Received: from hz.preining.info (hz.preining.info [IPv6:2a01:4f9:2a:1a08::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37A25F42
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 03:28:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=preining.info; s=201909; h=Content-Type:MIME-Version:Message-ID:Subject:To:
+        From:Date:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0m+uRoiTivb2BUtxBNrl7ee/92eZ1F5hbLZE85sd5iE=; b=htCSIwcdYBnmNCnfVogfUkah+N
+        nmvP/suO/0O/hXFz1o7AAVWWCA8upYwWL0eygvmZmqscoDDt10RKJUUw/z+7vtiiT0pdui+R4DDM/
+        f9HpCu5xsv0PcSsz1eLS9gOtt3qd8nj/PEfb3CYw+nWXFbuIcJhEPw2v4AdM1rZy8QZQvd5PHRT6q
+        IplTLJfCs1F/TURmlAAMbscIhS1cKNzqdeHu4Fz3kLMG7hS/gA8DgWz9J8UykH2di86WpccvJg0Wy
+        fbq+bZ6X3IAPx5y6YZlAuue1gD3wWvKw+WtC8mN2rROuX/TYzk5yQJdJjIGgjZr+yfrDJC3Z9AJV/
+        DWKJm+pA==;
+Received: from tvk215040.tvk.ne.jp ([180.94.215.40] helo=sakefilet.preining.info)
+        by hz.preining.info with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <norbert@preining.info>)
+        id 1nWxxA-00AmUz-E7
+        for linux-kernel@vger.kernel.org; Wed, 23 Mar 2022 10:10:57 +0000
+Received: by sakefilet.preining.info (Postfix, from userid 1000)
+        id 3D6232038C8C; Wed, 23 Mar 2022 19:10:53 +0900 (JST)
+Date:   Wed, 23 Mar 2022 19:10:53 +0900
+From:   Norbert Preining <norbert@preining.info>
+To:     linux-kernel@vger.kernel.org
+Subject: 5.17.0 fails to suspend
+Message-ID: <YjryLd+TuigtA6co@sakefilet.preining.info>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] cpu/hotplug: Set st->cpu earlier
-Content-Language: en-GB
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20220316153637.288199-1-steven.price@arm.com>
- <878rt2atre.ffs@tglx> <bc66bee6-7c99-b289-f5e9-ccaf03d5605d@arm.com>
- <87wngla932.ffs@tglx>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <87wngla932.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for taking a look at this.
+Hi all,
 
-On 22/03/2022 22:58, Thomas Gleixner wrote:
-> On Tue, Mar 22 2022 at 15:59, Vincent Donnefort wrote:
->> On 22/03/2022 15:31, Thomas Gleixner wrote:
->>> On Wed, Mar 16 2022 at 15:36, Steven Price wrote:
->>>> Setting the 'cpu' member of struct cpuhp_cpu_state in cpuhp_create() is
->>>> too late as other callbacks can be made before that point.
->>>
->>> What?
->>>
->>>          CPUHP_OFFLINE = 0,
->>>          CPUHP_CREATE_THREADS,
->>>
->>> The create threads callback is the very first callback which is invoked
->>> for a to be plugged CPU on the control CPU. So which earlier callback
->>> can be invoked and fail?
->>>
->>> Thanks,
->>>
->>>          tglx
->>
->>
->> CPUHP_CREATE_THREADS itself can fail, before st->cpu is set.
-> 
-> Sure. But that does not explain the problem.
-> 
->> Also, that value is used outside of the callbacks (cpuhp_set_state()
->> in _cpu_up()).
-> 
-> And why on earth is this not spelled out in the changelog?
+(please cc)
 
-I apologies for that, I'm not very familiar with the code and I have to
-admit I have been struggling to identify exactly what is going on here.
-The actual issue I saw was if the callback fails then the rollback code
-leaves things in a messed up state. By the looks of things that callback
-that fails is indeed the first (CPUHP_CREATE_THREADS).
+upgrading from 5.16.15 or so to 5.17.o my laptop (Fujitsu Lifebook U
+Series) fails to suspend:
 
->> But indeed this description could be refined a bit.
-> 
-> Indeed. But the description is not the only problem here:
-> 
-> It's completely uncomprehensible from the code in _cpu_up() _WHY_ this
-> 
->      st->cpu = cpu;
->      
-> assignment has to be there.
-> 
-> It's non-sensical if you really think about it, right?
+kernel: Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+kernel: printk: Suspending console(s) (use no_console_suspend to debug)
+kernel: e1000e: EEE TX LPI TIMER: 00000011
+kernel: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -16
+kernel: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x160 returns -16
+kernel: xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
+kernel: PM: Some devices failed to suspend, or early wake event detected
+kernel: nvme nvme0: Shutdown timeout set to 8 seconds
+kernel: nvme nvme0: 8/0/0 default/read/poll queues
+kernel: OOM killer enabled.
 
-I entirely agree, and I did ask in my v1 posting[1] if anyone could
-point me to a better place to do the assignment. Vincent suggested
-moving it earlier in _cpu_up() which is this v2.
+No external usb device connected, internal ones:
+$ lsusb
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 004: ID 04f2:b6e1 Chicony Electronics Co., Ltd FJ Camera
+Bus 001 Device 003: ID 298d:2033 Next Biometrics NB-2033-U
+Bus 001 Device 002: ID 058f:9540 Alcor Micro Corp. AU9540 Smartcard Reader
+Bus 001 Device 005: ID 8087:0026 Intel Corp. AX201 Bluetooth
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-But it still seems out-of-place to me. I've just had a go at simply
-removing the 'cpu' member and it doesn't look too bad. I'll post that
-patch as a follow up. I'm open to other suggestions for the best way to
-fix this.
+What further information can I provide (no external usb device
 
-Thanks,
+(please cc)
 
-Steve
+All the best
 
-[1]
-https://lore.kernel.org/all/20220225134918.105796-1-steven.price@arm.com/
+Norbert
 
-> That said, I'm pretty sure you can come up with:
-> 
->  - a proper one time initialization of @st which solves your problem
-> 
->  - a proper changelog which explains it
-> 
-> Thanks,
-> 
->         tglx
-
+--
+PREINING Norbert                              https://www.preining.info
+Fujitsu Research     +    IFMGA Guide     +    TU Wien    +    TeX Live
+GPG: 0x860CDC13   fp: F7D8 A928 26E3 16A1 9FA0 ACF0 6CAC A448 860C DC13

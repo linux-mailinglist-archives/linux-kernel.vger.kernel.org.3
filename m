@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C6A4E591B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1CD4E591E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344268AbiCWT1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S240360AbiCWT3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344214AbiCWT1i (ORCPT
+        with ESMTP id S242548AbiCWT3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:27:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8641D4EA0A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:26:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38500B82027
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:26:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D5FD3C340F5;
-        Wed, 23 Mar 2022 19:26:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648063561;
-        bh=Mi1nZdk9YMi+fc5l93jyhtromypy/xnOHHLBmhLkF7I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=PPyJr4yY1GzRuLfjRwc8WOPUEapkFU36qMnhdiGTP96mJvvzw0iTnWTdBmcedAqYD
-         e9uoFWIJ1QKL1aamF6/XB6NZLX3By3EutrxnES3ZC9ZpXVfos2dSlCNM7QQ+G88NCA
-         PXJZUFuYpmXMZJ6CnAQUf31X7bpoIu5B2QJx0FTwviUDoGhlA89n20pLPhLO4pVPcH
-         vjKJ1DqJiBc9OODN9YQwhVrtM06BdB+5wnDRJBTjct8A7P3LV38uvSxdIMdDTWNN4b
-         hRm05id/dF/+zDWJd9QmGZp68DydHK3wORLZ4bi3Oz3SuNuY+GcpfMQafSB54gGyK4
-         C/EBuUlRFh+rA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C4521E7BB0B;
-        Wed, 23 Mar 2022 19:26:01 +0000 (UTC)
-Subject: Re: [GIT PULL] tracing/rtla: Updates to the RTLA tool
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220321103035.564a1df5@gandalf.local.home>
-References: <20220321103035.564a1df5@gandalf.local.home>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220321103035.564a1df5@gandalf.local.home>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-rtla-v5.18
-X-PR-Tracked-Commit-Id: 75016ca3acd0de79868ef5b0694195fe05288ade
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 20f463fb38686dd3fe7e6903cab56bdbbf756238
-Message-Id: <164806356180.7379.17444599197607094264.pr-tracker-bot@kernel.org>
-Date:   Wed, 23 Mar 2022 19:26:01 +0000
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Mar 2022 15:29:47 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F076131372;
+        Wed, 23 Mar 2022 12:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qYdVN87fI7cxolE1tClOfp7bWWvUcWqI33uDbVepwfo=; b=3annfi6YEaF1or+cu2vm3QExf5
+        2vLfWjZ1K3BzOE1/5x160FeQw7fgekNJ+PMIUMxNKg8KE00LpG76WJUfLYgqR9390+o5B5ArSuaxX
+        O34b1CvFjELA1OxVOgTxlMMD5I9NhnfOmDtxm7IJqDWVpcV7OXYOGOsON+aV93P4WX2s=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nX6e5-00CKeV-6j; Wed, 23 Mar 2022 20:27:49 +0100
+Date:   Wed, 23 Mar 2022 20:27:49 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 1/5] net: phy: mscc-miim: reject clause 45
+ register accesses
+Message-ID: <Yjt0tQyq3NrEG3EO@lunn.ch>
+References: <20220323183419.2278676-1-michael@walle.cc>
+ <20220323183419.2278676-2-michael@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323183419.2278676-2-michael@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 21 Mar 2022 10:30:35 -0400:
+On Wed, Mar 23, 2022 at 07:34:15PM +0100, Michael Walle wrote:
+> The driver doesn't support clause 45 register access yet, but doesn't
+> check if the access is a c45 one either. This leads to spurious register
+> reads and writes. Add the check.
+> 
+> Fixes: 542671fe4d86 ("net: phy: mscc-miim: Add MDIO driver")
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-rtla-v5.18
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/20f463fb38686dd3fe7e6903cab56bdbbf756238
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+    Andrew

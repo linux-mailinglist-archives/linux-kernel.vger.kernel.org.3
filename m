@@ -2,141 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664284E513D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 086594E5153
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243883AbiCWLXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S235750AbiCWLdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243864AbiCWLXb (ORCPT
+        with ESMTP id S233311AbiCWLdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:23:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097027938A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:21:59 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648034518;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y1DDIKvSFBHGvys+scil0oGzmCVScxpU1UzE7+Rqw74=;
-        b=AiOGH3vWEa+aNlAqH0iIM0ykEkLFsWCBYWVQRHaTuiAf7sPlM0H81aXMJoMkywGQueRhVO
-        KFEU+NtNbfGsb45qKK5Y4gGpZPyaqFhcQ7qct87/XX5xY4xSsALJ2qjkhxwOe85jnbOPGd
-        6kAmKbVACJD8ZpL7NyvmqFPB/P6BpfLm9pE2VSc9c3TqBwgKa+iV7rtUb30fqWieFCOuRb
-        a7qwLYK7pEhORnj6DlHADvywZ824pw/oM83NpipS1I8EB7p1tg3HUfEjkUshaZiS/roWt4
-        bCl/HAjD9YxQgn4xHhFUKQju1qMNKO9balJIy5Ick14yNm6h3uJvKpeTveln2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648034518;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y1DDIKvSFBHGvys+scil0oGzmCVScxpU1UzE7+Rqw74=;
-        b=Q8ixCOEqgiWjt8lU2QDdeWx2M6WrHcJ3U6D+75dfEaTia2HrbO7aOCoZiq/Ux2Skn8Bpw4
-        HcMDEAT9d7YTRKBA==
-To:     Steven Price <steven.price@arm.com>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH v2] cpu/hotplug: Set st->cpu earlier
-In-Reply-To: <a704e21e-c1a6-6ffd-439c-e715a2633319@arm.com>
-References: <20220316153637.288199-1-steven.price@arm.com>
- <878rt2atre.ffs@tglx> <bc66bee6-7c99-b289-f5e9-ccaf03d5605d@arm.com>
- <87wngla932.ffs@tglx> <a704e21e-c1a6-6ffd-439c-e715a2633319@arm.com>
-Date:   Wed, 23 Mar 2022 12:21:48 +0100
-Message-ID: <87czicap83.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 23 Mar 2022 07:33:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45AB716E2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:31:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E391B81E7C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:31:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECDAC340E8;
+        Wed, 23 Mar 2022 11:31:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648035090;
+        bh=kGhxhui6d7ENoM5hG46cnHHMw8ZF28hUfd5gsRjeg2s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NRiS72I27HHyrozZayrzaGgcdpYbZ+HEvCZUmvoD0wD6nTcL59U/gOonWvviIsR+8
+         WMbt4fP755sIwXx6t5DZZJaBGOVrSFLoUDk2XWTy7A/MSO1ooQQshT+S0Nfh4SXxBW
+         nTsiFRcanLxluVkqCiKNpG6HEcyT8I7d6lwCiCWyDuskbsB2skPxEr7tuEHBm0qQk4
+         e1HvaAHGHvMEMpIQvoWlipjwLh1bJ9+qxVrjMRs+v66XBSCh8Bf4jYatEaWZ4EJTbB
+         YVcx0+zGW/uoD6ntKv/c/Y+ap7/T3s1LkaWsaBHztD0KskgosFOY+1KDNofRP1m13h
+         WqRQBpfQ4u0HQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nWzD5-00GTyX-ST; Wed, 23 Mar 2022 11:31:27 +0000
+Date:   Wed, 23 Mar 2022 11:31:27 +0000
+Message-ID: <8735j8ykfk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Garry <john.garry@huawei.com>,
+        David Decotigny <ddecotig@google.com>
+Subject: Re: [PATCH v2 0/3] genirq: Managed affinity fixes
+In-Reply-To: <d7019731-4ade-ea79-7464-f52872a60d79@huawei.com>
+References: <20220321193608.975495-1-maz@kernel.org>
+        <a83da394-dcc0-c9a6-1569-9c30fbc291fd@huawei.com>
+        <87a6dhxd13.wl-maz@kernel.org>
+        <d7019731-4ade-ea79-7464-f52872a60d79@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: wangxiongfeng2@huawei.com, linux-kernel@vger.kernel.org, tglx@linutronix.de, john.garry@huawei.com, ddecotig@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23 2022 at 10:10, Steven Price wrote:
-> On 22/03/2022 22:58, Thomas Gleixner wrote:
->> Indeed. But the description is not the only problem here:
->> 
->> It's completely uncomprehensible from the code in _cpu_up() _WHY_ this
->> 
->>      st->cpu = cpu;
->>      
->> assignment has to be there.
->> 
->> It's non-sensical if you really think about it, right?
->
-> I entirely agree, and I did ask in my v1 posting[1] if anyone could
-> point me to a better place to do the assignment. Vincent suggested
-> moving it earlier in _cpu_up() which is this v2.
->
-> But it still seems out-of-place to me. I've just had a go at simply
-> removing the 'cpu' member and it doesn't look too bad. I'll post that
-> patch as a follow up. I'm open to other suggestions for the best way to
-> fix this.
+On Wed, 23 Mar 2022 10:58:33 +0000,
+Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
+> 
+> 
+> 
+> On 2022/3/23 16:56, Marc Zyngier wrote:
+> > Hi Xiongfeng,
+> > 
+> > On Wed, 23 Mar 2022 03:52:46 +0000,
+> > Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
+> >>
+> >> Hi, Marc
+> >>
+> >> On 2022/3/22 3:36, Marc Zyngier wrote:
+> >>> John (and later on David) reported[1] a while ago that booting with
+> >>> maxcpus=1, managed affinity devices would fail to get the interrupts
+> >>> that were associated with offlined CPUs.
+> >>>
+> >>> Similarly, Xiongfeng reported[2] that the GICv3 ITS would sometime use
+> >>> non-housekeeping CPUs instead of the affinity that was passed down as
+> >>> a parameter.
+> >>>
+> >>> [1] can be fixed by not trying to activate these interrupts if no CPU
+> >>> that can satisfy the affinity is present (a patch addressing this was
+> >>> already posted[3])
+> >>>
+> >>> [2] is a consequence of affinities containing non-online CPUs being
+> >>> passed down to the interrupt controller driver and the ITS driver
+> >>> trying to paper over that by ignoring the affinity parameter and doing
+> >>> its own (stupid) thing. It would be better to (a) get the core code to
+> >>> remove the offline CPUs from the affinity mask at all times, and (b)
+> >>> fix the drivers so that they can trust the core code not to trip them.
+> >>>
+> >>> This small series, based on 5.17, addresses the above.
+> >>
+> >> I have tested this patchset on D06. It works well with kernel parameter
+> >> 'maxcpus=1' or 'nohz_full=1-127 isolcpus=nohz,domain,managed_irq,1-127'.
+> >> Also the 'effective_affinity' is correct. Thanks!
+> > 
+> > Thanks for having given it a go.
+> > 
+> >> By the way, I merged the second patch manually because of conflicts.
+> >> Maybe I lack some patches on your local repo.
+> > 
+> > That's odd, as the patches are directly sitting on top of 5.17 in my
+> > tree (see [1]). Do you have any out of tree patches around? Please
+> > make sure you test this without any extra change.
+> 
+> I apply the patchset based on the latest mainline kernel. The latest commit is
+>   commit 3bf03b9a0839c9fb06927ae53ebd0f960b19d408
+>   Merge branch 'akpm' (patches from Andrew)
+> I didn't change the modification of the second patch. Only resolve the
+> context conflicts, which is cause by the following commit.
+>   commit 04d4e665a60902cf36e7ad39af1179cb5df542ad
+>   sched/isolation: Use single feature type while referring to housekeeping cpumask
+> It changed 'HK_FLAG_MANAGED_IRQ' to 'HK_TYPE_MANAGED_IRQ'.
 
-Yes, we can do that. The alternative solution is to initialize the
-states once upfront. Something like the uncompiled below.
+Ah, that's on top of linux/master then. Yeah, I expect some small
+conflicts (this is a popular spot). I'll rebase things at some point
+once (and if) we agree that patch #2 is the right thing to do.
 
 Thanks,
 
-        tglx
----
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -714,15 +714,6 @@ static int cpuhp_up_callbacks(unsigned i
- /*
-  * The cpu hotplug threads manage the bringup and teardown of the cpus
-  */
--static void cpuhp_create(unsigned int cpu)
--{
--	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
--
--	init_completion(&st->done_up);
--	init_completion(&st->done_down);
--	st->cpu = cpu;
--}
--
- static int cpuhp_should_run(unsigned int cpu)
- {
- 	struct cpuhp_cpu_state *st = this_cpu_ptr(&cpuhp_state);
-@@ -882,15 +873,28 @@ static int cpuhp_kick_ap_work(unsigned i
- 
- static struct smp_hotplug_thread cpuhp_threads = {
- 	.store			= &cpuhp_state.thread,
--	.create			= &cpuhp_create,
- 	.thread_should_run	= cpuhp_should_run,
- 	.thread_fn		= cpuhp_thread_fun,
- 	.thread_comm		= "cpuhp/%u",
- 	.selfparking		= true,
- };
- 
-+static __init void cpuhp_init_state(void)
-+{
-+	struct cpuhp_cpu_state *st;
-+	int cpu;
-+
-+	for_each_possible_cpu(cpu) {
-+		st = per_cpu_ptr(&cpuhp_state, cpu);
-+		init_completion(&st->done_up);
-+		init_completion(&st->done_down);
-+		st->cpu = cpu;
-+	}
-+}
-+
- void __init cpuhp_threads_init(void)
- {
-+	cpuhp_init_state();
- 	BUG_ON(smpboot_register_percpu_thread(&cpuhp_threads));
- 	kthread_unpark(this_cpu_read(cpuhp_state.thread));
- }
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

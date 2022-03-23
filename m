@@ -2,123 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D1E4E5157
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2ED4E515A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbiCWLfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        id S243884AbiCWLfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235779AbiCWLfe (ORCPT
+        with ESMTP id S235560AbiCWLfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:35:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28457523A;
-        Wed, 23 Mar 2022 04:34:04 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22N9g005008924;
-        Wed, 23 Mar 2022 11:33:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=dTXWgK5sxg+OV8Z4CHkXj0LY3ByBMtrgQTNq8SLCasw=;
- b=SFapMDuZgXt8Vqu1ROJ5T6elAQ27sBj39z3WgK2S79jomr1jdrgCoAhnqLNxGVDMDykX
- mCgs3ORrV1atfa2XwHCrempkhMGEbe+r7hVrd1MvpBCPOal2HMIr8L1YdbfDYHau9are
- +QSM3CHNJoKa8ERffaco3IYSvhNXCxoNYU13zaTzwUf4WtDvxMfS1aG0L0KuRJIcZcx9
- 4zb+LRfM3C4v0eoLE9xg1LJbOfA2mDKrUpQ/q4Jb8itKNFFzO7KVAjuqxuWjwzxteIec
- k1CwWwRLDaZ5P1fSbvpCC+Xr3BhJSiMb07yWSNXJqgapIGGikr5cwVEhRtIdtdZCvCew DA== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f014yj4j5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 11:33:58 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22NBH4MM019266;
-        Wed, 23 Mar 2022 11:33:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3ew6t8q822-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 11:33:55 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22NBXv4n45547856
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Mar 2022 11:33:57 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E7504C046;
-        Wed, 23 Mar 2022 11:33:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C4E7A4C040;
-        Wed, 23 Mar 2022 11:33:52 +0000 (GMT)
-Received: from localhost (unknown [9.43.48.214])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Mar 2022 11:33:52 +0000 (GMT)
-Date:   Wed, 23 Mar 2022 17:03:51 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: ext2: Fix duplicate included linux/dax.h
-Message-ID: <20220323113351.sibsrr3qbpuegfm4@riteshh-domain>
-References: <1648008123-32485-1-git-send-email-baihaowen@meizu.com>
+        Wed, 23 Mar 2022 07:35:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E5675601;
+        Wed, 23 Mar 2022 04:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648035255; x=1679571255;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=XcpxrpodmHHAGGo3ZbCrVQ7fjR4rdhZnLOvk/WmCVzc=;
+  b=M4//BWEV1GTpn0LJZ/oEWFYmWlRvUDPV1pzqyDfZoh8iMj0Cujo1cNrG
+   EVl+6xwVLVgFXxVx3Evf18XKmFXGs3L0k8dCdPTxHaDnf9opkwp12BSaA
+   SPIRcOTCwWTyUQH+ZB0IAKj1oA+iTJe/bNJcNI/NAqmlFEwkPcHNrcsTM
+   ZukDSZQzj+suadK9B3whKp8z9ZoQ29x7KPPW/xtWYIcc+5dGgITHF/A4B
+   uHw/3EyQ7rGdO3U2T44MilepJbiAQaYF9c8yVZOEtMlV7R/afBtpQT/g/
+   ROGHTzRljOlvfInkgeqTVSfgfxlu7HYCdIkkxH1ZHOAod6DJECX9ucUQr
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="257802158"
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="257802158"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 04:34:15 -0700
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="560859985"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 04:34:10 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id ED701204A8;
+        Wed, 23 Mar 2022 13:34:07 +0200 (EET)
+Date:   Wed, 23 Mar 2022 13:34:07 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] device property: add
+ fwnode_property_read_string_index()
+Message-ID: <YjsFr4m/7pspMxD0@paasikivi.fi.intel.com>
+References: <20220323091810.329217-1-clement.leger@bootlin.com>
+ <20220323091810.329217-2-clement.leger@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1648008123-32485-1-git-send-email-baihaowen@meizu.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FkUFH6qZDgasMF7P6goF9oGYYcDK_hyI
-X-Proofpoint-ORIG-GUID: FkUFH6qZDgasMF7P6goF9oGYYcDK_hyI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-23_06,2022-03-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
- adultscore=0 bulkscore=0 spamscore=0 priorityscore=1501 impostorscore=0
- phishscore=0 lowpriorityscore=0 mlxlogscore=750 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203230066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220323091810.329217-2-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/23 12:02PM, Haowen Bai wrote:
-> Clean up the following includecheck warning:
->
-> fs/ext2/inode.c: linux/dax.h is included more than once.
->
+Hi Clément,
 
+Thanks for the set.
 
-Checked "make includecheck"
-This is the only warning coming from fs/ext2/
-
-Thanks for the cleanup. Looks good to me.
-Feel free to add -
-
-Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
-
-
-
-> No functional change.
->
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+On Wed, Mar 23, 2022 at 10:18:04AM +0100, Clément Léger wrote:
+> Add fwnode_property_read_string_index() function which allows to
+> retrieve a string from an array by its index. This function is the
+> equivalent of of_property_read_string_index() but for fwnode support.
+> A .property_read_string_index callback is added to fwnode_ops to avoid
+> doing a full allocation of an array just to retrieve one value.
+> 
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 > ---
->  fs/ext2/inode.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/fs/ext2/inode.c b/fs/ext2/inode.c
-> index 602578b..da4c301 100644
-> --- a/fs/ext2/inode.c
-> +++ b/fs/ext2/inode.c
-> @@ -36,7 +36,6 @@
->  #include <linux/iomap.h>
->  #include <linux/namei.h>
->  #include <linux/uio.h>
-> -#include <linux/dax.h>
->  #include "ext2.h"
->  #include "acl.h"
->  #include "xattr.h"
-> --
-> 2.7.4
->
+>  drivers/base/property.c  | 26 ++++++++++++++++++++++++++
+>  include/linux/fwnode.h   |  6 ++++++
+>  include/linux/property.h |  3 +++
+>  3 files changed, 35 insertions(+)
+> 
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index e6497f6877ee..a8dd6e496a1d 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -451,6 +451,32 @@ int fwnode_property_match_string(const struct fwnode_handle *fwnode,
+>  }
+>  EXPORT_SYMBOL_GPL(fwnode_property_match_string);
+>  
+> +/**
+> + * fwnode_property_read_string_index - read a string in an array using an index
+> + * @fwnode: Firmware node to get the property of
+> + * @propname: Name of the property holding the array
+> + * @index: Index of the string to look for
+> + * @string: Pointer to the string if found
+> + *
+> + * Find a string by a given index in a string array and if it is found return
+> + * the string value in @string.
+> + *
+> + * Return: %0 if the property was found (success),
+> + *	   %-EINVAL if given arguments are not valid,
+> + *	   %-ENODATA if the property does not have a value,
+> + *	   %-EPROTO if the property is not an array of strings,
+> + *	   %-ENXIO if no suitable firmware interface is present.
+> + */
+> +int fwnode_property_read_string_index(const struct fwnode_handle *fwnode,
+> +				      const char *propname, int index,
+> +				      const char **string)
+> +{
+> +	return fwnode_call_int_op(fwnode, property_read_string_index, propname,
+> +				  index,
+> +				  string);
+> +}
+> +EXPORT_SYMBOL_GPL(fwnode_property_read_string_index);
+> +
+>  /**
+>   * fwnode_property_get_reference_args() - Find a reference with arguments
+>   * @fwnode:	Firmware node where to look for the reference
+> diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+> index 3a532ba66f6c..71ba8f53cf1e 100644
+> --- a/include/linux/fwnode.h
+> +++ b/include/linux/fwnode.h
+> @@ -93,6 +93,9 @@ struct fwnode_reference_args {
+>   *			     success, a negative error code otherwise.
+>   * @property_read_string_array: Read an array of string properties. Return zero
+>   *				on success, a negative error code otherwise.
+> + * @property_read_string_index: Read a string from a string array using an
+> + *				index. Return zero on success, a negative error
+> + *				code otherwise.
+>   * @get_name: Return the name of an fwnode.
+>   * @get_name_prefix: Get a prefix for a node (for printing purposes).
+>   * @get_parent: Return the parent of an fwnode.
+> @@ -123,6 +126,9 @@ struct fwnode_operations {
+>  	(*property_read_string_array)(const struct fwnode_handle *fwnode_handle,
+>  				      const char *propname, const char **val,
+>  				      size_t nval);
+> +	int (*property_read_string_index)(const struct fwnode_handle *fwnode,
+> +					  const char *propname, int index,
+> +					  const char **string);
+
+Could this instead be done by adding an index argument to the
+property_read_string_array?
+
+The ACPI case is a bit more work but it guess it could be implemented later
+as part of a more general cleanup there.
+
+>  	const char *(*get_name)(const struct fwnode_handle *fwnode);
+>  	const char *(*get_name_prefix)(const struct fwnode_handle *fwnode);
+>  	struct fwnode_handle *(*get_parent)(const struct fwnode_handle *fwnode);
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index 7399a0b45f98..a033920eb10a 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -70,6 +70,9 @@ int fwnode_property_read_string_array(const struct fwnode_handle *fwnode,
+>  				      size_t nval);
+>  int fwnode_property_read_string(const struct fwnode_handle *fwnode,
+>  				const char *propname, const char **val);
+> +int fwnode_property_read_string_index(const struct fwnode_handle *fwnode,
+> +				      const char *propname, int index,
+> +				      const char **string);
+>  int fwnode_property_match_string(const struct fwnode_handle *fwnode,
+>  				 const char *propname, const char *string);
+>  int fwnode_property_get_reference_args(const struct fwnode_handle *fwnode,
+
+-- 
+Kind regards,
+
+Sakari Ailus

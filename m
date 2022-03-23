@@ -2,142 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44354E5AB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55704E5AC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344956AbiCWVfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S1344980AbiCWVhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240867AbiCWVfA (ORCPT
+        with ESMTP id S241131AbiCWVhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:35:00 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6CC26AEC
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:33:29 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id p17so2813261plo.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:33:29 -0700 (PDT)
+        Wed, 23 Mar 2022 17:37:48 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4E17DE23
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:36:16 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id o10so5510304ejd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:date:message-id:mime-version;
-        bh=2LhMk9zJI14VlAHepOXbNN8GLBArCKtkLBl/JZencgQ=;
-        b=NQREswWAuJqXlrTwtsO9W0l5FL1ZGF9oNGaqoVnzvn7QYtZJLsrRRxLVJyewSPbhLl
-         Vd2dx5/5lPVgOrMzSekExBniLmwbqDIldBU5dJHwI7PJBlw6K7QvKjy7ekckiPZqDaIv
-         edrg9/mJCTjdULdwcA/jj1topOuPK4AEo2TsJ71o0y7R5hZSDSNZ+d/eXkq4geieI4w0
-         ZH386zhFMVuB+L0Q7pb7z28eUC4subqepAamKhN/sVYolu905s2O7+6EEKKj43X+heAO
-         Mevi1ryPZl2KLilEG9+76+huEUmhyXzU6LMB3sUXRtwL8CeIBUr/6mWjbNGP/Taq9aUu
-         M2tQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2RHrOWoISIZGm/DvPY0LuaxD7QmbEyuYj5ghZWW+2nE=;
+        b=FDmYihKKzIc4yCb6yyRWzeIYyumvZwecwAAWPpH8gf+7y31BKaU6zi3RuFOXkagZRu
+         D3SE9gVMpCx+cvRSK4ySRgAhi655hjl/JMewgCdT8V5guWxa87/RvrjSVNcrQcF3aAe3
+         ZfxJi9DrcnAKWnHrYIaNU/qNPuOrtBcsgsvGZrdoGj+IiSX+68tGmwlV3zQ1YymCDT4y
+         S9TI4go0g+aq1TFkXcXxBGcvg1JTJDJuPSLS36OnGIEnhM/2uIFeTQ0AUpRVQEaHvL4s
+         XU4MD6uzD5Qi1vH6j7JUEIHFjU/7g8mIbHXq2Ze+smBrhZQrbaEDNeW5T6Q5nqNNYUfv
+         Gjsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version;
-        bh=2LhMk9zJI14VlAHepOXbNN8GLBArCKtkLBl/JZencgQ=;
-        b=Penh6MQtEZ7dG0jPGywHqhy5iQ5B632zJLAiqIKMhf7+R7vHjLdHQQl5Ndw4imNian
-         2UiqOnNnwSbrilL1LSG1dzIbOgAHmbbKdj5GO1n86PSVP6ubnjRgCSpGFpyhk96jhT/K
-         xRHUxRlRFed3MY9JCx15klUZivnflTGX5lwQDkMjC9Ts2t6/CBSobdWWjZ0lyVkZXn2Z
-         MLmUt+x43QPaJ+pRyif6hxSDLfFRyvsITvfbJ44AZUtYE5lebVlR2X9lhdTMCgTa/quy
-         WIM8iYHdZHyLZRwKwrjLjlr6mxItJtthadDY5T4i4HiDmPNMj/RDXplRZjQSJa0YFmbQ
-         Qe6A==
-X-Gm-Message-State: AOAM530O7wuqkZNjtl5Jfj3aB/xH9YorYUbr4h+1OmY2UJpQU0JPGQEB
-        cA3ydqaTkLl3T5jZD+wZldrX4A==
-X-Google-Smtp-Source: ABdhPJxCPBAivJPBjtl5b1if01CCcldTJ4n2shqfNkjDe8ptep3xT6vuvGG/4TxR2sr99SptDot3Xw==
-X-Received: by 2002:a17:902:a3cb:b0:151:e52e:fa0c with SMTP id q11-20020a170902a3cb00b00151e52efa0cmr2200676plb.70.1648071208748;
-        Wed, 23 Mar 2022 14:33:28 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id w24-20020a639358000000b00385fcbf8e55sm653826pgm.28.2022.03.23.14.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 14:33:28 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Eduardo Valentin <eduval@amazon.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, mka@chromium.org
-Subject: Re: [PATCH 0/2] thermal: Add support of multiple sensors
-In-Reply-To: <20220225235203.GH10536@uf8f119305bce5e.ant.amazon.com>
-Date:   Wed, 23 Mar 2022 14:33:27 -0700
-Message-ID: <7hlex0s6ag.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2RHrOWoISIZGm/DvPY0LuaxD7QmbEyuYj5ghZWW+2nE=;
+        b=CnmcLReMUxqBK+uV372Wjs7JEpkUfE7SVBT3LiYe+PaHCnT+XsV8willel5/IuALxL
+         9lrHRqS0xRWqV8X2orI1ethfvnF1Mw+6UGMjgYTImwpUQhWamwC5MxZRPFMYs2fq/Bzp
+         h8u/w0zWPyrghGXJ0knioC8eoj0OrkbF4soypjehOENwCXlKuNXzyJ7Aah3U328QEd0b
+         Q2xPnXmNn17JCDBeoHy+ZozCBOrxkA2UI/d2hP/k9+2IJXFNLV/6lxrECrWdyilEFCsY
+         LVf94flOVSkAXZSCpM5OMK5E4HiRd8TSS98Kzv54FmQ1XlOn3utf4bgK3Mp27qZcy3T/
+         UEyA==
+X-Gm-Message-State: AOAM5302f9bRmDPy9ytEMVuU8r/EYWnV3eN8On814bee8D0xVs9tyEN5
+        JNbZFNycM2ndAt3KCFAl0muqLUBipdyYIpnZkJc=
+X-Google-Smtp-Source: ABdhPJwwRgKueE5YMcjujXfBvSQ4CanyXkLJdj0YeSDjc8PVBYDzXkRdxqDc5TPQYNpYAExnuscG3Aot+Yj5Lyt5j70=
+X-Received: by 2002:a17:906:743:b0:6d0:7f19:d737 with SMTP id
+ z3-20020a170906074300b006d07f19d737mr2328129ejb.11.1648071375043; Wed, 23 Mar
+ 2022 14:36:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 23 Mar 2022 21:36:08 +0000
+Message-ID: <CAHpNFcOi=PouCaLfpcLriTDwij+2KbzLA+MhjsdC9WnbPjpwoQ@mail.gmail.com>
+Subject: Presenting : IiCE-SSRTP for digital channel infrastructure & cables
+ <Yes Even The Internet &+ Ethernet 5 Band> RS
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eduardo, Daniel,
+Presenting :  IiCE-SSR for digital channel infrastructure & cables
+<Yes Even The Internet &+ Ethernet 5 Band>
 
-Eduardo Valentin <eduval@amazon.com> writes:
+So the question of interleaved Bands & or signal inversion is a simple
+question but we have,
 
-> On Fri, Feb 18, 2022 at 09:46:02AM +0100, Alexandre Bailon wrote:
->> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->> 
->> 
->> 
->> Following this comment [1], this updates thermal_of to support multiple
->> sensors.
->> 
->> This has some limitations:
->> - A sensor must have its own termal zone, even if it is also registered
->>   inside a thermal zone supporting multiple sensors.
->> - Some callbacks (such as of_thermal_set_trips) have been updated to support
->>   multiple sensors but I don't know if this really make sense.
->> - of_thermal_get_trend have not been updated to support multiple sensors.
->>   This would probably make sense to support it but I am not sure how to do it,
->>   especially for the average.
->
-> Great to see this having somewhat a form now!
->
-> Overall the idea is sane and aligned to what I had in mind back during the 2019 Linux plumbers: one thermal zone should have multiple sensor inputs.
-> https://lpc.events/event/4/page/34-accepted-microconferences#PMSummary
->
-> In fact, that is aligned to what I originally wrote in the thermal device tree bindings:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n79
->
-> The only major concern with your series is the usage of of-thermal to achieve the multiple sensors per thermal zone.
-> While that solves the problem, it has the following limitations:
-> (1) limited to devices described in device tree. everybody else is left out.
-> (2) it keeps extending the code duplication in of-thermal. 
->
-> My suggestion here is have the thermal core aware of the multiple sensors per thermal zone.
->
-> That has the advantage of:
-> (a) cleanup the sensor handling within of-thermal
-> (b) expand the multi sensor per zone to all types of thermal drivers
-> (c) standardize the way to handle the multi sensor.
+SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
 
-This cleanup all sounds like the right direction to be headed, but since
-this has been planned since 2019 and nothing has happended, what is the
-level of urgency is for this of-thermal -> thermal core cleanup/rework?
+In Audio inversion would be a strange way to hear! but the inversion
+does help alleviate ...
 
-In $SUBJECT series, we have a fully functional series that solves an
-existing problem and takes a big step in the right long-term direction.
-While it indeed has the has limitations you mention, I don't think that
-should block the merging of this series.  More importantly, there are
-existing drivers[1] as well as forthcoming ones from MTK that depend on
-this series. Those are blocked if you require the of-thermal -> core
-move first.
+Transistor emission fatigue...
 
-As a maintainer also, I fully understand that maintainer bandwith is
-limited, and it's always nice to have contributors do core framework
-development when possible, but IMO, in this case I don't think it should
-be a prerequisite since a follow-up series to do the core work would not
-affect any functionality or bindings etc.  I don't see any reasons not
-do to this incrementally.
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
 
-So I would kindly request (read: beg, plead & grovel) that you seriously
-consider merging this series as a first phase and the of-thermal -> core
-change be done as a second phase.  Yes, I fully understand that punting
-this to a second phase means it might not get done soon.  But it's been
-waiting for years already, so it seems the urgency is low.  Meanwhile,
-there are OF users that are ready to use this feature today.
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
 
-Thanks for considering,
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
 
-Kevin
+Interleaved, Inverted & Compressed & a simple encryption?
 
-[1] https://lore.kernel.org/linux-mediatek/20210617114707.10618-1-ben.tseng@mediatek.com/
+Good for cables ? and noise ?
+
+Presenting : IiCE for digital channel infrastructure & cables <Yes
+Even The Internet &+ Ethernet 5 Band>
+
+(c) Rupert S
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+*
+
+***** Dukes Of THRUST ******
+
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
+
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
+
+Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
+
+channel Key selection based on unique..
+
+Crystal time Quartz with Synced Tick (Regulated & modular)
+
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
+
+(c)Rupert S
+
+***** Dukes Of THRUST ******
+
+Autism, Deafness & the hard of hearing : In need of ANC & Active audio
+clarification or correction 2022-01
+
+Sony & a few others make noise cancelling headphones that are suitable
+for people with Acute disfunction to brain function for ear drums ...
+Attention deficit or Autism,
+The newer Sony headsets are theoretically enablers of a clear
+confusion free world for Autistic people..
+Reaching out to a larger audience of people simply annoyed by a
+confusing world; While they listen to music..
+Can and does protect a small percentage of people who are confused &
+harassed by major discord located in all jurisdictions of life...
+
+Crazy noise levels, Or simply drowned in HISSING Static:
+
+Search for active voice enhanced noise cancellation today.
+
+Rupert S https://science.n-helix.com
+
+
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA17C4E552E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6ED54E552B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245145AbiCWP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 11:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
+        id S245160AbiCWP0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 11:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245143AbiCWP0P (ORCPT
+        with ESMTP id S245146AbiCWP0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 11:26:15 -0400
+        Wed, 23 Mar 2022 11:26:18 -0400
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37936E79E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:24:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E643C706
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:24:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648049085; x=1679585085;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=OwPLDU5ROJx7nbiAvFUSiXwLBzuvc8gPh6XC+2xjHbM=;
-  b=pHttAllXElvSSZYfiwCKJQ6jsOtQjTsdu2TmeRyN5tMLzuDgdBdshb3g
-   OW4uflVKJZQiBcqr/0BTMCGUCaxQMbiD6pLgI4ocECnBhDyS5jUd+YQmE
-   UG1P/bwvAjyRQkX+eW/ryLt6f1MhaD3SujzhtJdGE235C14I3RJ01KkPm
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Mar 2022 08:24:44 -0700
+  t=1648049089; x=1679585089;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=PDhBafgZj3+zXDMLpR9U5QffixWseTxyOTJmwjftEEw=;
+  b=K9acs0uGIIl/Wyd8currlai2EplH71NwNQNfFlBVIIVfHq5F1a9WoZob
+   wq20y4owFU7J3QmvfXH4bkKPrft4Hk73w2DqMCr5dsILsMeF+ntHZmMLm
+   R9/r9CMHRgHXjSppUk0ssXCgVMA+IA4RoBsOppqctiCexgaM8sxY5hHur
+   c=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Mar 2022 08:24:49 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 08:24:44 -0700
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 08:24:48 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 23 Mar 2022 08:24:44 -0700
+ 15.2.986.22; Wed, 23 Mar 2022 08:24:48 -0700
 Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 23 Mar 2022 08:24:40 -0700
+ 15.2.986.22; Wed, 23 Mar 2022 08:24:44 -0700
 From:   Charan Teja Kalla <quic_charante@quicinc.com>
 To:     <akpm@linux-foundation.org>, <mhocko@suse.com>,
         <minchan@kernel.org>, <surenb@google.com>, <vbabka@suse.cz>,
@@ -44,10 +45,12 @@ To:     <akpm@linux-foundation.org>, <mhocko@suse.com>,
         <edgararriaga@google.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: [PATCH 0/2] mm: madvise: return exact bytes advised with process_madvise under error
-Date:   Wed, 23 Mar 2022 20:54:08 +0530
-Message-ID: <cover.1648046642.git.quic_charante@quicinc.com>
+Subject: [PATCH 1/2] Revert "mm: madvise: skip unmapped vma holes passed to process_madvise"
+Date:   Wed, 23 Mar 2022 20:54:09 +0530
+Message-ID: <e73da1304a88b6a8a11907045117cccf4c2b8374.1648046642.git.quic_charante@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1648046642.git.quic_charante@quicinc.com>
+References: <cover.1648046642.git.quic_charante@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -63,34 +66,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under error conditions, process_madvise() is not returning the exact
-bytes processed in a iovec element thus user may repeat the advise on
-vma ranges contained in the iovec element despite those ranges are
-already processed. This problem is partially solved with commit
-08095d6310a7 ("mm: madvise: skip unmapped vma holes passed to
-process_madvise") for ENOMEM return types. These patches try to solve
-the problem for other error return types.
+This reverts commit 08095d6310a7 ("mm: madvise: skip unmapped vma holes
+passed to process_madvise") as process_madvise() fails to return exact
+processed bytes at other cases too. As an example: if the
+process_madvise() hits mlocked pages after processing some initial bytes
+passed in [start, end), it just returns EINVAL though some bytes are
+processed. Thus making an exception only for ENOMEM is partially fixing
+the problem of returning the proper advised bytes.
 
-Starting this as new discussion, as the back ground for these changes
-are coming from below patches, which are already merged into linus tree:
-1) https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5bd009c7c9a9e888077c07535dc0c70aeab242c3
-2) https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=08095d6310a7ce43256b4251577bc66a25c6e1a6
+Thus revert this patch and return proper bytes advised, if there any,
+for all the error types in the following patch.
 
-and lore archives for the above changes:
-1) V2: https://lore.kernel.org/linux-mm/cover.1647008754.git.quic_charante@quicinc.com/
-2) V1: https://lore.kernel.org/linux-mm/1646803679-11433-1-git-send-email-quic_charante@quicinc.com/
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+---
+ mm/madvise.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-Charan Teja Kalla (1):
-  Revert "mm: madvise: skip unmapped vma holes passed to
-    process_madvise"
-
-Charan Teja Reddy (1):
-  mm: madvise: return exact bytes advised with process_madvise under
-    error
-
- mm/madvise.c | 99 +++++++++++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 88 insertions(+), 11 deletions(-)
-
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 39b712f..0d8fd17 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1433,16 +1433,9 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
+ 
+ 	while (iov_iter_count(&iter)) {
+ 		iovec = iov_iter_iovec(&iter);
+-		/*
+-		 * do_madvise returns ENOMEM if unmapped holes are present
+-		 * in the passed VMA. process_madvise() is expected to skip
+-		 * unmapped holes passed to it in the 'struct iovec' list
+-		 * and not fail because of them. Thus treat -ENOMEM return
+-		 * from do_madvise as valid and continue processing.
+-		 */
+ 		ret = do_madvise(mm, (unsigned long)iovec.iov_base,
+ 					iovec.iov_len, behavior);
+-		if (ret < 0 && ret != -ENOMEM)
++		if (ret < 0)
+ 			break;
+ 		iov_iter_advance(&iter, iovec.iov_len);
+ 	}
 -- 
 2.7.4
 

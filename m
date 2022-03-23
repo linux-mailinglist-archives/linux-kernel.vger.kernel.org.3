@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD07A4E53CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0BB4E53D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244574AbiCWOBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S244585AbiCWOCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244580AbiCWOBq (ORCPT
+        with ESMTP id S244576AbiCWOCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:01:46 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4AC7EA12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:00:15 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id r23so1990949edb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4d3TC6ucZyuq0GaJLfYb56R+2q2cWcG09rOvKNcww+Y=;
-        b=rFUzZvUj9PsjZGaz0GrV+BnYRedhsb5f6r1ptV1gfdWwY3xslFCdzrM4x24fCLycBF
-         9MmlSkTxmB5ZKWfAkT//oYix5YBcg1GZ4A2hycMnzXs6IYSldeqDJ8lhln4BxNICUIAj
-         mGDJBuAQAWmHOfAHbGGJKcoRyTOtF9/dlWLZ8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4d3TC6ucZyuq0GaJLfYb56R+2q2cWcG09rOvKNcww+Y=;
-        b=upk2T4J/QxUkxQiBAHUAoyIO6mbzeFVMM37595EVG+SLaP0k3ZaGSvqaiOiwHNnQhi
-         Rs3C9eTijd5OiJL56r7E4KDKhktGs+qVhlfvwnuBNjUZeoDwe1cCHQlW1xZ3OTZAFxYm
-         Kodg1yTphp/QdeqMC0peLyW4HeQWmzsbbbzTBqKn/CMTZGoCJ+dlLRLGb4r9KooKOvTH
-         9ak3yxEwChM2RfLHwL5ZK9REHVLO6h5Yp60QdOtxuGb4KogLbEW3zyvZ3Bag/c/Uz11h
-         hT8DmomSQx8G09OLY3FxmKlLFWebPq7DcUKpPRQ6lpxsgOe9elct8iUStgMvUdhBQ+7b
-         /CUg==
-X-Gm-Message-State: AOAM532C2XWXQXJ4eBY+ZanVefk+kE820xNKKsKRxS9kWbClGeDwQugW
-        lLx976SevWBRxYjFKcxzlxibmNpf4ivUmEhWPjh9Bg==
-X-Google-Smtp-Source: ABdhPJydsCbI4K1DE26qhLWLhXVBLuexIeZknzjGHVibPwTP54CzEhxreoeycnCPeXjsI3G4qYdNmj5hUJK4kLkYjKo=
-X-Received: by 2002:a05:6402:5106:b0:419:45cd:7ab0 with SMTP id
- m6-20020a056402510600b0041945cd7ab0mr235899edd.116.1648044014041; Wed, 23 Mar
- 2022 07:00:14 -0700 (PDT)
+        Wed, 23 Mar 2022 10:02:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51437DE27;
+        Wed, 23 Mar 2022 07:00:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5EFD616CC;
+        Wed, 23 Mar 2022 14:00:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350A9C340F3;
+        Wed, 23 Mar 2022 14:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648044043;
+        bh=0iSclD+CWJo049DAjnNmpJPmyTaLxoM33bJuF/qUYIU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jZ+K6QtSrHhnIoImw542na484JXIO49e49FdbBKfgDnU5cncgJ2q8UUGU82ue/Xbi
+         KAB+CmdOZ1X58l9kDuVnAV9HtUnKQWpMdvJdL4MVp26ta3q7x+dYSIxNv75EuUBIfF
+         cVZxZT/djEZBclgGulDEdZz5nxnPV0ScYwTcKmYB5egJ+ACg2iQobgStpUYixiggOT
+         /bqOkJBeAEEnn1gxH8JkMFC+PaRxdRLS/mjB5t3vsKKtQ8rNQIeiiA8hyUCDzA8Z5H
+         R3KyQFS7jNouiuGR3lC1pit1u7VdnnNzQ9MzIylbB/nKj2JazUYeCK28O2WomIamp9
+         m0qjKUg8PACOg==
+Received: by mail-ej1-f45.google.com with SMTP id bi12so3051224ejb.3;
+        Wed, 23 Mar 2022 07:00:43 -0700 (PDT)
+X-Gm-Message-State: AOAM533qFgNHYhwYACkcGvj9NbPZg1reJSgLkqT0WM9NWg76p3mGnHj6
+        ByvpNj37Rh5tZQqeylqOjMe44QuDP78EEGcf6Q==
+X-Google-Smtp-Source: ABdhPJzJCX1fd6x6XUQvELujRx+GXFcimDLm2YbxSHA7op+nKKjo5EIzA07JjYkwARfwQ/qJhXNGyMd50X5K9s9lP8M=
+X-Received: by 2002:a17:907:1c1b:b0:6e0:6618:8ac with SMTP id
+ nc27-20020a1709071c1b00b006e0661808acmr109252ejc.82.1648044041365; Wed, 23
+ Mar 2022 07:00:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220322192712.709170-1-mszeredi@redhat.com> <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
- <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com> <d3333dbe-b4b7-8eb9-4a50-8526d95b5394@schaufler-ca.com>
-In-Reply-To: <d3333dbe-b4b7-8eb9-4a50-8526d95b5394@schaufler-ca.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 23 Mar 2022 15:00:01 +0100
-Message-ID: <CAJfpegvwTmaw0bp70-nYQAvs8T=wYyxnDEoA=rOvX8HDZnxCTg@mail.gmail.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
+References: <20220314075713.29140-1-biao.huang@mediatek.com> <20220314075713.29140-6-biao.huang@mediatek.com>
+In-Reply-To: <20220314075713.29140-6-biao.huang@mediatek.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 23 Mar 2022 09:00:29 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+6XKvS5RcE6j9vRd3JL-Wbi-O6BrcoGQ5xV0Q2ZG8EMw@mail.gmail.com>
+Message-ID: <CAL_Jsq+6XKvS5RcE6j9vRd3JL-Wbi-O6BrcoGQ5xV0Q2ZG8EMw@mail.gmail.com>
+Subject: Re: [PATCH net-next v13 5/7] net: dt-bindings: dwmac: Convert
+ mediatek-dwmac to DT schema
+To:     Biao Huang <biao.huang@mediatek.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>, dkirjanov@suse.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 at 14:51, Casey Schaufler <casey@schaufler-ca.com> wrote:
+On Mon, Mar 14, 2022 at 2:57 AM Biao Huang <biao.huang@mediatek.com> wrote:
+>
+> Convert mediatek-dwmac to DT schema, and delete old mediatek-dwmac.txt.
+> And there are some changes in .yaml than .txt, others almost keep the same:
+>   1. compatible "const: snps,dwmac-4.20".
+>   2. delete "snps,reset-active-low;" in example, since driver remove this
+>      property long ago.
+>   3. add "snps,reset-delay-us = <0 10000 10000>" in example.
+>   4. the example is for rgmii interface, keep related properties only.
+>
+> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/net/mediatek-dwmac.txt           |  91 ----------
+>  .../bindings/net/mediatek-dwmac.yaml          | 155 ++++++++++++++++++
+>  2 files changed, 155 insertions(+), 91 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
 
-> You also need a way to get a list off what attributes are available
-> and/or a way to get all available attributes. Applications and especially
-> libraries shouldn't have to guess what information is relevant. If the
-> attributes change depending on the filesystem and/or LSM involved, and
-> they do, how can a general purpose library function know what data to
-> ask for?
+Now failing in linux-next:
 
-Oh, yes.  Even the current prototype does that:
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb:
+ethernet@1101c000: snps,txpbl:0:0: 1 is not one of [2, 4, 8]
+ From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb:
+ethernet@1101c000: snps,rxpbl:0:0: 1 is not one of [2, 4, 8]
+ From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
 
-# ~/getvalues / ""
-[] = "mnt" "mntns" "xattr" "data" (len=21)
-# ~/getvalues / "mnt"
-[mnt] = "id" "parentid" "root" "mountpoint" "options" "shared"
-"master" "propagate_from" "unbindable" (len=76)
-# ~/getvalues / "mntns"
-[mntns] = "21" "22" "24" "25" "23" "26" "27" "28" "29" "30" "31" "32" (len=36)
- ~/getvalues / "mntns:21"
-[mntns:21] = "id" "parentid" "root" "mountpoint" "options" "shared"
-"master" "propagate_from" "unbindable" (len=76)
 
-I didn't implement enumeration for "data" and "xattr" but that is
-certainly possible and not even difficult to do.
-
-Thanks,
-Miklos
+Rob

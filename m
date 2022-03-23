@@ -2,206 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694E84E5540
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 114C44E5545
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245088AbiCWPdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 11:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S235178AbiCWPd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 11:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237516AbiCWPdW (ORCPT
+        with ESMTP id S230490AbiCWPd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 11:33:22 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC6B70F70;
-        Wed, 23 Mar 2022 08:31:51 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id r13so3593616ejd.5;
-        Wed, 23 Mar 2022 08:31:51 -0700 (PDT)
+        Wed, 23 Mar 2022 11:33:57 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9931975C29
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:32:27 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id gb19so2032896pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hHqJ7+Kfbku9VkUOFf7SvrePTkZ3BoPFBvyMADfYmzQ=;
+        b=zgJDIDgM7k22eDE1hF3S2Zv1opQG3jQse/V2sPGZwKCVmC5uFIaP5Em/1aMpN7mZJv
+         8prqaWjo2hhgEn3KRvZVTuiDKX85Kvdt0QyZAGBS1ePh5M3d0WCztFkmeWkdzuo+oPV/
+         ikL+TWkouMxPRNTPx7heTU6X/LGopLyqJD2cSEcQBysZvJZEE5/Ms6YQzu8j4X/kMG1J
+         gRqPD9AcVYobvcZPS6rV53rKf+awJ5xPfLwYicc69aAZazzU59rwFQnGwzzqfO2NVJ+s
+         yRwADavI0h6j5lzwW0lFEZ0Pug1znVqKC10T94W9ar0843Nz8lVTVfMq2MjwsqXpyx9A
+         sltw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=HlmRUE9bFHFNjrv1b4k2u8pDKleK8lJOe2XyU8TJzEU=;
-        b=vARMwS0XPGLB2sMqVdPfnR8f4XKlV55dwDrqG9idOmv+2vYTLr3de0kiQUYx2Re989
-         Msr8Q0AtwTlSBD+Iq+D6ZcIj6cZJwC3jfBBEfjCNy2STd9+E9AJbQdqeBb6Ev57i1pU+
-         ajxsPv9QwISpZQg0ncBQ9sp46Xwy7lorYjEvJ2kw9yHT4ixPAUcj52AjJgrE4WI+Fkeb
-         5Z65Y1Bznfxju23WHEf4/FmodWTiNMy+3WEYjmumVMqBmJtEe5Gk9LnpFCzn4sKjD0O0
-         zTqQiF/5nWudxGFmuEMP5HNwCSqLh4/VxhwIGwLG1ujJC2p5SkaNA9p3RsdUa0DTfl96
-         05MA==
-X-Gm-Message-State: AOAM5312uJoqRsx9XWA8p7CX9IVBCIcMnq2M0xwcp0q6BWwJmvILQV9b
-        6Ka7JiGqYKJn9yDruIxp8xE=
-X-Google-Smtp-Source: ABdhPJw48yfeqAIJM+CSgIJQlCaWPpOMlnPlp79H55niR+TGvFjpmIyU8BUbhK1Bro6gG2xepkwLdQ==
-X-Received: by 2002:a17:907:7d9e:b0:6df:9fe8:856a with SMTP id oz30-20020a1709077d9e00b006df9fe8856amr552897ejc.373.1648049510204;
-        Wed, 23 Mar 2022 08:31:50 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id c14-20020a170906340e00b006ce98f2581asm63669ejb.205.2022.03.23.08.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 08:31:49 -0700 (PDT)
-Message-ID: <2eee2611-d618-3fe2-4315-c57a26de6b21@kernel.org>
-Date:   Wed, 23 Mar 2022 16:31:48 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hHqJ7+Kfbku9VkUOFf7SvrePTkZ3BoPFBvyMADfYmzQ=;
+        b=2NDJ3HPy8xF2PHuj5w8etJgSLFhk5CmB2bUtDjFa2Nyft00JNvC7EW0fuD1PPYITqU
+         UjL2NBvR5XvmJMDgodht4oDg78h43MCVBRuiqOr4fB1lbzp/wNGhy0HesKx185vF+ETI
+         3rBI7QAOqfJ3Jc5Yz4kN8sdbxtDT6eEpFNzF0FUnZno2CvX+e6Ltdmfzu/LZO0dnbFDa
+         scQOeWtqlD0xkSSJQzZXo+S8lKdv5jYtIoSLlY/0KzBWpXeGaeWO6TfRh0njjSn6K5IF
+         M5n/dIXQRxJoUct+qxXt19vVvMpGUi/av0mw4xh3QmFfm4WbMnxmPgmfrYx2JMQsXgye
+         q9gA==
+X-Gm-Message-State: AOAM53082phpgIDp+PpwWgACkkhXfz/oVJoJUNBbB9RuwMYZaFn0fpdY
+        OAel3Kb8ApJWS7D4X5pkv73qwTHxap3x4MGletcI+A==
+X-Google-Smtp-Source: ABdhPJxMaAlqh+THUTx3rsqi6rlkbYnuOPwDmDD217V9P03EI6lmk9eVDTgR5pBFMTX0jPvvdR/rN2wDzjG8ZqUozxw=
+X-Received: by 2002:a17:90a:990c:b0:1bc:3c9f:2abe with SMTP id
+ b12-20020a17090a990c00b001bc3c9f2abemr219010pjp.220.1648049546854; Wed, 23
+ Mar 2022 08:32:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   krzk@kernel.org
-Subject: Re: [PATCH 7/7] ARM: dts: s5pv210: Add charger support in Aries
-Content-Language: en-US
-To:     Jonathan Bakker <xc-racer2@live.ca>, alim.akhtar@samsung.com
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
- <20220323150311.26699-1-xc-racer2@live.ca>
- <CY4PR04MB05671BD0A7FF349E8B04EE84CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
-In-Reply-To: <CY4PR04MB05671BD0A7FF349E8B04EE84CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220318114133.113627-1-kjain@linux.ibm.com> <20220318114133.113627-2-kjain@linux.ibm.com>
+ <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+ <c198a1b5-cc7e-4e51-533b-a5794f506b17@linux.ibm.com> <CAPcyv4j9NQ-Msr6JCp95QWAdDyTfYr65fXCoHHtjipLA=oJeHA@mail.gmail.com>
+ <877d8lgf1y.fsf@mpe.ellerman.id.au>
+In-Reply-To: <877d8lgf1y.fsf@mpe.ellerman.id.au>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 23 Mar 2022 08:32:19 -0700
+Message-ID: <CAPcyv4jjC8DAdNvJ5Y7HVG9Ss-hSk=Uae9kWoJ2ctwwe+w3__Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
+ CONFIG_PERF_EVENTS is not set
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     kajoljain <kjain@linux.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2022 16:03, Jonathan Bakker wrote:
-> Add charger-manager support to Aries boards to allow safe
-> charging of the battery without the need for userspace control.
-> 
-> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-> ---
->  arch/arm/boot/dts/s5pv210-fascinate4g.dts | 162 ++++++++++++++++++++++
->  arch/arm/boot/dts/s5pv210-galaxys.dts     | 144 +++++++++++++++++++
->  2 files changed, 306 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/s5pv210-fascinate4g.dts b/arch/arm/boot/dts/s5pv210-fascinate4g.dts
-> index 7427c84f1126..9530231b7a70 100644
-> --- a/arch/arm/boot/dts/s5pv210-fascinate4g.dts
-> +++ b/arch/arm/boot/dts/s5pv210-fascinate4g.dts
-> @@ -57,6 +57,168 @@
->  		pinctrl-0 = <&main_micbias_ena>;
->  	};
->  
-> +	thermal-zones {
-> +		batt_thermal: batt-thermal {
-> +			polling-delay-passive = <60000>; /* 60 seconds */
+On Wed, Mar 23, 2022 at 3:05 AM Michael Ellerman <mpe@ellerman.id.au> wrote=
+:
+>
+> Dan Williams <dan.j.williams@intel.com> writes:
+> > On Tue, Mar 22, 2022 at 7:30 AM kajoljain <kjain@linux.ibm.com> wrote:
+> >> On 3/22/22 03:09, Dan Williams wrote:
+> >> > On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wro=
+te:
+> >> >>
+> >> >> The following build failure occures when CONFIG_PERF_EVENTS is not =
+set
+> >> >> as generic pmu functions are not visible in that scenario.
+> >> >>
+> >> >> arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: =E2=80=98s=
+truct perf_event=E2=80=99 has no member named =E2=80=98attr=E2=80=99
+> >> >>          p->nvdimm_events_map[event->attr.config],
+> >> >>                                    ^~
+> >> >> In file included from ./include/linux/list.h:5,
+> >> >>                  from ./include/linux/kobject.h:19,
+> >> >>                  from ./include/linux/of.h:17,
+> >> >>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+> >> >> arch/powerpc/platforms/pseries/papr_scm.c: In function =E2=80=98pap=
+r_scm_pmu_event_init=E2=80=99:
+> >> >> arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: =E2=80=98s=
+truct perf_event=E2=80=99 has no member named =E2=80=98pmu=E2=80=99
+> >> >>   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
+> >> >>                                                  ^~
+> >> >> ./include/linux/container_of.h:18:26: note: in definition of macro =
+=E2=80=98container_of=E2=80=99
+> >> >>   void *__mptr =3D (void *)(ptr);     \
+> >> >>                           ^~~
+> >> >> arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansio=
+n of macro =E2=80=98to_nvdimm_pmu=E2=80=99
+> >> >>   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
+> >> >>                               ^~~~~~~~~~~~~
+> >> >> In file included from ./include/linux/bits.h:22,
+> >> >>                  from ./include/linux/bitops.h:6,
+> >> >>                  from ./include/linux/of.h:15,
+> >> >>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+> >> >>
+> >> >> Fix the build issue by adding check for CONFIG_PERF_EVENTS config o=
+ption
+> >> >> and disabling the papr_scm perf interface support incase this confi=
+g
+> >> >> is not set
+> >> >>
+> >> >> Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support"=
+) (Commit id
+> >> >> based on linux-next tree)
+> >> >> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+> >> >> ---
+> >> >>  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
+> >> >
+> >> > This is a bit messier than I would have liked mainly because it dump=
+s
+> >> > a bunch of ifdefery into a C file contrary to coding style, "Whereve=
+r
+> >> > possible, don't use preprocessor conditionals (#if, #ifdef) in .c
+> >> > files". I would expect this all to move to an organization like:
+> >>
+> >> Hi Dan,
+> >>       Thanks for reviewing the patches. Inorder to avoid the multiple
+> >> ifdefs checks, we can also add stub function for papr_scm_pmu_register=
+.
+> >> With that change we will just have one ifdef check for
+> >> CONFIG_PERF_EVENTS config in both papr_scm.c and nd.h file. Hence we c=
+an
+> >> avoid adding new files specific for papr_scm perf interface.
+> >>
+> >> Below is the code snippet for that change, let me know if looks fine t=
+o
+> >> you. I tested it
+> >> with set/unset PAPR_SCM config value and set/unset PERF_EVENTS config
+> >> value combinations.
+> >>
+> >> diff --git a/arch/powerpc/platforms/pseries/papr_scm.c
+> >> b/arch/powerpc/platforms/pseries/papr_scm.c
+> >> index 4dd513d7c029..38fabb44d3c3 100644
+> >> --- a/arch/powerpc/platforms/pseries/papr_scm.c
+> >> +++ b/arch/powerpc/platforms/pseries/papr_scm.c
+> >> @@ -69,8 +69,6 @@
+> >>  #define PAPR_SCM_PERF_STATS_EYECATCHER __stringify(SCMSTATS)
+> >>  #define PAPR_SCM_PERF_STATS_VERSION 0x1
+> >>
+> >> -#define to_nvdimm_pmu(_pmu)    container_of(_pmu, struct nvdimm_pmu, =
+pmu)
+> >> -
+> >>  /* Struct holding a single performance metric */
+> >>  struct papr_scm_perf_stat {
+> >>         u8 stat_id[8];
+> >> @@ -346,6 +344,9 @@ static ssize_t drc_pmem_query_stats(struct
+> >> papr_scm_priv *p,
+> >>         return 0;
+> >>  }
+> >>
+> >> +#ifdef CONFIG_PERF_EVENTS
+> >> +#define to_nvdimm_pmu(_pmu)    container_of(_pmu, struct nvdimm_pmu, =
+pmu)
+> >> +
+> >>  static int papr_scm_pmu_get_value(struct perf_event *event, struct
+> >> device *dev, u64 *count)
+> >>  {
+> >>         struct papr_scm_perf_stat *stat;
+> >> @@ -558,6 +559,10 @@ static void papr_scm_pmu_register(struct
+> >> papr_scm_priv *p)
+> >>         dev_info(&p->pdev->dev, "nvdimm pmu didn't register rc=3D%d\n"=
+, rc);
+> >>  }
+> >>
+> >> +#else
+> >> +static inline void papr_scm_pmu_register(struct papr_scm_priv *p) { }
+> >
+> > Since this isn't in a header file, it does not need to be marked
+> > "inline" the compiler will figure it out.
+> >
+> >> +#endif
+> >
+> > It might be time to create:
+> >
+> > arch/powerpc/platforms/pseries/papr_scm.h
+> >
+> > ...there is quite a bit of header material accrued in papr_scm.c and
+> > once the ifdefs start landing in it then it becomes a nominal coding
+> > style issue. That said, this is certainly more palatable than the
+> > previous version. So if you don't want to create papr_scm.h yet for
+> > this, at least make a note in the changelog that the first portion of
+> > arch/powerpc/platforms/pseries/papr_scm.c is effectively papr_scm.h
+> > content and may move there in the future, or something like that.
+>
+> IMHO the only thing that belongs in a header is content that's needed by
+> other C files. As long as those types/declarations are only used in
+> papr_scm.c then they should stay in the C file, and there's no need for
+> a header.
+>
+> I know the coding style rule is "avoid ifdefs in .c files", but I'd
+> argue that rule should be ignored if you're creating a header file
+> purely so that you can use an ifdef :)
+>
+> Coding style also says:
+>
+>   Prefer to compile out entire functions, rather than portions of functio=
+ns or
+>   portions of expressions.  Rather than putting an ifdef in an expression=
+, factor
+>   out part or all of the expression into a separate helper function and a=
+pply the
+>   conditional to that function.
+>
+> Which is what we're doing here with eg. papr_scm_pmu_register().
+>
+> Certainly for this merge window I think introducing a header is likely
+> to cause more problems than it solves, so let's not do that for now. We
+> can revisit it for the next merge window.
 
-There is no passive cooling device, so why do you need it?
-
-> +			polling-delay = <600000>; /* 600 seconds */
-> +
-> +			thermal-sensors = <&batt_thermistor>;
-> +		};
-> +	};
-> +
-> +	batt_thermistor: thermal-sensor-0 {
-> +		compatible = "generic-adc-thermal";
-> +		#thermal-sensor-cells = <0>;
-> +		io-channels = <&adc 6>;
-> +		io-channel-names = "sensor-channel";
-> +
-> +		temperature-lookup-table = <
-> +			(-20000) 1859
-> +			(-19000) 1846
-> +			(-18000) 1832
-> +			(-17000) 1818
-> +			(-16000) 1804
-> +			(-15000) 1790
-> +			(-14000) 1773
-> +			(-13000) 1756
-> +			(-12000) 1739
-> +			(-11000) 1722
-> +			(-10000) 1705
-> +			(-9000) 1691
-> +			(-8000) 1677
-> +			(-7000) 1663
-> +			(-6000) 1649
-> +			(-5000) 1635
-> +			(-4000) 1550
-> +			(-3000) 1510
-> +			(-2000) 1500
-> +			(-1000) 1490
-> +			0 1480
-> +			1000 1470
-> +			2000 1460
-> +			3000 1450
-> +			4000 1430
-> +			5000 1420
-> +			6000 1406
-> +			7000 1386
-> +			8000 1366
-> +			9000 1346
-> +			10000 1326
-> +			11000 1302
-> +			12000 1278
-> +			13000 1254
-> +			14000 1230
-> +			15000 1206
-> +			16000 1182
-> +			17000 1158
-> +			18000 1134
-> +			19000 1110
-> +			20000 1086
-> +			21000 1059
-> +			22000 1035
-> +			23000 1011
-> +			24000 987
-> +			25000 963
-> +			26000 937
-> +			27000 913
-> +			28000 889
-> +			29000 865
-> +			30000 841
-> +			31000 816
-> +			32000 794
-> +			33000 772
-> +			34000 750
-> +			35000 728
-> +			36000 708
-> +			37000 690
-> +			38000 672
-> +			39000 654
-> +			40000 636
-> +			41000 616
-> +			42000 599
-> +			43000 580
-> +			44000 565
-> +			45000 548
-> +			46000 529
-> +			47000 512
-> +			48000 495
-> +			49000 478
-> +			50000 461
-> +			51000 440
-> +			52000 431
-> +			53000 416
-> +			54000 405
-> +			55000 396
-> +			56000 375
-> +			57000 360
-> +			58000 347
-> +			59000 334
-> +			60000 325
-> +			61000 311
-> +			62000 303
-> +			63000 296
-> +			64000 290
-> +			65000 279
-> +			66000 265
-> +			67000 254
-> +			68000 240
-> +			69000 220
-> +			70000 206>;
-> +	};
-> +
-> +	charger_manager: charger-manager-0 {
-> +		compatible = "charger-manager";
-
-Sorry, this is not a hardware. It's a hack to configure kernel charging
-driver via DT which was made deprecated.
-
-Best regards,
-Krzysztof
+Fair enough. Kajol, please turn that snippet proposal into a formal patch.

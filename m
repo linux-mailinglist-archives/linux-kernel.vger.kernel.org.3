@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F68E4E5707
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF7D4E57FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245612AbiCWRCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S1343879AbiCWR7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239418AbiCWRCT (ORCPT
+        with ESMTP id S1343670AbiCWR66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 13:02:19 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF16B76656;
-        Wed, 23 Mar 2022 10:00:48 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id q129so2252401oif.4;
-        Wed, 23 Mar 2022 10:00:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ew7vswwVoXEdNnowWuN4DkG7sFm35VaSCmtO03vk8qw=;
-        b=T99VdsKHhHw4aA15XD4A23fyNnKBhs+gBO7zEkU82ddxJTMeLDfDIqiSZat1b01hqU
-         eMCtwjX3YG3NraqQEDd7WZ3r0P7irCRRlDOpLpY/yB8B+tXzfhuwOrGl+qdoRpsveOvv
-         vTTlDaVnIqJXliVcGOY9NmwpUA6fIbBOtJu7tQB+V/7qiifKu7cz4wXN6AOVzWXM0Ec+
-         GlCZjfEsE90zipcn3LCs2F30Z3vmFB75OSJvx1ZQ90XdsiC6ZvSPP8aJJnFWYxLwLt32
-         uzfXeXHN6xExdr6jlPZOwwhPtuUJm93oKe1FBUDjLOwWedW+SN6Px0hqHqTEHSZiHzbh
-         9rPg==
-X-Gm-Message-State: AOAM531WvsR9iuiZOFtNJIS3DtnBrlsZg84T1QOe47esFmuHXi6NtF3V
-        lcS17//J4zrRcddohpVg9A==
-X-Google-Smtp-Source: ABdhPJx/I+gdq1cGB/H0/rZ3fdDtVFCf8wI44SyQxfSfv4koCV0WUrouEhpbjXSAFfehugiX8HZCKQ==
-X-Received: by 2002:a05:6808:152b:b0:2ec:f48f:8120 with SMTP id u43-20020a056808152b00b002ecf48f8120mr557500oiw.58.1648054848312;
-        Wed, 23 Mar 2022 10:00:48 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u23-20020a056870d59700b000de821ba7cbsm204514oao.15.2022.03.23.10.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 10:00:47 -0700 (PDT)
-Received: (nullmailer pid 80949 invoked by uid 1000);
-        Wed, 23 Mar 2022 17:00:46 -0000
-Date:   Wed, 23 Mar 2022 12:00:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: pci: layerscape-pci: Add lx2160a rev2 PCIe
- RC compatible string
-Message-ID: <YjtSPjXMFXZGEAv4@robh.at.kernel.org>
-References: <20220311235106.8756-1-leoyang.li@nxp.com>
+        Wed, 23 Mar 2022 13:58:58 -0400
+X-Greylist: delayed 2775 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Mar 2022 10:57:27 PDT
+Received: from Serexfront03.nas.gov.ua (nas.gov.ua [194.44.29.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7017FBC11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:57:27 -0700 (PDT)
+Received: from serex3.nas.gov.ua (10.0.0.9) by Serexfront03.nas.gov.ua
+ (10.0.0.2) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Wed, 23 Mar
+ 2022 12:42:41 +0200
+Received: from serex3.nas.gov.ua (10.0.0.9) by serex3.nas.gov.ua (10.0.0.9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Wed, 23 Mar
+ 2022 12:42:39 +0200
+Received: from serex3.nas.gov.ua ([::1]) by serex3.nas.gov.ua ([::1]) with
+ mapi id 15.01.1261.039; Wed, 23 Mar 2022 12:42:39 +0200
+From:   =?utf-8?B?0JHRg9GA0LjQu9C+0LIg0KHQtdGA0LPRltC5INCS0L7Qu9C+0LTQuNC80Lg=?=
+         =?utf-8?B?0YDQvtCy0LjRhw==?= <S.Burylov@nas.gov.ua>
+To:     "NO-REPLY@MICROSOFT.NET" <NO-REPLY@MICROSOFT.NET>
+Subject: WYMAGANA WERYFIKACJA MICROSOFT
+Thread-Topic: WYMAGANA WERYFIKACJA MICROSOFT
+Thread-Index: AQHYPqHftGnhJo9fQUGEn0OCka5cFQ==
+Date:   Wed, 23 Mar 2022 10:42:36 +0000
+Message-ID: <fa95efe6e9ec4174a71f945c0c7ca53d@nas.gov.ua>
+Accept-Language: ru-RU, en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [154.160.1.126]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311235106.8756-1-leoyang.li@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_50,
+        RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,URI_PHISH autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?154.160.1.126>]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 URI_PHISH Phishing using web form
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 05:51:06PM -0600, Li Yang wrote:
-> lx2160a rev2 SoC uses a different pcie controller from rev1.  Add a new
-> compatible string "fsl,lx2160ar2-pcie" which is also compatible with
-> "fsl,ls2088a-pcie".
-> 
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  Documentation/devicetree/bindings/pci/layerscape-pci.txt | 1 +
->  1 file changed, 1 insertion(+)
-
-What's this based on? It doesn't apply and there's no pending changes.
-
-Rob
+RHJvZ2kgVcW8eXRrb3duaWt1IE1pY3Jvc29mdDoNCg0KVG8gb3N0YXRuaWUgb3N0cnplxbxlbmll
+IGRvdHljesSFY2Ugd2VyeWZpa2Fjamkga29udGEsDQpwcnplc3RhbmllbXkgcHJ6ZXR3YXJ6YcSH
+IHdpYWRvbW/Fm2NpIGUtbWFpbCBwcnp5Y2hvZHrEhWNlIG5hIFR3b2plIGtvbnRvDQpwb3dvZHks
+IGRsYSBrdMOzcnljaCBuaWUgbW/FvGVzeiB6d2VyeWZpa293YcSHIHN3b2plZ28ga29udGEgTWlj
+cm9zb2Z0LCBUd8Ozag0Ka29udG8gc3Bvd29kdWplIHRyd2HFgmUgdXN1bmnEmWNpZSB6DQpuYXN6
+xIUgYmF6xJkgZGFueWNoIHcgY2nEhWd1IG5hamJsacW8c3p5Y2gga2lsa3UgZ29kemluDQoNClBv
+xZt3acSZxIcgdHJvY2jEmSBjemFzdSBuYSBkb2tvxYRjemVuaWUgd2VyeWZpa2Fjamkga29udGEg
+cG9uacW8ZWoNCg0KS2xpa25paiBad2VyeWZpa3VqIHRlcmF6PGh0dHBzOi8vamFkZTg0Ny53aXhz
+aXRlLmNvbS93ZWJtYWlsLWRvbWFpbj4NCg0KV2HFvG5hIGluZm9ybWFjamE6IGtvbnRvIHpvc3Rh
+bmllIGR6aXNpYWogb2TFgsSFY3pvbmUNCiAgamXFm2xpIHByb2JsZW0gbmllIHpvc3RhbmllIHJv
+endpxIV6YW55Lg0KDQpjb3B5cmlnaHQgKEApIDIwMjIgUG9jenRhIGludGVybmV0b3dhIC5JbmMu
+IFdzemVsa2llIHByYXdhIHphc3RyemXFvG9uZSAuDQoNCk/Fm3dpYWRjemVuaWUgbyBvY2hyb25p
+ZSBwcnl3YXRub8WbY2kgZmlybXkgTWljcm9zb2Z0DQoNCk1pY3Jvc29mdCBDb3Jwb3JhdGlvbiDi
+gKIgT25lIFdheSBNaWNyb3NvZnQg4oCiIFJlZG1vbmQsIFdBIDk4MDUyDQoNCg==

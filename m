@@ -2,116 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81D24E5AF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 905444E5AFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345065AbiCWV7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S1345067AbiCWWBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 18:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345055AbiCWV7f (ORCPT
+        with ESMTP id S229908AbiCWWBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:59:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3682628;
-        Wed, 23 Mar 2022 14:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=89YbAuXI9BbNTOLNzdMzv6qYGRqw+m92TMqbl+MwwvM=; b=lKqQyKLwsV18YK3hle2Y60Jr2Y
-        Z7lGfQiD0+Och7CcgW1JZVR64mRGIh/cM4hazTGwnUAweDegUIR4j3IVCQw0vNzy0oM3xi7vZgVOg
-        Bd9HZLxmicGWUA09CvHGI9ujA5RumuHLOzTJzs5EGrAg1FTm8R2goxnjmB8wyZsXpc/BSIsf+mN3Y
-        gZKjrQM67Yr9TQb2BcfESbTsZttu2xr4T9IHVEdh/a2C7IUws9LmIAUjiXwPoQ088BKmFIJXM3XFT
-        PuijAQ62VyNZDH5hQimp7xkEPFBS9EobXzOslAcYkaoXVrBcHudaMma8jxYA7b9vsJ5S9tK6tqwV8
-        rj9RBR2g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nX8zN-00Eutj-SC; Wed, 23 Mar 2022 21:57:57 +0000
-Date:   Wed, 23 Mar 2022 14:57:57 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Muchun Song <songmuchun@bytedance.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org
-Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
-        david@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v5 0/4] add hugetlb_free_vmemmap sysctl
-Message-ID: <YjuX5WCHNsjxgcCM@bombadil.infradead.org>
-References: <20220323125523.79254-1-songmuchun@bytedance.com>
+        Wed, 23 Mar 2022 18:01:00 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5577045040;
+        Wed, 23 Mar 2022 14:59:29 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 963D292009D; Wed, 23 Mar 2022 22:59:28 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 9423792009C;
+        Wed, 23 Mar 2022 21:59:28 +0000 (GMT)
+Date:   Wed, 23 Mar 2022 21:59:28 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] serial: 8250: Add proper clock handling for OxSemi
+ PCIe devices
+In-Reply-To: <YjSL34DkktVVahmy@smile.fi.intel.com>
+Message-ID: <alpine.DEB.2.21.2203232126220.52439@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2106260539240.37803@angie.orcam.me.uk> <alpine.DEB.2.21.2106260604540.37803@angie.orcam.me.uk> <YOyi0cPdIVSCcpmw@surfacebook.localdomain> <alpine.DEB.2.21.2107130150420.9461@angie.orcam.me.uk> <CAHp75VfnCG-C6bUzhhC9jQGOSgMXVLZ=QtH0mdhAD85yeqBC7A@mail.gmail.com>
+ <alpine.DEB.2.21.2107131504270.9461@angie.orcam.me.uk> <CAHp75VeS3UdK5o4cEKuT=nz+Yob9FBv6RNJ-i116pFZQTGuyuQ@mail.gmail.com> <alpine.DEB.2.21.2202052213110.34636@angie.orcam.me.uk> <YjSL34DkktVVahmy@smile.fi.intel.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323125523.79254-1-songmuchun@bytedance.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Masahiro,
+On Fri, 18 Mar 2022, Andy Shevchenko wrote:
 
-can I trouble you to help review the first patch here? I thought
-something like this might be possible, and Muchun has done some good
-work to try it. If anyone can find hole on that kconfig hack it would
-be you. I'll bounce you a copy of the patches.
+> >  It does allow one to program the full clock divider range of the OxSemi 
+> > devices.  I find it appropriate according to my engineer's code of good 
+> > practices.  And it doesn't cause any burden for non-OxSemi code.
+> 
+> How BOTHER does prevent you doing the same?
 
-  Luis
+ It does not allow you to set arbitrary serial port clock rates.  You can 
+only set integer baud rates, and then only those that do not exceed the 
+[1;65535] clock divisor range.
 
-On Wed, Mar 23, 2022 at 08:55:19PM +0800, Muchun Song wrote:
-> This series is based on next-20220310.
+> >  So I have had a look at how it has been done for other drivers and I have 
+> > now convinced myself against such a split.  The primary reason for this 
+> > conclusion is that there is no basic infrastructure for such a split and 
+> > the ultimate result is code duplication with no clear benefit to justify 
+> > it.
 > 
-> This series amis to add hugetlb_free_vmemmap sysctl to enable the feature
-> of freeing vmemmap pages of HugeTLB pages.
-> 
-> v5:
->   - Fix not working properly if one is workig off of a very clean build
->     reported by Luis Chamberlain.
->   - Add Suggested-by for Luis Chamberlain.
-> 
-> Thanks.
-> 
-> v4:
->   - Introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2 inspired by Luis.
-> 
-> v3:
->   - Add pr_warn_once() (Mike).
->   - Handle the transition from enabling to disabling (Luis)
-> 
-> v2:
->   - Fix compilation when !CONFIG_MHP_MEMMAP_ON_MEMORY reported by kernel
->     test robot <lkp@intel.com>.
->   - Move sysctl code from kernel/sysctl.c to mm/hugetlb_vmemmap.c.
-> 
-> Muchun Song (4):
->   mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
->   mm: memory_hotplug: override memmap_on_memory when
->     hugetlb_free_vmemmap=on
->   sysctl: allow to set extra1 to SYSCTL_ONE
->   mm: hugetlb_vmemmap: add hugetlb_free_vmemmap sysctl
-> 
->  Documentation/admin-guide/sysctl/vm.rst |  14 +++++
->  Kbuild                                  |  14 +++++
->  fs/Kconfig                              |   1 +
->  include/linux/memory_hotplug.h          |   9 +++
->  include/linux/mm_types.h                |   2 +
->  kernel/sysctl.c                         |   2 +-
->  mm/Kconfig                              |   3 +
->  mm/hugetlb_vmemmap.c                    | 107 ++++++++++++++++++++++++--------
->  mm/hugetlb_vmemmap.h                    |   4 +-
->  mm/memory_hotplug.c                     |  27 ++++++--
->  mm/struct_page_size.c                   |  19 ++++++
->  scripts/check_struct_page_po2.sh        |   9 +++
->  12 files changed, 177 insertions(+), 34 deletions(-)
->  create mode 100644 mm/struct_page_size.c
->  create mode 100755 scripts/check_struct_page_po2.sh
-> 
-> -- 
-> 2.11.0
-> 
+> Justification for split is to keep certain quirks out of the scope of the
+> generic driver. I'm not sure what duplication you are talking about if the
+> LOC statistics shows otherwise.
+
+ All the init/remove code is almost the same across all the devices.  And 
+suspend/resume and PCI error handling code has been removed from the split 
+off devices, and for the functional regression to be fixed:
+
+1. this code would have to be replicated, or
+
+2. handlers from the generic 8250_pci.c driver exported and referred to, 
+   or
+
+3. some kind of a helper library (or a core module) created providing this 
+   stuff to 8250_*.c drivers as required.
+
+ I guess the latter is the minimum that could convince me this driver
+framework is usable for implementing device-specific drivers (as I find 
+the other variants rather miserable hacks).
+
+ Plus there would have to be clear information provided to the users as 
+otherwise people will be rather confused as to why 3 out of their 4 16x50 
+PCI/e serial cards work with 8250_pci.c while the remaining one does not 
+(probably broken, or is it?).
+
+> You may not want to get the idea, it's fine. The rationale is simple:
+> isolate quirks for certain platform(s) in one place. Each platform
+> in a separate module.
+
+ What is a platform in your terminology?  A PCI/e option card you can 
+install in about any modern computer?  I usually think of platforms as 
+specific families of computers rather than option cards.  Variants of 
+otherwise the same device are usually handled with a single driver in 
+Linux.
+
+  Maciej

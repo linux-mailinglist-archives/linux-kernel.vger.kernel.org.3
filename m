@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AD94E576F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15C44E5771
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343561AbiCWR2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        id S1343557AbiCWR2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343621AbiCWR17 (ORCPT
+        with ESMTP id S1343562AbiCWR2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 13:27:59 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479D27484B;
-        Wed, 23 Mar 2022 10:26:29 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id t25so3860369lfg.7;
-        Wed, 23 Mar 2022 10:26:29 -0700 (PDT)
+        Wed, 23 Mar 2022 13:28:06 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56E47484B;
+        Wed, 23 Mar 2022 10:26:36 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id m30so3155874wrb.1;
+        Wed, 23 Mar 2022 10:26:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lJMU8Tjj10gJIssCAW7AkaMCyOQjnDJPbnD9fw6PuNY=;
-        b=Jj84XPQ5C/gHSM/F8OloJ0YA9t7Myr9aNZwBuMjA5p7hhTpI8iWWVoLPmMMW6MiIXW
-         UP5wYHlnuUn1WRx9TsdqnyBo2/eIGgjK/PtPVmj5YoeuvPGTkBL5wBo1CC2ylxx6Cl3O
-         6mPYKSa9oLl4csI7iTI5I7DKnKOnQ+YCqi3oP2PZHsTubo4PI8UYcb5iKjSZuBd5uN1/
-         iDyXGdl9EV7J3iMK2Qw3/WA8Pf4s5VRXonRL31AmfQcfcl1BYDynbWZwAR1H2R+dDm0N
-         8xHVWWuhwnr3CbOUzIe79K3p0VJuHsZ/w53us1Xa3vv5lBtqj9RAByv3pVY7ddAM/IzG
-         CyQQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=V9Yyooz68jl2Yv/SIAxGrm/okwE52nxnEfNEFc+sdng=;
+        b=FrlZh6+UbspaaXyxhTyMHIa8XYe0QM+o1xheOIlAv4OtXepnmVZYhqUNJTBunN+QNA
+         5EVR1h0DyGH7+43jc5PKu4FYGPEp03inEVfYWsDKTLpKrBHSv7ZWxFD3LoVz5typNvAs
+         TO83pHFF1Hs9ATGDeTQWG3BR87fA1HAuTcynG6y84uo4VHkdiEpXHe9p19T1z5NbgpKA
+         JBbCDBU2dX0qqapkPCi5FcwJBVxC1cOAYIunSgvLknsg8ibqoYVMILgtktz9EIdnh3YI
+         Hv224v0kO4up3iC5sYXvibPhNm88mq3oS7pIUJDKYUUE165JQTX7TUM1pTXowL8KM8mc
+         gwUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lJMU8Tjj10gJIssCAW7AkaMCyOQjnDJPbnD9fw6PuNY=;
-        b=hTnGEp60Ym1wUvGH67YJU4Cj/g4zzgHz8rp87ch4YBIo7cpiINq/OFP5wUl4GMAPx4
-         CBKMcGCJIy/z0MvyBUqviVZamOgQL0zPMcK405ywbflEXeS8nIVaID/Wr7v2CU614n0h
-         aLVck5YnL3bgc+E1H8Ro4B3bFKG9Lcqy2MeNgznQb6ngDyg5n/5otBDzVJPstkeupyOd
-         VstkSzVWyy+upRnn5Ri/b9cXFe+zcoP3Pinwv4Ny3SP54iOMsyuzB+w+woTedG3ABibE
-         gacytIPV1tLJNWHA7SQfkR/RGemwiJ0Q3Lu4/nWHoWzXJ+rcorz2Dmwg8HANd6fqwWMA
-         r7/g==
-X-Gm-Message-State: AOAM533VBZ1+PaCOLyMBW/5wLygvY4iDKyf2JnG/+mozZNW6FouBhmt2
-        OxGe0CISeYAZYaaPP8Q12GwEnOfCl0mMTcTc4rM=
-X-Google-Smtp-Source: ABdhPJxrzbbwHDEQCPzyvg+d0htD1vm0vt/GTP4iwjUv4s0MhezDd0P8jXWhvksuWMba0Va98h6c0V6FCWfuY+sfAWk=
-X-Received: by 2002:a05:6512:1155:b0:448:bcee:3df0 with SMTP id
- m21-20020a056512115500b00448bcee3df0mr687432lfg.442.1648056387505; Wed, 23
- Mar 2022 10:26:27 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=V9Yyooz68jl2Yv/SIAxGrm/okwE52nxnEfNEFc+sdng=;
+        b=r20G8vm3u0KHyupCtBlsVEkj+XPb9VeacT5PQ8RokSjNhCWt6JxVMdfNwFWjg2AuqY
+         0sjrIO+ro5hUaEExWvqFf+bVFRRou5RrBOJYqRHZIp2RPOqqzsM95weZFXxpYYb1hPwi
+         rIU5ftP7WT0XvZn+KQRwZ+09vbQH3+CEDf/VO7zMrD+/KKwZOnAzCPNZQfSE/yu7TVWF
+         z+oYflLri0egYq8I0d6eWJnTWxrEH0YT8iAYfEyHkEW7Hw024TBgONJkk+Vn5u9LKYR5
+         B74KOhRUk3+b8bsULE0oOnyxr3VdvMR5jSLYew6nsJ55vJtFaScDgFPRMIcDcTllgwLC
+         3T7A==
+X-Gm-Message-State: AOAM531NrMNvq2lPF7Fbgm560a+pVP6uXn2DrJyT+UeVcjXRFQja+C3R
+        0b6GXQr3oVuXTe7HOgiPziY=
+X-Google-Smtp-Source: ABdhPJz0Yv0mOtu8mBleQKGzx8/1JIWReXJKiILWv0hl+NKIR3DKIt6hnhyV6uzP2eJjCrNVa+qVlA==
+X-Received: by 2002:a05:6000:2ca:b0:204:1e6a:d2a9 with SMTP id o10-20020a05600002ca00b002041e6ad2a9mr915767wry.182.1648056395232;
+        Wed, 23 Mar 2022 10:26:35 -0700 (PDT)
+Received: from [192.168.0.32] ([137.101.87.65])
+        by smtp.gmail.com with ESMTPSA id j15-20020a05600c1c0f00b0038cabc63721sm378462wms.30.2022.03.23.10.26.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 10:26:34 -0700 (PDT)
+Message-ID: <3c8b96c5-c390-0ff8-2434-b6bb2e60b3d3@gmail.com>
+Date:   Wed, 23 Mar 2022 18:26:33 +0100
 MIME-Version: 1.0
-References: <20220323073626.958652-1-ytcoode@gmail.com>
-In-Reply-To: <20220323073626.958652-1-ytcoode@gmail.com>
-From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Wed, 23 Mar 2022 10:26:15 -0700
-Message-ID: <CAJnrk1YF3PiiHFgQu2K4LN2P-Lx4obQOoQohdgXhG4Fg6WogHg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Remove redundant assignment to smap->map.value_size
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 04/22] arm64: dts: mt8192: Add SCP node
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
+ <20220318144534.17996-5-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220318144534.17996-5-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,33 +81,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 2:21 AM Yuntao Wang <ytcoode@gmail.com> wrote:
->
-> The attr->value_size is already assigned to smap->map.value_size
-> in bpf_map_init_from_attr(), there is no need to do it again in
-> stack_map_alloc()
->
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
 
-LGTM.
-Acked-by: Joanne Koong <joannelkoong@gmail.com>
+
+On 18/03/2022 15:45, Allen-KH Cheng wrote:
+> Add SCP node for mt8192 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+
+Applied, thanks
 
 > ---
->  kernel/bpf/stackmap.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 34725bfa1e97..6131b4a19572 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -106,7 +106,6 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
->                 return ERR_PTR(-ENOMEM);
->
->         bpf_map_init_from_attr(&smap->map, attr);
-> -       smap->map.value_size = value_size;
->         smap->n_buckets = n_buckets;
->
->         err = get_callchain_buffers(sysctl_perf_event_max_stack);
-> --
-> 2.35.0.rc2
->
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 9e1b563bebab..195d50894df4 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -706,6 +706,18 @@
+>   			status = "disabled";
+>   		};
+>   
+> +		scp: scp@10500000 {
+> +			compatible = "mediatek,mt8192-scp";
+> +			reg = <0 0x10500000 0 0x100000>,
+> +			      <0 0x10700000 0 0x8000>,
+> +			      <0 0x10720000 0 0xe0000>;
+> +			reg-names = "sram", "l1tcm", "cfg";
+> +			interrupts = <GIC_SPI 435 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks = <&infracfg CLK_INFRA_SCPSYS>;
+> +			clock-names = "main";
+> +			status = "disabled";
+> +		};
+> +
+>   		nor_flash: spi@11234000 {
+>   			compatible = "mediatek,mt8192-nor";
+>   			reg = <0 0x11234000 0 0xe0>;

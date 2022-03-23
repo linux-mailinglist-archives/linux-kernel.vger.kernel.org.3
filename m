@@ -2,146 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEB54E5763
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083C54E5765
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343523AbiCWRZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S1343533AbiCWRZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238674AbiCWRY7 (ORCPT
+        with ESMTP id S231378AbiCWRZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 13:24:59 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872515D5D2;
-        Wed, 23 Mar 2022 10:23:29 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id b24so2663459edu.10;
-        Wed, 23 Mar 2022 10:23:29 -0700 (PDT)
+        Wed, 23 Mar 2022 13:25:36 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549F45D5D2;
+        Wed, 23 Mar 2022 10:24:06 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id h23so3106937wrb.8;
+        Wed, 23 Mar 2022 10:24:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=juL17s/J9mHVgJHyYqq8vpqD2uO1Y1nLtpoOVNs7FRw=;
-        b=lAFBZ8r8drRioCv3odbctBgVd5UXVvEZNxPD/cyYarQZ0akXdf+zZURhaa42WuRsC9
-         1nTAwT6OpMQENK6Ho4GBKKZ/hZa511Pc5vW0yHzYTMEOKsAePNbwRYZLqieKRji5HekH
-         3yRi7Lvv2Fo5VcfcbrNfl34KJiwvpIvB+BkVrTWaMnAojaGZSSpNDLWJcAtlkA5u2njt
-         ZRUf6aAkfZT+Kgq3U9BAowcmCrhdTbPZQNKgmNIgAV2Wzhljs6ZsH0B+mtYpwhHe97lZ
-         pVS5UxfJIkIimYwK4rIupe86mSI/sFwHi7Q4/7ilUxPC4XaaKFzK/JW+/603iTjn7K22
-         WhZQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Hb32dDdO1qQ+N0iO81Os3RXNLwN3DToRtRm2BHJ4zPY=;
+        b=DRQktLhWWE7E8r8CBTkIuaY9kDFwj1GbxhNrCUaN4mKjEEvJoAnnnIUlC2KAtxVArp
+         p/VyfyXpv1wETZBWfR6TEhNq3LkXs/9TnVkXq0ZybOllat3PX8hBPYETdN9omqua7TBN
+         4E4maMMPy9qq/sPLEbxtO7vrmAfmWvqJ2yv7C4J9yThAyxr/4eaBVoYvkYf9Euhfv/Yl
+         HejkFDaqKFS9k3wtm7OCoDof6qXtwhNc/I20Vbx/48z+lKZSdNc5gX87SFbWKbqeWACM
+         J6OBPyupSfdVTLrs/EJQNhPfBaKYqd44oBOwYckaUG5nkAfjFgsgY1r+PJ3NUElMwrqy
+         n0xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=juL17s/J9mHVgJHyYqq8vpqD2uO1Y1nLtpoOVNs7FRw=;
-        b=Ir33r7Ue0NilSh4DwEmwtdJltv5tkTpLad2cxEr/jWM6seRKLk9m7Bn0OLvC3GVVRk
-         u4iee9KuuMHk3MQTIQ97gp93SKqMJa0+v0mHalgUaju7MxzMRifhWHtLj/leniIKmOH5
-         DBmbEOSwr8ujsC2p7Vl+v+M//UwOA8E/qbko9IFgmyoDCwi5FHuXz2VoL5SrCAxgHNQa
-         jvzpGmxlkWOjDeg7t0ZUVEKTMYxR6vuMtlHqD9wCuvgYry9mZj6mcE2sdWfs1+R/GLWa
-         rniMaWhEIggZCeOPGcosFmEoAzPC5ZQJFJFw6LIJW8oYtUtrPr4jyRCNzL3u465zssHP
-         hLAA==
-X-Gm-Message-State: AOAM532drBDvt+4t1dtd3/3Z8u75kpioAeNNwP4RmRo4tva/NAHRqH1o
-        jHxFxb1aNbCY3ZXu/OLglyVk0Tt/MoiMegHT7SjZm1Ps
-X-Google-Smtp-Source: ABdhPJyft3K9bCkUSLrNX6JZW9BLNtJ57TArhGm3JaTHjtmeZOA2hxLe9EQ03TB1Tv8j4DwJrud2AiOB1S7a0xyZtUU=
-X-Received: by 2002:a05:6402:2142:b0:413:6531:bd9e with SMTP id
- bq2-20020a056402214200b004136531bd9emr1464059edb.5.1648056207837; Wed, 23 Mar
- 2022 10:23:27 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Hb32dDdO1qQ+N0iO81Os3RXNLwN3DToRtRm2BHJ4zPY=;
+        b=MQak1Tqzq/DRxfTTJwOXkMzT0E/Y5N85VQiwDejiZcLpzNJdKvpRT9GXXZMoZX2CRR
+         GP0qgjQfYsIxckKKVLFtnn74+dsj4xScITNMoFdJhgQDN3M8eWb4Dg7mdQ6P6kCg4DbH
+         48XlPJlVd//avy+cTOP9PVJagIncJ03TswFsJPErQpXqpSUT4wHYmCGzAAYhh29xUEhy
+         lPaJHbUezKWS2V36WpfmjqqKws7zWBUxhHx33enETuR8GJHQ5ho4cR8rsDGkzySn7oiR
+         AmVZJCzl4+n/Et6+i11wFoZdrzFG8CNgmy0KAnQdw93Li+M8i2vA8kTgDuiMziGuqSQP
+         UHdg==
+X-Gm-Message-State: AOAM532g/P3U8dWCgAiH4/mHqbPjnqqhYP7y85ptzRLtQUaaPMkdSmkI
+        GLTAcQJKm5L46jjnUInBbuU=
+X-Google-Smtp-Source: ABdhPJz0gyJKC1sgaW3NYJbopqhfgocbBO3YRKk4AGZ4glvtMs0XETdWdH0DbswGnxUuw50ias6wlw==
+X-Received: by 2002:a05:6000:1863:b0:204:101a:b2b4 with SMTP id d3-20020a056000186300b00204101ab2b4mr817017wri.259.1648056244689;
+        Wed, 23 Mar 2022 10:24:04 -0700 (PDT)
+Received: from [192.168.0.32] ([137.101.87.65])
+        by smtp.gmail.com with ESMTPSA id k2-20020a1ca102000000b0038c78fdd59asm4488884wme.39.2022.03.23.10.24.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 10:24:04 -0700 (PDT)
+Message-ID: <a4935385-e7a5-8650-914b-73c699d2f8ca@gmail.com>
+Date:   Wed, 23 Mar 2022 18:24:03 +0100
 MIME-Version: 1.0
-References: <20220323134019.3796178-1-aford173@gmail.com> <35f58894-ed6d-0af0-e483-7a161ad6625a@kernel.org>
- <CAHCN7x+RLAFnES8b3UMoc6n69ZVSFGOmAZyMeeY1g3aoiDNbZg@mail.gmail.com> <354951e0-d2a8-bf4f-e0c5-081e836bb3c3@kernel.org>
-In-Reply-To: <354951e0-d2a8-bf4f-e0c5-081e836bb3c3@kernel.org>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 23 Mar 2022 12:23:16 -0500
-Message-ID: <CAHCN7xLWoUGi-jfxR2a0gvEFkPT3USUEb+8U3CCqCb5wWEJ8xw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: mmc: imx-esdhc: Change imx8mn and imx8mp
- compatible fallback
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 03/22] arm64: dts: mt8192: Add gce node
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
+ <20220318144534.17996-4-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220318144534.17996-4-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 9:11 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On 23/03/2022 15:00, Adam Ford wrote:
-> > On Wed, Mar 23, 2022 at 8:56 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >>
-> >> On 23/03/2022 14:40, Adam Ford wrote:
-> >>> The SDHC controller in the imx8mn and imx8mp have the same controller
-> >>> as the imx8mm which is slightly different than that of the imx7d.
-> >>> Using the fallback of the imx8mm enables the controllers to support
-> >>> HS400-ES which is not available on the imx7d.
-> >>>
-> >>> Signed-off-by: Adam Ford <aford173@gmail.com>
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> >>> index 7dbbcae9485c..d6ea73d76bdd 100644
-> >>> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> >>> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> >>> @@ -39,14 +39,14 @@ properties:
-> >>>        - items:
-> >>>            - enum:
-> >>>                - fsl,imx8mm-usdhc
-> >>
-> >> Your change looks reasonable, but why imx8mm is compatible with imx7d?
-> >
-> > I saw that, and I wasn't sure the best way to go about  fixing it.  If
-> > I move the 8mm out of the imx7d category, do I need to add it to the
-> > enum list associated with the imx8mm, or can I just delete it from the
-> > enum leaving the const for imx8mm good enough?
-> >
->
-> The DTS is using:
->   compatible = "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc"
-> which looks incorrect, based on what you wrote in commit description.
-> Since fsl,imx8mm-usdhc has its own compatibility-group and defines the
-> properties for entire family (imx8mm + imx8mn + imx8mp), then I would
-> assume that either fsl,imx8mm-usdhc is not be compatible with imx7d or
-> everything is compatible with imx7d. IOW, DTS and bindings should be
-> changed to one of following:
-> 1. Everything compatible with imx7d:
->   compatible = "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
->   compatible = "fsl,imx8mq-usdhc", "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
->
-> 2. A new group:
->   compatible = "fsl,imx8mm-usdhc";
->   compatible = "fsl,imx8mq-usdhc", "fsl,imx8mm-usdhc";
->
-> Which one, I am not sure. My commit 80fd350b95 organized it in (1)
-> approach, because also that time there was no new group for 8mm (added
-> in commit 431fae8). I assume NXP engineer knows better, so the better
-> solution would be (2). In such case, imx8mm has to be moved to the first
-> enum and all DTS have to be adjusted.
 
-I pulled NXP's downtream kernel based on 5.15.y, and grepped the code
-for imx8mm-usdhc.  It looks like the imx8mm, imx8mn, imx8mp, and
-imx8ulp use the imx8mm compatible flag.
-The imx8mq uses the older imx7d.  I'll do a second revision later
-today or tomorrow.  Looking inside the driver, it appears there are
-some other quirks that different between the imx7d and imx8mm beyond
-just support for HS400-ES, so I think your option 2 is appropriate.
-Hopefully someone from NXP can comment.
 
-adam
->
->
-> Best regards,
-> Krzysztof
+On 18/03/2022 15:45, Allen-KH Cheng wrote:
+> Add gce node for mt8192 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 0f9f211ca986..9e1b563bebab 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -6,6 +6,7 @@
+>   
+>   /dts-v1/;
+>   #include <dt-bindings/clock/mt8192-clk.h>
+> +#include <dt-bindings/gce/mt8192-gce.h>
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/interrupt-controller/irq.h>
+>   #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
+> @@ -552,6 +553,15 @@
+>   			#size-cells = <0>;
+>   		};
+>   
+> +		gce: mailbox@10228000 {
+> +			compatible = "mediatek,mt8192-gce";
+> +			reg = <0 0x10228000 0 0x4000>;
+> +			interrupts = <GIC_SPI 203 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			#mbox-cells = <3>;
+
+#mbox-cells should be 2, right?
+
+Regards,
+Matthias
+
+> +			clocks = <&infracfg CLK_INFRA_GCE>;
+> +			clock-names = "gce";
+> +		};
+> +
+>   		scp_adsp: clock-controller@10720000 {
+>   			compatible = "mediatek,mt8192-scp_adsp";
+>   			reg = <0 0x10720000 0 0x1000>;

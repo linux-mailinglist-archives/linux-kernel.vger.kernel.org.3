@@ -2,62 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678F04E55A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310194E55A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237525AbiCWPtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 11:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S244872AbiCWPt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 11:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiCWPtO (ORCPT
+        with ESMTP id S238839AbiCWPt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 11:49:14 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8468F70F70;
-        Wed, 23 Mar 2022 08:47:44 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id AA6B868B05; Wed, 23 Mar 2022 16:47:39 +0100 (CET)
-Date:   Wed, 23 Mar 2022 16:47:39 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        kernel test robot <oliver.sang@intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        John Garry <john.garry@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Subject: Re: [scsi]  6aded12b10: kernel_BUG_at_mm/usercopy.c
-Message-ID: <20220323154739.GA816@lst.de>
-References: <20220320143453.GD6208@xsang-OptiPlex-9020> <20220323071409.GA25480@lst.de> <202203230809.D63BF9511@keescook>
+        Wed, 23 Mar 2022 11:49:26 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D67A76E21;
+        Wed, 23 Mar 2022 08:47:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648050477; x=1679586477;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6M1M82HPoA8EEVObNR5ULMG0Mtv8/Wfw1Iz63bAEOXA=;
+  b=HXYb6jI13F0jtJuoBCoctnutAU/crkUojGFghLpT+KdmDciHIraH3bA5
+   zzfEK586Udi3vTB4JvQCXnn2vBLO7D0tMVyWLGvh7qiDHmTb61cL3+9Fm
+   RRXkVA4apPH+iOtvy0o7M13IuQ8jhi4bxJP/ExMF+uYIkm7F1e/NVpSTY
+   g=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Mar 2022 08:47:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 08:47:56 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 23 Mar 2022 08:47:56 -0700
+Received: from [10.216.14.252] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 23 Mar
+ 2022 08:47:51 -0700
+Message-ID: <e9ff041a-68a1-f74f-e9bf-351bf1591beb@quicinc.com>
+Date:   Wed, 23 Mar 2022 21:17:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202203230809.D63BF9511@keescook>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [patch 163/227] mm: madvise: skip unmapped vma holes passed to
+ process_madvise
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>, <linux-kernel@vger.kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>, <vbabka@suse.cz>,
+        <surenb@google.com>, <stable@vger.kernel.org>,
+        <sfr@canb.auug.org.au>, <rientjes@google.com>,
+        <nadav.amit@gmail.com>, <patches@lists.linux.dev>,
+        <linux-mm@kvack.org>, <mm-commits@vger.kernel.org>,
+        <torvalds@linux-foundation.org>
+References: <20220322143803.04a5e59a07e48284f196a2f9@linux-foundation.org>
+ <20220322214648.AB7A1C340EC@smtp.kernel.org> <Yjpo2jnp5pkJr+XI@google.com>
+ <YjraNQkmtkLiv1yz@dhcp22.suse.cz>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <YjraNQkmtkLiv1yz@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 08:40:30AM -0700, Kees Cook wrote:
-> Regardless, I'm concerned that disabling PAGESPAN will just uncover
-> further checks, though. Where is allocation happening? The check is here:
 
-blk_mq_alloc_rqs, using alloc_pages_node.  This hasn't actually changed
-with this comment.  Just the size of the allocation shrunk, probably
-leading to the span of pages.
 
-> I *think* the allocation is happening in scsi_ioctl_reset()? But that's
-> a plain kmalloc(), so I'm not sure why PAGESPAN would have tripped...
-> are there other allocation paths?
+On 3/23/2022 1:58 PM, Michal Hocko wrote:
+> On Tue 22-03-22 17:24:58, Minchan Kim wrote:
+>> On Tue, Mar 22, 2022 at 02:46:48PM -0700, Andrew Morton wrote:
+>>> From: Charan Teja Kalla <quic_charante@quicinc.com>
+>>> Subject: mm: madvise: skip unmapped vma holes passed to process_madvise
+>>>
+>>> The process_madvise() system call is expected to skip holes in vma passed
+>>> through 'struct iovec' vector list.  But do_madvise, which
+>>> process_madvise() calls for each vma, returns ENOMEM in case of unmapped
+>>> holes, despite the VMA is processed.
+>>>
+>>> Thus process_madvise() should treat ENOMEM as expected and consider the
+>>> VMA passed to as processed and continue processing other vma's in the
+>>> vector list.  Returning -ENOMEM to user, despite the VMA is processed,
+>>> will be unable to figure out where to start the next madvise.
+>>>
+>>> Link: https://lkml.kernel.org/r/4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com
+>> I thought it was still under discussion and Charan will post next
+>> version along with previous patch
+>> "mm: madvise: return correct bytes advised with process_madvise"
+>>
+>> https://lore.kernel.org/linux-mm/7207b2f5-6b3e-aea4-aa1b-9c6d849abe34@quicinc.com/
+> Yes, I am not even sure the new semantic is sensible[1]. We should discuss
+> that and see all the consequences. Changing the semantic of an existing
+> syscall is always tricky going back and forth is even worse.
 
-scsi_ioctl_reset is the odd one out and does also allocate a request,
-but that request is never used for user copies (and that whole hacky
-side path needs to go away, there is a huge series that needs to be
-finished to sort this out).
+Starting the discussion @
+https://lore.kernel.org/linux-mm/cover.1648046642.git.quic_charante@quicinc.com/
+
+Thanks,
+Charan
+

@@ -2,84 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E114E56DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259BF4E56E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245538AbiCWQtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S245565AbiCWQuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245532AbiCWQtc (ORCPT
+        with ESMTP id S245566AbiCWQt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:49:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CB93AC;
-        Wed, 23 Mar 2022 09:48:00 -0700 (PDT)
+        Wed, 23 Mar 2022 12:49:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A80BE27
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:48:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6921B81FB1;
-        Wed, 23 Mar 2022 16:47:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED4CFC340EE;
-        Wed, 23 Mar 2022 16:47:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8BFBB81F67
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 16:48:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312B9C340E8;
+        Wed, 23 Mar 2022 16:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648054077;
-        bh=GXavJvlaiTb+T7WbLpkUjW9/g2S2PtTfhMx/DZ2gdnw=;
+        s=k20201202; t=1648054099;
+        bh=KZysVJrReQA7i1Z1nRSDq4ryI+V0LIK35Q/WCAy5knM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iYLqcQY9fwH8klPGFWwIoTHUfdDXPptnOuiTYbBc9P2iQNEy5ogUKMUNnfahgrBzR
-         gZnc1BHLGxeh9uTkFpMzf79YD2oxsga2QlJZcHb3TCuzr/Et6xNXciF0UXqjeUvmiF
-         iKhBz4HzJGsGhsK3nKVnHZfHBek/8v/4rZkZ9FXDejX1XWKtqy863A7GO3ANf4PG4C
-         SUuYH03MkI2ODKlmKqA5Dj1frfYKD54pl4llZKJs8PSuPx2gqvv0VwxoRFhcSNi3KJ
-         yDyFyBe/IHh35tz3nQzCLWH317az/oz0mHGw7SGtlQNQLCe2tXfFTF3tN1rnaCBASP
-         /e3eRd7xwp5Pw==
-Date:   Wed, 23 Mar 2022 16:47:48 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        b=Kp0Ve9OH3/g0gQycRRJwUAl727z9uGUeetTB8IEQo4X9sqVNZ3Q2cZswd8Ncp9YFs
+         l0lIZJoQGYohEDJjw2V7mkP65cBS/azJzO9PXy+q0YaCzY+Sp6xRBVHArVASk6PDqa
+         R24FtNd2pjlMiUWtVeX/adzRoPj/xJqWx6KWT15EMq2UiTI5Dg6kaX2t0GpRvXbgC1
+         0A7suf+GxwDWZKyioMW7Vwl4QxmE3VcoHG0DCpkKmF+9KxWCl9F7//FlOr0RPO6KDH
+         wqdoJuz0Tnm5Gm0leMonwMHRwv8niqJrlvjRnm4fHR4ZxTgVQhMP6d/y0VBd9DCuuF
+         En/iOcQ7w/yNA==
+Date:   Wed, 23 Mar 2022 09:48:17 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-Message-ID: <YjtPNI2ZQFgVML6L@sirena.org.uk>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <20220322155820.GA1745955@roeck-us.net>
- <YjoUU+8zrzB02pW7@sirena.org.uk>
- <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
- <YjsOHmvDgAxwLFMg@sirena.org.uk>
- <ebafdf77-5d96-556b-0197-a172b656bb01@roeck-us.net>
- <CAK8P3a1hzmXTTMsGcCA2ekEHnff+M7GrYSQDN4bVfVk6Ui=Apw@mail.gmail.com>
- <YjtIVymPEZ4t16tP@sirena.org.uk>
- <CAK8P3a0Fzryo8Wi2exbQz=qXKGOGU6yxP0FGowa-fJkr0aGJFg@mail.gmail.com>
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [GIT PULL] f2fs for 5.18
+Message-ID: <YjtPUec8jiqUXGuf@google.com>
+References: <YjjihIZuvZpUjaSs@google.com>
+ <CAHk-=wgsmvoJFKFWxQ2orEVUOWH1agk9iUNZ=-DFh5OXZL=Ldw@mail.gmail.com>
+ <YjrNRpbo/i3tgbAA@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sQdCBG94vBDiG872"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a0Fzryo8Wi2exbQz=qXKGOGU6yxP0FGowa-fJkr0aGJFg@mail.gmail.com>
-X-Cookie: Nice guys get sick.
+In-Reply-To: <YjrNRpbo/i3tgbAA@infradead.org>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -90,42 +60,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/23, Christoph Hellwig wrote:
+> On Tue, Mar 22, 2022 at 10:22:50AM -0700, Linus Torvalds wrote:
+> > On Mon, Mar 21, 2022 at 1:39 PM Jaegeuk Kim <jaegeuk@kernel.org> wrote:
+> > >
+> > > In this cycle, f2fs has some performance improvements for Android workloads such
+> > > as using read-unfair rwsems [...]
+> > 
+> > I've pulled this, but that read-unfair rwsem code looks incredibly
+> > dodgy. Doing your own locking is always a bad sign, and it ahs
+> > traditionally come back to bite us pretty much every time. At least it
+> > uses real lock primitives, just in a really odd way.
+> 
+> FYI, Peter and I both pointed this out when the patches were posted
+> and NAKed the patch, but the feedback was ignored.
 
---sQdCBG94vBDiG872
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Christoph, I proposed,
 
-On Wed, Mar 23, 2022 at 05:41:01PM +0100, Arnd Bergmann wrote:
-> On Wed, Mar 23, 2022 at 5:18 PM Mark Brown <broonie@kernel.org> wrote:
+"I've been waiting for a generic solution as suggested here. Until then, I'd like
+to keep this in f2fs *only* in order to ship the fix in products. Once there's
+a right fix, let me drop or revise this patch again."
 
-> > and I'd be surprised if virtio devices made it through with a specific
-> > platform emulation.
-
-> In general they do: virtio devices appear as regular PCI devices
-> and get probed from there, as long as the drivers are available.
-
-> It looks like the PCI driver does not get initialized here though,
-> presumably because it's not enabled in versatile_defconfig.
-> It used to also not be enabled in multi_v5_defconfig, but I have
-> merged a patch from Anders that enables it in 5.18 for the
-> multi_v5_defconfig.
-
-Ah, I thought Versatile was like the other older Arm reference platforms
-and didn't have PCI.
-
---sQdCBG94vBDiG872
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI7TzQACgkQJNaLcl1U
-h9BjvAf/duSXw3LO6eKiw2GKSb5qNFkM7yPR4P7dmSrFcL3EotKV9wPef1AAKRWF
-p3DuYX1BoatfsHDiaTIzTDxaX9ao5E15uASqAy1Yd+V1LRa5HUobpSbDVonf+Kfw
-CG0Sh3gfmkRU8EAvDmFQZPBZ2hQAGENSpMHb1OBcTf3aras8a6bU9t9qHqpjlw2L
-gHrYYjlDm5V6iseTYAiNevPXyAh8XSHYJLfxjKquQTJ/nbe+2pcfYYsdz6Aqv+TF
-r6wGJR8dz+CXFNJHXyTRUpUyClPpFTqb8zEp4aTLMUgtf0ZyrIKpomR2Z5+kQkSd
-qraSPCepNqe5SiAsn8BY88A719I1Og==
-=d+d/
------END PGP SIGNATURE-----
-
---sQdCBG94vBDiG872--
+https://lore.kernel.org/linux-f2fs-devel/YhZzV11+BlgI1PBd@google.com/

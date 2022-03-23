@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18D54E51B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE5B4E51BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244020AbiCWL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
+        id S244030AbiCWMCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235981AbiCWL7g (ORCPT
+        with ESMTP id S235981AbiCWMB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:59:36 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A7B1129;
-        Wed, 23 Mar 2022 04:58:03 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0CB875C017F;
-        Wed, 23 Mar 2022 07:58:01 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 23 Mar 2022 07:58:01 -0400
+        Wed, 23 Mar 2022 08:01:59 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8473075E48;
+        Wed, 23 Mar 2022 05:00:30 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id E5A8C3200B25;
+        Wed, 23 Mar 2022 08:00:28 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 23 Mar 2022 08:00:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; bh=njhFasRxl7Ia1rqX1GO6RIfc0g8n5/4PEtJNvN
-        BVDok=; b=Y5thfAR321DMYFnFm7bhCzkSBUoOnnavryCjsHPUXb+M/fK1gc86hX
-        1mZB/Yrsa4ov6SpS1GYP8O4mNJPmMEfBsbgFBfd+7SyRWvm0RaVAgn3q5KvJnIMv
-        F8s9dDqFT3+qNmWgp8DUtdGcoe8oZIDtedMig8UOYxqOZm94ip6QjBHUwcec44cL
-        ar/zdmmvpRGpZ8vBgU+TR6CrFHrzHyE0kvvFyJfqHn6mkWVKdSqyuWBZJCtVAE89
-        hopavM3je5MY87re4Tfuu5mbNgih9u9M5VYcBmS8MwXQ5EPBNySrb1fX5hptYELM
-        zYol+N/fD3T30z+S1thQ9piHi+JcQrKw==
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; bh=oPrRJr0au2XwO23A1HrZcbzNNDvN2/
+        /w4Jho90lrt5k=; b=gKV2vvBbKK2CDXVZClM9sEyBTqMot0mnlvSvBmw/wtu+Jm
+        GyATvZxRh04VKTVFjCyjKKwVnJfFttbn5avccW3clmlQBV5/UmeFmQobMIdpTziz
+        m2ISablfOvsZ40L7YtNAhagIQnoBMv+RZ2vvuhNE6CS9uRHjtH1TnlyoF9tYmf1Z
+        6ULpkPqo2QBvReSS908fs+AJqaeZJhsJdXrSeYMzUESLaimRleWHXJ0eAfuo4sjg
+        rbiMLsbCXv+Vh3g8sJLTAw7TN2JdULdyHsxVxuQP8d+lBrA1pwQGWx7NjOvBykuz
+        nbMYgLPmN3NvnYJEu84rypmWgPm+9/XBMtL1YXoQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm3; bh=njhFasRxl7Ia1rqX1GO6RIfc0g8n5
-        /4PEtJNvNBVDok=; b=mdnYcUdhuEX6a0ttheB9gooKSO65Xb2r33bLAJvwQdVqO
-        NDL29/OuMpscze0GVQEZE+kyWpxc2aH2Hc1gDZFc7F5QUtyj3G6CiRdqskW4kgrz
-        YCXEBufpyleb5mAugj3Mo2ZLX36RPfg8vwZJJP2PWzyswclL+3gn/Bx0qKDwZvHq
-        zfqCv8/qx1XsOAJO6lNxAtOAQyDoTq4ojcLZIJNrAxALaewQBU36QSJ3Gm6PBOp4
-        2puydx4N/G8WUWeG76hDfe37UwBRIS1xeDMse/Qq6FSolJGQDSg5OX6Ladawlz4I
-        Za3AEd+AKdTdx7x3E8AMFDqZQCcjQS5FQNd+qXKRg==
-X-ME-Sender: <xms:SAs7YoDWBIs5HmpNlN85X8MuyZG75S-APzlUdhhyWFne_HeSTKJYpQ>
-    <xme:SAs7YqhwvI9Kf4f_f9XOBfGwIZN8q9_xz1YR65QyTbk3IX_7magkA_mEC8ie2SZJH
-    cgj1ghny2aZmPfJkr4>
-X-ME-Received: <xmr:SAs7Yrk_swLN_dEvSH4U8BiRIaGGxpnggpCiEBj3FkRk3g7kgzuiwXZEB58JvoMPPuLCOHSgJv8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegjedgfedvucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=oPrRJr
+        0au2XwO23A1HrZcbzNNDvN2//w4Jho90lrt5k=; b=ZiWrVgPtA+2AZnoGCotgt9
+        dUBM/fojGl5Iiv2uXDdPVXKd2UG1+BPVzF4mLG9e9DHIovMD6ovMZwJWyC2sf50t
+        dvvbDsd/aPbPi76xQPExXNVxhHGtBWbJ6LtRFwdbYNfdkLv/d33QrZbJ8HMCjw/V
+        rAMNQn+5IsXn/qNV/xSmjkYwLJ3OnZSktwSufhZutLf5DEtaMVtF2xNLr69pCFuk
+        mGzxr7N7VCd9BXICnWKliEmAOXh4NbEyuNokw5oj5SGY+FHZdlDvL7pJhzLG20fY
+        QpMIylKPGw0RIguRGQ4vCRZnr+4wfBr3paqfW8C1eNAac6WWvYDYtE7V8kEXXuwA
+        ==
+X-ME-Sender: <xms:2ws7YkpBZvlGzjWQeqlqMhl2VfNUiuz6ZIo_SmGNd_Y3oiDQC0Cfgg>
+    <xme:2ws7YqpkYLNHqchKFB3e7OcJW_LNUNewLQFkcV2OvVrcD_vRtqN6sV3iiU6Bqz56b
+    4BTvQ5sVnQqPa32Pco>
+X-ME-Received: <xmr:2ws7YpPwkyq5WkPPJgPVx9GcecWg3ijjgxkibMaJe5mbUJ8D0gqv1p_wG-nfeH1bZ-dbytwGXsc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegjedgfeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgggfestdekredtre
-    dttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
-    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeejleeihfdvtefgtd
-    ethfdtgefftdeiffefjeeiffefveeuleejheejvefhffeukeenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
-    grihhrvdefrdhmvg
-X-ME-Proxy: <xmx:SAs7YuzDAaONmUfUwjqb0dU8m-Ti0fa-AK8HsWUg_QobOyrrbrdK5A>
-    <xmx:SAs7YtQ3mn_7Nq8sdCNcAfoVYfBA9grgem_tnQ9hc9Om16WX2uYaWA>
-    <xmx:SAs7YpbZKLNR5Lpr9KddZTHoozh081dANQgUa5xJMMf_EXg4sJaAeg>
-    <xmx:SQs7YtZ9oOUGFxWipqa4oWF7jd0sNPaWBnYRdEhZDxf2ysyMRaGdZA>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofggtgfgsehtqhertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepffelvdegveefve
+    efvddvffeiteefgfejveegieethfekgefhleeukefhjeehfffgnecuffhomhgrihhnpehl
+    fihnrdhnvghtpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhm
+    vg
+X-ME-Proxy: <xmx:2ws7Yr7siJF3ggT0w78a9p7tk3YRBRPcECqzCShJBtsBs2WZVOLRVw>
+    <xmx:2ws7Yj5FazshV9-OGe0DhI5kKiICUtNpQ9CuNy9CfVbqChrJQxM7wQ>
+    <xmx:2ws7YrjL8MaX1F-fYaEMx2bt1KHqxGSm5CFf1qvVe-YalV6gCwmakQ>
+    <xmx:3As7YgG5yqjQ9-rTis_gwFqvb5GjuX5PceI1ywDoCxdvT_z9OZ-04g>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Mar 2022 07:57:55 -0400 (EDT)
+ 23 Mar 2022 08:00:23 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
-To:     shawnguo@kernel.org, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, s.hauer@pengutronix.de,
-        wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, festevam@gmail.com, robh+dt@kernel.org,
+To:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     alistair23@gmail.com, rydberg@bitmath.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        dmitry.torokhov@gmail.com, andreas@kemnade.info,
         Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v4] watchdog: imx2_wdg: Allow ping on suspend
-Date:   Wed, 23 Mar 2022 21:57:52 +1000
-Message-Id: <20220323115752.360409-1-alistair@alistair23.me>
+Subject: [PATCH v7 0/4] Add support for the Cypress cyttsp5
+Date:   Wed, 23 Mar 2022 22:00:17 +1000
+Message-Id: <20220323120021.361137-1-alistair@alistair23.me>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,97 +85,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i.MX watchdog cannot be disabled by software once it has been
-enabled. This means that it can't be stopped before suspend.
-
-For systems that enter low power mode this is fine, as the watchdog will
-be automatically stopped by hardware in low power mode. Not all i.MX
-platforms support low power mode in the mainline kernel. For example the
-i.MX7D does not enter low power mode and so will be rebooted 2 minutes
-after entering sleep states.
-
-This patch introduces a device tree property "fsl,ping-during-suspend"
-that can be used to enable ping on suspend support for these systems.
-
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/watchdog/imx2_wdt.c | 27 ++++++++++++++++++++-------
- 1 file changed, 20 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
-index 51bfb796898b..d0c5d47ddede 100644
---- a/drivers/watchdog/imx2_wdt.c
-+++ b/drivers/watchdog/imx2_wdt.c
-@@ -66,6 +66,7 @@ struct imx2_wdt_device {
- 	struct watchdog_device wdog;
- 	bool ext_reset;
- 	bool clk_is_on;
-+	bool no_ping;
- };
- 
- static bool nowayout = WATCHDOG_NOWAYOUT;
-@@ -312,12 +313,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
- 
- 	wdev->ext_reset = of_property_read_bool(dev->of_node,
- 						"fsl,ext-reset-output");
-+	/*
-+	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
-+	 * during suspend.
-+	 */
-+	wdev->no_ping = !of_device_is_compatible(dev->of_node, "fsl,imx7d-wdt");
- 	platform_set_drvdata(pdev, wdog);
- 	watchdog_set_drvdata(wdog, wdev);
- 	watchdog_set_nowayout(wdog, nowayout);
- 	watchdog_set_restart_priority(wdog, 128);
- 	watchdog_init_timeout(wdog, timeout, dev);
--	watchdog_stop_ping_on_suspend(wdog);
-+	if (wdev->no_ping)
-+		watchdog_stop_ping_on_suspend(wdog);
- 
- 	if (imx2_wdt_is_running(wdev)) {
- 		imx2_wdt_set_timeout(wdog, wdog->timeout);
-@@ -366,9 +373,11 @@ static int __maybe_unused imx2_wdt_suspend(struct device *dev)
- 		imx2_wdt_ping(wdog);
- 	}
- 
--	clk_disable_unprepare(wdev->clk);
-+	if (wdev->no_ping) {
-+		clk_disable_unprepare(wdev->clk);
- 
--	wdev->clk_is_on = false;
-+		wdev->clk_is_on = false;
-+	}
- 
- 	return 0;
- }
-@@ -380,11 +389,14 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
- 	struct imx2_wdt_device *wdev = watchdog_get_drvdata(wdog);
- 	int ret;
- 
--	ret = clk_prepare_enable(wdev->clk);
--	if (ret)
--		return ret;
-+	if (wdev->no_ping) {
-+		ret = clk_prepare_enable(wdev->clk);
- 
--	wdev->clk_is_on = true;
-+		if (ret)
-+			return ret;
-+
-+		wdev->clk_is_on = true;
-+	}
- 
- 	if (watchdog_active(wdog) && !imx2_wdt_is_running(wdev)) {
- 		/*
-@@ -407,6 +419,7 @@ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
- 
- static const struct of_device_id imx2_wdt_dt_ids[] = {
- 	{ .compatible = "fsl,imx21-wdt", },
-+	{ .compatible = "fsl,imx7d-wdt", },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, imx2_wdt_dt_ids);
--- 
-2.35.1
-
+This patch series builds on top of [1] and adds support for the cyttsp5=0D
+touchscreen controller for the reMarkable 2.=0D
+=0D
+I first tried to add an I2C HID device. Although the cyttsp5 has some HID=0D
+looking aspects it is not HID compatible. Just in trying to probe the devic=
+e=0D
+I found:=0D
+ - The HID descriptor has extra padding=0D
+ - The HID descriptor sets the high bytes of the descriptor length=0D
+ - The HID descriptor has extra unrecognised tags=0D
+ - The HID reset command doesn't appear to work=0D
+=0D
+I don't think there is a way to use the I2C HID framework with the cyttsp5.=
+=0D
+For anyone interested you can see the work here [2]. In that branch though =
+I=0D
+can only obtain a HID descriptor, nothing else works without more core=0D
+changes.=0D
+=0D
+So instead I rebased the series from [1]. Converted to the new yaml DTS=0D
+documentation, added regulator support and fixed a x/y miscalculation bug.=
+=0D
+=0D
+1: https://lwn.net/ml/linux-kernel/20180703094309.18514-1-mylene.josserand@=
+bootlin.com/=0D
+2: https://github.com/alistair23/linux/commits/rM2-mainline-cyttsp5-hid=0D
+=0D
+v7:=0D
+ - Fix device tree warnings=0D
+v6:=0D
+ - Use reg for the button properties=0D
+v5:=0D
+ - Address review comments from v4=0D
+=0D
+Alistair Francis (4):=0D
+  Input: Add driver for Cypress Generation 5 touchscreen=0D
+  dt-bindings: input: Add Cypress TT2100 touchscreen controller=0D
+  ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen=0D
+  ARM: dts: imx7d-remarkable2: Enable the cyttsp5=0D
+=0D
+ .../input/touchscreen/cypress,tt21000.yaml    | 101 ++=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts       | 100 ++=0D
+ arch/arm/configs/imx_v6_v7_defconfig          |   1 +=0D
+ drivers/input/touchscreen/Kconfig             |  16 +=0D
+ drivers/input/touchscreen/Makefile            |   1 +=0D
+ drivers/input/touchscreen/cyttsp5.c           | 902 ++++++++++++++++++=0D
+ 6 files changed, 1121 insertions(+)=0D
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/cyp=
+ress,tt21000.yaml=0D
+ create mode 100644 drivers/input/touchscreen/cyttsp5.c=0D
+=0D
+-- =0D
+2.35.1=0D
+=0D

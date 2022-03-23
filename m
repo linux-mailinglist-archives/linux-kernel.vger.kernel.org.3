@@ -2,192 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0ED4E4E64
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25714E4E60
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242828AbiCWIld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 04:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S242760AbiCWIlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiCWIl3 (ORCPT
+        with ESMTP id S232197AbiCWIlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:41:29 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C642FFF1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:39:59 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 25so846850ljv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=btkrkL+Yu68nubevJGwP5i6FUk2mdmM5RvBYRXPVWug=;
-        b=SBMue3CkWXyZA9Uw88pS2jeJP3IvnxcvlpDKsLRKfbAmIav7iO0E++mWiDajd0qmKq
-         NDgblTHYA+5gRFXLvKN4hg6zHjJ8itf9f5eAxN67KMQ8UTHahJwapjdasIXTdQ/mVL14
-         feLXRivIpgqP4Aw718JA+k2nPWW+GuMJN+T/9FVhC/yVFm9UZBJ1ISWATYn4Xcmdhqcy
-         qEw8ZcbP9QF0WVX3uPNNj9eUIExDbSKbi8iYHyEi0NQYjrKVISa65XeQfhQAn+J89nhX
-         PPm6ogh2tGqs0ZL8v7lnz7BoQ+KZ6GGTvT0jXp6J1lZmm3LDC984GWos8ssU1GRGeP9Q
-         K6zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=btkrkL+Yu68nubevJGwP5i6FUk2mdmM5RvBYRXPVWug=;
-        b=Ioi2hXnCyKVcbY6bsuPj6AnANUUykfMsdA8C6nePfJTbSgUPSa30qN4j0UYL3ZLGqY
-         4tKvSS3N16WdemjMS87HDNTJd1Qs0rc/EWCbd1Kyfs3O6YTft1Ra0V5fEIkfiSeDWxgb
-         Ii+PRVBtLPiSrYftWz8txgOt5Vy3NHbjfPMmLENn7mZsMz976beU5sYt0wAB2Vcmu0Kv
-         6gUXdIf9fJA42192fWoWSd5gK02wGKzFCLvhXJvc173ZIuCnJoE7lmHQC6YXEPOPwlAt
-         5qeaRK8TYdhoIfQyd+D4TLVJB8eYAs7aJD/+yATFeTWRax3g0BgLfM38g4I2p/NyLq+R
-         m8hQ==
-X-Gm-Message-State: AOAM532xvkx/X+Ghc0PdWVnnTyT8FGfdg3Cq1xus/dYaHSZtDY1f9GQ+
-        GWAYtUeU8ZXR6e911AmRAFcMXA==
-X-Google-Smtp-Source: ABdhPJyYl9PbFUIVd/Xa1kC6l5HiCulEtm/0hfSsG+yEPR8f4kikWADc2bXMWtEd9Ougr/cEv+keqA==
-X-Received: by 2002:a2e:a488:0:b0:249:6096:a381 with SMTP id h8-20020a2ea488000000b002496096a381mr21104861lji.268.1648024797313;
-        Wed, 23 Mar 2022 01:39:57 -0700 (PDT)
-Received: from localhost.localdomain (h-155-4-129-34.NA.cust.bahnhof.se. [155.4.129.34])
-        by smtp.gmail.com with ESMTPSA id o17-20020ac24351000000b004437b082fc6sm2462420lfl.229.2022.03.23.01.39.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 01:39:56 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org
-Cc:     Yann Gautier <yann.gautier@foss.st.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        brcm80211-dev-list.pdl@broadcom.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] brcmfmac: Avoid keeping power to SDIO card unless WOWL is used
-Date:   Wed, 23 Mar 2022 09:39:50 +0100
-Message-Id: <20220323083950.414783-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 23 Mar 2022 04:41:00 -0400
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDA9205FB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:39:29 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KNhbz56g6zMqCHm;
+        Wed, 23 Mar 2022 09:39:27 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KNhbx4PhbzljsV2;
+        Wed, 23 Mar 2022 09:39:25 +0100 (CET)
+Message-ID: <b71454bb-d084-bfd6-7cd3-aa6bfdaaab00@digikod.net>
+Date:   Wed, 23 Mar 2022 09:40:35 +0100
 MIME-Version: 1.0
+User-Agent: 
+Content-Language: en-US
+To:     James Morris <jmorris@namei.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     Brendan Jackman <jackmanb@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20220222175332.384545-1-mic@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [RFC PATCH v1] LSM: Remove double path_rename hook calls for
+ RENAME_EXCHANGE
+In-Reply-To: <20220222175332.384545-1-mic@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keeping the power to the SDIO card during system wide suspend, consumes
-energy. Especially on battery driven embedded systems, this can be a
-problem. Therefore, let's change the behaviour into allowing the SDIO card
-to be powered off, unless WOWL is supported and enabled.
+Any comment? John, Tetsuo, does it look OK for AppArmor and Tomoyo?
 
-Note that, the downside from this change, is that during system resume the
-SDIO card needs to be re-initialized and the FW must be re-programmed. Even
-if this may take some time to complete, it should we worth it, rather than
-draining the battery.
-
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
-
-Changes in v2:
-	- As pointed out by Yann, the changes for the resume path was missing,
-	so I have added that too.
-
-Again, please note that, I have only compile-tested this patch, so I am relying
-on help from Yann and others to run tests on real HW.
-
-Kind regards
-Ulf Hansson
-
----
- .../broadcom/brcm80211/brcmfmac/bcmsdh.c      | 39 +++++++++++--------
- 1 file changed, 22 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-index ac02244a6fdf..9c598ea97499 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-@@ -1119,9 +1119,21 @@ void brcmf_sdio_wowl_config(struct device *dev, bool enabled)
- {
- 	struct brcmf_bus *bus_if = dev_get_drvdata(dev);
- 	struct brcmf_sdio_dev *sdiodev = bus_if->bus_priv.sdio;
-+	mmc_pm_flag_t pm_caps = sdio_get_host_pm_caps(sdiodev->func1);
- 
--	brcmf_dbg(SDIO, "Configuring WOWL, enabled=%d\n", enabled);
--	sdiodev->wowl_enabled = enabled;
-+	/* Power must be preserved to be able to support WOWL. */
-+	if (!(pm_caps & MMC_PM_KEEP_POWER))
-+		goto notsup;
-+
-+	if (sdiodev->settings->bus.sdio.oob_irq_supported ||
-+	    pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
-+		sdiodev->wowl_enabled = enabled;
-+		brcmf_dbg(SDIO, "Configuring WOWL, enabled=%d\n", enabled);
-+		return;
-+	}
-+
-+notsup:
-+	brcmf_dbg(SDIO, "WOWL not supported\n");
- }
- 
- #ifdef CONFIG_PM_SLEEP
-@@ -1130,7 +1142,7 @@ static int brcmf_ops_sdio_suspend(struct device *dev)
- 	struct sdio_func *func;
- 	struct brcmf_bus *bus_if;
- 	struct brcmf_sdio_dev *sdiodev;
--	mmc_pm_flag_t pm_caps, sdio_flags;
-+	mmc_pm_flag_t sdio_flags;
- 	int ret = 0;
- 
- 	func = container_of(dev, struct sdio_func, dev);
-@@ -1142,20 +1154,15 @@ static int brcmf_ops_sdio_suspend(struct device *dev)
- 	bus_if = dev_get_drvdata(dev);
- 	sdiodev = bus_if->bus_priv.sdio;
- 
--	pm_caps = sdio_get_host_pm_caps(func);
--
--	if (pm_caps & MMC_PM_KEEP_POWER) {
--		/* preserve card power during suspend */
-+	if (sdiodev->wowl_enabled) {
- 		brcmf_sdiod_freezer_on(sdiodev);
- 		brcmf_sdio_wd_timer(sdiodev->bus, 0);
- 
- 		sdio_flags = MMC_PM_KEEP_POWER;
--		if (sdiodev->wowl_enabled) {
--			if (sdiodev->settings->bus.sdio.oob_irq_supported)
--				enable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
--			else
--				sdio_flags |= MMC_PM_WAKE_SDIO_IRQ;
--		}
-+		if (sdiodev->settings->bus.sdio.oob_irq_supported)
-+			enable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
-+		else
-+			sdio_flags |= MMC_PM_WAKE_SDIO_IRQ;
- 
- 		if (sdio_set_host_pm_flags(sdiodev->func1, sdio_flags))
- 			brcmf_err("Failed to set pm_flags %x\n", sdio_flags);
-@@ -1176,21 +1183,19 @@ static int brcmf_ops_sdio_resume(struct device *dev)
- 	struct brcmf_bus *bus_if = dev_get_drvdata(dev);
- 	struct brcmf_sdio_dev *sdiodev = bus_if->bus_priv.sdio;
- 	struct sdio_func *func = container_of(dev, struct sdio_func, dev);
--	mmc_pm_flag_t pm_caps = sdio_get_host_pm_caps(func);
- 	int ret = 0;
- 
- 	brcmf_dbg(SDIO, "Enter: F%d\n", func->num);
- 	if (func->num != 2)
- 		return 0;
- 
--	if (!(pm_caps & MMC_PM_KEEP_POWER)) {
-+	if (!sdiodev->wowl_enabled) {
- 		/* bus was powered off and device removed, probe again */
- 		ret = brcmf_sdiod_probe(sdiodev);
- 		if (ret)
- 			brcmf_err("Failed to probe device on resume\n");
- 	} else {
--		if (sdiodev->wowl_enabled &&
--		    sdiodev->settings->bus.sdio.oob_irq_supported)
-+		if (sdiodev->settings->bus.sdio.oob_irq_supported)
- 			disable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
- 
- 		brcmf_sdiod_freezer_off(sdiodev);
--- 
-2.25.1
-
+On 22/02/2022 18:53, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> In order to be able to identify a file exchange with renameat2(2) and
+> RENAME_EXCHANGE, which will be useful for Landlock [1], propagate the
+> rename flags to LSMs.  This may also improve performance because of the
+> switch from two set of LSM hook calls to only one, and because LSMs
+> using this hook may optimize the double check (e.g. only one lock,
+> reduce the number of path walks).
+> 
+> AppArmor, Landlock and Tomoyo are updated to leverage this change.  This
+> should not change the current behavior (same check order), except
+> (different level of) speed boosts.
+> 
+> [1] https://lore.kernel.org/r/20220221212522.320243-1-mic@digikod.net
+> 
+> Cc: James Morris <jmorris@namei.org>
+> Cc: John Johansen <john.johansen@canonical.com>
+> Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20220222175332.384545-1-mic@digikod.net
+> ---
+>   include/linux/lsm_hook_defs.h |  2 +-
+>   include/linux/lsm_hooks.h     |  1 +
+>   security/apparmor/lsm.c       | 30 +++++++++++++++++++++++++-----
+>   security/landlock/fs.c        | 12 ++++++++++--
+>   security/security.c           |  9 +--------
+>   security/tomoyo/tomoyo.c      | 11 ++++++++++-
+>   6 files changed, 48 insertions(+), 17 deletions(-)
+> 
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index 819ec92dc2a8..d8b49c9c3a8a 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -100,7 +100,7 @@ LSM_HOOK(int, 0, path_link, struct dentry *old_dentry,
+>   	 const struct path *new_dir, struct dentry *new_dentry)
+>   LSM_HOOK(int, 0, path_rename, const struct path *old_dir,
+>   	 struct dentry *old_dentry, const struct path *new_dir,
+> -	 struct dentry *new_dentry)
+> +	 struct dentry *new_dentry, unsigned int flags)
+>   LSM_HOOK(int, 0, path_chmod, const struct path *path, umode_t mode)
+>   LSM_HOOK(int, 0, path_chown, const struct path *path, kuid_t uid, kgid_t gid)
+>   LSM_HOOK(int, 0, path_chroot, const struct path *path)
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 3bf5c658bc44..32cd2a7fe9fc 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -358,6 +358,7 @@
+>    *	@old_dentry contains the dentry structure of the old link.
+>    *	@new_dir contains the path structure for parent of the new link.
+>    *	@new_dentry contains the dentry structure of the new link.
+> + *	@flags may contain rename options such as RENAME_EXCHANGE.
+>    *	Return 0 if permission is granted.
+>    * @path_chmod:
+>    *	Check for permission to change a mode of the file @path. The new
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index 4f0eecb67dde..900bc540656a 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -354,13 +354,16 @@ static int apparmor_path_link(struct dentry *old_dentry, const struct path *new_
+>   }
+>   
+>   static int apparmor_path_rename(const struct path *old_dir, struct dentry *old_dentry,
+> -				const struct path *new_dir, struct dentry *new_dentry)
+> +				const struct path *new_dir, struct dentry *new_dentry,
+> +				const unsigned int flags)
+>   {
+>   	struct aa_label *label;
+>   	int error = 0;
+>   
+>   	if (!path_mediated_fs(old_dentry))
+>   		return 0;
+> +	if ((flags & RENAME_EXCHANGE) && !path_mediated_fs(new_dentry))
+> +		return 0;
+>   
+>   	label = begin_current_label_crit_section();
+>   	if (!unconfined(label)) {
+> @@ -374,10 +377,27 @@ static int apparmor_path_rename(const struct path *old_dir, struct dentry *old_d
+>   			d_backing_inode(old_dentry)->i_mode
+>   		};
+>   
+> -		error = aa_path_perm(OP_RENAME_SRC, label, &old_path, 0,
+> -				     MAY_READ | AA_MAY_GETATTR | MAY_WRITE |
+> -				     AA_MAY_SETATTR | AA_MAY_DELETE,
+> -				     &cond);
+> +		if (flags & RENAME_EXCHANGE) {
+> +			struct path_cond cond_exchange = {
+> +				i_uid_into_mnt(mnt_userns, d_backing_inode(new_dentry)),
+> +				d_backing_inode(new_dentry)->i_mode
+> +			};
+> +
+> +			error = aa_path_perm(OP_RENAME_SRC, label, &new_path, 0,
+> +					     MAY_READ | AA_MAY_GETATTR | MAY_WRITE |
+> +					     AA_MAY_SETATTR | AA_MAY_DELETE,
+> +					     &cond_exchange);
+> +			if (!error)
+> +				error = aa_path_perm(OP_RENAME_DEST, label, &old_path,
+> +						     0, MAY_WRITE | AA_MAY_SETATTR |
+> +						     AA_MAY_CREATE, &cond_exchange);
+> +		}
+> +
+> +		if (!error)
+> +			error = aa_path_perm(OP_RENAME_SRC, label, &old_path, 0,
+> +					     MAY_READ | AA_MAY_GETATTR | MAY_WRITE |
+> +					     AA_MAY_SETATTR | AA_MAY_DELETE,
+> +					     &cond);
+>   		if (!error)
+>   			error = aa_path_perm(OP_RENAME_DEST, label, &new_path,
+>   					     0, MAY_WRITE | AA_MAY_SETATTR |
+> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+> index 97b8e421f617..7e57fca6e814 100644
+> --- a/security/landlock/fs.c
+> +++ b/security/landlock/fs.c
+> @@ -574,10 +574,12 @@ static inline u32 maybe_remove(const struct dentry *const dentry)
+>   static int hook_path_rename(const struct path *const old_dir,
+>   		struct dentry *const old_dentry,
+>   		const struct path *const new_dir,
+> -		struct dentry *const new_dentry)
+> +		struct dentry *const new_dentry,
+> +		const unsigned int flags)
+>   {
+>   	const struct landlock_ruleset *const dom =
+>   		landlock_get_current_domain();
+> +	u32 exchange_access = 0;
+>   
+>   	if (!dom)
+>   		return 0;
+> @@ -585,11 +587,17 @@ static int hook_path_rename(const struct path *const old_dir,
+>   	if (old_dir->dentry != new_dir->dentry)
+>   		/* Gracefully forbids reparenting. */
+>   		return -EXDEV;
+> +	if (flags & RENAME_EXCHANGE) {
+> +		if (unlikely(d_is_negative(new_dentry)))
+> +			return -ENOENT;
+> +		exchange_access =
+> +			get_mode_access(d_backing_inode(new_dentry)->i_mode);
+> +	}
+>   	if (unlikely(d_is_negative(old_dentry)))
+>   		return -ENOENT;
+>   	/* RENAME_EXCHANGE is handled because directories are the same. */
+>   	return check_access_path(dom, old_dir, maybe_remove(old_dentry) |
+> -			maybe_remove(new_dentry) |
+> +			maybe_remove(new_dentry) | exchange_access |
+>   			get_mode_access(d_backing_inode(old_dentry)->i_mode));
+>   }
+>   
+> diff --git a/security/security.c b/security/security.c
+> index 22261d79f333..8634da4cfd46 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1184,15 +1184,8 @@ int security_path_rename(const struct path *old_dir, struct dentry *old_dentry,
+>   		     (d_is_positive(new_dentry) && IS_PRIVATE(d_backing_inode(new_dentry)))))
+>   		return 0;
+>   
+> -	if (flags & RENAME_EXCHANGE) {
+> -		int err = call_int_hook(path_rename, 0, new_dir, new_dentry,
+> -					old_dir, old_dentry);
+> -		if (err)
+> -			return err;
+> -	}
+> -
+>   	return call_int_hook(path_rename, 0, old_dir, old_dentry, new_dir,
+> -				new_dentry);
+> +				new_dentry, flags);
+>   }
+>   EXPORT_SYMBOL(security_path_rename);
+>   
+> diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
+> index b6a31901f289..71e82d855ebf 100644
+> --- a/security/tomoyo/tomoyo.c
+> +++ b/security/tomoyo/tomoyo.c
+> @@ -264,17 +264,26 @@ static int tomoyo_path_link(struct dentry *old_dentry, const struct path *new_di
+>    * @old_dentry: Pointer to "struct dentry".
+>    * @new_parent: Pointer to "struct path".
+>    * @new_dentry: Pointer to "struct dentry".
+> + * @flags: Rename options.
+>    *
+>    * Returns 0 on success, negative value otherwise.
+>    */
+>   static int tomoyo_path_rename(const struct path *old_parent,
+>   			      struct dentry *old_dentry,
+>   			      const struct path *new_parent,
+> -			      struct dentry *new_dentry)
+> +			      struct dentry *new_dentry,
+> +			      const unsigned int flags)
+>   {
+>   	struct path path1 = { .mnt = old_parent->mnt, .dentry = old_dentry };
+>   	struct path path2 = { .mnt = new_parent->mnt, .dentry = new_dentry };
+>   
+> +	if (flags & RENAME_EXCHANGE) {
+> +		const int err = tomoyo_path2_perm(TOMOYO_TYPE_RENAME, &path2,
+> +				&path1);
+> +
+> +		if (err)
+> +			return err;
+> +	}
+>   	return tomoyo_path2_perm(TOMOYO_TYPE_RENAME, &path1, &path2);
+>   }
+>   
+> 
+> base-commit: cfb92440ee71adcc2105b0890bb01ac3cddb8507

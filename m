@@ -2,46 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798BA4E5944
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC084E5945
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344324AbiCWTlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S1344332AbiCWTl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240367AbiCWTk7 (ORCPT
+        with ESMTP id S240358AbiCWTl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:40:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C1A45790
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:39:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94030B82027
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:39:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84352C340E8;
-        Wed, 23 Mar 2022 19:39:25 +0000 (UTC)
-Date:   Wed, 23 Mar 2022 15:39:23 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [GIT PULL] tracing: Updates for 5.18
-Message-ID: <20220323153923.425be157@gandalf.local.home>
-In-Reply-To: <CAHk-=wiY2iVfuwuOLbaQ1PG2sK2ZGVtCfRH+bjDyei3j5YytLA@mail.gmail.com>
-References: <20220321105621.3d4a9bc6@gandalf.local.home>
-        <CAHk-=wiY2iVfuwuOLbaQ1PG2sK2ZGVtCfRH+bjDyei3j5YytLA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 23 Mar 2022 15:41:28 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9345749C;
+        Wed, 23 Mar 2022 12:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=EXspul3bxV1ROddHWUH5dYvmEAgYPmadkfO6M4GEFq4=; b=dVeofnZ+TOMTdO2uLMs5Upulco
+        bGum5lnQdTfrlAcA64OHzpfybLu6QbuJzHJk+s/exqbrOBOwCz6Nex/JkRHywxZ8qzSVRK7KEdHs8
+        HphUmRaKIBVbZRBdIx4Yv5mQCeRR248aQTGrMO5OsL+oRCs8yqtPDKZbx6krQOUZYEgU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nX6pg-00CKi9-2T; Wed, 23 Mar 2022 20:39:48 +0100
+Date:   Wed, 23 Mar 2022 20:39:48 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 2/5] net: phy: support indirect c45 access
+ in get_phy_c45_ids()
+Message-ID: <Yjt3hHWt0mW6er8/@lunn.ch>
+References: <20220323183419.2278676-1-michael@walle.cc>
+ <20220323183419.2278676-3-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323183419.2278676-3-michael@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,69 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 11:47:07 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> +static int mdiobus_probe_mmd_read(struct mii_bus *bus, int prtad, int devad,
+> +				  u16 regnum)
+> +{
+> +	int ret;
+> +
+> +	/* For backwards compatibility, treat MDIOBUS_NO_CAP as c45 capable */
+> +	if (bus->probe_capabilities == MDIOBUS_NO_CAP ||
+> +	    bus->probe_capabilities >= MDIOBUS_C45)
 
-> On Mon, Mar 21, 2022 at 7:56 AM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > A restructure of include/trace caused a conflict [..]  
-> 
-> Ugh. Disgusting. And in the very same pull request it shows why that
-> TRACE_CUSTOM_EVENT() thing that caused this all was actually a
-> horribly bad idea, since it also then DIDN'T WORK due to the kernel
-> interfaces changing.
+Maybe we should do the work and mark up those that are C45 capable. At
+a quick count, see 16 of them.
 
-I thought I explained the reasoning behind that in my pull request.
+> +		return mdiobus_c45_read(bus, prtad, devad, regnum);
+> +
+> +	mutex_lock(&bus->mdio_lock);
+> +
+> +	/* Write the desired MMD Devad */
+> +	ret = __mdiobus_write(bus, prtad, MII_MMD_CTRL, devad);
+> +	if (ret)
+> +		goto out;
+> +
+> +	/* Write the desired MMD register address */
+> +	ret = __mdiobus_write(bus, prtad, MII_MMD_DATA, regnum);
+> +	if (ret)
+> +		goto out;
+> +
+> +	/* Select the Function : DATA with no post increment */
+> +	ret = __mdiobus_write(bus, prtad, MII_MMD_CTRL,
+> +			      devad | MII_MMD_CTRL_NOINCR);
+> +	if (ret)
+> +		goto out;
 
-CUSTOM events have to match the function prototype to the tracepoint that
-they are on top of (which is created by the TRACE_EVENT), and if they do
-not, bad things can happen at run time. Thus, the added check to make sure
-it will fail at build time.
+Make mmd_phy_indirect() usable, rather then repeat it.
 
-> 
-> So this restructuring seems to have been triggered by something that
-> was a bad idea to begin with.
-> 
-> But the real problem is here:
-> 
-> > Tracing updates for 5.18:
-> >
-> > - New user_events interface. User space can register an event with the kernel
-> >   describing the format of the event. Then it will receive a byte in a page
-> >   mapping that it can check against. A privileged task can then enable that
-> >   event like any other event, which will change the mapped byte to true,
-> >   telling the user space application to start writing the event to the
-> >   tracing buffer.  
-> 
-> That explanation makes no sense, because it doesn't actually explain *why*.
-
-Sorry, sometimes when you are deep into the work, things that are obvious
-to yourself may not be obvious to others. Being able to know those things
-is an art onto itself.
-
-> 
-> It explains *what*, but the big issue for new interfaces shoudl always
-> be why the heck a new interface was needed in the first place.
-
-The why is that we have applications that run in containers that want
-events to be traced. But we do not want to always trace those events. These
-applications will not have an interface to talk to, to say "start tracing
-X", as they are inside a container and various other reasons.
-
-Thus, the applications can add their own trace events, and then the admin
-that is outside the container can enable the events inside the container,
-by enabling them from the tracefs file system, which will set a byte in the
-mapping that happened when the application registered the event, where it
-can now know to start tracing the event.
-
-It does require that the application has a conditional jmp on that byte,
-and not be optimized like the kernel is with static_branches.
-
-I hope that explains things a bit better.
-
-> 
-> I've pulled this, but under protest.
-
-Thank you.
-
--- Steve
+     Andrew

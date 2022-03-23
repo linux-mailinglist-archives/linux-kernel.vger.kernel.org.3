@@ -2,105 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF214E57FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382C84E5804
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343895AbiCWSA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 14:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S1343911AbiCWSDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 14:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235384AbiCWSA5 (ORCPT
+        with ESMTP id S240010AbiCWSDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 14:00:57 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761B41F605;
-        Wed, 23 Mar 2022 10:59:27 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id kx5-20020a17090b228500b001c6ed9db871so7182116pjb.1;
-        Wed, 23 Mar 2022 10:59:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TeKF1IrVTPwtitTV8dgbmN8AVqD0Mtciv+RTNtchAtM=;
-        b=CvS8qLVfcrk3NGlCqS+dzql75jrHonuWq7qfMNBpfDuWkx+hMOOp9iOU9e0kom/Vzu
-         PoEoodYURFWHBLM/vjzBIi1mkmM8fHUnSIZrKe7yhVUsBFioL4HmZDJQ89Mh8v+2al/l
-         /9qJUdoMxL/wc5GDlc7snCBOhfpm+krsr4wX0aQrLjUa2cx5atgPYYeZ1Ogj5a1qfmOm
-         i8r1AC/3qQiPyO/k+NEc//VJmgKq3WyYkzAogz3FE2klGCXhdxgnFNsrtmTPQRcbXZWj
-         bC2exxhscNLB5MsO79gtUxB0jgrfhQKfy3nMB+SHVX7tUTFRrHzEQZysXgpD/wTcJjMf
-         qK8g==
+        Wed, 23 Mar 2022 14:03:52 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40954387AB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:02:21 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id h14-20020a05660208ce00b00645c339411bso1562281ioz.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:02:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TeKF1IrVTPwtitTV8dgbmN8AVqD0Mtciv+RTNtchAtM=;
-        b=lEBqrZ/KWouxPw6rQxQyT4UfarzmmtVhtD2fcVm2rHQwxQZaZVh4Vw49/Y9eujfsjX
-         kpY3yOLeJ/fJxJ87o33UM1WdV1ZdL3AUahlHxzry5AZA38fTxrHcwl/+uEk39xCMwSzw
-         B1wIojbdVcABQUwuy7tDEoHetrg5bOl+eWLs/zSQE+f4Oaqiak4fsQP6Rp/vZWLwSLnR
-         Gjyiv0X1iVWnYo7uPu+66iRK9x/qjG3WIDYk19RC9J6Q4gFgT2Y1RuZ74b3tNBbnkQVC
-         VOaoM71tLC8kpnXJ9chlqqq5iIWr+gX9+1F1AeHjCOW0k6aY/bIO+9V2cHkbCA5p3Z4Q
-         PVNA==
-X-Gm-Message-State: AOAM533lxIOIplErCPHlPh95DZOJyCcRGxAtCXwOvEoaDE9s266/wln0
-        hSz0R7FMdxkIMWeBXzdq/nk=
-X-Google-Smtp-Source: ABdhPJwaHPOu98pWAjMGLcxyok9W+oPp/AYZC/v0jL+r/3wC+oBxGKiyJZhBZ8kX81WieVhTk9diBw==
-X-Received: by 2002:a17:90a:cce:b0:1bf:6387:30d9 with SMTP id 14-20020a17090a0cce00b001bf638730d9mr13199933pjt.196.1648058366984;
-        Wed, 23 Mar 2022 10:59:26 -0700 (PDT)
-Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id q2-20020a056a00084200b004f761a7287dsm551622pfk.131.2022.03.23.10.59.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 10:59:26 -0700 (PDT)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ARM: dts: spear13xx: Update SPI dma properties
-Date:   Wed, 23 Mar 2022 23:29:20 +0530
-Message-Id: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=HZKcxTd8yBjcuCzsi5LaWFbMjBot/jNyVQw48+3QEKE=;
+        b=PEbeOTO5KwI5ojBV1x97FC2a2fZhOX/dtNVD4ZEFzajOV09NsukeHdbrT7eVDZcogF
+         K2bU0a7WHTgy50Vbn6evX6oprlWgZPXto/pyhugHCGad6I1KZgQXjbAlKbJ55ly11dSF
+         iPkozYbQYjUrcVpXdY1BLtpbB5B/X3xJ98+fXoWJWRL41TTYfpyEuzgYSHepT806oJcu
+         8ydLY3QUBXQvOyI6Jl5oJnV587KmZTexWDidSS8epA1h6eSAwicMsOlLoaXEKxwCyrgq
+         DAokWGFywWwsyeDKedapXOmThpTxoRaFLcakGyccyqONsLXa68YYr+C5cOMuvlPS7x3a
+         oQOA==
+X-Gm-Message-State: AOAM532kMdA3XUytDb/hatpB+2y3pxCPRtDkWywrD+wMOr3zoY+tKQ0M
+        v1fz5/mtuLizYeiyJKiX2k2uvX7/M89a52gsNmGVLPMVCsJF
+X-Google-Smtp-Source: ABdhPJy4ryZML6boSyKCoxyWPJyLTqtm/xisM+H+IOjG+Nwayo7G7wbl+ObA0qqhNpIbTCLIwVvKnXbYS3KF2VjRdNsbTadybvkv
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:264b:b0:31a:84d7:7281 with SMTP id
+ n11-20020a056638264b00b0031a84d77281mr636739jat.288.1648058540624; Wed, 23
+ Mar 2022 11:02:20 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 11:02:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e20ce905dae687ee@google.com>
+Subject: [syzbot] WARNING in ieee80211_mgd_probe_ap_send
+From:   syzbot <syzbot+07aa0ff28ef3cc7c3793@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reorder dmas and dma-names property for spi controller node to make it
-compliant with bindings.
+Hello,
 
-Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+syzbot found the following issue on:
+
+HEAD commit:    14702b3b2438 Merge tag 'soc-fixes-5.17-4' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14d33aeb700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=07aa0ff28ef3cc7c3793
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+07aa0ff28ef3cc7c3793@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1087 at net/mac80211/mlme.c:2563 ieee80211_mgd_probe_ap_send+0x506/0x5d0 net/mac80211/mlme.c:2563
+Modules linked in:
+CPU: 0 PID: 1087 Comm: kworker/u4:5 Not tainted 5.17.0-rc8-syzkaller-00077-g14702b3b2438 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: phy23 ieee80211_beacon_connection_loss_work
+RIP: 0010:ieee80211_mgd_probe_ap_send+0x506/0x5d0 net/mac80211/mlme.c:2563
+Code: f8 48 c7 c2 60 05 d0 8a be d3 02 00 00 48 c7 c7 c0 05 d0 8a c6 05 60 18 d0 04 01 e8 2d 05 59 00 e9 34 fe ff ff e8 6a 4e c9 f8 <0f> 0b e9 c5 fe ff ff e8 de c7 10 f9 e9 3a fb ff ff 4c 89 e7 e8 e1
+RSP: 0018:ffffc90004e07c80 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff88801c1fd700 RSI: ffffffff88af71c6 RDI: 0000000000000000
+RBP: ffff88801dff0cc0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88801dff12d0
+R13: ffff88805dc3d0b8 R14: 0000000000000000 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055f43a4a93a0 CR3: 0000000061885000 CR4: 00000000003506e0
+Call Trace:
+ <TASK>
+ ieee80211_mgd_probe_ap.part.0+0x30a/0x480 net/mac80211/mlme.c:2653
+ ieee80211_mgd_probe_ap net/mac80211/mlme.c:2597 [inline]
+ ieee80211_beacon_connection_loss_work+0x147/0x180 net/mac80211/mlme.c:2787
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+
 ---
-v2:
-- Add fixes tag
-- Remove 1/2 patch from series as it's not required
-- v1 discussion link:
-  https://lore.kernel.org/linux-devicetree/20220312180615.68929-2-singh.kuldeep87k@gmail.com/
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- arch/arm/boot/dts/spear13xx.dtsi | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm/boot/dts/spear13xx.dtsi b/arch/arm/boot/dts/spear13xx.dtsi
-index c87b881b2c8b..45f0b2a33e02 100644
---- a/arch/arm/boot/dts/spear13xx.dtsi
-+++ b/arch/arm/boot/dts/spear13xx.dtsi
-@@ -284,9 +284,8 @@ spi0: spi@e0100000 {
- 				#size-cells = <0>;
- 				interrupts = <0 31 0x4>;
- 				status = "disabled";
--				dmas = <&dwdma0 4 0 0>,
--					<&dwdma0 5 0 0>;
--				dma-names = "tx", "rx";
-+				dmas = <&dwdma0 5 0 0>, <&dwdma0 4 0 0>;
-+				dma-names = "rx", "tx";
- 			};
- 
- 			rtc@e0580000 {
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,126 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365804E4F7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE1F4E4F85
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236959AbiCWJgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 05:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
+        id S243299AbiCWJgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 05:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234287AbiCWJf7 (ORCPT
+        with ESMTP id S234481AbiCWJgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 05:35:59 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C034974DF3;
-        Wed, 23 Mar 2022 02:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648028068; x=1679564068;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nJv5+3wfNL9GVTmJdE4b7/NUS6LcmBN/AhqlopqLrj0=;
-  b=bUKZBqULVfQGScPE4eQ/cP1ht8txV9iE5GKoR9ONaUfOKahaLTDqGISk
-   AEbYC/y3CHdlbX8RYi8hmiDgMaGecGgRQKjBEAX7Jl4uxMsKjvLXSKNGI
-   fvZ8IG0Gjpgu0zX7DxR6OkHT8VtkU9K4cJvwV4q4WiDLmTbVLStk+oR3m
-   4QL154Z36+k7O3ULq6VrLsu7j1V0gVmV5moWVxi7istxrHSoLs51cp3Ez
-   sbyQK1qaE7iPCmA8rWE1z1gpfpQVaaLKBDRVpU4mhjqd+KttqX7pnDC7A
-   XdnSH44F7bUU9zPjav0Dm5UCvpv8LW9EiotNSrzDx6qY0aogQWM8raHaT
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="238671276"
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="238671276"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 02:34:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="519290674"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 23 Mar 2022 02:34:25 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWxNo-000Ju3-6K; Wed, 23 Mar 2022 09:34:24 +0000
-Date:   Wed, 23 Mar 2022 17:33:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>
-Subject: Re: [PATCH 2/2] drivers: usb: dwc3: Add AM62 USB wrapper driver
-Message-ID: <202203231743.8JXV829j-lkp@intel.com>
-References: <20220323053524.7009-3-a-govindraju@ti.com>
+        Wed, 23 Mar 2022 05:36:42 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60087.outbound.protection.outlook.com [40.107.6.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8006E7B4;
+        Wed, 23 Mar 2022 02:35:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y1w0dV63M1aYDLTTjb9biET8XV2jfMKaKe1HwzDYQwwRU+4BVFwJ3uBcz9v9boelHlvSNRhfLVoGPeIXDpjRKFZFkoqwlmIfR0UbZEd9GiQghndrRmaqNYladM5qHsdaCycyCnM+16bRxDp2KwPTCJi4Zf7SGl29pQSwkuuCBWfxBsC3BekuAEpBrjMxDytZwsN9g+VnH/lZyseU0lFqVI4ACmpNSEiBYUg5OfKNRM7o08oxskr/Vgr2GpXp8bdy5HhbyHTdT0kxgk1vfL7375UU3qVsolMUZoAsGe+1l+vvreTqjaTQ9Ja+RzAY6xQjUQBxMHu/1K8rm05ILApatQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RW+Wy/cWHWH80OMzya/xM16Pi5s9FJ+30ec7EZrCL3c=;
+ b=K3/ULRILD6WquhaifTwgWNTIBZ5+/Yz/6y8cnJ/OEx1M7G8IYlCMminu8I7k2txgmshzmBswpPRFv2dApq5Moa1gc+RZEGZybr0kwtzprAIjei0sf9eeObX9ncjYTZxMzldlitsfACo4loijbAsnHlPwmg/G1LYmU5AeuZq2DXvuEVHYU5f+GHVAMbab9pxrdQtcm+41h4QgVexb/3h71zqBi1/v0i4UirfOJsgTc2n693f1AUM/Icw1Ege93D+fn2it52QnUAr1xBzY3cNyCgltR0toX6OmP04L7ZnrG2uFgdQYOW7TZz13CJlT9dll5Sx/gz9Y/ppCDMG3VNDbbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RW+Wy/cWHWH80OMzya/xM16Pi5s9FJ+30ec7EZrCL3c=;
+ b=PslrzTcXSlRfWr+NTCWDE3ERH5S2+OnXg+WlL8kixAq3xMTYoIkxcvaOfMPDTi6XWsLn1d3KRbElyMroRpcLeamPD9JuYDWDlTpyPfUZEm7lyN1EEPrungInUFLxr238h67aWn+90zGDkeFgpi0uKqecSBQfkAvZI5NxweIUg80=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by PAXPR04MB8095.eurprd04.prod.outlook.com (2603:10a6:102:1c6::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 23 Mar
+ 2022 09:35:10 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::1d8b:d8d8:ca2b:efff]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::1d8b:d8d8:ca2b:efff%3]) with mapi id 15.20.5102.016; Wed, 23 Mar 2022
+ 09:35:09 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2] dt-bindings: serial: fsl-lpuart: Add imx93 compatible string
+Date:   Wed, 23 Mar 2022 17:36:59 +0800
+Message-Id: <20220323093659.1722463-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR03CA0093.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::21) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323053524.7009-3-a-govindraju@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 557e760c-0323-4724-fdae-08da0cb06c35
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8095:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <PAXPR04MB80957E0B721EFD56A455B803C9189@PAXPR04MB8095.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TJJIfucVvt3z0Xgup43hObltmURBjbZxm5ZVL/JwRo7CiANOOzIZIO/6IhEYaxA4tv+5bnnko9/FY/S5igMfN9wFzSaSIwJSmYpCoy0eDuKdfXrWhpbqytoOtgszz0vpP8z0pIdfix8gPyRJyEaZGtx3W+Fz3bsFzAzFEW62Su2Qw2UEhKbmpr9KnUw4xsmSAqy/etJ5mTbObngLvuf6j1FOZvzgpEeawuCfYr2fcifTN+zQf+rzRd2DUVJd/bt7dC3ixkvZTYsl7rOXrgaJTEOv63/WlZXNJ4fOjwyj8WO2R1aPCIjWzBWsmH8YyhmvIDhJkug7p4FoslnESWGid6aUDANJJ3JFOJpLlrgYx5VpRbuaAQt+vDHq3Uvv+43dZSWZejVVPCHCsfRzKXG8J0vQCzMv4v2j+Z4c3MXYuTn+3EsYf14xqsp5UgiIbCeCUEq8Hf+1JhXaB/P8YIKnhQdJ6G9DKne4VnVQOCE+PjfbDvnYfY/r08YXssk6AwyuxE9l/DLMVCbWLNnbkErTMBwFXk+TZgznKcFa3vGduIKoPx70LPrnYXChnNqcgCbl4nSZ9zxcEZl5+AvEuKuEq8TEGBoVe+ADrb6bwqHGfE4wLBnykN7O7NNbxT5B+s6Sz2uktDOZFm7r3ioVGgSvt7pSJnU58VX+gLLlptfHKwedrhpURk/txj7MhYa16DbRMEpQSnbpwQyE/XpWxbP/MA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(1076003)(6506007)(26005)(186003)(6512007)(6666004)(2616005)(2906002)(66556008)(8676002)(4326008)(38350700002)(316002)(5660300002)(52116002)(38100700002)(66946007)(66476007)(83380400001)(508600001)(86362001)(4744005)(8936002)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6S3qP23SEhZij7KXx9yNpqBTsr3rWLCST4wix2C1sb6OIj84+w7JqXl43WVU?=
+ =?us-ascii?Q?yuNYoTDPbUja9/e/I3y00rP69EIJy7pqdl9fZnLo21udD7rkDYuC6iiKVKvS?=
+ =?us-ascii?Q?FrF15tRoyd1t/Ir+mpITVm/jEYqS75ni+D03gbsjJJ8MeTelfe+ZwS81kAKC?=
+ =?us-ascii?Q?Rgm/mEFc3QG1yjRo5XLrkmBm9q+iPaXYmsgrPxDi/b0m9dG3a7jeJkCPJzD4?=
+ =?us-ascii?Q?n10ZIO//Lx5Y2pKsicgCPgjIpmIID6/earT0rNLuAcnZL+pOBy6ILFuIn41C?=
+ =?us-ascii?Q?Qltj8T1/Peygylj2rpibYnaVXj3lQabr4DMLEDh0eVnV4DZeYiiLH+9ayyQr?=
+ =?us-ascii?Q?oA3tSI32LGrhrY/RAXdrUex/x6EcDnvpl5umLxYMpD9e7emYF9+zttf6w09B?=
+ =?us-ascii?Q?3j621xjPEtJ/xgFXsyF8vqAgg5a3EsThTxQv/640TOgFh76m0/LG9AlQg6XZ?=
+ =?us-ascii?Q?rWc3yuHaODEBJQp6tdGVKcROW4WWkd9s5F7Jk716ngZRR0WCAr08TVB+Bcb0?=
+ =?us-ascii?Q?LK6zy7wYeuAO3pFYgh/G9oQyEOwO1LHoyaPIW4x3d7cySFx75cb+/3Q6eNwU?=
+ =?us-ascii?Q?i59fcsLzSih0m10zW6xuQ5PaPy9Y8bHT2RkHM7vlgIHGBbyGYPxdfCXWw7CM?=
+ =?us-ascii?Q?0SdfqS6ZLhSwngp44pKD2j5jg84eOzAe97qYxT+HRfQeY5GIwsqBjIG1/o31?=
+ =?us-ascii?Q?YH4hFXk60qc6jeg/h7B0VbbPypT/txRQi6EbJPSFO0jad/6l1tWuGIgLBAxV?=
+ =?us-ascii?Q?bPA16Y8mr6mkgqpmVzbsOv+It2Afg9oGwcy8Hzv4V+H0mG3e1VJ1FhrDem+D?=
+ =?us-ascii?Q?CR2Ajw+Cu1wwQPHzRdztcdyaSdUpt1uJopDGsLZ+h/NSOeJ1c3JthPBjMyZh?=
+ =?us-ascii?Q?hnWoFgpweoAESNuv0OupmU2tY4EPTP+8YFfT9xqDGNaqF+GKred6UcSmKIVg?=
+ =?us-ascii?Q?IVfmWRPmHGCfiSF0uyjIBVkMkmsA6x0OqVYC5sry6o4wyqaU9/uob9Hrce12?=
+ =?us-ascii?Q?q3y/P2WKaQY23CYX9DVgszsE7eTkVxQqWdhiVyktNNpO8kks+R51tlUGKXvl?=
+ =?us-ascii?Q?eqXtGq8phTz0U+TdOTX/HHbU+84JrcLRGHeQItrpHh7Oy42+LT/e9AJDDHG5?=
+ =?us-ascii?Q?FoWQ7SwEyEeWYaQt7ocbjp0VHgAUAjFQB3NBqcfieFLtZXNVMHUhnLfINPhy?=
+ =?us-ascii?Q?0XUz56K04af1UABGr2fVExu4SufRwc/6KJe1/VC3pHwQYRVysOy2h5KJNpmn?=
+ =?us-ascii?Q?k6XMALhKWHRPLluYbfJm3gv7D34LGDOsoEg2bcBELlAisd7C2CD/7eQcHUHd?=
+ =?us-ascii?Q?e7SyrVeRJ17bi9dxWZV70ky2Z9ypMBh4YjQ8fFh0uAoNWTjsbKhL63oLtfX5?=
+ =?us-ascii?Q?G6cCqhiU15MWvHCP+q39p3LMHciVtM0X+0aLcEZSRkcQz+Ypai6WrLbRiKFH?=
+ =?us-ascii?Q?dXIHN+VpQHjRCo//6waO3qcE90cYMQh6?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 557e760c-0323-4724-fdae-08da0cb06c35
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 09:35:09.9038
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q8zo8bE1qLDTkPPybnrmR4oRjdzQOvhMpPZ3YdPf6T5jSEmbYgKkFJ0DEto9pYBQcQlyYz8zxcbYxIwnz5c/gw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8095
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aswath,
+From: Peng Fan <peng.fan@nxp.com>
 
-I love your patch! Yet something to improve:
+The lpuart on i.MX93 is derived from i.MX7ULP with some industrial
+enhancements, it uses two compatible strings, so update the
+compatible string for i.MX93.
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on usb/usb-testing linus/master v5.17 next-20220322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
 
-url:    https://github.com/0day-ci/linux/commits/Aswath-Govindraju/AM62-Add-support-for-AM62-USB-wrapper-driver/20220323-133708
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: mips-randconfig-c004-20220323 (https://download.01.org/0day-ci/archive/20220323/202203231743.8JXV829j-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4ca423573f638454724a40416042d84552db81af
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Aswath-Govindraju/AM62-Add-support-for-AM62-USB-wrapper-driver/20220323-133708
-        git checkout 4ca423573f638454724a40416042d84552db81af
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/usb/dwc3/
+V2:
+ Drop fsl,imx93-lpuart-v2, that is software controllable per Design team,
+ so we may update driver for that.
+ Update commit message
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+ Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-All errors (new ones prefixed by >>):
-
->> drivers/usb/dwc3/dwc3-am62.c:567:28: error: 'dwc3_ti_pm_ops' undeclared here (not in a function); did you mean 'dwc3_ti_probe'?
-     567 |                 .pm     = &dwc3_ti_pm_ops,
-         |                            ^~~~~~~~~~~~~~
-         |                            dwc3_ti_probe
-
-
-vim +567 drivers/usb/dwc3/dwc3-am62.c
-
-   561	
-   562	static struct platform_driver dwc3_ti_driver = {
-   563		.probe		= dwc3_ti_probe,
-   564		.remove		= dwc3_ti_remove,
-   565		.driver		= {
-   566			.name	= "dwc3-am62",
- > 567			.pm	= &dwc3_ti_pm_ops,
-   568			.of_match_table = dwc3_ti_of_match,
-   569		},
-   570	};
-   571	
-
+diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+index ff364bd0fbac..30eaa62e1aed 100644
+--- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
++++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+@@ -23,7 +23,9 @@ properties:
+           - fsl,imx8qxp-lpuart
+           - fsl,imxrt1050-lpuart
+       - items:
+-          - const: fsl,imx8ulp-lpuart
++          - enum:
++              - fsl,imx93-lpuart
++              - fsl,imx8ulp-lpuart
+           - const: fsl,imx7ulp-lpuart
+       - items:
+           - enum:
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

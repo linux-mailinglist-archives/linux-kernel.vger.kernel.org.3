@@ -2,114 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A5D4E4DBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFA84E4DBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242410AbiCWIFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 04:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S242423AbiCWIFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbiCWIFp (ORCPT
+        with ESMTP id S242409AbiCWIFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:05:45 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB7B70F78;
-        Wed, 23 Mar 2022 01:04:16 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bi12so1204842ejb.3;
-        Wed, 23 Mar 2022 01:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oNMVyc/j83Ecy4cv3OC0iNO8ILErqvD2g6W5CyTq9YM=;
-        b=Jm/YB+FO7nUYcqHPWrxgd7j2+1gT2mX8y52Dm2suYxlLEFFoExFfUKJW6LO9p2JjTu
-         TMoYyPmiohkYGrIKIaRrbzbjuvPNFxs+bZvnUtqDHworqhd4tOIUlGRpkU3Agxw8gJZ2
-         1O6srV/XGOl5VhiOOR5xtGi5Lf6PJIYYPpk/djhqe4LirE/hkaMKV2YLwTSXW54EcSDK
-         Y/KTJwY/7vdDIh+iKy6hkEvgGIF4hhFPnE3ketYo5Mc1M38QD7n5nut6NzNHZI4U09zr
-         I2NljQls0K6joLTi4Q7j9J6tUex6uHSwdqcfAD5T5TVIcrnq/8G4Q5TtUU16NUh3LJrr
-         5Pug==
+        Wed, 23 Mar 2022 04:05:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A99D70F78
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648022657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cePn2HPJ3CtBPN5ynUkfrIKVQlGOlqRorjeDVtC/Lcs=;
+        b=Y/gV590eC7jk89r+bJbjvNVxeqsP/NoC/AJnq7KEfHPw4rHN6pen0eF6Q+FoyOiiqpjCQj
+        13Sfl33zMf0Mn8uSwvQebCfHrsSvCN1HPgb/wycL5fZESjnf0lJu5rLODSDLkxxtJTCrMk
+        Mc78wyEzjsNrRSIl6k7yjS+vWF4bRFk=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-nUPBJ8yUMs-Q5aZYuMJA9g-1; Wed, 23 Mar 2022 04:04:15 -0400
+X-MC-Unique: nUPBJ8yUMs-Q5aZYuMJA9g-1
+Received: by mail-qt1-f198.google.com with SMTP id y23-20020ac85257000000b002e06697f2ebso599836qtn.16
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:04:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oNMVyc/j83Ecy4cv3OC0iNO8ILErqvD2g6W5CyTq9YM=;
-        b=ZCJBtG7wXUzFf5U9cOk+prJld0vaxPJT8NLPK4N9N2Wjzp7ZkFXepoMrw41+Ajy3f7
-         y8YDV4Onshg0EJY0m0WlavcNPii8+/EEAIFtgL4hVLnAzvhEwKs60urITCrkK0LVT26I
-         FGI39PisgPCUVEZxVhsYCaPxP2K/n74pq1qm+tQ95BuycOvxT93NJIAfYXk1gkdkPcdr
-         3V5/W87EgyKlCwCJe/u7mRkKVs6v92j1SvGBCzhKQUs7gpCzRwKL3YnDV0RUWaFpsxJr
-         vrfHlcfWdDFAE8/iOECg6xsysJ7BdhG67HLUZKSACnRFxDS+6da7xd0ZCPS8HJJmsabr
-         DZZQ==
-X-Gm-Message-State: AOAM531lvMAkD8eNyYyOQGUfRVrfc0xSgFU7HqXRPODOGw/XNnhiNGba
-        fSIPaqtPmOjhf6btB6mOpXwUwoXrxcbseIsLgDg=
-X-Google-Smtp-Source: ABdhPJzzGbjOXUeBkq9zpKAWT/MCjB4wYcea3KJDMCCPLzfGY8i5/1+dy3ASew7xPHJw2QglcLN2XVoyI1rxtLt9oWo=
-X-Received: by 2002:a17:907:7289:b0:6df:9746:e7c4 with SMTP id
- dt9-20020a170907728900b006df9746e7c4mr28874304ejc.497.1648022654472; Wed, 23
- Mar 2022 01:04:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cePn2HPJ3CtBPN5ynUkfrIKVQlGOlqRorjeDVtC/Lcs=;
+        b=g2crfDtmF/nNZzxU5DQwQCP8y8neKIAi1qxHDXso1zU0v99l0MP4WKSs0Q6LjammNl
+         UGWFVjgrM/8WgsivClSfQjb+4KVNsTGS2371vwH3IdvVcZ4Gr7dOhnKEK8sBaiNJizRz
+         xkbpf/vUFkord1CqeFbCdSBdUaJOl1iYg7e1wmPUsXs1mI5kFvY/8NC5FhR0PM6sMS9/
+         wkAa/010cK8FrC8PQHnX5/2+ZY5sSM3ZXIMYbCdB0k/gVe4y64ADORa3g9nVb6LDyGHP
+         UUNViO7lmZf1MH/mg6dl8gEpvmHFKuaIESQ3cr3zfm1vgP+A5gbIYsk4/3+dTCwVytuK
+         bvoQ==
+X-Gm-Message-State: AOAM533MTSQNLG9YzgsXRUG+0lHXoYisWBjzSCtg3lsnDFQmgPsv2x1v
+        QoZUopMfv5/VuJF95ZKmN3IylYYgFOxjlz1ee8clVDnTlYBu028eyIxLMnHNJ7zR4DfFkXPMEkm
+        tvCDPvTmg67t8nRaFhMcH9yKh
+X-Received: by 2002:a05:620a:150e:b0:67d:3243:12dd with SMTP id i14-20020a05620a150e00b0067d324312ddmr17782267qkk.229.1648022655089;
+        Wed, 23 Mar 2022 01:04:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxO1+nfH+Nu1xL1m12zS/Ds8sfGdKU0u5Nq1/xW6f1tEz+ILQzmDYkM4kKd0qQ0sC/hqLtTQg==
+X-Received: by 2002:a05:620a:150e:b0:67d:3243:12dd with SMTP id i14-20020a05620a150e00b0067d324312ddmr17782255qkk.229.1648022654824;
+        Wed, 23 Mar 2022 01:04:14 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-114.business.telecomitalia.it. [87.12.25.114])
+        by smtp.gmail.com with ESMTPSA id d13-20020a05622a15cd00b002e1df990d01sm15984553qty.71.2022.03.23.01.04.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 01:04:14 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 09:04:08 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] virtio: use virtio_device_ready() in
+ virtio_device_restore()
+Message-ID: <20220323080408.ogoedasrjiqbol4m@sgarzare-redhat>
+References: <20220322114313.116516-1-sgarzare@redhat.com>
+ <20220322100635-mutt-send-email-mst@kernel.org>
+ <CACGkMEuUpFKTyqmRh2T7cnF=1hbz3T3_DiT_t8L9Pfs_g5yJmA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220321183446.1108325-1-helgaas@kernel.org> <20220323022648.GA1243295@bhelgaas>
-In-Reply-To: <20220323022648.GA1243295@bhelgaas>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 23 Mar 2022 10:03:38 +0200
-Message-ID: <CAHp75VfdoAbSTkO7eaor94pkmN0ttLXstc1DS_Sa7i45Dt5GAA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: Avoid broken MSI on SB600 USB devices
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mick Lorain <micklorain@protonmail.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CACGkMEuUpFKTyqmRh2T7cnF=1hbz3T3_DiT_t8L9Pfs_g5yJmA@mail.gmail.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 4:26 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> On Mon, Mar 21, 2022 at 01:34:46PM -0500, Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > Some ATI SB600 USB adapters advertise MSI, but if INTx is disabled by
-> > setting PCI_COMMAND_INTX_DISABLE,
+On Wed, Mar 23, 2022 at 11:10:27AM +0800, Jason Wang wrote:
+>On Tue, Mar 22, 2022 at 10:07 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>>
+>> On Tue, Mar 22, 2022 at 12:43:13PM +0100, Stefano Garzarella wrote:
+>> > After waking up a suspended VM, the kernel prints the following trace
+>> > for virtio drivers which do not directly call virtio_device_ready() in
+>> > the .restore:
+>> >
+>> >     PM: suspend exit
+>> >     irq 22: nobody cared (try booting with the "irqpoll" option)
+>> >     Call Trace:
+>> >      <IRQ>
+>> >      dump_stack_lvl+0x38/0x49
+>> >      dump_stack+0x10/0x12
+>> >      __report_bad_irq+0x3a/0xaf
+>> >      note_interrupt.cold+0xb/0x60
+>> >      handle_irq_event+0x71/0x80
+>> >      handle_fasteoi_irq+0x95/0x1e0
+>> >      __common_interrupt+0x6b/0x110
+>> >      common_interrupt+0x63/0xe0
+>> >      asm_common_interrupt+0x1e/0x40
+>> >      ? __do_softirq+0x75/0x2f3
+>> >      irq_exit_rcu+0x93/0xe0
+>> >      sysvec_apic_timer_interrupt+0xac/0xd0
+>> >      </IRQ>
+>> >      <TASK>
+>> >      asm_sysvec_apic_timer_interrupt+0x12/0x20
+>> >      arch_cpu_idle+0x12/0x20
+>> >      default_idle_call+0x39/0xf0
+>> >      do_idle+0x1b5/0x210
+>> >      cpu_startup_entry+0x20/0x30
+>> >      start_secondary+0xf3/0x100
+>> >      secondary_startup_64_no_verify+0xc3/0xcb
+>> >      </TASK>
+>> >     handlers:
+>> >     [<000000008f9bac49>] vp_interrupt
+>> >     [<000000008f9bac49>] vp_interrupt
+>> >     Disabling IRQ #22
+>> >
+>> > This happens because we don't invoke .enable_cbs callback in
+>> > virtio_device_restore(). That callback is used by some transports
+>> > (e.g. virtio-pci) to enable interrupts.
+>> >
+>> > Let's fix it, by calling virtio_device_ready() as we do in
+>> > virtio_dev_probe(). This function calls .enable_cts callback and sets
+>> > DRIVER_OK status bit.
+>> >
+>> > This fix also avoids setting DRIVER_OK twice for those drivers that
+>> > call virtio_device_ready() in the .restore.
+>> >
+>> > Fixes: d50497eb4e55 ("virtio_config: introduce a new .enable_cbs method")
+>> > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> > ---
+>> >
+>> > I'm not sure about the fixes tag. That one is more generic, but the
+>> > following one I think introduced the issue.
+>> >
+>> > Fixes: 9e35276a5344 ("virtio_pci: harden MSI-X interrupts")
+>>
+>> Jason what should we do about this one BTW? Just revert? We have other
+>> issues ...
+>
+>Let me post a patch to revert it and give it a rework.
 
-> > MSI doesn't work either.
+Thanks for reverting it.
 
-I think this is not correct.
+Should we queue this patch anyway to prevent future issues and avoid 
+setting DRIVER_OK twice?
 
-> >  The PCI/PCIe
-> > specs do not require software to set PCI_COMMAND_INTX_DISABLE when enabling
-> > MSI, but Linux has done that for many years.
-> >
-> > Mick reported that 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI
-> > devices") broke these devices.  Prior to 306c54d0edb6, they used INTx.
-> > Starting with 306c54d0edb6, they use MSI, and and the fact that Linux sets
-> > PCI_COMMAND_INTX_DISABLE means both INTx and MSI are disabled on these
-> > devices.
+Please, let me know if I have to resend it by removing the call trace 
+that after the revert should no longer occur.
 
-> > Avoid this SB600 defect by disabling MSI so we use INTx as before.
+Thanks,
+Stefano
 
-And this is kinda too conservative approach.
-
-> > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=215690
-> > Link: https://lore.kernel.org/all/PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com/
-> > BugLink: https://lore.kernel.org/all/20200702143045.23429-1-andriy.shevchenko@linux.intel.com/
-> > Link: https://lore.kernel.org/r/20220314101448.90074-1-andriy.shevchenko@linux.intel.com
-> > Reported-by: Mick Lorain <micklorain@protonmail.com>
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-
-And it hasn't been tested by the reporter.
-
-> Unless there's objection, I plan to include this in the v5.18 pull
-> request in the next few days.
-
-You are the maintainer here and it's your choice. I'm not going to stop you.
-
--- 
-With Best Regards,
-Andy Shevchenko

@@ -2,46 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EF94E543F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F834E5440
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244768AbiCWOaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S244761AbiCWOaX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Mar 2022 10:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244764AbiCWOaJ (ORCPT
+        with ESMTP id S244773AbiCWOaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:30:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363F865B6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:28:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE829B81E7C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:28:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87324C340E8;
-        Wed, 23 Mar 2022 14:28:32 +0000 (UTC)
-Date:   Wed, 23 Mar 2022 10:28:31 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <lkp@intel.com>,
-        <lkp@lists.01.org>, <matthias.bgg@gmail.com>, <mingo@redhat.com>,
-        <oliver.sang@intel.com>, <yj.chiang@mediatek.com>
-Subject: Re: [PATCH] tracing: Avoid adding duplicated tracer options when
- update_tracer_options is running in parallel
-Message-ID: <20220323102831.1cf884d6@gandalf.local.home>
-In-Reply-To: <20220323142129.4175-1-mark-pk.tsai@mediatek.com>
-References: <20220323093021.4f541b40@gandalf.local.home>
-        <20220323142129.4175-1-mark-pk.tsai@mediatek.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 23 Mar 2022 10:30:19 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED67D13E80
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:28:45 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-232-Pk1Wyq6qM162T3n3s26yow-1; Wed, 23 Mar 2022 14:28:43 +0000
+X-MC-Unique: Pk1Wyq6qM162T3n3s26yow-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 23 Mar 2022 14:28:42 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 23 Mar 2022 14:28:42 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Martin Kaiser' <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/7] staging: r8188eu: use ieee80211 define for version
+ check
+Thread-Topic: [PATCH 1/7] staging: r8188eu: use ieee80211 define for version
+ check
+Thread-Index: AQHYPoqESUbsEDAaEUG/qobs079+wKzNBQKg
+Date:   Wed, 23 Mar 2022 14:28:42 +0000
+Message-ID: <3fafd45e349a4bc3aa8db888f08a71d3@AcuMS.aculab.com>
+References: <20220323074859.177425-1-martin@kaiser.cx>
+ <20220323074859.177425-2-martin@kaiser.cx>
+In-Reply-To: <20220323074859.177425-2-martin@kaiser.cx>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,93 +66,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 22:21:29 +0800
-Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
+From: Martin Kaiser
+> Sent: 23 March 2022 07:49
+> 
+> Use the IEEE80211_FCTL_VERS define to check the version number
+> of a received frame.
+> 
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> ---
+>  drivers/staging/r8188eu/core/rtw_recv.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> index 8800ea4825ff..524a00345501 100644
+> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> @@ -1063,7 +1063,6 @@ static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv
+>  	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
+>  	u8 *ptr = precv_frame->rx_data;
+>  	__le16 fc = *(__le16 *)ptr;
 
-> > On Wed, 23 Mar 2022 11:24:42 +0800
-> > Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
-> >   
-> > > When update_tracer_options is running in parallel,
-> > > tr->tops might be updated before the trace_types list traversal.
-> > > Let update_tracer_options traverse the trace_types list safely in
-> > > kernel init time and avoid the tr->tops update before it finish.  
-> > 
-> > ??? Have you seen a bug here? I'm totally confused by this.  
-> 
-> Sorry to make you confused.
-> 
-> After the below patch, update_tracer_options might be executed later than registering
-> hwlat_tracer, which is in late_initcall.
-> 
-> https://lore.kernel.org/lkml/20220316151639.9216-1-mark-pk.tsai@mediatek.com/
+Those two lines are somewhat horrid.
+Casts of pointers to integer types have a nasty habit of being bugs.
+In any case 'ptr' should probably be 'frame_data'.
+If the first two bytes are some kind of 16 bit id, then what follows?
+Should this be a 'struct' that defines the frame data layout??
 
-If you send patches that depend on patches that are not in the tree, you
-need to explicitly state that.
+	David
 
+> -	u8  ver = (unsigned char)(*ptr) & 0x3;
+>  	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
+> 
+>  	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
+> @@ -1072,8 +1071,7 @@ static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv
+>  			pmlmeext->channel_set[ch_set_idx].rx_count++;
+>  	}
+> 
+> -	/* add version chk */
+> -	if (ver != 0)
+> +	if ((fc & IEEE80211_FCTL_VERS) != 0)
+>  		return _FAIL;
+> 
+>  	pattrib->to_fr_ds = get_tofr_ds(ptr);
+> --
+> 2.30.2
 
-> 
-> The init_hwlat_tracer initcall will put hwlat_tracer to tr->tops.
-> Then when the later arrived __update_tracer_options is trying to
-> update all the tracer options, create_trace_option_files show the
-> below warning because hwlat_tracer is already in the list.
-> 
-> [ 6.680068 ][ T7 ] WARNING: CPU: 0 PID: 7 at kernel/trace/trace.c:8899 create_trace_option_files (kernel/trace/trace.c:8899 (discriminator 1))
-> 
-> full log: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-So this is all dependent on patches not in the tree?
-
-> 
-> 
-> >   
-> > > 
-> > > Link: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
-> > > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > > Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-> > > ---
-> > >  kernel/trace/trace.c | 7 +++++++
-> > >  1 file changed, 7 insertions(+)
-> > > 
-> > > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> > > index adb37e437a05..2974ae056068 100644
-> > > --- a/kernel/trace/trace.c
-> > > +++ b/kernel/trace/trace.c
-> > > @@ -6317,12 +6317,18 @@ static void tracing_set_nop(struct trace_array *tr)
-> > >  	tr->current_trace = &nop_trace;
-> > >  }
-> > >  
-> > > +static bool tracer_options_updated;
-> > > +
-> > >  static void add_tracer_options(struct trace_array *tr, struct tracer *t)
-> > >  {
-> > >  	/* Only enable if the directory has been created already. */
-> > >  	if (!tr->dir)
-> > >  		return;
-> > >  
-> > > +	/* Only create trace option files after update_tracer_options finish */
-> > > +	if (!tracer_options_updated)
-> > > +		return;
-> > > +
-> > >  	create_trace_option_files(tr, t);
-> > >  }
-> > >  
-> > > @@ -9133,6 +9139,7 @@ static void update_tracer_options(struct trace_array *tr)
-> > >  {
-> > >  	mutex_lock(&trace_types_lock);  
-> > 
-> > How is update_trace_options run in parallel?
-> > 
-> > There's a mutex that protects it. 
-> >   
-> 
-> Oh sorry.
-> What I trying to tell is that update_trace_options is run in parallel with
-> the initcall thread after:
-> 
-> https://lore.kernel.org/lkml/20220316151639.9216-1-mark-pk.tsai@mediatek.com/
-> 
-
-Again, this is not in the tree, so it should be part of that patch series,
-which I haven't yet been able to fully review.
-
--- Steve

@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DE24E4AAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DB84E4AB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 03:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbiCWB7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 21:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
+        id S240927AbiCWCD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 22:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiCWB7O (ORCPT
+        with ESMTP id S234323AbiCWCD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 21:59:14 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D08CA70044
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:57:45 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-130-lFQCKZA0NSGnTdW-G_mNsQ-1; Wed, 23 Mar 2022 01:57:41 +0000
-X-MC-Unique: lFQCKZA0NSGnTdW-G_mNsQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 23 Mar 2022 01:57:41 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 23 Mar 2022 01:57:41 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Torin Carey' <torin@tcarey.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] udp: change MSG_TRUNC return behaviour for MSG_PEEK in
- recvmsg
-Thread-Topic: [PATCH] udp: change MSG_TRUNC return behaviour for MSG_PEEK in
- recvmsg
-Thread-Index: AQHYPh+fV1aILsQYJkGFKR0h1ZEPnazMNg+w
-Date:   Wed, 23 Mar 2022 01:57:41 +0000
-Message-ID: <eff8db769c314119a8867e968e4dddea@AcuMS.aculab.com>
-References: <YjodjXHN7j69h/kd@kappa>
-In-Reply-To: <YjodjXHN7j69h/kd@kappa>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 22 Mar 2022 22:03:26 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4ED70058
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 19:01:56 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id u17so318356pfk.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 19:01:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pLZM3xjvzATAsLNs03YNSwUezrjd1ot4WTDVTGm9fDQ=;
+        b=dv8LG5HB7JnpRuMkmPhrs0gyUOu+bD49LFu7+b627kBf4rWuNRmgc0rti4WxA21+kK
+         7w+itS9ljtKAYOBw3OgXRL9kow/G9BRpWyY3ySYr9hIqYP4Ipps6phxxPjcV+1L4J+bH
+         HoiKS8GdIpwyHoTv64BZf+yBbs077mZH0F/6xVHSxEh5Z6G4yni+V5mYbyXrGwtN57qv
+         K2x0bV67beRxQRArYeypA+jLNJK1eAfyIZs/KsvJrekBgrLHZBvZCZKRWey5X9jfoFr+
+         7dkYG1dTdPbJWQDFFHndc823VsJiOOKfQQmYYi5rOVa4ik0xcgAlEQXAcbgt5OjSy36k
+         kaFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pLZM3xjvzATAsLNs03YNSwUezrjd1ot4WTDVTGm9fDQ=;
+        b=3DjNtxfwE4+AtdqQzUwNaG1DRhLwQM6hkNdjVRrU4JyUB5ykuCYPuI6XDjx03sy3SN
+         n0nUPTw2YA4l/enui7U1mdUu6GlG9WAUFJK7Hb2bm2pxfUaelw1jj9cZZj1dQPKy9jSB
+         lR01bcKs/diavCz7xpBUD27+TChoG9spuK4moZw2omCM/oJsoL1ZPWWDN11aBTPovwJF
+         JBDhMsVOyE62OdpFbcHudfw9XS78rvcQhZDGr8mODOT9Kw+QT2+z7WyHRlfWbzxq/09k
+         sB9WJfuaynWMhV0ATv/VBJhVr4VRqP3cIpZZOxG2MTIB9iGdDPeZXdCF4wZxgrP0gfdS
+         K4+Q==
+X-Gm-Message-State: AOAM530lpS0EQO8FwR5EK+V2NDYUkauu4UHXYoaAjb7vi518THG3+HuG
+        6OOYI/5TmdFj9jvfHLiSakQjeVHRWAQPNLSVq+k5JQ==
+X-Google-Smtp-Source: ABdhPJyKPoJXGMTQ91hx4JC/7ULV6MnIthDq/HGw4oZirD4Bxtkpdyr/bbPYdPdmmWPBmXzOC81czBXmfdFw36HFaJw=
+X-Received: by 2002:a63:5c53:0:b0:381:309e:e72c with SMTP id
+ n19-20020a635c53000000b00381309ee72cmr24709569pgm.40.1648000916091; Tue, 22
+ Mar 2022 19:01:56 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+References: <20220228094938.32153-1-yaozhenguo1@gmail.com>
+In-Reply-To: <20220228094938.32153-1-yaozhenguo1@gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 22 Mar 2022 19:01:48 -0700
+Message-ID: <CAPcyv4i=1BaEMSJsQWrmPx7ycMTVWXB035xmP8Rc2WEr976Y2w@mail.gmail.com>
+Subject: Re: [PATCH v1] device-dax: Adding match parameter to select which
+ driver to match dax devices
+To:     Zhenguo Yao <yaozhenguo1@gmail.com>
+Cc:     Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>, yaozhenguo@jd.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,49 +68,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogVG9yaW4gQ2FyZXkNCj4gU2VudDogMjIgTWFyY2ggMjAyMiAxOTowNA0KPiANCj4gTWFr
-ZSBVRFAgcmVjdm1zZyBvbmx5IHJldHVybiB0aGUgTVNHX1RSVU5DIGZsYWcgaWYgdGhlIHJlYWQg
-ZG9lcyBub3QNCj4gY29weSB0aGUgdGFpbCBlbmQgb2YgdGhlIGRhdGFncmFtLiAgU3BlY2lmaWNh
-bGx5LCB0aGlzIHRhcmdldHMgTVNHX1BFRUsNCj4gd2hlbiB3ZSdyZSB1c2luZyBhIHBvc2l0aXZl
-IHBlZWsgb2Zmc2V0Lg0KPiANCj4gVGhlIGN1cnJlbnQgYmVoYXZpb3VyIG1lYW5zIHRoYXQgaWYg
-d2UgaGF2ZSBhIHBvc2l0aXZlIHBlZWsgb2Zmc2V0IGBvZmZgDQo+IGFuZCB3ZSdyZSByZWFkaW5n
-IGByYCBieXRlcyBmcm9tIGEgZGF0YWdyYW0gb2YgYHVsZW5gIGxlbmd0aCwgd2UgcmVzcG9uZA0K
-PiB3aXRoIE1TR19UUlVOQyBpZiBhbmQgb25seSBpZiBgciA8PSB1bGVuIC0gb2ZmYC4gIFRoaXMg
-aXMgb2RkIGJlaGF2aW91cg0KPiBhcyB3ZSByZXR1cm4gTVNHX1RSVU5DIGlmIHRoZSB1c2VyIHJl
-cXVlc3RzIGV4YWN0bHkgYHVsZW4gLSBvZmZgIHdoaWNoDQo+IGhhcyBubyB0cnVuY2F0aW9uLg0K
-PiANCj4gVGhlIGJlaGF2aW91ciBjb3VsZCBiZSBjb3JyZWN0ZWQgaW4gdHdvIHdheXM6DQo+IA0K
-PiBUaGlzIHBhdGNoIHJldHVybnMgTVNHX1RSVU5DIG9ubHkgZm9yIHRhaWwtZW5kIHRydW5jYXRp
-b24gYW5kIG5vdCBoZWFkDQo+IHRydW5jYXRpb24uICBUaGlzIGlzIG1vcmUgY29uc2lzdGVudCB3
-aXRoIHJlY3YoMik6DQo+ID4gTVNHX1RSVU5DDQo+ID4gICAgIGluZGljYXRlcyB0aGF0IHRoZSB0
-cmFpbGluZyBwb3J0aW9uIG9mIGEgZGF0YWdyYW0gd2FzIGRpc2NhcmRlZA0KPiA+ICAgICBiZWNh
-dXNlIHRoZSBkYXRhZ3JhbSB3YXMgbGFyZ2VyIHRoYW4gdGhlIGJ1ZmZlciBzdXBwbGllZC4NCj4g
-YWx0aG91Z2ggdGhpcyBpc24ndCB3cml0dGVuIHdpdGggU09fUEVFS19PRkYgaW4gbWluZC4NCj4g
-DQo+IFRoZSBzZWNvbmQgb3B0aW9uIGlzIHRvIGFsd2F5cyByZXR1cm4gTVNHX1RSVU5DIGlmIGBv
-ZmYgPiAwYCBsaWtlIHRoZQ0KPiBtYW4tcGFnZXMgc29ja2V0KDcpIHBhZ2Ugc3RhdGVzOg0KPiA+
-IEZvciBkYXRhZ3JhbSBzb2NrZXRzLCBpZiB0aGUgInBlZWsgb2Zmc2V0IiBwb2ludHMgdG8gdGhl
-IG1pZGRsZSBvZiBhDQo+ID4gcGFja2V0LCB0aGUgZGF0YSByZXR1cm5lZCB3aWxsIGJlIG1hcmtl
-ZCB3aXRoIHRoZSBNU0dfVFJVTkMgZmxhZy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFRvcmluIENh
-cmV5IDx0b3JpbkB0Y2FyZXkudWs+DQo+IC0tLQ0KPiAgbmV0L2lwdjQvdWRwLmMgfCAyICstDQo+
-ICBuZXQvaXB2Ni91ZHAuYyB8IDIgKy0NCj4gIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL25ldC9pcHY0L3VkcC5jIGIv
-bmV0L2lwdjQvdWRwLmMNCj4gaW5kZXggMzE5ZGQ3YmJmZTMzLi5lNTc3NDBhMmMzMDggMTAwNjQ0
-DQo+IC0tLSBhL25ldC9pcHY0L3VkcC5jDQo+ICsrKyBiL25ldC9pcHY0L3VkcC5jDQo+IEBAIC0x
-ODU1LDcgKzE4NTUsNyBAQCBpbnQgdWRwX3JlY3Ztc2coc3RydWN0IHNvY2sgKnNrLCBzdHJ1Y3Qg
-bXNnaGRyICptc2csIHNpemVfdCBsZW4sIGludCBub2Jsb2NrLA0KPiAgCWNvcGllZCA9IGxlbjsN
-Cj4gIAlpZiAoY29waWVkID4gdWxlbiAtIG9mZikNCj4gIAkJY29waWVkID0gdWxlbiAtIG9mZjsN
-Cj4gLQllbHNlIGlmIChjb3BpZWQgPCB1bGVuKQ0KPiArCWVsc2UgaWYgKGNvcGllZCA8IHVsZW4g
-LSBvZmYpDQo+ICAJCW1zZy0+bXNnX2ZsYWdzIHw9IE1TR19UUlVOQzsNCg0KWW91IGNhbiByZW1v
-dmUgYSB0ZXN0Og0KCWlmIChjb3BpZWQgPj0gdWxlbiAtIG9mZikNCgkJY29waWVkID0gdWxlbiAt
-IG9mZjsNCgllbHNlDQoJCW1zZy0+bXNnX2ZsYWdzIHw9IE1TR19UUlVOQzsNCg0KICAgIERhdmlk
-DQoNCj4gDQo+ICAJLyoNCj4gZGlmZiAtLWdpdCBhL25ldC9pcHY2L3VkcC5jIGIvbmV0L2lwdjYv
-dWRwLmMNCj4gaW5kZXggMTRhOTRjZGRjZjBiLi5kNmMwZWVkOTQ1NjQgMTAwNjQ0DQo+IC0tLSBh
-L25ldC9pcHY2L3VkcC5jDQo+ICsrKyBiL25ldC9pcHY2L3VkcC5jDQo+IEBAIC0zNDgsNyArMzQ4
-LDcgQEAgaW50IHVkcHY2X3JlY3Ztc2coc3RydWN0IHNvY2sgKnNrLCBzdHJ1Y3QgbXNnaGRyICpt
-c2csIHNpemVfdCBsZW4sDQo+ICAJY29waWVkID0gbGVuOw0KPiAgCWlmIChjb3BpZWQgPiB1bGVu
-IC0gb2ZmKQ0KPiAgCQljb3BpZWQgPSB1bGVuIC0gb2ZmOw0KPiAtCWVsc2UgaWYgKGNvcGllZCA8
-IHVsZW4pDQo+ICsJZWxzZSBpZiAoY29waWVkIDwgdWxlbiAtIG9mZikNCj4gIAkJbXNnLT5tc2df
-ZmxhZ3MgfD0gTVNHX1RSVU5DOw0KPiANCj4gIAlpc191ZHA0ID0gKHNrYi0+cHJvdG9jb2wgPT0g
-aHRvbnMoRVRIX1BfSVApKTsNCj4gLS0NCj4gMi4zNC4xDQo+IA0KDQotDQpSZWdpc3RlcmVkIEFk
-ZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywg
-TUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Mon, Feb 28, 2022 at 1:50 AM Zhenguo Yao <yaozhenguo1@gmail.com> wrote:
+>
+> device_dax driver always match dax devices by default. The other
+> drivers only match devices by dax_id. There are situations which
+> need kmem drvier match all the dax device at boot time. So
+> adding a parameter to support this function.
 
+What are the situations that happen at boot time that can't wait for
+initramfs or userspace to move the device assignment?

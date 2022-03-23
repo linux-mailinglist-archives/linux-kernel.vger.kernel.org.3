@@ -2,99 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE874E58D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BB04E58E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244223AbiCWTEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
+        id S240285AbiCWTID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiCWTEt (ORCPT
+        with ESMTP id S1344116AbiCWTIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:04:49 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102E065BF;
-        Wed, 23 Mar 2022 12:03:16 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F1281100004;
-        Wed, 23 Mar 2022 19:03:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1648062191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jn4eEh+cMlzdXNoYeFxpZsql1R7mD18vfamv6OpnlJo=;
-        b=EVK5SV6gKLJ1Wmc8xcKelEB5XgHl439t77Ep+sR3gT6kk+SAGiGqsNvlrOKw4TtaikP1Nq
-        CVlmvTnqhRBp6RjC5r3FdtYxQmr9EB3RIYPHFroR8oLpxyFbtK32DdFpavBBy3wxj4SfGb
-        DiqJmvdWvwdMJP+lQo/9omI0nHpITPHB+tC3wkJez2NhRbeDUQdpIv1RDlWw8N54fOV8rJ
-        NIOVYVOLNP2r2WSs2LVqp/dnL39x1AhWZCvXpr2SVwQx8VSj787HB/vSaJ0WT+XeJEf/r8
-        tax6aC6tUlPp7oC5LYsbpirqNmz/9nAEY1P0s857vkER9MQhJX6cF4zevdAuVQ==
-Date:   Wed, 23 Mar 2022 20:03:10 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] dt-bindings: rtc: at91: rename rtt bindings file
-Message-ID: <Yjtu7sRdl3yIR0u8@piout.net>
-References: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
- <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
- <CAL_Jsq++eqGS6xJ6EgwXe2RpZYgbB30kfTvZQx=sGmb-LgVWXg@mail.gmail.com>
+        Wed, 23 Mar 2022 15:08:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A15669FE5;
+        Wed, 23 Mar 2022 12:06:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 409D0D6E;
+        Wed, 23 Mar 2022 12:06:30 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A5F83F73B;
+        Wed, 23 Mar 2022 12:06:27 -0700 (PDT)
+Message-ID: <27b5a287-7a33-9a8b-ad6d-04746735fb0c@arm.com>
+Date:   Wed, 23 Mar 2022 19:06:23 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq++eqGS6xJ6EgwXe2RpZYgbB30kfTvZQx=sGmb-LgVWXg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+Content-Language: en-GB
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc:     Halil Pasic <pasic@linux.ibm.com>, Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+References: <1812355.tdWV9SEqCh@natalenko.name>
+ <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 23/03/2022 09:39:07-0500, Rob Herring wrote:
-> On Wed, Mar 9, 2022 at 3:05 PM Rob Herring <robh+dt@kernel.org> wrote:
-> >
-> > On Tue, Mar 8, 2022 at 9:57 AM Alexandre Belloni
-> > <alexandre.belloni@bootlin.com> wrote:
-> > >
-> > > atmel,at91sam9-rtc is a confuing name for this file as it is documenting
-> > > the RTT used as an RTC and not the other regular RTC (atmel,at91rm9200-rtc
-> > > and atmel,at91sam9x5-rtc)
-> > >
-> > > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > ---
-> > >  .../rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml}   | 0
-> > >  1 file changed, 0 insertions(+), 0 deletions(-)
-> > >  rename Documentation/devicetree/bindings/rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml} (100%)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> > > similarity index 100%
-> > > rename from Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-> > > rename to Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> >
-> > Now failing in -next:
-> >
-> > ./Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml:
-> > $id: relative path/filename doesn't match actual path or filename
-> >   expected: http://devicetree.org/schemas/rtc/atmel,at91sam9260-rtt.yaml#
+On 2022-03-23 17:27, Linus Torvalds wrote:
+> On Wed, Mar 23, 2022 at 12:19 AM Oleksandr Natalenko
+> <oleksandr@natalenko.name> wrote:
+>>
+>> The following upstream commits:
+>>
+>> aa6f8dcbab47 swiotlb: rework "fix info leak with DMA_FROM_DEVICE"
+>> ddbd89deb7d3 swiotlb: fix info leak with DMA_FROM_DEVICE
+>>
+>> break ath9k-based Wi-Fi access point for me. The AP emits beacons, but
+>> no client can connect to it, either from the very beginning, or
+>> shortly after start. These are the only symptoms I've noticed (i.e.,
+>> no BUG/WARNING messages in `dmesg` etc).
 > 
-> Still failing...
-
-Sorry, this is fixed now.
-
+> Funky, but clearly true:
 > 
-> Rob
+>> These commits appeared in v5.17 and v5.16.15, and both kernels are
+>> broken for me. I'm pretty confident these commits make the difference
+>> since I've built both v5.17 and v5.16.15 without them, and it fixed
+>> the issue.
+> 
+> Can you double-check (or just explicitly confirm if you already did
+> that test) that you need to revert *both* of those commits, and it's
+> the later "rework" fix that triggers it?
+> 
+>> So, I do understand this might be an issue with regard to SG I/O
+>> handling in ath9k, hence relevant people in Cc.
+> 
+> Yeah, almost certainly an ath9k bug, but a regression is a regression,
+> so if people can't find the issue in ath9k, we'll have to revert those
+> commits.
+> 
+> Honestly, I personally think they were a bit draconian to begin with,
+> and didn't limit their effects sufficiently.
+> 
+> I'm assuming that the ath9k issue is that it gives DMA mapping a big
+> enough area to handle any possible packet size, and just expects -
+> quite reasonably - smaller packets to only fill the part they need.
+> 
+> Which that "info leak" patch obviously breaks entirely.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Except that's the exact case which the new patch is addressing - by 
+copying the whole original area into the SWIOTLB bounce buffer to begin 
+with, if we bounce the whole lot back after the device has only updated 
+part of it, the non-updated parts now get overwritten with the same 
+original contents, rather than whatever random crap happened to be left 
+in the SWIOTLB buffer by its previous user. I'm extremely puzzled how 
+any driver could somehow be dependent on non-device-written data getting 
+replaced with random crap, given that it wouldn't happen with a real 
+IOMMU, or if SWIOTLB just didn't need to bounce, and the data would 
+hardly be deterministic either.
+
+I think I can see how aa6f8dcbab47 might increase the severity of a 
+driver bug where it calls dma_sync_*_for_device() on part of a 
+DMA_FROM_DEVICE mapping that the device *has* written to, without having 
+called a corresponding dma_sync_*_for_cpu() first - previously that 
+would have had no effect, but now SWIOTLB will effectively behave more 
+like an eagerly-prefetching non-coherent cache and write back old data 
+over new - but if ddbd89deb7d3 alone makes a difference then something 
+really weird must be going on.
+
+Has anyone run a sanity check with CONFIG_DMA_API_DEBUG enabled to see 
+if that flags anything up?
+
+Robin.

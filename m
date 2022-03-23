@@ -2,222 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B994E4B56
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B26354E4B5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241449AbiCWDRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 23:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
+        id S241465AbiCWDUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 23:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236084AbiCWDRI (ORCPT
+        with ESMTP id S231637AbiCWDUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 23:17:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E9FB205D7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648005338;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SVrjcP1lrBTCbvCHht5yAGBOLG7SBcbqKikxAiB9SAI=;
-        b=JMYu/pZXOlUDEYnOt6+aSJzbqGEQoPEoToaZzxP4Y6PWl5u/TME7ymV/hdBEuRh7Oop1Xq
-        mrHHVQrWv9tggJWK7S1U0/gFQ3StPrHUnwL6UdoRYn/peTgoiHmg4fWQUElOg7bWxTKSu7
-        8M/FpWv+0LwCwz0sEnRYICRmDCIo8U0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-35-riB5se-NO0e12lAtJj5Xiw-1; Tue, 22 Mar 2022 23:15:34 -0400
-X-MC-Unique: riB5se-NO0e12lAtJj5Xiw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C31685A5BC;
-        Wed, 23 Mar 2022 03:15:34 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-12-49.pek2.redhat.com [10.72.12.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0C1EA1427AF5;
-        Wed, 23 Mar 2022 03:15:30 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, peterz@infradead.org,
-        Marc Zyngier <maz@kernel.org>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH 2/2] Revert "virtio_pci: harden MSI-X interrupts"
-Date:   Wed, 23 Mar 2022 11:15:24 +0800
-Message-Id: <20220323031524.6555-2-jasowang@redhat.com>
-In-Reply-To: <20220323031524.6555-1-jasowang@redhat.com>
-References: <20220323031524.6555-1-jasowang@redhat.com>
+        Tue, 22 Mar 2022 23:20:13 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B9F31342
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:18:44 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id ke15so328824qvb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:18:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HuZMniKUiLdmMq0S/smNDGx4nZr+J2VHjPsTBck+11s=;
+        b=Tse20CMLZPb2xi5LDlL7G8zi9e/ZhtX9/urs8GbZmvyP4uSFlC4CZWjoI4aA/TJyvz
+         qghQYdMJQ+pyEUGbMWo9FBTfHMapfLu7tHIX4XirSbAIpnoBipCMJ6EZ03PmxIMGhjW1
+         okzbtJ8uJ4EO1lPxEQfPOwGJAmG6jP26zu52g0/HxhUJMotkPKJ/sSRDXG721rlw1qzD
+         QEsaNlShMRACfhXdIbQfo4xyjU9cz+lcVORvKr2GnNQ1VmYSylY5FU2JtkhwI2EV7Yqf
+         qAaK9AiJ9R8/45dVaAXa9fu6S8fKx3RMOF7IPXHIED5AFMxcPAxaDrpl4iXWR43LCKrV
+         dnzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HuZMniKUiLdmMq0S/smNDGx4nZr+J2VHjPsTBck+11s=;
+        b=BytTRZ71VK0baA2wTDB5Gogu5WLmm97m8b5XbHKzLVhjw7peIqK3VTgZA91lwBvrjw
+         IDxw6qmYgaYd/KJDZvLASTi1Ua5nJJOFy5Av7mMV/VMLW8LrbwjFLDkXm1y6OaB2URoU
+         1PwIy/MzuIFwoGQkMRUW+GeV1C+o47IZX919JNkKHFXiEMzHZMcLjkeQqnUfmNgnOJH1
+         cDv3NNG54frK+MwZkw2XopWrygnAqyDA+bVAwvNOi198++dqwgP546eMNfvL7yiGnUCN
+         1Byl2qmMe8/sIRCUb53J3LmJjQ3L9nGDM2wsZ4j7sGfEvD/W3acSLbhgK/xL0DYWwrCg
+         kKrw==
+X-Gm-Message-State: AOAM532c2CpZpqmcGIq9ep2U7Jpg+R31IlZU/uEr5CLHQSt83F/t0RU2
+        Dy/qSVQYl0SE6G9xx8vWUUI=
+X-Google-Smtp-Source: ABdhPJzhksxHW4/rsLVdg+jn6M3FiJF1MkqN5pSAr6Z+9q+YhbyelyH/4MqEL6Bw9r3GhLufC8dKrg==
+X-Received: by 2002:ad4:5ccb:0:b0:441:1abe:1b8a with SMTP id iu11-20020ad45ccb000000b004411abe1b8amr11696377qvb.7.1648005523965;
+        Tue, 22 Mar 2022 20:18:43 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id w13-20020a05622a134d00b002e2280215f6sm2108254qtk.54.2022.03.22.20.18.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 20:18:43 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: yang.yang29@zte.com.cn
+To:     akpm@linux-foundation.org, david@redhat.com
+Cc:     yang.yang29@zte.com.cn, dave.hansen@linux.intel.com,
+        yang.shi@linux.alibaba.com, ran.xiaokai@zte.com.cn,
+        saravanand@fb.com, minchan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        xu xin <xu.xin16@zte.com.cn>
+Subject: [PATCH] mm/vmstat: add events for ksm cow
+Date:   Wed, 23 Mar 2022 03:17:31 +0000
+Message-Id: <20220323031730.2342930-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 9e35276a5344f74d4a3600fc4100b3dd251d5c56. Issue
-were reported for the drivers that are using affinity managed IRQ
-where manually toggling IRQ status is not expected. And we forget to
-enable the interrupts in the restore path as well.
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-In the future, we will rework on the interrupt hardening.
+Users may use ksm by calling madvise(, , MADV_MERGEABLE) when they want
+to save memory, it's a tradeoff by suffering delay on ksm cow. Users can
+get to know how much memory ksm saved by reading
+/sys/kernel/mm/ksm/pages_sharing, but they don't know what's the costs
+of ksm cow, and this is important of some delay sensitive tasks.
 
-Fixes: 9e35276a5344 ("virtio_pci: harden MSI-X interrupts")
-Reported-by: Marc Zyngier <maz@kernel.org>
-Reported-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
+So add ksm cow events to help users evaluate whether or how to use ksm.
+
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Reviewed-by: xu xin <xu.xin16@zte.com.cn>
+Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
 ---
- drivers/virtio/virtio_pci_common.c | 27 ++++++---------------------
- drivers/virtio/virtio_pci_common.h |  6 ++----
- drivers/virtio/virtio_pci_legacy.c |  5 ++---
- drivers/virtio/virtio_pci_modern.c |  6 ++----
- 4 files changed, 12 insertions(+), 32 deletions(-)
+ include/linux/vm_event_item.h |  2 ++
+ mm/memory.c                   | 18 +++++++++++++++---
+ mm/vmstat.c                   |  2 ++
+ 3 files changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-index 3f51fdb7be45..d724f676608b 100644
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -24,8 +24,8 @@ MODULE_PARM_DESC(force_legacy,
- 		 "Force legacy mode for transitional virtio 1 devices");
+diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
+index 16a0a4fd000b..6f32be04212f 100644
+--- a/include/linux/vm_event_item.h
++++ b/include/linux/vm_event_item.h
+@@ -131,6 +131,8 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+ 		SWAP_RA_HIT,
+ #ifdef CONFIG_KSM
+ 		KSM_SWPIN_COPY,
++		KSM_COW_SUCCESS,
++		KSM_COW_FAIL,
  #endif
- 
--/* disable irq handlers */
--void vp_disable_cbs(struct virtio_device *vdev)
-+/* wait for pending irq handlers */
-+void vp_synchronize_vectors(struct virtio_device *vdev)
+ #endif
+ #ifdef CONFIG_X86
+diff --git a/mm/memory.c b/mm/memory.c
+index 4111f97c91a0..06c92f322cdb 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3257,6 +3257,8 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 	__releases(vmf->ptl)
  {
- 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
- 	int i;
-@@ -34,20 +34,7 @@ void vp_disable_cbs(struct virtio_device *vdev)
- 		synchronize_irq(vp_dev->pci_dev->irq);
+ 	struct vm_area_struct *vma = vmf->vma;
++	vm_fault_t ret = 0;
++	bool ksm = 0;
  
- 	for (i = 0; i < vp_dev->msix_vectors; ++i)
--		disable_irq(pci_irq_vector(vp_dev->pci_dev, i));
--}
--
--/* enable irq handlers */
--void vp_enable_cbs(struct virtio_device *vdev)
--{
--	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
--	int i;
--
--	if (vp_dev->intx_enabled)
--		return;
--
--	for (i = 0; i < vp_dev->msix_vectors; ++i)
--		enable_irq(pci_irq_vector(vp_dev->pci_dev, i));
-+		synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
- }
- 
- /* the notify function used when creating a virt queue */
-@@ -154,8 +141,7 @@ static int vp_request_msix_vectors(struct virtio_device *vdev, int nvectors,
- 	snprintf(vp_dev->msix_names[v], sizeof *vp_dev->msix_names,
- 		 "%s-config", name);
- 	err = request_irq(pci_irq_vector(vp_dev->pci_dev, v),
--			  vp_config_changed, IRQF_NO_AUTOEN,
--			  vp_dev->msix_names[v],
-+			  vp_config_changed, 0, vp_dev->msix_names[v],
- 			  vp_dev);
- 	if (err)
- 		goto error;
-@@ -174,8 +160,7 @@ static int vp_request_msix_vectors(struct virtio_device *vdev, int nvectors,
- 		snprintf(vp_dev->msix_names[v], sizeof *vp_dev->msix_names,
- 			 "%s-virtqueues", name);
- 		err = request_irq(pci_irq_vector(vp_dev->pci_dev, v),
--				  vp_vring_interrupt, IRQF_NO_AUTOEN,
--				  vp_dev->msix_names[v],
-+				  vp_vring_interrupt, 0, vp_dev->msix_names[v],
- 				  vp_dev);
- 		if (err)
- 			goto error;
-@@ -352,7 +337,7 @@ static int vp_find_vqs_msix(struct virtio_device *vdev, unsigned nvqs,
- 			 "%s-%s",
- 			 dev_name(&vp_dev->vdev.dev), names[i]);
- 		err = request_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec),
--				  vring_interrupt, IRQF_NO_AUTOEN,
-+				  vring_interrupt, 0,
- 				  vp_dev->msix_names[msix_vec],
- 				  vqs[i]);
- 		if (err)
-diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
-index d3c6f72c7390..eb17a29fc7ef 100644
---- a/drivers/virtio/virtio_pci_common.h
-+++ b/drivers/virtio/virtio_pci_common.h
-@@ -101,10 +101,8 @@ static struct virtio_pci_device *to_vp_device(struct virtio_device *vdev)
- 	return container_of(vdev, struct virtio_pci_device, vdev);
- }
- 
--/* disable irq handlers */
--void vp_disable_cbs(struct virtio_device *vdev);
--/* enable irq handlers */
--void vp_enable_cbs(struct virtio_device *vdev);
-+/* wait for pending irq handlers */
-+void vp_synchronize_vectors(struct virtio_device *vdev);
- /* the notify function used when creating a virt queue */
- bool vp_notify(struct virtqueue *vq);
- /* the config->del_vqs() implementation */
-diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-index 34141b9abe27..6f4e34ce96b8 100644
---- a/drivers/virtio/virtio_pci_legacy.c
-+++ b/drivers/virtio/virtio_pci_legacy.c
-@@ -98,8 +98,8 @@ static void vp_reset(struct virtio_device *vdev)
- 	/* Flush out the status write, and flush in device writes,
- 	 * including MSi-X interrupts, if any. */
- 	vp_legacy_get_status(&vp_dev->ldev);
--	/* Disable VQ/configuration callbacks. */
--	vp_disable_cbs(vdev);
-+	/* Flush pending VQ/configuration callbacks. */
-+	vp_synchronize_vectors(vdev);
- }
- 
- static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vector)
-@@ -185,7 +185,6 @@ static void del_vq(struct virtio_pci_vq_info *info)
- }
- 
- static const struct virtio_config_ops virtio_pci_config_ops = {
--	.enable_cbs	= vp_enable_cbs,
- 	.get		= vp_get,
- 	.set		= vp_set,
- 	.get_status	= vp_get_status,
-diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-index 5455bc041fb6..30654d3a0b41 100644
---- a/drivers/virtio/virtio_pci_modern.c
-+++ b/drivers/virtio/virtio_pci_modern.c
-@@ -172,8 +172,8 @@ static void vp_reset(struct virtio_device *vdev)
+ 	if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+ 		pte_unmap_unlock(vmf->pte, vmf->ptl);
+@@ -3294,6 +3296,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
  	 */
- 	while (vp_modern_get_status(mdev))
- 		msleep(1);
--	/* Disable VQ/configuration callbacks. */
--	vp_disable_cbs(vdev);
-+	/* Flush pending VQ/configuration callbacks. */
-+	vp_synchronize_vectors(vdev);
+ 	if (PageAnon(vmf->page)) {
+ 		struct page *page = vmf->page;
++		ksm = PageKsm(page);
+ 
+ 		/*
+ 		 * We have to verify under page lock: these early checks are
+@@ -3302,7 +3305,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 		 *
+ 		 * PageKsm() doesn't necessarily raise the page refcount.
+ 		 */
+-		if (PageKsm(page) || page_count(page) > 3)
++		if (ksm || page_count(page) > 3)
+ 			goto copy;
+ 		if (!PageLRU(page))
+ 			/*
+@@ -3316,7 +3319,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 			goto copy;
+ 		if (PageSwapCache(page))
+ 			try_to_free_swap(page);
+-		if (PageKsm(page) || page_count(page) != 1) {
++		if (ksm || page_count(page) != 1) {
+ 			unlock_page(page);
+ 			goto copy;
+ 		}
+@@ -3339,7 +3342,16 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 	get_page(vmf->page);
+ 
+ 	pte_unmap_unlock(vmf->pte, vmf->ptl);
+-	return wp_page_copy(vmf);
++	ret = wp_page_copy(vmf);
++
++	if (ksm) {
++		if (unlikely(ret & VM_FAULT_ERROR))
++			count_vm_event(KSM_COW_FAIL);
++		else
++			count_vm_event(KSM_COW_SUCCESS);
++	}
++
++	return ret;
  }
  
- static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vector)
-@@ -380,7 +380,6 @@ static bool vp_get_shm_region(struct virtio_device *vdev,
- }
- 
- static const struct virtio_config_ops virtio_pci_config_nodev_ops = {
--	.enable_cbs	= vp_enable_cbs,
- 	.get		= NULL,
- 	.set		= NULL,
- 	.generation	= vp_generation,
-@@ -398,7 +397,6 @@ static const struct virtio_config_ops virtio_pci_config_nodev_ops = {
- };
- 
- static const struct virtio_config_ops virtio_pci_config_ops = {
--	.enable_cbs	= vp_enable_cbs,
- 	.get		= vp_get,
- 	.set		= vp_set,
- 	.generation	= vp_generation,
+ static void unmap_mapping_range_vma(struct vm_area_struct *vma,
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index d5cc8d739fac..a2c29a5206ec 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1390,6 +1390,8 @@ const char * const vmstat_text[] = {
+ 	"swap_ra_hit",
+ #ifdef CONFIG_KSM
+ 	"ksm_swpin_copy",
++	"ksm_cow_success",
++	"ksm_cow_fail",
+ #endif
+ #endif
+ #ifdef CONFIG_X86
 -- 
 2.25.1
 

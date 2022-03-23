@@ -2,148 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8744E531D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCB54E531F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244283AbiCWN03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
+        id S244239AbiCWN13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236642AbiCWN00 (ORCPT
+        with ESMTP id S232560AbiCWN1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:26:26 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E7342A23
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:24:53 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id h1so1843391edj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:24:53 -0700 (PDT)
+        Wed, 23 Mar 2022 09:27:25 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED76522F0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:25:55 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2e5827a76f4so16900567b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:25:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ofARB/tR+RVoABReGEuRsRQFB51fG8u0uAhot0zbmMw=;
-        b=kiS6nqG1b2tpgSMlBhPduqhTR+uUp0NChTeF3Di3s0Gjmx4bKjIIt1C21Otat+l2Q0
-         4riiJxQWeItg6q+1D7JmS8q2bknHa18aANAwBErwq0pxH33tw+zQsMdsN8+rKLqNK5mG
-         DSpYL7ceqguq/vwomiRqGOlI+eqIUjjbEr7eU=
+        bh=Z7oawa2AY57m2xBNWTaEFL3ZAO7yqhBtsuz3WE96h5o=;
+        b=WG6b+izbQ6vRlRg1kHzR8Hso6XWGHQmvm5bR3JDsIjTSzHbcoRHVDgcrB66VsgSaOJ
+         yY4VzstDQy6L07tda/xDjSBOMNQi6c/sPgZoSuHk5bc+jgqZvZuabgJu2eet8XbwH6Ht
+         HqtTVWvnVmxiHdZDM4TpXGbjowiNYP1TCoSCbuVxWjfChWUXprL0MoKXfhUNB3W/I40n
+         264gV6ZCFTG9YCmhl7YZSP4YLo3Nim1fbc4X6k1mB8KL2np0QCrySr8K0y/ITB3ZgwQf
+         sG8LX1dHNH0slb4ntL76PAGQXlWelY/NS7o8RjNg5Am19uFyHADjCOcVLbuL6Ev6RDb7
+         QX3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ofARB/tR+RVoABReGEuRsRQFB51fG8u0uAhot0zbmMw=;
-        b=WtTMUznifpI1AF9nU4quUWZ5fhGnhDlxSLkEUS43xrx7tQmXzzGlALMmbFHS26nvtc
-         ZfdZjd5Lo9CS0ZY/tegw+Rp3R6GeSHbENjZDudW1snXltuxQvNEK4I1ryuS0eW3j2RqP
-         8vusx24x4+FcjLwXojyarAbIqO7pym/YUOs/UUGPYmgKhCHEcNAKCD6QWErpHrSL7pvt
-         +RNsPlJ2l3bcFxdk7jDlR4OiCKrKmlu7gwipc4hZmL1HGzywQwUgpxHKJNpPfqp/kGRT
-         KjXipYZN7A0C4gWXcnA18iOETOMfi1U+9tr7iDK8K/Am1s1bi6D0R79qwyq+BnG9m3KE
-         21YA==
-X-Gm-Message-State: AOAM531fFPKBvX7ByU62d7AfSdP3brCt94Z7y5qnSmgB6uTj5mSty97E
-        24FEOmxc8b1CJEXreG9HuLftTNF/9Ovie1Ke7EkPXA==
-X-Google-Smtp-Source: ABdhPJyRgW2FVFPWTwmyfY3ygJgDF0P1WjrCCbHGjTDRam6d8g5Mn8TpLo/cwFgpJpNZHxGt28DfDlUbH73eq61XwZ8=
-X-Received: by 2002:a05:6402:50cf:b0:418:ee57:ed9 with SMTP id
- h15-20020a05640250cf00b00418ee570ed9mr34726129edb.37.1648041891743; Wed, 23
- Mar 2022 06:24:51 -0700 (PDT)
+        bh=Z7oawa2AY57m2xBNWTaEFL3ZAO7yqhBtsuz3WE96h5o=;
+        b=t10KkZYUvhMp2l+8WFOlBqCqBR/Ws2VYaeP51LxmY3xna0Ry2aUSy2g61xEUr+DOCU
+         MP0hIoSQwbm6WBYmz6uEVV9ryEpGYpsg/8CdWJwyzEUI5g5b1VjwCu0axp9vnu79Uzge
+         7xugla92n4sMJgp9K+OVA06xE8LjrWB9MHaJbcKAh9ynIUfR7B8mzZwS2EVDhthgVqQd
+         UxCMjMC7t7QtFpF2BX6Wp6j2nSamjBjOBYlAEezNobMZ6ALDa5ExgTm+67dI28xP/1qC
+         0aWE9IFJWuqREPu54LLznKF28YyDDRU8kjoTC9dZhMbdfR0yD8mVHWkmOvAo/iF/YkEW
+         sZbw==
+X-Gm-Message-State: AOAM532O0pZlBuIpJuWb6F9HEmURn8JlxQ9toLLIN0/fUjyDimJdyajJ
+        vCEs75bt4VN2FVj16NtpLjfbqU8IHGj2ciAXt3l8+w==
+X-Google-Smtp-Source: ABdhPJyXBZTLE+SdHvEM6HOhfR6sCqIa8iHPqXFGCtKCw6kEG9clABgN7+k7eLGXEtgng7QDuYBXenveLsJk9y/tWLU=
+X-Received: by 2002:a81:784b:0:b0:2e5:9f35:a90f with SMTP id
+ t72-20020a81784b000000b002e59f35a90fmr35657587ywc.278.1648041954053; Wed, 23
+ Mar 2022 06:25:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220322192712.709170-1-mszeredi@redhat.com> <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
-In-Reply-To: <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 23 Mar 2022 14:24:40 +0100
-Message-ID: <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
+References: <0f6d4f89-c08d-b985-075e-a763fec87fc4@163.com>
+In-Reply-To: <0f6d4f89-c08d-b985-075e-a763fec87fc4@163.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 23 Mar 2022 06:25:43 -0700
+Message-ID: <CANn89iKs0W=_HixT7_2R0xBrwEMEvin1-JHijjDNeMOqLKLmpg@mail.gmail.com>
+Subject: Re: [PATCH net-next] tcp: consume packet after do time wait process
+To:     Jianguo Wu <wujianguo106@163.com>
+Cc:     Menglong Dong <menglong8.dong@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 at 12:43, Christian Brauner <brauner@kernel.org> wrote:
+On Wed, Mar 23, 2022 at 6:05 AM Jianguo Wu <wujianguo106@163.com> wrote:
+>
+> From: Jianguo Wu <wujianguo@chinatelecom.cn>
+>
+> Using consume_skb() instead of kfree_skb_reason() after do normally
+> time wait process to be drop monitor friendly.
+>
+> Signed-off-by: Jianguo Wu <wujianguo@chinatelecom.cn>
+> ---
+>
 
-> Yes, we really need a way to query for various fs information. I'm a bit
-> torn about the details of this interface though. I would really like if
-> we had interfaces that are really easy to use from userspace comparable
-> to statx for example.
+1) net-next is closed.
 
-The reason I stated thinking about this is that Amir wanted a per-sb
-iostat interface and dumped it into /proc/PID/mountstats.  And that is
-definitely not the right way to go about this.
+2) This seems pretty much random to me, we definitely reach this point
+with packets that are dropped.
 
-So we could add a statfsx() and start filling in new stuff, and that's
-what Linus suggested.  But then we might need to add stuff that is not
-representable in a flat structure (like for example the stuff that
-nfs_show_stats does) and that again needs new infrastructure.
+These are classified as drops.
 
-Another example is task info in /proc.  Utilities are doing a crazy
-number of syscalls to get trivial information.  Why don't we have a
-procx(2) syscall?  I guess because lots of that is difficult to
-represent in a flat structure.  Just take the lsof example: tt's doing
-hundreds of thousands of syscalls on a desktop computer with just a
-few hundred processes.
+You know, TCP can handle reordered packets, spurious retransmits, and
+stuff like that, we do not want to hide this,
+otherwise we would have used consume_skb() for all packets.
 
-So I'm trying to look beyond fsinfo and about how we could better
-retrieve attributes, statistics, small bits and pieces within a
-unified framework.
+After all, TCP handles all incoming packets 'normally'.
 
-The ease of use argument does not really come into the picture here,
-because (unlike stat and friends) most of this info is specialized and
-will be either consumed by libraries, specialized utilities
-(util-linux, procos) or with a generic utility application that can
-query any information about anything that is exported through such an
-interface.    That applies to plain stat(2) as well: most users will
-not switch to statx() simply because that's too generic.  And that's
-fine, for info as common as struct stat a syscall is warranted.  If
-the info is more specialized, then I think a truly generic interface
-is a much better choice.
-
->  I know having this generic as possible was the
-> goal but I'm just a bit uneasy with such interfaces. They become
-> cumbersome to use in userspace. I'm not sure if the data: part for
-> example should be in this at all. That seems a bit out of place to me.
-
-Good point, reduction of scope may help.
-
-> Would it be really that bad if we added multiple syscalls for different
-> types of info? For example, querying mount information could reasonably
-> be a more focussed separate system call allowing to retrieve detailed
-> mount propagation info, flags, idmappings and so on. Prior approaches to
-> solve this in a completely generic way have gotten us not very far too
-> so I'm a bit worried about this aspect too.
-
-And I fear that this will just result in more and more ad-hoc
-interfaces being added, because a new feature didn't quite fit the old
-API.  You can see the history of this happening all over the place
-with multiple new syscall versions being added as the old one turns
-out to be not generic enough.
-
-I think a new interface needs to
-
-  - be uniform (a single utility can be used to retrieve various
-attributes and statistics, contrast this with e.g. stat(1),
-getfattr(1), lsattr(1) not to mention various fs specific tools).
-
- - have a hierarchical namespace (the unix path lookup is an example
-of this that stood the test of time)
-
- - allow retrieving arbitrary text or binary data
-
-And whatever form it takes, I'm sure it will be easier to use than the
-mess we currently have in various interfaces like the mount or process
-stats.
-
-Thanks,
-Miklos
+If you really care, I suggest you change (when net-next reopens in two
+weeks) the @reason to more precisely describe what is happening.

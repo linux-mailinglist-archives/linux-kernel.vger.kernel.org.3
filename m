@@ -2,119 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECAD54E4B7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847FE4E4B84
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241514AbiCWDdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 23:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
+        id S241535AbiCWDgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 23:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241542AbiCWDdB (ORCPT
+        with ESMTP id S236272AbiCWDgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 23:33:01 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6C070913
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:31:31 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id z8so510389oix.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Her+CON9l4wgkaJDnpr2YlL55pStpePMG7/cYiCS/kU=;
-        b=Z3zyJsmTrtJQJdSg7rK6ezx3eG2w+7kETHaEEWALmZjvYBgHUdZU4Kdz9rOzdtI03Q
-         IuLnfugF4B5M9Ff0rnt/sARNrGlvIQPLZsTf82sEcN61ZTShoi30Nyb13gZjXJlj8Ns6
-         o0RG9j0zIe9r/6Vn4JMpbqXus6CIgYZ/LUmtkIp+riJ/c7zWSzRueP7ykisb58Owoxsp
-         n2sW+AvG/ShAKbYATvINYzr5ATLcZocaRunx5wVREBigwxibRo8psAE2G4P/VXuDSBh1
-         HHCXFPSBDeYVrM2/Li0m7jig3PS20q/B79nGRZKNP5/FXhIRGHs2+DXzQYFnLTbfDoLr
-         VGTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Her+CON9l4wgkaJDnpr2YlL55pStpePMG7/cYiCS/kU=;
-        b=pUZiNH6IHlFjWpwVcnl0g7GZAb9ozTnrgAAoGOy09AY5GJIHjfWV8rfRcr3Dx11cuw
-         Gt7t+25lApKNzUIDX9ptfwe5CrwURf9AexGuPyE2jWRmHGApccUVdtIunMNLKGjzMiuB
-         ikmPMg+c6Da8dV7BbpB45dOVd/nkX/zCH6Tdvti5S0dYu25d1//7xpcz+AdTQ2vkKwrG
-         QsxDerAWbuwHua5coLkLEBC4ef4Bwasz1rUHURsvVvygR5J0HtQn+/U862QX5r5NzCnX
-         s2LQ3vKJuFFBBYAvH02Q/MzCmTBhwfJRfsVsOZgBTVfIge8tNqgWmk5MvFhgvXbjBcI1
-         R3Bw==
-X-Gm-Message-State: AOAM53362cPovgC1vVhkt8kqNwdM0Sm+dyCeCwLTpxjv5KEODywx7gqk
-        NtkGcvgUOdXPpGwH35WY9RdBuA==
-X-Google-Smtp-Source: ABdhPJwvnI084HJJ4vim9a3sctreUx8ZoiaiGUsBr1kx94Qt+Yxnl03yWN9JXRilkKjBAROxtCkbbQ==
-X-Received: by 2002:a54:4104:0:b0:2ec:b263:9979 with SMTP id l4-20020a544104000000b002ecb2639979mr3581918oic.66.1648006290958;
-        Tue, 22 Mar 2022 20:31:30 -0700 (PDT)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 23-20020a056870131700b000ddc17aba19sm6514297oab.58.2022.03.22.20.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 20:31:30 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Subject: [PATCH] net: stmmac: dwmac-qcom-ethqos: Enable RGMII functional clock on resume
-Date:   Tue, 22 Mar 2022 20:32:55 -0700
-Message-Id: <20220323033255.2282930-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
+        Tue, 22 Mar 2022 23:36:49 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788FF7087E;
+        Tue, 22 Mar 2022 20:35:19 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1nWrmB-0003Nm-JV; Wed, 23 Mar 2022 14:35:12 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 23 Mar 2022 15:35:10 +1200
+Date:   Wed, 23 Mar 2022 15:35:10 +1200
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Harsha <harsha.harsha@xilinx.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] cacheflush.h: Add forward declaration for struct folio
+Message-ID: <YjqVblTmjNYl3Zjc@gondor.apana.org.au>
+References: <Yigc4cQlTJRRZsQg@gondor.apana.org.au>
+ <20220322131327.GA747088@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322131327.GA747088@roeck-us.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the Qualcomm ethqos driver is properly described in its associated
-GDSC power-domain, the hardware will be powered down and loose its state
-between qcom_ethqos_probe() and stmmac_init_dma_engine().
+On Tue, Mar 22, 2022 at 06:13:27AM -0700, Guenter Roeck wrote:
+> On Wed, Mar 09, 2022 at 03:20:01PM +1200, Herbert Xu wrote:
+> > This patch turns the new SHA driver into a tristate and also allows
+> > compile testing.
+> > 
+> > Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> 
+> This results in:
+> 
+> Building s390:allmodconfig ... failed
+> --------------
+> Error log:
+> In file included from drivers/crypto/xilinx/zynqmp-sha.c:6:
+> include/linux/cacheflush.h:12:46: error: 'struct folio' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+>    12 | static inline void flush_dcache_folio(struct folio *folio)
 
-The result of this is that the functional clock from the RGMII IO macro
-is no longer provides and the DMA software reset in dwmac4_dma_reset()
-will time out, due to lacking clock signal.
+This should be fixed in cacheflush.h:
 
-Re-enable the functional clock, as part of the Qualcomm specific clock
-enablement sequence to avoid this problem.
+---8<---
+The struct folio is not declared in cacheflush.h so we need to
+provide a forward declaration as otherwise users of this header
+file may get warnings.
 
-The final clock configuration will be adjusted by ethqos_fix_mac_speed()
-once the link is being brought up.
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 522a0032af00 ("Add linux/cacheflush.h")
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-Fixes: a7c30e62d4b8 ("net: stmmac: Add driver for Qualcomm ethqos")
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-index 0cc28c79cc61..835caa15d55f 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-@@ -487,6 +487,13 @@ static int ethqos_clks_config(void *priv, bool enabled)
- 			dev_err(&ethqos->pdev->dev, "rgmii_clk enable failed\n");
- 			return ret;
- 		}
+diff --git a/include/linux/cacheflush.h b/include/linux/cacheflush.h
+index fef8b607f97e..a6189d21f2ba 100644
+--- a/include/linux/cacheflush.h
++++ b/include/linux/cacheflush.h
+@@ -4,6 +4,8 @@
+ 
+ #include <asm/cacheflush.h>
+ 
++struct folio;
 +
-+		/* Enable functional clock to prevent DMA reset to timeout due
-+		 * to lacking PHY clock after the hardware block has been power
-+		 * cycled. The actual configuration will be adjusted once
-+		 * ethqos_fix_mac_speed() is invoked.
-+		 */
-+		ethqos_set_func_clk_en(ethqos);
- 	} else {
- 		clk_disable_unprepare(ethqos->rgmii_clk);
- 	}
+ #if ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE
+ #ifndef ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
+ void flush_dcache_folio(struct folio *folio);
 -- 
-2.33.1
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

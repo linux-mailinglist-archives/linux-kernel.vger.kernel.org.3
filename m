@@ -2,126 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33514E52E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52CB4E52E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244207AbiCWNVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S244214AbiCWNVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236216AbiCWNVB (ORCPT
+        with ESMTP id S244202AbiCWNVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Mar 2022 09:21:01 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855AA1FCFB;
-        Wed, 23 Mar 2022 06:19:31 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id k25-20020a056830151900b005b25d8588dbso1053390otp.4;
-        Wed, 23 Mar 2022 06:19:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HyrrPHrvO3f1aaisugCkhzShyIOT6AwhUm27bUwnRnY=;
-        b=edJGnoiidC2B8L1eSAB1pVDctAy16XehxgC2A548wjV2WGwCQGPXPAZO8O/CaCwcCv
-         d3NDrKaz09eHAevVn3XNZD8nUb7Uw2yly6B5TccEF3aCWguruS6EXr4XU7hemWQMF17e
-         OCwZAjXB150bvRcNyKzPi0AsEx4L7KFz9JgJyAVYSQK3aNGCo93Kzvg019qz39T5zng2
-         PEVv2hbFYioa2ojf591KV/Y3u7urGkQyeta+T+7tSMnUxuQscVNlkBG9cMrKECma5vlV
-         xbxzniopKcuQYRKCLZbdXXB6Ss4W/gzcVUVU+moM973jCiz+nsqdrL74JzRxgSCIKw3U
-         M70g==
-X-Gm-Message-State: AOAM530+cprwJecoliORx8d/67oGTuZJLBOZU+sS1lcB7Lpr9vzV1wPn
-        GPpnHtsAw+BrubVRn4lFaxOB90nWng==
-X-Google-Smtp-Source: ABdhPJzsDMm/cvfuLg7u1LLlbwsqx1fxh37nvGVMM7XfRdRCrSnJJGXTwTDOnKPPSTOyY7+8cpZLIg==
-X-Received: by 2002:a05:6830:4106:b0:5c9:6651:9333 with SMTP id w6-20020a056830410600b005c966519333mr11914812ott.183.1648041569775;
-        Wed, 23 Mar 2022 06:19:29 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 60-20020a9d0642000000b005b22a82458csm9972012otn.55.2022.03.23.06.19.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 06:19:28 -0700 (PDT)
-Received: (nullmailer pid 3946551 invoked by uid 1000);
-        Wed, 23 Mar 2022 13:19:27 -0000
-Date:   Wed, 23 Mar 2022 08:19:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 17/18] dt-bindings: arm: msm: Convert kpss-gcc driver
- Documentation to yaml
-Message-ID: <YjseX1+AGkByxpg7@robh.at.kernel.org>
-References: <20220321231548.14276-1-ansuelsmth@gmail.com>
- <20220321231548.14276-18-ansuelsmth@gmail.com>
- <1647913851.222685.941035.nullmailer@robh.at.kernel.org>
- <Yjr2nkIrQ356DMUI@Ansuel-xps.localdomain>
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492FD1FCE6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:19:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E2EBE1F37F;
+        Wed, 23 Mar 2022 13:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648041570; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=skAPDzFpHTiodgB8Q02pBrdUfjbG2DP3aT/OV2kUCTg=;
+        b=ExWKBH5gbebZ2qLYLYhoqyuTeCoOFEeTDXcHTyKzVTsy7cEJjCYK6VddO3UW7yGD+ja2Cu
+        SrZnNBg0QIK1yZsSQPDEIxkQ45o4i57nTrErjU5qicqaZABRbr95w4AvNZ3e9QyzZnujTs
+        nm7tAt0Q1y8Sf0+UfJEtEENErmnZCco=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648041570;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=skAPDzFpHTiodgB8Q02pBrdUfjbG2DP3aT/OV2kUCTg=;
+        b=xJJQhmlpXwoElCRd9f8SJOA1NqCjyl8IfEx5JKFWYW8GBDuHAdGI+N76EUs5DvqbMFysNf
+        vQk/tHT2uqjB5mDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F60C12FC5;
+        Wed, 23 Mar 2022 13:19:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ud/kGWIeO2KkJgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 23 Mar 2022 13:19:30 +0000
+Message-ID: <93851312-6443-31ec-c194-8117e483f5d4@suse.cz>
+Date:   Wed, 23 Mar 2022 14:19:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yjr2nkIrQ356DMUI@Ansuel-xps.localdomain>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 27/39] kasan, mm: only define ___GFP_SKIP_KASAN_POISON
+ with HW_TAGS
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     andrey.konovalov@linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+References: <cover.1643047180.git.andreyknvl@google.com>
+ <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
+ <63704e10-18cf-9a82-cffb-052c6046ba7d@suse.cz>
+ <YjsaaQo5pqmGdBaY@linutronix.de>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <YjsaaQo5pqmGdBaY@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 11:29:50AM +0100, Ansuel Smith wrote:
-> On Mon, Mar 21, 2022 at 08:50:51PM -0500, Rob Herring wrote:
-> > On Tue, 22 Mar 2022 00:15:47 +0100, Ansuel Smith wrote:
-> > > Convert kpss-gcc driver Documentation to yaml. Since kpss-gcc expose a
-> > > clock add the required '#clock-cells' binding while converting it.
-> > > 
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > ---
-> > >  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
-> > >  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 69 +++++++++++++++++++
-> > >  2 files changed, 69 insertions(+), 44 deletions(-)
-> > >  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> > >  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> > > 
-> > 
-> > Running 'make dtbs_check' with the schema in this patch gives the
-> > following warnings. Consider if they are expected or the schema is
-> > incorrect. These may not be new warnings.
-> > 
-> > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> > This will change in the future.
-> > 
-> > Full log is available here: https://patchwork.ozlabs.org/patch/1607962
-> > 
-> > 
-> > clock-controller@2011000: '#clock-cells' is a required property
-> > 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
-> > 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
-> > 
-> > clock-controller@2011000: compatible:0: 'qcom,kpss-gcc' is not one of ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc-apq8064', 'qcom,kpss-gcc-msm8974', 'qcom,kpss-gcc-msm8960']
-> > 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
-> > 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
-> > 
-> > clock-controller@2011000: compatible:1: 'qcom,kpss-gcc' was expected
-> > 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
-> > 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
-> > 
-> > clock-controller@2011000: compatible: ['qcom,kpss-gcc', 'syscon'] is too short
-> > 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
-> > 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
-> > 
+On 3/23/22 14:02, Sebastian Andrzej Siewior wrote:
+> On 2022-03-23 12:48:29 [+0100], Vlastimil Babka wrote:
+>>> +#ifdef CONFIG_KASAN_HW_TAGS
+>>>  #define ___GFP_SKIP_KASAN_POISON	0x1000000u
+>>> +#else
+>>> +#define ___GFP_SKIP_KASAN_POISON	0
+>>> +#endif
+>>>  #ifdef CONFIG_LOCKDEP
+>>>  #define ___GFP_NOLOCKDEP	0x2000000u
+>>>  #else
+>>> @@ -251,7 +255,9 @@ struct vm_area_struct;
+>>>  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+>>>  
+>>>  /* Room for N __GFP_FOO bits */
+>>> -#define __GFP_BITS_SHIFT (25 + IS_ENABLED(CONFIG_LOCKDEP))
+>>> +#define __GFP_BITS_SHIFT (24 +					\
+>>> +			  IS_ENABLED(CONFIG_KASAN_HW_TAGS) +	\
+>>> +			  IS_ENABLED(CONFIG_LOCKDEP))
+>>
+>> This breaks __GFP_NOLOCKDEP, see:
+>> https://lore.kernel.org/all/YjoJ4CzB3yfWSV1F@linutronix.de/
 > 
-> Sorry for the very stupid question but it's something i'm searching for
-> a bit now... I can't really find Documentation or a guide on how to
-> check single yaml and dts instead of using the make command and check
-> everything. Am I missing something or this is not supported?
+> This could work because ___GFP_NOLOCKDEP is still 0x2000000u. In
 
-make allmodconfig
-make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+Hm but already this patch makes gfp_allowed_mask to be 0x1ffffff (thus
+not covering 0x2000000u) when CONFIG_LOCKDEP is enabled and the KASAN
+stuff not? 0x8000000u is just even further away.
 
-And now in next you can do just the filename or a pattern:
+> 	("kasan, page_alloc: allow skipping memory init for HW_TAGS")
+> 	https://lore.kernel.org/all/0d53efeff345de7d708e0baa0d8829167772521e.1643047180.git.andreyknvl@google.com/
+> 
+> This is replaced with 0x8000000u which breaks lockdep.
+> 
+> Sebastian
+> 
 
-make dtbs_check DT_SCHEMA_FILES=qcom,kpss-gcc.yaml
-
-Rob

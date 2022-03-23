@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBC04E599D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CB94E59AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344543AbiCWUOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 16:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S1344575AbiCWUPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 16:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236584AbiCWUOi (ORCPT
+        with ESMTP id S1344578AbiCWUPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 16:14:38 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168DBD63;
-        Wed, 23 Mar 2022 13:13:06 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-de3f2a19c8so2896851fac.1;
-        Wed, 23 Mar 2022 13:13:06 -0700 (PDT)
+        Wed, 23 Mar 2022 16:15:42 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B898BF34;
+        Wed, 23 Mar 2022 13:14:07 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id b130so645927pga.13;
+        Wed, 23 Mar 2022 13:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SqzXBf+oiLlHdlzIQAYBV2rUA1ozqz6S8acZiCgoJgg=;
+        b=fDxBnZ4Kc5wIbxD213OjcTAD+QweQLYRkWvnQ+RdrlH5GbL0HpzGsrO5NacSTPf1Uz
+         H0CVtiNi5c1Fetgx5OtkedAwyu6Kuy4PZOjIkstj3p/Uj2jRfUV2Z/iZEoZPdW4oKHe4
+         B4Pkp/Cwdqn8dUwHsc/n6K1JFrAUXmYjlMDGEsDMA6xWfAtBhjbQzsbeIbIRG7PBspxZ
+         uMqZ0NU+3QE5YeaPg5TN0pZKm2j2yWkVQoXMEH9KtmS8GTP1aQmvbao1ymyOCrovz6B9
+         F2Os/3vrlmn2hcfNUBVYXiGVmXrPZYGQIKf+mnAYJRDB6Qdmn7CxhXZr3S4mSDr1Y2Se
+         GgeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0dtghV1fkEXQC3eY/8QyiqW6VQirMjQBl/NSTjJ0W9I=;
-        b=JGYUxljba0jZsOFk3PA5RW7Ys9FxFTVDybJpIwNc9MflcbRx08O0ZYjQcElC+gstN/
-         Kc/TBsoZRjnzSpjUC8lWpZiCYqJodlIAKLT9XPRLiLupNjr9hfPyhlNtkL1vgA1t2kh0
-         vh7UdjYO1EqQINxlZ+cBnrtv/Vgs0xgfrS20JTcEsbfVJYTYBJRU2f9Cm5TKLjP/p9nJ
-         ggwnalH/YwVRgaumFHBG0piVq9vKn0zohUCpK5EuZW5m5npJRMFLYyJ3JGVSfB9GDhnn
-         N3lvMzL3e2MJc6Ea2kUNeipNE1NNVhGaw8IWOTBiyhntP6wCw/X8hyUPXsnA2UQ2gV4Z
-         stfg==
-X-Gm-Message-State: AOAM532q8bjyiYZctrcJLpyaqxXixDNTvy0gjHYImlKJIsv2hAH2FfZD
-        M4Y6mnwBCXeZRaVzXd256g==
-X-Google-Smtp-Source: ABdhPJx08/NjwL/LKLNaYctq1rd2mdl4jiv/04ZWeiY6YBXgM0/680BNb6NQWQd/cV6Kt76ohwagPg==
-X-Received: by 2002:a05:6870:c101:b0:da:b3f:2b89 with SMTP id f1-20020a056870c10100b000da0b3f2b89mr5288216oad.296.1648066385933;
-        Wed, 23 Mar 2022 13:13:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c9-20020a4a8ec9000000b0032438ba79b0sm449783ool.0.2022.03.23.13.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 13:13:05 -0700 (PDT)
-Received: (nullmailer pid 373336 invoked by uid 1000);
-        Wed, 23 Mar 2022 20:13:04 -0000
-Date:   Wed, 23 Mar 2022 15:13:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        ashishsingha@nvidia.com, skomatineni@nvidia.com,
-        ldewangan@nvidia.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] spi: dt-bindings: Add wait state polling flag
-Message-ID: <Yjt/UDlkE9ciA4Yt@robh.at.kernel.org>
-References: <20220317012006.15080-1-kyarlagadda@nvidia.com>
- <20220317012006.15080-4-kyarlagadda@nvidia.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SqzXBf+oiLlHdlzIQAYBV2rUA1ozqz6S8acZiCgoJgg=;
+        b=0B8WC0R9oxcDG6Y3ADQSkwfZigKBnQww21DLifXCWBCPynpaBo1VAjGfWgZ+Gank5P
+         T4xUGLDZTVGUc7GYjCyk9N7lj58eCcmuqtIrhCrBngTdrIh7/FKaqBQs+p0jh0G3sozY
+         rtk/1CwXYHhqyJkioUchf2ZTXgtu/kXb1itNmd24EjRdE3W9o+bFYR9GLT82Dmj3aG/D
+         dWq7h27CNXQTYrLxXm9RkCoH9JvA0a7ll0nrt4DrfuntwAcpWxIofA+1J+PKIQgwNiKZ
+         lEYYwpSvXGUdm9uVYGQ46psIQ/UwjP7YzaR6ghUTAgoJICs3bbnkFLlfumf2fidn/kM9
+         jxBg==
+X-Gm-Message-State: AOAM531pOIfK4bLrr0oh67EUjrP9p6MRV/0jmlLaJUQ2hh5NuwCS6HXn
+        +dw53Ze0TCeYT/MkyxTk7iQ=
+X-Google-Smtp-Source: ABdhPJwORPXCVM/tlAyQPyNcwD8oEQ/LjRZnSxlvzo8zHq8yZYnl8R9LbJZESYwcT3vxHtpCAeJqjA==
+X-Received: by 2002:a65:6e87:0:b0:380:a1ef:a9be with SMTP id bm7-20020a656e87000000b00380a1efa9bemr1230773pgb.284.1648066446930;
+        Wed, 23 Mar 2022 13:14:06 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id np8-20020a17090b4c4800b001c70aeab380sm7606982pjb.41.2022.03.23.13.14.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 13:14:06 -0700 (PDT)
+Message-ID: <a3dfb05f-e66a-171e-8dbe-1f32d3a69830@gmail.com>
+Date:   Wed, 23 Mar 2022 13:14:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317012006.15080-4-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RFC net-next 1/5] net: phy: mscc-miim: reject clause 45
+ register accesses
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220323183419.2278676-1-michael@walle.cc>
+ <20220323183419.2278676-2-michael@walle.cc>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220323183419.2278676-2-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 06:50:06AM +0530, Krishna Yarlagadda wrote:
-> Add flag to enable tpm wait state polling and Tegra Grace binding.
-
-TPM
-
+On 3/23/22 11:34, Michael Walle wrote:
+> The driver doesn't support clause 45 register access yet, but doesn't
+> check if the access is a c45 one either. This leads to spurious register
+> reads and writes. Add the check.
 > 
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->  .../devicetree/bindings/spi/nvidia,tegra210-quad.yaml       | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-> index 0296edd1de22..88b00fcad210 100644
-> --- a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-> +++ b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-> @@ -20,6 +20,7 @@ properties:
->        - nvidia,tegra186-qspi
->        - nvidia,tegra194-qspi
->        - nvidia,tegra234-qspi
-> +      - nvidia,tegra-grace-qspi
->  
->    reg:
->      maxItems: 1
-> @@ -57,6 +58,11 @@ patternProperties:
->        spi-tx-bus-width:
->          enum: [1, 2, 4]
->  
-> +      nvidia,wait-polling:
-> +        description:
-> +          Enable TPM wait state polling on supported chips.
+> Fixes: 542671fe4d86 ("net: phy: mscc-miim: Add MDIO driver")
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-What's TPM?
-
-Why is this not implied by the compatible string?
-
-Also, how child node properties are handled has changed. See 
-Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml. The 
-NVidia specific properties should be refactored first before adding 
-more.
-
-> +	type: boolean
-> +
->        nvidia,tx-clk-tap-delay:
->          description:
->            Delays the clock going out to device with this tap value.
-> -- 
-> 2.17.1
-> 
-> 
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

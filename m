@@ -2,150 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5A24E50C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6874E50C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243653AbiCWK65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
+        id S243657AbiCWK7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 06:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243654AbiCWK6x (ORCPT
+        with ESMTP id S243664AbiCWK7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:58:53 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6335878062;
-        Wed, 23 Mar 2022 03:57:21 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id u3so1324953ljd.0;
-        Wed, 23 Mar 2022 03:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=OXIgpQewnxlg0QpZCeU/b/t8bzjboH/kCWJvwnGyNJc=;
-        b=MMJDo4C5ZsXS02QHJkGPkc2lyI5LXoN+MlgkdrsVMW5SssCeJVW62Hs8mQRF3COpAT
-         VoO5NNnXNPCV4rNmVczeMJZdEJK+aGSdrLdzEa/e4kve9X3PhraQJf3lE+5NyF/0sQqD
-         MS2xjVtu0Xrt1BF9eRkLSzjEISDF0SDQNKCgEPF/mhGwcW4uoOgOHLtMIEfWVKdS0/17
-         4TmHYqPFP1N3VJNhdX7S6rtXZvyW8EH2g+P2iZMreLFP5sL3HUkBfPb8eZy1b3fKu7Gn
-         RcXSB1t5eFFxEuRKGIynxbt7uuw1MSFaG0Y2wRLVCmncp7cHrBFYKq7TvBKJtC5cHXXE
-         zP5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=OXIgpQewnxlg0QpZCeU/b/t8bzjboH/kCWJvwnGyNJc=;
-        b=tQJb3O1rW+o3i/ULIl4Z6PlCQsNbvbOUSs8J3elzaQt9nDcMJ4CoyZt9Zde44gsdfQ
-         /FxjD4EaEgucZjdVZZ8y02XI+O5fo/B56aUpF2tABQEq1a8sxRlrK/q52Zu3KnxDWQLp
-         2GghyUR14ckFuvk9kIhHFEgN3eId9xy5DiVxfIyQF68ZUJQGP3S/OaZHZL2hPROaD42d
-         7nVh2DOoEKdk7AQeEUs+vpGDQSf+5MTt1+6O+D1PdXl68dNYmeecn3NRlJ1IWS8Xw7TL
-         GS1xK7qZ+A+gK7XO0I3Fqpi3Zjtn+pgnGrXpafmU3wruxQdgOGSWk4zdzgZlbPf2JT/L
-         Hyug==
-X-Gm-Message-State: AOAM530Q9qjsPBBe1MRfTckUd+IY1Lrx7ffqY6lW/+00K9YmqJPdUBEZ
-        12Qaj0CSmjSCPANsHSKbCGMQBUUDPNM05w==
-X-Google-Smtp-Source: ABdhPJxhKO/5vy8tmJTecOngQH5nB4XpLXNl7EL+81Szm3yq5mv9kBuGhnMN5unFmagxo5GjkOcSdw==
-X-Received: by 2002:a2e:b014:0:b0:23c:9593:f7 with SMTP id y20-20020a2eb014000000b0023c959300f7mr21851030ljk.209.1648033039623;
-        Wed, 23 Mar 2022 03:57:19 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id l4-20020a2e9084000000b00244cb29e3e4sm2738763ljg.133.2022.03.23.03.57.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 03:57:19 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20220323101643.kum3nuqctunakcfo@skbuf>
-References: <20220317161808.psftauoz5iaecduy@skbuf>
- <8635jg5xe5.fsf@gmail.com> <20220317172013.rhjvknre5w7mfmlo@skbuf>
- <86tubvk24r.fsf@gmail.com> <20220318121400.sdc4guu5m4auwoej@skbuf>
- <86pmmjieyl.fsf@gmail.com> <20220318131943.hc7z52beztqlzwfq@skbuf>
- <86a6dixnd2.fsf@gmail.com> <20220322110806.kbdb362jf6pbtqaf@skbuf>
- <86fsn90ye8.fsf@gmail.com> <20220323101643.kum3nuqctunakcfo@skbuf>
-Date:   Wed, 23 Mar 2022 11:57:16 +0100
-Message-ID: <864k3p5437.fsf@gmail.com>
+        Wed, 23 Mar 2022 06:59:15 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC5378925;
+        Wed, 23 Mar 2022 03:57:44 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22N9Gq6c029260;
+        Wed, 23 Mar 2022 11:57:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=WCVSJNz4FKwo1y85lq01vI5ZuAMhAuljc4SWrnPI9fU=;
+ b=4vXcp4Jcv59ZKnUoy7vYxvgbeoMbRanec7ebfN2fVbeFNRECJKgVN3Z3SlsJ8YwYkCl7
+ AUOyVo2Y1GXdqcNnZaUYbI1h3lCruHjsx7xQAtUAtFCr/DheSSj0EV1ibbpQsNMnl2yw
+ PZ5FQXk5cewQvW6l2wAS2mTdmoZrxq2xXi+H7r4L4tC+j92QpqlGgKVEXcSBkJgjR7j/
+ Xepn/x2o3ewK0l8LQevOC7/60KxjKd0ww6zr9PKBBZh0w99vEj/wEp90yV3HFWYHhlbk
+ AON5bc8tXOm6v/OZROOdpaLj05r2AvsI9bsVzeuVLBHzmHAaWG1sZrwe9JvygZXRqhf3 8A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ew7d4fgfw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Mar 2022 11:57:37 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C287310002A;
+        Wed, 23 Mar 2022 11:57:34 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BA5ED2248D6;
+        Wed, 23 Mar 2022 11:57:34 +0100 (CET)
+Received: from [10.201.20.246] (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 23 Mar
+ 2022 11:57:34 +0100
+Message-ID: <9be3d491-4fdc-4aa6-8176-23a2cf3773ca@foss.st.com>
+Date:   Wed, 23 Mar 2022 11:57:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Subject: Re: [PATCH V2 1/3] rpmsg: core: Add signal API support
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>
+CC:     <swboyd@chromium.org>, <quic_clew@quicinc.com>,
+        <mathieu.poirier@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>
+References: <1642534993-6552-1-git-send-email-quic_deesin@quicinc.com>
+ <1642534993-6552-2-git-send-email-quic_deesin@quicinc.com>
+ <Yiu7DPHDY3uwcnLK@builder.lan>
+Content-Language: en-US
+In-Reply-To: <Yiu7DPHDY3uwcnLK@builder.lan>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-23_06,2022-03-22_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ons, mar 23, 2022 at 12:16, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Wed, Mar 23, 2022 at 11:13:51AM +0100, Hans Schultz wrote:
->> On tis, mar 22, 2022 at 13:08, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Tue, Mar 22, 2022 at 12:01:13PM +0100, Hans Schultz wrote:
->> >> On fre, mar 18, 2022 at 15:19, Vladimir Oltean <olteanv@gmail.com> wrote:
->> >> > On Fri, Mar 18, 2022 at 02:10:26PM +0100, Hans Schultz wrote:
->> >> >> In the offloaded case there is no difference between static and dynamic
->> >> >> flags, which I see as a general issue. (The resulting ATU entry is static
->> >> >> in either case.)
->> >> >
->> >> > It _is_ a problem. We had the same problem with the is_local bit.
->> >> > Independently of this series, you can add the dynamic bit to struct
->> >> > switchdev_notifier_fdb_info and make drivers reject it.
->> >> >
->> >> >> These FDB entries are removed when link goes down (soft or hard). The
->> >> >> zero DPV entries that the new code introduces age out after 5 minutes,
->> >> >> while the locked flagged FDB entries are removed by link down (thus the
->> >> >> FDB and the ATU are not in sync in this case).
->> >> >
->> >> > Ok, so don't let them disappear from hardware, refresh them from the
->> >> > driver, since user space and the bridge driver expect that they are
->> >> > still there.
->> >> 
->> >> I have now tested with two extra unmanaged switches (each connected to a
->> >> seperate port on our managed switch, and when migrating from one port to
->> >> another, there is member violations, but as the initial entry ages out,
->> >> a new miss violation occurs and the new port adds the locked entry. In
->> >> this case I only see one locked entry, either on the initial port or
->> >> later on the port the host migrated to (via switch).
->> >> 
->> >> If I refresh the ATU entries indefinitly, then this migration will for
->> >> sure not work, and with the member violation suppressed, it will be
->> >> silent about it.
->> >
->> > Manual says that migrations should trigger miss violations if configured
->> > adequately, is this not the case?
->> >
->> >> So I don't think it is a good idea to refresh the ATU entries
->> >> indefinitely.
->> >> 
->> >> Another issue I see, is that there is a deadlock or similar issue when
->> >> receiving violations and running 'bridge fdb show' (it seemed that
->> >> member violations also caused this, but not sure yet...), as the unit
->> >> freezes, not to return...
->> >
->> > Have you enabled lockdep, debug atomic sleep, detect hung tasks, things
->> > like that?
->> 
->> I have now determined that it is the rtnl_lock() that causes the
->> "deadlock". The doit() in rtnetlink.c is under rtnl_lock() and is what
->> takes care of getting the fdb entries when running 'bridge fdb show'. In
->> principle there should be no problem with this, but I don't know if some
->> interrupt queue is getting jammed as they are blocked from rtnetlink.c?
->
-> Sorry, I forgot to respond yesterday to this.
-> By any chance do you maybe have an AB/BA lock inversion, where from the
-> ATU interrupt handler you do mv88e6xxx_reg_lock() -> rtnl_lock(), while
-> from the port_fdb_dump() handler you do rtnl_lock() -> mv88e6xxx_reg_lock()?
 
-If I release the mv88e6xxx_reg_lock() before calling the handler, I need
-to get it again for the mv88e6xxx_g1_atu_loadpurge() call at least. But
-maybe the vtu_walk also needs the mv88e6xxx_reg_lock()?
-I could also just release the mv88e6xxx_reg_lock() before the
-call_switchdev_notifiers() call and reacquire it immediately after?
+
+On 3/11/22 22:11, Bjorn Andersson wrote:
+> On Tue 18 Jan 13:43 CST 2022, Deepak Kumar Singh wrote:
+> 
+>> Some transports like Glink support the state notifications between
+>> clients using signals similar to serial protocol signals.
+>> Local glink client drivers can send and receive signals to glink
+>> clients running on remote processors.
+>>
+>> Add APIs to support sending and receiving of signals by rpmsg clients.
+>>
+>> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+>> ---
+>>  drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
+>>  drivers/rpmsg/rpmsg_internal.h |  2 ++
+>>  include/linux/rpmsg.h          | 14 ++++++++++++++
+>>  3 files changed, 37 insertions(+)
+>>
+>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+>> index d3eb600..6712418 100644
+>> --- a/drivers/rpmsg/rpmsg_core.c
+>> +++ b/drivers/rpmsg/rpmsg_core.c
+>> @@ -328,6 +328,24 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+>>  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
+>>  
+>>  /**
+>> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
+>> + * @ept:	the rpmsg endpoint
+>> + * @enable:	enable or disable serial flow control
+>> + *
+>> + * Return: 0 on success and an appropriate error value on failure.
+>> + */
+>> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable)
+> 
+> This API looks nice and clean and deals with flow control.
+
+seems to me ambiguous API... what does it means flow control enable? Does it means that the flow control is enable or that the the local
+endpoint is ready to receive?
+
+Could we consider here that it is more a bind/unbind of the endpoint?
+
+> 
+>> +{
+>> +	if (WARN_ON(!ept))
+>> +		return -EINVAL;
+>> +	if (!ept->ops->set_flow_control)
+>> +		return -ENXIO;
+>> +
+>> +	return ept->ops->set_flow_control(ept, enable);
+>> +}
+>> +EXPORT_SYMBOL(rpmsg_set_flow_control);
+>> +
+>> +/**
+>>   * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
+>>   * @ept: the rpmsg endpoint
+>>   *
+>> @@ -535,6 +553,9 @@ static int rpmsg_dev_probe(struct device *dev)
+>>  
+>>  		rpdev->ept = ept;
+>>  		rpdev->src = ept->addr;
+>> +
+>> +		if (rpdrv->signals)
+
+seems an useless check
+
+>> +			ept->sig_cb = rpdrv->signals;
+>>  	}
+>>  
+>>  	err = rpdrv->probe(rpdev);
+>> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+>> index b1245d3..35c2197 100644
+>> --- a/drivers/rpmsg/rpmsg_internal.h
+>> +++ b/drivers/rpmsg/rpmsg_internal.h
+>> @@ -53,6 +53,7 @@ struct rpmsg_device_ops {
+>>   * @trysendto:		see @rpmsg_trysendto(), optional
+>>   * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
+>>   * @poll:		see @rpmsg_poll(), optional
+>> + * @set_flow_control:	see @rpmsg_set_flow_control(), optional
+>>   * @get_mtu:		see @rpmsg_get_mtu(), optional
+>>   *
+>>   * Indirection table for the operations that a rpmsg backend should implement.
+>> @@ -73,6 +74,7 @@ struct rpmsg_endpoint_ops {
+>>  			     void *data, int len);
+>>  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
+>>  			     poll_table *wait);
+>> +	int (*set_flow_control)(struct rpmsg_endpoint *ept, bool enable);
+>>  	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
+>>  };
+>>  
+>> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
+>> index 02fa911..06d090c 100644
+>> --- a/include/linux/rpmsg.h
+>> +++ b/include/linux/rpmsg.h
+>> @@ -62,12 +62,14 @@ struct rpmsg_device {
+>>  };
+>>  
+>>  typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
+>> +typedef int (*rpmsg_rx_sig_t)(struct rpmsg_device *, void *, u32);
+> 
+> This callback however, is still using the original low level tty
+> signals.
+> 
+> Is there any reason why this can't be "rpmsg_flowcontrol_cb_t" and take
+> a boolean, so we get a clean interface in both directions?
+> 
+> Regards,
+> Bjorn
+> 
+>>  
+>>  /**
+>>   * struct rpmsg_endpoint - binds a local rpmsg address to its user
+>>   * @rpdev: rpmsg channel device
+>>   * @refcount: when this drops to zero, the ept is deallocated
+>>   * @cb: rx callback handler
+>> + * @sig_cb: rx serial signal handler
+
+Is it signaling for reception or transmission?
+
+Regards,
+Arnaud
+
+>>   * @cb_lock: must be taken before accessing/changing @cb
+>>   * @addr: local rpmsg address
+>>   * @priv: private data for the driver's use
+>> @@ -90,6 +92,7 @@ struct rpmsg_endpoint {
+>>  	struct rpmsg_device *rpdev;
+>>  	struct kref refcount;
+>>  	rpmsg_rx_cb_t cb;
+>> +	rpmsg_rx_sig_t sig_cb;
+>>  	struct mutex cb_lock;
+>>  	u32 addr;
+>>  	void *priv;
+>> @@ -111,6 +114,7 @@ struct rpmsg_driver {
+>>  	int (*probe)(struct rpmsg_device *dev);
+>>  	void (*remove)(struct rpmsg_device *dev);
+>>  	int (*callback)(struct rpmsg_device *, void *, int, void *, u32);
+>> +	int (*signals)(struct rpmsg_device *rpdev, void *priv, u32);
+>>  };
+>>  
+>>  static inline u16 rpmsg16_to_cpu(struct rpmsg_device *rpdev, __rpmsg16 val)
+>> @@ -188,6 +192,8 @@ __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
+>>  
+>>  ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
+>>  
+>> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable);
+>> +
+>>  #else
+>>  
+>>  static inline int rpmsg_register_device(struct rpmsg_device *rpdev)
+>> @@ -306,6 +312,14 @@ static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
+>>  	return -ENXIO;
+>>  }
+>>  
+>> +static inline int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable)
+>> +{
+>> +	/* This shouldn't be possible */
+>> +	WARN_ON(1);
+>> +
+>> +	return -ENXIO;
+>> +}
+>> +
+>>  #endif /* IS_ENABLED(CONFIG_RPMSG) */
+>>  
+>>  /* use a macro to avoid include chaining to get THIS_MODULE */
+>> -- 
+>> 2.7.4
+>>

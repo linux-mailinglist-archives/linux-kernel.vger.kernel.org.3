@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2723A4E4BCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 05:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485354E4BD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 05:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241745AbiCWENA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 00:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S241759AbiCWEOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 00:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiCWEM7 (ORCPT
+        with ESMTP id S229446AbiCWEOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 00:12:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C1C55BD6;
-        Tue, 22 Mar 2022 21:11:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24A1D61585;
-        Wed, 23 Mar 2022 04:11:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D52D9C340E8;
-        Wed, 23 Mar 2022 04:11:28 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eFkXpepl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1648008686;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Tmx+SMJ8klnka/a+PxgQZA13oU4YxVuHKjh55SA6rJI=;
-        b=eFkXpepl82R3E7G6qgCYbO2N/529W0VVhuoKMXWp0mXsiorZoJfqxSqX19PlI6y8cmCzzt
-        2B4mXKBqhnDf4h9JyuTK+SY+8bQ723mP7Ca1LcIKx9PL6h13YRLG0FdtehoYhFSY3pVmjE
-        pKiR6h4RQfC9CROhWz8qB8ev44ECZ8I=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3da1f10b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 23 Mar 2022 04:11:26 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Graham Christensen <graham@grahamc.com>
-Subject: [PATCH] random: treat bootloader trust toggle the same way as cpu trust toggle
-Date:   Tue, 22 Mar 2022 22:11:23 -0600
-Message-Id: <20220323041123.146459-1-Jason@zx2c4.com>
+        Wed, 23 Mar 2022 00:14:18 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F5CC46168;
+        Tue, 22 Mar 2022 21:12:48 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:49490.1900241467
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 65E70100295;
+        Wed, 23 Mar 2022 12:12:44 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 9fdf852ba39e43dc86bc897a873f4e2f for robh@kernel.org;
+        Wed, 23 Mar 2022 12:12:47 CST
+X-Transaction-ID: 9fdf852ba39e43dc86bc897a873f4e2f
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <9ea4d326-ad5f-4f2c-1609-4ca772699d1b@189.cn>
+Date:   Wed, 23 Mar 2022 12:12:43 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
+ controller
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kernel test robot <lkp@intel.com>
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-8-15330273260@189.cn>
+ <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_RANDOM_TRUST_CPU is set, the RNG initializes using RDRAND.
-But, the user can disable (or enable) this behavior by setting
-`random.trust_cpu=0/1` on the kernel command line. This allows system
-builders to do reasonable things while avoiding howls from tinfoil
-hatters. (Or vice versa.)
 
-CONFIG_RANDOM_TRUST_BOOTLOADER is basically the same thing, but regards
-the seed passed via EFI or device tree, which might come from RDRAND or
-a TPM or somewhere else. In order to allow distros to more easily enable
-this while avoiding those same howls (or vice versa), this commit adds
-the corresponding `random.trust_bootloader=0/1` toggle.
+On 2022/3/23 04:49, Rob Herring wrote:
+>> +/*
+>> + * mainly for dc in ls7a1000 which have builtin gpio emulated i2c
+>> + *
+>> + * @index : output channel index, 0 for DVO0, 1 for DVO1
+>> + */
+>> +struct lsdc_i2c *lsdc_create_i2c_chan(struct device *dev, void *base, unsigned int index)
+>> +{
+>> +	char compat[32] = {0};
+>> +	unsigned int udelay = 5;
+>> +	unsigned int timeout = 2200;
+>> +	int nr = -1;
+>> +	struct i2c_adapter *adapter;
+>> +	struct lsdc_i2c *li2c;
+>> +	struct device_node *i2c_np;
+>> +	int ret;
+>> +
+>> +	li2c = devm_kzalloc(dev, sizeof(*li2c), GFP_KERNEL);
+>> +	if (!li2c)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	li2c->index = index;
+>> +	li2c->dev = dev;
+>> +
+>> +	if (index == 0) {
+>> +		li2c->sda = 0x01;
+>> +		li2c->scl = 0x02;
+>> +	} else if (index == 1) {
+>> +		li2c->sda = 0x04;
+>> +		li2c->scl = 0x08;
+> Just require this to be in DT rather than having some default.
+>
+By design,  I am try very hard to let the code NOT fully  DT dependent. DT is nice , easy to learn and use.
+But kernel side developer plan to follow UEFI + ACPI Specification on LS3A5000 + LS7A1000 platform. See [1]
+There will no DT support then, provide a convention support  make the driver more flexible. I want the
+driver works with minimal requirement. The driver just works on simple boards by put the following dc device
+node in arch/mips/dts/loongson/loongson64g_4core_ls7a.dts,
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Graham Christensen <graham@grahamc.com>
-Link: https://github.com/NixOS/nixpkgs/pull/165355
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+             lsdc: display-controller@6,1 {
+                 compatible = "loongson,ls7a1000-dc";
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 7b7f5e6596c2..c8974e5f57e1 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -948,11 +948,17 @@ static bool drain_entropy(void *buf, size_t nbytes, bool force)
-  **********************************************************************/
- 
- static bool trust_cpu __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
-+static bool trust_bootloader __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER);
- static int __init parse_trust_cpu(char *arg)
- {
- 	return kstrtobool(arg, &trust_cpu);
- }
-+static int __init parse_trust_bootloader(char *arg)
-+{
-+	return kstrtobool(arg, &trust_bootloader);
-+}
- early_param("random.trust_cpu", parse_trust_cpu);
-+early_param("random.trust_bootloader", parse_trust_bootloader);
- 
- /*
-  * The first collection of entropy occurs at system boot while interrupts
-@@ -1160,7 +1166,7 @@ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
-  */
- void add_bootloader_randomness(const void *buf, size_t size)
- {
--	if (IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER))
-+	if (trust_bootloader)
- 		add_hwgenerator_randomness(buf, size, size * 8);
- 	else
- 		add_device_randomness(buf, size);
--- 
-2.35.1
+                 reg = <0x3100 0x0 0x0 0x0 0x0>;
+                 interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+                 interrupt-parent = <&pic>;
+             };
+
+[1] 
+https://lwn.net/Articles/869541/#:~:text=LoongArch%20is%20a%20new%20RISC%20ISA%2C%20which%20is,revision%20of%20ACPI%20Specification%20%28current%20revision%20is%206.4%29.
 

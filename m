@@ -2,148 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205B04E5B9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 23:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D514E5BA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345360AbiCWXAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 19:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S240980AbiCWXDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 19:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234809AbiCWXAW (ORCPT
+        with ESMTP id S1345421AbiCWXDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 19:00:22 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED1FC90256;
-        Wed, 23 Mar 2022 15:58:49 -0700 (PDT)
-Received: from dread.disaster.area (pa49-186-150-27.pa.vic.optusnet.com.au [49.186.150.27])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 72EA3533E65;
-        Thu, 24 Mar 2022 09:58:45 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nX9wB-0095L5-JH; Thu, 24 Mar 2022 09:58:43 +1100
-Date:   Thu, 24 Mar 2022 09:58:43 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Miklos Szeredi <mszeredi@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Message-ID: <20220323225843.GI1609613@dread.disaster.area>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
+        Wed, 23 Mar 2022 19:03:12 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712A02CC8C;
+        Wed, 23 Mar 2022 16:01:42 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 644F5221D4;
+        Thu, 24 Mar 2022 00:01:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648076500;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mrbZnCx5ImFtI+d/9SJ/+v1bhmyj3qBx9rMgcrWC17Q=;
+        b=Rs87I7ubuG5FwsuqBEU0Wbdrk44gkKESedjD6nAYcoxcQ3F8Y8Fcd2DiHKlYL/vVP31iMX
+        jWcQPJrtcj6ULwLw6oXsrfaQWByIlQFUy7MJuNSXhF/PcDb0SpDJueH4k9EIX530VU4K8N
+        ELSDV6o0AMdR9Gxg/AzbhsbbDyniDRQ=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322192712.709170-1-mszeredi@redhat.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=623ba628
-        a=sPqof0Mm7fxWrhYUF33ZaQ==:117 a=sPqof0Mm7fxWrhYUF33ZaQ==:17
-        a=kj9zAlcOel0A:10 a=o8Y5sQTvuykA:10 a=GumQ9EM2AAAA:8 a=7-415B0cAAAA:8
-        a=63ntfpr2ZaCgDPseocQA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 24 Mar 2022 00:01:40 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 0/5] net: phy: C45-over-C22 access
+In-Reply-To: <YjuDbqZom8knPVpm@lunn.ch>
+References: <20220323183419.2278676-1-michael@walle.cc>
+ <YjuDbqZom8knPVpm@lunn.ch>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a09f9ac88b599f7124270a5063130c9e@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 08:27:12PM +0100, Miklos Szeredi wrote:
-> Add a new userspace API that allows getting multiple short values in a
-> single syscall.
+Am 2022-03-23 21:30, schrieb Andrew Lunn:
+> On Wed, Mar 23, 2022 at 07:34:14PM +0100, Michael Walle wrote:
+>> Hi,
+>> 
+>> This is the result of this discussion:
+>> https://lore.kernel.org/netdev/240354b0a54b37e8b5764773711b8aa3@walle.cc/
+>> 
+>> The goal here is to get the GYP215 and LAN8814 running on the 
+>> Microchip
+>> LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, 
+>> the
+>> LAN8814 has a bug which makes it impossible to use C45 on that bus.
+>> Fortunately, it was the intention of the GPY215 driver to be used on a 
+>> C22
+>> bus. But I think this could have never really worked, because the
+>> phy_get_c45_ids() will always do c45 accesses and thus on MDIO bus 
+>> drivers
+>> which will correctly check for the MII_ADDR_C45 flag and return 
+>> -EOPNOTSUPP
+>> the function call will fail and thus gpy_probe() will fail. This 
+>> series
+>> tries to fix that and will lay the foundation to add a workaround for 
+>> the
+>> LAN8814 bug by forcing an MDIO bus to be c22-only.
+>> 
+>> At the moment, the probe_capabilities is taken into account to decide 
+>> if
+>> we have to use C45-over-C22. What is still missing from this series is 
+>> the
+>> handling of a device tree property to restrict the probe_capabilities 
+>> to
+>> c22-only.
 > 
-> This would be useful for the following reasons:
+> We have a problem here with phydev->is_c45.
 > 
-> - Calling open/read/close for many small files is inefficient.  E.g. on my
->   desktop invoking lsof(1) results in ~60k open + read + close calls under
->   /proc and 90% of those are 128 bytes or less.
-
-How does doing the open/read/close in a single syscall make this any
-more efficient? All it saves is the overhead of a couple of
-syscalls, it doesn't reduce any of the setup or teardown overhead
-needed to read the data itself....
-
-> - Interfaces for getting various attributes and statistics are fragmented.
->   For files we have basic stat, statx, extended attributes, file attributes
->   (for which there are two overlapping ioctl interfaces).  For mounts and
->   superblocks we have stat*fs as well as /proc/$PID/{mountinfo,mountstats}.
->   The latter also has the problem on not allowing queries on a specific
->   mount.
-
-https://xkcd.com/927/
-
-> - Some attributes are cheap to generate, some are expensive.  Allowing
->   userspace to select which ones it needs should allow optimizing queries.
+> In phy-core.c, functions __phy_read_mmd() and __phy_write_mmd() it
+> means perform c45 transactions over the bus. We know we want to access
+> a register in c45 space because we are using an _mmd() function.
 > 
-> - Adding an ascii namespace should allow easy extension and self
->   description.
+> In phy.c, it means does this PHY have c45 registers and we should
+> access that register space, or should we use the c22 register
+> space. So far example phy_restart_aneg() decides to either call
+> genphy_c45_restart_aneg() or genphy_restart_aneg() depending on
+> is_c45.
+
+Yes, that is probably the reason why the gpy215 has explicitly
+set .aneg_done to genphy_c45_aneg_done() for example.
+
+> So a PHY with C45 register space but only accessible by C45 over C22
+> is probably going to do the wrong thing with the current code.
+
+Oh my, yes. Looks like the whole phy_get_c45_ids() isn't working
+at all for the gpy at the moment (or maybe it will work because
+it supports AN via the c22 registers, too). I'll have to dig deeper
+into that tomorrow. I know that _something_ worked at least ;)
+
+> For this patchset to work, we need to cleanly separate the concepts of
+> what sort of transactions to do over the bus, from what register
+> spaces the PHY has. We probably want something like phydev->has_c45 to
+> indicate the register space is implemented, and phydev->c45_over_c22
+> to indicate what sort of transaction should be used in the _mmd()
+> functions.
 > 
-> - The values can be text or binary, whichever is fits best.
-> 
-> The interface definition is:
-> 
-> struct name_val {
-> 	const char *name;	/* in */
-> 	struct iovec value_in;	/* in */
-> 	struct iovec value_out;	/* out */
-> 	uint32_t error;		/* out */
-> 	uint32_t reserved;
-> };
+> Your patches start in that direction, but i don't think it goes far
+> enough.
 
-Ahhh, XFS_IOC_ATTRMULTI_BY_HANDLE reborn. This is how xfsdump gets
-and sets attributes efficiently when dumping and restoring files -
-it's an interface that allows batches of xattr operations to be run
-on a file in a single syscall.
+Thanks for the review!
 
-I've said in the past when discussing things like statx() that maybe
-everything should be addressable via the xattr namespace and
-set/queried via xattr names regardless of how the filesystem stores
-the data. The VFS/filesystem simply translates the name to the
-storage location of the information. It might be held in xattrs, but
-it could just be a flag bit in an inode field.
-
-Then we just get named xattrs in batches from an open fd.
-
-> int getvalues(int dfd, const char *path, struct name_val *vec, size_t num,
-> 	      unsigned int flags);
-> 
-> @dfd and @path are used to lookup object $ORIGIN.  @vec contains @num
-> name/value descriptors.  @flags contains lookup flags for @path.
-> 
-> The syscall returns the number of values filled or an error.
-> 
-> A single name/value descriptor has the following fields:
-> 
-> @name describes the object whose value is to be returned.  E.g.
-> 
-> mnt                    - list of mount parameters
-> mnt:mountpoint         - the mountpoint of the mount of $ORIGIN
-> mntns                  - list of mount ID's reachable from the current root
-> mntns:21:parentid      - parent ID of the mount with ID of 21
-> xattr:security.selinux - the security.selinux extended attribute
-> data:foo/bar           - the data contained in file $ORIGIN/foo/bar
-
-How are these different from just declaring new xattr namespaces for
-these things. e.g. open any file and list the xattrs in the
-xattr:mount.mnt namespace to get the list of mount parameters for
-that mount.
-
-Why do we need a new "xattr in everything but name" interface when
-we could just extend the one we've already got and formalise a new,
-cleaner version of xattr batch APIs that have been around for 20-odd
-years already?
-
-Cheers,
-
-Dave.
-
--- 
-Dave Chinner
-david@fromorbit.com
+-michael

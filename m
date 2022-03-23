@@ -2,116 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32974E5A57
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088E04E5A5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344854AbiCWVGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S240625AbiCWVIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbiCWVGU (ORCPT
+        with ESMTP id S231975AbiCWVIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:06:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E853122E;
-        Wed, 23 Mar 2022 14:04:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6057F1F387;
-        Wed, 23 Mar 2022 21:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648069488; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZQRFIvMYPa57E8vs5yQx5fBF8QSVW2wkNB0Ft3IVHkg=;
-        b=hUPA4AfHH40LrLy7/afNuEXl3ZSmwWmLp5N8L4vWyy4uDG3LZjrrBdJIMAJMH4DsGmEquz
-        UQ6MKVTtH91xo15DCiU0edkhR+MBnlWOTPAARbOWUHBVPdofhMHr2EzGNTveoALQa66KJw
-        ISUr/uiq9UmAxPsZQ+SHgQlSrdE7pXk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648069488;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZQRFIvMYPa57E8vs5yQx5fBF8QSVW2wkNB0Ft3IVHkg=;
-        b=ebx4g8z+Yz2YE2VTtZLhKFXsf1MiAaeq5J9BhH2AkGiRXYd7fdpfHSDMCj/qdFlvyt30vh
-        e9x5ncED9Oe8LVBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B02F313302;
-        Wed, 23 Mar 2022 21:04:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id aD1FGm6LO2KobwAAMHmgww
-        (envelope-from <neilb@suse.de>); Wed, 23 Mar 2022 21:04:46 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Wed, 23 Mar 2022 17:08:32 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1152571EC9;
+        Wed, 23 Mar 2022 14:07:02 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z92so3324735ede.13;
+        Wed, 23 Mar 2022 14:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LMob1D1i/R5KcK87hci+jzzEC4MjJYbt0t47d5hUovY=;
+        b=cQ5Rn8RP7D8ngoNZu2dFD/oZPt4P7BynwfQeptMD2aRY5pL1OoGxdVWqza1pXJtVQ4
+         rY/X/C14pA/drwoh1QDrx/CT8b/5cafJ7Xepvj/zxd1mph2n4LW2eBLaleDfcT07+cy+
+         WjBcHZSvjd6rCnIzelsXdJd6BG87LFEJ9/bv9rPsDZ3uwcXV0wbwKGpoyXFtVgAMRhzs
+         MNcXty9r8FntZHvteS696YBi0bbDGiKW95SQBxAixwojNbsdGksOjMkgIGeWcdxnJ73m
+         Trv9IZxSWgFTbTCb1jtj1BV+HHyKtR8DfyFAmdT7y6NfL+aAi524rl347gpDwVptb+7F
+         Yzyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=LMob1D1i/R5KcK87hci+jzzEC4MjJYbt0t47d5hUovY=;
+        b=b3act5+uIXOyocE5IQsdqsoiv6WCEt3ualTUoMeU+m1/s08HPfo0BPcs0Nbt87pbJs
+         GB00avaaw03Mv6rMi6p5HPC4B1hRdUuWBieA+ynJbb/KikfSmnGjpWvOCCROpOnV1/mR
+         9+5C7Uq8ReGYSxYGfn/Teow3hUett9yurO4cFicJTf7+RV+CWgXRvREOadTXShCX8LVs
+         1zVpsC0kHEx9RqA/0fsjo1cX1oFJeCyxHy1fedwANJmwc1R67Hvd9DGMgu+kCoE0s275
+         kcjYKqwo/+7t+QR+nBSPgwy3lPtMStpRWeJBkdVK2P8UWNeCpZDsLccVC8rVnQs4zPxs
+         2+mw==
+X-Gm-Message-State: AOAM533dTwcisRp7ua4oQHNTr3HZC8pAbIjCvS/w3yqC6y4wpqwp3Za3
+        Z0C+b8gguMNox4PTkt70wRTCsXNBNMxyvA==
+X-Google-Smtp-Source: ABdhPJwwpGcC22tUk/vFU08UDFRGXnFfeqL0QOtqdwUlIomdkvOYkwsmmgqV3qAkjGeSZLeGH7bKOA==
+X-Received: by 2002:a05:6402:1e92:b0:419:76:21a6 with SMTP id f18-20020a0564021e9200b00419007621a6mr2644728edf.128.1648069620537;
+        Wed, 23 Mar 2022 14:07:00 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+        by smtp.gmail.com with ESMTPSA id b15-20020a50cccf000000b0040f74c6abedsm442301edj.77.2022.03.23.14.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 14:07:00 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 22:06:57 +0100
+From:   Petr Vorel <petr.vorel@gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/15] arm64: dts: qcom: msm8994: Fix sleep clock name
+Message-ID: <YjuL8UKROE5pnUj1@pevik>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+References: <20220319174645.340379-1-konrad.dybcio@somainline.org>
+ <20220319174645.340379-2-konrad.dybcio@somainline.org>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     xkernel.wang@foxmail.com
-Cc:     trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Xiaoke Wang" <xkernel.wang@foxmail.com>
-Subject: Re: [PATCH] NFS: check the return value of mempool_alloc()
-In-reply-to: <tencent_61C566F88A52C1BF198826737AAE0E471806@qq.com>
-References: <tencent_61C566F88A52C1BF198826737AAE0E471806@qq.com>
-Date:   Thu, 24 Mar 2022 08:04:41 +1100
-Message-id: <164806948116.6096.12331736937963571485@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220319174645.340379-2-konrad.dybcio@somainline.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022, xkernel.wang@foxmail.com wrote:
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
-> 
-> The check was first removed in 518662e ("NFS: fix usage of mempools.")
-> as the passed GFP flags is `GFP_NOIO`.
-> While now the flag is changed to `GFP_KERNEL` by 2b17d72 ("NFS: Clean
-> up writeback code"), so it is better to check it.
+Hi Konrad, all,
 
-no.  GFP_KERNEL is not that different from GFP_NOIO.
+> The sleep clock name expected by GCC is actually "sleep" and not
+> "sleep_clk". Fix the clock-names value for it to make sure it is
+> provided.
 
-mempool_alloc() can only fail with __GFP_DIRECT_RECLAIM is not passed.
+> Fixes: 9204da57cd65 ("arm64: dts: qcom: msm8994: Provide missing "xo_board" and "sleep_clk" to GCC")
+Thanks for fixing it, now I see it in
+Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml
 
-Please try to understand the code before you change it.
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-NeilBrown
+I also tested it with "clk: qcom: gcc-msm8994: Fix gpll4 width" [1]
+and "[PATCH v5 1/1] arm64: dts: qcom: msm8994-huawei-angler: Add sdhc1 definition" [2]
+and it works as expected.
 
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-> 
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-> ---
->  fs/nfs/write.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-> index eae9bf1..831fad9 100644
-> --- a/fs/nfs/write.c
-> +++ b/fs/nfs/write.c
-> @@ -106,8 +106,10 @@ static struct nfs_pgio_header *nfs_writehdr_alloc(void)
->  {
->  	struct nfs_pgio_header *p = mempool_alloc(nfs_wdata_mempool, GFP_KERNEL);
->  
-> -	memset(p, 0, sizeof(*p));
-> -	p->rw_mode = FMODE_WRITE;
-> +	if (p) {
-> +		memset(p, 0, sizeof(*p));
-> +		p->rw_mode = FMODE_WRITE;
-> +	}
->  	return p;
->  }
->  
-> -- 
-> 
-> 
+Kind regards,
+Petr
+
+[1] https://lore.kernel.org/linux-arm-msm/20220319174940.341137-1-konrad.dybcio@somainline.org/
+[2] https://lore.kernel.org/linux-arm-msm/20220323204840.22832-1-petr.vorel@gmail.com/

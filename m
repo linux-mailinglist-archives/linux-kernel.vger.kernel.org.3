@@ -2,79 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48C34E598E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8444E5991
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbiCWUHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 16:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S1344428AbiCWUJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 16:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242564AbiCWUHe (ORCPT
+        with ESMTP id S239934AbiCWUI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 16:07:34 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C381C8596F;
-        Wed, 23 Mar 2022 13:06:04 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id q129so2797194oif.4;
-        Wed, 23 Mar 2022 13:06:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xJAiyJpQqYMzE45B4+4Ip3dFo7/yY92VkX/LiqX9660=;
-        b=XevktBZOQlWe/ThAIjPK6RVgY9H1dh1T+G60gcQC3tNjLsJ9sZL8qsPMqmPK+0rmeO
-         MadMgxRZ/Vf30taNiZtTM2aYOHaNiy7pBWS59DVOS16eYSxqqqA1+Ezr7nBNTlEsALje
-         QHIm0AZFbg/H58knMRpMz1cz4icaISd2HcA9lCa9NAtsCjyGRidUhOJlgiup1SZsAreL
-         odpdU34rtsl31jz7pFyrxKXdqzwTLn/DqQJPP1UWyP7xJhjZUbwJElV9+XQBwl+fHnEM
-         RIrloIMFizmtFaDJ4RZ0sIXtGN5cQeeiWGT1E3nYxH/zlabVl2GjcjQPCMzCuqJfuURw
-         EBfQ==
-X-Gm-Message-State: AOAM532f+5BZ+rNiTckDElCFNevkwr25eb6e7hsDhb0TcFEXHs85dBPQ
-        FJM+rq+XwFCHB+Ie8XanYw==
-X-Google-Smtp-Source: ABdhPJyEg+a3Qvv1SXv6BAjqSqkcktrlf4VnWVfiwkpussCQzsTjMRsK/CDQ1DJSXP2e4dHsgVNAtg==
-X-Received: by 2002:a05:6808:30a0:b0:2da:3e03:5620 with SMTP id bl32-20020a05680830a000b002da3e035620mr5445003oib.264.1648065964085;
-        Wed, 23 Mar 2022 13:06:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o10-20020aca410a000000b002ecf2a4fda5sm395637oia.10.2022.03.23.13.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 13:06:03 -0700 (PDT)
-Received: (nullmailer pid 362658 invoked by uid 1000);
-        Wed, 23 Mar 2022 20:06:02 -0000
-Date:   Wed, 23 Mar 2022 15:06:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Nicolas Belin <nbelin@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, andrzej.hajda@intel.com,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        narmstrong@baylibre.com, devicetree@vger.kernel.org,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 1/3] dt-bindings: display: bridge: it66121: Add audio
- support
-Message-ID: <Yjt9qrPP7UsvDkq7@robh.at.kernel.org>
-References: <20220316135733.173950-1-nbelin@baylibre.com>
- <20220316135733.173950-2-nbelin@baylibre.com>
+        Wed, 23 Mar 2022 16:08:59 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F7385659;
+        Wed, 23 Mar 2022 13:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=pyn2uk6hP/JZdZoC6sjuiFzoIRCFMcZz+lk7gUqAIQ8=; b=y1S0yMfayT0AsXhV77kRxe2Mjw
+        wae+OJHLzDoysrWCDvY5BE6oJoECoZfmYZhY0B17FjBQ1iC31lUKuSqO9zEwR1mUA/DpHGqOgj1eQ
+        +75SN+DgjGcmeXFctJwJncr7lI2bLnnvu8exZi4rgymCIisWX5pD5MNp96Ic8mRAS2Pk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nX7GI-00CKrc-Si; Wed, 23 Mar 2022 21:07:18 +0100
+Date:   Wed, 23 Mar 2022 21:07:18 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
+Message-ID: <Yjt99k57mM5PQ8bT@lunn.ch>
+References: <20220323183419.2278676-1-michael@walle.cc>
+ <20220323183419.2278676-5-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220316135733.173950-2-nbelin@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220323183419.2278676-5-michael@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 14:57:31 +0100, Nicolas Belin wrote:
-> Update the ITE bridge HDMI it66121 bindings in order to
-> support audio.
+On Wed, Mar 23, 2022 at 07:34:18PM +0100, Michael Walle wrote:
+> The GPY215 driver supports indirect accesses to c45 over the c22
+> registers. In its probe function phy_get_c45_ids() is called and the
+> author descibed their use case as follows:
 > 
-> Signed-off-by: Nicolas Belin <nbelin@baylibre.com>
-> ---
->  .../devicetree/bindings/display/bridge/ite,it66121.yaml        | 3 +++
->  1 file changed, 3 insertions(+)
+>   The problem comes from condition "phydev->c45_ids.mmds_present &
+>   MDIO_DEVS_AN".
 > 
+>   Our product supports both C22 and C45.
+> 
+>   In the real system, we found C22 was used by customers (with indirect
+>   access to C45 registers when necessary).
+> 
+> So it is pretty clear that the intention was to have a method to use the
+> c45 features over a c22-only MDIO bus. The purpose of calling
+> phy_get_c45_ids() is to populate the .c45_ids for a PHY which wasn't
+> probed as a c45 one. Thus, first rename the phy_get_c45_ids() function
+> to reflect its actual meaning and second, add a new flag which indicates
+> that this is actually a c45 PHY but behind a c22 bus. The latter is
+> important for phylink because phylink will treat c45 in a special way by
+> checking the .is_c45 property. But in our case this isn't set.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Thinking out loud...
+
+1) We have a C22 only bus. Easy, C45 over C22 should be used.
+
+2) We have a C45 only bus. Easy, C45 should be used, and it will of
+   probed that way.
+
+3) We have a C22 and C45 bus, but MDIOBUS_NO_CAP. It will probe C22,
+   but ideally we want to swap to C45.
+
+4) We have a C22 and C45 bus, MDIOBUS_C22_C45. It will probe C22, but
+   ideally we want to swap to C45.
+
+> @@ -99,7 +99,7 @@ static int gpy_probe(struct phy_device *phydev)
+>  	int ret;
+>  
+>  	if (!phydev->is_c45) {
+> -		ret = phy_get_c45_ids(phydev);
+> +		ret = phy_get_c45_ids_by_c22(phydev);
+>  		if (ret < 0)
+>  			return ret;
+>  	}
+
+If we are inside the if, we know we probed C22. We have to achieve two
+things:
+
+1) Get the c45 ids,
+2) Figure out if C45 works, or if C45 over C22 is needed.
+
+I don't see how we are getting this second bit of information, if we
+are explicitly using c45 over c22.
+
+This _by_c22 is also making me think of the previous patch, where we
+look at the bus capabilities. We are explicitly saying here was want
+c45 over c22, and the PHY driver should know the PHY is capable of
+it. So we don't need to look at the capabilities, just do it.
+
+     Andrew

@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66D24E5211
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 383694E5216
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240560AbiCWMU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S241794AbiCWMUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239152AbiCWMU0 (ORCPT
+        with ESMTP id S241232AbiCWMUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:20:26 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C2154BEB;
-        Wed, 23 Mar 2022 05:18:56 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id e5so1349191pls.4;
-        Wed, 23 Mar 2022 05:18:56 -0700 (PDT)
+        Wed, 23 Mar 2022 08:20:35 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A809B6FA01
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:19:05 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id s72so966829pgc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KrOAEwdJIBQHysyGTc8MR/8Fl2/7DHu459R4bzhCCXA=;
-        b=Hdb6LUVmMLHMFB88LZalE3YlqGQFxKn6StXKfCNcLnwedSffq63vc6GYAt9VDEudgW
-         U7LP1G1pCHI7ry++xhqOpzqeUq2i6jQwoTHyDpcwAgP7FUHuGDY+7BgO/jfbzER6azb/
-         GEAo6mV9cRiZbV2EIl47yJ7Atbautj78Q/UO8eDu93NEQSJ0YUxBsnytJbhnT6vt6Kzv
-         wiIqBQKxOw34GwA5QaalOHQlAGdURXxpJ2ksWvnJxbO6maeGcCaomkm4zMkGiiN+M1uG
-         7hmmCNsDpl5T6BOzDsT8OhJE12qDoFQuZbO2X4nAa2Y1KhwZJmuhUHdcMaf5DqyUspR1
-         TCHg==
+         :references:cc:from:in-reply-to:content-transfer-encoding;
+        bh=B5eLCL36NYw/oaCAy7BwB1k2vxjlIgP2L6gnk+5PM+w=;
+        b=AgzKJOcIa7lmEYrEZmb8gO5PFNS86uCtEwssFfGTSgpX+W+MVOPT2990nPYqgNCPSg
+         WazesvQOyy/KWNpmTmkzQwGja/IypBCD19DU/nGQZ9nMQTwXD++1jki3O+iCP6M/TPej
+         c0m2mHxJ4NRzW9QdCtmPb8smcz7L0iYiAzzimFyc8a4H9Mjze3MAN5c1ttGke3rH6jA0
+         UCKlYQlLGhGY0cHCzwxvT2klgTQedOXmFWB/RAIJZ6si7i99MZvZuDuDi5c+97jHN5oS
+         IUIkxbFHMFPHg6IO/xr+Fnvx5gfB+jJNIDCvT4Cq3Am5J6+AEtCqMIer8GdrYpFWDzNX
+         KhOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:cc:from:in-reply-to
          :content-transfer-encoding;
-        bh=KrOAEwdJIBQHysyGTc8MR/8Fl2/7DHu459R4bzhCCXA=;
-        b=JKa4N7ngEmnCiKSCO+dqptPzLB3QODGWsW9pPA/ngmFF0B/wuvo9MFKnlG+9bHjMUI
-         b64HDO0sMrCxRc4AMo8ja79Eld27u14RMIryMZwOYiOyjqqA9Oo2LFF0Y2DdEz1JgY5K
-         ZX3dmHNB+2gobIK+ihVfp7CmuMWpAo3CNGZJ0GL5+Ud77qr7PSeuRt8gGpx77cXON54D
-         sUB3FAdFOvDdSU6w285Facp5Ro8jz529D0JmcakHoJvRtGmyCSbMmaYUxxdAgQJh/OZl
-         /kiJ2fuOYwzvevhnACH4mOcwN8eDX6wsgFXMtWwCzWgbzj1Rx+PKa1N8KQz+wAiuCsTt
-         cSRQ==
-X-Gm-Message-State: AOAM533Mq9WQnRUITkdrfXTlecNg8foWNJZwnL+0Z5CaBWN3HcUHSPX2
-        biqmh1vlk7JY7emb3v+DckA=
-X-Google-Smtp-Source: ABdhPJz9rNauBjyC7mJiIiMRzgRY+obTufzebjU3xVXY8Ra1/1jftU2jnwN/KdizwnMASycF5/p+gw==
-X-Received: by 2002:a17:90b:1b12:b0:1c7:6f5d:d7e8 with SMTP id nu18-20020a17090b1b1200b001c76f5dd7e8mr7499891pjb.154.1648037935572;
-        Wed, 23 Mar 2022 05:18:55 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-71.three.co.id. [180.214.233.71])
-        by smtp.gmail.com with ESMTPSA id e6-20020a63aa06000000b00380c8bed5a6sm21451042pgf.46.2022.03.23.05.18.52
+        bh=B5eLCL36NYw/oaCAy7BwB1k2vxjlIgP2L6gnk+5PM+w=;
+        b=JU7hdUs36kA75Prc8rGjjvX3igywORpxWFe6utBdVhU8FF22Fn/T+twx6K8cj85can
+         WlgXXjHN+s2NdfmCkdrVQbHiP61UJ6nEU+O7EZrGkZ3AffptVNeiuaP8j1roD/EwweFt
+         LyYqkNapTXYwSVnJRaOGjCXU06fFfd+CJx73UrAJT1OM4eQuyz/zBIcKK156/tZRCTCV
+         noATEw4Eo5kRYoxFa8fD1UV+nE/fmUZmRBWapO92XytAywUeCXlOruQa6czLQC8609Hf
+         SrsGXu3okaqEjn31FnSJXiKbIOMJFtNqnVAqhC10Cz+P+vOMgPaTLTyLXGwflURHa34P
+         QwUg==
+X-Gm-Message-State: AOAM533hUzLs46ebXIuHTeNPKArzHn9tuUWhmLyNrQ6ftOVxdigxZyfa
+        Q8cxZ0CCy3y1AAaOw9yCW6yZ/A==
+X-Google-Smtp-Source: ABdhPJx1i/SA5mqfLaoa5GFRdvsxuF920HgBhNL/+DR1yaAXnnOWXivQLRoX5SNa+0qn92cI42JhYw==
+X-Received: by 2002:a63:5c03:0:b0:382:70fa:4294 with SMTP id q3-20020a635c03000000b0038270fa4294mr13600823pgb.580.1648037945064;
+        Wed, 23 Mar 2022 05:19:05 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id m19-20020a17090ab79300b001c5ddc6ff21sm5777042pjr.8.2022.03.23.05.19.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 05:18:54 -0700 (PDT)
-Message-ID: <e1ea44f5-de48-e5ff-6feb-5f6ee7a68828@gmail.com>
-Date:   Wed, 23 Mar 2022 19:18:51 +0700
+        Wed, 23 Mar 2022 05:19:04 -0700 (PDT)
+Message-ID: <7e6f6467-6ac2-3926-9d7b-09f52f751481@kernel.dk>
+Date:   Wed, 23 Mar 2022 06:19:03 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [ammarfaizi2-block:palmer/linux/riscv-pmu 13/15]
- drivers/perf/riscv_pmu_sbi.c:498: warning: This comment starts with '/**',
- but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+Subject: Re: io_uring_enter() with opcode IORING_OP_RECV ignores MSG_WAITALL
+ in msg_flags
 Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>
-Cc:     lkp@intel.com, kbuild-all@lists.01.org, gwml@vger.gnuweeb.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <mhng-cc3dade0-37d7-4832-bb05-c23669599378@palmer-ri-x1c9>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <mhng-cc3dade0-37d7-4832-bb05-c23669599378@palmer-ri-x1c9>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+To:     Constantine Gavrilov <CONSTG@il.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <BYAPR15MB260078EC747F0F0183D1BB1BFA189@BYAPR15MB2600.namprd15.prod.outlook.com>
+Cc:     io-uring <io-uring@vger.kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <BYAPR15MB260078EC747F0F0183D1BB1BFA189@BYAPR15MB2600.namprd15.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/22 05.06, Palmer Dabbelt wrote:
->> All warnings (new ones prefixed by >>):
->>
->>    drivers/perf/riscv_pmu_sbi.c:42: warning: cannot understand function prototype: 'union sbi_pmu_ctr_info *pmu_ctr_list; '
+On 3/23/22 4:31 AM, Constantine Gavrilov wrote:
+> I get partial receives on TCP socket, even though I specify
+> MSG_WAITALL with IORING_OP_RECV opcode. Looking at tcpdump in
+> wireshark, I see entire reassambled packet (+4k), so it is not a
+> disconnect. The MTU is smaller than 4k.
 > 
-> Looks like that's just fallout from the ** comments.
+> From the mailing list history, looks like this was discussed before
+> and it seems the fix was supposed to be in. Can someone clarify the
+> expected behavior?
 > 
->>>> drivers/perf/riscv_pmu_sbi.c:498: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> 
-> I sent a fix for this one, there were a handful of them.  Sorry I missed that.
-> 
+> I do not think rsvmsg() has this issue.
 
-I have already sent the fix for vcpu_sbi.c at [1], but forgot to
-Cc: lkp@intel.com (I put it on To: instead), can you please pick it up?
-
-[1]: https://lore.kernel.org/linux-doc/20220320081810.405589-1-bagasdotme@gmail.com/
+Do you have a test case? I added the io-uring list, that's the
+appropriate forum for this kind of discussion.
 
 -- 
-An old man doll... just what I always wanted! - Clara
+Jens Axboe
+

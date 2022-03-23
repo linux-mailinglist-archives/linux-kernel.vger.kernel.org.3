@@ -2,50 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F214E4EBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F42E4E4EC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242906AbiCWIzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 04:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S242962AbiCWI6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234460AbiCWIzM (ORCPT
+        with ESMTP id S237212AbiCWI6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:55:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A1DBF2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:53:43 -0700 (PDT)
-X-UUID: 36902fb81b254e84924810e4cc4ea1cd-20220323
-X-UUID: 36902fb81b254e84924810e4cc4ea1cd-20220323
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1310939299; Wed, 23 Mar 2022 16:53:38 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 23 Mar 2022 16:53:36 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 23 Mar 2022 16:53:36 +0800
-Message-ID: <7992e5fcd0ed9fdee60ee9259b3238e33c86e28e.camel@mediatek.com>
-Subject: Re: [PATCH] soc: mediatek: mmsys: Add sw0_rst_offset for MT8192
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <matthias.bgg@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
-Date:   Wed, 23 Mar 2022 16:53:36 +0800
-In-Reply-To: <20220322092040.12010-1-angelogioacchino.delregno@collabora.com>
-References: <20220322092040.12010-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        Wed, 23 Mar 2022 04:58:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433DA5EDFD
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:56:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77B4C617A8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:56:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE46DC340E8;
+        Wed, 23 Mar 2022 08:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648025802;
+        bh=bQwHdsTWRnIH0VNaCAAZd6d15onghCKnS/5tM3JxI/w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CAe9G2sTLVEPyCbtFs3ggx98dbvBw1ifk3W9IEAbyhOKPQf+lFsMKYB0EF/arXX5w
+         2JBUA3h/2WBPTG8SCfaW4h1dc9wfzVF+XOEzheYwbrAtkLzc35iMqTytJyPUoGTQDw
+         Zzn2R9e0e+QBqk91vICgYgZyd6zRfRH8KjfB4FQtb8kryBwBhcRESTvlu35B19WrsN
+         upkM63YHn8+dW6xABXKwor52iOty/cevjXEOQzWK2/s0BcDjkfcNsdG52NNnN23KV2
+         5liwwcfvgxJXELMfIqX9OFZnuP+ByIlXLNdSi7AoEFZqRipGbJPFNOeuiCF90C0LMV
+         zCrmpZh6yqnwA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nWwnI-00GSIb-BE; Wed, 23 Mar 2022 08:56:40 +0000
+Date:   Wed, 23 Mar 2022 08:56:40 +0000
+Message-ID: <87a6dhxd13.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Garry <john.garry@huawei.com>,
+        David Decotigny <ddecotig@google.com>
+Subject: Re: [PATCH v2 0/3] genirq: Managed affinity fixes
+In-Reply-To: <a83da394-dcc0-c9a6-1569-9c30fbc291fd@huawei.com>
+References: <20220321193608.975495-1-maz@kernel.org>
+        <a83da394-dcc0-c9a6-1569-9c30fbc291fd@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: wangxiongfeng2@huawei.com, linux-kernel@vger.kernel.org, tglx@linutronix.de, john.garry@huawei.com, ddecotig@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,42 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-22 at 10:20 +0100, AngeloGioacchino Del Regno wrote:
-> MT8192 has the same sw0 reset offset as MT8183: add the parameter
-> to be able to use mmsys as a reset controller for managing at
-> least the DSI reset line.
+Hi Xiongfeng,
+
+On Wed, 23 Mar 2022 03:52:46 +0000,
+Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/soc/mediatek/mtk-mmsys.c | 1 +
->  1 file changed, 1 insertion(+)
+> Hi, Marc
 > 
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
-> b/drivers/soc/mediatek/mtk-mmsys.c
-> index 4fc4c2c9ea20..f69521fabcce 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -70,6 +70,7 @@ static const struct mtk_mmsys_driver_data
-> mt8192_mmsys_driver_data = {
->  	.clk_driver = "clk-mt8192-mm",
->  	.routes = mmsys_mt8192_routing_table,
->  	.num_routes = ARRAY_SIZE(mmsys_mt8192_routing_table),
-> +	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
->  };
->  
->  static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data =
-> {
+> On 2022/3/22 3:36, Marc Zyngier wrote:
+> > John (and later on David) reported[1] a while ago that booting with
+> > maxcpus=1, managed affinity devices would fail to get the interrupts
+> > that were associated with offlined CPUs.
+> > 
+> > Similarly, Xiongfeng reported[2] that the GICv3 ITS would sometime use
+> > non-housekeeping CPUs instead of the affinity that was passed down as
+> > a parameter.
+> > 
+> > [1] can be fixed by not trying to activate these interrupts if no CPU
+> > that can satisfy the affinity is present (a patch addressing this was
+> > already posted[3])
+> > 
+> > [2] is a consequence of affinities containing non-online CPUs being
+> > passed down to the interrupt controller driver and the ITS driver
+> > trying to paper over that by ignoring the affinity parameter and doing
+> > its own (stupid) thing. It would be better to (a) get the core code to
+> > remove the offline CPUs from the affinity mask at all times, and (b)
+> > fix the drivers so that they can trust the core code not to trip them.
+> > 
+> > This small series, based on 5.17, addresses the above.
+> 
+> I have tested this patchset on D06. It works well with kernel parameter
+> 'maxcpus=1' or 'nohz_full=1-127 isolcpus=nohz,domain,managed_irq,1-127'.
+> Also the 'effective_affinity' is correct. Thanks!
 
-Hello Angelo,
+Thanks for having given it a go.
 
-Thanks for your patch.
-But from register map for mmsys, the offset is 0x160 and DSI reset bit
-is 15.
+> By the way, I merged the second patch manually because of conflicts.
+> Maybe I lack some patches on your local repo.
 
-datasheet: MT8192 Tablet Application Processor Software Register
-Table/4.1 Display Controller.pdf
+That's odd, as the patches are directly sitting on top of 5.17 in my
+tree (see [1]). Do you have any out of tree patches around? Please
+make sure you test this without any extra change.
 
-BRs,
-Rex
+Thanks,
 
+	M.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/managed-affinity-fixes
+
+-- 
+Without deviation from the norm, progress is not possible.

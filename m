@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3174E573B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B534E573E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239514AbiCWRRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
+        id S241132AbiCWRSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbiCWRRI (ORCPT
+        with ESMTP id S233723AbiCWRSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 13:17:08 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8367484B;
-        Wed, 23 Mar 2022 10:15:38 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id p26-20020a05600c1d9a00b0038ccbff1951so254013wms.1;
-        Wed, 23 Mar 2022 10:15:38 -0700 (PDT)
+        Wed, 23 Mar 2022 13:18:08 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EDA7A99E;
+        Wed, 23 Mar 2022 10:16:38 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id r190-20020a1c2bc7000000b0038a1013241dso1303407wmr.1;
+        Wed, 23 Mar 2022 10:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oJQgROgJhAs1zSxE1mRh4y4eh7NMgOw/yWHgMuFN26I=;
-        b=mIn5e6gAwLR5fDT8jPEigoygRWKOZzU/RGVaiTkiHDSNcImPNYdagX20DR3b1BPQnz
-         A5OyFHQNmCzjzZGWJcEd2UE5HJnJdPz4px9EqJdrNmxmR4YVsjsoIEzWe8bVLchlWjEV
-         KX0LTmh5mEJTBVR3OPe1PFpsH9mZu1TerF3m260/0Yz0j/jEesCTTaahD8KbDHQPrpek
-         I21mlCuEE0L9YtlsscXN3rFaIxL5G8pobQaGC+ibhZDOPo3IrJdPnV2Awrmv8d5ZYSC+
-         wvQ2hedNDq0VJjAFOMtFxvt3uiYwdNKymoLDN7afSMr4Y8r6XevbfxMDAkgWQ8uNNUIb
-         uQhw==
+        bh=hkH0tUK7Ab/Z/SHkXKztrJgwmG4XsuWqH85qdLpELtM=;
+        b=ct1V0Qqkvy2GvMt2u3pbPt44uLlr+I0rPDIPx0znmRRnHXn0+brP+ZiDXqkKiHZHC5
+         taihcJNjpeyfyaKImanxNodfcVtuKnxE0hOol4jRG8SvEWanwNCNl4YWeDe7ppHT3/MF
+         f9gnUXYOpn2GDZX9lQ8tuRH+dE+8PvgtH3XUvoc1zpqbVj17lMDIrDYOdU1L3qeeOfA3
+         4OpxMGHQK0mG9sBU7Tx2UQVsLvYqNJkEQHpPlOVMMO6fvOTtr6XfsL57PRFsXGp1SmbA
+         hRcIeiOpq33nR03iIwhMyv3O9y6rc71NK6CHhwZMqs6QoJQ3alHktNanm/0zcl50llu9
+         BT4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=oJQgROgJhAs1zSxE1mRh4y4eh7NMgOw/yWHgMuFN26I=;
-        b=TnFrWYyUoB2ES1ZrjC8QFTToO8D4DNt02wJLzLpfogn8GQyRUm36npPtv35nqCcW0k
-         VcPtDs+gcLWGXWzqSOKX8mR9ruWz5EqHhHF6R8QrM/lz8QDHOtTsZGV0hNCRmoCgEOpG
-         G1lG9z89Lasv0fEsq110p6I7lgld599nYv4gsYgrkapAaxZFU0fAIWlYhR4V3FyC5G4k
-         NL8Cd3fQs6EmU+tjc378W7kxAvLFgRCGbMYTTWcgcBM6WSzA3i5BaSgC6G9k5fNycL+z
-         cY09nskvDn9SO7zM90GDu7pjhr3bODXY9aDOZ47kB34gYkwyPcFpWrHk9GMZB4Lh7eMp
-         8cmQ==
-X-Gm-Message-State: AOAM532Dr7/BGeTVJ5YJdNGXZ7np81sTgdB7pEOGaTvvFQfmgzqXzX4I
-        YXJvffUzZF9TCSURBBTAORs=
-X-Google-Smtp-Source: ABdhPJygYOPyQCoOA2LIJK6393T7O0XcTeprcQYnp4XDZQbgdlmkYUc4J0aKPLXB2HNYh3cMi0w2Qw==
-X-Received: by 2002:a05:600c:190c:b0:38c:ca19:1bb7 with SMTP id j12-20020a05600c190c00b0038cca191bb7mr2502374wmq.152.1648055737123;
-        Wed, 23 Mar 2022 10:15:37 -0700 (PDT)
+        bh=hkH0tUK7Ab/Z/SHkXKztrJgwmG4XsuWqH85qdLpELtM=;
+        b=Pnq7nDCKFgS/y/upsKJ+YXqpkSLSgDuydk+3ooeIVua6g4WEZoEquWxjqqzFVt9BhO
+         zrM3uvTXouVgQwkzJvbDh+68/zlsVKkgKC8gR5REUtf8LEwaHifJdSYUf/jH8nHTNA/n
+         FJLiLhhK7uv5MgfzgSvIQw8s5BYA0C0/XT0mZcujBZXiAGpCpaVs4rh6j0TsiW46pfTr
+         ggUHZqiwaXaTby7QeccHSH32Y5yjCB5dXK0fdhAIkTV5Gfxdnjwghx8zHfd1JnrmteGu
+         Cde2omq9LQ4Pjj2kSrzF6UbRkTbRf9azgcCEl2poEnWdr3bqAeYzMVAnm8AaIz3cPckf
+         F4qQ==
+X-Gm-Message-State: AOAM532XDf8bq1yjDcyqD/861fA003LHJROLG5T7jE56aDC2fHXeG2Pr
+        6sSRl2YNiGW8oY91QJwaXe8=
+X-Google-Smtp-Source: ABdhPJzMjlLcvGg/anxatVCB8sDCZ0HTUpMJqgQHEpIoSduFVctpxRURpT1yhVlix6oTzQh9Xw0fCA==
+X-Received: by 2002:a7b:ce02:0:b0:381:2007:f75c with SMTP id m2-20020a7bce02000000b003812007f75cmr10735674wmc.6.1648055797230;
+        Wed, 23 Mar 2022 10:16:37 -0700 (PDT)
 Received: from [192.168.0.32] ([137.101.87.65])
-        by smtp.gmail.com with ESMTPSA id f12-20020a5d64cc000000b00203d45bfbc7sm408022wri.7.2022.03.23.10.15.35
+        by smtp.gmail.com with ESMTPSA id l15-20020a05600c4f0f00b0038cbdf5221dsm3336331wmq.41.2022.03.23.10.16.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 10:15:36 -0700 (PDT)
-Message-ID: <3bddd48b-95c2-de20-3aa2-0f6f3ebffd3e@gmail.com>
-Date:   Wed, 23 Mar 2022 18:15:35 +0100
+        Wed, 23 Mar 2022 10:16:36 -0700 (PDT)
+Message-ID: <8e482005-8f44-3502-3bca-0824f3e2dd7a@gmail.com>
+Date:   Wed, 23 Mar 2022 18:16:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 01/22] arm64: dts: mt8192: Add pwrap node
+Subject: Re: [PATCH v4 02/22] arm64: dts: mt8192: Add spmi node
 Content-Language: en-US
 To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
         Ryder Lee <ryder.lee@kernel.org>,
         Hui Liu <hui.liu@mediatek.com>
 References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-2-allen-kh.cheng@mediatek.com>
+ <20220318144534.17996-3-allen-kh.cheng@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220318144534.17996-2-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20220318144534.17996-3-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,38 +84,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 18/03/2022 15:45, Allen-KH Cheng wrote:
-> Add pwrap node for mt8192 SoC.
+> Add spmi node for mt8192 SoC.
 > 
 > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 > Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Applied
-
-Thanks
-
 > ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 17 +++++++++++++++++
+>   1 file changed, 17 insertions(+)
 > 
 > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 411feb294613..76428599444e 100644
+> index 76428599444e..0f9f211ca986 100644
 > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
 > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -523,6 +523,18 @@
->   			clock-names = "clk13m";
+> @@ -535,6 +535,23 @@
+>   			assigned-clock-parents = <&topckgen CLK_TOP_OSC_D10>;
 >   		};
 >   
-> +		pwrap: pwrap@10026000 {
-> +			compatible = "mediatek,mt6873-pwrap";
-> +			reg = <0 0x10026000 0 0x1000>;
-> +			reg-names = "pwrap";
-> +			interrupts = <GIC_SPI 220 IRQ_TYPE_LEVEL_HIGH 0>;
+> +		spmi: spmi@10027000 {
+> +			compatible = "mediatek,mt6873-spmi";
+> +			reg = <0 0x10027000 0 0x000e00>,
+> +			      <0 0x10029000 0 0x000100>;
+> +			reg-names = "pmif", "spmimst";
 > +			clocks = <&infracfg CLK_INFRA_PMIC_AP>,
-> +				 <&infracfg CLK_INFRA_PMIC_TMR>;
-> +			clock-names = "spi", "wrap";
+> +				 <&infracfg CLK_INFRA_PMIC_TMR>,
+> +				 <&topckgen CLK_TOP_SPMI_MST_SEL>;
+> +			clock-names = "pmif_sys_ck",
+> +				      "pmif_tmr_ck",
+> +				      "spmimst_clk_mux";
 > +			assigned-clocks = <&topckgen CLK_TOP_PWRAP_ULPOSC_SEL>;
 > +			assigned-clock-parents = <&topckgen CLK_TOP_OSC_D10>;
+> +			#address-cells = <2>;
+> +			#size-cells = <0>;
+
+What do we need the address-cells and size-cells for?
+
+Regards,
+Matthias
+
 > +		};
 > +
 >   		scp_adsp: clock-controller@10720000 {

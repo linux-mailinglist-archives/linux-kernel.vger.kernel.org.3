@@ -2,122 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1E84E592E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FA84E5932
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244426AbiCWTcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
+        id S1344288AbiCWTeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234750AbiCWTcE (ORCPT
+        with ESMTP id S1344277AbiCWTef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:32:04 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59AA89083;
-        Wed, 23 Mar 2022 12:30:33 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id x20so4430327ybi.5;
-        Wed, 23 Mar 2022 12:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=4GBPXMmjtCwB7t0ecjf/4IevMdb1dyWXSGcgSEXFlT8=;
-        b=qtl+lhBaAMthvQDwCYrV6oxBbC+PpsvyuQLj9/TyMc0cCgyzg/Dls7Uf4lCluf5sOx
-         DLyYicn0h5x101JHYSFSrbZBA4YBboKhpgxZfOIKjKBJ2fmLJallwWJEKPTccS1jQp1N
-         pK7eIgpawC5cyF/cod72+8hmqN2tddQFpB8QHs0bk+RHqPXOLUmLC92QqzEAdKmupkbp
-         U7yHXUEuFIn0IDBY6zm3qkGjbtTWJBjSuaIvGL4CEZrV4MB7t/9F10KLzqsDEfy54MyJ
-         tD0/BzuWdLkom/QcU8WK1EwzwLFsnOdMTiBx74ASzxaxaG263bKSDlK7cM+2QoU2LSZ7
-         uqnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=4GBPXMmjtCwB7t0ecjf/4IevMdb1dyWXSGcgSEXFlT8=;
-        b=3GzLuG8meCNXv/hbZx1p7QqQkbpRlU/vleKsw8M37tIme/4gUqCVw4B/dRLwTdU/E+
-         0cNJghu1NtpzlzG9JGQnrvOKrivbjsVhtHioAfqtms1/kADfuFkc/uJbXa979KmQB37w
-         uxrf8iVH8OaOK+XbZ6SQwSaXNM2qlOlPrSud57hBP+UdmT1qxTjRLFSf4P/OBEf9wWyZ
-         QCL1XpYVoKTw8X6fbfTleVDzHYz9E+CtmQqGB+BqWQ885EaYAvbt0h9N53Z7ktvdBQBf
-         nbD4UyPg9un1QD3wJ+kdRfXPtpvhHFJCwGCS7BaLxkGa/e6Ew3gl2qh9GnvbatWOLEX9
-         lokQ==
-X-Gm-Message-State: AOAM532518POkunZ1XBvJpMjiPn1p7T/vmtzYRW5ly7f1tnfGOpOi9CS
-        oXmfzI8KRyqVOofTRl4pmu/kFaHOH3VtgP99w1E=
-X-Google-Smtp-Source: ABdhPJxZ1MSoLDdKHZky2vco5xm5QrfsdbxxW3/Aqho9hXPfRJJqaLRTKCYfMAcuhHnxTxfnVEZsegttbk9HVYJbwuQ=
-X-Received: by 2002:a25:d95:0:b0:633:771f:6118 with SMTP id
- 143-20020a250d95000000b00633771f6118mr1635509ybn.122.1648063833053; Wed, 23
- Mar 2022 12:30:33 -0700 (PDT)
+        Wed, 23 Mar 2022 15:34:35 -0400
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8644738BF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:33:05 -0700 (PDT)
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id C0AE39F073
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:33:04 -0500 (CDT)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id X6jAnKsa6b6UBX6jAnYsvC; Wed, 23 Mar 2022 14:33:04 -0500
+X-Authority-Reason: nr=8
+Received: from host-79-43-204-123.retail.telecomitalia.it ([79.43.204.123]:49850 helo=[10.0.0.45])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1nX6j9-002X2T-Ui; Wed, 23 Mar 2022 14:33:04 -0500
+Message-ID: <21ebdc8c-ddf8-cd0a-b93c-5d5dd74a9a84@kernel.org>
+Date:   Wed, 23 Mar 2022 20:32:59 +0100
 MIME-Version: 1.0
-From:   Charlemagne Lasse <charlemagnelasse@gmail.com>
-Date:   Wed, 23 Mar 2022 20:30:22 +0100
-Message-ID: <CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com>
-Subject: Re: [PATCH] x86: bug.h: merge annotate_reachable into _BUG_FLAGS for __WARN_FLAGS
-To:     ndesaulniers@google.com
-Cc:     adobriyan@gmail.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
-        linux-sparse@vger.kernel.org, llvm@lists.linux.dev,
-        luc.vanoostenryck@gmail.com, mingo@redhat.com, nathan@kernel.org,
-        peterz@infradead.org, tglx@linutronix.de, x86@kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [GIT PULL] tracing/rtla: Updates to the RTLA tool
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220321103035.564a1df5@gandalf.local.home>
+ <CAHk-=whxmA86E=csNv76DuxX_wYsg8mW15oUs3XTabu2Yc80yw@mail.gmail.com>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <CAHk-=whxmA86E=csNv76DuxX_wYsg8mW15oUs3XTabu2Yc80yw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 79.43.204.123
+X-Source-L: No
+X-Exim-ID: 1nX6j9-002X2T-Ui
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-79-43-204-123.retail.telecomitalia.it ([10.0.0.45]) [79.43.204.123]:49850
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 3
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -75,9 +77,9 @@ do {                                \
->   */
->  #define __WARN_FLAGS(flags)                    \
->  do {                                \
-> +    __auto_type f = BUGFLAG_WARNING|(flags);        \
->      instrumentation_begin();                \
-> -    _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));        \
-> -    annotate_reachable();                    \
-> +    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
->      instrumentation_end();                    \
->  } while (0)
+On 3/23/22 19:15, Linus Torvalds wrote:
+> On Mon, Mar 21, 2022 at 7:30 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>>
+>> I'm sending this as a separate pull request from my normal tracing tree, as
+>> it had dependencies to commits in your tree but not in my development
+>> branch. As it only affects the tools/ directory, I kept it separate as it
+>> has no changes to the kernel itself.
+> 
+> Yes, please keep the tooling updates separate from the kernel ones,
+> the way we now for some time have for the perf tooling too.
+> 
+> That said, mentioning the perf tools, I wish the tracing tools would
+> do a bit more package checking and helpful error messages too, rather
+> than just fail with
+> 
+>     fatal error: tracefs.h: No such file or directory
+> 
+> when (presumably) libtracefs and friends are needed.
+> 
+> Hmm?
 
-This causes following sparse warning on x86:
+Yes, we need to improve the Makefile.
 
-make allnoconfig && touch init/version.c && make CHECK="sparse
--Wshadow"  C=1 init/version.o
-#
-# No change to .config
-#
- CALL    scripts/checksyscalls.sh
- CALL    scripts/atomic/check-atomics.sh
- CHK     include/generated/compile.h
- CC      init/version.o
- CHECK   init/version.c
-init/version.c: note: in included file (through
-include/linux/rculist.h, include/linux/pid.h, include/linux/sched.h,
-include/linux/utsname.h):
-./include/linux/rcupdate.h:1007:9: warning: symbol 'f' shadows an earlier one
-./include/linux/rcupdate.h:1001:47: originally declared here
+It depends on procps-ng-devel and python3-docutils packages and the latest
+libtracefs (1.3) and libtraceevent (1.5). There is info about it in the README,
+but we definitely need to improve the Makefile... I will prioritize that.
 
+-- Daniel
+>               Linus
 
-Affected versions (from the ones on kernel.org):
-
-* 5.17 - bfb1a7c91fb7 ("x86/bug: Merge annotate_reachable() into
-_BUG_FLAGS() asm")
-* 5.16.17 - fe0c95903a68 ("x86/bug: Merge annotate_reachable() into
-_BUG_FLAGS() asm")
-
-Cannot be seen when changing the variable name:
-
-diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-index bab883c0b6fe..cbd11e38252a 100644
---- a/arch/x86/include/asm/bug.h
-+++ b/arch/x86/include/asm/bug.h
-@@ -77,9 +77,9 @@ do {                                \
-  */
- #define __WARN_FLAGS(flags)                    \
- do {                                \
--    __auto_type f = BUGFLAG_WARNING|(flags);        \
-+    __auto_type __f = BUGFLAG_WARNING|(flags);        \
-     instrumentation_begin();                \
--    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
-+    _BUG_FLAGS(ASM_UD2, __f, ASM_REACHABLE);            \
-     instrumentation_end();                    \
- } while (0)

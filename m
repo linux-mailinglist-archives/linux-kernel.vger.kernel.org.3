@@ -2,92 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176E14E4DB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A5D4E4DBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242396AbiCWICU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 04:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S242410AbiCWIFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbiCWICQ (ORCPT
+        with ESMTP id S232115AbiCWIFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:02:16 -0400
-Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CDE5A0B3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648022439;
-        bh=lwMLg/Yews7tW/5fe8TNLpkLv34pD5PLMY7UOC6qBW4=;
-        h=From:To:Cc:Subject:Date;
-        b=hgPSnT28ZTMyW/opEe+m9kYni+IAeGT26zBrlssNukx7Bz9XPndfN8lImo8eaUXs/
-         S3AI+NSRn18/Jw71p5NSASF/mVOl8HyKhgRWQAy3GqPxV0nlIrnW4H5tWrS78j6tSW
-         xApC5HgF7wpDgVrj/hZEbh0gUOCBGRDYf4Gsp3vA=
-Received: from localhost.localdomain ([43.227.138.48])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id 23A188F; Wed, 23 Mar 2022 16:00:35 +0800
-X-QQ-mid: xmsmtpt1648022435tca9ugqwi
-Message-ID: <tencent_61C566F88A52C1BF198826737AAE0E471806@qq.com>
-X-QQ-XMAILINFO: ONLymQk6scaO9GJ/nMNoeUSLwUq3BvP5iTFihRf6aDI5gVJH5Jgd/kyaCnjkgy
-         tpXZu0pMbNV1taHd1Tfho/FwM5qpNI/vmvr1LWWc3v3VBIg0h0RHPdSzXJkPInToClh9HMG6Cj42
-         SL/1v02nd0d16vEDVqz5/9GSxfaZzMllyR9lDESE6Fp5AW0sisjCiY4WmhAeNHeJ/czFd0hxPXpq
-         ryC9PQREFqOkeex+qh7xBQkU9nX/1+tq+vSzEhS6Ic2qlv7gmBnRi7SRiVkhTZYfmrVldjs7JgcS
-         8XBksnSB62XLpzpGsUeKijSHpJyHUvJbb4D4YEwVC+YwNWSlWd/MWuaB/QieXqGXqin+xXxWDYM1
-         NNq5itTOBQLyiDj/RmfPKIB/AiJZT+aSdAvOpdQKbTLEXTbFyA0kujcanBOjj7h/ai3+6GEN6AYL
-         44j/HNa6Gh9aNCnp622fjvDlApSyg/NS9u2cIecHPAVhvZtn1Wg3vkclAOUxKSJoOOuuLU1vmVaA
-         HEDzkbubQgM9f8ksUpF/tP9fzV+RRUgvlh25gS73pP6N4xwQAGZoNpXTQxWOSxrVOlIiLipTbBMN
-         FCMiiIzQ+kWYR6eKrjlrfq9xhBaD63vj+CT5ckwQrn41hStdx+LFh6Z6tVhmaFzZFLutzTt1vZGL
-         HC4LwInyRycVR9JWsj4HlProl7bsUX3YLNBfmgEFhIHqmbrP4tIZ6p+taTdPkJHm5UdBi/u+wm8c
-         HpgPyGw+zz4SG8SWN7uj4CmA7Q+TD092d7KsM7kNctV8EeVol6GmR9Wkrhb5yvZv0LNZ0uaVsDr1
-         SzqvIysmbm6fTRusEmXTpwe9KKlBK5LvNKCf28UhdElSfALo3w3mPok7qGsxYZkv3bn3CFFfoMD+
-         byxIdVhOAswoFH6cojh0M2bvQ6Qc1C2zqLSXOft6n8pjAcjkw6fPhZ7A5MEL+Ynz/iGsG3WseYpK
-         f7fV6OHUs=
-From:   xkernel.wang@foxmail.com
-To:     trond.myklebust@hammerspace.com, anna.schumaker@netapp.com
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] NFS: check the return value of mempool_alloc()
-Date:   Wed, 23 Mar 2022 16:00:03 +0800
-X-OQ-MSGID: <20220323080003.2151-1-xkernel.wang@foxmail.com>
+        Wed, 23 Mar 2022 04:05:45 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB7B70F78;
+        Wed, 23 Mar 2022 01:04:16 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bi12so1204842ejb.3;
+        Wed, 23 Mar 2022 01:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oNMVyc/j83Ecy4cv3OC0iNO8ILErqvD2g6W5CyTq9YM=;
+        b=Jm/YB+FO7nUYcqHPWrxgd7j2+1gT2mX8y52Dm2suYxlLEFFoExFfUKJW6LO9p2JjTu
+         TMoYyPmiohkYGrIKIaRrbzbjuvPNFxs+bZvnUtqDHworqhd4tOIUlGRpkU3Agxw8gJZ2
+         1O6srV/XGOl5VhiOOR5xtGi5Lf6PJIYYPpk/djhqe4LirE/hkaMKV2YLwTSXW54EcSDK
+         Y/KTJwY/7vdDIh+iKy6hkEvgGIF4hhFPnE3ketYo5Mc1M38QD7n5nut6NzNHZI4U09zr
+         I2NljQls0K6joLTi4Q7j9J6tUex6uHSwdqcfAD5T5TVIcrnq/8G4Q5TtUU16NUh3LJrr
+         5Pug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oNMVyc/j83Ecy4cv3OC0iNO8ILErqvD2g6W5CyTq9YM=;
+        b=ZCJBtG7wXUzFf5U9cOk+prJld0vaxPJT8NLPK4N9N2Wjzp7ZkFXepoMrw41+Ajy3f7
+         y8YDV4Onshg0EJY0m0WlavcNPii8+/EEAIFtgL4hVLnAzvhEwKs60urITCrkK0LVT26I
+         FGI39PisgPCUVEZxVhsYCaPxP2K/n74pq1qm+tQ95BuycOvxT93NJIAfYXk1gkdkPcdr
+         3V5/W87EgyKlCwCJe/u7mRkKVs6v92j1SvGBCzhKQUs7gpCzRwKL3YnDV0RUWaFpsxJr
+         vrfHlcfWdDFAE8/iOECg6xsysJ7BdhG67HLUZKSACnRFxDS+6da7xd0ZCPS8HJJmsabr
+         DZZQ==
+X-Gm-Message-State: AOAM531lvMAkD8eNyYyOQGUfRVrfc0xSgFU7HqXRPODOGw/XNnhiNGba
+        fSIPaqtPmOjhf6btB6mOpXwUwoXrxcbseIsLgDg=
+X-Google-Smtp-Source: ABdhPJzzGbjOXUeBkq9zpKAWT/MCjB4wYcea3KJDMCCPLzfGY8i5/1+dy3ASew7xPHJw2QglcLN2XVoyI1rxtLt9oWo=
+X-Received: by 2002:a17:907:7289:b0:6df:9746:e7c4 with SMTP id
+ dt9-20020a170907728900b006df9746e7c4mr28874304ejc.497.1648022654472; Wed, 23
+ Mar 2022 01:04:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20220321183446.1108325-1-helgaas@kernel.org> <20220323022648.GA1243295@bhelgaas>
+In-Reply-To: <20220323022648.GA1243295@bhelgaas>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 23 Mar 2022 10:03:38 +0200
+Message-ID: <CAHp75VfdoAbSTkO7eaor94pkmN0ttLXstc1DS_Sa7i45Dt5GAA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: Avoid broken MSI on SB600 USB devices
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mick Lorain <micklorain@protonmail.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Wed, Mar 23, 2022 at 4:26 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> On Mon, Mar 21, 2022 at 01:34:46PM -0500, Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> >
+> > Some ATI SB600 USB adapters advertise MSI, but if INTx is disabled by
+> > setting PCI_COMMAND_INTX_DISABLE,
 
-The check was first removed in 518662e ("NFS: fix usage of mempools.")
-as the passed GFP flags is `GFP_NOIO`.
-While now the flag is changed to `GFP_KERNEL` by 2b17d72 ("NFS: Clean
-up writeback code"), so it is better to check it.
+> > MSI doesn't work either.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- fs/nfs/write.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I think this is not correct.
 
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index eae9bf1..831fad9 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -106,8 +106,10 @@ static struct nfs_pgio_header *nfs_writehdr_alloc(void)
- {
- 	struct nfs_pgio_header *p = mempool_alloc(nfs_wdata_mempool, GFP_KERNEL);
- 
--	memset(p, 0, sizeof(*p));
--	p->rw_mode = FMODE_WRITE;
-+	if (p) {
-+		memset(p, 0, sizeof(*p));
-+		p->rw_mode = FMODE_WRITE;
-+	}
- 	return p;
- }
- 
+> >  The PCI/PCIe
+> > specs do not require software to set PCI_COMMAND_INTX_DISABLE when enabling
+> > MSI, but Linux has done that for many years.
+> >
+> > Mick reported that 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI
+> > devices") broke these devices.  Prior to 306c54d0edb6, they used INTx.
+> > Starting with 306c54d0edb6, they use MSI, and and the fact that Linux sets
+> > PCI_COMMAND_INTX_DISABLE means both INTx and MSI are disabled on these
+> > devices.
+
+> > Avoid this SB600 defect by disabling MSI so we use INTx as before.
+
+And this is kinda too conservative approach.
+
+> > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=215690
+> > Link: https://lore.kernel.org/all/PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com/
+> > BugLink: https://lore.kernel.org/all/20200702143045.23429-1-andriy.shevchenko@linux.intel.com/
+> > Link: https://lore.kernel.org/r/20220314101448.90074-1-andriy.shevchenko@linux.intel.com
+> > Reported-by: Mick Lorain <micklorain@protonmail.com>
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+
+And it hasn't been tested by the reporter.
+
+> Unless there's objection, I plan to include this in the v5.18 pull
+> request in the next few days.
+
+You are the maintainer here and it's your choice. I'm not going to stop you.
+
 -- 
+With Best Regards,
+Andy Shevchenko

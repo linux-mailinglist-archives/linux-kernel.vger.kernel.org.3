@@ -2,100 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CDF4E5929
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1E84E592E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiCWTbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S244426AbiCWTcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344271AbiCWTba (ORCPT
+        with ESMTP id S234750AbiCWTcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:31:30 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C0A89CC4;
-        Wed, 23 Mar 2022 12:29:59 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id D23745EE6; Wed, 23 Mar 2022 15:29:58 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org D23745EE6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1648063798;
-        bh=JqlmM1NJloLOZMtErdOCWTM4BMqIYjuNg8gf8rNh+10=;
-        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
-        b=XiuE3MK+ad95PtbIPK3tcNgV2ZFIBA/1OobGjqdSpjWTURZVlzhQ5UzmFAB6l+BQv
-         9sSK1ci0gHcdFjVQyOjO454C6k6EgKsR255d2OBlzQ7IlOE7bA++zZNjOUhN49/hV5
-         nbRqZ/PRFcmEYls4Zyh9I3nNlgSifXY4XSoujKec=
-Date:   Wed, 23 Mar 2022 15:29:58 -0400
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Message-ID: <20220323192958.GA18275@fieldses.org>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
- <YjrJWf+XMnWVd6K0@kroah.com>
- <d0e2573a-7736-bb3e-9f6a-5fa25e6d31a2@ddn.com>
+        Wed, 23 Mar 2022 15:32:04 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59AA89083;
+        Wed, 23 Mar 2022 12:30:33 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id x20so4430327ybi.5;
+        Wed, 23 Mar 2022 12:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=4GBPXMmjtCwB7t0ecjf/4IevMdb1dyWXSGcgSEXFlT8=;
+        b=qtl+lhBaAMthvQDwCYrV6oxBbC+PpsvyuQLj9/TyMc0cCgyzg/Dls7Uf4lCluf5sOx
+         DLyYicn0h5x101JHYSFSrbZBA4YBboKhpgxZfOIKjKBJ2fmLJallwWJEKPTccS1jQp1N
+         pK7eIgpawC5cyF/cod72+8hmqN2tddQFpB8QHs0bk+RHqPXOLUmLC92QqzEAdKmupkbp
+         U7yHXUEuFIn0IDBY6zm3qkGjbtTWJBjSuaIvGL4CEZrV4MB7t/9F10KLzqsDEfy54MyJ
+         tD0/BzuWdLkom/QcU8WK1EwzwLFsnOdMTiBx74ASzxaxaG263bKSDlK7cM+2QoU2LSZ7
+         uqnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=4GBPXMmjtCwB7t0ecjf/4IevMdb1dyWXSGcgSEXFlT8=;
+        b=3GzLuG8meCNXv/hbZx1p7QqQkbpRlU/vleKsw8M37tIme/4gUqCVw4B/dRLwTdU/E+
+         0cNJghu1NtpzlzG9JGQnrvOKrivbjsVhtHioAfqtms1/kADfuFkc/uJbXa979KmQB37w
+         uxrf8iVH8OaOK+XbZ6SQwSaXNM2qlOlPrSud57hBP+UdmT1qxTjRLFSf4P/OBEf9wWyZ
+         QCL1XpYVoKTw8X6fbfTleVDzHYz9E+CtmQqGB+BqWQ885EaYAvbt0h9N53Z7ktvdBQBf
+         nbD4UyPg9un1QD3wJ+kdRfXPtpvhHFJCwGCS7BaLxkGa/e6Ew3gl2qh9GnvbatWOLEX9
+         lokQ==
+X-Gm-Message-State: AOAM532518POkunZ1XBvJpMjiPn1p7T/vmtzYRW5ly7f1tnfGOpOi9CS
+        oXmfzI8KRyqVOofTRl4pmu/kFaHOH3VtgP99w1E=
+X-Google-Smtp-Source: ABdhPJxZ1MSoLDdKHZky2vco5xm5QrfsdbxxW3/Aqho9hXPfRJJqaLRTKCYfMAcuhHnxTxfnVEZsegttbk9HVYJbwuQ=
+X-Received: by 2002:a25:d95:0:b0:633:771f:6118 with SMTP id
+ 143-20020a250d95000000b00633771f6118mr1635509ybn.122.1648063833053; Wed, 23
+ Mar 2022 12:30:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0e2573a-7736-bb3e-9f6a-5fa25e6d31a2@ddn.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-From:   bfields@fieldses.org (J. Bruce Fields)
+From:   Charlemagne Lasse <charlemagnelasse@gmail.com>
+Date:   Wed, 23 Mar 2022 20:30:22 +0100
+Message-ID: <CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com>
+Subject: Re: [PATCH] x86: bug.h: merge annotate_reachable into _BUG_FLAGS for __WARN_FLAGS
+To:     ndesaulniers@google.com
+Cc:     adobriyan@gmail.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
+        linux-sparse@vger.kernel.org, llvm@lists.linux.dev,
+        luc.vanoostenryck@gmail.com, mingo@redhat.com, nathan@kernel.org,
+        peterz@infradead.org, tglx@linutronix.de, x86@kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 11:26:11AM +0100, Bernd Schubert wrote:
-> Add in network file systems. Demonstrating that this is useful
-> locally and with micro benchmarks - yeah, helps a bit to make it
-> locally faster. But the real case is when thousands of clients are
-> handled by a few network servers. Even reducing wire latency for a
-> single client would make a difference here.
-> 
-> There is a bit of chicken-egg problem - it is a bit of work to add
-> to file systems like NFS (or others that are not the kernel), but
-> the work won't be made there before there is no syscall for it. To
-> demonstrate it on NFS one also needs a an official protocol change
-> first.
+> @@ -75,9 +77,9 @@ do {                                \
+>   */
+>  #define __WARN_FLAGS(flags)                    \
+>  do {                                \
+> +    __auto_type f = BUGFLAG_WARNING|(flags);        \
+>      instrumentation_begin();                \
+> -    _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));        \
+> -    annotate_reachable();                    \
+> +    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
+>      instrumentation_end();                    \
+>  } while (0)
 
-I wouldn't assume that.  NFSv4 already supports compound rpc operations,
-so you can do OPEN+READ+CLOSE in a single round trip.  The client's
-never done that, but there are pynfs tests that can testify to the fact
-that our server supports it.
+This causes following sparse warning on x86:
 
-It's not something anyone's used much outside of artificial tests, so
-there may well turn out be issues, but the protocol's definitely
-sufficient to prototype this at least.
+make allnoconfig && touch init/version.c && make CHECK="sparse
+-Wshadow"  C=1 init/version.o
+#
+# No change to .config
+#
+ CALL    scripts/checksyscalls.sh
+ CALL    scripts/atomic/check-atomics.sh
+ CHK     include/generated/compile.h
+ CC      init/version.o
+ CHECK   init/version.c
+init/version.c: note: in included file (through
+include/linux/rculist.h, include/linux/pid.h, include/linux/sched.h,
+include/linux/utsname.h):
+./include/linux/rcupdate.h:1007:9: warning: symbol 'f' shadows an earlier one
+./include/linux/rcupdate.h:1001:47: originally declared here
 
-I'm not volunteering, but it doesn't seem too difficult in theory if
-someone's interested.
 
---b.
+Affected versions (from the ones on kernel.org):
 
-> And then applications also need to support that new syscall
-> first.
-> I had a hard time explaining weather physicist back in 2009 that it
-> is not a good idea to have millions of 512B files on  Lustre. With
-> recent AI workload this gets even worse.
-> 
-> This is the same issue in fact with the fuse patches we are creating
-> (https://lwn.net/Articles/888877/). Miklos asked for benchmark
-> numbers - we can only demonstrate slight effects locally, but out
-> goal is in fact to reduce network latencies and server load.
-> 
-> - Bernd
+* 5.17 - bfb1a7c91fb7 ("x86/bug: Merge annotate_reachable() into
+_BUG_FLAGS() asm")
+* 5.16.17 - fe0c95903a68 ("x86/bug: Merge annotate_reachable() into
+_BUG_FLAGS() asm")
+
+Cannot be seen when changing the variable name:
+
+diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+index bab883c0b6fe..cbd11e38252a 100644
+--- a/arch/x86/include/asm/bug.h
++++ b/arch/x86/include/asm/bug.h
+@@ -77,9 +77,9 @@ do {                                \
+  */
+ #define __WARN_FLAGS(flags)                    \
+ do {                                \
+-    __auto_type f = BUGFLAG_WARNING|(flags);        \
++    __auto_type __f = BUGFLAG_WARNING|(flags);        \
+     instrumentation_begin();                \
+-    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
++    _BUG_FLAGS(ASM_UD2, __f, ASM_REACHABLE);            \
+     instrumentation_end();                    \
+ } while (0)

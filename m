@@ -2,155 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55704E5AC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE8E4E5AC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344980AbiCWVhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S1344967AbiCWVn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241131AbiCWVhs (ORCPT
+        with ESMTP id S234033AbiCWVn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:37:48 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4E17DE23
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:36:16 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id o10so5510304ejd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:36:16 -0700 (PDT)
+        Wed, 23 Mar 2022 17:43:58 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1540E85952
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:42:28 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so1996459otj.10
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:42:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=2RHrOWoISIZGm/DvPY0LuaxD7QmbEyuYj5ghZWW+2nE=;
-        b=FDmYihKKzIc4yCb6yyRWzeIYyumvZwecwAAWPpH8gf+7y31BKaU6zi3RuFOXkagZRu
-         D3SE9gVMpCx+cvRSK4ySRgAhi655hjl/JMewgCdT8V5guWxa87/RvrjSVNcrQcF3aAe3
-         ZfxJi9DrcnAKWnHrYIaNU/qNPuOrtBcsgsvGZrdoGj+IiSX+68tGmwlV3zQ1YymCDT4y
-         S9TI4go0g+aq1TFkXcXxBGcvg1JTJDJuPSLS36OnGIEnhM/2uIFeTQ0AUpRVQEaHvL4s
-         XU4MD6uzD5Qi1vH6j7JUEIHFjU/7g8mIbHXq2Ze+smBrhZQrbaEDNeW5T6Q5nqNNYUfv
-         Gjsg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gauJU+/Ukt87qElnbOCar/GeP644jnPenO1H+olAZxI=;
+        b=cswYNs/WyXAL6DSvgYLR3dF6cUIcVKCxSQGRNXV786efwrusYDE0bclQvwL/1eYS9t
+         vThDuK/9GhGm5Ws+5z71Qd6WANakCW1IxYdEHRVO7aP16V8R06I2LqJrdw4RATCO1HP0
+         UUGnJhwwcsp+xk/fmmMo/rX+1/XfoPXgN3W38qwm7MH+c8m3HzAOcpFmrbcAhGuFJHfX
+         Vw5+f9RS596X3GChcf3jnVR4yHuJTrMPuhPEsnm8gzpHE3KwO/joTbHm5QXM0P67HP7h
+         kV7tMbBorXJ887ivq0y7jr9VBFPDYpcw9XRIV3B7VBq9qM221sxbmH/8tVfi1WkmyQp0
+         i0dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=2RHrOWoISIZGm/DvPY0LuaxD7QmbEyuYj5ghZWW+2nE=;
-        b=CnmcLReMUxqBK+uV372Wjs7JEpkUfE7SVBT3LiYe+PaHCnT+XsV8willel5/IuALxL
-         9lrHRqS0xRWqV8X2orI1ethfvnF1Mw+6UGMjgYTImwpUQhWamwC5MxZRPFMYs2fq/Bzp
-         h8u/w0zWPyrghGXJ0knioC8eoj0OrkbF4soypjehOENwCXlKuNXzyJ7Aah3U328QEd0b
-         Q2xPnXmNn17JCDBeoHy+ZozCBOrxkA2UI/d2hP/k9+2IJXFNLV/6lxrECrWdyilEFCsY
-         LVf94flOVSkAXZSCpM5OMK5E4HiRd8TSS98Kzv54FmQ1XlOn3utf4bgK3Mp27qZcy3T/
-         UEyA==
-X-Gm-Message-State: AOAM5302f9bRmDPy9ytEMVuU8r/EYWnV3eN8On814bee8D0xVs9tyEN5
-        JNbZFNycM2ndAt3KCFAl0muqLUBipdyYIpnZkJc=
-X-Google-Smtp-Source: ABdhPJwwRgKueE5YMcjujXfBvSQ4CanyXkLJdj0YeSDjc8PVBYDzXkRdxqDc5TPQYNpYAExnuscG3Aot+Yj5Lyt5j70=
-X-Received: by 2002:a17:906:743:b0:6d0:7f19:d737 with SMTP id
- z3-20020a170906074300b006d07f19d737mr2328129ejb.11.1648071375043; Wed, 23 Mar
- 2022 14:36:15 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gauJU+/Ukt87qElnbOCar/GeP644jnPenO1H+olAZxI=;
+        b=50h7k0kKQ+JdkpR0dWkCgvHNv7G93l0ocIBsJ3UHD/vvRbtFxF8C+OMJuC6B1+wiPF
+         RYgKbC3/eTlJ7cZASAUOBnYg8U4Ptp+qyqfJWm6sZYXMasTDm5gnhdbr/HivfRKQutaF
+         ZELvcgTp9HviwGf5v5MQxob29vC8QbUKXKaex58mXXKs3BLC3OEZA/HSlKqhrsEORnar
+         //yKNIcY11lXS+mXpSOqO8/rlRQwAYptvvfGcIXq5BZ4QeDTCBWTCDB/3zq9wdPjZa/6
+         1a2E4rXm2CJPqCLf+hRN99yZUe69PP45XO85zkTk7Ph39VPzkOPYy4z/e4+ZVLf+Z0hp
+         tKKQ==
+X-Gm-Message-State: AOAM533TZvhRuKov+8YV+9It3xDR00H4YIBPh30KMwFvM5KYoLIO1vAn
+        PT1bTtnlglFsdZgx1C6oyqZTmrkTYAWu2kR9Z8o=
+X-Google-Smtp-Source: ABdhPJxUgqnvMju0kQuK4cFRp3woy6+I3sh81LdOzyl9ntgr/e/GmMKsqkaDy48Yz3SiqBg8bmw7SQ3TapKKosYD62I=
+X-Received: by 2002:a05:6830:10c3:b0:5cd:481a:148a with SMTP id
+ z3-20020a05683010c300b005cd481a148amr913080oto.200.1648071747457; Wed, 23 Mar
+ 2022 14:42:27 -0700 (PDT)
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 23 Mar 2022 21:36:08 +0000
-Message-ID: <CAHpNFcOi=PouCaLfpcLriTDwij+2KbzLA+MhjsdC9WnbPjpwoQ@mail.gmail.com>
-Subject: Presenting : IiCE-SSRTP for digital channel infrastructure & cables
- <Yes Even The Internet &+ Ethernet 5 Band> RS
-To:     torvalds@linux-foundation.org
+References: <1647943132-31250-1-git-send-email-baihaowen@meizu.com>
+In-Reply-To: <1647943132-31250-1-git-send-email-baihaowen@meizu.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 23 Mar 2022 17:42:16 -0400
+Message-ID: <CADnq5_PB-SOvbJJiRGvGpeLwfYpuYHPT8_0HRW1R6WUJ8vwKiw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: use NULL instead of using plain integer
+ as pointer
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     "Wentland, Harry" <harry.wentland@amd.com>,
+        "Leo (Sunpeng) Li" <sunpeng.li@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
+Thanks for the patches.  I've already applied fixes from others for
+these issues.
 
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
+Alex
 
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
-
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
-
-Transistor emission fatigue...
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-*
-
-***** Dukes Of THRUST ******
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-***** Dukes Of THRUST ******
-
-Autism, Deafness & the hard of hearing : In need of ANC & Active audio
-clarification or correction 2022-01
-
-Sony & a few others make noise cancelling headphones that are suitable
-for people with Acute disfunction to brain function for ear drums ...
-Attention deficit or Autism,
-The newer Sony headsets are theoretically enablers of a clear
-confusion free world for Autistic people..
-Reaching out to a larger audience of people simply annoyed by a
-confusing world; While they listen to music..
-Can and does protect a small percentage of people who are confused &
-harassed by major discord located in all jurisdictions of life...
-
-Crazy noise levels, Or simply drowned in HISSING Static:
-
-Search for active voice enhanced noise cancellation today.
-
-Rupert S https://science.n-helix.com
-
-
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-
-https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
-
-
-https://www.orosound.com/
-
-https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/
+On Tue, Mar 22, 2022 at 9:05 AM Haowen Bai <baihaowen@meizu.com> wrote:
+>
+> This fixes the following sparse warnings:
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:71:40: warning: Using
+> plain integer as NULL pointer
+>
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
+> index ec636d0..ef75eb7 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
+> @@ -68,7 +68,7 @@ static void get_qp_set(qp_set qps, enum colour_mode cm, enum bits_per_comp bpc,
+>         int sel = table_hash(mode, bpc, max_min);
+>         int table_size = 0;
+>         int index;
+> -       const struct qp_entry *table = 0L;
+> +       const struct qp_entry *table = NULL;
+>
+>         // alias enum
+>         enum { min = DAL_MM_MIN, max = DAL_MM_MAX };
+> --
+> 2.7.4
+>

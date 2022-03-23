@@ -2,234 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497104E58FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 811194E58FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243889AbiCWTO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S1344099AbiCWTPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbiCWTOy (ORCPT
+        with ESMTP id S232772AbiCWTPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:14:54 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7493C275D6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:13:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IPxKW39EUL7G8t67G435Bj88o8iGOLqWBdTaoCPauurevKvwv0jbdTKAchnNQR2dOSU8o79ZuiD+CAYE3fVveLid9txdyXdiBNQ/wn7IH9ev0mJSzjqzuYeaccJZ3NnUOoMbK3j5nmzdrBQboggwfnujgLlJ6KTwptcYFlvtm4bq6yaFS6SJ5xkpTBHlFJbS06roxvypQBfSrJCagDwu24sQrEUm8VwzCyzgvMkFONtwmrpxMCqIxQBlzura1B6D0zLpGLtmSE/oereaupi382N0lfkaJRoub8acJ24fo5cYF3VFryVHyjApWDQ6vnxRdUn6H+QYVUEa6jTjRU6tNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6h3sUz8bhs3D90HGxhp7V/78f7iCFBUvGnm7S5UayLs=;
- b=PkZ78P1W1s21RIevqVW8uh8uQaTuyEkxq66+owuef4QMcWCWN8XV8G1G14F+y5V7tCc9TPu7hWfIAWfrPfi8VKypMG7V5srtlvnemMWf7eA319OQqecsE26obI4ItsTDnKvBgquTzhKnRhx7d1wBldolIKynxM4d7yDMe5yjTXH5oCQ31W5rAn0xhrylruLS+FCg0sFWPCGGSBBYKXVmS660KINadGgZg3FL6Qv608nWxOUxeLUpzmArZSfx0k/xNbiglAtiyrX3uEO5z7kyyTJJO+Bqxg10p85CYmGMFnK3+I+OTvplNSOCEkhqjuLCTIKsU17SyDT3RXmTQrhg9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6h3sUz8bhs3D90HGxhp7V/78f7iCFBUvGnm7S5UayLs=;
- b=OeZeavap3nW+n5qRxDQqmGCxdoTXC8qObL107Cbjbr+5JgfuIbJUXjWwpRDOrlUrtirDnQjXuBVyeAFJyWNE+sjCECwf0s9esD2d/hln/vCDY298S5VjyStQ/tzq57T9fgWXyzIxvrXRVFaAJhZQ1KXMQsDc2vZFRmPXbxDEwXg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by SN1PR12MB2495.namprd12.prod.outlook.com (2603:10b6:802:32::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 23 Mar
- 2022 19:13:21 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::4839:9431:1040:5cd5]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::4839:9431:1040:5cd5%4]) with mapi id 15.20.5102.016; Wed, 23 Mar 2022
- 19:13:21 +0000
-Message-ID: <4d1f3148-c421-a35f-4466-837b63c3958d@amd.com>
-Date:   Wed, 23 Mar 2022 15:13:19 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/1] drm/amdkfd: Protect the Client whilst it is being
- operated on
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>, philip yang <yangp@amd.com>
-Cc:     David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220317131610.554347-1-lee.jones@linaro.org>
- <8702f8a5-62a1-c07e-c7b7-e9378be069b6@amd.com> <YjNNCXc8harOvwqe@google.com>
- <1f003356-3cf9-7237-501e-950d0aa124d1@amd.com> <YjNQA80wkWpy+AmA@google.com>
- <b65db51e-f1ba-3a9b-0ac1-0b8ae51c5eee@amd.com> <YjNh/Ajxgp3mjvWV@google.com>
- <YjsWvy8cT2eOw618@google.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <YjsWvy8cT2eOw618@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT3PR01CA0016.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:86::6) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Wed, 23 Mar 2022 15:15:51 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3AA37AB8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:14:20 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id j25-20020a056e02219900b002c81019b2fdso1431288ila.16
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:14:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=2ZDnCCGjtWFNfeOASE7YLgyJVCHQS+Agca5j8mHDAO4=;
+        b=V6pwYdb29V5NrPARKH2x6ptEpAIj3Sfhv5RluMCgWqsADXe9cBXIx/TSP7Ipns5aXL
+         u/Lw8pkaJGO6AyeyRbt1Hd4GV97SduejXujjQXuj1hgvi34KMyZUAJFFPuNXC6GWvWaQ
+         dTLc2y1X4NOuNL2WWZtYTe7ybdvkkDWuVCMliL9GdRS8JARSSNFRh9YDZ24d+LP3BdPY
+         P4ubaK5Hf3Hs71up0zx1ULT6XhrrStv6LwnU0Vssp4HrLndfdU6evhHMJgWOXtreqNoW
+         XBRTCnbrVvkFc+2Qnv2/bCW94MkydoVnGaRrnIXzfafG27ECbkWPXFjB7WyVjwsB66Yr
+         E1lA==
+X-Gm-Message-State: AOAM533lOItGVGzeUZfg1N2a3+4E1kts/tXKIiLlSOmn2/loMb2mNts4
+        8TEKY96afd+eVJXzv3cSlvafX6UbHM3AwJzn4XiikaHmvtOy
+X-Google-Smtp-Source: ABdhPJxdzO9rFo426k2EUnyp3kMUM3M9wnf8kZVxiQD/Ex+DSGzHL1nNp8qYm5R4XPGgNtKBVsSSajM86jDW3vBBI0p4L8t1Nuce
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 62a93ec8-a809-4c4d-f960-08da0d01323b
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2495:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB24957797A8A6FD8D60B6C6FD92189@SN1PR12MB2495.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SbaWcmEITsVPPZl/w607O7pw1+Sf1RQ5tbClZDkbLfOpxhU2oaY/+/1gSxSrQ0bhXNO8NE2m5laL20oQQtKpIa6zC3B3AQluO4PEYo26e69eGNYydAHqKE7FDveucimLklN5sWNOhuCXNYgZ+Ey/EJ+vUkFiGrgyaKId+SefQNI1xwCsmyzKgQu04aAA2cYSKMuE8JnWVmXwjtJSrqOwRg/hnM9MzwmBxOWp+FDdASSzxmySDx39kAqMPqYPVSRSaRTnQH8Us/aijtWXtpSYvZLacyK6v0P+mz/VhdUJGo1fLlEGcgAU54QjVdFPF3LXdmK1Wn/yrkxSYtu6PaLUHRWqEHFJRI9395DHjD1zXzvwznhgfGSxHvWJBrAVkROL9dFkREbwSHM/ELOktfFahIkO6uU/YZcM+35ggL/JS/5rd8EodCuxethnhl1rbAPUsa1eQsQfqq+03ExF+edYcQSoYkad3hwX/DzpIfHy9LNSvzbywjAPV397tOdWmrYtZp0gbVxzldGnjZY5E6lPXd0QQV1DjinD8CgCdknj+0uDmqwmK2Tx0/WOct9DRXtFh6o+dI6cyr6QGoqjuC5pBYzMioPf2TrHg/toEmFryetfyC3zGo5V8Or5gBtrY/YBWOwbGgYoJWSFLzKtcN/DNbjWNS/qVEB1grqfw+cnK4W0OpVQU0cRLE/H45JRAniq4AMDvA7mohiqApiNPiXUE9y+2Y+F2Xx8JShVNqbiuE3GC7IdeN3gfl7qLjeYuiZqYJg9aLwsSZvsQpTVuy8+XQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(2906002)(508600001)(186003)(66574015)(31686004)(36756003)(26005)(38100700002)(83380400001)(6506007)(6486002)(53546011)(86362001)(6512007)(5660300002)(66946007)(8676002)(66476007)(66556008)(8936002)(31696002)(4326008)(316002)(6636002)(54906003)(110136005)(2616005)(487294008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dys2dEUxQ21PbXRmQkRGQVNobzRFVzkySFZWQWNURWd3ajZQTlFSejAzUHRY?=
- =?utf-8?B?Q1QvSlF6Qlg5YXdVTkxsSHFOT3Y5ay85aXBJeGlLd2xVUkY2eGx3bk9TbVhq?=
- =?utf-8?B?YXdWNGtTeXVBTjNDekh1Z1pXUFVHUnNic2dRNnpDOWQwSDJwdnFacE1qU1NH?=
- =?utf-8?B?Uk1pUlh1Vi92UERoUmpNMDFRWDl2N2dHRmZsQXk0SjhPS1pJVjdjQWNUbllD?=
- =?utf-8?B?ZG9LT25nd3kwK014b1c4aStzY2lkZlUyaTcxMWxXdHhWYzNSLzdBaWNZdUlQ?=
- =?utf-8?B?dWQwRitNNHFlTTJEK0NOVlJuOEFXQytxOEpQMytqWDREeXhuTEFYM3pRd0FV?=
- =?utf-8?B?dzhRak1PS1NEZEo0SFZoS3lYOTNEbm1keFdqL3JiTjloRWhQeml5VDE1MnAw?=
- =?utf-8?B?dXlYT0dyZXJzVlVmT0p0eU5wNTBmNjgyL2dkVlhTaElRbGhlNXpCdEd1dFVD?=
- =?utf-8?B?bmJwZHNpNEJ3VGxsc0MvNEx3UHA1UGRmYzRmSFVMd2QvZWhlRWdVS04zZmxs?=
- =?utf-8?B?SWNJOU9YMUszQk5ML3d4ZzZJQjF2TTljUi9LM1F5cGRYMjh2Y3lhYTdYVnI1?=
- =?utf-8?B?TDQxY2JEU2hOQ01tYnhXclRIWUtYcklTUGs0d2gwWVF1c0Jmc2VxUTBoMC9j?=
- =?utf-8?B?aVY5dEM4Z0E4b0NyelA0czc0aUZ1RmVwMHdtOHVZN1ZNY3lDaG1adGZET1hy?=
- =?utf-8?B?cDR0Mm9YQkFIOEttb2JZQ3hGcnltT1VsUlpXYzNtamwwQUg0QWlZSmRwUjRx?=
- =?utf-8?B?SUtvbE5BKzEvc0hIOTB2S1g5MFMwVm9BeHFDbGJrZjZya1phNGw0SVFRaFFY?=
- =?utf-8?B?TUtOZ1pBNWpHUXoyTFNYQlNuRFVucHpnMUhXNTZhNHUxMXpMMlNTb2ZsRkR1?=
- =?utf-8?B?NlJ3VUFndXNFL3ZvR1VPN1pkNXJ3NlZKaHRyblViVlFMMjBhMWl5azJjZDh3?=
- =?utf-8?B?RkxFckk4c0s1UDJnYWJDeEs5bzRsR3B2TE1xbSsxQmRiS2psd2hGVnhoS1Ro?=
- =?utf-8?B?Ynh0N3B5YUNpWURZL1dMR3I2ZGRvd1RZaHk0c0FNcGRwV21nRWQzaHZJSGh0?=
- =?utf-8?B?dFJRblNUOHhGN3pZNTBDVTZ2dmZzZzZMSm56KzArVGJ2aytVNkhQVnp1R29K?=
- =?utf-8?B?L3VuVUt4eWJaWVEyeU1tcXRKS3BFZlppK2JoNzRTTGIzbmFSTmVHbVh5NnQ4?=
- =?utf-8?B?cWk3YmtkRC9uMU9CbmJwMEFabDErMnlSU0NRZHBDVE5EOWRKUHBkeGllQW9F?=
- =?utf-8?B?ODRQUHVpN1FuMGVMditpV3U3NU9kQ0lXcG9vRFg0emZLdFBsdHVtTHFXUE93?=
- =?utf-8?B?RHc3VVMxZlYvamVnbVFFZnp1eERIMTY5QWdwUGpOUFlSWkoyTVExVnl1dGgv?=
- =?utf-8?B?cmp2MldOZnJUR0RGRlBYL2xBdnlUMk90V1RsdmJzY2tzRW5lOVdISHpZN241?=
- =?utf-8?B?VUxXcFFWYzhONXBsQzBPNDI1NFV4bjJtMFR2emFhdzFaeFROb3kxcG1kbWtl?=
- =?utf-8?B?Vm9PMUJ4WXRJUGt0YjA1NDJ0TnVvR0c1eXgvbC8vZzVidTdjT3NnblpWWXNs?=
- =?utf-8?B?Z0EyUU9vaHFIT3p6UXNOMGQ4WjVXdHZuSk1ONE1rOG9EMUx1N2FmMWNMWGFL?=
- =?utf-8?B?RFhyU3FhaUExeXhvdmIvSWx3ZUdMTnMyZEFLQjVqeWw1MHFtTm9HWmhVVXgz?=
- =?utf-8?B?YVZTT2FQQnd3bGc4QnpPanJjVzFhVlVmWVd5WGgyR1cvUE5Qa1FjemMxd1pO?=
- =?utf-8?B?M1N2NE51aUxqM3lka2c2ME1iODRkZ1BhamNqYVNOWGFGY3VBUlhOY0JrSG13?=
- =?utf-8?B?L3hETmt5ZGFPZmZhaEhwbytGNFMvQU8valVyb2oxZk5sSC9VR0Rtd1JaMlZj?=
- =?utf-8?B?Qk9aaFo4MmpmZ0trcjJSZXN3RWcxRFlCVFVxRkV2TklIWSs3ZS9ZZElXbHh1?=
- =?utf-8?Q?I59+hJciwBBXNPPt8K064l6gXXrLfcDf?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62a93ec8-a809-4c4d-f960-08da0d01323b
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 19:13:21.6984
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R6jY+17LLuti5wBZ4zrOA/7+n4xFYe/zbPc6pchuiyBq2WJLrbxq6Jv3IzsI7LqDHE3LVOYFtZKjwyzoXuM75g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2495
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_FILL_THIS_FORM_SHORT,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c7c5:0:b0:2c8:465a:71c6 with SMTP id
+ g5-20020a92c7c5000000b002c8465a71c6mr877579ilk.292.1648062859885; Wed, 23 Mar
+ 2022 12:14:19 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 12:14:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000054c45805dae78903@google.com>
+Subject: [syzbot] bpf-next boot error: KASAN: null-ptr-deref Write in register_btf_kfunc_id_set
+From:   syzbot <syzbot+12babd2d45fac8bfff7d@syzkaller.appspotmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-Am 2022-03-23 um 08:46 schrieb Lee Jones:
-> On Thu, 17 Mar 2022, Lee Jones wrote:
->
->> On Thu, 17 Mar 2022, philip yang wrote:
->>
->>>     On 2022-03-17 11:13 a.m., Lee Jones wrote:
->>>
->>> On Thu, 17 Mar 2022, Felix Kuehling wrote:
->>>
->>>
->>> Am 2022-03-17 um 11:00 schrieb Lee Jones:
->>>
->>> Good afternoon Felix,
->>>
->>> Thanks for your review.
->>>
->>>
->>> Am 2022-03-17 um 09:16 schrieb Lee Jones:
->>>
->>> Presently the Client can be freed whilst still in use.
->>>
->>> Use the already provided lock to prevent this.
->>>
->>> Cc: Felix Kuehling [1]<Felix.Kuehling@amd.com>
->>> Cc: Alex Deucher [2]<alexander.deucher@amd.com>
->>> Cc: "Christian König" [3]<christian.koenig@amd.com>
->>> Cc: "Pan, Xinhui" [4]<Xinhui.Pan@amd.com>
->>> Cc: David Airlie [5]<airlied@linux.ie>
->>> Cc: Daniel Vetter [6]<daniel@ffwll.ch>
->>> Cc: [7]amd-gfx@lists.freedesktop.org
->>> Cc: [8]dri-devel@lists.freedesktop.org
->>> Signed-off-by: Lee Jones [9]<lee.jones@linaro.org>
->>> ---
->>>     drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c | 6 ++++++
->>>     1 file changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c b/drivers/gpu/drm/amd/a
->>> mdkfd/kfd_smi_events.c
->>> index e4beebb1c80a2..3b9ac1e87231f 100644
->>> --- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
->>> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
->>> @@ -145,8 +145,11 @@ static int kfd_smi_ev_release(struct inode *inode, struct f
->>> ile *filep)
->>>          spin_unlock(&dev->smi_lock);
->>>          synchronize_rcu();
->>> +
->>> +       spin_lock(&client->lock);
->>>          kfifo_free(&client->fifo);
->>>          kfree(client);
->>> +       spin_unlock(&client->lock);
->>>
->>> The spin_unlock is after the spinlock data structure has been freed.
->>>
->>> Good point.
->>>
->>> If we go forward with this approach the unlock should perhaps be moved
->>> to just before the kfree().
->>>
->>>
->>> There
->>> should be no concurrent users here, since we are freeing the data structure.
->>> If there still are concurrent users at this point, they will crash anyway.
->>> So the locking is unnecessary.
->>>
->>> The users may well crash, as does the kernel unfortunately.
->>>
->>> We only get to kfd_smi_ev_release when the file descriptor is closed. User
->>> mode has no way to use the client any more at this point. This function also
->>> removes the client from the dev->smi_cllients list. So no more events will
->>> be added to the client. Therefore it is safe to free the client.
->>>
->>> If any of the above were not true, it would not be safe to kfree(client).
->>>
->>> But if it is safe to kfree(client), then there is no need for the locking.
->>>
->>> I'm not keen to go into too much detail until it's been patched.
->>>
->>> However, there is a way to free the client while it is still in use.
->>>
->>> Remember we are multi-threaded.
->>>
->>>     files_struct->count refcount is used to handle this race, as
->>>     vfs_read/vfs_write takes file refcount and fput calls release only if
->>>     refcount is 1, to guarantee that read/write from user space is finished
->>>     here.
->>>
->>>     Another race is driver add_event_to_kfifo while closing the handler. We
->>>     use rcu_read_lock in add_event_to_kfifo, and kfd_smi_ev_release calls
->>>     synchronize_rcu to wait for all rcu_read done. So it is safe to call
->>>     kfifo_free(&client->fifo) and kfree(client).
->> Philip, please reach out to Felix.
-> Philip, Felix, are you receiving my direct messages?
->
-> I have a feeling they're being filtered out by AMD's mail server.
+syzbot found the following issue on:
 
-I didn't get any direct messages. :/ I'll send you my private email address.
+HEAD commit:    a8fee96202e2 libbpf: Avoid NULL deref when initializing ma..
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1686180b700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=820db791969fe863
+dashboard link: https://syzkaller.appspot.com/bug?extid=12babd2d45fac8bfff7d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Regards,
-   Felix
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+12babd2d45fac8bfff7d@syzkaller.appspotmail.com
+
+usbcore: registered new interface driver snd-usb-audio
+usbcore: registered new interface driver snd-ua101
+usbcore: registered new interface driver snd-usb-usx2y
+usbcore: registered new interface driver snd-usb-us122l
+usbcore: registered new interface driver snd-usb-caiaq
+usbcore: registered new interface driver snd-usb-6fire
+usbcore: registered new interface driver snd-usb-hiface
+usbcore: registered new interface driver snd-bcd2000
+usbcore: registered new interface driver snd_usb_pod
+usbcore: registered new interface driver snd_usb_podhd
+usbcore: registered new interface driver snd_usb_toneport
+usbcore: registered new interface driver snd_usb_variax
+drop_monitor: Initializing network drop monitor service
+NET: Registered PF_LLC protocol family
+GACT probability on
+Mirror/redirect action on
+Simple TC action Loaded
+netem: version 1.3
+u32 classifier
+    Performance counters on
+    input device check on
+    Actions configured
+nf_conntrack_irc: failed to register helpers
+nf_conntrack_sane: failed to register helpers
+nf_conntrack_sip: failed to register helpers
+xt_time: kernel timezone is -0000
+IPVS: Registered protocols (TCP, UDP, SCTP, AH, ESP)
+IPVS: Connection hash table configured (size=4096, memory=64Kbytes)
+IPVS: ipvs loaded.
+IPVS: [rr] scheduler registered.
+IPVS: [wrr] scheduler registered.
+IPVS: [lc] scheduler registered.
+IPVS: [wlc] scheduler registered.
+IPVS: [fo] scheduler registered.
+IPVS: [ovf] scheduler registered.
+IPVS: [lblc] scheduler registered.
+IPVS: [lblcr] scheduler registered.
+IPVS: [dh] scheduler registered.
+IPVS: [sh] scheduler registered.
+IPVS: [mh] scheduler registered.
+IPVS: [sed] scheduler registered.
+IPVS: [nq] scheduler registered.
+IPVS: [twos] scheduler registered.
+IPVS: [sip] pe registered.
+ipip: IPv4 and MPLS over IPv4 tunneling driver
+gre: GRE over IPv4 demultiplexor driver
+ip_gre: GRE over IPv4 tunneling driver
+IPv4 over IPsec tunneling driver
+ipt_CLUSTERIP: ClusterIP Version 0.8 loaded successfully
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+BUG: KASAN: null-ptr-deref in atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
+BUG: KASAN: null-ptr-deref in __refcount_add include/linux/refcount.h:193 [inline]
+BUG: KASAN: null-ptr-deref in __refcount_inc include/linux/refcount.h:250 [inline]
+BUG: KASAN: null-ptr-deref in refcount_inc include/linux/refcount.h:267 [inline]
+BUG: KASAN: null-ptr-deref in btf_get kernel/bpf/btf.c:1636 [inline]
+BUG: KASAN: null-ptr-deref in btf_get_module_btf kernel/bpf/btf.c:6588 [inline]
+BUG: KASAN: null-ptr-deref in register_btf_kfunc_id_set+0x99/0x8b0 kernel/bpf/btf.c:6812
+Write of size 4 at addr 0000000000000054 by task swapper/0/1
+
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc6-syzkaller-02045-ga8fee96202e2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __kasan_report mm/kasan/report.c:446 [inline]
+ kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
+ __refcount_add include/linux/refcount.h:193 [inline]
+ __refcount_inc include/linux/refcount.h:250 [inline]
+ refcount_inc include/linux/refcount.h:267 [inline]
+ btf_get kernel/bpf/btf.c:1636 [inline]
+ btf_get_module_btf kernel/bpf/btf.c:6588 [inline]
+ register_btf_kfunc_id_set+0x99/0x8b0 kernel/bpf/btf.c:6812
+ bbr_register+0x18/0x48 net/ipv4/tcp_bbr.c:1183
+ do_one_initcall+0x103/0x650 init/main.c:1302
+ do_initcall_level init/main.c:1375 [inline]
+ do_initcalls init/main.c:1391 [inline]
+ do_basic_setup init/main.c:1410 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1615
+ kernel_init+0x1a/0x1d0 init/main.c:1504
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+==================================================================
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 1 Comm: swapper/0 Tainted: G    B             5.17.0-rc6-syzkaller-02045-ga8fee96202e2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ panic+0x2b0/0x6dd kernel/panic.c:233
+ end_report.cold+0x63/0x6f mm/kasan/report.c:128
+ __kasan_report mm/kasan/report.c:449 [inline]
+ kasan_report.cold+0x71/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
+ __refcount_add include/linux/refcount.h:193 [inline]
+ __refcount_inc include/linux/refcount.h:250 [inline]
+ refcount_inc include/linux/refcount.h:267 [inline]
+ btf_get kernel/bpf/btf.c:1636 [inline]
+ btf_get_module_btf kernel/bpf/btf.c:6588 [inline]
+ register_btf_kfunc_id_set+0x99/0x8b0 kernel/bpf/btf.c:6812
+ bbr_register+0x18/0x48 net/ipv4/tcp_bbr.c:1183
+ do_one_initcall+0x103/0x650 init/main.c:1302
+ do_initcall_level init/main.c:1375 [inline]
+ do_initcalls init/main.c:1391 [inline]
+ do_basic_setup init/main.c:1410 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1615
+ kernel_init+0x1a/0x1d0 init/main.c:1504
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
 
->
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F327C4E56FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079AA4E56FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239381AbiCWQ5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S245593AbiCWQ6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236920AbiCWQ53 (ORCPT
+        with ESMTP id S230328AbiCWQ6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:57:29 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5A46E4E1;
-        Wed, 23 Mar 2022 09:55:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DAA26CE1F8E;
-        Wed, 23 Mar 2022 16:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F3FC340F2;
-        Wed, 23 Mar 2022 16:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648054554;
-        bh=81nfjiQFeTPRAGOqW0aoil91fkoUvymS7z9RcUla0K0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ofyi97hboKxpE/pTa+ftOp/+oZCRyHADhyI8FcijbBV3/CvCk42BCVN059vz4KwUa
-         gE1wn43OEVpNIw242WOqUiRZn9ABQiK1kbuqyqmLBAR24Eo3kzWEEB2gkvr1NaM86f
-         4Qz8Vep6KzvW5c7Ll1nh994LjHqnNvGoD2Rx9ZG49BRt/rUViVf5R2eP1/7xA/TLEF
-         jWDOXFUxVpSqjxwG18ZOpYjc/EhVMW64CSS0phvAxOuqmnFnJXamy8hvud33+ZR1hO
-         pviv9ZN4azZ84nG9xsOKfZd0NfDcJ4Jq1YkaN5+4gJDv4Lf0TarZ6rR22T8YRRh195
-         IIfAg8Us2S/gg==
-Message-ID: <9a3dab30b8657351ab6a73de533b7e3f2a41f72a.camel@kernel.org>
-Subject: Re: [RFC PATCH v11 08/51] ceph: add support for
- fscrypt_auth/fscrypt_file to cap messages
-From:   Jeff Layton <jlayton@kernel.org>
-To:     idryomov@gmail.com, xiubli@redhat.com
-Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lhenriques@suse.de
-Date:   Wed, 23 Mar 2022 12:55:52 -0400
-In-Reply-To: <20220322141316.41325-9-jlayton@kernel.org>
-References: <20220322141316.41325-1-jlayton@kernel.org>
-         <20220322141316.41325-9-jlayton@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 23 Mar 2022 12:58:22 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA496E4E1;
+        Wed, 23 Mar 2022 09:56:52 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-de3f2a19c8so2306807fac.1;
+        Wed, 23 Mar 2022 09:56:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=v7L9ap4GpNRjjElNdT0yh/Sp/wCcecw0FkTSkrd8bsw=;
+        b=WTisdeBLjqudkEn4FdW2MeIxt5Q0E9s4zeWtDRZGNmZWjdwfwGiKx5qlg/MerFIYUR
+         4yzSSmbPQn7Wdmt61v+vi2Yjx9+UmJtfEmWlBGdV5k1FAmRyxP+ByViN9duAQF3cuFew
+         iExk/3TVOuGieOlZgbN/ahS4YuHT5a/+x7SHvzu0GA2vQDjfImNUdcdwSWFWfOWC/xfK
+         sS74R0CPoE1dTYI6XYGRbbq7mr0i6qUNWue4HajuR6y7tjbyZv7NOsR6KT100ZgqUmsh
+         XTaifLcJEiVOf7KHiZyvFjx+iqVZIYous0CaR2fouzVIMuivXXzlFocJ4fOpvr4Cs/fr
+         rwSw==
+X-Gm-Message-State: AOAM532mcq/vucoxMvWTKsko5cfDhFud+ZRoenZEbjUmr55HgK7m5Y9S
+        ZcqqYtVTAa1GGTRcqksiOQ==
+X-Google-Smtp-Source: ABdhPJx0rcy71J5iBnTkDYdwY7ow5S9sY6VGoRn0bx+CmDpmUoBHODo18+Ib2exeipbENAG7oZNWsw==
+X-Received: by 2002:a05:6871:203:b0:dd:bd36:fd8b with SMTP id t3-20020a056871020300b000ddbd36fd8bmr4664191oad.122.1648054611728;
+        Wed, 23 Mar 2022 09:56:51 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000ccfbea4f23sm219920oae.33.2022.03.23.09.56.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 09:56:50 -0700 (PDT)
+Received: (nullmailer pid 74591 invoked by uid 1000);
+        Wed, 23 Mar 2022 16:56:49 -0000
+Date:   Wed, 23 Mar 2022 11:56:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jorge Ramirez-Ortiz <jorge@foundries.io>,
+        Tom Rini <trini@konsulko.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sean Anderson <seanga2@gmail.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Ricardo Salveti <ricardo@foundries.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        u-boot@lists.denx.de
+Subject: Re: [PATCH V3] dt-bindings: nvmem: add U-Boot environment variables
+ binding
+Message-ID: <YjtRUVL2fRZpLFl5@robh.at.kernel.org>
+References: <20220228131250.16943-1-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220228131250.16943-1-zajec5@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,161 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-22 at 10:12 -0400, Jeff Layton wrote:
-> Add support for new version 12 cap messages that carry the new
-> fscrypt_auth and fscrypt_file fields from the inode.
+On Mon, 28 Feb 2022 14:12:50 +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> U-Boot uses environment variables for storing device setup data. It
+> usually needs to be accessed by a bootloader, kernel and often
+> user-space.
+> 
+> This binding allows describing environment data located in a raw flash
+> partition. It's treated as NVMEM device and can be reused later for
+> other storage devices.
+> 
+> Using DT should be cleaner than hardcoding & duplicating such info in
+> multiple places. Bootloader & kernel can share DTS and user-space can
+> try reading it too or just have correct data exposed by a kernel.
+> 
+> A custom "compatible" string allows system to automatically load
+> relevant NVMEM driver but phandle can be also used for reading raw
+> location.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
->  fs/ceph/caps.c | 76 +++++++++++++++++++++++++++++++++++++++++---------
->  1 file changed, 63 insertions(+), 13 deletions(-)
+> V2: Update descriptions to don't make this binding MTD (flash partition)
+>     specific. Mention multiple possible storage ways.
+> V3: Drop
+>     allOf:
+>       - $ref: nvmem.yaml#
+>     as we don't use anything rom the nvmem.yaml. Thanks Rob.
+> ---
+>  .../devicetree/bindings/nvmem/u-boot,env.yaml | 62 +++++++++++++++++++
+>  MAINTAINERS                                   |  5 ++
+>  2 files changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
 > 
-> diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
-> index 7d8ef67a1032..b0b7688331b4 100644
-> --- a/fs/ceph/caps.c
-> +++ b/fs/ceph/caps.c
-> @@ -13,6 +13,7 @@
->  #include "super.h"
->  #include "mds_client.h"
->  #include "cache.h"
-> +#include "crypto.h"
->  #include <linux/ceph/decode.h>
->  #include <linux/ceph/messenger.h>
->  
-> @@ -1214,15 +1215,12 @@ struct cap_msg_args {
->  	umode_t			mode;
->  	bool			inline_data;
->  	bool			wake;
-> +	u32			fscrypt_auth_len;
-> +	u32			fscrypt_file_len;
-> +	u8			fscrypt_auth[sizeof(struct ceph_fscrypt_auth)]; // for context
-> +	u8			fscrypt_file[sizeof(u64)]; // for size
->  };
->  
-> -/*
-> - * cap struct size + flock buffer size + inline version + inline data size +
-> - * osd_epoch_barrier + oldest_flush_tid
-> - */
-> -#define CAP_MSG_SIZE (sizeof(struct ceph_mds_caps) + \
-> -		      4 + 8 + 4 + 4 + 8 + 4 + 4 + 4 + 8 + 8 + 4)
-> -
->  /* Marshal up the cap msg to the MDS */
->  static void encode_cap_msg(struct ceph_msg *msg, struct cap_msg_args *arg)
->  {
-> @@ -1238,7 +1236,7 @@ static void encode_cap_msg(struct ceph_msg *msg, struct cap_msg_args *arg)
->  	     arg->size, arg->max_size, arg->xattr_version,
->  	     arg->xattr_buf ? (int)arg->xattr_buf->vec.iov_len : 0);
->  
-> -	msg->hdr.version = cpu_to_le16(10);
-> +	msg->hdr.version = cpu_to_le16(12);
->  	msg->hdr.tid = cpu_to_le64(arg->flush_tid);
->  
->  	fc = msg->front.iov_base;
-> @@ -1309,6 +1307,21 @@ static void encode_cap_msg(struct ceph_msg *msg, struct cap_msg_args *arg)
->  
->  	/* Advisory flags (version 10) */
->  	ceph_encode_32(&p, arg->flags);
-> +
-> +	/* dirstats (version 11) - these are r/o on the client */
-> +	ceph_encode_64(&p, 0);
-> +	ceph_encode_64(&p, 0);
-> +
-> +#if IS_ENABLED(CONFIG_FS_ENCRYPTION)
-> +	/* fscrypt_auth and fscrypt_file (version 12) */
-> +	ceph_encode_32(&p, arg->fscrypt_auth_len);
-> +	ceph_encode_copy(&p, arg->fscrypt_auth, arg->fscrypt_auth_len);
-> +	ceph_encode_32(&p, arg->fscrypt_file_len);
-> +	ceph_encode_copy(&p, arg->fscrypt_file, arg->fscrypt_file_len);
-> +#else /* CONFIG_FS_ENCRYPTION */
-> +	ceph_encode_32(&p, 0);
-> +	ceph_encode_32(&p, 0);
-> +#endif /* CONFIG_FS_ENCRYPTION */
->  }
->  
->  /*
-> @@ -1430,8 +1443,37 @@ static void __prep_cap(struct cap_msg_args *arg, struct ceph_cap *cap,
->  		}
->  	}
->  	arg->flags = flags;
-> +#if IS_ENABLED(CONFIG_FS_ENCRYPTION)
-> +	if (ci->fscrypt_auth_len &&
-> +	    WARN_ON_ONCE(ci->fscrypt_auth_len != sizeof(struct ceph_fscrypt_auth))) {
 
-The above WARN_ON_ONCE is too strict, and causes the client to reject v1
-fscrypt contexts (as well as throw the warning). That should be a ">"
-instead. I've fixed this in my tree and pushed the fix into wip-fscrypt.
-
-
-> +		/* Don't set this if it isn't right size */
-> +		arg->fscrypt_auth_len = 0;
-> +	} else {
-> +		arg->fscrypt_auth_len = ci->fscrypt_auth_len;
-> +		memcpy(arg->fscrypt_auth, ci->fscrypt_auth,
-> +			min_t(size_t, ci->fscrypt_auth_len, sizeof(arg->fscrypt_auth)));
-> +	}
-> +	/* FIXME: use this to track "real" size */
-> +	arg->fscrypt_file_len = 0;
-> +#endif /* CONFIG_FS_ENCRYPTION */
->  }
->  
-> +#define CAP_MSG_FIXED_FIELDS (sizeof(struct ceph_mds_caps) + \
-> +		      4 + 8 + 4 + 4 + 8 + 4 + 4 + 4 + 8 + 8 + 4 + 8 + 8 + 4 + 4)
-> +
-> +#if IS_ENABLED(CONFIG_FS_ENCRYPTION)
-> +static inline int cap_msg_size(struct cap_msg_args *arg)
-> +{
-> +	return CAP_MSG_FIXED_FIELDS + arg->fscrypt_auth_len +
-> +			arg->fscrypt_file_len;
-> +}
-> +#else
-> +static inline int cap_msg_size(struct cap_msg_args *arg)
-> +{
-> +	return CAP_MSG_FIXED_FIELDS;
-> +}
-> +#endif /* CONFIG_FS_ENCRYPTION */
-> +
->  /*
->   * Send a cap msg on the given inode.
->   *
-> @@ -1442,7 +1484,7 @@ static void __send_cap(struct cap_msg_args *arg, struct ceph_inode_info *ci)
->  	struct ceph_msg *msg;
->  	struct inode *inode = &ci->vfs_inode;
->  
-> -	msg = ceph_msg_new(CEPH_MSG_CLIENT_CAPS, CAP_MSG_SIZE, GFP_NOFS, false);
-> +	msg = ceph_msg_new(CEPH_MSG_CLIENT_CAPS, cap_msg_size(arg), GFP_NOFS, false);
->  	if (!msg) {
->  		pr_err("error allocating cap msg: ino (%llx.%llx) flushing %s tid %llu, requeuing cap.\n",
->  		       ceph_vinop(inode), ceph_cap_string(arg->dirty),
-> @@ -1468,10 +1510,6 @@ static inline int __send_flush_snap(struct inode *inode,
->  	struct cap_msg_args	arg;
->  	struct ceph_msg		*msg;
->  
-> -	msg = ceph_msg_new(CEPH_MSG_CLIENT_CAPS, CAP_MSG_SIZE, GFP_NOFS, false);
-> -	if (!msg)
-> -		return -ENOMEM;
-> -
->  	arg.session = session;
->  	arg.ino = ceph_vino(inode).ino;
->  	arg.cid = 0;
-> @@ -1509,6 +1547,18 @@ static inline int __send_flush_snap(struct inode *inode,
->  	arg.flags = 0;
->  	arg.wake = false;
->  
-> +	/*
-> +	 * No fscrypt_auth changes from a capsnap. It will need
-> +	 * to update fscrypt_file on size changes (TODO).
-> +	 */
-> +	arg.fscrypt_auth_len = 0;
-> +	arg.fscrypt_file_len = 0;
-> +
-> +	msg = ceph_msg_new(CEPH_MSG_CLIENT_CAPS, cap_msg_size(&arg),
-> +			   GFP_NOFS, false);
-> +	if (!msg)
-> +		return -ENOMEM;
-> +
->  	encode_cap_msg(msg, &arg);
->  	ceph_con_send(&arg.session->s_con, msg);
->  	return 0;
-
--- 
-Jeff Layton <jlayton@kernel.org>
+Applied, thanks!

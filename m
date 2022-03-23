@@ -2,63 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31E84E5341
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D974E5342
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbiCWNij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S244359AbiCWNjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244384AbiCWNie (ORCPT
+        with ESMTP id S241030AbiCWNi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:38:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661767DA89;
-        Wed, 23 Mar 2022 06:36:55 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7E666210E2;
-        Wed, 23 Mar 2022 13:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648042614; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xF+2OTyRsrDHA/qolZw1jSNPVTPjccZAz09TGKCZ+kQ=;
-        b=o74f4HA/v+dCAD/HmFZi0Y0x1EUwDm2Un0XxiDFfhWTSE2t35FfoHlhVMdHPQQXLJhznvs
-        +37QwfS5AHR31f3Ya8ZAzG/TyqhiilOuCqnj74051jgG0/qfeqJAo+rArZx9QDSEGas56q
-        UvJxsCPQIjOLzi1r5dHrJGQdV7xAkL0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648042614;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xF+2OTyRsrDHA/qolZw1jSNPVTPjccZAz09TGKCZ+kQ=;
-        b=EiTLKR6JktOkH96pzVjQf6fwdBJ4U4m+nHrVwhz8XUwyBFShlU6dktcpG81HGgkxNn0Zp0
-        O9+cJDf6KitATyCw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5A25FA3B93;
-        Wed, 23 Mar 2022 13:36:54 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id EDFF7A0610; Wed, 23 Mar 2022 14:36:53 +0100 (CET)
-Date:   Wed, 23 Mar 2022 14:36:53 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     yebin <yebin10@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lczerner@redhat.com
-Subject: Re: [PATCH -next] ext4: fix use-after-free in ext4_search_dir
-Message-ID: <20220323133653.peodswwvznalzhhx@quack3.lan>
-References: <20220323034304.3597652-1-yebin10@huawei.com>
- <20220323104745.76u3uhdn745jaw4j@quack3.lan>
- <623B0BF7.3050907@huawei.com>
+        Wed, 23 Mar 2022 09:38:56 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4CF7D020
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:37:26 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id w8so1543868pll.10
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VfajTc7fN5/QBah8uryBe2x7PpPvgTkjk9FpVMqI2Is=;
+        b=X6L7caAs4D6yd3LFy3C0MVgkxhB2lTj6oP3oqntMlIMTMfzQatfRHNg76dn9Zhywgr
+         lTN3bw+JS0CpnCaFHZ9ncnFvuiYOjOyk/unztfnWeRNAKPvhKuxfwVdDMhKY0kGG7SQw
+         SiDpW9zIrRafwSn2ls4u8/ShuxVUMzjj5bTYrgF36nbsk6fR8TlwlyyquXi7t8C87uUd
+         SOgUWHmvpwTSlbh7XXsz/xFB5pvamxbGmVGei2A86copTP2wMAR/llzVqe1v82CsghAN
+         HXlpfN4dAQ6Pxmjei6ey8mseQgQbWTSmIwRQH+KgPH0Ur6zj79DenZ8n7mBCpnZJjPVB
+         I3TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VfajTc7fN5/QBah8uryBe2x7PpPvgTkjk9FpVMqI2Is=;
+        b=ZoFsbrNROEDLeSnDSJMtiFtQeLblgMmHMtCO5Y3ocM/56Wu3kYdVIsREVIwwFAU7LM
+         GhvxOIf4/BICsddNfGemGO9Mq/XhUwer9OoG3wF8hOkNTHgPRIZGMOo1qjjonUkJwlmF
+         rPJoh9oJyVr6qJe29UYIgueD09KWg21rltjOlqw2wELxfa/sTs0jwGQvIywIWGq26W7/
+         ssOwOUIx9L/uIUEN1noCl/2EbNUA4Q7+irSb9imAAY1itRSI4E8ofMKlBGhQJAJ0pUkd
+         w0LyQzlyQK/YDEoZjOrdz9vCfv2o726bZYIRUg3zk6SCxH3ha4zuxoYIVtIrTaT3Vo/a
+         AdDw==
+X-Gm-Message-State: AOAM532KduOnRirTLsTbiOJYCgKSE8Ix9mnKVep1rXi74wi3rEm+aT8J
+        LsWEowqqdMBMx4HZ6vAjlrxolQ==
+X-Google-Smtp-Source: ABdhPJx8aAdnXi3BFxQKrylXbbKyjkCLwLwRVVaqgAGr0C6HjAU/0fl68wSxOvKNF9RIEiMbH/ufuA==
+X-Received: by 2002:a17:90b:1d0e:b0:1bf:2a24:2716 with SMTP id on14-20020a17090b1d0e00b001bf2a242716mr11581372pjb.60.1648042645866;
+        Wed, 23 Mar 2022 06:37:25 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6? ([2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6])
+        by smtp.gmail.com with ESMTPSA id o7-20020aa79787000000b004f8e44a02e2sm24747pfp.45.2022.03.23.06.37.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 06:37:25 -0700 (PDT)
+Message-ID: <c4fea458-b0e1-9842-91ea-5a1c6f7e8387@bytedance.com>
+Date:   Wed, 23 Mar 2022 21:37:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <623B0BF7.3050907@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [External] Re: [PATCH v2 2/6] perf/core: Introduce percpu
+ perf_cgroup
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, eranian@google.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+References: <20220322120834.98637-1-zhouchengming@bytedance.com>
+ <20220322120834.98637-3-zhouchengming@bytedance.com>
+ <20220323125116.GX8939@worktop.programming.kicks-ass.net>
+ <f6a46509-a373-5c7a-8694-8eaf0ebc69ab@bytedance.com>
+ <20220323131744.GY8939@worktop.programming.kicks-ass.net>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220323131744.GY8939@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,147 +82,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 23-03-22 20:00:55, yebin wrote:
-> On 2022/3/23 18:47, Jan Kara wrote:
-> > On Wed 23-03-22 11:43:04, Ye Bin wrote:
-> > > We got issue as follows:
-> > > EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
-> > > ==================================================================
-> > > BUG: KASAN: use-after-free in ext4_search_dir fs/ext4/namei.c:1394 [inline]
-> > > BUG: KASAN: use-after-free in search_dirblock fs/ext4/namei.c:1199 [inline]
-> > > BUG: KASAN: use-after-free in __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
-> > > Read of size 1 at addr ffff8881317c3005 by task syz-executor117/2331
-> > > 
-> > > CPU: 1 PID: 2331 Comm: syz-executor117 Not tainted 5.10.0+ #1
-> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-> > > Call Trace:
-> > >   __dump_stack lib/dump_stack.c:83 [inline]
-> > >   dump_stack+0x144/0x187 lib/dump_stack.c:124
-> > >   print_address_description+0x7d/0x630 mm/kasan/report.c:387
-> > >   __kasan_report+0x132/0x190 mm/kasan/report.c:547
-> > >   kasan_report+0x47/0x60 mm/kasan/report.c:564
-> > >   ext4_search_dir fs/ext4/namei.c:1394 [inline]
-> > >   search_dirblock fs/ext4/namei.c:1199 [inline]
-> > >   __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
-> > >   ext4_lookup_entry fs/ext4/namei.c:1622 [inline]
-> > >   ext4_lookup+0xb8/0x3a0 fs/ext4/namei.c:1690
-> > >   __lookup_hash+0xc5/0x190 fs/namei.c:1451
-> > >   do_rmdir+0x19e/0x310 fs/namei.c:3760
-> > >   do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
-> > >   entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> > > RIP: 0033:0x445e59
-> > > Code: 4d c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 1b c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-> > > RSP: 002b:00007fff2277fac8 EFLAGS: 00000246 ORIG_RAX: 0000000000000054
-> > > RAX: ffffffffffffffda RBX: 0000000000400280 RCX: 0000000000445e59
-> > > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200000c0
-> > > RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000002
-> > > R10: 00007fff2277f990 R11: 0000000000000246 R12: 0000000000000000
-> > > R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
-> > > 
-> > > The buggy address belongs to the page:
-> > > page:0000000048cd3304 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1317c3
-> > > flags: 0x200000000000000()
-> > > raw: 0200000000000000 ffffea0004526588 ffffea0004528088 0000000000000000
-> > > raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-> > > page dumped because: kasan: bad access detected
-> > > 
-> > > Memory state around the buggy address:
-> > >   ffff8881317c2f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >   ffff8881317c2f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > > > ffff8881317c3000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> > >                     ^
-> > >   ffff8881317c3080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> > >   ffff8881317c3100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> > > ==================================================================
-> > > 
-> > > ext4_search_dir:
-> > >    ...
-> > >    de = (struct ext4_dir_entry_2 *)search_buf;
-> > >    dlimit = search_buf + buf_size;
-> > >    while ((char *) de < dlimit) {
-> > >    ...
-> > >      if ((char *) de + de->name_len <= dlimit &&
-> > > 	 ext4_match(dir, fname, de)) {
-> > > 	    ...
-> > >      }
-> > >    ...
-> > >      de_len = ext4_rec_len_from_disk(de->rec_len, dir->i_sb->s_blocksize);
-> > >      if (de_len <= 0)
-> > >        return -1;
-> > >      offset += de_len;
-> > >      de = (struct ext4_dir_entry_2 *) ((char *) de + de_len);
-> > >    }
-> > > 
-> > > Assume:
-> > > de=0xffff8881317c2fff
-> > > dlimit=0x0xffff8881317c3000
-> > > 
-> > > If read 'de->name_len' which address is 0xffff8881317c3005, obviously is
-> > > out of range, then will trigger use-after-free.
-> > > To solve this issue, 'dlimit' must reserve 8 bytes, as we will read
-> > > 'de->name_len' to judge if '(char *) de + de->name_len' out of range.
-> > > 
-> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> > Oh, good catch.
-> > 
-> > > diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> > > index 3f87cca49f0c..276683f7ab77 100644
-> > > --- a/fs/ext4/ext4.h
-> > > +++ b/fs/ext4/ext4.h
-> > > @@ -2273,6 +2273,10 @@ static inline int ext4_forced_shutdown(struct ext4_sb_info *sbi)
-> > >    * Structure of a directory entry
-> > >    */
-> > >   #define EXT4_NAME_LEN 255
-> > > +/*
-> > > + * Base length of ext4_dir_entry_2 and ext4_dir_entry exclude name
-> > > + */
-> > > +#define EXT4_BASE_DIR_LEN 8
-> > I'd rather use (sizeof(struct ext4_dir_entry_2) - EXT4_NAME_LEN) here...
-> > 
-> > >   struct ext4_dir_entry {
-> > >   	__le32	inode;			/* Inode number */
-> > > diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-> > > index e37da8d5cd0c..4739a5aa13aa 100644
-> > > --- a/fs/ext4/namei.c
-> > > +++ b/fs/ext4/namei.c
-> > > @@ -1465,7 +1465,7 @@ int ext4_search_dir(struct buffer_head *bh, char *search_buf, int buf_size,
-> > >   	int de_len;
-> > >   	de = (struct ext4_dir_entry_2 *)search_buf;
-> > > -	dlimit = search_buf + buf_size;
-> > > +	dlimit = search_buf + buf_size - EXT4_BASE_DIR_LEN;
-> > >   	while ((char *) de < dlimit) {
-> > >   		/* this code is executed quadratically often */
-> > >   		/* do minimal checking `by hand' */
-> > This looks wrong because a bit later we use dlimit to verify
-> > de+de->name_len and that can certainly go upto bufsize. You need to modify
-> > only the condition in the while loop like:
-> > 
-> >    	while ((char *) de < dlimit - EXT4_BASE_DIR_LEN) {
-> > 
-> > 									Honza
-> I think  'dlimit' also need to minus EXT4_BASE_DIR_LEN when verify
-> 'de+de->name_len' .
-> Assume:
-> de = 0xffff8881317c2ff7
-> dlimit = 0x0xffff8881317c3000
-> de->name_len = 8
+On 2022/3/23 9:17 下午, Peter Zijlstra wrote:
+> On Wed, Mar 23, 2022 at 09:07:01PM +0800, Chengming Zhou wrote:
+>> On 2022/3/23 8:51 下午, Peter Zijlstra wrote:
+>>> On Tue, Mar 22, 2022 at 08:08:30PM +0800, Chengming Zhou wrote:
+>>>
+>>>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>>>> index 8b5cf2aedfe6..848a3bfa9513 100644
+>>>> --- a/kernel/events/core.c
+>>>> +++ b/kernel/events/core.c
+>>>
+>>>> @@ -843,11 +845,21 @@ static void perf_cgroup_switch(struct task_struct *task)
+>>>>  	 */
+>>>>  	local_irq_save(flags);
+>>>>  
+>>>> +	cgrp = perf_cgroup_from_task(task, NULL);
+>>>> +	if (cgrp == __this_cpu_read(cpu_perf_cgroup))
+>>>> +		goto out;
 > 
-> =>
-> de + de->name_len = 0xffff8881317c2fff  ( <= dlimit=0x0xffff8881317c3000)
-> de->name = 'de' address  + EXT4_BASE_DIR_LEN  = 0xffff8881317c2ff7 + 8 =
-> 0xffff8881317c2fff
-> If we read 8 bytes form 0xffff8881317c2fff will read out of range.
+> So this compares the cpu thing against the task thing, if matching, we
+> bail.
+> 
+>>>> +
+>>>> +	__this_cpu_write(cpu_perf_cgroup, cgrp);
+> 
+> Then we set cpu thing.
+> 
+>>>> +
+>>>>  	list = this_cpu_ptr(&cgrp_cpuctx_list);
+>>>>  	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
+>>>>  		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
+>>>>  
+>>>>  		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
+>>>> +
+>>>> +		if (cpuctx->cgrp == cgrp)
+>>>> +			continue;
+>>>> +
+>>>>  		perf_pmu_disable(cpuctx->ctx.pmu);
+>>>>  
+>>>>  		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
+> 
+>>>> +		cpuctx->cgrp = cgrp
+> 
+> But here we already have exactly the same pattern, we match cpuctx thing
+> against task thing and skip/set etc.
 
-Ah, I see. Well, I'd rather modify the condition to look like:
+Yes, cpu_perf_cgroup is just "cache" which cgrp assigned to cpuctx->cgrp.
 
-                if (de->name + de->name_len <= dlimit &&
-                    ext4_match(dir, fname, de)) {
+> 
+>>> Also, I really don't see the point of cpu_perf_cgroup, cpuctx->cgrp
+>>> should be able to do this.
+>>
+>> But the problem is that we have two cpuctx on the percpu list, do you
+>> mean we should use perf_cgroup of the first cpuctx to compare with
+>> the next task's perf_cgroup ?
+>>
+>> Or we should delete the cgrp in cpuctx, and use this new percpu cpu_perf_cgroup?
+> 
+> I'm a bit confused, per the above, you already do exactly what the new
+> cpu_perf_cgroup does on the cpuctx->cgrp variable. AFAICT the only think
+> the new per-cpu variable does is avoid a lock, howveer:
 
-Because that expresses better what we are checking...
+we have cgrp in cpuctx make me confused at first too.
 
-								Honza
+perf_cgroup_event_enable()
+	if (ctx->is_active && !cpuctx->cgrp)
+		if ...
+			cpuctx->cgrp = cgrp;   -->  set cpuctx->cgrp when enable event
 
+	list_add(&cpuctx->cgrp_cpuctx_entry,
+			per_cpu_ptr(&cgrp_cpuctx_list, event->cpu))  --> add cpuctx on percpu list
 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+But we have two (hw and sw) cpuctx, so these two cpuctx->cgrp maybe different...
+
+This is the reason why I want to create a percpu cpu_perf_cgroup,
+just "cache" cgrp last scheduled, to compare with next task to decide
+whether perf_cgroup_switch() can be skipped.
+
+But you are right, having cpuctx->cgrp and cpu_perf_cgroup make things confused..
+maybe we can delete cpuctx->cgrp, change to use percpu cpu_perf_cgroup?
+
+> 
+> 
+>>> --- a/kernel/events/core.c
+>>> +++ b/kernel/events/core.c
+>>> @@ -833,6 +833,7 @@ static DEFINE_PER_CPU(struct list_head,
+>>>   */
+>>>  static void perf_cgroup_switch(struct task_struct *task)
+>>>  {
+>>> +	struct perf_cgroup *cgrp;
+>>>  	struct perf_cpu_context *cpuctx, *tmp;
+>>>  	struct list_head *list;
+>>>  	unsigned long flags;
+>>> @@ -843,11 +844,20 @@ static void perf_cgroup_switch(struct ta
+>>>  	 */
+>>>  	local_irq_save(flags);
+>>>  
+>>> +	cgrp = perf_cgroup_from_task(task, NULL);
+>>> +
+>>>  	list = this_cpu_ptr(&cgrp_cpuctx_list);
+>>>  	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
+>>>  		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
+>>>  
+>>> +		if (READ_ONCE(cpuctx->cgrp == cgrp))
+>>> +			continue
+> 
+> I think we can avoid that by doing an early check, hmm?
+
+perf_cgroup_switch() can be called from context_switch(), or __perf_cgroup_move() from IPI.
+Say if in context_switch() already set cpuctx->cgrp to the new task->cgroups, then context_switch()
+finish, handle IPI in __perf_cgroup_move(), we don't need to do sched_out/in again.
+
+Thanks.
+
+> 
+>>> +
+>>>  		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
+>>> +
+>>> +		if (cpuctx->cgrp == cgrp)
+>>> +			goto next;
+>>> +
+>>>  		perf_pmu_disable(cpuctx->ctx.pmu);
+>>>  
+>>>  		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
+>>> @@ -855,50 +865,22 @@ static void perf_cgroup_switch(struct ta
+>>>  		 * must not be done before ctxswout due
+>>>  		 * to event_filter_match() in event_sched_out()
+>>>  		 */
+>>> -		cpuctx->cgrp = perf_cgroup_from_task(task,
+>>> -						     &cpuctx->ctx);
+>>> +		WRITE_ONCE(cpuctx->cgrp, cgrp);

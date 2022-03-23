@@ -2,37 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047944E5A55
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B32974E5A57
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344840AbiCWVGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S1344854AbiCWVGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344844AbiCWVF6 (ORCPT
+        with ESMTP id S235540AbiCWVGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:05:58 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEE911C1C;
-        Wed, 23 Mar 2022 14:04:26 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 313FB1C0B87; Wed, 23 Mar 2022 22:04:24 +0100 (CET)
-Date:   Wed, 23 Mar 2022 22:04:23 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Manuel =?iso-8859-1?Q?Sch=F6nlaub?= <manuel.schoenlaub@gmail.com>
-Cc:     lains@riseup.net, jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: logitech-hidpp: support Color LED feature (8071).
-Message-ID: <20220323210423.GA10741@duo.ucw.cz>
-References: <Yifr4etBFPu1a2Ct@hermes>
+        Wed, 23 Mar 2022 17:06:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E853122E;
+        Wed, 23 Mar 2022 14:04:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6057F1F387;
+        Wed, 23 Mar 2022 21:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648069488; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZQRFIvMYPa57E8vs5yQx5fBF8QSVW2wkNB0Ft3IVHkg=;
+        b=hUPA4AfHH40LrLy7/afNuEXl3ZSmwWmLp5N8L4vWyy4uDG3LZjrrBdJIMAJMH4DsGmEquz
+        UQ6MKVTtH91xo15DCiU0edkhR+MBnlWOTPAARbOWUHBVPdofhMHr2EzGNTveoALQa66KJw
+        ISUr/uiq9UmAxPsZQ+SHgQlSrdE7pXk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648069488;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZQRFIvMYPa57E8vs5yQx5fBF8QSVW2wkNB0Ft3IVHkg=;
+        b=ebx4g8z+Yz2YE2VTtZLhKFXsf1MiAaeq5J9BhH2AkGiRXYd7fdpfHSDMCj/qdFlvyt30vh
+        e9x5ncED9Oe8LVBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B02F313302;
+        Wed, 23 Mar 2022 21:04:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aD1FGm6LO2KobwAAMHmgww
+        (envelope-from <neilb@suse.de>); Wed, 23 Mar 2022 21:04:46 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="W/nzBZO5zC0uMSeA"
-Content-Disposition: inline
-In-Reply-To: <Yifr4etBFPu1a2Ct@hermes>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+From:   "NeilBrown" <neilb@suse.de>
+To:     xkernel.wang@foxmail.com
+Cc:     trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Xiaoke Wang" <xkernel.wang@foxmail.com>
+Subject: Re: [PATCH] NFS: check the return value of mempool_alloc()
+In-reply-to: <tencent_61C566F88A52C1BF198826737AAE0E471806@qq.com>
+References: <tencent_61C566F88A52C1BF198826737AAE0E471806@qq.com>
+Date:   Thu, 24 Mar 2022 08:04:41 +1100
+Message-id: <164806948116.6096.12331736937963571485@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,65 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 23 Mar 2022, xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+> 
+> The check was first removed in 518662e ("NFS: fix usage of mempools.")
+> as the passed GFP flags is `GFP_NOIO`.
+> While now the flag is changed to `GFP_KERNEL` by 2b17d72 ("NFS: Clean
+> up writeback code"), so it is better to check it.
 
---W/nzBZO5zC0uMSeA
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+no.  GFP_KERNEL is not that different from GFP_NOIO.
 
-Hi!
+mempool_alloc() can only fail with __GFP_DIRECT_RECLAIM is not passed.
 
-> The HID++ protocol allows to set multicolor (RGB) to a static color.
-> Multiple of such LED zones per device are supported.
-> This patch exports said LEDs so that they can be set from userspace.
->=20
-> Signed-off-by: Manuel Sch=F6nlaub <manuel.schoenlaub@gmail.com>
+Please try to understand the code before you change it.
 
-Please cc LEDs stuff to the LED lists.
+NeilBrown
 
-> +static int hidpp_mc_led_register(struct hidpp_device *hidpp_dev,
-> +				 struct led_classdev_mc *mc_dev,
-> +				 int zone)
-> +{
-> +	struct hid_device *hdev =3D hidpp_dev->hid_dev;
-> +	struct mc_subled *mc_led_info;
-> +	struct led_classdev *cdev;
-> +	int ret;
-> +
-> +	mc_led_info =3D devm_kmalloc_array(&hdev->dev, 3,
-> +					 sizeof(*mc_led_info),
-> +					 GFP_KERNEL | __GFP_ZERO);
-> +	if (!mc_led_info)
-> +		return -ENOMEM;
-> +
-> +	mc_led_info[0].color_index =3D LED_COLOR_ID_RED;
-> +	mc_led_info[1].color_index =3D LED_COLOR_ID_GREEN;
-> +	mc_led_info[2].color_index =3D LED_COLOR_ID_BLUE;
-> +
-> +	mc_dev->subled_info =3D mc_led_info;
-> +	mc_dev->num_colors =3D 3;
-> +
-> +	cdev =3D &mc_dev->led_cdev;
-> +	cdev->name =3D devm_kasprintf(&hdev->dev, GFP_KERNEL,
-> +				    "%s:rgb:indicator-%d", hdev->uniq, zone);
 
-So this is keyboard backlight? We should add the documentation at the
-very least, so that other drivers use same name.
-
-Best regards,
-								Pavel
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---W/nzBZO5zC0uMSeA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYjuLVwAKCRAw5/Bqldv6
-8kx0AJ9oRQqFcCr56nwvRNMMN+qF5d6glgCfbBf5ZasT2VlWCFhfy+uI65wakSk=
-=ru61
------END PGP SIGNATURE-----
-
---W/nzBZO5zC0uMSeA--
+> 
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+>  fs/nfs/write.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+> index eae9bf1..831fad9 100644
+> --- a/fs/nfs/write.c
+> +++ b/fs/nfs/write.c
+> @@ -106,8 +106,10 @@ static struct nfs_pgio_header *nfs_writehdr_alloc(void)
+>  {
+>  	struct nfs_pgio_header *p = mempool_alloc(nfs_wdata_mempool, GFP_KERNEL);
+>  
+> -	memset(p, 0, sizeof(*p));
+> -	p->rw_mode = FMODE_WRITE;
+> +	if (p) {
+> +		memset(p, 0, sizeof(*p));
+> +		p->rw_mode = FMODE_WRITE;
+> +	}
+>  	return p;
+>  }
+>  
+> -- 
+> 
+> 

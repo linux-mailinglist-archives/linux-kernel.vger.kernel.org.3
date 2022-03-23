@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9C04E58AE
+	by mail.lfdr.de (Postfix) with ESMTP id D5DFD4E58B0
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344035AbiCWSu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 14:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S1344056AbiCWSvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 14:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbiCWSuz (ORCPT
+        with ESMTP id S1344032AbiCWSu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 14:50:55 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76990606C7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:49:25 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id q71-20020a17090a17cd00b001c653c3b564so1525496pja.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:49:25 -0700 (PDT)
+        Wed, 23 Mar 2022 14:50:57 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF89C606DD
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:49:26 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id d7-20020a17090ad98700b001c6834c71ffso1540995pjv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:49:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=vksLZSJ/1XSsrv5+Q44yzVYsU90jJzgSeUJqyoBHB3k=;
-        b=Mol/t6djA6xfgUtihD1s4EYkxSSzamZSlq8W+dA2jAHEMVwdF9WxvpkKB8lwCoJMDY
-         9wuW/UVP7U3AarQBF6lE4gimtHGT9ecsTfJo6IiQB5MU7bqvoiYg4e4VVxCGM3FL/TiY
-         rFZqb6pGu0w+U3LTN5nFohLXarkpEHjAFQ+U4UbrePmi7F0lVs3S/quSQWLI7bwTqYHP
-         VE8gTIP50G9ETEPEMG+DS358KFjYb956uzEsMtyWR/yejP+8EEE/oaSlpFi8szXttbyL
-         M3iHQCK6BErBslrSku1TrBtmpcRYQh4FdJUtSrAfmpJGOA8YKjEJSOr03FSJhaWko0vl
-         Ebfg==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=slbs+omTj8xyRVbCkc6cD/g6x3OLZjyKyltZ5xxXewk=;
+        b=JOgyL7wv6R8OMnIGun2hdLU6NtSAivXpQTUW4Tl2D/z/uPw4YxriqKwTLYk4wf590a
+         Bosvzj4LJOxmE8QH5fFPbuBjFziPfr64viJZZ4i217n8OygNOi0pD2YsgwFbt0McL2c7
+         0h8Jo39B1xmKIrXl0QiL0/kbxUb5HhiIuSKc80XSYXjE9O3ba55Ld4KjVkmu7wWIJV5f
+         22QzRQTo8Sf7AHBpfaHo+YJwpbXzCRmf+ADazmAxkVP7R8SXsCWXypH9IJCyY11TFkAc
+         GefZsQcIY75ToGGtbqCQy8w24Paf3EUlaCkJJuQ5oCUC2o6CmLHokr6N8Bd0TqHmPoVA
+         QEow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=vksLZSJ/1XSsrv5+Q44yzVYsU90jJzgSeUJqyoBHB3k=;
-        b=OXy+Nw1+0RRWp6ZV9DlK1xQtnq8RIdoJFbACCQWJlUnR9YYi12DveJNjXh/uNcNgzM
-         JyopRbEZ3ZYVqXCdhX+0vdEs44Pe0Ox5bkfstFgNNf6UpfchY/1N3kaxu7Tuh5ZpGbol
-         jpPI+HETNDprvy2CQK7djPRa/DA3UtQFpeXFre0sbX7Fbn/l7Y+vKJAgfmWNMeOwAUQ7
-         +RGcqSwVp8kyvjPH3vBWqesgN05mDsKH3fpse9XM7HhQrWi/ETzIFBHuNrLKxT4K7qZf
-         y04PqPIxW3Bnv5tDqlc9OchTTLgmtEe004ofMtMxI29Hh9EY760ddTADhttRwA03Y88y
-         PT7Q==
-X-Gm-Message-State: AOAM530EzcNh/EStme/84GvLEFSa7iMKMBp06Cn21D2LF2lbDIC8SWUP
-        nuGJjTk005pOUf8jG6RRquLHDZgUgfaV
-X-Google-Smtp-Source: ABdhPJxpPj/2h7pKgUcUCSuYC1DoUpWJiS75/RmWuIi+WVtwRRkKM//2d/pTcA6go0BWa1pEsyBxi/J2CdmG
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=slbs+omTj8xyRVbCkc6cD/g6x3OLZjyKyltZ5xxXewk=;
+        b=fqe0Ten+toE5RrOg6308n5k2ptycz9hmOdxOMBjx2F0pa+qznKwZhg17NVK58Jp+/s
+         /YRCUkythWXSsqCS1jJyN47Ox2jhbHa812dkMioadBYRw7V36/Qx4XDhoyLvpAPxx+tR
+         KdkRB58rABJLWObUu+po0AyA3Lw2fIWysAbHIY0SWPhj9fcufGWyiMQFSMb2yPjRDkbo
+         BntLyksTYmz96GxpLkaQVm7hItkttaz5qimKtXESgma1iCTO14aWX8aEj3W10iXyGWi0
+         1QVRbqt5qaRAlzkUm6LWTkh/Dt5+NPnRG9oCddiPY3fJ6yOIdlkTbjS5e0e6dqMbKlPH
+         4hwQ==
+X-Gm-Message-State: AOAM531+3nBv68Ruz3K7jB7ccf8dnuTz8YBRBov0hEkD09uUu6+yNOhj
+        8FEJV8U5TRC2lRj4dFlMsD5woxeToxtq
+X-Google-Smtp-Source: ABdhPJzlBoaUIUX6DtX8d5f88vHUtRaluCuxp2990xcogvOPaTqSYv2FxYGKeJxvtICOHJJhQtfHlWI0LcxF
 X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a17:90a:d3d1:b0:1bb:fdc5:182 with SMTP id
- d17-20020a17090ad3d100b001bbfdc50182mr13515326pjw.206.1648061364908; Wed, 23
- Mar 2022 11:49:24 -0700 (PDT)
+ (user=mizhang job=sendgmr) by 2002:a05:6a00:2310:b0:4fa:7eb1:e855 with SMTP
+ id h16-20020a056a00231000b004fa7eb1e855mr1170187pfh.14.1648061366233; Wed, 23
+ Mar 2022 11:49:26 -0700 (PDT)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Wed, 23 Mar 2022 18:49:10 +0000
-Message-Id: <20220323184915.1335049-1-mizhang@google.com>
+Date:   Wed, 23 Mar 2022 18:49:11 +0000
+In-Reply-To: <20220323184915.1335049-1-mizhang@google.com>
+Message-Id: <20220323184915.1335049-2-mizhang@google.com>
 Mime-Version: 1.0
+References: <20220323184915.1335049-1-mizhang@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH 0/4] Verify dirty logging works properly with page stats
+Subject: [PATCH v2 0/4]  Verify dirty logging works properly with page stats
 From:   Mingwei Zhang <mizhang@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -81,10 +84,17 @@ for the guest. The selftest logic added later could help validate the
 problem.
 
 The patchset borrowes two patches come from Ben's series: "[PATCH 00/13]
-KVM: x86: Add a cap to disable NX hugepages on a VM" [1], which completes the
-selftest library functions to use the stats interface.
+KVM: x86: Add a cap to disable NX hugepages on a VM" [1], which completes
+the selftest library functions to use the stats interface.
 
 [1] https://lore.kernel.org/all/20220310164532.1821490-2-bgardon@google.com/T/
+
+v2 -> v1:
+ - Update the commit message. [dmatlack]
+ - Update the comments in patch 3/4 to clarify the motivation. [bgardon]
+ - Add another iteration in dirty_log_perf_test to regain pages [bgardon]
+
+v1: https://lore.kernel.org/all/20220321002638.379672-1-mizhang@google.com/
 
 Ben Gardon (2):
   selftests: KVM: Dump VM stats in binary stats test
@@ -97,12 +107,12 @@ Mingwei Zhang (2):
     correctly
 
  arch/x86/kvm/mmu/mmu.c                        |  14 +-
- .../selftests/kvm/dirty_log_perf_test.c       |  52 +++++
+ .../selftests/kvm/dirty_log_perf_test.c       |  53 +++++
  .../selftests/kvm/include/kvm_util_base.h     |   2 +
  .../selftests/kvm/kvm_binary_stats_test.c     |   6 +
  tools/testing/selftests/kvm/lib/kvm_util.c    | 196 ++++++++++++++++++
- 5 files changed, 268 insertions(+), 2 deletions(-)
+ 5 files changed, 269 insertions(+), 2 deletions(-)
 
 -- 
-2.35.1.894.gb6a874cedc-goog
+2.35.1.1021.g381101b075-goog
 

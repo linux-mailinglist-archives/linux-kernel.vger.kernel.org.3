@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F52F4E5BAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0814E5BAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345446AbiCWXIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 19:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        id S1345465AbiCWXI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 19:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345429AbiCWXIi (ORCPT
+        with ESMTP id S1345483AbiCWXIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 19:08:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECABE9027B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 16:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648076827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AeE76UaTYeKfGTHUnXSHySwumYli4lVrVB6Ua4GUIIk=;
-        b=LourY2NPk2YpJWHRyTbqdVFP4U20EGEXrq+fJZRLjY5Bq55kSRIiXSrfhCEViqsKAIrhkg
-        6OIFuc0f4xiirqQWALIqFM1JKLp8S4IpBtlefxlDD6MwUVpOJJDWpEbElnWJ2yx2ajJKsQ
-        r5WJOfzW9gdKj2xtso58k3cmrpZlXwg=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-w5nYyYyrMXqxGIoYs3NVEA-1; Wed, 23 Mar 2022 19:07:05 -0400
-X-MC-Unique: w5nYyYyrMXqxGIoYs3NVEA-1
-Received: by mail-qt1-f198.google.com with SMTP id p6-20020a05622a00c600b002e1cb9508e8so2321551qtw.20
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 16:07:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AeE76UaTYeKfGTHUnXSHySwumYli4lVrVB6Ua4GUIIk=;
-        b=2YI7O2zW4TSw299H8R0NKktZnTr00AQDiW1SbH4+Ba/RPyX9Q7jh9zD1+4ApzsjnIe
-         4KcM1UfiJ4b4XXY0XSC+e8IwiMQLzHcwbPe1H+9bow6m1hc8wRnifLYqsjpw/NZY4B9s
-         3dKO+eUkk47gcze88ZpCIYwKx/P4jn2WZvmIZq4u7gPsOXgKAvycUvjKWl13aNrkGXlP
-         zRttqgh9u8uTjD+mPuaV5C1uvBW0aeLMrDOVsRFIshIbSW3EO05Uvcmif6frX39r0UBc
-         h0jbv1uG2hbM0vcO9YwD4t5ZWnxn7+6SqzVVhNHcc9nC5pimxYF10FCCqrWNWFI9RASk
-         5wmQ==
-X-Gm-Message-State: AOAM530T3BuhBxGyyvkttvQ99lCalw2di2kBup8Y+GQ3qSRmCCTj/LpV
-        WV/XbltUkXi12jcytfJV12El1cS8cgyTzPY58Pt/41dO7G+KTrBhPh//9Hb7suca65vKJjpQqdM
-        1MUGaTemXJG9NGDG8OGc8V5Q=
-X-Received: by 2002:a05:620a:4554:b0:67d:6750:6a3 with SMTP id u20-20020a05620a455400b0067d675006a3mr1618760qkp.439.1648076824998;
-        Wed, 23 Mar 2022 16:07:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy4cizB/SoNIm4ab298xlavH6M9Ey73WflczZsQIKYfKAtTDPuv/lVMEGZ8IxLT/JR4E7epBA==
-X-Received: by 2002:a05:620a:4554:b0:67d:6750:6a3 with SMTP id u20-20020a05620a455400b0067d675006a3mr1618743qkp.439.1648076824778;
-        Wed, 23 Mar 2022 16:07:04 -0700 (PDT)
-Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
-        by smtp.gmail.com with ESMTPSA id g21-20020ac85815000000b002e06e2623a7sm1025395qtg.0.2022.03.23.16.07.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 16:07:04 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 19:07:03 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Mike Snitzer <snitzer@kernel.org>, kbuild-all@lists.01.org,
-        dm-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [device-mapper-dm:dm-5.19 132/132] drivers/md/dm.c:1542:18:
- error: 'result' undeclared
-Message-ID: <YjuoF88MzBALI+l8@redhat.com>
-References: <202203240638.crXQjFY5-lkp@intel.com>
+        Wed, 23 Mar 2022 19:08:55 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2827790FDA;
+        Wed, 23 Mar 2022 16:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mj8PXvWr7idtmZWEBEDAzY/76f/xydcoSsKld+xUHEU=; b=BcZYwqNU0fJX+RTgM9TtGhxWDh
+        YTQv4IH3xPlj9fadook3ZkO+aXwhLbNnZwX/hrXAKl282yxqKSsKMPkQQtP8tA+PwU817c4ruS/6A
+        MtI5Ux3w6w8WsLShgZDkTfiJjzFZZocwMC8OCsBQbA2za8hM91edmovyj5CPoEIrIMZLfxwiUJwpW
+        7FT9ycmr65iiHIM4yGG4ulHoRyCWGepvvqvq/nT3IlDV4SKKN9zNAqMmCLi8+5HBueHWd5h9a7WNq
+        tNV6rba/qtUufF+CbMJ/BKb1ni1ZpNIhmRbnElnILHuOjCc0gdoMPW/1JIxZeVPicprnQeR9qrB/e
+        ZO7O1c/w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nXA4O-00CvCt-PW; Wed, 23 Mar 2022 23:07:12 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 64BA5986200; Thu, 24 Mar 2022 00:07:12 +0100 (CET)
+Date:   Thu, 24 Mar 2022 00:07:12 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        ebiggers@google.com, herbert@gondor.apana.org.au, Jason@zx2c4.com,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH 4/2] objtool: Fix SLS validation for KCOV tail-call
+ replacement
+Message-ID: <20220323230712.GA8939@worktop.programming.kicks-ass.net>
+References: <20220322114809.381992456@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202203240638.crXQjFY5-lkp@intel.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220322114809.381992456@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23 2022 at  6:57P -0400,
-kernel test robot <lkp@intel.com> wrote:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git dm-5.19
-> head:   7f8ac95a6464b895e3d2b6175f7ee64a4c10fcfe
-> commit: 7f8ac95a6464b895e3d2b6175f7ee64a4c10fcfe [132/132] dm: push error handling down to __split_and_process_bio
-> config: s390-buildonly-randconfig-r005-20220323 (https://download.01.org/0day-ci/archive/20220324/202203240638.crXQjFY5-lkp@intel.com/config)
-> compiler: s390-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?id=7f8ac95a6464b895e3d2b6175f7ee64a4c10fcfe
->         git remote add device-mapper-dm https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git
->         git fetch --no-tags device-mapper-dm dm-5.19
->         git checkout 7f8ac95a6464b895e3d2b6175f7ee64a4c10fcfe
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash drivers/md/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/md/dm.c: In function '__process_abnormal_io':
-> >> drivers/md/dm.c:1542:18: error: 'result' undeclared (first use in this function)
->     1542 |                 *result = BLK_STS_NOTSUPP;
->          |                  ^~~~~~
->    drivers/md/dm.c:1542:18: note: each undeclared identifier is reported only once for each function it appears in
-> 
+Since not all compilers have a function attribute to disable KCOV
+instrumentation, objtool can rewrite KCOV instrumentation in noinstr
+functions as per commit:
 
-Yeah, I pushed this too soon, fixed now.
+  f56dae88a81f ("objtool: Handle __sanitize_cov*() tail calls")
 
-But why are you even testing this branch? I didn't include dm-5.19 in
-linux-next yet.
+However, this has subtle interaction with the SLS validation from
+commit:
 
-Given that it seems strange for the bot to just pick up some branch,
-and then spam LKML, dm-devel, etc like it found a meaningful problem.
+  1cc1e4c8aab4 ("objtool: Add straight-line-speculation validation")
 
-Mike
+In that when a tail-call instrucion is replaced with a RET an
+additional INT3 instruction is also written, but is not represented in
+the decoded instruction stream.
 
+This then leads to false positive missing INT3 objtool warnings in
+noinstr code.
+
+Instead of adding additional struct instruction objects, mark the RET
+instruction with retpoline_safe to suppress the warning (since we know
+there really is an INT3).
+
+Fixes: 1cc1e4c8aab4 ("objtool: Add straight-line-speculation validation")
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ tools/objtool/check.c |   43 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 29 insertions(+), 14 deletions(-)
+
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1090,6 +1099,17 @@ static void annotate_call_site(struct ob
+ 			               : arch_nop_insn(insn->len));
+ 
+ 		insn->type = sibling ? INSN_RETURN : INSN_NOP;
++
++		if (sibling) {
++			/*
++			 * We've replaced the tail-call JMP insn by two new
++			 * insn: RET; INT3, except we only have a single struct
++			 * insn here. Mark it retpoline_safe to avoid the SLS
++			 * warning, instead of adding another insn.
++			 */
++			insn->retpoline_safe = true;
++		}
++
+ 		return;
+ 	}
+ 

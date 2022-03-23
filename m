@@ -2,116 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA3C4E518F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE2E4E5194
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243998AbiCWLrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
+        id S244005AbiCWLuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235880AbiCWLr2 (ORCPT
+        with ESMTP id S232988AbiCWLuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:47:28 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E2CA7939D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:45:58 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-251-3EBf9A9TPvaSMLqZWsEjrw-1; Wed, 23 Mar 2022 11:45:55 +0000
-X-MC-Unique: 3EBf9A9TPvaSMLqZWsEjrw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 23 Mar 2022 11:45:55 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 23 Mar 2022 11:45:55 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        Theodore Ts'o <tytso@mit.edu>, "Jann Horn" <jannh@google.com>
-Subject: RE: [PATCH] random: allow writes to /dev/urandom to influence fast
- init
-Thread-Topic: [PATCH] random: allow writes to /dev/urandom to influence fast
- init
-Thread-Index: AQHYPiElHr6Egf4vbEGW28icqj7YNKzMOPHggAAMXYCAAJACUA==
-Date:   Wed, 23 Mar 2022 11:45:55 +0000
-Message-ID: <0f9b31b346504d28a908d16884df5e02@AcuMS.aculab.com>
-References: <20220322191436.110963-1-Jason@zx2c4.com>
- <6716f3ffefae4ed8b5fd332bfcca8a9a@AcuMS.aculab.com>
- <YjqLAWbZ8K7eg3Fw@zx2c4.com>
-In-Reply-To: <YjqLAWbZ8K7eg3Fw@zx2c4.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 23 Mar 2022 07:50:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685A620198
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:48:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AFF561F37F;
+        Wed, 23 Mar 2022 11:48:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648036110; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8PjZDyXTMEaHn2duElkoOX449JsJoEUnBONEtu7w2ec=;
+        b=due7XOdwWAhr4mm91mYQhKVwvAMCG2rQKP2uXlTwqfKfl4ku+qD1DsAib8OrR55mnx+ZY7
+        Jd4TR5wNe0iP0z6c+r4kPl5VbHs3RK71Gjl+6/w5lbIkRVhKJ/AZt60wCgLTT9sahzgQWX
+        GTUbNeoRADoV9ynIrIuZQdLONgSHCkE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648036110;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8PjZDyXTMEaHn2duElkoOX449JsJoEUnBONEtu7w2ec=;
+        b=DNkYmWTOmcSlx4Nc5GwO5uYnK/Ad6vKfQeZQf9Z1wFc36uOnRNLB6P/+2yJ0a4xmliCUxM
+        dS8jETBVmqgPScBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38B4413A78;
+        Wed, 23 Mar 2022 11:48:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CqUDDA4JO2IdcgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 23 Mar 2022 11:48:30 +0000
+Message-ID: <63704e10-18cf-9a82-cffb-052c6046ba7d@suse.cz>
+Date:   Wed, 23 Mar 2022 12:48:29 +0100
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 27/39] kasan, mm: only define ___GFP_SKIP_KASAN_POISON
+ with HW_TAGS
 Content-Language: en-US
+To:     andrey.konovalov@linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+References: <cover.1643047180.git.andreyknvl@google.com>
+ <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDIzIE1hcmNoIDIwMjIgMDI6NTENCj4g
-DQo+IE9uIFR1ZSwgTWFyIDIyLCAyMDIyIGF0IDg6MTYgUE0gRGF2aWQgTGFpZ2h0IDxEYXZpZC5M
-YWlnaHRAYWN1bGFiLmNvbT4gd3JvdGU6DQo+ID4gTmV2ZXIgbWluZCBzY3JpcHRzIHRoYXQgdHJ5
-IHRvIGltbWVkaWF0ZWx5IHNhdmUgYSBuZXcgc2VlZGZpbGUgWzFdLg0KPiA+DQo+ID4gV2hhdCBh
-Ym91dCBjb2RlIHJ1biBieSBsYXRlciBzdGFydHVwIHNjcmlwdHMgdGhhdCB3YW50cyByYW5kb20g
-bnVtYmVycy4NCj4gPiBUaGV5IHJlYWxseSBkbyB3YW50IHRoZSBzZWVkZmlsZSBkYXRhIHRvIGJl
-IHVzZWQuDQo+ID4gSWYgaXQgaXNuJ3QgdXNlZCB0aGVuIHRoZXkgYXJlIGxpa2VseSB0byBnZXQg
-dmVyeSB3ZWFrIHJhbmRvbSBudW1iZXJzLg0KPiA+DQo+ID4gWW91IGNhbid0IHJlYWxseSBleHBl
-Y3Qgc3RhcnR1cCBzY3JpcHRzIHRvIGJlIGlzc3VpbmcgaW9jdGwgcmVxdWVzdHMuDQo+IA0KPiBU
-byBiZSBjbGVhciwgdGhpcyAiZXhwZWN0W2F0aW9uXSIgb2YgeW91cnMgaXMgdmVyeSBtdWNoIGEg
-bmV3DQo+IGV4cGVjdGF0aW9uLiBDcmVkaXRpbmcgYml0cyBoYXMgcmVxdWlyZWQgYW4gaW9jdGwg
-c2luY2UgZm9yZXZlci4gVGhvc2UNCj4gc2hlbGwgc2NyaXB0cyBoYXZlIGJlZW4gYnJva2VuIGZv
-cmV2ZXIuIFRoZSBwcm9wb3NhbCBoZXJlIGlzIHRvIGFkZCBuZXcNCj4gYmVoYXZpb3IgdG8gc3Vw
-cG9ydCB0aG9zZSBvbGQgYnJva2VuIHNoZWxsIHNjcmlwdHMuDQouLi4NCg0KSSBwZXJzb25hbGx5
-IHdvbid0IGhhdmUgZXhwZWN0ZWQgdGhlIGJlaGF2aW91ciBmb3IgbG9uZyENCkkgd2FzIG9ubHkg
-dHJ5aW5nIHRvIGdldCBhIGJ1aWxkcm9vdCBzeXN0ZW0gdG8gaW5pdGlhbGlzZSB0aGUNCnJhbmRv
-bSBudW1iZXIgZ2VuZXJhdG9yIGxhc3QgeWVhci4NCkJ1dCBJJ20gc3VyZSBJIHJlYWQgc29tZSBv
-ZiB0aGUgZG9jdW1lbnRhdGlvbiBhcyB3ZWxsIGFzIGxvb2tpbmcNCmF0IHRoZSBzY3JpcHRzIGFu
-ZCB0aGUga2VybmVsIHNvdXJjZXMuDQoNClRoZSBidWlsZHJvb3Qgc2NyaXB0cyBhY3R1YWxseSBu
-ZWVkIGZpeGluZyBzbyB0aGV5IGFjdHVhbGx5DQphZGQgZW50cm9weSBvbiBvbGRlciBrZXJuZWwu
-DQoNCkkgZG8gcmVtZW1iZXIgbG9va2luZyBhdCBvbmUgb2YgdGhlIGtlcm5lbCBlbnRyb3B5IHN0
-b3Jlcw0KKHByb2JhYmx5IHRoZSBMaW51eCBvbmUpIGEgZmV3IHllYXJzIGJhY2sgYW5kIHRoaW5r
-aW5nDQp0aGF0IGl0IHdhcyBvdmVyLWNvbXBsZXggYW5kIHByb2JhYmx5IGRpZG4ndCBhY3R1YWxs
-eSB3b3JrDQp0aGF0IHdlbGwgaW4gcmVhbGl0eS4NCklJUkMgaXQgc2F2ZWQgJ2VudHJvcHkgYnl0
-ZXMnIGFuZCB0aGUgbnVtYmVyIG9mIGJpdHMgb2YgZW50cm9weQ0KdGhleSByZXByZXNlbnRlZCAt
-IGFuZCB0aGVuIHJlYWQgb3V0IGVub3VnaCBieXRlcyB0byBnZXQNCnRoZSByZXF1aXJlZCBlbnRy
-b3B5IHRvIHJlc2VlZCB0aGUgUFJORy4NCk5vdyBpZiB5b3VyIFBSTkcgaGFzIE4gYml0cyBvZiBz
-dGF0ZS4gSW4gcHJpbmNpcGxlIGF0IGxlYXN0DQphZnRlciB5b3UndmUgb3V0cHV0IE4gYml0cyBz
-b21lb25lIGNhbiBzb2x2ZSB0aGUgc2ltdWx0YW5lb3VzDQplcXVhdGlvbnMgYW5kIGRldGVybWlu
-ZSB0aGUgUFJORyBzdGF0ZS4NCkJ1dCBhcyBzb29uIGFzIHlvdSB1c2UgYSBjcnlwdG9ncmFwaGlj
-IGhhc2ggZnVuY3Rpb24gdGhhdA0KaXMgbm90IHJlYWxseSBwb3NzaWJsZSBpbiBhbnkgcmVhc29u
-YWJsZSB0aW1lZnJhbWUuDQooSXMgZXZlbiBNRDUgdGhhdCBicm9rZW4/KQ0KDQpCdXQgdGhlICdl
-bnRyb3B5IHN0b3JlJyBjYW4ganVzdCBzdGlyIGluIG5ldyBieXRlcyBhbmQNCmNvdW50IHRoZSBu
-dW1iZXIgb2YgZW50cm9weSBiaXRzLg0KVGhlbiBpdCBkb2Vzbid0IHJlYWxseSBjYXJlIGhvdyBy
-YW5kb20gdGhlIGJ5dGVzIGFyZS4NCihBcGFydCBmcm9tIGFuIGVzdGltYXRpb24gb2YgaG93ICdm
-dWxsJyBpdCBpcy4pDQpDb3B5IGJpdHMgdG8gdGhlIFBSTkcgYW5kIHlvdSByZWR1Y2UgdGhlIG51
-bWJlciBvZg0KYml0cyBpbiB0aGUgZW50cm9weSBzdG9yZSAtIGJ1dCBjb250aW51ZSBqdXN0IHN0
-aXJyaW5nDQppbiBuZXcgZGF0YS4NCg0KSSd2ZSBvZnRlbiB3b25kZXJlZCB3aGV0aGVyIHRoZSBS
-QzUgYWxnb3JpdGhtIHdvdWxkDQptYWtlIGEgZ29vZCBlbnRyb3B5IHN0b3JlLg0KSnVzdCBjeWNs
-ZSB0aGUgYWxnb3JpdGhtIHdpdGggZWFjaCBlbnRyb3B5IGJ5dGUgYXMNCmlzIGRvbmUgd2hlbiBz
-ZXR0aW5nIGVhY2gga2V5IGJ5dGUuDQpDbGVhcmx5IHlvdSBkb24ndCB3YW50IHRvIHVzZSB0aGUg
-UkM1IG91dHB1dCBhcyByYW5kb20gZGF0YS4NCkJ1dCBpdCBvdWdodCB0byBiZSBwbGVudHkgZ29v
-ZCBlbm91Z2ggdG8ga2VlcCBlbnRyb3B5Lg0KVGhlIG9ubHkgcmVhbCBwcm9ibGVtIGlzIHRoYXQg
-UkM1IGlzIHByZXR0eSBob3JyaWQgb24NCnRoZSBkYXRhIGNhY2hlLCBhbmQgcHJvYmFibHkgYSBi
-aXQgYmlnIGZvciBwZXItY3B1IGRhdGEuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
-c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
-IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On 1/24/22 19:05, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
+> 
+> Only define the ___GFP_SKIP_KASAN_POISON flag when CONFIG_KASAN_HW_TAGS
+> is enabled.
+> 
+> This patch it not useful by itself, but it prepares the code for
+> additions of new KASAN-specific GFP patches.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> 
+> ---
+> 
+> Changes v3->v4:
+> - This is a new patch.
+> ---
+>  include/linux/gfp.h            |  8 +++++++-
+>  include/trace/events/mmflags.h | 12 +++++++++---
+>  2 files changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+> index 581a1f47b8a2..96f707931770 100644
+> --- a/include/linux/gfp.h
+> +++ b/include/linux/gfp.h
+> @@ -54,7 +54,11 @@ struct vm_area_struct;
+>  #define ___GFP_THISNODE		0x200000u
+>  #define ___GFP_ACCOUNT		0x400000u
+>  #define ___GFP_ZEROTAGS		0x800000u
+> +#ifdef CONFIG_KASAN_HW_TAGS
+>  #define ___GFP_SKIP_KASAN_POISON	0x1000000u
+> +#else
+> +#define ___GFP_SKIP_KASAN_POISON	0
+> +#endif
+>  #ifdef CONFIG_LOCKDEP
+>  #define ___GFP_NOLOCKDEP	0x2000000u
+>  #else
+> @@ -251,7 +255,9 @@ struct vm_area_struct;
+>  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+>  
+>  /* Room for N __GFP_FOO bits */
+> -#define __GFP_BITS_SHIFT (25 + IS_ENABLED(CONFIG_LOCKDEP))
+> +#define __GFP_BITS_SHIFT (24 +					\
+> +			  IS_ENABLED(CONFIG_KASAN_HW_TAGS) +	\
+> +			  IS_ENABLED(CONFIG_LOCKDEP))
+
+This breaks __GFP_NOLOCKDEP, see:
+https://lore.kernel.org/all/YjoJ4CzB3yfWSV1F@linutronix.de/
+
+>  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
+>  
+>  /**
+> diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
+> index 116ed4d5d0f8..cb4520374e2c 100644
+> --- a/include/trace/events/mmflags.h
+> +++ b/include/trace/events/mmflags.h
+> @@ -49,12 +49,18 @@
+>  	{(unsigned long)__GFP_RECLAIM,		"__GFP_RECLAIM"},	\
+>  	{(unsigned long)__GFP_DIRECT_RECLAIM,	"__GFP_DIRECT_RECLAIM"},\
+>  	{(unsigned long)__GFP_KSWAPD_RECLAIM,	"__GFP_KSWAPD_RECLAIM"},\
+> -	{(unsigned long)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"},	\
+> -	{(unsigned long)__GFP_SKIP_KASAN_POISON,"__GFP_SKIP_KASAN_POISON"}\
+> +	{(unsigned long)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"}	\
+> +
+> +#ifdef CONFIG_KASAN_HW_TAGS
+> +#define __def_gfpflag_names_kasan					      \
+> +	, {(unsigned long)__GFP_SKIP_KASAN_POISON, "__GFP_SKIP_KASAN_POISON"}
+> +#else
+> +#define __def_gfpflag_names_kasan
+> +#endif
+>  
+>  #define show_gfp_flags(flags)						\
+>  	(flags) ? __print_flags(flags, "|",				\
+> -	__def_gfpflag_names						\
+> +	__def_gfpflag_names __def_gfpflag_names_kasan			\
+>  	) : "none"
+>  
+>  #ifdef CONFIG_MMU
 

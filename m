@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A35D4E5997
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBC04E599D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344450AbiCWUMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 16:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S1344543AbiCWUOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 16:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbiCWUMA (ORCPT
+        with ESMTP id S236584AbiCWUOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 16:12:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD77694AE
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 13:10:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCEE5B8207D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 20:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14902C340E8;
-        Wed, 23 Mar 2022 20:10:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="o4aIXw3b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1648066224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RtkyuG0hqTErbT1hHrW6eIZiMucD7+NPmbjercTm5/w=;
-        b=o4aIXw3bmN5yphYd4aF6nEQFQzYDAhT+8kH2jCVUjRGHWEdeYQrNlEWo9c4dr8HB/uG0KO
-        6+JyyPRTa4xGr7y4JFSv4nYvrJ3SZ5YAy+RnU0WpeJTEkwoguZHXOkbfLso5vc5rWmrO+D
-        el7ir5WpDwnsfNRvKbmcaMaVfYo6TF4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a8650d78 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 23 Mar 2022 20:10:23 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux@dominikbrodowski.net, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v2] random: re-add removed comment about get_random_{u32,u64} reseeding
-Date:   Wed, 23 Mar 2022 14:10:18 -0600
-Message-Id: <20220323201018.171141-1-Jason@zx2c4.com>
-In-Reply-To: <Yjt6NJGromYyAb+/@owl.dominikbrodowski.net>
-References: <Yjt6NJGromYyAb+/@owl.dominikbrodowski.net>
+        Wed, 23 Mar 2022 16:14:38 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168DBD63;
+        Wed, 23 Mar 2022 13:13:06 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-de3f2a19c8so2896851fac.1;
+        Wed, 23 Mar 2022 13:13:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0dtghV1fkEXQC3eY/8QyiqW6VQirMjQBl/NSTjJ0W9I=;
+        b=JGYUxljba0jZsOFk3PA5RW7Ys9FxFTVDybJpIwNc9MflcbRx08O0ZYjQcElC+gstN/
+         Kc/TBsoZRjnzSpjUC8lWpZiCYqJodlIAKLT9XPRLiLupNjr9hfPyhlNtkL1vgA1t2kh0
+         vh7UdjYO1EqQINxlZ+cBnrtv/Vgs0xgfrS20JTcEsbfVJYTYBJRU2f9Cm5TKLjP/p9nJ
+         ggwnalH/YwVRgaumFHBG0piVq9vKn0zohUCpK5EuZW5m5npJRMFLYyJ3JGVSfB9GDhnn
+         N3lvMzL3e2MJc6Ea2kUNeipNE1NNVhGaw8IWOTBiyhntP6wCw/X8hyUPXsnA2UQ2gV4Z
+         stfg==
+X-Gm-Message-State: AOAM532q8bjyiYZctrcJLpyaqxXixDNTvy0gjHYImlKJIsv2hAH2FfZD
+        M4Y6mnwBCXeZRaVzXd256g==
+X-Google-Smtp-Source: ABdhPJx08/NjwL/LKLNaYctq1rd2mdl4jiv/04ZWeiY6YBXgM0/680BNb6NQWQd/cV6Kt76ohwagPg==
+X-Received: by 2002:a05:6870:c101:b0:da:b3f:2b89 with SMTP id f1-20020a056870c10100b000da0b3f2b89mr5288216oad.296.1648066385933;
+        Wed, 23 Mar 2022 13:13:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c9-20020a4a8ec9000000b0032438ba79b0sm449783ool.0.2022.03.23.13.13.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 13:13:05 -0700 (PDT)
+Received: (nullmailer pid 373336 invoked by uid 1000);
+        Wed, 23 Mar 2022 20:13:04 -0000
+Date:   Wed, 23 Mar 2022 15:13:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        ashishsingha@nvidia.com, skomatineni@nvidia.com,
+        ldewangan@nvidia.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] spi: dt-bindings: Add wait state polling flag
+Message-ID: <Yjt/UDlkE9ciA4Yt@robh.at.kernel.org>
+References: <20220317012006.15080-1-kyarlagadda@nvidia.com>
+ <20220317012006.15080-4-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317012006.15080-4-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment about get_random_{u32,u64}() not invoking reseeding got
-added in an unrelated commit, that then was recently reverted by
-0313bc278dac ("Revert "random: block in /dev/urandom""). So this adds
-that little comment snippet back, and improves the wording a bit too.
+On Thu, Mar 17, 2022 at 06:50:06AM +0530, Krishna Yarlagadda wrote:
+> Add flag to enable tpm wait state polling and Tegra Grace binding.
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+TPM
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 1d7aac2a9600..40107f8b9e9e 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -224,9 +224,10 @@ static void _warn_unseeded_randomness(const char *func_name, void *caller, void
-  *
-  * These interfaces will return the requested number of random bytes
-  * into the given buffer or as a return value. This is equivalent to
-- * a read from /dev/urandom. The integer family of functions may be
-- * higher performance for one-off random integers, because they do a
-- * bit of buffering.
-+ * a read from /dev/urandom. The u32, u64, int, and long family of
-+ * functions may be higher performance for one-off random integers,
-+ * because they do a bit of buffering and do not invoke reseeding
-+ * until the buffer is emptied.
-  *
-  *********************************************************************/
- 
--- 
-2.35.1
+> 
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  .../devicetree/bindings/spi/nvidia,tegra210-quad.yaml       | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+> index 0296edd1de22..88b00fcad210 100644
+> --- a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+> +++ b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+> @@ -20,6 +20,7 @@ properties:
+>        - nvidia,tegra186-qspi
+>        - nvidia,tegra194-qspi
+>        - nvidia,tegra234-qspi
+> +      - nvidia,tegra-grace-qspi
+>  
+>    reg:
+>      maxItems: 1
+> @@ -57,6 +58,11 @@ patternProperties:
+>        spi-tx-bus-width:
+>          enum: [1, 2, 4]
+>  
+> +      nvidia,wait-polling:
+> +        description:
+> +          Enable TPM wait state polling on supported chips.
 
+What's TPM?
+
+Why is this not implied by the compatible string?
+
+Also, how child node properties are handled has changed. See 
+Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml. The 
+NVidia specific properties should be refactored first before adding 
+more.
+
+> +	type: boolean
+> +
+>        nvidia,tx-clk-tap-delay:
+>          description:
+>            Delays the clock going out to device with this tap value.
+> -- 
+> 2.17.1
+> 
+> 

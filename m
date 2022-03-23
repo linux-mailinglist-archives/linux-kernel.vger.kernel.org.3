@@ -2,187 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD294E51C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D53764E51CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244092AbiCWMCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S244075AbiCWMDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244076AbiCWMC3 (ORCPT
+        with ESMTP id S231514AbiCWMDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:02:29 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1A57A9B2;
-        Wed, 23 Mar 2022 05:00:57 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KNn2f5cQyzfYmZ;
-        Wed, 23 Mar 2022 19:59:22 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Mar 2022 20:00:55 +0800
-Subject: Re: [PATCH -next] ext4: fix use-after-free in ext4_search_dir
-To:     Jan Kara <jack@suse.cz>
-References: <20220323034304.3597652-1-yebin10@huawei.com>
- <20220323104745.76u3uhdn745jaw4j@quack3.lan>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lczerner@redhat.com>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <623B0BF7.3050907@huawei.com>
-Date:   Wed, 23 Mar 2022 20:00:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Wed, 23 Mar 2022 08:03:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B44CA7A99B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648036909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=06IKLeK1HPa8EqbWxS+T+9EJyp3Gy0v+dNMgxkBuw9M=;
+        b=afrBe2334W9R8YqKZZYv0g/Sh8EN7zslyV4PO8VrtP3SF1Qo2MwMQ8moAD5lTjYcAn9F6P
+        +xbQCHFvq7sId/dUMwGiPFooORacBSga3pvDINcktDrzcn1lYfNpPY1d1weRLgH5i4etpF
+        5TR8U/dMJZ64rm+twXGd0f8BoFnqpGA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-357-FI4l3HsjOmuLVkLX1zjGWg-1; Wed, 23 Mar 2022 08:01:48 -0400
+X-MC-Unique: FI4l3HsjOmuLVkLX1zjGWg-1
+Received: by mail-wr1-f69.google.com with SMTP id f14-20020adfc98e000000b001e8593b40b0so433632wrh.14
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:01:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=06IKLeK1HPa8EqbWxS+T+9EJyp3Gy0v+dNMgxkBuw9M=;
+        b=s45H229phKE99SWhwzw4/sj8qgMw6P1V5LpkyOc6MfBI496aGyhXNDFqIcdAVgd2tR
+         OvsYa8yDD+XVF81bdGZlzc5QH7PT9y9MJNKV0WKPYEgEtO3EW0k2vk8p24rW6oCp4g1m
+         qqP/jfxiz9Fq2Km8Nc36wQPT7iyTLc89d8Lp4Q2Z9MgDN8wMw8HpTo6/SYNL6td47mRT
+         JI+56waz7AN7GKllKNA97XhaJVJ1L6k1B0Y+Y2hKziiss4zfQPII+IPSTYxFiaP6gbtw
+         qNQS1dK3iuTn8cOCRj+tqm65MxgZX3GBRYG/wXDKmZtgG2wtl6BIDYdfhlyIDu1x44A2
+         zJaQ==
+X-Gm-Message-State: AOAM530aXXwMS7yH0jaagx6JXYRanSD/nw3gSE7nSs3QNccwzDZjwxRF
+        Bjf/3b1kC84ogpBASl8M7yGoCumWlfxR9XlLJw6nPwkBRJ7wnlp4V48vagBFX0UmoYRgO8beeyK
+        YK5SGga1Jm2CMVUhgE+FDvFyI
+X-Received: by 2002:a5d:6750:0:b0:203:efaf:9fc1 with SMTP id l16-20020a5d6750000000b00203efaf9fc1mr23869457wrw.252.1648036907616;
+        Wed, 23 Mar 2022 05:01:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJynjLJRb91b0j7OuTthwiOqxaUOL6Ex8tKvWylL7WSkMnM9JIzW97AzFCAg5VkEOFL8tDHc5w==
+X-Received: by 2002:a5d:6750:0:b0:203:efaf:9fc1 with SMTP id l16-20020a5d6750000000b00203efaf9fc1mr23869390wrw.252.1648036906938;
+        Wed, 23 Mar 2022 05:01:46 -0700 (PDT)
+Received: from redhat.com ([2.55.151.118])
+        by smtp.gmail.com with ESMTPSA id i74-20020adf90d0000000b0020373ba7beesm26224455wri.0.2022.03.23.05.01.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 05:01:45 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 08:01:42 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Keir Fraser <keirf@google.com>, kernel-team@android.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] virtio: pci: sanity check bar indexes
+Message-ID: <20220323075030-mutt-send-email-mst@kernel.org>
+References: <20220322151952.2950143-1-keirf@google.com>
+ <CACGkMEubcU4rFVem7neKYb-qT3TQUN802bbLNq7vh+y8gdD5AA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220323104745.76u3uhdn745jaw4j@quack3.lan>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEubcU4rFVem7neKYb-qT3TQUN802bbLNq7vh+y8gdD5AA@mail.gmail.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 23, 2022 at 03:57:59PM +0800, Jason Wang wrote:
+> On Tue, Mar 22, 2022 at 11:20 PM Keir Fraser <keirf@google.com> wrote:
+> >
+> > The bar index is used as an index into the device's resource list
+> > and should be checked as within range for a standard bar.
+> >
+> > Also clean up an existing check to consistently use PCI_STD_NUM_BARS.
+> >
+> > Signed-off-by: Keir Fraser <keirf@google.com>
+> > ---
+> >  drivers/virtio/virtio_pci_modern.c     | 10 ++++++++--
+> >  drivers/virtio/virtio_pci_modern_dev.c |  8 +++++++-
+> >  2 files changed, 15 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+> > index 5455bc041fb6..84bace98dff5 100644
+> > --- a/drivers/virtio/virtio_pci_modern.c
+> > +++ b/drivers/virtio/virtio_pci_modern.c
+> > @@ -293,7 +293,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
+> >
+> >         for (pos = pci_find_capability(dev, PCI_CAP_ID_VNDR); pos > 0;
+> >              pos = pci_find_next_capability(dev, pos, PCI_CAP_ID_VNDR)) {
+> > -               u8 type, cap_len, id;
+> > +               u8 type, cap_len, id, res_bar;
+> >                 u32 tmp32;
+> >                 u64 res_offset, res_length;
+> >
+> > @@ -317,7 +317,12 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
+> >
+> >                 /* Type, and ID match, looks good */
+> >                 pci_read_config_byte(dev, pos + offsetof(struct virtio_pci_cap,
+> > -                                                        bar), bar);
+> > +                                                        bar), &res_bar);
+> > +               if (res_bar >= PCI_STD_NUM_BARS) {
+> > +                       dev_err(&dev->dev, "%s: shm cap with bad bar: %d\n",
+> > +                               __func__, res_bar);
+> > +                       continue;
+> > +               }
+> >
+> >                 /* Read the lower 32bit of length and offset */
+> >                 pci_read_config_dword(dev, pos + offsetof(struct virtio_pci_cap,
+
+In fact, the spec says such BAR values are reserved, not bad, so
+the capabiluty should be ignored, they should not cause the driver to error out
+or print errors.
+
+> > @@ -337,6 +342,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
+> >                                                      length_hi), &tmp32);
+> >                 res_length |= ((u64)tmp32) << 32;
+> >
+> > +               *bar = res_bar;
+> >                 *offset = res_offset;
+> >                 *len = res_length;
+> >
+> > diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+> > index e8b3ff2b9fbc..a6911d1e212a 100644
+> > --- a/drivers/virtio/virtio_pci_modern_dev.c
+> > +++ b/drivers/virtio/virtio_pci_modern_dev.c
+> > @@ -35,6 +35,12 @@ vp_modern_map_capability(struct virtio_pci_modern_device *mdev, int off,
+> >         pci_read_config_dword(dev, off + offsetof(struct virtio_pci_cap, length),
+> >                               &length);
+> >
+> > +       if (bar >= PCI_STD_NUM_BARS) {
+> > +               dev_err(&dev->dev,
+> > +                       "virtio_pci: bad capability bar %u\n", bar);
+
+In fact, I would say the issue is less that bar is reserved.
+The real issue is that the value apparently changed since
+we read it the first time. I think it's a good idea to
+reflect that in the message. Maybe find_capability should return
+the capability structure so we don't need to re-read it from
+the device?
+
+> > +               return NULL;
+> > +       }
+> > +
+> >         if (length <= start) {
+> >                 dev_err(&dev->dev,
+> >                         "virtio_pci: bad capability len %u (>%u expected)\n",
+> > @@ -120,7 +126,7 @@ static inline int virtio_pci_find_capability(struct pci_dev *dev, u8 cfg_type,
+> >                                      &bar);
+> >
+> >                 /* Ignore structures with reserved BAR values */
+> > -               if (bar > 0x5)
+> > +               if (bar >= PCI_STD_NUM_BARS)
+> >                         continue;
+> 
+> Just notice that the spec said:
+> 
+> "
+> values 0x0 to 0x5 specify a Base Address register (BAR) belonging to
+> the function located beginning at 10h in PCI Configuration Space and
+> used to map the structure into Memory or I/O Space. The BAR is
+> permitted to be either 32-bit or 64-bit, it can map Memory Space or
+> I/O Space.
+> 
+> Any other value is reserved for future use.
+> "
+> So we probably need to stick 0x5 instead of 0x6 (PCI_STD_NUM_BARS) for
+> this and other places.
+> 
+> Thanks
+
+It does not matter much IMHO, the reason spec uses 0 to 0x5 is precisely
+because that's the standard number of BARs. Both ways work as long as we
+are consistent, and I guess PCI_STD_NUM_BARS might be preferable since
+people tend to copy paste values.
 
 
-On 2022/3/23 18:47, Jan Kara wrote:
-> On Wed 23-03-22 11:43:04, Ye Bin wrote:
->> We got issue as follows:
->> EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
->> ==================================================================
->> BUG: KASAN: use-after-free in ext4_search_dir fs/ext4/namei.c:1394 [inline]
->> BUG: KASAN: use-after-free in search_dirblock fs/ext4/namei.c:1199 [inline]
->> BUG: KASAN: use-after-free in __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
->> Read of size 1 at addr ffff8881317c3005 by task syz-executor117/2331
->>
->> CPU: 1 PID: 2331 Comm: syz-executor117 Not tainted 5.10.0+ #1
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
->> Call Trace:
->>   __dump_stack lib/dump_stack.c:83 [inline]
->>   dump_stack+0x144/0x187 lib/dump_stack.c:124
->>   print_address_description+0x7d/0x630 mm/kasan/report.c:387
->>   __kasan_report+0x132/0x190 mm/kasan/report.c:547
->>   kasan_report+0x47/0x60 mm/kasan/report.c:564
->>   ext4_search_dir fs/ext4/namei.c:1394 [inline]
->>   search_dirblock fs/ext4/namei.c:1199 [inline]
->>   __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
->>   ext4_lookup_entry fs/ext4/namei.c:1622 [inline]
->>   ext4_lookup+0xb8/0x3a0 fs/ext4/namei.c:1690
->>   __lookup_hash+0xc5/0x190 fs/namei.c:1451
->>   do_rmdir+0x19e/0x310 fs/namei.c:3760
->>   do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
->>   entry_SYSCALL_64_after_hwframe+0x44/0xa9
->> RIP: 0033:0x445e59
->> Code: 4d c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 1b c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
->> RSP: 002b:00007fff2277fac8 EFLAGS: 00000246 ORIG_RAX: 0000000000000054
->> RAX: ffffffffffffffda RBX: 0000000000400280 RCX: 0000000000445e59
->> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200000c0
->> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000002
->> R10: 00007fff2277f990 R11: 0000000000000246 R12: 0000000000000000
->> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
->>
->> The buggy address belongs to the page:
->> page:0000000048cd3304 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1317c3
->> flags: 0x200000000000000()
->> raw: 0200000000000000 ffffea0004526588 ffffea0004528088 0000000000000000
->> raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
->> page dumped because: kasan: bad access detected
->>
->> Memory state around the buggy address:
->>   ffff8881317c2f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>   ffff8881317c2f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>> ffff8881317c3000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>                     ^
->>   ffff8881317c3080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>   ffff8881317c3100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->> ==================================================================
->>
->> ext4_search_dir:
->>    ...
->>    de = (struct ext4_dir_entry_2 *)search_buf;
->>    dlimit = search_buf + buf_size;
->>    while ((char *) de < dlimit) {
->>    ...
->>      if ((char *) de + de->name_len <= dlimit &&
->> 	 ext4_match(dir, fname, de)) {
->> 	    ...
->>      }
->>    ...
->>      de_len = ext4_rec_len_from_disk(de->rec_len, dir->i_sb->s_blocksize);
->>      if (de_len <= 0)
->>        return -1;
->>      offset += de_len;
->>      de = (struct ext4_dir_entry_2 *) ((char *) de + de_len);
->>    }
->>
->> Assume:
->> de=0xffff8881317c2fff
->> dlimit=0x0xffff8881317c3000
->>
->> If read 'de->name_len' which address is 0xffff8881317c3005, obviously is
->> out of range, then will trigger use-after-free.
->> To solve this issue, 'dlimit' must reserve 8 bytes, as we will read
->> 'de->name_len' to judge if '(char *) de + de->name_len' out of range.
->>
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> Oh, good catch.
->
->> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
->> index 3f87cca49f0c..276683f7ab77 100644
->> --- a/fs/ext4/ext4.h
->> +++ b/fs/ext4/ext4.h
->> @@ -2273,6 +2273,10 @@ static inline int ext4_forced_shutdown(struct ext4_sb_info *sbi)
->>    * Structure of a directory entry
->>    */
->>   #define EXT4_NAME_LEN 255
->> +/*
->> + * Base length of ext4_dir_entry_2 and ext4_dir_entry exclude name
->> + */
->> +#define EXT4_BASE_DIR_LEN 8
-> I'd rather use (sizeof(struct ext4_dir_entry_2) - EXT4_NAME_LEN) here...
->
->>   struct ext4_dir_entry {
->>   	__le32	inode;			/* Inode number */
->> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
->> index e37da8d5cd0c..4739a5aa13aa 100644
->> --- a/fs/ext4/namei.c
->> +++ b/fs/ext4/namei.c
->> @@ -1465,7 +1465,7 @@ int ext4_search_dir(struct buffer_head *bh, char *search_buf, int buf_size,
->>   	int de_len;
->>   
->>   	de = (struct ext4_dir_entry_2 *)search_buf;
->> -	dlimit = search_buf + buf_size;
->> +	dlimit = search_buf + buf_size - EXT4_BASE_DIR_LEN;
->>   	while ((char *) de < dlimit) {
->>   		/* this code is executed quadratically often */
->>   		/* do minimal checking `by hand' */
-> This looks wrong because a bit later we use dlimit to verify
-> de+de->name_len and that can certainly go upto bufsize. You need to modify
-> only the condition in the while loop like:
->
->    	while ((char *) de < dlimit - EXT4_BASE_DIR_LEN) {
->
-> 									Honza
-I think  'dlimit' also need to minus EXT4_BASE_DIR_LEN when verify 
-'de+de->name_len' .
-Assume:
-de = 0xffff8881317c2ff7
-dlimit = 0x0xffff8881317c3000
-de->name_len = 8
-
-=>
-de + de->name_len = 0xffff8881317c2fff  ( <= dlimit=0x0xffff8881317c3000)
-de->name = 'de' address  + EXT4_BASE_DIR_LEN  = 0xffff8881317c2ff7 + 8 = 
-0xffff8881317c2fff
-If we read 8 bytes form 0xffff8881317c2fff will read out of range.
-
+> >
+> >                 if (type == cfg_type) {
+> > --
+> > 2.35.1.894.gb6a874cedc-goog
+> >
 

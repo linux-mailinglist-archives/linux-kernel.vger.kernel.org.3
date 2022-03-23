@@ -2,121 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDB94E4CBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 07:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C74104E4CBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 07:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241956AbiCWGaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 02:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S241959AbiCWGbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 02:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiCWGaR (ORCPT
+        with ESMTP id S229472AbiCWGbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 02:30:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6C052B1B;
-        Tue, 22 Mar 2022 23:28:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E82961618;
-        Wed, 23 Mar 2022 06:28:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6D0C340E8;
-        Wed, 23 Mar 2022 06:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648016926;
-        bh=jcw//5QnXtIGt33tyaZpopiiPu5NKipd6vYgSxZStfo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IoH2mGGDQsQV7jlg6cG+jF9Tqec2Qouozz6CisTnOobsPoAw+6dsrUe5etr+aSZAl
-         jdVv6LtAr43rBdYfAcznAG6GY3dbVkUE4u8s4gTAvfOeL20mxqK/IGApOMs7JxT0q5
-         RjY9uz0T9OYTUhvydYHPX4cw9GSJk0Qn8xm9r1Lgs5f8XiiCVUY+IhPeOP8TOfvWXG
-         +TmhOJLFhIsDDawr7+2XnpKkVuLs2KjMQnQEIulvBz8cKkp46F1HQlcsyLI26d8ali
-         48TKHi+pkc1JH71Tt5UmZ2l9xmgP5LgpKulx/dYp60J+4XPbS3uf4N1+f5FXNSI43a
-         gaO0wHThbLKfQ==
-Date:   Wed, 23 Mar 2022 15:28:40 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        Wed, 23 Mar 2022 02:31:17 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F43554B5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 23:29:48 -0700 (PDT)
+Received: from [192.168.12.80] (unknown [182.2.71.26])
+        by gnuweeb.org (Postfix) with ESMTPSA id E2BE57E342;
+        Wed, 23 Mar 2022 06:29:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1648016987;
+        bh=rTYefPkm+7jh3YIcnrUKbBW9z+mAVw1UIN7o+WWdb6g=;
+        h=Date:From:To:Cc:References:Subject:In-Reply-To:From;
+        b=t0UH9wr/A8UAyjs5YliU2fVLk2EdDwauQN1d5rIafsqmJvmDsRIqhhUdBeyxEXGYB
+         17688upkz47HJcZV9s8yT33VGgTByJHsdWQQE109w68t9w+TZYQRR8bcCgpFCLuUl2
+         U7WUb03B/zgOdI2o+stWvpmqb8vDMcw06vCtQ6tQmZZ1hAiMhCtaSB8fNrczxSPU3a
+         ejE6x6GxivbB9fX2evVsclML/a/z8TI2n/LC6ny5hCAA+tMSSxaO0X089WOKTWlXii
+         wgABX5JvJuR3uvODbLh2B8fX81o79u71FZ23S2gPS2BmxSooy8D3bWJH0ppbrD1nz6
+         l0CRZY4NiTgyQ==
+Message-ID: <2eba5687-6b63-ceb2-3fbd-3d236727ea11@gnuweeb.org>
+Date:   Wed, 23 Mar 2022 13:29:39 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     David Laight <David.Laight@ACULAB.COM>, 'Willy Tarreau' <w@1wt.eu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        ast@kernel.org, hjl.tools@gmail.com, rick.p.edgecombe@intel.com,
-        rppt@kernel.org, linux-toolchains@vger.kernel.org,
-        Andrew.Cooper3@citrix.com, ndesaulniers@google.com
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-Id: <20220323152840.cb6295ec547f50d3ec34f02a@kernel.org>
-In-Reply-To: <20220322224236.46f8c2f1@gandalf.local.home>
-References: <20220321112805.1393f9b9@gandalf.local.home>
-        <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
-        <20220321121209.3b95e406@gandalf.local.home>
-        <20220321121549.1c8588c5@gandalf.local.home>
-        <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
-        <20220321124551.3d73660b@gandalf.local.home>
-        <Yjis6hJKUj/WrSwK@hirez.programming.kicks-ass.net>
-        <20220321125419.0a20415c@gandalf.local.home>
-        <YjmAz0MbdW4Q1Cnv@hirez.programming.kicks-ass.net>
-        <20220322091242.1ad0206b@gandalf.local.home>
-        <Yjneyn8o06svJkY4@hirez.programming.kicks-ass.net>
-        <20220323112323.65337d76d96836e487064a99@kernel.org>
-        <20220322224236.46f8c2f1@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+References: <20220322102115.186179-1-ammarfaizi2@gnuweeb.org>
+ <20220322102115.186179-4-ammarfaizi2@gnuweeb.org>
+ <8653f6784a9b4272a59a75a530663567@AcuMS.aculab.com>
+ <a8eeec1d-656d-15a3-dde5-0f8cc8c5956b@gnuweeb.org>
+ <20220322121338.GD10306@1wt.eu>
+ <22fd9709b3a64a548226741b682ca155@AcuMS.aculab.com>
+Content-Language: en-US
+Subject: Re: [RFC PATCH v2 3/8] tools/nolibc: i386: Implement syscall with 6
+ arguments
+In-Reply-To: <22fd9709b3a64a548226741b682ca155@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Mar 2022 22:42:36 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Wed, 23 Mar 2022 11:23:23 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On 3/22/22 8:37 PM, David Laight wrote:
+> dunno, 'asm' register variables are rather more horrid and
+> should probably only be used (for asm statements) when there aren't
+> suitable register constraints.
 > 
-> > I see the __fexit__ is needed, but why __ftail__ is needed? I guess because
-> > func_B is notrace, in that case the __fexit__ will not be in the func_B.
-> > Am I correct?
-> 
-> I believe Peter and I agreed that the "best" solution so far, that has the
-> least amount of regressions (doesn't remove anything currently being
-> function graph traced, nor removes current tail calls) is:
-> 
-> > At that point giving us something like:
-> > 
-> > 1:
-> > 	pushsection __ftail_loc
-> > 	.long	1b - .
-> > 	popsection
-> > 
-> > 	jmp.d32	func_B
-> > 	call	__fexit__
-> > 	ret
-> 
-> 
-> Functions with a tail call will not have a __fexit__ and we can not rely on
-> the function that is the tail call to do the __fexit__ for the parent
-> function. Thus, the compromise is to add a label where the jmp to the
-> tail-call function is, and when we want to trace the return of that
-> function, we first have to patch the jmp into a call, which will then
-> return back to the call to __fexit__.
+> (I'm sure there is a comment about that in the gcc docs.)
 
-Got it. So the tail call "jump" will be replaced with a normal call when
-we trace it.
+^ Hey David, yes you're right, that is very interesting...
 
-That's a good idea :) 
+I hit a GCC bug when playing with syscall6() implementation here.
 
+Using register variables for all inputs for syscall6() causing GCC 11.2
+stuck in an endless loop with 100% CPU usage. Reproducible with several
+versions of GCC.
 
-> 
-> -- Steve
+In GCC 6.3, the syscall6() implementation above yields ICE (Internal
+Compiler Error):
+```
+   <source>: In function '__sys_mmap':
+   <source>:35:1: error: unable to find a register to spill
+    }
+    ^
+   <source>:35:1: error: this is the insn:
+   (insn 14 13 30 2 (set (reg:SI 95 [92])
+           (mem/c:SI (plus:SI (reg/f:SI 16 argp)
+                   (const_int 28 [0x1c])) [1 offset+0 S4 A32])) <source>:33 86 {*movsi_internal}
+        (expr_list:REG_DEAD (reg:SI 16 argp)
+           (nil)))
+   <source>:35: confused by earlier errors, bailing out
+   Compiler returned: 1
+```
+See the full show here: https://godbolt.org/z/dYeKaYWY3
 
+Using the appropriate constraints, it compiles nicely, now it looks
+like this:
+```
+   #define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)	\
+   ({								\
+   	long _eax  = (long)(num);				\
+   	long _arg6 = (long)(arg6); /* Always be in memory */	\
+   	asm volatile (						\
+   		"pushl	%[_arg6]\n\t"				\
+   		"pushl	%%ebp\n\t"				\
+   		"movl	4(%%esp), %%ebp\n\t"			\
+   		"int	$0x80\n\t"				\
+   		"popl	%%ebp\n\t"				\
+   		"addl	$4,%%esp\n\t"				\
+   		: "+a"(_eax)		/* %eax */		\
+   		: "b"(arg1),		/* %ebx */		\
+   		  "c"(arg2),		/* %ecx */		\
+   		  "d"(arg3),		/* %edx */		\
+   		  "S"(arg4),		/* %esi */		\
+   		  "D"(arg5),		/* %edi */		\
+   		  [_arg6]"m"(_arg6)	/* memory */		\
+   		: "memory", "cc"				\
+   	);							\
+   	_eax;							\
+   })
+```
+Link: https://godbolt.org/z/ozGbYWbPY
+
+Will use that in the next patchset version.
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Ammar Faizi
+

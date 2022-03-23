@@ -2,115 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDE34E4A80
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C13C84E4A88
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiCWBdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 21:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S239123AbiCWBhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 21:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiCWBdv (ORCPT
+        with ESMTP id S233466AbiCWBhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 21:33:51 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8137933E1C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:32:23 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so323783pjq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1tdwMzgNU3+9ty6xkH9fMGGweeCwRgg1Dr+d/9eH3Qc=;
-        b=Gb0kqmLT129jUYWppYcf+O0ptJfQ1chsmf0FWqDF33rRzHXnu9VU00lf82mCBhvMOT
-         xEjT2gr2VnGPjBV+knw3swrECBoiOXP+IaNN3IZCyRh3fJbtolZLh24hhLZODv+yUM2N
-         GFIiTiqXmm3LkBcYok5oDYtJXWYgk85zciH63XgxqfYUs5VWqb539wKbEnisMMJ9+fHX
-         0fpcq6O1OMroRA0Ug9+nYbNeuaQKWOsm5Ke7a379DYXWXP67n6eeVB/IwCE/MNv+nWaK
-         XUQCZ/XpQoF/T20F+m22W61xy9jzoFz/4ky/GkBcnOn9Lcp1py6ktikn1QFU79g7Rza4
-         I0qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=1tdwMzgNU3+9ty6xkH9fMGGweeCwRgg1Dr+d/9eH3Qc=;
-        b=5Iud4obIyV5XrUK6XVT1YP30FkAPVC7oeSDLsbN9rkeTxqfIb/v3LW2EkvdaUE1d/Q
-         3mpyNdCG/Vq9j2pFpvG33hU1xy0SK+tQN5qzRYOJ7+Ekn+f1Y1tYThJbsRw9u72RPz9a
-         3u8uk4IkXZwtKuZmqAGijIuS6fjuEyLe4ecsXet1Lv5+t7nNGhivhhGJTpVMfQnJyJX4
-         V1ZlXEVancxfiDSKDWWSsYKbbP8NZ4SkOHgIqObR1gnZ6gRX/Fi29wg7c1YGll/mtWcm
-         KQTplcryW0BpPdHOMl3hsthOJRqPSVCW+zKFo4pMFyb73d6WxR8F2wDxJ9ARuZqixsPZ
-         GeWw==
-X-Gm-Message-State: AOAM532GfDXruS6TXZzUA1OngBxtnSV1LaMzLe5k3LLtZO/dmLI/VBQP
-        cKCuS3+f0rxvOS9+YNUgd6n1zA==
-X-Google-Smtp-Source: ABdhPJwy3tsZpMmtKAa8Z+PP3YAuWnFssj1dAbdwrL7GGL/i9W4P1ajH89rZtTfBAzTSrLgBPMJwkg==
-X-Received: by 2002:a17:903:32c9:b0:154:3a2d:fa89 with SMTP id i9-20020a17090332c900b001543a2dfa89mr17771357plr.3.1647999142958;
-        Tue, 22 Mar 2022 18:32:22 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056a00140a00b004c55d0dcbd1sm24433562pfu.120.2022.03.22.18.32.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 18:32:22 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 18:32:22 -0700 (PDT)
-X-Google-Original-Date: Tue, 22 Mar 2022 18:32:18 PDT (-0700)
-Subject:     Re: [RFC PATCH V2 0/1] RISCV_EFI_BOOT_PROTOCOL support in linux
-In-Reply-To: <20220303145944.307321-1-sunilvl@ventanamicro.com>
-CC:     ardb@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, heinrich.schuchardt@canonical.com,
-        Atish Patra <atishp@rivosinc.com>, apatel@ventanamicro.com,
-        abner.chang@hpe.com, jrtc27@jrtc27.com, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        sunilvl@ventanamicro.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     sunilvl@ventanamicro.com
-Message-ID: <mhng-5eb23850-e2a9-43d3-8093-2f588c71de00@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Mar 2022 21:37:08 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CC98E0A1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:35:38 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-314-XHEmaLmFMKCfa60oSAy2oA-1; Wed, 23 Mar 2022 01:35:34 +0000
+X-MC-Unique: XHEmaLmFMKCfa60oSAy2oA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 23 Mar 2022 01:35:34 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 23 Mar 2022 01:35:34 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Arnd Bergmann' <arnd@arndb.de>,
+        "chenjiahao (C)" <chenjiahao16@huawei.com>
+CC:     "Eric W . Biederman" <ebiederm@xmission.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: RE: [PATCH -next] uaccess: fix __access_ok limit setup in compat mode
+Thread-Topic: [PATCH -next] uaccess: fix __access_ok limit setup in compat
+ mode
+Thread-Index: AQHYPfsecjlH4Ezf4kOvHM6pPLYCHKzMKolw
+Date:   Wed, 23 Mar 2022 01:35:34 +0000
+Message-ID: <bdebdcb56b8a4af8a6b1d22029a2e7ba@AcuMS.aculab.com>
+References: <20220318071130.163942-1-chenjiahao16@huawei.com>
+ <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
+ <88ff36b3-558b-9c3f-f21d-5ef05b3227c5@huawei.com>
+ <CAK8P3a3_iZihNmgRNz7Ntrp8sj0hB_Yrpu5iT++ivMjsUXH7+w@mail.gmail.com>
+In-Reply-To: <CAK8P3a3_iZihNmgRNz7Ntrp8sj0hB_Yrpu5iT++ivMjsUXH7+w@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 03 Mar 2022 06:59:43 PST (-0800), sunilvl@ventanamicro.com wrote:
-> This patch adds support for getting the boot hart ID using new
-> RISCV_EFI_BOOT_PROTOCOL in linux efi stub. While there is an existing
-> solution of passing the boot hart ID through Device Tree, it doesn't work
-> for ACPI. Hence an EFI protocol protocol is recommended which works for
-> both DT and ACPI based platforms.
->
-> The latest draft spec of this new protocol is available at
-> https://github.com/riscv-non-isa/riscv-uefi/releases/download/1.0-rc2/RISCV_UEFI_PROTOCOL-spec.pdf
+RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyMiBNYXJjaCAyMDIyIDE0OjQxDQo+IA0KPiBP
+biBUdWUsIE1hciAyMiwgMjAyMiBhdCAxOjU1IFBNIGNoZW5qaWFoYW8gKEMpIDxjaGVuamlhaGFv
+MTZAaHVhd2VpLmNvbT4gd3JvdGU6DQo+ID4g5ZyoIDIwMjIvMy8xOCAxNTo0NCwgQXJuZCBCZXJn
+bWFubiDlhpnpgZM6DQo+ID4gPg0KPiA+ID4gVGhpcyBzaG91bGQgbm90IHJlc3VsdCBpbiBhbnkg
+dXNlciB2aXNpYmxlIGRpZmZlcmVuY2UsIGluIGJvdGggY2FzZXMNCj4gPiA+IHVzZXIgcHJvY2Vz
+cyB3aWxsIHNlZSBhIC1FRkFVTFQgcmV0dXJuIGNvZGUgZnJvbSBpdHMgc3lzdGVtIGNhbGwuDQo+
+ID4gPiBBcmUgeW91IGFibGUgdG8gY29tZSB1cCB3aXRoIGEgdGVzdCBjYXNlIHRoYXQgc2hvd3Mg
+YW4gb2JzZXJ2YWJsZQ0KPiA+ID4gZGlmZmVyZW5jZSBpbiBiZWhhdmlvcj8NCj4gPg0KPiA+IEFj
+dHVhbGx5LCB0aGlzIHBhdGNoIGRvIGNvbWVzIGZyb20gYSB0ZXN0Y2FzZSBmYWlsdXJlLCB0aGUg
+Y29kZSBpcw0KPiA+IHBhc3RlZCBiZWxvdzoNCj4gDQo+IFRoYW5rIHlvdSBmb3IgdGhlIHRlc3Qg
+Y2FzZSENCj4gDQouLi4NCj4gPiAgICAgIHJldCA9IHByZWFkNjQoZmQsIGJ1ZiwgLTEsIDEpOw0K
+PiA+ICAgICAgaWYoKC0xID09IHJldCkgJiYgKEVGQVVMVCA9PSBlcnJubykpDQo+ID4gICAgICB7
+DQouLi4NCj4gPiAgICAgICAgICBwcmludGYoIlBBU1NcbiIpOw0KLi4uDQo+ID4gSW4gbXkgZXhw
+bGFuYXRpb24sIHByZWFkNjQgaXMgY2FsbGVkIHdpdGggY291bnQgJzB4ZmZmZmZmZmZ1bGwnIGFu
+ZA0KPiA+IG9mZnNldCAnMScsIHdoaWNoIG1pZ2h0IHN0aWxsIG5vdCB0cmlnZ2VyDQo+ID4NCj4g
+PiBwYWdlIGZhdWx0IGluIDY0LWJpdCBrZXJuZWwuDQo+ID4NCj4gPg0KPiA+IFRoaXMgcGF0Y2gg
+dXNlcyBUQVNLX1NJWkUgYXMgdGhlIGFkZHJfbGltaXQgdG8gcGVyZm9ybWFuY2UgYSBzdHJpY3Rl
+cg0KPiA+IGFkZHJlc3MgY2hlY2sgYW5kIGludGVyY2VwdHMNCj4gDQo+IEkgc2VlLiBTbyB3aGls
+ZSB0aGUga2VybmVsIGJlaGF2aW9yIHdhcyBub3QgbWVhbnQgdG8gY2hhbmdlIGZyb20NCj4gbXkg
+cGF0Y2gsIGl0IGNsZWFybHkgZGlkLCB3aGljaCBtYXkgY2F1c2UgcHJvYmxlbXMuIEhvd2V2ZXIs
+IEknbQ0KPiBub3Qgc3VyZSBpZiB0aGUgY2hhbmdlZCBiZWhhdmlvciBpcyBhY3R1YWxseSB3cm9u
+Zy4NCg0KSXQgaXNuJ3QgcmVhbGx5IGFueSBkaWZmZXJlbnQgZnJvbSBwYXNzaW5nIGEgbGVuZ3Ro
+IG9mICgxIDw8IDMwKQ0KKGFuZCBhIGJ1ZmZlciBhdCBhIGxvdyB1c2VyIGFkZHJlc3MpLg0KVGhl
+IGVudGlyZSBidWZmZXIgaXMgdmFsaWQgdXNlciBhZGRyZXNzZXMsIGJ1dCBtb3N0IG9mIGl0IGlz
+DQppbnZhbGlkIGJlY2F1c2UgdGhlcmUgaXMgbm90aGluZyBtYXBwZWQgYXQgdGhlIHJlbGV2YW50
+IGFkZHJlc3Nlcy4NClVubGVzcyB5b3UgYWN0dWFsbHkgdHJ5IHRvIGFjY2VzcyBvbmUgb2YgdGhl
+IG1lbW9yeSBsb2NhdGlvbnMNCnlvdSB3b24ndCBnZXQgYSBmYXVsdCAtIGFuZCB0aGUgY29ycmVj
+dCByZXR1cm4gaXMgdGhlbiBhIHBhcnRpYWwgcmVhZC4NCg0KU2ltaWxhcmx5IGl0IGlzIHZhbGlk
+IGZvciB0aGUga2VybmVsIHRvIGVuc3VyZSB0aGVyZSBpcyBhbg0KdW5tYXBwZWQgcGFnZSBiZXR3
+ZWVuIHVzZXIgYW5kIGtlcm5lbCBhZGRyZXNzZXMgYW5kIHRoZW4NCm5vdCBjaGVjayB0aGUgYnVm
+ZmVyIHNpemUgYXQgYWxsIC0gcmVxdWlyaW5nIHRoZSBrZXJuZWwgY29kZQ0KZG8gKGFkZXF1YXRl
+bHkpIHNlcXVlbnRpYWwgYWNjZXNzZXMuDQpBZ2FpbiB5b3VyIHRlc3QgJ2ZhaWxzJy4NCg0KWW91
+IGNvdWxkIGVxdWFsbHkgd2VsbCBhcmd1ZSB0aGF0IHRoZSAnb2xkJyBiZWhhdmlvdXIgaXMgd3Jv
+bmchDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
+Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
+biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-This looks fine to me, but we need the spec folk to commit to this being 
-a stable interface before we can start using it.  Historically that's 
-been "frozen" for RISC-V specs, but I'm not sure how that all fits 
-together in EFI land as IIUC we also have to follow the UEFI forum's 
-process.  Last I checked you guys understood that better than I did, so
-
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # pending spec freeze
-
-I had a minor comment about the error message, as well.
-
-Thanks!
-
-> This linux ptach can be found in:
-> riscv_boot_protocol_rfc_v2 branch at
-> https://github.com/vlsunil/linux.git
->
-> This is tested in qemu with u-boot 2022.04.rc3.
->
-> Changes since V1:
->   - Rebased to get the "Fix get_boot_hartid_from_fdt() return value"
->     patch
->   - Removed mixed_mode member
->   - Separated return value and status.
->
-> Sunil V L (1):
->   riscv/efi_stub: Add support for RISCV_EFI_BOOT_PROTOCOL
->
->  drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
->  drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
->  include/linux/efi.h                       |  1 +
->  3 files changed, 32 insertions(+), 5 deletions(-)

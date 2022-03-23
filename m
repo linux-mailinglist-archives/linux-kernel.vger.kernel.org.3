@@ -2,44 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905444E5AFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C448D4E5B01
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 23:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345067AbiCWWBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 18:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        id S1345091AbiCWWCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 18:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiCWWBA (ORCPT
+        with ESMTP id S1345080AbiCWWB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 18:01:00 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5577045040;
-        Wed, 23 Mar 2022 14:59:29 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 963D292009D; Wed, 23 Mar 2022 22:59:28 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 9423792009C;
-        Wed, 23 Mar 2022 21:59:28 +0000 (GMT)
-Date:   Wed, 23 Mar 2022 21:59:28 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] serial: 8250: Add proper clock handling for OxSemi
- PCIe devices
-In-Reply-To: <YjSL34DkktVVahmy@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.21.2203232126220.52439@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2106260539240.37803@angie.orcam.me.uk> <alpine.DEB.2.21.2106260604540.37803@angie.orcam.me.uk> <YOyi0cPdIVSCcpmw@surfacebook.localdomain> <alpine.DEB.2.21.2107130150420.9461@angie.orcam.me.uk> <CAHp75VfnCG-C6bUzhhC9jQGOSgMXVLZ=QtH0mdhAD85yeqBC7A@mail.gmail.com>
- <alpine.DEB.2.21.2107131504270.9461@angie.orcam.me.uk> <CAHp75VeS3UdK5o4cEKuT=nz+Yob9FBv6RNJ-i116pFZQTGuyuQ@mail.gmail.com> <alpine.DEB.2.21.2202052213110.34636@angie.orcam.me.uk> <YjSL34DkktVVahmy@smile.fi.intel.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 23 Mar 2022 18:01:57 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C845B5AEE5;
+        Wed, 23 Mar 2022 15:00:26 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-d6ca46da48so3121044fac.12;
+        Wed, 23 Mar 2022 15:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=cCUJOW25CLr0CeLCnE62n9am59728Z8IpIAoIkTyH8w=;
+        b=BrN0/8+UKuT/c/CxI6vxUQoH8bAOu5CLLGm0B1gaXmAlXGpD5RAIYpoQiv/g/PHo0n
+         zgrW2NzOL21eJiKJMrksxsLY5cEzU8GdSIiMvX+jEo7JBJPVAJaX+cA6ixDdJ6xq1zKM
+         TK6NO1/dGDclpceuyLpigdW8hUJim1AVc1Cykc564tB6rp3wjlFprtbbYbBsdyhomcch
+         uJ+DH7iQUKJiujYBygCXWhVZozbUTzMXzFa96/0JIlqGvJZ6WisDrpGk2jy7OOcpGZXE
+         U3cm/P9/4RmHUpiA+5v0jFwbTf4Pr8RHeaVsvtZduhILkPrc4CRMBMB9eKc61WSRwoDP
+         sfJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=cCUJOW25CLr0CeLCnE62n9am59728Z8IpIAoIkTyH8w=;
+        b=wingd7PxZXTPptVSgziEAP5limmTh/KSJ8KmBaZZwskzbNPwtIuKrXuH47Q7A/nQS0
+         6Zr29LA64CoZOpytCDkMfNLo9po1a9aBd1QrlJA7zM1ufgUTbquBu/EoD5Pz/QyenGyE
+         qDYNYcJ39gG/3SBdo4HXCPSLxYpku28/ekBRzx72AkSJtE14knxVCHUHqTlgZO0cBlmK
+         SB0i2Xk//gaj9m3lgpkmeRUTECz1IBhuDV8mf1jaPYK2FKD/rbGsNrhAXx0zBGvnHOPs
+         fzVYc2vq2y+cT9VMq7TpT02wPvc2umk0g+tIPU5aFMcnYtUD1+J3NVMmYRPD6jp+w9Nk
+         L/6Q==
+X-Gm-Message-State: AOAM531ByyHBsXhMy6BidHpuBl9fIaUA6wyLPPJeAm+I2kPQ8/QErUzP
+        VPMAkeVPf0OqCNOWLZ5YCvKe5GLjfGldcvOj
+X-Google-Smtp-Source: ABdhPJxKYcohZLXbzIiEAcg3BmdYtw/mH4Ru7srghs3Ss4x/V6+R8kTndUbj/ELK42v6ZBNc50K2+w==
+X-Received: by 2002:a05:6870:42d0:b0:dd:acbd:14dc with SMTP id z16-20020a05687042d000b000ddacbd14dcmr1041713oah.87.1648072825998;
+        Wed, 23 Mar 2022 15:00:25 -0700 (PDT)
+Received: from test-HP-EliteDesk-800-G1-SFF ([70.102.108.170])
+        by smtp.gmail.com with ESMTPSA id w8-20020aca3008000000b002ef7e3ad3b8sm490262oiw.29.2022.03.23.15.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 15:00:25 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 15:00:24 -0700
+From:   Greg Jesionowski <jesionowskigreg@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: usb: ax88179_178a: add Allied Telesis AT-UMCs
+Message-ID: <20220323220024.GA36800@test-HP-EliteDesk-800-G1-SFF>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,57 +66,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Mar 2022, Andy Shevchenko wrote:
+Adds the driver_info and IDs for the AX88179 based Allied Telesis AT-UMC
+family of devices.
 
-> >  It does allow one to program the full clock divider range of the OxSemi 
-> > devices.  I find it appropriate according to my engineer's code of good 
-> > practices.  And it doesn't cause any burden for non-OxSemi code.
-> 
-> How BOTHER does prevent you doing the same?
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Jesionowski <jesionowskigreg@gmail.com>
+---
+ drivers/net/usb/ax88179_178a.c | 51 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
- It does not allow you to set arbitrary serial port clock rates.  You can 
-only set integer baud rates, and then only those that do not exceed the 
-[1;65535] clock divisor range.
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index a31098981a65..e2fa56b92685 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1872,6 +1872,45 @@ static const struct driver_info mct_info = {
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+ 
++static const struct driver_info at_umc2000_info = {
++	.description = "AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter",
++	.bind   = ax88179_bind,
++	.unbind = ax88179_unbind,
++	.status = ax88179_status,
++	.link_reset = ax88179_link_reset,
++	.reset  = ax88179_reset,
++	.stop   = ax88179_stop,
++	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
++	.rx_fixup = ax88179_rx_fixup,
++	.tx_fixup = ax88179_tx_fixup,
++};
++
++static const struct driver_info at_umc200_info = {
++	.description = "AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter",
++	.bind   = ax88179_bind,
++	.unbind = ax88179_unbind,
++	.status = ax88179_status,
++	.link_reset = ax88179_link_reset,
++	.reset  = ax88179_reset,
++	.stop   = ax88179_stop,
++	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
++	.rx_fixup = ax88179_rx_fixup,
++	.tx_fixup = ax88179_tx_fixup,
++};
++
++static const struct driver_info at_umc2000sp_info = {
++	.description = "AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter",
++	.bind   = ax88179_bind,
++	.unbind = ax88179_unbind,
++	.status = ax88179_status,
++	.link_reset = ax88179_link_reset,
++	.reset  = ax88179_reset,
++	.stop   = ax88179_stop,
++	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
++	.rx_fixup = ax88179_rx_fixup,
++	.tx_fixup = ax88179_tx_fixup,
++};
++
+ static const struct usb_device_id products[] = {
+ {
+ 	/* ASIX AX88179 10/100/1000 */
+@@ -1913,6 +1952,18 @@ static const struct usb_device_id products[] = {
+ 	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
+ 	USB_DEVICE(0x0711, 0x0179),
+ 	.driver_info = (unsigned long)&mct_info,
++}, {
++	/* Allied Telesis AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
++	USB_DEVICE(0x07c9, 0x000e),
++	.driver_info = (unsigned long)&at_umc2000_info,
++}, {
++	/* Allied Telesis AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter */
++	USB_DEVICE(0x07c9, 0x000f),
++	.driver_info = (unsigned long)&at_umc200_info,
++}, {
++	/* Allied Telesis AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
++	USB_DEVICE(0x07c9, 0x0010),
++	.driver_info = (unsigned long)&at_umc2000sp_info,
+ },
+ 	{ },
+ };
+-- 
+2.25.1
 
-> >  So I have had a look at how it has been done for other drivers and I have 
-> > now convinced myself against such a split.  The primary reason for this 
-> > conclusion is that there is no basic infrastructure for such a split and 
-> > the ultimate result is code duplication with no clear benefit to justify 
-> > it.
-> 
-> Justification for split is to keep certain quirks out of the scope of the
-> generic driver. I'm not sure what duplication you are talking about if the
-> LOC statistics shows otherwise.
-
- All the init/remove code is almost the same across all the devices.  And 
-suspend/resume and PCI error handling code has been removed from the split 
-off devices, and for the functional regression to be fixed:
-
-1. this code would have to be replicated, or
-
-2. handlers from the generic 8250_pci.c driver exported and referred to, 
-   or
-
-3. some kind of a helper library (or a core module) created providing this 
-   stuff to 8250_*.c drivers as required.
-
- I guess the latter is the minimum that could convince me this driver
-framework is usable for implementing device-specific drivers (as I find 
-the other variants rather miserable hacks).
-
- Plus there would have to be clear information provided to the users as 
-otherwise people will be rather confused as to why 3 out of their 4 16x50 
-PCI/e serial cards work with 8250_pci.c while the remaining one does not 
-(probably broken, or is it?).
-
-> You may not want to get the idea, it's fine. The rationale is simple:
-> isolate quirks for certain platform(s) in one place. Each platform
-> in a separate module.
-
- What is a platform in your terminology?  A PCI/e option card you can 
-install in about any modern computer?  I usually think of platforms as 
-specific families of computers rather than option cards.  Variants of 
-otherwise the same device are usually handled with a single driver in 
-Linux.
-
-  Maciej

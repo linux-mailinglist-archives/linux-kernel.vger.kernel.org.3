@@ -2,83 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B19A4E5A91
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45BA4E5A92
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344878AbiCWVWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S1344885AbiCWVWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241081AbiCWVWa (ORCPT
+        with ESMTP id S241081AbiCWVWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:22:30 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF335FDD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:20:59 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bg10so5432642ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=58oFgw+aSJKbmcVcBo8WJoE16fYK1EVOuFObJ6dRxLE=;
-        b=E/euJg1O6WdvDAGao/Ysl1hYIzJqoY1BQobkcH3juoZC8UfixEm9MeHVqh3TPwhQE7
-         AuwgdU7hITXRZX63oGEzlU8bvgd6wr2tnGaVSGCU9mpHf+iogW5jbqRftYiVetOjyZrN
-         lusdVvRAMlH08NouLi3fBd6vcsV1MwFE0O62eN/OgfnWonVpvCnfcJzpwMFlHfW1Jzjz
-         SyPPmxVFTep5V0qKFyrQ0wRdGAbCx/11vZ3IwlVIYa/csynGUgK1vPxZ+kIAM+WATT5s
-         kN7oH2Ke3aRG3l6Wu8EvrMnI3fjPiHuOakjtuexVDonrVEYx23irntaDnEEZN+eg/5I8
-         SIBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=58oFgw+aSJKbmcVcBo8WJoE16fYK1EVOuFObJ6dRxLE=;
-        b=syEkaB/drg7jq0B9nb6Zj4uQ0uCxO4+kmIrawJLHlfU+xRclet66EhDT5sNi5c8T9N
-         fmk0hfDu3briPfbf4NosMEIKiR+vY1IAYJf68D2F5IxOrBcqbgUjI7cnI2tMXqsrphfD
-         M/NJaqlZOTueew7fMA3Kfn4h8YjSsb0pdIl+Mm/BLR20B8qD0no+vyhXpwbiWmLlF1BO
-         kKawiwn6cGP5BsKvQ/ujWj61+nzCmfUSsmsJ8O6yeKiD2bmude2dRXrEhjCgDaF6yPvT
-         /ZPhT03SBYxATP5oK643viQtq27Rpz/7TkDrQ8XvBs9gB6OZrVn7fc3XfDf3GBDQ9zeM
-         1Adg==
-X-Gm-Message-State: AOAM532UJelKemiw9l+a/1+xFAjGNLoqmDozQpJK1gXeMjdT2P+N4o4v
-        MnDo+jaelI+jUV+3VX9HOkePyPq5hpaV5E2vhfOAqg==
-X-Google-Smtp-Source: ABdhPJzaCrJBL3DfPHCEbeIi+Uh/TeD+CQXGI0FEOYWafjGQBn/JTTZgPoLjrSoKM/jhJ5e3oN6nJBVLP1x+lee/gYQ=
-X-Received: by 2002:a17:907:c018:b0:6df:e31b:d912 with SMTP id
- ss24-20020a170907c01800b006dfe31bd912mr2271911ejc.196.1648070458265; Wed, 23
- Mar 2022 14:20:58 -0700 (PDT)
+        Wed, 23 Mar 2022 17:22:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE2985644
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:21:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E13D2B820C5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 21:21:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D880C340EE;
+        Wed, 23 Mar 2022 21:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648070469;
+        bh=pi4TsVzQEBzAwpJQOAYodMLonLQpZSt0gqr4sMg+vN4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YFGFG1ApYl/SfF0lPexzaDWCb3nM7r0Q1oJaR4DWf34eUD1IdXXzArV5VsHEeDzkx
+         jals1gSGpf1j4r5E+jG7aLG0ljiJ4j9qmS13NuVq5Qjcbi782RoAKBrKgOOXGyStGr
+         f4nHE5kKMLC/fJAc/ABzSnB6LEv1UTucf4wqTRBsMHXT8OLtrC7ZOkVVb4AaJoKplP
+         oGu9U5DcC/aMXgIyFsAi9k918VU87xWdBDfLvYO0rr7V3+Wc+auC4qN0tHoUcgm9sm
+         9QacqXJLRd/WNbzWAWQRuGfzfVozPsws8uKQWcBTaS16QBqf8/W6/gEopsyA7iH3ZU
+         bo2GrGLZmb11Q==
+Date:   Wed, 23 Mar 2022 14:21:07 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Tim Murray <timmurray@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>
+Subject: Re: [GIT PULL] f2fs for 5.18
+Message-ID: <YjuPQ36A4W553ai1@google.com>
+References: <YjjihIZuvZpUjaSs@google.com>
+ <CAHk-=wgsmvoJFKFWxQ2orEVUOWH1agk9iUNZ=-DFh5OXZL=Ldw@mail.gmail.com>
+ <51cded74-3135-eed8-06d3-0b2165e3b379@redhat.com>
+ <CAHk-=wi=Xsekgj7zfw_vpOM673CG24vznmz-yx9G05rWSAAYXg@mail.gmail.com>
+ <CAEe=Sxmcn5+YUXBQhxDpzZVJu_T6S6+EURDqrP9uUS-PHGyuSg@mail.gmail.com>
+ <CAHk-=whGKUyJpi0dTQJjyJxdmG+WCeKkJJyycpOaUW0De17h_Q@mail.gmail.com>
+ <YjtKRAgFmBfgU0al@google.com>
+ <CAHk-=wi99R8i=uvHiHo3jjZPzg6oTJW1rin3ekuPbuccS5XZqA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220224192036.2388302-1-dlatypov@google.com>
-In-Reply-To: <20220224192036.2388302-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 17:20:46 -0400
-Message-ID: <CAFd5g47Q9Z-YmqVSdHFwcXwPmLGq6QmjC+XanVMqXNrhBa_c3Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kunit: tool: readability tweaks in KernelCI json
- generation logic
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi99R8i=uvHiHo3jjZPzg6oTJW1rin3ekuPbuccS5XZqA@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 2:20 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Use a more idiomatic check that a list is non-empty (`if mylist:`) and
-> simplify the function body by dedenting and using a dict to map between
-> the kunit TestStatus enum => KernelCI json status string.
->
-> The dict hopefully makes it less likely to have bugs like commit
-> 9a6bb30a8830 ("kunit: tool: fix --json output for skipped tests").
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+On 03/23, Linus Torvalds wrote:
+> On Wed, Mar 23, 2022 at 9:26 AM Jaegeuk Kim <jaegeuk@kernel.org> wrote:
+> >
+> > OTOH, I was suspecting the major contetion would be
+> >         f2fs_lock_op -> f2fs_down_read(&sbi->cp_rwsem);
+> > , which was used for most of filesystem operations.
+> 
+> Very possible, I was just looking at a random one in f2fs/file.c
+> obviously with no actual numbers in hand.
+> 
+> In general, I really hate seeing specialized locks, but this f2fs use
+> case is in some ways worse than other ad-hoc locks I've seen - simply
+> because it's been one whole-sale conversion of "down_read/write()" to
+> "f2fs_down_read/write()" - regardless of _which_ lock is being locked.
+> 
+> (Now, it's not all bad news - in other respects it's much better than
+> some ad-hoc locking: at least you still will participate in lockdep,
+> and you use the actual low-level locking primitives instead of making
+> up your own and getting memory ordering wrong).
+> 
+> But basically I think it would have been much nicer if you would have
+> done this for just the _one_ lock that mattered, whichever lock that
+> might be. Partly as documentation, and partly so that maybe some day
+> you can split that lock up (or maybe notice cases where you can avoid
+> it entirely).
+> 
+> For example, if it's really just f2fs_lock_op() that needs this, the
+> special "wait_event(trylock)" hack could have been entirely local to
+> just *that*, rather than affecting all the other locks too.
+> 
+> And the very first f2fs_lock_op() case I find, I see that the lock is
+> pointless. Again, that's unlikely to be the *cause* of any of these
+> problems, but the fact that I've now looked at two of the f2fs locks,
+> and gone "the locking seems to be pointlessly badly done" does imply
+> that the problem isn't "down_read()", it's the use.
+> 
+> That other lock I reacted to was the f2fs_lock_op(sbi) at the top of
+> f2fs_new_inode().
+> 
+> Look, you have a new inode that you just allocated, that nobody else
+> can yet access.
+> 
+> And the only thing that that f2fs_lock_op(sbi) -> f2fs_unlock_op(sbi)
+> sequence protects is the f2fs_alloc_nid() for that new inode.
+> 
+> Ok, so maybe f2fs_alloc_nid() needs that lock?
+> 
+> No it doesn't. It already has
+> 
+>  - &nm_i->nid_list_lock spinlock for its own in-memory internal NID caches
+> 
+> *and* when that fails
+> 
+>  - &NM_I(sbi)->build_lock for protecting all of f2fs_build_free_nids()
+> 
+> *and* inside of that lock
+> 
+>  - f2fs_down_read(&nm_i->nat_tree_lock) for protecting the NAT tree structures.
+> 
+> So I see two major issues in the very first user of that
+> f2fs_lock_op() that I look at:
+> 
+>  (a) it seems to be entirely unnecessary
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Actually, when I took a look at the above path, indeed, f2fs_lock_op in
+f2fs_new_inode may be unnecessary at all aligned to your points. Even, that
+might hurt performance since we get f2fs_lock_op twice before dealing with
+dentries like f2fs_add_link. Let me test a bit whether there's any regression
+if I remove f2fs_lock_op in f2fs_new_inode.
+
+> 
+>  (b) it is a classic case of "multiple nested locks".
+> 
+> Now, it's possible that I'm wrong on (a) and there's some odd reason
+> that lock is needed (maybe there is a lock ordering problem for one of
+> the other locks between readers and writers, and the op-lock acts as a
+> mutual exclusion for that).
+> 
+> But (b) really is a classic problem case for locking: nested locks are
+> *much* more likely to cause horrible contention, because not any
+> contention in any of the locks will end up affecting the others (and
+> you easily get "bunching up" of different processes when they get
+> synchronized with each other thanks to the inner lock).
+> 
+> Nested locking is often required, but it's one of those things where
+> you just need to be aware that they can be horribly bad for
+> performance, _particularly_ if an inner lock sees contention and
+> essentially "transfers" that contention to an outer lock.
+> 
+> Maybe I've been unlucky. Maybe the two cases I happened to look at
+> were just completely harmless, and very unusual. But the fact that I'm
+> two-for-two and go "that locking looks like a prime candidate to be
+> fixed" makes me suspect there's a lot of low-hanging fruit in there.
+
+Thank you so much for taking the time to write this great advise. Let me dig
+more whether there's anything that I can relax the lock use-cases further.
+(tbh, I haven't reviewed them for a long time due to focusing on stability
+issues mostly.)
+
+> 
+> And that whole "wait_event(trylock)" thing is a symptom of problematic
+> f2fs locking, rather than a solution to it.
+
+Understood. If I can avoid lock contention upfront, definitely it wouldn't
+need to apply rwsem change at all. Let me take some time to think about how to
+move forward.
+
+> 
+>                  Linus

@@ -2,185 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB294E5275
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BA94E527E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243219AbiCWMsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
+        id S243291AbiCWMvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243298AbiCWMsa (ORCPT
+        with ESMTP id S235121AbiCWMvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:48:30 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C169B7C175
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:46:59 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id m30so1984992wrb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:46:59 -0700 (PDT)
+        Wed, 23 Mar 2022 08:51:07 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9002978934;
+        Wed, 23 Mar 2022 05:49:37 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 17so1658222ljw.8;
+        Wed, 23 Mar 2022 05:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=QrnKrN1J0be5aGhbUhpBdOm3mgQtzJ3AbarAe1cgyz4=;
-        b=PNp6vqLvvi186d7HmPfAqbvJGTx7NW1Fx8uwCXWK6FDJi8hDa0A4Obyl0BJlO5+1lB
-         vMizD2ozDTrd1SWvW6k6EbB7UdNw60K8M08R7jTHpovxIB7hs0FOgMsE6ChIt7QkfrIk
-         bTGHkOg+xnrkgrIEahmcKVKPCqZRSxCqwzYZUfEPQXRZLytNNrKHkdlH6ytPTaCbezNf
-         6KqsyEBPIYlSSPXBmqKdIRnKAWl5fyQw0hqv/fail0P9VB0VcVBOKzUv2UrSnseSFA4P
-         4qliOHKw8/ytu9CL4ol6/j71Mf3nRJBkXmqtRzicETMnTCLQtXImq4sJeK616gwzDtE4
-         tvGA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=nM4ECUsKD86TuX1aebriaMiAFYf1FOMfworhtEK62yY=;
+        b=q4QXZ6ZYBRVEjNXVeG4HyqNr/xsvJ41Yrfq1g3qXiSTGEX/JyAKhQYXsucxBKhrPoX
+         1zALqoDFrlUEazH4Utx9a5idSyhlM5jEkiIx8KAhoiW4MqmaSiooQIrlBuZHBc29Kp71
+         YdInh1dNzHDr6/a+0Iz5PofA7Zmy3jM0BGyS5+pUq9nEy9jHQDPZGwAhU/R1UBr2fn90
+         s14w5/bTh/a70n/j/2g8ScpAjOCveJ2AEywNjgbUN5mTLEcoOepBH10NACleW3L2Enoz
+         33uT5HmvypS9EpSoHduNTMc9H9g0NHv7dBMJIHiR0Pez0K7Mr+MbmNiSjYZOEoG8j34n
+         kCPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=QrnKrN1J0be5aGhbUhpBdOm3mgQtzJ3AbarAe1cgyz4=;
-        b=h0PyIGNd+lSuJHe3E4vRs0HLF0IBL0bhRwulsSIKy97Rpm273DVPBC6dhKJ3Aiua6g
-         Bore//SuJ+IfzopDVPfWPYVGUQEaL6kWiFqKoUEuH7Il3KB3/mnk0IDy4UjeM2LVYcx+
-         bQJJ+BWTnX/W9Ht5Kl2Twxd6DrzAiUsgJdRxWXDOnVKXaV9UEXK+js2EYjsc+nENz2yz
-         ZHUorrPfVqsha6mHrccaKng8TRtKfy5wAAQPvsWbecAdCzT4ayL1p7jfGAHAFfFrkKjv
-         QVpDw0UrH8a8/67nn61s0uDbJ5a/MWBUfY9wZlpJS6N7b+WIl9wfZXt13laTl2/5NyHq
-         FITA==
-X-Gm-Message-State: AOAM530Rx0jaqa9eL73h7DpZw8VnZRSdEMxgrv2Qz+nm3WUfZG3MtHvZ
-        yG4BBmqZ8gMVreWociqJlEJtCBs4236Eog==
-X-Google-Smtp-Source: ABdhPJzSkUmPOcaKtIxHaouVgmm319CJF0UXHX2JHBimkzdShZYdJ/tai3elVkeKWEBvyUS26e35pw==
-X-Received: by 2002:a5d:64e7:0:b0:205:8cc7:aa82 with SMTP id g7-20020a5d64e7000000b002058cc7aa82mr1486949wri.247.1648039618247;
-        Wed, 23 Mar 2022 05:46:58 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id o8-20020a5d6488000000b002051f1028f6sm4375837wri.111.2022.03.23.05.46.56
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=nM4ECUsKD86TuX1aebriaMiAFYf1FOMfworhtEK62yY=;
+        b=MIvBJeq6W0zQNXCyzVUWrxzer3Q8jDBSuOzOGorxWNRhZtqySQ/5+r5cCy4WhS5i4A
+         QJsw748PgXauLx/GX51lbNTZzXuW3cOIA/cP4APeeZ8Tv9XYLvhdlWG61nmLdu8L/mDe
+         ZfVSpkZou2rctfJK/tOGMGcE+KfE9u4r+Hl/mPvRDkaQpVR+drdSfOzB27qC46WANFWJ
+         yV3k9+DbUhupqTUjiRLfymMfzwdepErW3duAq8SClM17w6eHqceSen+u0XiAALh7azJf
+         gR0nUdM678UCUkpRFv+ica7aF7+ru0w6lOeDcrsAFzhMHiPkBuY95/eil94OoEWAwWwz
+         OGog==
+X-Gm-Message-State: AOAM5320kNbQajfkwXte8e4IX3g4bk63OaQRbe9jgKQLctLrkkW1rbpX
+        46XvaeGL8ZoIADxOoJK2xoXjQMor7/nKGw==
+X-Google-Smtp-Source: ABdhPJxzVlKNn3Jz26qzmOxkGiYvN7hZ1TF3R5fHeuNMvIa8zgMHBmDQdKGFqBG0N1ilCFcXwDnrzw==
+X-Received: by 2002:a2e:944e:0:b0:246:4a4f:c610 with SMTP id o14-20020a2e944e000000b002464a4fc610mr21656073ljh.458.1648039775924;
+        Wed, 23 Mar 2022 05:49:35 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id n2-20020a056512310200b0044a30030d33sm905924lfb.91.2022.03.23.05.49.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 05:46:57 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 12:46:55 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     philip yang <yangp@amd.com>
-Cc:     Felix Kuehling <felix.kuehling@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Subject: Re: [PATCH 1/1] drm/amdkfd: Protect the Client whilst it is being
- operated on
-Message-ID: <YjsWvy8cT2eOw618@google.com>
-References: <20220317131610.554347-1-lee.jones@linaro.org>
- <8702f8a5-62a1-c07e-c7b7-e9378be069b6@amd.com>
- <YjNNCXc8harOvwqe@google.com>
- <1f003356-3cf9-7237-501e-950d0aa124d1@amd.com>
- <YjNQA80wkWpy+AmA@google.com>
- <b65db51e-f1ba-3a9b-0ac1-0b8ae51c5eee@amd.com>
- <YjNh/Ajxgp3mjvWV@google.com>
+        Wed, 23 Mar 2022 05:49:35 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
+ offloading of fdb locked flag
+In-Reply-To: <20220323123534.i2whyau3doq2xdxg@skbuf>
+References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
+ <20220317093902.1305816-3-schultz.hans+netdev@gmail.com>
+ <86o81whmwv.fsf@gmail.com> <20220323123534.i2whyau3doq2xdxg@skbuf>
+Date:   Wed, 23 Mar 2022 13:49:32 +0100
+Message-ID: <86wngkbzqb.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YjNh/Ajxgp3mjvWV@google.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022, Lee Jones wrote:
+On ons, mar 23, 2022 at 14:35, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Wed, Mar 23, 2022 at 01:29:52PM +0100, Hans Schultz wrote:
+>> On tor, mar 17, 2022 at 10:39, Hans Schultz <schultz.hans@gmail.com> wrote:
+>> > Used for Mac-auth/MAB feature in the offloaded case.
+>> >
+>> > Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+>> > ---
+>> >  include/net/switchdev.h | 3 ++-
+>> >  net/bridge/br.c         | 3 ++-
+>> >  net/bridge/br_fdb.c     | 7 +++++--
+>> >  net/bridge/br_private.h | 2 +-
+>> >  4 files changed, 10 insertions(+), 5 deletions(-)
+>> >
+>> > diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+>> > index 3e424d40fae3..d5d923411f5e 100644
+>> > --- a/include/net/switchdev.h
+>> > +++ b/include/net/switchdev.h
+>> > @@ -229,7 +229,8 @@ struct switchdev_notifier_fdb_info {
+>> >  	u16 vid;
+>> >  	u8 added_by_user:1,
+>> >  	   is_local:1,
+>> > -	   offloaded:1;
+>> > +	   offloaded:1,
+>> > +	   locked:1;
+>> >  };
+>> >  
+>> >  struct switchdev_notifier_port_obj_info {
+>> > diff --git a/net/bridge/br.c b/net/bridge/br.c
+>> > index b1dea3febeea..adcdbecbc218 100644
+>> > --- a/net/bridge/br.c
+>> > +++ b/net/bridge/br.c
+>> > @@ -166,7 +166,8 @@ static int br_switchdev_event(struct notifier_block *unused,
+>> >  	case SWITCHDEV_FDB_ADD_TO_BRIDGE:
+>> >  		fdb_info = ptr;
+>> >  		err = br_fdb_external_learn_add(br, p, fdb_info->addr,
+>> > -						fdb_info->vid, false);
+>> > +						fdb_info->vid, false,
+>> > +						fdb_info->locked);
+>> >  		if (err) {
+>> >  			err = notifier_from_errno(err);
+>> >  			break;
+>> > diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+>> > index 57ec559a85a7..57aa1955d34d 100644
+>> > --- a/net/bridge/br_fdb.c
+>> > +++ b/net/bridge/br_fdb.c
+>> > @@ -987,7 +987,7 @@ static int __br_fdb_add(struct ndmsg *ndm, struct net_bridge *br,
+>> >  					   "FDB entry towards bridge must be permanent");
+>> >  			return -EINVAL;
+>> >  		}
+>> > -		err = br_fdb_external_learn_add(br, p, addr, vid, true);
+>> > +		err = br_fdb_external_learn_add(br, p, addr, vid, true,
+>> >  false);
+>> 
+>> Does someone have an idea why there at this point is no option to add a
+>> dynamic fdb entry?
+>> 
+>> The fdb added entries here do not age out, while the ATU entries do
+>> (after 5 min), resulting in unsynced ATU vs fdb.
+>
+> I think the expectation is to use br_fdb_external_learn_del() if the
+> externally learned entry expires. The bridge should not age by itself
+> FDB entries learned externally.
+>
 
-> On Thu, 17 Mar 2022, philip yang wrote:
-> 
-> >    On 2022-03-17 11:13 a.m., Lee Jones wrote:
-> > 
-> > On Thu, 17 Mar 2022, Felix Kuehling wrote:
-> > 
-> > 
-> > Am 2022-03-17 um 11:00 schrieb Lee Jones:
-> > 
-> > Good afternoon Felix,
-> > 
-> > Thanks for your review.
-> > 
-> > 
-> > Am 2022-03-17 um 09:16 schrieb Lee Jones:
-> > 
-> > Presently the Client can be freed whilst still in use.
-> > 
-> > Use the already provided lock to prevent this.
-> > 
-> > Cc: Felix Kuehling [1]<Felix.Kuehling@amd.com>
-> > Cc: Alex Deucher [2]<alexander.deucher@amd.com>
-> > Cc: "Christian König" [3]<christian.koenig@amd.com>
-> > Cc: "Pan, Xinhui" [4]<Xinhui.Pan@amd.com>
-> > Cc: David Airlie [5]<airlied@linux.ie>
-> > Cc: Daniel Vetter [6]<daniel@ffwll.ch>
-> > Cc: [7]amd-gfx@lists.freedesktop.org
-> > Cc: [8]dri-devel@lists.freedesktop.org
-> > Signed-off-by: Lee Jones [9]<lee.jones@linaro.org>
-> > ---
-> >    drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c | 6 ++++++
-> >    1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c b/drivers/gpu/drm/amd/a
-> > mdkfd/kfd_smi_events.c
-> > index e4beebb1c80a2..3b9ac1e87231f 100644
-> > --- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> > @@ -145,8 +145,11 @@ static int kfd_smi_ev_release(struct inode *inode, struct f
-> > ile *filep)
-> >         spin_unlock(&dev->smi_lock);
-> >         synchronize_rcu();
-> > +
-> > +       spin_lock(&client->lock);
-> >         kfifo_free(&client->fifo);
-> >         kfree(client);
-> > +       spin_unlock(&client->lock);
-> > 
-> > The spin_unlock is after the spinlock data structure has been freed.
-> > 
-> > Good point.
-> > 
-> > If we go forward with this approach the unlock should perhaps be moved
-> > to just before the kfree().
-> > 
-> > 
-> > There
-> > should be no concurrent users here, since we are freeing the data structure.
-> > If there still are concurrent users at this point, they will crash anyway.
-> > So the locking is unnecessary.
-> > 
-> > The users may well crash, as does the kernel unfortunately.
-> > 
-> > We only get to kfd_smi_ev_release when the file descriptor is closed. User
-> > mode has no way to use the client any more at this point. This function also
-> > removes the client from the dev->smi_cllients list. So no more events will
-> > be added to the client. Therefore it is safe to free the client.
-> > 
-> > If any of the above were not true, it would not be safe to kfree(client).
-> > 
-> > But if it is safe to kfree(client), then there is no need for the locking.
-> > 
-> > I'm not keen to go into too much detail until it's been patched.
-> > 
-> > However, there is a way to free the client while it is still in use.
-> > 
-> > Remember we are multi-threaded.
-> > 
-> >    files_struct->count refcount is used to handle this race, as
-> >    vfs_read/vfs_write takes file refcount and fput calls release only if
-> >    refcount is 1, to guarantee that read/write from user space is finished
-> >    here.
-> > 
-> >    Another race is driver add_event_to_kfifo while closing the handler. We
-> >    use rcu_read_lock in add_event_to_kfifo, and kfd_smi_ev_release calls
-> >    synchronize_rcu to wait for all rcu_read done. So it is safe to call
-> >    kfifo_free(&client->fifo) and kfree(client).
-> 
-> Philip, please reach out to Felix.
+It seems to me that something is missing then?
+My tests using trafgen that I gave a report on to Lunn generated massive
+amounts of fdb entries, but after a while the ATU was clean and the fdb
+was still full of random entries...
 
-Philip, Felix, are you receiving my direct messages?
-
-I have a feeling they're being filtered out by AMD's mail server.
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+>> >  	} else {
+>> >  		spin_lock_bh(&br->hash_lock);
+>> >  		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, nfea_tb);
+>> > @@ -1216,7 +1216,7 @@ void br_fdb_unsync_static(struct net_bridge *br, struct net_bridge_port *p)
+>> >  
+>> >  int br_fdb_external_learn_add(struct net_bridge *br, struct net_bridge_port *p,
+>> >  			      const unsigned char *addr, u16 vid,
+>> > -			      bool swdev_notify)
+>> > +			      bool swdev_notify, bool locked)
+>> >  {
+>> >  	struct net_bridge_fdb_entry *fdb;
+>> >  	bool modified = false;
+>> > @@ -1236,6 +1236,9 @@ int br_fdb_external_learn_add(struct net_bridge *br, struct net_bridge_port *p,
+>> >  		if (!p)
+>> >  			flags |= BIT(BR_FDB_LOCAL);
+>> >  
+>> > +		if (locked)
+>> > +			flags |= BIT(BR_FDB_ENTRY_LOCKED);
+>> > +
+>> >  		fdb = fdb_create(br, p, addr, vid, flags);
+>> >  		if (!fdb) {
+>> >  			err = -ENOMEM;
+>> > diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+>> > index f5a0b68c4857..3275e33b112f 100644
+>> > --- a/net/bridge/br_private.h
+>> > +++ b/net/bridge/br_private.h
+>> > @@ -790,7 +790,7 @@ int br_fdb_sync_static(struct net_bridge *br, struct net_bridge_port *p);
+>> >  void br_fdb_unsync_static(struct net_bridge *br, struct net_bridge_port *p);
+>> >  int br_fdb_external_learn_add(struct net_bridge *br, struct net_bridge_port *p,
+>> >  			      const unsigned char *addr, u16 vid,
+>> > -			      bool swdev_notify);
+>> > +			      bool swdev_notify, bool locked);
+>> >  int br_fdb_external_learn_del(struct net_bridge *br, struct net_bridge_port *p,
+>> >  			      const unsigned char *addr, u16 vid,
+>> >  			      bool swdev_notify);
+>> > -- 
+>> > 2.30.2

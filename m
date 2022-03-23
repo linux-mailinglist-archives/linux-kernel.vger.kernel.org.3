@@ -2,115 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F7D4E52AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210064E52AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244122AbiCWM76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S244142AbiCWNAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244092AbiCWM7n (ORCPT
+        with ESMTP id S244143AbiCWNAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:59:43 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D34A13F7B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:58:13 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id x2so1444027plm.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:58:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=d7xbP64xjZhWxyyC9DGfTISrsVyNh9EM/3khYQoSQPQ=;
-        b=fFzN+rwWRCKB+LB3MO0RWMXvqX5j03z9CzGfY/zREENLq7VAYPKjAgaTfX+/w/0Y+Y
-         2cXNWHbzXIdQOHfZwloWhQxdd2H2/pthkIdFtZS8QWG6NSkVDl93FjeSAbHErZ1ACRjb
-         PqUhHAMlqJFN84oEAGa+SWkWA4n0X27cei5gprv82iW7Iy+5AgXTcTfuwZh1FT0Iy4Vr
-         TIwqjasUaAkCAALWXYwS/s+rrtBRocAZsv1nxB1airx7ST3SAHEOosQ9kiLGWnlErwul
-         nJlEWXirwjKTxg+W7PUkFNsVId+eZKf2stLGM+GDWn51oHhhAXfmLK9zA0l3a1ndKs1w
-         EudA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=d7xbP64xjZhWxyyC9DGfTISrsVyNh9EM/3khYQoSQPQ=;
-        b=jzmYPWCqcoLi18ZmOR91DjOHWPVgKa7KrsubWTm+FreKqdTbubRhskJtDOJKh37o7e
-         6tway45JTrfbMTZxzVwHo2EfhJHvzK6UZzeNTNrb1mKIN6u/JvaKfRZIKztwDddN5xwb
-         IBBZClRMPLrUQvB3cBQzaW34FNoKQydmGE/d2zZy1boK4FFzwJ6VyK+U77utHSlbx7We
-         yHbDis1Gq9lG03idb2rtfhErXFbD9nLHTfbNDBSV7Q/3M65ppENQ/tv9lLzrvS/G2Cg5
-         FIRJyDA+/pQZ0PSBf+Bq9bYYHObtpkY1mGTY9bXZj2YPP9OjbA4vfNL3PJuv8adcY56I
-         gz3w==
-X-Gm-Message-State: AOAM532IQmhaiMTteWwLLrU/ho7oPOEvu3DvFXP9ZO8KuXtWZI/hnYN/
-        U0jL4CC0FU17xGakuVP1GT2bYw==
-X-Google-Smtp-Source: ABdhPJzT0kM27TyYyXZjeJzcnD9KpjyNzMq6DUwpOBhbjlNHcsvxcGvaoTKV9AzjczD/Y/XP7RpN4g==
-X-Received: by 2002:a17:902:ecd1:b0:154:5393:aa7e with SMTP id a17-20020a170902ecd100b001545393aa7emr16351618plh.79.1648040292894;
-        Wed, 23 Mar 2022 05:58:12 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6? ([2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6])
-        by smtp.gmail.com with ESMTPSA id q20-20020a056a00151400b004fa99ba6654sm13314782pfu.115.2022.03.23.05.58.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 05:58:12 -0700 (PDT)
-Message-ID: <bd9f8db0-64d3-433b-502a-f83845f932fe@bytedance.com>
-Date:   Wed, 23 Mar 2022 20:58:03 +0800
+        Wed, 23 Mar 2022 09:00:04 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E340240B2;
+        Wed, 23 Mar 2022 05:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648040312; x=1679576312;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XfJY9Dz9/CIorEMilrZscP0n3Q9pGdXNn7/Ceo4d1M4=;
+  b=kZXqg9q7ZgPujeKHwzhtiAtUcYy/0eEfN9mGYBEUXasJS697oZ6rtuMg
+   24fFaXbYgJmvnB6f8yGg+Boz/ULayGH30X1klcd8SCj677bY6CRfENUtV
+   A7Ejt5vPdKmsCoa0IOefEDe1JZXHs9XBO+JGUcPTotoYqTzf4bOgLlko0
+   tX5Lr8lYqPnDROdxzkacA6lk4WwMtkInALVYjtXZrPCBkl+FSTHgiMCVN
+   hlPUUmKLZXOHWo/1/me5Z45XYMXJWZPzh+pvaizf+5/kbKzUVeBmRrE8a
+   csPwy6B4yKXt6YjBfOnmHWAY1Lb9DhFLjva/XTpzUm7nKQAVXaaZMpQcX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="258290753"
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="258290753"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 05:58:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="825306011"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Mar 2022 05:58:30 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nX0ZJ-000K4G-Gs; Wed, 23 Mar 2022 12:58:29 +0000
+Date:   Wed, 23 Mar 2022 20:58:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Haowen Bai <baihaowen@meizu.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>
+Subject: Re: [PATCH] net: l2tp: Fix duplicate included trace.h
+Message-ID: <202203232038.g9DSFJVx-lkp@intel.com>
+References: <1648006705-30269-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [External] Re: [PATCH v2 2/6] perf/core: Introduce percpu
- perf_cgroup
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, eranian@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-References: <20220322120834.98637-1-zhouchengming@bytedance.com>
- <20220322120834.98637-3-zhouchengming@bytedance.com>
- <YjnIpn/PCM6wKpOC@hirez.programming.kicks-ass.net>
- <0a7ebd49-cfdd-911e-3982-44f594320b0f@bytedance.com>
- <YjrWxnnIZvn3PWoX@hirez.programming.kicks-ass.net>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <YjrWxnnIZvn3PWoX@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1648006705-30269-1-git-send-email-baihaowen@meizu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/23 4:13 下午, Peter Zijlstra wrote:
-> On Wed, Mar 23, 2022 at 12:33:51AM +0800, Chengming Zhou wrote:
->> On 2022/3/22 9:01 下午, Peter Zijlstra wrote:
->>> On Tue, Mar 22, 2022 at 08:08:30PM +0800, Chengming Zhou wrote:
->>>> Although we don't have incosistency problem any more, we can
->>>> have other problem like:
->>>>
->>>> CPU1					CPU2
->>>> (in context_switch)			(attach running task)
->>>> 					prev->cgroups = cgrp2
->>>> perf_cgroup_sched_switch(prev, next)
->>>> 	cgrp2 == cgrp2 is True
->>>>
->>>
->>> Again, I'm not following, how can you attach to a running task from
->>> another CPU ?
->>
->> Hi Peter, I make a little testcase which can reproduce the race
->> problem, on system with PSI disabled. Because when PSI enabled,
->> cgroup_move_task() will hold rq lock to assign task->cgroups.
-> 
-> No, the problem is that you're talking about cgroup attach while I'm
-> thinking of attaching a event to a task. And your picture has nothing to
-> clarify.
-> 
-> Those pictures of yours could really do with a few more function names
-> in them, otherwise it's absolutely unclear what code is running where.
+Hi Haowen,
 
-Sorry for the confusion ;-)
-I will draw a better picture including more function names in the next version.
+Thank you for the patch! Yet something to improve:
 
-Thanks.
+[auto build test ERROR on net-next/master]
+[also build test ERROR on net/master horms-ipvs/master linus/master v5.17 next-20220323]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Haowen-Bai/net-l2tp-Fix-duplicate-included-trace-h/20220323-114023
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 4a0cb83ba6e0cd73a50fa4f84736846bf0029f2b
+config: openrisc-buildonly-randconfig-r003-20220323 (https://download.01.org/0day-ci/archive/20220323/202203232038.g9DSFJVx-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d079f4f8992c56c4d970665bad819349d4916c46
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Haowen-Bai/net-l2tp-Fix-duplicate-included-trace-h/20220323-114023
+        git checkout d079f4f8992c56c4d970665bad819349d4916c46
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `trace_session_seqnum_update':
+>> l2tp_core.c:(.text+0xa3c): undefined reference to `__tracepoint_session_seqnum_update'
+>> or1k-linux-ld: l2tp_core.c:(.text+0xa40): undefined reference to `__tracepoint_session_seqnum_update'
+>> or1k-linux-ld: l2tp_core.c:(.text+0xb10): undefined reference to `__traceiter_session_seqnum_update'
+   l2tp_core.c:(.text+0xb10): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_session_seqnum_update'
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_recv_dequeue':
+>> l2tp_core.c:(.text+0x1e58): undefined reference to `__tracepoint_session_pkt_expired'
+>> or1k-linux-ld: l2tp_core.c:(.text+0x1e90): undefined reference to `__tracepoint_session_pkt_expired'
+>> or1k-linux-ld: l2tp_core.c:(.text+0x1fe0): undefined reference to `__traceiter_session_pkt_expired'
+   l2tp_core.c:(.text+0x1fe0): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_session_pkt_expired'
+>> or1k-linux-ld: l2tp_core.c:(.text+0x21ac): undefined reference to `__tracepoint_session_seqnum_reset'
+   or1k-linux-ld: l2tp_core.c:(.text+0x21b8): undefined reference to `__tracepoint_session_seqnum_reset'
+>> or1k-linux-ld: l2tp_core.c:(.text+0x227c): undefined reference to `__traceiter_session_seqnum_reset'
+   l2tp_core.c:(.text+0x227c): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_session_seqnum_reset'
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_tunnel_delete':
+>> (.text+0x2c7c): undefined reference to `__tracepoint_delete_tunnel'
+>> or1k-linux-ld: (.text+0x2c80): undefined reference to `__tracepoint_delete_tunnel'
+>> or1k-linux-ld: (.text+0x2d4c): undefined reference to `__traceiter_delete_tunnel'
+   (.text+0x2d4c): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_delete_tunnel'
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_tunnel_dec_refcount':
+>> (.text+0x3414): undefined reference to `__tracepoint_free_tunnel'
+>> or1k-linux-ld: (.text+0x3418): undefined reference to `__tracepoint_free_tunnel'
+>> or1k-linux-ld: (.text+0x34e8): undefined reference to `__traceiter_free_tunnel'
+   (.text+0x34e8): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_free_tunnel'
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_session_dec_refcount':
+>> (.text+0x36c4): undefined reference to `__tracepoint_free_session'
+>> or1k-linux-ld: (.text+0x36c8): undefined reference to `__tracepoint_free_session'
+>> or1k-linux-ld: (.text+0x3798): undefined reference to `__traceiter_free_session'
+   (.text+0x3798): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_free_session'
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_tunnel_register':
+>> (.text+0x3db8): undefined reference to `__tracepoint_register_tunnel'
+>> or1k-linux-ld: (.text+0x3dbc): undefined reference to `__tracepoint_register_tunnel'
+>> or1k-linux-ld: (.text+0x3e7c): undefined reference to `__traceiter_register_tunnel'
+   (.text+0x3e7c): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_register_tunnel'
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_recv_data_seq':
+   l2tp_core.c:(.text+0x4074): undefined reference to `__tracepoint_session_pkt_outside_rx_window'
+   or1k-linux-ld: l2tp_core.c:(.text+0x4078): undefined reference to `__tracepoint_session_pkt_outside_rx_window'
+   or1k-linux-ld: l2tp_core.c:(.text+0x4138): undefined reference to `__traceiter_session_pkt_outside_rx_window'
+   l2tp_core.c:(.text+0x4138): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_session_pkt_outside_rx_window'
+   or1k-linux-ld: l2tp_core.c:(.text+0x43b0): undefined reference to `__tracepoint_session_pkt_oos'
+   or1k-linux-ld: l2tp_core.c:(.text+0x43b4): undefined reference to `__tracepoint_session_pkt_oos'
+   or1k-linux-ld: l2tp_core.c:(.text+0x446c): undefined reference to `__traceiter_session_pkt_oos'
+   l2tp_core.c:(.text+0x446c): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_session_pkt_oos'
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_session_delete':
+   (.text+0x45dc): undefined reference to `__tracepoint_delete_session'
+   or1k-linux-ld: (.text+0x45e0): undefined reference to `__tracepoint_delete_session'
+   or1k-linux-ld: (.text+0x46ac): undefined reference to `__traceiter_delete_session'
+   (.text+0x46ac): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `__traceiter_delete_session'
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_session_register':
+   (.text+0x525c): undefined reference to `__tracepoint_register_session'
+   or1k-linux-ld: (.text+0x5260): undefined reference to `__tracepoint_register_session'
+   or1k-linux-ld: (.text+0x5320): undefined reference to `__traceiter_register_session'
+   (.text+0x5320): additional relocation overflows omitted from the output
+   or1k-linux-ld: net/l2tp/l2tp_core.o: in function `l2tp_recv_common':
+   (.text+0x55c4): undefined reference to `__tracepoint_session_seqnum_lns_enable'
+   or1k-linux-ld: (.text+0x55d0): undefined reference to `__tracepoint_session_seqnum_lns_enable'
+   or1k-linux-ld: (.text+0x5694): undefined reference to `__traceiter_session_seqnum_lns_enable'
+   or1k-linux-ld: (.text+0x5818): undefined reference to `__tracepoint_session_seqnum_lns_disable'
+   or1k-linux-ld: (.text+0x581c): undefined reference to `__tracepoint_session_seqnum_lns_disable'
+   or1k-linux-ld: (.text+0x58e0): undefined reference to `__traceiter_session_seqnum_lns_disable'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

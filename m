@@ -2,50 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62854E58A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773934E58AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343990AbiCWSsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 14:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S1344022AbiCWStr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 14:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237232AbiCWSso (ORCPT
+        with ESMTP id S1343554AbiCWStn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 14:48:44 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E99189338
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:47:14 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id m16-20020a928710000000b002c7be7653d1so1409639ild.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:47:14 -0700 (PDT)
+        Wed, 23 Mar 2022 14:49:43 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3B365A0;
+        Wed, 23 Mar 2022 11:48:11 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id j83so2563055oih.6;
+        Wed, 23 Mar 2022 11:48:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=pYu8i4bCyQkvLkE2p2XwJd7jMwp1xPlmh43gdxxjfcs=;
-        b=OjIocQ+MRSIGVGRk4spk3mQ8PzHmq6oW/CPiAIL1RkkgpTguigNY84DoafeWPeqHAv
-         x3O+3cOZlRCT3tyDarZMxqJclynyWa0+aNDnvVgCeddb/mnDbC4c/UeGoT6c/nlaICpX
-         whBIo8bp2QhZJOaHGnTaHJYTCyuIyUSo7DmmxrjdaIkacqNUI4gDxepcEtB3H8k8Btg0
-         P1IsxJS3vylpLvpnA2G2wsB5o2TmYI5Dxly8zBrZ6IprQLfTc3NI3zdCKe2iRe/Xx8Zd
-         Nn0UgfjcgAEL7ltMWkEBBIaMuf7bw5V0+0YXSh15DsjnCz8FTwuVLwFvBkk74X158K1m
-         Qrag==
-X-Gm-Message-State: AOAM532FqU75jCtYlf0ukUKtiqEfGS7k+0/w9EPpvBVrhddCJjgqDi4j
-        PiHddvtfDH9wgKkznbBeKC799VqGzPB+8/QKUMkUPUjVwlIZ
-X-Google-Smtp-Source: ABdhPJyBbjyelOm6XZrSiqfFQ4vxrm4HvKy9Vh/Bx4jgt2Ms1B6Km+omLeQZEYQAxGGY4jCyHzAymP+ofR1jf/WmN1zVDe0wFM6d
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=56J3GohQxdWaUNz7jQ2eEsIABoOTuL958gy1PE8F0ck=;
+        b=DUoLoVZ/rDn9oQ/vFbbJicRa1l11n/zsCo8nr44vHks6jw/1v8rx9foY+hMjR+4fsp
+         a0Haw2CAEChp97RUkywc58GHlcQfRYLTq2VtJh7rb46lDxQ5gDf7iwh3qtWkGa7K+kkr
+         1VcM7FEPUMxqfHh1Yr3f4fS+5Ma/1PmGj/h6yrRLNPlfMnk6zEUeYTT90OQIAaC4gMn4
+         n8w0iddJCBVW81pNaL93tZfgT9YVd9ihse6KsTwZws/Y0Px91GzDP5aPcgod5u1YP8gc
+         fiW1hH6zps+RZleLiWSEM9wPYNzNRgPKjaHv+7LaoJDI0AMPM5hF1i+nB0LI1V3nodlN
+         o/YA==
+X-Gm-Message-State: AOAM531qwJoHJIfmhIqXBPDOU6BAHljLjlIECwZStMzLOFVapPpJ1Vb+
+        sroIiEirhT8AydcFNxP14w==
+X-Google-Smtp-Source: ABdhPJyFLHubkitJIKDgjYHSdLjgwJ/cuVQanHqprHw4EB6GVqxlaV8Sxw0nJfSrmHho34tIgDeGWw==
+X-Received: by 2002:aca:ebd1:0:b0:2ec:91e4:f423 with SMTP id j200-20020acaebd1000000b002ec91e4f423mr804158oih.1.1648061291132;
+        Wed, 23 Mar 2022 11:48:11 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q9-20020a4ae649000000b00320d35fc91dsm348675oot.24.2022.03.23.11.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 11:48:10 -0700 (PDT)
+Received: (nullmailer pid 242466 invoked by uid 1000);
+        Wed, 23 Mar 2022 18:48:09 -0000
+Date:   Wed, 23 Mar 2022 13:48:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     patches@lists.linux.dev, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] dt-bindings:i kbuild: Make DT_SCHEMA_LINT a
+ recursive variable
+Message-ID: <YjtraaYJFuNG30xW@robh.at.kernel.org>
+References: <20220315202032.538911-1-nathan@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1655:b0:319:a174:6ba0 with SMTP id
- a21-20020a056638165500b00319a1746ba0mr722356jat.195.1648061233677; Wed, 23
- Mar 2022 11:47:13 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 11:47:13 -0700
-In-Reply-To: <000000000000a0506305dae664f2@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000066cd8205dae72838@google.com>
-Subject: Re: [syzbot] general protection fault in io_kill_timeouts
-From:   syzbot <syzbot+f252f28df734e8521387@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315202032.538911-1-nathan@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
@@ -55,25 +64,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Tue, 15 Mar 2022 13:20:32 -0700, Nathan Chancellor wrote:
+> A recent change added a warning when yamllint is not installed, as it is
+> needed for 'make dt_binding_check'. However, it also changed
+> DT_SCHEMA_LINT to be a simple make variable, which is evaluated when a
+> Makefile is evaluated. This causes a warning when running 'make clean',
+> as Documentation/devicetree/bindings/Makefile has a "clean-files"
+> variable:
+> 
+>   $ make -s clean
+>   which: no yamllint in (...)
+>   warning: python package 'yamllint' not installed, skipping
+> 
+> Make DT_SCHEMA_LINT a recursive variable so it is evaluated only when it
+> is used. The warning still triggers when 'make dt_binding_check' is run.
+> 
+> Fixes: b3e664a7f449 ("dt-bindings: kbuild: Print a warning if yamllint is not found")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-commit c9be622494c012d56c71e00cb90be841820c3e34
-Author: Pavel Begunkov <asml.silence@gmail.com>
-Date:   Mon Mar 21 22:02:20 2022 +0000
-
-    io_uring: remove extra ifs around io_commit_cqring
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15a04739700000
-start commit:   b61581ae229d Add linux-next specific files for 20220323
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=17a04739700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a04739700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=def28433baf109ed
-dashboard link: https://syzkaller.appspot.com/bug?extid=f252f28df734e8521387
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117d3a43700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15538925700000
-
-Reported-by: syzbot+f252f28df734e8521387@syzkaller.appspotmail.com
-Fixes: c9be622494c0 ("io_uring: remove extra ifs around io_commit_cqring")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Applied, thanks!

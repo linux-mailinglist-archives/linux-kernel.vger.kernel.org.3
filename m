@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3084E5C1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA784E5C1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346591AbiCWX5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 19:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
+        id S1346597AbiCWX6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 19:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242772AbiCWX5b (ORCPT
+        with ESMTP id S240367AbiCWX6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 19:57:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC7B6E369;
-        Wed, 23 Mar 2022 16:56:01 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KP4xW1fvJz4xdL;
-        Thu, 24 Mar 2022 10:55:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648079759;
-        bh=5op/+Ee75X6jMM9LpJ8tw2XhdqLCfxHaxlloqYK9zEo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tQbvhSakIX4btAB6skak3+FVtQKO6l/qB7zI1laEwbHNqeCJtZGhwA6wyt9IYRPqK
-         zPCZRYIh+Z3y+4f45+0EyzFoPJudPlRJAS9Tt0hNM4b99iwNdYfOaBmL/Dk3QRkba3
-         7OvoEfmfYLwYfv4MdlqUlqsilxnsmspVEe5zaSXjKjkPQpMhm6qs72x7Rc+JAjIyf4
-         xTfhHQmE9Aej5MeFNDbxzZsdMkJ8fWQCjMaJDCnAy56QfIDL+aeuUjdi7R6DMeRzrS
-         WuiF3oChoJIKkmxGk+PphRHz0scgJA6oRi9B5cgLW2WYWsGizDn/H2GJHpgk0Ujco6
-         UC5TOP3LZ0cAA==
-Date:   Thu, 24 Mar 2022 10:55:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Trond Myklebust <trondmy@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: Re: linux-next: manual merge of the folio tree with the nfs tree
-Message-ID: <20220324105558.3df66122@canb.auug.org.au>
-In-Reply-To: <20220315204540.4f9f6b66@canb.auug.org.au>
-References: <20220315204540.4f9f6b66@canb.auug.org.au>
+        Wed, 23 Mar 2022 19:58:09 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD906E369
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 16:56:38 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id h1so3751812edj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 16:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sr7J4vfXVHgXl/lrrjqeau5g6gjXQTlIBcP0OGTYE7A=;
+        b=ofKf+l9lFhG9+K+rNIAmI2pVWAmDdvO4SuuOzCqfEAZh19RvYXvwX9dN95tGecz9zp
+         cP8pKxJYxc+10Y5e867EQHrFkZoI0W/lkKNCZ22jgq5+fk7hymMoDNSvkSgDFiNd4Qun
+         8EnP08Pyj0kFbpC9eeT56GLMozN6uPUtGMvI0Cux46JSg1m1N5N4aVl0JllB9T2V9bUi
+         H4iUnV2Qh6X3qWJPn6VnVkmZyy3N85cKj5vluNr0HZvBS+O7hCdhHE2ezLM52r86H3hS
+         I+CeIidoIprZIiKiPll0gmrJet47VYgoUbYlAnMqJEdRTMRE/sYUfMVKo2UlHfPHZrMb
+         pviA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sr7J4vfXVHgXl/lrrjqeau5g6gjXQTlIBcP0OGTYE7A=;
+        b=E26ao+mDLKXtMVHI9KPvTN2vfSI6bIrAJUzQUk4gG5ppOND2xlEBBfxtdCO0ux3S1o
+         oKncFJwxZmFgBl5y/IEi+MChl2PgJ3AOzmDAupmVgFyB2k6gvzQbYFaLNP1GHai2WHBD
+         f0NYxMZIKnA0gr1tuDZGvmPfOvWbTE/f0C3aM5zsCGdmHE0yIY63EqUrW78ZIJKFH8Rt
+         RKKyj1Y2JSOA12tzGFaYU5++a/fxXkvnR2+stGQgkcelgL4NWo8rFS3/qBJ0UtLzJaXj
+         buDa6O8uZMcYgJ03uLh3QdyJ0Ijecp7v4MO/kcOVdvc9XhzZ6g94ItUXSDJC6h4Clv09
+         JK6Q==
+X-Gm-Message-State: AOAM532HzD3tNodFTqjMFo11OSFQMXqi+YSqWpwzntN8tMBbFOuwf/RM
+        VBIXQZbsC+16kxVQ30IH1eWzV+iM4JzD9fgUHnpeiw==
+X-Google-Smtp-Source: ABdhPJyNvKik3+MBbQKpWReI26T9y3k0RGMXxOUvfjslYhOAJGNGwznYbZ1Rv7IrggHj0u9f9Sncg8BmrR7L9rtlmWQ=
+X-Received: by 2002:a05:6402:1cc1:b0:413:2b12:fc49 with SMTP id
+ ds1-20020a0564021cc100b004132b12fc49mr3463086edb.118.1648079797217; Wed, 23
+ Mar 2022 16:56:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YOl1qoAM5X0Nnf/3wEM7BOP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220318064959.3298768-1-davidgow@google.com>
+In-Reply-To: <20220318064959.3298768-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 23 Mar 2022 19:56:26 -0400
+Message-ID: <CAFd5g45V6P9ATGQ3kqkuFLNDB=_01gws8Ldr1kH3j+r0aSZ-Og@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Make kunit_remove_resource() idempotent
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,74 +69,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/YOl1qoAM5X0Nnf/3wEM7BOP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 18, 2022 at 2:50 AM David Gow <davidgow@google.com> wrote:
+>
+> The kunit_remove_resource() function is used to unlink a resource from
+> the list of resources in the test, making it no longer show up in
+> kunit_find_resource().
+>
+> However, this could lead to a race condition if two threads called
+> kunit_remove_resource() on the same resource at the same time: the
+> resource would be removed from the list twice (causing a crash at the
+> second list_del()), and the refcount for the resource would be
+> decremented twice (instead of once, for the reference held by the
+> resource list).
+>
+> Fix both problems, the first by using list_del_init(), and the second by
+> checking if the resource has already been removed using list_empty(),
+> and only decrementing its refcount if it has not.
+>
+> Also add a KUnit test for the kunit_remove_resource() function which
+> tests this behaviour.
+>
+> Reported-by: Daniel Latypov <dlatypov@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Hi all,
-
-On Tue, 15 Mar 2022 20:45:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the folio tree got a conflict in:
->=20
->   fs/nfs/file.c
->=20
-> between commit:
->=20
->   8786fde8421c ("Convert NFS from readpages to readahead")
->=20
-> from the nfs tree and commit:
->=20
->   821405cf3ebb ("fs: Convert trivial uses of __set_page_dirty_nobuffers t=
-o filemap_dirty_folio")
->=20
-> from the folio tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc fs/nfs/file.c
-> index 81c80548a5c6,2df2a5392737..000000000000
-> --- a/fs/nfs/file.c
-> +++ b/fs/nfs/file.c
-> @@@ -518,8 -514,8 +518,8 @@@ static void nfs_swap_deactivate(struct=20
->  =20
->   const struct address_space_operations nfs_file_aops =3D {
->   	.readpage =3D nfs_readpage,
->  -	.readpages =3D nfs_readpages,
->  +	.readahead =3D nfs_readahead,
-> - 	.set_page_dirty =3D __set_page_dirty_nobuffers,
-> + 	.dirty_folio =3D filemap_dirty_folio,
->   	.writepage =3D nfs_writepage,
->   	.writepages =3D nfs_writepages,
->   	.write_begin =3D nfs_write_begin,
-
-This is now a conflict between the nfs tree and Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/YOl1qoAM5X0Nnf/3wEM7BOP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI7s44ACgkQAVBC80lX
-0GyVzAf/dmpdo89C6sZaB74WjkBcwSFh2BLuWSPSfjKaCGCL5lfYJ6qx9cKXtEDc
-UIhIp7kd0yzl34h9kJ1U7SZ4QLI7vJSLcC/cYMIQgXfDb0Swk2iaP/HM9PBUN6kd
-5t4yTqVeSLcRyahxvCsVxlMsX4zVMfoKy8wtBbJrmW07L1IHFvB83rb4p2ZAbESY
-hxmvvz+0pTfO/SzPoV+2vPqwnbDhos8lmjLacL3MQ5/mMV1fezs8Jkcorbr6z5iJ
-4MDvX0tL3O6Q3KyAHXSxx0Uwco16CFUn62B5bVQKDqsLgK+EOiz3E5Oq32qih/GJ
-MgI01AMC+y/3G/ny/rrvodyjcoLT2Q==
-=hpPn
------END PGP SIGNATURE-----
-
---Sig_/YOl1qoAM5X0Nnf/3wEM7BOP--
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

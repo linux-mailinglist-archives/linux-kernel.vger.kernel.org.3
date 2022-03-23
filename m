@@ -2,116 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F57D4E50B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0764E50BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243606AbiCWKzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S243629AbiCWK5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 06:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235237AbiCWKzw (ORCPT
+        with ESMTP id S243620AbiCWK5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:55:52 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559C3E09A;
-        Wed, 23 Mar 2022 03:54:23 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id p15so2007741ejc.7;
-        Wed, 23 Mar 2022 03:54:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=+d7S4vBd2bYRZC1tf8MKO6zbTNTZ+Z8jRnsWY4Pru8c=;
-        b=yssw5jxeFz1tzajHWnObIqtd80Kjo3SzsdeNkNQ5FEv1Dw+3/lRuXTow58M9qWAG88
-         vr7g5jw6aMbKLnlaKnzeMZp0Ut1RfiWBMSUcefHTiuIzAi8qhmFmWYc6ooSUN7KUW7GR
-         kP1jMyY8JsfFP/zDrh/kUpFAgHeOgJg5oBq9fIVZ5bElCTCYhp7Zxc/3h0uKAkXw7whL
-         jjCkkX55ixevQfSDVG2r6ry0pZpyiEpINzR1/QCuc0jBMga1XpF76Xpz3r40j4Q96rP2
-         4P13+5DECPcaUkz2An/scpydkp9xt15aqeSMEFrXPU0XQPOJtlgPf+f+CmuPVTwdI6aK
-         4VPA==
-X-Gm-Message-State: AOAM530+C8thB4WFbQi9eeYeenBCw6S287wO2ziqfJp5rDDY803vMiVa
-        yCa1//5aOCz3itGO+uGlVV0ynBnGTB1TrA==
-X-Google-Smtp-Source: ABdhPJzgxVTRGQfJfJPQ1tJS4CyH9RFYeKK9oKhfwAF9UQXlD3OXpR6Mi5GGExqO2zzRxiPFWrsAnA==
-X-Received: by 2002:a17:907:7b9d:b0:6df:fb8f:fe82 with SMTP id ne29-20020a1709077b9d00b006dffb8ffe82mr15992982ejc.652.1648032861668;
-        Wed, 23 Mar 2022 03:54:21 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id o12-20020a50c90c000000b0041907e62024sm8431600edh.85.2022.03.23.03.54.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 03:54:21 -0700 (PDT)
-Message-ID: <51007577-52a2-60a5-0720-7b2c7f78ae3e@kernel.org>
-Date:   Wed, 23 Mar 2022 11:54:19 +0100
+        Wed, 23 Mar 2022 06:57:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A4AFE0B2;
+        Wed, 23 Mar 2022 03:55:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0E85ED1;
+        Wed, 23 Mar 2022 03:55:52 -0700 (PDT)
+Received: from bogus (unknown [10.57.41.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60DFC3F73B;
+        Wed, 23 Mar 2022 03:55:51 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 10:54:22 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: xen: Add xen,scmi-devid property
+ description for SCMI
+Message-ID: <20220323105422.2t726d5wbr5h2ksl@bogus>
+References: <cover.1646639462.git.oleksii_moisieiev@epam.com>
+ <5859bb58c8caf87985deb84d7f6bfc8182bd6a59.1646639462.git.oleksii_moisieiev@epam.com>
+ <Yie47a4lqXjVzgxI@robh.at.kernel.org>
+ <20220316164619.GA3489934@EPUAKYIW015D>
+ <YjIzeyNoWhVAY5HK@bogus>
+ <alpine.DEB.2.22.394.2203181644560.2910984@ubuntu-linux-20-04-desktop>
+ <YjmvFZOqAcnoBcR+@bogus>
+ <20220322192146.GA145617@EPUAKYIW015D>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 1/7] ARM: dts: s5pv210: Split memory nodes to match spec
-Content-Language: en-US
-To:     Jonathan Bakker <xc-racer2@live.ca>, alim.akhtar@samsung.com
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220322201144.20320-1-xc-racer2@live.ca>
- <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
-In-Reply-To: <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322192146.GA145617@EPUAKYIW015D>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 21:11, Jonathan Bakker wrote:
-> Memory nodes should only have a singular reg property in them, so
-> split the memory nodes such that there is only per node.
+On Tue, Mar 22, 2022 at 07:21:47PM +0000, Oleksii Moisieiev wrote:
+> Hi Sudeep,
 > 
-> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-> ---
->  arch/arm/boot/dts/s5pv210-aquila.dts |  8 ++++++--
->  arch/arm/boot/dts/s5pv210-aries.dtsi | 14 +++++++++++---
->  arch/arm/boot/dts/s5pv210-goni.dts   | 14 +++++++++++---
->  3 files changed, 28 insertions(+), 8 deletions(-)
+> On Tue, Mar 22, 2022 at 11:12:21AM +0000, Sudeep Holla wrote:
+> > On Fri, Mar 18, 2022 at 04:53:20PM -0700, Stefano Stabellini wrote:
+> > > On Wed, 16 Mar 2022, Sudeep Holla wrote:
+> > > > On Wed, Mar 16, 2022 at 04:46:20PM +0000, Oleksii Moisieiev wrote:
+> > > > > 
+> > > > > > + The reason I want to keep it xen specific at the moment as we had some
+> > > > > > plan to extended the device-id usage in the spec which hasn't progressed
+> > > > > > a bit(I must admit that before you ask), and this addition should not be
+> > > > > > obstruct that future development. If we align with what we define xen
+> > > > > > specific as part of $subject work, we can always define generic binding
+> > > > > > in the future and slowly make the other obsolete over the time.
+> > > > > 
+> > > > > IIUC you have some plans to provide device_id support to the device-tree
+> > > > > bindings from your side. Maybe we can discuss some of your plans here
+> > > > > and we can come up with the generic device-id binding?
+> > > > > So I will have something to base on in Xen.
+> > > > > 
+> > > > 
+> > > > Sorry if I wasn't clear in earlier emails. What I mentioned was that I would
+> > > > like to reserve the generic namespace(i.e. just device-id) for generic SCMI
+> > > > usage. Since we haven't defined it clearly in the spec, I don't want to
+> > > > introduce the generic definition and binding now.
+> > > > 
+> > > > As mentioned earlier, though Xen definition and generic once may be exactly
+> > > > same, but we won't know until then. So keep the xen usage and namespace
+> > > > separate for now to avoid any future conflicts.
+> > > 
+> > > 
+> > > Hi Sudeep,
+> > > 
+> > > I thought the specification already covered this device id, it simply
+> > > delegated the description of it to Device Tree or ACPI, which is common
+> > > behavior in ARM specs. What is missing in the SCMI spec from your point
+> > > of view?
+> > >
+> > 
+> > While you can say so, but for me it isn't to an extent that we can support
+> > software around it. I did share my feedback with spec author but as you
+> > know it was needed for virtualisation use-case like Xen and was rushed
+> > into the spec. All it states is "Device identifier" identifies the device
+> > and the enumeration is not part of the spec. It defers to DT/ACPI.
+> > 
+> > Since I didn't have to use that in OSPM, I hadn't given much thought/review
+> > on that.
+> > 
+> > >
+> > > Or would you like this scmi-devid Device Tree property (or similar) to
+> > > be described in the SCMI specification itself?
+> > >
+> > 
+> > Spec doesn't cover that in general but do carry some recommendations
+> > sometimes.
+> > 
+> > > Typically Device Tree and ACPI descriptions are delegated to Device Tree
+> > > and ACPI respectively. Also specification updates are typically slow
+> > > (for good reason.) We might be waiting for a long time. It is usually
+> > > not a matter of days.
+> > 
+> > I agree.
+> > 
+> > As I said, there were thoughts about adding device protocol to make
+> > all the other protocols centered around the device. The idea is as below:
+> > 
+> > Today a device A is associated with clock domain X, reset domain Y,
+> > voltage domain Z, perf domain P, power domain Q, ...and so on.
+> > Especially this would get complex with lots of devices and for virtual
+> > machines.
+> > 
+> > Instead let all these different operations use the device identifier A
+> > in the above case to drive clock, reset, perf, power, voltage,...etc.
 > 
-> diff --git a/arch/arm/boot/dts/s5pv210-aquila.dts b/arch/arm/boot/dts/s5pv210-aquila.dts
-> index 6423348034b6..6984479ddba3 100644
-> --- a/arch/arm/boot/dts/s5pv210-aquila.dts
-> +++ b/arch/arm/boot/dts/s5pv210-aquila.dts
-> @@ -29,8 +29,12 @@
->  
->  	memory@30000000 {
->  		device_type = "memory";
-> -		reg = <0x30000000 0x05000000
-> -			0x40000000 0x18000000>;
-> +		reg = <0x30000000 0x05000000>;
-> +	};
-> +
-> +	memory@40000000 {
-> +		device_type = "memory";
-> +		reg = <0x40000000 0x18000000>;
->  	};
->  
->  	pmic_ap_clk: clock-0 {
-> diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
-> index 160f8cd9a68d..70ff56daf4cb 100644
-> --- a/arch/arm/boot/dts/s5pv210-aries.dtsi
-> +++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
-> @@ -24,9 +24,17 @@
->  
->  	memory@30000000 {
->  		device_type = "memory";
-> -		reg = <0x30000000 0x05000000
-> -			0x40000000 0x10000000
-> -			0x50000000 0x08000000>;
+> So, IIUC - the idea is to provide new device based protocol
+> which will allow agents to control different domains by using ony device
+> id? Does it mean that scmi drivers for agents should be also changed and there will
+> be no back compatibility with previous versions of SCMI protocol?
 
-0x40000000 to 0x58000000 is continues, so I wonder why it is split? Look
-at Aquila DTS.
+The idea is it is discoverable and if the platform advertises new protocol,
+then only it will be used. Otherwise we must continue to use the existing
+and advertised protocols. Anyways I realised that we need not even consider
+these new changes for the discussion here.
 
+> If yes - we probably can add scmi-devid property for current SCMI
+> version, such as scmi-v3,device-id (because current DEN0056D document
+> has version 3.1) and say that this property should be
+> used for SCMI versions, which doesn't support device protocol.
+> What do you think about this idea?
 
+The main idea we had is to re-use the generic definition of device ID
+Linux might need for other purposes like device assignments. We would
+like to avoid a mapping from the generic device ID Linux might need and
+define to the one in scmi context. So as Rob mentioned, it is better to
+define one in a generic Linux/OS context and see how we can make use of
+that in SCMI context. We could get some recommendations added to the spec
+if needed based on what gets added/supported in the kernel.
 
-Best regards,
-Krzysztof
+So better to start addressing or responding to Rob's comments(not sure
+if it was this version or the previous) if you want a generic device
+ID definition. We are not adding anything SCMI specific as that might
+end up conflicting with the one that Linux kernel might add.
+
+Hope this helps.
+
+-- 
+Regards,
+Sudeep

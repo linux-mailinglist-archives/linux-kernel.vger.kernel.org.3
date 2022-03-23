@@ -2,80 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF5C4E4F0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B29654E4F33
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243121AbiCWJVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 05:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
+        id S243251AbiCWJXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 05:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbiCWJVQ (ORCPT
+        with ESMTP id S243310AbiCWJW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 05:21:16 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC4F5D654
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 02:19:46 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 944671F43FE1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648027185;
-        bh=Knb3Qbz4FitufncDzqCAXY9iWmZ7oO2JSE4/JnyALn8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XGwOPIe2HYdU9TA+y06TluGf1bR0lZefNH5+gEcIAZBM/eQLWcnKIgS44l8x1HE39
-         oFb8+spytzkN1/C8bUEPowRsB0Vj9XIrInGe5xiYLAFbnzmxf+XR/lRJuX18t/zWwG
-         m47keWojG2LHU1FnBoAIq9X+Fkrd5Jjr8f6tDo9pGU/2ilPTJmALeB6Z2c6FfWSDVp
-         kcnhzcEu7Sn447yW0CerVS8bNy8SbHAcJUGKZD0rRH9uKIOh4T8ypYgbPMkjRg2AlN
-         RZY4iayneA5Y4fPh3KY582mrmFONwVCuzZZZEddLKJ0i4jqohN4tuaJhaSz20qestH
-         KNixtcFQRR6mw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     matthias.bgg@gmail.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, rex-bc.chen@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] soc: mediatek: mmsys: Add sw0_rst_offset for MT8192
-Date:   Wed, 23 Mar 2022 10:19:32 +0100
-Message-Id: <20220323091932.10648-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 23 Mar 2022 05:22:59 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C3F75C0F;
+        Wed, 23 Mar 2022 02:21:29 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22N6MgxC007319;
+        Wed, 23 Mar 2022 04:20:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=dUdn/ajdZpukt6IfviTuwEcR8cl6Pbc9zj4WxhUmKt8=;
+ b=dGJg4evumteFBY9L3HnQEPk/QrJyWWGJryeshHcMSyjn+QeWlvdBCEO8rhEcZ3WBFIx5
+ TchnIW6s2xbWIdGse8YGxHPfEStWGYZvzvfhosNRUBOeWV5WUdDdQJx1rYHy1yU6I/S2
+ Ofzyd8rYeRVBj1Yu146AM0eXgyhX2RBe6N3AQ0FBlJOT9kz1Kjeq1RbjEvO8qH2BRhQx
+ 3vB6vRBnNeaYUXHiXIBzGiMwdJOuanLBXW/uabAKwLuGari1mu+tuV7a9TMKKq2sNdG7
+ mF4g7MSieKAsXS9zeEebPRaE2G4ecOw1bStoif5DX5sldi4U2c2lQ7l+Q0llwAbpi+ha cw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ewbknd5ag-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 23 Mar 2022 04:20:45 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 23 Mar
+ 2022 09:20:43 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Wed, 23 Mar 2022 09:20:43 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9023CB1A;
+        Wed, 23 Mar 2022 09:20:43 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 09:20:43 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        David Rhodes <drhodes@opensource.cirrus.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 15/16] ASoC: cs35l41: Document CS35l41 External Boost
+Message-ID: <20220323092043.GO38351@ediswmail.ad.cirrus.com>
+References: <20220322151819.4299-1-tanureal@opensource.cirrus.com>
+ <20220322151819.4299-16-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220322151819.4299-16-tanureal@opensource.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: 1BSKhSHDLuiq-vmXuEjJMl83KV1ODsfL
+X-Proofpoint-GUID: 1BSKhSHDLuiq-vmXuEjJMl83KV1ODsfL
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT8192 has the same sw0 reset offset as MT8186: add the parameter
-to be able to use mmsys as a reset controller for managing at
-least the DSI reset line.
+On Tue, Mar 22, 2022 at 03:18:18PM +0000, Lucas Tanure wrote:
+> From: David Rhodes <drhodes@opensource.cirrus.com>
+> 
+> Document internal and external boost feature for ASoC CS35L41.
+> For internal boost the following properties are required:
+> - cirrus,boost-peak-milliamp
+> - cirrus,boost-ind-nanohenry
+> - cirrus,boost-cap-microfarad
+> 
+> For external boost, the GPIO1 must be configured as output,
+> so the following properties are required:
+> - cirrus,gpio1-src-select = <1>
+> - cirrus,gpio1-output-enable
+> 
+> Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-v2: Change the offset to 0x160 (as defined for MT8186). Thanks, Rex-BC!
-
- drivers/soc/mediatek/mtk-mmsys.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index 4fc4c2c9ea20..f69521fabcce 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -70,6 +70,7 @@ static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
- 	.clk_driver = "clk-mt8192-mm",
- 	.routes = mmsys_mt8192_routing_table,
- 	.num_routes = ARRAY_SIZE(mmsys_mt8192_routing_table),
-+	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
- };
- 
- static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
--- 
-2.35.1
-
+Thanks,
+Charles

@@ -2,150 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641CB4E5B55
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 23:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3A74E5B5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 23:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345274AbiCWWkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 18:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
+        id S1345284AbiCWWlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 18:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240410AbiCWWkR (ORCPT
+        with ESMTP id S234878AbiCWWlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 18:40:17 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D036167C1;
-        Wed, 23 Mar 2022 15:38:46 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 08027221D4;
-        Wed, 23 Mar 2022 23:38:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648075124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U8jdoR5jqJ3/I0PWZz2NXnJG2RKiRWixoRqKl2Hur6U=;
-        b=nVBcxd4j5IU6vfFmHjAuziycN0DAYCCG9p55wtx+3lKUFc84gNrL0WYDwtLSzYMZHh2HVh
-        CvCWT3SIhW7p0AHA5uzPI8telKF3X70GtqPVhlGcXIaIr32QmevLKDcyRkFN4K9tpYtqI9
-        rCAhTAzjzOcMKL32Xbdh1BJn/L6N4Pw=
+        Wed, 23 Mar 2022 18:41:12 -0400
+Received: from sonic304-28.consmr.mail.ne1.yahoo.com (sonic304-28.consmr.mail.ne1.yahoo.com [66.163.191.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D407125C7B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 15:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648075181; bh=mC20+7TfRW6SdSbJR6fvSbCljYYikadz3XaqubTXWoY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=PH0HRAXD67YIpmWyafy9rFOEVuYUyIq8X//OYb2DMN04faT0PnlF3KwpR8mZXy8AclhocXmwgKUmE0fKsCNQND35nq3Rf/CjFpMOI9RiVsI6NaO2C1BSauVCjct/N9mKpvjLvQ1n8N3oa9amr3PsOwn8N95yB8Bp0xb1mSMBl5RDnNlVuQ1+QVfmxH2FSKT/lt8OGQEM7IazaB/OGzj9ppAt4KAlbILYebbQjvXclM0mBb3snFQZEjJI7L/yO47jjcXT6BJ9hEQ/SUd/8rQAN7xtSmCv3dZ0Jrx9nsEtqa0eeK6bkJji0f2JEM8xOt5ecpiwr4ofvs7vzX0d7wMeew==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648075181; bh=bT1BWLYh3huKi4ud4dqj1HI4/AEBVypxzPWNmAT4ids=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ZX5EYmTz68twxKEGZE7p0+9qxsYKa8pv/0rYZljKAo0VuVCxZVHxXIIppkGgBxoh41+t7gaxd8DTZq36Ivcd6f425SQ/ZDgIvAtkCJ081k2m8bENMBgy9Tj17oKC+28OwT2sEPkyvhb7o2X4IyLxxeFzCRJHsVqU3Di3sjCfhkVjSnpuP4kf2Z/RDiJ+8AHAgbo6SGpjFfHUw/fKSZ2mDUF2LbNrPUE4PYE2J3PHAue9HC/bU6gnReLkdFuVTJTd/RstSw3ajf7vdtqVFBoz+9OJyNWEqAwqd5NLs6xs/P6UOsv6L7Kt2igZOQroFaSo48xvwbYjLihRCr5nGI4dCg==
+X-YMail-OSG: aRtVYpIVM1mcjJ.GzVEao9yrcefHqRuQJJQV5bnHobGLoSqFv6ixDYNnp33Q6J4
+ O6wcg61HZXxIrKh241.ARyjgYLW_BZomXhC_fm69liIfuCNgSw1o1DlDZDY7ckpx4EL1YHxQfvba
+ 0XRp42brli2U0GaB2fAuhRvaIEGc1VInOFbQXm6NVyrDr6AsNnv1YZUaJcMK_dDnXLWQ3lwx_zLh
+ kwHtfz3K0ji6zY3n20TtVlEgs9BPwHwRM6wS4gfQ16biZ8avXe9Z6rhr59OQ.dXNmjPKCsFWD.Xi
+ xhZ9lj0t2MzC2sZB960gp84Q.akfi8hGua17Puz6ioV27GvZbXvaUbqJ80CpaFrhwxfKGTKShRKB
+ jSvZprgBol6j4dempnAM2iKgA98CJvkldDBA6GM0T5okKvqNkTL45.KGOusVUbAJR1nkNWSAobXl
+ GK6njZuBvUQcTuyTE63ga6cgEzelkb.gVOjHxmjh7aLI5Y5uAHySk2tBI.SimdyqdtKnkNDHgy3g
+ XBTfuOSLVRbA0mniu2TlzejhAo_YsTPpkIqs6OOGwKGZwCxkKC3efipTNYgCrVbCDds08_RLsx.i
+ HqWkUWiBno3pFuuCvAxuwHG5HMyyBpjmkqBaLrlbHRIM9ihEWg6rucQb_XakkuNR1VRq9llMJnlL
+ anUyC23w4vtzTnFSAJVS31w.ninIpS2VLKFW.9U_SqdJgV7WqAZ9BbfujN.wfmVk.clQGLEEZK9B
+ B3hsv2XXwZA72U9x212vkvZbWUz5eRoTBjHKpzvfwm7.jVv58VrKa824ICtGIpGalaW_iwitcJ9C
+ XdWEvoIy4PI8QvXmoVFdYh7BerDemLMoprEWs9JC75iv2NSsQyDn1gC0efsIE.ZgtNjtEgCf87B8
+ qpQwHdp7Rnw3G.eKNXMo.1794KwjoguOezCkXY33IsCtMJamdFZFYUH6cWoNTOWxFMjiza_9N4r9
+ MPBzhKSL1iKNxchhGSBQ7FXEgoc4CSuWTB..nECTIVAwKpx4wgF5MhFfcqCu5F7lOduRO.wChuVY
+ KZ4RDENm5T0HkVudv0ofQCzLXXa4b4WIItpY84auduRcTOUQldAugaU7JURuuwLSOxNDAeru9QYm
+ orTqQ5aYYgHAjF0VVnoCOh1H5wemxTzAFTYEA0.YbIP6IEpjX3N82nHoq_QJyjbFM6rNM6gVD.Lc
+ 05rtS0IjAhJ3IL2JctbsQhsT4qf.1kS6rFh3YbYrzeRoW6wSbpdGe2aTDXsxkI5i8luyKENR5eD0
+ MgQIgqKOhuRh_74U1l5symqEYNVNZRJsbaAHWgvUdsARiEGVk39ZYj5Yz2LqGKagf3imPz8FNipo
+ j1.kQdU1T93ztMARo6H96TeOsUts6G45x34qxbur5GCIGse5zliFl.Bo.h.94kEn2szypcE7k8WB
+ babF_qk5q2fgFbEJQpj26vKusCE0iSbvM8HdyliVqBtoUZLDcpnLqjR.Fbs37aQQyZhrJLVpqKdC
+ c1yBpLKXir_SN9vh6zidi20ngxIPufZS0n9GZcLb0aXhwxEcbPaIGz36n6iTQvMmQcQCgylqBId8
+ _8vUW_OJDPfaIW1JpKMhdjuNxUZSClHaNH1n9_TfnEq8kkwaonY.SOpS6V8.KC4nrQUReic3006X
+ Oc6FQQToxZvB4hn2tC_iZZm2.ByWF.dbItfjhfc9RqJG7B_lg2PVIcCvGkzBrVkIjLTqctqKg6pR
+ JvzEMQ1t.m4BUonAq1uR1Vf6qRld8z6WENRqKHdFLlGp57Mmt7XakLMM3LgcufyPcEQjxyG_9q3y
+ PndMF6uMxlPt6_ajanYVkD4Jh6S.XF8FhIyaK8gZMMP3tV8BnnjYhHoBqFAn1VEIp0.FwvcSbuDc
+ zJMg8.gbg3p3ElWDAUfWNnvXu5B0IGpzJwwVDcrzuJn_pJMi4wCbfQDSrESMdgjwuyH3jpDkRDHR
+ QK0tdrrLc1a392lJoneXeGEZQdBFHg_gt1DLzrnANQmHfFDBTCx_lRXG.Fy6iRnQAn5n4cmZyUx.
+ Kd0OxdwrE_3gdqYKVQTpY_EcdJa7lcgNdZMmXUgzNWCqhqr7._zek7BabXejjTbmGs40OhGyGn6U
+ hTZdhxuOtqtMFIbgNE2aDeR.MOzJmW2bCRXe4dobJB4Pmyl9PFnI9VQkfFUjbKbxaR25QJTopStF
+ UzJ6lWFMHacHE9ZMU9s.Vfg43Fms27uHaroreo1N6ZqYxSI21ja7YG8cs0krHtQleUSMsYf6nIWF
+ 1XTsNFEA5wF9PVf.tcuFoUttjcCRyUPwjWVQ0P.nOmRmDet7TprAe7XkZHdY2u3XDhyL.rP_USiC
+ YpfERr0INimq_.KnTrTs-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Wed, 23 Mar 2022 22:39:41 +0000
+Received: by hermes--canary-production-bf1-665cdb9985-6p9bt (VZM Hermes SMTP Server) with ESMTPA ID 39a8b820c79283304b7db448c9a80e45;
+          Wed, 23 Mar 2022 22:39:39 +0000 (UTC)
+Message-ID: <d0894565-9783-b398-0faf-60bfb96837ce@schaufler-ca.com>
+Date:   Wed, 23 Mar 2022 15:39:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+Content-Language: en-US
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20220322192712.709170-1-mszeredi@redhat.com>
+ <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+ <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
+ <d3333dbe-b4b7-8eb9-4a50-8526d95b5394@schaufler-ca.com>
+ <CAJfpegvwTmaw0bp70-nYQAvs8T=wYyxnDEoA=rOvX8HDZnxCTg@mail.gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAJfpegvwTmaw0bp70-nYQAvs8T=wYyxnDEoA=rOvX8HDZnxCTg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 23 Mar 2022 23:38:43 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
-In-Reply-To: <Yjt99k57mM5PQ8bT@lunn.ch>
-References: <20220323183419.2278676-1-michael@walle.cc>
- <20220323183419.2278676-5-michael@walle.cc> <Yjt99k57mM5PQ8bT@lunn.ch>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <8304fb3578ee38525a158af768691e75@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mailer: WebService/1.1.19987 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-23 21:07, schrieb Andrew Lunn:
-> On Wed, Mar 23, 2022 at 07:34:18PM +0100, Michael Walle wrote:
->> The GPY215 driver supports indirect accesses to c45 over the c22
->> registers. In its probe function phy_get_c45_ids() is called and the
->> author descibed their use case as follows:
->> 
->>   The problem comes from condition "phydev->c45_ids.mmds_present &
->>   MDIO_DEVS_AN".
->> 
->>   Our product supports both C22 and C45.
->> 
->>   In the real system, we found C22 was used by customers (with 
->> indirect
->>   access to C45 registers when necessary).
->> 
->> So it is pretty clear that the intention was to have a method to use 
->> the
->> c45 features over a c22-only MDIO bus. The purpose of calling
->> phy_get_c45_ids() is to populate the .c45_ids for a PHY which wasn't
->> probed as a c45 one. Thus, first rename the phy_get_c45_ids() function
->> to reflect its actual meaning and second, add a new flag which 
->> indicates
->> that this is actually a c45 PHY but behind a c22 bus. The latter is
->> important for phylink because phylink will treat c45 in a special way 
->> by
->> checking the .is_c45 property. But in our case this isn't set.
-> 
-> Thinking out loud...
-> 
-> 1) We have a C22 only bus. Easy, C45 over C22 should be used.
-> 
-> 2) We have a C45 only bus. Easy, C45 should be used, and it will of
->    probed that way.
-> 
-> 3) We have a C22 and C45 bus, but MDIOBUS_NO_CAP. It will probe C22,
->    but ideally we want to swap to C45.
-> 
-> 4) We have a C22 and C45 bus, MDIOBUS_C22_C45. It will probe C22, but
->    ideally we want to swap to C45.
+On 3/23/2022 7:00 AM, Miklos Szeredi wrote:
+> On Wed, 23 Mar 2022 at 14:51, Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+>> You also need a way to get a list off what attributes are available
+>> and/or a way to get all available attributes. Applications and especially
+>> libraries shouldn't have to guess what information is relevant. If the
+>> attributes change depending on the filesystem and/or LSM involved, and
+>> they do, how can a general purpose library function know what data to
+>> ask for?
+> Oh, yes.  Even the current prototype does that:
+>
+> # ~/getvalues / ""
+> [] = "mnt" "mntns" "xattr" "data" (len=21)
+> # ~/getvalues / "mnt"
+> [mnt] = "id" "parentid" "root" "mountpoint" "options" "shared"
+> "master" "propagate_from" "unbindable" (len=76)
+> # ~/getvalues / "mntns"
+> [mntns] = "21" "22" "24" "25" "23" "26" "27" "28" "29" "30" "31" "32" (len=36)
+>   ~/getvalues / "mntns:21"
+> [mntns:21] = "id" "parentid" "root" "mountpoint" "options" "shared"
+> "master" "propagate_from" "unbindable" (len=76)
 
-I presume you are speaking of
-https://elixir.bootlin.com/linux/v5.17/source/drivers/net/phy/mdio_bus.c#L700
+That requires multiple calls and hierarchy tracking by the caller.
+Not to mention that in this case the caller needs to understand
+how mount namespaces are being used. I don't see that you've made
+anything cleaner. You have discarded the type checking provided
+by the "classic" APIs. Elsewhere in this thread the claims of
+improved performance have been questioned, but I can't say boo
+about that. Is this interface targeted for languages other than C
+for which the paradigm might provide (more?) value?
 
-Shouldn't that be the other way around then? How would you tell if
-you can do C45?
-
->> @@ -99,7 +99,7 @@ static int gpy_probe(struct phy_device *phydev)
->>  	int ret;
->> 
->>  	if (!phydev->is_c45) {
->> -		ret = phy_get_c45_ids(phydev);
->> +		ret = phy_get_c45_ids_by_c22(phydev);
->>  		if (ret < 0)
->>  			return ret;
->>  	}
-> 
-> If we are inside the if, we know we probed C22. We have to achieve two
-> things:
-> 
-> 1) Get the c45 ids,
-> 2) Figure out if C45 works, or if C45 over C22 is needed.
-> 
-> I don't see how we are getting this second bit of information, if we
-> are explicitly using c45 over c22.
-
-That is related to how C45 capable PHYs are probed (your 4) above),
-right? If the PHY would be probed correctly as C45 we wouldn't have
-to worry about it. TBH I didn't consider that a valid case because
-I thought there were other means to tell "treat this PHY as C45",
-that is by the device tree compatible, for example.
-
-Btw. all of this made me question if this is actually the correct
-place, or if if shouldn't be handled in the core. With a flag
-in the phy driver which might indicate its capable of doing
-c45 over c22.
-
-> This _by_c22 is also making me think of the previous patch, where we
-> look at the bus capabilities. We are explicitly saying here was want
-> c45 over c22, and the PHY driver should know the PHY is capable of
-> it. So we don't need to look at the capabilities, just do it.
-
-Mh? I can't follow you here. Are you talking about the
-probe_capabilites? These are for the bus probing, i.e. if you can
-call mdiobus_c45_read().
-
--michael
+>
+> I didn't implement enumeration for "data" and "xattr" but that is
+> certainly possible and not even difficult to do.
+>
+> Thanks,
+> Miklos

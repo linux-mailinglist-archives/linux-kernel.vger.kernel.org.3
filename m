@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D363D4E54DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310814E54E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243150AbiCWPIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 11:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
+        id S237757AbiCWPJJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Mar 2022 11:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbiCWPIq (ORCPT
+        with ESMTP id S244993AbiCWPJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 11:08:46 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C8875E41
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:07:16 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so991672ilc.17
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:07:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=OCNxa9n6u0UYsSpngdxE2RzTqlLKDflz8tjBWq7Q28s=;
-        b=42MO3rEPRHH4Yknt1tNXiRpWUJ4Sqmw5O4U9iBjUWJCxP+srn12ONCvmO81+3PACrg
-         ysgP/Pask0Ugqp62xi9IZpplpZ7jF+xQX7wFyu7RDtOagFdL+3nWmlh+L2CkOPvdyk+m
-         P7PRqYp3xzLAhp06DkRjFPZEvqs+5RN3ZEiDp7OolIi8B19YmBika2YC0qnuzjakPZWQ
-         xDLPZMkb0Nf5D4guMm8yUfcarZEjVXM/Cfanv4mVa5hrK50yvi66DDY84VZHqfOarclE
-         zFx75LQRqUizcOvOqshN7IVnXfDfYpX/mxgMSGptNQGmtGSEyJbi+qtZ7pQcC8a6w4mF
-         sutQ==
-X-Gm-Message-State: AOAM533xldyjKWd7riJj8ma2R8oocJX8Yo1c7OcXK/XDcniG+JbylfWI
-        kcOngvG37e3Ena8ZBP/GOCjaGsuzLHf6rMY/JEfyLsJIizg8
-X-Google-Smtp-Source: ABdhPJws14Yfc6W/f6AeMeaXwEcAaKf4KKbckIBCk2WA1PXSi3Ym6qbtgZlUT0YzULj9ZhdyGN8lcTD2cRxHyl+/k4g7AJstdvLR
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:17c9:b0:2c7:f556:da52 with SMTP id
- z9-20020a056e0217c900b002c7f556da52mr262922ilu.96.1648048035383; Wed, 23 Mar
- 2022 08:07:15 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 08:07:15 -0700
-In-Reply-To: <00000000000079c56a05ba1c18c3@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b8cdba05dae41558@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in ext4_xattr_set_entry (4)
-From:   syzbot <syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, cmaiolino@redhat.com,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sjc@chobot.com,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu, wanjiabing@vivo.com
+        Wed, 23 Mar 2022 11:09:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9407D03D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:07:35 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nX2a8-0004Yt-FC; Wed, 23 Mar 2022 16:07:28 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nX2a4-002Vih-QY; Wed, 23 Mar 2022 16:07:27 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nX2a6-0007nK-BN; Wed, 23 Mar 2022 16:07:26 +0100
+Message-ID: <d2d119b07cb51878904574ff14c8e4dd92c28907.camel@pengutronix.de>
+Subject: Re: [PATCH 0/2] add fwnode support to reset subsystem
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     =?ISO-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Date:   Wed, 23 Mar 2022 16:07:26 +0100
+In-Reply-To: <20220323095022.453708-1-clement.leger@bootlin.com>
+References: <20220323095022.453708-1-clement.leger@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,24 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Hi Clément,
 
-commit 6e47a3cc68fc525428297a00524833361ebbb0e9
-Author: Lukas Czerner <lczerner@redhat.com>
-Date:   Wed Oct 27 14:18:52 2021 +0000
+On Mi, 2022-03-23 at 10:50 +0100, Clément Léger wrote:
+> This series is part of a larger series which aims at adding fwnode
+> support in multiple subsystems [1]. The goal of this series was to
+> add support for software node in various subsystem but in a first
+> time only the fwnode support had gained consensus and will be added
+> to multiple subsystems.
 
-    ext4: get rid of super block and sbi from handle_mount_ops()
+Could you explain the purpose of this a little? From the referenced
+mail it looks like this would be intended allow to register reset
+controllers via software node? Are there any real systems where this
+would be useful?
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=100bc10b700000
-start commit:   f8ad8187c3b5 fs/pipe: allow sendfile() to pipe again
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=96b123631a6700e9
-dashboard link: https://syzkaller.appspot.com/bug?extid=4cb1e27475bf90a9b926
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11131f94d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c3761b500000
+> For the moment ACPI node support is excluded from the fwnode support
+> to avoid creating an unspecified ACPI reset device description.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Are there any plans or ongoing discussions to specify such a
+description in the future? Right now I'm only aware of the ACPI _RST
+method as used by this patch:
 
-#syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
+[1] https://lore.kernel.org/all/20220307135626.16673-1-kyarlagadda@nvidia.com/
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> One question raised by this series is that I'm not sure if all reset
+> drivers should be modified to use the new fwnode support or keep the
+> existing device-tree support. Maintainer advice on that particular
+> question will be welcome.
+
+I would prefer not to have to switch all those small DT-only reset
+controller drivers all over the tree from of_node to fwnode.
+On the other hand, I think it would be good to avoid the direct of_node
+assignment, possibly by letting devm_reset_controller_register()
+initialize of_node or fwnode from the device for most cases, and by
+adding of_reset_controller_register() and
+fwnode_reset_controller_register() variants that take the node as an
+argument for the rest.
+That could allow to eventually get rid of the of_node pointer.
+
+For those drivers that provide their own .of_xlate, I'm not sure it
+would make sense to force them to use .fwnode_xlate if they don't
+already have a reason to use fwnode on their own.
+
+regards
+Philipp

@@ -2,258 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2A74E5256
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF17D4E525D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242778AbiCWMmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
+        id S243016AbiCWMnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbiCWMmR (ORCPT
+        with ESMTP id S242871AbiCWMnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:42:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FE407B553
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648039246;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EFFzrMoeCc+vtGGQUpI0c3WJGOuV+lzt7PoTPoO5vXg=;
-        b=N4WEOa5MQuD8qGEnFeDHLDcJFyynMMX8bC5FMhqmNM9BZLpIXOXPKHeQYaXnoRE/tthZxy
-        VWwzZu9cD1qQr7Pn6X22pODfm6xLWTcFHi4ABe3yYRRTKi0k+Dp1mc63UsOFlNnH20qOln
-        NgutCS5q3tQYZ0a1Rkni5ji036c5MRQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-250-yjcbSrvrOCe8umxWptf5wQ-1; Wed, 23 Mar 2022 08:40:43 -0400
-X-MC-Unique: yjcbSrvrOCe8umxWptf5wQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 87CB63C01B95;
-        Wed, 23 Mar 2022 12:40:42 +0000 (UTC)
-Received: from [10.72.12.33] (ovpn-12-33.pek2.redhat.com [10.72.12.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E037C140262B;
-        Wed, 23 Mar 2022 12:40:36 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v5 02/22] KVM: arm64: Add SDEI virtualization
- infrastructure
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-References: <20220322080710.51727-1-gshan@redhat.com>
- <20220322080710.51727-3-gshan@redhat.com> <YjpRArSezR3gVv2K@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <c178489c-9e52-f5b2-4ff8-4f1328c08208@redhat.com>
-Date:   Wed, 23 Mar 2022 20:40:33 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Wed, 23 Mar 2022 08:43:17 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5892F7B554
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:41:47 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id g3so1403191plo.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a4dvkjPYRELhzllIpA0f3GYBFS79Xmkqa9OQbMC0sQc=;
+        b=BKV9SqrLcCplUfT86q4wICSAi929UqoXsOYEw5LTO37EfKdTN2GtR664bQ3vyjorSZ
+         umEsHvA9Hf69ZUhSOSj2bHwQo7CoYe2dMR3VY8RSVgE6oCwkDjPS2kQtFuqphIyDUj4Q
+         JhPZpVN5veA4MJL1CHALKuLy77VIaGfl3oAydDYdTtl5+oro1O72+9Utv02ZjSYfJiWl
+         4Tlb1i3xphsC1I6jo19owV9XBgkkZvTCV2/LwprTZvQfKG/ahY//EyAZOMJLAxhZ75+s
+         SXKAirhz68DkHMz6X8Gkd06lyWj3oYWLZMxK9/aiYcb0HsIC1hoo9f1GvlkvNeJo8Nlb
+         +mOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a4dvkjPYRELhzllIpA0f3GYBFS79Xmkqa9OQbMC0sQc=;
+        b=T5N2mMYm8hBm2kBOt3+hrxOmtW9lnhCvirK0Qp7ue6+mh0IS3zQlJRFOumSYvRfp8k
+         Edoh4U30HPncr9GncireALIpKJVTdwOzfqmpSgBmsMrgtvE2/Ls1TppuEU9lx9WQyWU1
+         ix+MJlh7ip0GePhmX+EqT0DMsl6LCCKNHTUnWx4qmxJF0i/QeP2tNdOVUMcr1ugjld7+
+         hTAtZzuDf65iKRUgqzorR5LxrM47dsiEguHvp3SyJrN5wTefwEG7ra2CoMwiG38BKTV8
+         blu3c4HrPnBMoDTN8kpRTW0eFUWAIqln/Eh6H+SXMJRnCKy94P+VvqQBIYTbKTypzlhk
+         CCEA==
+X-Gm-Message-State: AOAM53206YNd5DaARuM1G8VmftO2FiFLkIiMJyvdP58ulF1Wa9rB1711
+        HVcEiDCuSeBFGaCKA6dvVupS7en7OU6AIavXlljF7g==
+X-Google-Smtp-Source: ABdhPJwj0X9bRHFxzj52gv00VxzzzCayohoiI5JJBSZZRHRycjz7IVFuiC6D+k6f9FViImGXM5UKs9f1KGdqXvP4E/c=
+X-Received: by 2002:a17:902:e545:b0:154:4d5b:2006 with SMTP id
+ n5-20020a170902e54500b001544d5b2006mr16865421plf.94.1648039306634; Wed, 23
+ Mar 2022 05:41:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YjpRArSezR3gVv2K@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220216074613.235725-1-patrick.rudolph@9elements.com>
+ <20220216074613.235725-3-patrick.rudolph@9elements.com> <5658941a-bf81-4ecf-3317-82d2a8244021@axentia.se>
+In-Reply-To: <5658941a-bf81-4ecf-3317-82d2a8244021@axentia.se>
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+Date:   Wed, 23 Mar 2022 13:41:35 +0100
+Message-ID: <CALNFmy0vADcLGcNCCGtPhsXXRCxV549Q5vhdv9v0YQ+HjZOhNQ@mail.gmail.com>
+Subject: Re: [v6 2/3] i2c: muxes: pca954x: Add MAX735x/MAX736x support
+To:     Peter Rosin <peda@axentia.se>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+Hi Peter,
+thanks for the review.
+The MAX7358 has indeed the same registers as the MAX7357, but they
+need to be "unlocked" by sending a magic sequence first.
+As this isn't implemented by the driver it behaves like the MAX7356
+with a single register.
+The additional registers can be hidden again by setting a bit in the
+config space.
+Which wording would you prefer to describe this feature?
 
-On 3/23/22 6:43 AM, Oliver Upton wrote:
-> On Tue, Mar 22, 2022 at 04:06:50PM +0800, Gavin Shan wrote:
->> Software Delegated Exception Interface (SDEI) provides a mechanism for
->> registering and servicing system events. Those system events are high
->> priority events, which must be serviced immediately. It's going to be
->> used by Asynchronous Page Fault (APF) to deliver notification from KVM
->> to guest. It's noted that SDEI is defined by ARM DEN0054C specification.
-> 
-> I'm guessing that you're using linked lists for stitching all of this
-> together because the specification provides for 24 bits of event
-> encoding. However, it seems that there will be a finite number of events
-> in KVM. So the APF stuff and a software signaled event.
-> 
-> Given that the number of events in KVM is rather small, would it make
-> more sense to do away with the overhead of linked lists and having the
-> state just represented in a static or allocated array? I think you can
-> cram all of the VM scoped event state into a single structure and hang
-> the implementation off of that.
-> 
+I'll change it to maxim_enhanced_mode.
 
-Yes, the number of events in KVM is small. Including the events for Async
-PF and the software signaled event, 8 events would be enough currently. In
-the meanwhile, there are several types of objects for various events. Some
-of them can be put into static array, while the left might need static array
-of pointers to avoid the linked list:
+Regards,
+Patrick
 
-    struct kvm_sdei_exposed_event/state         on struct kvm_arch
-           size: 24 bytes
-           static array, 8 entries
-    struct kvm_sdei_registered_event/state      on struct kvm_arch
-           size: 9KB
-           static array of pointers, still need allocate them dynamically, 8 entries
-    struct kvm_sdei_vcpu_event/state            on struct kvm_vcpu_arch
-           size: 16 bytes
-           static array, 8 entries
-
-
->> This introduces SDEI virtualization infrastructure where the SDEI events
->> are registered and manipulated by the guest through hypercall. The SDEI
->> event is delivered to one specific vCPU by KVM once it's raised. This
->> introduces data structures to represent the needed objects to support
->> the feature, which is highlighted as below. As those objects could be
->> migrated between VMs, these data structures are partially exposed to
->> user space.
->>
->>     * kvm_sdei_exposed_event
->>       The exposed events are determined and added by VMM through ioctl
->>       interface. Only the exposed events can be registered from the
->>       guest.
->>
->>     * kvm_sdei_registered_event
->>       The events that have been registered from the guest through the
->>       SDEI_1_0_FN_SDEI_EVENT_REGISTER hypercall.
->>
->>     * kvm_sdei_vcpu_event
->>       The events that have been delivered to the target vCPU.
->>
->>     * kvm_sdei_vcpu
->>       Used to save the preempted context when the SDEI event is serviced
->>       and delivered. After the SDEI event handling is completed, the
->>       execution is resumed from the preempted context.
->>
->>     * kvm_sdei_kvm
->>       Place holder for the exposed and registered events.
-> 
-> It might be a good idea to expand these a bit and move them into
-> comments on each of the structures.
-> 
-
-Sure, I will do in next respin.
-
->> The error of SDEI_NOT_SUPPORTED is returned for all SDEI hypercalls for
->> now. They will be supported in the subsequent patches.
->>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   arch/arm64/include/asm/kvm_host.h            |   3 +
->>   arch/arm64/include/asm/kvm_sdei.h            | 171 +++++++++++++
->>   arch/arm64/include/uapi/asm/kvm.h            |   1 +
->>   arch/arm64/include/uapi/asm/kvm_sdei_state.h |  72 ++++++
->>   arch/arm64/kvm/Makefile                      |   2 +-
->>   arch/arm64/kvm/arm.c                         |   8 +
->>   arch/arm64/kvm/hypercalls.c                  |  21 ++
->>   arch/arm64/kvm/sdei.c                        | 244 +++++++++++++++++++
->>   include/uapi/linux/arm_sdei.h                |   2 +
->>   9 files changed, 523 insertions(+), 1 deletion(-)
->>   create mode 100644 arch/arm64/include/asm/kvm_sdei.h
->>   create mode 100644 arch/arm64/include/uapi/asm/kvm_sdei_state.h
->>   create mode 100644 arch/arm64/kvm/sdei.c
->>
->> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
->> index 031e3a2537fc..5d37e046a458 100644
->> --- a/arch/arm64/include/asm/kvm_host.h
->> +++ b/arch/arm64/include/asm/kvm_host.h
->> @@ -113,6 +113,8 @@ struct kvm_arch {
->>   	/* Interrupt controller */
->>   	struct vgic_dist	vgic;
->>   
->> +	struct kvm_sdei_kvm *sdei;
->> +
-> 
-> nit: avoid repeating 'kvm'. struct kvm_sdei should be descriptive enough
-> :)
-> 
-
-Indeed, "struct kvm_sdei" is better :)
-
->>   	/* Mandated version of PSCI */
->>   	u32 psci_version;
->>   
->> @@ -338,6 +340,7 @@ struct kvm_vcpu_arch {
->>   	 * Anything that is not used directly from assembly code goes
->>   	 * here.
->>   	 */
->> +	struct kvm_sdei_vcpu *sdei;
->>
-> 
-> nit: put your scoping tokens at the beginning of a symbol name, so
-> 'struct kvm_vcpu_sdei'.
-> 
-> [...]
-> 
-
-Yep, "struct kvm_vcpu_sdei" is the one I will have in next respin :)
-
->> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
->> index 202b8c455724..3c20fee72bb4 100644
->> --- a/arch/arm64/kvm/hypercalls.c
->> +++ b/arch/arm64/kvm/hypercalls.c
->> @@ -5,6 +5,7 @@
->>   #include <linux/kvm_host.h>
->>   
->>   #include <asm/kvm_emulate.h>
->> +#include <asm/kvm_sdei.h>
->>   
->>   #include <kvm/arm_hypercalls.h>
->>   #include <kvm/arm_psci.h>
->> @@ -151,6 +152,26 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
->>   	case ARM_SMCCC_TRNG_RND32:
->>   	case ARM_SMCCC_TRNG_RND64:
->>   		return kvm_trng_call(vcpu);
->> +	case SDEI_1_0_FN_SDEI_VERSION:
->> +	case SDEI_1_0_FN_SDEI_EVENT_REGISTER:
->> +	case SDEI_1_0_FN_SDEI_EVENT_ENABLE:
->> +	case SDEI_1_0_FN_SDEI_EVENT_DISABLE:
->> +	case SDEI_1_0_FN_SDEI_EVENT_CONTEXT:
->> +	case SDEI_1_0_FN_SDEI_EVENT_COMPLETE:
->> +	case SDEI_1_0_FN_SDEI_EVENT_COMPLETE_AND_RESUME:
->> +	case SDEI_1_0_FN_SDEI_EVENT_UNREGISTER:
->> +	case SDEI_1_0_FN_SDEI_EVENT_STATUS:
->> +	case SDEI_1_0_FN_SDEI_EVENT_GET_INFO:
->> +	case SDEI_1_0_FN_SDEI_EVENT_ROUTING_SET:
->> +	case SDEI_1_0_FN_SDEI_PE_MASK:
->> +	case SDEI_1_0_FN_SDEI_PE_UNMASK:
->> +	case SDEI_1_0_FN_SDEI_INTERRUPT_BIND:
->> +	case SDEI_1_0_FN_SDEI_INTERRUPT_RELEASE:
->> +	case SDEI_1_1_FN_SDEI_EVENT_SIGNAL:
->> +	case SDEI_1_0_FN_SDEI_PRIVATE_RESET:
->> +	case SDEI_1_0_FN_SDEI_SHARED_RESET:
->> +	case SDEI_1_1_FN_SDEI_FEATURES:
-> 
-> Consider only adding switch statements for hypercalls when they're
-> actually implemented.
-> 
-> Additionally, while this isn't directly related to your patch, I do have
-> a gripe about kvm_hvc_call_handler(). It is really ugly that we
-> enumerate the specific hypercalls we support, and otherwise fall through
-> to PSCI.
-> 
-> IMO, a cleaner approach would be to have kvm_hvc_call_handler() simply
-> route a particular service range/service owner to the appropriate
-> handler. We can then terminate individual hypercalls in those handlers,
-> avoiding a catch-all switch such as this one is currently.
-> 
-
-Yes, I agree. I can have a separate patch as preparatory work to
-route the range of hypercalls to their owner for further handling.
-In this way, we can route the range of SDEI hypercalls to its own
-handler. I will figure it out in next respin.
-
-Thanks,
-Gavin
-
-
+On Sat, Mar 19, 2022 at 3:41 PM Peter Rosin <peda@axentia.se> wrote:
+>
+> Hi!
+>
+> Sorry for the slow review and thanks for your patience...
+>
+> On 2022-02-16 08:46, Patrick Rudolph wrote:
+> > Add support for the following Maxim chips using the existing PCA954x
+> > driver:
+> > - MAX7356
+> > - MAX7357
+> > - MAX7358
+> > - MAX7367
+> > - MAX7368
+> > - MAX7369
+> >
+> > All added Maxim chips behave like the PCA954x, where a single SMBUS byte
+> > write selects up to 8 channels to be bridged to the primary bus.
+> >
+> > The MAX7357 exposes 6 additional registers at Power-On-Reset and is
+>
+> MAX7358 also has the same enhanced mode as the 7357, no?
+>
+> And what do you mean that they are exposed at POR? I can see why they
+> are not exposed /before/ POR, but are they ever /not/ exposed? If they
+> are always exposed when the chip is "alive", then I suggest that the
+> POR wording is dropped, otherwise that the above is reworded to
+> describe when the register are no longer exposed.
+>
+> > configured to:
+> >  - Disabled interrupts on bus locked up detection
+> >  - Enable bus locked-up clearing
+> >  - Disconnect only locked bus instead of all channels
+> >
+> > While the MAX7357/MAX7358 have interrupt support, they don't act as
+> > interrupt controller like the PCA9545 does. Thus don't enable IRQ support
+> > and handle them like the PCA9548.
+> >
+> > Tested using the MAX7357 and verified that the stalled bus is disconnected
+> > while the other channels remain operational.
+> >
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > ---
+> >  drivers/i2c/muxes/Kconfig           |  4 +-
+> >  drivers/i2c/muxes/i2c-mux-pca954x.c | 92 +++++++++++++++++++++++++++--
+> >  2 files changed, 90 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/i2c/muxes/Kconfig b/drivers/i2c/muxes/Kconfig
+> > index 1708b1a82da2..2ac99d044199 100644
+> > --- a/drivers/i2c/muxes/Kconfig
+> > +++ b/drivers/i2c/muxes/Kconfig
+> > @@ -65,11 +65,11 @@ config I2C_MUX_PCA9541
+> >         will be called i2c-mux-pca9541.
+> >
+> >  config I2C_MUX_PCA954x
+> > -     tristate "NXP PCA954x and PCA984x I2C Mux/switches"
+> > +     tristate "NXP PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C Mux/switches"
+> >       depends on GPIOLIB || COMPILE_TEST
+> >       help
+> >         If you say yes here you get support for the NXP PCA954x
+> > -       and PCA984x I2C mux/switch devices.
+> > +       and PCA984x and Maxim MAX735x/MAX736x I2C mux/switch devices.
+>
+> and and and... :-) Maybe like this?
+>
+>           If you say yes here you get support for NXP PCA954x/PCA984x
+>           and Maxim MAX735x/MAX736x I2C mux/switch devices.
+>
+> >         This driver can also be built as a module.  If so, the module
+> >         will be called i2c-mux-pca954x.
+> > diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > index 4ad665757dd8..33b9a6a1fffa 100644
+> > --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > @@ -4,6 +4,7 @@
+> >   *
+> >   * Copyright (c) 2008-2009 Rodolfo Giometti <giometti@linux.it>
+> >   * Copyright (c) 2008-2009 Eurotech S.p.A. <info@eurotech.it>
+> > + * Copyright (c) 2022 Patrick Rudolph <patrick.rudolph@9elements.com>
+> >   *
+> >   * This module supports the PCA954x and PCA984x series of I2C multiplexer/switch
+> >   * chips made by NXP Semiconductors.
+> > @@ -11,6 +12,12 @@
+> >   *    PCA9540, PCA9542, PCA9543, PCA9544, PCA9545, PCA9546, PCA9547,
+> >   *    PCA9548, PCA9846, PCA9847, PCA9848 and PCA9849.
+> >   *
+> > + * It's also compatible to Maxims MAX735x I2C switch chips, which are controlled
+> > + * as the NXP PCA9548 and the MAX736x chips that act like the PCA9544.
+> > + *
+> > + * This includes the:
+> > + *    MAX7356, MAX7357, MAX7358, MAX7367, MAX7368 and MAX7369
+> > + *
+> >   * These chips are all controlled via the I2C bus itself, and all have a
+> >   * single 8-bit register. The upstream "parent" bus fans out to two,
+> >   * four, or eight downstream busses or channels; which of these
+> > @@ -50,7 +57,30 @@
+> >
+> >  #define PCA954X_IRQ_OFFSET 4
+> >
+> > +/*
+> > + * MAX7357 exposes 7 registers on POR which allow to configure additional
+> > + * features. Disable interrupts, enable bus locked-up clearing,
+> > + * isolate only the locked channel instead of all channels.
+>
+> Same MAX7358 and POR comments as above.
+>
+> The way I understands things are:
+>
+>  * MAX7357/MAX7358 exposes 7 registers which allow setup of
+>  * enhanced mode features. The first of these registers is the
+>  * switch control register that is present in some form on all
+>  * chips supported by this driver.
+>  * The second register is the configuration register, which allows
+>  * to configure additional features. E.g. disable interrupts,
+>  * enable bus locked-up clearing and isolate only the locked
+>  * channel instead of all channels.
+>  * The remaining 5 registers are left as is by this driver.
+>
+> > + */
+> > +#define MAX7357_CONF_INT_ENABLE                      BIT(0)
+> > +#define MAX7357_CONF_FLUSH_OUT                       BIT(1)
+> > +#define MAX7357_CONF_RELEASE_INT             BIT(2)
+> > +#define MAX7357_CONF_LOCK_UP_CLEAR           BIT(3)
+> > +#define MAX7357_CONF_DISCON_SINGLE_CHAN              BIT(4)
+> > +#define MAX7357_CONF_BUS_LOCKUP_DETECTION    BIT(5)
+> > +#define MAX7357_CONF_ENABLE_BASIC_MODE               BIT(6)
+> > +#define MAX7357_CONF_PRECONNECT_TEST         BIT(7)
+> > +
+> > +#define MAX7357_CONF_DEFAULTS (MAX7357_CONF_FLUSH_OUT | \
+> > +      MAX7357_CONF_DISCON_SINGLE_CHAN)
+> > +
+> >  enum pca_type {
+> > +     max_7367,
+> > +     max_7368,
+> > +     max_7369,
+> > +     max_7356,
+> > +     max_7357,
+> > +     max_7358,
+> >       pca_9540,
+> >       pca_9542,
+> >       pca_9543,
+> > @@ -69,6 +99,7 @@ struct chip_desc {
+> >       u8 nchans;
+> >       u8 enable;      /* used for muxes only */
+> >       u8 has_irq;
+> > +     u8 max7357;
+>
+> Perhaps maxim_enhanced_mode is a better name?
+>
+> >       enum muxtype {
+> >               pca954x_ismux = 0,
+> >               pca954x_isswi
+> > @@ -90,8 +121,42 @@ struct pca954x {
+> >       raw_spinlock_t lock;
+> >  };
+> >
+> > -/* Provide specs for the PCA954x types we know about */
+> > +/* Provide specs for the PCA954x and MAX735x types we know about */
+> >  static const struct chip_desc chips[] = {
+> > +     [max_7356] = {
+> > +             .nchans = 8,
+> > +             .muxtype = pca954x_isswi,
+> > +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> > +     },
+> > +     [max_7357] = {
+> > +             .nchans = 8,
+> > +             .muxtype = pca954x_isswi,
+> > +             .max7357 = 1,
+> > +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> > +     },
+> > +     [max_7358] = {
+> > +             .nchans = 8,
+> > +             .muxtype = pca954x_isswi,
+> > +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> > +     },
+> > +     [max_7367] = {
+> > +             .nchans = 4,
+> > +             .muxtype = pca954x_isswi,
+> > +             .has_irq = 1,
+> > +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> > +     },
+> > +     [max_7368] = {
+> > +             .nchans = 4,
+> > +             .muxtype = pca954x_isswi,
+> > +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> > +     },
+> > +     [max_7369] = {
+> > +             .nchans = 4,
+> > +             .enable = 0x4,
+> > +             .muxtype = pca954x_ismux,
+> > +             .has_irq = 1,
+> > +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> > +     },
+> >       [pca_9540] = {
+> >               .nchans = 2,
+> >               .enable = 0x4,
+> > @@ -177,6 +242,12 @@ static const struct chip_desc chips[] = {
+> >  };
+> >
+> >  static const struct i2c_device_id pca954x_id[] = {
+> > +     { "max7356", max_7356 },
+> > +     { "max7357", max_7357 },
+> > +     { "max7358", max_7358 },
+> > +     { "max7367", max_7367 },
+> > +     { "max7368", max_7368 },
+> > +     { "max7369", max_7369 },
+> >       { "pca9540", pca_9540 },
+> >       { "pca9542", pca_9542 },
+> >       { "pca9543", pca_9543 },
+> > @@ -194,6 +265,12 @@ static const struct i2c_device_id pca954x_id[] = {
+> >  MODULE_DEVICE_TABLE(i2c, pca954x_id);
+> >
+> >  static const struct of_device_id pca954x_of_match[] = {
+> > +     { .compatible = "maxim,max7356", .data = &chips[max_7356] },
+> > +     { .compatible = "maxim,max7357", .data = &chips[max_7357] },
+> > +     { .compatible = "maxim,max7358", .data = &chips[max_7358] },
+> > +     { .compatible = "maxim,max7367", .data = &chips[max_7367] },
+> > +     { .compatible = "maxim,max7368", .data = &chips[max_7368] },
+> > +     { .compatible = "maxim,max7369", .data = &chips[max_7369] },
+> >       { .compatible = "nxp,pca9540", .data = &chips[pca_9540] },
+> >       { .compatible = "nxp,pca9542", .data = &chips[pca_9542] },
+> >       { .compatible = "nxp,pca9543", .data = &chips[pca_9543] },
+> > @@ -401,9 +478,16 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
+> >       else
+> >               data->last_chan = 0; /* Disconnect multiplexer */
+> >
+> > -     ret = i2c_smbus_write_byte(client, data->last_chan);
+> > -     if (ret < 0)
+> > -             data->last_chan = 0;
+> > +     if (data->chip->max7357) {
+> > +             ret = i2c_smbus_write_byte_data(client, data->last_chan,
+> > +                                             MAX7357_CONF_DEFAULTS);
+> > +             if (ret < 0)
+> > +                     data->last_chan = 0;
+> > +     } else {
+> > +             ret = i2c_smbus_write_byte(client, data->last_chan);
+> > +             if (ret < 0)
+> > +                     data->last_chan = 0;
+> > +     }
+> >
+> >       return ret;
+> >  }
+>
+> The actual code is simple enough, and looks good.
+>
+> Cheers,
+> Peter

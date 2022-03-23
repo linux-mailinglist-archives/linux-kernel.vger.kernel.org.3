@@ -2,120 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8774E5435
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030504E543D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237183AbiCWO2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        id S244754AbiCWOaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiCWO2P (ORCPT
+        with ESMTP id S231790AbiCWOaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:28:15 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B38DF2C;
-        Wed, 23 Mar 2022 07:26:44 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id t7so1234978qta.10;
-        Wed, 23 Mar 2022 07:26:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MgaVbTc6NIAbgS2wEZfzTz0EIf+0SLB19R8ha1w5Zmc=;
-        b=6yh7OkIoFpKFL3aPJ7SSm/F4hrHx85q6Ka0r12r0MXCDIuKsUseKrtkxutPWaOBqFR
-         DsWng2xiiJYyaQuFoKxrWH/gZtgpZXuEyj01WrK0XuLQcWyChNzW5KbKPyBca37a+i8d
-         Mxc40PYPJXFpaHz46kIHmtEEiFLwO+URSI1aBIB9PjMVKxompgXlBsd6XhwKxrUHZfnJ
-         84QOYmLQo6FE8XiHp4qedljX5H2HGCGDzJ2lk/5XSOLzgKoG2cqIQlbu4ErJO/X7qG/u
-         yNjFmsOwd+OowWNLgVHTL9hLFyFOSVcBPnToBZJP/YRb/VIq/KmTErDqWKDx/pixMIGU
-         XAqQ==
-X-Gm-Message-State: AOAM533tbJpw0/aOGCa5UG78a9EZUN8hpq3xlmtzzQCl+J2jFkkRYEWE
-        yKJRwP8gmpXcFHHLlPA9CZOlNAhT1k0rqquj
-X-Google-Smtp-Source: ABdhPJzPnzoyNIrd1y1A1+ahUJOehAFamtMkh/kPgcBS1SG4dLj9mcGF3yn2if79yS8zlNzQ6JvmxQ==
-X-Received: by 2002:ac8:57ca:0:b0:2e2:131b:6f0e with SMTP id w10-20020ac857ca000000b002e2131b6f0emr11994094qta.664.1648045602739;
-        Wed, 23 Mar 2022 07:26:42 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id b21-20020a05620a04f500b0067b4895472esm75201qkh.5.2022.03.23.07.26.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 07:26:42 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id z8so2989358ybh.7;
-        Wed, 23 Mar 2022 07:26:42 -0700 (PDT)
-X-Received: by 2002:a5b:a8f:0:b0:633:fd57:f587 with SMTP id
- h15-20020a5b0a8f000000b00633fd57f587mr190730ybq.506.1648045601981; Wed, 23
- Mar 2022 07:26:41 -0700 (PDT)
+        Wed, 23 Mar 2022 10:30:01 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C0260EC;
+        Wed, 23 Mar 2022 07:28:29 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 5333C1F44CF5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648045708;
+        bh=uTVCR5ZdpxUM6s7MkLUaYHnuhsua3Eu575U/P4M4DTk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ooQiBjlAl+SB8sdeVy7w5cNkGkuz8W4WURWbiON3uHiEyZLEVvv/SBJIFfQ3sLroY
+         JMK4FVfb1AuJTJyHc7e9VifJ+Iuf0XBLMrgt8TKdE1zzEW3/+L0DSiPe3X0X7f2WdI
+         /19ZuRsmqtiPF8mH8uYbFUWq6skILrpgpHxmJvJ7+NyHZcBqvBKxUu690GGhAbo9hj
+         4OwfftyZXRJ8Pp7tVc39mADFY+QEDENdtslHU9LV1TYVqrwPyRtJXM9O4HcLKMsX8m
+         QQsryjNDuVByheFDU8ZE4agGdg+Ivm37XE4Jkz13EAE33N5j2xa9k4Nij60zQySPLP
+         n5AIzuk0YKSng==
+Message-ID: <9ec970d6-ea09-802c-419b-b2ef26800990@collabora.com>
+Date:   Wed, 23 Mar 2022 17:28:24 +0300
 MIME-Version: 1.0
-References: <20220301190400.1644150-1-robh@kernel.org> <CAMuHMdXqsvQy_6+6w8DVCtqNiFERPV29xd3HRqtyz9RY3KXOYw@mail.gmail.com>
- <CAL_JsqKX7XrSS1OktT6OfPgyxte6_+AcGh4uV0Abdf2Wi4eCFg@mail.gmail.com>
- <CAMuHMdXzNpjSjhT3crdN3XzcFNXd8Uojqo8gA7Y=Qtz8utH6Mw@mail.gmail.com> <CAL_Jsq+=2oibXA1otjaVoGY0GWdLZg2bmw1C9BACga5P99X35A@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+=2oibXA1otjaVoGY0GWdLZg2bmw1C9BACga5P99X35A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 23 Mar 2022 15:26:30 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUHUqCccnUa2WaAm=7s8EcumwJoZ22Wyy1=hosOu1kVuQ@mail.gmail.com>
-Message-ID: <CAMuHMdUHUqCccnUa2WaAm=7s8EcumwJoZ22Wyy1=hosOu1kVuQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: clock: renesas: Make example 'clocks' parsable
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1] media: videobuf2: Allow applications customize data
+ offsets of capture buffers
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Boris Brezillon <bbrezillon@collabora.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Laura Nao <laura.nao@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20220322132329.6527-1-dmitry.osipenko@collabora.com>
+ <a7c858461b99de2d4afad22d888acc3a74850240.camel@ndufresne.ca>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <a7c858461b99de2d4afad22d888acc3a74850240.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi Nicolas,
 
-On Wed, Mar 23, 2022 at 3:07 PM Rob Herring <robh@kernel.org> wrote:
-> On Tue, Mar 8, 2022 at 3:53 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Fri, Mar 4, 2022 at 2:28 PM Rob Herring <robh@kernel.org> wrote:
-> > > On Fri, Mar 4, 2022 at 3:09 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > On Tue, Mar 1, 2022 at 8:04 PM Rob Herring <robh@kernel.org> wrote:
-> > > > > 'clocks' in the example is not parsable with the 0 phandle value
-> > > > > because the number of #clock-cells is unknown in the previous entry.
-> > > > > Solve this by adding the clock provider node. Only 'cpg_clocks' is
-> > > > > needed as the examples are built with fixups which can be used to
-> > > > > identify phandles.
-> > > > >
-> > > > > This is in preparation to support schema validation on .dtb files.
-> > > > >
-> > > > > Signed-off-by: Rob Herring <robh@kernel.org>
-> > > >
-> > > > Thanks for your patch!
-> > > >
-> > > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > >
-> > > > Do you want me to queue this in renesas-clk-for-v5.19, or do you
-> > > > want to take it yourself, together with the validation patches?
-> > > > Please let me know.
-> > >
-> > > You can take it.
-> >
-> > Thanks, queuing in renesas-clk-for-v5.19.
->
-> This needs to go in 5.18, not 5.19.
+On 3/23/22 16:05, Nicolas Dufresne wrote:
+> Hi Dmitry,
+> 
+> thanks for giving a second look a this issue.
+> 
+> Le mardi 22 mars 2022 à 16:23 +0300, Dmitry Osipenko a écrit :
+>> Use data offsets provided by applications for multi-planar capture
+>> buffers. This allows V4L to import and use dma-bufs exported by other
+>> subsystems in cases where application wants to customize data offsets
+>> of capture buffers in order to meet hardware alignment requirements of
+>> both dma-buf exporter and importer.
+>>
+>> This feature is wanted for providing a better support of media hardware
+>> found on Chromebooks. In particular display and camera ISP hardware of
+>> Rockchip and MediaTek SoCs require special handling by userspace because
+>> display h/w has specific alignment requirements that don't match default
+>> alignments expected by V4L and there is a need to customize the data
+>> offsets in case of multi-planar formats.
+>>
+>> Some drivers already have preliminary support for data offsets
+>> customization of capture buffers, like NVIDIA Tegra video decoder driver
+>> for example, and V4L allows applications to provide data offsets for
+>> multi-planar output buffers, let's support such customization for the
+>> capture buffers as well.
+>>
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> ---
+>>  Documentation/userspace-api/media/v4l/buffer.rst | 9 ++++++++-
+>>  drivers/media/common/videobuf2/videobuf2-v4l2.c  | 7 +++++++
+>>  2 files changed, 15 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
+>> index 4638ec64db00..75b1929e2acb 100644
+>> --- a/Documentation/userspace-api/media/v4l/buffer.rst
+>> +++ b/Documentation/userspace-api/media/v4l/buffer.rst
+>> @@ -369,13 +369,20 @@ struct v4l2_plane
+>>        - ``data_offset``
+>>        - Offset in bytes to video data in the plane. Drivers must set this
+>>  	field when ``type`` refers to a capture stream, applications when
+>> -	it refers to an output stream.
+>> +	it refers to an output or capture stream.
+> 
+> There is a clear contradiction in this paragraph. Both the driver and the
+> application MUST set the data_offset.
 
-Mike/Stephen: can you please take this directly?
-Thanks!
+I'm not sure where the contradiction is. Application must initialize the
+data_offset and driver must set data_offset too, if it's appropriate to
+do that for a particular driver.
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Would it be possible to demo your idea by implementing this in a virtual driver
+> ? vivid already have data_offset for capture in some cases, you could verify if
+> your idea works without any conflict in this scenario.
 
-Gr{oetje,eeting}s,
+I actually considered implementing it in the vivid driver, but vivid
+driver already sets the data_offset to fixed values [1], so I decided
+that not to change it.
 
-                        Geert
+But maybe we actually could extend the vivid driver by accepting
+data_offset from userspace for the cases where the fixed offset value is
+zero in the driver.. not sure.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[1]
+https://elixir.bootlin.com/linux/latest/source/drivers/media/test-drivers/vivid/vivid-vid-cap.c#L172
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I verified my idea using the NVIDIA Tegra video decoder driver, which
+already takes data_offsets for capture planes [3] and libvdpau-tegra
+imports DRM dma-bufs into the V4L driver [4][5].
+
+[3]
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/media/platform/nvidia/tegra-vde/v4l2.c#n236
+[4]
+https://github.com/grate-driver/libvdpau-tegra/blob/master/src/decoder.c#L685
+[5]
+https://github.com/grate-driver/libvdpau-tegra/blob/master/src/v4l2.c#L359
+
+The plan is to extend RK ISP driver with support of data_offsets next,
+once we'll agree that this acceptable approach and we don't actually
+need go back to implementing the new VIDIOC_EXT_QBUF ioctl [6].
+
+[6]
+https://patchwork.linuxtv.org/project/linux-media/cover/20210114180738.1758707-1-helen.koike@collabora.com/
+
+This patch solves the problem for userspace when it wants to import
+buffers into V4L in case of multi-planar formats, but it doesn't cover
+all other possible cases that may require offsets customization too. On
+the other hand, it's easy to start accepting data_offset for the capture
+MPLANES without introducing new UAPIs, so I decided that will be best to
+start easy with the simplest solution.

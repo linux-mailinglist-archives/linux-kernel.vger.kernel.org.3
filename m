@@ -2,145 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4683C4E5681
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645BD4E5685
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238764AbiCWQdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S238903AbiCWQeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238836AbiCWQdU (ORCPT
+        with ESMTP id S237353AbiCWQeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:33:20 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226E47CDC1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:31:50 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id g8so1471149qke.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:31:50 -0700 (PDT)
+        Wed, 23 Mar 2022 12:34:05 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171227CB2D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:32:35 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b19so2881250wrh.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:32:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J3AvCzI63JEnokrUC4Iwv6N5EWlCu1QJfFBDdd/unKY=;
-        b=jL8Up4A9KJl86VW8bp2LwyPe3GAoSvY02FH4VZGMRf6L8+fy2IzjDosZj2yZefYHQB
-         wzL15TdotJDVuRXcBuocyR5w36bv7gZ8tf4g1MKYFQR6D7UvEyM5LvpeCOBYCYYqtvVO
-         QyYconNt0ojQtvQjwvpbahs23JDp7wBTIn6N690sGkiHGnQM8LJ1X418m2IoldJjuiqS
-         RfOsRcA7Ab18vaKZ5C7r2Iy6XbYC7agVkkPu12ogJSZffaAcXR5qVLo/l8Cx2lD2Vb53
-         EVDKvyQLlG7Zlg+SF2t2YhCjoaTPBYzz/XzH9IByKiPCqA5OV8uON5z0miITLmXSIb3V
-         4LoQ==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=trCEH0bE6PaumD9lKzsz88cLWqI4Gc48zVWYeF+JLGE=;
+        b=715G9aBMEgb/RuG3lm8ue1+D8YN6vxqXPzx2SVIgyire1F2RO8mwWraOJZEnLgLLME
+         u5gmeTjoQA7ruESrpCjhYAtljoKGFODubsFiQXk1ieJqt6EZgv/1ZsUus1KSxaiLz3F/
+         dNynSwomfjeZyMeTd/GzU2Bl9Z+M16eSRphbjnkl+QJWB09oPh7h7/Li6ZPTOe3SKkej
+         /cRtQ5/sxe9nbI0ZKkat2GWiSqtvNyE2BzDkG/h55YUBnd0sBy8sEDpzimoqRHoKlNWk
+         5tpaGDWvWq3jYVhyvNhcSMgcQLJ6UG5IjQVENV56JS+vI5VAhLcCa34vl1fgEU0cKtlh
+         2czQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J3AvCzI63JEnokrUC4Iwv6N5EWlCu1QJfFBDdd/unKY=;
-        b=xoiW3dVPv/S2/zD3GuFSGaqi5ts5MfkxswUYEAP8gjr/vO67Ve/F32LiQqGPu68/tG
-         FvauuBn2aiu3eIXNQ+yzUan8BuJTaak4BXMzDQrmxqZX5DAjis5Y8mGNg8yWe/BmMTa2
-         Ao3L+8QRgiHdenK/mDb4QlQ3dzc3l8+1558q+sWqKClQiMplDlkYFFG+c1ZYYl9nwhjR
-         sXVc0jhi9qqADmV96oP7QRurnsGV7BAMCPICQ3o0pxZACoj7aChcGBJCrV6V0C81y9Q9
-         071A2W7nUQvGMzU1FCxWsU52vkUSjhKdrBLn+fr2w/jJD4XEtbharDlyZW0z/CVxNHT7
-         pClA==
-X-Gm-Message-State: AOAM533SfFfya01OiHt77vpq1DgAUAxVN9K6KpSARsDc7flZE65TX41C
-        ikRRo72eUYJOYg/la0fW7N1kmQ==
-X-Google-Smtp-Source: ABdhPJw6RSABU5Oon1xMFEywJpe1TUJiBcWQJAx1x5CGutfzgTfUsftf7dysku23cafQK2qtN0k/DQ==
-X-Received: by 2002:a05:620a:d8d:b0:67b:e95:2975 with SMTP id q13-20020a05620a0d8d00b0067b0e952975mr475429qkl.115.1648053108858;
-        Wed, 23 Mar 2022 09:31:48 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id a6-20020ae9e806000000b0067ba5a8a2a7sm210602qkg.134.2022.03.23.09.31.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=trCEH0bE6PaumD9lKzsz88cLWqI4Gc48zVWYeF+JLGE=;
+        b=0hgChPuUf1+c3caLShQcX3bJoyg030TUJwKj6JbEANaoXGofnvL9+FYtO7aFRstC8K
+         dGsnSXOpfgl2EP97N3kAr9KMJ9da7VGyM0Fer18f15GlTYHD2hRu8l7Is1hgm7low6eM
+         Zo0747HCjm4usB+6HqMiZvqALsvnRdN7HPesCfvY0IaBcLX+sst0JhMP8i9qW4C7SWv3
+         jWP/Y5yw/vEiBw9+8xguKeIZiXAZOwVnZeVfEIjxbC8CBys15PanYVQmBeEl+mhhOBVo
+         BHUHscKdqpb5xFyi/KctQddefeeEeK2/fuRRrHVOnjjO51blMSQwMGWLYUs3Zu1HTCuL
+         rEqA==
+X-Gm-Message-State: AOAM532MPXIyNXv9woyBhJmAf7FFMoNt4G6RU4RJNwfiYA9XHioD0cUI
+        4PAhPDL/Dtl+gJdgiTFTrwDh7A==
+X-Google-Smtp-Source: ABdhPJyQBA7RWxogEUW+4vbMCMwX77BkU0ZFJ808H936v0jDTJt8PagQZ8ycbymm/Ptx/ELaxKS4UQ==
+X-Received: by 2002:adf:f5c4:0:b0:205:2836:f1e5 with SMTP id k4-20020adff5c4000000b002052836f1e5mr579608wrp.519.1648053153629;
+        Wed, 23 Mar 2022 09:32:33 -0700 (PDT)
+Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
+        by smtp.gmail.com with ESMTPSA id w7-20020a1cf607000000b00389a5390180sm274635wmc.25.2022.03.23.09.32.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 09:31:47 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nX3ti-004xOm-Q4; Wed, 23 Mar 2022 13:31:46 -0300
-Date:   Wed, 23 Mar 2022 13:31:46 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Juergen Gross <jgross@suse.com>, linux-mm@kvack.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        Jerome Glisse <jglisse@redhat.com>
-Subject: Re: blocking vs. non-blocking mmu notifiers
-Message-ID: <20220323163146.GI64706@ziepe.ca>
-References: <8e8ec786-74db-157b-a290-b1537941e91d@suse.com>
- <YjrsOnxaPYc3rbdj@dhcp22.suse.cz>
+        Wed, 23 Mar 2022 09:32:33 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [GIT PULL] gpio: updates for v5.18
+Date:   Wed, 23 Mar 2022 17:32:30 +0100
+Message-Id: <20220323163230.691802-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjrsOnxaPYc3rbdj@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 10:45:30AM +0100, Michal Hocko wrote:
-> [Let me add more people to the CC list - I am not really sure who is the
->  most familiar with all the tricks that mmu notifiers might do]
-> 
-> On Wed 23-03-22 09:43:59, Juergen Gross wrote:
-> > Hi,
-> > 
-> > during analysis of a customer's problem on a 4.12 based kernel
-> > (deadlock due to a blocking mmu notifier in a Xen driver) I came
-> > across upstream patches 93065ac753e4 ("mm, oom: distinguish
-> > blockable mode for mmu notifiers") et al.
-> > 
-> > The backtrace of the blocked tasks was typically something like:
-> > 
-> >  #0 [ffffc9004222f228] __schedule at ffffffff817223e2
-> >  #1 [ffffc9004222f2b8] schedule at ffffffff81722a02
-> >  #2 [ffffc9004222f2c8] schedule_preempt_disabled at ffffffff81722d0a
-> >  #3 [ffffc9004222f2d0] __mutex_lock at ffffffff81724104
-> >  #4 [ffffc9004222f360] mn_invl_range_start at ffffffffc01fd398 [xen_gntdev]
-> >  #5 [ffffc9004222f398] __mmu_notifier_invalidate_page at ffffffff8123375a
-> >  #6 [ffffc9004222f3c0] try_to_unmap_one at ffffffff812112cb
-> >  #7 [ffffc9004222f478] rmap_walk_file at ffffffff812105cd
-> >  #8 [ffffc9004222f4d0] try_to_unmap at ffffffff81212450
-> >  #9 [ffffc9004222f508] shrink_page_list at ffffffff811e0755
-> > #10 [ffffc9004222f5c8] shrink_inactive_list at ffffffff811e13cf
-> > #11 [ffffc9004222f6a8] shrink_node_memcg at ffffffff811e241f
-> > #12 [ffffc9004222f790] shrink_node at ffffffff811e29c5
-> > #13 [ffffc9004222f808] do_try_to_free_pages at ffffffff811e2ee1
-> > #14 [ffffc9004222f868] try_to_free_pages at ffffffff811e3248
-> > #15 [ffffc9004222f8e8] __alloc_pages_slowpath at ffffffff81262c37
-> > #16 [ffffc9004222f9f0] __alloc_pages_nodemask at ffffffff8121afc1
-> > #17 [ffffc9004222fa48] alloc_pages_current at ffffffff8122f350
-> > #18 [ffffc9004222fa78] __get_free_pages at ffffffff8121685a
-> > #19 [ffffc9004222fa80] __pollwait at ffffffff8127e795
-> > #20 [ffffc9004222faa8] evtchn_poll at ffffffffc00e802b [xen_evtchn]
-> > #21 [ffffc9004222fab8] do_sys_poll at ffffffff8127f953
-> > #22 [ffffc9004222fec8] sys_ppoll at ffffffff81280478
-> > #23 [ffffc9004222ff30] do_syscall_64 at ffffffff81004954
-> > #24 [ffffc9004222ff50] entry_SYSCALL_64_after_hwframe at ffffffff818000b6
-> > 
-> > It was found that the notifier of the Xen gntdev driver was using a
-> > mutex resulting in the deadlock.
+Linus,
 
-The bug here is that prior to commit a81461b0546c ("xen/gntdev: update
-to new mmu_notifier semantic") wired the mn_invl_range_start() which
-takes a mutex to invalidate_page, which is defined to run in an atomic
-context.
+There are relatively few updates for the next release cycle. We have a single
+new driver and some minor changes in drivers, more work on limiting the usage
+of of_node in drivers and DT updates.
 
-> > Michal Hocko suggested that backporting above mentioned patch might
-> > help, as the mmu notifier call is happening in atomic context.
+Please pull,
+Bartosz Golaszewski
 
-IIRC "blocking" was not supposed to be about atomic context or not, but
-more about time to completion/guarenteed completion as it is used from
-a memory reclaim path.
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-> Just to be more explicit. The current upstream code calls
-> mmu_notifier_invalidate_range while the page table locks are held.
-> Are there any notifiers which could sleep in those? 
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-There should not be, that would be a bug that lockdep would find.
+are available in the Git repository at:
 
-> In other words should we use the nonblock start/stop in
-> try_to_unmap?
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-updates-for-v5.18
 
-AFAICT, no.
+for you to fetch changes up to 87ba5badc541a79bab2fa3243ee0008c0880c64a:
 
-Jason
+  gpio: ts4900: Use SPDX header (2022-03-10 10:05:39 +0100)
+
+----------------------------------------------------------------
+gpio updates for v5.18-rc1
+
+- new driver: gpio-en7523
+- dt-bindings: convertion of faraday,ftgpio010 to YAML, new compatible string
+  in gpio-vf610 and a bugfix in an example
+- gpiolib core: several improvements and some code shrink
+- documentation: convert all public docs into kerneldoc format
+- set IRQ bus token in gpio-crystalcove (addresses a debugfs issue)
+- add a missing return value check for kstrdup() in gpio-merrifield
+- allow gpio-tps68470 to be built as module
+- more work on limiting usage of of_node in GPIO drivers
+- several sysfs interface improvements
+- use SDPX in gpio-ts4900
+
+----------------------------------------------------------------
+Andy Shevchenko (9):
+      gpio: altera-a10sr: Switch to use fwnode instead of of_node
+      gpio: tegra: Get rid of duplicate of_node assignment
+      gpiolib: Introduce for_each_gpio_desc_with_flag() macro
+      gpiolib: Use short form of ternary operator in gpiod_get_index()
+      gpiolib: Simplify error path in gpiod_get_index() when requesting GPIO
+      gpiolib: sysfs: Move sysfs_emit() calls outside of the mutex lock
+      gpiolib: sysfs: Move kstrtox() calls outside of the mutex lock
+      gpiolib: sysfs: Simplify edge handling in the code
+      gpiolib: Use list_first_entry()/list_last_entry()
+
+Bartosz Golaszewski (2):
+      gpiolib: make struct comments into real kernel docs
+      Merge tag 'intel-gpio-v5.18-1' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-next
+
+Corentin Labbe (1):
+      dt-bindings: gpio: convert faraday,ftgpio01 to yaml
+
+Hans de Goede (2):
+      gpio: crystalcove: Set IRQ domain bus token to DOMAIN_BUS_WIRED
+      gpio: tps68470: Allow building as module
+
+John Crispin (2):
+      dt-bindings: arm: airoha: Add binding for Airoha GPIO controller
+      gpio: Add support for Airoha EN7523 GPIO controller
+
+Kris Bahnsen (1):
+      gpio: ts4900: Use SPDX header
+
+Marcel Ziswiler (1):
+      dt-bindings: gpio: fix gpio-hog example
+
+Peng Fan (1):
+      dt-bindings: gpio: gpio-vf610: Add imx93 compatible string
+
+Xiaoke Wang (1):
+      gpio: merrifield: check the return value of devm_kstrdup()
+
+ .../bindings/gpio/airoha,en7523-gpio.yaml          |  66 ++++++++++
+ .../devicetree/bindings/gpio/faraday,ftgpio010.txt |  27 ----
+ .../bindings/gpio/faraday,ftgpio010.yaml           |  65 ++++++++++
+ .../devicetree/bindings/gpio/gpio-vf610.yaml       |   4 +-
+ Documentation/devicetree/bindings/gpio/gpio.txt    |   2 +-
+ drivers/gpio/Kconfig                               |  16 ++-
+ drivers/gpio/Makefile                              |   1 +
+ drivers/gpio/gpio-altera-a10sr.c                   |   3 +-
+ drivers/gpio/gpio-crystalcove.c                    |   9 +-
+ drivers/gpio/gpio-en7523.c                         | 137 +++++++++++++++++++++
+ drivers/gpio/gpio-merrifield.c                     |   3 +
+ drivers/gpio/gpio-tegra.c                          |   1 -
+ drivers/gpio/gpio-tps68470.c                       |   5 +-
+ drivers/gpio/gpio-ts4900.c                         |  10 +-
+ drivers/gpio/gpiolib-of.c                          |  10 +-
+ drivers/gpio/gpiolib-sysfs.c                       | 100 ++++++---------
+ drivers/gpio/gpiolib.c                             |  41 +++---
+ drivers/gpio/gpiolib.h                             |  41 ++++++
+ include/linux/gpio/consumer.h                      |  35 +++---
+ 19 files changed, 422 insertions(+), 154 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/airoha,en7523-gpio.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/faraday,ftgpio010.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/faraday,ftgpio010.yaml
+ create mode 100644 drivers/gpio/gpio-en7523.c

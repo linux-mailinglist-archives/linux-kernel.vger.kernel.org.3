@@ -2,104 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF044E542C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 961344E542E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244735AbiCWOZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S244750AbiCWOZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237165AbiCWOZe (ORCPT
+        with ESMTP id S244678AbiCWOZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:25:34 -0400
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B21DEDF
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:24:04 -0700 (PDT)
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id 5881A944E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:24:01 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id X1u5nnhAg9AGSX1u5niYqR; Wed, 23 Mar 2022 09:24:01 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=id4KakR43VwvSclTscrtuuJMK1IX+RuWRI/B9xFRJpk=; b=SVzwFj19iwEqII6is3hOB116dH
-        +gBfETPclRjBnoEvnRrOoeW+sDTr+HJAtSYVUX8gptsIpITfOUg1cFuME2dcm3P5UMk415bAELP/q
-        feklv8fsUk4sIh/rzmueB+y6EwGWnCT8cYq9MBPTPnF+K6XqVjwm20bzbyvaGgIARVK331DUeq7vB
-        iKjDb2KIwYx0QExPQA1aDN8T9L8/ZY9tOlyI2WV8vMP8YqAcjUROIvSlWeFIoFUome6eiJCc1+sNL
-        HC35XPU2SmqRcuAwhX0a9ZQNFnMOgeqdHQUFBTz4nCq7XF7OxOzzMW6Uk8Q4rdd1dU0F/DaKDZhG1
-        0UL+lFyA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54412)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nX1u3-002CJg-TF; Wed, 23 Mar 2022 14:23:59 +0000
-Message-ID: <ebafdf77-5d96-556b-0197-a172b656bb01@roeck-us.net>
-Date:   Wed, 23 Mar 2022 07:23:56 -0700
+        Wed, 23 Mar 2022 10:25:54 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CCEDEDF;
+        Wed, 23 Mar 2022 07:24:21 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id r22so3138975ejs.11;
+        Wed, 23 Mar 2022 07:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xxM/CCiZqmy9dWayhpcsnysAin++6OStfr44+GkTcw0=;
+        b=LdcFoB1uCbYp/KQmdXmuKc4HRQNzV99UWZs93wZEeI4BwrG7d+a2NKtTwJLVNU5x0z
+         rtb2kfUl9rmjBqMvdGi7b95HGL7kwZPmqpkwDwd0UJ5rQCk5i5+bjId909aT7jsyZrtl
+         sW6W+shCkt7wEOSsfGi+IDHxf4dYwUk1rNfA0JJyEkYcXg/wrpzy234LWQJjgGSjwSAV
+         e8tBwUx6MnYyTVo7xIz/43wsgZdc+FJNM/EmCYHVQ62KGVfTspitO1ykd3VI2Yl4Ka1Y
+         w/dVSOQWk7EPJ2rjCmaErI9advMUOH7eT3giTfotfcBcy6IwtlXe+T2pIVzP5fc4+hzq
+         7o3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xxM/CCiZqmy9dWayhpcsnysAin++6OStfr44+GkTcw0=;
+        b=l+N10lrLDSNttkUV5uaWdBLIiSpvjGybwEsNsdxZepxNVpP04viaHJ2go8Zw/Z6nyt
+         56fLSm4nPMOKNIybSmXBAQyRUMhmaX5nXXpGLGjaQTYqdPtOwrK0DZAgos5ZN8kUyGGT
+         AvnuEVNbULuXvsdouPqkrKKeKOGFKs7/PlumrpMPVQU4eqlGxiWPtgW6WsOHFhKj7uNw
+         vzo33b+psQFqwJuwnAEyczCGRs0k2iGb7VaYrgep/TWqC1jYEyke1pp21z7jDjdBI/4q
+         4+BxKI19sYoGyFtZGzPLKsG4ehY6xIBP4vdB4k9zgZrSb/lPjJiRvkq4xozmiRjJCqkY
+         EN6A==
+X-Gm-Message-State: AOAM533R/wbnNjKjb0ht8nfEUr3KYUxlIkVFLO1Rue8iwn6tnAeanvbJ
+        TC9fai3gYY8jeQ32DEInSOI=
+X-Google-Smtp-Source: ABdhPJykBB6DNurIzRR5b4gOQQyE2jIBjMtPp159C7bzAKeSXaAF6aLqtptppOrRQKTnhQoxuzBqog==
+X-Received: by 2002:a17:906:3a55:b0:6ce:c2ee:3e10 with SMTP id a21-20020a1709063a5500b006cec2ee3e10mr214494ejf.210.1648045460145;
+        Wed, 23 Mar 2022 07:24:20 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id jg22-20020a170907971600b006df9ff416ccsm7839ejc.137.2022.03.23.07.24.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 07:24:19 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <01c86f82-0c61-94c1-602c-f62d176c9ad7@gnu.org>
+Date:   Wed, 23 Mar 2022 15:24:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+ Thunderbird/91.4.0
+Subject: Re: ping Re: [PATCH v4 0/2] x86: Fix ARCH_REQ_XCOMP_PERM and update
+ the test
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <20220322155820.GA1745955@roeck-us.net> <YjoUU+8zrzB02pW7@sirena.org.uk>
- <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
- <YjsOHmvDgAxwLFMg@sirena.org.uk>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-In-Reply-To: <YjsOHmvDgAxwLFMg@sirena.org.uk>
+To:     Thomas Gleixner <tglx@linutronix.de>, dave.hansen@linux.intel.com
+Cc:     yang.zhong@intel.com, ravi.v.shankar@intel.com, mingo@redhat.com,
+        "Chang S. Bae" <chang.seok.bae@intel.com>, bp@alien8.de,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        KVM list <kvm@vger.kernel.org>
+References: <20220129173647.27981-1-chang.seok.bae@intel.com>
+ <a0bded7d-5bc0-12b9-2aca-c1c92d958293@gnu.org> <87a6dgam7b.ffs@tglx>
+ <877d8kakwg.ffs@tglx>
+From:   Paolo Bonzini <bonzini@gnu.org>
+In-Reply-To: <877d8kakwg.ffs@tglx>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nX1u3-002CJg-TF
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54412
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 27
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,36 +82,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 05:10, Mark Brown wrote:
-> On Tue, Mar 22, 2022 at 02:54:20PM -0700, Guenter Roeck wrote:
->> On 3/22/22 11:24, Mark Brown wrote:
-> 
->>> Just as a datapoint for debugging at least qemu/arm is getting coverage
->>> in CI systems (KernelCI is covering a bunch of different emulated
->>> machines and LKFT has at least one configuration as well, clang's tests
->>> have some wider architecture coverage as well I think) and they don't
->>> seem to be seeing any problems - there's some other variable in there.
-> 
->> I use buildroot 2021.02.3. I have not changed the buildroot code, and it
->> still seems to be the same in 2022.02. I don't see the problem with all
->> boot tests, only with the architectures mentioned above, and not with all
->> qemu machines on the affected platforms. For arm, mostly older machines
->> are affected (versatile, realview, pxa configurations, collie, integratorcp,
->> sx1, mps2-an385, vexpress-a9, cubieboard). I didn't check, but maybe
->> kernelci doesn't test those machines ?
-> 
-> Kind of academic given that Jason seems to have a handle on what the
-> issues are but for KernelCI it's variations on mach-virt, plus
-> versatile-pb.  There's a physical cubietruck as well, and BeagleBone
-> Blacks among others.  My best guess would be systems with low RAM are
-> somehow more prone to issues.
+On 3/23/22 13:55, Thomas Gleixner wrote:
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1625,6 +1625,8 @@ static int __xstate_request_perm(u64 per
+>   
+>   	/* Calculate the resulting kernel state size */
+>   	mask = permitted | requested;
+> +	/* Take supervisor states into account */
+> +	mask |= xfeatures_mask_supervisor();
+>   	ksize = xstate_calculate_size(mask, compacted);
+>   
 
-I don't think it is entirely academic. versatile-pb fails for me;
-if it doesn't fail at KernelCI, I'd like to understand why - not to
-fix it in my test environment, but to make sure that I _don't_ fix it.
-After all, it _is_ a regression. Even if that regression is triggered
-by bad (for a given definition of "bad") userspace code, it is still
-a regression.
+This should be only added in for the !guest case.
 
-Thanks,
-Guenter
+Paolo

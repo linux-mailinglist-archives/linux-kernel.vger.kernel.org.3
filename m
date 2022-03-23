@@ -2,118 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3AA4E50D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0004E50D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241356AbiCWK7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S243688AbiCWLAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243667AbiCWK7i (ORCPT
+        with ESMTP id S243681AbiCWLAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:59:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D57B1B;
-        Wed, 23 Mar 2022 03:58:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DDB56125C;
-        Wed, 23 Mar 2022 10:58:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC840C340E9;
-        Wed, 23 Mar 2022 10:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648033083;
-        bh=LqwU8plbtn4AIksRq4IGPu+orql0HtiebWAHYKnPuDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rITRSE/pQMHW6rMV+Ea0ZxWsSuyUUaz69aXGdoycdMJ66u9ihgXVNCL+lj1wpe4It
-         Yjnal3Yxk9WiKhq5dqwWYMn06dRaGeWNLIqdqcJNVENC7fcct4ET2ymGVrf+ERNNez
-         EFIIDNw96F21A3Z/HTu2Lpl855OK83YIsN0bSEc4oPogaYAA+sDwe7h9SRFJOgumqI
-         7Y3Cvjc9zkUKxbwdZ3lBw4k2iju0p+ZkgAkHZbMACsUmG7zQXFwa771+kdVJE/DdbA
-         esp+gCxzNJwNKrt/Y0b8OQuEqEA0/TaqBdifW4zQF8f3tYL3j9CTFOl+99sVPjkLfs
-         d2WgAlIA/iw7Q==
-Date:   Wed, 23 Mar 2022 16:27:59 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Jonathan Marek <jonathan@marek.ca>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: [Freedreno] [PATCH v3 12/13] drm/msm/dsi: Add support for DSC
- configuration
-Message-ID: <Yjr9N4DPdOyi7CO5@matsya>
-References: <20211116062256.2417186-1-vkoul@kernel.org>
- <20211116062256.2417186-13-vkoul@kernel.org>
- <20211211000315.pavmcc7cc73ilb6l@SoMainline.org>
- <Yg4t/G3tgcmkswHg@matsya>
- <20220217151142.sbp6wslxbxeohsgf@SoMainline.org>
- <YjoEgpAZAwM8hWEa@matsya>
- <20220322185925.nszstmi5silgefd5@SoMainline.org>
+        Wed, 23 Mar 2022 07:00:10 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0323265D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 03:58:36 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KNlf26pJnzCr24;
+        Wed, 23 Mar 2022 18:56:26 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 23 Mar 2022 18:58:34 +0800
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 23 Mar
+ 2022 18:58:33 +0800
+Subject: Re: [PATCH v2 0/3] genirq: Managed affinity fixes
+To:     Marc Zyngier <maz@kernel.org>
+CC:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Garry <john.garry@huawei.com>,
+        David Decotigny <ddecotig@google.com>
+References: <20220321193608.975495-1-maz@kernel.org>
+ <a83da394-dcc0-c9a6-1569-9c30fbc291fd@huawei.com>
+ <87a6dhxd13.wl-maz@kernel.org>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <d7019731-4ade-ea79-7464-f52872a60d79@huawei.com>
+Date:   Wed, 23 Mar 2022 18:58:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322185925.nszstmi5silgefd5@SoMainline.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87a6dhxd13.wl-maz@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-03-22, 19:59, Marijn Suijten wrote:
-> On 2022-03-22 22:46:50, Vinod Koul wrote:
-> > On 17-02-22, 16:11, Marijn Suijten wrote:
-> > > Hi Vinod,
-> > > 
-> > > Thanks for taking time to go through this review, please find some
-> > > clarifications below.
-> > > 
-> > > On 2022-02-17 16:44:04, Vinod Koul wrote:
-> > > > Hi Marijn,
-> > > > 
-> > > > On 11-12-21, 01:03, Marijn Suijten wrote:
-> > > > 
-> > > > > > +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
-> > > > > > +				  int pic_width, int pic_height)
-> > > > > 
-> > > > > This function - adopted from downstream - does not seem to perform a
-> > > > > whole lot, especially without the modulo checks against the slice size.
-> > > > > Perhaps it can be inlined?
-> > > > 
-> > > > Most of the code here is :)
-> > > > 
-> > > > This was split from downstream code to check and update dimension. We
-> > > > can inline this, or should we leave that to compiler. I am not a very
-> > > > big fan of inlining...
-> > > 
-> > > It doesn't seem beneficial to code readability to have this function,
-> > > which is only called just once and also has the same struct members read
-> > > in a `DBG()` directly, abstracted away to a function.  Not really
-> > > concerned about generated code/performance FWIW.
-> > > 
-> > > Also note that the caller isn't checking the `-EINVAL` result...
-> > 
-> > I have made this void inline.
-> 
-> Perhaps there is a misunderstanding here: with inlining I am referring
-> to the process of transplanting the _function body_ to the only
-> call-site, not adding the `inline` keyword nor changing this to `void`.
-> 
-> The checks that make this function return `-EINVAL` seem valid, so the
-> caller should check it instead of removing the return?
 
-Okay somehow I misunderstood then, let me see how the code looks in this
-case then
--- 
-~Vinod
+
+On 2022/3/23 16:56, Marc Zyngier wrote:
+> Hi Xiongfeng,
+> 
+> On Wed, 23 Mar 2022 03:52:46 +0000,
+> Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
+>>
+>> Hi, Marc
+>>
+>> On 2022/3/22 3:36, Marc Zyngier wrote:
+>>> John (and later on David) reported[1] a while ago that booting with
+>>> maxcpus=1, managed affinity devices would fail to get the interrupts
+>>> that were associated with offlined CPUs.
+>>>
+>>> Similarly, Xiongfeng reported[2] that the GICv3 ITS would sometime use
+>>> non-housekeeping CPUs instead of the affinity that was passed down as
+>>> a parameter.
+>>>
+>>> [1] can be fixed by not trying to activate these interrupts if no CPU
+>>> that can satisfy the affinity is present (a patch addressing this was
+>>> already posted[3])
+>>>
+>>> [2] is a consequence of affinities containing non-online CPUs being
+>>> passed down to the interrupt controller driver and the ITS driver
+>>> trying to paper over that by ignoring the affinity parameter and doing
+>>> its own (stupid) thing. It would be better to (a) get the core code to
+>>> remove the offline CPUs from the affinity mask at all times, and (b)
+>>> fix the drivers so that they can trust the core code not to trip them.
+>>>
+>>> This small series, based on 5.17, addresses the above.
+>>
+>> I have tested this patchset on D06. It works well with kernel parameter
+>> 'maxcpus=1' or 'nohz_full=1-127 isolcpus=nohz,domain,managed_irq,1-127'.
+>> Also the 'effective_affinity' is correct. Thanks!
+> 
+> Thanks for having given it a go.
+> 
+>> By the way, I merged the second patch manually because of conflicts.
+>> Maybe I lack some patches on your local repo.
+> 
+> That's odd, as the patches are directly sitting on top of 5.17 in my
+> tree (see [1]). Do you have any out of tree patches around? Please
+> make sure you test this without any extra change.
+
+I apply the patchset based on the latest mainline kernel. The latest commit is
+  commit 3bf03b9a0839c9fb06927ae53ebd0f960b19d408
+  Merge branch 'akpm' (patches from Andrew)
+I didn't change the modification of the second patch. Only resolve the
+context conflicts, which is cause by the following commit.
+  commit 04d4e665a60902cf36e7ad39af1179cb5df542ad
+  sched/isolation: Use single feature type while referring to housekeeping cpumask
+It changed 'HK_FLAG_MANAGED_IRQ' to 'HK_TYPE_MANAGED_IRQ'.
+
+Thanks,
+Xiongfeng
+
+> 
+> Thanks,
+> 
+> 	M.
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/managed-affinity-fixes
+> 

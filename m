@@ -2,89 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022B04E5A53
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:04:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 047944E5A55
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344495AbiCWVFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
+        id S1344840AbiCWVGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240854AbiCWVFu (ORCPT
+        with ESMTP id S1344844AbiCWVF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:05:50 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CF412AF8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:04:18 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id o10so5373442ejd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=96OPHRtjpLUkzMKOmZHTFwbJz5Jyl9hyIas7RLYSw4Q=;
-        b=Y031F6hf2sWxJzVczsI6DwN15K/fScPKXLhbWHFfYBi5upYSFMRNec8Mbc4WSNARgG
-         4sqVpLnuoG2DGIOHvH8mL3diB5NIeN+mwoDHLMhIHicZa7/WmLnePbKJOMCYQeyBnksJ
-         zXeVrIYCMBR8bHLbJfOgZ3nIXkjF0DkkmiA+K8Lbyw2184VsnpUDPLqIUWX3fJN8OIpw
-         oLIOpj707wDyyb05BnFgblOUt6Qy7S5VXF01Au9UWWc+bnH/xymFEue+2j8Yms2aRMAp
-         gseQ5FsJr12DGqdxxWBNrjOJbAYM+NK4NRYB1e2bbFfxyA0StQlKn9rt7pBAoOqeH4zq
-         nHYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=96OPHRtjpLUkzMKOmZHTFwbJz5Jyl9hyIas7RLYSw4Q=;
-        b=pzkvxy+ZkOY1SPKS+FvujUZHgmklA7SdSTIVu92bqZNXHkJr3xksgflFuLHN71ATnI
-         09cy1H8dXJks2gn9ICugY4lmAmf6KtIzJNPYSMI5nRtsv3IwXIe31mrnkBZaws3Y702m
-         TiSDAF7ie7YeaoXRpzJY9ptfhGcqoTTbTnk1XPP2iwLzqmLPEduewN7ms42WzqlXCBBo
-         wGd0wdpDmRqy87s5fBv/wlzHaHg3oz5lYYfonWROVW29R1ndtaA4rXNVlkIx+dDx6Eaz
-         CBnulapCuk6EtRppWTFWqPwkavLzHXuS2u3x+0UfqxRBPJ1a1dEfK36dZZs8YHVAMNBA
-         JjEA==
-X-Gm-Message-State: AOAM532FxDmBc1viioN8yc4L3ozeH9+mIK2hCeQXVKpMyxKPslTgF1xG
-        JvoUxCzpYqyjmTgbz90urCaspwujg1qDLK5rDRuhCQ==
-X-Google-Smtp-Source: ABdhPJzdu0So/JbbLp6MeXfrKuRthxofNbACLCTnpUvfS7ucyWSPfllgGv30FdGrNnTR49ZFPKiqvjn2qeHRG4voyBw=
-X-Received: by 2002:a17:907:c018:b0:6df:e31b:d912 with SMTP id
- ss24-20020a170907c01800b006dfe31bd912mr2204489ejc.196.1648069456760; Wed, 23
- Mar 2022 14:04:16 -0700 (PDT)
+        Wed, 23 Mar 2022 17:05:58 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEE911C1C;
+        Wed, 23 Mar 2022 14:04:26 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 313FB1C0B87; Wed, 23 Mar 2022 22:04:24 +0100 (CET)
+Date:   Wed, 23 Mar 2022 22:04:23 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Manuel =?iso-8859-1?Q?Sch=F6nlaub?= <manuel.schoenlaub@gmail.com>
+Cc:     lains@riseup.net, jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: logitech-hidpp: support Color LED feature (8071).
+Message-ID: <20220323210423.GA10741@duo.ucw.cz>
+References: <Yifr4etBFPu1a2Ct@hermes>
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-5-dlatypov@google.com>
-In-Reply-To: <20220118190922.1557074-5-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 17:04:05 -0400
-Message-ID: <CAFd5g47vptm6c0x+sbUpYTgNL6viH2Yj8k8GMG=WKN2A6eTA5Q@mail.gmail.com>
-Subject: Re: [PATCH 5/5] kunit: tool: simplify code since build_dir can't be None
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="W/nzBZO5zC0uMSeA"
+Content-Disposition: inline
+In-Reply-To: <Yifr4etBFPu1a2Ct@hermes>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 2:09 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> --build_dir is set to a default of '.kunit' since commit ddbd60c779b4
-> ("kunit: use --build_dir=.kunit as default"), but even before then it
-> was explicitly set to ''.
->
-> So outside of one unit test, there was no way for the build_dir to be
-> ever be None, and we can simplify code by fixing the unit test and
-> enforcing that via updated type annotations.
->
-> E.g. this lets us drop `get_file_path()` since it's now exactly
-> equivalent to os.path.join().
->
-> Note: there's some `if build_dir` checks that also fail if build_dir is
-> explicitly set to '' that just guard against passing "O=" to make.
-> But running `make O=` works just fine, so drop these checks.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+--W/nzBZO5zC0uMSeA
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> The HID++ protocol allows to set multicolor (RGB) to a static color.
+> Multiple of such LED zones per device are supported.
+> This patch exports said LEDs so that they can be set from userspace.
+>=20
+> Signed-off-by: Manuel Sch=F6nlaub <manuel.schoenlaub@gmail.com>
+
+Please cc LEDs stuff to the LED lists.
+
+> +static int hidpp_mc_led_register(struct hidpp_device *hidpp_dev,
+> +				 struct led_classdev_mc *mc_dev,
+> +				 int zone)
+> +{
+> +	struct hid_device *hdev =3D hidpp_dev->hid_dev;
+> +	struct mc_subled *mc_led_info;
+> +	struct led_classdev *cdev;
+> +	int ret;
+> +
+> +	mc_led_info =3D devm_kmalloc_array(&hdev->dev, 3,
+> +					 sizeof(*mc_led_info),
+> +					 GFP_KERNEL | __GFP_ZERO);
+> +	if (!mc_led_info)
+> +		return -ENOMEM;
+> +
+> +	mc_led_info[0].color_index =3D LED_COLOR_ID_RED;
+> +	mc_led_info[1].color_index =3D LED_COLOR_ID_GREEN;
+> +	mc_led_info[2].color_index =3D LED_COLOR_ID_BLUE;
+> +
+> +	mc_dev->subled_info =3D mc_led_info;
+> +	mc_dev->num_colors =3D 3;
+> +
+> +	cdev =3D &mc_dev->led_cdev;
+> +	cdev->name =3D devm_kasprintf(&hdev->dev, GFP_KERNEL,
+> +				    "%s:rgb:indicator-%d", hdev->uniq, zone);
+
+So this is keyboard backlight? We should add the documentation at the
+very least, so that other drivers use same name.
+
+Best regards,
+								Pavel
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--W/nzBZO5zC0uMSeA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYjuLVwAKCRAw5/Bqldv6
+8kx0AJ9oRQqFcCr56nwvRNMMN+qF5d6glgCfbBf5ZasT2VlWCFhfy+uI65wakSk=
+=ru61
+-----END PGP SIGNATURE-----
+
+--W/nzBZO5zC0uMSeA--

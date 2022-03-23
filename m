@@ -2,150 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44594E5400
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8361E4E5405
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244675AbiCWOJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        id S236980AbiCWOKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244666AbiCWOJX (ORCPT
+        with ESMTP id S236534AbiCWOKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:09:23 -0400
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BEA7EA3D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:07:53 -0700 (PDT)
-Received: by mail-wm1-x349.google.com with SMTP id 9-20020a05600c240900b0038c99b98f6fso660675wmp.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:07:53 -0700 (PDT)
+        Wed, 23 Mar 2022 10:10:32 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D3936B6B;
+        Wed, 23 Mar 2022 07:09:02 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id bp39so1195376qtb.6;
+        Wed, 23 Mar 2022 07:09:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=jP0KzNHLjXL65QouGmxzUA6j72GCAzLFmydsbCQzK+c=;
-        b=Flm092IOzhTpQM+6LgcrxMhqgwZbTmWFAZZTWrHWcfLI09EbGCm28p89SXLeDHVOZS
-         XtiNt9NbY/5FqsVScIjk7vcu4lDoKN2tcVYJNvb8e9BeXA3lbrlq1z990IiOBlg5VHmW
-         Nntmig7AMEY9acXWJDlGpBpDuUNHI2zVYczf0k1QdVInnxOGD5M7SS+DRhre9fSSN91e
-         uclsMCn8+O5MVoJKKgVY41F/vThwsktwufXuPskq7nXIqveJR6vv1EVuXrEdCjdw+VCG
-         te7jp8DRLWcvvjzdTD4rwltMMjGxIiCZDG7G8Z/vhQtYayovpexziGO6Y02KPhCskk2G
-         0lMA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Nnzujr/9w5yv7VmfvBVj8t7Pp/lBvu+cUel9AUsKnc4=;
+        b=GxnGH8X4pwCOkQmivYx30gdwX5XCZATNOUdp+xEy9onfcRfUvfh2fuHKplV2r+M9ma
+         HtIQlDdTD6RQbQjT4b32YoG/EZvYcS3Nxz1OTSLYv9JH3Rmt1LD7nLjkJpvwOpP0d+g1
+         DG+fXtGFMZ8tvjD2s4wXaIGEaS01HoeqzuvsRPiI1M00PS24yXZvUpR4Bn9neZX1WOU8
+         dYSKFQB6tUPtfRlxL0fPcdBYT5/fXaeEBth1fyQ9unbiZ6153ftpSucVL4rqqNcqK0nW
+         ZF6wuqfA8plRqW+HwqpE8zQbZ10H3lGAyekwTW3NywUY0K9nyDqTnxOC6U0V2tjLUuXz
+         o5Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=jP0KzNHLjXL65QouGmxzUA6j72GCAzLFmydsbCQzK+c=;
-        b=QRyFedDYOXSBkfPayF8mx/a8eIf3SmRXjqOi813+H7Umg7mfBV9kiLthA7Hu7M5yQn
-         yPe4o1FtIzA5JgXhEQmyk65/by8ZBLLhl3h4G96U1iWvnXr4wt9i+pA2nuY8MoVznJag
-         BgwPli0PHx0kk2Hs+JAoz72biZ12vK8lVMkzuhl0wgc3a/ezXI0ul77H+zvJkdISAoXB
-         ZSSm7rDOkPfH0fYKrNj9hUHPTQUjrnuWqATH633ukVdsF3vCN4k+tKlSUAIooZA4PCt8
-         snhX/88UIQNNPUQdCvmfWgn6diznR00yP625tmU/1ig3vuAIYfAUSAOmD3I55wsinZo9
-         GBaA==
-X-Gm-Message-State: AOAM531koHrdhABDVGsq1Xhhh4mcgLKRHH7+RPSkxbRvsStg6OVZneWX
-        hX36cegEgY0/7C5rrU1S9G4OzA4Bvg==
-X-Google-Smtp-Source: ABdhPJzS/U76tN3svbEdV1F5BCZa9h9w/aKT1XqvQDq7aU+26RjZ/vjQ7Zsm2udC86R1bqNevOwvW1Qk4g==
-X-Received: from keirf.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:29e7])
- (user=keirf job=sendgmr) by 2002:a7b:c30d:0:b0:381:4bb9:eede with SMTP id
- k13-20020a7bc30d000000b003814bb9eedemr9406529wmj.74.1648044471463; Wed, 23
- Mar 2022 07:07:51 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 14:07:27 +0000
-Message-Id: <20220323140727.3499235-1-keirf@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH v3] virtio: pci: check bar values read from virtio config space
-From:   Keir Fraser <keirf@google.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     kernel-team@android.com, Keir Fraser <keirf@google.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Nnzujr/9w5yv7VmfvBVj8t7Pp/lBvu+cUel9AUsKnc4=;
+        b=BEyC91msxzVM2XU9Jv1sQgKbyZBoYAlXWZ0MTUukLqsRma8K1/FkVd2asWxY+vKC1a
+         R5wqK4Iw+2qJXy7vrgCrBvjbsvWxy3jLQ3zUP6DNwriS0S/2khkIcnCIE8YNB+y2yuEL
+         fLMQ8frT4GhPmV1zBdImD9GjKrCGkngeA6XzTNgn9e1IIFJ6bMCa2A0BN7ZzG/xrF/5G
+         Tr7uywJeTFhIvENjl4TlCzaF8FoJekLlGf4yVGZCL5Ty19DglTTl3kWDCfXFVIA1tK2k
+         zEbPdd/9SkXZfAHlH+lwf3+4gtpPV3Xhna9iN8x0fhPPG6k3EiAiA9DFAKMy8RK77AOB
+         8fAg==
+X-Gm-Message-State: AOAM5314fovckF7J+4lJq8LhI+9NdLPbGx5hB9wHfMkKYPlusNrczhoK
+        dWZkm6FF/wVXGHWT7sBOcyX4i1avh05MBULB+rQ=
+X-Google-Smtp-Source: ABdhPJxF6vyzbewMOMHuSjYrXVW47XC4GaWj3ntkDGXVgqTUkYhzPwYCL2S4HPEezVTQ6ott/O6ehDSMtUkYTHuH9VQ=
+X-Received: by 2002:a05:622a:291:b0:2e1:fee4:8a56 with SMTP id
+ z17-20020a05622a029100b002e1fee48a56mr20587862qtw.624.1648044541317; Wed, 23
+ Mar 2022 07:09:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220311164628.378849-1-gengcixi@gmail.com> <20220311164628.378849-6-gengcixi@gmail.com>
+In-Reply-To: <20220311164628.378849-6-gengcixi@gmail.com>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Wed, 23 Mar 2022 22:09:47 +0800
+Message-ID: <CADBw62qJCHrGSX7+yMfo7SV9SGdQwyYPFc6zcBn=cmfOuMgMTA@mail.gmail.com>
+Subject: Re: [PATCH V2 5/7] iio: adc: sc27xx: add support for PMIC sc2730
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     jic23@kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>, lgirdwood@gmail.com,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?B?5pyx546J5piOIChZdW1pbmcgWmh1LzExNDU3KQ==?= 
+        <yuming.zhu1@unisoc.com>, linux-iio@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-virtio pci config structures may in future have non-standard bar
-values in the bar field. We should anticipate this by skipping any
-structures containing such a reserved value.
+On Sat, Mar 12, 2022 at 12:47 AM Cixi Geng <gengcixi@gmail.com> wrote:
+>
+> From: Cixi Geng <cixi.geng1@unisoc.com>
+>
+> sc2730 is the product of sc27xx series.
+>
+> Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
+>  drivers/iio/adc/sc27xx_adc.c | 108 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 107 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+> index 2603ce313b07..b89637c051ac 100644
+> --- a/drivers/iio/adc/sc27xx_adc.c
+> +++ b/drivers/iio/adc/sc27xx_adc.c
+> @@ -13,9 +13,11 @@
+>  #include <linux/slab.h>
+>
+>  /* PMIC global registers definition */
+> +#define SC2730_MODULE_EN               0x1808
+>  #define SC2731_MODULE_EN               0xc08
+>  #define SC27XX_MODULE_ADC_EN           BIT(5)
+>  #define SC2721_ARM_CLK_EN              0xc0c
+> +#define SC2730_ARM_CLK_EN              0x180c
+>  #define SC2731_ARM_CLK_EN              0xc10
+>  #define SC27XX_CLK_ADC_EN              BIT(5)
+>  #define SC27XX_CLK_ADC_CLK_EN          BIT(6)
+> @@ -293,6 +295,80 @@ static int sc2721_adc_get_ratio(int channel, int scale)
+>         return SC27XX_VOLT_RATIO(1, 1);
+>  }
+>
+> +static int sc2730_adc_get_ratio(int channel, int scale)
+> +{
+> +       switch (channel) {
+> +       case 14:
+> +               switch (scale) {
+> +               case 0:
+> +                       return SC27XX_VOLT_RATIO(68, 900);
+> +               case 1:
+> +                       return SC27XX_VOLT_RATIO(68, 1760);
+> +               case 2:
+> +                       return SC27XX_VOLT_RATIO(68, 2327);
+> +               case 3:
+> +                       return SC27XX_VOLT_RATIO(68, 3654);
+> +               default:
+> +                       return SC27XX_VOLT_RATIO(1, 1);
+> +               }
+> +       case 15:
+> +               switch (scale) {
+> +               case 0:
+> +                       return SC27XX_VOLT_RATIO(1, 3);
+> +               case 1:
+> +                       return SC27XX_VOLT_RATIO(1000, 5865);
+> +               case 2:
+> +                       return SC27XX_VOLT_RATIO(500, 3879);
+> +               case 3:
+> +                       return SC27XX_VOLT_RATIO(500, 6090);
+> +               default:
+> +                       return SC27XX_VOLT_RATIO(1, 1);
+> +               }
+> +       case 16:
+> +               switch (scale) {
+> +               case 0:
+> +                       return SC27XX_VOLT_RATIO(48, 100);
+> +               case 1:
+> +                       return SC27XX_VOLT_RATIO(480, 1955);
+> +               case 2:
+> +                       return SC27XX_VOLT_RATIO(480, 2586);
+> +               case 3:
+> +                       return SC27XX_VOLT_RATIO(48, 406);
+> +               default:
+> +                       return SC27XX_VOLT_RATIO(1, 1);
+> +               }
+> +       case 21:
+> +       case 22:
+> +       case 23:
+> +               switch (scale) {
+> +               case 0:
+> +                       return SC27XX_VOLT_RATIO(3, 8);
+> +               case 1:
+> +                       return SC27XX_VOLT_RATIO(375, 1955);
+> +               case 2:
+> +                       return SC27XX_VOLT_RATIO(375, 2586);
+> +               case 3:
+> +                       return SC27XX_VOLT_RATIO(300, 3248);
+> +               default:
+> +                       return SC27XX_VOLT_RATIO(1, 1);
+> +               }
+> +       default:
+> +               switch (scale) {
+> +               case 0:
+> +                       return SC27XX_VOLT_RATIO(1, 1);
+> +               case 1:
+> +                       return SC27XX_VOLT_RATIO(1000, 1955);
+> +               case 2:
+> +                       return SC27XX_VOLT_RATIO(1000, 2586);
+> +               case 3:
+> +                       return SC27XX_VOLT_RATIO(1000, 4060);
+> +               default:
+> +                       return SC27XX_VOLT_RATIO(1, 1);
+> +               }
+> +       }
+> +       return SC27XX_VOLT_RATIO(1, 1);
+> +}
+> +
+>  static int sc2731_adc_get_ratio(int channel, int scale)
+>  {
+>         switch (channel) {
+> @@ -349,6 +425,22 @@ static void sc2720_adc_scale_init(struct sc27xx_adc_data *data)
+>         }
+>  }
+>
+> +static void sc2730_adc_scale_init(struct sc27xx_adc_data *data)
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> +               if (i == 5 || i == 10 || i == 19 || i == 30 || i == 31)
+> +                       data->channel_scale[i] = 3;
+> +               else if (i == 7 || i == 9)
+> +                       data->channel_scale[i] = 2;
+> +               else if (i == 13)
+> +                       data->channel_scale[i] = 1;
+> +               else
+> +                       data->channel_scale[i] = 0;
+> +       }
+> +}
+> +
+>  static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
+>  {
+>         int i;
+> @@ -449,7 +541,8 @@ static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
+>                                                     SC27XX_ADC_REFVOL_VDD28,
+>                                                     SC27XX_ADC_REFVOL_VDD28);
+>                         if (ret_volref) {
+> -                               dev_err(data->dev, "failed to set the volref 2.8V, ret_volref = 0x%x\n,ret_volref");
+> +                               dev_err(data->dev, "failed to set the volref 2.8V, ret_volref = 0x%x\n",
+> +                                       ret_volref);
 
-The bar value should never change: check for harmful modified values
-we re-read it from the config space in vp_modern_map_capability().
+Do not add unrelated changes in this patch.
 
-Also clean up an existing check to consistently use PCI_STD_NUM_BARS.
-
-Signed-off-by: Keir Fraser <keirf@google.com>
----
- drivers/virtio/virtio_pci_modern.c     | 12 +++++++++---
- drivers/virtio/virtio_pci_modern_dev.c |  9 ++++++++-
- 2 files changed, 17 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-index 5455bc041fb6..6adfcd0297a7 100644
---- a/drivers/virtio/virtio_pci_modern.c
-+++ b/drivers/virtio/virtio_pci_modern.c
-@@ -293,7 +293,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
- 
- 	for (pos = pci_find_capability(dev, PCI_CAP_ID_VNDR); pos > 0;
- 	     pos = pci_find_next_capability(dev, pos, PCI_CAP_ID_VNDR)) {
--		u8 type, cap_len, id;
-+		u8 type, cap_len, id, res_bar;
- 		u32 tmp32;
- 		u64 res_offset, res_length;
- 
-@@ -315,9 +315,14 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
- 		if (id != required_id)
- 			continue;
- 
--		/* Type, and ID match, looks good */
- 		pci_read_config_byte(dev, pos + offsetof(struct virtio_pci_cap,
--							 bar), bar);
-+							 bar), &res_bar);
-+		if (res_bar >= PCI_STD_NUM_BARS)
-+			continue;
-+
-+		/* Type and ID match, and the BAR value isn't reserved.
-+		 * Looks good.
-+		 */
- 
- 		/* Read the lower 32bit of length and offset */
- 		pci_read_config_dword(dev, pos + offsetof(struct virtio_pci_cap,
-@@ -337,6 +342,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
- 						     length_hi), &tmp32);
- 		res_length |= ((u64)tmp32) << 32;
- 
-+		*bar = res_bar;
- 		*offset = res_offset;
- 		*len = res_length;
- 
-diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
-index e8b3ff2b9fbc..591738ad3d56 100644
---- a/drivers/virtio/virtio_pci_modern_dev.c
-+++ b/drivers/virtio/virtio_pci_modern_dev.c
-@@ -35,6 +35,13 @@ vp_modern_map_capability(struct virtio_pci_modern_device *mdev, int off,
- 	pci_read_config_dword(dev, off + offsetof(struct virtio_pci_cap, length),
- 			      &length);
- 
-+	/* Check if the BAR may have changed since we requested the region. */
-+	if (bar >= PCI_STD_NUM_BARS || !(mdev->modern_bars & (1 << bar))) {
-+		dev_err(&dev->dev,
-+			"virtio_pci: bar unexpectedly changed to %u\n", bar);
-+		return NULL;
-+	}
-+
- 	if (length <= start) {
- 		dev_err(&dev->dev,
- 			"virtio_pci: bad capability len %u (>%u expected)\n",
-@@ -120,7 +127,7 @@ static inline int virtio_pci_find_capability(struct pci_dev *dev, u8 cfg_type,
- 				     &bar);
- 
- 		/* Ignore structures with reserved BAR values */
--		if (bar > 0x5)
-+		if (bar >= PCI_STD_NUM_BARS)
- 			continue;
- 
- 		if (type == cfg_type) {
 -- 
-2.35.1.894.gb6a874cedc-goog
-
+Baolin Wang

@@ -2,95 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5734E583D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7043C4E5847
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244291AbiCWSSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 14:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S245596AbiCWSVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 14:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245538AbiCWSRw (ORCPT
+        with ESMTP id S244643AbiCWSVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 14:17:52 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88E188B35
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:16:22 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id h63so2676894iof.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nMqxdIZgJ4df2glO3AXxvZM8Vb5idq1c8Jw7C91a7Vc=;
-        b=p43R9GLwlW8RzbEXi8zCiRwYsoq1VH3VbGU7vQ8dDRiLQNTTwvSxVUgbRv97gty1nU
-         gBWq8BpTOJl3argEvXZePHDxsmy1SR8wOHYa9Mc5QC84mXyij9bggiFnh6GG7MsGhONZ
-         DWNUl/8mdwnRLkc+0BskLlHPtksxf9odD3frJghi5DKJtnnybDhNTpCAsjT7VOiEkeT6
-         OSN407EU7F9qBwpdyBSK/G+TqEHrtUeM9w1btYhMRm4bDdhtf6x+t0PuNcoEwqZO8NmB
-         0ND+M4SL+uaZW51ehTiehp0P+GScV8fbrdXwb5riFHisJTGltXQTF35BvRNfbvcmrGdc
-         BcQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nMqxdIZgJ4df2glO3AXxvZM8Vb5idq1c8Jw7C91a7Vc=;
-        b=VcDzGGoprqJw7V5T5UYXdDGyZUCZAMFrp2GH0cN3gQ++7dTv9TYR2WdflzEGYQQouW
-         ut6YrRgTOsbs6axm4Si9H9x28MbKQ/hOvklY8r6xZf7WRk1nc6Eo1tokrV74BwdiiB8D
-         wJbDUyM0cQ2HVFCrLC25O8lzf8QOnb3vKYaQG0hrGlPxtjn0RZyLKjy0rPLppvV2zWbA
-         BfOof2Hx4BzmzBZxJQAR0oLOxI1jH6oSFAnwSseA4zAOHiLDGt/4/NMv5ougYsYOM8eL
-         90+FWxEu0pe7BuZWNuOUh5IA9KqYVaFxahUV8lqplsxSJe6+Gmy3ekcUzF/w2KzL+NoQ
-         jG/A==
-X-Gm-Message-State: AOAM530aeHDJEXFL9nqjkit1jL62ztvR07vO9pGY+32HAjXhelIBwrvD
-        2390EviKaK1pYnN5PbNYhS6N3g==
-X-Google-Smtp-Source: ABdhPJz21mhhHYj2VEdsCwKHh095WxTo6GZp1tVD+4wVhwAzkpj23tCt6tZvUXBt2e4Xi/BR9V8V6A==
-X-Received: by 2002:a05:6638:328f:b0:31a:12ca:b4d3 with SMTP id f15-20020a056638328f00b0031a12cab4d3mr610421jav.19.1648059382139;
-        Wed, 23 Mar 2022 11:16:22 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id f9-20020a5ec709000000b00645ec64112asm279808iop.42.2022.03.23.11.16.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 11:16:21 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 18:16:18 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com, jmattson@google.com
-Subject: Re: [PATCH 3/3] Documentation: KVM: add API issues section
-Message-ID: <Yjtj8qESPWIL221r@google.com>
-References: <20220322110712.222449-1-pbonzini@redhat.com>
- <20220322110712.222449-4-pbonzini@redhat.com>
+        Wed, 23 Mar 2022 14:21:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4629890A2;
+        Wed, 23 Mar 2022 11:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648059604; x=1679595604;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zKC6DF3oHwhlqlVr0NFUdSwE6lappAD/Mes4aBhNhNo=;
+  b=DeBCEZ+bPWlzQHtsgbSCyaF29zTSscfyETvfDvwToKhEdWydRQ31YC6C
+   kzQswjH7Ftdb5GgDRlqfMCFm5Y11siVBx+j8lYDgQC6oNd9OhSAFmnrI1
+   tP+vPMhGBeS3sA23gmJSJnSnzhKFHNdGBAsDqr/HCVXnr6Ge8zUX2DRhr
+   J6mQEC4+TNQPAKNIIDFvgwJoL9/RiweG4iz2qk1p25Vtol3oZvo4EySo6
+   xE1hOmkkMypY+KDA4XzWguca9E90pPQrLk07c8T3Hhj7uOFqATu/ivDIL
+   njHJKqGuXD5ks8N1qHXWmXyQYHyG7ykVWcDPDOtzZ9t16UVqdmSOlVC8t
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="344629237"
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="344629237"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 11:20:01 -0700
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="561031165"
+Received: from mszycik-mobl.ger.corp.intel.com (HELO [10.249.137.148]) ([10.249.137.148])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 11:19:57 -0700
+Message-ID: <287f2247-2c58-497d-f7b1-ae1e24a88da8@linux.intel.com>
+Date:   Wed, 23 Mar 2022 19:19:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322110712.222449-4-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net] ice: Clear default forwarding VSI during VSI release
+Content-Language: en-US
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     netdev@vger.kernel.org, poros@redhat.com, mschmidt@redhat.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Brett Creeley <brett.creeley@intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        "moderated list:INTEL ETHERNET DRIVERS\"" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220322142554.3253428-1-ivecera@redhat.com>
+ <45b155ff-8e26-fa96-f89e-6a561de01abb@linux.intel.com>
+ <20220323185426.33c66892@ceranb>
+From:   Marcin Szycik <marcin.szycik@linux.intel.com>
+In-Reply-To: <20220323185426.33c66892@ceranb>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
 
-On Tue, Mar 22, 2022 at 12:07:12PM +0100, Paolo Bonzini wrote:
-> Add a section to document all the different ways in which the KVM API sucks.
+
+On 23-Mar-22 18:54, Ivan Vecera wrote:
+> On Wed, 23 Mar 2022 18:39:11 +0100
+> Marcin Szycik <marcin.szycik@linux.intel.com> wrote:
 > 
-> I am sure there are way more, give people a place to vent so that userspace
-> authors are aware.
+>> On 22-Mar-22 15:25, Ivan Vecera wrote:
+>>> VSI is set as default forwarding one when promisc mode is set for
+>>> PF interface, when PF is switched to switchdev mode or when VF
+>>> driver asks to enable allmulticast or promisc mode for the VF
+>>> interface (when vf-true-promisc-support priv flag is off).
+>>> The third case is buggy because in that case VSI associated with
+>>> VF remains as default one after VF removal.
+>>>
+>>> Reproducer:
+>>> 1. Create VF
+>>>    echo 1 > sys/class/net/ens7f0/device/sriov_numvfs
+>>> 2. Enable allmulticast or promisc mode on VF
+>>>    ip link set ens7f0v0 allmulticast on
+>>>    ip link set ens7f0v0 promisc on
+>>> 3. Delete VF
+>>>    echo 0 > sys/class/net/ens7f0/device/sriov_numvfs
+>>> 4. Try to enable promisc mode on PF
+>>>    ip link set ens7f0 promisc on
+>>>
+>>> Although it looks that promisc mode on PF is enabled the opposite
+>>> is true because ice_vsi_sync_fltr() responsible for IFF_PROMISC
+>>> handling first checks if any other VSI is set as default forwarding
+>>> one and if so the function does not do anything. At this point
+>>> it is not possible to enable promisc mode on PF without re-probe
+>>> device.
+>>>
+>>> To resolve the issue this patch clear default forwarding VSI
+>>> during ice_vsi_release() when the VSI to be released is the default
+>>> one.
+>>>
+>>> Fixes: 01b5e89aab49 ("ice: Add VF promiscuous support")
+>>> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+>>> ---
+>>>  drivers/net/ethernet/intel/ice/ice_lib.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+>>> index 53256aca27c7..20d755822d43 100644
+>>> --- a/drivers/net/ethernet/intel/ice/ice_lib.c
+>>> +++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+>>> @@ -3147,6 +3147,8 @@ int ice_vsi_release(struct ice_vsi *vsi)
+>>>  		}
+>>>  	}
+>>>  
+>>> +	if (ice_is_vsi_dflt_vsi(pf->first_sw, vsi))
+>>> +		ice_clear_dflt_vsi(pf->first_sw);  
+>>
+>> It would probably be good to check `ice_clear_dflt_vsi` return code.
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Check and report potential warning when error occurs? because we are in ice_vsi_release() so
+> any rollback does not make sense.
 
-Do you think we should vent about our mistakes inline with the
-descriptions of the corresponding UAPI? One example that comes to mind
-is ARM's CNTV_CVAL_EL0/CNTVCT_EL0 mixup, which is mentioned in 4.68
-'KVM_SET_ONE_REG'. That, of course, doesn't cover the
-previously-undocumented bits of UAPI that are problematic :)
+Right. ice_clear_dflt_vsi already reports errors so it should be good as is.
+LGTM, thanks!
 
-If we go that route we likely should have a good format for documenting
-the ugliness.
-
---
-Thanks,
-Oliver
+> 
+> Ivan
+> 

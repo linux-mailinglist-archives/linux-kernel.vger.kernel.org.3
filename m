@@ -2,170 +2,440 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645BD4E5685
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9284E5688
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238903AbiCWQeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
+        id S239064AbiCWQeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237353AbiCWQeF (ORCPT
+        with ESMTP id S237353AbiCWQeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:34:05 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171227CB2D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:32:35 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id b19so2881250wrh.11
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=trCEH0bE6PaumD9lKzsz88cLWqI4Gc48zVWYeF+JLGE=;
-        b=715G9aBMEgb/RuG3lm8ue1+D8YN6vxqXPzx2SVIgyire1F2RO8mwWraOJZEnLgLLME
-         u5gmeTjoQA7ruESrpCjhYAtljoKGFODubsFiQXk1ieJqt6EZgv/1ZsUus1KSxaiLz3F/
-         dNynSwomfjeZyMeTd/GzU2Bl9Z+M16eSRphbjnkl+QJWB09oPh7h7/Li6ZPTOe3SKkej
-         /cRtQ5/sxe9nbI0ZKkat2GWiSqtvNyE2BzDkG/h55YUBnd0sBy8sEDpzimoqRHoKlNWk
-         5tpaGDWvWq3jYVhyvNhcSMgcQLJ6UG5IjQVENV56JS+vI5VAhLcCa34vl1fgEU0cKtlh
-         2czQ==
+        Wed, 23 Mar 2022 12:34:13 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB91F7CDDD;
+        Wed, 23 Mar 2022 09:32:42 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id dr20so3954934ejc.6;
+        Wed, 23 Mar 2022 09:32:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=trCEH0bE6PaumD9lKzsz88cLWqI4Gc48zVWYeF+JLGE=;
-        b=0hgChPuUf1+c3caLShQcX3bJoyg030TUJwKj6JbEANaoXGofnvL9+FYtO7aFRstC8K
-         dGsnSXOpfgl2EP97N3kAr9KMJ9da7VGyM0Fer18f15GlTYHD2hRu8l7Is1hgm7low6eM
-         Zo0747HCjm4usB+6HqMiZvqALsvnRdN7HPesCfvY0IaBcLX+sst0JhMP8i9qW4C7SWv3
-         jWP/Y5yw/vEiBw9+8xguKeIZiXAZOwVnZeVfEIjxbC8CBys15PanYVQmBeEl+mhhOBVo
-         BHUHscKdqpb5xFyi/KctQddefeeEeK2/fuRRrHVOnjjO51blMSQwMGWLYUs3Zu1HTCuL
-         rEqA==
-X-Gm-Message-State: AOAM532MPXIyNXv9woyBhJmAf7FFMoNt4G6RU4RJNwfiYA9XHioD0cUI
-        4PAhPDL/Dtl+gJdgiTFTrwDh7A==
-X-Google-Smtp-Source: ABdhPJyQBA7RWxogEUW+4vbMCMwX77BkU0ZFJ808H936v0jDTJt8PagQZ8ycbymm/Ptx/ELaxKS4UQ==
-X-Received: by 2002:adf:f5c4:0:b0:205:2836:f1e5 with SMTP id k4-20020adff5c4000000b002052836f1e5mr579608wrp.519.1648053153629;
-        Wed, 23 Mar 2022 09:32:33 -0700 (PDT)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id w7-20020a1cf607000000b00389a5390180sm274635wmc.25.2022.03.23.09.32.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 09:32:33 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: updates for v5.18
-Date:   Wed, 23 Mar 2022 17:32:30 +0100
-Message-Id: <20220323163230.691802-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
+        bh=E7akCe8lBAqH23pOndxll2BXioVgSP/wXYmgr1zmhUY=;
+        b=6Mo0bqBL7ls7DyxLKzJPTXCIR3SA5HFJMPV5LYqYRH5XItTXV52mLaacfK8OpqsVok
+         bHgrGfpD0M4+HE/0wfoTzUrUb0GaVUs9EInkfHCTQHCld0xq0yygNoUwO7ZJL0PFJ9fp
+         Yp0buwXH1fVvG5q+NRD/dcBlh1sQVv+jDTxvwbpHvFTXRIoKb3TGDHll5iMNvS+o1rxr
+         TtoykMgquoHPPWsg+mZdULEyParcfuZzjXR69+wsRwSzFt2ElZbWSBZ7CN3s/OK0L73J
+         L6rN0JWI0dV+ZtbVcr+SsHgOnc5k/VbTRtyUCeFKX+4nQ/daK39+ZfIZ3JmkDgNu5ggn
+         CJMw==
+X-Gm-Message-State: AOAM532OI5pvYDQ2w5d7040lgTIAQa4XfaeIUcGmOR1IRcVHUvlgQzvG
+        e2LUDH9XQhWtEbZY2a/EuhzqxFw357FtNQ==
+X-Google-Smtp-Source: ABdhPJwiqMCLHEjPl7sBX1A7y17nAGLs1ckQHMAh8ME1OQ1VF4Fy+YeiPaF+nD848Ecgy7OPbBiASQ==
+X-Received: by 2002:a17:906:4996:b0:6df:f6da:fbef with SMTP id p22-20020a170906499600b006dff6dafbefmr968259eju.68.1648053161140;
+        Wed, 23 Mar 2022 09:32:41 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id x12-20020a50d9cc000000b0040f70fe78f3sm193534edj.36.2022.03.23.09.32.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 09:32:40 -0700 (PDT)
+Message-ID: <f696fb7a-6bb1-9a44-2aa4-df728ebc965e@kernel.org>
+Date:   Wed, 23 Mar 2022 17:32:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] dt-bindings: mmc: xenon: Convert to JSON schema
+Content-Language: en-US
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        ulf.hansson@linaro.org, robh+dt@kernel.org, huziji@marvell.com
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220320234938.1946259-1-chris.packham@alliedtelesis.co.nz>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220320234938.1946259-1-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 21/03/2022 00:49, Chris Packham wrote:
+> Convert the marvell,xenon-sdhci binding to JSON schema. Currently the
+> in-tree dts files don't validate because they use sdhci@ instead of mmc@
+> as required by the generic mmc-controller schema.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-There are relatively few updates for the next release cycle. We have a single
-new driver and some minor changes in drivers, more work on limiting the usage
-of of_node in drivers and DT updates.
+Patches fixing the DTS (in the same series, before this one) are highly
+welcomed. Otherwise Rob's bot might soon complain...
 
-Please pull,
-Bartosz Golaszewski
+> ---
+> 
+> Notes:
+>     Changes in v2:
+>     - Update MAINTAINERS entry
+>     - Incorporate feedback from Krzysztof
+> 
+>  .../bindings/mmc/marvell,xenon-sdhci.txt      | 173 -----------
+>  .../bindings/mmc/marvell,xenon-sdhci.yaml     | 272 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 273 insertions(+), 174 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
+>  create mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
+> deleted file mode 100644
+> index c51a62d751dc..000000000000
+> --- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
+> +++ /dev/null
+> @@ -1,173 +0,0 @@
+> -Marvell Xenon SDHCI Controller device tree bindings
+> -This file documents differences between the core mmc properties
+> -described by mmc.txt and the properties used by the Xenon implementation.
+> -
+> -Multiple SDHCs might be put into a single Xenon IP, to save size and cost.
+> -Each SDHC is independent and owns independent resources, such as register sets,
+> -clock and PHY.
+> -Each SDHC should have an independent device tree node.
+> -
+> -Required Properties:
+> -- compatible: should be one of the following
+> -  - "marvell,armada-3700-sdhci": For controllers on Armada-3700 SoC.
+> -  Must provide a second register area and marvell,pad-type.
+> -  - "marvell,armada-ap806-sdhci": For controllers on Armada AP806.
+> -  - "marvell,armada-ap807-sdhci": For controllers on Armada AP807.
+> -  - "marvell,armada-cp110-sdhci": For controllers on Armada CP110.
+> -
+> -- clocks:
+> -  Array of clocks required for SDHC.
+> -  Require at least input clock for Xenon IP core. For Armada AP806 and
+> -  CP110, the AXI clock is also mandatory.
+> -
+> -- clock-names:
+> -  Array of names corresponding to clocks property.
+> -  The input clock for Xenon IP core should be named as "core".
+> -  The input clock for the AXI bus must be named as "axi".
+> -
+> -- reg:
+> -  * For "marvell,armada-3700-sdhci", two register areas.
+> -    The first one for Xenon IP register. The second one for the Armada 3700 SoC
+> -    PHY PAD Voltage Control register.
+> -    Please follow the examples with compatible "marvell,armada-3700-sdhci"
+> -    in below.
+> -    Please also check property marvell,pad-type in below.
+> -
+> -  * For other compatible strings, one register area for Xenon IP.
+> -
+> -Optional Properties:
+> -- marvell,xenon-sdhc-id:
+> -  Indicate the corresponding bit index of current SDHC in
+> -  SDHC System Operation Control Register Bit[7:0].
+> -  Set/clear the corresponding bit to enable/disable current SDHC.
+> -  If Xenon IP contains only one SDHC, this property is optional.
+> -
+> -- marvell,xenon-phy-type:
+> -  Xenon support multiple types of PHYs.
+> -  To select eMMC 5.1 PHY, set:
+> -  marvell,xenon-phy-type = "emmc 5.1 phy"
+> -  eMMC 5.1 PHY is the default choice if this property is not provided.
+> -  To select eMMC 5.0 PHY, set:
+> -  marvell,xenon-phy-type = "emmc 5.0 phy"
+> -
+> -  All those types of PHYs can support eMMC, SD and SDIO.
+> -  Please note that this property only presents the type of PHY.
+> -  It doesn't stand for the entire SDHC type or property.
+> -  For example, "emmc 5.1 phy" doesn't mean that this Xenon SDHC only
+> -  supports eMMC 5.1.
+> -
+> -- marvell,xenon-phy-znr:
+> -  Set PHY ZNR value.
+> -  Only available for eMMC PHY.
+> -  Valid range = [0:0x1F].
+> -  ZNR is set as 0xF by default if this property is not provided.
+> -
+> -- marvell,xenon-phy-zpr:
+> -  Set PHY ZPR value.
+> -  Only available for eMMC PHY.
+> -  Valid range = [0:0x1F].
+> -  ZPR is set as 0xF by default if this property is not provided.
+> -
+> -- marvell,xenon-phy-nr-success-tun:
+> -  Set the number of required consecutive successful sampling points
+> -  used to identify a valid sampling window, in tuning process.
+> -  Valid range = [1:7].
+> -  Set as 0x4 by default if this property is not provided.
+> -
+> -- marvell,xenon-phy-tun-step-divider:
+> -  Set the divider for calculating TUN_STEP.
+> -  Set as 64 by default if this property is not provided.
+> -
+> -- marvell,xenon-phy-slow-mode:
+> -  If this property is selected, transfers will bypass PHY.
+> -  Only available when bus frequency lower than 55MHz in SDR mode.
+> -  Disabled by default. Please only try this property if timing issues
+> -  always occur with PHY enabled in eMMC HS SDR, SD SDR12, SD SDR25,
+> -  SD Default Speed and HS mode and eMMC legacy speed mode.
+> -
+> -- marvell,xenon-tun-count:
+> -  Xenon SDHC SoC usually doesn't provide re-tuning counter in
+> -  Capabilities Register 3 Bit[11:8].
+> -  This property provides the re-tuning counter.
+> -  If this property is not set, default re-tuning counter will
+> -  be set as 0x9 in driver.
+> -
+> -- marvell,pad-type:
+> -  Type of Armada 3700 SoC PHY PAD Voltage Controller register.
+> -  Only valid when "marvell,armada-3700-sdhci" is selected.
+> -  Two types: "sd" and "fixed-1-8v".
+> -  If "sd" is selected, SoC PHY PAD is set as 3.3V at the beginning and is
+> -  switched to 1.8V when later in higher speed mode.
+> -  If "fixed-1-8v" is selected, SoC PHY PAD is fixed 1.8V, such as for eMMC.
+> -  Please follow the examples with compatible "marvell,armada-3700-sdhci"
+> -  in below.
+> -
+> -Example:
+> -- For eMMC:
+> -
+> -	sdhci@aa0000 {
+> -		compatible = "marvell,armada-ap806-sdhci";
+> -		reg = <0xaa0000 0x1000>;
+> -		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>
+> -		clocks = <&emmc_clk>,<&axi_clk>;
+> -		clock-names = "core", "axi";
+> -		bus-width = <4>;
+> -		marvell,xenon-phy-slow-mode;
+> -		marvell,xenon-tun-count = <11>;
+> -		non-removable;
+> -		no-sd;
+> -		no-sdio;
+> -
+> -		/* Vmmc and Vqmmc are both fixed */
+> -	};
+> -
+> -- For SD/SDIO:
+> -
+> -	sdhci@ab0000 {
+> -		compatible = "marvell,armada-cp110-sdhci";
+> -		reg = <0xab0000 0x1000>;
+> -		interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>
+> -		vqmmc-supply = <&sd_vqmmc_regulator>;
+> -		vmmc-supply = <&sd_vmmc_regulator>;
+> -		clocks = <&sdclk>, <&axi_clk>;
+> -		clock-names = "core", "axi";
+> -		bus-width = <4>;
+> -		marvell,xenon-tun-count = <9>;
+> -	};
+> -
+> -- For eMMC with compatible "marvell,armada-3700-sdhci":
+> -
+> -	sdhci@aa0000 {
+> -		compatible = "marvell,armada-3700-sdhci";
+> -		reg = <0xaa0000 0x1000>,
+> -		      <phy_addr 0x4>;
+> -		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>
+> -		clocks = <&emmcclk>;
+> -		clock-names = "core";
+> -		bus-width = <8>;
+> -		mmc-ddr-1_8v;
+> -		mmc-hs400-1_8v;
+> -		non-removable;
+> -		no-sd;
+> -		no-sdio;
+> -
+> -		/* Vmmc and Vqmmc are both fixed */
+> -
+> -		marvell,pad-type = "fixed-1-8v";
+> -	};
+> -
+> -- For SD/SDIO with compatible "marvell,armada-3700-sdhci":
+> -
+> -	sdhci@ab0000 {
+> -		compatible = "marvell,armada-3700-sdhci";
+> -		reg = <0xab0000 0x1000>,
+> -		      <phy_addr 0x4>;
+> -		interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>
+> -		vqmmc-supply = <&sd_regulator>;
+> -		/* Vmmc is fixed */
+> -		clocks = <&sdclk>;
+> -		clock-names = "core";
+> -		bus-width = <4>;
+> -
+> -		marvell,pad-type = "sd";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+> new file mode 100644
+> index 000000000000..eae7498686af
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+> @@ -0,0 +1,272 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/marvell,xenon-sdhci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell Xenon SDHCI Controller
+> +
+> +description: |
+> +  This file documents differences between the core MMC properties described by
+> +  mmc-controller.yaml and the properties used by the Xenon implementation.
+> +
+> +  Multiple SDHCs might be put into a single Xenon IP, to save size and cost.
+> +  Each SDHC is independent and owns independent resources, such as register
+> +  sets, clock and PHY.
+> +
+> +  Each SDHC should have an independent device tree node.
+> +
+> +maintainers:
+> +  - Ulf Hansson <ulf.hansson@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - marvell,armada-3700-sdhci
+> +          - marvell,armada-cp110-sdhci
+> +          - marvell,armada-ap807-sdhci
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+Since ap807 is compatible with ap806 I do not expect it to be alone. The
+previous bindings did not specify this exactly and existing DTS seems to
+use case below (ap807+ap806).
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+Someone should confirm whether ap807 hardware is really compatible with
+ap806 (the driver just sets one more quirk for ap806) and fix it here.
+In such case please explain the change of compatibles in commit msg.
 
-are available in the Git repository at:
+> +          - marvell,armada-ap806-sdhci
+> +
+> +      - items:
+> +          - const: marvell,armada-ap807-sdhci
+> +          - const: marvell,armada-ap806-sdhci
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description: |
+> +      For "marvell,armada-3700-sdhci", two register areas.  The first one
+> +      for Xenon IP register. The second one for the Armada 3700 SoC PHY PAD
+> +      Voltage Control register.  Please follow the examples with compatible
+> +      "marvell,armada-3700-sdhci" in below.
+> +      Please also check property marvell,pad-type in below.
+> +
+> +      For other compatible strings, one register area for Xenon IP.
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: core
+> +      - const: axi
+> +
+> +  marvell,xenon-sdhc-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 7
+> +    description: |
+> +      Indicate the corresponding bit index of current SDHC in SDHC System
+> +      Operation Control Register Bit[7:0].  Set/clear the corresponding bit to
+> +      enable/disable current SDHC.
+> +
+> +  marvell,xenon-phy-type:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum:
+> +      - "emmc 5.1 phy"
+> +      - "emmc 5.0 phy"
+> +    description: |
+> +      Xenon support multiple types of PHYs. To select eMMC 5.1 PHY, set:
+> +      marvell,xenon-phy-type = "emmc 5.1 phy" eMMC 5.1 PHY is the default
+> +      choice if this property is not provided.  To select eMMC 5.0 PHY, set:
+> +      marvell,xenon-phy-type = "emmc 5.0 phy"
+> +
+> +      All those types of PHYs can support eMMC, SD and SDIO. Please note that
+> +      this property only presents the type of PHY.  It doesn't stand for the
+> +      entire SDHC type or property.  For example, "emmc 5.1 phy" doesn't mean
+> +      that this Xenon SDHC only supports eMMC 5.1.
+> +
+> +  marvell,xenon-phy-znr:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 0x1f
+> +    default: 0xf
+> +    description: |
+> +      Set PHY ZNR value.
+> +      Only available for eMMC PHY.
+> +
+> +  marvell,xenon-phy-zpr:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 0x1f
+> +    default: 0xf
+> +    description: |
+> +      Set PHY ZPR value.
+> +      Only available for eMMC PHY.
+> +
+> +  marvell,xenon-phy-nr-success-tun:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +    maximum: 7
+> +    default: 0x4
+> +    description: |
+> +      Set the number of required consecutive successful sampling points
+> +      used to identify a valid sampling window, in tuning process.
+> +
+> +  marvell,xenon-phy-tun-step-divider:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    default: 64
+> +    description: |
+> +      Set the divider for calculating TUN_STEP.
+> +
+> +  marvell,xenon-phy-slow-mode:
+> +    type: boolean
+> +    description: |
+> +      If this property is selected, transfers will bypass PHY.
+> +      Only available when bus frequency lower than 55MHz in SDR mode.
+> +      Disabled by default. Please only try this property if timing issues
+> +      always occur with PHY enabled in eMMC HS SDR, SD SDR12, SD SDR25,
+> +      SD Default Speed and HS mode and eMMC legacy speed mode.
+> +
+> +  marvell,xenon-tun-count:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    default: 0x9
+> +    description: |
+> +      Xenon SDHC SoC usually doesn't provide re-tuning counter in
+> +      Capabilities Register 3 Bit[11:8].
+> +      This property provides the re-tuning counter.
+> +
+> +allOf:
+> +  - $ref: mmc-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: marvell,armada-3700-sdhci
+> +
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - description: Xenon IP registers
+> +            - description: Armada 3700 SoC PHY PAD Voltage Control register
+> +          minItems: 2
+> +
+> +        marvell,pad-type:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-updates-for-v5.18
+You need here ref to string as well.
 
-for you to fetch changes up to 87ba5badc541a79bab2fa3243ee0008c0880c64a:
+Rest looks ok.
 
-  gpio: ts4900: Use SPDX header (2022-03-10 10:05:39 +0100)
 
-----------------------------------------------------------------
-gpio updates for v5.18-rc1
-
-- new driver: gpio-en7523
-- dt-bindings: convertion of faraday,ftgpio010 to YAML, new compatible string
-  in gpio-vf610 and a bugfix in an example
-- gpiolib core: several improvements and some code shrink
-- documentation: convert all public docs into kerneldoc format
-- set IRQ bus token in gpio-crystalcove (addresses a debugfs issue)
-- add a missing return value check for kstrdup() in gpio-merrifield
-- allow gpio-tps68470 to be built as module
-- more work on limiting usage of of_node in GPIO drivers
-- several sysfs interface improvements
-- use SDPX in gpio-ts4900
-
-----------------------------------------------------------------
-Andy Shevchenko (9):
-      gpio: altera-a10sr: Switch to use fwnode instead of of_node
-      gpio: tegra: Get rid of duplicate of_node assignment
-      gpiolib: Introduce for_each_gpio_desc_with_flag() macro
-      gpiolib: Use short form of ternary operator in gpiod_get_index()
-      gpiolib: Simplify error path in gpiod_get_index() when requesting GPIO
-      gpiolib: sysfs: Move sysfs_emit() calls outside of the mutex lock
-      gpiolib: sysfs: Move kstrtox() calls outside of the mutex lock
-      gpiolib: sysfs: Simplify edge handling in the code
-      gpiolib: Use list_first_entry()/list_last_entry()
-
-Bartosz Golaszewski (2):
-      gpiolib: make struct comments into real kernel docs
-      Merge tag 'intel-gpio-v5.18-1' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-next
-
-Corentin Labbe (1):
-      dt-bindings: gpio: convert faraday,ftgpio01 to yaml
-
-Hans de Goede (2):
-      gpio: crystalcove: Set IRQ domain bus token to DOMAIN_BUS_WIRED
-      gpio: tps68470: Allow building as module
-
-John Crispin (2):
-      dt-bindings: arm: airoha: Add binding for Airoha GPIO controller
-      gpio: Add support for Airoha EN7523 GPIO controller
-
-Kris Bahnsen (1):
-      gpio: ts4900: Use SPDX header
-
-Marcel Ziswiler (1):
-      dt-bindings: gpio: fix gpio-hog example
-
-Peng Fan (1):
-      dt-bindings: gpio: gpio-vf610: Add imx93 compatible string
-
-Xiaoke Wang (1):
-      gpio: merrifield: check the return value of devm_kstrdup()
-
- .../bindings/gpio/airoha,en7523-gpio.yaml          |  66 ++++++++++
- .../devicetree/bindings/gpio/faraday,ftgpio010.txt |  27 ----
- .../bindings/gpio/faraday,ftgpio010.yaml           |  65 ++++++++++
- .../devicetree/bindings/gpio/gpio-vf610.yaml       |   4 +-
- Documentation/devicetree/bindings/gpio/gpio.txt    |   2 +-
- drivers/gpio/Kconfig                               |  16 ++-
- drivers/gpio/Makefile                              |   1 +
- drivers/gpio/gpio-altera-a10sr.c                   |   3 +-
- drivers/gpio/gpio-crystalcove.c                    |   9 +-
- drivers/gpio/gpio-en7523.c                         | 137 +++++++++++++++++++++
- drivers/gpio/gpio-merrifield.c                     |   3 +
- drivers/gpio/gpio-tegra.c                          |   1 -
- drivers/gpio/gpio-tps68470.c                       |   5 +-
- drivers/gpio/gpio-ts4900.c                         |  10 +-
- drivers/gpio/gpiolib-of.c                          |  10 +-
- drivers/gpio/gpiolib-sysfs.c                       | 100 ++++++---------
- drivers/gpio/gpiolib.c                             |  41 +++---
- drivers/gpio/gpiolib.h                             |  41 ++++++
- include/linux/gpio/consumer.h                      |  35 +++---
- 19 files changed, 422 insertions(+), 154 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/gpio/airoha,en7523-gpio.yaml
- delete mode 100644 Documentation/devicetree/bindings/gpio/faraday,ftgpio010.txt
- create mode 100644 Documentation/devicetree/bindings/gpio/faraday,ftgpio010.yaml
- create mode 100644 drivers/gpio/gpio-en7523.c
+Best regards,
+Krzysztof

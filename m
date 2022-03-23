@@ -2,178 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BA24E56D1
+	by mail.lfdr.de (Postfix) with ESMTP id 779D34E56D0
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245505AbiCWQsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S245521AbiCWQsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245571AbiCWQsE (ORCPT
+        with ESMTP id S245513AbiCWQsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:48:04 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C8612750
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:46:34 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22NGcY8N000638;
-        Wed, 23 Mar 2022 16:46:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=nQUDxAWdnBxieEOrgt6Rjodl6BsNlSgJ11dryF09ZFU=;
- b=R206v4B1YR+CMIlxy+9iNJyPUWmQjekM/3AjQ0j17iOnRBPvju+CU8zBSMOWvCf3njVj
- Lvp4h9Z3OSQ+9/4FfxnxvzuMr4KX3hXuSSrb4GBi8L4le6Ou3dS4AKyCEEodDVNv8o01
- d7DeLQ+rnoW0PhgzO0tFKgU/Emqsop4Qeiz4GMOdAvoi1hYMIkjVDkXzIkZV1HZu/RRo
- gA6A4k4XGJ+lJX1VWs34Wim3Mmv+9WUWsr2vsljH11NWiPivk6uGLjIm0nczRKr0l0Xf
- 9O5uM7Nlk4x84m7tIXa+RkdpjpITftTxECc6nKGtegYX8AtyaEKv0VXElnm37VIVquWJ tQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f000yu6hx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 16:46:20 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22NGjBlM031956;
-        Wed, 23 Mar 2022 16:46:18 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ew6ej12h6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 16:46:18 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22NGkFDt49480104
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Mar 2022 16:46:15 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2AC9E4C050;
-        Wed, 23 Mar 2022 16:46:15 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A9D1F4C040;
-        Wed, 23 Mar 2022 16:46:10 +0000 (GMT)
-Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.30.161])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Mar 2022 16:46:10 +0000 (GMT)
-From:   Kajol Jain <kjain@linux.ibm.com>
-To:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, dan.j.williams@intel.com,
-        ira.weiny@intel.com, vishal.l.verma@intel.com
-Cc:     santosh@fossix.org, maddy@linux.ibm.com, rnsastry@linux.ibm.com,
-        aneesh.kumar@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
-        vaibhav@linux.ibm.com, tglx@linutronix.de, kjain@linux.ibm.com
-Subject: [v2 PATCH 2/2] powerpc/papr_scm: Fix build failure when
-Date:   Wed, 23 Mar 2022 22:15:50 +0530
-Message-Id: <20220323164550.109768-2-kjain@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220323164550.109768-1-kjain@linux.ibm.com>
-References: <20220323164550.109768-1-kjain@linux.ibm.com>
+        Wed, 23 Mar 2022 12:48:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D922C4A3CB;
+        Wed, 23 Mar 2022 09:47:01 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9A1EE1F388;
+        Wed, 23 Mar 2022 16:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648054020; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9/+VETRFO5PTDlIzRRIClit3aflm+jce01s1gMGXpJ0=;
+        b=d6YPUKTB90VFKRJsQKtU90s/POZJMVD6N8/rJjk0XqcFyWq2KZ/91hGBjGy2q7DBrUxvts
+        jvTunoqsZacd1/hsxbIKQtv8vD4XqTf998EGySEXbusFh7a5b2n4sfL9s2NITMvc2bTWKh
+        o+9AJZePH2hFO9f1TzFGhVE/DLf0bb8=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 683C3A3B83;
+        Wed, 23 Mar 2022 16:47:00 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 17:46:59 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: Re: undefined reference to `node_data'
+Message-ID: <YjtPAwl/lhh+n3c2@dhcp22.suse.cz>
+References: <202203232042.AS9SV1zv-lkp@intel.com>
+ <Yjs0ausRy6/mLUFD@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xIEXUz4LB4lpWrkHGvS1F04dXex9Hqmk
-X-Proofpoint-GUID: xIEXUz4LB4lpWrkHGvS1F04dXex9Hqmk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-23_07,2022-03-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- spamscore=0 priorityscore=1501 malwarescore=0 phishscore=0 suspectscore=0
- impostorscore=0 clxscore=1015 mlxlogscore=999 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203230087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yjs0ausRy6/mLUFD@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following build failure occurs when CONFIG_PERF_EVENTS is not set
-as generic pmu functions are not visible in that scenario.
+Let me CC MIPS maintainers
 
-arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: ‘struct perf_event’ has no member named ‘attr’
-         p->nvdimm_events_map[event->attr.config],
-                                   ^~
-In file included from ./include/linux/list.h:5,
-                 from ./include/linux/kobject.h:19,
-                 from ./include/linux/of.h:17,
-                 from arch/powerpc/platforms/pseries/papr_scm.c:5:
-arch/powerpc/platforms/pseries/papr_scm.c: In function ‘papr_scm_pmu_event_init’:
-arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: ‘struct perf_event’ has no member named ‘pmu’
-  struct nvdimm_pmu *nd_pmu = to_nvdimm_pmu(event->pmu);
-                                                 ^~
-./include/linux/container_of.h:18:26: note: in definition of macro ‘container_of’
-  void *__mptr = (void *)(ptr);     \
-                          ^~~
-arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion of macro ‘to_nvdimm_pmu’
-  struct nvdimm_pmu *nd_pmu = to_nvdimm_pmu(event->pmu);
-                              ^~~~~~~~~~~~~
-In file included from ./include/linux/bits.h:22,
-                 from ./include/linux/bitops.h:6,
-                 from ./include/linux/of.h:15,
-                 from arch/powerpc/platforms/pseries/papr_scm.c:5:
+On Wed 23-03-22 15:53:31, Michal Hocko wrote:
+> On Wed 23-03-22 20:58:10, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   6b1f86f8e9c7f9de7ca1cb987b2cf25e99b1ae3a
+> > commit: 09f49dca570a917a8c6bccd7e8c61f5141534e3a mm: handle uninitialized numa nodes gracefully
+> > date:   14 hours ago
+> > config: mips-buildonly-randconfig-r004-20220323 (https://download.01.org/0day-ci/archive/20220323/202203232042.AS9SV1zv-lkp@intel.com/config)
+> > compiler: mips64-linux-gcc (GCC) 11.2.0
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f49dca570a917a8c6bccd7e8c61f5141534e3a
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout 09f49dca570a917a8c6bccd7e8c61f5141534e3a
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+> 
+> Didn't work for me
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    mips64-linux-ld: mm/page_alloc.o: in function `free_area_init':
+> > >> (.init.text+0x1680): undefined reference to `node_data'
+> >    mips64-linux-ld: (.init.text+0x1690): undefined reference to `node_data'
+> 
+> OK, I can see what is going here. The page allocator normally
+> uses NODE_DATA but arch_refresh_nodedata refers to node_data directly.
+> This is a problem with
+> arch/mips/include/asm/mach-loongson64/mmzone.h:
+> extern struct pglist_data *__node_data[];
+> 
+> #define NODE_DATA(n)            (__node_data[n])
+> 
+> Unfortunately we cannot use NODE_DATA there because of header inclusion
+> ordering. I will think about a solution.
 
-Fix the build issue by adding check for CONFIG_PERF_EVENTS config option
-and also add stub function for papr_scm_pmu_register to handle
-the CONFIG_PERF_EVENTS=n case. Also move the position of macro
-"to_nvdimm_pmu" inorder to merge it in CONFIG_PERF_EVENTS=y block.
+Is there any reason why (some?) MIPS arches use __node_data rather than
+node_data as most other architectures? Would it be acceptable to do the
+renaming? It would help to cover the above compilation problem because
+arch_refresh_nodedata could keep using node_data directly.
 
-Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") (Commit id
-based on libnvdimm-for-next tree)
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
----
- arch/powerpc/platforms/pseries/papr_scm.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
----
-Changelog:
-v1 -> v2
-- Rebase and tested the fix patch changes on top of libnvdimm-for-next branch
-
-- Add stub function for papr_scm_pmu_register function to handle
-  the CONFIG_PERF_EVENTS=n case.
-
-- Move the position of macro "to_nvdimm_pmu" inorder to merge it in CONFIG_PERF_EVENTS=y
-  block.
-
-- The initial part of arch/powerpc/platforms/pseries/papr_scm.c could be moved to a
-  headerfile, will work on this in the follow up patchset.
----
-diff --git a/arch/powerpc/platforms/pseries/papr_scm.c b/arch/powerpc/platforms/pseries/papr_scm.c
-index 4dd513d7c029..9dba9e71fde9 100644
---- a/arch/powerpc/platforms/pseries/papr_scm.c
-+++ b/arch/powerpc/platforms/pseries/papr_scm.c
-@@ -69,8 +69,6 @@
- #define PAPR_SCM_PERF_STATS_EYECATCHER __stringify(SCMSTATS)
- #define PAPR_SCM_PERF_STATS_VERSION 0x1
- 
--#define to_nvdimm_pmu(_pmu)	container_of(_pmu, struct nvdimm_pmu, pmu)
--
- /* Struct holding a single performance metric */
- struct papr_scm_perf_stat {
- 	u8 stat_id[8];
-@@ -346,6 +344,9 @@ static ssize_t drc_pmem_query_stats(struct papr_scm_priv *p,
- 	return 0;
- }
- 
-+#ifdef CONFIG_PERF_EVENTS
-+#define to_nvdimm_pmu(_pmu)	container_of(_pmu, struct nvdimm_pmu, pmu)
-+
- static int papr_scm_pmu_get_value(struct perf_event *event, struct device *dev, u64 *count)
- {
- 	struct papr_scm_perf_stat *stat;
-@@ -558,6 +559,10 @@ static void papr_scm_pmu_register(struct papr_scm_priv *p)
- 	dev_info(&p->pdev->dev, "nvdimm pmu didn't register rc=%d\n", rc);
- }
- 
-+#else
-+static void papr_scm_pmu_register(struct papr_scm_priv *p) { }
-+#endif
-+
- /*
-  * Issue hcall to retrieve dimm health info and populate papr_scm_priv with the
-  * health information.
+Thanks!
 -- 
-2.31.1
-
+Michal Hocko
+SUSE Labs

@@ -2,124 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183EC4E5AAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA174E5A97
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344947AbiCWVcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S241081AbiCWVZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240867AbiCWVcD (ORCPT
+        with ESMTP id S229792AbiCWVZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:32:03 -0400
-X-Greylist: delayed 453 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Mar 2022 14:30:32 PDT
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF93D3E0EE;
-        Wed, 23 Mar 2022 14:30:32 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4KP1Xz15lyzDs6Q;
-        Wed, 23 Mar 2022 14:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1648070579; bh=K5DayJKzywfJ8rV0t5+qTTJdDuq8sxKxz9R1nJWR6v0=;
-        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
-        b=efwQCJNGWb3akNgwGKrZEqvn2jHIW0+yj/ELXOU/nsFhcwWR2dGCaJIYR2c86tXDo
-         L4QzMDn4IL56xtKoZogZUOXVI6a3XCMjccamKMzwWsW6d1dlVjCv3Mn5Zmx41qpBgH
-         VzWxTajgfNSZWd7XiaFzPsh7na5X2Vb7TdaXYBsQ=
-X-Riseup-User-ID: 3E5567DDA8FA81198A5EBD1492A1B1F43CA8B82C4894982B0AA93A2620D2FCED
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4KP1Xx5LxLz1y9M;
-        Wed, 23 Mar 2022 14:22:57 -0700 (PDT)
-Message-ID: <275245e8048fa124055d9ff3d10ce6562294483a.camel@riseup.net>
-Subject: Re: [PATCH] HID: logitech-hidpp: support Color LED feature (8071).
-From:   Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>
-To:     Manuel =?ISO-8859-1?Q?Sch=F6nlaub?= <manuel.schoenlaub@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <Yifr4etBFPu1a2Ct@hermes>
-References: <Yifr4etBFPu1a2Ct@hermes>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-7NA5b+BMyLiRNR4ZGUnP"
-Date:   Wed, 23 Mar 2022 21:22:49 +0000
+        Wed, 23 Mar 2022 17:25:16 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94B7B10FFF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:23:46 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 7276F92009C; Wed, 23 Mar 2022 22:23:44 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 6C84E92009B;
+        Wed, 23 Mar 2022 21:23:44 +0000 (GMT)
+Date:   Wed, 23 Mar 2022 21:23:44 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [GIT pull] x86/irq for v5.18-rc1
+In-Reply-To: <CAHk-=wg_Kyh4zVmBSc4H79jH+yv9wN7dMsf-5x=EDrORbL3fuQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2203232114180.52439@angie.orcam.me.uk>
+References: <164786042536.122591.4459156564791679956.tglx@xen13> <164786043041.122591.4693682080153649212.tglx@xen13> <CAHk-=wg_Kyh4zVmBSc4H79jH+yv9wN7dMsf-5x=EDrORbL3fuQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 21 Mar 2022, Linus Torvalds wrote:
 
---=-7NA5b+BMyLiRNR4ZGUnP
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> Because that stupid IRT routing table code already been reported to cause bugs:
+> 
+>     https://lore.kernel.org/all/a2791312-2957-27e6-43af-c805bbb90266@collabora.com/
+> 
+> which seems to be because the $IRT signature check is complete garbage:
+> 
+> > +       for (addr = (u8 *)__va(0xf0000); addr < (u8 *)__va(0x100000); addr++) {
+> > +               rt = pirq_convert_irt_table(addr);
+> > +               if (rt)
+> > +                       return rt;
+> 
+> The above doesn't seem like it could really ever have been tested
+> properly, since it will walk off the end of that __va(0x100000)
+> address: it will walk every byte up to the 1MB physical address, and
+> it will try to find that $IRT signature there, but if it never finds
+> it, IT WILL CHECK THE SIGNATURE PAST THE 1MB mark!
 
-On Tue, 2022-03-08 at 16:50 -0700, Manuel Sch=C3=B6nlaub wrote:
-> The HID++ protocol allows to set multicolor (RGB) to a static color.
-> Multiple of such LED zones per device are supported.
-> This patch exports said LEDs so that they can be set from userspace.
->=20
-> Signed-off-by: Manuel Sch=C3=B6nlaub <manuel.schoenlaub@gmail.com>
-> ---
-> =C2=A0drivers/hid/hid-logitech-hidpp.c | 188 ++++++++++++++++++++++++++++=
-+++
-> =C2=A01 file changed, 188 insertions(+)
+ Drat!  I did verify this code in a simulated environment that does supply 
+a $IRT table (for a reporter who has an actual system; I'm not lucky 
+enough to have one), however somehow I didn't think of verifying it with a 
+setup that has neither a $PIR nor a $IRT table.  Therefore this issue has 
+slipped ($PIR scanner works in 16-byte intervals, so it escapes the range
+overrun), and then of course things started moving only while I am away 
+enjoying Italian mountains.  Oh well, nobody's perfect.
 
-*snip*
+ Thanks for narrowing this down, I'll post a fixed version on or shortly 
+after this coming weekend.  And sorry for the mess-up!
 
-Hi Manuel,
-
-Thanks for putting this forward, although I am not sure if this is the best=
- way
-to handle this.
-
-Before anything, could you elaborate a bit on what lead to you wanting this=
-?
-
-There are a couple of reasons why merging this in the kernel might be
-problematic.
-
-1) I don't think we will ever support the full capabilities of the devices,=
- so
-configuration via userspace apps will always be required, and here we are
-introducing a weird line between the two.
-
-2) There is already an ecosystem of userspace configuration apps, with whic=
-h
-this would conflict. They might not be in the best maintenance state due to=
- lack
-of time from the maintainers, but moving this functionality to the kernel, =
-which
-is harder change, and harder to ship to users, will only make that worse.
-
-Cheers,
-Filipe La=C3=ADns
-
---=-7NA5b+BMyLiRNR4ZGUnP
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEE0jW0leqs33gyftiw+JPGdIFqqV0FAmI7j6kACgkQ+JPGdIFq
-qV3jwQ/8DPkEGDhXfUMS/tEHfeP3AMV3pKrpIP0ccAWDQUCJdmowjGrdrbM/AVbs
-3RIxMULEuIk94kY0oQbmumQhbd3xyGC8AgQ1F0jgVc94w3RQg4R4YqdMk7HLeqrc
-GfrO/u2RUR6T5B5+oas0LZ/9HmS/wbPdVg8B1Ucvs7Zk9090gyx0HxXDVg/VJ6kj
-HRG2BH1c9wDDHv4mRcZ0n8gsmhzHEFkpeCDeUEmgyJZ+LC11DdVjMGIl3vB2HXPC
-WcHNjz5OIrWZKSqdoiyN6yUZqc6GuoPhB8FW+kRNfUnQA5kZFAQrTZDfQ709HOj2
-cJ9QylEyJy98pGLRRwoev+yX9hKFwmRDnS8H2TqiKCWcuS+GMedFtO8mJRFSSaei
-7yfN+Udw8fWm26ctitqO7RmUuEs9V0WCIi0DkjFYhf9oqYWZUlxC1xuJYSR3Nt9A
-7eytHD6TWmL3x9GCMs3YbSVd6xxPgwDOwnx6PwaopZppyLYsQjIzRCwyznea17Tv
-DNcfZUdijLORD4G2uiq5FhlRT5Pjly38TfYTen9PsNwMScYccp4mDX2xToRTo/0A
-YTZk+Gpy4hDDEw7nXhCq8FuDniK1pFrRUVO8BUfZmc3drUDk/lAQmzjbPQoWEE0J
-c6t9Zl26T1xQY+htIwhWMUfyTpWopdUmFilQLCi/yatiw19V5ak=
-=LrbX
------END PGP SIGNATURE-----
-
---=-7NA5b+BMyLiRNR4ZGUnP--
+  Maciej

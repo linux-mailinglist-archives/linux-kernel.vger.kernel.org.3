@@ -2,100 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A135B4E5315
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8744E531D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236476AbiCWNZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S244283AbiCWN03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244198AbiCWNZP (ORCPT
+        with ESMTP id S236642AbiCWN00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:25:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F7A2DD67;
-        Wed, 23 Mar 2022 06:23:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5479615E2;
-        Wed, 23 Mar 2022 13:23:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4097C340E8;
-        Wed, 23 Mar 2022 13:23:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648041825;
-        bh=8Xwrt+yAp5wzjaRWkS8R/tdZf2ywTiZm3wtOn2sTi5U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bqbzj3WIZX0chTD/7XcSnjg1sEm38Y1Kh1C9TybT7Q+LCWigyybpsEWKiVHnHVldf
-         9CWv9MvkPOPnp/hEXIfOETJpikchS8g7lWQopuYkq1RO6KEjGR8gnGSrW61+Bb3hdo
-         XZ81la4UP5nuo95cTZ/XUTytITQOcydf6Wox1Q1wdxqy9GBAZTzPiqvx2Qv6oPmwme
-         2NLoJ8OByQ8JZjp0uA614FpjHL9XwM72XrAYViPzVZOKq0tlx0AirEWiqvkyh9GB3G
-         BLHGpquDlwhX9+sbWgJ/3xtkq76MC/wfTn+BUmEArNyVggkl3IHtXmn8PhJVwN+PVt
-         vzWCjVTaGDBzw==
-Date:   Wed, 23 Mar 2022 08:23:43 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mick Lorain <micklorain@protonmail.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] PCI: Avoid broken MSI on SB600 USB devices
-Message-ID: <20220323132343.GA1282700@bhelgaas>
+        Wed, 23 Mar 2022 09:26:26 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E7342A23
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:24:53 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id h1so1843391edj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ofARB/tR+RVoABReGEuRsRQFB51fG8u0uAhot0zbmMw=;
+        b=kiS6nqG1b2tpgSMlBhPduqhTR+uUp0NChTeF3Di3s0Gjmx4bKjIIt1C21Otat+l2Q0
+         4riiJxQWeItg6q+1D7JmS8q2bknHa18aANAwBErwq0pxH33tw+zQsMdsN8+rKLqNK5mG
+         DSpYL7ceqguq/vwomiRqGOlI+eqIUjjbEr7eU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ofARB/tR+RVoABReGEuRsRQFB51fG8u0uAhot0zbmMw=;
+        b=WtTMUznifpI1AF9nU4quUWZ5fhGnhDlxSLkEUS43xrx7tQmXzzGlALMmbFHS26nvtc
+         ZfdZjd5Lo9CS0ZY/tegw+Rp3R6GeSHbENjZDudW1snXltuxQvNEK4I1ryuS0eW3j2RqP
+         8vusx24x4+FcjLwXojyarAbIqO7pym/YUOs/UUGPYmgKhCHEcNAKCD6QWErpHrSL7pvt
+         +RNsPlJ2l3bcFxdk7jDlR4OiCKrKmlu7gwipc4hZmL1HGzywQwUgpxHKJNpPfqp/kGRT
+         KjXipYZN7A0C4gWXcnA18iOETOMfi1U+9tr7iDK8K/Am1s1bi6D0R79qwyq+BnG9m3KE
+         21YA==
+X-Gm-Message-State: AOAM531fFPKBvX7ByU62d7AfSdP3brCt94Z7y5qnSmgB6uTj5mSty97E
+        24FEOmxc8b1CJEXreG9HuLftTNF/9Ovie1Ke7EkPXA==
+X-Google-Smtp-Source: ABdhPJyRgW2FVFPWTwmyfY3ygJgDF0P1WjrCCbHGjTDRam6d8g5Mn8TpLo/cwFgpJpNZHxGt28DfDlUbH73eq61XwZ8=
+X-Received: by 2002:a05:6402:50cf:b0:418:ee57:ed9 with SMTP id
+ h15-20020a05640250cf00b00418ee570ed9mr34726129edb.37.1648041891743; Wed, 23
+ Mar 2022 06:24:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a1bf31d6a8957b837b999c02875456b805efdff1.camel@infradead.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220322192712.709170-1-mszeredi@redhat.com> <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+In-Reply-To: <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 23 Mar 2022 14:24:40 +0100
+Message-ID: <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 12:43:48PM +0000, David Woodhouse wrote:
-> On Wed, 2022-03-23 at 10:03 +0200, Andy Shevchenko wrote:
-> > On Wed, Mar 23, 2022 at 4:26 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > 
-> > > On Mon, Mar 21, 2022 at 01:34:46PM -0500, Bjorn Helgaas wrote:
-> > > > From: Bjorn Helgaas <bhelgaas@google.com>
-> > > > Some ATI SB600 USB adapters advertise MSI, but if INTx is disabled by
-> > > > setting PCI_COMMAND_INTX_DISABLE,
-> > 
-> > > > MSI doesn't work either.
-> > 
-> > I think this is not correct.
-> 
-> I think it was perfectly correct until you added a couple of newlines
-> in the middle of the sentence, then took it out of context. :)
-> 
-> "If INTX is disabled, MSI doesn't work either".
-> 
-> But really, in that case surely the solution is *not* to disable INTX
-> for this device. Then MSI will work, right?
+On Wed, 23 Mar 2022 at 12:43, Christian Brauner <brauner@kernel.org> wrote:
 
-That's what Andy's original patch [1] does, and MSI *does* work if we
-skip disabling INTx.
+> Yes, we really need a way to query for various fs information. I'm a bit
+> torn about the details of this interface though. I would really like if
+> we had interfaces that are really easy to use from userspace comparable
+> to statx for example.
 
-I'm hesitant [2] about that approach because it creates two classes of
-devices using MSI (most have INTx disabled but a few do not), which
-makes it harder to reason about them.  For example, there are non-MSI
-paths that read or set the "disable INTx" bit, so we have to consider:
+The reason I stated thinking about this is that Amir wanted a per-sb
+iostat interface and dumped it into /proc/PID/mountstats.  And that is
+definitely not the right way to go about this.
 
-  - will readers be surprised if a device using MSI has INTx enabled?
+So we could add a statfsx() and start filling in new stuff, and that's
+what Linus suggested.  But then we might need to add stuff that is not
+representable in a flat structure (like for example the stuff that
+nfs_show_stats does) and that again needs new infrastructure.
 
-  - will writers care disabling INTx disables *all* interrupts, not
-    just INTx?
+Another example is task info in /proc.  Utilities are doing a crazy
+number of syscalls to get trivial information.  Why don't we have a
+procx(2) syscall?  I guess because lots of that is difficult to
+represent in a flat structure.  Just take the lsof example: tt's doing
+hundreds of thousands of syscalls on a desktop computer with just a
+few hundred processes.
 
-So skipping the INTx disable certainly works most of the time and
-*likely* works all the time, but there are cases that could be
-problems and we don't have a compelling reason to use MSI on these
-devices.
+So I'm trying to look beyond fsinfo and about how we could better
+retrieve attributes, statistics, small bits and pieces within a
+unified framework.
 
-[1] https://lore.kernel.org/r/20220314101448.90074-1-andriy.shevchenko@linux.intel.com
-[2] https://lore.kernel.org/r/20220318210947.GA845994@bhelgaas
+The ease of use argument does not really come into the picture here,
+because (unlike stat and friends) most of this info is specialized and
+will be either consumed by libraries, specialized utilities
+(util-linux, procos) or with a generic utility application that can
+query any information about anything that is exported through such an
+interface.    That applies to plain stat(2) as well: most users will
+not switch to statx() simply because that's too generic.  And that's
+fine, for info as common as struct stat a syscall is warranted.  If
+the info is more specialized, then I think a truly generic interface
+is a much better choice.
+
+>  I know having this generic as possible was the
+> goal but I'm just a bit uneasy with such interfaces. They become
+> cumbersome to use in userspace. I'm not sure if the data: part for
+> example should be in this at all. That seems a bit out of place to me.
+
+Good point, reduction of scope may help.
+
+> Would it be really that bad if we added multiple syscalls for different
+> types of info? For example, querying mount information could reasonably
+> be a more focussed separate system call allowing to retrieve detailed
+> mount propagation info, flags, idmappings and so on. Prior approaches to
+> solve this in a completely generic way have gotten us not very far too
+> so I'm a bit worried about this aspect too.
+
+And I fear that this will just result in more and more ad-hoc
+interfaces being added, because a new feature didn't quite fit the old
+API.  You can see the history of this happening all over the place
+with multiple new syscall versions being added as the old one turns
+out to be not generic enough.
+
+I think a new interface needs to
+
+  - be uniform (a single utility can be used to retrieve various
+attributes and statistics, contrast this with e.g. stat(1),
+getfattr(1), lsattr(1) not to mention various fs specific tools).
+
+ - have a hierarchical namespace (the unix path lookup is an example
+of this that stood the test of time)
+
+ - allow retrieving arbitrary text or binary data
+
+And whatever form it takes, I'm sure it will be easier to use than the
+mess we currently have in various interfaces like the mount or process
+stats.
+
+Thanks,
+Miklos

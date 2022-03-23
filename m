@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA174E5A97
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D844E5A9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241081AbiCWVZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        id S245740AbiCWV0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiCWVZQ (ORCPT
+        with ESMTP id S241085AbiCWV0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:25:16 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94B7B10FFF
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:23:46 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 7276F92009C; Wed, 23 Mar 2022 22:23:44 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 6C84E92009B;
-        Wed, 23 Mar 2022 21:23:44 +0000 (GMT)
-Date:   Wed, 23 Mar 2022 21:23:44 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [GIT pull] x86/irq for v5.18-rc1
-In-Reply-To: <CAHk-=wg_Kyh4zVmBSc4H79jH+yv9wN7dMsf-5x=EDrORbL3fuQ@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2203232114180.52439@angie.orcam.me.uk>
-References: <164786042536.122591.4459156564791679956.tglx@xen13> <164786043041.122591.4693682080153649212.tglx@xen13> <CAHk-=wg_Kyh4zVmBSc4H79jH+yv9wN7dMsf-5x=EDrORbL3fuQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 23 Mar 2022 17:26:46 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDE113CCC;
+        Wed, 23 Mar 2022 14:25:16 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id pv16so5512236ejb.0;
+        Wed, 23 Mar 2022 14:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vysV2YUxUhlwVd6KhPoL0mZSMTmNq5rE3h8xE9VrJx8=;
+        b=PtPwjommumuKRrAvDNWWBgum++vMOpb0uWE806D+fInZ45L5E/NJ9NyFzFl2g2MRWp
+         NTUwDXLUNCmW9F9V1lLFtHtdGzUxc/Aq6/j4pJSIYNzRUiEGUZnrX6zZEwFDN4bimt88
+         FR9Lssy5lLk0/a1O4jgG4MTg81Q5gnxXNnQJVnUe8Zdpbm0XHwURNoPp4pY4Lo32K1kM
+         FPz4sr1TxjtV4lRX+yj5S8WnV8JN4CJQJ6DuVHzcM5WDtMikxSxTMlfFUBtHFJU7+XV/
+         bRcP42q+GfMms+7ZmvTkae3LSHRSblz8Qd2FSZh5ZN7qfpqg3H8SbiKx8myY9Sgvm4hP
+         baWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=vysV2YUxUhlwVd6KhPoL0mZSMTmNq5rE3h8xE9VrJx8=;
+        b=WkOKKjbgaPusCt+DimFWTlj85j6BbXwULMx6zjosWtqeinOiK7kpEyaKgxuodinU9Q
+         GtU1pXa556a91uIwjRbFqLDVlE2DlFodAaxPPCAINsj/jPwS6VG0DB7AkasEQ8XR+2l3
+         SJZ2oDjcLwJOu9ara9LJJQoAaDeBIp8/3G+VaKPkNYl63RFKZddB2twcnYsuSbcu8C8P
+         NzkcB8XTV4h6wzcnxaxPsHCHo0ZEdgr0izirWLx0+T2m8qty6DAo6cjdAIA3SBCfCqhq
+         qmzg4363wY7bjV7dFRsK2SgqWRG5g5FRG2864nSwo8lyyv8olVNS3t8qD5NYevUkBb3D
+         E4eQ==
+X-Gm-Message-State: AOAM531UZJVJiVR/FWV+G+Lij1K/SxT3l/Fg068i6gIddt2wZc6iM8Sa
+        nSzKs4IkDj/kJPIvOirjGDSv0zCi7wM/Gw==
+X-Google-Smtp-Source: ABdhPJwgfyQqYCEPw63TtPi+2J3FKbcZmNiqLGPwcV4bZp0KThU5s1y2CY7v1zeV7VqpCCsJaRIQtA==
+X-Received: by 2002:a17:906:dc8f:b0:6e0:5ce7:d80e with SMTP id cs15-20020a170906dc8f00b006e05ce7d80emr2228061ejc.435.1648070714984;
+        Wed, 23 Mar 2022 14:25:14 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+        by smtp.gmail.com with ESMTPSA id d23-20020aa7d5d7000000b00418f7b2f1dbsm466065eds.71.2022.03.23.14.25.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 14:25:14 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 22:25:11 +0100
+From:   Petr Vorel <petr.vorel@gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 15/15] arm64: dts: qcom: msm8994: Add mmc aliases
+Message-ID: <YjuQNx/zEfq5/9JR@pevik>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+References: <20220319174645.340379-1-konrad.dybcio@somainline.org>
+ <20220319174645.340379-16-konrad.dybcio@somainline.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220319174645.340379-16-konrad.dybcio@somainline.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022, Linus Torvalds wrote:
+Hi Konrad, all,
 
-> Because that stupid IRT routing table code already been reported to cause bugs:
-> 
->     https://lore.kernel.org/all/a2791312-2957-27e6-43af-c805bbb90266@collabora.com/
-> 
-> which seems to be because the $IRT signature check is complete garbage:
-> 
-> > +       for (addr = (u8 *)__va(0xf0000); addr < (u8 *)__va(0x100000); addr++) {
-> > +               rt = pirq_convert_irt_table(addr);
-> > +               if (rt)
-> > +                       return rt;
-> 
-> The above doesn't seem like it could really ever have been tested
-> properly, since it will walk off the end of that __va(0x100000)
-> address: it will walk every byte up to the 1MB physical address, and
-> it will try to find that $IRT signature there, but if it never finds
-> it, IT WILL CHECK THE SIGNATURE PAST THE 1MB mark!
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
- Drat!  I did verify this code in a simulated environment that does supply 
-a $IRT table (for a reporter who has an actual system; I'm not lucky 
-enough to have one), however somehow I didn't think of verifying it with a 
-setup that has neither a $PIR nor a $IRT table.  Therefore this issue has 
-slipped ($PIR scanner works in 16-byte intervals, so it escapes the range
-overrun), and then of course things started moving only while I am away 
-enjoying Italian mountains.  Oh well, nobody's perfect.
+BTW Documentation/devicetree/bindings/mmc/sdhci-msm.txt
+and real code for other SoCs uses sdhc_1 and sdhc_2.
 
- Thanks for narrowing this down, I'll post a fixed version on or shortly 
-after this coming weekend.  And sorry for the mess-up!
+I suppose sdhc[12] (without underscore is the preferred variant.
 
-  Maciej
+Kind regards,
+Petr

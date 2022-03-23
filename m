@@ -2,109 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3714E4ED1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058914E4ED5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242997AbiCWJC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 05:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S243020AbiCWJDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 05:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbiCWJC0 (ORCPT
+        with ESMTP id S234009AbiCWJDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 05:02:26 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3013D6EB0D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 02:00:57 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id m22so1069253pja.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 02:00:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vbfwNZ672/QivizbpxYzAD70C990QzKhms0ROZ5rRjk=;
-        b=Ab35ObTt3m/gbH6C1Zds39aaaYWaVb6ZBPHzy4/6PeVpzh1QZXhoWQ1HJPlOfNpnhG
-         dBmsIxIV5kPgpN0wxJTkNeUY7wFCjFkhpM39aCLJg5Y8tCqiNVrWrW+GtTf1XU0rz0UI
-         5cxPrHkRRSHR4MMW34IXmYArx36xNyNMjQuz4FGTzuVFIwx3zGgmyq11nBQWxbGN298W
-         rwep3U21MPSdEZc04u6pRJqo6AQbEgAy74iC+Hm51wTojvjulgzg3dxzfbNlkKLof4QW
-         EbJ3ppmOvVFm5N+dQz1r46b5KBoN2hR4lmavmAaklqUArGZudXDO4dv2cUAIg4zSUMDt
-         9i/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vbfwNZ672/QivizbpxYzAD70C990QzKhms0ROZ5rRjk=;
-        b=ElAfqbq5b3EAV3E1a/SYGvYdsPHTLb4ioSPLk6hXM9LhTFcgIoP2MLWoni6ldKcUoK
-         WY/FUcLz1/GKrOu1tfYdosww5oaUHkSxdhTzxegfL5CP+2rmbvhxQSzAqVnNLArBe/ny
-         k9kdo3ZFLt0dbnVBvDK5u6SNRRugrkd+eCA+BKbOrpxIPjMAzQHQpw1dBYpr+j31DmFl
-         ctGWQTjaHa7Di4fQzItyeWeQStrUGSwsP5T/XKEHlvYIFVV/OoztlGW+m6zS+D58Hvbp
-         w5cBpIjnLeHTCnnexi38V2eK18IvPHCWkG4ZHTOL3Pu0mVyF1QHF05Yoozxx2O1BMhfo
-         7zQQ==
-X-Gm-Message-State: AOAM530fHo0iJIntNTRNNILMttjAwiipAWck/GiFv0HWHH908Hw4AyYL
-        goI/l6M9iJmqkrwzl3ktpbcDIw==
-X-Google-Smtp-Source: ABdhPJytP6LLZxBu0sisrxqgLnFnXaLVrohP/INGBzvNNYJQLbSBjeWW4JywHU+xzfySv/O/MnjPEA==
-X-Received: by 2002:a17:90a:a594:b0:1bc:5def:a652 with SMTP id b20-20020a17090aa59400b001bc5defa652mr10268506pjq.167.1648026056686;
-        Wed, 23 Mar 2022 02:00:56 -0700 (PDT)
-Received: from localhost.localdomain ([223.182.250.48])
-        by smtp.gmail.com with ESMTPSA id i6-20020a633c46000000b003817d623f72sm19642115pgn.24.2022.03.23.02.00.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 02:00:56 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH] RISC-V: Enable perf events by default
-Date:   Wed, 23 Mar 2022 14:30:25 +0530
-Message-Id: <20220323090025.546808-1-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 23 Mar 2022 05:03:10 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326116EB0D;
+        Wed, 23 Mar 2022 02:01:40 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KNj3b1ngBz67PtB;
+        Wed, 23 Mar 2022 16:59:55 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 23 Mar 2022 10:01:37 +0100
+Received: from [10.47.85.68] (10.47.85.68) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 23 Mar
+ 2022 09:01:36 +0000
+Message-ID: <378065de-3cb8-b44f-66e9-747960bcd990@huawei.com>
+Date:   Wed, 23 Mar 2022 09:01:33 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 01/11] blk-mq: Add blk_mq_init_queue_ops()
+To:     Bart Van Assche <bvanassche@acm.org>, <axboe@kernel.dk>,
+        <damien.lemoal@opensource.wdc.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hch@lst.de>, <ming.lei@redhat.com>,
+        <hare@suse.de>
+CC:     <chenxiang66@hisilicon.com>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <dm-devel@redhat.com>,
+        <beanhuo@micron.com>
+References: <1647945585-197349-1-git-send-email-john.garry@huawei.com>
+ <1647945585-197349-2-git-send-email-john.garry@huawei.com>
+ <e74776f0-505b-8b4f-effd-519bce9bdc79@acm.org>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <e74776f0-505b-8b4f-effd-519bce9bdc79@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.85.68]
+X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let us enable perf events by default in RV32 and RV64 defconfigs
-so that we can use RISC-V PMU drivers on various RISC-V platforms.
+On 23/03/2022 02:57, Bart Van Assche wrote:
+> On 3/22/22 03:39, John Garry wrote:
+>> Add an API to allocate a request queue which accepts a custom set of
+>> blk_mq_ops for that request queue.
+>>
+>> The reason which we may want custom ops is for queuing requests which we
+>> don't want to go through the normal queuing path.
+> 
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/configs/defconfig      | 1 +
- arch/riscv/configs/rv32_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+Hi Bart,
 
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index f120fcc43d0a..57aaedc7cf74 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -15,6 +15,7 @@ CONFIG_CHECKPOINT_RESTORE=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
- # CONFIG_SYSFS_SYSCALL is not set
-+CONFIG_PERF_EVENTS=y
- CONFIG_SOC_MICROCHIP_POLARFIRE=y
- CONFIG_SOC_SIFIVE=y
- CONFIG_SOC_VIRT=y
-diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-index 8b56a7f1eb06..21d422e740d5 100644
---- a/arch/riscv/configs/rv32_defconfig
-+++ b/arch/riscv/configs/rv32_defconfig
-@@ -15,6 +15,7 @@ CONFIG_CHECKPOINT_RESTORE=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
- # CONFIG_SYSFS_SYSCALL is not set
-+CONFIG_PERF_EVENTS=y
- CONFIG_SOC_SIFIVE=y
- CONFIG_SOC_VIRT=y
- CONFIG_ARCH_RV32I=y
--- 
-2.25.1
+ > Custom ops shouldn't be required for this. See e.g. how tmf_queue
+ > is used in the UFS driver for an example of a queue implementation
+ > with custom operations and that does not require changes of the block
+ > layer core.
 
+The UFS code uses a private tagset (in ufs_hba.tmf_tag_set) for only 
+management of TMF tags/memories. This tagset does not really have any 
+custom operations. All it has is a stub of .queue_rq CB in 
+ufshcd_queue_tmf() and that is because this CB is compulsory.
+
+As for the idea of having multiple tagsets per shost with real custom 
+operations, this idea was mentioned before, but I think managing 
+multiple tagsets could be trouble. For a start, it would mean that we 
+need a distinct allocation of reserved and regular tags, and sometimes 
+we don't want this - as Hannes mentioned earlier, many HBAs have low 
+queue depth and cannot afford to permanently carve out a bunch of 
+reserved tags.
+
+Thanks,
+John

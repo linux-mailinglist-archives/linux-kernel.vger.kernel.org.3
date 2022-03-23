@@ -2,190 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3794E4FAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6014E4FB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243325AbiCWJr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 05:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S243323AbiCWJsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 05:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243312AbiCWJrX (ORCPT
+        with ESMTP id S239488AbiCWJsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 05:47:23 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2569911C1E;
-        Wed, 23 Mar 2022 02:45:53 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22N9QBx9018452;
-        Wed, 23 Mar 2022 09:45:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=7LKmfYkYIAAQwIlj3rg0LsAEbnQObOItHI07v0dw0V4=;
- b=VL5MWpEXkIMAVk8EEV1rWblT12YxmIkoUrOI7XKS4qDh6fq/YmCWVEEljQQmczilQFDC
- Ro8Q8kSg/INEmPuC2KF0ajLK6ZY6OHqbnCq4usMrO/8OHgF9RaH2avVfbsL2JivpMVto
- jGglXOtQXhKZTHqKO2U17sWwwZHrgWPn7s7og7A9mzUNXaviWpndM7juP6mSNyScR9FA
- g6ivjJgZEpTnqgcoch/K4qUQvmC7cKj5cpQtuBERiZDdO5eoJRWZDOC7nuSaAiIxSl8w
- Yj4lDrkzIlX0PbWLJ8QxvJyAPJk/fLox6EnCO+M0kYN0/E7r7UJd+3Q7aCPfubD9U21s lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f00wr8bff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 09:45:53 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22N9SO7s022985;
-        Wed, 23 Mar 2022 09:45:52 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f00wr8beq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 09:45:52 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22N9axDL024844;
-        Wed, 23 Mar 2022 09:45:50 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ew6ej08gq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 09:45:50 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22N9jlj216908550
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Mar 2022 09:45:47 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 392F152050;
-        Wed, 23 Mar 2022 09:45:47 +0000 (GMT)
-Received: from [9.171.50.35] (unknown [9.171.50.35])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A6B615204F;
-        Wed, 23 Mar 2022 09:45:46 +0000 (GMT)
-Message-ID: <ce84fb30-30b4-2ff6-e5dc-4b7da5f47c85@linux.ibm.com>
-Date:   Wed, 23 Mar 2022 10:45:46 +0100
+        Wed, 23 Mar 2022 05:48:37 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BC810FDD;
+        Wed, 23 Mar 2022 02:47:07 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id z92so1104719ede.13;
+        Wed, 23 Mar 2022 02:47:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=KHm72o5Y4MjVl7rRhvPVahUTvwKrMwJLAH7A+mLGnhw=;
+        b=wa50lWNVFGL+Lek+Iu//NdwQiOcMLZmvNNMIKk2wR2bRl2t10UjFETTzYn73iWLahv
+         aXJ3UnXOMJRO0LBOMrOxpNOMDQlBkeEGx8Jm78hfXAPjBbKZJ8evBiW7W8NyVmm1eMR7
+         7GhKLl4zoC3TdTyKZWkUdB2Y7EwoqTxcURWSMKKrtFJp8wvzcF/bFyoZzRXmrhFQWT58
+         KDr4W8R76Pyzl+Ut7AWK+Dq5kMhA/WKHD42dtmGRZKEnNd2ICVP2u3B+DD4h9n0K12Cw
+         Cc/CRp1VcdSyFE9P6cqiJMMqUIginxE1J1HhX0gbDEy7LIbNKsfUv1HpImqn2/Wr045O
+         LDPA==
+X-Gm-Message-State: AOAM531tSNHmYRBBMtDPwEKRWwDqzK9QcebPNA7f0859pmCNMdKe2YAb
+        0j7MTpx6mJrXkt/dFIvhQTz1sVarqT4=
+X-Google-Smtp-Source: ABdhPJy7Te9mb6SAVMrVpJ0UoTWaTwu2FW1kGcfE7g15tD/BYULe2tkh14yK8RQhDHew1/1SerTqBA==
+X-Received: by 2002:aa7:c683:0:b0:418:f5f3:9684 with SMTP id n3-20020aa7c683000000b00418f5f39684mr33731202edq.184.1648028826179;
+        Wed, 23 Mar 2022 02:47:06 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm9473886eji.67.2022.03.23.02.47.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 02:47:05 -0700 (PDT)
+Message-ID: <e6d014ca-4568-20f2-0254-e8fe51f30e5d@kernel.org>
+Date:   Wed, 23 Mar 2022 10:47:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] KVM: s390: Fix lockdep issue in vm memop
+ Thunderbird/91.5.0
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh
+ on max17055
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220322153204.2637400-1-scgl@linux.ibm.com>
- <44618f05-9aee-5aa5-b036-dd838285b26f@linux.ibm.com>
- <95c28949-8732-8812-c255-79467dafb5c8@linux.ibm.com>
- <7bcd8720-1c92-4e14-0c93-51d604f017a4@linux.ibm.com>
- <968319ed-ae4b-02fe-41c4-06799e940d94@linux.ibm.com>
- <8dc4c812-5c92-fcb8-9322-efc41fc73e1e@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <8dc4c812-5c92-fcb8-9322-efc41fc73e1e@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
+ <7080597.aeNJFYEL58@pliszka>
+ <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
+ <2957015.e9J7NaK4W3@pliszka>
+In-Reply-To: <2957015.e9J7NaK4W3@pliszka>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: N1fkA2LGWxYrCraW2S9-sUeT7aYt2gSA
-X-Proofpoint-ORIG-GUID: f-zumIiEju4Yu7_UvVZvjBca1r-eFfjS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-23_05,2022-03-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 adultscore=0 mlxlogscore=999
- impostorscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203230055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Am 23.03.22 um 10:39 schrieb Janis Schoetterl-Glausch:
-> On 3/23/22 10:30, Christian Borntraeger wrote:
->>
->>
->> Am 23.03.22 um 09:57 schrieb Janosch Frank:
->>> On 3/23/22 09:52, Janis Schoetterl-Glausch wrote:
->>>> On 3/23/22 08:58, Janosch Frank wrote:
->>>>> On 3/22/22 16:32, Janis Schoetterl-Glausch wrote:
->>>>>> Issuing a memop on a protected vm does not make sense,
+On 20/03/2022 21:44, Sebastian Krzyszkowiak wrote:
+> On niedziela, 20 marca 2022 13:18:49 CET Krzysztof Kozlowski wrote:
+>> On 18/03/2022 20:58, Sebastian Krzyszkowiak wrote:
+>>> On piątek, 18 marca 2022 09:22:16 CET Krzysztof Kozlowski wrote:
+>>>> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
+>>>>> Unlike other models, max17055 doesn't require cell characterization
+>>>>> data and operates on smaller amount of input variables (DesignCap,
+>>>>> VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
+>>>>> by max17042_override_por_values, however model refresh bit has to be
+>>>>> set after adjusting input variables in order to make them apply.
 >>>>>
->>>>> Issuing a vm memop on a protected vm...
+>>>>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+>>>>> ---
 >>>>>
->>>>> The cpu memop still makes sense, no?
+>>>>>  drivers/power/supply/max17042_battery.c | 73 +++++++++++++++----------
+>>>>>  include/linux/power/max17042_battery.h  |  3 +
+>>>>>  2 files changed, 48 insertions(+), 28 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/power/supply/max17042_battery.c
+>>>>> b/drivers/power/supply/max17042_battery.c index
+>>>>> c019d6c52363..c39250349a1d 100644
+>>>>> --- a/drivers/power/supply/max17042_battery.c
+>>>>> +++ b/drivers/power/supply/max17042_battery.c
+>>>>> @@ -806,6 +806,13 @@ static inline void
+>>>>> max17042_override_por_values(struct max17042_chip *chip)>
+>>>>>
+>>>>>  	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055)) {
+>>>>>  		
+>>>>>  		max17042_override_por(map, MAX17047_V_empty, config-
 >>>>
->>>> The vcpu memop does hold the vcpu->lock, so no lockdep issue.
->>>> If you issue a vcpu memop while enabling protected virtualization,
->>>> the memop might find that the vcpu is not protected, while other vcpus
->>>> might already be, but I don't think there's a way to create secure memory
->>>> concurrent with the memop.
->>>
->>> I just wanted you to make this a bit more specific since we now have vm and vcpu memops. vm memops don't make sense for pv guests but vcpu ones are needed to access the sida.
->>
->> Right, I think changing the commit messages
->> - Issuing a memop on a protected vm does not make sense
->> + Issuing a vm memop on a protected vm does not make sense
->>
->> does make sense.
-> 
-> Ok, want me to send a v2?
-
-I can fixup when applying. Done and queued for kvm.
->>
->>>
->>>>>
->>>>>> neither is the memory readable/writable, nor does it make sense to check
->>>>>> storage keys. This is why the ioctl will return -EINVAL when it detects
->>>>>> the vm to be protected. However, in order to ensure that the vm cannot
->>>>>> become protected during the memop, the kvm->lock would need to be taken
->>>>>> for the duration of the ioctl. This is also required because
->>>>>> kvm_s390_pv_is_protected asserts that the lock must be held.
->>>>>> Instead, don't try to prevent this. If user space enables secure
->>>>>> execution concurrently with a memop it must accecpt the possibility of
->>>>>> the memop failing.
->>>>>> Still check if the vm is currently protected, but without locking and
->>>>>> consider it a heuristic.
->>>>>>
->>>>>> Fixes: ef11c9463ae0 ("KVM: s390: Add vm IOCTL for key checked guest absolute memory access")
->>>>>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->>>>>
->>>>> Makes sense to me.
->>>>>
->>>>> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
->>>>>
->>>>>> ---
->>>>>>     arch/s390/kvm/kvm-s390.c | 11 ++++++++++-
->>>>>>     1 file changed, 10 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->>>>>> index ca96f84db2cc..53adbe86a68f 100644
->>>>>> --- a/arch/s390/kvm/kvm-s390.c
->>>>>> +++ b/arch/s390/kvm/kvm-s390.c
->>>>>> @@ -2385,7 +2385,16 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->>>>>>             return -EINVAL;
->>>>>>         if (mop->size > MEM_OP_MAX_SIZE)
->>>>>>             return -E2BIG;
->>>>>> -    if (kvm_s390_pv_is_protected(kvm))
->>>>>> +    /*
->>>>>> +     * This is technically a heuristic only, if the kvm->lock is not
->>>>>> +     * taken, it is not guaranteed that the vm is/remains non-protected.
->>>>>> +     * This is ok from a kernel perspective, wrongdoing is detected
->>>>>> +     * on the access, -EFAULT is returned and the vm may crash the
->>>>>> +     * next time it accesses the memory in question.
->>>>>> +     * There is no sane usecase to do switching and a memop on two
->>>>>> +     * different CPUs at the same time.
->>>>>> +     */
->>>>>> +    if (kvm_s390_pv_get_handle(kvm))
->>>>>>             return -EINVAL;
->>>>>>         if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
->>>>>>             if (access_key_invalid(mop->key))
->>>>>>
->>>>>> base-commit: c9b8fecddb5bb4b67e351bbaeaa648a6f7456912
->>>>>
+>>>> vempty);
 >>>>
+>>>>>  	}
+>>>>>
+>>>>> +
+>>>>> +	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
+>>>>> +		max17042_override_por(map, MAX17055_ModelCfg, config-
+>>>>
+>>>> model_cfg);
+>>>>
+>>>>> +		// VChg is 1 by default, so allow it to be set to 0
+>>>>
+>>>> Consistent comment, so /* */
+>>>>
+>>>> I actually do not understand fully the comment and the code. You write
+>>>> entire model_cfg to MAX17055_ModelCfg and then immediately do it again,
+>>>> but with smaller mask. Why?
 >>>
+>>> That's because VChg is 1 on POR, and max17042_override_por doesn't do
+>>> anything when value equals 0 - which means that if the whole
+>>> config->model_cfg is 0, VChg won't get unset (which is needed for 4.2V
+>>> batteries).
+>>>
+>>> This could actually be replaced with a single regmap_write.
+>>
+>> I got it now. But if config->model_cfg is 0, should VChg be unset?
 > 
+> That's a good question.
+> 
+> max17042_override_por doesn't override the register value when the given value 
+> equals zero in order to not override POR defaults with unset platform data. 
+> This way one can set only the registers that they want to change in `config` 
+> and the rest are untouched. This, however, only works if we assume that zero 
+> means "don't touch", which isn't the case for ModelCfg.
+> 
+> On the Librem 5, we need to unset VChg bit because our battery is only being 
+> charged up to 4.2V. Allowing to unset this bit only without having to touch 
+> the rest of the register was the motivation behind the current version of this 
+> patch, however, thinking about it now I can see that it fails to do that in 
+> the opposite case - when the DT contains a simple-battery with maximum voltage 
+> higher than 4.25V, VChg will be set in config->model_cfg causing the whole 
+> register to be overwritten.
+
+This is actually nice description which could be put into a comment there.
+
+> 
+> So, I see two possible solutions:
+> 
+> 1) move VChg handling to a separate variable in struct max17042_config_data. 
+> This way model_cfg can stay zero when there's no need to touch the rest of the 
+> register. This minimizes changes over current code.
+> 
+> 2) remove max17042_override_por_values in its current shape altogether and 
+> make it only deal with the values that are actually being set by the driver 
+> (and only extend it in the future as it gains more ability). Currently most of 
+> this function is only usable with platform data - is there actually any user 
+> of max17042 that would need to configure the gauge without DT in the mainline 
+> kernel? My quick search didn't find any. Do we need or want to keep platform 
+> data support at all?
+> 
+> I'm leaning towards option 2, as it seems to me that currently this driver is 
+> being cluttered quite a lot by what's essentially a dead code. Adding new 
+> parameters to read from DT for POR initialization (which is necessary for 
+> other models than MAX17055) should be rather easy, but trying to fit them into 
+> current platform_data-oriented code may be not.
+
+I am in for removal of platform data.
+
+Best regards,
+Krzysztof

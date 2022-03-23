@@ -2,95 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8804E4A9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6654E4A9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240590AbiCWBra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 21:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S240726AbiCWBrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 21:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240209AbiCWBr2 (ORCPT
+        with ESMTP id S240209AbiCWBrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 21:47:28 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCB36FF57
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:46:00 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso329479pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:46:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KqfEw4Ajc2umoSsEyMC9bwp+tt5nSd/kMf9EMGWLoi4=;
-        b=4vaApsLfR6zf1IrbRvVkpy9wfc2EULWHx9WmPyQGkaVB2vcw9V4owbJsmrC7i3pint
-         UJwGct/pLgQeEVM/my/QhKOsgLv8tt121osIxl/A8MOZzEehua9/LSQamVW/O9uM+HCj
-         tBNnTURY1hLpLxQhYZLsuQ+d2UOwyqa2xtOlx8+vz0LJp8jbuA4nvcX1GMQn3DrzmGtx
-         43o98itP8HT0uGr3+JC9JNUu+LbQhMYv6awtTP3Ahm3zTsRHLhzrN8NteaGzOCgMhENo
-         MSeToJ1V3jQYeAWcrgPKcqlcvog059xfYukstY96WRci6bE0N+npQRjJQ5gUGDX9fMw3
-         ztUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KqfEw4Ajc2umoSsEyMC9bwp+tt5nSd/kMf9EMGWLoi4=;
-        b=wCUcDZf8IYx3VyMr/q9kjoq7gzgSdADHL/4S1/RoYbuMQkc0yZDvzI632K5CsLc+Qq
-         TpYzrAj6nHp9gz8IMfvG8WpMsSNcnNzfTVJFZGK4MhrqH23IcQBKA3jCNe1lgi5N7DmL
-         XTL9UDWMVYVhD2BzY7i32S6Rro6fNPtIpt2yCnJy8NcxCoXr51IQwInKXV9YQh95cnjr
-         DtBPmouUgt7KMF5+4ndruqaICzPhUPWWuIbykQFU7+CbuZ534KGaIVL8+ILJF0CYZk0M
-         0BAZ3ik5YIfcPX0nrEEvlimOnT4LivGKlJeFMrmH3XyXJVDt45NZa+EnFcvEfReiwUYn
-         UFGw==
-X-Gm-Message-State: AOAM532xIAK0wRRTzBzmfWBDOPYnLf4m7DHiwUTUy/kLdkC1BUb4T/mb
-        ufsG+yKtpIv4aHyddFBNuyUE5CljGOmTk4LI
-X-Google-Smtp-Source: ABdhPJwQyyxMLbL7zJAzXkcfXqCH9nvzSf+WzVN+f+JHID7ZeShvkkjsIKsOErIzxLBL0DI2Wvl1og==
-X-Received: by 2002:a17:90b:1642:b0:1c6:c6d0:fbfa with SMTP id il2-20020a17090b164200b001c6c6d0fbfamr8416339pjb.218.1647999959543;
-        Tue, 22 Mar 2022 18:45:59 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e19-20020a637453000000b003821bdb8103sm14768089pgn.83.2022.03.22.18.45.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 18:45:59 -0700 (PDT)
-Message-ID: <26108737-fe0a-f3e6-f7ab-872427ca7b6b@kernel.dk>
-Date:   Tue, 22 Mar 2022 19:45:57 -0600
+        Tue, 22 Mar 2022 21:47:35 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03306FF5A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:46:02 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 23 Mar
+ 2022 09:46:01 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 23 Mar
+ 2022 09:45:59 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <clm@fb.com>, <josef@toxicpanda.com>, <dsterba@suse.com>
+CC:     <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>
+Subject: [PATCH] fs: btrfs: Remove redundant condition
+Date:   Wed, 23 Mar 2022 09:45:58 +0800
+Message-ID: <1647999958-1496-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Keith Busch <kbusch@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220323074915.7cfb312d@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220323074915.7cfb312d@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-124.meizu.com (172.16.1.124) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/22 2:49 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   c30cf83999ad ("crytpo: fix crc64 testmgr digest byte order")
-> 
-> Fixes tag
-> 
->   Fixes: commit f3813f4b287e4 ("crypto: add rocksoft 64b crc guard tag framework")
-> 
-> has these problem(s):
-> 
->   - leading word 'commit' unexpected
+The logic !A || A && B is equivalent to !A || B. so we can
+make code clear.
 
-And misspelled commit title - I fixed both up, thanks Stephen.
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ fs/btrfs/inode.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index 5bbea5e..50c2a37 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -2012,8 +2012,7 @@ int btrfs_run_delalloc_range(struct btrfs_inode *inode, struct page *locked_page
+ 		 * to use run_delalloc_nocow() here, like for  regular
+ 		 * preallocated inodes.
+ 		 */
+-		ASSERT(!zoned ||
+-		       (zoned && btrfs_is_data_reloc_root(inode->root)));
++		ASSERT(!zoned || btrfs_is_data_reloc_root(inode->root));
+ 		ret = run_delalloc_nocow(inode, locked_page, start, end,
+ 					 page_started, nr_written);
+ 	} else if (!inode_can_compress(inode) ||
 -- 
-Jens Axboe
+2.7.4
 

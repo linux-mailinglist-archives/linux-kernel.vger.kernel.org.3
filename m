@@ -2,82 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B55A4E58D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE874E58D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344067AbiCWTED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
+        id S244223AbiCWTEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiCWTEC (ORCPT
+        with ESMTP id S229836AbiCWTEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:04:02 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003FF67D24
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:02:32 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id r2so2845266iod.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ILBTcqbT7I8ERAhQgoP+879JxAlN6lgSjFR2Kgt92rU=;
-        b=i9KhzFRzSDE94JcTAqHIOza78OGHLvuqTh6NzpW8BI5PzZye1IJ7d6nWD7PtqzawGW
-         mMfoQEZDw9pk8BfZMCWjhfof2Qm8+il7EkqfVe5Wb9R6LTxbjsespfOjq6xJBZv2aXUl
-         SUMq2HTqb9HHeFrLPsvbnenp5I+9RcSNDa2N4mHzHDINbZL8BX/VjnCNMP+Yb6Vcj4eq
-         kFfAa+sDq8GgM0t6y4ufe41nP5TJ2325djUZcJpVqYeoan02sKFBTcUA5XnEB6fmbBuN
-         chh+y2yrE6c93BgcvJDq39xgSRanxBD8vwWdFFpdeO7YY+shjgRmS9ALjfBZ7frA+1dv
-         SwqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ILBTcqbT7I8ERAhQgoP+879JxAlN6lgSjFR2Kgt92rU=;
-        b=I/zv32PEiuqFyL4SNGCucTMsMmWxYKu3ictI8kUrcoEv6B5M3lvoWvR+HJn2R6g3/D
-         FWZrzG74K04qsvFqjUDPlNPW6n3qnO3vShAQAIktaHrWBehBZzv97buuxJMABQcs+9Ap
-         MHzNBRzyMn7e17NtoHdjt4rSIEpQw3tDicMTBdl3F3kFa6o6jdDbAMkrYFvFK4+8/1Ny
-         SajBSOhJFQrTma35d9FJICb3DHMfbY6T9zLlvaJ+d3gOgtpeOsRRxoceovBLBZJALtxA
-         9aP4AFuHFVRtvoxe0DbuGltFMA7PE4rcofHyQ1BdjnRHMY7iaaSXVa914rWblv/IWkZQ
-         5SSA==
-X-Gm-Message-State: AOAM533w6b0LWpUtrnOtRObXRJKnITwJUaqoUe2QAg0p9u819iB8bdOF
-        585FyFnjAXYOVGZdgJlSszueqg6Af2mqF8EkeA8=
-X-Google-Smtp-Source: ABdhPJztMHMmsNQy8dQ5gWQnBlTdXE0AU/DGUamXU3evKA4MSjOxM9U2wi35kk1dN6m420ZO683FctYgQlzAOzhG8WE=
-X-Received: by 2002:a05:6638:16c6:b0:31a:c83:bc7c with SMTP id
- g6-20020a05663816c600b0031a0c83bc7cmr784674jat.264.1648062152433; Wed, 23 Mar
- 2022 12:02:32 -0700 (PDT)
+        Wed, 23 Mar 2022 15:04:49 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102E065BF;
+        Wed, 23 Mar 2022 12:03:16 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F1281100004;
+        Wed, 23 Mar 2022 19:03:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1648062191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jn4eEh+cMlzdXNoYeFxpZsql1R7mD18vfamv6OpnlJo=;
+        b=EVK5SV6gKLJ1Wmc8xcKelEB5XgHl439t77Ep+sR3gT6kk+SAGiGqsNvlrOKw4TtaikP1Nq
+        CVlmvTnqhRBp6RjC5r3FdtYxQmr9EB3RIYPHFroR8oLpxyFbtK32DdFpavBBy3wxj4SfGb
+        DiqJmvdWvwdMJP+lQo/9omI0nHpITPHB+tC3wkJez2NhRbeDUQdpIv1RDlWw8N54fOV8rJ
+        NIOVYVOLNP2r2WSs2LVqp/dnL39x1AhWZCvXpr2SVwQx8VSj787HB/vSaJ0WT+XeJEf/r8
+        tax6aC6tUlPp7oC5LYsbpirqNmz/9nAEY1P0s857vkER9MQhJX6cF4zevdAuVQ==
+Date:   Wed, 23 Mar 2022 20:03:10 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] dt-bindings: rtc: at91: rename rtt bindings file
+Message-ID: <Yjtu7sRdl3yIR0u8@piout.net>
+References: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
+ <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
+ <CAL_Jsq++eqGS6xJ6EgwXe2RpZYgbB30kfTvZQx=sGmb-LgVWXg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220308151119.48412-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220308151119.48412-1-andriy.shevchenko@linux.intel.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 23 Mar 2022 20:02:20 +0100
-Message-ID: <CANiq72kLxzRdXSQfjXBL9xixXBwbxOAhZ4fR_+GtgT5FXz7vaQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] auxdisplay: lcd2s: make use of device property API
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_Jsq++eqGS6xJ6EgwXe2RpZYgbB30kfTvZQx=sGmb-LgVWXg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
 
-On Tue, Mar 8, 2022 at 4:11 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Make use of device property API in this driver so that both OF based
-> system and ACPI based system can use this driver.
+On 23/03/2022 09:39:07-0500, Rob Herring wrote:
+> On Wed, Mar 9, 2022 at 3:05 PM Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Tue, Mar 8, 2022 at 9:57 AM Alexandre Belloni
+> > <alexandre.belloni@bootlin.com> wrote:
+> > >
+> > > atmel,at91sam9-rtc is a confuing name for this file as it is documenting
+> > > the RTT used as an RTC and not the other regular RTC (atmel,at91rm9200-rtc
+> > > and atmel,at91sam9x5-rtc)
+> > >
+> > > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > > ---
+> > >  .../rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml}   | 0
+> > >  1 file changed, 0 insertions(+), 0 deletions(-)
+> > >  rename Documentation/devicetree/bindings/rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml} (100%)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> > > similarity index 100%
+> > > rename from Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
+> > > rename to Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> >
+> > Now failing in -next:
+> >
+> > ./Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml:
+> > $id: relative path/filename doesn't match actual path or filename
+> >   expected: http://devicetree.org/schemas/rtc/atmel,at91sam9260-rtt.yaml#
+> 
+> Still failing...
 
-I applied the series to -next, but for my understanding: the device
-property API was already being used, even if non-OF platforms couldn't
-use the driver before this patch, right? i.e. the commit message seems
-like the patch modified the calls.
+Sorry, this is fixed now.
 
-Cheers,
-Miguel
+> 
+> Rob
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

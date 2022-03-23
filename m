@@ -2,83 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CD84E533A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFB64E533D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244338AbiCWNiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S244355AbiCWNi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244315AbiCWNiA (ORCPT
+        with ESMTP id S244320AbiCWNiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:38:00 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CC7532F6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:36:30 -0700 (PDT)
-Received: from [192.168.12.80] (unknown [182.2.71.26])
-        by gnuweeb.org (Postfix) with ESMTPSA id C015B7E34E;
-        Wed, 23 Mar 2022 13:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648042589;
-        bh=kspSnS46lZV734KbQIo5pA/i92KsQL/tiG1+/s6yn7Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kcSf8zofG1Ae79QbZtwwD1xaWjFxENfn05JIUSat/GpbIDrcZpefOB5w0UdBHIjyY
-         AUZfewatYsqEK5iDgtC3n6tYRSaVvh6pWu9Jl+5S5rfJsoKCKiduRIg/GOeIMoB9i4
-         CR+Z/iIA3YkGdzRRk9N08+dnD+TY57RkDPXmJJ93kA+/AnHMmBBsUXU2Yv+oYfbfCt
-         g9I06f6kEGBTEax4PMXUq3dmVajI0+qA52D9WMXBWfFm+fc2aeH0DyRhXU0p7eBfdg
-         lnUcHP6nBKcW7VZxLlM8TX0rhd5gT8o6JRfJCiEVNNmGcZfCdzV+2WgeqjbekNLxTr
-         H1T00RpGk1Zsw==
-Message-ID: <5b611ae8-aca6-71c1-6a86-6234f61f1608@gnuweeb.org>
-Date:   Wed, 23 Mar 2022 20:36:24 +0700
+        Wed, 23 Mar 2022 09:38:10 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B076E7890E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:36:40 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id h63so1655205iof.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0FQgYBAsErSA0oer7QMlQ/bPAVMnnC+mA8O5EU9gYhE=;
+        b=NRryz7C/CBrDgsQBcaN2kMLAwOzoDH2ug5A383MR3vdPIM05sEaWuMxYA+dWsnERtd
+         WEF3wo/5Ggo92cgi4BjRtv9NYLZlx6mGxAkPDRtcL+eDzmhIPAvM7SoLiRLPpSGrQckb
+         mqXoB1djf+8/rdhZ1rwqKIKZZqmoixyaRhzX1mhxaCDvtl1tUZ3q0/QgMe46t6fa6fTo
+         blojXPt48hKe8DzkMltRNkP7i5qekdL/bi0RZYA10fK/EGfeEkI8/Ie2hMr8kl/oBKTb
+         sozfGvxECdMjZtgsoRIFkPPmnu2LBB3fz+09DaSryPwEctuNmKI32yvZKOZSFLpMCFNU
+         TAlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0FQgYBAsErSA0oer7QMlQ/bPAVMnnC+mA8O5EU9gYhE=;
+        b=QZxcFmKD7YKmQdHUVuds35gzjt/4g/MDnKbszMyNzTLNSVeLM1lnHpEQO4fY64pWLu
+         /qTmbo+UwGddoqMKMxESQRaDKh5MoeIkuzO+66pEMsRRV2dmAUVx7AERli/q/MaEq1wQ
+         FzXdSPPC8RCISxkjLeF1jeKREdzENlyTL9se6uWAbKnzgIltdL8wlj6CxW0MjYTb3ImJ
+         kHfv+AMkz5/PNz/aU/c6Y/uRzJHg7mK2mqg7Dixc0NNXazWmk/wi19czZRUwoqIsjKDs
+         sNDGr8FMHLl3cyblgHgLBjwzRPaaqWXYytZC6eK7uy2cT4hityOMqejvoDQCl84tght6
+         oIOg==
+X-Gm-Message-State: AOAM530wZwgg2tmRE5e5lhX3VCnhuIXRprXILdSzwAtkBulEnP1m9vRO
+        XPRXQT8sBNBia3oYasKIA2Tl914TqSIn7Y8MCf8=
+X-Google-Smtp-Source: ABdhPJz6vyLn/hfvoZ5H7cTB+dmb5THdx0hRYenJ9lwl09n52Z7nCI+eX+KvZKpsuMSGNFrjCWKcDHmceXzeblftEgc=
+X-Received: by 2002:a05:6638:4881:b0:321:6522:2cbd with SMTP id
+ ct1-20020a056638488100b0032165222cbdmr3282446jab.9.1648042600126; Wed, 23 Mar
+ 2022 06:36:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] tools/nolibc/stdlib: only reference the external
- environ when inlined
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>, "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20220323071807.14413-1-w@1wt.eu>
- <20220323071807.14413-3-w@1wt.eu>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220323071807.14413-3-w@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1643047180.git.andreyknvl@google.com> <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
+ <63704e10-18cf-9a82-cffb-052c6046ba7d@suse.cz> <YjsaaQo5pqmGdBaY@linutronix.de>
+In-Reply-To: <YjsaaQo5pqmGdBaY@linutronix.de>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Wed, 23 Mar 2022 14:36:29 +0100
+Message-ID: <CA+fCnZeG5DbxcnER1yWkJ50605_4E1xPtgeTEsSEc89qUg4w6g@mail.gmail.com>
+Subject: Re: [PATCH v6 27/39] kasan, mm: only define ___GFP_SKIP_KASAN_POISON
+ with HW_TAGS
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 2:18 PM, Willy Tarreau wrote:
-> When building with gcc at -O0 we're seeing link errors due to the
-> "environ" variable being referenced by getenv(). The problem is that
-> at -O0 gcc will not inline getenv() and will not drop the external
-> reference. One solution would be to locally declare the variable as
-> weak, but then it would appear in all programs even those not using
-> it, and would be confusing to users of getenv() who would forget to
-> set environ to envp.
-> 
-> An alternate approach used in this patch consists in always inlining
-> the outer part of getenv() that references this extern so that it's
-> always dropped when not used. The biggest part of the function was
-> now moved to a new function called _getenv() that's still not inlined
-> by default.
-> 
-> Reported-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> Signed-off-by: Willy Tarreau <w@1wt.eu>
-> ---
+On Wed, Mar 23, 2022 at 2:02 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> On 2022-03-23 12:48:29 [+0100], Vlastimil Babka wrote:
+> > > +#ifdef CONFIG_KASAN_HW_TAGS
+> > >  #define ___GFP_SKIP_KASAN_POISON   0x1000000u
+> > > +#else
+> > > +#define ___GFP_SKIP_KASAN_POISON   0
+> > > +#endif
+> > >  #ifdef CONFIG_LOCKDEP
+> > >  #define ___GFP_NOLOCKDEP   0x2000000u
+> > >  #else
+> > > @@ -251,7 +255,9 @@ struct vm_area_struct;
+> > >  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+> > >
+> > >  /* Room for N __GFP_FOO bits */
+> > > -#define __GFP_BITS_SHIFT (25 + IS_ENABLED(CONFIG_LOCKDEP))
+> > > +#define __GFP_BITS_SHIFT (24 +                                     \
+> > > +                     IS_ENABLED(CONFIG_KASAN_HW_TAGS) +    \
+> > > +                     IS_ENABLED(CONFIG_LOCKDEP))
+> >
+> > This breaks __GFP_NOLOCKDEP, see:
+> > https://lore.kernel.org/all/YjoJ4CzB3yfWSV1F@linutronix.de/
+>
+> This could work because ___GFP_NOLOCKDEP is still 0x2000000u. In
+>         ("kasan, page_alloc: allow skipping memory init for HW_TAGS")
+>         https://lore.kernel.org/all/0d53efeff345de7d708e0baa0d8829167772521e.1643047180.git.andreyknvl@google.com/
+>
+> This is replaced with 0x8000000u which breaks lockdep.
+>
+> Sebastian
 
-This one works nicely. I will resend my previous RFC after this one
-lands in Paul's tree to avoid conflict.
+Hi Sebastian,
 
-Tested-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Indeed, sorry for breaking lockdep. Thank you for the report!
+
+I wonder what's the proper fix for this. Perhaps, don't hide KASAN GFP
+bits under CONFIG_KASAN_HW_TAGS? And then do:
+
+#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
+
+Vlastimil, Andrew do you have any preference?
+
+If my suggestion sounds good, Andrew, could you directly apply the
+changes? They are needed for these 3 patches:
+
+kasan, page_alloc: allow skipping memory init for HW_TAGS
+kasan, page_alloc: allow skipping unpoisoning for HW_TAGS
+kasan, mm: only define ___GFP_SKIP_KASAN_POISON with HW_TAGS
+
+As these depend on each other, I can't send separate patches that can
+be folded for all 3.
 
 Thanks!
-
--- 
-Ammar Faizi

@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D144E4E5941
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F07214E5943
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344315AbiCWTjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S1344323AbiCWTkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344305AbiCWTji (ORCPT
+        with ESMTP id S1344305AbiCWTkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:39:38 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCACE0B8;
-        Wed, 23 Mar 2022 12:38:08 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id g20so3099133edw.6;
-        Wed, 23 Mar 2022 12:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=nGTAh3VFxfF30v+szl0C7u8CzPhVgOsJVDuXB5GMlyg=;
-        b=UwlRQqOFj6+z4kxoIRPNhz8h13FCSRRYd7y05W7RHmOdYQNAWrdL/VqXbwy4sAqfME
-         QiZql6SLAvzWrU6I83Eh0T4L6DXMbP1nkiK8iz/KZF606StrpIDgYfGqLOtv46x4W7Ht
-         oIqqaIXXSPvAIf++mtXynMB/o9FmTJZazoXZ2ucUZt/i1qOriC5Emc47egS0pwwayxe1
-         pX9Tzlkcp9gv6a9oxjMhPZfIfagTO2kgfwQoYU6SY7bbN7PQGlrTl4ZM7O1rX86hkZw8
-         AbSb+V5KxwmRbn0+f4/HFBaEuSHlEv9HhS76VpRT/nRhXN+GQ6giaJD22V+8TWWRGikp
-         iVbQ==
+        Wed, 23 Mar 2022 15:40:18 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A260334B9A;
+        Wed, 23 Mar 2022 12:38:47 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id b188so2684619oia.13;
+        Wed, 23 Mar 2022 12:38:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nGTAh3VFxfF30v+szl0C7u8CzPhVgOsJVDuXB5GMlyg=;
-        b=3OTUMFMOvEqOvjLYv/elo6nQKKqxgBr1U59hMfOuin1d8UzZMUIDcHcsRadz3b/c5/
-         14sgzzpUDO1kth41HJo0nJMHi7exbEiO/tKZS8tbWFZQD4mTM42vRA2EnZjiRs1U6352
-         N5b1yqthXAThLFRrBr03oiVF4hQx0NYxKWfcq37xWCZxEY56KUuxMZL32FQ4hxO0i7Y0
-         zcpnbFIYv6mnjI2tDCZB90YI0zDlCjxHZzbsXY0PjKytrlfS2/S8VAuerMnba366eMby
-         A64N8WfersRiMSu56FeV3rzgZDgboM42CfZlsohtF0Y1IFnkbu0gL2+7WyHfKHeCnHk5
-         aM7g==
-X-Gm-Message-State: AOAM530aWQS/ABJOVBfn32DZJVBt+1apvWfFaDmv5V1bVQCrraX2H26R
-        eUwrlxbUEqsAWdYvs8Hdp0A=
-X-Google-Smtp-Source: ABdhPJyPQG6hxldJ7qnrkTTN+HIBSIdhpt4u36wU3Yzl9GBmYTF367tK7mivPKqE7rT+s516Ph1LfQ==
-X-Received: by 2002:a05:6402:11d4:b0:419:5a50:75a4 with SMTP id j20-20020a05640211d400b004195a5075a4mr2260451edw.226.1648064286570;
-        Wed, 23 Mar 2022 12:38:06 -0700 (PDT)
-Received: from [192.168.1.114] ([85.105.239.232])
-        by smtp.gmail.com with ESMTPSA id y14-20020a056402440e00b00416046b623csm430859eda.2.2022.03.23.12.38.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 12:38:06 -0700 (PDT)
-Message-ID: <442f565c-b68c-9359-60d1-dd61213d3233@gmail.com>
-Date:   Wed, 23 Mar 2022 19:36:57 +0000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fz/6QMfzsAXlR0TWAXHAx7AhLj9JxZcoy2PnMbAmC1w=;
+        b=1tSMLOk4ejNsXdjOYP5E64szHJD3rcKjO1NRgkSr5VNVEGCn2pcxGwVC9OY/bSMRhI
+         Rvs/tVyUFvFuHYD8QWzXVcp1SRhBrHWinirrOFipAmpkxWzHJCyIE6dsbqkCuaYUgVF4
+         C5lUuESxDqbISQ7dU4Z7C/N0RvVOjY2Mh3HgR/zL3kFccqddDn7qEUQFyO+Yu7x3Hz1R
+         Kh61xFZ775zgX89V84PcohvKbfFZd9Y7yrR/5/9p/1BbzTkjjLBrGOwhkBit+OuXVl47
+         xiA7++S7wmNIpy/LS1ZMD78lh5Ys+rZmstHgVBNJ+xPopVzRDEurZY4SqH1TnA+Kyw6N
+         Vf9A==
+X-Gm-Message-State: AOAM5315uzQrVaImj6OEl12RnXRvbQD70bH1GBI9LRm0FTrMwkc50IKO
+        4kiKZnPV0JBoLmMthlhZpZtDJjl+GA==
+X-Google-Smtp-Source: ABdhPJwNb+/W52M6+cOH8SSBzIaZDXzQJSHn4fnPGNM/yFgH0rTWof15Wse2IwJH73EgWAggBjY6fA==
+X-Received: by 2002:a05:6808:23c1:b0:2da:30fd:34d9 with SMTP id bq1-20020a05680823c100b002da30fd34d9mr5469047oib.203.1648064326950;
+        Wed, 23 Mar 2022 12:38:46 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l12-20020a056870d3cc00b000ddeb925982sm343896oag.38.2022.03.23.12.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 12:38:46 -0700 (PDT)
+Received: (nullmailer pid 320713 invoked by uid 1000);
+        Wed, 23 Mar 2022 19:38:45 -0000
+Date:   Wed, 23 Mar 2022 14:38:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/3] Fix dtbs warnings for arch timer
+Message-ID: <Yjt3RQJ82t29ZjVN@robh.at.kernel.org>
+References: <20220316095433.20225-1-singh.kuldeep87k@gmail.com>
+ <5521012e957efa3c4afe2de996a1b5ac@kernel.org>
+ <20220316172051.GA21737@9a2d8922b8f1>
+ <87y219ybsc.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [syzbot] INFO: task hung in io_wq_put_and_exit (3)
-Content-Language: en-US
-To:     syzbot <syzbot+adb05ed2853417be49ce@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000099e7a405dae66418@google.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <00000000000099e7a405dae66418@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y219ybsc.wl-maz@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 17:52, syzbot wrote:
-> Hello,
+On Wed, Mar 16, 2022 at 06:47:47PM +0000, Marc Zyngier wrote:
+> On Wed, 16 Mar 2022 17:20:51 +0000,
+> Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
+> > 
+> > On Wed, Mar 16, 2022 at 11:27:10AM +0000, Marc Zyngier wrote:
+> > > On 2022-03-16 09:54, Kuldeep Singh wrote:
+> > > > This patchset is an attempt to resolve 'make dtbs_check' warning for
+> > > > arch timer.
+> > > > 
+> > > > Patch 1 is done in preparation for following patches which defines
+> > > > compatibles order in more clear way.
+> > > > Patch 2 documents arm,cortex-a7-timer entry in bindings similar to an
+> > > > existing entry arm,cortex-a15-timer.
+> > > > Patch 3 adds above 2 properties in of_match list to bring them in
+> > > > use.
+> > > > 
+> > > > Please note, this patchset is based on
+> > > > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git, master
+> > > > 
+> > > > Kuldeep Singh (3):
+> > > >   dt-bindings: timer: Rearrange compatible entries of arch timer
+> > > >   dt-bindings: timer: Document arm,cortex-a7-timer for arch timer
+> > > >   clocksource: arch_timer: Add arm,cortex-a7/15-timer in of_match list
+> > > > 
+> > > >  .../devicetree/bindings/timer/arm,arch_timer.yaml   | 13 +++++--------
+> > > >  drivers/clocksource/arm_arch_timer.c                |  2 ++
+> > > >  2 files changed, 7 insertions(+), 8 deletions(-)
+> > > 
+> > > Please use my @kernel.org address exclusively. My @arm.com
+> > > address stopped working over two years ago, and the MAINTAINERS
+> > > file shows the right addresses.
+> > 
+> > Hi Marc,
+> > 
+> > I have tocmd and cccmd set in my gitconfig and it generated mail
+> > addresses automatically so I assume it is correct.
+> > tocmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
+> > 
+> > It seems your arm mail address got configured from binding file and not
+> > from MAINTAINERS.
 > 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    b47d5a4f6b8d Merge tag 'audit-pr-20220321' of git://git.ke..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15e065dd700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=63af44f0631a5c3a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=adb05ed2853417be49ce
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16d673db700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14627e25700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+adb05ed2853417be49ce@syzkaller.appspotmail.com
+> It is a bug in get_maintainer.pl. You'll have to manually apply the
+> .mailmap transformation.
 
-#syz test: git://git.kernel.dk/linux-block for-5.18/io_uring
+I just sent a fix for this[1]. 'in file' emails were not honoring 
+mailmap.
 
+Rob
 
--- 
-Pavel Begunkov
+[1] https://lore.kernel.org/all/20220323193645.317514-1-robh@kernel.org/

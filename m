@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9341D4E4CC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 07:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C39F4E4CC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 07:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241925AbiCWGcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 02:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S241981AbiCWGdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 02:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiCWGc3 (ORCPT
+        with ESMTP id S241970AbiCWGdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 02:32:29 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F206D710F4;
-        Tue, 22 Mar 2022 23:30:58 -0700 (PDT)
-Received: from IT-EXMB-1-123.meizu.com (172.16.1.123) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 23 Mar
- 2022 14:30:58 +0800
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by
- IT-EXMB-1-123.meizu.com (172.16.1.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 23 Mar 2022 14:30:56 +0800
-Received: from IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575]) by
- IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575%3]) with mapi id
- 15.01.2308.014; Wed, 23 Mar 2022 14:30:56 +0800
-From:   =?gb2312?B?sNe6xs7E?= <baihaowen@meizu.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBuZXQ6IGwydHA6IEZpeCBkdXBsaWNhdGUgaW5jbHVk?=
- =?gb2312?Q?ed_trace.h?=
-Thread-Topic: [PATCH] net: l2tp: Fix duplicate included trace.h
-Thread-Index: AQHYPmd0se+T/7P3CU2M/VTl+cE8UazL5sYAgACbYPY=
-Date:   Wed, 23 Mar 2022 06:30:56 +0000
-Message-ID: <710ae0adfbc343aa81403055c31665c6@meizu.com>
-References: <1648006705-30269-1-git-send-email-baihaowen@meizu.com>,<20220322221418.55f6a665@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220322221418.55f6a665@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.137.70]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Wed, 23 Mar 2022 02:33:40 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C9F716ED
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 23:32:10 -0700 (PDT)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id WuXPnSkMs9VRxWuXPnBGAk; Wed, 23 Mar 2022 07:32:08 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 23 Mar 2022 07:32:08 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steve French <sfrench@samba.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-cifs@vger.kernel.org
+Subject: [PATCH v2] ksmbd: Remove a redundant zeroing of memory
+Date:   Wed, 23 Mar 2022 07:32:05 +0100
+Message-Id: <577b4601aa5d62d222fa9387c5036f2504f40318.1648017112.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dGh4IGZvciBwb2ludGluZyBvdXQgbXkgbWlzdGFrZW4uDQpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fDQq3orz+yMs6IEpha3ViIEtpY2luc2tpIDxrdWJhQGtlcm5lbC5v
-cmc+DQq3osvNyrG85DogMjAyMsTqM9TCMjPI1SAxMzoxNDoxOA0KytW8/sjLOiCw17rGzsQNCrOt
-y806IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IHBhYmVuaUByZWRoYXQuY29tOyBuZXRkZXZAdmdlci5r
-ZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQrW98ziOiBSZTogW1BBVENI
-XSBuZXQ6IGwydHA6IEZpeCBkdXBsaWNhdGUgaW5jbHVkZWQgdHJhY2UuaA0KDQpPbiBXZWQsIDIz
-IE1hciAyMDIyIDExOjM4OjI1ICswODAwIEhhb3dlbiBCYWkgd3JvdGU6DQo+IENsZWFuIHVwIHRo
-ZSBmb2xsb3dpbmcgaW5jbHVkZWNoZWNrIHdhcm5pbmc6DQo+DQo+IG5ldC9sMnRwL2wydHBfY29y
-ZS5jOiB0cmFjZS5oIGlzIGluY2x1ZGVkIG1vcmUgdGhhbiBvbmNlLg0KPg0KPiBObyBmdW5jdGlv
-bmFsIGNoYW5nZS4NCg0KVGhpcyBvbmUgZG9lc24ndCBidWlsZCBlaXRoZXIuDQoNCllvdSBtdXN0
-IHZhbGlkYXRlIHlvdXIgcGF0Y2hlcyB0byB0aGUgYmVzdCBvZiB5b3VyIGFiaWxpdHkuDQpJZiB0
-aGUgYmVzdCBvZiB5b3VyIGFiaWxpdHkgZG9lcyBub3QgaW5jbHVkZSBmaXJpbmcgdXANCmEgY29t
-cGlsZXIgLSB0aGF0IHdpbGwgYmUgYSBwcm9ibGVtLg0K
+fill_transform_hdr() has only one caller that already clears tr_buf (it is
+kzalloc'ed).
+
+So there is no need to clear it another time here.
+
+Remove the superfluous memset() and add a comment to remind that the caller
+must clear the buffer.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+v2: keep kzalloc in the caller and remove the memset here
+---
+ fs/ksmbd/smb2pdu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index bcb98109bac9..bcd1bb7e2856 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -8410,7 +8410,7 @@ static void fill_transform_hdr(void *tr_buf, char *old_buf, __le16 cipher_type)
+ 	struct smb2_hdr *hdr = smb2_get_msg(old_buf);
+ 	unsigned int orig_len = get_rfc1002_len(old_buf);
+ 
+-	memset(tr_buf, 0, sizeof(struct smb2_transform_hdr) + 4);
++	/* tr_buf must be cleared by the caller */
+ 	tr_hdr->ProtocolId = SMB2_TRANSFORM_PROTO_NUM;
+ 	tr_hdr->OriginalMessageSize = cpu_to_le32(orig_len);
+ 	tr_hdr->Flags = cpu_to_le16(TRANSFORM_FLAG_ENCRYPTED);
+-- 
+2.32.0
+

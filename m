@@ -2,71 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518014E5654
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BB44E5658
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245420AbiCWQ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S245451AbiCWQaG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Mar 2022 12:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242091AbiCWQ32 (ORCPT
+        with ESMTP id S242091AbiCWQaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:29:28 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912CD17A82
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:27:58 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso6942558pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+GkM0EsIpmPEs+2fEuWOpfnSs20UxwWfYqecrAXhXLY=;
-        b=QF3UUYiCGO0ViS4CuMlDVBr4REmIM+Fg/874L9K8EsFLMZEcwyY66S3OiF/Sn8CmlN
-         w510dTQHFNL79JLWdyeXLg8qwMWPV12BBrShW3e+KTsIvOcs7iMKTFMgTCnXuhFctgsS
-         tKyyhZVL0h9ZmrSWpJWI0iaKhHoBy6Lm3tz6Sm2YaOSb8VWG4jZA3qjllYGm8Xbd27/7
-         dBKb36Brw6auML+vARie2pdIEzTRmZGcvkaX6150GSjin1Qh8gbhhGmrpIUKwRCFsaJ1
-         GvVRKp2/SejAxChhSj+W7RAmlSX+Mhrz3KFmuqOL5H6+dX8pNuZb/XH+oM6wM3wzWg0c
-         9CKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+GkM0EsIpmPEs+2fEuWOpfnSs20UxwWfYqecrAXhXLY=;
-        b=ig218wvWaWLJuKpr2rm52quljwEtu0Lue8yysCEHmgMEUyv7sdbUtNsEaJP0AF+x5j
-         hgrc6Axey4AD36QBfGRzThMuqwM09N3C/27nbZzBDIXqg9s8tYjnC382d9ePVwp29Py6
-         27saXAEgEvKEAqyAIb08iGRYYn3JFsKgV30SGbxp3en1A9qQ9MKiZAWohDjq6KjCRMtv
-         GXkeYbfkrGG3hcZQTqFB2E1CIFhmAO/8Sb0QtuDRe5ENfO/rVKv9UZxnmnB86qgWOczU
-         dbFLBCho94YGfdtSbib8YPqArXn6uxSbvXfVqcG2k40TyxPtOXi7NkcuRgIyA7tZMhUF
-         cojg==
-X-Gm-Message-State: AOAM533P61fbAbBTJxAxHkQIFQtSn0zk2uivr59vDrdTPCqLoSzl2xqw
-        +WcFqbyZ3OEIaSItqmJeDTIBCg==
-X-Google-Smtp-Source: ABdhPJxdyw30bh2pKE+3hwkGOES/bE/U5B9N1OxqWylkElPtex6mxLZrmYAnSavkrnoUSGgDJYnPog==
-X-Received: by 2002:a17:902:d48d:b0:153:a517:6ff2 with SMTP id c13-20020a170902d48d00b00153a5176ff2mr756437plg.141.1648052878061;
-        Wed, 23 Mar 2022 09:27:58 -0700 (PDT)
-Received: from sunil-laptop ([49.206.7.17])
-        by smtp.gmail.com with ESMTPSA id r1-20020a63b101000000b00380989bcb1bsm289959pgf.5.2022.03.23.09.27.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 09:27:57 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 21:57:48 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     ardb@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, heinrich.schuchardt@canonical.com,
-        Atish Patra <atishp@rivosinc.com>, apatel@ventanamicro.com,
-        abner.chang@hpe.com, jrtc27@jrtc27.com, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [RFC PATCH V2 0/1] RISCV_EFI_BOOT_PROTOCOL support in linux
-Message-ID: <20220323162748.GA55066@sunil-laptop>
-References: <20220303145944.307321-1-sunilvl@ventanamicro.com>
- <mhng-5eb23850-e2a9-43d3-8093-2f588c71de00@palmer-ri-x1c9>
+        Wed, 23 Mar 2022 12:30:04 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F070D23BD9;
+        Wed, 23 Mar 2022 09:28:31 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nX3qT-00030m-16; Wed, 23 Mar 2022 17:28:25 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        LABBE Corentin <clabbe@baylibre.com>
+Cc:     herbert@gondor.apana.org.au, krzk+dt@kernel.org,
+        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v3 18/26] arm64: dts: rockchip: rk3399: add crypto node
+Date:   Wed, 23 Mar 2022 17:28:24 +0100
+Message-ID: <1898921.yKVeVyVuyW@diego>
+In-Reply-To: <YjsfIbLQRvoxkana@Red>
+References: <20220321200739.3572792-1-clabbe@baylibre.com> <70422777-a3f9-b2f1-5faa-94d24fe200ac@arm.com> <YjsfIbLQRvoxkana@Red>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-5eb23850-e2a9-43d3-8093-2f588c71de00@palmer-ri-x1c9>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,51 +45,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 06:32:22PM -0700, Palmer Dabbelt wrote:
-> On Thu, 03 Mar 2022 06:59:43 PST (-0800), sunilvl@ventanamicro.com wrote:
-> > This patch adds support for getting the boot hart ID using new
-> > RISCV_EFI_BOOT_PROTOCOL in linux efi stub. While there is an existing
-> > solution of passing the boot hart ID through Device Tree, it doesn't work
-> > for ACPI. Hence an EFI protocol protocol is recommended which works for
-> > both DT and ACPI based platforms.
+Am Mittwoch, 23. März 2022, 14:22:41 CET schrieb LABBE Corentin:
+> Le Tue, Mar 22, 2022 at 12:00:06PM +0000, Robin Murphy a écrit :
+> > On 2022-03-21 20:07, Corentin Labbe wrote:
+> > > The rk3399 has a crypto IP handled by the rk3288 crypto driver so adds a
+> > > node for it.
+> > > 
+> > > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > > ---
+> > >   arch/arm64/boot/dts/rockchip/rk3399.dtsi | 12 ++++++++++++
+> > >   1 file changed, 12 insertions(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> > > index 88f26d89eea1..ca2c658371a5 100644
+> > > --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> > > +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> > > @@ -573,6 +573,18 @@ saradc: saradc@ff100000 {
+> > >   		status = "disabled";
+> > >   	};
+> > >   
+> > > +	crypto0: crypto@ff8b0000 {
+> > > +		compatible = "rockchip,rk3399-crypto";
+> > > +		reg = <0x0 0xff8b0000 0x0 0x4000>,
+> > > +		      <0x0 0xff8b8000 0x0 0x4000>;
+> > > +		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH 0>,
+> > > +			     <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +		clocks = <&cru SCLK_CRYPTO0>, <&cru HCLK_M_CRYPTO0>, <&cru HCLK_S_CRYPTO0>,
+> > > +			 <&cru SCLK_CRYPTO1>, <&cru HCLK_M_CRYPTO1>, <&cru HCLK_S_CRYPTO1>;
+> > > +		resets = <&cru SRST_CRYPTO0>, <&cru SRST_CRYPTO0_S>, <&cru SRST_CRYPTO0_M>,
+> > > +			 <&cru SRST_CRYPTO1>, <&cru SRST_CRYPTO1_S>, <&cru SRST_CRYPTO1_M>;
+> > > +	};
 > > 
-> > The latest draft spec of this new protocol is available at
-> > https://github.com/riscv-non-isa/riscv-uefi/releases/download/1.0-rc2/RISCV_UEFI_PROTOCOL-spec.pdf
+> > What's going on here? If these are simply two instances of the same IP 
+> > block as the evidence suggests, why are they crammed into a single DT 
+> > node rather than simply being described as two separate instances? I was 
+> > rather wondering what all the confusing mess in patch #16 was about, 
+> > until I got here.
+> > 
+> > If there's something in the crypto API that means the driver can't 
+> > simply naively register itself multiple times, there should be any 
+> > number of ways for the probe routine to keep track of whether it's 
+> > already registered something and associate any subsequent devices with 
+> > the first one internally if need be. Linux implementation details should 
+> > not leak out as non-standard DT weirdness.
+> > 
+> > I know the Rockchip IOMMU driver does this, but in that case the two 
+> > IOMMU instances are closely coupled and sharing work such that they 
+> > effectively need to be programmed identically at all times, so it was a 
+> > bit more justifiable. I don't know the full story here, but it certainly 
+> > looks like rk_get_engine_number() is just a means to schedule work on 
+> > any available unit independently, so looks like it wouldn't take much to 
+> > select between distinct devices at that point, and actually end up a lot 
+> > simpler and cleaner overall.
 > 
-> This looks fine to me, but we need the spec folk to commit to this being a
-> stable interface before we can start using it.  Historically that's been
-> "frozen" for RISC-V specs, but I'm not sure how that all fits together in
-> EFI land as IIUC we also have to follow the UEFI forum's process.  Last I
-> checked you guys understood that better than I did, so
+> Yes rk3399 has 2 instances of the same IP (Exception: crypto1 does not have RSA).
+> 
+> The problem is that only one drivername (like rk-md5) could exists.
+> If crypto0 and crypto1 register with different drivername (rk-md5-0/rk-md5-1), only one will be used anyway.
+> So I merged them into only one instance.
+> I think this way will be easier, but you are right, this is not pretty.
+> 
+> I found another way with 2 nodes:
+> You could preview it at https://github.com/montjoie/linux/tree/cryptorockchipv4
+> Basicly the crypto0 is a normal instance, and crypto1 "registers" itself against crypto0.
+> So if crypto0 know another instance exists it will load balance requests.
 
-Thank you Palmer. The specification is in frozen state now. 
-http://lists.infradead.org/pipermail/linux-riscv/2022-March/013431.html.
+The DT-nodes in that branch are
 
-Thanks
-Sunil
-> 
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # pending spec freeze
-> 
-> I had a minor comment about the error message, as well.
-> 
-> Thanks!
-> 
-> > This linux ptach can be found in:
-> > riscv_boot_protocol_rfc_v2 branch at
-> > https://github.com/vlsunil/linux.git
-> > 
-> > This is tested in qemu with u-boot 2022.04.rc3.
-> > 
-> > Changes since V1:
-> >   - Rebased to get the "Fix get_boot_hartid_from_fdt() return value"
-> >     patch
-> >   - Removed mixed_mode member
-> >   - Separated return value and status.
-> > 
-> > Sunil V L (1):
-> >   riscv/efi_stub: Add support for RISCV_EFI_BOOT_PROTOCOL
-> > 
-> >  drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
-> >  drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
-> >  include/linux/efi.h                       |  1 +
-> >  3 files changed, 32 insertions(+), 5 deletions(-)
+@@ -573,6 +573,22 @@
+ 		status = "disabled";
+ 	};
+ 
++	crypto0: crypto@ff8b0000 {
++		compatible = "rockchip,rk3399-crypto0";
++		reg = <0x0 0xff8b0000 0x0 0x4000>;
++		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru SCLK_CRYPTO0>, <&cru HCLK_M_CRYPTO0>, <&cru HCLK_S_CRYPTO0>;
++		resets = <&cru SRST_CRYPTO0>, <&cru SRST_CRYPTO0_S>, <&cru SRST_CRYPTO0_M>;
++	};
++
++	crypto1: crypto@ff8b8000 {
++		compatible = "rockchip,rk3399-crypto1";
++		reg = <0x0 0xff8b8000 0x0 0x4000>;
++		interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru SCLK_CRYPTO1>, <&cru HCLK_M_CRYPTO1>, <&cru HCLK_S_CRYPTO1>;
++		resets = <&cru SRST_CRYPTO1>, <&cru SRST_CRYPTO1_S>, <&cru SRST_CRYPTO1_M>;
++	};
++
+ 	i2c1: i2c@ff110000 {
+ 		compatible = "rockchip,rk3399-i2c";
+ 		reg = <0x0 0xff110000 0x0 0x1000>;
+
+which looks at lot better :-) .
+
+I'm not sure about the different compatibles yet, but as the blocks
+are really _not_ the same implementation that actually does make sense
+[i.e. one not having RSA]
+
+Though I think you'll need to update the binding for them.
+
+
+Heiko
+
+
+
+

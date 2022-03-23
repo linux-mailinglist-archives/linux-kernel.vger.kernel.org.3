@@ -2,72 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE104E5009
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184264E5011
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbiCWKJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S235014AbiCWKMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 06:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiCWKJK (ORCPT
+        with ESMTP id S230102AbiCWKMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:09:10 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE4F7665A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 03:07:40 -0700 (PDT)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22NA7cEL060187;
-        Wed, 23 Mar 2022 19:07:38 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Wed, 23 Mar 2022 19:07:38 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22NA7cHF060181
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 23 Mar 2022 19:07:38 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <d0b370d2-403c-9fa8-c1b5-3e5b2c42c88c@I-love.SAKURA.ne.jp>
-Date:   Wed, 23 Mar 2022 19:07:38 +0900
+        Wed, 23 Mar 2022 06:12:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A0987666C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 03:10:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0DD823A;
+        Wed, 23 Mar 2022 03:10:49 -0700 (PDT)
+Received: from [10.57.39.153] (unknown [10.57.39.153])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 29DB73F73B;
+        Wed, 23 Mar 2022 03:10:48 -0700 (PDT)
+Message-ID: <a704e21e-c1a6-6ffd-439c-e715a2633319@arm.com>
+Date:   Wed, 23 Mar 2022 10:10:46 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v1] LSM: Remove double path_rename hook calls for
- RENAME_EXCHANGE
-Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Cc:     Brendan Jackman <jackmanb@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        James Morris <jmorris@namei.org>,
-        John Johansen <john.johansen@canonical.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-References: <20220222175332.384545-1-mic@digikod.net>
- <b71454bb-d084-bfd6-7cd3-aa6bfdaaab00@digikod.net>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <b71454bb-d084-bfd6-7cd3-aa6bfdaaab00@digikod.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] cpu/hotplug: Set st->cpu earlier
+Content-Language: en-GB
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220316153637.288199-1-steven.price@arm.com>
+ <878rt2atre.ffs@tglx> <bc66bee6-7c99-b289-f5e9-ccaf03d5605d@arm.com>
+ <87wngla932.ffs@tglx>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <87wngla932.ffs@tglx>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/03/23 17:40, Mickaël Salaün wrote:
-> Any comment? John, Tetsuo, does it look OK for AppArmor and Tomoyo?
+Thanks for taking a look at this.
 
-I'm OK with this change regarding TOMOYO part.
+On 22/03/2022 22:58, Thomas Gleixner wrote:
+> On Tue, Mar 22 2022 at 15:59, Vincent Donnefort wrote:
+>> On 22/03/2022 15:31, Thomas Gleixner wrote:
+>>> On Wed, Mar 16 2022 at 15:36, Steven Price wrote:
+>>>> Setting the 'cpu' member of struct cpuhp_cpu_state in cpuhp_create() is
+>>>> too late as other callbacks can be made before that point.
+>>>
+>>> What?
+>>>
+>>>          CPUHP_OFFLINE = 0,
+>>>          CPUHP_CREATE_THREADS,
+>>>
+>>> The create threads callback is the very first callback which is invoked
+>>> for a to be plugged CPU on the control CPU. So which earlier callback
+>>> can be invoked and fail?
+>>>
+>>> Thanks,
+>>>
+>>>          tglx
+>>
+>>
+>> CPUHP_CREATE_THREADS itself can fail, before st->cpu is set.
+> 
+> Sure. But that does not explain the problem.
+> 
+>> Also, that value is used outside of the callbacks (cpuhp_set_state()
+>> in _cpu_up()).
+> 
+> And why on earth is this not spelled out in the changelog?
 
-Acked-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+I apologies for that, I'm not very familiar with the code and I have to
+admit I have been struggling to identify exactly what is going on here.
+The actual issue I saw was if the callback fails then the rollback code
+leaves things in a messed up state. By the looks of things that callback
+that fails is indeed the first (CPUHP_CREATE_THREADS).
 
-Thank you.
+>> But indeed this description could be refined a bit.
+> 
+> Indeed. But the description is not the only problem here:
+> 
+> It's completely uncomprehensible from the code in _cpu_up() _WHY_ this
+> 
+>      st->cpu = cpu;
+>      
+> assignment has to be there.
+> 
+> It's non-sensical if you really think about it, right?
+
+I entirely agree, and I did ask in my v1 posting[1] if anyone could
+point me to a better place to do the assignment. Vincent suggested
+moving it earlier in _cpu_up() which is this v2.
+
+But it still seems out-of-place to me. I've just had a go at simply
+removing the 'cpu' member and it doesn't look too bad. I'll post that
+patch as a follow up. I'm open to other suggestions for the best way to
+fix this.
+
+Thanks,
+
+Steve
+
+[1]
+https://lore.kernel.org/all/20220225134918.105796-1-steven.price@arm.com/
+
+> That said, I'm pretty sure you can come up with:
+> 
+>  - a proper one time initialization of @st which solves your problem
+> 
+>  - a proper changelog which explains it
+> 
+> Thanks,
+> 
+>         tglx
+

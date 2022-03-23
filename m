@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2B04E5137
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2904A4E513A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243860AbiCWLXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S243855AbiCWLWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235691AbiCWLWu (ORCPT
+        with ESMTP id S235624AbiCWLWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:22:50 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A7D78FC2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:21:19 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 12AB41EC0104;
-        Wed, 23 Mar 2022 12:21:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1648034474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=py7kMA51MdGBUz1FXOirwusmSTs1+ukYQH97i+mRmtQ=;
-        b=CEk+37BUmi/wA5LPfZmPMXdJwBdkWMQi8qUZhRYQSDNSHVQfErALO8w8g2Kh0u1aspcIjv
-        0+Y8/90Fai9EKDIsoZIorDqF/0dVVSV0YLkFG7JciE5nWKDXC1Esma0c/9/fszb6BJuvrZ
-        fVOZ3EPBepIB0fxKF29Ew9yhwQaW/x8=
-Date:   Wed, 23 Mar 2022 12:21:10 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH] x86/defconfig: Enable WERROR
-Message-ID: <YjsCpoRK7W4l6tSh@zn.tnic>
-References: <YjhdcJB4FaLfsoyO@gmail.com>
- <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
- <YjpLiKRUIB4TGJm0@zn.tnic>
- <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
+        Wed, 23 Mar 2022 07:22:49 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322DE78FCA;
+        Wed, 23 Mar 2022 04:21:20 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id r22so2116440ejs.11;
+        Wed, 23 Mar 2022 04:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=87E72TCYXIHs+TxIG+l3uw9PKroKBbtdliBk27X7cqU=;
+        b=mZuOPUC1JPNEyLejK7a7msjQdh9oyGwx2iT5PQH8gXq9SYl5RA1ogmBF8TJrWyPBsO
+         0d4YI6s3it4uHjEO5v9MjyYDck6aKZ2ASjWnL73UagE8pP5Ber56NrCV2wpa23Vg9d7t
+         3jooRkr6m/d/Pu8ModCXLY3UP+ZFHuAk+2Z/MgM1meqKYV80Czohn5b+yeiXqWJKvZf6
+         9uuVrJvCLgRvgWwjy7ZyscxLwlxsnSdAHYg9NhSmWVULxmAu1KQhafhnjW78XVw0oF1O
+         n6XCZZLLGVcODUjD//HRBnnYjzdRyCklW+S1zt+anW3LanIPnNkF7Qt4qihcAZSBv6uX
+         69aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=87E72TCYXIHs+TxIG+l3uw9PKroKBbtdliBk27X7cqU=;
+        b=ki1yawf+dnilRpP+H45eKDye8dplO1dmtPu6jYIiNppOgxt9Po63oGYplqYOie22SS
+         Cqu+i9zCdDIj3pQSHQCEq0OGg5HZFMsC5B94VH50rW2+Dm0XF1QSLZBMyawlCKMsF7m9
+         mjJnb17nWaeGOy8RZ1CqATDGYejk7yomzSwzevzLjrSfopIkJMCNhV33zxVqJDg5r3IY
+         BZGINGdji8WFL8Y8osc4BJ3LhbhNpV594BahWcEvJ0mEHZYtc78WmVFz5QifY2LFMJCa
+         2piZXBb27mZ++sagghbTpa0y17Dv5wQ94QVmqv3pyN+9pL3VEHY8jqkWrhWB/2vTEWNo
+         Jk5A==
+X-Gm-Message-State: AOAM53250mKSq5zydwxm7/hSYX6RTx1fc3Gz1ieNEvNOX8o1NUbxCfyT
+        ayo8Rt6eiYBGjVEQPjbO6Z0=
+X-Google-Smtp-Source: ABdhPJybO4BiYPAi/fg3VFIMEzE591UHnNC3gbe30chy4gmV4funJuWxJSRkeJ/Zs57SqVYNE2lZng==
+X-Received: by 2002:a17:906:c214:b0:6b3:d0d6:9fe6 with SMTP id d20-20020a170906c21400b006b3d0d69fe6mr30833372ejz.150.1648034478453;
+        Wed, 23 Mar 2022 04:21:18 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id og49-20020a1709071df100b006db0dcf673esm9856923ejc.27.2022.03.23.04.21.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 04:21:18 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 13:21:16 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20220323112116.q6shx2g4r23ungtc@skbuf>
+References: <20220317172013.rhjvknre5w7mfmlo@skbuf>
+ <86tubvk24r.fsf@gmail.com>
+ <20220318121400.sdc4guu5m4auwoej@skbuf>
+ <86pmmjieyl.fsf@gmail.com>
+ <20220318131943.hc7z52beztqlzwfq@skbuf>
+ <86a6dixnd2.fsf@gmail.com>
+ <20220322110806.kbdb362jf6pbtqaf@skbuf>
+ <86fsn90ye8.fsf@gmail.com>
+ <20220323101643.kum3nuqctunakcfo@skbuf>
+ <864k3p5437.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
+In-Reply-To: <864k3p5437.fsf@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On Wed, Mar 23, 2022 at 11:57:16AM +0100, Hans Schultz wrote:
+> >> >> Another issue I see, is that there is a deadlock or similar issue when
+> >> >> receiving violations and running 'bridge fdb show' (it seemed that
+> >> >> member violations also caused this, but not sure yet...), as the unit
+> >> >> freezes, not to return...
+> >> >
+> >> > Have you enabled lockdep, debug atomic sleep, detect hung tasks, things
+> >> > like that?
+> >> 
+> >> I have now determined that it is the rtnl_lock() that causes the
+> >> "deadlock". The doit() in rtnetlink.c is under rtnl_lock() and is what
+> >> takes care of getting the fdb entries when running 'bridge fdb show'. In
+> >> principle there should be no problem with this, but I don't know if some
+> >> interrupt queue is getting jammed as they are blocked from rtnetlink.c?
+> >
+> > Sorry, I forgot to respond yesterday to this.
+> > By any chance do you maybe have an AB/BA lock inversion, where from the
+> > ATU interrupt handler you do mv88e6xxx_reg_lock() -> rtnl_lock(), while
+> > from the port_fdb_dump() handler you do rtnl_lock() -> mv88e6xxx_reg_lock()?
+> 
+> If I release the mv88e6xxx_reg_lock() before calling the handler, I need
+> to get it again for the mv88e6xxx_g1_atu_loadpurge() call at least. But
+> maybe the vtu_walk also needs the mv88e6xxx_reg_lock()?
+> I could also just release the mv88e6xxx_reg_lock() before the
+> call_switchdev_notifiers() call and reacquire it immediately after?
 
-To quote Linus:
-
-"EVERYBODY should have CONFIG_WERROR=y on at least x86-64 and other
-serious architectures, unless you have some completely random
-experimental (and broken) compiler.
-
-New compiler warnings are not acceptable."
-
-So this should make at least the most obvious and common ones not go
-unnoticed.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/configs/i386_defconfig   | 1 +
- arch/x86/configs/x86_64_defconfig | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
-index 71124cf8630c..4b2085243aa3 100644
---- a/arch/x86/configs/i386_defconfig
-+++ b/arch/x86/configs/i386_defconfig
-@@ -262,3 +262,4 @@ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
- CONFIG_EARLY_PRINTK_DBGP=y
- CONFIG_DEBUG_BOOT_PARAMS=y
- CONFIG_KALLSYMS_ALL=y
-+CONFIG_WERROR=y
-diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
-index 92b1169ec90b..38c52e4eb30b 100644
---- a/arch/x86/configs/x86_64_defconfig
-+++ b/arch/x86/configs/x86_64_defconfig
-@@ -258,3 +258,4 @@ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
- CONFIG_EARLY_PRINTK_DBGP=y
- CONFIG_DEBUG_BOOT_PARAMS=y
- CONFIG_KALLSYMS_ALL=y
-+CONFIG_WERROR=y
--- 
-2.29.2
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+The cleanest way to go about this would be to have the call_switchdev_notifiers()
+portion of the ATU interrupt handling at the very end of mv88e6xxx_g1_atu_prob_irq_thread_fn(),
+with no hardware access needed, and therefore no reg_lock() held.

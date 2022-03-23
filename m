@@ -2,157 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437B74E56E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 792D64E56ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244944AbiCWQuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
+        id S245581AbiCWQvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245573AbiCWQuA (ORCPT
+        with ESMTP id S238981AbiCWQvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:50:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB115BF5B;
-        Wed, 23 Mar 2022 09:48:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 23 Mar 2022 12:51:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4830223BD2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:49:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D8357210F3;
+        Wed, 23 Mar 2022 16:49:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648054184; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=22ADZAB+7skaLqBInlr+u4wR7AIA/10MMMrUH4hmyqg=;
+        b=oKhk9Cql8RB3t1jmsW+Oo6vEsnO+LnEOjuudGFTJor/ASf/X8Ihk/o+8wwpS8uMQCu7yxZ
+        YQw7MdBmjvSrKzYUACYG6MUo+a6Ak5ms/lBErRmswrGe8YofSONokaQRp61jZduv08dp/7
+        QffTCYzlW9hgB5JS8ZHwtKkWEGMuVQU=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 663F4B81FB1;
-        Wed, 23 Mar 2022 16:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB37C340EE;
-        Wed, 23 Mar 2022 16:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648054102;
-        bh=FoMqu2BEYnX3aJox5RSpcdoi3KAm34IMLWdtQd02tvU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=p4cqQd83k7Fo6EiX+ZyI1r2HWIdZN1JELau8kSctO6NhxQQ95hN8PoQrwat+RnwMO
-         LwvtWmvc0Szd3j8dhS+ID5BCEqfoZaZpjBNWSkom3Kg/eljkuWLBG2iyTnpvK56Dm/
-         oEwN8S/0iNPYzy2nC/17F10PsOyrMCJsbHc8Al9omSUZkduwWkePHLx2CFbrEBKein
-         U1tNlIDAAm0iUv8VfQUFJvzo5orz0rMcS0NHDAPKtlHcGqw/nKSRes/PAiRbWAKtkn
-         QGk8saZlWUpqeYY/WjmaceVVjq9pEJ93gcAYlB1iKcH18oZNF2TgW+qk1eMPyAGZII
-         R8XxiWOEfXhyA==
-Date:   Wed, 23 Mar 2022 09:48:21 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        david@fromorbit.com, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, hch@lst.de
-Subject: [GIT PULL] xfs: new code for 5.18
-Message-ID: <20220323164821.GP8224@magnolia>
+        by relay2.suse.de (Postfix) with ESMTPS id 8B1A4A3B87;
+        Wed, 23 Mar 2022 16:49:44 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 17:49:43 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Juergen Gross <jgross@suse.com>, linux-mm@kvack.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        Jerome Glisse <jglisse@redhat.com>
+Subject: Re: blocking vs. non-blocking mmu notifiers
+Message-ID: <YjtPpxlE/zWwnJ0W@dhcp22.suse.cz>
+References: <8e8ec786-74db-157b-a290-b1537941e91d@suse.com>
+ <YjrsOnxaPYc3rbdj@dhcp22.suse.cz>
+ <20220323163146.GI64706@ziepe.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220323163146.GI64706@ziepe.ca>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed 23-03-22 13:31:46, Jason Gunthorpe wrote:
+> On Wed, Mar 23, 2022 at 10:45:30AM +0100, Michal Hocko wrote:
+> > [Let me add more people to the CC list - I am not really sure who is the
+> >  most familiar with all the tricks that mmu notifiers might do]
+> > 
+> > On Wed 23-03-22 09:43:59, Juergen Gross wrote:
+> > > Hi,
+> > > 
+> > > during analysis of a customer's problem on a 4.12 based kernel
+> > > (deadlock due to a blocking mmu notifier in a Xen driver) I came
+> > > across upstream patches 93065ac753e4 ("mm, oom: distinguish
+> > > blockable mode for mmu notifiers") et al.
+> > > 
+> > > The backtrace of the blocked tasks was typically something like:
+> > > 
+> > >  #0 [ffffc9004222f228] __schedule at ffffffff817223e2
+> > >  #1 [ffffc9004222f2b8] schedule at ffffffff81722a02
+> > >  #2 [ffffc9004222f2c8] schedule_preempt_disabled at ffffffff81722d0a
+> > >  #3 [ffffc9004222f2d0] __mutex_lock at ffffffff81724104
+> > >  #4 [ffffc9004222f360] mn_invl_range_start at ffffffffc01fd398 [xen_gntdev]
+> > >  #5 [ffffc9004222f398] __mmu_notifier_invalidate_page at ffffffff8123375a
+> > >  #6 [ffffc9004222f3c0] try_to_unmap_one at ffffffff812112cb
+> > >  #7 [ffffc9004222f478] rmap_walk_file at ffffffff812105cd
+> > >  #8 [ffffc9004222f4d0] try_to_unmap at ffffffff81212450
+> > >  #9 [ffffc9004222f508] shrink_page_list at ffffffff811e0755
+> > > #10 [ffffc9004222f5c8] shrink_inactive_list at ffffffff811e13cf
+> > > #11 [ffffc9004222f6a8] shrink_node_memcg at ffffffff811e241f
+> > > #12 [ffffc9004222f790] shrink_node at ffffffff811e29c5
+> > > #13 [ffffc9004222f808] do_try_to_free_pages at ffffffff811e2ee1
+> > > #14 [ffffc9004222f868] try_to_free_pages at ffffffff811e3248
+> > > #15 [ffffc9004222f8e8] __alloc_pages_slowpath at ffffffff81262c37
+> > > #16 [ffffc9004222f9f0] __alloc_pages_nodemask at ffffffff8121afc1
+> > > #17 [ffffc9004222fa48] alloc_pages_current at ffffffff8122f350
+> > > #18 [ffffc9004222fa78] __get_free_pages at ffffffff8121685a
+> > > #19 [ffffc9004222fa80] __pollwait at ffffffff8127e795
+> > > #20 [ffffc9004222faa8] evtchn_poll at ffffffffc00e802b [xen_evtchn]
+> > > #21 [ffffc9004222fab8] do_sys_poll at ffffffff8127f953
+> > > #22 [ffffc9004222fec8] sys_ppoll at ffffffff81280478
+> > > #23 [ffffc9004222ff30] do_syscall_64 at ffffffff81004954
+> > > #24 [ffffc9004222ff50] entry_SYSCALL_64_after_hwframe at ffffffff818000b6
+> > > 
+> > > It was found that the notifier of the Xen gntdev driver was using a
+> > > mutex resulting in the deadlock.
+> 
+> The bug here is that prior to commit a81461b0546c ("xen/gntdev: update
+> to new mmu_notifier semantic") wired the mn_invl_range_start() which
+> takes a mutex to invalidate_page, which is defined to run in an atomic
+> context.
 
-Please pull this branch containing bug fixes for XFS for 5.18.  The
-biggest change this cycle is bringing XFS' inode attribute setting code
-back towards alignment with what the VFS does.  IOWs, setgid bit
-handling should be a closer match with ext4 and btrfs behavior.
+Yeah, we have already identified that but quickly realized that the
+whole mmu notifier overhaul which this fix depends on would be no no for
+backporting to our older code base. So we are trying to find our way
+around that.
 
-The rest of the branch is bug fixes around the filesystem -- patching
-gaps in quota enforcement, removing bogus selinux audit messages, and
-fixing log corruption and problems with log recovery.  There will be a
-second pull request later on in the merge window with more bug fixes.
+> > > Michal Hocko suggested that backporting above mentioned patch might
+> > > help, as the mmu notifier call is happening in atomic context.
+> 
+> IIRC "blocking" was not supposed to be about atomic context or not, but
+> more about time to completion/guarenteed completion as it is used from
+> a memory reclaim path.
 
-Dave Chinner will be taking over as XFS maintainer for one release
-cycle, starting from the day 5.18-rc1 drops until 5.19-rc1 is tagged so
-that I can focus on starting a massive design review for the (feature
-complete after five years) online repair feature.
+Yeah, when I was introducing that I was mostly concerned about oom path.
+But it is essentially impossible to tell what are the existing
+assumptions different mmu notifiers operate on.
 
-As usual, I did a test-merge with upstream master as of a few minutes
-ago, and didn't see any conflicts.  Please let me know if you encounter
-any problems.
+> 
+> > Just to be more explicit. The current upstream code calls
+> > mmu_notifier_invalidate_range while the page table locks are held.
+> > Are there any notifiers which could sleep in those? 
+> 
+> There should not be, that would be a bug that lockdep would find.
 
---D
-
-The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
-
-  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.18-merge-2
-
-for you to fetch changes up to 01728b44ef1b714756607be0210fbcf60c78efce:
-
-  xfs: xfs_is_shutdown vs xlog_is_shutdown cage fight (2022-03-20 08:59:50 -0700)
-
-----------------------------------------------------------------
-New code for 5.18:
- - Fix some incorrect mapping state being passed to iomap during COW
- - Don't create bogus selinux audit messages when deciding to degrade
-   gracefully due to lack of privilege
- - Fix setattr implementation to use VFS helpers so that we drop setgid
-   consistently with the other filesystems
- - Fix link/unlink/rename to check quota limits
- - Constify xfs_name_dotdot to prevent abuse of in-kernel symbols
- - Fix log livelock between the AIL and inodegc threads during recovery
- - Fix a log stall when the AIL races with pushers
- - Fix stalls in CIL flushes due to pinned inode cluster buffers during
-   recovery
- - Fix log corruption due to incorrect usage of xfs_is_shutdown vs
-   xlog_is_shutdown because during an induced fs shutdown, AIL writeback
-   must continue until the log is shut down, even if the filesystem has
-   already shut down
-
-----------------------------------------------------------------
-Darrick J. Wong (7):
-      xfs: don't generate selinux audit messages for capability testing
-      xfs: use setattr_copy to set vfs inode attributes
-      xfs: refactor user/group quota chown in xfs_setattr_nonsize
-      xfs: reserve quota for dir expansion when linking/unlinking files
-      xfs: reserve quota for target dir expansion when renaming files
-      xfs: constify the name argument to various directory functions
-      xfs: constify xfs_name_dotdot
-
-Dave Chinner (7):
-      xfs: log worker needs to start before intent/unlink recovery
-      xfs: check buffer pin state after locking in delwri_submit
-      xfs: xfs_ail_push_all_sync() stalls when racing with updates
-      xfs: async CIL flushes need pending pushes to be made stable
-      xfs: log items should have a xlog pointer, not a mount
-      xfs: AIL should be log centric
-      xfs: xfs_is_shutdown vs xlog_is_shutdown cage fight
-
-Gao Xiang (1):
-      xfs: add missing cmap->br_state = XFS_EXT_NORM update
-
- fs/xfs/libxfs/xfs_dir2.c      |  36 +++++++------
- fs/xfs/libxfs/xfs_dir2.h      |   8 +--
- fs/xfs/libxfs/xfs_dir2_priv.h |   5 +-
- fs/xfs/xfs_bmap_item.c        |   2 +-
- fs/xfs/xfs_buf.c              |  45 ++++++++++++----
- fs/xfs/xfs_buf_item.c         |   5 +-
- fs/xfs/xfs_extfree_item.c     |   2 +-
- fs/xfs/xfs_fsmap.c            |   4 +-
- fs/xfs/xfs_icache.c           |  10 +++-
- fs/xfs/xfs_inode.c            | 100 ++++++++++++++++++++++-------------
- fs/xfs/xfs_inode.h            |   2 +-
- fs/xfs/xfs_inode_item.c       |  12 +++++
- fs/xfs/xfs_ioctl.c            |   2 +-
- fs/xfs/xfs_iops.c             | 118 +++++++++---------------------------------
- fs/xfs/xfs_log.c              |   5 +-
- fs/xfs/xfs_log_cil.c          |  24 +++++++--
- fs/xfs/xfs_pnfs.c             |   3 +-
- fs/xfs/xfs_qm.c               |   8 +--
- fs/xfs/xfs_refcount_item.c    |   2 +-
- fs/xfs/xfs_reflink.c          |   5 +-
- fs/xfs/xfs_rmap_item.c        |   2 +-
- fs/xfs/xfs_trace.h            |   8 +--
- fs/xfs/xfs_trans.c            |  90 +++++++++++++++++++++++++++++++-
- fs/xfs/xfs_trans.h            |   6 ++-
- fs/xfs/xfs_trans_ail.c        |  47 ++++++++++-------
- fs/xfs/xfs_trans_priv.h       |   3 +-
- kernel/capability.c           |   1 +
- 27 files changed, 344 insertions(+), 211 deletions(-)
+OK, this is reassuring. Thanks!
+-- 
+Michal Hocko
+SUSE Labs

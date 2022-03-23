@@ -2,111 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8794E533C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CD84E533A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244317AbiCWNiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S244338AbiCWNiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244322AbiCWNiB (ORCPT
+        with ESMTP id S244315AbiCWNiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:38:01 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A6A71EC0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:36:31 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id k10so1874598edj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=eoJL8/ssTz//H6D1ky8wIdZCZtyYwQOapMLC4rpTJK4=;
-        b=bNAXkMThypJ8Fp6kfoI5Ak+DXC/qipME9qq62aGmE5rQINI4bXll1STdm+yJBTY1XJ
-         MAB6Colidi9wkqYkm7XWQwOKwYmnk4N/8QwaoLXdCBDgbO31bDjqhqNM7981z02PuoO3
-         M5L7fKggjZfAXBPxbyqoGJX8NduefdgX+vtezqdHOYoYD18Z5xNXH5mk1vIXUsDfCfO/
-         dURe8v8nEofP406hTLidblrYU8cfLUmEEdN7mt1/VBpZE2j2IUxhkmXtSwrxT0EowZJY
-         MteICWcMF6ES9/2/i6lSw8Gu7YZwdZjcjbUzz6HU0lS5Vrt7EMjMCphuPwK0KJ+6ciVZ
-         NmNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=eoJL8/ssTz//H6D1ky8wIdZCZtyYwQOapMLC4rpTJK4=;
-        b=b6IjmsboN2wkYRG3dkRNNmJR4KJSsePjc1LMIU4aIfYVYaTz0kjz0Ru6kS7ogk28PL
-         DI37Cbi3uYD2ciBd8dxUmOa7M7TO5u7tn2Fx0sEKVDmeCh/WXh+4h4ScWbqyWPZt2H/F
-         +D7S4mn3HxQnR2dbH7qmrOGkfkJ5shWomQoT0Cc3MDfsoFBu1wugUUx+HAVYf9l663ze
-         mwwJqf0t4KnZAf4o38HXHc0hy5PJWk+lmc2j1lsnCnLOwVt07bmPljZdn0s+qHQkB1VC
-         Z5b3/4/Y9eaIbjnXjffZONh5xTU3S3/SgOJcgnbr5VQc5Z5uG3UJdsl/jhrZGSqELD12
-         Vq2w==
-X-Gm-Message-State: AOAM532byHBv2TlWg00aq9hRePU5NUvILCQuHx83kt+gXdZJxbnsPUDm
-        iH3mKQx6GHQJe1X3fogZE7sj/uEzGdpq4eRv32w=
-X-Google-Smtp-Source: ABdhPJwFcJm7rfKsAySs+0vGMiLsgkerhO1IJaAaoI5nIsMNewFDbxma8gXpcBnrN9wIhl6vxQwOyxG97McgmzXPrzY=
-X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
- n13-20020a5099cd000000b00418d6c22405mr67804edb.342.1648042590389; Wed, 23 Mar
- 2022 06:36:30 -0700 (PDT)
+        Wed, 23 Mar 2022 09:38:00 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CC7532F6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:36:30 -0700 (PDT)
+Received: from [192.168.12.80] (unknown [182.2.71.26])
+        by gnuweeb.org (Postfix) with ESMTPSA id C015B7E34E;
+        Wed, 23 Mar 2022 13:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1648042589;
+        bh=kspSnS46lZV734KbQIo5pA/i92KsQL/tiG1+/s6yn7Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kcSf8zofG1Ae79QbZtwwD1xaWjFxENfn05JIUSat/GpbIDrcZpefOB5w0UdBHIjyY
+         AUZfewatYsqEK5iDgtC3n6tYRSaVvh6pWu9Jl+5S5rfJsoKCKiduRIg/GOeIMoB9i4
+         CR+Z/iIA3YkGdzRRk9N08+dnD+TY57RkDPXmJJ93kA+/AnHMmBBsUXU2Yv+oYfbfCt
+         g9I06f6kEGBTEax4PMXUq3dmVajI0+qA52D9WMXBWfFm+fc2aeH0DyRhXU0p7eBfdg
+         lnUcHP6nBKcW7VZxLlM8TX0rhd5gT8o6JRfJCiEVNNmGcZfCdzV+2WgeqjbekNLxTr
+         H1T00RpGk1Zsw==
+Message-ID: <5b611ae8-aca6-71c1-6a86-6234f61f1608@gnuweeb.org>
+Date:   Wed, 23 Mar 2022 20:36:24 +0700
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 23 Mar 2022 13:36:22 +0000
-Message-ID: <CAHpNFcM8p5hZ=wC5s+5JOw03yJbC-ZqApX0Cqpa48p=QdszTeg@mail.gmail.com>
-Subject: Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you
- trade markerz ***** Dukes Of THRUST ******
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] tools/nolibc/stdlib: only reference the external
+ environ when inlined
+Content-Language: en-US
+To:     Willy Tarreau <w@1wt.eu>, "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+References: <20220323071807.14413-1-w@1wt.eu>
+ <20220323071807.14413-3-w@1wt.eu>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220323071807.14413-3-w@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-***** Dukes Of THRUST ******
+On 3/23/22 2:18 PM, Willy Tarreau wrote:
+> When building with gcc at -O0 we're seeing link errors due to the
+> "environ" variable being referenced by getenv(). The problem is that
+> at -O0 gcc will not inline getenv() and will not drop the external
+> reference. One solution would be to locally declare the variable as
+> weak, but then it would appear in all programs even those not using
+> it, and would be confusing to users of getenv() who would forget to
+> set environ to envp.
+> 
+> An alternate approach used in this patch consists in always inlining
+> the outer part of getenv() that references this extern so that it's
+> always dropped when not used. The biggest part of the function was
+> now moved to a new function called _getenv() that's still not inlined
+> by default.
+> 
+> Reported-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> Signed-off-by: Willy Tarreau <w@1wt.eu>
+> ---
 
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
+This one works nicely. I will resend my previous RFC after this one
+lands in Paul's tree to avoid conflict.
 
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
+Tested-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Microchip clock abd 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
+Thanks!
 
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-***** Dukes Of THRUST ******
-
-Autism, Deafness & the hard of hearing : In need of ANC & Active audio
-clarification or correction 2022-01
-
-Sony & a few others make noise cancelling headphones that are suitable
-for people with Acute disfunction to brain function for ear drums ...
-Attention deficit or Autism,
-The newer Sony headsets are theoretically enablers of a clear
-confusion free world for Autistic people..
-Reaching out to a larger audience of people simply annoyed by a
-confusing world; While they listen to music..
-Can and does protect a small percentage of people who are confused &
-harassed by major discord located in all jurisdictions of life...
-
-Crazy noise levels, Or simply drowned in HISSING Static:
-
-Search for active voice enhanced noise cancellation today.
-
-Rupert S https://science.n-helix.com
-
-
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-
-https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
-
-
-https://www.orosound.com/
-
-https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/
+-- 
+Ammar Faizi

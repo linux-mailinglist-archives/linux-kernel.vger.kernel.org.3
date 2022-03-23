@@ -2,123 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00324E579A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B55A4E58D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343659AbiCWRg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S1344067AbiCWTED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239664AbiCWRgZ (ORCPT
+        with ESMTP id S230099AbiCWTEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 13:36:25 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F53A44A2D;
-        Wed, 23 Mar 2022 10:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648056895; x=1679592895;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sQLlik2JBKgjvTm6fLFQVl8wTqJf3BIKx0o9VBPfxEY=;
-  b=lAAFEMQbl84QIBvB3dS5mlI9IBa5FkTqog9nk8ZRssKHox/nY2qGJTC0
-   QxFNd3gZEjkUGZ+xAjyJ5gjJygV5QwgEsYsoZPktIpmk71NYX3KGoUoV0
-   MzYVsJcHo+Km05Hnvau/J73LDvqAlf0Asrv1BNp+8ixzhOMwM3sTRlRg+
-   /DkFe8uAXrIHfM0AbdXTRVOrNUL92lx1Xhw6cQGwL++CnQd1dkYVFuj9R
-   vvCVpBATZM4CGaFQqWI8hWwnBGsPqfgFNwW5hMgO0b4pQWCDL6MRzNdrj
-   tP69WHPt3iu0GhCDsitDEvcDrW2v4lpukeHplYArWwMRaRxOE/WKtODUH
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="257005681"
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="257005681"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 10:22:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="544287811"
-Received: from kplh.igk.intel.com ([10.102.21.224])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 10:22:01 -0700
-Date:   Wed, 23 Mar 2022 20:10:10 +0100
-From:   Piotr Raczynski <piotr.raczynski@intel.com>
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     netdev@vger.kernel.org, poros@redhat.com, mschmidt@redhat.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] ice: Fix MAC address setting
-Message-ID: <20220323190519.GA23730@kplh.igk.intel.com>
-References: <20220323135829.4015645-1-ivecera@redhat.com>
+        Wed, 23 Mar 2022 15:04:02 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003FF67D24
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:02:32 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id r2so2845266iod.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ILBTcqbT7I8ERAhQgoP+879JxAlN6lgSjFR2Kgt92rU=;
+        b=i9KhzFRzSDE94JcTAqHIOza78OGHLvuqTh6NzpW8BI5PzZye1IJ7d6nWD7PtqzawGW
+         mMfoQEZDw9pk8BfZMCWjhfof2Qm8+il7EkqfVe5Wb9R6LTxbjsespfOjq6xJBZv2aXUl
+         SUMq2HTqb9HHeFrLPsvbnenp5I+9RcSNDa2N4mHzHDINbZL8BX/VjnCNMP+Yb6Vcj4eq
+         kFfAa+sDq8GgM0t6y4ufe41nP5TJ2325djUZcJpVqYeoan02sKFBTcUA5XnEB6fmbBuN
+         chh+y2yrE6c93BgcvJDq39xgSRanxBD8vwWdFFpdeO7YY+shjgRmS9ALjfBZ7frA+1dv
+         SwqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ILBTcqbT7I8ERAhQgoP+879JxAlN6lgSjFR2Kgt92rU=;
+        b=I/zv32PEiuqFyL4SNGCucTMsMmWxYKu3ictI8kUrcoEv6B5M3lvoWvR+HJn2R6g3/D
+         FWZrzG74K04qsvFqjUDPlNPW6n3qnO3vShAQAIktaHrWBehBZzv97buuxJMABQcs+9Ap
+         MHzNBRzyMn7e17NtoHdjt4rSIEpQw3tDicMTBdl3F3kFa6o6jdDbAMkrYFvFK4+8/1Ny
+         SajBSOhJFQrTma35d9FJICb3DHMfbY6T9zLlvaJ+d3gOgtpeOsRRxoceovBLBZJALtxA
+         9aP4AFuHFVRtvoxe0DbuGltFMA7PE4rcofHyQ1BdjnRHMY7iaaSXVa914rWblv/IWkZQ
+         5SSA==
+X-Gm-Message-State: AOAM533w6b0LWpUtrnOtRObXRJKnITwJUaqoUe2QAg0p9u819iB8bdOF
+        585FyFnjAXYOVGZdgJlSszueqg6Af2mqF8EkeA8=
+X-Google-Smtp-Source: ABdhPJztMHMmsNQy8dQ5gWQnBlTdXE0AU/DGUamXU3evKA4MSjOxM9U2wi35kk1dN6m420ZO683FctYgQlzAOzhG8WE=
+X-Received: by 2002:a05:6638:16c6:b0:31a:c83:bc7c with SMTP id
+ g6-20020a05663816c600b0031a0c83bc7cmr784674jat.264.1648062152433; Wed, 23 Mar
+ 2022 12:02:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323135829.4015645-1-ivecera@redhat.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220308151119.48412-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220308151119.48412-1-andriy.shevchenko@linux.intel.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 23 Mar 2022 20:02:20 +0100
+Message-ID: <CANiq72kLxzRdXSQfjXBL9xixXBwbxOAhZ4fR_+GtgT5FXz7vaQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] auxdisplay: lcd2s: make use of device property API
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 02:58:29PM +0100, Ivan Vecera wrote:
-> Commit 2ccc1c1ccc671b ("ice: Remove excess error variables") merged
-> the usage of 'status' and 'err' variables into single one in
-> function ice_set_mac_address(). Unfortunately this causes
-> a regression when call of ice_fltr_add_mac() returns -EEXIST because
-> this return value does not indicate an error in this case but
-> value of 'err' value remains to be -EEXIST till the end of
-> the function and is returned to caller.
-> 
-> Prior this commit this does not happen because return value of
-> ice_fltr_add_mac() was stored to 'status' variable first and
-> if it was -EEXIST then 'err' remains to be zero.
-> 
-> The patch fixes the problem by reset 'err' to zero when
-> ice_fltr_add_mac() returns -EEXIST.
-> 
-> Fixes: 2ccc1c1ccc671b ("ice: Remove excess error variables")
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> ---
->  drivers/net/ethernet/intel/ice/ice_main.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-> index 168a41ea37b8..420558d1cd21 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_main.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
-> @@ -5474,14 +5474,15 @@ static int ice_set_mac_address(struct net_device *netdev, void *pi)
->  
->  	/* Add filter for new MAC. If filter exists, return success */
->  	err = ice_fltr_add_mac(vsi, mac, ICE_FWD_TO_VSI);
-> -	if (err == -EEXIST)
-> +	if (err == -EEXIST) {
->  		/* Although this MAC filter is already present in hardware it's
->  		 * possible in some cases (e.g. bonding) that dev_addr was
->  		 * modified outside of the driver and needs to be restored back
->  		 * to this value.
->  		 */
->  		netdev_dbg(netdev, "filter for MAC %pM already exists\n", mac);
-> -	else if (err)
-> +		err = 0;
+Hi Andy,
 
-Thanks Ivan, This looks fine. It is a regression as I checked since
-driver used to return success in such case. It seems that the only
-way to have EEXIST here is when the same MAC is requested, I'd also
-consider just return 0 here to skip later firwmare write which seems
-redundant here.
+On Tue, Mar 8, 2022 at 4:11 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Make use of device property API in this driver so that both OF based
+> system and ACPI based system can use this driver.
 
-Piotr
+I applied the series to -next, but for my understanding: the device
+property API was already being used, even if non-OF platforms couldn't
+use the driver before this patch, right? i.e. the commit message seems
+like the patch modified the calls.
 
-> +	} else if (err)
->  		/* error if the new filter addition failed */
->  		err = -EADDRNOTAVAIL;
->  
-> -- 
-> 2.34.1
-> 
+Cheers,
+Miguel

@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09CD4E5BF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C804E5BF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346006AbiCWXj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 19:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S233077AbiCWXjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 19:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346793AbiCWXhv (ORCPT
+        with ESMTP id S241532AbiCWXhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 19:37:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C7D6E781;
-        Wed, 23 Mar 2022 16:36:21 -0700 (PDT)
+        Wed, 23 Mar 2022 19:37:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C165070047;
+        Wed, 23 Mar 2022 16:36:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE9856184D;
-        Wed, 23 Mar 2022 23:36:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1F313C340E9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78485B8217F;
+        Wed, 23 Mar 2022 23:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 42206C36AE2;
         Wed, 23 Mar 2022 23:36:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1648078580;
-        bh=7K9FJdSlVd6h8HdN99KHbIy2DMjwhOMF3qRQpBjx5yQ=;
+        bh=r0t/LWSTRy50EZPGEgy6dJ6vuSnBZ2yGfwlmCVG7TBo=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=n3i8SfvfYAinnG7jC48DSCzeNNKcjBgWDj7v9j6q37nMn05X+X8rrq8tdc88k133d
-         NKCMi8dEUwmB0x3aILnrM6RY+uEB5txgqRyQG37AhxsTJ39q06DjnQVWXtlddljp8g
-         +ZbGgiM13ARyREOX/TrLxk89i+1DgNTC4aogRU4tfYC5GA/WuH1S3sOkpBweX7ZE/Z
-         ctCT7N8dKwKGznCRkmr/CiDsxLG8/bBnR+jEL1rLx4q3+mR3u3oqUAUezRPlRpItJQ
-         R4OZ50ACQMFyNT8EVgtMnnQSe63EvTiMmXCktsryM3LWKrHb+FtHSC4JO5lF7rCpEY
-         evvUynse751DA==
+        b=VwqWK7uQgNX2u+t8F9/DB1V8UCIaMjgaxw+IX0qwohv2jUUhXdDcEVxaQaKffp2NQ
+         BHCDoL2UILVQn4janvojeaIJef4G7e/ortwczdFRpjNSXBSM2LLqRTCRMw1DLXCUSX
+         utSZCvhnxUXkajaMF+mIxjm6F/trSHFc1YmSQidop8FvNZ8krxTSMrGIFoXU66LWs2
+         B6PQuPojAjiP6/E7DyIsPpwBQ/ICrxDkDFo44aN/20K1K9RaMrEkl5xyflLhKVm6br
+         iO/8o84XDs8+kOBKyaDKngtTj1msGu3RCRE7tdAFDDoeUWuUkYuPK9EHy436ItbHwQ
+         RsfJAp6xMOVsg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03AD9E7BB0B;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2E6CBE6D402;
         Wed, 23 Mar 2022 23:36:20 +0000 (UTC)
-Subject: Re: [GIT PULL for v5.18-rc1] media updates
+Subject: Re: [GIT PULL] MMC updates for v5.18
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220322101406.459e2950@coco.lan>
-References: <20220322101406.459e2950@coco.lan>
+In-Reply-To: <20220322114159.358997-1-ulf.hansson@linaro.org>
+References: <20220322114159.358997-1-ulf.hansson@linaro.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220322101406.459e2950@coco.lan>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.18-1
-X-PR-Tracked-Commit-Id: ba2c670ae84bad705ec023bfa7a48f7f8eab5e16
+X-PR-Tracked-Message-Id: <20220322114159.358997-1-ulf.hansson@linaro.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.18
+X-PR-Tracked-Commit-Id: dc3d879c6ffa25e90875237265898e49b2cabb7e
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 182966e1cd74ec0e326cd376de241803ee79741b
-Message-Id: <164807858001.14397.18040680261738090444.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 5bebe2c9ae0e0d3c6b25b8e1048bf66b1a3df621
+Message-Id: <164807858018.14397.12936198691051486429.pr-tracker-bot@kernel.org>
 Date:   Wed, 23 Mar 2022 23:36:20 +0000
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 22 Mar 2022 10:14:06 +0100:
+The pull request you sent on Tue, 22 Mar 2022 12:41:59 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.18-1
+> git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.18
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/182966e1cd74ec0e326cd376de241803ee79741b
+https://git.kernel.org/torvalds/c/5bebe2c9ae0e0d3c6b25b8e1048bf66b1a3df621
 
 Thank you!
 

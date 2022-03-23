@@ -2,140 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5F04E4B3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A4E4E4B40
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241418AbiCWDJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 23:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
+        id S241428AbiCWDJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 23:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiCWDJ3 (ORCPT
+        with ESMTP id S241416AbiCWDJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 23:09:29 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DC3BE15;
-        Tue, 22 Mar 2022 20:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648004880; x=1679540880;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=EF/JQuQvjXcqaoJAFGbUy4VuBPt0HhFRN25fJmoeJlk=;
-  b=ME6+DSaAh/SFqD9UbBXJLD0Vl7gOfpOWeslWTTRVgsgC+nnQdj9Scr/3
-   q1yaV7XKOTo07v+P6EqRa7uJo4XXqJ5AcBSNLyLYJf78xMlOJKBBlpYL8
-   XWgsmTR+TIVhtlwIX42YYLbEyzGbLPQYAdlJx5DwTfCPOJl7DKW3/YRNS
-   o=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 22 Mar 2022 20:07:59 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 20:07:58 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 22 Mar 2022 20:07:58 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 22 Mar 2022 20:07:52 -0700
-Date:   Wed, 23 Mar 2022 08:37:49 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Pawel Laszczak" <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        "Roger Quadros" <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH v2 0/3] Refactor xhci quirks and plat private data
-Message-ID: <20220323030749.GO23316@hu-pkondeti-hyd.qualcomm.com>
-References: <1646130507-26796-1-git-send-email-quic_c_sanm@quicinc.com>
- <ddc86a4f-8d1c-c02c-5600-4fa851568557@quicinc.com>
- <YjR0Ne3BDxxMfrxt@kroah.com>
- <b38ddfcc-68c3-d99f-816b-8b9f788aa88a@quicinc.com>
- <29ba84fb-1db2-1d84-cf9e-191e9bcbf739@linux.intel.com>
+        Tue, 22 Mar 2022 23:09:35 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8730B2459C;
+        Tue, 22 Mar 2022 20:08:02 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:51852.492916150
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id CB0F11002BB;
+        Wed, 23 Mar 2022 11:07:58 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 73c6cd2c2177406cb813e64aa6784a6a for jiaxun.yang@flygoat.com;
+        Wed, 23 Mar 2022 11:08:01 CST
+X-Transaction-ID: 73c6cd2c2177406cb813e64aa6784a6a
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <e0d3648e-3055-9f9b-878d-0fc22a93a806@189.cn>
+Date:   Wed, 23 Mar 2022 11:07:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v11 2/7] MIPS: Loongson64: dts: introduce ls3A4000
+ evaluation board
+Content-Language: en-US
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        chenhuacai@kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        liyi@loongson.cn
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-3-15330273260@189.cn>
+ <2644866a-8db2-923e-4227-2aa6d8e375fe@flygoat.com>
+ <2c671752-6684-f87b-7b2d-90568d36adde@189.cn>
+ <005099b5-33ed-4cb7-f8e4-10e1de780311@flygoat.com>
+ <abe784ce-eb9e-0143-dbc3-d415bbedbb81@189.cn>
+ <87d4f869-2ae8-f8d3-a55f-1a563cb21115@flygoat.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <87d4f869-2ae8-f8d3-a55f-1a563cb21115@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <29ba84fb-1db2-1d84-cf9e-191e9bcbf739@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathias,
 
-On Tue, Mar 22, 2022 at 05:53:42PM +0200, Mathias Nyman wrote:
-> On 21.3.2022 8.21, Sandeep Maheswaram (Temp) wrote:
-> > Hi Mathias,
-> > 
-> > On 3/18/2022 5:29 PM, Greg Kroah-Hartman wrote:
-> >> On Thu, Mar 17, 2022 at 11:17:17AM +0530, Sandeep Maheswaram (Temp) wrote:
-> >>> Hi Greg,
-> >>>
-> >>> On 3/1/2022 3:58 PM, Sandeep Maheswaram wrote:
-> >>>> changes in v2:
-> >>>> Added a PATCH 2/3 to remove unwanted header inclusion.
-> >>>> Fixed minor nitpicks in PATCH 3/3.
-> >>>>
-> >>>> Pavankumar Kondeti (1):
-> >>>>     usb: xhci: refactor quirks and plat private data
-> >>>>
-> >>>> Sandeep Maheswaram (2):
-> >>>>     usb: xhci: Remove unwanted header inclusion
-> >>>>     usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
-> >>>>
-> >>>>    drivers/usb/cdns3/host.c        |  2 +-
-> >>>>    drivers/usb/dwc3/host.c         | 13 ++++++++
-> >>>>    drivers/usb/host/xhci-plat.c    |  3 +-
-> >>>>    drivers/usb/host/xhci-plat.h    | 24 ---------------
-> >>>>    drivers/usb/host/xhci-rcar.c    |  3 +-
-> >>>>    drivers/usb/host/xhci.h         | 60 ++++--------------------------------
-> >>>>    include/linux/usb/xhci-plat.h   | 24 +++++++++++++++
-> >>>>    include/linux/usb/xhci-quirks.h | 67 +++++++++++++++++++++++++++++++++++++++++
-> >>>>    8 files changed, 115 insertions(+), 81 deletions(-)
-> >>>>    delete mode 100644 drivers/usb/host/xhci-plat.h
-> >>>>    create mode 100644 include/linux/usb/xhci-plat.h
-> >>>>    create mode 100644 include/linux/usb/xhci-quirks.h
-> >>> Please let me know your opinion about this patch series.
-> >> I need the xhci maintainer to review it...
-> >>
-> >> thanks,
-> >>
-> >> greg k-h
-> > 
-> > 
-> > Can you please review this patch series.
-> > 
-> 
-> I don't have a better solution than this.
-> 
-> So neither devicetree or ACPI entries exists for the xHC part of this dwc3 controller?
-> 
-> A pure platform device is created, and it matches and binds to xhci-plat driver by "xhci-hcd" name.
-> I guess we have no way to identify this dwc3 xhci controller in xhci-plat.c, and set quirks there,
-> like all those devicetree xhci devices that we set quirks based on .compatibility. 
-> 
-Thanks for the review. Yes, xhci-plat platform device is created by the DWC3
-driver for the controllers that needs to be operated in the host.
+On 2022/3/23 10:29, Jiaxun Yang wrote:
+>
+>
+> åœ¨ 2022/3/23 1:53, Sui Jingfeng å†™é“:
+>> Hi, Jiaxun
+>>
+>> Build all dts into vmlinuz will make the vmlinuz bigger and bigger.
+>> How does the kernel get the dtb is another big issue, either from 
+>> built-in
+>> dtb or pass from the firmware(pmon and uefi etc). This should be
+>> solved with another patch carefully. Providing board specific dts
+>> helps to code review, it helps reviewers understand that there are
+>> variant boards and have to be express with different OF graph.
+> Hi,
+>
+> I insist my taste on those code. If the only intention is to demonstrate
+> the usage of the driver then please just leave them in dt document
+> or commit message.
+>
+>>
+>> Now, there are about 6 dts under arch/mips/boot/dts/loongson/,
+>> Suppose loongson have 1000+ different board, do you want built all
+>> of them into vmlinuz?
+> Note that we are supporting all those boards on "platform" bias. Which
+> means if they share similar design then they will use the same DTS.
+> If we have a new design then unfortunately our kernel binary must grow.
+>
+> For those who intended to build a size-optimized kernel they will be
+> able to disable unused DTS in Kconfig.
+>
+> If you want to blame somebody for the problem then please don't
+> blame us. We tried very hard to fit all those stuff into kernel's model
+> of devices. You should blame those who did the initial design of
+> Loongson's boot interface that failed to introduce a proper way
+> to describe the platform.
+>
+>>
+>> Besides, ls7a1000 and ls2k1000 lack a i2c driver, gpio driver,
+>> pwm driver, clk driver, can you pay more attention to salve those
+>> problems, please ?
+> Are you trying to make a TODO list for your colleague :-)
+>
+> We , community developers, don't owe you anything. So please
+> don't expect anything from us. I lost access to most Loongson
+> devices since I'm currently study abroad, but I'm determined to
+> keep platform code in a good shape. That's my duty as a maintainer.
+>
+> Thanks.
+> - Jiaxun
 
-Thanks,
-Pavan
+Providing a few board specific dts doesn't hurt anybody.
+
+Can we leave the problem(passing correct dts to the kernel) untouched and
+
+solve it in the feature with a another patch, ok?
+

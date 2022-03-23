@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB3F4E59D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CC04E59D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344639AbiCWUcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 16:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S1344650AbiCWUch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 16:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234460AbiCWUcU (ORCPT
+        with ESMTP id S234460AbiCWUce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 16:32:20 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB1D8878E;
-        Wed, 23 Mar 2022 13:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=/P+1boOsbCQ6AVBVCSZ/z5hphLHXogBYDH2FQO7KmI4=; b=Ve7FKq/JIk+7trK6q3RWgSvlnS
-        CrLHPojrgili7GrvVHfgwtk8st5K1uZU3yc0M2ag1k7eKYuAezQJZSLfvd38TXJ+CJqTKqZQyoCTZ
-        MdFb4I9j+y0/A8L7pN2t2qd6ftDI59koFx3nbQtPMOFXqAfJAesd3R6FaTdxA0C00l9Q=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nX7cs-00CL1M-RO; Wed, 23 Mar 2022 21:30:38 +0100
-Date:   Wed, 23 Mar 2022 21:30:38 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 0/5] net: phy: C45-over-C22 access
-Message-ID: <YjuDbqZom8knPVpm@lunn.ch>
-References: <20220323183419.2278676-1-michael@walle.cc>
+        Wed, 23 Mar 2022 16:32:34 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60828BF33
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 13:31:04 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id m22so2874400pja.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 13:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8oFqq3OAhLNYPmEUiRfaWEgxs162u2Kk2WATsf8DjFk=;
+        b=yfFgEujSkMrvB7YkpTzShQMqW9DQ8ZztfhEKHxVi83cgbvHnbrolIbRgTLR7KMxOfn
+         9YV5bkeeTjzlAr2Qq6Y1Z5i4ADZUugUDosI9tIbgZlfiak/gLoXdW8SGrMhYNZ9ifN7h
+         MxGmlJYpAjzH3fe/rnxaw5+lGlfL1oBzGijj99NLf66z1NHaQkDzvW7WZn2+qzZ7WAhw
+         FmTnj/l5KQrB2WA5dwr3qv27AEUYV+Ai0Vd7qlehDx5dJrY8n3fp3c6esRVWM2GW9uYM
+         g8zaGc6EQqLj/7T1fvJ08zTjASFOt9Jgwbvpj5Zgu6B1JgkXZ3xIzOgoh//wgzxSCysh
+         YSSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8oFqq3OAhLNYPmEUiRfaWEgxs162u2Kk2WATsf8DjFk=;
+        b=pj9ptOdNS4R8E3jrrL+lt7eR5ZYCuL/a3CNfVRBfe18vwoekmbEVZlBkpZThwu5cmT
+         UArTFa9gQU/e6ntQdccaf1BA680jZXjSRQzW9RWE9EIb2ApvJ5hYZRSx4CbIuvgfM0oJ
+         BW1DvQjWKSOEZomokNSNZLWeM6gYN1r5iZsCxBsJL9zAHes0BFr3XDdPtNHcFtszsgh/
+         50vtc5/oplKRWnx/vy6KLSB/S7qmeVieYWB1rPmD50XzOAjec96ARxg8BWl6pM1c8jC6
+         Ld5kix+V128imDYa3Z9YjZFFrdFjvR5gi5RwPgI3Q3qgmi2KzMueC+5vZ8DopSE6eL9F
+         CjDQ==
+X-Gm-Message-State: AOAM531yM/RM9zRLS7D+7/1hdb1+MiADAaNgYgCSV0PLLgXx2r28EPPx
+        Fohn9H0hLRnj4ec3zlfAxxYz5vD97m6OQA==
+X-Google-Smtp-Source: ABdhPJz4bqT4rTQKROWpsRfJ8/z0g4TFpQqPDv/8rW47kC7Hm9iL/Mo81XGivORNIzOkprgJCskZOw==
+X-Received: by 2002:a17:902:7405:b0:154:68e6:9bdb with SMTP id g5-20020a170902740500b0015468e69bdbmr1879887pll.15.1648067464295;
+        Wed, 23 Mar 2022 13:31:04 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.78.42])
+        by smtp.gmail.com with ESMTPSA id n3-20020a056a0007c300b004fa3e9f59cdsm718476pfu.39.2022.03.23.13.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 13:31:03 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 1/1] arm64: dts: qcom: sm8150: Add ufs power-domain entries
+Date:   Thu, 24 Mar 2022 02:00:52 +0530
+Message-Id: <20220323203052.1124683-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323183419.2278676-1-michael@walle.cc>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 07:34:14PM +0100, Michael Walle wrote:
-> Hi,
-> 
-> This is the result of this discussion:
-> https://lore.kernel.org/netdev/240354b0a54b37e8b5764773711b8aa3@walle.cc/
-> 
-> The goal here is to get the GYP215 and LAN8814 running on the Microchip
-> LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, the
-> LAN8814 has a bug which makes it impossible to use C45 on that bus.
-> Fortunately, it was the intention of the GPY215 driver to be used on a C22
-> bus. But I think this could have never really worked, because the
-> phy_get_c45_ids() will always do c45 accesses and thus on MDIO bus drivers
-> which will correctly check for the MII_ADDR_C45 flag and return -EOPNOTSUPP
-> the function call will fail and thus gpy_probe() will fail. This series
-> tries to fix that and will lay the foundation to add a workaround for the
-> LAN8814 bug by forcing an MDIO bus to be c22-only.
-> 
-> At the moment, the probe_capabilities is taken into account to decide if
-> we have to use C45-over-C22. What is still missing from this series is the
-> handling of a device tree property to restrict the probe_capabilities to
-> c22-only.
+Add power-domain entries for UFS phy node in sm8150 dts.
 
-We have a problem here with phydev->is_c45.
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Rob Herring <robh@kernel.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+Changes since v3:
+----------------
+- v3 can be found here: https://lore.kernel.org/linux-arm-msm/20220303082140.240745-1-bhupesh.sharma@linaro.org/
+- Dropped [PATCH 1/2] from v3, which is already in linux-next now.
+- Addressed Dmitry's and Bjorn's review comments.
+- This patch is rebase on linux-next.
 
-In phy-core.c, functions __phy_read_mmd() and __phy_write_mmd() it
-means perform c45 transactions over the bus. We know we want to access
-a register in c45 space because we are using an _mmd() function.
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
-In phy.c, it means does this PHY have c45 registers and we should
-access that register space, or should we use the c22 register
-space. So far example phy_restart_aneg() decides to either call
-genphy_c45_restart_aneg() or genphy_restart_aneg() depending on
-is_c45.
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 6012322a5984..eed601e70229 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -1637,6 +1637,7 @@ ufs_mem_hc: ufshc@1d84000 {
+ 			phy-names = "ufsphy";
+ 			lanes-per-direction = <2>;
+ 			#reset-cells = <1>;
++
+ 			resets = <&gcc GCC_UFS_PHY_BCR>;
+ 			reset-names = "rst";
+ 
+@@ -1687,6 +1688,8 @@ ufs_mem_phy: phy@1d87000 {
+ 			clocks = <&gcc GCC_UFS_MEM_CLKREF_CLK>,
+ 				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+ 
++			power-domains = <&gcc UFS_PHY_GDSC>;
++			power-domain-names = "ufs_phy_gdsc";
+ 			resets = <&ufs_mem_hc 0>;
+ 			reset-names = "ufsphy";
+ 			status = "disabled";
+-- 
+2.35.1
 
-So a PHY with C45 register space but only accessible by C45 over C22
-is probably going to do the wrong thing with the current code.
-
-For this patchset to work, we need to cleanly separate the concepts of
-what sort of transactions to do over the bus, from what register
-spaces the PHY has. We probably want something like phydev->has_c45 to
-indicate the register space is implemented, and phydev->c45_over_c22
-to indicate what sort of transaction should be used in the _mmd()
-functions.
-
-Your patches start in that direction, but i don't think it goes far
-enough.
-
-	Andrew

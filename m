@@ -2,213 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D974E5342
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456724E5348
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244359AbiCWNjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S244375AbiCWNjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241030AbiCWNi4 (ORCPT
+        with ESMTP id S244362AbiCWNjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:38:56 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4CF7D020
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:37:26 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id w8so1543868pll.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VfajTc7fN5/QBah8uryBe2x7PpPvgTkjk9FpVMqI2Is=;
-        b=X6L7caAs4D6yd3LFy3C0MVgkxhB2lTj6oP3oqntMlIMTMfzQatfRHNg76dn9Zhywgr
-         lTN3bw+JS0CpnCaFHZ9ncnFvuiYOjOyk/unztfnWeRNAKPvhKuxfwVdDMhKY0kGG7SQw
-         SiDpW9zIrRafwSn2ls4u8/ShuxVUMzjj5bTYrgF36nbsk6fR8TlwlyyquXi7t8C87uUd
-         SOgUWHmvpwTSlbh7XXsz/xFB5pvamxbGmVGei2A86copTP2wMAR/llzVqe1v82CsghAN
-         HXlpfN4dAQ6Pxmjei6ey8mseQgQbWTSmIwRQH+KgPH0Ur6zj79DenZ8n7mBCpnZJjPVB
-         I3TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VfajTc7fN5/QBah8uryBe2x7PpPvgTkjk9FpVMqI2Is=;
-        b=ZoFsbrNROEDLeSnDSJMtiFtQeLblgMmHMtCO5Y3ocM/56Wu3kYdVIsREVIwwFAU7LM
-         GhvxOIf4/BICsddNfGemGO9Mq/XhUwer9OoG3wF8hOkNTHgPRIZGMOo1qjjonUkJwlmF
-         rPJoh9oJyVr6qJe29UYIgueD09KWg21rltjOlqw2wELxfa/sTs0jwGQvIywIWGq26W7/
-         ssOwOUIx9L/uIUEN1noCl/2EbNUA4Q7+irSb9imAAY1itRSI4E8ofMKlBGhQJAJ0pUkd
-         w0LyQzlyQK/YDEoZjOrdz9vCfv2o726bZYIRUg3zk6SCxH3ha4zuxoYIVtIrTaT3Vo/a
-         AdDw==
-X-Gm-Message-State: AOAM532KduOnRirTLsTbiOJYCgKSE8Ix9mnKVep1rXi74wi3rEm+aT8J
-        LsWEowqqdMBMx4HZ6vAjlrxolQ==
-X-Google-Smtp-Source: ABdhPJx8aAdnXi3BFxQKrylXbbKyjkCLwLwRVVaqgAGr0C6HjAU/0fl68wSxOvKNF9RIEiMbH/ufuA==
-X-Received: by 2002:a17:90b:1d0e:b0:1bf:2a24:2716 with SMTP id on14-20020a17090b1d0e00b001bf2a242716mr11581372pjb.60.1648042645866;
-        Wed, 23 Mar 2022 06:37:25 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6? ([2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6])
-        by smtp.gmail.com with ESMTPSA id o7-20020aa79787000000b004f8e44a02e2sm24747pfp.45.2022.03.23.06.37.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 06:37:25 -0700 (PDT)
-Message-ID: <c4fea458-b0e1-9842-91ea-5a1c6f7e8387@bytedance.com>
-Date:   Wed, 23 Mar 2022 21:37:16 +0800
+        Wed, 23 Mar 2022 09:39:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8E35F8D6;
+        Wed, 23 Mar 2022 06:38:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3593B81F13;
+        Wed, 23 Mar 2022 13:38:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EFBC340E8;
+        Wed, 23 Mar 2022 13:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648042690;
+        bh=FS4rMUgYm98K72DS/l0zV5frCfm1kqj/zcgo/7pabXw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JT3Ze9V22MkpJEe9f7BnjRn/vnsga2B9nHBVD0kV8zKLTi+VEroCdcjGzZlWKuHYJ
+         1gyqGo/IrlVtRZkznGfLmYBmgt2Uworm16hjtXdDeQl+39jWHRbUTf26ct9hOH0/uG
+         er6PCviMcAqG8oVa0XLsFb3EYWzzpovOYPuNPGhM=
+Date:   Wed, 23 Mar 2022 14:38:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+Message-ID: <Yjsiv2XesJRzoeTW@kroah.com>
+References: <20220322192712.709170-1-mszeredi@redhat.com>
+ <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+ <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [External] Re: [PATCH v2 2/6] perf/core: Introduce percpu
- perf_cgroup
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, eranian@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-References: <20220322120834.98637-1-zhouchengming@bytedance.com>
- <20220322120834.98637-3-zhouchengming@bytedance.com>
- <20220323125116.GX8939@worktop.programming.kicks-ass.net>
- <f6a46509-a373-5c7a-8694-8eaf0ebc69ab@bytedance.com>
- <20220323131744.GY8939@worktop.programming.kicks-ass.net>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20220323131744.GY8939@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/23 9:17 下午, Peter Zijlstra wrote:
-> On Wed, Mar 23, 2022 at 09:07:01PM +0800, Chengming Zhou wrote:
->> On 2022/3/23 8:51 下午, Peter Zijlstra wrote:
->>> On Tue, Mar 22, 2022 at 08:08:30PM +0800, Chengming Zhou wrote:
->>>
->>>> diff --git a/kernel/events/core.c b/kernel/events/core.c
->>>> index 8b5cf2aedfe6..848a3bfa9513 100644
->>>> --- a/kernel/events/core.c
->>>> +++ b/kernel/events/core.c
->>>
->>>> @@ -843,11 +845,21 @@ static void perf_cgroup_switch(struct task_struct *task)
->>>>  	 */
->>>>  	local_irq_save(flags);
->>>>  
->>>> +	cgrp = perf_cgroup_from_task(task, NULL);
->>>> +	if (cgrp == __this_cpu_read(cpu_perf_cgroup))
->>>> +		goto out;
+On Wed, Mar 23, 2022 at 02:24:40PM +0100, Miklos Szeredi wrote:
+> On Wed, 23 Mar 2022 at 12:43, Christian Brauner <brauner@kernel.org> wrote:
 > 
-> So this compares the cpu thing against the task thing, if matching, we
-> bail.
+> > Yes, we really need a way to query for various fs information. I'm a bit
+> > torn about the details of this interface though. I would really like if
+> > we had interfaces that are really easy to use from userspace comparable
+> > to statx for example.
 > 
->>>> +
->>>> +	__this_cpu_write(cpu_perf_cgroup, cgrp);
+> The reason I stated thinking about this is that Amir wanted a per-sb
+> iostat interface and dumped it into /proc/PID/mountstats.  And that is
+> definitely not the right way to go about this.
 > 
-> Then we set cpu thing.
+> So we could add a statfsx() and start filling in new stuff, and that's
+> what Linus suggested.  But then we might need to add stuff that is not
+> representable in a flat structure (like for example the stuff that
+> nfs_show_stats does) and that again needs new infrastructure.
 > 
->>>> +
->>>>  	list = this_cpu_ptr(&cgrp_cpuctx_list);
->>>>  	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
->>>>  		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
->>>>  
->>>>  		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
->>>> +
->>>> +		if (cpuctx->cgrp == cgrp)
->>>> +			continue;
->>>> +
->>>>  		perf_pmu_disable(cpuctx->ctx.pmu);
->>>>  
->>>>  		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
+> Another example is task info in /proc.  Utilities are doing a crazy
+> number of syscalls to get trivial information.  Why don't we have a
+> procx(2) syscall?  I guess because lots of that is difficult to
+> represent in a flat structure.  Just take the lsof example: tt's doing
+> hundreds of thousands of syscalls on a desktop computer with just a
+> few hundred processes.
 > 
->>>> +		cpuctx->cgrp = cgrp
+> So I'm trying to look beyond fsinfo and about how we could better
+> retrieve attributes, statistics, small bits and pieces within a
+> unified framework.
 > 
-> But here we already have exactly the same pattern, we match cpuctx thing
-> against task thing and skip/set etc.
-
-Yes, cpu_perf_cgroup is just "cache" which cgrp assigned to cpuctx->cgrp.
-
+> The ease of use argument does not really come into the picture here,
+> because (unlike stat and friends) most of this info is specialized and
+> will be either consumed by libraries, specialized utilities
+> (util-linux, procos) or with a generic utility application that can
+> query any information about anything that is exported through such an
+> interface.    That applies to plain stat(2) as well: most users will
+> not switch to statx() simply because that's too generic.  And that's
+> fine, for info as common as struct stat a syscall is warranted.  If
+> the info is more specialized, then I think a truly generic interface
+> is a much better choice.
 > 
->>> Also, I really don't see the point of cpu_perf_cgroup, cpuctx->cgrp
->>> should be able to do this.
->>
->> But the problem is that we have two cpuctx on the percpu list, do you
->> mean we should use perf_cgroup of the first cpuctx to compare with
->> the next task's perf_cgroup ?
->>
->> Or we should delete the cgrp in cpuctx, and use this new percpu cpu_perf_cgroup?
+> >  I know having this generic as possible was the
+> > goal but I'm just a bit uneasy with such interfaces. They become
+> > cumbersome to use in userspace. I'm not sure if the data: part for
+> > example should be in this at all. That seems a bit out of place to me.
 > 
-> I'm a bit confused, per the above, you already do exactly what the new
-> cpu_perf_cgroup does on the cpuctx->cgrp variable. AFAICT the only think
-> the new per-cpu variable does is avoid a lock, howveer:
-
-we have cgrp in cpuctx make me confused at first too.
-
-perf_cgroup_event_enable()
-	if (ctx->is_active && !cpuctx->cgrp)
-		if ...
-			cpuctx->cgrp = cgrp;   -->  set cpuctx->cgrp when enable event
-
-	list_add(&cpuctx->cgrp_cpuctx_entry,
-			per_cpu_ptr(&cgrp_cpuctx_list, event->cpu))  --> add cpuctx on percpu list
-
-But we have two (hw and sw) cpuctx, so these two cpuctx->cgrp maybe different...
-
-This is the reason why I want to create a percpu cpu_perf_cgroup,
-just "cache" cgrp last scheduled, to compare with next task to decide
-whether perf_cgroup_switch() can be skipped.
-
-But you are right, having cpuctx->cgrp and cpu_perf_cgroup make things confused..
-maybe we can delete cpuctx->cgrp, change to use percpu cpu_perf_cgroup?
-
+> Good point, reduction of scope may help.
 > 
+> > Would it be really that bad if we added multiple syscalls for different
+> > types of info? For example, querying mount information could reasonably
+> > be a more focussed separate system call allowing to retrieve detailed
+> > mount propagation info, flags, idmappings and so on. Prior approaches to
+> > solve this in a completely generic way have gotten us not very far too
+> > so I'm a bit worried about this aspect too.
 > 
->>> --- a/kernel/events/core.c
->>> +++ b/kernel/events/core.c
->>> @@ -833,6 +833,7 @@ static DEFINE_PER_CPU(struct list_head,
->>>   */
->>>  static void perf_cgroup_switch(struct task_struct *task)
->>>  {
->>> +	struct perf_cgroup *cgrp;
->>>  	struct perf_cpu_context *cpuctx, *tmp;
->>>  	struct list_head *list;
->>>  	unsigned long flags;
->>> @@ -843,11 +844,20 @@ static void perf_cgroup_switch(struct ta
->>>  	 */
->>>  	local_irq_save(flags);
->>>  
->>> +	cgrp = perf_cgroup_from_task(task, NULL);
->>> +
->>>  	list = this_cpu_ptr(&cgrp_cpuctx_list);
->>>  	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
->>>  		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
->>>  
->>> +		if (READ_ONCE(cpuctx->cgrp == cgrp))
->>> +			continue
+> And I fear that this will just result in more and more ad-hoc
+> interfaces being added, because a new feature didn't quite fit the old
+> API.  You can see the history of this happening all over the place
+> with multiple new syscall versions being added as the old one turns
+> out to be not generic enough.
 > 
-> I think we can avoid that by doing an early check, hmm?
-
-perf_cgroup_switch() can be called from context_switch(), or __perf_cgroup_move() from IPI.
-Say if in context_switch() already set cpuctx->cgrp to the new task->cgroups, then context_switch()
-finish, handle IPI in __perf_cgroup_move(), we don't need to do sched_out/in again.
-
-Thanks.
-
+> I think a new interface needs to
 > 
->>> +
->>>  		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
->>> +
->>> +		if (cpuctx->cgrp == cgrp)
->>> +			goto next;
->>> +
->>>  		perf_pmu_disable(cpuctx->ctx.pmu);
->>>  
->>>  		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
->>> @@ -855,50 +865,22 @@ static void perf_cgroup_switch(struct ta
->>>  		 * must not be done before ctxswout due
->>>  		 * to event_filter_match() in event_sched_out()
->>>  		 */
->>> -		cpuctx->cgrp = perf_cgroup_from_task(task,
->>> -						     &cpuctx->ctx);
->>> +		WRITE_ONCE(cpuctx->cgrp, cgrp);
+>   - be uniform (a single utility can be used to retrieve various
+> attributes and statistics, contrast this with e.g. stat(1),
+> getfattr(1), lsattr(1) not to mention various fs specific tools).
+> 
+>  - have a hierarchical namespace (the unix path lookup is an example
+> of this that stood the test of time)
+> 
+>  - allow retrieving arbitrary text or binary data
+> 
+> And whatever form it takes, I'm sure it will be easier to use than the
+> mess we currently have in various interfaces like the mount or process
+> stats.
+
+This has been proposed in the past a few times.  Most recently by the
+KVM developers, which tried to create a "generic" api, but ended up just
+making something to work for KVM as they got tired of people ignoring
+their more intrusive patch sets.  See virt/kvm/binary_stats.c for what
+they ended up with, and perhaps you can just use that same type of
+interface here as well?
+
+thanks,
+
+greg k-h

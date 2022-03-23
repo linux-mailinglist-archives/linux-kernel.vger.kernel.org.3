@@ -2,126 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40224E5054
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161764E5056
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243536AbiCWKbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S243548AbiCWKcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 06:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243497AbiCWKbW (ORCPT
+        with ESMTP id S229786AbiCWKcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:31:22 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9CC23149;
-        Wed, 23 Mar 2022 03:29:53 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id o30-20020a05600c511e00b0038c9cfb79cbso2848784wms.1;
-        Wed, 23 Mar 2022 03:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NPCBeK8EmlJTLX7b8VpEEv5X7dyNwlhHhnCggdFBrcE=;
-        b=qCdS83+Qfa6n9umTyVz3zBeCN4SuOd83241gKDfei+pW0vIEpIF7/yBTmxVFUjunnX
-         2hdou67Rw8yuOKtQjBGjB6l8T7axLIFyZM0rA8UxjHYIvCzYdWZ/OAngIna0jfD+/aVV
-         quEtdxTe4Zt36sJLG3b9I/ZviguWfUVLrBMzNhJ9GLawtO/x1s3PI1mADTbR4G2U4g7I
-         OKoHhF1Zdf8bbUJmXLPb3VjmaLqJUtSFTpaVmZULmjwaLBshuBMFp0pIPB8wfphmoTEF
-         l9IfSpcuedD3pwQbVTtJF50DGCfV0wzMJUo81ikY320MwUIFf23hMTMv07XQKiP78GmT
-         /l0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NPCBeK8EmlJTLX7b8VpEEv5X7dyNwlhHhnCggdFBrcE=;
-        b=1b79UelmdjbTKPrGmk5hOigaFMQXnLtgGnLBQ1myc3ijRCyzXPUWTSf1SCNiQ/Ug9U
-         PFmpyjjqQsYVTMlDRTpnPWV4P0yoygCiZHK8d/EIxrDvyz0dMaU50R2OAAm5xSJRWI6k
-         npfz1mGJx74Cv2Bp0j3Hrq+WKVRRyWSf7EwDp9hroTFpWEr64uCGFBfEAXBCKJF+EJKZ
-         nMIUODpDj4Gk/XCKG5BeEYAJCLzof4Av9NIEJbG9MIisbK3ITF6dUIct77Mq5iFaOl1a
-         5mHFXDHFNIecEr0R3xw/vDCH1vk/guRXCdZB/0ezTBTGWO1JEr1mVVSoUrZ5J7fJaSUh
-         SWCg==
-X-Gm-Message-State: AOAM532CjHKGFhKbAUmmVkdPJx1Tzw5r3YErM2zDkOlaQexcDPyTWzcN
-        iSy1T+E0heCVB3AnUOvgHUs=
-X-Google-Smtp-Source: ABdhPJyHea6O2q1bz2HV4g4AFBLS35QU0I+LtFAlaTzAWOVC/Wo0vznM+u/mxodCJm04FmQER/vFyA==
-X-Received: by 2002:a1c:c904:0:b0:38c:8dc1:87a3 with SMTP id f4-20020a1cc904000000b0038c8dc187a3mr8671232wmb.101.1648031391419;
-        Wed, 23 Mar 2022 03:29:51 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.gmail.com with ESMTPSA id x13-20020adfec0d000000b00203ff46f802sm17017681wrn.36.2022.03.23.03.29.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 03:29:51 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 11:29:50 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 17/18] dt-bindings: arm: msm: Convert kpss-gcc driver
- Documentation to yaml
-Message-ID: <Yjr2nkIrQ356DMUI@Ansuel-xps.localdomain>
-References: <20220321231548.14276-1-ansuelsmth@gmail.com>
- <20220321231548.14276-18-ansuelsmth@gmail.com>
- <1647913851.222685.941035.nullmailer@robh.at.kernel.org>
+        Wed, 23 Mar 2022 06:32:22 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E83E6EB0A;
+        Wed, 23 Mar 2022 03:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648031451; x=1679567451;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SV0+1VOXq+yxYQQCFdKG0nZadXPiB8XCijjjUS7LwI4=;
+  b=MvHPNDY+0MNQM4fPyPTgPVAxo+zI3eqAeFin9sfkcNlh2BvYHvzrE+/o
+   8HJ22J20aLHSNkzUz2/DRlKPjdJkijHYIQVUT8dXTE2dDc+5QWfUUQ0KV
+   ham8QzQ0iJlx6By9IWOSrkahnQWeLgK6ow98qh/KEe4gYQhU0KTVfutJ7
+   tUCtAG99kEKcp0C9xob6EWyCNyAYr/cwKXbYu8+jlBhzeblTeM5V3cSc0
+   KsO8d5kUqiSA2NVl8GUoy0NyFRKW3FHy45aUFxHJR3QQbZicEyOuoDd0S
+   1nYqActMOtfh2cO9CZ1L5irMod2llowrZ4vDJE2yT+MLx7tSg9vjM+VHr
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="240238208"
+X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
+   d="scan'208";a="240238208"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 03:30:51 -0700
+X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
+   d="scan'208";a="515731387"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 03:30:47 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 23 Mar 2022 12:30:45 +0200
+Date:   Wed, 23 Mar 2022 12:30:45 +0200
+From:   "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
+To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
+Cc:     "bleung@google.com" <bleung@google.com>,
+        "Malani, Prashant" <pmalani@google.com>,
+        "jthies@google.com" <jthies@google.com>,
+        "Rao, Abhijeet" <abhijeet.rao@intel.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB4/TBT device routers should wake up during S0ix when
+ something gets connected/disconnected or a DP monitor gets plugged in
+Message-ID: <Yjr21UzWmj4NjItA@lahna>
+References: <20220323101818.3503-1-rajat.khandelwal@intel.com>
+ <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1647913851.222685.941035.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 08:50:51PM -0500, Rob Herring wrote:
-> On Tue, 22 Mar 2022 00:15:47 +0100, Ansuel Smith wrote:
-> > Convert kpss-gcc driver Documentation to yaml. Since kpss-gcc expose a
-> > clock add the required '#clock-cells' binding while converting it.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
-> >  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 69 +++++++++++++++++++
-> >  2 files changed, 69 insertions(+), 44 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> >  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> > 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1607962
-> 
-> 
-> clock-controller@2011000: '#clock-cells' is a required property
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
-> 
-> clock-controller@2011000: compatible:0: 'qcom,kpss-gcc' is not one of ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc-apq8064', 'qcom,kpss-gcc-msm8974', 'qcom,kpss-gcc-msm8960']
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
-> 
-> clock-controller@2011000: compatible:1: 'qcom,kpss-gcc' was expected
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
-> 
-> clock-controller@2011000: compatible: ['qcom,kpss-gcc', 'syscon'] is too short
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
-> 
+Hi,
 
-Sorry for the very stupid question but it's something i'm searching for
-a bit now... I can't really find Documentation or a guide on how to
-check single yaml and dts instead of using the make command and check
-everything. Am I missing something or this is not supported?
+If you want it to be woken up when something is plugged to the USB4 port
+then I suggest to add this to the "wakeup" capability of the usb4_port
+itself (see drivers/thunderbolt/usb4_port.c). And make it disabled by
+default too.
 
--- 
-	Ansuel
+On Wed, Mar 23, 2022 at 10:26:37AM +0000, Khandelwal, Rajat wrote:
+> +Mika
+> @Malani, Prashant @bleung@google.com This is the patch which fixes the partner issue. Kindly escalate your thoughts. 
+> 
+> Thanks
+> Rajat
+> 
+> -----Original Message-----
+> From: Khandelwal, Rajat <rajat.khandelwal@intel.com> 
+> Sent: Wednesday, March 23, 2022 3:48 PM
+> To: mika.westerberg@linux.intel.com
+> Cc: Khandelwal, Rajat <rajat.khandelwal@intel.com>; bleung@google.com; jthies@google.com; Malani, Prashant <pmalani@google.com>; Rao, Abhijeet <abhijeet.rao@intel.com>; Regupathy, Rajaram <rajaram.regupathy@intel.com>; linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: [PATCH] USB4/TBT device routers should wake up during S0ix when something gets connected/disconnected or a DP monitor gets plugged in
+> 
+> Device routers don't wake up during S0ix when something is plugged in/out or if a DP monitor gets connected. This causes the linux device to not wake up during S0ix cycling as the host router didn't wake up because the device router didn't. This patch adds a new functionality to linux.
+> 
+> Signed-off-by: Rajat-Khandelwal <rajat.khandelwal@intel.com>
+> ---
+>  drivers/thunderbolt/switch.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c index d026e305fe5d..4f8056724aa4 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -3067,13 +3067,11 @@ void tb_switch_suspend(struct tb_switch *sw, bool runtime)
+>  			tb_switch_suspend(port->remote->sw, runtime);
+>  	}
+>  
+> -	if (runtime) {
+> +	if (runtime || device_may_wakeup(&sw->dev)) {
+>  		/* Trigger wake when something is plugged in/out */
+>  		flags |= TB_WAKE_ON_CONNECT | TB_WAKE_ON_DISCONNECT;
+>  		flags |= TB_WAKE_ON_USB4;
+>  		flags |= TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE | TB_WAKE_ON_DP;
+> -	} else if (device_may_wakeup(&sw->dev)) {
+> -		flags |= TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE;
+>  	}
+>  
+>  	tb_switch_set_wake(sw, flags);
+> --
+> 2.17.1

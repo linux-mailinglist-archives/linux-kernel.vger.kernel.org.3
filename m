@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E764E4DCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0484E4DDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242445AbiCWIKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 04:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S242468AbiCWINM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242447AbiCWIKJ (ORCPT
+        with ESMTP id S233339AbiCWING (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:10:09 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF01074DE0;
-        Wed, 23 Mar 2022 01:08:38 -0700 (PDT)
-Received: (Authenticated sender: peter@korsgaard.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DB4AFFF80A;
-        Wed, 23 Mar 2022 08:08:35 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
-        (envelope-from <peter@korsgaard.com>)
-        id 1nWw2k-009WST-El; Wed, 23 Mar 2022 09:08:34 +0100
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     <santoshkumar.yadav@barco.com>, <peter.korsgaard@barco.com>,
-        <hdegoede@redhat.com>, <markgross@kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2] platform/x86: barco-p50-gpio: Fix duplicate included
- inux/io.h
-References: <1648021825-6182-1-git-send-email-baihaowen@meizu.com>
-Date:   Wed, 23 Mar 2022 09:08:34 +0100
-In-Reply-To: <1648021825-6182-1-git-send-email-baihaowen@meizu.com> (Haowen
-        Bai's message of "Wed, 23 Mar 2022 15:50:25 +0800")
-Message-ID: <87ee2tf5vh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 23 Mar 2022 04:13:06 -0400
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A8F43AC5;
+        Wed, 23 Mar 2022 01:11:36 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="55203557"
+X-IronPort-AV: E=Sophos;i="5.90,203,1643641200"; 
+   d="scan'208";a="55203557"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 23 Mar 2022 17:11:34 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+        by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 6CBCDF034A;
+        Wed, 23 Mar 2022 17:11:33 +0900 (JST)
+Received: from yto-om1.fujitsu.com (yto-om1.o.css.fujitsu.com [10.128.89.162])
+        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 9AAA3E6A3C;
+        Wed, 23 Mar 2022 17:11:32 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om1.fujitsu.com (Postfix) with ESMTP id 5C31B404AFD0D;
+        Wed, 23 Mar 2022 17:11:32 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v5 0/2] selftests/resctrl: Print a message if the result of MBM&CMT tests is failed on Intel CPU 
+Date:   Wed, 23 Mar 2022 17:09:26 +0900
+Message-Id: <20220323080928.1586408-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,18 +51,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> "Haowen" == Haowen Bai <baihaowen@meizu.com> writes:
+Hello,
 
- > Clean up the following includecheck warning:
- > drivers/platform/x86/barco-p50-gpio.c: linux/io.h is included more than once.
+The aim of this series is to print a message to let users know a possible
+cause of failure, if the result of MBM&CMT tests is failed on Intel CPU.
+In order to detect Intel vendor, I extended AMD vendor detect function.
 
- > No functional change.
+Difference from v4:
+- Fixed the typos.
+- Changed "get_vendor() != ARCH_AMD" to "get_vendor() == ARCH_INTEL".
+- Reorder the declarations based on line length from longest to shortest.
+https://lore.kernel.org/lkml/20220316055940.292550-1-tan.shaopeng@jp.fujitsu.com/ [PATCH v4]
 
- > Signed-off-by: Haowen Bai <baihaowen@meizu.com>
- > ---
- V1-> V2: drop the io.h include higher up to keep the (almost) alphabetical ordering.
+This patch series is based on v5.17.
 
-Acked-by: Peter Korsgaard <peter.korsgaard@barco.com>
+Shaopeng Tan (2):
+  selftests/resctrl: Extend CPU vendor detection
+  selftests/resctrl: Print a message if the result of MBM&CMT tests is
+    failed on Intel CPU
+
+ tools/testing/selftests/resctrl/cat_test.c    |  2 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  5 ++-
+ .../testing/selftests/resctrl/resctrl_tests.c | 45 +++++++++++++------
+ tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
+ 4 files changed, 37 insertions(+), 17 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+2.27.0
+

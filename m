@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4E74E4CF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 07:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FA04E4CF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 07:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242026AbiCWG5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 02:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S242032AbiCWG6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 02:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiCWG5T (ORCPT
+        with ESMTP id S242042AbiCWG5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 02:57:19 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105D371ED7;
-        Tue, 22 Mar 2022 23:55:50 -0700 (PDT)
-Received: from [192.168.0.3] (ip5f5ae903.dynamic.kabel-deutschland.de [95.90.233.3])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7991161EA1928;
-        Wed, 23 Mar 2022 07:55:48 +0100 (CET)
-Message-ID: <5fb6af7b-d84f-cbae-7eb1-543f3a7e53e4@molgen.mpg.de>
-Date:   Wed, 23 Mar 2022 07:55:48 +0100
+        Wed, 23 Mar 2022 02:57:55 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003BB71A11;
+        Tue, 22 Mar 2022 23:56:25 -0700 (PDT)
+X-UUID: 972c8aee81944895b22513bc9208dbcd-20220323
+X-UUID: 972c8aee81944895b22513bc9208dbcd-20220323
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 685011337; Wed, 23 Mar 2022 14:56:14 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 23 Mar 2022 14:56:13 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 23 Mar 2022 14:56:11 +0800
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Wei-Shun Chang <weishunc@google.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
+        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
+        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
+        <jian.yang@mediatek.com>
+Subject: [PATCH v4 0/2] phy: mediatek: Add PCIe PHY driver
+Date:   Wed, 23 Mar 2022 14:56:06 +0800
+Message-ID: <20220323065608.27426-1-jianjun.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 3/3] ata: ahci: Skip 200 ms debounce delay for AMD 300
- Series Chipset SATA Controller
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-ide@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nehal-bakulchandra Shah <Nehal-bakulchandra.Shah@amd.com>
-References: <20220321212431.13717-1-pmenzel@molgen.mpg.de>
- <20220321212431.13717-3-pmenzel@molgen.mpg.de>
- <BL1PR12MB5157DDFD5E75360F032346D3E2169@BL1PR12MB5157.namprd12.prod.outlook.com>
- <cc7b4426-f6a6-e6b1-4aaf-0a713ee3d388@opensource.wdc.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <cc7b4426-f6a6-e6b1-4aaf-0a713ee3d388@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Damien,
+These series patches add support for PCIe PHY driver on MediaTek chipsets.
 
+Changes in v4:
+1. Fix no return when calling dev_err_probe.
 
-Am 23.03.22 um 06:01 schrieb Damien Le Moal:
-> On 3/22/22 06:51, Limonciello, Mario wrote:
->> [Public]
->>
->>> -----Original Message-----
->>> From: Paul Menzel <pmenzel@molgen.mpg.de>
->>> Sent: Monday, March 21, 2022 16:25
+Changes in v3:
+1. Add introductions for structure members;
+2. Add SoC dependent data;
+3. Dynamically allocate efuse data;
+4. Check return value if it's an -EPROBE_DEFER.
 
-[…]
+Changes in v2:
+1. Add specific compatible name;
+2. Read NVMEM data at probe time;
+3. Fix typos.
 
->> I seem to recall that we were talking about trying to drop the debounce delay for
->> everything, weren't we?
->>
->> So perhaps it would be right to add a 4th patch in the series to do just that.  Then
->> If this turns out to be problematic for anything other than the controllers in the
->> series that you identified as not problematic then that 4th patch can potentially
->> be reverted alone?
-> 
-> Not quite everything :) But you are right, let's try to switch the default
-> to no delay. I will be posting patches today for that.
-> 
-> Paul,
-> 
-> With these patches, your patches are not necessary anymore as the AMD
-> chipset falls under the default no-delay.
+Jianjun Wang (2):
+  dt-bindings: phy: mediatek: Add YAML schema for PCIe PHY
+  phy: mediatek: Add PCIe PHY driver
 
-I am all for improving the situation for all devices, but I am unable to 
-judge the regression potential of changing this, as it affects a lot of 
-devices. I guess it’d would go through the next tree, and hopefully the 
-company QA teams can give it a good spin. I hoped that my patches, as I 
-have tested them, and AMD will hopefully too, could go into the current 
-merge window.
+ .../bindings/phy/mediatek,pcie-phy.yaml       |  75 +++++
+ drivers/phy/mediatek/Kconfig                  |  11 +
+ drivers/phy/mediatek/Makefile                 |   1 +
+ drivers/phy/mediatek/phy-mtk-pcie.c           | 272 ++++++++++++++++++
+ 4 files changed, 359 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+ create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
 
-> It would be nice if you can test though.
+-- 
+2.18.0
 
-Of course, I am going to that either way.
-
-
-Kind regards,
-
-Paul

@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E194E5A85
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5BD4E5A89
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241047AbiCWVSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S1344865AbiCWVTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240915AbiCWVSr (ORCPT
+        with ESMTP id S239195AbiCWVTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:18:47 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8ED84EF7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:17:17 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id r8so2981831oib.5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:17:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h9o+6xxE9gX10Taey3uxAiu/yqonSkF9+C51+NjLQ+c=;
-        b=IAJm1SDQWFQEP0U2RiBFB7hE5MAQXFlmBrmb5Q1BA+lbK6z+et+l4n9P7gEfafeWd5
-         MLvtpW4RVRrZ4Y0kgUXDNGvPfqMo/XzG7HgYKFhmSc13rmKaRmAYoHHkDYgKSaSmlnFS
-         kJUxHcFm3h73ct7Sc38ucoApqQ2FqzoQSq45S0+1Y2MPmtZGB7lDYZRgY2fZPyAqp6Ib
-         N1+gUUqOVY1UW1K3rrWAWuAJ/EbnZEYx3Dif0um8E6tyPpVpTNT9wUClJ2zJcBe8GuTS
-         bC6Mfis2i3WY837Tp+LkJoF9M4euzAJSujpgvJTO1n3AJk/n1+DR//Zcfxexg0nTFJP/
-         PhHg==
-X-Gm-Message-State: AOAM530j/HscUyof6J2ZH4Q3BUwihvYSVOpu8e1sU116lzj/oU8Q2MWM
-        0WhKoSN+hm0YJQoqn7pu/Q==
-X-Google-Smtp-Source: ABdhPJwpI852GkTaURWFEFVnsAjcGLkR3Z3ziISvkXDZMdUEZnwkEClQGXhlVztVh9r4gUq8oQdRgw==
-X-Received: by 2002:a05:6808:10cb:b0:2da:88e4:e352 with SMTP id s11-20020a05680810cb00b002da88e4e352mr5252705ois.159.1648070236487;
-        Wed, 23 Mar 2022 14:17:16 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d9-20020a9d51c9000000b005b2466cd7b3sm495319oth.36.2022.03.23.14.17.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 14:17:15 -0700 (PDT)
-Received: (nullmailer pid 468441 invoked by uid 1000);
-        Wed, 23 Mar 2022 21:17:14 -0000
-Date:   Wed, 23 Mar 2022 16:17:14 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     James Morse <james.morse@arm.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        Jamie Iles <jamie@nuviainc.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com
-Subject: Re: [PATCH v3 21/21] x86/resctrl: Make resctrl_arch_rmid_read()
- return values in bytes
-Message-ID: <YjuOWpqLfiP4u2AT@robh.at.kernel.org>
-References: <20220217182110.7176-1-james.morse@arm.com>
- <20220217182110.7176-22-james.morse@arm.com>
+        Wed, 23 Mar 2022 17:19:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E54685644;
+        Wed, 23 Mar 2022 14:17:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EB01B820BC;
+        Wed, 23 Mar 2022 21:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07754C340ED;
+        Wed, 23 Mar 2022 21:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648070265;
+        bh=v5e4k963RO31bJDETxEOIn5BWVaRc2DhlX7tt5acHug=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qKRqWz7esmgtQQDVc81K+/mQRuHJuJrQYiAhaTgNK2RwWFkWFTNbBnd4Bq2NxULaN
+         E2RqKbj1H101IC2CIljcSuVdqQIAX+9ROuQoABzO/QeORek6cpLB6SzKD1CAvNiq9d
+         JEFnAQ0hBpfA/ATH5BMloSlcC1LjPK3hdODYWmVejr4YGpJy/ryB+FzQG4HhySEtHN
+         uRt3CxB/YCAjk3hK6VJRJ2gQ6FRSQvSDUfH6Z3DAaskQ8iICvfsq+UaN+mbm7gz/LQ
+         SqyvutbXQS0tLz8GAwWvVvmVz9eLocundVe0AyNjQjilGT3G8VyUJYkZXhMdSYD7rn
+         dZ2KLyHUXDsiQ==
+Date:   Wed, 23 Mar 2022 16:17:43 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [GIT PULL] PCI changes for v5.18
+Message-ID: <20220323211743.GA1372301@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220217182110.7176-22-james.morse@arm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,163 +53,310 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 06:21:10PM +0000, James Morse wrote:
-> resctrl_arch_rmid_read() returns a value in chunks, as read from the
-> hardware. This needs scaling to bytes by mon_scale, as provided by
-> the architecture code.
-> 
-> Now that resctrl_arch_rmid_read() performs the overflow and corrections
-> itself, it may as well return a value in bytes directly. This allows
-> the accesses to the architecture specific 'hw' structure to be removed.
-> 
-> Move the mon_scale conversion into resctrl_arch_rmid_read().
-> mbm_bw_count() is updated to calculate bandwidth from bytes.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
->  arch/x86/kernel/cpu/resctrl/ctrlmondata.c |  6 ++----
->  arch/x86/kernel/cpu/resctrl/internal.h    |  4 ++--
->  arch/x86/kernel/cpu/resctrl/monitor.c     | 22 +++++++++-------------
->  include/linux/resctrl.h                   |  2 +-
->  4 files changed, 14 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-> index d3f7eb2ac14b..03fc91d8bc9f 100644
-> --- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-> +++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-> @@ -549,7 +549,6 @@ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
->  int rdtgroup_mondata_show(struct seq_file *m, void *arg)
->  {
->  	struct kernfs_open_file *of = m->private;
-> -	struct rdt_hw_resource *hw_res;
->  	u32 resid, evtid, domid;
->  	struct rdtgroup *rdtgrp;
->  	struct rdt_resource *r;
-> @@ -569,8 +568,7 @@ int rdtgroup_mondata_show(struct seq_file *m, void *arg)
->  	domid = md.u.domid;
->  	evtid = md.u.evtid;
->  
-> -	hw_res = &rdt_resources_all[resid];
-> -	r = &hw_res->r_resctrl;
-> +	r = &rdt_resources_all[resid].r_resctrl;
->  	d = rdt_find_domain(r, domid, NULL);
->  	if (IS_ERR_OR_NULL(d)) {
->  		ret = -ENOENT;
-> @@ -584,7 +582,7 @@ int rdtgroup_mondata_show(struct seq_file *m, void *arg)
->  	else if (rr.err == -EINVAL)
->  		seq_puts(m, "Unavailable\n");
->  	else
-> -		seq_printf(m, "%llu\n", rr.val * hw_res->mon_scale);
-> +		seq_printf(m, "%llu\n", rr.val);
->  
->  out:
->  	rdtgroup_kn_unlock(of->kn);
-> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-> index e26a4d67e204..d6ce6ce91885 100644
-> --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> @@ -279,13 +279,13 @@ struct rftype {
->  
->  /**
->   * struct mbm_state - status for each MBM counter in each domain
-> - * @prev_bw_chunks: Previous chunks value read when for bandwidth calculation
-> + * @prev_bw_bytes: Previous bytes value read when for bandwidth calculation
->   * @prev_bw:	The most recent bandwidth in MBps
->   * @delta_bw:	Difference between the current and previous bandwidth
->   * @delta_comp:	Indicates whether to compute the delta_bw
->   */
->  struct mbm_state {
-> -	u64	prev_bw_chunks;
-> +	u64	prev_bw_bytes;
->  	u32	prev_bw;
->  	u32	delta_bw;
->  	bool	delta_comp;
-> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-> index 3a6555f49720..437e7db77f93 100644
-> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
-> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-> @@ -186,7 +186,7 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
->  	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
->  	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
->  	struct arch_mbm_state *am;
-> -	u64 msr_val;
-> +	u64 msr_val, chunks;
->  
->  	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
->  		return -EINVAL;
-> @@ -211,10 +211,11 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
->  	if (am) {
->  		am->chunks += mbm_overflow_count(am->prev_msr, msr_val,
->  						 hw_res->mbm_width);
-> -		*val = get_corrected_mbm_count(rmid, am->chunks);
-> +		chunks = get_corrected_mbm_count(rmid, am->chunks);
-> +		*val = chunks * hw_res->mon_scale;
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-This can be moved out of the if/else if you make the following change:
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
->  		am->prev_msr = msr_val;
->  	} else {
-> -		*val = msr_val;
-> +		*val = msr_val * hw_res->mon_scale;
+are available in the Git repository at:
 
-chunks = msr_val;
+  git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.18-changes
 
->  	}
->  
->  	return 0;
-> @@ -229,7 +230,6 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
->  void __check_limbo(struct rdt_domain *d, bool force_free)
->  {
->  	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
-> -	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
->  	struct rmid_entry *entry;
->  	u32 crmid = 1, nrmid;
->  	bool rmid_dirty;
-> @@ -252,7 +252,6 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
->  					   QOS_L3_OCCUP_EVENT_ID, &val)) {
->  			rmid_dirty = true;
->  		} else {
-> -			val *= hw_res->mon_scale;
->  			rmid_dirty = (val >= resctrl_rmid_realloc_threshold);
->  		}
->  
-> @@ -296,7 +295,6 @@ int alloc_rmid(void)
->  static void add_rmid_to_limbo(struct rmid_entry *entry)
->  {
->  	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
-> -	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
->  	struct rdt_domain *d;
->  	int cpu, err;
->  	u64 val = 0;
-> @@ -308,7 +306,6 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
->  			err = resctrl_arch_rmid_read(r, d, entry->rmid,
->  						     QOS_L3_OCCUP_EVENT_ID,
->  						     &val);
-> -			val *= hw_res->mon_scale;
->  			if (err || val <= resctrl_rmid_realloc_threshold)
->  				continue;
->  		}
-> @@ -400,15 +397,14 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
->   */
->  static void mbm_bw_count(u32 rmid, struct rmid_read *rr)
->  {
-> -	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(rr->r);
->  	struct mbm_state *m = &rr->d->mbm_local[rmid];
-> -	u64 cur_bw, chunks, cur_chunks;
-> +	u64 cur_bw, bytes, cur_bytes;
->  
-> -	cur_chunks = rr->val;
-> -	chunks = cur_chunks - m->prev_bw_chunks;
-> -	m->prev_bw_chunks = cur_chunks;
-> +	cur_bytes = rr->val;
-> +	bytes = cur_bytes - m->prev_bw_bytes;
-> +	m->prev_bw_bytes = cur_bytes;
->  
-> -	cur_bw = (chunks * hw_res->mon_scale) >> 20;
-> +	cur_bw = bytes >> 20;
+for you to fetch changes up to 611f841830aa5723ea67682628bd214cbc18df41:
 
-'bytes / SZ_1M' would be more readable and any decent compiler should 
-optimize a power of 2 divide. But maybe that's a separate change as 
-there are other cases of bytes to MB.
+  Merge branch 'remotes/lorenzo/pci/xgene' (2022-03-22 17:16:27 -0500)
 
-Rob
+----------------------------------------------------------------
+
+Enumeration:
+  - Move the VGA arbiter from drivers/gpu to drivers/pci because it's
+    PCI-specific, not GPU-specific (Bjorn Helgaas)
+  - Select the default VGA device consistently whether it's enumerated
+    before or after VGA arbiter init, which fixes arches that enumerate PCI
+    devices late (Huacai Chen)
+
+Resource management:
+  - Support BAR sizes up to 8TB (Dongdong Liu)
+
+PCIe native device hotplug:
+  - Fix "Command Completed" tracking to avoid spurious timouts when
+    powering off empty slots (Liguang Zhang)
+  - Quirk Qualcomm devices that don't implement Command Completed
+    correctly, again to avoid spurious timeouts (Manivannan Sadhasivam)
+
+Peer-to-peer DMA:
+  - Add Intel 3rd Gen Intel Xeon Scalable Processors to whitelist (Michael
+    J. Ruhl)
+
+APM X-Gene PCIe controller driver:
+  - Revert generic DT parsing changes that broke some machines in the field
+    (Marc Zyngier)
+
+Freescale i.MX6 PCIe controller driver:
+  - Allow controller probe to succeed even when no devices currently
+    present to allow hot-add later (Fabio Estevam)
+  - Enable power management on i.MX6QP (Richard Zhu)
+  - Assert CLKREQ# on i.MX8MM so enumeration doesn't hang when no device is
+    connected (Richard Zhu)
+
+Marvell Aardvark PCIe controller driver:
+  - Fix MSI and MSI-X support (Marek Behún, Pali Rohár)
+  - Add support for ERR and PME interrupts (Pali Rohár)
+
+Marvell MVEBU PCIe controller driver:
+  - Add DT binding and support for "num-lanes" (Pali Rohár)
+  - Add support for INTx interrupts (Pali Rohár)
+
+Microsoft Hyper-V host bridge driver:
+  - Avoid unnecessary hypercalls when unmasking IRQs on ARM64 (Boqun Feng)
+
+Qualcomm PCIe controller driver:
+  - Add SM8450 DT binding and driver support (Dmitry Baryshkov)
+
+Renesas R-Car PCIe controller driver:
+  - Help the controller get to the L1 state since the hardware can't do it
+    on its own (Marek Vasut)
+  - Return PCI_ERROR_RESPONSE (~0) for reads that fail on PCIe (Marek Vasut)
+
+SiFive FU740 PCIe controller driver:
+  - Drop redundant '-gpios' from DT GPIO lookup (Ben Dooks)
+  - Force 2.5GT/s for initial device probe (Ben Dooks)
+
+Socionext UniPhier Pro5 controller driver:
+  - Add NX1 DT binding and driver support (Kunihiko Hayashi)
+
+Synopsys DesignWare PCIe controller driver:
+  - Restore MSI configuration so MSI works after resume (Jisheng Zhang)
+
+----------------------------------------------------------------
+Ben Dooks (2):
+      PCI: fu740: Drop redundant '-gpios' from DT GPIO lookup
+      PCI: fu740: Force 2.5GT/s for initial device probe
+
+Bjorn Helgaas (31):
+      PCI/VGA: Move vgaarb to drivers/pci
+      PCI/VGA: Factor out vga_select_framebuffer_device()
+      PCI/VGA: Remove empty vga_arb_device_card_gone()
+      PCI/VGA: Use unsigned format string to print lock counts
+      PCI/VGA: Replace full MIT license text with SPDX identifier
+      PCI: Avoid broken MSI on SB600 USB devices
+      PCI: Remove unused assignments
+      PCI: kirin: Remove unused assignments
+      PCI: fu740: Remove unused assignments
+      PCI: cpqphp: Remove unused assignments
+      PCI: ibmphp: Remove unused assignments
+      Merge branch 'pci/acpi'
+      Merge branch 'pci/bridge-class-codes'
+      Merge branch 'pci/enumeration'
+      Merge branch 'pci/hotplug'
+      Merge branch 'pci/misc'
+      Merge branch 'pci/msi'
+      Merge branch 'pci/p2pdma'
+      Merge branch 'pci/vga'
+      Merge branch 'remotes/lorenzo/pci/aardvark'
+      Merge branch 'pci/host/dwc'
+      Merge branch 'remotes/lorenzo/pci/endpoint'
+      Merge branch 'pci/host/fu740'
+      Merge branch 'remotes/lorenzo/pci/hv'
+      Merge branch 'remotes/lorenzo/pci/imx6'
+      Merge branch 'remotes/lorenzo/pci/misc'
+      Merge branch 'remotes/lorenzo/pci/mvebu'
+      Merge branch 'remotes/lorenzo/pci/qcom'
+      Merge branch 'remotes/lorenzo/pci/rcar'
+      Merge branch 'remotes/lorenzo/pci/uniphier'
+      Merge branch 'remotes/lorenzo/pci/xgene'
+
+Boqun Feng (1):
+      PCI: hv: Avoid the retarget interrupt hypercall in irq_unmask() on ARM64
+
+Christophe Leroy (1):
+      sizes.h: Add SZ_1T macro
+
+Dmitry Baryshkov (4):
+      dt-bindings: pci: qcom: Document PCIe bindings for SM8450
+      PCI: qcom: Remove redundancy between qcom_pcie and qcom_pcie_cfg
+      PCI: qcom: Add ddrss_sf_tbu flag
+      PCI: qcom: Add SM8450 PCIe support
+
+Dongdong Liu (1):
+      PCI: Support BAR sizes up to 8TB
+
+Fabio Estevam (1):
+      PCI: imx6: Allow to probe when dw_pcie_wait_for_link() fails
+
+Hou Zhiqiang (1):
+      PCI: endpoint: Fix alignment fault error in copy tests
+
+Huacai Chen (6):
+      PCI/VGA: Move vga_arb_integrated_gpu() earlier in file
+      PCI/VGA: Factor out default VGA device selection
+      PCI/VGA: Move firmware default device detection to ADD_DEVICE path
+      PCI/VGA: Move non-legacy VGA detection to ADD_DEVICE path
+      PCI/VGA: Move disabled VGA device detection to ADD_DEVICE path
+      PCI/VGA: Log bridge control messages when adding devices
+
+Jisheng Zhang (1):
+      PCI: dwc: Restore MSI Receiver mask during resume
+
+Krzysztof Wilczyński (1):
+      PCI: Declare pci_filp_private only when HAVE_PCI_MMAP
+
+Kunihiko Hayashi (3):
+      dt-bindings: PCI: uniphier-ep: Add bindings for NX1 SoC
+      PCI: uniphier-ep: Add SoC data structure
+      PCI: uniphier-ep: Add NX1 support
+
+Li Chen (1):
+      PCI: endpoint: Fix misused goto label
+
+Liguang Zhang (1):
+      PCI: pciehp: Clear cmd_busy bit in polling mode
+
+Manivannan Sadhasivam (1):
+      PCI: pciehp: Add Qualcomm quirk for Command Completed erratum
+
+Marc Zyngier (2):
+      PCI: xgene: Revert "PCI: xgene: Use inbound resources for setup"
+      PCI: xgene: Revert "PCI: xgene: Fix IB window setup"
+
+Marek Behún (5):
+      PCI: aardvark: Make MSI irq_chip structures static driver structures
+      PCI: aardvark: Make msi_domain_info structure a static driver structure
+      PCI: aardvark: Use dev_fwnode() instead of of_node_to_fwnode(dev->of_node)
+      PCI: aardvark: Drop __maybe_unused from advk_pcie_disable_phy()
+      PCI: aardvark: Update comment about link going down after link-up
+
+Marek Vasut (2):
+      PCI: rcar: Finish transition to L1 state in rcar_pcie_config_access()
+      PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception
+
+Mark Tomlinson (1):
+      PCI: Reduce warnings on possible RW1C corruption
+
+Michael J. Ruhl (1):
+      PCI/P2PDMA: Add Intel 3rd Gen Intel Xeon Scalable Processors to whitelist
+
+Pali Rohár (39):
+      MAINTAINERS: Add Pali Rohár as pci-mvebu.c maintainer
+      PCI: pci-bridge-emul: Make struct pci_bridge_emul_ops as const
+      PCI: pci-bridge-emul: Rename PCI_BRIDGE_EMUL_NO_PREFETCHABLE_BAR to PCI_BRIDGE_EMUL_NO_PREFMEM_FORWARD
+      PCI: pci-bridge-emul: Add support for new flag PCI_BRIDGE_EMUL_NO_IO_FORWARD
+      PCI: mvebu: Add help string for CONFIG_PCI_MVEBU option
+      PCI: mvebu: Remove duplicate nports assignment
+      PCI: mvebu: Set PCI_BRIDGE_EMUL_NO_IO_FORWARD when IO is unsupported
+      PCI: mvebu: Properly initialize vendor, device and revision of emulated bridge
+      PCI: mvebu: Update comment for PCI_EXP_LNKCAP register on emulated bridge
+      PCI: mvebu: Update comment for PCI_EXP_LNKCTL register on emulated bridge
+      PCI: mvebu: Fix reporting Data Link Layer Link Active on emulated bridge
+      PCI: aardvark: Replace custom PCIE_CORE_INT_* macros with PCI_INTERRUPT_*
+      PCI: aardvark: Fix reading MSI interrupt number
+      PCI: aardvark: Fix support for MSI interrupts
+      PCI: aardvark: Rewrite IRQ code to chained IRQ handler
+      PCI: aardvark: Check return value of generic_handle_domain_irq() when processing INTx IRQ
+      PCI: aardvark: Refactor unmasking summary MSI interrupt
+      PCI: aardvark: Add support for masking MSI interrupts
+      PCI: aardvark: Fix setting MSI address
+      PCI: aardvark: Enable MSI-X support
+      PCI: aardvark: Add support for ERR interrupt on emulated bridge
+      PCI: aardvark: Fix reading PCI_EXP_RTSTA_PME bit on emulated bridge
+      PCI: aardvark: Optimize writing PCI_EXP_RTCTL_PMEIE and PCI_EXP_RTSTA_PME on emulated bridge
+      PCI: aardvark: Add support for PME interrupts
+      PCI: aardvark: Fix support for PME requester on emulated bridge
+      PCI: aardvark: Use separate INTA interrupt for emulated root bridge
+      PCI: aardvark: Remove irq_mask_ack() callback for INTx interrupts
+      PCI: aardvark: Don't mask irq when mapping
+      PCI: Add defines for normal and subtractive PCI bridges
+      PCI: iproc: Set all 24 bits of PCI class code
+      PCI: pci-bridge-emul: Add support for PCI Bridge Subsystem Vendor ID capability
+      dt-bindings: PCI: mvebu: Add num-lanes property
+      PCI: mvebu: Correctly configure x1/x4 mode
+      PCI: mvebu: Add support for PCI Bridge Subsystem Vendor ID on emulated bridge
+      PCI: mvebu: Add support for Advanced Error Reporting registers on emulated bridge
+      PCI: mvebu: Use child_ops API
+      dt-bindings: PCI: mvebu: Update information about intx interrupts
+      PCI: mvebu: Fix macro names and comments about legacy interrupts
+      PCI: mvebu: Implement support for legacy INTx interrupts
+
+Rafael J. Wysocki (1):
+      PCI/ACPI: Replace acpi_bus_get_device() with acpi_fetch_acpi_dev()
+
+Randy Dunlap (1):
+      x86/PCI: Add #includes to asm/pci_x86.h
+
+Richard Zhu (3):
+      PCI: imx6: Enable i.MX6QP PCIe power management support
+      PCI: imx6: Invoke the PHY exit function after PHY power off
+      PCI: imx6: Assert i.MX8MM CLKREQ# even if no device present
+
+Russell King (2):
+      PCI: pci-bridge-emul: Re-arrange register tests
+      PCI: pci-bridge-emul: Add support for PCIe extended capabilities
+
+Yicong Yang (1):
+      PCI/AER: Update aer-inject URL
+
+ .../devicetree/bindings/pci/mvebu-pci.txt          |  16 +
+ .../devicetree/bindings/pci/qcom,pcie.txt          |  22 +-
+ .../bindings/pci/socionext,uniphier-pcie-ep.yaml   |  22 +-
+ Documentation/gpu/vgaarbiter.rst                   |   2 +-
+ MAINTAINERS                                        |   1 +
+ arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h  |   2 -
+ arch/mips/pci/fixup-sb1250.c                       |   2 +-
+ arch/mips/pci/pci-bcm63xx.c                        |   2 +-
+ arch/powerpc/platforms/powernv/pci.c               |   2 +-
+ arch/powerpc/sysdev/fsl_pci.c                      |   2 +-
+ arch/sh/drivers/pci/pcie-sh7786.c                  |   2 +-
+ arch/x86/include/asm/pci_x86.h                     |   3 +
+ drivers/gpu/vga/Kconfig                            |  19 -
+ drivers/gpu/vga/Makefile                           |   1 -
+ drivers/pci/Kconfig                                |  19 +
+ drivers/pci/Makefile                               |   1 +
+ drivers/pci/access.c                               |   9 +-
+ drivers/pci/controller/Kconfig                     |   4 +
+ drivers/pci/controller/dwc/pci-imx6.c              |  19 +-
+ drivers/pci/controller/dwc/pci-keystone.c          |   8 +-
+ drivers/pci/controller/dwc/pci-meson.c             |  16 +-
+ drivers/pci/controller/dwc/pcie-designware-host.c  |   7 +-
+ drivers/pci/controller/dwc/pcie-fu740.c            |  57 ++-
+ drivers/pci/controller/dwc/pcie-kirin.c            |   3 -
+ drivers/pci/controller/dwc/pcie-qcom.c             |  95 +++--
+ drivers/pci/controller/dwc/pcie-uniphier-ep.c      | 142 ++++++-
+ .../pci/controller/mobiveil/pcie-mobiveil-host.c   |   2 +-
+ drivers/pci/controller/pci-aardvark.c              | 394 +++++++++++++------
+ drivers/pci/controller/pci-hyperv.c                | 233 ++++++------
+ drivers/pci/controller/pci-loongson.c              |   2 +-
+ drivers/pci/controller/pci-mvebu.c                 | 416 +++++++++++++++++----
+ drivers/pci/controller/pci-tegra.c                 |   2 +-
+ drivers/pci/controller/pci-xgene.c                 |  36 +-
+ drivers/pci/controller/pcie-iproc-bcma.c           |   2 +-
+ drivers/pci/controller/pcie-iproc.c                |  11 +-
+ drivers/pci/controller/pcie-mediatek-gen3.c        |   2 +-
+ drivers/pci/controller/pcie-rcar-host.c            | 132 +++++--
+ drivers/pci/controller/pcie-rockchip-host.c        |   2 +-
+ drivers/pci/controller/pcie-rockchip.h             |   1 -
+ drivers/pci/endpoint/functions/pci-epf-test.c      |  14 +-
+ drivers/pci/hotplug/acpiphp_glue.c                 |   7 +-
+ drivers/pci/hotplug/acpiphp_ibm.c                  |   5 +-
+ drivers/pci/hotplug/cpqphp_core.c                  |   2 +-
+ drivers/pci/hotplug/cpqphp_ctrl.c                  |  22 +-
+ drivers/pci/hotplug/cpqphp_pci.c                   |   2 +-
+ drivers/pci/hotplug/ibmphp_hpc.c                   |   2 -
+ drivers/pci/hotplug/ibmphp_res.c                   |   3 +-
+ drivers/pci/hotplug/pciehp_hpc.c                   |   4 +
+ drivers/pci/hotplug/shpchp_core.c                  |   2 +-
+ drivers/pci/p2pdma.c                               |   1 +
+ drivers/pci/pci-acpi.c                             |   6 +-
+ drivers/pci/pci-bridge-emul.c                      | 190 +++++++---
+ drivers/pci/pci-bridge-emul.h                      |  31 +-
+ drivers/pci/pci-sysfs.c                            |   7 +-
+ drivers/pci/pcie/Kconfig                           |   2 +-
+ drivers/pci/pcie/aer_inject.c                      |   2 +-
+ drivers/pci/pcie/portdrv_pci.c                     |   4 +-
+ drivers/pci/proc.c                                 |   6 +-
+ drivers/pci/quirks.c                               |  12 +
+ drivers/pci/setup-bus.c                            |   4 +-
+ drivers/{gpu/vga => pci}/vgaarb.c                  | 313 ++++++++--------
+ include/linux/pci.h                                |   1 +
+ include/linux/pci_ids.h                            |   2 +
+ include/linux/sizes.h                              |   2 +
+ 64 files changed, 1593 insertions(+), 766 deletions(-)
+ rename drivers/{gpu/vga => pci}/vgaarb.c (90%)

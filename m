@@ -2,146 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9C44E502A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455C74E5031
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243448AbiCWKSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S243465AbiCWKTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 06:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiCWKSQ (ORCPT
+        with ESMTP id S230102AbiCWKTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:18:16 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B550776E01;
-        Wed, 23 Mar 2022 03:16:46 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id h1so1256259edj.1;
-        Wed, 23 Mar 2022 03:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZKZgJV4GC9xGEIlfzshMoCdAQMdiXn2rDfscno1TubQ=;
-        b=aBrNChj78Oc4I8xD0ZMbS+VO4sBtz26t6Nd+xP9MfFXKkPsiB/l7qjWZ0nudoelSAK
-         1QUlFr2TMAOgt3nnZiEb+Ts/K365LL7vzPtDO0WmdgKE1AMufYd4dO93CDFWALOU2zIC
-         9EKtzTp/+kQ3KUlUtO+5lQ6XVQqi6rjOIrearEFDryiZpof2kT6pYvn9gxAtf8pYvUQG
-         5v82fG0lnc06nJdnFT4UiFslCDSq+duB+Veop3nwlqd3Grf4TAI9nyVuMhl3H6bor7Sp
-         oPqcx6o9RBaijMrgmrFnIfBclgD9/YBv994AG8bhgT274PwaJ2kubAFhIuiHFoZzvkKo
-         pFew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZKZgJV4GC9xGEIlfzshMoCdAQMdiXn2rDfscno1TubQ=;
-        b=AV4sNwGIFzxiNuOggdUVG182k9xOb17nw/zRzcxq/388ik3J+BdmvUEkCg5j+dN3vv
-         mk7fKJUTCUjTsNwNXjY/xGo3/d6Ogst42OUV5sGwPwQBzVJmqQd6bfbSz043bfWtjDyz
-         NUeLs5seXRO9X3R9kYZX+9qiidNBkZSTM5O4O5Sod6KiXqR5b8lLlFTcgq+qiKgwryzZ
-         +576Ky7KCXEuT4BKiI5iCq3N/tNqlw/2QJOj2nerHiV4AAoZo0cXOvN1LYH6sJUZB9uT
-         Ugaei6epwcvmfesDPRvB1ibU8nmgIn9d+Uj5eK90yH6SKCed9JFq/OTJMUMviBqm2K8e
-         L8xg==
-X-Gm-Message-State: AOAM5326Zw9Cdkywesyp4x72U9B9EpSKospnwzgyBJrL05V6x1W8+8ak
-        6Q2/rkzjnjSpDuZqR/DkAeY=
-X-Google-Smtp-Source: ABdhPJy3i8eh06rnBx6JiEKkwZ+VLalCP/MotS2slHhsBrTTRJ39l4k1Q4orQtxWVE24RG+jTTGPwQ==
-X-Received: by 2002:a05:6402:c81:b0:410:a329:e27a with SMTP id cm1-20020a0564020c8100b00410a329e27amr34321304edb.142.1648030605082;
-        Wed, 23 Mar 2022 03:16:45 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170906b10500b006ce6fa4f510sm9634623ejy.165.2022.03.23.03.16.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 03:16:44 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 12:16:43 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20220323101643.kum3nuqctunakcfo@skbuf>
-References: <20220317161808.psftauoz5iaecduy@skbuf>
- <8635jg5xe5.fsf@gmail.com>
- <20220317172013.rhjvknre5w7mfmlo@skbuf>
- <86tubvk24r.fsf@gmail.com>
- <20220318121400.sdc4guu5m4auwoej@skbuf>
- <86pmmjieyl.fsf@gmail.com>
- <20220318131943.hc7z52beztqlzwfq@skbuf>
- <86a6dixnd2.fsf@gmail.com>
- <20220322110806.kbdb362jf6pbtqaf@skbuf>
- <86fsn90ye8.fsf@gmail.com>
+        Wed, 23 Mar 2022 06:19:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE75676E06;
+        Wed, 23 Mar 2022 03:17:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2278760E88;
+        Wed, 23 Mar 2022 10:17:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9372C340E8;
+        Wed, 23 Mar 2022 10:17:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648030671;
+        bh=i6bjWAxhQ9B49HKiVKTYB2SDWHUVsRp7XHRLw7HgwN4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=esq8dpfpITUN07UMIcp4KzH9MJPHK/pQEpedcDfP5jr1dGnafPCcSmQkQ6UcqGr5I
+         /ZyRdLbUxhQmKMgftgdFFROx17Q9ngy9wzXirCDW7ae2SVGf3/NX1LUNtfk5cnpm09
+         lM8ufgd7Aumowg3VC0rs6nJhgoXSM7flxAkkTRzRapWhRZjF7t2wXFZFJR09z3RsPn
+         4jofjsK/dT1MgDDKV+T1bjyymmfsJqpvAdweaPRSUOtynSam4VWIgaH6ptYCINV2+1
+         30DiTvpQqZmyIp15VJMj/arWDmbq0pJuMs1+X5vAQ90RyUUD8oUQb2J7r2+UpVcIAX
+         nyRmK7THW3hiQ==
+Message-ID: <1407bfb44b60b3cdd704e48d85754c18693c925f.camel@kernel.org>
+Subject: Re: [PATCH -next] ceph: replace DEFINE_SIMPLE_ATTRIBUTE with
+ DEFINE_DEBUGFS_ATTRIBUTE
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     xiubli@redhat.com, idryomov@gmail.com, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Date:   Wed, 23 Mar 2022 06:17:49 -0400
+In-Reply-To: <20220322235308.9770-1-yang.lee@linux.alibaba.com>
+References: <20220322235308.9770-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86fsn90ye8.fsf@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 11:13:51AM +0100, Hans Schultz wrote:
-> On tis, mar 22, 2022 at 13:08, Vladimir Oltean <olteanv@gmail.com> wrote:
-> > On Tue, Mar 22, 2022 at 12:01:13PM +0100, Hans Schultz wrote:
-> >> On fre, mar 18, 2022 at 15:19, Vladimir Oltean <olteanv@gmail.com> wrote:
-> >> > On Fri, Mar 18, 2022 at 02:10:26PM +0100, Hans Schultz wrote:
-> >> >> In the offloaded case there is no difference between static and dynamic
-> >> >> flags, which I see as a general issue. (The resulting ATU entry is static
-> >> >> in either case.)
-> >> >
-> >> > It _is_ a problem. We had the same problem with the is_local bit.
-> >> > Independently of this series, you can add the dynamic bit to struct
-> >> > switchdev_notifier_fdb_info and make drivers reject it.
-> >> >
-> >> >> These FDB entries are removed when link goes down (soft or hard). The
-> >> >> zero DPV entries that the new code introduces age out after 5 minutes,
-> >> >> while the locked flagged FDB entries are removed by link down (thus the
-> >> >> FDB and the ATU are not in sync in this case).
-> >> >
-> >> > Ok, so don't let them disappear from hardware, refresh them from the
-> >> > driver, since user space and the bridge driver expect that they are
-> >> > still there.
-> >> 
-> >> I have now tested with two extra unmanaged switches (each connected to a
-> >> seperate port on our managed switch, and when migrating from one port to
-> >> another, there is member violations, but as the initial entry ages out,
-> >> a new miss violation occurs and the new port adds the locked entry. In
-> >> this case I only see one locked entry, either on the initial port or
-> >> later on the port the host migrated to (via switch).
-> >> 
-> >> If I refresh the ATU entries indefinitly, then this migration will for
-> >> sure not work, and with the member violation suppressed, it will be
-> >> silent about it.
-> >
-> > Manual says that migrations should trigger miss violations if configured
-> > adequately, is this not the case?
-> >
-> >> So I don't think it is a good idea to refresh the ATU entries
-> >> indefinitely.
-> >> 
-> >> Another issue I see, is that there is a deadlock or similar issue when
-> >> receiving violations and running 'bridge fdb show' (it seemed that
-> >> member violations also caused this, but not sure yet...), as the unit
-> >> freezes, not to return...
-> >
-> > Have you enabled lockdep, debug atomic sleep, detect hung tasks, things
-> > like that?
+On Wed, 2022-03-23 at 07:53 +0800, Yang Li wrote:
+> Fix the following coccicheck warning:
+> ./fs/ceph/debugfs.c:389:0-23: WARNING: congestion_kb_fops should be
+> defined with DEFINE_DEBUGFS_ATTRIBUTE
 > 
-> I have now determined that it is the rtnl_lock() that causes the
-> "deadlock". The doit() in rtnetlink.c is under rtnl_lock() and is what
-> takes care of getting the fdb entries when running 'bridge fdb show'. In
-> principle there should be no problem with this, but I don't know if some
-> interrupt queue is getting jammed as they are blocked from rtnetlink.c?
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  fs/ceph/debugfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ceph/debugfs.c b/fs/ceph/debugfs.c
+> index bec3c4549c07..05d15a0bbd9b 100644
+> --- a/fs/ceph/debugfs.c
+> +++ b/fs/ceph/debugfs.c
+> @@ -386,7 +386,7 @@ static int congestion_kb_get(void *data, u64 *val)
+>  	return 0;
+>  }
+>  
+> -DEFINE_SIMPLE_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
+> +DEFINE_DEBUGFS_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
+>  			congestion_kb_set, "%llu\n");
+>  
+>  
 
-Sorry, I forgot to respond yesterday to this.
-By any chance do you maybe have an AB/BA lock inversion, where from the
-ATU interrupt handler you do mv88e6xxx_reg_lock() -> rtnl_lock(), while
-from the port_fdb_dump() handler you do rtnl_lock() -> mv88e6xxx_reg_lock()?
+I think you're the 4th person to propose this patch. Here are the three
+prior postings:
+
+    https://lore.kernel.org/ceph-devel/1577111958-100981-1-git-send-email-chenwandun@huawei.com/
+    https://lore.kernel.org/ceph-devel/1612165930-110076-1-git-send-email-jiapeng.chong@linux.alibaba.com/
+    https://lore.kernel.org/ceph-devel/20211221143614.480385-1-deng.changcheng@zte.com.cn/
+
+It's not as simple as doing a 1:1 conversion like this. Please look at
+the threads above and offer a revised patch or let us know whether you
+want us to drop this one.
+
+Thanks,
+-- 
+Jeff Layton <jlayton@kernel.org>

@@ -2,111 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779D34E56D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8BC4E56E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245521AbiCWQsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S245572AbiCWQuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245513AbiCWQsc (ORCPT
+        with ESMTP id S245583AbiCWQuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:48:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D922C4A3CB;
-        Wed, 23 Mar 2022 09:47:01 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9A1EE1F388;
-        Wed, 23 Mar 2022 16:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648054020; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9/+VETRFO5PTDlIzRRIClit3aflm+jce01s1gMGXpJ0=;
-        b=d6YPUKTB90VFKRJsQKtU90s/POZJMVD6N8/rJjk0XqcFyWq2KZ/91hGBjGy2q7DBrUxvts
-        jvTunoqsZacd1/hsxbIKQtv8vD4XqTf998EGySEXbusFh7a5b2n4sfL9s2NITMvc2bTWKh
-        o+9AJZePH2hFO9f1TzFGhVE/DLf0bb8=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 683C3A3B83;
-        Wed, 23 Mar 2022 16:47:00 +0000 (UTC)
-Date:   Wed, 23 Mar 2022 17:46:59 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: undefined reference to `node_data'
-Message-ID: <YjtPAwl/lhh+n3c2@dhcp22.suse.cz>
-References: <202203232042.AS9SV1zv-lkp@intel.com>
- <Yjs0ausRy6/mLUFD@dhcp22.suse.cz>
+        Wed, 23 Mar 2022 12:50:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66BCBBE2E;
+        Wed, 23 Mar 2022 09:48:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB7C8D6E;
+        Wed, 23 Mar 2022 09:48:20 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C04A03F73D;
+        Wed, 23 Mar 2022 09:48:17 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 16:47:48 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>, catalin.marinas@arm.com,
+        will@kernel.org
+Subject: Re: [PATCH v13 bpf-next 0/1] fprobe: Introduce fprobe function
+ entry/exit probe
+Message-ID: <YjtPNAFQZ15NY0sp@lakrids>
+References: <164800288611.1716332.7053663723617614668.stgit@devnote2>
+ <YjssQKblWeKqr/x8@lakrids>
+ <20220323235539.644ad8ace98347467de3e897@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yjs0ausRy6/mLUFD@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220323235539.644ad8ace98347467de3e897@kernel.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let me CC MIPS maintainers
-
-On Wed 23-03-22 15:53:31, Michal Hocko wrote:
-> On Wed 23-03-22 20:58:10, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   6b1f86f8e9c7f9de7ca1cb987b2cf25e99b1ae3a
-> > commit: 09f49dca570a917a8c6bccd7e8c61f5141534e3a mm: handle uninitialized numa nodes gracefully
-> > date:   14 hours ago
-> > config: mips-buildonly-randconfig-r004-20220323 (https://download.01.org/0day-ci/archive/20220323/202203232042.AS9SV1zv-lkp@intel.com/config)
-> > compiler: mips64-linux-gcc (GCC) 11.2.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f49dca570a917a8c6bccd7e8c61f5141534e3a
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 09f49dca570a917a8c6bccd7e8c61f5141534e3a
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On Wed, Mar 23, 2022 at 11:55:39PM +0900, Masami Hiramatsu wrote:
+> On Wed, 23 Mar 2022 14:18:40 +0000
+> Mark Rutland <mark.rutland@arm.com> wrote:
 > 
-> Didn't work for me
+> > On Wed, Mar 23, 2022 at 11:34:46AM +0900, Masami Hiramatsu wrote:
+> > > Hi,
 > > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
+> > Hi Masami,
 > > 
-> > All errors (new ones prefixed by >>):
+> > > Here is the 13th version of rethook x86 port. This is developed for a part
+> > > of fprobe series [1] for hooking function return. But since I forgot to send
+> > > it to arch maintainers, that caused conflict with IBT and SLS mitigation series.
+> > > Now I picked the x86 rethook part and send it to x86 maintainers to be
+> > > reviewed.
+> > > 
+> > > [1] https://lore.kernel.org/all/164735281449.1084943.12438881786173547153.stgit@devnote2/T/#u
 > > 
-> >    mips64-linux-ld: mm/page_alloc.o: in function `free_area_init':
-> > >> (.init.text+0x1680): undefined reference to `node_data'
-> >    mips64-linux-ld: (.init.text+0x1690): undefined reference to `node_data'
+> > As mentioned elsewhere, I have similar (though not identical) concerns
+> > to Peter for the arm64 patch, which was equally unreviewed by
+> > maintainers, and the overall structure.
 > 
-> OK, I can see what is going here. The page allocator normally
-> uses NODE_DATA but arch_refresh_nodedata refers to node_data directly.
-> This is a problem with
-> arch/mips/include/asm/mach-loongson64/mmzone.h:
-> extern struct pglist_data *__node_data[];
+> Yes, those should be reviewed by arch maintainers.
 > 
-> #define NODE_DATA(n)            (__node_data[n])
+> > > Note that this patch is still for the bpf-next since the rethook itself
+> > > is on the bpf-next tree. But since this also uses the ANNOTATE_NOENDBR
+> > > macro which has been introduced by IBT/ENDBR patch, to build this series
+> > > you need to merge the tip/master branch with the bpf-next.
+> > > (hopefully, it is rebased soon)
+> > 
+> > I thought we were going to drop the series from the bpf-next tree so
+> > that this could all go through review it had missed thusfar.
+> > 
+> > Is that still the plan? What's going on?
 > 
-> Unfortunately we cannot use NODE_DATA there because of header inclusion
-> ordering. I will think about a solution.
+> Now the arm64 (and other arch) port is reverted from bpf-next.
+> I'll send those to you soon.
 
-Is there any reason why (some?) MIPS arches use __node_data rather than
-node_data as most other architectures? Would it be acceptable to do the
-renaming? It would help to cover the above compilation problem because
-arch_refresh_nodedata could keep using node_data directly.
+Ah; thanks for confirming!
 
-Thanks!
--- 
-Michal Hocko
-SUSE Labs
+> Since bpf-next is focusing on x86 at first, I chose this for review in
+> this version. Sorry for confusion.
+
+No problem; I think the confusion is all my own, so nothing to apologise
+for! :)
+
+> > > The fprobe itself is for providing the function entry/exit probe
+> > > with multiple probe point. The rethook is a sub-feature to hook the
+> > > function return as same as kretprobe does. Eventually, I would like
+> > > to replace the kretprobe's trampoline with this rethook.
+> > 
+> > Can we please start by converting each architecture to rethook?
+> 
+> Yes. As Peter pointed, I'm planning to add a kretprobe patches to use
+> rethook if available in that series. let me prepare it.
+> 
+> > Ideally we'd unify things such that each architecture only needs *one*
+> > return trampoline that both ftrace and krpboes can use, which'd be
+> > significantly easier to get right and manage.
+> 
+> Agreed :-)
+
+Great!
+
+Thanks,
+Mark.

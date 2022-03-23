@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2194E5856
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC674E587B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245682AbiCWSZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 14:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S1343835AbiCWSgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 14:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbiCWSZc (ORCPT
+        with ESMTP id S237928AbiCWSgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 14:25:32 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87295F56;
-        Wed, 23 Mar 2022 11:24:01 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id o64so2491004oib.7;
-        Wed, 23 Mar 2022 11:24:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oKTwXn3AzG41Z3u41j1rFts/g2rJnWT6gTg6f0FYmHE=;
-        b=dFJiAfSZvgq0MCCzBmcBhw/azrMl58UjngAEmtNc66dQl5mHoNLI2NMqty3eT4m65W
-         sbdfnQ8O6E6gqacwUJcqQ5ym75UnALf1hE2qsbQmrIo/ghqDLMT0IPHQzTswZmiPtTw9
-         qaLI+VYGKqdjfIO7+uPyAh+M30F9mCB3y9kNISfDoPRH5bqBeVHZ0qJPYEgeT3vGaKVL
-         zl5EGLO0xPQehhsNA0sirLP6Dz0iGyVXFKwifu9T1FU2i7zF54yuIqx7YAkgbrIOCgAY
-         BnnrCaVaBbR7tuhBx21f4NT9HNE8AWpFA34wp218YL4ipgfiB0s0fZxFruywvC015XcF
-         OXzg==
-X-Gm-Message-State: AOAM533SO4yLwgPC3GjdJpMSxzPnldEBtLT18wy8efLN6B5t4sq+SJQ8
-        YSiBEkBrWdBEugv2h4m/ZQ==
-X-Google-Smtp-Source: ABdhPJxoaSf2++CCDZaunh3odXbdG5Bl8kpsdCWU366fF1ugEU/8uHcoJEmuYVYlRMVnLUeZ5MX7sQ==
-X-Received: by 2002:aca:230e:0:b0:2d9:ec1f:bbae with SMTP id e14-20020aca230e000000b002d9ec1fbbaemr5307335oie.68.1648059841134;
-        Wed, 23 Mar 2022 11:24:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i4-20020a4addc4000000b00324bd261e5fsm50138oov.11.2022.03.23.11.23.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 11:24:00 -0700 (PDT)
-Received: (nullmailer pid 206689 invoked by uid 1000);
-        Wed, 23 Mar 2022 18:23:59 -0000
-Date:   Wed, 23 Mar 2022 13:23:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     max.krummenacher@toradex.com, linux-kernel@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        devicetree@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Li Yang <leoyang.li@nxp.com>
-Subject: Re: [PATCH v1 02/14] dt-bindings: arm: fsl: Add carriers for
- toradex,colibri-imx6dl
-Message-ID: <Yjtlv9NUQ0dSNESd@robh.at.kernel.org>
-References: <20220314162958.40361-1-max.krummenacher@toradex.com>
- <20220314162958.40361-3-max.krummenacher@toradex.com>
+        Wed, 23 Mar 2022 14:36:01 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0B664BDD;
+        Wed, 23 Mar 2022 11:34:30 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 277FB22238;
+        Wed, 23 Mar 2022 19:34:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648060469;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vO8LtpVxs/SG4LP+EIbUtQ6dKdMIxW7dBZiiQyLBuXk=;
+        b=Ojck0E/1HtzFGDLB7IviQABkc8mkQhaVxZ1xkUdO+LHddkCoZimaRkbq5qr0D9iMgAqr09
+        yee0RLnWdYvoCS6P8az7IAuy3E2Cdqj59WnJfJgDiU+pg2hI8WhhZxGsiqscTzb/PaCFWI
+        e2Kz7P0IQwl9ynDm5z8FpKynicfU9ic=
+From:   Michael Walle <michael@walle.cc>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH RFC net-next 0/5] net: phy: C45-over-C22 access
+Date:   Wed, 23 Mar 2022 19:34:14 +0100
+Message-Id: <20220323183419.2278676-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314162958.40361-3-max.krummenacher@toradex.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 17:29:46 +0100, Max Krummenacher wrote:
-> Add bindings for Aster, Iris and Iris V2 carrier boards our
-> Colibri iMX6S/DL may be mated with.
-> 
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-> ---
-> 
->  Documentation/devicetree/bindings/arm/fsl.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+Hi,
 
-Acked-by: Rob Herring <robh@kernel.org>
+This is the result of this discussion:
+https://lore.kernel.org/netdev/240354b0a54b37e8b5764773711b8aa3@walle.cc/
+
+The goal here is to get the GYP215 and LAN8814 running on the Microchip
+LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, the
+LAN8814 has a bug which makes it impossible to use C45 on that bus.
+Fortunately, it was the intention of the GPY215 driver to be used on a C22
+bus. But I think this could have never really worked, because the
+phy_get_c45_ids() will always do c45 accesses and thus on MDIO bus drivers
+which will correctly check for the MII_ADDR_C45 flag and return -EOPNOTSUPP
+the function call will fail and thus gpy_probe() will fail. This series
+tries to fix that and will lay the foundation to add a workaround for the
+LAN8814 bug by forcing an MDIO bus to be c22-only.
+
+At the moment, the probe_capabilities is taken into account to decide if
+we have to use C45-over-C22. What is still missing from this series is the
+handling of a device tree property to restrict the probe_capabilities to
+c22-only.
+
+Since net-next is closed, this is marked as RFC to get some early feedback.
+
+Michael Walle (5):
+  net: phy: mscc-miim: reject clause 45 register accesses
+  net: phy: support indirect c45 access in get_phy_c45_ids()
+  net: phy: mscc-miim: add probe_capabilities
+  net: phy: introduce is_c45_over_c22 flag
+  net: phylink: handle the new is_c45_over_c22 property
+
+ drivers/net/mdio/mdio-mscc-miim.c |  7 ++++
+ drivers/net/phy/mxl-gpy.c         |  2 +-
+ drivers/net/phy/phy_device.c      | 65 ++++++++++++++++++++++++++-----
+ drivers/net/phy/phylink.c         |  2 +-
+ include/linux/phy.h               |  4 +-
+ 5 files changed, 68 insertions(+), 12 deletions(-)
+
+-- 
+2.30.2
+

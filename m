@@ -2,194 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0FE4E4B51
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5554E4B54
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241437AbiCWDQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 23:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S241442AbiCWDRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 23:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbiCWDQN (ORCPT
+        with ESMTP id S231637AbiCWDRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 23:16:13 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEF36545;
-        Tue, 22 Mar 2022 20:14:44 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DF5B9580259;
-        Tue, 22 Mar 2022 23:14:43 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute1.internal (MEProxy); Tue, 22 Mar 2022 23:14:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=L0SvsihPk0D6/q
-        9wCsLi7ZzaZZ1wSYEuefF72MQXOXg=; b=PzEyKpMYj6Pf1xaYL4WZi9/YHBolcN
-        DmW6NTOixVYflJ6WoBxgBksMGQxi56btWsGQ+DPWW0PlmsTb8FEkFUokuV1dv7zb
-        9qBApPrPkm0HpvWcBV4oBC6iLiZQqXn9ktNs1yZ6Efd4CgO1g3ndFxYDktUhBk6a
-        c2IcQjO56Fb50VE04t1lwjxWYhN9N5rAFZuSTy/FlhBShf/AWuU//7QL5jj0p/so
-        mLiA+6bbNL9y1BBfuc0nQ469oBZ0L6pho4kOmUugSR3H3PJZMHbs2aSd4lC7u4PB
-        BpVnSpvK7PVt2R842XlVYePAkVEcwGei3WGG0MYnKNtyYKZlX50+Cw2w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=L0SvsihPk0D6/q9wCsLi7ZzaZZ1wSYEuefF72MQXO
-        Xg=; b=QJczCdVtsEOknGpSj6yCcMEeWP/9teRXgWQsyKc1JoI2hlSP5FprJ+6AZ
-        wa2za9+Has9VuNsOfSAXfpLSmtDA+GKGMylVhjszUeOjrfXmHyErH9BK4i4cZdH+
-        SMpGvEYGpgSY7UUibE5Aj5eZP7LQ2niJbC7i/OpDxKmihAmN9SqWkoz2tw4NUgpT
-        tHYDIk2lyUK+lD3qFtUO0tuRZmyk3L0KR3neZeHbi2WoFSlBbmFwrKiTV3Uz/dUU
-        8srcxAwMIQwS7hIgbfstcgWJu4ye5iQbT15VdeX7OOHiQfAITNqvy5r8vXpt7ZIV
-        gffBnpeh3kpAlq/sIq7VoAgDGc2HA==
-X-ME-Sender: <xms:opA6YpO4FgQrvrHNvrGpXqku3T9ZOdZHfy-2Rfb-CHsga8KtpPM7kw>
-    <xme:opA6Yr_E-hD3jbkPL1wgv-qHirnaTelKCeW9YckgJihkz1EkOlXewufHmcDHYgeCQ
-    xfFwcOHJT0-xMoQlYo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegiedgheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnheptedtjedvvddthffgheeujedttddtgfektdeghfeltdek
-    leefhffhleelvdejkeffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigr
-    nhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:opA6YoS3_YBWTt5X0iX_aG5fBypQ5oPHEdL8yJiQZx9-M-UAR2X2Ng>
-    <xmx:opA6Ylsne8mRYIXj25nFHOo6HHtbShdOkYPlXBVobu5vd4DsCWRTCg>
-    <xmx:opA6YhdI89yNjP2eLi9NI6vcPwUJ068I0ZiHo9r3SlTA1sPj8B6hzA>
-    <xmx:o5A6YqurSieiMc5LkoIhPHd6PuJfOgHZe_f7oj7OH4L0OpXfMrQW4w>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8646DFA0AA7; Tue, 22 Mar 2022 23:14:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4907-g25ce6f34a9-fm-20220311.001-g25ce6f34
-Mime-Version: 1.0
-Message-Id: <8d474c46-c354-4dec-920d-dbbc67377690@www.fastmail.com>
-In-Reply-To: <e0d3648e-3055-9f9b-878d-0fc22a93a806@189.cn>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-3-15330273260@189.cn>
- <2644866a-8db2-923e-4227-2aa6d8e375fe@flygoat.com>
- <2c671752-6684-f87b-7b2d-90568d36adde@189.cn>
- <005099b5-33ed-4cb7-f8e4-10e1de780311@flygoat.com>
- <abe784ce-eb9e-0143-dbc3-d415bbedbb81@189.cn>
- <87d4f869-2ae8-f8d3-a55f-1a563cb21115@flygoat.com>
- <e0d3648e-3055-9f9b-878d-0fc22a93a806@189.cn>
-Date:   Wed, 23 Mar 2022 03:14:23 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Sui Jingfeng" <15330273260@189.cn>,
-        "Maxime Ripard" <mripard@kernel.org>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Roland Scheidegger" <sroland@vmware.com>,
-        "Zack Rusin" <zackr@vmware.com>,
-        "Christian Gmeiner" <christian.gmeiner@gmail.com>,
-        "David Airlie" <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Dan Carpenter" <dan.carpenter@oracle.com>,
-        "Krzysztof Kozlowski" <krzk@kernel.org>,
-        "Andrey Zhizhikin" <andrey.zhizhikin@leica-geosystems.com>,
-        "Sam Ravnborg" <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Lucas Stach" <l.stach@pengutronix.de>,
-        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        "Ilia Mirkin" <imirkin@alum.mit.edu>,
-        "Qing Zhang" <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Tiezhu Yang" <yangtiezhu@loongson.cn>, liyi@loongson.cn
-Subject: Re: [PATCH v11 2/7] MIPS: Loongson64: dts: introduce ls3A4000 evaluation board
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 22 Mar 2022 23:17:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0415F1B7BF
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648005334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RzU9qqeaoBp/Yii+Yq3KaDZTZqiOvzziYtFqIGNvnWw=;
+        b=FuMlEfDPx1Ffc4Ba/ETKx2W7XlPLu0BEtIdg6DIxWte7zhQmBTXjMv34ZgWdpFF/dQ+vhE
+        um3N/smgpPstSn/9RkheeU/pOU2huGoaDLU7H9wOhxZctQEvOM8b4Jy54Hoamgz1ta/hnk
+        K3EYwNwH5smz24EEw984p3JM/ZynF3E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-645-f43DsdMhMTi3hwG3iEVDBw-1; Tue, 22 Mar 2022 23:15:30 -0400
+X-MC-Unique: f43DsdMhMTi3hwG3iEVDBw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5A86F3804078;
+        Wed, 23 Mar 2022 03:15:30 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-12-49.pek2.redhat.com [10.72.12.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F26E11400E70;
+        Wed, 23 Mar 2022 03:15:26 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, peterz@infradead.org
+Subject: [PATCH 1/2] Revert "virtio-pci: harden INTX interrupts"
+Date:   Wed, 23 Mar 2022 11:15:23 +0800
+Message-Id: <20220323031524.6555-1-jasowang@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This reverts commit 080cd7c3ac8701081d143a15ba17dd9475313188. Since
+the MSI-X interrupts hardening will be reverted in the next patch. We
+will rework the interrupt hardening in the future.
 
+Fixes: 080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/virtio/virtio_pci_common.c | 23 ++---------------------
+ drivers/virtio/virtio_pci_common.h |  1 -
+ 2 files changed, 2 insertions(+), 22 deletions(-)
 
-=E5=9C=A82022=E5=B9=B43=E6=9C=8823=E6=97=A5=E4=B8=89=E6=9C=88 =E4=B8=8A=E5=
-=8D=883:07=EF=BC=8CSui Jingfeng=E5=86=99=E9=81=93=EF=BC=9A
-> On 2022/3/23 10:29, Jiaxun Yang wrote:
->>
->>
->> =E5=9C=A8 2022/3/23 1:53, Sui Jingfeng =E5=86=99=E9=81=93:
->>> Hi, Jiaxun
->>>
->>> Build all dts into vmlinuz will make the vmlinuz bigger and bigger.
->>> How does the kernel get the dtb is another big issue, either from=20
->>> built-in
->>> dtb or pass from the firmware(pmon and uefi etc). This should be
->>> solved with another patch carefully. Providing board specific dts
->>> helps to code review, it helps reviewers understand that there are
->>> variant boards and have to be express with different OF graph.
->> Hi,
->>
->> I insist my taste on those code. If the only intention is to demonstr=
-ate
->> the usage of the driver then please just leave them in dt document
->> or commit message.
->>
->>>
->>> Now, there are about 6 dts under arch/mips/boot/dts/loongson/,
->>> Suppose loongson have 1000+ different board, do you want built all
->>> of them into vmlinuz?
->> Note that we are supporting all those boards on "platform" bias. Which
->> means if they share similar design then they will use the same DTS.
->> If we have a new design then unfortunately our kernel binary must gro=
-w.
->>
->> For those who intended to build a size-optimized kernel they will be
->> able to disable unused DTS in Kconfig.
->>
->> If you want to blame somebody for the problem then please don't
->> blame us. We tried very hard to fit all those stuff into kernel's mod=
-el
->> of devices. You should blame those who did the initial design of
->> Loongson's boot interface that failed to introduce a proper way
->> to describe the platform.
->>
->>>
->>> Besides, ls7a1000 and ls2k1000 lack a i2c driver, gpio driver,
->>> pwm driver, clk driver, can you pay more attention to salve those
->>> problems, please ?
->> Are you trying to make a TODO list for your colleague :-)
->>
->> We , community developers, don't owe you anything. So please
->> don't expect anything from us. I lost access to most Loongson
->> devices since I'm currently study abroad, but I'm determined to
->> keep platform code in a good shape. That's my duty as a maintainer.
->>
->> Thanks.
->> - Jiaxun
->
-> Providing a few board specific dts doesn't hurt anybody.
+diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+index fdbde1db5ec5..3f51fdb7be45 100644
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -30,16 +30,8 @@ void vp_disable_cbs(struct virtio_device *vdev)
+ 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+ 	int i;
+ 
+-	if (vp_dev->intx_enabled) {
+-		/*
+-		 * The below synchronize() guarantees that any
+-		 * interrupt for this line arriving after
+-		 * synchronize_irq() has completed is guaranteed to see
+-		 * intx_soft_enabled == false.
+-		 */
+-		WRITE_ONCE(vp_dev->intx_soft_enabled, false);
++	if (vp_dev->intx_enabled)
+ 		synchronize_irq(vp_dev->pci_dev->irq);
+-	}
+ 
+ 	for (i = 0; i < vp_dev->msix_vectors; ++i)
+ 		disable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+@@ -51,16 +43,8 @@ void vp_enable_cbs(struct virtio_device *vdev)
+ 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+ 	int i;
+ 
+-	if (vp_dev->intx_enabled) {
+-		disable_irq(vp_dev->pci_dev->irq);
+-		/*
+-		 * The above disable_irq() provides TSO ordering and
+-		 * as such promotes the below store to store-release.
+-		 */
+-		WRITE_ONCE(vp_dev->intx_soft_enabled, true);
+-		enable_irq(vp_dev->pci_dev->irq);
++	if (vp_dev->intx_enabled)
+ 		return;
+-	}
+ 
+ 	for (i = 0; i < vp_dev->msix_vectors; ++i)
+ 		enable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+@@ -113,9 +97,6 @@ static irqreturn_t vp_interrupt(int irq, void *opaque)
+ 	struct virtio_pci_device *vp_dev = opaque;
+ 	u8 isr;
+ 
+-	if (!READ_ONCE(vp_dev->intx_soft_enabled))
+-		return IRQ_NONE;
+-
+ 	/* reading the ISR has the effect of also clearing it so it's very
+ 	 * important to save off the value. */
+ 	isr = ioread8(vp_dev->isr);
+diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
+index 23f6c5c678d5..d3c6f72c7390 100644
+--- a/drivers/virtio/virtio_pci_common.h
++++ b/drivers/virtio/virtio_pci_common.h
+@@ -63,7 +63,6 @@ struct virtio_pci_device {
+ 	/* MSI-X support */
+ 	int msix_enabled;
+ 	int intx_enabled;
+-	bool intx_soft_enabled;
+ 	cpumask_var_t *msix_affinity_masks;
+ 	/* Name strings for interrupts. This size should be enough,
+ 	 * and I'm too lazy to allocate each name separately. */
+-- 
+2.25.1
 
-There are a lot of things that don't hurt anybody but we shouldn't do.
-
-The standard of reviewing the code is not "doesn't hurt anybody". It's "=
-do the right thing".
-
-Please reference:
-https://www.kernel.org/doc/html/latest/process/6.Followthrough.html
-
->
-> Can we leave the problem(passing correct dts to the kernel) untouched =
-and
->
-> solve it in the feature with a another patch, ok?
-
-Then please drop platform DTS part.
-
-I must NAK this part, sorry.
-
-Thanks
---=20
-- Jiaxun

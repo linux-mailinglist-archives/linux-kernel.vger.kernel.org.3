@@ -2,208 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F314E52F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D89E4E52F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244227AbiCWNWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        id S244232AbiCWNXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiCWNWg (ORCPT
+        with ESMTP id S229482AbiCWNXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:22:36 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEFB7A99B;
-        Wed, 23 Mar 2022 06:21:00 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22ND6jYY009715;
-        Wed, 23 Mar 2022 14:20:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=ll1t8Ir3H0qz808D0MiUytqqfMAXZhxxOsdPSkfQBGA=;
- b=ur9kxkLqoBnbt7Gng+THHatMVZbGgUgMWxGs+joMLLKFxv0LP07QKpQOqkMXA/GZLtrI
- xgSCACXm6bqFKcKhIHCXev/qWgjnmJgbpCoecs5m2txUYOCsAEbXNOgNN6DHTMlV9HBy
- pH6Vt2M9JBoolyGJurua2RXbG0iZEfwpWVtzre87hM/iHLPzxaQ0kT7t3FSXDjWTi5Ge
- DGfKvve3CCAzM9ZrmUFo6Y5uScmPfXORifHBVVKCKnMlpYvjI6qS9rWRXEMBVwJoKDhC
- 0BvKKD1eA9qZ+FCz0sfFvJwUMxCdxbNed7jo+jdlq7wAHycabeS5XmiaEQ7YxbhFqSAT Eg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ew5fpgnj6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 14:20:41 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C141010002A;
-        Wed, 23 Mar 2022 14:20:37 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B4B7622FA51;
-        Wed, 23 Mar 2022 14:20:37 +0100 (CET)
-Received: from [10.211.9.79] (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 23 Mar
- 2022 14:20:37 +0100
-Message-ID: <51b4917b-823d-263a-2412-a4b17cb38420@foss.st.com>
-Date:   Wed, 23 Mar 2022 14:20:36 +0100
+        Wed, 23 Mar 2022 09:23:33 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0588403E1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:22:01 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id u16so2117699wru.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tGzfsn7IkUKmHexsutOQcsuKq7L5d/j+OVaScHOdJcc=;
+        b=IfUyUzTma+4nremz179BHr4NZNOPwfc2QBuNDW4OS8XtuNMEHGpkvD9oOgtaXhJQ+/
+         mzAPIrGQs+0JbBL5xYcEbv34RPPsiBMw3xIFQ/C9BL0gjs6h1n2ep0j3gbyq4Nq4LDwX
+         whpc95IKZBqtnctd+Ea+urrA3jedQL1TrH2TmQ7yoUru9a8P44J4/pI2F+Y94/ZWlwpF
+         USUWYMvE7+66h5vK47kEZdtL7j8qDxa/Q0Te7nt2Mcj/ryIMyPBV+0lQMgMIMYTHiya/
+         DTtd6rfdVq5+PaJnrM3fnZlNte8gasHCdcfgeCSPKpBomUgvdciMri7Yz2Fnjem4mWGb
+         Ktlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tGzfsn7IkUKmHexsutOQcsuKq7L5d/j+OVaScHOdJcc=;
+        b=I0jlWHeDeNC4c5WL2fuysgm1YkNA3upf29WQJOcOkHNh8aq0sMwqS2xlG+GOnqtZpX
+         RUhrPsYJd2SO0B6roYhfVi4LH6dWLREjVDzMsbwIVEU5xxeOT2UCRdgBev7SSGOcr32o
+         qoaKl3TQITIdHXklMTlekctRKV1nu7e79Gpo3ByxXcHt1tGobPbJSvgP+i9SRAg3Cu1J
+         NLpSVyxXDa1bepLAdTgx5U8+vt6BBPt3X0/XLqTI+xjkjLKvUlr+e7lpJN49DRrS5C8L
+         /wGFuypgcpgcY9LPmpRJTVY9Thvo5nyvChk6YiTp1xB50o6I0mgjdxoBraRiz1bTeYsr
+         3Fww==
+X-Gm-Message-State: AOAM531/SDK4qNe51EU+dvKdEp/Gc0y0YclBOlnhogkXYskBqxy2qksa
+        aOjMsZNdGLtv0xX0ir1gP3kyEA==
+X-Google-Smtp-Source: ABdhPJyPiWf2vuPwSO2VRKmuXTXzfOu+foOhVbZJqYldRzI+lSdIGgR0lt0qwxl4ybOOwJsNg0NlYg==
+X-Received: by 2002:a5d:550f:0:b0:203:efaa:fa8b with SMTP id b15-20020a5d550f000000b00203efaafa8bmr25037917wrv.284.1648041720144;
+        Wed, 23 Mar 2022 06:22:00 -0700 (PDT)
+Received: from google.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
+        by smtp.gmail.com with ESMTPSA id y13-20020adffa4d000000b00203e3ca2701sm23235250wrr.45.2022.03.23.06.21.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 06:21:59 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 13:21:55 +0000
+From:   Keir Fraser <keirf@google.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>, kernel-team@android.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] virtio: pci: sanity check bar indexes
+Message-ID: <Yjse870sgpcMGsT6@google.com>
+References: <20220322151952.2950143-1-keirf@google.com>
+ <CACGkMEubcU4rFVem7neKYb-qT3TQUN802bbLNq7vh+y8gdD5AA@mail.gmail.com>
+ <20220323075030-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] brcmfmac: Avoid keeping power to SDIO card unless WOWL
- is used
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        <linux-wireless@vger.kernel.org>,
-        Christophe ROULLIER-SCND-02 <christophe.roullier@foss.st.com>
-CC:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        <linux-kernel@vger.kernel.org>,
-        Christophe KERELLO - foss <christophe.kerello@foss.st.com>
-References: <20220323083950.414783-1-ulf.hansson@linaro.org>
-From:   Yann Gautier <yann.gautier@foss.st.com>
-In-Reply-To: <20220323083950.414783-1-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-23_07,2022-03-22_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323075030-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 09:39, Ulf Hansson wrote:
-> Keeping the power to the SDIO card during system wide suspend, consumes
-> energy. Especially on battery driven embedded systems, this can be a
-> problem. Therefore, let's change the behaviour into allowing the SDIO card
-> to be powered off, unless WOWL is supported and enabled.
+On Wed, Mar 23, 2022 at 08:01:42AM -0400, Michael S. Tsirkin wrote:
+> On Wed, Mar 23, 2022 at 03:57:59PM +0800, Jason Wang wrote:
+> > On Tue, Mar 22, 2022 at 11:20 PM Keir Fraser <keirf@google.com> wrote:
+> > >
+> > > The bar index is used as an index into the device's resource list
+> > > and should be checked as within range for a standard bar.
+> > >
+> > > Also clean up an existing check to consistently use PCI_STD_NUM_BARS.
+> > >
+> > > Signed-off-by: Keir Fraser <keirf@google.com>
+> > > ---
+> > >  drivers/virtio/virtio_pci_modern.c     | 10 ++++++++--
+> > >  drivers/virtio/virtio_pci_modern_dev.c |  8 +++++++-
+> > >  2 files changed, 15 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+> > > index 5455bc041fb6..84bace98dff5 100644
+> > > --- a/drivers/virtio/virtio_pci_modern.c
+> > > +++ b/drivers/virtio/virtio_pci_modern.c
+> > > @@ -293,7 +293,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
+> > >
+> > >         for (pos = pci_find_capability(dev, PCI_CAP_ID_VNDR); pos > 0;
+> > >              pos = pci_find_next_capability(dev, pos, PCI_CAP_ID_VNDR)) {
+> > > -               u8 type, cap_len, id;
+> > > +               u8 type, cap_len, id, res_bar;
+> > >                 u32 tmp32;
+> > >                 u64 res_offset, res_length;
+> > >
+> > > @@ -317,7 +317,12 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
+> > >
+> > >                 /* Type, and ID match, looks good */
+> > >                 pci_read_config_byte(dev, pos + offsetof(struct virtio_pci_cap,
+> > > -                                                        bar), bar);
+> > > +                                                        bar), &res_bar);
+> > > +               if (res_bar >= PCI_STD_NUM_BARS) {
+> > > +                       dev_err(&dev->dev, "%s: shm cap with bad bar: %d\n",
+> > > +                               __func__, res_bar);
+> > > +                       continue;
+> > > +               }
+> > >
+> > >                 /* Read the lower 32bit of length and offset */
+> > >                 pci_read_config_dword(dev, pos + offsetof(struct virtio_pci_cap,
 > 
-> Note that, the downside from this change, is that during system resume the
-> SDIO card needs to be re-initialized and the FW must be re-programmed. Even
-> if this may take some time to complete, it should we worth it, rather than
-> draining the battery.
-> 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
-> 
-> Changes in v2:
-> 	- As pointed out by Yann, the changes for the resume path was missing,
-> 	so I have added that too.
-> 
-> Again, please note that, I have only compile-tested this patch, so I am relying
-> on help from Yann and others to run tests on real HW.
-> 
-> Kind regards
-> Ulf Hansson
-> 
-> ---
->   .../broadcom/brcm80211/brcmfmac/bcmsdh.c      | 39 +++++++++++--------
->   1 file changed, 22 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> index ac02244a6fdf..9c598ea97499 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> @@ -1119,9 +1119,21 @@ void brcmf_sdio_wowl_config(struct device *dev, bool enabled)
->   {
->   	struct brcmf_bus *bus_if = dev_get_drvdata(dev);
->   	struct brcmf_sdio_dev *sdiodev = bus_if->bus_priv.sdio;
-> +	mmc_pm_flag_t pm_caps = sdio_get_host_pm_caps(sdiodev->func1);
->   
-> -	brcmf_dbg(SDIO, "Configuring WOWL, enabled=%d\n", enabled);
-> -	sdiodev->wowl_enabled = enabled;
-> +	/* Power must be preserved to be able to support WOWL. */
-> +	if (!(pm_caps & MMC_PM_KEEP_POWER))
-> +		goto notsup;
-> +
-> +	if (sdiodev->settings->bus.sdio.oob_irq_supported ||
-> +	    pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
-> +		sdiodev->wowl_enabled = enabled;
-> +		brcmf_dbg(SDIO, "Configuring WOWL, enabled=%d\n", enabled);
-> +		return;
-> +	}
-> +
-> +notsup:
-> +	brcmf_dbg(SDIO, "WOWL not supported\n");
->   }
->   
->   #ifdef CONFIG_PM_SLEEP
-> @@ -1130,7 +1142,7 @@ static int brcmf_ops_sdio_suspend(struct device *dev)
->   	struct sdio_func *func;
->   	struct brcmf_bus *bus_if;
->   	struct brcmf_sdio_dev *sdiodev;
-> -	mmc_pm_flag_t pm_caps, sdio_flags;
-> +	mmc_pm_flag_t sdio_flags;
->   	int ret = 0;
->   
->   	func = container_of(dev, struct sdio_func, dev);
-> @@ -1142,20 +1154,15 @@ static int brcmf_ops_sdio_suspend(struct device *dev)
->   	bus_if = dev_get_drvdata(dev);
->   	sdiodev = bus_if->bus_priv.sdio;
->   
-> -	pm_caps = sdio_get_host_pm_caps(func);
-> -
-> -	if (pm_caps & MMC_PM_KEEP_POWER) {
-> -		/* preserve card power during suspend */
-> +	if (sdiodev->wowl_enabled) {
->   		brcmf_sdiod_freezer_on(sdiodev);
->   		brcmf_sdio_wd_timer(sdiodev->bus, 0);
->   
->   		sdio_flags = MMC_PM_KEEP_POWER;
-> -		if (sdiodev->wowl_enabled) {
-> -			if (sdiodev->settings->bus.sdio.oob_irq_supported)
-> -				enable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
-> -			else
-> -				sdio_flags |= MMC_PM_WAKE_SDIO_IRQ;
-> -		}
-> +		if (sdiodev->settings->bus.sdio.oob_irq_supported)
-> +			enable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
-> +		else
-> +			sdio_flags |= MMC_PM_WAKE_SDIO_IRQ;
->   
->   		if (sdio_set_host_pm_flags(sdiodev->func1, sdio_flags))
->   			brcmf_err("Failed to set pm_flags %x\n", sdio_flags);
-> @@ -1176,21 +1183,19 @@ static int brcmf_ops_sdio_resume(struct device *dev)
->   	struct brcmf_bus *bus_if = dev_get_drvdata(dev);
->   	struct brcmf_sdio_dev *sdiodev = bus_if->bus_priv.sdio;
->   	struct sdio_func *func = container_of(dev, struct sdio_func, dev);
-> -	mmc_pm_flag_t pm_caps = sdio_get_host_pm_caps(func);
->   	int ret = 0;
->   
->   	brcmf_dbg(SDIO, "Enter: F%d\n", func->num);
->   	if (func->num != 2)
->   		return 0;
->   
-> -	if (!(pm_caps & MMC_PM_KEEP_POWER)) {
-> +	if (!sdiodev->wowl_enabled) {
->   		/* bus was powered off and device removed, probe again */
->   		ret = brcmf_sdiod_probe(sdiodev);
->   		if (ret)
->   			brcmf_err("Failed to probe device on resume\n");
->   	} else {
-> -		if (sdiodev->wowl_enabled &&
-> -		    sdiodev->settings->bus.sdio.oob_irq_supported)
-> +		if (sdiodev->settings->bus.sdio.oob_irq_supported)
->   			disable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
->   
->   		brcmf_sdiod_freezer_off(sdiodev);
+> In fact, the spec says such BAR values are reserved, not bad, so
+> the capabiluty should be ignored, they should not cause the driver to error out
+> or print errors.
 
-Hi Ulf,
+Ah yes, so I see. It makes sense then to silently ignore the capability and print nothing.
+I will fix it.
 
-Thanks for the patch, it is OK, and tested by Christophe (R.).
-So you can add:
-Tested-by: Christophe Roullier <christophe.roullier@foss.st.com>
-Acked-by: Yann Gautier <yann.gautier@foss.st.com>
+> > > @@ -337,6 +342,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
+> > >                                                      length_hi), &tmp32);
+> > >                 res_length |= ((u64)tmp32) << 32;
+> > >
+> > > +               *bar = res_bar;
+> > >                 *offset = res_offset;
+> > >                 *len = res_length;
+> > >
+> > > diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+> > > index e8b3ff2b9fbc..a6911d1e212a 100644
+> > > --- a/drivers/virtio/virtio_pci_modern_dev.c
+> > > +++ b/drivers/virtio/virtio_pci_modern_dev.c
+> > > @@ -35,6 +35,12 @@ vp_modern_map_capability(struct virtio_pci_modern_device *mdev, int off,
+> > >         pci_read_config_dword(dev, off + offsetof(struct virtio_pci_cap, length),
+> > >                               &length);
+> > >
+> > > +       if (bar >= PCI_STD_NUM_BARS) {
+> > > +               dev_err(&dev->dev,
+> > > +                       "virtio_pci: bad capability bar %u\n", bar);
+> 
+> In fact, I would say the issue is less that bar is reserved.
+> The real issue is that the value apparently changed since
+> we read it the first time. I think it's a good idea to
+> reflect that in the message. Maybe find_capability should return
+> the capability structure so we don't need to re-read it from
+> the device?
 
+I will have a look and fix it up one way or the other, and respin
+this patch.
 
-Best regards,
-Yann
+ Thanks,
+  Keir
+
+> > > +               return NULL;
+> > > +       }
+> > > +
+> > >         if (length <= start) {
+> > >                 dev_err(&dev->dev,
+> > >                         "virtio_pci: bad capability len %u (>%u expected)\n",
+> > > @@ -120,7 +126,7 @@ static inline int virtio_pci_find_capability(struct pci_dev *dev, u8 cfg_type,
+> > >                                      &bar);
+> > >
+> > >                 /* Ignore structures with reserved BAR values */
+> > > -               if (bar > 0x5)
+> > > +               if (bar >= PCI_STD_NUM_BARS)
+> > >                         continue;
+> > 
+> > Just notice that the spec said:
+> > 
+> > "
+> > values 0x0 to 0x5 specify a Base Address register (BAR) belonging to
+> > the function located beginning at 10h in PCI Configuration Space and
+> > used to map the structure into Memory or I/O Space. The BAR is
+> > permitted to be either 32-bit or 64-bit, it can map Memory Space or
+> > I/O Space.
+> > 
+> > Any other value is reserved for future use.
+> > "
+> > So we probably need to stick 0x5 instead of 0x6 (PCI_STD_NUM_BARS) for
+> > this and other places.
+> > 
+> > Thanks
+> 
+> It does not matter much IMHO, the reason spec uses 0 to 0x5 is precisely
+> because that's the standard number of BARs. Both ways work as long as we
+> are consistent, and I guess PCI_STD_NUM_BARS might be preferable since
+> people tend to copy paste values.
+> 
+> > >
+> > >                 if (type == cfg_type) {
+> > > --
+> > > 2.35.1.894.gb6a874cedc-goog
+> > >
+> 

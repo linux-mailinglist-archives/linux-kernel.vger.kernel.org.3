@@ -2,94 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA784E5C1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100164E5C1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 01:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346597AbiCWX6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 19:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S1346608AbiCXACT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 20:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240367AbiCWX6J (ORCPT
+        with ESMTP id S240367AbiCXACS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 19:58:09 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD906E369
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 16:56:38 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id h1so3751812edj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 16:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Sr7J4vfXVHgXl/lrrjqeau5g6gjXQTlIBcP0OGTYE7A=;
-        b=ofKf+l9lFhG9+K+rNIAmI2pVWAmDdvO4SuuOzCqfEAZh19RvYXvwX9dN95tGecz9zp
-         cP8pKxJYxc+10Y5e867EQHrFkZoI0W/lkKNCZ22jgq5+fk7hymMoDNSvkSgDFiNd4Qun
-         8EnP08Pyj0kFbpC9eeT56GLMozN6uPUtGMvI0Cux46JSg1m1N5N4aVl0JllB9T2V9bUi
-         H4iUnV2Qh6X3qWJPn6VnVkmZyy3N85cKj5vluNr0HZvBS+O7hCdhHE2ezLM52r86H3hS
-         I+CeIidoIprZIiKiPll0gmrJet47VYgoUbYlAnMqJEdRTMRE/sYUfMVKo2UlHfPHZrMb
-         pviA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Sr7J4vfXVHgXl/lrrjqeau5g6gjXQTlIBcP0OGTYE7A=;
-        b=E26ao+mDLKXtMVHI9KPvTN2vfSI6bIrAJUzQUk4gG5ppOND2xlEBBfxtdCO0ux3S1o
-         oKncFJwxZmFgBl5y/IEi+MChl2PgJ3AOzmDAupmVgFyB2k6gvzQbYFaLNP1GHai2WHBD
-         f0NYxMZIKnA0gr1tuDZGvmPfOvWbTE/f0C3aM5zsCGdmHE0yIY63EqUrW78ZIJKFH8Rt
-         RKKyj1Y2JSOA12tzGFaYU5++a/fxXkvnR2+stGQgkcelgL4NWo8rFS3/qBJ0UtLzJaXj
-         buDa6O8uZMcYgJ03uLh3QdyJ0Ijecp7v4MO/kcOVdvc9XhzZ6g94ItUXSDJC6h4Clv09
-         JK6Q==
-X-Gm-Message-State: AOAM532HzD3tNodFTqjMFo11OSFQMXqi+YSqWpwzntN8tMBbFOuwf/RM
-        VBIXQZbsC+16kxVQ30IH1eWzV+iM4JzD9fgUHnpeiw==
-X-Google-Smtp-Source: ABdhPJyNvKik3+MBbQKpWReI26T9y3k0RGMXxOUvfjslYhOAJGNGwznYbZ1Rv7IrggHj0u9f9Sncg8BmrR7L9rtlmWQ=
-X-Received: by 2002:a05:6402:1cc1:b0:413:2b12:fc49 with SMTP id
- ds1-20020a0564021cc100b004132b12fc49mr3463086edb.118.1648079797217; Wed, 23
- Mar 2022 16:56:37 -0700 (PDT)
+        Wed, 23 Mar 2022 20:02:18 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E490C76282
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 17:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648080046; x=1679616046;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oMEJnPtZcH7pdTBWL2rAUzaHh70z6n+O5Q3opiboGBU=;
+  b=BdlMENf5dEV5dQzySZvR2aJyc7/9FF0wRdwgNm5jQ0DkZKPAYpAMP/GT
+   E9UTNCH8dVYCOL4JE2NTtQxR6ItSZ2VdCZA25MgaiyqKZ+W37DBftzjzk
+   PHvSCniGmJAyFkboFWjwlPf/uu36TDqKLlHyKaUfPpbe3lUcyg/pfSsqm
+   MEAMVoCdJw2+RO2j2oZJS+yYKsbgCy4LfzzXXYNPmeFUz80NxEO3DbAvF
+   eh7y8Rzs7ooEWBVvZc7zkL5AJF1YZb4sKkbRfJGyfnmaNb5KL92kYDz/g
+   tjAj/NJVf6k1hy/T9BN5PEm6JIFAzb5iUopVCE+AWz53LutozBhEmZI4I
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="258205575"
+X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
+   d="scan'208";a="258205575"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 17:00:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
+   d="scan'208";a="601494545"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Mar 2022 17:00:43 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXAuA-000KUZ-Uj; Thu, 24 Mar 2022 00:00:42 +0000
+Date:   Thu, 24 Mar 2022 07:59:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: Re: [PATCH 1/7] staging: r8188eu: use ieee80211 define for version
+ check
+Message-ID: <202203240701.1JNFezRj-lkp@intel.com>
+References: <20220323074859.177425-2-martin@kaiser.cx>
 MIME-Version: 1.0
-References: <20220318064959.3298768-1-davidgow@google.com>
-In-Reply-To: <20220318064959.3298768-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 19:56:26 -0400
-Message-ID: <CAFd5g45V6P9ATGQ3kqkuFLNDB=_01gws8Ldr1kH3j+r0aSZ-Og@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Make kunit_remove_resource() idempotent
-To:     David Gow <davidgow@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323074859.177425-2-martin@kaiser.cx>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 2:50 AM David Gow <davidgow@google.com> wrote:
->
-> The kunit_remove_resource() function is used to unlink a resource from
-> the list of resources in the test, making it no longer show up in
-> kunit_find_resource().
->
-> However, this could lead to a race condition if two threads called
-> kunit_remove_resource() on the same resource at the same time: the
-> resource would be removed from the list twice (causing a crash at the
-> second list_del()), and the refcount for the resource would be
-> decremented twice (instead of once, for the reference held by the
-> resource list).
->
-> Fix both problems, the first by using list_del_init(), and the second by
-> checking if the resource has already been removed using list_empty(),
-> and only decrementing its refcount if it has not.
->
-> Also add a KUnit test for the kunit_remove_resource() function which
-> tests this behaviour.
->
-> Reported-by: Daniel Latypov <dlatypov@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
+Hi Martin,
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on staging/staging-testing]
+
+url:    https://github.com/0day-ci/linux/commits/Martin-Kaiser/staging-r8188eu-use-ieee80211-helpers-for-parsing/20220323-155119
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 41197a5f11a4b2d11ac19bc62552022153032811
+config: sh-randconfig-s031-20220323 (https://download.01.org/0day-ci/archive/20220324/202203240701.1JNFezRj-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/ab583161be478f342c621b22766fc7f233769bef
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Martin-Kaiser/staging-r8188eu-use-ieee80211-helpers-for-parsing/20220323-155119
+        git checkout ab583161be478f342c621b22766fc7f233769bef
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/staging/r8188eu/core/rtw_recv.c:1074:14: sparse: sparse: restricted __le16 degrades to integer
+
+vim +1074 drivers/staging/r8188eu/core/rtw_recv.c
+
+  1054	
+  1055	static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv_frame)
+  1056	{
+  1057		/* shall check frame subtype, to / from ds, da, bssid */
+  1058	
+  1059		/* then call check if rx seq/frag. duplicated. */
+  1060	
+  1061		int retval = _FAIL;
+  1062		u8 bDumpRxPkt;
+  1063		struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
+  1064		u8 *ptr = precv_frame->rx_data;
+  1065		__le16 fc = *(__le16 *)ptr;
+  1066		struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
+  1067	
+  1068		if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
+  1069			int ch_set_idx = rtw_ch_set_search_ch(pmlmeext->channel_set, rtw_get_oper_ch(adapter));
+  1070			if (ch_set_idx >= 0)
+  1071				pmlmeext->channel_set[ch_set_idx].rx_count++;
+  1072		}
+  1073	
+> 1074		if ((fc & IEEE80211_FCTL_VERS) != 0)
+  1075			return _FAIL;
+  1076	
+  1077		pattrib->to_fr_ds = get_tofr_ds(ptr);
+  1078	
+  1079		pattrib->frag_num = GetFragNum(ptr);
+  1080		pattrib->seq_num = GetSequence(ptr);
+  1081	
+  1082		pattrib->pw_save = GetPwrMgt(ptr);
+  1083		pattrib->mfrag = ieee80211_has_morefrags(fc);
+  1084		pattrib->mdata = ieee80211_has_moredata(fc);
+  1085		pattrib->privacy = ieee80211_has_protected(fc);
+  1086		pattrib->order = ieee80211_has_order(fc);
+  1087	
+  1088		/* Dump rx packets */
+  1089		GetHalDefVar8188EUsb(adapter, HAL_DEF_DBG_DUMP_RXPKT, &bDumpRxPkt);
+  1090	
+  1091		/* We return _SUCCESS only for data frames. */
+  1092		if (ieee80211_is_mgmt(fc))
+  1093			validate_recv_mgnt_frame(adapter, precv_frame);
+  1094		else if (ieee80211_is_ctl(fc))
+  1095			validate_recv_ctrl_frame(adapter, precv_frame);
+  1096		else if (ieee80211_is_data(fc)) {
+  1097			rtw_led_control(adapter, LED_CTL_RX);
+  1098			pattrib->qos = ieee80211_is_data_qos(fc);
+  1099			retval = validate_recv_data_frame(adapter, precv_frame);
+  1100			if (retval == _FAIL) {
+  1101				struct recv_priv *precvpriv = &adapter->recvpriv;
+  1102				precvpriv->rx_drop++;
+  1103			}
+  1104		}
+  1105	
+  1106		return retval;
+  1107	}
+  1108	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

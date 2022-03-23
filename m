@@ -2,223 +2,411 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921DB4E4B88
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A074E4B5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241555AbiCWDha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 23:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
+        id S241458AbiCWDTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 23:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241553AbiCWDhT (ORCPT
+        with ESMTP id S231637AbiCWDTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 23:37:19 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862777093D;
-        Tue, 22 Mar 2022 20:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648006550; x=1679542550;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=o5Dr8IiC1ocOvSPHem1Sioh4b7U35QV3IUqt2Im329Q=;
-  b=EwcDhh0vt9aXGK0UNflvzOAUFzjTj3gBxuOK3OBHxTcTtLGOVVRowQjk
-   7M2q2sCqxlYQqXkb2pXJuf7gtPaIqBv1L/gm/SguddBZYLlRop3ORVKjT
-   LKJwq75D+a/URmB28jNNpPzQvhwb1e0ns0ANVjIz9nPa0K51PyjeDZwJa
-   OhQqumxYQYAAvwdhlKvs03+Ze/Gw/amouUXY3qbEF63VWsOJK4yRNFRP1
-   uOJT3RxbV3369Pg+08VoFOlWVyMRjcMi1SLE89XZ0azwNeyUdxQFQbBlW
-   isMzKeUpr7GuL2At75f4byaRE0JuzxYsznr2T7Shbuwt++3+C3b9Et3E+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="258203049"
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="258203049"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 20:35:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="717229609"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by orsmga005.jf.intel.com with ESMTP; 22 Mar 2022 20:35:50 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+        Tue, 22 Mar 2022 23:19:37 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2245FF3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:18:06 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KNYSy4LW2zcbLk;
+        Wed, 23 Mar 2022 11:17:54 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 22 Mar 2022 20:35:49 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ 15.1.2375.24; Wed, 23 Mar 2022 11:18:02 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 22 Mar 2022 20:35:49 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Tue, 22 Mar 2022 20:35:49 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.48) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Tue, 22 Mar 2022 20:35:48 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MwSM01Km8gV9TKXd0vNVrr0UU7Vx3an6MYihFH9a3qPNSZg4uxRzebL9+Ig6X8wy0Yg9vqHm8M9VmtzlLAA6D7QAjf7HL7bR6PgF4mAdZAf2FHsmLdirLTM2eGoCOx2EdvbDDWGXTRZs6lZ2Ep+PIKNvlDFi8ADZnkXgSxlhBgpJOsruHRpNo+jWLpCzimz/IHWTTRFBtbC9H7FHya5j3uw1mpSOEKrbr1mVVjF2JAGY4TImwWOGtf2EZQhC8OdEvNl1jitfOeQJziwyTBDEmWFaWkTO+lx431wVnZEj5s0am89Z4+Zo4epfMzjHiaQsrdOb/6NZ/jz5EZGaprpuzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AJaLvnW46AddKRRZAvRayy7DZpJWC5Dy3wcI0qxSBHU=;
- b=IPPmfBnV90NCuheQBT1VA29pADWGdPV55MESXc9YwQrBKPlRt9zNgKAX6rh6v30LcGV5VDLPKiZYy1Teme07tppgeCjVqgrRFcWXYrF+gQibl3Rpd0lykbmGJ0PLgaH5g+/UNtPN+no0IYT4Kg2th+ha64McobPJooi7s5e0/38JPKAkzaTHb8V/uYyDp5/bqNZDnKjbA9tzE+G9gtUC4byYUgVmy5MNvdK70ibh+FrrQe2S5ewRRE85c62SKT1h7WS05HIAKyynhoJwlQMCrJWCWdhhrHGAVh4pAWGKgwTgtEUqnEofPBSZsQ1qSnAkSX39aObe6yr583cU/lMjMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DM6PR11MB4580.namprd11.prod.outlook.com (2603:10b6:5:2af::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Wed, 23 Mar
- 2022 03:35:45 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4df7:2fc6:c7cf:ffa0]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4df7:2fc6:c7cf:ffa0%4]) with mapi id 15.20.5081.023; Wed, 23 Mar 2022
- 03:35:45 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-CC:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Subject: RE: [PATCH v2 03/21] x86/virt/tdx: Implement the SEAMCALL base
- function
-Thread-Topic: [PATCH v2 03/21] x86/virt/tdx: Implement the SEAMCALL base
- function
-Thread-Index: AQHYNsg4xFkq5zuN7EW7F8EKAI7kNKzMXTdA
-Date:   Wed, 23 Mar 2022 03:35:45 +0000
-Message-ID: <BN9PR11MB5276B5986582F9AD11D993618C189@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1647167475.git.kai.huang@intel.com>
- <269a053607357eedd9a1e8ddf0e7240ae0c3985c.1647167475.git.kai.huang@intel.com>
-In-Reply-To: <269a053607357eedd9a1e8ddf0e7240ae0c3985c.1647167475.git.kai.huang@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 17aa54f8-edc6-45ff-27a1-08da0c7e36ef
-x-ms-traffictypediagnostic: DM6PR11MB4580:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-x-microsoft-antispam-prvs: <DM6PR11MB4580460162FEE75411D096B88C189@DM6PR11MB4580.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: r7abJ6JNb8Q8VsX9WVZI9RldHRB7tC/5ENAzP6s4xak0cHmSbdrj+zqtbZ2SR6SuACuQloT8CfMvr/8/gJKdxQ5v1aOz+/aN94udSBzKDI8Ooo5JXA3WN7WAd3kojHdYlNUFsvAdSqI/roVLph7ucTgAOTEiiZMO7mCtDXhrwfzXxVMHSdHAbLPTyaKxGvwNxlirJLQk9Ps53JF32442ogygirfVgDNlMqotCEK3TMnsC5bQF7I58LQjnrJDt15gBClSqVLC4gx1SD2gIttulyMT+QNDoX9dHYklqqb0N92lNmdcwyFRr7ftV8786s/Iejhshoqobnz1PpCzzSSfxbPn2nStOyPV0tTZVizPojOY5uNNALE0ODK24LBUjdn47nqYUYZJThPrL8gq9r7jZVzBx3BZEYhcF5jc1sZtTB2excnJAo6zxzgeK3z5/9ONwd79RgyiHBZPCQsfxzSCu/BhFkAcdAxlVS7OVG6Bpg7k8bQ3kL6kk8Zsr4Qr9Q6Y1kZ8Ru3JIap1tTFr3XQwNsienj7AfCWZtyBBYcWW4vQ6BRsS0y5nwdqZStVYx9d3jNvpaXUMo/LUNDPAOu4zZ19W4nsCxie8Ja/vnXRI1GdQA9fn2iSG+LQj6NtHA0jYI7jcptPwiDsAsB75P79rhdrBAAIB0z012A/w+6RRGJhQ3vm8ZXu0UNA974x5XC/5uTAIJy84fzu18kUcFJa4Bg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(71200400001)(316002)(26005)(83380400001)(38070700005)(55016003)(186003)(33656002)(66946007)(38100700002)(76116006)(9686003)(7696005)(110136005)(52536014)(508600001)(82960400001)(54906003)(2906002)(86362001)(6506007)(4326008)(8676002)(8936002)(64756008)(66556008)(66446008)(122000001)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4QVLJ4SK4HSoGtu6T7Jxbr4NiDFjL7O0KQkvRWW2ApGouPBsV55J7ffbepwU?=
- =?us-ascii?Q?29iS7kn8v6OD5NVUr8bDSqRxke01PN/DbpmEzNLCA6Aa57HEMimiMN+uF4Jd?=
- =?us-ascii?Q?b02chi8RzmwSBuCXGOHTXEOQviGn2Og04MlEDIZKfyYQsRfjErkgz/R7h3Zy?=
- =?us-ascii?Q?8elB9/cI94bS1F9xBuWSQsP2GIXYnot0Gr1QT/kQVWdRiUBOTDe6I+HRa7Wr?=
- =?us-ascii?Q?Osc1ELwWTp4cUSy+sqxOPVoriu9RY7bzT8ygBP2j/nET3zcoHQRV4kFnZeWl?=
- =?us-ascii?Q?ed3OV8qVKyThdXUjbGqtk6HlvojZ/tye2T+u7Lf3rOqdUVg1ZcMyYHCjfaCF?=
- =?us-ascii?Q?zn1N98OvgfyrFvoU7U8hX57DtbadKYgt3oNHzCIy1gRyjpvLG6VYsjI49eVQ?=
- =?us-ascii?Q?pJsgPpqdnjU4mjukiQHj6ZkAOFPBa+LkNIJ3kgIhPLvXiJC4381mmcKDj9Hk?=
- =?us-ascii?Q?x8o6yGO/Nu6LDXTGazPBaTX7N7mqN5PvYaCcXZamwZ+sKfnit41zyGjqRMRu?=
- =?us-ascii?Q?YcJL7+ny4WSO+BkjgJNxzGiRXZ/jEf6Iyc4vDqfW+0E1LaBnc+AR7lFx0h+M?=
- =?us-ascii?Q?YdZHOa00j+whvzi+Q1DxGv+ceQViRWq0GPUoVDQQkofCIbD3yUazNMtQh/qv?=
- =?us-ascii?Q?mtnQxIyoA99gakreCNHW+uKtIhuYPqRlfEtXWyy1N2ME+KRGYxKmlm+ybYQW?=
- =?us-ascii?Q?G7rfjW46iXis931h0agpQxdPCQoyLw2vXmWL4Vywb3YVmiy7LBIojn0oUHOf?=
- =?us-ascii?Q?H11KVzpz1MEuXVcnUuJfIFydzJ8MAWipIMjfNTtHSLwXg7YdNzqshsJiEYh9?=
- =?us-ascii?Q?igvsBd67bW6ftRnZgCrrLxyPWXsXaVa0HZ0wOA6m9g+SrRtMqu4MR8yV2dJM?=
- =?us-ascii?Q?Z1VBlk46Z6a5FJOe4DbpmF888P6cge2AGeB/gNnPQ9MqOAGEZE6293k3f/Bx?=
- =?us-ascii?Q?eSrbjd5nwvJeZUq59S733OYEFkrKPNl4k3+0Gp6vyJOI5U8qNjJGcTHze7DJ?=
- =?us-ascii?Q?CV1VngrwyJwzwkvuc5pmmlNFg4pZ0G/PgLKJuhn+p82qQOmD6aO6jYIjtt+C?=
- =?us-ascii?Q?nFD9lX+vojvTOoYOPTvDHE1CI6IlsM1JhZmXnksSOedOpILyjQn3wMNYxptd?=
- =?us-ascii?Q?+Qdxhc28zK7WwOLoPW67SixQyKuZkfiIPevZI2x2lqfQGs4c4laI75rJkG/j?=
- =?us-ascii?Q?3sPEmWXvFlyno5lpta6N4n4fhrQghXWGN04OvluSYJxsuSkQRdaQO3DcBHpH?=
- =?us-ascii?Q?o0A88T7p19gwGipe8TR9JLkTEmns2zuvM/Td8uhjGXNB/o8/I5pauD6fOpWV?=
- =?us-ascii?Q?LH0xgRWzEyUyrF/GwD04IUEOpJnT+FFAg72PZ5mX6DNDK6w1NlTm2pMYDp4t?=
- =?us-ascii?Q?HAqXHOaXoweL6w4IK4Ggfce7kHfF+C502SwXkadokIM87KV2V1X+kwaujAPS?=
- =?us-ascii?Q?8ll/2NHzqgnqQsznQty0RcDeP1XqMiX6?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 15.1.2308.21; Wed, 23 Mar 2022 11:18:02 +0800
+From:   Tong Tiangen <tongtiangen@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tong Tiangen <tongtiangen@huawei.com>
+Subject: [RFC PATCH -next] arm64: ras: add uce kernel recovery support
+Date:   Wed, 23 Mar 2022 03:37:05 +0000
+Message-ID: <20220323033705.3966643-1-tongtiangen@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17aa54f8-edc6-45ff-27a1-08da0c7e36ef
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2022 03:35:45.1996
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +GXvvjOJAvF8dJ8y9MHmJFfGT1q0gFmJoNjVM/RW1egNvnChYf6c7BAte8P2F2bs5kKfjvVoxfCvJxo94Rc7Sg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4580
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Kai Huang <kai.huang@intel.com>
-> Sent: Sunday, March 13, 2022 6:50 PM
->=20
-> Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
-> defines a new VMX root operation (SEAM VMX root) and a new VMX non-
-> root
-> operation (SEAM VMX non-root) which isolate from legacy VMX root and
-> VMX
-> non-root mode.
+uce means uncorrectable memory error.
 
-s/isolate/are isolated/
+In the sea fault handling process of the kernel, if it is judged that the
+RAS error is consumed in the kernel, the current processing is kernel panic
+. However, it is not optimal. In some case, the page accessed in kernel is
+a user page (such as copy_from_user/get_user), in this case, kill the user
+process and isolate the user page with hardware error is a better choice.
 
->=20
-> A CPU-attested software module (called the 'TDX module') runs in SEAM
-> VMX root to manage the crypto protected VMs running in SEAM VMX non-
-> root.
-> SEAM VMX root is also used to host another CPU-attested software module
-> (called the 'P-SEAMLDR') to load and update the TDX module.
->=20
-> Host kernel transits to either the P-SEAMLDR or the TDX module via the
-> new SEAMCALL instruction.  SEAMCALLs are host-side interface functions
-> defined by the P-SEAMLDR and the TDX module around the new SEAMCALL
-> instruction.  They are similar to a hypercall, except they are made by
+This feature provides the option. We implement it to add new extable type
+(XXX_UCE_RECOVERY), these new types indicates they can be fixup from
+uncorrectable memory error and it is fixuped in do_sea(). If the exception
+is fixuped correctly, the kernel can avoid panic.
 
-"SEAMCALLs are ... functions ... around the new SEAMCALL instruction"
+In copy_from_user, record the exception reason to regs->regs[0] at
+ex_handler_fixup_uce_recovery() which is used to check sea fault triggered.
 
-This is confusing. Probably just:
+In get_user, the processing of EX_TYPE_UACCESS_ERR_ZERO and
+EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY is same and both return -EFAULT.
 
-"SEAMCALL functions are defined and handled by the P-SEAMLDR and
-the TDX module"
+Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+---
+ arch/arm64/Kconfig                   | 10 ++++++++
+ arch/arm64/include/asm/asm-extable.h | 35 ++++++++++++++++++++++++----
+ arch/arm64/include/asm/asm-uaccess.h | 16 +++++++++++++
+ arch/arm64/include/asm/esr.h         |  5 ++++
+ arch/arm64/include/asm/extable.h     |  2 +-
+ arch/arm64/include/asm/uaccess.h     |  2 +-
+ arch/arm64/kernel/probes/kprobes.c   |  2 +-
+ arch/arm64/lib/copy_from_user.S      | 11 +++++----
+ arch/arm64/mm/extable.c              | 21 ++++++++++++++++-
+ arch/arm64/mm/fault.c                | 30 +++++++++++++++++++++++-
+ 10 files changed, 119 insertions(+), 15 deletions(-)
 
-> host kernel to the SEAM software.
->=20
-> SEAMCALLs use an ABI different from the x86-64 system-v ABI.  Instead,
-> they share the same ABI with the TDCALL.  %rax is used to carry both the
-> SEAMCALL leaf function number (input) and the completion status code
-> (output).  Additional GPRs (%rcx, %rdx, %r8->%r11) may be further used
-> as both input and output operands in individual leaf SEAMCALLs.
->=20
-> Implement a C function __seamcall() to do SEAMCALL using the assembly
-> macro used by __tdx_module_call() (the implementation of TDCALL).  The
-> only exception not covered here is TDENTER leaf function which takes
-> all GPRs and XMM0-XMM15 as both input and output.  The caller of TDENTER
-> should implement its own logic to call TDENTER directly instead of using
-> this function.
->=20
-> SEAMCALL instruction is essentially a VMExit from VMX root to SEAM VMX
-> root, and it can fail with VMfailInvalid, for instance, when the SEAM
-> software module is not loaded.  The C function __seamcall() returns
-> TDX_SEAMCALL_VMFAILINVALID, which doesn't conflict with any actual error
-> code of SEAMCALLs, to uniquely represent this case.
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 962c84952c98..39f828c5b931 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1681,6 +1681,16 @@ config ARM64_CNP
+ 	  at runtime, and does not affect PEs that do not implement
+ 	  this feature.
+ 
++config ARM64_UCE_KERNEL_RECOVERY
++	bool "Enable support for uncorrectable memory error(uce) kernel recovery"
++	default y
++	depends on ACPI_APEI_SEA
++	help
++	  With ARM v8.2 RAS Extension, SEA are usually triggered when memory
++	  error are consumed. In some cases, if the error address is in a
++	  user page there is a chance to recover. we can isolate this page
++	  and killing process instead of die.
++
+ endmenu
+ 
+ menu "ARMv8.3 architectural features"
+diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
+index c39f2437e08e..9debab58c2b2 100644
+--- a/arch/arm64/include/asm/asm-extable.h
++++ b/arch/arm64/include/asm/asm-extable.h
+@@ -2,11 +2,19 @@
+ #ifndef __ASM_ASM_EXTABLE_H
+ #define __ASM_ASM_EXTABLE_H
+ 
+-#define EX_TYPE_NONE			0
+-#define EX_TYPE_FIXUP			1
+-#define EX_TYPE_BPF			2
+-#define EX_TYPE_UACCESS_ERR_ZERO	3
+-#define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
++#define EX_TYPE_NONE				0
++#define EX_TYPE_FIXUP				1
++#define EX_TYPE_BPF				2
++#define EX_TYPE_UACCESS_ERR_ZERO		3
++#define EX_TYPE_LOAD_UNALIGNED_ZEROPAD		4
++
++/* _UCE_RECOVERY indicates that can fixup from unrecoverable memory errors */
++#define EX_TYPE_FIXUP_UCE_RECOVERY		5
++#define EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY	6
++
++#define IS_EX_TYPE_UCE_RECOVERY(type)				\
++	(type == EX_TYPE_FIXUP_UCE_RECOVERY ||			\
++	 type == EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY)
+ 
+ #ifdef __ASSEMBLY__
+ 
+@@ -27,6 +35,14 @@
+ 	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
+ 	.endm
+ 
++/*
++ * Create an exception table entry for `insn`, which will branch to `fixup`
++ * when an unhandled fault(include sea fault) is taken.
++ */
++	.macro		_asm_extable_uce_recovery, insn, fixup
++	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP_UCE_RECOVERY, 0)
++	.endm
++
+ /*
+  * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
+  * do nothing.
+@@ -64,6 +80,15 @@
+ #define EX_DATA_REG(reg, gpr)						\
+ 	"((.L__gpr_num_" #gpr ") << " __stringify(EX_DATA_REG_##reg##_SHIFT) ")"
+ 
++#define _ASM_EXTABLE_UACCESS_ERR_ZERO_UCE_RECOVERY(insn, fixup, err, zero)		\
++	__DEFINE_ASM_GPR_NUMS								\
++	__ASM_EXTABLE_RAW(#insn, #fixup,						\
++			  __stringify(EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY),		\
++			  "("								\
++			    EX_DATA_REG(ERR, err) " | "					\
++			    EX_DATA_REG(ZERO, zero)					\
++			  ")")
++
+ #define _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)		\
+ 	__DEFINE_ASM_GPR_NUMS						\
+ 	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
+diff --git a/arch/arm64/include/asm/asm-uaccess.h b/arch/arm64/include/asm/asm-uaccess.h
+index 0557af834e03..36692ec1fdbb 100644
+--- a/arch/arm64/include/asm/asm-uaccess.h
++++ b/arch/arm64/include/asm/asm-uaccess.h
+@@ -92,4 +92,20 @@ alternative_else_nop_endif
+ 
+ 		_asm_extable	8888b,\l;
+ 	.endm
++
++	.macro user_ldp_uce_recovery l, reg1, reg2, addr, post_inc
++8888:		ldtr	\reg1, [\addr];
++8889:		ldtr	\reg2, [\addr, #8];
++		add	\addr, \addr, \post_inc;
++
++		_asm_extable_uce_recovery	8888b, \l;
++		_asm_extable_uce_recovery	8889b, \l;
++	.endm
++
++	.macro user_ldst_uce_recovery l, inst, reg, addr, post_inc
++8888:		\inst		\reg, [\addr];
++		add		\addr, \addr, \post_inc;
++
++		_asm_extable_uce_recovery	8888b, \l;
++	.endm
+ #endif
+diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+index d52a0b269ee8..11fcfc002654 100644
+--- a/arch/arm64/include/asm/esr.h
++++ b/arch/arm64/include/asm/esr.h
+@@ -330,6 +330,11 @@
+ #ifndef __ASSEMBLY__
+ #include <asm/types.h>
+ 
++static inline bool esr_is_sea(u32 esr)
++{
++	return (esr & ESR_ELx_FSC) == ESR_ELx_FSC_EXTABT;
++}
++
+ static inline bool esr_is_data_abort(u32 esr)
+ {
+ 	const u32 ec = ESR_ELx_EC(esr);
+diff --git a/arch/arm64/include/asm/extable.h b/arch/arm64/include/asm/extable.h
+index 72b0e71cc3de..f7835b0f473b 100644
+--- a/arch/arm64/include/asm/extable.h
++++ b/arch/arm64/include/asm/extable.h
+@@ -45,5 +45,5 @@ bool ex_handler_bpf(const struct exception_table_entry *ex,
+ }
+ #endif /* !CONFIG_BPF_JIT */
+ 
+-bool fixup_exception(struct pt_regs *regs);
++bool fixup_exception(struct pt_regs *regs, unsigned int esr);
+ #endif
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index e8dce0cc5eaa..a229f86e6542 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -236,7 +236,7 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+ 	asm volatile(							\
+ 	"1:	" load "	" reg "1, [%2]\n"			\
+ 	"2:\n"								\
+-	_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %w0, %w1)			\
++	_ASM_EXTABLE_UACCESS_ERR_ZERO_UCE_RECOVERY(1b, 2b, %w0, %w1)	\
+ 	: "+r" (err), "=&r" (x)						\
+ 	: "r" (addr))
+ 
+diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
+index d9dfa82c1f18..16a069e8eec3 100644
+--- a/arch/arm64/kernel/probes/kprobes.c
++++ b/arch/arm64/kernel/probes/kprobes.c
+@@ -285,7 +285,7 @@ int __kprobes kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr)
+ 		 * In case the user-specified fault handler returned
+ 		 * zero, try to fix up.
+ 		 */
+-		if (fixup_exception(regs))
++		if (fixup_exception(regs, fsr))
+ 			return 1;
+ 	}
+ 	return 0;
+diff --git a/arch/arm64/lib/copy_from_user.S b/arch/arm64/lib/copy_from_user.S
+index 34e317907524..f16104c63dde 100644
+--- a/arch/arm64/lib/copy_from_user.S
++++ b/arch/arm64/lib/copy_from_user.S
+@@ -21,7 +21,7 @@
+  */
+ 
+ 	.macro ldrb1 reg, ptr, val
+-	user_ldst 9998f, ldtrb, \reg, \ptr, \val
++	user_ldst_uce_recovery 9998f, ldtrb, \reg, \ptr, \val
+ 	.endm
+ 
+ 	.macro strb1 reg, ptr, val
+@@ -29,7 +29,7 @@
+ 	.endm
+ 
+ 	.macro ldrh1 reg, ptr, val
+-	user_ldst 9997f, ldtrh, \reg, \ptr, \val
++	user_ldst_uce_recovery 9997f, ldtrh, \reg, \ptr, \val
+ 	.endm
+ 
+ 	.macro strh1 reg, ptr, val
+@@ -37,7 +37,7 @@
+ 	.endm
+ 
+ 	.macro ldr1 reg, ptr, val
+-	user_ldst 9997f, ldtr, \reg, \ptr, \val
++	user_ldst_uce_recovery 9997f, ldtr, \reg, \ptr, \val
+ 	.endm
+ 
+ 	.macro str1 reg, ptr, val
+@@ -45,7 +45,7 @@
+ 	.endm
+ 
+ 	.macro ldp1 reg1, reg2, ptr, val
+-	user_ldp 9997f, \reg1, \reg2, \ptr, \val
++	user_ldp_uce_recovery 9997f, \reg1, \reg2, \ptr, \val
+ 	.endm
+ 
+ 	.macro stp1 reg1, reg2, ptr, val
+@@ -62,7 +62,8 @@ SYM_FUNC_START(__arch_copy_from_user)
+ 	ret
+ 
+ 	// Exception fixups
+-9997:	cmp	dst, dstin
++9997:	cbz	x0, 9998f
++	cmp	dst, dstin
+ 	b.ne	9998f
+ 	// Before being absolutely sure we couldn't copy anything, try harder
+ USER(9998f, ldtrb tmp1w, [srcin])
+diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
+index 489455309695..b6b76e839b4b 100644
+--- a/arch/arm64/mm/extable.c
++++ b/arch/arm64/mm/extable.c
+@@ -9,6 +9,7 @@
+ 
+ #include <asm/asm-extable.h>
+ #include <asm/ptrace.h>
++#include <asm/esr.h>
+ 
+ static inline unsigned long
+ get_ex_fixup(const struct exception_table_entry *ex)
+@@ -23,6 +24,18 @@ static bool ex_handler_fixup(const struct exception_table_entry *ex,
+ 	return true;
+ }
+ 
++static bool ex_handler_fixup_uce_recovery(const struct exception_table_entry *ex,
++					  struct pt_regs *regs, unsigned int esr)
++{
++	if (esr_is_sea(esr))
++		regs->regs[0] = 0;
++	else
++		regs->regs[0] = 1;
++
++	regs->pc = get_ex_fixup(ex);
++	return true;
++}
++
+ static bool ex_handler_uaccess_err_zero(const struct exception_table_entry *ex,
+ 					struct pt_regs *regs)
+ {
+@@ -63,7 +76,7 @@ ex_handler_load_unaligned_zeropad(const struct exception_table_entry *ex,
+ 	return true;
+ }
+ 
+-bool fixup_exception(struct pt_regs *regs)
++bool fixup_exception(struct pt_regs *regs, unsigned int esr)
+ {
+ 	const struct exception_table_entry *ex;
+ 
+@@ -71,12 +84,18 @@ bool fixup_exception(struct pt_regs *regs)
+ 	if (!ex)
+ 		return false;
+ 
++	if (esr_is_sea(esr) && !IS_EX_TYPE_UCE_RECOVERY(ex->type))
++		return false;
++
+ 	switch (ex->type) {
+ 	case EX_TYPE_FIXUP:
+ 		return ex_handler_fixup(ex, regs);
++	case EX_TYPE_FIXUP_UCE_RECOVERY:
++		return ex_handler_fixup_uce_recovery(ex, regs, esr);
+ 	case EX_TYPE_BPF:
+ 		return ex_handler_bpf(ex, regs);
+ 	case EX_TYPE_UACCESS_ERR_ZERO:
++	case EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY:
+ 		return ex_handler_uaccess_err_zero(ex, regs);
+ 	case EX_TYPE_LOAD_UNALIGNED_ZEROPAD:
+ 		return ex_handler_load_unaligned_zeropad(ex, regs);
+diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+index 77341b160aca..47c447554d2a 100644
+--- a/arch/arm64/mm/fault.c
++++ b/arch/arm64/mm/fault.c
+@@ -361,7 +361,7 @@ static void __do_kernel_fault(unsigned long addr, unsigned int esr,
+ 	 * Are we prepared to handle this kernel fault?
+ 	 * We are almost certainly not prepared to handle instruction faults.
+ 	 */
+-	if (!is_el1_instruction_abort(esr) && fixup_exception(regs))
++	if (!is_el1_instruction_abort(esr) && fixup_exception(regs, esr))
+ 		return;
+ 
+ 	if (WARN_RATELIMIT(is_spurious_el1_translation_fault(addr, esr, regs),
+@@ -695,6 +695,30 @@ static int do_bad(unsigned long far, unsigned int esr, struct pt_regs *regs)
+ 	return 1; /* "fault" */
+ }
+ 
++static bool arm64_process_kernel_sea(unsigned long addr, unsigned int esr,
++				     struct pt_regs *regs, int sig, int code)
++{
++	if (!IS_ENABLED(CONFIG_ARM64_UCE_KERNEL_RECOVERY))
++		return false;
++
++	if (user_mode(regs) || !current->mm)
++		return false;
++
++	if (apei_claim_sea(regs) < 0)
++		return false;
++
++	current->thread.fault_address = 0;
++	current->thread.fault_code = esr;
++
++	if (!fixup_exception(regs, esr))
++		return false;
++
++	arm64_force_sig_fault(sig, code, addr,
++		"Uncorrected hardware memory error in kernel-access\n");
++
++	return true;
++}
++
+ static int do_sea(unsigned long far, unsigned int esr, struct pt_regs *regs)
+ {
+ 	const struct fault_info *inf;
+@@ -720,6 +744,10 @@ static int do_sea(unsigned long far, unsigned int esr, struct pt_regs *regs)
+ 		 */
+ 		siaddr  = untagged_addr(far);
+ 	}
++
++	if (arm64_process_kernel_sea(siaddr, esr, regs, inf->sig, inf->code))
++		return 0;
++
+ 	arm64_notify_die(inf->name, regs, inf->sig, inf->code, siaddr, esr);
+ 
+ 	return 0;
+-- 
+2.18.0.huawei.25
 
-SEAMCALL is TDX specific, is it? If yes, there is no need to have both
-TDX and SEAMCALL in one macro, i.e. above can be SEAMCALL_VMFAILINVALID.
-
-Thanks
-Kevin

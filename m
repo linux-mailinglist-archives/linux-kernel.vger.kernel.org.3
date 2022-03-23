@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215024E5502
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99334E557B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237842AbiCWPRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 11:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
+        id S241180AbiCWPmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 11:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbiCWPR3 (ORCPT
+        with ESMTP id S238256AbiCWPmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 11:17:29 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE0419297;
-        Wed, 23 Mar 2022 08:15:59 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id z92so2194916ede.13;
-        Wed, 23 Mar 2022 08:15:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=+5MDsgaAS/vAQj+VVJW1W9egaGRomv8qKOjhUnZ2xXE=;
-        b=0t63jl0lpUKG54uTV1YPZm63FdVhkAYwVE6p3RYMhEfzIpFETH5JGb5kAbughHULsu
-         Wy4rDzfqef5LMXv41lzf7GbHXIAWI0rKjpcgj48GNtCGJrSEatLdPJ9+Ch9H48isC6yN
-         yw3IUeAIGYKaq1VJY/oWtU/mGlYFEv5GVLCHcXBN6MSw5enj4xyw4Wx4eeyxYYEK9ItK
-         N8nlfyaleFLWrFVk5zAX2ul70yYW87X/QY5ki59WBpxb4yznXQm4UF69EdqOSEEfSsPP
-         PCv55Lo+apsCPf836gU2yh/qEodSEdFSFX5CPxLlf+A4EQ1xVB0ZJsyKJuGy4XPvGbC/
-         7isA==
-X-Gm-Message-State: AOAM530+age+reyBCua1nTPhkfXu0OUBWB0hsGAJgQ8qPokPFPg0PjZY
-        06JwE2zZxvw09YcEXXilf/w=
-X-Google-Smtp-Source: ABdhPJyNts/hRdd+ry5GZYpRRawYywnSMndvLddMIsO40489tAqxrIs0PMAh5LE+ihwFMqj0SGhHVA==
-X-Received: by 2002:a05:6402:298c:b0:418:f55e:fdda with SMTP id eq12-20020a056402298c00b00418f55efddamr687608edb.230.1648048558284;
-        Wed, 23 Mar 2022 08:15:58 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id l20-20020a1709062a9400b006ce71a88bf5sm50729eje.183.2022.03.23.08.15.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 08:15:57 -0700 (PDT)
-Message-ID: <f44c9881-6f7b-f4f5-8225-e0c74c83fab1@kernel.org>
-Date:   Wed, 23 Mar 2022 16:15:56 +0100
+        Wed, 23 Mar 2022 11:42:18 -0400
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.49.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3DB3ED3A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:40:46 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id ECDA72B1F0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:19:35 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id X2lrnuU0g22u3X2lrnIvD3; Wed, 23 Mar 2022 10:19:35 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=HIStbkOPq4KmqmDgNBDsGitQzT/C57KQ09sUwOZRSMk=; b=ySmUsaeuUBq33rtPaqlamrBkXM
+        S0JULLSndwe4GCVmTtPYfC9A4GmPTPleA3aSm0ibrtL4v2//nN6QTluUExEybGTpsiBnahwMR695d
+        0sjZ8UCxtHWUn3amgZYqJx/1PuS67/ll5m482huAkX0cU+kfbp+oSjiUnYf18URiM20DKPV9OjzFI
+        Tmp5KemWGJSYU0VOID6o567phCG6rWL4C1lr6tvGO8KtXoyl1Y/+UOkONjKv0dyZ0//bvl2AHpqvB
+        gVabAAUvN9OtwOyZj6nlbXq6JOjCQJuQDjOX1jrYBJ86MXBW9SKiBD/LmTmMMPrzadVIX4V2FZV4i
+        I3+QVb9g==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57636 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nX2lr-002q3w-70; Wed, 23 Mar 2022 15:19:35 +0000
+Date:   Wed, 23 Mar 2022 08:19:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     David Gow <davidgow@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] lib: overflow: Convert to Kunit
+Message-ID: <20220323151933.GA1363768@roeck-us.net>
+References: <20220224054825.1853314-1-keescook@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/7] ARM: dts: s5pv210: Adjust I2S entries to match spec
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Jonathan Bakker <xc-racer2@live.ca>, alim.akhtar@samsung.com
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
- <CY4PR04MB056784D54ADDBB4F57F82D4ACB189@CY4PR04MB0567.namprd04.prod.outlook.com>
- <4ebe2bb9-4f92-2dff-6737-d057e5950b24@kernel.org>
-In-Reply-To: <4ebe2bb9-4f92-2dff-6737-d057e5950b24@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224054825.1853314-1-keescook@chromium.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nX2lr-002q3w-70
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57636
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 3
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2022 16:14, Krzysztof Kozlowski wrote:
-> On 23/03/2022 16:03, Jonathan Bakker wrote:
->> Based on the device tree spec, clocks should be ordered tx/rx.
->> Re-order from rx/tx to avoid warnings when running make dtbs_check
->>
->> Additionally, the number of #sound-dai-cells should be 1, not 0
->>
->> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
->> ---
->>  arch/arm/boot/dts/s5pv210-aries.dtsi |  2 +-
->>  arch/arm/boot/dts/s5pv210.dtsi       | 18 +++++++++---------
->>  2 files changed, 10 insertions(+), 10 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
->> index 70ff56daf4cb..503b5a50ef1a 100644
->> --- a/arch/arm/boot/dts/s5pv210-aries.dtsi
->> +++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
->> @@ -644,7 +644,7 @@
->>  };
->>  
->>  &i2s0 {
->> -	dmas = <&pdma0 9>, <&pdma0 10>, <&pdma0 11>;
->> +	dmas = <&pdma0 10>, <&pdma0 9>, <&pdma0 11>;
->>  	status = "okay";
+Hi,
+
+On Wed, Feb 23, 2022 at 09:48:25PM -0800, Kees Cook wrote:
+> Convert overflow unit tests to KUnit, for better integration into the
+> kernel self test framework. Includes a rename of test_overflow.c to
+> overflow_kunit.c, and CONFIG_TEST_OVERFLOW to CONFIG_OVERFLOW_KUNIT_TEST.
 > 
-> Except that fix that's the same commit as here:
-> https://lore.kernel.org/all/20200907161141.31034-26-krzk@kernel.org/
-> so just extend it.
-> 
-> sound-dai-cells should go to a separate commit. But are you sure they
-> are correct? The Fascinate 4G seems to be using them as cells=0.
 
-See my previous patch and discussion:
-https://lore.kernel.org/all/20200907161141.31034-10-krzk@kernel.org/
+This patch results in lots of test build failures
+due to large frame sizes.
 
+Building i386:allyesconfig ... failed
+--------------
+Error log:
+lib/overflow_kunit.c: In function 'overflow_size_helpers_test':
+lib/overflow_kunit.c:644:1: error: the frame size of 2480 bytes is larger than 2048 bytes
 
-Best regards,
-Krzysztof
+Building i386:allmodconfig ... failed
+--------------
+Error log:
+lib/overflow_kunit.c: In function 'overflow_size_helpers_test':
+lib/overflow_kunit.c:644:1: error: the frame size of 2480 bytes is larger than 2048 bytes
+
+Building mips:allmodconfig ... failed
+--------------
+Error log:
+lib/overflow_kunit.c: In function 'overflow_size_helpers_test':
+lib/overflow_kunit.c:644:1: error: the frame size of 2864 bytes is larger than 2048 bytes
+
+Building powerpc:allmodconfig ... failed
+--------------
+Error log:
+lib/overflow_kunit.c: In function 'overflow_size_helpers_test':
+lib/overflow_kunit.c:644:1: error: the frame size of 3904 bytes is larger than 2048 bytes
+
+Guenter

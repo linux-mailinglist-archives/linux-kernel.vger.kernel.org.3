@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607D54E5BD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 654A34E5BD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 00:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345517AbiCWXdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 19:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S1345507AbiCWXdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 19:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241475AbiCWXdQ (ORCPT
+        with ESMTP id S1345405AbiCWXdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Mar 2022 19:33:16 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A82E90CCF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8FE90CD5;
         Wed, 23 Mar 2022 16:31:44 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 23:31:39 -0000
+Date:   Wed, 23 Mar 2022 23:31:41 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648078301;
+        s=2020; t=1648078302;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mb8sRc00s7UweUwt1QoAi01Vq/4TD9UyM7gruvNKweM=;
-        b=vJVxTFd/yzIq5owV6d84fhzjPurzls/0HhmMnQea4UKo0RGCd+eBMuH7rtiqlsSCLpD9yb
-        wjn5G1PXtHbrAZwQX4u/kcCs8kMUOVR5fn1toPArSuiTAKnhc8fZeCusdGeG+Zwpm0KEBC
-        JnkD33kadwecDmgDoha03Q5jIy8QGnF0MAleg6N38NEF/7lmlihpELjpGivCpso56hB8FL
-        CjFSe0HAoPxGAt4P87FTEy1jatmuJF1QEeOaWD0BEIkr+8y6VQC2Gm+jfDm3pgYGmjO80j
-        Z6frWd/mDnhycQF2o1XW0B7RCf/+ei6r4bGDOKoNktTOCK5vZIn+rYdmEqu3DQ==
+        bh=PT1maxWW5NNo9X1wLuCr6EW7XZ21JWxdjhPR3iYLg6M=;
+        b=m97itk0cwVz2OFyFZgoHOLAehrle3xst6TRwYXT8Fzqs7/NftfylqFRIPfTc+YgMZyObr9
+        crPuhA1+A+w/zWr2L4yAmx38LcNY3Iztb3bvaGuK2Hl4AovskX11ess2hlolHOc2hTyGIQ
+        kEpJLFLvE4/X7fBAe29tFoTXJUBenf9wg6r1SFgqYkLh7iM+kE4JXWHFOStAuGEXZ44R9i
+        qBdjBWditqJ6rwuINo1Ff3tyEE2g81xZDNGVTR7qhz4V4GvQfO79hzfQ4CG/uGhAwyOuf3
+        nluERvh64gBEtId1k/6hdr0hI+0j3KP3hEtV7r7bP0CVYAL3R8e/m1n8QdHjow==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648078301;
+        s=2020e; t=1648078302;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mb8sRc00s7UweUwt1QoAi01Vq/4TD9UyM7gruvNKweM=;
-        b=UPr8IfNb1iIeO07lu8i7bbz16cYABb/3nzRpIMdEgrAlhVhEnP+vwNBAzS1d1iDtYU0O1v
-        CZB4WUhq4b5TCOAw==
-From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
+        bh=PT1maxWW5NNo9X1wLuCr6EW7XZ21JWxdjhPR3iYLg6M=;
+        b=hoJySjsgFmvMf/dUsT0yWpvZELjWwCo2Pf/1Ylxr0fNeFVWgZ8FAnDJalRYPeHbclDhjFG
+        JTPc4jcuQ1XXuRCw==
+From:   "tip-bot2 for Yang Zhong" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] selftests/x86/amx: Update the ARCH_REQ_XCOMP_PERM test
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220129173647.27981-3-chang.seok.bae@intel.com>
-References: <20220129173647.27981-3-chang.seok.bae@intel.com>
+Subject: [tip: x86/urgent] x86/fpu/xstate: Fix the ARCH_REQ_XCOMP_PERM implementation
+Cc:     Yang Zhong <yang.zhong@intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paolo Bonzini <bonzini@gnu.org>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220129173647.27981-2-chang.seok.bae@intel.com>
+References: <20220129173647.27981-2-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-Message-ID: <164807829910.389.4784020527797489400.tip-bot2@tip-bot2>
+Message-ID: <164807830122.389.15178914175068421091.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,66 +69,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     20df737561484cb2d42e537663c03a7311d2b3c1
-Gitweb:        https://git.kernel.org/tip/20df737561484cb2d42e537663c03a7311d2b3c1
-Author:        Chang S. Bae <chang.seok.bae@intel.com>
-AuthorDate:    Sat, 29 Jan 2022 09:36:47 -08:00
+Commit-ID:     063452fd94d153d4eb38ad58f210f3d37a09cca4
+Gitweb:        https://git.kernel.org/tip/063452fd94d153d4eb38ad58f210f3d37a09cca4
+Author:        Yang Zhong <yang.zhong@intel.com>
+AuthorDate:    Sat, 29 Jan 2022 09:36:46 -08:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Wed, 23 Mar 2022 21:28:34 +01:00
 
-selftests/x86/amx: Update the ARCH_REQ_XCOMP_PERM test
+x86/fpu/xstate: Fix the ARCH_REQ_XCOMP_PERM implementation
 
-Update the arch_prctl test to check the permission bitmap whether the
-requested feature is added as expected or not.
+ARCH_REQ_XCOMP_PERM is supposed to add the requested feature to the
+permission bitmap of thread_group_leader()->fpu. But the code overwrites
+the bitmap with the requested feature bit only rather than adding it.
 
-Every non-dynamic feature that is enabled is permitted already for use.
-TILECFG is not dynamic feature. Ensure the bit is always on from
-ARCH_GET_XCOMP_PERM.
+Fix the code to add the requested feature bit to the master bitmask.
 
+Fixes: db8268df0983 ("x86/arch_prctl: Add controls for dynamic XSTATE components")
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220129173647.27981-3-chang.seok.bae@intel.com
+Cc: Paolo Bonzini <bonzini@gnu.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220129173647.27981-2-chang.seok.bae@intel.com
 
 ---
- tools/testing/selftests/x86/amx.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ arch/x86/kernel/fpu/xstate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-index 3615ef4..2189f03 100644
---- a/tools/testing/selftests/x86/amx.c
-+++ b/tools/testing/selftests/x86/amx.c
-@@ -368,9 +368,16 @@ static void req_xtiledata_perm(void)
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 7c7824a..dc6d5e9 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1639,7 +1639,7 @@ static int __xstate_request_perm(u64 permitted, u64 requested, bool guest)
  
- static void validate_req_xcomp_perm(enum expected_result exp)
- {
--	unsigned long bitmask;
-+	unsigned long bitmask, expected_bitmask;
- 	long rc;
- 
-+	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
-+	if (rc) {
-+		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
-+	} else if (!(bitmask & XFEATURE_MASK_XTILECFG)) {
-+		fatal_error("ARCH_GET_XCOMP_PERM returns XFEATURE_XTILECFG off.");
-+	}
-+
- 	rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA);
- 	if (exp == FAIL_EXPECTED) {
- 		if (rc) {
-@@ -383,10 +390,15 @@ static void validate_req_xcomp_perm(enum expected_result exp)
- 		fatal_error("ARCH_REQ_XCOMP_PERM saw unexpected failure.\n");
- 	}
- 
-+	expected_bitmask = bitmask | XFEATURE_MASK_XTILEDATA;
-+
- 	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
- 	if (rc) {
- 		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
--	} else if (bitmask & XFEATURE_MASK_XTILE) {
-+	} else if (bitmask != expected_bitmask) {
-+		fatal_error("ARCH_REQ_XCOMP_PERM set a wrong bitmask: %lx, expected: %lx.\n",
-+			    bitmask, expected_bitmask);
-+	} else {
- 		printf("\tARCH_REQ_XCOMP_PERM is successful.\n");
- 	}
- }
+ 	perm = guest ? &fpu->guest_perm : &fpu->perm;
+ 	/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
+-	WRITE_ONCE(perm->__state_perm, requested);
++	WRITE_ONCE(perm->__state_perm, mask);
+ 	/* Protected by sighand lock */
+ 	perm->__state_size = ksize;
+ 	perm->__user_state_size = usize;

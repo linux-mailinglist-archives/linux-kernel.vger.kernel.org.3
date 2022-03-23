@@ -2,55 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AB24E5222
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BE44E522B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242271AbiCWM2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        id S242351AbiCWMbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbiCWM2g (ORCPT
+        with ESMTP id S231716AbiCWMbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:28:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D47B136;
-        Wed, 23 Mar 2022 05:27:06 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648038424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SDVMgslzXL3gRKImFxqbLng/cEJIgHfuf5NzQdxe1Rg=;
-        b=M8SZiYDMlrcjHucSj/axq2y7HuL5uQmzl3JY2EFLvPwjY8o13wROJFJBpC3fcXFlr2jFp2
-        j3F4QGSVe98OBOfO3bqZJsiAl2PPCihB0TSLQlXAg3PAq4Z7jqaKXHZMd9rq9VBwoECa83
-        F6BTXPSJguIc+HZSA9cS7igyG3HmOJggwEuljr+ju8ZInv2/lw7Y19ymsy7g9aItKl5NUJ
-        GqQEhOKFAUNDebiOGhbuyr/LSw1aImeQnAzIp5bxr1EBZgowqTgdMVyytA+/W7WADyjltV
-        EkKMjg5XgRIrQJXURJAARw3JWlM3Yq4IS9G7yDOOkHXsXztZcniiulKsypqxtQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648038424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SDVMgslzXL3gRKImFxqbLng/cEJIgHfuf5NzQdxe1Rg=;
-        b=UnGujgWRRnYP7tr5iZh/XI9r+CA+RRPnpEJExESxRzR8lYsUazcydY0eOCqTeMrkpW0S3j
-        rAh0Vs8tx3I2UyAQ==
-To:     Paolo Bonzini <bonzini@gnu.org>, dave.hansen@linux.intel.com
-Cc:     yang.zhong@intel.com, ravi.v.shankar@intel.com, mingo@redhat.com,
-        "Chang S. Bae" <chang.seok.bae@intel.com>, bp@alien8.de,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        KVM list <kvm@vger.kernel.org>
-Subject: Re: ping Re: [PATCH v4 0/2] x86: Fix ARCH_REQ_XCOMP_PERM and update
- the test
-In-Reply-To: <a0bded7d-5bc0-12b9-2aca-c1c92d958293@gnu.org>
-References: <20220129173647.27981-1-chang.seok.bae@intel.com>
- <a0bded7d-5bc0-12b9-2aca-c1c92d958293@gnu.org>
-Date:   Wed, 23 Mar 2022 13:27:04 +0100
-Message-ID: <87a6dgam7b.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        Wed, 23 Mar 2022 08:31:06 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C300F5A0B1;
+        Wed, 23 Mar 2022 05:29:36 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 849145801A3;
+        Wed, 23 Mar 2022 08:29:33 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute1.internal (MEProxy); Wed, 23 Mar 2022 08:29:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=U/ewyp5y3Q5PVO
+        u36vKaYrXTr8xm2PIaC+1xyM55hhw=; b=3s/P5v0SrlAsYc4jGnxlP2wGQwyM5P
+        C/bx6Yr9RDoinqfZET2ecfTblc3g9ChOBwWx1MezRZWICJ6RFJ9qqA4x9BQfavst
+        RpJTlEUHe+vX6CoVwfKPBc4UN3iy8S89xUddafHgfrK7zrkjthZAEzC/Rd9ceGU2
+        bScHMtdsDgpOlePe4TCKOzehZVDsQg9Vk2Ma2M+Uq9q8lok4LClYzUJ9xE5zUVo0
+        nmVaOdLTVIbKmMVg/5c976Ry0yT/sv3iJzh8Fh11SNNeTiXlAOJGuxKySAhJZJ4F
+        9n6dJiSBhpQw3Cc7e21t9F40SxvUXANwCzBSBDSXSihBnTp8ChY+Za0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=U/ewyp5y3Q5PVOu36vKaYrXTr8xm2PIaC+1xyM55h
+        hw=; b=I/flf/tYX0qs0esw7uam9MB+H2H2m56aCRHkq/2W6i6cpPaLWnYG47pzo
+        RYHsnB6Uhlw6o7JggLeC2av3/2sKkvkmm/0XyztJkW5HratOgYStMKocduFSyxmy
+        4BhBP5nj8yVsyvRDNAkHKFX/8i+kzJuiTCFLRM32wBI2+oKvqPWlfLN532xaTl3u
+        IpFb69ixjB76hJ1VwyP/t8pwa71EgSyEQNB4avAfYYtThnvsbQgw75zG8EHBA3Ie
+        rxd9Su1sAec6DH6FgvjVD2SpulzniN7RZlaK5gPhmYhtgqq3nIVUm3cIj+bWy5cS
+        xSMtE4nG1XMLXxDqTh8qhB0WXrt1A==
+X-ME-Sender: <xms:rBI7YnMFDEKEpWG0wFCS74gL-3fOJAS4rYtxxj7AZM4fMZDzvVN0Ng>
+    <xme:rBI7Yh_A_fN_VkOhudxRj3GQCUtHaeXBO7o4RL_TigCEuVcYQmQOEVZwjvNQt-bhe
+    vutDhqCOKk8gE7Ko2M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegjedgfeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnheptedtjedvvddthffgheeujedttddtgfektdeghfeltdek
+    leefhffhleelvdejkeffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigr
+    nhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:rBI7YmT_mtPvWJfSAR6aH4tH_gTCJlifICGgCDSu-EhFM3Qa-1Rjjw>
+    <xmx:rBI7YrsBhsfW1GzZcQQLxNrRFV3Wt3bvUty6hF9CkIS7gugWEcM_fg>
+    <xmx:rBI7YveCRFh9Ixt1JCwyCnUXY76XlyczIpTn5o-muqczIMVphxdCsA>
+    <xmx:rRI7YotjiVzS8G-JGBwVyP57xQ2EHgi_6DhFrc8G6QZNyJQVd-A2Zg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0E500FA0AA6; Wed, 23 Mar 2022 08:29:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4907-g25ce6f34a9-fm-20220311.001-g25ce6f34
+Mime-Version: 1.0
+Message-Id: <01028879-99ee-41bd-9222-c2c2703fbf4b@www.fastmail.com>
+In-Reply-To: <c9357494-6472-e0a0-50a8-e62df56dceb0@189.cn>
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-3-15330273260@189.cn>
+ <2644866a-8db2-923e-4227-2aa6d8e375fe@flygoat.com>
+ <2c671752-6684-f87b-7b2d-90568d36adde@189.cn>
+ <005099b5-33ed-4cb7-f8e4-10e1de780311@flygoat.com>
+ <abe784ce-eb9e-0143-dbc3-d415bbedbb81@189.cn>
+ <87d4f869-2ae8-f8d3-a55f-1a563cb21115@flygoat.com>
+ <c9357494-6472-e0a0-50a8-e62df56dceb0@189.cn>
+Date:   Wed, 23 Mar 2022 12:29:12 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Sui Jingfeng" <15330273260@189.cn>,
+        "Maxime Ripard" <mripard@kernel.org>,
+        "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Roland Scheidegger" <sroland@vmware.com>,
+        "Zack Rusin" <zackr@vmware.com>,
+        "Christian Gmeiner" <christian.gmeiner@gmail.com>,
+        "David Airlie" <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Dan Carpenter" <dan.carpenter@oracle.com>,
+        "Krzysztof Kozlowski" <krzk@kernel.org>,
+        "Andrey Zhizhikin" <andrey.zhizhikin@leica-geosystems.com>,
+        "Sam Ravnborg" <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Lucas Stach" <l.stach@pengutronix.de>,
+        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
+        "Ilia Mirkin" <imirkin@alum.mit.edu>,
+        "Qing Zhang" <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>, liyi@loongson.cn
+Subject: Re: [PATCH v11 2/7] MIPS: Loongson64: dts: introduce ls3A4000 evaluation board
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,14 +113,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo,
 
-On Wed, Mar 23 2022 at 12:04, Paolo Bonzini wrote:
-> can this series be included in 5.18 and CCed to stable?
 
-working on it. There is another issue with that which I'm currently
-looking into.
+=E5=9C=A82022=E5=B9=B43=E6=9C=8823=E6=97=A5=E4=B8=89=E6=9C=88 =E4=B8=8A=E5=
+=8D=887:07=EF=BC=8CSui Jingfeng=E5=86=99=E9=81=93=EF=BC=9A
+> On 2022/3/23 10:29, Jiaxun Yang wrote:
+>> If you want to blame somebody for the problem then please don't
+>> blame us. We tried very hard to fit all those stuff into kernel's mod=
+el
+>> of devices. You should blame those who did the initial design of
+>> Loongson's boot interface that failed to introduce a proper way
+>> to describe the platform.=20
+>
+> I am not blame anybody, please do not misleading.
+Your language seems to be aggressive from my point of view.
 
-Thanks,
+> I am report problem and try to seek a better solution.
+>
+> I have my intention and ideas, i just don't want to solve
+> all of the problems in one shot.
+If so please just drop this part from the patch. I've repeated several t=
+imes.
 
-        tglx
+>
+> I could provide one more patch wire all board specific dts up.
+> But i don't know what's the opinions of other reviewers, does
+> this is plausible?
+Please carefully read section 6.1 about how should you work with reviewe=
+rs.
+https://www.kernel.org/doc/html/latest/process/6.Followthrough.html
+
+Thanks.
+--=20
+- Jiaxun

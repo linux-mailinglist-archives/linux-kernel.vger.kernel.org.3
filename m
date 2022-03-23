@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0D24E52C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D23D4E52C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244117AbiCWNIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S244137AbiCWNJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243493AbiCWNIn (ORCPT
+        with ESMTP id S243493AbiCWNJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:08:43 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB6B7A986
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:07:14 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso1721133pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:07:14 -0700 (PDT)
+        Wed, 23 Mar 2022 09:09:00 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DAA7CDD4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:07:29 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id a1so2031247wrh.10
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZxdFE04CTgkizBkYzCS4GbYVPagKn+7CUxhEqDV8SKc=;
-        b=iG+TwB9aEVfEu/ws/wkSBpzFYxAgzAQhtf/EwAdOGeEuUSw0uybKzsA+54AyNd/SkD
-         47WWxTi2eMDY5tJw3j9lsA1IJSPETf6CgCtPhm7FamWTfGc4lYleLpOoa5Zx8eRAeR+o
-         URguTFXCdgZQ/JUq4HDDGv0iSTfDrpoWbZxtMLEkFt52IQSYAGUsHcMR0c/UhC9BgBqJ
-         Um+aMS5GDH7SOROC3RT7jqP5a2FzgKZIwjwavJuAxxpjNwUU+veXjztA8lLZBt6/N/+Z
-         7taplPIAlKFy+D+QIzNfVD/Br7ajffq454mdDu3l+S5xBauOatXjh4HjBwoULZzVAeP/
-         bJqQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/7GPfWTScrdUPxYCfpF4p4gmdocaWvB3DedYIkySiRQ=;
+        b=7EDiYHM0/mHUHNh2nAcUtV8Mo87BBMJDjh2R3QaAEXuxurVdInHyGhkLnwH6gL3bPY
+         ftLMYfyygow8mzkD5Dev2Iq+3cB/DbsVL3VVzYv3NYkRy77gO07thxxfnDuE/5vvFwiB
+         SnNZc9jBzd7JxXBaPe5MmyMhQ/dZvf5IJrjHbztF2VDxy+YSXfGCFsGy91bzu0dpwUVD
+         vLLzZ2UR7OCpthmgXf0+rBDgwrScxpIXhhh0aF66G9+NvYfooCnN6Ac965njTsu7vX7H
+         5rK015KemhcLQmxFbNnPmlRfVnVllLsShyU6SyQvhK65gIf9XVzlSMG1ZoK1rbNLFDgk
+         2K8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZxdFE04CTgkizBkYzCS4GbYVPagKn+7CUxhEqDV8SKc=;
-        b=aSBKWz1M5VXcQHtf5Io/g4MzwBSr4IOXLPLaTX/hxYnXmGcd+E9krsXnpoHWJyQF4P
-         TnH/e/uupzvTBuuKOIpW7N4rZdvv1an/WXbXmq74W+2YmRa8yleh6TYQhYhl70V2ZO2f
-         N1hwGQ1qEkgkstxKVG6Z9g12YbLcb0/ktNv7kN8cXyZtJ1do5/SAdX+qne/FI9IP3CEM
-         6cxuc2Ys3NLrzoZTuI/RvHsLCCsXy4dwEaEjIM+dRpzj9V9fxcN6fo0wTojGq8HoNWVU
-         ofR7FPXwg38qMzyyqM8//DeNw8Evk3FaV3FUk0K7q2n/8m9VBS8w7x7UnkGiw4oARqKy
-         YzBQ==
-X-Gm-Message-State: AOAM532XOikM/xEApweU5JJpyvnTTDqsWHhlSe6pPs7pHx35ilVk+mft
-        TB8jduhb2mzW+Z5lNooB/tMiAw==
-X-Google-Smtp-Source: ABdhPJzr+vPKF/Xud3CsLzZb9/OKzypa6peSNxe6Jd7Hs+yFnQYrokAGJe5/DpQ7OJJ83RtHDPFGxg==
-X-Received: by 2002:a17:90b:3b8c:b0:1c6:ed78:67e2 with SMTP id pc12-20020a17090b3b8c00b001c6ed7867e2mr11530730pjb.163.1648040833488;
-        Wed, 23 Mar 2022 06:07:13 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6? ([2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6])
-        by smtp.gmail.com with ESMTPSA id x23-20020a63fe57000000b0036490068f12sm19376483pgj.90.2022.03.23.06.07.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 06:07:13 -0700 (PDT)
-Message-ID: <f6a46509-a373-5c7a-8694-8eaf0ebc69ab@bytedance.com>
-Date:   Wed, 23 Mar 2022 21:07:01 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/7GPfWTScrdUPxYCfpF4p4gmdocaWvB3DedYIkySiRQ=;
+        b=TOaZakTZsY9JhwjyaBodiMiTeDo4o3HnQsPhJmjyENqkg8X0xpHVWtmADXTGl4+rEs
+         xlTN4AGoiu5buy0EorNqh5fa2C3J1ZRN1JXh0UTBHLi5QbP+bw/sxMtelm4dHGHrYgnw
+         jpugWRPeCI4sX9WhXUwTuJEOgqkSPWPNSHWVixyiTyPRBMwkWit4ZtS7Dzr1n811zjd/
+         sPp6NtZ1dh6/buZjLP3oykiy0mw9SrdofWEItp4wi9P9R+Sd/Ifl8fvHddbxIEIHZilD
+         /+iei5JJWT5e7+rSZxZhdCAqFG02KvXier4D7Z6ErM5GY6/TxMArf1tW6YHnFqzQVJPH
+         q2Xw==
+X-Gm-Message-State: AOAM530IwHcmnm9hyVqraMAw8Ou+MmpDA30HxNaNSW66Uo9SEQqaYw8H
+        vARDT4W2clEinDraNNsHWxxsOg==
+X-Google-Smtp-Source: ABdhPJwlHTs/jXded6YR+bEyG9ABUfL/AlSP0pBeJMmhWDxUYvyYfFnDLfkgPcSrNXyLqFblB0f+cw==
+X-Received: by 2002:a5d:5509:0:b0:204:f77:c2d with SMTP id b9-20020a5d5509000000b002040f770c2dmr13533390wrv.432.1648040848448;
+        Wed, 23 Mar 2022 06:07:28 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id n20-20020a05600c4f9400b0038cbd13e06esm2794951wmq.2.2022.03.23.06.07.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 06:07:27 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 14:07:25 +0100
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, krzk+dt@kernel.org,
+        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v3 06/26] crypto: rockchip: add fallback for cipher
+Message-ID: <YjsbjaQrj2Y+cLmL@Red>
+References: <20220321200739.3572792-1-clabbe@baylibre.com>
+ <20220321200739.3572792-7-clabbe@baylibre.com>
+ <c643c8a0-3ebc-519b-bc6e-f95362d43a69@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [External] Re: [PATCH v2 2/6] perf/core: Introduce percpu
- perf_cgroup
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, eranian@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-References: <20220322120834.98637-1-zhouchengming@bytedance.com>
- <20220322120834.98637-3-zhouchengming@bytedance.com>
- <20220323125116.GX8939@worktop.programming.kicks-ass.net>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20220323125116.GX8939@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <c643c8a0-3ebc-519b-bc6e-f95362d43a69@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,187 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/23 8:51 下午, Peter Zijlstra wrote:
-> On Tue, Mar 22, 2022 at 08:08:30PM +0800, Chengming Zhou wrote:
+Le Tue, Mar 22, 2022 at 11:25:25AM +0000, Robin Murphy a �crit :
+> On 2022-03-21 20:07, Corentin Labbe wrote:
+> > The hardware does not handle 0 size length request, let's add a
+> > fallback.
+> > Furthermore fallback will be used for all unaligned case the hardware
+> > cannot handle.
+> > 
+> > Fixes: ce0183cb6464b ("crypto: rockchip - switch to skcipher API")
+> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > ---
+> >   drivers/crypto/Kconfig                        |   4 +
+> >   drivers/crypto/rockchip/rk3288_crypto.h       |   2 +
+> >   .../crypto/rockchip/rk3288_crypto_skcipher.c  | 105 +++++++++++++++---
+> >   3 files changed, 98 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
+> > index 7b2d138bc83e..84ab14afcbd9 100644
+> > --- a/drivers/crypto/Kconfig
+> > +++ b/drivers/crypto/Kconfig
+> > @@ -784,6 +784,10 @@ config CRYPTO_DEV_IMGTEC_HASH
+> >   config CRYPTO_DEV_ROCKCHIP
+> >   	tristate "Rockchip's Cryptographic Engine driver"
+> >   	depends on OF && ARCH_ROCKCHIP
+> > +	depends on PM
 > 
->> diff --git a/kernel/events/core.c b/kernel/events/core.c
->> index 8b5cf2aedfe6..848a3bfa9513 100644
->> --- a/kernel/events/core.c
->> +++ b/kernel/events/core.c
+> This appears to belong to patch #13 rather than this one.
 > 
->> @@ -843,11 +845,21 @@ static void perf_cgroup_switch(struct task_struct *task)
->>  	 */
->>  	local_irq_save(flags);
->>  
->> +	cgrp = perf_cgroup_from_task(task, NULL);
->> +	if (cgrp == __this_cpu_read(cpu_perf_cgroup))
->> +		goto out;
->> +
->> +	__this_cpu_write(cpu_perf_cgroup, cgrp);
->> +
->>  	list = this_cpu_ptr(&cgrp_cpuctx_list);
->>  	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
->>  		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
->>  
->>  		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
->> +
->> +		if (cpuctx->cgrp == cgrp)
->> +			continue;
->> +
->>  		perf_pmu_disable(cpuctx->ctx.pmu);
->>  
->>  		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
+
+Hello
+
+Yes this is an error, I will move it this line on the right patch.
+
+> My initial thought was that it probably shouldn't be something for 
+> random consumers to care about at all, but there do seem to be a handful 
+> of other drivers relying on pm_runtime_resume to enable their clocks, so 
+> I guess maybe it's an acceptable idiom :/
 > 
-> This is just straight up broken.. you can't continue after taking a
-> lock, that'll miss unlock.
 
-Yes, Namhyung has pointed it out, I will fix it next version.
+Depending on PM made the driver easier to understand (no more if PM/if not PM).
+And anyway, since it's embedded device, PM should be always enabled.
 
-> 
-> Also, I really don't see the point of cpu_perf_cgroup, cpuctx->cgrp
-> should be able to do this.
-
-But the problem is that we have two cpuctx on the percpu list, do you
-mean we should use perf_cgroup of the first cpuctx to compare with
-the next task's perf_cgroup ?
-
-Or we should delete the cgrp in cpuctx, and use this new percpu cpu_perf_cgroup?
-
-> 
-> Also, perhaps merge this in the previous patch, I'm not sure it makes
-> sense to split this.
-
-Ok, will do. I put it in one patch in v1 RFC, then split it for easier review.
-I will put it together in the next version.
-
-Thanks.
-
-> 
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -833,6 +833,7 @@ static DEFINE_PER_CPU(struct list_head,
->   */
->  static void perf_cgroup_switch(struct task_struct *task)
->  {
-> +	struct perf_cgroup *cgrp;
->  	struct perf_cpu_context *cpuctx, *tmp;
->  	struct list_head *list;
->  	unsigned long flags;
-> @@ -843,11 +844,20 @@ static void perf_cgroup_switch(struct ta
->  	 */
->  	local_irq_save(flags);
->  
-> +	cgrp = perf_cgroup_from_task(task, NULL);
-> +
->  	list = this_cpu_ptr(&cgrp_cpuctx_list);
->  	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
->  		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
->  
-> +		if (READ_ONCE(cpuctx->cgrp == cgrp))
-> +			continue
-> +
->  		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
-> +
-> +		if (cpuctx->cgrp == cgrp)
-> +			goto next;
-> +
->  		perf_pmu_disable(cpuctx->ctx.pmu);
->  
->  		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
-> @@ -855,50 +865,22 @@ static void perf_cgroup_switch(struct ta
->  		 * must not be done before ctxswout due
->  		 * to event_filter_match() in event_sched_out()
->  		 */
-> -		cpuctx->cgrp = perf_cgroup_from_task(task,
-> -						     &cpuctx->ctx);
-> +		WRITE_ONCE(cpuctx->cgrp, cgrp);
->  		/*
->  		 * set cgrp before ctxsw in to allow
->  		 * event_filter_match() to not have to pass
->  		 * task around
-> -		 * we pass the cpuctx->ctx to perf_cgroup_from_task()
-> -		 * because cgroup events are only per-cpu
->  		 */
->  		cpu_ctx_sched_in(cpuctx, EVENT_ALL, task);
->  
->  		perf_pmu_enable(cpuctx->ctx.pmu);
-> +next:
->  		perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
->  	}
->  
->  	local_irq_restore(flags);
->  }
->  
-> -static inline void perf_cgroup_sched_switch(struct task_struct *task,
-> -					    struct task_struct *next)
-> -{
-> -	struct perf_cgroup *cgrp1;
-> -	struct perf_cgroup *cgrp2 = NULL;
-> -
-> -	rcu_read_lock();
-> -	/*
-> -	 * we come here when we know perf_cgroup_events > 0
-> -	 * we do not need to pass the ctx here because we know
-> -	 * we are holding the rcu lock
-> -	 */
-> -	cgrp1 = perf_cgroup_from_task(task, NULL);
-> -	cgrp2 = perf_cgroup_from_task(next, NULL);
-> -
-> -	/*
-> -	 * only schedule out current cgroup events if we know
-> -	 * that we are switching to a different cgroup. Otherwise,
-> -	 * do no touch the cgroup events.
-> -	 */
-> -	if (cgrp1 != cgrp2)
-> -		perf_cgroup_switch(task);
-> -
-> -	rcu_read_unlock();
-> -}
-> -
->  static int perf_cgroup_ensure_storage(struct perf_event *event,
->  				struct cgroup_subsys_state *css)
->  {
-> @@ -1062,11 +1044,6 @@ static inline void update_cgrp_time_from
->  {
->  }
->  
-> -static inline void perf_cgroup_sched_switch(struct task_struct *task,
-> -					    struct task_struct *next)
-> -{
-> -}
-> -
->  static inline int perf_cgroup_connect(pid_t pid, struct perf_event *event,
->  				      struct perf_event_attr *attr,
->  				      struct perf_event *group_leader)
-> @@ -1080,11 +1057,6 @@ perf_cgroup_set_timestamp(struct task_st
->  {
->  }
->  
-> -static inline void
-> -perf_cgroup_sched_switch(struct task_struct *task, struct task_struct *next)
-> -{
-> -}
-> -
->  static inline u64 perf_cgroup_event_time(struct perf_event *event)
->  {
->  	return 0;
-> @@ -1104,6 +1076,10 @@ static inline void
->  perf_cgroup_event_disable(struct perf_event *event, struct perf_event_context *ctx)
->  {
->  }
-> +
-> +static void perf_cgroup_switch(struct task_struct *task)
-> +{
-> +}
->  #endif
->  
->  /*
-> @@ -3625,7 +3601,7 @@ void __perf_event_task_sched_out(struct
->  	 * cgroup event are system-wide mode only
->  	 */
->  	if (atomic_read(this_cpu_ptr(&perf_cgroup_events)))
-> -		perf_cgroup_sched_switch(task, next);
-> +		perf_cgroup_switch(next);
->  }
->  
->  /*
+Thanks

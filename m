@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBF14E4B6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FD94E4B80
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 04:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241517AbiCWD0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 23:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S241525AbiCWDd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 23:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241504AbiCWD0m (ORCPT
+        with ESMTP id S239206AbiCWDdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 23:26:42 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5F07087E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:25:13 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id k20-20020a5e9314000000b00649d55ffa67so206619iom.20
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 20:25:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=4vGMEtGe+BbLjSVih08yohBtZCRt30b9qlDbMhfTRl0=;
-        b=iyWu5ZqarmgAP58QaV+1Sn5af4Evkf7xv/6PkLNb0y1rw4Bhx+biAs70WSbU7Fh0t2
-         2m77nvxKls1OBIKgzeuEL+GeIiU+Wdl9Qhh6ftQs2LLf1dH9DiYfqMQRhGzTcvSW+Kee
-         JS9bIf5qklla6ATrw5/fIKwRsEUFBk3MEn6n29d4k+JgWpQ9ZQ5esdRMFvKaQboZ6k7+
-         qRzFZ08MvPQqGL9sGTEDtcB+Kl+9y7JPmXxymcDnNXs/bH+noQlFUMz6ADgov+8r2uX0
-         o2cUeCP+ghwxxZE19y1S2nH4C2VuOoSYi+Z6F0ttyCXTDoc4u7ma5+7XJXYU3oIYnCB4
-         rf5w==
-X-Gm-Message-State: AOAM532lFu9vbjdhXOiBs6p+Qf4JpLFbQ5DB2iYaZsPqL2Je3swIWei3
-        zNRii/2vTyC7A37YTwwP6qHnW0OBrHpWLGamko2hDiY7c1+E
-X-Google-Smtp-Source: ABdhPJxPmD1OSkA0wPsjR1WGTpH4zf9ZPV9c193YS4y2yCDtYsvVjxIthOQverrG4KJLyuKRpk3Ekb1prWTDh8ldMR24rIqhrGbr
+        Tue, 22 Mar 2022 23:33:25 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104687004C;
+        Tue, 22 Mar 2022 20:31:56 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 23 Mar
+ 2022 11:31:54 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 23 Mar
+ 2022 11:31:54 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <santoshkumar.yadav@barco.com>, <peter.korsgaard@barco.com>,
+        <hdegoede@redhat.com>, <markgross@kernel.org>
+CC:     <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Haowen Bai <baihaowen@meizu.com>
+Subject: [PATCH] platform/x86: barco-p50-gpio: Fix duplicate included inux/io.h
+Date:   Wed, 23 Mar 2022 11:31:52 +0800
+Message-ID: <1648006312-29460-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8714:0:b0:636:13bb:bc89 with SMTP id
- u20-20020a5d8714000000b0063613bbbc89mr14075565iom.126.1648005913000; Tue, 22
- Mar 2022 20:25:13 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 20:25:12 -0700
-In-Reply-To: <0000000000000f361d05dacabb09@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000008409805dada47ce@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in io_poll_remove_entries
-From:   syzbot <syzbot+cd301bb6523ea8cc8ca2@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk,
-        gregkh@linuxfoundation.org, io-uring@vger.kernel.org,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Clean up the following includecheck warning:
 
-commit 91eac1c69c202d9dad8bf717ae5b92db70bfe5cf
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Wed Mar 16 22:59:10 2022 +0000
+drivers/platform/x86/barco-p50-gpio.c: linux/io.h is included more than once.
 
-    io_uring: cache poll/double-poll state with a request flag
+No functional change.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11819d0b700000
-start commit:   b47d5a4f6b8d Merge tag 'audit-pr-20220321' of git://git.ke..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=13819d0b700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=15819d0b700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c44f0c051803a0ae
-dashboard link: https://syzkaller.appspot.com/bug?extid=cd301bb6523ea8cc8ca2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=150525ed700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d08625700000
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/platform/x86/barco-p50-gpio.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Reported-by: syzbot+cd301bb6523ea8cc8ca2@syzkaller.appspotmail.com
-Fixes: 91eac1c69c20 ("io_uring: cache poll/double-poll state with a request flag")
+diff --git a/drivers/platform/x86/barco-p50-gpio.c b/drivers/platform/x86/barco-p50-gpio.c
+index f5c72e3..bb8ed8e 100644
+--- a/drivers/platform/x86/barco-p50-gpio.c
++++ b/drivers/platform/x86/barco-p50-gpio.c
+@@ -14,7 +14,6 @@
+ #include <linux/delay.h>
+ #include <linux/dmi.h>
+ #include <linux/err.h>
+-#include <linux/io.h>
+ #include <linux/kernel.h>
+ #include <linux/leds.h>
+ #include <linux/module.h>
+-- 
+2.7.4
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection

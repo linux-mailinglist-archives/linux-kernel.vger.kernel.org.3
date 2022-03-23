@@ -2,149 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456724E5348
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 909DE4E534B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244375AbiCWNjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
+        id S244378AbiCWNkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244362AbiCWNjp (ORCPT
+        with ESMTP id S239960AbiCWNkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:39:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8E35F8D6;
-        Wed, 23 Mar 2022 06:38:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3593B81F13;
-        Wed, 23 Mar 2022 13:38:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EFBC340E8;
-        Wed, 23 Mar 2022 13:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648042690;
-        bh=FS4rMUgYm98K72DS/l0zV5frCfm1kqj/zcgo/7pabXw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JT3Ze9V22MkpJEe9f7BnjRn/vnsga2B9nHBVD0kV8zKLTi+VEroCdcjGzZlWKuHYJ
-         1gyqGo/IrlVtRZkznGfLmYBmgt2Uworm16hjtXdDeQl+39jWHRbUTf26ct9hOH0/uG
-         er6PCviMcAqG8oVa0XLsFb3EYWzzpovOYPuNPGhM=
-Date:   Wed, 23 Mar 2022 14:38:07 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Message-ID: <Yjsiv2XesJRzoeTW@kroah.com>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
- <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
- <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
+        Wed, 23 Mar 2022 09:40:16 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859A65E14E;
+        Wed, 23 Mar 2022 06:38:46 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22NCxj3F022015;
+        Wed, 23 Mar 2022 14:38:40 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=P7ZqFBQaQQZDZswUVGm+4mgYq4ZngDZt4zwx6qLPUs8=;
+ b=wVTyWBtqdwAlPMTCprb3bpmnHUxFRq9uaDlWUGKV6FhQIMBJvBzuPG7J132KlWT3oJe8
+ gWBNSeuSYZ4yTftO3xR7rUnW04akAm0OgT56OoiV8mkhZD9r8jpMXziS1VKulcLvAJt3
+ vegfAiSNucFcDO3amXIvxzQc46lSamuWNL/vrw2heCi9IovOQSfmNgdAH4lMv5ZkEOfs
+ dsaI7XHflf57fny4bTkb0y1jFKvPZD1j5rd/EFsZ/YSfvDh+oPN2U6ip+oohx1I8ek7Y
+ 9WhIvKXwIZE4jbObYunHgmJqRztNu3KfL82yhLZKNc5+BBhVPjRVDKycwOBvcF84tjix TA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ewr5fyu3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Mar 2022 14:38:40 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 11B7D10002A;
+        Wed, 23 Mar 2022 14:38:38 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 091FB22FA37;
+        Wed, 23 Mar 2022 14:38:38 +0100 (CET)
+Received: from [10.201.20.246] (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 23 Mar
+ 2022 14:38:37 +0100
+Message-ID: <e04ac97e-51bf-7470-5265-ce55119e1ba9@foss.st.com>
+Date:   Wed, 23 Mar 2022 14:38:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2 3/3] rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
+Content-Language: en-US
+To:     Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        <bjorn.andersson@linaro.org>, <swboyd@chromium.org>,
+        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>
+References: <1642534993-6552-1-git-send-email-quic_deesin@quicinc.com>
+ <1642534993-6552-4-git-send-email-quic_deesin@quicinc.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <1642534993-6552-4-git-send-email-quic_deesin@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-23_07,2022-03-22_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 02:24:40PM +0100, Miklos Szeredi wrote:
-> On Wed, 23 Mar 2022 at 12:43, Christian Brauner <brauner@kernel.org> wrote:
-> 
-> > Yes, we really need a way to query for various fs information. I'm a bit
-> > torn about the details of this interface though. I would really like if
-> > we had interfaces that are really easy to use from userspace comparable
-> > to statx for example.
-> 
-> The reason I stated thinking about this is that Amir wanted a per-sb
-> iostat interface and dumped it into /proc/PID/mountstats.  And that is
-> definitely not the right way to go about this.
-> 
-> So we could add a statfsx() and start filling in new stuff, and that's
-> what Linus suggested.  But then we might need to add stuff that is not
-> representable in a flat structure (like for example the stuff that
-> nfs_show_stats does) and that again needs new infrastructure.
-> 
-> Another example is task info in /proc.  Utilities are doing a crazy
-> number of syscalls to get trivial information.  Why don't we have a
-> procx(2) syscall?  I guess because lots of that is difficult to
-> represent in a flat structure.  Just take the lsof example: tt's doing
-> hundreds of thousands of syscalls on a desktop computer with just a
-> few hundred processes.
-> 
-> So I'm trying to look beyond fsinfo and about how we could better
-> retrieve attributes, statistics, small bits and pieces within a
-> unified framework.
-> 
-> The ease of use argument does not really come into the picture here,
-> because (unlike stat and friends) most of this info is specialized and
-> will be either consumed by libraries, specialized utilities
-> (util-linux, procos) or with a generic utility application that can
-> query any information about anything that is exported through such an
-> interface.    That applies to plain stat(2) as well: most users will
-> not switch to statx() simply because that's too generic.  And that's
-> fine, for info as common as struct stat a syscall is warranted.  If
-> the info is more specialized, then I think a truly generic interface
-> is a much better choice.
-> 
-> >  I know having this generic as possible was the
-> > goal but I'm just a bit uneasy with such interfaces. They become
-> > cumbersome to use in userspace. I'm not sure if the data: part for
-> > example should be in this at all. That seems a bit out of place to me.
-> 
-> Good point, reduction of scope may help.
-> 
-> > Would it be really that bad if we added multiple syscalls for different
-> > types of info? For example, querying mount information could reasonably
-> > be a more focussed separate system call allowing to retrieve detailed
-> > mount propagation info, flags, idmappings and so on. Prior approaches to
-> > solve this in a completely generic way have gotten us not very far too
-> > so I'm a bit worried about this aspect too.
-> 
-> And I fear that this will just result in more and more ad-hoc
-> interfaces being added, because a new feature didn't quite fit the old
-> API.  You can see the history of this happening all over the place
-> with multiple new syscall versions being added as the old one turns
-> out to be not generic enough.
-> 
-> I think a new interface needs to
-> 
->   - be uniform (a single utility can be used to retrieve various
-> attributes and statistics, contrast this with e.g. stat(1),
-> getfattr(1), lsattr(1) not to mention various fs specific tools).
-> 
->  - have a hierarchical namespace (the unix path lookup is an example
-> of this that stood the test of time)
-> 
->  - allow retrieving arbitrary text or binary data
-> 
-> And whatever form it takes, I'm sure it will be easier to use than the
-> mess we currently have in various interfaces like the mount or process
-> stats.
 
-This has been proposed in the past a few times.  Most recently by the
-KVM developers, which tried to create a "generic" api, but ended up just
-making something to work for KVM as they got tired of people ignoring
-their more intrusive patch sets.  See virt/kvm/binary_stats.c for what
-they ended up with, and perhaps you can just use that same type of
-interface here as well?
 
-thanks,
+On 1/18/22 20:43, Deepak Kumar Singh wrote:
+> Add TICOMGET and TIOCMSET ioctl support for rpmsg char device nodes
+> to get/set the low level transport signals.
+> 
+> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
+> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> ---
+>  drivers/rpmsg/rpmsg_char.c | 47 ++++++++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 43 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index b5907b8..c03a118 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/rpmsg.h>
+>  #include <linux/skbuff.h>
+>  #include <linux/slab.h>
+> +#include <linux/termios.h>
+>  #include <linux/uaccess.h>
+>  #include <uapi/linux/rpmsg.h>
+>  
+> @@ -74,6 +75,9 @@ struct rpmsg_eptdev {
+>  	spinlock_t queue_lock;
+>  	struct sk_buff_head queue;
+>  	wait_queue_head_t readq;
+> +
+> +	u32 rsigs;
+> +	bool sig_pending;
+>  };
+>  
+>  static int rpmsg_eptdev_destroy(struct device *dev, void *data)
+> @@ -112,7 +116,18 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
+>  	skb_queue_tail(&eptdev->queue, skb);
+>  	spin_unlock(&eptdev->queue_lock);
+>  
+> -	/* wake up any blocking processes, waiting for new data */
+> +	wake_up_interruptible(&eptdev->readq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int rpmsg_sigs_cb(struct rpmsg_device *rpdev, void *priv, u32 sigs)
+> +{
+> +	struct rpmsg_eptdev *eptdev = priv;
+> +
+> +	eptdev->rsigs = sigs;
+> +	eptdev->sig_pending = true;
+> +
+>  	wake_up_interruptible(&eptdev->readq);
 
-greg k-h
+Regarding the Glink code, the callback is used to be informed that the remote
+is ready to send (DSR) and to receive (CTS or DSR)
+So I suppose that the transmission should also be conditioned by the sig_pending
+
+That said tell me if I'm wrong but look to me that what is implemented here is the 
+ hardware flow control already managed by the TTY interface. What about using the
+TTY interface in this case?
+
+And What about using the "software flow control" instead? [1]
+
+[1] https://en.wikipedia.org/wiki/Software_flow_control
+
+>  
+>  	return 0;
+> @@ -137,6 +152,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
+>  		return -EINVAL;
+>  	}
+>  
+> +	ept->sig_cb = rpmsg_sigs_cb;
+>  	eptdev->ept = ept;
+>  	filp->private_data = eptdev;
+>  
+> @@ -155,6 +171,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
+>  		eptdev->ept = NULL;
+>  	}
+>  	mutex_unlock(&eptdev->ept_lock);
+> +	eptdev->sig_pending = false;
+>  
+>  	/* Discard all SKBs */
+>  	skb_queue_purge(&eptdev->queue);
+> @@ -265,6 +282,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
+>  	if (!skb_queue_empty(&eptdev->queue))
+>  		mask |= EPOLLIN | EPOLLRDNORM;
+>  
+> +	if (eptdev->sig_pending)
+> +		mask |= EPOLLPRI;
+> +
+>  	mask |= rpmsg_poll(eptdev->ept, filp, wait);
+>  
+>  	return mask;
+> @@ -274,11 +294,30 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
+>  			       unsigned long arg)
+>  {
+>  	struct rpmsg_eptdev *eptdev = fp->private_data;
+> +	bool set;
+> +	u32 val;
+> +	int ret;
+>  
+> -	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
+> -		return -EINVAL;
+> +	switch (cmd) {
+> +	case TIOCMGET:
+> +		eptdev->sig_pending = false;
+> +		ret = put_user(eptdev->rsigs, (int __user *)arg);
+> +		break;
+> +	case TIOCMSET:
+> +		ret = get_user(val, (int __user *)arg);
+> +		if (ret)
+> +			break;
+> +		set = (val & TIOCM_DTR) ? true : false;
+> +		ret = rpmsg_set_flow_control(eptdev->ept, set);
+> +		break;
+
+Could this directly be handled by the driver on open close?
+If application wants to suspend the link it could just close de /dev/rpmsgX.
+ 
+Regards,
+Arnaud
+
+> +	case RPMSG_DESTROY_EPT_IOCTL:
+> +		ret = rpmsg_eptdev_destroy(&eptdev->dev, NULL);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +	}
+>  
+> -	return rpmsg_eptdev_destroy(&eptdev->dev, NULL);
+> +	return ret;
+>  }
+>  
+>  static const struct file_operations rpmsg_eptdev_fops = {

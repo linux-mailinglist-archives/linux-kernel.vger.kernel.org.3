@@ -2,110 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0BB4E53D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 639F64E53D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244585AbiCWOCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
+        id S244593AbiCWOCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244576AbiCWOCO (ORCPT
+        with ESMTP id S241736AbiCWOCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:02:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51437DE27;
-        Wed, 23 Mar 2022 07:00:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5EFD616CC;
-        Wed, 23 Mar 2022 14:00:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350A9C340F3;
-        Wed, 23 Mar 2022 14:00:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648044043;
-        bh=0iSclD+CWJo049DAjnNmpJPmyTaLxoM33bJuF/qUYIU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jZ+K6QtSrHhnIoImw542na484JXIO49e49FdbBKfgDnU5cncgJ2q8UUGU82ue/Xbi
-         KAB+CmdOZ1X58l9kDuVnAV9HtUnKQWpMdvJdL4MVp26ta3q7x+dYSIxNv75EuUBIfF
-         cVZxZT/djEZBclgGulDEdZz5nxnPV0ScYwTcKmYB5egJ+ACg2iQobgStpUYixiggOT
-         /bqOkJBeAEEnn1gxH8JkMFC+PaRxdRLS/mjB5t3vsKKtQ8rNQIeiiA8hyUCDzA8Z5H
-         R3KyQFS7jNouiuGR3lC1pit1u7VdnnNzQ9MzIylbB/nKj2JazUYeCK28O2WomIamp9
-         m0qjKUg8PACOg==
-Received: by mail-ej1-f45.google.com with SMTP id bi12so3051224ejb.3;
-        Wed, 23 Mar 2022 07:00:43 -0700 (PDT)
-X-Gm-Message-State: AOAM533qFgNHYhwYACkcGvj9NbPZg1reJSgLkqT0WM9NWg76p3mGnHj6
-        ByvpNj37Rh5tZQqeylqOjMe44QuDP78EEGcf6Q==
-X-Google-Smtp-Source: ABdhPJzJCX1fd6x6XUQvELujRx+GXFcimDLm2YbxSHA7op+nKKjo5EIzA07JjYkwARfwQ/qJhXNGyMd50X5K9s9lP8M=
-X-Received: by 2002:a17:907:1c1b:b0:6e0:6618:8ac with SMTP id
- nc27-20020a1709071c1b00b006e0661808acmr109252ejc.82.1648044041365; Wed, 23
- Mar 2022 07:00:41 -0700 (PDT)
+        Wed, 23 Mar 2022 10:02:39 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6AE7484E;
+        Wed, 23 Mar 2022 07:01:10 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id p15so3023918ejc.7;
+        Wed, 23 Mar 2022 07:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TCVIhfUSnU8IPSagUHAJ0Zv4n7o7gQntDTvbCX+nFt8=;
+        b=juExcyDTlT2UxKk3zCaBuoiQGJhree5ifHR7oGTRpSsDRiZfWhNHEoZbt2uL1Td94d
+         UgBQB/rsoeFcq09aZyEYqUBXv4ocQJxhTOjHBBpvRSiUyznxb30omlPbg7F22O844Ejr
+         Yv4ihxVXOZrftdmtmeQK6hM9H0KB5mUkphorU2Cnphc7xm7grwbmT7m3lfRZxHqi83HA
+         VRjLZyVoWHwrJSl1x+MrYsHb1QwZelcKyDWXAm/A4ZqH6m0/JNGBotpnpgR8R4vbBthF
+         a76LWrQdQ7vwvcJhNQhpu3aGoufB9zv7NN9uedQxRZ0NSY9B/mSXEGp8BX+qoJ4/q0xR
+         bb0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TCVIhfUSnU8IPSagUHAJ0Zv4n7o7gQntDTvbCX+nFt8=;
+        b=iqBCRxS6V4YpCpQBZJPZul4wa0t9avga/tRoyVw3WCnylvKz+9hLpBPwDuYZPi8oqV
+         YiPcXXnKflsj2GrDrZEiszcmNNERWby5yk8vyvpAd+JZ354friBRpY207dzy32U0WLFn
+         FJ1oN2pmcxZJKfdx8yHqA9kgazyHkKNXeQpYgYigQ5DKwfiSYcOZ9N2H20cEXwrWfgBA
+         XoeIPV4aXIYkJlKd+H9whpfkdy4ta/utWHt5TQxa/otcu2R2QiPxCx6fuLJbxmnjOqB2
+         vfonHU6lvMFuKjsyGs56Ut2eY8u3LbOslI/COUNTjWxRT3Pogi26x6ozrfa/ukjsNjJY
+         PQbw==
+X-Gm-Message-State: AOAM530ZbkdMLbWfqvjZ5ww7sFAg0geRHPlsOBRCmq3rhJtEetlhb11g
+        RivM1hq1J/B2vEFwsseI9UvR/6NEl1r9s5f9K20=
+X-Google-Smtp-Source: ABdhPJyqw2t5SZvLPazfXOr5THRD2EXHKAd2jXnzzMePxhtG4B2gyboCh8jzuJpoks8a2B4rBbdXNqpPs7XxSF/vJi8=
+X-Received: by 2002:a17:906:9e11:b0:6df:a9d8:cbad with SMTP id
+ fp17-20020a1709069e1100b006dfa9d8cbadmr115397ejc.32.1648044068495; Wed, 23
+ Mar 2022 07:01:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220314075713.29140-1-biao.huang@mediatek.com> <20220314075713.29140-6-biao.huang@mediatek.com>
-In-Reply-To: <20220314075713.29140-6-biao.huang@mediatek.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 23 Mar 2022 09:00:29 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+6XKvS5RcE6j9vRd3JL-Wbi-O6BrcoGQ5xV0Q2ZG8EMw@mail.gmail.com>
-Message-ID: <CAL_Jsq+6XKvS5RcE6j9vRd3JL-Wbi-O6BrcoGQ5xV0Q2ZG8EMw@mail.gmail.com>
-Subject: Re: [PATCH net-next v13 5/7] net: dt-bindings: dwmac: Convert
- mediatek-dwmac to DT schema
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>, dkirjanov@suse.de
+References: <20220323134019.3796178-1-aford173@gmail.com> <35f58894-ed6d-0af0-e483-7a161ad6625a@kernel.org>
+In-Reply-To: <35f58894-ed6d-0af0-e483-7a161ad6625a@kernel.org>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 23 Mar 2022 09:00:57 -0500
+Message-ID: <CAHCN7x+RLAFnES8b3UMoc6n69ZVSFGOmAZyMeeY1g3aoiDNbZg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: mmc: imx-esdhc: Change imx8mn and imx8mp
+ compatible fallback
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 2:57 AM Biao Huang <biao.huang@mediatek.com> wrote:
+On Wed, Mar 23, 2022 at 8:56 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >
-> Convert mediatek-dwmac to DT schema, and delete old mediatek-dwmac.txt.
-> And there are some changes in .yaml than .txt, others almost keep the same:
->   1. compatible "const: snps,dwmac-4.20".
->   2. delete "snps,reset-active-low;" in example, since driver remove this
->      property long ago.
->   3. add "snps,reset-delay-us = <0 10000 10000>" in example.
->   4. the example is for rgmii interface, keep related properties only.
+> On 23/03/2022 14:40, Adam Ford wrote:
+> > The SDHC controller in the imx8mn and imx8mp have the same controller
+> > as the imx8mm which is slightly different than that of the imx7d.
+> > Using the fallback of the imx8mm enables the controllers to support
+> > HS400-ES which is not available on the imx7d.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> >
+> > diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > index 7dbbcae9485c..d6ea73d76bdd 100644
+> > --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > @@ -39,14 +39,14 @@ properties:
+> >        - items:
+> >            - enum:
+> >                - fsl,imx8mm-usdhc
 >
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/net/mediatek-dwmac.txt           |  91 ----------
->  .../bindings/net/mediatek-dwmac.yaml          | 155 ++++++++++++++++++
->  2 files changed, 155 insertions(+), 91 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.txt
->  create mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+> Your change looks reasonable, but why imx8mm is compatible with imx7d?
 
-Now failing in linux-next:
+I saw that, and I wasn't sure the best way to go about  fixing it.  If
+I move the 8mm out of the imx7d category, do I need to add it to the
+enum list associated with the imx8mm, or can I just delete it from the
+enum leaving the const for imx8mm good enough?
 
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb:
-ethernet@1101c000: snps,txpbl:0:0: 1 is not one of [2, 4, 8]
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb:
-ethernet@1101c000: snps,rxpbl:0:0: 1 is not one of [2, 4, 8]
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+I am not very good with YAML files yet, so please forgive my ignorance.
 
-
-Rob
+adam
+>
+> > -              - fsl,imx8mn-usdhc
+> > -              - fsl,imx8mp-usdhc
+> >                - fsl,imx8mq-usdhc
+> >                - fsl,imx8qm-usdhc
+> >                - fsl,imx8qxp-usdhc
+> >            - const: fsl,imx7d-usdhc
+> >        - items:
+> >            - enum:
+> > +              - fsl,imx8mn-usdhc
+> > +              - fsl,imx8mp-usdhc
+> >                - fsl,imx93-usdhc
+> >                - fsl,imx8ulp-usdhc
+> >            - const: fsl,imx8mm-usdhc
+>
+>
+> Best regards,
+> Krzysztof

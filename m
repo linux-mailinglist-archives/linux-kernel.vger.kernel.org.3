@@ -2,183 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC914E5730
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3604E5733
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238453AbiCWRNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S237380AbiCWRNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245717AbiCWRM4 (ORCPT
+        with ESMTP id S245702AbiCWRNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 13:12:56 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4058978078
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:11:26 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id d62so2435482iog.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:11:26 -0700 (PDT)
+        Wed, 23 Mar 2022 13:13:38 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC827CB12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:12:07 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id c15so2761952ljr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CJcX+FxfEaq/uuvyNw1S0dCzP3seuy40H9PTEBUtNog=;
-        b=fXE+Kpe5mhnSbe/ssGX6libNH578T7NVZN12czfPzITa139jE0x1ySGcfvG+WKJjTi
-         d3LHju2WyVXWJ2SytyErBrbsQgim8wyCLw+KogL1nV1VAceywJnBvg4MZRHblXA/Vw7A
-         ZPoJNjse+tY7jHR0vXSljSWIkqiAUXs+rKI5+Ye+eiflCFhTuEdZigb1PKXsQTcqoesi
-         IjGYxpfZYCThIhQ6ySoJqBXZGN8/Igu5f5soFBBe5sg3gHrk28RSHWmtQqhKnH7wNKSg
-         YnEiaqEpvHzsYlk6AsBxyC/fSm3MV+McLzjUYT7jbxINXTt0Fd6SMCvjfhFaG1YKRSlU
-         jmGg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S5cqrwm6NEPQjFiPbKAqninZQSMn4UOTnCh0iTsFNLo=;
+        b=Inx3pPtFVYpWMK7FixLjIbC1jJxntgKxFxZ0jH6X3A3V4DayOw22Ok5qXfcDFVHksW
+         5Z+y3J3Fpxdxt45EqV9ejbfr/BGgUPJVYjAt8PrdQK+Ldu47SVdHIt+TLQqEqo5qaN0k
+         sSquUwe0j+WFE+jhk4cmjc8l4bgrN6x5TUmwzWlBNIgwdrfsm/To1mdKwqgs/hyp3KVw
+         YlmGCRtvtdOGsveQAz8JBAto90omMtMgAZChFdGkZQQCsWMKgJxds1s315znXohhOVRJ
+         BF8FWP31cfszkf7ExpfbNhunzTTF+m1FakIVwVrJu+J6eMnqRRMZJWa0AFxN/aigXAcf
+         Nnbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CJcX+FxfEaq/uuvyNw1S0dCzP3seuy40H9PTEBUtNog=;
-        b=2F9owBYBgfKFEnkWW1wbugn/w1pdeWB/qquLW9QKI2RYIpklh/g30vtb119kdd8WJ0
-         AQOBf3Cfvko2URz/5eQ4HvNxy3gtp9Kr46+1/CouJ38aFFjik3kTSP4RjYMCMiSjoEWq
-         e/1ZmqeDZZY3mGC6X7XqNNUWhwumLqp8DGsTRoDUGMs7+VqhTYfdXlkX8IFnehHLaNWi
-         nyQO7zMlrTM/63jdvUt8KSb5kDu4zJaoWWVBi+pisIC5usE+SqaSQWfIt+rGCvYJKVpL
-         qcDUnIBMspUH6lbmdaMXYbCtQ9yC8LynAKzX2rM47IxybK8ZLMTemuSLxOiXASV1CHhw
-         JHbQ==
-X-Gm-Message-State: AOAM531x6EhLOWsLqop5Wr50RKWkkiFPiJNgTS8zAV0aZ27WD98+AeQa
-        9Z+qOcmniBggX4Z7EZq1Iho4pA==
-X-Google-Smtp-Source: ABdhPJwZ1i6jce/UGoZtD6TdoDDyrgcMcbsRlWhHkHftWonzln3+byrRitd4L+UzDPjYxXM296EnIg==
-X-Received: by 2002:a05:6638:34a3:b0:321:3908:3224 with SMTP id t35-20020a05663834a300b0032139083224mr472421jal.75.1648055485420;
-        Wed, 23 Mar 2022 10:11:25 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id t11-20020a922c0b000000b002c85834eb06sm256878ile.47.2022.03.23.10.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 10:11:24 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 17:11:21 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-Subject: Re: [PATCH v5 02/22] KVM: arm64: Add SDEI virtualization
- infrastructure
-Message-ID: <YjtUufdsWYxqdGa+@google.com>
-References: <20220322080710.51727-1-gshan@redhat.com>
- <20220322080710.51727-3-gshan@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S5cqrwm6NEPQjFiPbKAqninZQSMn4UOTnCh0iTsFNLo=;
+        b=oTXecHK2JpD9JpTQHMflq4D+rRwkmp9o7UK6IaoayrxLbUAXjDueucsplbo7HuBRbR
+         5RnVLp5+DZyGObbmr9oZ/E4Yy379KplXV5Tr6HFSyQDSXdUUTKM6qQyQNR/JMWXcMwZe
+         dWmvUi/wi9M5U7gS+W4uAv2+tJQN9fxmxL98k6iVWWzgSlbIiJwVOx+vApCXCTXAsgbz
+         udPL5fT5f3/iJar6TF7f6CS4+o0yX1CgjH/uIIxwNSGIQIaguHY9FitRv9WCDM4/EGAK
+         +FPwgIAnue+YS8JsJyuqhaLBRpRFC1o2sadCND3QX4SLOFSGwuPKD7ebxlc6Cg7EIVOI
+         /l1Q==
+X-Gm-Message-State: AOAM531YMM/OONyth2kIcU5s1P3LeSdfRpbJDiMeF2JAYZIxQLkPqNTj
+        Bpec1UoPIP+WGNL85YGZYXIZvbS4I571q81cH2sYow==
+X-Google-Smtp-Source: ABdhPJznpm3ZCA3c5phLjI/3h2MA5pz20oijX4CrsCdzRosKuSDTTPndiUuGKIM12svCeiRr5Los/q9NoNLvrKzo2A0=
+X-Received: by 2002:a2e:904c:0:b0:23e:d7ad:3fdd with SMTP id
+ n12-20020a2e904c000000b0023ed7ad3fddmr805064ljg.239.1648055525198; Wed, 23
+ Mar 2022 10:12:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322080710.51727-3-gshan@redhat.com>
+References: <164724890153.731226.1478494969800777757.stgit@devnote2>
+ <164724892075.731226.14103557516176115189.stgit@devnote2> <20220316191649.GA11547@pswork>
+ <20220318101445.fdb151efe58c6c3a1c572500@kernel.org> <20220321183500.GA4065@pswork>
+ <20220322120311.690f237b63ddfd9c0e4f78ec@kernel.org> <20220322190219.GA26859@pswork>
+ <20220323091617.495bfdf5281a543b27f2656f@kernel.org>
+In-Reply-To: <20220323091617.495bfdf5281a543b27f2656f@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 23 Mar 2022 10:11:53 -0700
+Message-ID: <CAKwvOdk8is=R2qhgKuS_CddvtZzgeJC1Uht84x--TcYykfaiHw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] bootconfig: Support embedding a bootconfig file in kernel
+To:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Cc:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gavin,
+On Tue, Mar 22, 2022 at 5:16 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> On Tue, 22 Mar 2022 20:02:19 +0100
+> Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+>
+> > Hello Masami Hiramatsu,
+> >
+> > On Tue, Mar 22, 2022 at 12:03:11PM +0900, Masami Hiramatsu wrote:
+> > > On Mon, 21 Mar 2022 19:35:00 +0100
+> > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+> > >
+> > > > Hello Masami Hiramatsu,
+> > > >
+> > > > On Fri, Mar 18, 2022 at 10:14:45AM +0900, Masami Hiramatsu wrote:
+> > > > > On Wed, 16 Mar 2022 20:16:49 +0100
+> > > > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+> > > > >
+> > > > > > Hello Masami Hiramatsu,
+> > > > > >
+> > > > > > Also noted that a change in default.bconf requries a clean build, is it
+> > > > > > expected behaviour?
+> > > > >
+> > > > > default.bconf will be always updated if CONFIG_EMBED_BOOT_CONFIG=y. So you can
+> > > > > do incremental build. (I tested it with the incremental build environment)
+> > > > >
+> > > >
+> > > > Thanks, your observation made me to further experiment ther incremental build.
+> > > >
+> > > > Below are the observations I have:
+> > > >
+> > > > When I use GCC for a build; yes, the modified default.conf was observed on
+> > > > the target.
+> > > >
+> > > > But when I use clang; either with FULL or THIN LTO, the modified
+> > > > default.conf doesnt get reflected on the target.
+> > >
+> > > Hmm, curious. So you just add 'CC=clang' on the make command line, right?
+> > Yes, CC=clang ARCH=arm64 LLVM=1. As specified here:
+> > https://docs.kernel.org/kbuild/llvm.html.
 
-More comments, didn't see exactly how all of these structures are
-getting used.
+You should just need LLVM=1 (and ARCH=arm64) at this point. LLVM=1
+implies CC=clang.
 
-On Tue, Mar 22, 2022 at 04:06:50PM +0800, Gavin Shan wrote:
+Also, here's the start of the lore thread for folks:
+https://lore.kernel.org/linux-doc/164724892075.731226.14103557516176115189.stgit@devnote2/
 
-[...]
+> >
+> > > Can you confirm that following line in your build log,
+> > >
+> > >   GEN     lib/default.bconf
+> > >
+> > Yes, I do see above line. Indeed lib/default.bconf will get incremental
+> > change.
+> >
+> >   GEN     lib/default.bconf
+> >   CC      lib/bootconfig.o
+> >   AR      lib/lib.a
+> >
+> > > and the timestamp of lib/bootconfig.o is built after lib/default.bconf file?
+> > >
+> > Yes, verified timestamp for all above artifacts including vmlinux.o.
+> >
+> > ex:
+> > -rw-rw-r-- 1 psrinivasaia psrinivasaia 22K Mar 22 14:50
+> > ../out/lib/bootconfig.o
+> > -rw-rw-r-- 1 psrinivasaia psrinivasaia 355 Mar 22 14:50
+> > ../out/lib/default.bconf
+> > -rw-rw-r-- 1 psrinivasaia psrinivasaia 54M Mar 22 14:50 ../out/vmlinux.o
+> >
+> > As said incremnetal change was refelected in artifact default.bconf.
+> > But not in vmlinux.o/vmlinux, used below command to verify.
+>
+> Interesting! This sounds clang's issue, because the make command rebuilds
+> the object file including new default.bconf, but the linker (lld?)
+> doesn't link it again correctly.
 
-> diff --git a/arch/arm64/include/uapi/asm/kvm_sdei_state.h b/arch/arm64/include/uapi/asm/kvm_sdei_state.h
-> new file mode 100644
-> index 000000000000..b14844230117
-> --- /dev/null
-> +++ b/arch/arm64/include/uapi/asm/kvm_sdei_state.h
-> @@ -0,0 +1,72 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/*
-> + * Definitions of various KVM SDEI event states.
-> + *
-> + * Copyright (C) 2022 Red Hat, Inc.
-> + *
-> + * Author(s): Gavin Shan <gshan@redhat.com>
-> + */
-> +
-> +#ifndef _UAPI__ASM_KVM_SDEI_STATE_H
-> +#define _UAPI__ASM_KVM_SDEI_STATE_H
-> +
-> +#ifndef __ASSEMBLY__
-> +#include <linux/types.h>
-> +
-> +/*
-> + * The software signaled event is the default one, which is
-> + * defined in v1.1 specification.
-> + */
-> +#define KVM_SDEI_INVALID_EVENT	0xFFFFFFFF
+Sounds like missing FORCE directives in the Makefiles, perhaps?
 
-Isn't the constraint that bit 31 must be zero? (DEN 0054C 4.4 "Event
-number allocation")
+Sami, do you recall any issues like this when implementing
+commit dc5723b02e52 ("kbuild: add support for Clang LTO")
+?
 
-> +#define KVM_SDEI_DEFAULT_EVENT	0
-> +
-> +#define KVM_SDEI_MAX_VCPUS	512	/* Aligned to 64 */
-> +#define KVM_SDEI_MAX_EVENTS	128
+>
+> >
+> > llvm-objdump  -s -j .init.data ../out/vmlinux
+> >
+> > On target too, /proc/bootconfig shows old data.
+> >
+> > > And is that related to CONFIG_LTO? What happen if CONFIG_LTO=n?
+> > >
+> > Yes;  CONFIG_LTO_NONE=y  issue not observed even with LLVM binutils.
+>
+> And this issue is related to LTO. Maybe LTO ignores the '.init.data'
+> section update. (Perhaps, LTO only checks the function code hash or
+> something like that instead of the timestamp, and ignore whole object
+> file if all of them are not updated.)
 
-I would *strongly* recommend against having these limits. I find the
-vCPU limit especially concerning, because we're making KVM_MAX_VCPUS
-ABI, which it definitely is not. Anything that deals with a vCPU should
-be accessed through a vCPU FD (and thus agnostic to the maximum number
-of vCPUs) to avoid such a complication.
-
-> +struct kvm_sdei_exposed_event_state {
-> +	__u64	num;
-> +
-> +	__u8	type;
-> +	__u8	signaled;
-> +	__u8	priority;
-> +	__u8	padding[5];
-> +	__u64	notifier;
-
-Wait, isn't this a kernel function pointer!?
-
-> +};
-> +
-> +struct kvm_sdei_registered_event_state {
-
-You should fold these fields together with kvm_sdei_exposed_event_state
-into a single 'kvm_sdei_event' structure:
-
-> +	__u64	num;
-> +
-> +	__u8	route_mode;
-> +	__u8	padding[3];
-> +	__u64	route_affinity;
-
-And these shouldn't be UAPI at the VM scope. Each of these properties
-could be accessed via a synthetic/'pseudo-firmware' register on a vCPU FD:
-
-> +	__u64	ep_address[KVM_SDEI_MAX_VCPUS];
-> +	__u64	ep_arg[KVM_SDEI_MAX_VCPUS];
-> +	__u64	registered[KVM_SDEI_MAX_VCPUS/64];
-> +	__u64	enabled[KVM_SDEI_MAX_VCPUS/64];
-> +	__u64	unregister_pending[KVM_SDEI_MAX_VCPUS/64];
-> +};
-> +
-> +struct kvm_sdei_vcpu_event_state {
-> +	__u64	num;
-> +
-> +	__u32	event_count;
-> +	__u32	padding;
-> +};
-> +
-> +struct kvm_sdei_vcpu_regs_state {
-> +	__u64	regs[18];
-> +	__u64	pc;
-> +	__u64	pstate;
-> +};
-> +
-> +struct kvm_sdei_vcpu_state {
-
-Same goes here, I strongly recommend you try to expose this through the
-KVM_{GET,SET}_ONE_REG interface if at all possible since it
-significantly reduces the UAPI burden, both on KVM to maintain it and
-VMMs to actually use it.
-
---
+Sounds like this is a result of the above issue?
+-- 
 Thanks,
-Oliver
+~Nick Desaulniers

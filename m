@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6014E4FB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BE34E4FBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 10:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243323AbiCWJsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 05:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S243330AbiCWJtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 05:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239488AbiCWJsh (ORCPT
+        with ESMTP id S232578AbiCWJtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 05:48:37 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BC810FDD;
-        Wed, 23 Mar 2022 02:47:07 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id z92so1104719ede.13;
-        Wed, 23 Mar 2022 02:47:07 -0700 (PDT)
+        Wed, 23 Mar 2022 05:49:46 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30A35FD9;
+        Wed, 23 Mar 2022 02:48:16 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id bi12so1702095ejb.3;
+        Wed, 23 Mar 2022 02:48:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:content-language:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=KHm72o5Y4MjVl7rRhvPVahUTvwKrMwJLAH7A+mLGnhw=;
-        b=wa50lWNVFGL+Lek+Iu//NdwQiOcMLZmvNNMIKk2wR2bRl2t10UjFETTzYn73iWLahv
-         aXJ3UnXOMJRO0LBOMrOxpNOMDQlBkeEGx8Jm78hfXAPjBbKZJ8evBiW7W8NyVmm1eMR7
-         7GhKLl4zoC3TdTyKZWkUdB2Y7EwoqTxcURWSMKKrtFJp8wvzcF/bFyoZzRXmrhFQWT58
-         KDr4W8R76Pyzl+Ut7AWK+Dq5kMhA/WKHD42dtmGRZKEnNd2ICVP2u3B+DD4h9n0K12Cw
-         Cc/CRp1VcdSyFE9P6cqiJMMqUIginxE1J1HhX0gbDEy7LIbNKsfUv1HpImqn2/Wr045O
-         LDPA==
-X-Gm-Message-State: AOAM531tSNHmYRBBMtDPwEKRWwDqzK9QcebPNA7f0859pmCNMdKe2YAb
-        0j7MTpx6mJrXkt/dFIvhQTz1sVarqT4=
-X-Google-Smtp-Source: ABdhPJy7Te9mb6SAVMrVpJ0UoTWaTwu2FW1kGcfE7g15tD/BYULe2tkh14yK8RQhDHew1/1SerTqBA==
-X-Received: by 2002:aa7:c683:0:b0:418:f5f3:9684 with SMTP id n3-20020aa7c683000000b00418f5f39684mr33731202edq.184.1648028826179;
-        Wed, 23 Mar 2022 02:47:06 -0700 (PDT)
+        bh=PRqqoL9CnfGAKj9tbMC9+tkIa+u9q7uMWZ60TfiHncQ=;
+        b=3/JclvJiuDbaHdmHzgW9hrBlYz3J5pqpWJBhIn7uQzOmpBTnMj7EcrLjPFzCJWkt/M
+         /24VRS6j0rMUwNvgA/akcBAPjrMNGc7uHLn3taC8/Y8YGImfaRmLJqiLotwfdlfIr1+z
+         F9ZeBRurZQtVkpnKKuVP+4TJhaNJSQNETWmF2fSoJaHj1EhK/bnhTQD6VIWkfrH2Iqj+
+         kux5jT2yCDQpKhA6e1+jSh9zPTY+eIUUJ+i509XwYm3Gf5ZhcUBdfCEHvTqbeg+oxDTT
+         lXDSyH7LAwXImG3DbfuEfFiM/W+hMG9cIIWreAo9Gg3+BnZTZTVGaglKW1Rqg4bgFehc
+         IdvQ==
+X-Gm-Message-State: AOAM531qVJ7UJCmIQ/xTWDTgh0PE1e3BJOxJanoyaHZt+Pq4FBbK8vpL
+        frYPEoZzKVvgsa6mUceeT24=
+X-Google-Smtp-Source: ABdhPJw6T/zZOwaVo7qGDuY48WS9ZdH6rtWNyliGC6aqvxDyLma2jGVbzRmKDkI302Zua7QF+t0Q7A==
+X-Received: by 2002:a17:906:c111:b0:6db:cf0e:3146 with SMTP id do17-20020a170906c11100b006dbcf0e3146mr30866519ejc.280.1648028895162;
+        Wed, 23 Mar 2022 02:48:15 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm9473886eji.67.2022.03.23.02.47.05
+        by smtp.googlemail.com with ESMTPSA id ga5-20020a1709070c0500b006de43e9605asm9656907ejc.181.2022.03.23.02.48.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 02:47:05 -0700 (PDT)
-Message-ID: <e6d014ca-4568-20f2-0254-e8fe51f30e5d@kernel.org>
-Date:   Wed, 23 Mar 2022 10:47:04 +0100
+        Wed, 23 Mar 2022 02:48:14 -0700 (PDT)
+Message-ID: <a730f531-4e89-da90-d100-5090a392c1a8@kernel.org>
+Date:   Wed, 23 Mar 2022 10:48:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh
- on max17055
+Subject: Re: [PATCH 4/4] power: supply: max17042_battery: read battery
+ properties from device tree
 Content-Language: en-US
 To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -54,120 +54,156 @@ To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
 Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
- <7080597.aeNJFYEL58@pliszka>
- <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
- <2957015.e9J7NaK4W3@pliszka>
-In-Reply-To: <2957015.e9J7NaK4W3@pliszka>
+ <20220318001048.20922-5-sebastian.krzyszkowiak@puri.sm>
+ <354ec362-0883-ccfe-9e19-7897318e5e08@kernel.org>
+ <3482664.QJadu78ljV@pliszka>
+In-Reply-To: <3482664.QJadu78ljV@pliszka>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2022 21:44, Sebastian Krzyszkowiak wrote:
-> On niedziela, 20 marca 2022 13:18:49 CET Krzysztof Kozlowski wrote:
->> On 18/03/2022 20:58, Sebastian Krzyszkowiak wrote:
->>> On piątek, 18 marca 2022 09:22:16 CET Krzysztof Kozlowski wrote:
->>>> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
->>>>> Unlike other models, max17055 doesn't require cell characterization
->>>>> data and operates on smaller amount of input variables (DesignCap,
->>>>> VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
->>>>> by max17042_override_por_values, however model refresh bit has to be
->>>>> set after adjusting input variables in order to make them apply.
->>>>>
->>>>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
->>>>> ---
->>>>>
->>>>>  drivers/power/supply/max17042_battery.c | 73 +++++++++++++++----------
->>>>>  include/linux/power/max17042_battery.h  |  3 +
->>>>>  2 files changed, 48 insertions(+), 28 deletions(-)
->>>>>
->>>>> diff --git a/drivers/power/supply/max17042_battery.c
->>>>> b/drivers/power/supply/max17042_battery.c index
->>>>> c019d6c52363..c39250349a1d 100644
->>>>> --- a/drivers/power/supply/max17042_battery.c
->>>>> +++ b/drivers/power/supply/max17042_battery.c
->>>>> @@ -806,6 +806,13 @@ static inline void
->>>>> max17042_override_por_values(struct max17042_chip *chip)>
->>>>>
->>>>>  	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055)) {
->>>>>  		
->>>>>  		max17042_override_por(map, MAX17047_V_empty, config-
->>>>
->>>> vempty);
->>>>
->>>>>  	}
->>>>>
->>>>> +
->>>>> +	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
->>>>> +		max17042_override_por(map, MAX17055_ModelCfg, config-
->>>>
->>>> model_cfg);
->>>>
->>>>> +		// VChg is 1 by default, so allow it to be set to 0
->>>>
->>>> Consistent comment, so /* */
->>>>
->>>> I actually do not understand fully the comment and the code. You write
->>>> entire model_cfg to MAX17055_ModelCfg and then immediately do it again,
->>>> but with smaller mask. Why?
+On 20/03/2022 22:24, Sebastian Krzyszkowiak wrote:
+> On piątek, 18 marca 2022 09:40:36 CET Krzysztof Kozlowski wrote:
+>> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
+>>> So far configuring the gauge was only possible using platform data,
+>>> with no way to provide the configuration on device tree-based platforms.
 >>>
->>> That's because VChg is 1 on POR, and max17042_override_por doesn't do
->>> anything when value equals 0 - which means that if the whole
->>> config->model_cfg is 0, VChg won't get unset (which is needed for 4.2V
->>> batteries).
+>>> Change that by looking up the configuration values from monitored-battery
+>>> property. This is especially useful on models implementing ModelGauge m5
+>>> EZ
+>>> algorithm, such as MAX17055, as all the required configuration can be
+>>> derived from a "simple-battery" DT node there.
 >>>
->>> This could actually be replaced with a single regmap_write.
+>>> In order to be able to access power supply framework in get_of_pdata,
+>>> move devm_power_supply_register earlier in max17042_probe.
+>>>
+>>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+>>> ---
+>>>
+>>>  drivers/power/supply/max17042_battery.c | 50 +++++++++++++++++++------
+>>>  include/linux/power/max17042_battery.h  |  1 +
+>>>  2 files changed, 40 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/drivers/power/supply/max17042_battery.c
+>>> b/drivers/power/supply/max17042_battery.c index
+>>> c39250349a1d..4c33565802d5 100644
+>>> --- a/drivers/power/supply/max17042_battery.c
+>>> +++ b/drivers/power/supply/max17042_battery.c
+>>> @@ -937,7 +937,9 @@ max17042_get_of_pdata(struct max17042_chip *chip)
+>>>
+>>>  	struct device *dev = &chip->client->dev;
+>>>  	struct device_node *np = dev->of_node;
+>>>  	u32 prop;
+>>>
+>>> +	u64 data64;
+>>>
+>>>  	struct max17042_platform_data *pdata;
+>>>
+>>> +	struct power_supply_battery_info *info;
+>>>
+>>>  	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
+>>>  	if (!pdata)
+>>>
+>>> @@ -961,6 +963,32 @@ max17042_get_of_pdata(struct max17042_chip *chip)
+>>>
+>>>  	if (of_property_read_s32(np, "maxim,over-volt", &pdata->vmax))
+>>>  	
+>>>  		pdata->vmax = INT_MAX;
+>>>
+>>> +	if (pdata->enable_current_sense &&
+>>> +	    power_supply_get_battery_info(chip->battery, &info) == 0) {
+>>> +		pdata->config_data = devm_kzalloc(dev, sizeof(*pdata-
+>> config_data),
+>>> GFP_KERNEL); +		if (!pdata->config_data)
+>>> +			return NULL;
+>>> +
+>>> +		if (info->charge_full_design_uah != -EINVAL) {
+>>> +			data64 = (u64)info->charge_full_design_uah * 
+> pdata->r_sns;
+>>> +			do_div(data64, MAX17042_CAPACITY_LSB);
+>>> +			pdata->config_data->design_cap = (u16)data64;
+>>> +			pdata->enable_por_init = true;
+>>> +		}
+>>> +		if (info->charge_term_current_ua != -EINVAL) {
+>>> +			data64 = (u64)info->charge_term_current_ua * 
+> pdata->r_sns;
+>>> +			do_div(data64, MAX17042_CURRENT_LSB);
+>>> +			pdata->config_data->ichgt_term = (u16)data64;
+>>> +			pdata->enable_por_init = true;
+>>> +		}
+>>> +		if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
+>>> +			if (info->voltage_max_design_uv > 4250000) {
+>>> +				pdata->config_data->model_cfg = 
+> MAX17055_MODELCFG_VCHG_BIT;
+>>> +				pdata->enable_por_init = true;
+>>> +			}
+>>> +		}
+>>> +	}
+>>> +
+>>>
+>>>  	return pdata;
+>>>  
+>>>  }
+>>>  #endif
+>>>
+>>> @@ -1092,16 +1120,23 @@ static int max17042_probe(struct i2c_client
+>>> *client,> 
+>>>  		return -EINVAL;
+>>>  	
+>>>  	}
+>>>
+>>> +	i2c_set_clientdata(client, chip);
+>>> +	psy_cfg.drv_data = chip;
+>>> +	psy_cfg.of_node = dev->of_node;
+>>> +
+>>> +	chip->battery = devm_power_supply_register(&client->dev, 
+> max17042_desc,
+>>> +						   
+> &psy_cfg);
+>>> +	if (IS_ERR(chip->battery)) {
+>>> +		dev_err(&client->dev, "failed: power supply 
+> register\n");
+>>> +		return PTR_ERR(chip->battery);
+>>> +	}
 >>
->> I got it now. But if config->model_cfg is 0, should VChg be unset?
+>> I don't think it is correct. You register power supply, thus making it
+>> available for system, before configuring most of the data. For short
+>> time the chip might report to the system bogus results and events.
+>>
+>> Instead I think you should split it into two parts - init which happens
+>> before registering power supply and after.
 > 
-> That's a good question.
+> Simply splitting initialization into two parts won't really help. If you set 
+> capacity, current, Vchg and refresh the model after registering power supply, 
+> you will still end up having a short time window with bogus results. Looking 
+> at other drivers, they seem to deal with it in the same way - they register 
+> the power supply early, before the driver can fully configure the device.
 > 
-> max17042_override_por doesn't override the register value when the given value 
-> equals zero in order to not override POR defaults with unset platform data. 
-> This way one can set only the registers that they want to change in `config` 
-> and the rest are untouched. This, however, only works if we assume that zero 
-> means "don't touch", which isn't the case for ModelCfg.
-> 
-> On the Librem 5, we need to unset VChg bit because our battery is only being 
-> charged up to 4.2V. Allowing to unset this bit only without having to touch 
-> the rest of the register was the motivation behind the current version of this 
-> patch, however, thinking about it now I can see that it fails to do that in 
-> the opposite case - when the DT contains a simple-battery with maximum voltage 
-> higher than 4.25V, VChg will be set in config->model_cfg causing the whole 
-> register to be overwritten.
+> To actually fix the problem with bogus data on init, it seems like we would 
+> either need some support from the power supply framework to notify it when can 
+> it actually start expecting correct data, or have a way to access the battery 
+> information without having to register power supply beforehand.
 
-This is actually nice description which could be put into a comment there.
+Indeed I spotted similar pattern in other drivers, so this might be a
+common issue.
 
 > 
-> So, I see two possible solutions:
-> 
-> 1) move VChg handling to a separate variable in struct max17042_config_data. 
-> This way model_cfg can stay zero when there's no need to touch the rest of the 
-> register. This minimizes changes over current code.
-> 
-> 2) remove max17042_override_por_values in its current shape altogether and 
-> make it only deal with the values that are actually being set by the driver 
-> (and only extend it in the future as it gains more ability). Currently most of 
-> this function is only usable with platform data - is there actually any user 
-> of max17042 that would need to configure the gauge without DT in the mainline 
-> kernel? My quick search didn't find any. Do we need or want to keep platform 
-> data support at all?
-> 
-> I'm leaning towards option 2, as it seems to me that currently this driver is 
-> being cluttered quite a lot by what's essentially a dead code. Adding new 
-> parameters to read from DT for POR initialization (which is necessary for 
-> other models than MAX17055) should be rather easy, but trying to fit them into 
-> current platform_data-oriented code may be not.
+> Since power_supply_get_battery_info doesn't actually seem to depend on 
+> power_supply device at all - it uses psy->dev for devm functions and psy-
+> of_node to read the data from - I wonder if it could be split into a function 
+> that only takes an of_node?
 
-I am in for removal of platform data.
+That might be the best approach.
+
 
 Best regards,
 Krzysztof

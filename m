@@ -2,105 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658894E4C12
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 06:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AB94E4C0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 06:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238973AbiCWFTl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Mar 2022 01:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S241822AbiCWFNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 01:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiCWFTi (ORCPT
+        with ESMTP id S229696AbiCWFNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 01:19:38 -0400
-X-Greylist: delayed 499 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Mar 2022 22:18:08 PDT
-Received: from 6.mo560.mail-out.ovh.net (6.mo560.mail-out.ovh.net [87.98.165.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2D435262
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 22:18:08 -0700 (PDT)
-Received: from player694.ha.ovh.net (unknown [10.108.16.135])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id E55BC23AED
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:09:46 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player694.ha.ovh.net (Postfix) with ESMTPSA id 27E4B28977B6A;
-        Wed, 23 Mar 2022 05:09:41 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G0030a29b9fe-1317-4aa6-b294-7148a9ed8fa2,
-                    404CC6C5AE1CA2DD881B97E5F464CB0C121347F9) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-Date:   Wed, 23 Mar 2022 06:09:39 +0100
-From:   Stephen Kitt <steve@sk2.org>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-CC:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] idr: Remove unused ida_simple_{get,remove}
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220322220602.985011-1-steve@sk2.org>
-References: <20220322220602.985011-1-steve@sk2.org>
-Message-ID: <E131FD3F-4FC1-4EC0-8DE0-42BFC6708384@sk2.org>
+        Wed, 23 Mar 2022 01:13:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E503146172;
+        Tue, 22 Mar 2022 22:11:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E9B2615C4;
+        Wed, 23 Mar 2022 05:11:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50812C340E8;
+        Wed, 23 Mar 2022 05:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648012295;
+        bh=twJa8z2WuTuCCTXplZkeqyLcJT4YJH1ALfCTJg9asGw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GZYbLIC2YT2wIpJW5DQR0JXtC2S6yUPpwmr8PqeJMgGgfhEAE8+2ji9EogfpFkp++
+         sixVLYm9hAeDBtr1IZO4wyTDRNvr44E3BenK6OspKpTIXUY1T4/txuwyhkHbx+DZqI
+         Go199aUs+HrcR7tEw49lV/DOYUY9B1MntWAx1ac9Ytt0qreK+OeJ83JwDZmAfYRP0O
+         io0Q+QzIVCASK7NmWyUOxKAzce2jju1Mgv5vFYkuUjS9xP8HL2FS64Dv5qxsRUREJx
+         n/E674ufMXx2BNfYHpEvvmrKVmPMuFSSZl1AFMi/PGO9fL5uZk5xuvbr7a3NZKOcdq
+         Yx25hoeVMq/BA==
+Date:   Tue, 22 Mar 2022 22:11:33 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     <pablo@netfilter.org>, <kadlec@netfilter.org>, <fw@strlen.de>,
+        <davem@davemloft.net>, <netfilter-devel@vger.kernel.org>,
+        <coreteam@netfilter.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] netfilter: ipset: Fix duplicate included
+ ip_set_hash_gen.h
+Message-ID: <20220322221133.7475f708@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1648005894-28708-1-git-send-email-baihaowen@meizu.com>
+References: <1648005894-28708-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Ovh-Tracer-Id: 12365195729709270662
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudegiedgjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffufggjfhfkgggtgfesthhqmhdttderjeenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepvdeitedvheelgeefieefieevudekveetheeuleekueeuvdehtddtheekheejtdeunecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrieelgedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22 March 2022 23:06:02 CET, Stephen Kitt <steve@sk2.org> wrote:
->These are no longer used anywhere, remove them; update the
->nvmem-prodiver.h to refer to ida_alloc() which is what is used now
->(see drivers/nvmem/core.c).
->
->Signed-off-by: Stephen Kitt <steve@sk2.org>
->---
-> include/linux/idr.h            | 8 --------
-> include/linux/nvmem-provider.h | 2 +-
-> 2 files changed, 1 insertion(+), 9 deletions(-)
->
->diff --git a/include/linux/idr.h b/include/linux/idr.h
->index a0dce14090a9..273b2158a428 100644
->--- a/include/linux/idr.h
->+++ b/include/linux/idr.h
->@@ -314,14 +314,6 @@ static inline void ida_init(struct ida *ida)
-> 	xa_init_flags(&ida->xa, IDA_INIT_FLAGS);
-> }
-> 
->-/*
->- * ida_simple_get() and ida_simple_remove() are deprecated. Use
->- * ida_alloc() and ida_free() instead respectively.
->- */
->-#define ida_simple_get(ida, start, end, gfp)	\
->-			ida_alloc_range(ida, start, (end) - 1, gfp)
->-#define ida_simple_remove(ida, id)	ida_free(ida, id)
->-
-> static inline bool ida_is_empty(const struct ida *ida)
-> {
-> 	return xa_empty(&ida->xa);
->diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
->index c9a3ac9efeaa..e957cdc56619 100644
->--- a/include/linux/nvmem-provider.h
->+++ b/include/linux/nvmem-provider.h
->@@ -75,7 +75,7 @@ struct nvmem_keepout {
->  *
->  * Note: A default "nvmem<id>" name will be assigned to the device if
->  * no name is specified in its configuration. In such case "<id>" is
->- * generated with ida_simple_get() and provided id field is ignored.
->+ * generated with ida_alloc() and provided id field is ignored.
->  *
->  * Note: Specifying name and setting id to -1 implies a unique device
->  * whose name is provided as-is (kept unaltered).
->
->base-commit: 5191290407668028179f2544a11ae9b57f0bcf07
+On Wed, 23 Mar 2022 11:24:54 +0800 Haowen Bai wrote:
+> No functional change.
 
-Apologies for the waste of time, these are far from unused. I'm not sure why my searches didn't find anything yesterday...
-
-Regards,
-
-Stephen
+In some deeply philosophical sense? This patch does not build.

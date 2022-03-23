@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1D74E52AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC054E52B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240409AbiCWNAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S236482AbiCWNEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243951AbiCWNAF (ORCPT
+        with ESMTP id S236412AbiCWNEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:00:05 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9447B2657F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:58:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648040315; x=1679576315;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w0fD6UOHayE6atiMi0tgX/+OIrvXP49abIMEUIRrwPo=;
-  b=jVf8z/VEzzviJZv2UaZpTu956iNVD4kzIRpAmdhlmwaUOswQ48JoYB/R
-   z1UHprJzgBMj5adwwoJermee3Smmn9obrr+7OXgqBanI7Huy5cun3CiXt
-   OQYacdfRWFKulzsu1ul8PcZDaXIVwBiSlUcMo/f/qwrMcZpvTZVDL45NA
-   6ULUD1bgOAqyqZeoDVohWTSGm0kfv84JOexIuKrNyaB1zGqTV9MDz5Ami
-   l60FMGgZgg+1PvvRW5ieFDssfoeKy6LAFYA7PW1DA0IvEoIh5kyc8FTto
-   na1lZ4cVARDT8CqaxdyRwRWepMkyTjnLuigfQLIvRDZd/xs14FejjaDaB
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="258290754"
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="258290754"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 05:58:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="500989773"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 23 Mar 2022 05:58:30 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nX0ZJ-000K48-EQ; Wed, 23 Mar 2022 12:58:29 +0000
-Date:   Wed, 23 Mar 2022 20:58:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Oscar Salvador <osalvador@suse.de>,
+        Wed, 23 Mar 2022 09:04:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B01F7CDC4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:02:36 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 14:02:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648040554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fbCwVVRphwKFhHFjdgqzv4b5jAPDrPw5EXg1eflzqcM=;
+        b=lTyix5maivfLw8E8Po9Y8v0iZkkEthoVdWxUAkacnuW0EcVIUXUU/gXp86tc8gzJW1L/9d
+        IE1sZhoeNDz/df5gmlbGLLgOMTkZ7b0Yhuv+nx3cNEniAygTwrvIyC5v8oJZ+oBJdZeEGh
+        eJ+CIs/Un9nFcO9gJcTYcTsVa2IBBjBC9hb8oc1PTPzF333H+1LoX0mqXANdTWMhr2sCG9
+        WtR1y5ljZeyMxVkZEXbLcOHnuqZtIqFtcbSVpB/Jwdl5jjlEHi60d+fg4LteatHl3lNSrA
+        wnMrsAbczhw5//ay4CFJisdm3qQh3CXF9MZ0xzyihH1ZU+FEqdBJcVYSf7p+vg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648040554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fbCwVVRphwKFhHFjdgqzv4b5jAPDrPw5EXg1eflzqcM=;
+        b=VOsTdu5ZLZW0Wq76l4BUB69GXQpUMxEHlRDyF0Lcl3AtX6x/7peY+Wd+sltN7+9itzrpzd
+        Dlkn6n4Th6PRY5Dw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     andrey.konovalov@linux.dev,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: undefined reference to `node_data'
-Message-ID: <202203232042.AS9SV1zv-lkp@intel.com>
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH v6 27/39] kasan, mm: only define ___GFP_SKIP_KASAN_POISON
+ with HW_TAGS
+Message-ID: <YjsaaQo5pqmGdBaY@linutronix.de>
+References: <cover.1643047180.git.andreyknvl@google.com>
+ <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
+ <63704e10-18cf-9a82-cffb-052c6046ba7d@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <63704e10-18cf-9a82-cffb-052c6046ba7d@suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6b1f86f8e9c7f9de7ca1cb987b2cf25e99b1ae3a
-commit: 09f49dca570a917a8c6bccd7e8c61f5141534e3a mm: handle uninitialized numa nodes gracefully
-date:   14 hours ago
-config: mips-buildonly-randconfig-r004-20220323 (https://download.01.org/0day-ci/archive/20220323/202203232042.AS9SV1zv-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f49dca570a917a8c6bccd7e8c61f5141534e3a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 09f49dca570a917a8c6bccd7e8c61f5141534e3a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On 2022-03-23 12:48:29 [+0100], Vlastimil Babka wrote:
+> > +#ifdef CONFIG_KASAN_HW_TAGS
+> >  #define ___GFP_SKIP_KASAN_POISON	0x1000000u
+> > +#else
+> > +#define ___GFP_SKIP_KASAN_POISON	0
+> > +#endif
+> >  #ifdef CONFIG_LOCKDEP
+> >  #define ___GFP_NOLOCKDEP	0x2000000u
+> >  #else
+> > @@ -251,7 +255,9 @@ struct vm_area_struct;
+> >  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+> >  
+> >  /* Room for N __GFP_FOO bits */
+> > -#define __GFP_BITS_SHIFT (25 + IS_ENABLED(CONFIG_LOCKDEP))
+> > +#define __GFP_BITS_SHIFT (24 +					\
+> > +			  IS_ENABLED(CONFIG_KASAN_HW_TAGS) +	\
+> > +			  IS_ENABLED(CONFIG_LOCKDEP))
+> 
+> This breaks __GFP_NOLOCKDEP, see:
+> https://lore.kernel.org/all/YjoJ4CzB3yfWSV1F@linutronix.de/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This could work because ___GFP_NOLOCKDEP is still 0x2000000u. In
+	("kasan, page_alloc: allow skipping memory init for HW_TAGS")
+	https://lore.kernel.org/all/0d53efeff345de7d708e0baa0d8829167772521e.1643047180.git.andreyknvl@google.com/
 
-All errors (new ones prefixed by >>):
+This is replaced with 0x8000000u which breaks lockdep.
 
-   mips64-linux-ld: mm/page_alloc.o: in function `free_area_init':
->> (.init.text+0x1680): undefined reference to `node_data'
-   mips64-linux-ld: (.init.text+0x1690): undefined reference to `node_data'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sebastian

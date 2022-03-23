@@ -2,74 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BFE4E5959
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FADF4E5961
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344371AbiCWTrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S1344387AbiCWTvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241263AbiCWTrH (ORCPT
+        with ESMTP id S241263AbiCWTu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:47:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077E18BE1C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:45:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A00C0615BD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C078DC340E8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:45:35 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="NXA1qI36"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1648064734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nwg+qxFHZRnPjdPTzV0MenWDKtE/+cq1lWxamf8sySg=;
-        b=NXA1qI36SCQcapT7abCeBx4U7XY7XBmiV0Jd3bzVyAXsNYCfnS8+Q6qu6ByZZs9yKjO/Px
-        cDwk6xIYmr2U8pInr1i3w+U3wF2hItDy2NMVyTew8Dsu2oiT2cjrGCCFbcodnUNoEh/06e
-        6E53gGHgnTpd20ZXazsr7l4ERkTKr5k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d8e51a92 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Wed, 23 Mar 2022 19:45:34 +0000 (UTC)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2e5827a76f4so29521307b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:45:34 -0700 (PDT)
-X-Gm-Message-State: AOAM533FUr95MUUKOjH/i0DS3aVLB9W2ipVj+jUL3MvkNMnuD50RzQub
-        w5rwbTBnG/kz3ldOP73xLagcxpskKS01MkASwdo=
-X-Google-Smtp-Source: ABdhPJw027su77izYzWCjdxmO/5j44xOY2E1CeGSlB89lwfUaOCDNQzMZFQPlAhTdEZZSDqzaWBjVUNcdBQghDnamjc=
-X-Received: by 2002:a0d:c681:0:b0:2db:9ffe:1f00 with SMTP id
- i123-20020a0dc681000000b002db9ffe1f00mr1756667ywd.100.1648064733566; Wed, 23
- Mar 2022 12:45:33 -0700 (PDT)
+        Wed, 23 Mar 2022 15:50:58 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC84D58827
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:49:27 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id b5so3336464ljf.13
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cPOg7ml2GHdztCx2wbZWD76YhsCFr2lpapXRjdLOdn4=;
+        b=f7BkQA4NgoKs9prBjgEi7tB+5wVOxuAcmxEzL8s4/11jpagSay2PERpfZ+g6SrDUnQ
+         o7jBani49t1qdStXNOb8e3kw/lA+w3sTkryWnoPWwiyLkUA6+0hx2mZZU2qtSq30pqvo
+         ZsGyIosnr5Rr4w1Pn8kt3zdPliJdC48WJ+WW0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cPOg7ml2GHdztCx2wbZWD76YhsCFr2lpapXRjdLOdn4=;
+        b=ReqRyB33RJ1Vr+DRNWMWNGtF7A1l9KsTDYfo0FhiHqQ0W5xJE/o3ne339kQ2g+K5YS
+         syG+ynWQCZjmseZy84k3piGPSV2HtdV5jfH2KCCt9exRq7asDGeGO6vB4DZKGCBOvT1u
+         4grDNtT+j0tQnhz4DebRgSspTLGapgD3D/pU3xu0tQhIgxgrrISNThxtYMvLunZ+CjkA
+         U1ge6HqIDsiachNfq4bWY9PtRHbHXcWb5UdmynzW4dxpwdZkSE5WOQtZ7dgbPVYgBFcs
+         tPu6NL7w30wlGZe/FUxm5yZVWlW17dOcjMk/GAz6GxxiYLGg3GKoqHXVRq0wh+1frkUx
+         T1Kw==
+X-Gm-Message-State: AOAM532UY0eZNwjrvM5HwGhJmuabsNEL7ec2Mctnb67aIHgl+eZmSN7v
+        t5TOTjrfSgCh8h12YjxEsljti76PNaR8pexha3c=
+X-Google-Smtp-Source: ABdhPJzXCbj2GT3D1nUdZtlyCTTydsgqe9hLH279orke+KFSovkNApka8+HXHdoqc7EQ5f4KIpAX9A==
+X-Received: by 2002:a2e:97c9:0:b0:249:8404:a5b7 with SMTP id m9-20020a2e97c9000000b002498404a5b7mr1342005ljj.57.1648064965871;
+        Wed, 23 Mar 2022 12:49:25 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id c22-20020ac24156000000b0044846901eabsm77608lfi.24.2022.03.23.12.49.24
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 12:49:25 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id w27so4477825lfa.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:49:24 -0700 (PDT)
+X-Received: by 2002:a19:e048:0:b0:448:2caa:7ed2 with SMTP id
+ g8-20020a19e048000000b004482caa7ed2mr1120043lfj.449.1648064964589; Wed, 23
+ Mar 2022 12:49:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220323042336.148775-1-Jason@zx2c4.com> <Yjt0AX8st/gE00CM@owl.dominikbrodowski.net>
-In-Reply-To: <Yjt0AX8st/gE00CM@owl.dominikbrodowski.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 23 Mar 2022 13:45:22 -0600
-X-Gmail-Original-Message-ID: <CAHmME9r7+tU6sU80opW-cyw4srsnOpLTsUKUv2Qdfs-DtPYekw@mail.gmail.com>
-Message-ID: <CAHmME9r7+tU6sU80opW-cyw4srsnOpLTsUKUv2Qdfs-DtPYekw@mail.gmail.com>
-Subject: Re: [PATCH] random: re-add removed comment about get_random_{u32,u64} reseeding
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <20220321105621.3d4a9bc6@gandalf.local.home> <CAHk-=wj3_p98e_oohGZzfkDPaJFLKEW8C6mS9dhuKgLN8PNitg@mail.gmail.com>
+ <CAHk-=wiNzTuFN0gCitdkPna0h3MM-ScZhgS_O0NKA5=mcuZCVQ@mail.gmail.com> <20220323154338.200882ac@gandalf.local.home>
+In-Reply-To: <20220323154338.200882ac@gandalf.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Mar 2022 12:49:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjNSrf1SWDR+cV6R-pzWOQYPa5RzAwyvgv_ixED5sRD4Q@mail.gmail.com>
+Message-ID: <CAHk-=wjNSrf1SWDR+cV6R-pzWOQYPa5RzAwyvgv_ixED5sRD4Q@mail.gmail.com>
+Subject: Re: [GIT PULL] tracing: Updates for 5.18
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dominik,
+On Wed, Mar 23, 2022 at 12:43 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> I'll take a look at yours. I gave that branch to Stephen to help him resolve
+> it, but didn't look at what he had done to see if it was different.
 
-Good point; might as well take this opportunity to firm up that
-wording. How about:
+I may actually have messed up my comparison with your tree, because I
+was doing some of that while in my "test-merge" branch (which had that
+dirty state due to the merge not working). Maybe I screwed up twice.
 
-"... and do not invoke reseeding until the buffer is emptied."
+I think the only difference I have against linux-next is because I added the
 
-Jason
+  #undef __assign_sockaddr
+...
+  #undef __assign_rel_sockaddr
+
+lines to stage6 to match the other pre-existing non-sockaddr cases.
+
+              Linus

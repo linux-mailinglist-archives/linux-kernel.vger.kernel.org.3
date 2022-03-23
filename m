@@ -2,235 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDEBA4E4D9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 08:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCE74E4D8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 08:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiCWHvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 03:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S233305AbiCWHu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 03:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241232AbiCWHuu (ORCPT
+        with ESMTP id S233121AbiCWHu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 03:50:50 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F75C7463E;
-        Wed, 23 Mar 2022 00:49:19 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22N6gimV012427;
-        Wed, 23 Mar 2022 07:48:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=esyvE9d47G4eT5PCtsnWcq/crKLziOOj6fAWWtqcXMs=;
- b=l/kmsX1uWIepF15zc1p3+kBP4g9PqvWl8xd3FoiVGuX3IKnXfRUWDDwgOf4sWlAEffKY
- RoCsynmNM74nGsOa15gw2DqAS61rDrWHDPOzhdSVMz4hIWpFJ3pa72ikOwHHBaUl8NcM
- nTP1KTbYI+zbVb5Dd3cYzJaykmvsYkNiV0olqzV+p4k6BJeoJ8G3pVKgcAOkfkbrcJo/
- 2HItxT74rfmwYrn1kxXTWdK595uf1BSVMbikEyvstgSJmNLFe9yNlIqTlDqZYCdh4zf8
- WKkMh3FBPcmhHo8QdNQDMH319th6YxGcmzApeeEY+bGBV5qVWdv2w3E+mTidw82GbU2u kA== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3eywmn20ed-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 07:48:49 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22N7juZ0004242;
-        Wed, 23 Mar 2022 07:48:47 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3ew6t9etqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 07:48:47 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22N7mib836438486
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Mar 2022 07:48:44 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5ED64A4040;
-        Wed, 23 Mar 2022 07:48:44 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 786DEA405E;
-        Wed, 23 Mar 2022 07:48:35 +0000 (GMT)
-Received: from vajain21.in.ibm.com (unknown [9.211.147.181])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Wed, 23 Mar 2022 07:48:35 +0000 (GMT)
-Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Wed, 23 Mar 2022 13:18:33 +0530
-From:   Vaibhav Jain <vaibhav@linux.ibm.com>
-To:     Dan Williams <dan.j.williams@intel.com>,
-        kajoljain <kjain@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
-        rnsastry@linux.ibm.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        atrajeev@linux.vnet.ibm.com, Thomas Gleixner <tglx@linutronix.de>,
-        Linux MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
- CONFIG_PERF_EVENTS is not set
-In-Reply-To: <CAPcyv4j9NQ-Msr6JCp95QWAdDyTfYr65fXCoHHtjipLA=oJeHA@mail.gmail.com>
-References: <20220318114133.113627-1-kjain@linux.ibm.com>
- <20220318114133.113627-2-kjain@linux.ibm.com>
- <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
- <c198a1b5-cc7e-4e51-533b-a5794f506b17@linux.ibm.com>
- <CAPcyv4j9NQ-Msr6JCp95QWAdDyTfYr65fXCoHHtjipLA=oJeHA@mail.gmail.com>
-Date:   Wed, 23 Mar 2022 13:18:33 +0530
-Message-ID: <87a6dh3y9a.fsf@vajain21.in.ibm.com>
+        Wed, 23 Mar 2022 03:50:26 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332DE6FF6A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 00:48:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m65yMEGir31igZp14VvuUg5CyxQFq9QyJuLfAixipedi/vhquyO8X5rULPIwrja4vG8wGiMEPRcx6KBcd3bhmeD9WhSUdZLVQDPOYjJ+6XMO8ACVTtDceBafW03jW4VmRNfmZIT02nHLptuqtuD3uiuS5MEjY1P8Enhlj7pz1SZ2B78GxzC3i0Mhnj2SaeoKXe84jaHLS2Ky7ob7sGMmZ4+et+v8q0QaIV2M1C6lkMMCYomq+04MCROBjqUvTrCsh6cd/spLNOgkdSj/mc7d/d2lcmqI6FFhYzCTMgCN/PmOmS2Hynw+XIZIbTLpkCxt3FYiE7VMcYc/IdDKeiYNBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EzTBHZkp/TvUxq+qBbHPuMbG3kEDK8whPuuQY9F2gvs=;
+ b=B/9faL27hdM0c1SO6E3OWLH/OrRrUB8Xi23AVb/NGbGGWUfmSTuggkn3EZ3Zi8B+L7DIg2ene9jjV9+h+gNuh0/RJSNkR4/AEleHyNcpxVA2WEGZbr6/h4M2qgWZVEjH26qOvl/aV0Qa6yKibilbM6vD6b0uCFgXTPVhLQPTxbcolp6YFO/OSjMRpUx8pxfBDRGLV1yhuXlvJgPlm37hzIdMY9JW4QTG5PWu47YQL85tysIJVAHHfJtRWG/lmEKXljWE4kXwb7ic6aiCGxyOBnpV+2YFe5cXhvfv1KI34dicz2EIBc906grn1BMrno7eFYVXRzecbLwMej58ypL7xQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EzTBHZkp/TvUxq+qBbHPuMbG3kEDK8whPuuQY9F2gvs=;
+ b=0FcM8CqYT3THpyrYCD2R5hK17vSMRr2mTgn4mLVPXe7rtoSBlOOkb8BkSdhsLXYHE7wQiZFxBmvWEvW1iqa1PeUIA5jPocPus5Tolz+vyniZrfwSvfERjy1nw6F1UMOit8SlbbRev3AaX2MrI7i6YjVA3D4Fk0PZAkivobmKkRs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB4289.namprd12.prod.outlook.com (2603:10b6:a03:204::14)
+ by BL0PR12MB4675.namprd12.prod.outlook.com (2603:10b6:207:35::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.23; Wed, 23 Mar
+ 2022 07:48:53 +0000
+Received: from BY5PR12MB4289.namprd12.prod.outlook.com
+ ([fe80::4843:222b:2955:543f]) by BY5PR12MB4289.namprd12.prod.outlook.com
+ ([fe80::4843:222b:2955:543f%8]) with mapi id 15.20.5081.023; Wed, 23 Mar 2022
+ 07:48:53 +0000
+Message-ID: <b0861376-e628-06bd-713e-8837e0dc9d0b@amd.com>
+Date:   Wed, 23 Mar 2022 13:18:41 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v0 0/6] x86/AMD: Userspace address tagging
+Content-Language: en-US
+To:     Andy Lutomirski <luto@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     linux-mm@kvack.org, the arch/x86 maintainers <x86@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, shuah@kernel.org,
+        Oleg Nesterov <oleg@redhat.com>, ananth.narayan@amd.com
+References: <20220310111545.10852-1-bharata@amd.com>
+ <6a5076ad-405e-4e5e-af55-fe2a6b01467d@www.fastmail.com>
+From:   Bharata B Rao <bharata@amd.com>
+In-Reply-To: <6a5076ad-405e-4e5e-af55-fe2a6b01467d@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN1PR01CA0081.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c00:1::21) To BY5PR12MB4289.namprd12.prod.outlook.com
+ (2603:10b6:a03:204::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TFr3gJPNI2gWBR5RzZV2Oj1ONwN3lgOL
-X-Proofpoint-GUID: TFr3gJPNI2gWBR5RzZV2Oj1ONwN3lgOL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-22_08,2022-03-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 phishscore=0 clxscore=1011 mlxscore=0 spamscore=0
- impostorscore=0 priorityscore=1501 mlxlogscore=999 malwarescore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203230042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7dce802b-be66-4486-9c1e-08da0ca19386
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4675:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB4675ED5BB57FA14BB534227DB0189@BL0PR12MB4675.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: soWXzF3nNcv63N/jbGHOe0iWNO4lHaevFlobUMTL33xdfXqPKK+8JPJZYkeBPkQ7qsWpcXsThnI8uYFQt+dgFjvqJT48jDLaku4SIxvExrsmwtzTNC8FQ460GpQ8wwme1JgncM9KJFVYQbxi7NcgYA+VCrVGER99SJXsdvrC0A3qt4/i2fpvrnhSoIqNWwdqHHy1EIVqZ6zVusnjXqfJoQMc4JySshN+ZWLOJR0KN8l/St2U3pPdwjIamFroJRcMftyqd32zgBU5KqM8kktrPPYp8+hhDiPRusbCSvyX2zDhuOAYukL2QqLNTZ1ULZiHi+V4Ik4ZwW7JlS/PL1khTPDgSKNaPQJdw/73v0saL3ZtuJqCf5xc3+NtvcQdHwZo+e9fKuwpb+ICPY76+zsskvba2vBOBOCeGwQ7d8tS+UiyxOHVO/960txbEPQ9ILJaUbSzdbPLSjGbjOjiFuh9tgx8KuGtRP55yxAQYrwzlXcdyOqgwK/cYGkr+iR0gEg6LyAJ1EmBAIkBj52TMjr+TmZjUc76KmYVytl+/E2e4FmxgosEtiV6KipMHNw6ar+YAbwE6XthoYUQJyhJLMVFQfdvnTtV6yAwv52sGubWifXKTUJxn44jyQTg4CVUG7GdJpqwrccwnKH5GFk0lxy1YZhQTZT3SwL9QhYrYC1OLioFMFf5FYWacyHywja4HUYcpUuN5dmqk/KiHAh89j/wW10z+y5wHfuDfS9a9rQdYxo50BNzbx41n6EdgjFnohONLWSvJv72uFnXr8e7wA6xRD38aZcScuviK3hZ9LDRJUbs3H2ao7TIuDmSPWbpWn99
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4289.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6666004)(8936002)(4326008)(86362001)(26005)(2616005)(186003)(6512007)(38100700002)(2906002)(6506007)(5660300002)(53546011)(7416002)(31696002)(83380400001)(966005)(6486002)(31686004)(8676002)(110136005)(54906003)(66946007)(66476007)(316002)(66556008)(36756003)(508600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWFoQ1lFb3ZzV0NDR2Z1Y1NwMkJMWTM0amtZQmpNTkJjYlp4Y0svL0Y3U1l0?=
+ =?utf-8?B?a3VXbDIzRnFOODVRd0QyQytNbk5zMnFTRzdobC9McEp1NjJKaTFVLzFnb0Vw?=
+ =?utf-8?B?NnQxS0hrVkFBOWlqYm1aekxrYTArbkpXTGh1OVd2Tmw5MDdjQW5LQXAxTCt0?=
+ =?utf-8?B?ODVGYlB4N3ZNenB2dXAyenhJazMxdEE3anZVNnhxdnNhVGRhbWtQaGxDRmdU?=
+ =?utf-8?B?OWhtWG9GNW5ReDA1TGFZc21MSnQySXZCM3pzamV0YnVmUFhDMzF0WkszNWdB?=
+ =?utf-8?B?TEVpRW1UZDdKQ290MVY0RVVuQ2xXYlA2T0w2UmtWYW1jUUlqV3hGUGlCbmZW?=
+ =?utf-8?B?cGozcnhGTTYySGFGY0d0SmVkdExUTFZWWXowc1ZFak1tQkU5VXJLbkhQU2Zs?=
+ =?utf-8?B?YmhBTnYra2cwT0lBTWE2RjFpV3l4OURwK0swK2NOckRGYmlFbjJxcTh5SEZu?=
+ =?utf-8?B?Y0NqZlBuV1d3WWVxdDVHQU1hVEg3ZStXdkRQeGU1b015OWowRTkzYjROMVdv?=
+ =?utf-8?B?NE5raG5FZWFacU5EZ3kyaTJNVVlqRGxqeXFDVFhuSHIwWkUzbThnTjhPa2tV?=
+ =?utf-8?B?Z3pzUXlYc0ZFek9YNHczUGVoNWx2cGZHeHdVZ2F5VjFTelZUTTdqcTJmK3Vl?=
+ =?utf-8?B?NjV2K2crZFYremlpdGFhd0pYYVhQRGptZEk2cWtkQklqWXIrMngwM0hYUDVr?=
+ =?utf-8?B?LzNUSTVPYlVyV2FGUXVjd09qOGZJT1VwN3ZSM0xPVnVPZjB4SkJwZU1ieW4v?=
+ =?utf-8?B?ek5Tenc4SVQ3OUw5MXJ6VFdVb1RoYi9hcXd0N255Q1ZaeW9qTXlMcHJFVEc1?=
+ =?utf-8?B?SzhBMVJjdDVUZFBEcyt3bU5GMm1iMVJ3Q3plWndVWVowaWtGZnNqNHY5ZWl0?=
+ =?utf-8?B?eDdhYkI0b1E0MzhFZzUvTlMwTXVtNWpKZzE3UlR2aGd0VHYvL2krdHdMeWY1?=
+ =?utf-8?B?MmIwemFpeU9nOEluWEJjTDVvZzhZK2tJRWtoeTRPVUsySi8xWnVoY0xsU3NQ?=
+ =?utf-8?B?N1JtZ1dhc1Q4Z2VPS002ZUFaWURoOXV4MFo1L3BWSnBHelhuRWdEMXBDOGhl?=
+ =?utf-8?B?TnIrMnViOFZSV3Y5S3dCN1UxZjQ4THMvaG9rTC8zMzNlUmRibTVDc2M5Ukph?=
+ =?utf-8?B?c1ppVldlWmFEcXM2dkVOVjdzU0hPZFdmaVZWcUxlN0IyQmd5UFczNGQzSW5a?=
+ =?utf-8?B?TkdpZFZyZlliUXdCclBjNW1jVXVWNVpTV0RNMzg5a25WUGpLK3dzblpwSFcy?=
+ =?utf-8?B?S2VyNkJBMWx3LzJnMXJsRWJCU1RsNzRRUExiZlJLYkdvWlgwN0lvTzJJVDZn?=
+ =?utf-8?B?Y1FhamtsaTZsM2hGVjN6cTVKc0k0Q0ViS09rWk53bXJMMDFFaTdGdmtpaHNK?=
+ =?utf-8?B?VWUvQzkrbUp2RmJ0UVF1OEovVjdOSVBaVksyT0ZrVmtRZ3ZpWHN6UW9USUJY?=
+ =?utf-8?B?YUgvQXRsbElTY3dmdFlOWHp2Uk1JaGFtUFYyeC9OTmFpbEV0RUhUYkNKQVZ2?=
+ =?utf-8?B?UVdqcnMvRWZ4L2V3VVVFc3JXdXRNZEJUUmkwZ2NnYjhjaStQVm9Ca3hiYlZN?=
+ =?utf-8?B?b0drUEp3NFhUME85MTFlWHhvczc3SDFrbFdMTytvUmdoa1R2Z3VJRFdGaEdU?=
+ =?utf-8?B?d0RkZHZkMnliNENQQjhjM1UxM1NzZmQ1K3BSNnBjK1FraG45WFVLZU8rWFlO?=
+ =?utf-8?B?OHV5c0dPNVZUblZucld5YkExOUdKLzhXQzcwSno3ZnpqMUt1bFgrbSs4eGdy?=
+ =?utf-8?B?bU9uYjR6OU9pOUROUGFyd0lDZHNyMkx3ZElzL3d3Q0JPOG82Z0JVWU5pRk14?=
+ =?utf-8?B?b3NtSHJsTHY5cUVKNGZ4Uk1zQzFOZ1NsVUFVdzZWVlUzQXlCOENZNk9vaUwy?=
+ =?utf-8?B?b2FpaGpaMkx0b2VWZkY0VkVHRUt0MTZqTi9aVHZsSGVnaGdjektwSEk4czgv?=
+ =?utf-8?Q?Fb9rfaWP2Q8VST+dVuzsmiLywN7wdSk8?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7dce802b-be66-4486-9c1e-08da0ca19386
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4289.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 07:48:53.5217
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2jmCPG+QZoRFSKLutNSqXf3YLMTvQNmgP7z2GFkPZ/pzckF5iyFu5IzzZ+8wrXViD5rrXgtrq2sL7J4hBKwodw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4675
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dan Williams <dan.j.williams@intel.com> writes:
+On 3/22/2022 3:59 AM, Andy Lutomirski wrote:
+> On Thu, Mar 10, 2022, at 3:15 AM, Bharata B Rao wrote:
+>> Hi,
+>>
+>> This patchset makes use of Upper Address Ignore (UAI) feature available
+>> on upcoming AMD processors to provide user address tagging support for x86/AMD.
+>>
+>> UAI allows software to store a tag in the upper 7 bits of a logical
+>> address [63:57]. When enabled, the processor will suppress the
+>> traditional canonical address checks on the addresses. More information
+>> about UAI can be found in section 5.10 of 'AMD64 Architecture
+>> Programmer's Manual, Vol 2: System Programming' which is available from
+>>
+>> https://bugzilla.kernel.org/attachment.cgi?id=300549
+> 
+> I hate to be a pain, but I'm really not convinced that this feature is suitable for Linux.  There are a few reasons:
+> 
+> Right now, the concept that the high bit of an address determines whether it's a user or a kernel address is fairly fundamental to the x86_64 (and x86_32!) code.  It may not be strictly necessary to preserve this, but violating it would require substantial thought.  With UAI enabled, kernel and user addresses are, functionally, interleaved.  This makes things like access_ok checks, and more generally anything that operates on a range of addresses, behave potentially quite differently.  A lot of auditing of existing code would be needed to make it safe.
 
-> On Tue, Mar 22, 2022 at 7:30 AM kajoljain <kjain@linux.ibm.com> wrote:
->>
->>
->>
->> On 3/22/22 03:09, Dan Williams wrote:
->> > On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
->> >>
->> >> The following build failure occures when CONFIG_PERF_EVENTS is not set
->> >> as generic pmu functions are not visible in that scenario.
->> >>
->> >> arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: =E2=80=98str=
-uct perf_event=E2=80=99 has no member named =E2=80=98attr=E2=80=99
->> >>          p->nvdimm_events_map[event->attr.config],
->> >>                                    ^~
->> >> In file included from ./include/linux/list.h:5,
->> >>                  from ./include/linux/kobject.h:19,
->> >>                  from ./include/linux/of.h:17,
->> >>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
->> >> arch/powerpc/platforms/pseries/papr_scm.c: In function =E2=80=98papr_=
-scm_pmu_event_init=E2=80=99:
->> >> arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: =E2=80=98str=
-uct perf_event=E2=80=99 has no member named =E2=80=98pmu=E2=80=99
->> >>   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
->> >>                                                  ^~
->> >> ./include/linux/container_of.h:18:26: note: in definition of macro =
-=E2=80=98container_of=E2=80=99
->> >>   void *__mptr =3D (void *)(ptr);     \
->> >>                           ^~~
->> >> arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion =
-of macro =E2=80=98to_nvdimm_pmu=E2=80=99
->> >>   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
->> >>                               ^~~~~~~~~~~~~
->> >> In file included from ./include/linux/bits.h:22,
->> >>                  from ./include/linux/bitops.h:6,
->> >>                  from ./include/linux/of.h:15,
->> >>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
->> >>
->> >> Fix the build issue by adding check for CONFIG_PERF_EVENTS config opt=
-ion
->> >> and disabling the papr_scm perf interface support incase this config
->> >> is not set
->> >>
->> >> Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") =
-(Commit id
->> >> based on linux-next tree)
->> >> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
->> >> ---
->> >>  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
->> >
->> > This is a bit messier than I would have liked mainly because it dumps
->> > a bunch of ifdefery into a C file contrary to coding style, "Wherever
->> > possible, don't use preprocessor conditionals (#if, #ifdef) in .c
->> > files". I would expect this all to move to an organization like:
->>
->> Hi Dan,
->>       Thanks for reviewing the patches. Inorder to avoid the multiple
->> ifdefs checks, we can also add stub function for papr_scm_pmu_register.
->> With that change we will just have one ifdef check for
->> CONFIG_PERF_EVENTS config in both papr_scm.c and nd.h file. Hence we can
->> avoid adding new files specific for papr_scm perf interface.
->>
->> Below is the code snippet for that change, let me know if looks fine to
->> you. I tested it
->> with set/unset PAPR_SCM config value and set/unset PERF_EVENTS config
->> value combinations.
->>
->> diff --git a/arch/powerpc/platforms/pseries/papr_scm.c
->> b/arch/powerpc/platforms/pseries/papr_scm.c
->> index 4dd513d7c029..38fabb44d3c3 100644
->> --- a/arch/powerpc/platforms/pseries/papr_scm.c
->> +++ b/arch/powerpc/platforms/pseries/papr_scm.c
->> @@ -69,8 +69,6 @@
->>  #define PAPR_SCM_PERF_STATS_EYECATCHER __stringify(SCMSTATS)
->>  #define PAPR_SCM_PERF_STATS_VERSION 0x1
->>
->> -#define to_nvdimm_pmu(_pmu)    container_of(_pmu, struct nvdimm_pmu, pm=
-u)
->> -
->>  /* Struct holding a single performance metric */
->>  struct papr_scm_perf_stat {
->>         u8 stat_id[8];
->> @@ -346,6 +344,9 @@ static ssize_t drc_pmem_query_stats(struct
->> papr_scm_priv *p,
->>         return 0;
->>  }
->>
->> +#ifdef CONFIG_PERF_EVENTS
->> +#define to_nvdimm_pmu(_pmu)    container_of(_pmu, struct nvdimm_pmu, pm=
-u)
->> +
->>  static int papr_scm_pmu_get_value(struct perf_event *event, struct
->> device *dev, u64 *count)
->>  {
->>         struct papr_scm_perf_stat *stat;
->> @@ -558,6 +559,10 @@ static void papr_scm_pmu_register(struct
->> papr_scm_priv *p)
->>         dev_info(&p->pdev->dev, "nvdimm pmu didn't register rc=3D%d\n", =
-rc);
->>  }
->>
->> +#else
->> +static inline void papr_scm_pmu_register(struct papr_scm_priv *p) { }
->
-> Since this isn't in a header file, it does not need to be marked
-> "inline" the compiler will figure it out.
->
->> +#endif
->
-> It might be time to create:
->
-> arch/powerpc/platforms/pseries/papr_scm.h
->
-> ...there is quite a bit of header material accrued in papr_scm.c and
-> once the ifdefs start landing in it then it becomes a nominal coding
-> style issue. That said, this is certainly more palatable than the
-> previous version. So if you don't want to create papr_scm.h yet for
-> this, at least make a note in the changelog that the first portion of
-> arch/powerpc/platforms/pseries/papr_scm.c is effectively papr_scm.h
-> content and may move there in the future, or something like that.
+Ok got that. However can you point to me a few instances in the current
+kernel code where such assumption of high bit being user/kernel address
+differentiator exists so that I get some idea of what it takes to
+audit all such cases?
 
-Great suggestion Dan and incidently we are already working on a patchset
-to reconcile this by moving a bunch of these defines from papr_scm.c to a
-header. That work is primarily done to towards remove the redundancy
-between papr_scm and generic ndtest module that we have today. We will
-post the patches in next few days.
+Also wouldn't the problem of high bit be solved by using only the
+6 out of 7 available bits in UAI and leaving the 63rd bit alone?
+The hardware will still ignore the top bit, but this should take
+care of the requirement of high bit being 0/1 for user/kernel in the
+x86_64 kernel. Wouldn't that work?
 
---=20
-Cheers
-~ Vaibhav
+> 
+> UAI looks like it wasn't intended to be context switched and, indeed, your series doesn't context switch it.  As far as I'm concerned, this is an error, and if we support UAI at all, we should context switch it.  Yes, this will be slow, perhaps painfully slow.  AMD knows how to fix it by, for example, reading the Intel SDM.  By *not* context switching UAI, we force it on for all user code, including unsuspecting user code, as well as for kernel code.  Do we actually want it on for kernel code?  With LAM, in contrast, the semantics for kernel pointers vs user pointers actually make sense and can be set per mm, which will make things like io_uring (in theory) do the right thing.
+
+I plan to enable/disable UAI based on the next task's settings by
+doing MSR write to EFER during context switch. I will have to measure
+how much additional cost an MSR write in context switch path brings in.
+However given that without a hardware feature like ARM64 MTE, this would
+primarily be used in non-production environments. Hence I wonder if MSR
+write cost could be tolerated?
+
+Regarding enabling UAI for kernel, I will have to check how clean and
+efficient it would be to disable/enable UAI on user/kernel entry/exit
+points.
+
+> 
+> UAI and LAM are incompatible from a userspace perspective.  Since LAM is pretty clearly superior [0], it seems like a better long term outcome would be for programs that want tag bits to target LAM and for AMD to support LAM if there is demand.  For that matter, do we actually expect any userspace to want to support UAI?  (Are there existing too-clever sandboxes that would be broken by enabling UAI?)
+> 
+> Given that UAI is not efficiently context switched, the implementation of uaccess is rather bizarre.  With the implementation in this series in particular, if the access_ok checks ever get out of sync with actual user access, a user access could be emitted with the high bits not masked despite the range check succeeding due to masking, which would, unless great care is taken, result in a "user" access hitting the kernel range.  That's no good.
+
+Okay, I guess if context switching and sticking to 6 bits as mentioned
+earlier is feasible, this concern too goes away unless I am missing something.
+
+Thanks for your feedback.
+
+Regards,
+Bharata.

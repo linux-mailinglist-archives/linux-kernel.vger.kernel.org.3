@@ -2,88 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773934E58AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9C04E58AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344022AbiCWStr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 14:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S1344035AbiCWSu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 14:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343554AbiCWStn (ORCPT
+        with ESMTP id S233341AbiCWSuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 14:49:43 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3B365A0;
-        Wed, 23 Mar 2022 11:48:11 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id j83so2563055oih.6;
-        Wed, 23 Mar 2022 11:48:11 -0700 (PDT)
+        Wed, 23 Mar 2022 14:50:55 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76990606C7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:49:25 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id q71-20020a17090a17cd00b001c653c3b564so1525496pja.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=vksLZSJ/1XSsrv5+Q44yzVYsU90jJzgSeUJqyoBHB3k=;
+        b=Mol/t6djA6xfgUtihD1s4EYkxSSzamZSlq8W+dA2jAHEMVwdF9WxvpkKB8lwCoJMDY
+         9wuW/UVP7U3AarQBF6lE4gimtHGT9ecsTfJo6IiQB5MU7bqvoiYg4e4VVxCGM3FL/TiY
+         rFZqb6pGu0w+U3LTN5nFohLXarkpEHjAFQ+U4UbrePmi7F0lVs3S/quSQWLI7bwTqYHP
+         VE8gTIP50G9ETEPEMG+DS358KFjYb956uzEsMtyWR/yejP+8EEE/oaSlpFi8szXttbyL
+         M3iHQCK6BErBslrSku1TrBtmpcRYQh4FdJUtSrAfmpJGOA8YKjEJSOr03FSJhaWko0vl
+         Ebfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=56J3GohQxdWaUNz7jQ2eEsIABoOTuL958gy1PE8F0ck=;
-        b=DUoLoVZ/rDn9oQ/vFbbJicRa1l11n/zsCo8nr44vHks6jw/1v8rx9foY+hMjR+4fsp
-         a0Haw2CAEChp97RUkywc58GHlcQfRYLTq2VtJh7rb46lDxQ5gDf7iwh3qtWkGa7K+kkr
-         1VcM7FEPUMxqfHh1Yr3f4fS+5Ma/1PmGj/h6yrRLNPlfMnk6zEUeYTT90OQIAaC4gMn4
-         n8w0iddJCBVW81pNaL93tZfgT9YVd9ihse6KsTwZws/Y0Px91GzDP5aPcgod5u1YP8gc
-         fiW1hH6zps+RZleLiWSEM9wPYNzNRgPKjaHv+7LaoJDI0AMPM5hF1i+nB0LI1V3nodlN
-         o/YA==
-X-Gm-Message-State: AOAM531qwJoHJIfmhIqXBPDOU6BAHljLjlIECwZStMzLOFVapPpJ1Vb+
-        sroIiEirhT8AydcFNxP14w==
-X-Google-Smtp-Source: ABdhPJyFLHubkitJIKDgjYHSdLjgwJ/cuVQanHqprHw4EB6GVqxlaV8Sxw0nJfSrmHho34tIgDeGWw==
-X-Received: by 2002:aca:ebd1:0:b0:2ec:91e4:f423 with SMTP id j200-20020acaebd1000000b002ec91e4f423mr804158oih.1.1648061291132;
-        Wed, 23 Mar 2022 11:48:11 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q9-20020a4ae649000000b00320d35fc91dsm348675oot.24.2022.03.23.11.48.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 11:48:10 -0700 (PDT)
-Received: (nullmailer pid 242466 invoked by uid 1000);
-        Wed, 23 Mar 2022 18:48:09 -0000
-Date:   Wed, 23 Mar 2022 13:48:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     patches@lists.linux.dev, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] dt-bindings:i kbuild: Make DT_SCHEMA_LINT a
- recursive variable
-Message-ID: <YjtraaYJFuNG30xW@robh.at.kernel.org>
-References: <20220315202032.538911-1-nathan@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315202032.538911-1-nathan@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=vksLZSJ/1XSsrv5+Q44yzVYsU90jJzgSeUJqyoBHB3k=;
+        b=OXy+Nw1+0RRWp6ZV9DlK1xQtnq8RIdoJFbACCQWJlUnR9YYi12DveJNjXh/uNcNgzM
+         JyopRbEZ3ZYVqXCdhX+0vdEs44Pe0Ox5bkfstFgNNf6UpfchY/1N3kaxu7Tuh5ZpGbol
+         jpPI+HETNDprvy2CQK7djPRa/DA3UtQFpeXFre0sbX7Fbn/l7Y+vKJAgfmWNMeOwAUQ7
+         +RGcqSwVp8kyvjPH3vBWqesgN05mDsKH3fpse9XM7HhQrWi/ETzIFBHuNrLKxT4K7qZf
+         y04PqPIxW3Bnv5tDqlc9OchTTLgmtEe004ofMtMxI29Hh9EY760ddTADhttRwA03Y88y
+         PT7Q==
+X-Gm-Message-State: AOAM530EzcNh/EStme/84GvLEFSa7iMKMBp06Cn21D2LF2lbDIC8SWUP
+        nuGJjTk005pOUf8jG6RRquLHDZgUgfaV
+X-Google-Smtp-Source: ABdhPJxpPj/2h7pKgUcUCSuYC1DoUpWJiS75/RmWuIi+WVtwRRkKM//2d/pTcA6go0BWa1pEsyBxi/J2CdmG
+X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
+ (user=mizhang job=sendgmr) by 2002:a17:90a:d3d1:b0:1bb:fdc5:182 with SMTP id
+ d17-20020a17090ad3d100b001bbfdc50182mr13515326pjw.206.1648061364908; Wed, 23
+ Mar 2022 11:49:24 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Wed, 23 Mar 2022 18:49:10 +0000
+Message-Id: <20220323184915.1335049-1-mizhang@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [PATCH 0/4] Verify dirty logging works properly with page stats
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 13:20:32 -0700, Nathan Chancellor wrote:
-> A recent change added a warning when yamllint is not installed, as it is
-> needed for 'make dt_binding_check'. However, it also changed
-> DT_SCHEMA_LINT to be a simple make variable, which is evaluated when a
-> Makefile is evaluated. This causes a warning when running 'make clean',
-> as Documentation/devicetree/bindings/Makefile has a "clean-files"
-> variable:
-> 
->   $ make -s clean
->   which: no yamllint in (...)
->   warning: python package 'yamllint' not installed, skipping
-> 
-> Make DT_SCHEMA_LINT a recursive variable so it is evaluated only when it
-> is used. The warning still triggers when 'make dt_binding_check' is run.
-> 
-> Fixes: b3e664a7f449 ("dt-bindings: kbuild: Print a warning if yamllint is not found")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  Documentation/devicetree/bindings/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+This patchset is to verify if dirty logging works properly by checking page
+stats from the per-VM interface. We discovered one performance bug in
+disallowed_hugepage_adjust() which prevents KVM from recovering large pages
+for the guest. The selftest logic added later could help validate the
+problem.
 
-Applied, thanks!
+The patchset borrowes two patches come from Ben's series: "[PATCH 00/13]
+KVM: x86: Add a cap to disable NX hugepages on a VM" [1], which completes the
+selftest library functions to use the stats interface.
+
+[1] https://lore.kernel.org/all/20220310164532.1821490-2-bgardon@google.com/T/
+
+Ben Gardon (2):
+  selftests: KVM: Dump VM stats in binary stats test
+  selftests: KVM: Test reading a single stat
+
+Mingwei Zhang (2):
+  KVM: x86/mmu: explicitly check nx_hugepage in
+    disallowed_hugepage_adjust()
+  selftests: KVM: use dirty logging to check if page stats work
+    correctly
+
+ arch/x86/kvm/mmu/mmu.c                        |  14 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  52 +++++
+ .../selftests/kvm/include/kvm_util_base.h     |   2 +
+ .../selftests/kvm/kvm_binary_stats_test.c     |   6 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 196 ++++++++++++++++++
+ 5 files changed, 268 insertions(+), 2 deletions(-)
+
+-- 
+2.35.1.894.gb6a874cedc-goog
+

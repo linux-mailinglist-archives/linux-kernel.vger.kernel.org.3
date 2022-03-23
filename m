@@ -2,137 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00B34E5428
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF044E542C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244726AbiCWOXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S244735AbiCWOZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiCWOXI (ORCPT
+        with ESMTP id S237165AbiCWOZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:23:08 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1637520B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:21:34 -0700 (PDT)
-X-UUID: 8b0a3f7a949c4fbb8b8c1b6fc03af3f7-20220323
-X-UUID: 8b0a3f7a949c4fbb8b8c1b6fc03af3f7-20220323
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <mark-pk.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1529662981; Wed, 23 Mar 2022 22:21:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 23 Mar 2022 22:21:29 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 23 Mar 2022 22:21:29 +0800
-From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To:     <rostedt@goodmis.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <lkp@intel.com>,
-        <lkp@lists.01.org>, <mark-pk.tsai@mediatek.com>,
-        <matthias.bgg@gmail.com>, <mingo@redhat.com>,
-        <oliver.sang@intel.com>, <yj.chiang@mediatek.com>
-Subject: Re: [PATCH] tracing: Avoid adding duplicated tracer options when update_tracer_options is running in parallel
-Date:   Wed, 23 Mar 2022 22:21:29 +0800
-Message-ID: <20220323142129.4175-1-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220323093021.4f541b40@gandalf.local.home>
-References: <20220323093021.4f541b40@gandalf.local.home>
+        Wed, 23 Mar 2022 10:25:34 -0400
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B21DEDF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:24:04 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 5881A944E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:24:01 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id X1u5nnhAg9AGSX1u5niYqR; Wed, 23 Mar 2022 09:24:01 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=id4KakR43VwvSclTscrtuuJMK1IX+RuWRI/B9xFRJpk=; b=SVzwFj19iwEqII6is3hOB116dH
+        +gBfETPclRjBnoEvnRrOoeW+sDTr+HJAtSYVUX8gptsIpITfOUg1cFuME2dcm3P5UMk415bAELP/q
+        feklv8fsUk4sIh/rzmueB+y6EwGWnCT8cYq9MBPTPnF+K6XqVjwm20bzbyvaGgIARVK331DUeq7vB
+        iKjDb2KIwYx0QExPQA1aDN8T9L8/ZY9tOlyI2WV8vMP8YqAcjUROIvSlWeFIoFUome6eiJCc1+sNL
+        HC35XPU2SmqRcuAwhX0a9ZQNFnMOgeqdHQUFBTz4nCq7XF7OxOzzMW6Uk8Q4rdd1dU0F/DaKDZhG1
+        0UL+lFyA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54412)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nX1u3-002CJg-TF; Wed, 23 Mar 2022 14:23:59 +0000
+Message-ID: <ebafdf77-5d96-556b-0197-a172b656bb01@roeck-us.net>
+Date:   Wed, 23 Mar 2022 07:23:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net> <YjoUU+8zrzB02pW7@sirena.org.uk>
+ <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
+ <YjsOHmvDgAxwLFMg@sirena.org.uk>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+In-Reply-To: <YjsOHmvDgAxwLFMg@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nX1u3-002CJg-TF
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54412
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 27
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, 23 Mar 2022 11:24:42 +0800
-> Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
+On 3/23/22 05:10, Mark Brown wrote:
+> On Tue, Mar 22, 2022 at 02:54:20PM -0700, Guenter Roeck wrote:
+>> On 3/22/22 11:24, Mark Brown wrote:
 > 
-> > When update_tracer_options is running in parallel,
-> > tr->tops might be updated before the trace_types list traversal.
-> > Let update_tracer_options traverse the trace_types list safely in
-> > kernel init time and avoid the tr->tops update before it finish.
+>>> Just as a datapoint for debugging at least qemu/arm is getting coverage
+>>> in CI systems (KernelCI is covering a bunch of different emulated
+>>> machines and LKFT has at least one configuration as well, clang's tests
+>>> have some wider architecture coverage as well I think) and they don't
+>>> seem to be seeing any problems - there's some other variable in there.
 > 
-> ??? Have you seen a bug here? I'm totally confused by this.
-
-Sorry to make you confused.
-
-After the below patch, update_tracer_options might be executed later than registering
-hwlat_tracer, which is in late_initcall.
-
-https://lore.kernel.org/lkml/20220316151639.9216-1-mark-pk.tsai@mediatek.com/
-
-The init_hwlat_tracer initcall will put hwlat_tracer to tr->tops.
-Then when the later arrived __update_tracer_options is trying to
-update all the tracer options, create_trace_option_files show the
-below warning because hwlat_tracer is already in the list.
-
-[ 6.680068 ][ T7 ] WARNING: CPU: 0 PID: 7 at kernel/trace/trace.c:8899 create_trace_option_files (kernel/trace/trace.c:8899 (discriminator 1))
-
-full log: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
-
-
+>> I use buildroot 2021.02.3. I have not changed the buildroot code, and it
+>> still seems to be the same in 2022.02. I don't see the problem with all
+>> boot tests, only with the architectures mentioned above, and not with all
+>> qemu machines on the affected platforms. For arm, mostly older machines
+>> are affected (versatile, realview, pxa configurations, collie, integratorcp,
+>> sx1, mps2-an385, vexpress-a9, cubieboard). I didn't check, but maybe
+>> kernelci doesn't test those machines ?
 > 
-> > 
-> > Link: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-> > ---
-> >  kernel/trace/trace.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> > index adb37e437a05..2974ae056068 100644
-> > --- a/kernel/trace/trace.c
-> > +++ b/kernel/trace/trace.c
-> > @@ -6317,12 +6317,18 @@ static void tracing_set_nop(struct trace_array *tr)
-> >  	tr->current_trace = &nop_trace;
-> >  }
-> >  
-> > +static bool tracer_options_updated;
-> > +
-> >  static void add_tracer_options(struct trace_array *tr, struct tracer *t)
-> >  {
-> >  	/* Only enable if the directory has been created already. */
-> >  	if (!tr->dir)
-> >  		return;
-> >  
-> > +	/* Only create trace option files after update_tracer_options finish */
-> > +	if (!tracer_options_updated)
-> > +		return;
-> > +
-> >  	create_trace_option_files(tr, t);
-> >  }
-> >  
-> > @@ -9133,6 +9139,7 @@ static void update_tracer_options(struct trace_array *tr)
-> >  {
-> >  	mutex_lock(&trace_types_lock);
-> 
-> How is update_trace_options run in parallel?
-> 
-> There's a mutex that protects it. 
-> 
+> Kind of academic given that Jason seems to have a handle on what the
+> issues are but for KernelCI it's variations on mach-virt, plus
+> versatile-pb.  There's a physical cubietruck as well, and BeagleBone
+> Blacks among others.  My best guess would be systems with low RAM are
+> somehow more prone to issues.
 
-Oh sorry.
-What I trying to tell is that update_trace_options is run in parallel with
-the initcall thread after:
+I don't think it is entirely academic. versatile-pb fails for me;
+if it doesn't fail at KernelCI, I'd like to understand why - not to
+fix it in my test environment, but to make sure that I _don't_ fix it.
+After all, it _is_ a regression. Even if that regression is triggered
+by bad (for a given definition of "bad") userspace code, it is still
+a regression.
 
-https://lore.kernel.org/lkml/20220316151639.9216-1-mark-pk.tsai@mediatek.com/
-
-
-> -- Steve
-> 
-> 
-> >  	__update_tracer_options(tr);
-> > +	tracer_options_updated = true;
-> >  	mutex_unlock(&trace_types_lock);
-> >  }
-> >  
+Thanks,
+Guenter

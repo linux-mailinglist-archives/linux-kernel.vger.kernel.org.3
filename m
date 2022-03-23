@@ -2,110 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E654E4AB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 03:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 823E24E4AC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 03:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240947AbiCWCFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 22:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58932 "EHLO
+        id S241023AbiCWCNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 22:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbiCWCFo (ORCPT
+        with ESMTP id S231704AbiCWCNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 22:05:44 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED40ADF55
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 19:04:11 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q5so43957ljb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 19:04:11 -0700 (PDT)
+        Tue, 22 Mar 2022 22:13:51 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79F85AA66;
+        Tue, 22 Mar 2022 19:12:22 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id u22so352737pfg.6;
+        Tue, 22 Mar 2022 19:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sj6VvC5iMmzyukYbPBIOXyTPJrBZLqUvWOBfUQn8two=;
-        b=UOXiI1q346c6OcIvufJQ0+4pmDjiHq9Jpv4CjRI3buFoKmrtF5s5hrtsI9plQZhtca
-         utP01u0qD7ibZpwsgmM1HnxjnR+hmocZRN32SaDsELqJqqLM2VfhmEjqmUNxVra8NkwO
-         F3bE988q7tf976xM1smV6Ehz0ahG9oBY/x2RE=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UncvP6XNcDMsck6iIpDxBH4/BrcQCa39MJmzvdmtf24=;
+        b=S8FzccePabKNM+jUXRPDPAAmqqvJFMrOTpIx/44A+okbVkDtd7JV1SINXMokVU2rfN
+         X+TjvDdxhc51e8PLirZku4PlJlI6R1QKmhTj3TvSR4NHt45/QFFFBoV1zC6aHe9prrxD
+         PqORVWffMMzZ3RVavHxT3ga/5ayx48jUX40pPVYO9VwhwhxUQ8kZrPM0+txRbro0evBI
+         xuDkBS/zc/E+p9WGpOLot/kJc70bfDuxpAZKvaUtp40H6Zlirvg7sopvyjlZNGyzyWU7
+         oflbUM2yqtMX6q1ZxKGDRQuERqJuOaKOZsJYEVRFYOrk/6S178mvDNUWdBpHDwNOo+qY
+         0qvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sj6VvC5iMmzyukYbPBIOXyTPJrBZLqUvWOBfUQn8two=;
-        b=rgvMDcQDMc3DoB3cE45oBooK5cv1MqtPmUow7Ho2DKdDmitmbUMJtxURCnqpmrrLp3
-         rdpacq902eapiTbHji5j4K+/XZbXF8trYFTf63h2ECXdbfOkTmMiYYFxF/R0Ri3ltAve
-         jzvvZcGvQMFtryGK9DwVLp04WZR09vptuW3kHyk/oERqmFyZImV5Y5k8PQOXRZMdk+uD
-         qEPQ0f6TLuYTZAYX4d0gsgrk1EFvKowPrqb2e+laEqB4eCuJvNxKt5smzqm0qJ1CHp6r
-         Z3LJJ1qIzQrxKiJpJILSclKqDp/Nd6IG2O+ifcFmpgn2PHm8U9/FDZLQSI4mMydce5yE
-         tKYQ==
-X-Gm-Message-State: AOAM531Bf+PA2xi2y04iQJXcgMbVnhiHia5vadmg812Gt1zWa7EfRldf
-        Il/pbd10EOxvzrr73A8pWtV4MrdcV4uJJJ/wrbI=
-X-Google-Smtp-Source: ABdhPJyV8olwRJYgqXwiF+lbH9WRvfTXNZH9CqeB/C/etIOuYdE7GUxSt/UwywtZbhwkSTU5E/YeNw==
-X-Received: by 2002:a05:651c:1543:b0:249:a2bd:4a74 with SMTP id y3-20020a05651c154300b00249a2bd4a74mr986206ljp.375.1648001050059;
-        Tue, 22 Mar 2022 19:04:10 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id h20-20020a056512221400b0044a347019c2sm659257lfu.72.2022.03.22.19.04.08
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UncvP6XNcDMsck6iIpDxBH4/BrcQCa39MJmzvdmtf24=;
+        b=LtdGwBWu2fKsy0JwgFPzSee09Mp9eOKPulklGshroit1OEIdJCO5gj35j7OeoOKKwE
+         HSoFSxgT2ehfNq1KHEpkiO7b3qa8QquhszLotqhiMMZbEnO2og3Ha7AeZKdWB+aUwgy1
+         8iNdpWIvZ3/3UVtwdonf/ZuZLS5FMD2jYnMq7hdwWZs2BEMKeK1c9MxtLQ7LcHSaqNo/
+         BgrkyzbPfU+5MeU/F7QEYWTp6iw53WaSdGKL0649qQQmgNGsrNy/5QiHKlo/lKkenCUe
+         16cIORljORvKrfbaemjRbBfxL1Su25WuFusXvC4kRPEBoKhoafnUk5s08KkACoH5Axx4
+         qGOQ==
+X-Gm-Message-State: AOAM533J3Y3ODfGOrXKSzlZqm1Kpw/vNzVvgEeKHF+91JLfwSdrX1d3E
+        Vby6au+HJo0P0oZPi8EJZ9I=
+X-Google-Smtp-Source: ABdhPJwcuAX9ufS9jBuMCOPE0vwKOOY3dWNaEapYdpv0C4xUbMIvOBS5vD67fHzSObiHNokwJXkl+Q==
+X-Received: by 2002:a63:ce48:0:b0:373:ac94:f489 with SMTP id r8-20020a63ce48000000b00373ac94f489mr24454999pgi.622.1648001542398;
+        Tue, 22 Mar 2022 19:12:22 -0700 (PDT)
+Received: from [10.11.37.162] ([103.84.139.52])
+        by smtp.gmail.com with ESMTPSA id s141-20020a632c93000000b0038134d09219sm18824633pgs.55.2022.03.22.19.12.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 19:04:08 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id q14so40488ljc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 19:04:08 -0700 (PDT)
-X-Received: by 2002:a2e:9794:0:b0:249:8488:7dbd with SMTP id
- y20-20020a2e9794000000b0024984887dbdmr9582628lji.176.1648001048529; Tue, 22
- Mar 2022 19:04:08 -0700 (PDT)
+        Tue, 22 Mar 2022 19:12:22 -0700 (PDT)
+Message-ID: <2f7ed3fa-9fd0-4109-8cdd-815ff3cfb35e@gmail.com>
+Date:   Wed, 23 Mar 2022 10:12:15 +0800
 MIME-Version: 1.0
-References: <YjjihIZuvZpUjaSs@google.com> <CAHk-=wgsmvoJFKFWxQ2orEVUOWH1agk9iUNZ=-DFh5OXZL=Ldw@mail.gmail.com>
- <51cded74-3135-eed8-06d3-0b2165e3b379@redhat.com> <CAHk-=wi=Xsekgj7zfw_vpOM673CG24vznmz-yx9G05rWSAAYXg@mail.gmail.com>
- <CAEe=Sxmcn5+YUXBQhxDpzZVJu_T6S6+EURDqrP9uUS-PHGyuSg@mail.gmail.com>
-In-Reply-To: <CAEe=Sxmcn5+YUXBQhxDpzZVJu_T6S6+EURDqrP9uUS-PHGyuSg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 22 Mar 2022 19:03:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whGKUyJpi0dTQJjyJxdmG+WCeKkJJyycpOaUW0De17h_Q@mail.gmail.com>
-Message-ID: <CAHk-=whGKUyJpi0dTQJjyJxdmG+WCeKkJJyycpOaUW0De17h_Q@mail.gmail.com>
-Subject: Re: [GIT PULL] f2fs for 5.18
-To:     Tim Murray <timmurray@google.com>
-Cc:     Waiman Long <longman@redhat.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] can: mcba_usb: fix possible double dev_kfree_skb in
+ mcba_usb_start_xmit
+Content-Language: en-US
+To:     Yasushi SHOJI <yashi@spacecubics.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        stefan.maetje@esd.eu, Pavel Skripkin <paskripkin@gmail.com>,
+        remigiusz.kollataj@mobica.com,
+        linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220311080208.45047-1-hbh25y@gmail.com>
+ <CAGLTpnK=4Gd8S488osvrbttkMvtsPy8eCGspV4-=z2N3UGZ5rw@mail.gmail.com>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <CAGLTpnK=4Gd8S488osvrbttkMvtsPy8eCGspV4-=z2N3UGZ5rw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 5:34 PM Tim Murray <timmurray@google.com> wrote:
->
-> AFAICT, what's happening is that rwsem_down_read_slowpath
-> modifies sem->count to indicate that there's a pending reader while
-> f2fs_ckpt holds the write lock, and when f2fs_ckpt releases the write
-> lock, it wakes pending readers and hands the lock over to readers.
-> This means that any subsequent attempt to grab the write lock from
-> f2fs_ckpt will stall until the newly-awakened reader releases the read
-> lock, which depends on the readers' arbitrarily long scheduling
-> delays.
+Hi yashi,
 
-Ugh.
+You are right. There are a series of the same problems about 
+can_put_echo_skb.
 
-So I'm looking at some of this, and you have things like this:
+This issue was discovered while I was discussing a incorrect patch with 
+Marc. You can check this in
 
-        f2fs_down_read(&F2FS_I(inode)->i_sem);
-        cp_reason = need_do_checkpoint(inode);
-        f2fs_up_read(&F2FS_I(inode)->i_sem);
+https://lore.kernel.org/all/20220225060019.21220-1-hbh25y@gmail.com/
 
-which really doesn't seem to want a sleeping lock at all.
+So i submitted a new patch. This was the first place where the problem 
+occurs. You can check this in
 
-In fact, it's not clear that it has any business serializing with IO
-at all. It seems to just check very basic inode state. Very strange.
-It's the kind of thing that the VFS layer tends to use te i_lock
-*spinlock* for.
+[1] https://lore.kernel.org/all/20220228083639.38183-1-hbh25y@gmail.com/
 
-And perhaps equally oddly, then when you do f2fs_issue_checkpoint(),
-_that_ code uses fancy lockless lists.
+After a week, I realized it could be a series of problems. So
+i submitted the following patches
 
-I'm probably mis-reading it.
+[2] 
+https://lore.kernel.org/all/0d2f9980-fb1d-4068-7868-effc77892a97@gmail.com/
+[3] 
+https://lore.kernel.org/all/de416319-c027-837d-4b8c-b8c3c37ed88e@gmail.com/
+[4] https://lore.kernel.org/all/20220317081305.739554-1-mkl@pengutronix.de/
 
-             Linus
+I think this is all affected. None of the four have been merged 
+upstream. Do i need to remake all these four patches?
+
+Thanks,
+Hangyu
+
+
+
+
+
+
+On 2022/3/23 07:08, Yasushi SHOJI wrote:
+> Hi Hangyu,
+> 
+> On Fri, Mar 11, 2022 at 5:02 PM Hangyu Hua <hbh25y@gmail.com> wrote:
+>>
+>> There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
+>> can_put_echo_skb deletes original skb and can_free_echo_skb deletes the cloned
+>> skb.
+> 
+> So, it's more like, "we don't need to call dev_kfree_skb() after
+> can_put_echo_skb()
+> because can_put_echo_skb() consumes the given skb.".  It seems it doesn't depend
+> on the condition of usb_submit_urb().  Plus, we don't see the "cloned
+> skb" at the
+> call site.
+> 
+> Would you mind adding a comment on can_put_echo_skb(), in a separate patch,
+> saying the fact that it consumes the skb?
+> 
+> ems_usb.c, gs_usb.c and possibly some others seem to call
+> dev_kfree_skb() as well.
+> Are they affected?
+> 
+> Best,

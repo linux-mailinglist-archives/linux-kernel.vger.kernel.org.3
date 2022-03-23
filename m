@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079AA4E56FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC414E5702
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245593AbiCWQ6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
+        id S245596AbiCWRBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiCWQ6W (ORCPT
+        with ESMTP id S239418AbiCWRBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:58:22 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA496E4E1;
-        Wed, 23 Mar 2022 09:56:52 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-de3f2a19c8so2306807fac.1;
-        Wed, 23 Mar 2022 09:56:52 -0700 (PDT)
+        Wed, 23 Mar 2022 13:01:40 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BB175E5E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:00:08 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-dacc470e03so2296147fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TV0oSDRHiJymPDNvAXTxfZzTo2VZe2I/axS41WuuY70=;
+        b=my1cWR6Rh+0RcmMEq5FG5TrEo8BEnU6rdhNBXANAIK6yfOazwVLY6RVDsfMz/jEDR7
+         dTE8pfntIyxgjNmfEyNQsw+BYPWGgvVSycJALr7Wn7ANAefOYSOEXK/Te+RfwLCRJSZY
+         WQWNODMAPr2VcdpOsW6IlRLG3BNf2oCb1XvUbj2J0HelpY1uA0IaXigrVjBraUtzGm7s
+         8TCb8JfCyChDlrCRsL+pAjfGYzCHZ8rHBrTIuaQ3h2holgRggK5dJeSQ8KQni9PZ6WAh
+         hLMmL6ZNDVor0PzvNLvBtFeUXpCaB7UnN9TI+SkpvnYz2uJ8v5ciGRxdCvTdQYyGkQ/1
+         5org==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=v7L9ap4GpNRjjElNdT0yh/Sp/wCcecw0FkTSkrd8bsw=;
-        b=WTisdeBLjqudkEn4FdW2MeIxt5Q0E9s4zeWtDRZGNmZWjdwfwGiKx5qlg/MerFIYUR
-         4yzSSmbPQn7Wdmt61v+vi2Yjx9+UmJtfEmWlBGdV5k1FAmRyxP+ByViN9duAQF3cuFew
-         iExk/3TVOuGieOlZgbN/ahS4YuHT5a/+x7SHvzu0GA2vQDjfImNUdcdwSWFWfOWC/xfK
-         sS74R0CPoE1dTYI6XYGRbbq7mr0i6qUNWue4HajuR6y7tjbyZv7NOsR6KT100ZgqUmsh
-         XTaifLcJEiVOf7KHiZyvFjx+iqVZIYous0CaR2fouzVIMuivXXzlFocJ4fOpvr4Cs/fr
-         rwSw==
-X-Gm-Message-State: AOAM532mcq/vucoxMvWTKsko5cfDhFud+ZRoenZEbjUmr55HgK7m5Y9S
-        ZcqqYtVTAa1GGTRcqksiOQ==
-X-Google-Smtp-Source: ABdhPJx0rcy71J5iBnTkDYdwY7ow5S9sY6VGoRn0bx+CmDpmUoBHODo18+Ib2exeipbENAG7oZNWsw==
-X-Received: by 2002:a05:6871:203:b0:dd:bd36:fd8b with SMTP id t3-20020a056871020300b000ddbd36fd8bmr4664191oad.122.1648054611728;
-        Wed, 23 Mar 2022 09:56:51 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000ccfbea4f23sm219920oae.33.2022.03.23.09.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 09:56:50 -0700 (PDT)
-Received: (nullmailer pid 74591 invoked by uid 1000);
-        Wed, 23 Mar 2022 16:56:49 -0000
-Date:   Wed, 23 Mar 2022 11:56:49 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Jorge Ramirez-Ortiz <jorge@foundries.io>,
-        Tom Rini <trini@konsulko.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sean Anderson <seanga2@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Ricardo Salveti <ricardo@foundries.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        u-boot@lists.denx.de
-Subject: Re: [PATCH V3] dt-bindings: nvmem: add U-Boot environment variables
- binding
-Message-ID: <YjtRUVL2fRZpLFl5@robh.at.kernel.org>
-References: <20220228131250.16943-1-zajec5@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TV0oSDRHiJymPDNvAXTxfZzTo2VZe2I/axS41WuuY70=;
+        b=7W9Rl79ujYYbt5SwjL7IFnYHk9P8q/heDtHbzjUdMvoIwzSPDZh713rsZhTFUgbkut
+         ldzEQfNdNNdqHC43dOeM3RRr+UtGqW0wGSDEFFP1HnzQ+ejfWM9ViEIFfIj4B0Hc+WFG
+         DAqEyMTCKPf7kEzvqA1di+LosepSEEc9njzkHrgHBpMFWrqHESgwgZhjBee1W8nd6ZBE
+         6PdlmIeFS8FVtadVgWMBU2VgadmExiGTw7fYKDdZH4SgtmlcGFrVaY1sRtupe1Iu3qcr
+         FByqikkym0L1kE4RvElTn5sAxWqBiOCQI0V68vPpOdNDFaHn0+lybvWT4KogfGG54r+/
+         /tog==
+X-Gm-Message-State: AOAM532ccgaVCXlgd4Uj+y/fzJcY89/88wGNiWqefqgxN5Vj6yp2G8Hp
+        wwoF+hPjPm1izpx9B0aI4EpChqz94PsR57QzfEiqiA==
+X-Google-Smtp-Source: ABdhPJx6iz/VgCAnesCKx9zB4V3pMwqq+DIGns58a7UjyjhWqSQ+fo15VfZN9YVoFiwEcDe9r+ZQpZ3NO5bQ3inmHiA=
+X-Received: by 2002:a05:6870:15c9:b0:dd:e6db:cfce with SMTP id
+ k9-20020a05687015c900b000dde6dbcfcemr3824760oad.269.1648054806252; Wed, 23
+ Mar 2022 10:00:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220228131250.16943-1-zajec5@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220322110712.222449-1-pbonzini@redhat.com> <20220322110712.222449-3-pbonzini@redhat.com>
+In-Reply-To: <20220322110712.222449-3-pbonzini@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 23 Mar 2022 09:59:55 -0700
+Message-ID: <CALMp9eS0_BXC2J26umCOqQS6mbZn-QKQqYzFcON5rrEBbebbvw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] Documentation: KVM: add virtual CPU errata documentation
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        mlevitsk@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,38 +67,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 14:12:50 +0100, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> U-Boot uses environment variables for storing device setup data. It
-> usually needs to be accessed by a bootloader, kernel and often
-> user-space.
-> 
-> This binding allows describing environment data located in a raw flash
-> partition. It's treated as NVMEM device and can be reused later for
-> other storage devices.
-> 
-> Using DT should be cleaner than hardcoding & duplicating such info in
-> multiple places. Bootloader & kernel can share DTS and user-space can
-> try reading it too or just have correct data exposed by a kernel.
-> 
-> A custom "compatible" string allows system to automatically load
-> relevant NVMEM driver but phandle can be also used for reading raw
-> location.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V2: Update descriptions to don't make this binding MTD (flash partition)
->     specific. Mention multiple possible storage ways.
-> V3: Drop
->     allOf:
->       - $ref: nvmem.yaml#
->     as we don't use anything rom the nvmem.yaml. Thanks Rob.
-> ---
->  .../devicetree/bindings/nvmem/u-boot,env.yaml | 62 +++++++++++++++++++
->  MAINTAINERS                                   |  5 ++
->  2 files changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> 
+On Tue, Mar 22, 2022 at 4:07 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> Add a file to document all the different ways in which the virtual CPU
+> emulation is imperfect.  Include an example to show how to document
+> such errata.
+This is fantastic. Thank you. Along these lines, I wonder if we should
+come up with a mechanism a la IA32_ARCH_CAPABILITIES (or AMD's OSVW
+MSRs) for declaring fixed errata.
 
-Applied, thanks!
+For example, today, KVM ignores the guest-only and host-only bits in
+PerfEvtSel MSRs, but I can't imagine we're going to do that forever.
+
+Reviewed-by: Jim Mattson <jmattson@google.com>

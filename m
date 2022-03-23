@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2C34E594E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293514E594F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344355AbiCWTog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S1344358AbiCWTpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240384AbiCWToe (ORCPT
+        with ESMTP id S240384AbiCWTpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:44:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294FA6582
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:43:03 -0700 (PDT)
+        Wed, 23 Mar 2022 15:45:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0AE8AE61
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:43:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C29D2615BB
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:43:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EED2C340E8;
-        Wed, 23 Mar 2022 19:43:01 +0000 (UTC)
-Date:   Wed, 23 Mar 2022 15:43:00 -0400
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFA89B81FDB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:43:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D83C3C340E8;
+        Wed, 23 Mar 2022 19:43:39 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 15:43:38 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: Re: [GIT PULL] tracing/rtla: Updates to the RTLA tool
-Message-ID: <20220323154300.0be32927@gandalf.local.home>
-In-Reply-To: <CAHk-=whxmA86E=csNv76DuxX_wYsg8mW15oUs3XTabu2Yc80yw@mail.gmail.com>
-References: <20220321103035.564a1df5@gandalf.local.home>
-        <CAHk-=whxmA86E=csNv76DuxX_wYsg8mW15oUs3XTabu2Yc80yw@mail.gmail.com>
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [GIT PULL] tracing: Updates for 5.18
+Message-ID: <20220323154338.200882ac@gandalf.local.home>
+In-Reply-To: <CAHk-=wiNzTuFN0gCitdkPna0h3MM-ScZhgS_O0NKA5=mcuZCVQ@mail.gmail.com>
+References: <20220321105621.3d4a9bc6@gandalf.local.home>
+        <CAHk-=wj3_p98e_oohGZzfkDPaJFLKEW8C6mS9dhuKgLN8PNitg@mail.gmail.com>
+        <CAHk-=wiNzTuFN0gCitdkPna0h3MM-ScZhgS_O0NKA5=mcuZCVQ@mail.gmail.com>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -47,22 +50,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 11:15:30 -0700
+On Wed, 23 Mar 2022 12:20:33 -0700
 Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> That said, mentioning the perf tools, I wish the tracing tools would
-> do a bit more package checking and helpful error messages too, rather
-> than just fail with
+> On Wed, Mar 23, 2022 at 11:56 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > Anyway, when I actually compare my resolution to what is in
+> > linux-next, it turns out they are fairly different.  
 > 
->     fatal error: tracefs.h: No such file or directory
-> 
-> when (presumably) libtracefs and friends are needed.
+> Actually, my resolution is fairly similar - but not identical - to
+> linux-next, but quite different from the one I find in your branch. I
+> just got confused by having looked at both.
 
-Yes exactly.
+I'll take a look at yours. I gave that branch to Stephen to help him resolve
+it, but didn't look at what he had done to see if it was different.
 
-Daniel, care to update the Makefile to check for libtracefs and friends and
-give a more informative message when it fails?
-
-You can look at the trace-cmd Makefile that does so.
+I didn't merge against your branch because when I did the pull request you
+didn't have the nfsd tree in yet.
 
 -- Steve

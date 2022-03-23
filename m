@@ -2,111 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E184E4A3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 01:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A9A4E4A41
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 01:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241004AbiCWA5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 20:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S241012AbiCWA7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 20:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiCWA5C (ORCPT
+        with ESMTP id S231292AbiCWA7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 20:57:02 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9570C220F2;
-        Tue, 22 Mar 2022 17:55:32 -0700 (PDT)
-Received: from kwepemi500018.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KNVJV4R3Jz1GCvk;
-        Wed, 23 Mar 2022 08:55:22 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500018.china.huawei.com (7.221.188.213) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Mar 2022 08:55:30 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Mar 2022 08:55:29 +0800
-Subject: Re: [PATCH 4.19 00/57] 4.19.236-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220321133221.984120927@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <bac11cab-4161-eaa5-5288-14df89d1ccb5@huawei.com>
-Date:   Wed, 23 Mar 2022 08:55:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 22 Mar 2022 20:59:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B88613D06;
+        Tue, 22 Mar 2022 17:58:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KNVMk74RQz4xRB;
+        Wed, 23 Mar 2022 11:58:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647997092;
+        bh=pidBt9WRiWeMGPxp90p95PzjZtrosrfkBzbkrdrUFv8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r4L3prxtjrbF8YsXUkh4Li1bcHinDn8Ozm/KtITQo15s1q8EPVzBweqPDR6aJFkRc
+         DuHDy52CsTDS0kcATJE60gAA0RZjjyPxFJZAKHDPmZrbQNPfUVdZp7C7AWjHHNnpCG
+         lXMYMSqT7JeE2rTUCwUKvjmKjJRaCUtIO0qrSg+iYaP03wZ8jv/p+afTvLkvzc+IRL
+         DKB5/j5LzBI8TRg+26McTDTo0rZqDd6MhLTCHKe178Lkhm/wW7siB7YzeYCDpJDhag
+         i/e1ACzuBWun6XUDXtQjPCQcXpThmXO1FWUt6jFnPMrMLHVi9Bh1ZeUa/d1cyZVqmR
+         rNSwIpOdKS4IA==
+Date:   Wed, 23 Mar 2022 11:58:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the mfd tree with the arm-soc tree
+Message-ID: <20220323115810.2b1ce018@canb.auug.org.au>
+In-Reply-To: <20220309132952.525b3aa4@canb.auug.org.au>
+References: <20220309132952.525b3aa4@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20220321133221.984120927@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/I1yL3Wodt.44j4IGhFasOqZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/I1yL3Wodt.44j4IGhFasOqZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2022/3/21 21:51, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.236 release.
-> There are 57 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.236-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Wed, 9 Mar 2022 13:29:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the mfd tree got a conflict in:
+>=20
+>   Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+>=20
+> between commit:
+>=20
+>   e465ea5cc05d ("dt-bindings: soc: samsung: usi: refer to dtschema for ch=
+ildren")
+>=20
+> from the arm-soc tree and commit:
+>=20
+>   0ff4827ed66f ("spi: dt-bindings: samsung: Convert to dtschema")
+>=20
+> from the mfd tree.
+>=20
+> I fixed it up (I just used the former version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-Tested on arm64 and x86 for 4.19.236-rc1,
+This is now a conflict between the arm-soc tree and Linus' tree.
 
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-4.19.y
-Version: 4.19.236-rc1
-Commit: a78343b23caede1f7ef885dce0e97225fb3f19e0
-Compiler: gcc version 7.3.0 (GCC)
+--=20
+Cheers,
+Stephen Rothwell
 
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 8938
-passed: 8938
-failed: 0
-timeout: 0
---------------------------------------------------------------------
+--Sig_/I1yL3Wodt.44j4IGhFasOqZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 8938
-passed: 8938
-failed: 0
-timeout: 0
---------------------------------------------------------------------
+-----BEGIN PGP SIGNATURE-----
 
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI6cKIACgkQAVBC80lX
+0GzTKAf+MAF1piKQbCyJCKYTdaVpe2p1hjmzU8BaRe4o9AU0UJTIg8gKn812MVbI
+abtn/R+b99OhQfhel5egS3ionjthfunucc4ZsPdHiWNbm/MZQrz2zzYYYbz7KwGH
+0gVYlUnPW7hBR5bj42DQBELB/FMNvEx62zGz7+RF6RM7eHmzEDcfsq212WM+TY0X
+7u2n3k3LCkMsB8fQ/P9nmEWTTf2DlQoRQrQXSN65HIo06Mi+bd9XkzvrreyZIUGC
+z7xXlED+ecEBdVGsPIku5pvZeFs9/VBUl/V6V1wnref/RzrjF/RbW8u3/tyk+mhF
+QtNj4htnl8KwX6Hsud8n6b6W84Po2A==
+=eeq/
+-----END PGP SIGNATURE-----
+
+--Sig_/I1yL3Wodt.44j4IGhFasOqZ--

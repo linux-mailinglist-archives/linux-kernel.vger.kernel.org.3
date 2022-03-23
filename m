@@ -2,126 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B467A4E5271
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB294E5275
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243184AbiCWMsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S243219AbiCWMsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236374AbiCWMsV (ORCPT
+        with ESMTP id S243298AbiCWMsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:48:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B57477C141
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:46:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648039611;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DTnFtVcodyoIwIXV9QxS/vo7a2K9rOATfHER2lAcBYs=;
-        b=D5udak05osjVDH0IED2H5KlgJOUVIUbQkmRl7cKZGMMj2dNvJlcj6PIenAZun/gHqmQ2UN
-        WNzXXQPwPEXLJW9XX6gmfTl5DbTVRV6fs5iMAJbvkGprMynRvW5m7bqqd9LvyAu9ALyCbd
-        cCPMw4zf+TpTwzpUhiOHGiyebh1ytPY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-gHMvhEejPxqhMi7HhzDauQ-1; Wed, 23 Mar 2022 08:46:48 -0400
-X-MC-Unique: gHMvhEejPxqhMi7HhzDauQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0BD23810D56;
-        Wed, 23 Mar 2022 12:46:47 +0000 (UTC)
-Received: from [10.72.12.33] (ovpn-12-33.pek2.redhat.com [10.72.12.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 66F2C401E78;
-        Wed, 23 Mar 2022 12:46:43 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v5 03/22] KVM: arm64: Support SDEI_VERSION hypercall
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-References: <20220322080710.51727-1-gshan@redhat.com>
- <20220322080710.51727-4-gshan@redhat.com> <YjoPxLAMIPobBzS0@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <d8e151e5-080b-dc87-b7e0-9031a7928853@redhat.com>
-Date:   Wed, 23 Mar 2022 20:46:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Wed, 23 Mar 2022 08:48:30 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C169B7C175
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:46:59 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id m30so1984992wrb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=QrnKrN1J0be5aGhbUhpBdOm3mgQtzJ3AbarAe1cgyz4=;
+        b=PNp6vqLvvi186d7HmPfAqbvJGTx7NW1Fx8uwCXWK6FDJi8hDa0A4Obyl0BJlO5+1lB
+         vMizD2ozDTrd1SWvW6k6EbB7UdNw60K8M08R7jTHpovxIB7hs0FOgMsE6ChIt7QkfrIk
+         bTGHkOg+xnrkgrIEahmcKVKPCqZRSxCqwzYZUfEPQXRZLytNNrKHkdlH6ytPTaCbezNf
+         6KqsyEBPIYlSSPXBmqKdIRnKAWl5fyQw0hqv/fail0P9VB0VcVBOKzUv2UrSnseSFA4P
+         4qliOHKw8/ytu9CL4ol6/j71Mf3nRJBkXmqtRzicETMnTCLQtXImq4sJeK616gwzDtE4
+         tvGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=QrnKrN1J0be5aGhbUhpBdOm3mgQtzJ3AbarAe1cgyz4=;
+        b=h0PyIGNd+lSuJHe3E4vRs0HLF0IBL0bhRwulsSIKy97Rpm273DVPBC6dhKJ3Aiua6g
+         Bore//SuJ+IfzopDVPfWPYVGUQEaL6kWiFqKoUEuH7Il3KB3/mnk0IDy4UjeM2LVYcx+
+         bQJJ+BWTnX/W9Ht5Kl2Twxd6DrzAiUsgJdRxWXDOnVKXaV9UEXK+js2EYjsc+nENz2yz
+         ZHUorrPfVqsha6mHrccaKng8TRtKfy5wAAQPvsWbecAdCzT4ayL1p7jfGAHAFfFrkKjv
+         QVpDw0UrH8a8/67nn61s0uDbJ5a/MWBUfY9wZlpJS6N7b+WIl9wfZXt13laTl2/5NyHq
+         FITA==
+X-Gm-Message-State: AOAM530Rx0jaqa9eL73h7DpZw8VnZRSdEMxgrv2Qz+nm3WUfZG3MtHvZ
+        yG4BBmqZ8gMVreWociqJlEJtCBs4236Eog==
+X-Google-Smtp-Source: ABdhPJzSkUmPOcaKtIxHaouVgmm319CJF0UXHX2JHBimkzdShZYdJ/tai3elVkeKWEBvyUS26e35pw==
+X-Received: by 2002:a5d:64e7:0:b0:205:8cc7:aa82 with SMTP id g7-20020a5d64e7000000b002058cc7aa82mr1486949wri.247.1648039618247;
+        Wed, 23 Mar 2022 05:46:58 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id o8-20020a5d6488000000b002051f1028f6sm4375837wri.111.2022.03.23.05.46.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 05:46:57 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 12:46:55 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     philip yang <yangp@amd.com>
+Cc:     Felix Kuehling <felix.kuehling@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: Re: [PATCH 1/1] drm/amdkfd: Protect the Client whilst it is being
+ operated on
+Message-ID: <YjsWvy8cT2eOw618@google.com>
+References: <20220317131610.554347-1-lee.jones@linaro.org>
+ <8702f8a5-62a1-c07e-c7b7-e9378be069b6@amd.com>
+ <YjNNCXc8harOvwqe@google.com>
+ <1f003356-3cf9-7237-501e-950d0aa124d1@amd.com>
+ <YjNQA80wkWpy+AmA@google.com>
+ <b65db51e-f1ba-3a9b-0ac1-0b8ae51c5eee@amd.com>
+ <YjNh/Ajxgp3mjvWV@google.com>
 MIME-Version: 1.0
-In-Reply-To: <YjoPxLAMIPobBzS0@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YjNh/Ajxgp3mjvWV@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+On Thu, 17 Mar 2022, Lee Jones wrote:
 
-On 3/23/22 2:04 AM, Oliver Upton wrote:
-> On Tue, Mar 22, 2022 at 04:06:51PM +0800, Gavin Shan wrote:
->> This supports SDEI_VERSION hypercall by returning v1.1, which is
->> the specification version we're following. The vendor is set to
->> 'KVM'.
->>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   arch/arm64/kvm/sdei.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
->> index 8a9b477b8977..5a3a64cd6e84 100644
->> --- a/arch/arm64/kvm/sdei.c
->> +++ b/arch/arm64/kvm/sdei.c
->> @@ -118,6 +118,14 @@ static bool remove_all_vcpu_events(struct kvm_vcpu *vcpu,
->>   	return pending;
->>   }
->>   
->> +static unsigned long hypercall_version(struct kvm_vcpu *vcpu)
->> +{
->> +	/* v1.1 and the vendor is KVM */
->> +	return (1UL << SDEI_VERSION_MAJOR_SHIFT) |
->> +	       (1UL << SDEI_VERSION_MINOR_SHIFT) |
->> +	       0x4b564d;
+> On Thu, 17 Mar 2022, philip yang wrote:
 > 
-> It looks like the SDEI specification states that the vendor-defined
-> version number is 32 bits. Could we just use one of the
-> ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_{0,3} values instead?
+> >    On 2022-03-17 11:13 a.m., Lee Jones wrote:
+> > 
+> > On Thu, 17 Mar 2022, Felix Kuehling wrote:
+> > 
+> > 
+> > Am 2022-03-17 um 11:00 schrieb Lee Jones:
+> > 
+> > Good afternoon Felix,
+> > 
+> > Thanks for your review.
+> > 
+> > 
+> > Am 2022-03-17 um 09:16 schrieb Lee Jones:
+> > 
+> > Presently the Client can be freed whilst still in use.
+> > 
+> > Use the already provided lock to prevent this.
+> > 
+> > Cc: Felix Kuehling [1]<Felix.Kuehling@amd.com>
+> > Cc: Alex Deucher [2]<alexander.deucher@amd.com>
+> > Cc: "Christian König" [3]<christian.koenig@amd.com>
+> > Cc: "Pan, Xinhui" [4]<Xinhui.Pan@amd.com>
+> > Cc: David Airlie [5]<airlied@linux.ie>
+> > Cc: Daniel Vetter [6]<daniel@ffwll.ch>
+> > Cc: [7]amd-gfx@lists.freedesktop.org
+> > Cc: [8]dri-devel@lists.freedesktop.org
+> > Signed-off-by: Lee Jones [9]<lee.jones@linaro.org>
+> > ---
+> >    drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c | 6 ++++++
+> >    1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c b/drivers/gpu/drm/amd/a
+> > mdkfd/kfd_smi_events.c
+> > index e4beebb1c80a2..3b9ac1e87231f 100644
+> > --- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
+> > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
+> > @@ -145,8 +145,11 @@ static int kfd_smi_ev_release(struct inode *inode, struct f
+> > ile *filep)
+> >         spin_unlock(&dev->smi_lock);
+> >         synchronize_rcu();
+> > +
+> > +       spin_lock(&client->lock);
+> >         kfifo_free(&client->fifo);
+> >         kfree(client);
+> > +       spin_unlock(&client->lock);
+> > 
+> > The spin_unlock is after the spinlock data structure has been freed.
+> > 
+> > Good point.
+> > 
+> > If we go forward with this approach the unlock should perhaps be moved
+> > to just before the kfree().
+> > 
+> > 
+> > There
+> > should be no concurrent users here, since we are freeing the data structure.
+> > If there still are concurrent users at this point, they will crash anyway.
+> > So the locking is unnecessary.
+> > 
+> > The users may well crash, as does the kernel unfortunately.
+> > 
+> > We only get to kfd_smi_ev_release when the file descriptor is closed. User
+> > mode has no way to use the client any more at this point. This function also
+> > removes the client from the dev->smi_cllients list. So no more events will
+> > be added to the client. Therefore it is safe to free the client.
+> > 
+> > If any of the above were not true, it would not be safe to kfree(client).
+> > 
+> > But if it is safe to kfree(client), then there is no need for the locking.
+> > 
+> > I'm not keen to go into too much detail until it's been patched.
+> > 
+> > However, there is a way to free the client while it is still in use.
+> > 
+> > Remember we are multi-threaded.
+> > 
+> >    files_struct->count refcount is used to handle this race, as
+> >    vfs_read/vfs_write takes file refcount and fput calls release only if
+> >    refcount is 1, to guarantee that read/write from user space is finished
+> >    here.
+> > 
+> >    Another race is driver add_event_to_kfifo while closing the handler. We
+> >    use rcu_read_lock in add_event_to_kfifo, and kfd_smi_ev_release calls
+> >    synchronize_rcu to wait for all rcu_read done. So it is safe to call
+> >    kfifo_free(&client->fifo) and kfree(client).
 > 
-> ASCII 'KVM' is neat, but in reality guest software will just throw it in
-> a macro regardless. Might as well use one of the values we've already
-> trained it to use :-)
-> 
-> Also, it would appear that guest discovery of SDEI relies upon KVM
-> reporting a valid SDEI version. IMO, this patch should come at the very
-> end when KVM actually implements SDEI.
-> 
+> Philip, please reach out to Felix.
 
-Yeah, I was sticky to the pattern of "KVM". However, I think it's good
-to reuse the existing one. Lets use ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2
-if you agree. Its first two characters are "VM" at least.
+Philip, Felix, are you receiving my direct messages?
 
-It's fine to return the version here because the SDEI capability isn't
-exposed yet. It means no events have been exposed and able to be
-registered. However, It's also fine to move this patch after the
-following one:
+I have a feeling they're being filtered out by AMD's mail server.
 
-[PATCH v5 16/22] KVM: arm64: Support SDEI_EVENT_{COMPLETE, COMPLETE_AND_RESUME} hypercall
-
-Thanks,
-Gavin
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

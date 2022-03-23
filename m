@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0864A4E4D75
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 08:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1C34E4D7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 08:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242278AbiCWHib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 03:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S242253AbiCWHlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 03:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235948AbiCWHi1 (ORCPT
+        with ESMTP id S236908AbiCWHlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 03:38:27 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BD35EDFD;
-        Wed, 23 Mar 2022 00:36:53 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id w8so746787pll.10;
-        Wed, 23 Mar 2022 00:36:53 -0700 (PDT)
+        Wed, 23 Mar 2022 03:41:06 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54B87306D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 00:39:37 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bg10so1089881ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 00:39:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m1iCmozCFO2nDUbdDZOeMBYLeshVtbE1//V44gRhfv8=;
-        b=MqHMspPcSlKu9NLkB7yl/rkEVfNptO/w7y0kPb8esvKHzzWH+HAarv7W2zksAiOvGI
-         L0smPUkUiYS9wnFvpXA5v+/kODBl8g9RSJC7wuoIRew8x2ULMgJidGZS7U+6GZHomqR+
-         dDWPGSStirVRDj8dZZjVJ/TRFTrgJrfbg3tA47YXVxldwQK3s+NakqlxIAREsmGYcx/E
-         CS2EZEd5uQJ58J6xxMAlmopw05uvtpaeIGkgidxIiACTsASMiIYWHDowxTDKoMX1v30b
-         KqDYqoLRn5mOEwIGZfMZBW9QUCx7kpVAIfxFsd9mne+96jPRdWyX1cY1pECqxYU22Rz3
-         uvfQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WEh0/flcESvnwCkKqqvAysliWpY0z2CXDkNX2AVoqs0=;
+        b=OoKtuc/vUxOsJQZnoz312bkwh6oBQMglt1+NbBFzszTLeN5kzK9XXHeDjWNKsQlPlY
+         hqeHE+aHsGQONYWD0+3cExe+fUkOud9BzoG8YsuH5UgTgLGFS6xrySZygHX7lgRBjIfJ
+         dzApgShtqtlWRmYTbTg48Vwu6u+4zLLVaDNj3gjRc33WzXk/EC96UrrdDB+ixWxFPlnt
+         IvfAebCXrTPaAKWBYG+Jyfg19ni5YtyFeZFT2622xnX/1KkPNEj+Cl0MXns4bMG/xYh9
+         zqwMJodiB/USMjWmQAKNAMOSHaSO4BoyXYP6vzaJZmeaMV5abpWg5ge/jmCOtROYt0Ko
+         beuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m1iCmozCFO2nDUbdDZOeMBYLeshVtbE1//V44gRhfv8=;
-        b=j4Mr5P4hPKpNaKlhrnBAxDOA3roSNGrvvt0CZX9JKRPkwKLUUGxJ78cUtm+Eyoikn8
-         N1ScFks3zFDhflni5vkt9GClhGQe0XtTxT9MUOxXhxmMWGm546JPdT98lf+OxBoJjeC/
-         r936YLKonPKtuhiZChsnqSGZarBhDCw0al3J9V79UmWhTCi26EUNf5ex1w/R1OHUyXDV
-         9JsanXu6cLTgZmd6xMmKHE0tq9N06FqzAhxyc+elROKzkaqWWWMx5u38FXRR8z+UWN0M
-         Z2Edr9ZHn392noV5UfaO7ZpR65ZBQ+Hnp4/u/8eFupN+y7xDEldvvOOkOpgbOqtjNPJY
-         9AiA==
-X-Gm-Message-State: AOAM532oYTR0RSlh4h6+TDcOEyI9e2PPqHsCCsGwUUYMQAn609rpXCPw
-        I5fBsk66/QKUXtUyTzArQMc=
-X-Google-Smtp-Source: ABdhPJzPEEK9ZixNQwtvEIi5X0A3WXJM+iT8soYrHwThTS4gHEbROpq/XN7nXTl9qLmD3gS6GCfT+g==
-X-Received: by 2002:a17:902:c40a:b0:154:2302:9b88 with SMTP id k10-20020a170902c40a00b0015423029b88mr22204578plk.165.1648021012846;
-        Wed, 23 Mar 2022 00:36:52 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.4])
-        by smtp.gmail.com with ESMTPSA id u9-20020a056a00158900b004faad3ae570sm8416190pfk.189.2022.03.23.00.36.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 00:36:52 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] bpf: Remove redundant assignment to smap->map.value_size
-Date:   Wed, 23 Mar 2022 15:36:26 +0800
-Message-Id: <20220323073626.958652-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.0.rc2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WEh0/flcESvnwCkKqqvAysliWpY0z2CXDkNX2AVoqs0=;
+        b=zQV3P+7ERDMy3waNjTmrSCkeAYMT7mTIZa8Onaiy5lQ4ajLsPqRXdsCzkBWUxcVwik
+         Ztv7+eCI+J1/AIAp1L/1E+WG9IW1S09uCrvCXde9G6GIysmgPhGzw0F+RPkJ4MWYkFie
+         aBeBlwQHVQCdQ1tXEFgC8cgzgWOpmGE8XzESNRdBCzQ/pfgGlO50SKxtSwMXf/H4kxLa
+         PpaoCOgljmH0T6cWna0a4KKDJm9pNW0Ges5MAZjBWnxfrvhTS5SG29taclPhXIsvrPbH
+         aewwyupZ0UeppeY/9dbZDgdD2Gl8901gih5ffTBPpR+cULgzQw2JuuCDZi0E6+Dxs3Mb
+         WmAA==
+X-Gm-Message-State: AOAM531sYOYn8X9u0ywOswdmrbc6mbR9hM48uSv1rvitSuVWwQyb6VCU
+        Jg7tpRQTxY6cj9nNnVIDnBuwdQHQF0IyHKEztV6aMg==
+X-Google-Smtp-Source: ABdhPJzx77NzvV/SmsySRQaOio7nBF4qQqYJX1vVKRq5khbJvqP3qA6Ew1CDvacgKram6Rco1p9JJEXDtLy1oDeWlM0=
+X-Received: by 2002:a17:906:d54d:b0:6e0:1f9b:5064 with SMTP id
+ cr13-20020a170906d54d00b006e01f9b5064mr11937589ejc.59.1648021176257; Wed, 23
+ Mar 2022 00:39:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220305074020.751309-1-davidgow@google.com>
+In-Reply-To: <20220305074020.751309-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 23 Mar 2022 03:39:24 -0400
+Message-ID: <CAFd5g47kM_fd7AT2RRV88biXsLDpfrvKqKT2aaGNJGqdVwXGAw@mail.gmail.com>
+Subject: Re: [PATCH] list: test: Test the hlist structure
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,27 +70,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The attr->value_size is already assigned to smap->map.value_size
-in bpf_map_init_from_attr(), there is no need to do it again in
-stack_map_alloc()
+On Sat, Mar 5, 2022 at 2:40 AM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> Add KUnit tests to the hlist linked-list structure which is used by
+> hashtables. This should give coverage of every function and macro in
+> list.h, as well as (combined with the KUnit tests for the hash
+> functions) get very close to having tests for the hashtable structure.
+>
+> The tests here mirror the existing list tests, and are found in a new
+> suite titled 'hlist'.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- kernel/bpf/stackmap.c | 1 -
- 1 file changed, 1 deletion(-)
+I am not an expert on hlist, but these tests seem pretty straightforward to me.
 
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 34725bfa1e97..6131b4a19572 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -106,7 +106,6 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
- 		return ERR_PTR(-ENOMEM);
- 
- 	bpf_map_init_from_attr(&smap->map, attr);
--	smap->map.value_size = value_size;
- 	smap->n_buckets = n_buckets;
- 
- 	err = get_callchain_buffers(sysctl_perf_event_max_stack);
--- 
-2.35.0.rc2
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

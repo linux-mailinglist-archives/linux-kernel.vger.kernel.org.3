@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA2C4E536F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9E14E5373
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244438AbiCWNqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S244450AbiCWNqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236735AbiCWNqL (ORCPT
+        with ESMTP id S236735AbiCWNqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:46:11 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58549E0FD;
-        Wed, 23 Mar 2022 06:44:41 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id c62so1893972edf.5;
-        Wed, 23 Mar 2022 06:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5n9h4RX0iio25CI6fqvwPwFNSibxgTcsM+GkXv7ZxQQ=;
-        b=NYPdIg+F9GW3polJIYVTprEYKhiZ4g86XAN3K8y5SxfWZMir0k6dO8Wxq7jkbFlSX2
-         C4++F3u5Umsk5l02eDL+b+4ZG8fj6rsBkFFZyXXtOaLRtdBms4fBt2LW7cGGjl80/DD0
-         7mSLIHnZQkquUdlI0HQBw2c4XYeuPimUUP3dGCnq8oi8z+z3lGghoxgbIwJ+wOl7ON8Q
-         QrGkWMYUuZiJFdQMurXF+tJjyPvoL916fBx3HenXEoDUxRa2VAAO3XU40vogLpUqZAYx
-         /sD7n9RCIC+dLMQlicY7rvGHIcK/KfegaC3NUo/gs6vEm8Hui03GZDorILVL5jbFYnos
-         bRZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5n9h4RX0iio25CI6fqvwPwFNSibxgTcsM+GkXv7ZxQQ=;
-        b=RsQLYzr8GvcgwN7xUwwwmOz/osr+MZ6ibhXhX365iFXxBqYZpsWvN3WVNDawnRbgBW
-         BSstMi6dlJuXgvDtAzVdYw76hJQJI1LNKEb9bcdCGxVx35+cvk4T0qjKGwMTJBpx6oHg
-         M1yExLpP00sPUQj9A/4WOxDqSLkydjq1SBYzmv5Vu5k744z2W7RCAsFsV+7JDl8tvrqE
-         JieV7CrAuaBwgKv3xoekfT9UwQiysJAKPNIjOvB6jB5gOG3lAKyF3QaBog+BBOZZnEnV
-         uo6f3MkY8Z3gZrJrbJ3bHm+hut5xpeuhZBpV5r/EjQ972cHwgoE5oAW7cLJsr0LG+EUF
-         maGw==
-X-Gm-Message-State: AOAM530Z2WJhOuPolcLHDfB2EW3Rqcrmoow5Zz/wuKW0BDn5giXQxwSB
-        qhzgsFWeJkmX0BswqxYQE4iXyYG613ZClehvKPg=
-X-Google-Smtp-Source: ABdhPJykUQnR9d8S/w+Aj8qrgX8B13l0SKuPjc7N6s4BuzK4ejP1LeC4kp0r8iMV4XAxTUQg0MIGhMrr6xMqRP+VPPQ=
-X-Received: by 2002:aa7:dc4e:0:b0:419:407b:6bff with SMTP id
- g14-20020aa7dc4e000000b00419407b6bffmr145751edu.158.1648043079752; Wed, 23
- Mar 2022 06:44:39 -0700 (PDT)
+        Wed, 23 Mar 2022 09:46:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D6F013EA5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648043087;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GSgoSaQ+JIfg7wq78quWtl1Bx2v1bqSuTJRYfSjlhrE=;
+        b=W63ZKKS5zxypUZELKSrrkpNRyzIb1ATId2o7e9BL7U1T8R6YhSmgSghbiSsI7ZMw/zpD71
+        glAhg5/X8+ZaFNdqZM2S7I5hH82NyCgNn79Qq8i+NCbPnlaAnno9pfLlSS9ELqYJSV7srn
+        fbh7Ck8DYKQ63YB0qJcuxBmK4tYm1cE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-503-PE0IjX1kNEi9tDprSbLOhg-1; Wed, 23 Mar 2022 09:44:44 -0400
+X-MC-Unique: PE0IjX1kNEi9tDprSbLOhg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DFBE811E75;
+        Wed, 23 Mar 2022 13:44:43 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E7E2D1400E70;
+        Wed, 23 Mar 2022 13:44:42 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 13:44:42 +0000
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Arseny Krasnov <arseny.krasnov@kaspersky.com>,
+        "David S. Miller" <davem@davemloft.net>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, Asias He <asias@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH net v2 1/3] vsock/virtio: enable VQs early on probe
+Message-ID: <YjskSh4PgXuDStAF@stefanha-x1.localdomain>
+References: <20220323084954.11769-1-sgarzare@redhat.com>
+ <20220323084954.11769-2-sgarzare@redhat.com>
 MIME-Version: 1.0
-References: <20220321183446.1108325-1-helgaas@kernel.org> <20220323022648.GA1243295@bhelgaas>
- <CAHp75VfdoAbSTkO7eaor94pkmN0ttLXstc1DS_Sa7i45Dt5GAA@mail.gmail.com> <a1bf31d6a8957b837b999c02875456b805efdff1.camel@infradead.org>
-In-Reply-To: <a1bf31d6a8957b837b999c02875456b805efdff1.camel@infradead.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 23 Mar 2022 15:43:29 +0200
-Message-ID: <CAHp75VdKOzgWgsTh-8sAEEey8iOLUUgnw=M-OeX+Dzhu2tnH1g@mail.gmail.com>
-Subject: Re: [PATCH] PCI: Avoid broken MSI on SB600 USB devices
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mick Lorain <micklorain@protonmail.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Ew8YH6cjDCduveFO"
+Content-Disposition: inline
+In-Reply-To: <20220323084954.11769-2-sgarzare@redhat.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 2:43 PM David Woodhouse <dwmw2@infradead.org> wrote:
-> On Wed, 2022-03-23 at 10:03 +0200, Andy Shevchenko wrote:
-> > On Wed, Mar 23, 2022 at 4:26 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Mon, Mar 21, 2022 at 01:34:46PM -0500, Bjorn Helgaas wrote:
-> > > > From: Bjorn Helgaas <bhelgaas@google.com>
-> > > > Some ATI SB600 USB adapters advertise MSI, but if INTx is disabled by
-> > > > setting PCI_COMMAND_INTX_DISABLE,
-> >
-> > > > MSI doesn't work either.
-> >
-> > I think this is not correct.
->
-> I think it was perfectly correct until you added a couple of newlines
-> in the middle of the sentence, then took it out of context. :)
->
-> "If INTX is disabled, MSI doesn't work either".
 
-Ah, I stand corrected. Thanks for the English lesson!
+--Ew8YH6cjDCduveFO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> But really, in that case surely the solution is *not* to disable INTX
-> for this device. Then MSI will work, right?
+On Wed, Mar 23, 2022 at 09:49:52AM +0100, Stefano Garzarella wrote:
+> virtio spec requires drivers to set DRIVER_OK before using VQs.
+> This is set automatically after probe returns, but virtio-vsock
+> driver uses VQs in the probe function to fill rx and event VQs
+> with new buffers.
+>=20
+> Let's fix this, calling virtio_device_ready() before using VQs
+> in the probe function.
+>=20
+> Fixes: 0ea9e1d3a9e3 ("VSOCK: Introduce virtio_transport.ko")
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+>  net/vmw_vsock/virtio_transport.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_tran=
+sport.c
+> index 5afc194a58bb..b1962f8cd502 100644
+> --- a/net/vmw_vsock/virtio_transport.c
+> +++ b/net/vmw_vsock/virtio_transport.c
+> @@ -622,6 +622,8 @@ static int virtio_vsock_probe(struct virtio_device *v=
+dev)
+>  	INIT_WORK(&vsock->event_work, virtio_transport_event_work);
+>  	INIT_WORK(&vsock->send_pkt_work, virtio_transport_send_pkt_work);
+> =20
+> +	virtio_device_ready(vdev);
 
-That was my intention, but Bjorn has concerns.
+Can rx and event virtqueue interrupts be lost if they occur before we
+assign vdev->priv later in virtio_vsock_probe()?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Stefan
+
+--Ew8YH6cjDCduveFO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmI7JEkACgkQnKSrs4Gr
+c8iwMQf6AoKiNuvBPWS3yOCgqec8X+6LYAdNCyNKlqC9GPmHeZ6YFFfiuvTxqTNg
+WujzjOLTSWdMn8IOwNfNyxtIb5dLFITwd5eaAyh8zPjWTimt0JE70MU2/ezYQBJU
+0pW9hKlhUT9i2HccLdSKvMRrCJfnqFyJqGod/1AXK3Bxb307mxFydP7rjOq/nGpw
+BJapVkSHZ1oNbsFiad5XZMkmEnLeJbV+NKxdmlyMIXFsnCda9QsgQ+/qDwck41jQ
+pMlBjnoWhwMV0NEeWqICUSp0dNOEKMzs+lrp5DJeuqnLsApUDb9DOpvtU44ZRcVF
+gQHruj4EAL/97VOo0C/f/7jE6h+f+g==
+=R5CZ
+-----END PGP SIGNATURE-----
+
+--Ew8YH6cjDCduveFO--
+

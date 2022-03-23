@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE724E5411
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E344E5414
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244678AbiCWOM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S237105AbiCWOOT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Mar 2022 10:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244684AbiCWOMt (ORCPT
+        with ESMTP id S240717AbiCWOOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:12:49 -0400
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21387CB38;
-        Wed, 23 Mar 2022 07:11:19 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id u26so1954875eda.12;
-        Wed, 23 Mar 2022 07:11:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=4HA4+cV5Cx2YJ/wnGG8SlUcCWZl88X9bJXGKc8DKpxk=;
-        b=t7q2mFOh4vugfvEI7Ba5gtmGKveibgoNBXLkijBeHjv+/xtxVzqM8jmHfQUiRLvJQO
-         i+K4X3Atk2Z83rGZ7SnElJj9FtaQOAgLebfCvSpKCTkzYKLvPk1awJ2ci/bkfvHp7YJC
-         ryYwlYYqCecpUYdMJrhnntRotToD6bNeGHbjeQDRU2mdo+CQMbuG/Z0gxy4yNh06idox
-         aewuDjkm8j45JrrZNyLBn/ixWFPFGBPIhAEmR1NJIvpE3aZhxmXIEk/SfyMbsCyc8WT0
-         DPMfZybANYUNyJf/KJNfNpagYFLltkOIRYeLiyLy3G5WSJf0a6Dno/Cb4TgrlJ928DK5
-         py/w==
-X-Gm-Message-State: AOAM533l9c1ndfXUqihAilB3HttAchC0ix3TbdFpeSUpDr4+jGRYRHQB
-        Lh8Q6YVd5kCWLB4XEKI6roP2N2RYjBqhkg==
-X-Google-Smtp-Source: ABdhPJy0t1OjP/Hq1l00yzZQD24L/hzLXOOrAXXXbbnSzOp4xPY+DuUEXsDeBfbMxTTh3SauXo5aCQ==
-X-Received: by 2002:a05:6402:4414:b0:419:28bc:55dc with SMTP id y20-20020a056402441400b0041928bc55dcmr316217eda.130.1648044678168;
-        Wed, 23 Mar 2022 07:11:18 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id n13-20020a170906724d00b006cedd6d7e24sm9974442ejk.119.2022.03.23.07.11.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 07:11:17 -0700 (PDT)
-Message-ID: <354951e0-d2a8-bf4f-e0c5-081e836bb3c3@kernel.org>
-Date:   Wed, 23 Mar 2022 15:11:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: mmc: imx-esdhc: Change imx8mn and imx8mp
- compatible fallback
-Content-Language: en-US
-To:     Adam Ford <aford173@gmail.com>
-Cc:     arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
+        Wed, 23 Mar 2022 10:14:15 -0400
+Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8163DA66;
+        Wed, 23 Mar 2022 07:12:46 -0700 (PDT)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id D6223122FBB;
+        Wed, 23 Mar 2022 15:12:43 +0100 (CET)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id C4784122DBF;
+        Wed, 23 Mar 2022 15:12:43 +0100 (CET)
+X-TM-AS-ERS: 10.149.2.84-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
+        by mail4.swissbit.com (Postfix) with ESMTPS;
+        Wed, 23 Mar 2022 15:12:43 +0100 (CET)
+Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
+ (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 23 Mar
+ 2022 15:12:43 +0100
+Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
+ sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
+ 15.02.0986.022; Wed, 23 Mar 2022 15:12:43 +0100
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220323134019.3796178-1-aford173@gmail.com>
- <35f58894-ed6d-0af0-e483-7a161ad6625a@kernel.org>
- <CAHCN7x+RLAFnES8b3UMoc6n69ZVSFGOmAZyMeeY1g3aoiDNbZg@mail.gmail.com>
-In-Reply-To: <CAHCN7x+RLAFnES8b3UMoc6n69ZVSFGOmAZyMeeY1g3aoiDNbZg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "cloehle@posteo.de" <cloehle@posteo.de>
+CC:     Avri Altman <Avri.Altman@wdc.com>,
+        "david-b@pacbell.net" <david-b@pacbell.net>
+Subject: [PATCHv2] mmc: block: Check for errors after write on SPI
+Thread-Topic: [PATCHv2] mmc: block: Check for errors after write on SPI
+Thread-Index: AQHYPsAQB7Ge7QSFOEmDJ2kn629cyA==
+Date:   Wed, 23 Mar 2022 14:12:43 +0000
+Message-ID: <cf04ac31665c48be9f275ed21332763b@hyperstone.com>
+References: <9d1ea819e4bb4222a227a02d5f6ad97c@hyperstone.com>
+In-Reply-To: <9d1ea819e4bb4222a227a02d5f6ad97c@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.154.1.4]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-TMASE-Version: DDEI-5.1-8.6.1018-26790.000
+X-TMASE-Result: 10--2.793200-10.000000
+X-TMASE-MatchedRID: 0aps3uOmWi5rFdvBEmTnvLZ0InVwVLVTn5nfR7I2dFOxPXYIh1l6dlg7
+        cH4SOkOpdWqA+wY3gFZusJxXwmCOnpDH5Y6LoY7BRZfQN+FVqbA1kR+05VC1hsiCh8yBqE+tbiP
+        oclJOCy0MV38Bdz1roh5HSIAURpXTL/tBTZzO5Q0D2WXLXdz+Afb991FvFjWAd3XtjqAaoMLBTP
+        qP0WxWQAGRC3bBIF8o0+pR+Ea5cIJI5l15C51feb+viKbH3Jj7+VJ6lZyB0s/3K1BQq7xa/qPFj
+        JEFr+olIoOsWgr8s12OhzOa6g8KrfVs4fo5Jz/CFFjqD8M1Htc+HGIjyd7T85t1B6KjWowdgKQB
+        rzCcMVk=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: c45e74ff-0bbe-40a2-b079-69b958a98b15-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,56 +80,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2022 15:00, Adam Ford wrote:
-> On Wed, Mar 23, 2022 at 8:56 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On 23/03/2022 14:40, Adam Ford wrote:
->>> The SDHC controller in the imx8mn and imx8mp have the same controller
->>> as the imx8mm which is slightly different than that of the imx7d.
->>> Using the fallback of the imx8mm enables the controllers to support
->>> HS400-ES which is not available on the imx7d.
->>>
->>> Signed-off-by: Adam Ford <aford173@gmail.com>
->>>
->>> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
->>> index 7dbbcae9485c..d6ea73d76bdd 100644
->>> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
->>> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
->>> @@ -39,14 +39,14 @@ properties:
->>>        - items:
->>>            - enum:
->>>                - fsl,imx8mm-usdhc
->>
->> Your change looks reasonable, but why imx8mm is compatible with imx7d?
-> 
-> I saw that, and I wasn't sure the best way to go about  fixing it.  If
-> I move the 8mm out of the imx7d category, do I need to add it to the
-> enum list associated with the imx8mm, or can I just delete it from the
-> enum leaving the const for imx8mm good enough?
-> 
+Introduce a SEND_STATUS check for writes through SPI to not mark
+an unsuccessful write as successful.
 
-The DTS is using:
-  compatible = "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc"
-which looks incorrect, based on what you wrote in commit description.
-Since fsl,imx8mm-usdhc has its own compatibility-group and defines the
-properties for entire family (imx8mm + imx8mn + imx8mp), then I would
-assume that either fsl,imx8mm-usdhc is not be compatible with imx7d or
-everything is compatible with imx7d. IOW, DTS and bindings should be
-changed to one of following:
-1. Everything compatible with imx7d:
-  compatible = "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
-  compatible = "fsl,imx8mq-usdhc", "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
+Since SPI SD/MMC does not have states, after a write, the card will
+just hold the line LOW until it is ready again. The driver marks the
+write therefore as completed as soon as it reads something other than
+all zeroes.
+The driver does not distinguish from a card no longer signalling busy
+and it being disconnected (and the line being pulled-up by the host).
+This lead to writes being marked as successful when disconnecting
+a busy card.
+Now the card is ensured to be still connected by an additional CMD13,
+just like non-SPI is ensured to go back to TRAN state.
 
-2. A new group:
-  compatible = "fsl,imx8mm-usdhc";
-  compatible = "fsl,imx8mq-usdhc", "fsl,imx8mm-usdhc";
+While at it and since we already poll for the post-write status anyway,
+we might as well check for SPIs error bits (any of them).
 
-Which one, I am not sure. My commit 80fd350b95 organized it in (1)
-approach, because also that time there was no new group for 8mm (added
-in commit 431fae8). I assume NXP engineer knows better, so the better
-solution would be (2). In such case, imx8mm has to be moved to the first
-enum and all DTS have to be adjusted.
+The disconnecting card problem is reproducable for me after continuous
+write activity and randomly disconnecting, around every 20-50 tries
+on SPI DS for some card.
 
+Fixes: 7213d175e3b6f ("MMC/SD card driver learns SPI")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+v2:
+  - Reorder err and status check for err to take precedence and look cleaner
+  
+ drivers/mmc/core/block.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 4e67c1403cc9..54c2009f398f 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1903,9 +1903,34 @@ static int mmc_blk_card_busy(struct mmc_card *card, struct request *req)
+ 	struct mmc_blk_busy_data cb_data;
+ 	int err;
+ 
+-	if (mmc_host_is_spi(card->host) || rq_data_dir(req) == READ)
++	if (rq_data_dir(req) == READ)
+ 		return 0;
+ 
++	/*
++	 * SPI does not have a TRAN state we have to wait on, instead the
++	 * card is ready again when it no longer holds the line LOW.
++	 * We still have to ensure two things here before we know the write
++	 * was successful:
++	 * 1. The card has not disconnected during busy and we actually read our
++	 * own pull-up, thinking it was still connected, so ensure it
++	 * still responds.
++	 * 2. Check for any error bits, in particular R1_SPI_IDLE to catch a
++	 * just reconnected card after being disconnected during busy.
++	 */
++	if (mmc_host_is_spi(card->host)) {
++		u32 status = 0;
++
++		err = __mmc_send_status(card, &status, 0);
++		/* All R1 and R2 bits of SPI are errors in our case */
++		if (err || status) {
++			mqrq->brq.data.bytes_xfered = 0;
++			if (err)
++				return err;
++			return -EIO;
++		}
++		return 0;
++	}
++
+ 	cb_data.card = card;
+ 	cb_data.status = 0;
+ 	err = __mmc_poll_for_busy(card->host, 0, MMC_BLK_TIMEOUT_MS,
+-- 
+2.34.1
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+

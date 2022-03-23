@@ -2,210 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0794E5049
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40224E5054
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 11:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243521AbiCWK2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 06:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S243536AbiCWKbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 06:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243524AbiCWK2O (ORCPT
+        with ESMTP id S243497AbiCWKbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 06:28:14 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE71876E29;
-        Wed, 23 Mar 2022 03:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648031203; x=1679567203;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=6fGsGJLFQNUPrG6Yd9EAaUlxoubZTQxo/jtcT6g8FQw=;
-  b=Tm/8p6mwFXSYqU+1+7RW15T3Rlxzx81UjWQYBKceKHYn1V352kbR341H
-   G0AKQp8jxI7RyjLTTJPxWkAsJRdqkgkCnrNYW0t0aR6BLgcuChX3BS2VY
-   lCDoKEKsX9MVRBjs+aF7RxbrSNs1+rLfQkRB+vJlMTJdsCF0KqLRn7f9T
-   oPIKd89RaCeioX2HBNKwwCs7wgmELYxprNyKzIlO6v9IOceNgzI7wOqEH
-   RgdwV9hXzhwdFD2OaUplcgIodNi7GwC/tctUsOUfX7LM465oqadvGbvOa
-   iC6iHiC5dvINRWKJibvK0LgcVWsO4UzT5xjraHZ9BAI7+RKpEPPq4YUux
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="238680204"
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="238680204"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 03:26:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="544134005"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 23 Mar 2022 03:26:40 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 23 Mar 2022 03:26:40 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Wed, 23 Mar 2022 03:26:40 -0700
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.44) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Wed, 23 Mar 2022 03:26:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=by4+vHJBSOfUeCm1PNBV0gQS/Z1YNJotbWjepxQFFG/kLg3YfLGRxGvYesj9Gl4wqn7YJmMRwGotUQa8Vo66KVKHYY8TelvPcLdQUoGgFCspHGqF7U/ETxaNMk2WqpRBc0MAyO9TK2y50Hpg48g8GR+N0Jd7ZrBeQq92n5m0EZD+lAPJRt+jDcZ5T7FIsVGJWtnc5e9fDufMqE/h/1yl+oghx+MB9734bPTgNxHb7ntLpsXMhXekXj5If91uFeAA9LbcaFs4t9htkpqSGvYeQJXlFbOdubCp3ufH+TF2kY51uV10/lOGwI8edmb4mKTGTvngel0bGbIEeOkVXVv3YQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YZxxoE5v1NnJgnIzWRPQ70ZVEL7oiVUZ75f8OUkTRds=;
- b=QXcMy55rHB5zJfnmzmwbi3kkd2MoggERFPz3A6EYMPAYA0OfKBg5l8HumnQKoR2ubEremFuQTZG6Z8Y1G2T/AXkFn22RHha/bXtiIuKLoxinwo9hRgiTZZgobkQ0w/WBL8dXPYb66PAmrfbwJd8CaVkdxeF+B5BcLp/+bKSKqRu0yTgPV8QMHGQibsUAsg2jkjCT2iheuxd3kyUjSPdy0InnaZdMxQzrbYGpTja6hYhQrmLovTH5zdMWc6oJZPo8jeEkuBS+iodO2y6CDfj+x0qDrFDxi+t69vxJq/S3Rn+eAQ0Cy+iWFho4Hu+51Me9fMBgDwui84IG5JKJBjRedg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CO1PR11MB4835.namprd11.prod.outlook.com (2603:10b6:303:9e::22)
- by MWHPR1101MB2318.namprd11.prod.outlook.com (2603:10b6:301:4e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Wed, 23 Mar
- 2022 10:26:37 +0000
-Received: from CO1PR11MB4835.namprd11.prod.outlook.com
- ([fe80::fdae:50ef:a0cd:b1c9]) by CO1PR11MB4835.namprd11.prod.outlook.com
- ([fe80::fdae:50ef:a0cd:b1c9%7]) with mapi id 15.20.5102.017; Wed, 23 Mar 2022
- 10:26:37 +0000
-From:   "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
-To:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "bleung@google.com" <bleung@google.com>,
-        "Malani, Prashant" <pmalani@google.com>
-CC:     "jthies@google.com" <jthies@google.com>,
-        "Rao, Abhijeet" <abhijeet.rao@intel.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Westerberg, Mika" <mika.westerberg@intel.com>
-Subject: RE: [PATCH] USB4/TBT device routers should wake up during S0ix when
- something gets connected/disconnected or a DP monitor gets plugged in
-Thread-Topic: [PATCH] USB4/TBT device routers should wake up during S0ix when
- something gets connected/disconnected or a DP monitor gets plugged in
-Thread-Index: AQHYPqA9gj/nefPhe0uZrTXrK6euOKzMw0/A
-Date:   Wed, 23 Mar 2022 10:26:37 +0000
-Message-ID: <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
-References: <20220323101818.3503-1-rajat.khandelwal@intel.com>
-In-Reply-To: <20220323101818.3503-1-rajat.khandelwal@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-Mentions: bleung@google.com,pmalani@google.com
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.401.20
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5e09fdfb-916c-4ade-62ff-08da0cb79cd5
-x-ms-traffictypediagnostic: MWHPR1101MB2318:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <MWHPR1101MB2318A9B73DE5336BA9BBCB2A96189@MWHPR1101MB2318.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8AISVL5Bnkm9dF/Iqw1jvX3FQcsG47ZN8jDKIxjbGCyvCNs4WggZZIo/pES6d191NdZdiY9PF1u7Ol3nkVprPVCEOFzo+x0gG6OH/AovXUiYM2eBOVrabGAaDpLomw6BhTsvaCnZNIhatG9ez0PgsK5FmnqqKkd2x/rgTjniLXb5Gf3rpJXvYUT7nUIMB7lCcftZQZVK1jakEkjvieQiqVWPkPRBGFWlTPn2jlBQoM5IO0cz0+T3V/kyqxJUzt5MSDHlB99/vReEf8zi9NyYQG0o+Sf/Zmsuau5aagMdZkXVO1DwrZQbTdkf3sZyDxxgVbQocJofOikROTXHQ83lMgIPGCls0beqkVIuxGtzqaKVGdFPnhJHKnUkkzCI7iFnTgCSPv0Sz3lID8zlA4jqz8gI57R7UHO0LZixBZNzfSlRm86/D/hL7f7gTP59c05TTOu5wIREQU7Vu1tONnvz2JWWOYDTwL7Fn+G+x+wX1IJUs0iinUqmZVGer+xp6O2WIXLL04aC5wkL+agxnSE7LQS4y58J6PCyTHZmVLs9JecgrAIR3vKPolp/ATzYcyMGLRhNCZF85bi6l3876lgN+TPpFh+0TS+/76zygKXRFU9iaegK24U/FytmrmijW1P03urQN2LSAikgOC1dziAYvx+AtFYF2kheakz+Ipu/4UGsZA+5qr6YZWLuZiZ3bQrkT2qqq1H8jrxqY92LhwN1xy0CB041PJt5HuAEb3nl9VA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4835.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(8676002)(66446008)(4326008)(66476007)(64756008)(53546011)(55016003)(66946007)(66556008)(508600001)(76116006)(6506007)(7696005)(82960400001)(38070700005)(8936002)(122000001)(9686003)(52536014)(316002)(5660300002)(86362001)(71200400001)(26005)(186003)(66574015)(83380400001)(33656002)(110136005)(54906003)(2906002)(32563001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?K3phGt0nQV8Irqn/81jAvqoRW0iba4uXNCfE6nxdFY3Ga2t/gumA4KIAcxOW?=
- =?us-ascii?Q?cv/HcH1FgUdTSmoSEpo0JjJyWJt79eFgQ7cJTmWPqnqK49UbsvJvFASPQqzl?=
- =?us-ascii?Q?IsoBEGNfZxeVJhhxFd2lwK8GLaMrociDEf41n3+0bnNC644owScln2KgpYYm?=
- =?us-ascii?Q?9EbOTRno9K/pC1LwK6XIzM9OEbgcJUOuKsmHHc4zQu8XFYEA/Ko03kYkMhXl?=
- =?us-ascii?Q?Avo66Ow3YaSZ2j5jiK0PcuSFRxNr5objiHXJxJ3jN4nRPC+6fUw/3iHm2/oE?=
- =?us-ascii?Q?G2P/K6sccLWiaMlmgu1x5h/H0bto01iYZXjhERyNp+b2hPnrifQlCE/e4tjT?=
- =?us-ascii?Q?YNWJwm6LcfsqjmAUZ+JF5/s0gFh/ae5o+8WKUzWeSmQQZRB1fdv440V4qY39?=
- =?us-ascii?Q?Mg+gm9aicW7azJW+EFlKj2HYTGhggPRI0/RsuuSchr2IRXtfwvjcK8yCDiqr?=
- =?us-ascii?Q?fG3XyVN4q3PsQaT+0ws6zSbl4fBNv1ZHU+YfhEas0x+EyNEbCIS+WFIvEiP5?=
- =?us-ascii?Q?5KK6UgzJHpNwh6ADEfx/E2qgAOnL6Bfac69Pk3po/aHt8S4QiQwFNR0ilrMZ?=
- =?us-ascii?Q?8C9IiD0XrczZE8e9qkgipAQojfwmpSRTX1nSF6GwsecdYcIjm89NwJQkEMEZ?=
- =?us-ascii?Q?ngC3OQah+DZEjtIx/+iLw4w+yp9l+wQpyuqJxmfucE1tKZnyjOGpjjQrf0bQ?=
- =?us-ascii?Q?SJtr544sPhpbxQOCriGC2CYnI/q7noMNmp5fiqhsyQh9ZA6ect202OsRSR4/?=
- =?us-ascii?Q?voASgOXaE4esvY7Fsf+ml92AHn9L7pnoRqGI2eql9EUt8mkBehRFJe4kNXHR?=
- =?us-ascii?Q?L65A/G+Rh8Pw8tlF4eyjwWv4koXWbjo/7C2N7dyCtb9PgfGDGgr5XrFkR20Z?=
- =?us-ascii?Q?IKzOdzXo43kDGJeFl9pLl+4pw7r2r9aMHpDX+7zeNuPMK3k0qCn44zZYKBWL?=
- =?us-ascii?Q?YV7Dj8IiCpk6jRpOkeB/o7U06THNPh628Yqb/ZvreWY0mZWz1u0LFq9pgeXk?=
- =?us-ascii?Q?gh3X7Tr2kmtNyo+wy5GKs3MoilTypDjGfpTjqCnxMohsc6RZosBzd95IOKQB?=
- =?us-ascii?Q?6S0tkUm17cOL68BAVccx+9+H4RnNia9mKoWaPAyHK0yqgqLHgNyz2P57bOks?=
- =?us-ascii?Q?P3kIeZPkv2wN61Gf40f4iOf4oLtWIkHBvmXtxs09XvgFm9CUm7Z8LPI5Erkv?=
- =?us-ascii?Q?pbyfO4dmW2bH+zdrOOAged6Iwy3h/+pJngr6vESRlo6zytl0pZJVuNyhUqjB?=
- =?us-ascii?Q?vB8XTA59/WnB8qZz++uwmdnBhysp2UClc0aZpzlCTsl4LvQ7IJFa+84MF6LN?=
- =?us-ascii?Q?Bcilftc1v5giz8SLjKpdSpMMKleak/9d2RSa3eUBHmE8jcppuoXoYTawwSgx?=
- =?us-ascii?Q?RtNJIu9IbFLOItgR11yJyruLKxFHCYcr+7aHMc/0DIuNR3aeKh/SffcTuQAf?=
- =?us-ascii?Q?DXGaKySVhmm/QD4E1lP8YQmhJ0OQD4VuwLgPbLYt6lADQHUWDKC8/g=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 23 Mar 2022 06:31:22 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9CC23149;
+        Wed, 23 Mar 2022 03:29:53 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id o30-20020a05600c511e00b0038c9cfb79cbso2848784wms.1;
+        Wed, 23 Mar 2022 03:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NPCBeK8EmlJTLX7b8VpEEv5X7dyNwlhHhnCggdFBrcE=;
+        b=qCdS83+Qfa6n9umTyVz3zBeCN4SuOd83241gKDfei+pW0vIEpIF7/yBTmxVFUjunnX
+         2hdou67Rw8yuOKtQjBGjB6l8T7axLIFyZM0rA8UxjHYIvCzYdWZ/OAngIna0jfD+/aVV
+         quEtdxTe4Zt36sJLG3b9I/ZviguWfUVLrBMzNhJ9GLawtO/x1s3PI1mADTbR4G2U4g7I
+         OKoHhF1Zdf8bbUJmXLPb3VjmaLqJUtSFTpaVmZULmjwaLBshuBMFp0pIPB8wfphmoTEF
+         l9IfSpcuedD3pwQbVTtJF50DGCfV0wzMJUo81ikY320MwUIFf23hMTMv07XQKiP78GmT
+         /l0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NPCBeK8EmlJTLX7b8VpEEv5X7dyNwlhHhnCggdFBrcE=;
+        b=1b79UelmdjbTKPrGmk5hOigaFMQXnLtgGnLBQ1myc3ijRCyzXPUWTSf1SCNiQ/Ug9U
+         PFmpyjjqQsYVTMlDRTpnPWV4P0yoygCiZHK8d/EIxrDvyz0dMaU50R2OAAm5xSJRWI6k
+         npfz1mGJx74Cv2Bp0j3Hrq+WKVRRyWSf7EwDp9hroTFpWEr64uCGFBfEAXBCKJF+EJKZ
+         nMIUODpDj4Gk/XCKG5BeEYAJCLzof4Av9NIEJbG9MIisbK3ITF6dUIct77Mq5iFaOl1a
+         5mHFXDHFNIecEr0R3xw/vDCH1vk/guRXCdZB/0ezTBTGWO1JEr1mVVSoUrZ5J7fJaSUh
+         SWCg==
+X-Gm-Message-State: AOAM532CjHKGFhKbAUmmVkdPJx1Tzw5r3YErM2zDkOlaQexcDPyTWzcN
+        iSy1T+E0heCVB3AnUOvgHUs=
+X-Google-Smtp-Source: ABdhPJyHea6O2q1bz2HV4g4AFBLS35QU0I+LtFAlaTzAWOVC/Wo0vznM+u/mxodCJm04FmQER/vFyA==
+X-Received: by 2002:a1c:c904:0:b0:38c:8dc1:87a3 with SMTP id f4-20020a1cc904000000b0038c8dc187a3mr8671232wmb.101.1648031391419;
+        Wed, 23 Mar 2022 03:29:51 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
+        by smtp.gmail.com with ESMTPSA id x13-20020adfec0d000000b00203ff46f802sm17017681wrn.36.2022.03.23.03.29.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 03:29:51 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 11:29:50 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 17/18] dt-bindings: arm: msm: Convert kpss-gcc driver
+ Documentation to yaml
+Message-ID: <Yjr2nkIrQ356DMUI@Ansuel-xps.localdomain>
+References: <20220321231548.14276-1-ansuelsmth@gmail.com>
+ <20220321231548.14276-18-ansuelsmth@gmail.com>
+ <1647913851.222685.941035.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4835.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e09fdfb-916c-4ade-62ff-08da0cb79cd5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2022 10:26:37.5031
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JN+UPA25MDL/frGbqusbwoMhegf4/evGPngUO9fxorUAzPvgLvZvXn4gILOqglp4wRnQ8XYKhFQ8dNO+VLyf4KzhFSec95TuJQ9laSjAxys=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1101MB2318
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1647913851.222685.941035.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Mika
-@Malani, Prashant @bleung@google.com This is the patch which fixes the part=
-ner issue. Kindly escalate your thoughts.=20
+On Mon, Mar 21, 2022 at 08:50:51PM -0500, Rob Herring wrote:
+> On Tue, 22 Mar 2022 00:15:47 +0100, Ansuel Smith wrote:
+> > Convert kpss-gcc driver Documentation to yaml. Since kpss-gcc expose a
+> > clock add the required '#clock-cells' binding while converting it.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
+> >  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 69 +++++++++++++++++++
+> >  2 files changed, 69 insertions(+), 44 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> >  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> > 
+> 
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
+> 
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
+> 
+> Full log is available here: https://patchwork.ozlabs.org/patch/1607962
+> 
+> 
+> clock-controller@2011000: '#clock-cells' is a required property
+> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
+> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
+> 
+> clock-controller@2011000: compatible:0: 'qcom,kpss-gcc' is not one of ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc-apq8064', 'qcom,kpss-gcc-msm8974', 'qcom,kpss-gcc-msm8960']
+> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
+> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
+> 
+> clock-controller@2011000: compatible:1: 'qcom,kpss-gcc' was expected
+> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
+> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
+> 
+> clock-controller@2011000: compatible: ['qcom,kpss-gcc', 'syscon'] is too short
+> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dt.yaml
+> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dt.yaml
+> 
 
-Thanks
-Rajat
+Sorry for the very stupid question but it's something i'm searching for
+a bit now... I can't really find Documentation or a guide on how to
+check single yaml and dts instead of using the make command and check
+everything. Am I missing something or this is not supported?
 
------Original Message-----
-From: Khandelwal, Rajat <rajat.khandelwal@intel.com>=20
-Sent: Wednesday, March 23, 2022 3:48 PM
-To: mika.westerberg@linux.intel.com
-Cc: Khandelwal, Rajat <rajat.khandelwal@intel.com>; bleung@google.com; jthi=
-es@google.com; Malani, Prashant <pmalani@google.com>; Rao, Abhijeet <abhije=
-et.rao@intel.com>; Regupathy, Rajaram <rajaram.regupathy@intel.com>; linux-=
-usb@vger.kernel.org; linux-kernel@vger.kernel.org
-Subject: [PATCH] USB4/TBT device routers should wake up during S0ix when so=
-mething gets connected/disconnected or a DP monitor gets plugged in
-
-Device routers don't wake up during S0ix when something is plugged in/out o=
-r if a DP monitor gets connected. This causes the linux device to not wake =
-up during S0ix cycling as the host router didn't wake up because the device=
- router didn't. This patch adds a new functionality to linux.
-
-Signed-off-by: Rajat-Khandelwal <rajat.khandelwal@intel.com>
----
- drivers/thunderbolt/switch.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c in=
-dex d026e305fe5d..4f8056724aa4 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -3067,13 +3067,11 @@ void tb_switch_suspend(struct tb_switch *sw, bool r=
-untime)
- 			tb_switch_suspend(port->remote->sw, runtime);
- 	}
-=20
--	if (runtime) {
-+	if (runtime || device_may_wakeup(&sw->dev)) {
- 		/* Trigger wake when something is plugged in/out */
- 		flags |=3D TB_WAKE_ON_CONNECT | TB_WAKE_ON_DISCONNECT;
- 		flags |=3D TB_WAKE_ON_USB4;
- 		flags |=3D TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE | TB_WAKE_ON_DP;
--	} else if (device_may_wakeup(&sw->dev)) {
--		flags |=3D TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE;
- 	}
-=20
- 	tb_switch_set_wake(sw, flags);
---
-2.17.1
-
+-- 
+	Ansuel

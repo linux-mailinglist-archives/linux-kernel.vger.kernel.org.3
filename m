@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDF14E512E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2B04E5137
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243828AbiCWLVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
+        id S243860AbiCWLXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235705AbiCWLVb (ORCPT
+        with ESMTP id S235691AbiCWLWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:21:31 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E1D2AE2E;
-        Wed, 23 Mar 2022 04:20:01 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id dr20so2144222ejc.6;
-        Wed, 23 Mar 2022 04:20:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8NQwjInQeHX4PNBQH9WRkcIExVlhXjtH5bBsP3hUUow=;
-        b=rsmRF13+szGJjK74EX3UkoYGPxvponNSH/MTschx7TUpNFbfZCezKQoVkHseddkMee
-         NyDvaHi/XRHWfWuhGvs3qMZ/6lqK+Yh8OSq4gn8Ml4AP2TNkWkEU4Ol9Dl6eYb/l1M43
-         R/lGeCiTbVeFLeznRCzC+vKJu+pYMDw+Zf1PSlOnBBl1FBzJM4Yh0xW4Uca3QfedddyN
-         he3NLddOQ3SQ/A6cOOhZ64fjdspy91/nWgUeVclN6qm4hdY1tuEa8y1k7v4gbz35frUI
-         R0ZPJ3ovlKw7D18YAjQltfhs6Xop/iJtVihL7hyfn/x6cWmzjAxs+/1/5aUHkVaFAS9e
-         EtRg==
-X-Gm-Message-State: AOAM530JtDL/9Ivc+2QF1nfntxf5tljZRYNlvO7pod79j0JAMM2UlaTY
-        bNimD6zILEzlVE/Ad4ABaF8Au0BZNQZpRw==
-X-Google-Smtp-Source: ABdhPJyggNgkzWof95iHK2BBBMKkQTe1ofpITUi/c6gBiK4dbd3/biJiEJrfNyHqAUzhektMkOESWg==
-X-Received: by 2002:a17:907:16ac:b0:6e0:1646:9121 with SMTP id hc44-20020a17090716ac00b006e016469121mr14215917ejc.194.1648034400203;
-        Wed, 23 Mar 2022 04:20:00 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm9582171eji.67.2022.03.23.04.19.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Mar 2022 04:19:59 -0700 (PDT)
-Message-ID: <5eed58a1-ee56-8aee-e73b-76b162d59873@kernel.org>
-Date:   Wed, 23 Mar 2022 12:19:57 +0100
+        Wed, 23 Mar 2022 07:22:50 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A7D78FC2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:21:19 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 12AB41EC0104;
+        Wed, 23 Mar 2022 12:21:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1648034474;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=py7kMA51MdGBUz1FXOirwusmSTs1+ukYQH97i+mRmtQ=;
+        b=CEk+37BUmi/wA5LPfZmPMXdJwBdkWMQi8qUZhRYQSDNSHVQfErALO8w8g2Kh0u1aspcIjv
+        0+Y8/90Fai9EKDIsoZIorDqF/0dVVSV0YLkFG7JciE5nWKDXC1Esma0c/9/fszb6BJuvrZ
+        fVOZ3EPBepIB0fxKF29Ew9yhwQaW/x8=
+Date:   Wed, 23 Mar 2022 12:21:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH] x86/defconfig: Enable WERROR
+Message-ID: <YjsCpoRK7W4l6tSh@zn.tnic>
+References: <YjhdcJB4FaLfsoyO@gmail.com>
+ <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
+ <YjpLiKRUIB4TGJm0@zn.tnic>
+ <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5/9] soc: apple: Add RTKit IPC library
-Content-Language: en-US
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-References: <20220321165049.35985-1-sven@svenpeter.dev>
- <20220321165049.35985-6-sven@svenpeter.dev>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220321165049.35985-6-sven@svenpeter.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 17:50, Sven Peter wrote:
-> Apple SoCs such as the M1 come with multiple embedded co-processors
-> running proprietary firmware. Communication with those is established
-> over a simple mailbox using the RTKit IPC protocol.
-> 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
->  drivers/soc/apple/Kconfig          |  13 +
->  drivers/soc/apple/Makefile         |   3 +
->  drivers/soc/apple/rtkit-crashlog.c | 147 +++++
->  drivers/soc/apple/rtkit-internal.h |  76 +++
->  drivers/soc/apple/rtkit.c          | 842 +++++++++++++++++++++++++++++
->  include/linux/soc/apple/rtkit.h    | 203 +++++++
->  6 files changed, 1284 insertions(+)
+From: Borislav Petkov <bp@suse.de>
 
-Isn't this some implementation of a mailbox? If so, it should be in
-drivers/mailbox. Please don't put all stuff in soc/apple, that's not how
-Linux is organized. To drivers/soc usually we put drivers which do not
-fit regular subsystems.
+To quote Linus:
 
-Best regards,
-Krzysztof
+"EVERYBODY should have CONFIG_WERROR=y on at least x86-64 and other
+serious architectures, unless you have some completely random
+experimental (and broken) compiler.
+
+New compiler warnings are not acceptable."
+
+So this should make at least the most obvious and common ones not go
+unnoticed.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+---
+ arch/x86/configs/i386_defconfig   | 1 +
+ arch/x86/configs/x86_64_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
+index 71124cf8630c..4b2085243aa3 100644
+--- a/arch/x86/configs/i386_defconfig
++++ b/arch/x86/configs/i386_defconfig
+@@ -262,3 +262,4 @@ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
+ CONFIG_EARLY_PRINTK_DBGP=y
+ CONFIG_DEBUG_BOOT_PARAMS=y
+ CONFIG_KALLSYMS_ALL=y
++CONFIG_WERROR=y
+diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
+index 92b1169ec90b..38c52e4eb30b 100644
+--- a/arch/x86/configs/x86_64_defconfig
++++ b/arch/x86/configs/x86_64_defconfig
+@@ -258,3 +258,4 @@ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
+ CONFIG_EARLY_PRINTK_DBGP=y
+ CONFIG_DEBUG_BOOT_PARAMS=y
+ CONFIG_KALLSYMS_ALL=y
++CONFIG_WERROR=y
+-- 
+2.29.2
+
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

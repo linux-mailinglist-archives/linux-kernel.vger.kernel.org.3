@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16564E52BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0D24E52C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243722AbiCWNHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
+        id S244117AbiCWNIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236437AbiCWNHH (ORCPT
+        with ESMTP id S243493AbiCWNIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:07:07 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE5D75E71
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:05:38 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id k125so973890qkf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:05:38 -0700 (PDT)
+        Wed, 23 Mar 2022 09:08:43 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB6B7A986
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:07:14 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso1721133pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:07:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=jP6H13YhnBeGfeYQzZ93Xibqu7njgIeGZjFH0n7MMa4=;
-        b=SVuc3CYsfFZNSxW31DMhZalADPrE6ytJWJ6fYRABmZqRer+hM1I5sG3ysnQbaxX4az
-         /I/tZmgbtqDnzRocLG4qvhI3WC7KFv99yPUmBamXoar2jTVUHmUsWCBOEtSt030geA+U
-         BEo2lntsE18w76kHid7lCBUoYeLCPKnyLwb/uDub7zaDZgbAk7sKZ+WosvjO6GsGVHOD
-         mEAWa2d0YNJ/RF3nXsSu1J/h0IRdieGzc57FA36WG4Fqe5mNM3AH6w/hRFMRGOGikpoM
-         0671oZPiP9IfaSvLOmcDSuBI+oXLGMbCKQ6ucMVCNzJTuimOc+rhbN5QnXPHA9mopXvi
-         qX4w==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZxdFE04CTgkizBkYzCS4GbYVPagKn+7CUxhEqDV8SKc=;
+        b=iG+TwB9aEVfEu/ws/wkSBpzFYxAgzAQhtf/EwAdOGeEuUSw0uybKzsA+54AyNd/SkD
+         47WWxTi2eMDY5tJw3j9lsA1IJSPETf6CgCtPhm7FamWTfGc4lYleLpOoa5Zx8eRAeR+o
+         URguTFXCdgZQ/JUq4HDDGv0iSTfDrpoWbZxtMLEkFt52IQSYAGUsHcMR0c/UhC9BgBqJ
+         Um+aMS5GDH7SOROC3RT7jqP5a2FzgKZIwjwavJuAxxpjNwUU+veXjztA8lLZBt6/N/+Z
+         7taplPIAlKFy+D+QIzNfVD/Br7ajffq454mdDu3l+S5xBauOatXjh4HjBwoULZzVAeP/
+         bJqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=jP6H13YhnBeGfeYQzZ93Xibqu7njgIeGZjFH0n7MMa4=;
-        b=OMzPi+GEHH7nZYp1D/6FNU8aHgs9kS47DRD6Rkdzj6ZW2n8iKejT06K8+0wNLPdo9j
-         81goOpdqAuweaMJ87BK5w4F67IvDs1YFXXOByu8Sn9GY8tBE1lUDW7FE3wkzoKmT7Y8o
-         lUFf2Lbzy2gSQ14w/HPOtAGptRgvIRv1LmxJiGFcTVVPRWSisLK9+JrzNkuaBbuh8mZV
-         R3CuoGJSestROuIzzTA2X53Hg8ewbNe1AOFxwMir6RTw/pTMd/jfNpvJjtfQT1HNfNlx
-         YZ0DcIvLR2qeNIdQgu+rEwcPAI6su58fxjVALgYNRo6zLJDTjLTUOfmt/Am8qE563q6F
-         /3sg==
-X-Gm-Message-State: AOAM531ejgwzWxYD2afAgtwCLBUECjD4A7mOhqZhTxgqlrVPMDoSWYP1
-        29i8q+4HM8JJWyxri5wfk4pC4w==
-X-Google-Smtp-Source: ABdhPJyTImRZbWZybzHwuqooxwilNQZaFKxrxF+882HKRVaCtSuV6OwyhLLuhF5MwvoGm5gl2Whr5A==
-X-Received: by 2002:a05:620a:45a1:b0:67d:af98:10d5 with SMTP id bp33-20020a05620a45a100b0067daf9810d5mr18580578qkb.1.1648040737316;
-        Wed, 23 Mar 2022 06:05:37 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05622a004f00b002e1aaa1738dsm16215255qtw.12.2022.03.23.06.05.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 06:05:36 -0700 (PDT)
-Message-ID: <a7c858461b99de2d4afad22d888acc3a74850240.camel@ndufresne.ca>
-Subject: Re: [PATCH v1] media: videobuf2: Allow applications customize data
- offsets of capture buffers
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Boris Brezillon <bbrezillon@collabora.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Laura Nao <laura.nao@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>
-Date:   Wed, 23 Mar 2022 09:05:35 -0400
-In-Reply-To: <20220322132329.6527-1-dmitry.osipenko@collabora.com>
-References: <20220322132329.6527-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZxdFE04CTgkizBkYzCS4GbYVPagKn+7CUxhEqDV8SKc=;
+        b=aSBKWz1M5VXcQHtf5Io/g4MzwBSr4IOXLPLaTX/hxYnXmGcd+E9krsXnpoHWJyQF4P
+         TnH/e/uupzvTBuuKOIpW7N4rZdvv1an/WXbXmq74W+2YmRa8yleh6TYQhYhl70V2ZO2f
+         N1hwGQ1qEkgkstxKVG6Z9g12YbLcb0/ktNv7kN8cXyZtJ1do5/SAdX+qne/FI9IP3CEM
+         6cxuc2Ys3NLrzoZTuI/RvHsLCCsXy4dwEaEjIM+dRpzj9V9fxcN6fo0wTojGq8HoNWVU
+         ofR7FPXwg38qMzyyqM8//DeNw8Evk3FaV3FUk0K7q2n/8m9VBS8w7x7UnkGiw4oARqKy
+         YzBQ==
+X-Gm-Message-State: AOAM532XOikM/xEApweU5JJpyvnTTDqsWHhlSe6pPs7pHx35ilVk+mft
+        TB8jduhb2mzW+Z5lNooB/tMiAw==
+X-Google-Smtp-Source: ABdhPJzr+vPKF/Xud3CsLzZb9/OKzypa6peSNxe6Jd7Hs+yFnQYrokAGJe5/DpQ7OJJ83RtHDPFGxg==
+X-Received: by 2002:a17:90b:3b8c:b0:1c6:ed78:67e2 with SMTP id pc12-20020a17090b3b8c00b001c6ed7867e2mr11530730pjb.163.1648040833488;
+        Wed, 23 Mar 2022 06:07:13 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6? ([2409:8a28:e62:3990:1de6:b89c:5d2d:b2d6])
+        by smtp.gmail.com with ESMTPSA id x23-20020a63fe57000000b0036490068f12sm19376483pgj.90.2022.03.23.06.07.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 06:07:13 -0700 (PDT)
+Message-ID: <f6a46509-a373-5c7a-8694-8eaf0ebc69ab@bytedance.com>
+Date:   Wed, 23 Mar 2022 21:07:01 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [External] Re: [PATCH v2 2/6] perf/core: Introduce percpu
+ perf_cgroup
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, eranian@google.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+References: <20220322120834.98637-1-zhouchengming@bytedance.com>
+ <20220322120834.98637-3-zhouchengming@bytedance.com>
+ <20220323125116.GX8939@worktop.programming.kicks-ass.net>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220323125116.GX8939@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,86 +79,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
-
-thanks for giving a second look a this issue.
-
-Le mardi 22 mars 2022 à 16:23 +0300, Dmitry Osipenko a écrit :
-> Use data offsets provided by applications for multi-planar capture
-> buffers. This allows V4L to import and use dma-bufs exported by other
-> subsystems in cases where application wants to customize data offsets
-> of capture buffers in order to meet hardware alignment requirements of
-> both dma-buf exporter and importer.
+On 2022/3/23 8:51 下午, Peter Zijlstra wrote:
+> On Tue, Mar 22, 2022 at 08:08:30PM +0800, Chengming Zhou wrote:
 > 
-> This feature is wanted for providing a better support of media hardware
-> found on Chromebooks. In particular display and camera ISP hardware of
-> Rockchip and MediaTek SoCs require special handling by userspace because
-> display h/w has specific alignment requirements that don't match default
-> alignments expected by V4L and there is a need to customize the data
-> offsets in case of multi-planar formats.
+>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>> index 8b5cf2aedfe6..848a3bfa9513 100644
+>> --- a/kernel/events/core.c
+>> +++ b/kernel/events/core.c
 > 
-> Some drivers already have preliminary support for data offsets
-> customization of capture buffers, like NVIDIA Tegra video decoder driver
-> for example, and V4L allows applications to provide data offsets for
-> multi-planar output buffers, let's support such customization for the
-> capture buffers as well.
+>> @@ -843,11 +845,21 @@ static void perf_cgroup_switch(struct task_struct *task)
+>>  	 */
+>>  	local_irq_save(flags);
+>>  
+>> +	cgrp = perf_cgroup_from_task(task, NULL);
+>> +	if (cgrp == __this_cpu_read(cpu_perf_cgroup))
+>> +		goto out;
+>> +
+>> +	__this_cpu_write(cpu_perf_cgroup, cgrp);
+>> +
+>>  	list = this_cpu_ptr(&cgrp_cpuctx_list);
+>>  	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
+>>  		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
+>>  
+>>  		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
+>> +
+>> +		if (cpuctx->cgrp == cgrp)
+>> +			continue;
+>> +
+>>  		perf_pmu_disable(cpuctx->ctx.pmu);
+>>  
+>>  		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
 > 
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  Documentation/userspace-api/media/v4l/buffer.rst | 9 ++++++++-
->  drivers/media/common/videobuf2/videobuf2-v4l2.c  | 7 +++++++
->  2 files changed, 15 insertions(+), 1 deletion(-)
+> This is just straight up broken.. you can't continue after taking a
+> lock, that'll miss unlock.
+
+Yes, Namhyung has pointed it out, I will fix it next version.
+
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
-> index 4638ec64db00..75b1929e2acb 100644
-> --- a/Documentation/userspace-api/media/v4l/buffer.rst
-> +++ b/Documentation/userspace-api/media/v4l/buffer.rst
-> @@ -369,13 +369,20 @@ struct v4l2_plane
->        - ``data_offset``
->        - Offset in bytes to video data in the plane. Drivers must set this
->  	field when ``type`` refers to a capture stream, applications when
-> -	it refers to an output stream.
-> +	it refers to an output or capture stream.
+> Also, I really don't see the point of cpu_perf_cgroup, cpuctx->cgrp
+> should be able to do this.
 
-There is a clear contradiction in this paragraph. Both the driver and the
-application MUST set the data_offset.
+But the problem is that we have two cpuctx on the percpu list, do you
+mean we should use perf_cgroup of the first cpuctx to compare with
+the next task's perf_cgroup ?
 
-Would it be possible to demo your idea by implementing this in a virtual driver
-? vivid already have data_offset for capture in some cases, you could verify if
-your idea works without any conflict in this scenario.
+Or we should delete the cgrp in cpuctx, and use this new percpu cpu_perf_cgroup?
 
+> 
+> Also, perhaps merge this in the previous patch, I'm not sure it makes
+> sense to split this.
+
+Ok, will do. I put it in one patch in v1 RFC, then split it for easier review.
+I will put it together in the next version.
+
+Thanks.
+
+> 
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -833,6 +833,7 @@ static DEFINE_PER_CPU(struct list_head,
+>   */
+>  static void perf_cgroup_switch(struct task_struct *task)
+>  {
+> +	struct perf_cgroup *cgrp;
+>  	struct perf_cpu_context *cpuctx, *tmp;
+>  	struct list_head *list;
+>  	unsigned long flags;
+> @@ -843,11 +844,20 @@ static void perf_cgroup_switch(struct ta
+>  	 */
+>  	local_irq_save(flags);
 >  
->  	.. note::
+> +	cgrp = perf_cgroup_from_task(task, NULL);
+> +
+>  	list = this_cpu_ptr(&cgrp_cpuctx_list);
+>  	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
+>  		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
 >  
->  	   That data_offset is included  in ``bytesused``. So the
->  	   size of the image in the plane is ``bytesused``-``data_offset``
->  	   at offset ``data_offset`` from the start of the plane.
+> +		if (READ_ONCE(cpuctx->cgrp == cgrp))
+> +			continue
 > +
-> +	   For capture planes data_offset may be specified by applications
-> +	   and by drivers. Driver may override application's offset or error
-> +	   out buffer if offset can't be satisfied by hardware. This allows
-> +	   applications to customize data offsets of imported dma-bufs.
-> +	   Handling of application's offsets is driver-dependent, application
-> +	   must use the resulting buffer offset.
->      * - __u32
->        - ``reserved[11]``
->        - Reserved for future use. Should be zeroed by drivers and
-> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> index 6edf4508c636..929107a431cc 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> @@ -263,6 +263,13 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
->  						psrc->bytesused : pdst->length;
->  				pdst->data_offset = psrc->data_offset;
->  			}
-> +		} else {
-> +			for (plane = 0; plane < vb->num_planes; ++plane) {
-> +				struct vb2_plane *pdst = &planes[plane];
-> +				struct v4l2_plane *psrc = &b->m.planes[plane];
+>  		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
 > +
-> +				pdst->data_offset = psrc->data_offset;
-> +			}
->  		}
->  	} else {
+> +		if (cpuctx->cgrp == cgrp)
+> +			goto next;
+> +
+>  		perf_pmu_disable(cpuctx->ctx.pmu);
+>  
+>  		cpu_ctx_sched_out(cpuctx, EVENT_ALL);
+> @@ -855,50 +865,22 @@ static void perf_cgroup_switch(struct ta
+>  		 * must not be done before ctxswout due
+>  		 * to event_filter_match() in event_sched_out()
+>  		 */
+> -		cpuctx->cgrp = perf_cgroup_from_task(task,
+> -						     &cpuctx->ctx);
+> +		WRITE_ONCE(cpuctx->cgrp, cgrp);
 >  		/*
-
+>  		 * set cgrp before ctxsw in to allow
+>  		 * event_filter_match() to not have to pass
+>  		 * task around
+> -		 * we pass the cpuctx->ctx to perf_cgroup_from_task()
+> -		 * because cgroup events are only per-cpu
+>  		 */
+>  		cpu_ctx_sched_in(cpuctx, EVENT_ALL, task);
+>  
+>  		perf_pmu_enable(cpuctx->ctx.pmu);
+> +next:
+>  		perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
+>  	}
+>  
+>  	local_irq_restore(flags);
+>  }
+>  
+> -static inline void perf_cgroup_sched_switch(struct task_struct *task,
+> -					    struct task_struct *next)
+> -{
+> -	struct perf_cgroup *cgrp1;
+> -	struct perf_cgroup *cgrp2 = NULL;
+> -
+> -	rcu_read_lock();
+> -	/*
+> -	 * we come here when we know perf_cgroup_events > 0
+> -	 * we do not need to pass the ctx here because we know
+> -	 * we are holding the rcu lock
+> -	 */
+> -	cgrp1 = perf_cgroup_from_task(task, NULL);
+> -	cgrp2 = perf_cgroup_from_task(next, NULL);
+> -
+> -	/*
+> -	 * only schedule out current cgroup events if we know
+> -	 * that we are switching to a different cgroup. Otherwise,
+> -	 * do no touch the cgroup events.
+> -	 */
+> -	if (cgrp1 != cgrp2)
+> -		perf_cgroup_switch(task);
+> -
+> -	rcu_read_unlock();
+> -}
+> -
+>  static int perf_cgroup_ensure_storage(struct perf_event *event,
+>  				struct cgroup_subsys_state *css)
+>  {
+> @@ -1062,11 +1044,6 @@ static inline void update_cgrp_time_from
+>  {
+>  }
+>  
+> -static inline void perf_cgroup_sched_switch(struct task_struct *task,
+> -					    struct task_struct *next)
+> -{
+> -}
+> -
+>  static inline int perf_cgroup_connect(pid_t pid, struct perf_event *event,
+>  				      struct perf_event_attr *attr,
+>  				      struct perf_event *group_leader)
+> @@ -1080,11 +1057,6 @@ perf_cgroup_set_timestamp(struct task_st
+>  {
+>  }
+>  
+> -static inline void
+> -perf_cgroup_sched_switch(struct task_struct *task, struct task_struct *next)
+> -{
+> -}
+> -
+>  static inline u64 perf_cgroup_event_time(struct perf_event *event)
+>  {
+>  	return 0;
+> @@ -1104,6 +1076,10 @@ static inline void
+>  perf_cgroup_event_disable(struct perf_event *event, struct perf_event_context *ctx)
+>  {
+>  }
+> +
+> +static void perf_cgroup_switch(struct task_struct *task)
+> +{
+> +}
+>  #endif
+>  
+>  /*
+> @@ -3625,7 +3601,7 @@ void __perf_event_task_sched_out(struct
+>  	 * cgroup event are system-wide mode only
+>  	 */
+>  	if (atomic_read(this_cpu_ptr(&perf_cgroup_events)))
+> -		perf_cgroup_sched_switch(task, next);
+> +		perf_cgroup_switch(next);
+>  }
+>  
+>  /*

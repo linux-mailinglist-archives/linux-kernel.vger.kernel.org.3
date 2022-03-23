@@ -2,191 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5E44E58EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497104E58FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 20:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344095AbiCWTJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 15:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S243889AbiCWTO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 15:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238380AbiCWTJo (ORCPT
+        with ESMTP id S232772AbiCWTOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 15:09:44 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B26E6431;
-        Wed, 23 Mar 2022 12:08:14 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id p17so2449315plo.9;
-        Wed, 23 Mar 2022 12:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T9cEFUgZOXaQ/vzN5D/naAp9zAmzy1GxcpGvVsKY8Hw=;
-        b=PQDzITIOqjNQsmrORP1m8PslVp9pELPXPgTsxIvG8O4ldLoMl1vFAHUxUUbdDUbS0K
-         nWDY/H1FOZrdjPTH4Clbwii7e2z6oa6qmLdSo3QWNdJL36YgdR1nxZOWp2owyYCMIws9
-         sxyG3ngcUoaelTZJUoilpXzeah9c+BAg2tHpPsklIpZ9dhFJdmJlquz7CllLGKvpwbK5
-         mPnrQy68OIQiCD4jaic+Dw9aYicfRsqX2J+5RSYmy1qwf4cKDwP0xoHD8bxdRvp6+nKu
-         YJqA0jZsf3VNBSE97CYjrn+86BdiVTPCPoZtHD9CgmyfacbVeqEAvXsFoIPQ28w7Q+Lo
-         Gdsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T9cEFUgZOXaQ/vzN5D/naAp9zAmzy1GxcpGvVsKY8Hw=;
-        b=VyxSaw01qiggD9OEFgsWY3Za3qfeEpm7+hAzz+Xd4qMQbvoLg0uA9xMmpSbv7EUQIF
-         76pXYFvHKBmcrbGRnt9WeFV8+8mYvyDohY2IPUn4peRpffDKvOjeeEkEij+Fv4Iz5bv6
-         6YTgWVAePGcVTe+1c4WrtUGNcTidsI27BV5SVlgMOitUX4QS338rHXvjxsiZkB/srsmc
-         YLL5TzO6gP0Nug6b0gI/Qcbt+t4U932CTzAlWXoPgOIdlurQmDD6ewch1HokHZAuWxk5
-         l7ENmmXxeVSCkttDlo2L3z54eMHjN4V++NsgE5L4Owmxlg2M4GrSmhCHNXMN7kTWQ9qS
-         Ocdw==
-X-Gm-Message-State: AOAM531YroTzQIRtth620m6ICYHKm8L+mS0DaSWqmPOXaE3GI3EZX6Zo
-        NfdI+Qn/96Bht19pWgYsNEg=
-X-Google-Smtp-Source: ABdhPJzUZU/GsUv1TDau7l+3XBBkjFme6BKm1O2k+UlOeQc84aqHHTeen1a2E5DBy4jaeIKSF7bjIg==
-X-Received: by 2002:a17:90a:7147:b0:1bd:24ac:13bd with SMTP id g7-20020a17090a714700b001bd24ac13bdmr13508510pjs.70.1648062493634;
-        Wed, 23 Mar 2022 12:08:13 -0700 (PDT)
-Received: from localhost ([192.55.54.52])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056a00238500b004fae3e50e14sm612570pfc.214.2022.03.23.12.08.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 12:08:13 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 12:08:12 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Erdem Aktas <erdemaktas@google.com>
-Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [RFC PATCH v5 073/104] KVM: TDX: track LP tdx vcpu run and
- teardown vcpus on descroing the guest TD
-Message-ID: <20220323190812.GH1964605@ls.amr.corp.intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <6e096d8509ef40ce3e25c1e132643e772641241b.1646422845.git.isaku.yamahata@intel.com>
- <CAAYXXYy-LU+FCt3VDubjhwYPk1TEKc9qshPp2r8tTvcXXPRnOQ@mail.gmail.com>
+        Wed, 23 Mar 2022 15:14:54 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7493C275D6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 12:13:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IPxKW39EUL7G8t67G435Bj88o8iGOLqWBdTaoCPauurevKvwv0jbdTKAchnNQR2dOSU8o79ZuiD+CAYE3fVveLid9txdyXdiBNQ/wn7IH9ev0mJSzjqzuYeaccJZ3NnUOoMbK3j5nmzdrBQboggwfnujgLlJ6KTwptcYFlvtm4bq6yaFS6SJ5xkpTBHlFJbS06roxvypQBfSrJCagDwu24sQrEUm8VwzCyzgvMkFONtwmrpxMCqIxQBlzura1B6D0zLpGLtmSE/oereaupi382N0lfkaJRoub8acJ24fo5cYF3VFryVHyjApWDQ6vnxRdUn6H+QYVUEa6jTjRU6tNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6h3sUz8bhs3D90HGxhp7V/78f7iCFBUvGnm7S5UayLs=;
+ b=PkZ78P1W1s21RIevqVW8uh8uQaTuyEkxq66+owuef4QMcWCWN8XV8G1G14F+y5V7tCc9TPu7hWfIAWfrPfi8VKypMG7V5srtlvnemMWf7eA319OQqecsE26obI4ItsTDnKvBgquTzhKnRhx7d1wBldolIKynxM4d7yDMe5yjTXH5oCQ31W5rAn0xhrylruLS+FCg0sFWPCGGSBBYKXVmS660KINadGgZg3FL6Qv608nWxOUxeLUpzmArZSfx0k/xNbiglAtiyrX3uEO5z7kyyTJJO+Bqxg10p85CYmGMFnK3+I+OTvplNSOCEkhqjuLCTIKsU17SyDT3RXmTQrhg9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6h3sUz8bhs3D90HGxhp7V/78f7iCFBUvGnm7S5UayLs=;
+ b=OeZeavap3nW+n5qRxDQqmGCxdoTXC8qObL107Cbjbr+5JgfuIbJUXjWwpRDOrlUrtirDnQjXuBVyeAFJyWNE+sjCECwf0s9esD2d/hln/vCDY298S5VjyStQ/tzq57T9fgWXyzIxvrXRVFaAJhZQ1KXMQsDc2vZFRmPXbxDEwXg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by SN1PR12MB2495.namprd12.prod.outlook.com (2603:10b6:802:32::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 23 Mar
+ 2022 19:13:21 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::4839:9431:1040:5cd5]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::4839:9431:1040:5cd5%4]) with mapi id 15.20.5102.016; Wed, 23 Mar 2022
+ 19:13:21 +0000
+Message-ID: <4d1f3148-c421-a35f-4466-837b63c3958d@amd.com>
+Date:   Wed, 23 Mar 2022 15:13:19 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/1] drm/amdkfd: Protect the Client whilst it is being
+ operated on
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>, philip yang <yangp@amd.com>
+Cc:     David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20220317131610.554347-1-lee.jones@linaro.org>
+ <8702f8a5-62a1-c07e-c7b7-e9378be069b6@amd.com> <YjNNCXc8harOvwqe@google.com>
+ <1f003356-3cf9-7237-501e-950d0aa124d1@amd.com> <YjNQA80wkWpy+AmA@google.com>
+ <b65db51e-f1ba-3a9b-0ac1-0b8ae51c5eee@amd.com> <YjNh/Ajxgp3mjvWV@google.com>
+ <YjsWvy8cT2eOw618@google.com>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+In-Reply-To: <YjsWvy8cT2eOw618@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT3PR01CA0016.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:86::6) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAYXXYy-LU+FCt3VDubjhwYPk1TEKc9qshPp2r8tTvcXXPRnOQ@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 62a93ec8-a809-4c4d-f960-08da0d01323b
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2495:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB24957797A8A6FD8D60B6C6FD92189@SN1PR12MB2495.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SbaWcmEITsVPPZl/w607O7pw1+Sf1RQ5tbClZDkbLfOpxhU2oaY/+/1gSxSrQ0bhXNO8NE2m5laL20oQQtKpIa6zC3B3AQluO4PEYo26e69eGNYydAHqKE7FDveucimLklN5sWNOhuCXNYgZ+Ey/EJ+vUkFiGrgyaKId+SefQNI1xwCsmyzKgQu04aAA2cYSKMuE8JnWVmXwjtJSrqOwRg/hnM9MzwmBxOWp+FDdASSzxmySDx39kAqMPqYPVSRSaRTnQH8Us/aijtWXtpSYvZLacyK6v0P+mz/VhdUJGo1fLlEGcgAU54QjVdFPF3LXdmK1Wn/yrkxSYtu6PaLUHRWqEHFJRI9395DHjD1zXzvwznhgfGSxHvWJBrAVkROL9dFkREbwSHM/ELOktfFahIkO6uU/YZcM+35ggL/JS/5rd8EodCuxethnhl1rbAPUsa1eQsQfqq+03ExF+edYcQSoYkad3hwX/DzpIfHy9LNSvzbywjAPV397tOdWmrYtZp0gbVxzldGnjZY5E6lPXd0QQV1DjinD8CgCdknj+0uDmqwmK2Tx0/WOct9DRXtFh6o+dI6cyr6QGoqjuC5pBYzMioPf2TrHg/toEmFryetfyC3zGo5V8Or5gBtrY/YBWOwbGgYoJWSFLzKtcN/DNbjWNS/qVEB1grqfw+cnK4W0OpVQU0cRLE/H45JRAniq4AMDvA7mohiqApiNPiXUE9y+2Y+F2Xx8JShVNqbiuE3GC7IdeN3gfl7qLjeYuiZqYJg9aLwsSZvsQpTVuy8+XQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(2906002)(508600001)(186003)(66574015)(31686004)(36756003)(26005)(38100700002)(83380400001)(6506007)(6486002)(53546011)(86362001)(6512007)(5660300002)(66946007)(8676002)(66476007)(66556008)(8936002)(31696002)(4326008)(316002)(6636002)(54906003)(110136005)(2616005)(487294008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dys2dEUxQ21PbXRmQkRGQVNobzRFVzkySFZWQWNURWd3ajZQTlFSejAzUHRY?=
+ =?utf-8?B?Q1QvSlF6Qlg5YXdVTkxsSHFOT3Y5ay85aXBJeGlLd2xVUkY2eGx3bk9TbVhq?=
+ =?utf-8?B?YXdWNGtTeXVBTjNDekh1Z1pXUFVHUnNic2dRNnpDOWQwSDJwdnFacE1qU1NH?=
+ =?utf-8?B?Uk1pUlh1Vi92UERoUmpNMDFRWDl2N2dHRmZsQXk0SjhPS1pJVjdjQWNUbllD?=
+ =?utf-8?B?ZG9LT25nd3kwK014b1c4aStzY2lkZlUyaTcxMWxXdHhWYzNSLzdBaWNZdUlQ?=
+ =?utf-8?B?dWQwRitNNHFlTTJEK0NOVlJuOEFXQytxOEpQMytqWDREeXhuTEFYM3pRd0FV?=
+ =?utf-8?B?dzhRak1PS1NEZEo0SFZoS3lYOTNEbm1keFdqL3JiTjloRWhQeml5VDE1MnAw?=
+ =?utf-8?B?dXlYT0dyZXJzVlVmT0p0eU5wNTBmNjgyL2dkVlhTaElRbGhlNXpCdEd1dFVD?=
+ =?utf-8?B?bmJwZHNpNEJ3VGxsc0MvNEx3UHA1UGRmYzRmSFVMd2QvZWhlRWdVS04zZmxs?=
+ =?utf-8?B?SWNJOU9YMUszQk5ML3d4ZzZJQjF2TTljUi9LM1F5cGRYMjh2Y3lhYTdYVnI1?=
+ =?utf-8?B?TDQxY2JEU2hOQ01tYnhXclRIWUtYcklTUGs0d2gwWVF1c0Jmc2VxUTBoMC9j?=
+ =?utf-8?B?aVY5dEM4Z0E4b0NyelA0czc0aUZ1RmVwMHdtOHVZN1ZNY3lDaG1adGZET1hy?=
+ =?utf-8?B?cDR0Mm9YQkFIOEttb2JZQ3hGcnltT1VsUlpXYzNtamwwQUg0QWlZSmRwUjRx?=
+ =?utf-8?B?SUtvbE5BKzEvc0hIOTB2S1g5MFMwVm9BeHFDbGJrZjZya1phNGw0SVFRaFFY?=
+ =?utf-8?B?TUtOZ1pBNWpHUXoyTFNYQlNuRFVucHpnMUhXNTZhNHUxMXpMMlNTb2ZsRkR1?=
+ =?utf-8?B?NlJ3VUFndXNFL3ZvR1VPN1pkNXJ3NlZKaHRyblViVlFMMjBhMWl5azJjZDh3?=
+ =?utf-8?B?RkxFckk4c0s1UDJnYWJDeEs5bzRsR3B2TE1xbSsxQmRiS2psd2hGVnhoS1Ro?=
+ =?utf-8?B?Ynh0N3B5YUNpWURZL1dMR3I2ZGRvd1RZaHk0c0FNcGRwV21nRWQzaHZJSGh0?=
+ =?utf-8?B?dFJRblNUOHhGN3pZNTBDVTZ2dmZzZzZMSm56KzArVGJ2aytVNkhQVnp1R29K?=
+ =?utf-8?B?L3VuVUt4eWJaWVEyeU1tcXRKS3BFZlppK2JoNzRTTGIzbmFSTmVHbVh5NnQ4?=
+ =?utf-8?B?cWk3YmtkRC9uMU9CbmJwMEFabDErMnlSU0NRZHBDVE5EOWRKUHBkeGllQW9F?=
+ =?utf-8?B?ODRQUHVpN1FuMGVMditpV3U3NU9kQ0lXcG9vRFg0emZLdFBsdHVtTHFXUE93?=
+ =?utf-8?B?RHc3VVMxZlYvamVnbVFFZnp1eERIMTY5QWdwUGpOUFlSWkoyTVExVnl1dGgv?=
+ =?utf-8?B?cmp2MldOZnJUR0RGRlBYL2xBdnlUMk90V1RsdmJzY2tzRW5lOVdISHpZN241?=
+ =?utf-8?B?VUxXcFFWYzhONXBsQzBPNDI1NFV4bjJtMFR2emFhdzFaeFROb3kxcG1kbWtl?=
+ =?utf-8?B?Vm9PMUJ4WXRJUGt0YjA1NDJ0TnVvR0c1eXgvbC8vZzVidTdjT3NnblpWWXNs?=
+ =?utf-8?B?Z0EyUU9vaHFIT3p6UXNOMGQ4WjVXdHZuSk1ONE1rOG9EMUx1N2FmMWNMWGFL?=
+ =?utf-8?B?RFhyU3FhaUExeXhvdmIvSWx3ZUdMTnMyZEFLQjVqeWw1MHFtTm9HWmhVVXgz?=
+ =?utf-8?B?YVZTT2FQQnd3bGc4QnpPanJjVzFhVlVmWVd5WGgyR1cvUE5Qa1FjemMxd1pO?=
+ =?utf-8?B?M1N2NE51aUxqM3lka2c2ME1iODRkZ1BhamNqYVNOWGFGY3VBUlhOY0JrSG13?=
+ =?utf-8?B?L3hETmt5ZGFPZmZhaEhwbytGNFMvQU8valVyb2oxZk5sSC9VR0Rtd1JaMlZj?=
+ =?utf-8?B?Qk9aaFo4MmpmZ0trcjJSZXN3RWcxRFlCVFVxRkV2TklIWSs3ZS9ZZElXbHh1?=
+ =?utf-8?Q?I59+hJciwBBXNPPt8K064l6gXXrLfcDf?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62a93ec8-a809-4c4d-f960-08da0d01323b
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 19:13:21.6984
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R6jY+17LLuti5wBZ4zrOA/7+n4xFYe/zbPc6pchuiyBq2WJLrbxq6Jv3IzsI7LqDHE3LVOYFtZKjwyzoXuM75g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2495
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 05:54:45PM -0700,
-Erdem Aktas <erdemaktas@google.com> wrote:
 
-> On Fri, Mar 4, 2022 at 11:50 AM <isaku.yamahata@intel.com> wrote:
-> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > index a6b1a8ce888d..690298fb99c7 100644
-> > --- a/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -48,6 +48,14 @@ struct tdx_capabilities tdx_caps;
-> >  static DEFINE_MUTEX(tdx_lock);
-> >  static struct mutex *tdx_mng_key_config_lock;
-> >
-> > +/*
-> > + * A per-CPU list of TD vCPUs associated with a given CPU.  Used when a CPU
-> > + * is brought down to invoke TDH_VP_FLUSH on the approapriate TD vCPUS.
-> > + * Protected by interrupt mask.  This list is manipulated in process context
-> > + * of vcpu and IPI callback.  See tdx_flush_vp_on_cpu().
-> > + */
-> > +static DEFINE_PER_CPU(struct list_head, associated_tdvcpus);
-> > +
-> >  static u64 hkid_mask __ro_after_init;
-> >  static u8 hkid_start_pos __ro_after_init;
-> >
-> > @@ -87,6 +95,8 @@ static inline bool is_td_finalized(struct kvm_tdx *kvm_tdx)
-> >
-> >  static inline void tdx_disassociate_vp(struct kvm_vcpu *vcpu)
-> >  {
-> > +       list_del(&to_tdx(vcpu)->cpu_list);
-> > +
-> >         /*
-> >          * Ensure tdx->cpu_list is updated is before setting vcpu->cpu to -1,
-> >          * otherwise, a different CPU can see vcpu->cpu = -1 and add the vCPU
-> > @@ -97,6 +107,22 @@ static inline void tdx_disassociate_vp(struct kvm_vcpu *vcpu)
-> >         vcpu->cpu = -1;
-> >  }
-> >
-> > +void tdx_hardware_enable(void)
-> > +{
-> > +       INIT_LIST_HEAD(&per_cpu(associated_tdvcpus, raw_smp_processor_id()));
-> > +}
-> > +
-> > +void tdx_hardware_disable(void)
-> > +{
-> > +       int cpu = raw_smp_processor_id();
-> > +       struct list_head *tdvcpus = &per_cpu(associated_tdvcpus, cpu);
-> > +       struct vcpu_tdx *tdx, *tmp;
-> > +
-> > +       /* Safe variant needed as tdx_disassociate_vp() deletes the entry. */
-> > +       list_for_each_entry_safe(tdx, tmp, tdvcpus, cpu_list)
-> > +               tdx_disassociate_vp(&tdx->vcpu);
-> > +}
-> > +
-> >  static void tdx_clear_page(unsigned long page)
-> >  {
-> >         const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
-> > @@ -230,9 +256,11 @@ void tdx_mmu_prezap(struct kvm *kvm)
-> >         struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> >         cpumask_var_t packages;
-> >         bool cpumask_allocated;
-> > +       struct kvm_vcpu *vcpu;
-> >         u64 err;
-> >         int ret;
-> >         int i;
-> > +       unsigned long j;
-> >
-> >         if (!is_hkid_assigned(kvm_tdx))
-> >                 return;
-> > @@ -248,6 +276,17 @@ void tdx_mmu_prezap(struct kvm *kvm)
-> >                 return;
-> >         }
-> >
-> > +       kvm_for_each_vcpu(j, vcpu, kvm)
-> > +               tdx_flush_vp_on_cpu(vcpu);
-> > +
-> > +       mutex_lock(&tdx_lock);
-> > +       err = tdh_mng_vpflushdone(kvm_tdx->tdr.pa);
-> 
-> Hi Isaku,
+Am 2022-03-23 um 08:46 schrieb Lee Jones:
+> On Thu, 17 Mar 2022, Lee Jones wrote:
+>
+>> On Thu, 17 Mar 2022, philip yang wrote:
+>>
+>>>     On 2022-03-17 11:13 a.m., Lee Jones wrote:
+>>>
+>>> On Thu, 17 Mar 2022, Felix Kuehling wrote:
+>>>
+>>>
+>>> Am 2022-03-17 um 11:00 schrieb Lee Jones:
+>>>
+>>> Good afternoon Felix,
+>>>
+>>> Thanks for your review.
+>>>
+>>>
+>>> Am 2022-03-17 um 09:16 schrieb Lee Jones:
+>>>
+>>> Presently the Client can be freed whilst still in use.
+>>>
+>>> Use the already provided lock to prevent this.
+>>>
+>>> Cc: Felix Kuehling [1]<Felix.Kuehling@amd.com>
+>>> Cc: Alex Deucher [2]<alexander.deucher@amd.com>
+>>> Cc: "Christian König" [3]<christian.koenig@amd.com>
+>>> Cc: "Pan, Xinhui" [4]<Xinhui.Pan@amd.com>
+>>> Cc: David Airlie [5]<airlied@linux.ie>
+>>> Cc: Daniel Vetter [6]<daniel@ffwll.ch>
+>>> Cc: [7]amd-gfx@lists.freedesktop.org
+>>> Cc: [8]dri-devel@lists.freedesktop.org
+>>> Signed-off-by: Lee Jones [9]<lee.jones@linaro.org>
+>>> ---
+>>>     drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c | 6 ++++++
+>>>     1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c b/drivers/gpu/drm/amd/a
+>>> mdkfd/kfd_smi_events.c
+>>> index e4beebb1c80a2..3b9ac1e87231f 100644
+>>> --- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
+>>> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
+>>> @@ -145,8 +145,11 @@ static int kfd_smi_ev_release(struct inode *inode, struct f
+>>> ile *filep)
+>>>          spin_unlock(&dev->smi_lock);
+>>>          synchronize_rcu();
+>>> +
+>>> +       spin_lock(&client->lock);
+>>>          kfifo_free(&client->fifo);
+>>>          kfree(client);
+>>> +       spin_unlock(&client->lock);
+>>>
+>>> The spin_unlock is after the spinlock data structure has been freed.
+>>>
+>>> Good point.
+>>>
+>>> If we go forward with this approach the unlock should perhaps be moved
+>>> to just before the kfree().
+>>>
+>>>
+>>> There
+>>> should be no concurrent users here, since we are freeing the data structure.
+>>> If there still are concurrent users at this point, they will crash anyway.
+>>> So the locking is unnecessary.
+>>>
+>>> The users may well crash, as does the kernel unfortunately.
+>>>
+>>> We only get to kfd_smi_ev_release when the file descriptor is closed. User
+>>> mode has no way to use the client any more at this point. This function also
+>>> removes the client from the dev->smi_cllients list. So no more events will
+>>> be added to the client. Therefore it is safe to free the client.
+>>>
+>>> If any of the above were not true, it would not be safe to kfree(client).
+>>>
+>>> But if it is safe to kfree(client), then there is no need for the locking.
+>>>
+>>> I'm not keen to go into too much detail until it's been patched.
+>>>
+>>> However, there is a way to free the client while it is still in use.
+>>>
+>>> Remember we are multi-threaded.
+>>>
+>>>     files_struct->count refcount is used to handle this race, as
+>>>     vfs_read/vfs_write takes file refcount and fput calls release only if
+>>>     refcount is 1, to guarantee that read/write from user space is finished
+>>>     here.
+>>>
+>>>     Another race is driver add_event_to_kfifo while closing the handler. We
+>>>     use rcu_read_lock in add_event_to_kfifo, and kfd_smi_ev_release calls
+>>>     synchronize_rcu to wait for all rcu_read done. So it is safe to call
+>>>     kfifo_free(&client->fifo) and kfree(client).
+>> Philip, please reach out to Felix.
+> Philip, Felix, are you receiving my direct messages?
+>
+> I have a feeling they're being filtered out by AMD's mail server.
 
-Hi.
+I didn't get any direct messages. :/ I'll send you my private email address.
+
+Regards,
+   Felix
 
 
-> I am wondering about the impact of the failures on these functions. Is
-> there any other function which recovers any failures here?
-> When I look at the tdx_flush_vp function, it seems like it can fail
-> due to task migration so tdx_flush_vp_on_cpu might also fail and if it
-> fails, tdh_mng_vpflushdone returns err. Since tdx_vm_teardown does not
-> return any error , how the VMM can free the keyid used in this TD.
-> Will they be forever in "used state"?
-> Also if tdx_vm_teardown fails, the kvm_tdx->hkid is never set to -1
-> which will prevent tdx_vcpu_free to free and reclaim the resources
-> allocated for the vcpu.
-
-mmu_prezap() is called via release callback of mmu notifier when the last mmu
-reference of this process is dropped.  It is after all kvm vcpu fd and kvm vm
-fd were closed.  vcpu will never run.  But we still hold kvm_vcpu structures.
-There is no race between tdh_vp_flush()/tdh_mng_vpflushdone() here and process
-migration.  tdh_vp_flush()/tdh_mng_vp_flushdone() should success.
-
-The cpuid check in tdx_flush_vp() is for vcpu_load() which may race with process
-migration. 
-
-Anyway what if one of those TDX seamcalls fails?  HKID is leaked and will be
-never used because there is no good way to free and use HKID safely.  Such
-failure is due to unknown issue and probably a bug.
-
-One mitigation is to add pr_err() when HKID leak happens.  I'll add such message
-on next respin.
-
-thanks,
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+>

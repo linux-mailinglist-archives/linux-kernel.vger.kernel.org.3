@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5B44E56AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A954E56B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbiCWQnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S239181AbiCWQqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238815AbiCWQmv (ORCPT
+        with ESMTP id S236943AbiCWQqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:42:51 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754897D015;
-        Wed, 23 Mar 2022 09:41:20 -0700 (PDT)
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M2OAi-1nVP5E3Are-003sH2; Wed, 23 Mar 2022 17:41:18 +0100
-Received: by mail-wm1-f54.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso1231626wmz.4;
-        Wed, 23 Mar 2022 09:41:18 -0700 (PDT)
-X-Gm-Message-State: AOAM531Nxs/XarV9jd9ywPi9FCuU+fSNA+0hfrkLNG8pTaniV5dIm110
-        LwmR/5AEa9LypK5YEAuqTMg9M76Y+GeDLwYnDAo=
-X-Google-Smtp-Source: ABdhPJzQ6+sWLiXr8Hp2o8LXfAR2AuwxHJYkOgUowaeEKHIJ0SuNttg2LIiHKo5yBPCGx6C4R7ZFcmIhEjJe1vVdEm0=
-X-Received: by 2002:a05:600c:4b83:b0:38c:49b5:5bfc with SMTP id
- e3-20020a05600c4b8300b0038c49b55bfcmr10553256wmp.33.1648053678343; Wed, 23
- Mar 2022 09:41:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220217162848.303601-1-Jason@zx2c4.com> <20220322155820.GA1745955@roeck-us.net>
- <YjoUU+8zrzB02pW7@sirena.org.uk> <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
- <YjsOHmvDgAxwLFMg@sirena.org.uk> <ebafdf77-5d96-556b-0197-a172b656bb01@roeck-us.net>
- <CAK8P3a1hzmXTTMsGcCA2ekEHnff+M7GrYSQDN4bVfVk6Ui=Apw@mail.gmail.com> <YjtIVymPEZ4t16tP@sirena.org.uk>
-In-Reply-To: <YjtIVymPEZ4t16tP@sirena.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Mar 2022 17:41:01 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0Fzryo8Wi2exbQz=qXKGOGU6yxP0FGowa-fJkr0aGJFg@mail.gmail.com>
-Message-ID: <CAK8P3a0Fzryo8Wi2exbQz=qXKGOGU6yxP0FGowa-fJkr0aGJFg@mail.gmail.com>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Wed, 23 Mar 2022 12:46:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD21FCC0;
+        Wed, 23 Mar 2022 09:44:43 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22NGVjho004726;
+        Wed, 23 Mar 2022 16:44:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=bR3Xdsc0A/CEVp68Z04s5U/ffS6+4SVOvjC43+ZAa40=;
+ b=YzUVucaaU5yV0vnkJHaFFd+8UrRaJplDB96as66T8J4YYHG0himdGCf51LlY3ajgDtOn
+ BNNZylPW0cjv70ZaA/U1Ua0z3mEI4hui/cTb4FAsEooO98l/seSWgEtTG/a6PVSr3M7w
+ AUSRsSzJbxnaPNAgQBXtp0M+fpDZ3rvSxLL4N3dJ8uDG6BkUnXnZHKoz0HAWJNPulEDb
+ Z7hFY0fANCfnhMetD9CO86aTSBpY8DGSkQvm7+NVtPmxF2BPFQHZW+5nxqAOSm5DOhC7
+ I7xpZYUyIjqlPC+PPdf0bPEnlAIJzqkBb35gaUe4CEfhuU1+tnrzwKpeBk18t69itNQy 2Q== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0757875g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Mar 2022 16:43:59 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22NGhdwY022968;
+        Wed, 23 Mar 2022 16:43:57 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ew6t910m2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Mar 2022 16:43:57 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22NGhsVX26345744
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Mar 2022 16:43:54 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C0A242045;
+        Wed, 23 Mar 2022 16:43:54 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 385434203F;
+        Wed, 23 Mar 2022 16:43:49 +0000 (GMT)
+Received: from [9.43.30.161] (unknown [9.43.30.161])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 23 Mar 2022 16:43:48 +0000 (GMT)
+Message-ID: <51698a4d-1940-2191-5bdc-f3f7e4fa6e0e@linux.ibm.com>
+Date:   Wed, 23 Mar 2022 22:13:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] drivers/nvdimm: Fix build failure when
+ CONFIG_PERF_EVENTS is not set
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Nrnd2roAseJI6Rsq/gsTAvzXGUaLxalm6mS+yRoH6hjNj5E+ybe
- pjtUwrVkpNs4hw53lZDlcaj0RFwRa4SZ3gERjEcy//2/PFqlwGBnQjrdJtf9YXTdJZk8sxB
- f2SwahfUlt4yZKd9WLSPAU6ultg9xJXGZbAw5nVATNXvJjkFaxSfV4XK7z7QKlRU2CSECPL
- MGJi1RdQzugAzEYfQsgDA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:H5ZB9EtM2mE=:eKZ97HhzMgPX+vgt44QyEU
- cG/HixN1TEXHZ6dbpln14YrmzHZznI7L8L/R1B3Papy71LcVBXW8X9RwzaVe1jCqLc25ztFjL
- vQAJDtoHkUj6fHAhJt5HeI5pFywD/GrWO5yw8Mrv2sqraj+PmNg1+WjXBKJPQVaY3HACmgWyM
- UHQ0y+NXjhuZmyBVcaBfNsSOgEmy94MW8QgaPd+nE1eZkMMc2adKrukiWC1EFsqZwhehWgNzm
- 6TYeiLDYUwmhsoJ2VbjpZCRnoveOatCed9flnRco7JxVjqwXjVj45quVY4jdlaeNBqRUccc3z
- 6xgcicqvgBF259e9GzOXO4+UxXcEDAQoyKjVsAveAcQSvYo1jV6+43br7XOfO9pLE7/YiOzgC
- sJiIUe8oGnPbI7mqP8BDGjQk75OOEwsk4+jr1mLtInNdbHji444z8DxleEGmVl/stwQ8KLOca
- nvZe/hQzKMlpzH0ivcukdWOUicg57BLavagWLz6Z0EgVNGKlcKKG54ZSVWwS9151yFVpzSrYv
- 5+X1cqLMQ+H03MUcBkVmLnVqmHar9rkTANW0SP1cwMhY14JBnPqy5mH0fTa6DdVm08Thjhc1W
- 9VWGdFSRxjB0EAeQBEwVjW3WxKv4cWuzmz4u2WwzV44i8kBMb1n869lXgcCJM3z90iMPVCjCY
- EptcvrDnvqUKnhC9FyqF2qSJCd7QEXG29sXwnaxx7Jy+VIVsH+JeEyMiAZs9odHVg2MkqR9KF
- QHWMOKNg6sWj4BD0kU9LRdkwLzZNoebv92Mk/zazs22FCxnAErhI/HiLYvR9G2SyJQp17YIDL
- Saa0DiJ4J9oOaN+e3eApFO920CWTBO00mPDVHr4cV4EZaK7lJk=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Linux MM <linux-mm@kvack.org>,
+        kernel test robot <lkp@intel.com>
+References: <20220318114133.113627-1-kjain@linux.ibm.com>
+ <CAPcyv4jNJy70b6jK6S9TYDrLLZxzSNQxfN7-bzOpVa+ffZN3hw@mail.gmail.com>
+From:   kajoljain <kjain@linux.ibm.com>
+In-Reply-To: <CAPcyv4jNJy70b6jK6S9TYDrLLZxzSNQxfN7-bzOpVa+ffZN3hw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: g66pYFIrv4bvqoq2-4MUOpsjFTo-mARV
+X-Proofpoint-ORIG-GUID: g66pYFIrv4bvqoq2-4MUOpsjFTo-mARV
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-23_07,2022-03-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ adultscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 clxscore=1015
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203230087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,41 +104,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 5:18 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Wed, Mar 23, 2022 at 04:53:13PM +0100, Arnd Bergmann wrote:
-> > On Wed, Mar 23, 2022 at 3:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> > > I don't think it is entirely academic. versatile-pb fails for me;
-> > > if it doesn't fail at KernelCI, I'd like to understand why - not to
-> > > fix it in my test environment, but to make sure that I _don't_ fix it.
-> > > After all, it _is_ a regression. Even if that regression is triggered
-> > > by bad (for a given definition of "bad") userspace code, it is still
-> > > a regression.
->
-> > Maybe kernelci has a virtio-rng device assigned to the machine
-> > and you don't? That would clearly avoid the issue here.
->
-> No, nothing I can see in the boot log:
->
-> https://storage.kernelci.org/next/master/next-20220323/arm/versatile_defconfig/gcc-10/lab-baylibre/baseline-qemu_arm-versatilepb.html
->
-> and I'd be surprised if virtio devices made it through with a specific
-> platform emulation.
 
-In general they do: virtio devices appear as regular PCI devices
-and get probed from there, as long as the drivers are available.
 
-It looks like the PCI driver does not get initialized here though,
-presumably because it's not enabled in versatile_defconfig.
-It used to also not be enabled in multi_v5_defconfig, but I have
-merged a patch from Anders that enables it in 5.18 for the
-multi_v5_defconfig.
+On 3/22/22 07:40, Dan Williams wrote:
+> On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
+>>
+>> The following build failure occures when CONFIG_PERF_EVENTS is not set
+>> as generic pmu functions are not visible in that scenario.
+>>
+>> |-- s390-randconfig-r044-20220313
+>> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_migrate_context
+>> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_register
+>> |   `-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_unregister
+>>
+>> Similar build failure in nds32 architecture:
+>> nd_perf.c:(.text+0x21e): undefined reference to `perf_pmu_migrate_context'
+>> nd_perf.c:(.text+0x434): undefined reference to `perf_pmu_register'
+>> nd_perf.c:(.text+0x57c): undefined reference to `perf_pmu_unregister'
+>>
+>> Fix this issue by adding check for CONFIG_PERF_EVENTS config option
+>> and disabling the nvdimm perf interface incase this config is not set.
+>>
+>> Also removed function declaration of perf_pmu_migrate_context,
+>> perf_pmu_register, perf_pmu_unregister functions from nd.h as these are
+>> common pmu functions which are part of perf_event.h and since we
+>> are disabling nvdimm perf interface incase CONFIG_PERF_EVENTS option
+>> is not set, we not need to declare them in nd.h
+>>
+>> Fixes: 0fab1ba6ad6b ("drivers/nvdimm: Add perf interface to expose
+>> nvdimm performance stats") (Commit id based on linux-next tree)
+>> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+>> Link: https://lore.kernel.org/all/62317124.YBQFU33+s%2FwdvWGj%25lkp@intel.com/
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> ---
+>>  drivers/nvdimm/Makefile | 2 +-
+>>  include/linux/nd.h      | 7 ++++---
+>>  2 files changed, 5 insertions(+), 4 deletions(-)
+>>
+>> ---
+>> - This fix patch changes are added and tested on top of linux-next tree
+>>   on the 'next-20220315' branch.
+>> ---
+>> diff --git a/drivers/nvdimm/Makefile b/drivers/nvdimm/Makefile
+>> index 3fb806748716..ba0296dca9db 100644
+>> --- a/drivers/nvdimm/Makefile
+>> +++ b/drivers/nvdimm/Makefile
+>> @@ -15,7 +15,7 @@ nd_e820-y := e820.o
+>>  libnvdimm-y := core.o
+>>  libnvdimm-y += bus.o
+>>  libnvdimm-y += dimm_devs.o
+>> -libnvdimm-y += nd_perf.o
+>> +libnvdimm-$(CONFIG_PERF_EVENTS) += nd_perf.o
+>>  libnvdimm-y += dimm.o
+>>  libnvdimm-y += region_devs.o
+>>  libnvdimm-y += region.o
+>> diff --git a/include/linux/nd.h b/include/linux/nd.h
+>> index 7b2ccbdc1cbc..a4265eaf5ae8 100644
+>> --- a/include/linux/nd.h
+>> +++ b/include/linux/nd.h
+>> @@ -8,8 +8,10 @@
+>>  #include <linux/ndctl.h>
+>>  #include <linux/device.h>
+>>  #include <linux/badblocks.h>
+>> +#ifdef CONFIG_PERF_EVENTS
+>>  #include <linux/perf_event.h>
+> 
+> Why must this not be included? Doesn't it already handle the
+> CONFIG_PERF_EVENTS=n case internally?
+> 
+>>  #include <linux/platform_device.h>
+> 
+> I notice now that this platform-device header should have never been
+> added in the first place, just forward declare:
+> 
+> struct platform_device;
 
-> However it looks like for that test the init
-> scripts didn't do anything with the random seed (possibly due to running
-> from ramdisk?) so we'd not have hit the condition.
+Hi Dan,
+    Sure I will do the required changes.
 
-Right.
-
-     Arnd
+Thanks,
+Kajol Jain
+> 
+>> +#endif
+>>
+>>  enum nvdimm_event {
+>>         NVDIMM_REVALIDATE_POISON,
+>> @@ -25,6 +27,7 @@ enum nvdimm_claim_class {
+>>         NVDIMM_CCLASS_UNKNOWN,
+>>  };
+>>
+>> +#ifdef CONFIG_PERF_EVENTS
+>>  #define NVDIMM_EVENT_VAR(_id)  event_attr_##_id
+>>  #define NVDIMM_EVENT_PTR(_id)  (&event_attr_##_id.attr.attr)
+> 
+> Why must these be inside the ifdef guard?
+> 
+>>
+>> @@ -63,9 +66,7 @@ extern ssize_t nvdimm_events_sysfs_show(struct device *dev,
+>>
+>>  int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm, struct platform_device *pdev);
+>>  void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu);
+> 
+> Shouldn't there also be stub functions in the CONFIG_PERF_EVENTS=n case?
+> 
+> static inline int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm,
+> struct platform_device *pdev)
+> {
+>     return -ENXIO;
+> }
+> 
+> static inline void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu)
+> {
+> }
+> 
+>> -void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu);
+>> -int perf_pmu_register(struct pmu *pmu, const char *name, int type);
+>> -void perf_pmu_unregister(struct pmu *pmu);
+> 
+> Yeah, I should have caught these earlier.
+> 
+>> +#endif
+>>
+>>  struct nd_device_driver {
+>>         struct device_driver drv;
+>> --
+>> 2.31.1
+>>

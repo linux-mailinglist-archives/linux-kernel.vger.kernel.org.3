@@ -2,79 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7704E5537
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C28AD4E5538
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245165AbiCWPaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 11:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        id S245177AbiCWPbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 11:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237924AbiCWPaB (ORCPT
+        with ESMTP id S237924AbiCWPbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 11:30:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD1E6E7B8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:28:31 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2D849210F0;
-        Wed, 23 Mar 2022 15:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648049310; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3D1yfbWb9Pw0dyRZ3yvsjxWufPpIaywjGWQ03KWgohQ=;
-        b=td80NtyObKyxXWfyLdvp/JLKax4JKPNaff6tRF2kimlz3s5KaRyq5TsgRxJa80ibsnsx1i
-        Lu624OkAWJio42ALNOSL3zUF1lc1kRiXWwR4FiJuq5Wcq8cokaN0tF3xUnZeX9IWPaZpWU
-        06ABMx1RhkdhNEakmHvabhTbr8r7fE0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648049310;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3D1yfbWb9Pw0dyRZ3yvsjxWufPpIaywjGWQ03KWgohQ=;
-        b=NLeu1uoiQAZCyRGh4iyAXS8pvacMgg1kXJ2aMbuK7ITMRBHHl0oOTG1MLUyKak1yaZ1Qke
-        L2vYhKSK7pzMcJAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D6EAE12FC5;
-        Wed, 23 Mar 2022 15:28:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0vLZMp08O2KfagAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 23 Mar 2022 15:28:29 +0000
-Message-ID: <5833607a-4444-206d-db4f-9f958653c5b0@suse.cz>
-Date:   Wed, 23 Mar 2022 16:28:29 +0100
+        Wed, 23 Mar 2022 11:31:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618AF70F70
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:29:50 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nX2vf-0006we-Ob; Wed, 23 Mar 2022 16:29:43 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nX2vb-002W8V-U2; Wed, 23 Mar 2022 16:29:42 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nX2vd-000Egn-T8; Wed, 23 Mar 2022 16:29:41 +0100
+Message-ID: <ba95a3fec9c726e2cd61665ac5d7f89d16232d60.camel@pengutronix.de>
+Subject: Re: [PATCH 2/2] reset: add support for fwnode
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     =?ISO-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Date:   Wed, 23 Mar 2022 16:29:41 +0100
+In-Reply-To: <20220323095022.453708-3-clement.leger@bootlin.com>
+References: <20220323095022.453708-1-clement.leger@bootlin.com>
+         <20220323095022.453708-3-clement.leger@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v1 01/15] mm/slab: cleanup slab_alloc() and
- slab_alloc_node()
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org
-References: <20220308114142.1744229-1-42.hyeyoo@gmail.com>
- <20220308114142.1744229-2-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220308114142.1744229-2-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,83 +58,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 12:41, Hyeonggon Yoo wrote:
-> +
->  static __always_inline void *
-> -slab_alloc(struct kmem_cache *cachep, gfp_t flags, size_t orig_size, unsigned long caller)
-> +slab_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid, size_t orig_size,
-> +		   unsigned long caller)
->  {
->  	unsigned long save_flags;
-> -	void *objp;
-> +	void *ptr;
-> +	int slab_node = numa_mem_id();
->  	struct obj_cgroup *objcg = NULL;
->  	bool init = false;
->  
-> @@ -3299,21 +3255,49 @@ slab_alloc(struct kmem_cache *cachep, gfp_t flags, size_t orig_size, unsigned lo
->  	if (unlikely(!cachep))
->  		return NULL;
->  
-> -	objp = kfence_alloc(cachep, orig_size, flags);
-> -	if (unlikely(objp))
-> -		goto out;
-> +	ptr = kfence_alloc(cachep, orig_size, flags);
-> +	if (unlikely(ptr))
-> +		goto out_hooks;
->  
->  	cache_alloc_debugcheck_before(cachep, flags);
->  	local_irq_save(save_flags);
-> -	objp = __do_cache_alloc(cachep, flags);
-
-Looks like after this patch, slab_alloc() (without a node specified)
-will not end up in __do_cache_alloc() anymore, so there's no more
-possibility of alternate_node_alloc(), which looks like a functional
-regression?
-
-> +
-> +	if (node_match(nodeid, slab_node)) {
-> +		/*
-> +		 * Use the locally cached objects if possible.
-> +		 * However ____cache_alloc does not allow fallback
-> +		 * to other nodes. It may fail while we still have
-> +		 * objects on other nodes available.
-> +		 */
-> +		ptr = ____cache_alloc(cachep, flags);
-> +		if (ptr)
-> +			goto out;
-> +	}
-> +#ifdef CONFIG_NUMA
-> +	else if (unlikely(!get_node(cachep, nodeid))) {
-> +		/* Node not bootstrapped yet */
-> +		ptr = fallback_alloc(cachep, flags);
-> +		goto out;
-> +	}
-> +
-> +	/* ___cache_alloc_node can fall back to other nodes */
-> +	ptr = ____cache_alloc_node(cachep, flags, nodeid);
-> +#endif
-> +out:
->  	local_irq_restore(save_flags);
-> -	objp = cache_alloc_debugcheck_after(cachep, flags, objp, caller);
-> -	prefetchw(objp);
-> +	ptr = cache_alloc_debugcheck_after(cachep, flags, ptr, caller);
-> +	prefetchw(ptr);
->  	init = slab_want_init_on_alloc(flags, cachep);
->  
-> -out:
-> -	slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init);
-> -	return objp;
-> +out_hooks:
-> +	slab_post_alloc_hook(cachep, objcg, flags, 1, &ptr, init);
-> +	return ptr;
-> +}
-> +
-> +static __always_inline void *
-> +slab_alloc(struct kmem_cache *cachep, gfp_t flags, size_t orig_size, unsigned long caller)
-> +{
-> +	return slab_alloc_node(cachep, flags, NUMA_NO_NODE, orig_size, caller);
->  }
->  
->  /*
+T24gTWksIDIwMjItMDMtMjMgYXQgMTA6NTAgKzAxMDAsIENsw6ltZW50IEzDqWdlciB3cm90ZToK
+Wy4uLl0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9yZXNldC9jb3JlLmMgYi9kcml2ZXJzL3Jlc2V0
+L2NvcmUuYwo+IGluZGV4IDYxZTY4ODg4MjY0My4uZjAxNGRhMDNiN2MxIDEwMDY0NAo+IC0tLSBh
+L2RyaXZlcnMvcmVzZXQvY29yZS5jCj4gKysrIGIvZHJpdmVycy9yZXNldC9jb3JlLmMKPiBAQCAt
+NCw2ICs0LDcgQEAKPiDCoCAqCj4gwqAgKiBDb3B5cmlnaHQgMjAxMyBQaGlsaXBwIFphYmVsLCBQ
+ZW5ndXRyb25peAo+IMKgICovCj4gKyNpbmNsdWRlIDxsaW51eC9hY3BpLmg+Cj4gwqAjaW5jbHVk
+ZSA8bGludXgvYXRvbWljLmg+Cj4gwqAjaW5jbHVkZSA8bGludXgvZGV2aWNlLmg+Cj4gwqAjaW5j
+bHVkZSA8bGludXgvZXJyLmg+Cj4gQEAgLTcwLDI2ICs3MSw0OSBAQCBzdGF0aWMgY29uc3QgY2hh
+ciAqcmNkZXZfbmFtZShzdHJ1Y3QKPiByZXNldF9jb250cm9sbGVyX2RldiAqcmNkZXYpCj4gwqDC
+oMKgwqDCoMKgwqDCoGlmIChyY2Rldi0+b2Zfbm9kZSkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoHJldHVybiByY2Rldi0+b2Zfbm9kZS0+ZnVsbF9uYW1lOwoKQ291bGQgdGhlIGFi
+b3ZlIGJlIHJlbW92ZWQsIHNpbmNlIHJlc2V0X2NvbnRyb2xsZXJfcmVnaXN0ZXIoKSBzZXQKcmNk
+ZXYtPmZ3bm9kZSB0byBvZl9md25vZGVfaGFuZGxlKHJjZGV2LT5vZl9ub2RlKSBlYXJsaWVyPwoK
+PiDCoAo+ICvCoMKgwqDCoMKgwqDCoGlmIChyY2Rldi0+Zndub2RlKQo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gZndub2RlX2dldF9uYW1lKHJjZGV2LT5md25vZGUpOwo+
+ICsKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIE5VTEw7Cj4gwqB9Cj4gwqAKWy4uLl0KPiDCoAo+
+IMKgLyoqCj4gQEAgLTk4LDkgKzEyMiwyMSBAQCBzdGF0aWMgaW50IG9mX3Jlc2V0X3NpbXBsZV94
+bGF0ZShzdHJ1Y3QgcmVzZXRfY29udHJvbGxlcl9kZXYgKnJjZGV2LAo+IMKgICovCj4gwqBpbnQg
+cmVzZXRfY29udHJvbGxlcl9yZWdpc3RlcihzdHJ1Y3QgcmVzZXRfY29udHJvbGxlcl9kZXYgKnJj
+ZGV2KQo+IMKgewo+IC3CoMKgwqDCoMKgwqDCoGlmICghcmNkZXYtPm9mX3hsYXRlKSB7Cj4gLcKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJjZGV2LT5vZl9yZXNldF9uX2NlbGxzID0gMTsK
+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmNkZXYtPm9mX3hsYXRlID0gb2ZfcmVz
+ZXRfc2ltcGxlX3hsYXRlOwo+ICvCoMKgwqDCoMKgwqDCoGlmICghcmNkZXYtPmZ3bm9kZSkgewo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByY2Rldi0+Zndub2RlID0gb2ZfZndub2Rl
+X2hhbmRsZShyY2Rldi0+b2Zfbm9kZSk7Cj4gK8KgwqDCoMKgwqDCoMKgfSBlbHNlIHsKPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKGlzX2FjcGlfbm9kZShyY2Rldi0+Zndub2Rl
+KSkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
+biAtRUlOVkFMOwo+ICvCoMKgwqDCoMKgwqDCoH0KPiArCj4gK8KgwqDCoMKgwqDCoMKgaWYgKHJj
+ZGV2LT5vZl94bGF0ZSkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByY2Rldi0+
+Zndub2RlX3hsYXRlID0gZndub2RlX29mX3Jlc2V0X3hsYXRlOwoKSXQgc2hvdWxkIGJlIGRvY3Vt
+ZW50ZWQgdGhhdCAuZndub2RlX3hsYXRlLy5md25vZGVfcmVzZXRfbl9jZWxscyBhcmUKaWdub3Jl
+ZCBpZiAub2ZfeGxhdGUgaXMgc2V0LgoKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+cmNkZXYtPmZ3bm9kZV9yZXNldF9uX2NlbGxzID0gcmNkZXYtPm9mX3Jlc2V0X25fY2VsbHM7Cj4g
+K8KgwqDCoMKgwqDCoMKgfQo+ICsKPiArwqDCoMKgwqDCoMKgwqBpZiAoIXJjZGV2LT5md25vZGVf
+eGxhdGUpIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmNkZXYtPmZ3bm9kZV9y
+ZXNldF9uX2NlbGxzID0gMTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmNkZXYt
+PmZ3bm9kZV94bGF0ZSA9IGZ3bm9kZV9yZXNldF9zaW1wbGVfeGxhdGU7Cj4gwqDCoMKgwqDCoMKg
+wqDCoH0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBJTklUX0xJU1RfSEVBRCgmcmNkZXYtPnJlc2V0
+X2NvbnRyb2xfaGVhZCk7Cj4gQEAgLTgxMCwyOSArODQ2LDI4IEBAIHN0YXRpYyB2b2lkIF9fcmVz
+ZXRfY29udHJvbF9wdXRfaW50ZXJuYWwoc3RydWN0Cj4gcmVzZXRfY29udHJvbCAqcnN0YykKPiDC
+oH0KPiDCoAo+IMKgc3RydWN0IHJlc2V0X2NvbnRyb2wgKgo+IC1fX29mX3Jlc2V0X2NvbnRyb2xf
+Z2V0KHN0cnVjdCBkZXZpY2Vfbm9kZSAqbm9kZSwgY29uc3QgY2hhciAqaWQsIGludCBpbmRleCwK
+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJvb2wgc2hhcmVk
+LCBib29sIG9wdGlvbmFsLCBib29sIGFjcXVpcmVkKQo+ICtfX2Z3bm9kZV9yZXNldF9jb250cm9s
+X2dldChzdHJ1Y3QgZndub2RlX2hhbmRsZSAqZndub2RlLCBjb25zdCBjaGFyICppZCwKPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW50IGluZGV4
+LCBib29sIHNoYXJlZCwgYm9vbCBvcHRpb25hbCwgYm9vbCBhY3F1aXJlZCkKPiDCoHsKPiDCoMKg
+wqDCoMKgwqDCoMKgc3RydWN0IHJlc2V0X2NvbnRyb2wgKnJzdGM7Cj4gwqDCoMKgwqDCoMKgwqDC
+oHN0cnVjdCByZXNldF9jb250cm9sbGVyX2RldiAqciwgKnJjZGV2Owo+IC3CoMKgwqDCoMKgwqDC
+oHN0cnVjdCBvZl9waGFuZGxlX2FyZ3MgYXJnczsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgZndu
+b2RlX3JlZmVyZW5jZV9hcmdzIGFyZ3M7Cj4gwqDCoMKgwqDCoMKgwqDCoGludCByc3RjX2lkOwo+
+IMKgwqDCoMKgwqDCoMKgwqBpbnQgcmV0Owo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgaWYgKCFub2Rl
+KQo+ICvCoMKgwqDCoMKgwqDCoGlmICghZndub2RlIHx8IGlzX2FjcGlfbm9kZShmd25vZGUpKQo+
+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIEVSUl9QVFIoLUVJTlZBTCk7
+Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKGlkKSB7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGluZGV4ID0gb2ZfcHJvcGVydHlfbWF0Y2hfc3RyaW5nKG5vZGUsCj4gLcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgInJlc2V0LW5hbWVzIiwgaWQpOwo+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbmRleCA9IGZ3bm9kZV9wcm9wZXJ0eV9tYXRj
+aF9zdHJpbmcoZndub2RlLCAicmVzZXQtbmFtZXMiLCBpZCk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBpZiAoaW5kZXggPT0gLUVJTFNFUSkKPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gRVJSX1BUUihpbmRleCk7CgpJIGRv
+bid0IHRoaW5rIHRoaXMgaXMgZ29vZCBlbm91Z2ggYW55IG1vcmUuIEF0IGxlYXN0IC1FTk9NRU0g
+aXMgYWRkZWQKYXMgYSBwb3NzaWJsZSBlcnJvciByZXR1cm4gY29kZSBieSB0aGlzIGNoYW5nZS4K
+ClsuLi5dCj4gQEAgLTk0NSw2ICs5ODksOSBAQCBzdHJ1Y3QgcmVzZXRfY29udHJvbCAqX19yZXNl
+dF9jb250cm9sX2dldChzdHJ1Y3QgZGV2aWNlICpkZXYsIGNvbnN0IGNoYXIgKmlkLAo+IMKgwqDC
+oMKgwqDCoMKgwqBpZiAoZGV2LT5vZl9ub2RlKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgcmV0dXJuIF9fb2ZfcmVzZXRfY29udHJvbF9nZXQoZGV2LT5vZl9ub2RlLCBpZCwgaW5k
+ZXgsIHNoYXJlZCwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgb3B0aW9uYWws
+IGFjcXVpcmVkKTsKCkNvdWxkIHRoZSBhYm92ZSBiZSByZW1vdmVkLCBnaXZlbiB0aGF0IF9fb2Zf
+cmVzZXRfY29udHJvbF9nZXQoKSBqdXN0CndyYXBzIF9fZndub2RlX3Jlc2V0X2NvbnRyb2xfZ2V0
+KCksIHdoaWNoIGlzIGNhbGxlZCByaWdodCBiZWxvdzoKCj4gK8KgwqDCoMKgwqDCoMKgaWYgKGRl
+dl9md25vZGUoZGV2KSkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIF9f
+Zndub2RlX3Jlc2V0X2NvbnRyb2xfZ2V0KGRldl9md25vZGUoZGV2KSwgaWQsIGluZGV4LAo+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2hhcmVkLCBvcHRpb25hbCwg
+YWNxdWlyZWQpOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiBfX3Jlc2V0X2NvbnRyb2xf
+Z2V0X2Zyb21fbG9va3VwKGRldiwgaWQsIHNoYXJlZCwgb3B0aW9uYWwsCj4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYWNxdWlyZWQpOwo+IGRpZmYgLS1naXQgYS9pbmNsdWRl
+L2xpbnV4L3Jlc2V0LWNvbnRyb2xsZXIuaCBiL2luY2x1ZGUvbGludXgvcmVzZXQtCj4gY29udHJv
+bGxlci5oCj4gaW5kZXggMGZhNGY2MGUxMTg2Li4yOTI1NTIwMDNkMTEgMTAwNjQ0Cj4gLS0tIGEv
+aW5jbHVkZS9saW51eC9yZXNldC1jb250cm9sbGVyLmgKPiArKysgYi9pbmNsdWRlL2xpbnV4L3Jl
+c2V0LWNvbnRyb2xsZXIuaAo+IEBAIC0yNCw3ICsyNCw5IEBAIHN0cnVjdCByZXNldF9jb250cm9s
+X29wcyB7Cj4gwqAKPiDCoHN0cnVjdCBtb2R1bGU7Cj4gwqBzdHJ1Y3QgZGV2aWNlX25vZGU7Cj4g
+K3N0cnVjdCBmd25vZGVfaGFuZGxlOwo+IMKgc3RydWN0IG9mX3BoYW5kbGVfYXJnczsKPiArc3Ry
+dWN0IGZ3bm9kZV9yZWZlcmVuY2VfYXJnczsKPiDCoAo+IMKgLyoqCj4gwqAgKiBzdHJ1Y3QgcmVz
+ZXRfY29udHJvbF9sb29rdXAgLSByZXByZXNlbnRzIGEgc2luZ2xlIGxvb2t1cCBlbnRyeQo+IEBA
+IC02MCwxMCArNjIsMTYgQEAgc3RydWN0IHJlc2V0X2NvbnRyb2xfbG9va3VwIHsKPiDCoCAqIEBy
+ZXNldF9jb250cm9sX2hlYWQ6IGhlYWQgb2YgaW50ZXJuYWwgbGlzdCBvZiByZXF1ZXN0ZWQgcmVz
+ZXQgY29udHJvbHMKPiDCoCAqIEBkZXY6IGNvcnJlc3BvbmRpbmcgZHJpdmVyIG1vZGVsIGRldmlj
+ZSBzdHJ1Y3QKPiDCoCAqIEBvZl9ub2RlOiBjb3JyZXNwb25kaW5nIGRldmljZSB0cmVlIG5vZGUg
+YXMgcGhhbmRsZSB0YXJnZXQKPiArICogQGZ3bm9kZTogY29ycmVzcG9uZGluZyBmaXJtd2FyZSBu
+b2RlIGFzIHJlZmVyZW5jZSB0YXJnZXQKPiDCoCAqIEBvZl9yZXNldF9uX2NlbGxzOiBudW1iZXIg
+b2YgY2VsbHMgaW4gcmVzZXQgbGluZSBzcGVjaWZpZXJzCj4gwqAgKiBAb2ZfeGxhdGU6IHRyYW5z
+bGF0aW9uIGZ1bmN0aW9uIHRvIHRyYW5zbGF0ZSBmcm9tIHNwZWNpZmllciBhcyBmb3VuZCBpbiB0
+aGUKPiDCoCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkZXZpY2UgdHJlZSB0byBpZCBhcyBnaXZl
+biB0byB0aGUgcmVzZXQgY29udHJvbCBvcHMsIGRlZmF1bHRzCj4gLSAqwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCB0byA6YzpmdW5jOmBvZl9yZXNldF9zaW1wbGVfeGxhdGVgLgo+ICsgKsKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgdG8gOmM6ZnVuYzpgZndub2RlX29mX3Jlc2V0X3hsYXRlYC4KPiArICog
+QGZ3bm9kZV9yZXNldF9uX2NlbGxzOiBudW1iZXIgb2YgY2VsbHMgaW4gcmVzZXQgbGluZSByZWZl
+cmVuY2Ugc3BlY2lmaWVycwo+ICsgKiBAZndub2RlX3hsYXRlOiB0cmFuc2xhdGlvbiBmdW5jdGlv
+biB0byB0cmFuc2xhdGUgZnJvbSByZWZlcmVuY2Ugc3BlY2lmaWVyIGFzCj4gKyAqwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZvdW5kIGluIHRoZSBmaXJtd2FyZSBub2RlIGRlc2NyaXB0
+aW9uIHRvIGlkIGFzIGdpdmVuIHRvIHRoZQo+ICsgKsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCByZXNldCBjb250cm9sIG9wcywgZGVmYXVsdHMgdG8KPiArICrCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgOmM6ZnVuYzpgZndub2RlX3Jlc2V0X3NpbXBsZV94bGF0ZWAuCgpUaGlz
+IHNob3VsZCBtZW50aW9uIHRoYXQgLmZ3bm9kZV94bGF0ZSBpcyBpZ25vcmVkL292ZXJ3cml0dGVu
+IHdoZW4KLm9mX3hsYXRlIGlzIHNldC4KCgpyZWdhcmRzClBoaWxpcHAK
 

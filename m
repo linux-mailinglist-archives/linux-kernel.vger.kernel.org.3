@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800184E4D45
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 08:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79394E4D47
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 08:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242215AbiCWHYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 03:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S240250AbiCWH0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 03:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbiCWHYU (ORCPT
+        with ESMTP id S232978AbiCWHZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 03:24:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255307306D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 00:22:51 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id yy13so1041320ejb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 00:22:51 -0700 (PDT)
+        Wed, 23 Mar 2022 03:25:57 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1803DF20;
+        Wed, 23 Mar 2022 00:24:28 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a1so758084wrh.10;
+        Wed, 23 Mar 2022 00:24:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FjYbB0p0LrOcfIL6of6QwuQD3Wj+3lAuUT/c+K+uL4c=;
-        b=J33sJ4aXRwY5OJw1KjvnEiLsfiBDLstAfNOLvJnbAWozJc6BmnqeMXNwVNQrT26Y53
-         OwaDtr3Y8Nl0dPXsEFdX8101O4zBr0gJHpM+4d3q5DBd4xXEVPfwyHtwbYxojPtCvvgM
-         UpCSvrnlB5CCrSH9dKKZ0XLrOPPJkLguzMdHd8rC0Sho5ltZ/wDyj7j6YOVKLAbK++Ec
-         RS/JMFHCpbtdPVpADlGVPgCbZnrl7dJRKubPF8ItijMDKJOoK1ikl8fgwHXOBxrnyU2n
-         1ueWHxZ4Hzi3J4XUvmErTcRuUn63L5a2yZ6rN3K1fz/CH5HkDqnsP8BeRdlxx3h9qgzB
-         92wA==
+        bh=FdIn2rq09mVC2hmd5LhNrpHlnS0ToShO47iRud1Ea6c=;
+        b=LQJUGLXcu5/E7O3GD54pxVvr0AD1QbQqLyTHQqG6f7HzxbijNSsPE5KIgrXR9lVlFO
+         P53GqY+bpMOASJHDf5NSobUl0Bh2KCcnCfzGCadcn/h8Utr+9duCtZMs+0lZr3QWWrPv
+         vKVjwk2JCoRrv/q6YdvZRYsUh2/xiDHlG2bSNECIOOMAiA0Cf1kRKfBBVHwEEBoGhnVR
+         El38tOHBv+jmq6aakpIrpsLJhTMxz40lvmViOO5uNAl8tJ0fKQUoRQns8oFrdwczOS50
+         0nCphazmXZNOrBIA4H0I5St06PQFJy6FsvBGY5TWlI/E53tLX3V7HvmvviZkYiB9GjYY
+         +uCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FjYbB0p0LrOcfIL6of6QwuQD3Wj+3lAuUT/c+K+uL4c=;
-        b=kNXDgQOIcTk/VEsSGLwaMJ5Yp20Vhtf+jadG3gVQu4x+uDceP9rKr0ax3eu2MNmMYZ
-         nofFdVseqUfDrZH3OVwW/7MVo69fYQptC2qEWzHQkjHHgD54rdVmF1J351vx9tq4LMTS
-         xdkfZYINOq/D+oIG2KSN/cDeu5+PINpm5iNvDshFjGaa1ylDUt60wFGjs6d34P+DpwxG
-         AuCffPyUvkc4rOdWKvdKIpWEm/GMrnPHmsrYS7CCSEgKRbQT0xtjZXJQItRCGVvyxyfX
-         /cbRNKM2NcZPv0hm1gjLTnKSVFeB0cmUo0qcjw1JwLUN/K0INMBV+bHGrhWH6ucS9eVQ
-         Hniw==
-X-Gm-Message-State: AOAM531vcPpHX/pj62/oeYMX+NxVVkt3at6hNjzDky8g5sNuWuTDQ8bk
-        ZtJynGddmCOX7E4FGa1GJlZzBY8r912L7RDwDLEG/wOSY2o=
-X-Google-Smtp-Source: ABdhPJyMha7ML20/oSGDyIKQrditBXLYvAclp4IynFPWsl5e7TkIX9R4OA82kgKrb6PZM+y5VWpbJxlbXLgdgKjsXe8=
-X-Received: by 2002:a17:906:c14b:b0:6da:b30d:76a0 with SMTP id
- dp11-20020a170906c14b00b006dab30d76a0mr29276258ejc.279.1648020169255; Wed, 23
- Mar 2022 00:22:49 -0700 (PDT)
+        bh=FdIn2rq09mVC2hmd5LhNrpHlnS0ToShO47iRud1Ea6c=;
+        b=IrOII13YhoziVruvin/rLW+61d0pFn1aPzrjGc6gprmga9jnyW79uoJNdI7MTBPcIw
+         ojT04yePKo2dlauDlLu+8RUX1Fcf8rTwAVWV2WCeAUM+iIOu+kM4Y15PNZBg/QRsahS+
+         GsiHGpwyJe4ICzJcvobvaFNkx6Du0EBzbL/gvggj0Sozw0DcOyDRe1YQdxITwk57hksW
+         9eHcF71liJKTcLyTi/e74pT9yMRwobU+SUWGPHg0gFWoD+ClgpOBgWFYDrXtjboR4yoZ
+         oA3n2keo2ruKUTAH9GIo1NSZbqltLCAqc9ksV/GjRKMt0oC3g2xVnSWXFFBV4BUzN0oC
+         E6vQ==
+X-Gm-Message-State: AOAM533Q7nC8GEudJqHjmzmzI1OoTullzHNO+DjYrr/jOUyizN1rhXJl
+        qnHDZgkGl87MHrZ87AiFHyoWRr+3nDMr5qNwwgCQHan/JXc=
+X-Google-Smtp-Source: ABdhPJzNc9NL8Hp1qvXqAwTF0Z0cFBm5fh7bnM9E6aH3yKhObYNU4SO8/9PcevsVKBXPOBpiinIBq5CVH+6OgUttWHA=
+X-Received: by 2002:adf:e74a:0:b0:1f0:25cb:3ad5 with SMTP id
+ c10-20020adfe74a000000b001f025cb3ad5mr25704592wrn.231.1648020267110; Wed, 23
+ Mar 2022 00:24:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220319055600.3471875-1-davidgow@google.com> <CAGS_qxpqcc8O2HpmF3qB-uzXZrDNg9=h3nE_f7si=aOxXkRA+Q@mail.gmail.com>
- <CABVgOS=sKWiDLN=GgyXQGOdmRn6t35mEA_0C7GrZyEApjVg1Pw@mail.gmail.com> <CAGS_qxobBt2gH3FB79m7sfQZ9thKXQ5exQEa_1GcQOmXFFEv1A@mail.gmail.com>
-In-Reply-To: <CAGS_qxobBt2gH3FB79m7sfQZ9thKXQ5exQEa_1GcQOmXFFEv1A@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 03:22:37 -0400
-Message-ID: <CAFd5g47ZJq8FmFFnAVdDEc6MKdeYBndrb=jbiiebLBdoG4hvCQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Rework kunit_resource allocation policy
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220323054001.17344-1-diego.viola@gmail.com> <ac99cc8e-11c2-d96b-9ce1-ce5618b7b378@opensource.wdc.com>
+ <CA+ToGPH+FQ-6QM6MWt6Zoe_pTyL6LTn9-=-694f7xLkSVCCr1Q@mail.gmail.com> <641a417b-acac-6b0f-c330-b94b6ed97b99@opensource.wdc.com>
+In-Reply-To: <641a417b-acac-6b0f-c330-b94b6ed97b99@opensource.wdc.com>
+From:   Diego Viola <diego.viola@gmail.com>
+Date:   Wed, 23 Mar 2022 04:24:16 -0300
+Message-ID: <CA+ToGPEAhWDwFLNHqXvtuumvdLQb=kzme7fdrgBfb4zojVvDNQ@mail.gmail.com>
+Subject: Re: [PATCH] ata: libata-core: fix "it's" typos
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,270 +67,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 3:06 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Wed, Mar 23, 2022 at 2:53 AM Damien Le Moal
+<damien.lemoal@opensource.wdc.com> wrote:
 >
-> On Mon, Mar 21, 2022 at 11:10 PM David Gow <davidgow@google.com> wrote:
+> On 3/23/22 14:52, Diego Viola wrote:
+> > On Wed, Mar 23, 2022 at 2:45 AM Damien Le Moal
+> > <damien.lemoal@opensource.wdc.com> wrote:
+> >>
+> >> On 3/23/22 14:40, Diego Viola wrote:
+> >>> Use the contraction "it's" instead of the possessive form "its".
+> >>
+> >> Well, while at it, let's use proper formal written English, so:
+> >> s/it's/it is
+> >> s/isn't/is not
 > >
-> > On Tue, Mar 22, 2022 at 9:57 AM 'Daniel Latypov' via KUnit Development
-> > <kunit-dev@googlegroups.com> wrote:
-> > >
-> > > On Sat, Mar 19, 2022 at 12:56 AM David Gow <davidgow@google.com> wrote:
-> > > >
-> > > > KUnit's test-managed resources can be created in two ways:
-> > > > - Using the kunit_add_resource() family of functions, which accept a
-> > > >   struct kunit_resource pointer, typically allocated statically or on
-> > > >   the stack during the test.
-> > > > - Using the kunit_alloc_resource() family of functions, which allocate a
-> > > >   struct kunit_resource using kzalloc() behind the scenes.
-> > > >
-> > > > Both of these families of functions accept a 'free' function to be
-> > > > called when the resource is finally disposed of.
-> > > >
-> > > > At present, KUnit will kfree() the resource if this 'free' function is
-> > > > specified, and will not if it is NULL. However, this can lead
-> > > > kunit_alloc_resource() to leak memory (if no 'free' function is passed
-> > > > in), or kunit_add_resource() to incorrectly kfree() memory which was
-> > > > allocated by some other means (on the stack, as part of a larger
-> > > > allocation, etc), if a 'free' function is provided.
-> > >
-> > > Trying it with this:
-> > >
-> > > static void noop_free_resource(struct kunit_resource *) {}
-> > >
-> > > struct kunit_resource global_res;
-> > >
-> > > static void example_simple_test(struct kunit *test)
-> > > {
-> > >         kunit_add_resource(test, NULL, noop_free_resource, &global_res, test);
-> > > }
-> > >
-> > > Running then with
-> > > $ run_kunit --kunitconfig=lib/kunit --arch=x86_64
-> > > --build_dir=kunit_x86/ --kconfig_add=CONFIG_KASAN=y
-> > >
-> > > Before:
-> > > BUG: KASAN: double-free or invalid-free in kunit_cleanup+0x51/0xb0
-> > >
-> > > After:
-> > > Passes
-> > >
-> >
-> > Phew! :-)
-> > I'm glad it works.
-> >
-> > > >
-> > > > Instead, always kfree() if the resource was allocated with
-> > > > kunit_alloc_resource(), and never kfree() if it was passed into
-> > > > kunit_add_resource() by the user. (If the user of kunit_add_resource()
-> > > > wishes the resource be kfree()ed, they can call kfree() on the resource
-> > > > from within the 'free' function.
-> > > >
-> > > > This is implemented by adding a 'should_free' member to
-> > >
-> > > nit: would `should_kfree` be a bit better?
-> > > `should_free` almost sounds like "should we invoke res->free" (as
-> > > nonsensical as that might be)
-> > >
-> >
-> > I think I had it as should_kfree at some point. I agree it's a little
-> > clearer. I'll rename it back.
-> >
-> > The other option I considered was to have a "flags" member, of which
-> > SHOULD_KFREE could be one. Though I eventually decided to leave that
-> > until we needed another flag.
-> >
-> > > > struct kunit_resource and setting it appropriately. To facilitate this,
-> > > > the various resource add/alloc functions have been refactored somewhat,
-> > > > making them all call a __kunit_add_resource() helper after setting the
-> > > > 'should_free' member appropriately. In the process, all other functions
-> > > > have been made static inline functions.
-> > > >
-> > > > Signed-off-by: David Gow <davidgow@google.com>
-> > >
-> > > Tested-by: Daniel Latypov <dlatypov@google.com>
-> > >
-> > >
-> > > > ---
-> > > >  include/kunit/test.h | 135 +++++++++++++++++++++++++++++++++++--------
-> > > >  lib/kunit/test.c     |  65 +++------------------
-> > > >  2 files changed, 120 insertions(+), 80 deletions(-)
-> > > >
-> > > > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > > > index 00b9ff7783ab..5a3aacbadda2 100644
-> > > > --- a/include/kunit/test.h
-> > > > +++ b/include/kunit/test.h
-> > > > @@ -36,11 +36,14 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
-> > > >   * struct kunit_resource - represents a *test managed resource*
-> > > >   * @data: for the user to store arbitrary data.
-> > > >   * @name: optional name
-> > > > - * @free: a user supplied function to free the resource. Populated by
-> > > > - * kunit_resource_alloc().
-> > > > + * @free: a user supplied function to free the resource.
-> > > >   *
-> > > >   * Represents a *test managed resource*, a resource which will automatically be
-> > > > - * cleaned up at the end of a test case.
-> > > > + * cleaned up at the end of a test case. This cleanup is performed by the 'free'
-> > > > + * function. The resource itself is allocated with kmalloc() and freed with
-> > > > + * kfree() if created with kunit_alloc_{,and_get_}resource(), otherwise it must
-> > > > + * be freed by the user, typically with the 'free' function, or automatically if
-> > > > + * it's allocated on the stack.
-> > >
-> > > I'm not a fan of this complexity, but I'm not sure if we have a way
-> > > around it, esp. w/ stack-allocated data.
-> > >
-> > The other option is to make all resources allocated with
-> > kunit_alloc_resource() require a non-NULL 'free' function which calls
-> > kfree() itself. This is much simpler on the KUnit side, but does put
-> > some of that burden on the user (and may prevent a free() function
-> > from being shared between allocated and non-allocated resources).
+> > Fine with me, do you want me to send you another patch with those changes?
 >
-> Overall, I'm ambivalent.
->
-> To be honest, I'm not sure how real the user burden would be (it's
-> basically 0 right now).
->
-> This would only add about 6 more lines to add a kfree version:
-> static void free_stack_resource(struct kunit_resource *res) { ... }
->
-> static void free_heap_resource(struct kunit_resource *res)
-> {
->    free_stack_resource(res);
->    kfree(res);
-> }
->
-> So far, this function is only ever used w/ non-NULL free functions
-> (even in the under-review stubbing patches).
-> So now would be the time to make such a change.
->
-> But I'm slightly against such a change.
-> It slightly complicates the "resources as storage" usecase in favor of
-> simplifying the "resources as memory wranglers".
-> Maybe it'd be fine if we added a helper they could use, e.g.
->   void kunit_resource_default_free(struct kunit_resource *res) { kfree(res); }
-> but it
+> Yes please.
 
-I agree. I am not a fan of requiring a non-null free function. I think
-the solution is better captured by splitting up the resource API, like
-you suggest elsewhere as a long term solution.
+I sent a v2 patch changing those things you pointed out, however, the
+whole comment[0] looks informal "But wait.. there's more" and I don't
+think replacing "it's" with "it is" achieves a lot in this case.
 
-In the short term, I like what you did here with the should_kfree.
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/ata/libata-core.c#n1399
 
-> > > Perhaps this would be a bit easier to read if we tweaked it a bit like:
-> > > "freed with kfree() if allocated by KUnit (via kunit_alloc..."
-> > >
-> > > Maybe we can drop the "or automatically, if it's allocated on the
-> > > stack" as well.
-> >
-> > Yeah: I'm not 100% happy with that wording. I wanted to make it clear
-> > that there are cases where no automatic freeing is needed, but I agree
-> > it's really just making things more confusing.
-> > >
-> > > A bigger way to simplify: perhaps we should get rid of
-> > > kunit_alloc_and_get_resource() first?
-> > > It's only used in KUnit's tests for itself.
-> > > They could instead use kunit_alloc_resource() +
-> > > kunit_find_resource(test, kunit_resource_instance_match, data).
-> > > We could even define the helper with the same name in kunit-test.c
-> > > (the only place it's used).
-> > >
-> > > Alternatively, we could make it an internal helper and define
-> > > kunit_alloc_resource() as
-> > >
-> > > void *kunit_alloc_resource(...)
-> > > {
-> > >    struct kunit_resource *res = _kunit_alloc_and_get_resource(...)
-> > >    if (res) return res->data;
-> > >    return NULL;
-> > > }
-> > >
-> > > ?
-> > >
-> >
-> > I was thinking about this a bit this morning, and I think we should do
-> > the opposite: get rid of kunit_alloc_resource() and leave only
-> > kunit_alloc_and_get_resource().
-> > Then, split the resource system basically in two:
-> > - The system for managing "findable" resources, whose main purpose is
-> > for cases like the KASAN integration and the stub stuff where main
-> > goal is tying some named bit of data to a test, and reference counting
-> > it so it can safely be retrieved and used throughout the kernel if
-> > need be.
-> > - The simpler "free this on test exit" system, which could be as
-> > simple as a kunit_defer(func, context) function built on top of the
-> > former. This wouldn't need detailed tracking of reference counts, etc,
->
-> Agree that there's two distinct usecases here.
-> One wants a replacement for global variables (which thus need
-> "finding") and the other just wants to ensure some function like
-> kfree() gets called.
-
-Agreed.
-
-> The latter ~never need to get "found" (e.g. kunit_kmalloc() users).
-> The one exception: when people use kunit_kfree() to free things early,
-> which requires us to "find" these resources we otherwise wouldn't care
-> about.
->
-> So I don't know how we can split the API unless we get rid of kunit_kfree().
-> Its presence means kunit_kmalloc() and friends need refcounting.
-
-Do we need to choose between dropping kunit_kfree() and refcounting? I
-think this is semantically different from other findable resources,
-and I think it fairly obviously entails the complexity of using it.
-
-> Can we drop it? Maybe.
-> Looking at the uses of kunit_kfree(), they're all internal to kunit except one.
->
->    111  static void
-> ne_misc_dev_test_merge_phys_contig_memory_regions(struct kunit *test)
->    112  {
-> ...
->    117          phys_contig_mem_regions.regions = kunit_kcalloc(test,
-> MAX_PHYS_REGIONS,
->    118
-> sizeof(*phys_contig_mem_regions.regions),
->    119                                                          GFP_KERNEL);
-> ...
->    140
->    141          kunit_kfree(test, phys_contig_mem_regions.regions);
->    142  }
->
-> Hmm, that looks redundant since it's right before the end of the test case.
-> We can drop that call, I think.
->
-> But I think kunit_kfree() can serve a purpose.
-> E.g. for short-lived allocations where assertions are used.
->   buf = kunit_kzalloc(test, sizeof(*buf), GFP_KERNEL);
->   KUNIT_ASSERT_EQ(test, do_stuff(buf), 0);
->   KUNIT_EXPECT_EQ(test, <something about buf>);
->   kunit_kfree(buf);
->   // do more stuff
->
-> Sure we can drop kunit_kfree() and have `buf` stick around longer than needed.
-> Or we could rewrite it like
->   buf = kzalloc(sizeof(*buf), GFP_KERNEL);
->   if (do_stuff(buf)) {
->     KUNIT_FAIL(test, "do_stuff() failed");
->   } else {
->      KUNIT_EXPECT_EQ(test, <something about buf>);
->   }
->   kfree(buf);
->  but I think the kunit_kfree() code is cleaner.
->
-> >
-> > (tl;dr: I think that kunit_alloc_resource() is broken, refcount-wise,
-> > if we're trying to implement the first kind of system, but useful for
-> > the second, and this is quite confusing. So kunit_alloc_resource()
-> > probably shouldn't be used alongside kunit_find_resource(), as there
-> > could be a potential race condition. Now, this shouldn't happen in
-> > practice, as most tests are single threaded and none are doing fancy
-> > things with kunit_remove_resource(), but
-> > kunit_alloc_and_get_resource() should be safer, as you're not playing
-> > with a resource you don't have a reference to according to the
-> > refcount.)
-> >
-> > That's a more complicated refactor and redesign of the resources
-> > system, though, so I'd rather fix this first.
-> >
-> > Cheers,
-> > -- David
+Diego

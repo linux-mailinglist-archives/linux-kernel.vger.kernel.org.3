@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCCC4E5729
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 712DD4E572B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245687AbiCWRJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S245698AbiCWRLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237903AbiCWRJA (ORCPT
+        with ESMTP id S237903AbiCWRLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 13:09:00 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68D876E3D;
-        Wed, 23 Mar 2022 10:07:29 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648055248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o4Lz164WNYxm3inB0nQDx15OPnuCNYaulpad8GE61YQ=;
-        b=lwwfyySfgTNDChQE4BBU1+lpMvW+qzxGwxjrvVHY+ntUQpznYpO+PaZWcBd0jrsv0fPWY7
-        fej4b5fpMvqXzlPRf+EGWwliU8Ft+InoYQvxoNg1+dXl6BFWCVD/68OZ9/SnVWb4Sv04w1
-        CBjpew1Z1bCqj40F1JhJ3wIW2hwol00LOCswWRNRmlqcMKYaiDUKRIPDCdbCIg0dUzO3NX
-        7KdjvplqQ5o4A0SnFXINyY3SGvONMq7pgSlghjukqYIFhjTyWe72+Zq3Fwu6GSTDhLUJfi
-        rKwdREzGhLOKIGMOZTCuseSZ0unWpEyQIpoC8URqTWjJyEyOaAuk46ii8u3yaQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648055248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o4Lz164WNYxm3inB0nQDx15OPnuCNYaulpad8GE61YQ=;
-        b=n4J7aE7wXaJxIQ5Tlr1yY7xXwjAuuiBo7p2kwGkL5z2ZDLO3DPV+t+JjWPpgBbKMx+eCWG
-        j7vlcW+9GtFCLbBw==
-To:     Paolo Bonzini <bonzini@gnu.org>, dave.hansen@linux.intel.com
-Cc:     yang.zhong@intel.com, ravi.v.shankar@intel.com, mingo@redhat.com,
-        "Chang S. Bae" <chang.seok.bae@intel.com>, bp@alien8.de,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        KVM list <kvm@vger.kernel.org>
-Subject: Re: ping Re: [PATCH v4 0/2] x86: Fix ARCH_REQ_XCOMP_PERM and update
- the test
-In-Reply-To: <01c86f82-0c61-94c1-602c-f62d176c9ad7@gnu.org>
-References: <20220129173647.27981-1-chang.seok.bae@intel.com>
- <a0bded7d-5bc0-12b9-2aca-c1c92d958293@gnu.org> <87a6dgam7b.ffs@tglx>
- <877d8kakwg.ffs@tglx> <01c86f82-0c61-94c1-602c-f62d176c9ad7@gnu.org>
-Date:   Wed, 23 Mar 2022 18:07:27 +0100
-Message-ID: <87zglg8unk.ffs@tglx>
+        Wed, 23 Mar 2022 13:11:32 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF7B49F1B;
+        Wed, 23 Mar 2022 10:10:02 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id j83so2272268oih.6;
+        Wed, 23 Mar 2022 10:10:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7hKrd5H7B7WvqIMdiaPvuwOv1aT0mWRSH/OSMprLgR4=;
+        b=FyU61z3ULQu+ggh2Ydmpi4STYh5/cIg9lWETadGTZBYtzujYiTc0F+LSXz68yL44pD
+         LvljJfNWgpn6a90iDMpG8TA6SI9ET/3IxsV5/NiLHRZBKAmWrq5fwpp+9hwau8QpknVO
+         txkvZenn6+gtnB69KAp3vBziLUqopS//6Hzb/aNonByRWqjqdjWTaKXaYb9d2TScRlx2
+         sJGbCXfSqtj9OsQRedDNKfYsJhaLQr29y6a+1HqKxK3dMf9G4Ih+gT2fNj7qaalhd8Hf
+         Uf3rcjYt0t9JkYITA5mJyQLHZY+PqeqOkdahKQLJR2lrqyMqcXvt9c7TQ/g+Ekl2NK0M
+         2ESQ==
+X-Gm-Message-State: AOAM532fuMgWnaAsVD164SC8nPl0by6NIH/e2OLfXsOk5TRNbCUeKa1O
+        XPMIQ/mf+zmMf7ed51pnQg==
+X-Google-Smtp-Source: ABdhPJx8jPlgF405kvPPYl2lYEG107noZH9leUHMGog8OncHx0ZtDujB9+uS/h2L5Tca9Pa2VoBzyg==
+X-Received: by 2002:a54:400c:0:b0:2ef:8951:a271 with SMTP id x12-20020a54400c000000b002ef8951a271mr535618oie.267.1648055401409;
+        Wed, 23 Mar 2022 10:10:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 11-20020a05687013cb00b000dd9b5dd71csm184164oat.56.2022.03.23.10.09.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 10:10:00 -0700 (PDT)
+Received: (nullmailer pid 94890 invoked by uid 1000);
+        Wed, 23 Mar 2022 17:09:59 -0000
+Date:   Wed, 23 Mar 2022 12:09:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     aaronyu@google.com, trevor.wu@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        robh+dt@kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        broonie@kernel.org, tzungbi@google.com, devicetree@vger.kernel.org,
+        angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
+        julianbraha@gmail.com, linux-mediatek@lists.infradead.org
+Subject: Re: [v3 02/19] dt-bindings: mediatek: mt6358: add new compatible for
+ using mt6366
+Message-ID: <YjtUZ0gbt/KZ4WKH@robh.at.kernel.org>
+References: <20220313151023.21229-1-jiaxin.yu@mediatek.com>
+ <20220313151023.21229-3-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220313151023.21229-3-jiaxin.yu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23 2022 at 15:24, Paolo Bonzini wrote:
-> On 3/23/22 13:55, Thomas Gleixner wrote:
->> --- a/arch/x86/kernel/fpu/xstate.c
->> +++ b/arch/x86/kernel/fpu/xstate.c
->> @@ -1625,6 +1625,8 @@ static int __xstate_request_perm(u64 per
->>   
->>   	/* Calculate the resulting kernel state size */
->>   	mask = permitted | requested;
->> +	/* Take supervisor states into account */
->> +	mask |= xfeatures_mask_supervisor();
->>   	ksize = xstate_calculate_size(mask, compacted);
->>   
->
-> This should be only added in for the !guest case.
+On Sun, 13 Mar 2022 23:10:06 +0800, Jiaxin Yu wrote:
+> Add new compatible string "mediatek,mt6366-sound" for using mt6366.
+> 
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/sound/mt6358.txt | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-Yes, I figured that out already :)
+Acked-by: Rob Herring <robh@kernel.org>

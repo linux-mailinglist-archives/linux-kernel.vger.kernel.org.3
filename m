@@ -2,109 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37E74E5180
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C6F4E5183
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243960AbiCWLoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
+        id S243963AbiCWLol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233318AbiCWLoV (ORCPT
+        with ESMTP id S243973AbiCWLoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:44:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD9879385;
-        Wed, 23 Mar 2022 04:42:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F00DCB81E85;
-        Wed, 23 Mar 2022 11:42:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0E1C340E8;
-        Wed, 23 Mar 2022 11:42:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648035769;
-        bh=AX3abbornC9FM40TMDR9pJEAVnDGmX3E+mfdfSSC5xI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Apt6NVYWGYqoV9pWyMXsDMiJOfEiyhunqbrscSTMrQR+PW+kTafTW02Cm/97eg84W
-         75nUv0lOOwEHQMrgiEd0+NcdbvjqP4rVYfiK+u/hU1AH9NgjLzZ0tO/mAuzzV/vuFS
-         SeicNiFy08qDfL13M1ouV92Ks/on9bSEE/K9AkN0=
-Date:   Wed, 23 Mar 2022 12:42:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Message-ID: <YjsHtg7uzRGUlsb3@kroah.com>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
- <YjrJWf+XMnWVd6K0@kroah.com>
- <d0e2573a-7736-bb3e-9f6a-5fa25e6d31a2@ddn.com>
+        Wed, 23 Mar 2022 07:44:38 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79895E093;
+        Wed, 23 Mar 2022 04:43:08 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 17so1447702lji.1;
+        Wed, 23 Mar 2022 04:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=GUNacRM0Kzot4Ci3+9/rQiAP6HGdFO8cNfIKSh2/JpE=;
+        b=Jdm0puZZ/Q6dFz353KCoDZvifEBG6tzHxW6igmTgxd+obwpPQAudDXwNknS/hhz/dn
+         qCVif8Hnrp91CoRN93+vhhSXQr3O0aViX2rpkgbxco2CgKXm4vcj3xV/rB7waIx9ztsB
+         R0mmMVc818zGQV6acVGBsI2XRGtQi23j0NZdJQ3tP5uOe3ghbIsHipM4baigfeZK+Sfz
+         9sAsxvFUgiFl3NTSys9UjwoH0U+wR2PDNR7Z1KBKZCVkk4oU810jgtSTRDxyYTPoLCQd
+         Dlvwu7iShS+Uf6N70yehFjkjjuL8gZFZjRNybtYbtHRcPvurxM4JhK/VMh4Hvuhcn2/e
+         dgZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=GUNacRM0Kzot4Ci3+9/rQiAP6HGdFO8cNfIKSh2/JpE=;
+        b=YBptG7s4kYIWcYn12GFL85yxSDWaaElDrVkuOh2sSrNU/CXA5YbS0gSZ7MfWlhctt8
+         +FDGUfXATUZie9cSg211+vWBlBhd9pydc4hpFodKShlTT7+Z48o6BO7cx2wH0XnNi/V/
+         KyRFPauHvlRnPtzP9tAAuCYoChHBLGscdZ2MvNHn0d0PqOATM7t/EINCDaubYAxndv23
+         ypaE3hhUYVDBzXA/az35LagtVmB/ydYQSoIiIX5neeYelRcKRPZbFcsDmi8DbvTJCeT/
+         D8f9w3jNAbp0wj5Skcg9GjKpV3FFjG7MWJLuL6UNCFsA0eTt1FkWdGm4z8qjBSEJmGdY
+         Nijw==
+X-Gm-Message-State: AOAM53395V6mVJIq7HKSE6Ri5Q7CkmAPXr7pGk7sBnqB4z7Ol2pTBLvi
+        e3NeS/gSFUtMsrZ+IWLgTUpvblpdLu4vuw==
+X-Google-Smtp-Source: ABdhPJykafU9a03wA5avbF9HT0x528x5zTqhH1AL31w9rXO/uO4pFDwD6bruH4dLIxrv5tOUpAMGvQ==
+X-Received: by 2002:a2e:7d18:0:b0:247:f205:96fa with SMTP id y24-20020a2e7d18000000b00247f20596famr23072028ljc.269.1648035786533;
+        Wed, 23 Mar 2022 04:43:06 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id k2-20020a056512330200b0044a096ea7absm2008256lfe.54.2022.03.23.04.43.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 04:43:06 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20220323112116.q6shx2g4r23ungtc@skbuf>
+References: <20220317172013.rhjvknre5w7mfmlo@skbuf>
+ <86tubvk24r.fsf@gmail.com> <20220318121400.sdc4guu5m4auwoej@skbuf>
+ <86pmmjieyl.fsf@gmail.com> <20220318131943.hc7z52beztqlzwfq@skbuf>
+ <86a6dixnd2.fsf@gmail.com> <20220322110806.kbdb362jf6pbtqaf@skbuf>
+ <86fsn90ye8.fsf@gmail.com> <20220323101643.kum3nuqctunakcfo@skbuf>
+ <864k3p5437.fsf@gmail.com> <20220323112116.q6shx2g4r23ungtc@skbuf>
+Date:   Wed, 23 Mar 2022 12:43:03 +0100
+Message-ID: <86tuboao8o.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0e2573a-7736-bb3e-9f6a-5fa25e6d31a2@ddn.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 11:26:11AM +0100, Bernd Schubert wrote:
-> On 3/23/22 08:16, Greg KH wrote:
-> > On Tue, Mar 22, 2022 at 08:27:12PM +0100, Miklos Szeredi wrote:
-> > > Add a new userspace API that allows getting multiple short values in a
-> > > single syscall.
-> > > 
-> > > This would be useful for the following reasons:
-> > > 
-> > > - Calling open/read/close for many small files is inefficient.  E.g. on my
-> > >    desktop invoking lsof(1) results in ~60k open + read + close calls under
-> > >    /proc and 90% of those are 128 bytes or less.
-> > 
-> > As I found out in testing readfile():
-> > 	https://lore.kernel.org/r/20200704140250.423345-1-gregkh@linuxfoundation.org
-> > 
-> > microbenchmarks do show a tiny improvement in doing something like this,
-> > but that's not a real-world application.
-> > 
-> > Do you have anything real that can use this that shows a speedup?
-> 
-> Add in network file systems. Demonstrating that this is useful locally and
-> with micro benchmarks - yeah, helps a bit to make it locally faster. But the
-> real case is when thousands of clients are handled by a few network servers.
-> Even reducing wire latency for a single client would make a difference here.
+On ons, mar 23, 2022 at 13:21, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Wed, Mar 23, 2022 at 11:57:16AM +0100, Hans Schultz wrote:
+>> >> >> Another issue I see, is that there is a deadlock or similar issue when
+>> >> >> receiving violations and running 'bridge fdb show' (it seemed that
+>> >> >> member violations also caused this, but not sure yet...), as the unit
+>> >> >> freezes, not to return...
+>> >> >
+>> >> > Have you enabled lockdep, debug atomic sleep, detect hung tasks, things
+>> >> > like that?
+>> >> 
+>> >> I have now determined that it is the rtnl_lock() that causes the
+>> >> "deadlock". The doit() in rtnetlink.c is under rtnl_lock() and is what
+>> >> takes care of getting the fdb entries when running 'bridge fdb show'. In
+>> >> principle there should be no problem with this, but I don't know if some
+>> >> interrupt queue is getting jammed as they are blocked from rtnetlink.c?
+>> >
+>> > Sorry, I forgot to respond yesterday to this.
+>> > By any chance do you maybe have an AB/BA lock inversion, where from the
+>> > ATU interrupt handler you do mv88e6xxx_reg_lock() -> rtnl_lock(), while
+>> > from the port_fdb_dump() handler you do rtnl_lock() -> mv88e6xxx_reg_lock()?
+>> 
+>> If I release the mv88e6xxx_reg_lock() before calling the handler, I need
+>> to get it again for the mv88e6xxx_g1_atu_loadpurge() call at least. But
+>> maybe the vtu_walk also needs the mv88e6xxx_reg_lock()?
+>> I could also just release the mv88e6xxx_reg_lock() before the
+>> call_switchdev_notifiers() call and reacquire it immediately after?
+>
+> The cleanest way to go about this would be to have the call_switchdev_notifiers()
+> portion of the ATU interrupt handling at the very end of mv88e6xxx_g1_atu_prob_irq_thread_fn(),
+> with no hardware access needed, and therefore no reg_lock() held.
 
-I think I tried running readfile on NFS.  Didn't see any improvements.
-But please, try it again.  Also note that this proposal isn't for NFS,
-or any other "real" filesystem :)
-
-> There is a bit of chicken-egg problem - it is a bit of work to add to file
-> systems like NFS (or others that are not the kernel), but the work won't be
-> made there before there is no syscall for it. To demonstrate it on NFS one
-> also needs a an official protocol change first. And then applications also
-> need to support that new syscall first.
-> I had a hard time explaining weather physicist back in 2009 that it is not a
-> good idea to have millions of 512B files on  Lustre. With recent AI workload
-> this gets even worse.
-
-Can you try using the readfile() patch to see if that helps you all out
-on Lustre?  If so, that's a good reason to consider it.  But again, has
-nothing to do with this getvalues(2) api.
-
-thanks,
-
-greg k-h
+So something like?
+	mv88e6xxx_reg_unlock(chip);
+	rtnl_lock();
+	err = call_switchdev_notifiers(SWITCHDEV_FDB_ADD_TO_BRIDGE, brport, &info.info, NULL);
+	rtnl_unlock();
+	mv88e6xxx_reg_lock(chip);

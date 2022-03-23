@@ -2,71 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278904E55A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4774E55AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 16:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245248AbiCWPtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 11:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S238279AbiCWPyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 11:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245241AbiCWPtk (ORCPT
+        with ESMTP id S238265AbiCWPyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 11:49:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE63BCA4;
-        Wed, 23 Mar 2022 08:48:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 23 Mar 2022 11:54:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9280212A95;
+        Wed, 23 Mar 2022 08:53:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 05F09210F3;
+        Wed, 23 Mar 2022 15:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648050790; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yi+NBj+fiR2T/7qvGEUjUcsgNiIZjTQLMSbnc3SdRBU=;
+        b=pYBHymC0Kj0AgtNOT7wy6G26/sKL8L0tu3iZ5/KgjkiEhUqin13jAF1bucxYpsvXggXi72
+        uD2kOMYslWlBaMxR38+EBu+nYI/gDSxMOXvhFKwjJT/RrIVDhYZZH12P/vBlDdgIHsxFdR
+        im9Ia5o7aFUVuXF+hzxusMOfsoBg0PU=
+Received: from suse.cz (unknown [10.100.224.162])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58B8D617F1;
-        Wed, 23 Mar 2022 15:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6364FC340EE;
-        Wed, 23 Mar 2022 15:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648050487;
-        bh=iu0a4mlm3tbKjoNfbU+jRGCOyzpTsae6ebaZk9gmlDE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jSMDr7MJ1iTCQsTagta1rYmK+n+407ozJ9MkOx8M0n7xPhBiSqCZLNonhHOk63pHj
-         jtyxZQq+ibp64Qcz6XJF2Qz+ry1TEvJkUhCwLt2TQk1oojYd4VGjNPvKOnEaAd6GHd
-         T452ay+Kt9aCZTxD1+yg/haAut9eWrEFfyoMALVL3mMTk4PQ2uPERy5QOhV0t+yyQL
-         0Bw1jY+vGuakSSIbLWrC8sSafCrB34w+DxD5RCA0t8M5He+/3Kwqb8mCOXV9dbu5Rm
-         GPU1FmMlxjyaknMi8PNTKkbxfmdUR4vTTW8aNoyq2gLhtaIpQJKPD3P7uTyhS3gowL
-         LXN2zmL3tghdg==
-Date:   Wed, 23 Mar 2022 08:48:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "GONG, Ruiqi" <gongruiqi1@huawei.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Benjamin Poirier <bpoirier@nvidia.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        "Xiu Jianfeng" <xiujianfeng@huawei.com>
-Subject: Re: [PATCH] net: mpls: fix memdup.cocci warning
-Message-ID: <20220323084806.41291408@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220323080706.212531-1-gongruiqi1@huawei.com>
-References: <20220323080706.212531-1-gongruiqi1@huawei.com>
+        by relay2.suse.de (Postfix) with ESMTPS id D044EA3B83;
+        Wed, 23 Mar 2022 15:53:09 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 16:53:07 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     trix@redhat.com
+Cc:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] livepatch: Reorder to use before freeing a pointer
+Message-ID: <YjtCY1QaA6GI3b+7@alley>
+References: <20220320015143.2208591-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220320015143.2208591-1-trix@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 16:07:06 +0800 GONG, Ruiqi wrote:
-> Simply use kmemdup instead of explicitly allocating and copying memory.
+On Sat 2022-03-19 18:51:43, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 > 
-> Generated by: scripts/coccinelle/api/memdup.cocci
+> Clang static analysis reports this issue
+> livepatch-shadow-fix1.c:113:2: warning: Use of
+>   memory after it is freed
+>   pr_info("%s: dummy @ %p, prevented leak @ %p\n",
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Fixes: 7d4741eacdef ("net: mpls: Fix notifications when deleting a device")
+> The pointer is freed in the previous statement.
+> Reorder the pr_info to report before the free.
+> 
+> Similar issue in livepatch-shadow-fix2.c
 
-Fixes tag are for bugs.
+I have added the following paragraph:
 
-> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
+<snip>
+Note that it is a false positive. pr_info() just prints the address.
+The freed memory is not accessed. Well, the static analyzer could not
+know this easily.
+</snip>
 
-net-next is closed during the merge window please repost in 2 weeks.
+> Signed-off-by: Tom Rix <trix@redhat.com>
+
+and pushed the patch into livepatching/livepatching.git,
+branch for-5.18/selftests-fixes.
+
+IMHO, the patch is so trivial and can be added even in this merge
+window. There is no need to create more dances around it ;-)
+
+Let me know if you disagree. I am going to send the pull request
+on Friday or Monday.
+
+Best Regards,
+Petr

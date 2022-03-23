@@ -2,157 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA424E53DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8A04E53F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244578AbiCWODx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
+        id S244635AbiCWOHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241629AbiCWODt (ORCPT
+        with ESMTP id S244629AbiCWOHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:03:49 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244737EA2A;
-        Wed, 23 Mar 2022 07:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648044140; x=1679580140;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6JzlOM0Zp9+nJWpyflWqezPxav66g3ZVKXHPUjsbyW8=;
-  b=J9x4eMkEvFxCiYjNs22Y4oOHlQeEc0E1PX55Fa35vyrF4jZEsfAu+jFG
-   4B3KgIe1z5nYpdrvFNsgXFPmLZYEBnLkF0xAxHq5aod01exlJDh/Q8/86
-   mPgv2ucYVyHL+si1+w31qYsQ50SlNF7PmQs5itQ55M1aQgmgNe+SNuntu
-   3z4FEoDCxXZ+3fg7VlRq0vmd6vpWGCBaOwcKGqyQI+7df6tNxv5woYyhG
-   cgXEaTP3GTatoAsKoQAO61k+IVpBASxH97zlofuTZgKup5MWbdJhwd6wh
-   KCCV3vslh6vNQFOTLlLYb0X4gH9U1Ok2tzp93CzhhFSZOFtqd/kFW4odP
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="258304809"
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="258304809"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 07:01:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="785796352"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Mar 2022 07:01:57 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 09864252; Wed, 23 Mar 2022 16:02:18 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 4/4] spidev: Replace OF specific code by device property API
-Date:   Wed, 23 Mar 2022 16:02:15 +0200
-Message-Id: <20220323140215.2568-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220323140215.2568-1-andriy.shevchenko@linux.intel.com>
-References: <20220323140215.2568-1-andriy.shevchenko@linux.intel.com>
+        Wed, 23 Mar 2022 10:07:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04EB7E09B;
+        Wed, 23 Mar 2022 07:05:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78AE1616DB;
+        Wed, 23 Mar 2022 14:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3E2C340E8;
+        Wed, 23 Mar 2022 14:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648044345;
+        bh=1oAteS9kFdrvyEzNGdIhJUXXW3m2qPYEMmS/a468Uzo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oAvdrJwwvv0nTDkqjTkFxUBB0Uv5Xs+zarFCEWHugKri/ymW17SYVahPoE5wAK5fM
+         FubYzfJjvyJKx3tzHi7m2z9xh1/fYcZEc0nEkGdjqwUVeTPM/GwZysQgjZmeh6hY4p
+         x/JfwA/kwpS2UPYH89Qs+2MLo8DJguNBl36zG7zPzaDubIsO23XtHF/N7U1Su9G9KE
+         Q6ldUWSTg26zKTJZtBhchqjoiKVw9zwV9rWakuQe4LS5n2uFEJ/VgOb3Re24xhjiKo
+         8Loh6fooVwyMU2w5mZEiuCST/IF08ylTShDUI/xLwbnG04nbLjNySVNpg00aaFuZxM
+         5KQ5KAGudir1A==
+Received: by mail-ej1-f41.google.com with SMTP id d10so3032633eje.10;
+        Wed, 23 Mar 2022 07:05:45 -0700 (PDT)
+X-Gm-Message-State: AOAM53074xT6D2BDVdoLmjAE/bvcdWeMP29cQ/0Zo3BsfJLySWp/oQYD
+        plmFa8/vcVlxmkHvdCN4E7ciL9puAzJIHJOYvQ==
+X-Google-Smtp-Source: ABdhPJy7E6vyxf070rK6ZOCxsK5AWkoUKOUi1IbGT0yD0nul4jRGmi2hr2Mpc0tM9FE9EBpY85DFp3LmxDC9L4QwWts=
+X-Received: by 2002:a17:907:1c1b:b0:6e0:6618:8ac with SMTP id
+ nc27-20020a1709071c1b00b006e0661808acmr137550ejc.82.1648044344180; Wed, 23
+ Mar 2022 07:05:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220301233501.2110047-1-robh@kernel.org>
+In-Reply-To: <20220301233501.2110047-1-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 23 Mar 2022 09:05:32 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKs=00e_XdO4W0oML6DVrhR3CsSTD+Cfamcx52i=DAE9g@mail.gmail.com>
+Message-ID: <CAL_JsqKs=00e_XdO4W0oML6DVrhR3CsSTD+Cfamcx52i=DAE9g@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: media: mediatek,vcodec: Fix addressing cell sizes
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of calling the OF specific APIs, use device property ones.
+On Tue, Mar 1, 2022 at 5:35 PM Rob Herring <robh@kernel.org> wrote:
+>
+> 'dma-ranges' in the example is written for cell sizes of 2 cells, but
+> the schema and example specify sizes of 1 cell. As the h/w has a bus
+> address of >32-bits, cell sizes of 2 is correct. Update the schema's
+> '#address-cells' and '#size-cells' to be 2 and adjust the example
+> throughout.
+>
+> There's no error currently because dtc only checks 'dma-ranges' is a
+> correct multiple number of cells (3) and the schema checking is based on
+> bracketing of entries.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> I noticed the driver is checking 'dma-ranges' itself. That's generally
+> wrong as the core code should be configuring bus dma masks
+> automatically.
+> ---
+>  .../media/mediatek,vcodec-subdev-decoder.yaml | 122 +++++++++---------
+>  1 file changed, 64 insertions(+), 58 deletions(-)
 
-It also prevents misusing PRP0001 in ACPI when trying to instantiate
-spidev directly. We only support special SPI test devices there.
+Can this fix be applied for rc1? Still failing in linux-next.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spidev.c | 45 ++++++++++++++++++++++----------------------
- 1 file changed, 22 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 13dea81b21be..ffa124665cf3 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -20,8 +20,6 @@
- #include <linux/property.h>
- #include <linux/slab.h>
- #include <linux/compat.h>
--#include <linux/of.h>
--#include <linux/of_device.h>
- 
- #include <linux/spi/spi.h>
- #include <linux/spi/spidev.h>
-@@ -695,20 +693,31 @@ static const struct spi_device_id spidev_spi_ids[] = {
- };
- MODULE_DEVICE_TABLE(spi, spidev_spi_ids);
- 
--#ifdef CONFIG_OF
-+/*
-+ * spidev should never be referenced in DT without a specific compatible string,
-+ * it is a Linux implementation thing rather than a description of the hardware.
-+ */
-+static int spidev_of_check(struct device *dev)
-+{
-+	if (device_property_match_string(dev, "compatible", "spidev") < 0)
-+		return 0;
-+
-+	dev_err(dev, "spidev listed directly in DT is not supported\n");
-+	return -EINVAL;
-+}
-+
- static const struct of_device_id spidev_dt_ids[] = {
--	{ .compatible = "rohm,dh2228fv" },
--	{ .compatible = "lineartechnology,ltc2488" },
--	{ .compatible = "semtech,sx1301" },
--	{ .compatible = "lwn,bk4" },
--	{ .compatible = "dh,dhcom-board" },
--	{ .compatible = "menlo,m53cpld" },
--	{ .compatible = "cisco,spi-petra" },
--	{ .compatible = "micron,spi-authenta" },
-+	{ .compatible = "rohm,dh2228fv", .data = &spidev_of_check },
-+	{ .compatible = "lineartechnology,ltc2488", .data = &spidev_of_check },
-+	{ .compatible = "semtech,sx1301", .data = &spidev_of_check },
-+	{ .compatible = "lwn,bk4", .data = &spidev_of_check },
-+	{ .compatible = "dh,dhcom-board", .data = &spidev_of_check },
-+	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
-+	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
-+	{ .compatible = "micron,spi-authenta", .data = &spidev_of_check },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, spidev_dt_ids);
--#endif
- 
- /* Dummy SPI devices not to be used in production systems */
- static int spidev_acpi_check(struct device *dev)
-@@ -740,16 +749,6 @@ static int spidev_probe(struct spi_device *spi)
- 	int			status;
- 	unsigned long		minor;
- 
--	/*
--	 * spidev should never be referenced in DT without a specific
--	 * compatible string, it is a Linux implementation thing
--	 * rather than a description of the hardware.
--	 */
--	if (spi->dev.of_node && of_device_is_compatible(spi->dev.of_node, "spidev")) {
--		dev_err(&spi->dev, "spidev listed directly in DT is not supported\n");
--		return -EINVAL;
--	}
--
- 	match = device_get_match_data(&spi->dev);
- 	if (match) {
- 		status = match(&spi->dev);
-@@ -824,7 +823,7 @@ static void spidev_remove(struct spi_device *spi)
- static struct spi_driver spidev_spi_driver = {
- 	.driver = {
- 		.name =		"spidev",
--		.of_match_table = of_match_ptr(spidev_dt_ids),
-+		.of_match_table = spidev_dt_ids,
- 		.acpi_match_table = spidev_acpi_ids,
- 	},
- 	.probe =	spidev_probe,
--- 
-2.35.1
-
+Rob

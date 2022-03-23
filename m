@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1BA4E5186
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E304E5189
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243973AbiCWLpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
+        id S243993AbiCWLqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbiCWLpH (ORCPT
+        with ESMTP id S229834AbiCWLqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:45:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CEC36150;
-        Wed, 23 Mar 2022 04:43:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3525B81E7D;
-        Wed, 23 Mar 2022 11:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6938C340E8;
-        Wed, 23 Mar 2022 11:43:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648035815;
-        bh=WkV8XVmzLw63I9Fodwt+Z/8kLcUo4U+yhHdNLmmb6OM=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=H6e0rP9LCnJ63/4bOKhWvsfJt8D9JpW/36GSwu0akuxoBI/3EoqVOm886HE0u8cmV
-         oWWIZZtdcBA2KALOQP8rsZhhPncqjPPdIx2fQDEcdyXnv5YD0fn0bm4ixnEbcQSKgV
-         Uy6OtxyRh78m3ieuonTnfC3d4ksDxFZkOrFG/AJg=
-Date:   Wed, 23 Mar 2022 12:43:32 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Jung Daehwan <dh10.jung@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>,
-        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
-        cpgs@samsung.com, cpgsproxy5@samsung.com
-Subject: Re: [PATCH v1 1/4] usb: host: export symbols for xhci hooks usage
-Message-ID: <YjsH5Jtwd4JlXJ6g@kroah.com>
-References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220304062617epcas2p2084161966aaa66d07f4c25720ec18088@epcas2p2.samsung.com>
- <252651381.41646375583002.JavaMail.epsvc@epcpadp4>
- <b33d8497-d6d5-18e2-93a9-e0564a84c1c5@kernel.org>
- <1983025922.01648006681661.JavaMail.epsvc@epcpadp4>
- <105eaeec-d77e-b0eb-86ad-a88c7446ca98@kernel.org>
+        Wed, 23 Mar 2022 07:46:33 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BA037BC2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648035904; x=1679571904;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L7fnnj44GzYC3xj3q3dLZgw4zoYW9N6Mb9jq70zoJSU=;
+  b=J84Btvov57bcGbrYcS8szLl/d26tHeeoxpJbWg/UO8r3AvYJGaJgSz3N
+   32EoYNG8LZikytwqVJoj4WA8mSY4mmGBpXhPCKBWmr1cdWdKxqPWwXm9Z
+   nsb6LIKPTUdMetoUULE+xeNVlNfp+wpidBUzzrHCUBnAgp/TDz9XcCjAq
+   Ooql9rI2uH8QJ+ClRdC+rWvUmaEvZMrMDRQ/y9hsUzts/mmWqVEbp5XHe
+   NL7ahRK00ec1+gauB9unnIbARWuTnJ1SaoZ5fM3pCDZjk3aztAmfOlMQJ
+   qcnGOUCXbhC+8o3EDKwLEvNcruCuV3PQzEqdJUAk6hEmcWtDnXzXTbbwI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="318799158"
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="318799158"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 04:45:03 -0700
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="717366373"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 04:44:58 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 1D833204A8;
+        Wed, 23 Mar 2022 13:44:56 +0200 (EET)
+Date:   Wed, 23 Mar 2022 13:44:56 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [GIT PULL] bounds fixes for v5.18-rc1
+Message-ID: <YjsIOGpYwN10n60u@paasikivi.fi.intel.com>
+References: <202203210843.0E70F58@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <105eaeec-d77e-b0eb-86ad-a88c7446ca98@kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202203210843.0E70F58@keescook>
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 10:41:23AM +0100, Krzysztof Kozlowski wrote:
-> On 23/03/2022 03:58, Jung Daehwan wrote:
-> > On Mon, Mar 07, 2022 at 10:59:06AM +0100, Krzysztof Kozlowski wrote:
-> >> On 04/03/2022 07:23, Daehwan Jung wrote:
-> >>> Export symbols for xhci hooks usage:
-> >>> 	xhci_ring_free
-> >>> 	- Allow xhci hook to free xhci_ring.
-> >>
-> >> Instead of copying-pasting the name of function, please explain why do
-> >> you need these symbols exported.
-> >>
-> >> The "Why" is actually one of most important questions, because "what is
-> >> this patch doing" we can easily see...
-> >>
-> >>>
-> >>> 	xhci_get_slot_ctx
-> >>> 	- Allow xhci hook to get slot_ctx from the xhci_container_ctx
-> >>> 	  for getting the slot_ctx information to know which slot is
-> >>> 	  offloading and compare the context in remote subsystem memory
-> >>> 	  if needed.
-> >>>
-> >>
-> >>
-> >> Best regards,
-> >> Krzysztof
-> >>
-> > 
-> > Hi Krzysztof
-> > 
-> > xhci_ring_free has been removed from v3..
-> > The reason why I want to export is for managing vendor specific ring.
-> > I want to alloc and free vendor specific ring on specific address.
-> > It's done with xhci hooks.
-> 
-> It's better, but still does not explain why these have to be exported.
-> Please mention where are these hooks going to be. Where are they
-> implemented. I actually expect all of these exports to be used in your
-> patchset.
+Hi Kees,
 
-All exports _HAVE_ to be used by the patchset.  Otherwise it's an
-invalid submission.
+On Mon, Mar 21, 2022 at 08:52:31AM -0700, Kees Cook wrote:
+>       media: omap3isp: Use struct_group() for memcpy() region
 
-thanks,
+This patch has been applied to linux-media tree about a month ago. It may
+have taken a bit more time than usual to get to linux-next though.
 
-greg k-h
+Please try to remember to agree with maintainers in advance when merging
+patches via non-default routes.
+
+Thanks.
+
+-- 
+Kind regards,
+
+Sakari Ailus

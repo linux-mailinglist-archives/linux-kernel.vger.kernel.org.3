@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BE44E4A9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8804E4A9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240157AbiCWBpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 21:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S240590AbiCWBra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 21:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiCWBpK (ORCPT
+        with ESMTP id S240209AbiCWBr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 21:45:10 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8409729815
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:43:33 -0700 (PDT)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7834:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Wed, 23 Mar 2022 09:41:20 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Wed, 23 Mar 2022 09:41:50 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.018; Wed, 23 Mar 2022 09:41:50 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Russell King - ARM Linux" <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: RE: [PATCH v11 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021
- defconfig
-Thread-Topic: [PATCH v11 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021
- defconfig
-Thread-Index: AQHYPbV20XoTM/apKU2VdtNWQYp2n6zKqyIAgAGFk2A=
-Date:   Wed, 23 Mar 2022 01:41:50 +0000
-Message-ID: <d79dd7655c964f88a58d8bf403da39be@cqplus1.com>
-References: <cover.1647928315.git.qinjian@cqplus1.com>
- <8372ee2fcf361a3af7233450c4403178052ceee2.1647928316.git.qinjian@cqplus1.com>
- <CAK8P3a1H2xM1PdDwKPWHD0fqZ0q_o-KZTLvSXdm9jjqTWcX-hA@mail.gmail.com>
-In-Reply-To: <CAK8P3a1H2xM1PdDwKPWHD0fqZ0q_o-KZTLvSXdm9jjqTWcX-hA@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 22 Mar 2022 21:47:28 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCB36FF57
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:46:00 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso329479pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KqfEw4Ajc2umoSsEyMC9bwp+tt5nSd/kMf9EMGWLoi4=;
+        b=4vaApsLfR6zf1IrbRvVkpy9wfc2EULWHx9WmPyQGkaVB2vcw9V4owbJsmrC7i3pint
+         UJwGct/pLgQeEVM/my/QhKOsgLv8tt121osIxl/A8MOZzEehua9/LSQamVW/O9uM+HCj
+         tBNnTURY1hLpLxQhYZLsuQ+d2UOwyqa2xtOlx8+vz0LJp8jbuA4nvcX1GMQn3DrzmGtx
+         43o98itP8HT0uGr3+JC9JNUu+LbQhMYv6awtTP3Ahm3zTsRHLhzrN8NteaGzOCgMhENo
+         MSeToJ1V3jQYeAWcrgPKcqlcvog059xfYukstY96WRci6bE0N+npQRjJQ5gUGDX9fMw3
+         ztUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KqfEw4Ajc2umoSsEyMC9bwp+tt5nSd/kMf9EMGWLoi4=;
+        b=wCUcDZf8IYx3VyMr/q9kjoq7gzgSdADHL/4S1/RoYbuMQkc0yZDvzI632K5CsLc+Qq
+         TpYzrAj6nHp9gz8IMfvG8WpMsSNcnNzfTVJFZGK4MhrqH23IcQBKA3jCNe1lgi5N7DmL
+         XTL9UDWMVYVhD2BzY7i32S6Rro6fNPtIpt2yCnJy8NcxCoXr51IQwInKXV9YQh95cnjr
+         DtBPmouUgt7KMF5+4ndruqaICzPhUPWWuIbykQFU7+CbuZ534KGaIVL8+ILJF0CYZk0M
+         0BAZ3ik5YIfcPX0nrEEvlimOnT4LivGKlJeFMrmH3XyXJVDt45NZa+EnFcvEfReiwUYn
+         UFGw==
+X-Gm-Message-State: AOAM532xIAK0wRRTzBzmfWBDOPYnLf4m7DHiwUTUy/kLdkC1BUb4T/mb
+        ufsG+yKtpIv4aHyddFBNuyUE5CljGOmTk4LI
+X-Google-Smtp-Source: ABdhPJwQyyxMLbL7zJAzXkcfXqCH9nvzSf+WzVN+f+JHID7ZeShvkkjsIKsOErIzxLBL0DI2Wvl1og==
+X-Received: by 2002:a17:90b:1642:b0:1c6:c6d0:fbfa with SMTP id il2-20020a17090b164200b001c6c6d0fbfamr8416339pjb.218.1647999959543;
+        Tue, 22 Mar 2022 18:45:59 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e19-20020a637453000000b003821bdb8103sm14768089pgn.83.2022.03.22.18.45.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 18:45:59 -0700 (PDT)
+Message-ID: <26108737-fe0a-f3e6-f7ab-872427ca7b6b@kernel.dk>
+Date:   Tue, 22 Mar 2022 19:45:57 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Keith Busch <kbusch@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220323074915.7cfb312d@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220323074915.7cfb312d@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiBUdWUsIE1hciAyMiwgMjAyMiBhdCA3OjE3IEFNIFFpbiBKaWFuIDxxaW5qaWFuQGNxcGx1
-czEuY29tPiB3cm90ZToNCj4gPg0KPiA+IEFkZCBnZW5lcmljIFN1bnBsdXMgU1A3MDIxIGJhc2Vk
-IGJvYXJkIGRlZmNvbmZpZw0KPiA+DQo+ID4gUmV2aWV3ZWQtYnk6IEFybmQgQmVyZ21hbm4gPGFy
-bmRAYXJuZGIuZGU+DQo+ID4gU2lnbmVkLW9mZi1ieTogUWluIEppYW4gPHFpbmppYW5AY3FwbHVz
-MS5jb20+DQo+IA0KPiBJIGRvbid0IHRoaW5rIEkgZXZlciByZXBsaWVkIHdpdGggJ1Jldmlld2Vk
-LWJ5OiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPicNCj4gdG8gdGhpcyBwYXRjaC4gV2hp
-bGUgSSBkaWQgcmV2aWV3IGl0IGluIHZlcnNpb24gNSwgeW91IG5ldmVyIHNlZW0gdG8gaGF2ZQ0K
-PiByZXBsaWVkIHRvIG15IHF1ZXN0aW9ucyB0aGVyZS4NCj4gDQo+IEl0IHdhcyBhIHdoaWxlIGFn
-byB0aG91Z2gsIHNvIEkgZG9uJ3QgcmVtZW1iZXIgdGhlIGRldGFpbHMsIGlmIHdlIGRpZA0KPiBj
-b25jbHVkZSB0aGUgcmV2aWV3LCBjYW4geW91IGxpbmsgdG8gdGhlIGxvcmUua2VybmVsLm9yZyB0
-aHJlYWQgaW4NCj4gdGhlIG5leHQgdmVyc2lvbj8gUGxlYXNlIGFsc28gY2hlY2sgdGhlIG90aGVy
-IHBhdGNoZXMgb24gd2hpY2gNCj4geW91IGFkZGVkIGEgJ1Jldmlld2VkLWJ5JyB0YWcgZnJvbSBz
-b21lb25lIHRvIGVuc3VyZSB0aGF0IHRoZXkNCj4gYWN0dWFsbHkgcHJvdmlkZWQgdGhhdCB0YWcs
-IHJhdGhlciB0aGFuIGp1c3QgcHJvdmlkaW5nIHJldmlldyBjb21tZW50cy4NCj4gDQo+ICAgICAg
-ICBBcm5kDQoNCg0KSW4gcGF0Y2ggNiwgSSBmaXhlZCBhbGwgeW91ciBjb21tZW50cy4NCg0KSSBn
-b3QgYSByZXBseSBmcm9tIHlvdTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL0NBSzhQM2Ex
-RG9oOEdZOWlGWnN2bWQ2d0FTSG9QcXlSK3JvWHgwRzVYaWRubUhOa0dhQUBtYWlsLmdtYWlsLmNv
-bS8NCj4gVGhpcyBsb29rcyBhbGwgZ29vZCB0byBtZSBub3csIGl0IGp1c3QgbmVlZHMgYSByZXZp
-ZXcgZm9yIHRoZSBjbGssDQo+IHJlc2V0ICBhbmQgaXJxY2hpcCBkcml2ZXJzLiAuLi4NCg0KSWYg
-dGhlc2Ugbm90IG1lYW5zIHlvdSByZXZpZXdlZCwgSSdsbCByZW1vdmUgeW91ciByZXZpZXctdGFn
-Lg0KDQoNCg==
+On 3/22/22 2:49 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   c30cf83999ad ("crytpo: fix crc64 testmgr digest byte order")
+> 
+> Fixes tag
+> 
+>   Fixes: commit f3813f4b287e4 ("crypto: add rocksoft 64b crc guard tag framework")
+> 
+> has these problem(s):
+> 
+>   - leading word 'commit' unexpected
+
+And misspelled commit title - I fixed both up, thanks Stephen.
+
+-- 
+Jens Axboe
+

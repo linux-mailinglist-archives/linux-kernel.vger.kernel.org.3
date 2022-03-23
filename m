@@ -2,160 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208D34E5445
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710E64E5449
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244762AbiCWOcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
+        id S244795AbiCWOec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbiCWOck (ORCPT
+        with ESMTP id S234745AbiCWOe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:32:40 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC19240A0E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:31:07 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r13so3219917ejd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=FiqNhl/cI6wxGkLb9mBZPXXy7xwymO3zqp/WgxUHXUI=;
-        b=a5D/FC4KmyFXSpkmdd1sTXSjEHekxQNVKadxhzOXj+hHwRSrg2h+vowP4B0S7FumiU
-         uWrWRF7pylwGxodIO85iyi6P+gshxkOlR1qNhxl26IIsvcCYfiO/7YDF48fcaKX6v2ic
-         qcLgfoogdgP78uaC9hTrNsOSPMDW4bL7Us4UyftSoYC1gvkH7xuC7ESaMHWypZrS9wYP
-         nUHfCZb/NSHBbx1UCIzsjITS8UOBXgtYOLsSLWnwpoCz5ICRy8Js6qwwzmcJ9NJjzHIS
-         GzTwJATBfnl2VxKEra7WUB+2TbCAuTFO1zGdJUhkYrtHFfNOIbZVqhYXZ8Z+z5nXliK0
-         SP2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FiqNhl/cI6wxGkLb9mBZPXXy7xwymO3zqp/WgxUHXUI=;
-        b=Pn3zRLE6I/tD+Mqxnoc/zfC4M29x/mRENNnSOKrB4lpP7ZUnv41OgDYXjg2fCy1Rr7
-         9jKU61nvm7+ctWDWfK4krZFc/fCBoZ2oJqljN5HreU0lZglb6HnccV/6IpZZvkBOy4lk
-         n7vphRdXz8BFfF0EwgrgHsae4Y58wCFWCihxkcDIUqFIPf+XJrBnFSTGL3hSwUO95I6H
-         92daGx4kO5NIt3YDvBM4+XTuMyS1s0It1vikYiu+huflC9b1i/ehQlI01gAjD/aA73CQ
-         oJJPglmMe8o9Enpd8atxjuWmNr8s+fnegmodztZwWgYBIsNDbDkaM7ey0whH9pWT+mD4
-         zMhQ==
-X-Gm-Message-State: AOAM532YinjKdt58rcueX4Ucz9qZQP1FUMXc21GzjehLH1mML5ly5E6j
-        ufLkTs4j8WE65WEVQ4NLO5efjTtLjUZlH5lYjrIfxw==
-X-Google-Smtp-Source: ABdhPJy1TIxmXzRn8TzJosm68MZqp3sSSwaNsLtM+mQ429elw5eHsHlHcEP7KzVHxyENGWkFIPzISdjoV99gVJsqu/o=
-X-Received: by 2002:a17:906:3014:b0:6da:f381:4dfe with SMTP id
- 20-20020a170906301400b006daf3814dfemr230517ejz.670.1648045865895; Wed, 23 Mar
- 2022 07:31:05 -0700 (PDT)
+        Wed, 23 Mar 2022 10:34:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9599831222;
+        Wed, 23 Mar 2022 07:32:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4FC2A1F37F;
+        Wed, 23 Mar 2022 14:32:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648045978; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FNiwTKRmVGioNI4r3rxOC3Dp0Dgtr6hFyDUErY47Yb0=;
+        b=Lod5jB7AbPd8wgpAbueuW4Q7Urgn8vbi39g3qX6KNRBwbPr9PdXRQo62i5e7svmbjlYl3o
+        wDBwmUAJNeDJzH90wJT18nRUX39hNPlKUpUIXm7TNbbGtLRAZ7N8vA8rXFRTzpe2gg1MDx
+        czOWZ2uPI/H+MZkhPeO4+mLoIcYZFQI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648045978;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FNiwTKRmVGioNI4r3rxOC3Dp0Dgtr6hFyDUErY47Yb0=;
+        b=q35h0+7EjuB6ibw2M6MJxT4eaU8rIUdX+w43HH/nmFLDiEGOsNg3HYP/pHfQz9JUsT4YeT
+        mRWRcy2TgUddiuBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BC62913302;
+        Wed, 23 Mar 2022 14:32:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id h9wCK5kvO2IATgAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Wed, 23 Mar 2022 14:32:57 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 39ee974f;
+        Wed, 23 Mar 2022 14:33:17 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Eric Biggers <ebiggers@google.com>
+Cc:     Jeff Layton <jlayton@kernel.org>, idryomov@gmail.com,
+        xiubli@redhat.com, ceph-devel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v11 02/51] fscrypt: export fscrypt_base64url_encode
+ and fscrypt_base64url_decode
+References: <20220322141316.41325-1-jlayton@kernel.org>
+        <20220322141316.41325-3-jlayton@kernel.org>
+Date:   Wed, 23 Mar 2022 14:33:17 +0000
+In-Reply-To: <20220322141316.41325-3-jlayton@kernel.org> (Jeff Layton's
+        message of "Tue, 22 Mar 2022 10:12:27 -0400")
+Message-ID: <87zglgoi1e.fsf@brahms.olymp>
 MIME-Version: 1.0
-References: <20220323101818.3503-1-rajat.khandelwal@intel.com> <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
-In-Reply-To: <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
-From:   Benson Leung <bleung@google.com>
-Date:   Wed, 23 Mar 2022 07:30:54 -0700
-Message-ID: <CANLzEkvGHCwsOu_KfFgDkkYypvW-QQ-_egcVycrSo2WfaToamQ@mail.gmail.com>
-Subject: Re: [PATCH] USB4/TBT device routers should wake up during S0ix when
- something gets connected/disconnected or a DP monitor gets plugged in
-To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
-Cc:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "Malani, Prashant" <pmalani@google.com>,
-        "jthies@google.com" <jthies@google.com>,
-        "Rao, Abhijeet" <abhijeet.rao@intel.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Westerberg, Mika" <mika.westerberg@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rajat,
+Hi Eric,
 
-On Wed, Mar 23, 2022 at 3:26 AM Khandelwal, Rajat
-<rajat.khandelwal@intel.com> wrote:
+Jeff Layton <jlayton@kernel.org> writes:
+
+> Ceph is going to add fscrypt support, but we still want encrypted
+> filenames to be composed of printable characters, so we can maintain
+> compatibility with clients that don't support fscrypt.
 >
-> +Mika
-> @Malani, Prashant @bleung@google.com This is the patch which fixes the pa=
-rtner issue. Kindly escalate your thoughts.
+> We could just adopt fscrypt's current nokey name format, but that is
+> subject to change in the future, and it also contains dirhash fields
+> that we don't need for cephfs. Because of this, we're going to concoct
+> our own scheme for encoding encrypted filenames. It's very similar to
+> fscrypt's current scheme, but doesn't bother with the dirhash fields.
 >
-> Thanks
-> Rajat
+> The ceph encoding scheme will use base64 encoding as well, and we also
+> want it to avoid characters that are illegal in filenames. Export the
+> fscrypt base64 encoding/decoding routines so we can use them in ceph's
+> fscrypt implementation.
 >
-> -----Original Message-----
-> From: Khandelwal, Rajat <rajat.khandelwal@intel.com>
-> Sent: Wednesday, March 23, 2022 3:48 PM
-> To: mika.westerberg@linux.intel.com
-> Cc: Khandelwal, Rajat <rajat.khandelwal@intel.com>; bleung@google.com; jt=
-hies@google.com; Malani, Prashant <pmalani@google.com>; Rao, Abhijeet <abhi=
-jeet.rao@intel.com>; Regupathy, Rajaram <rajaram.regupathy@intel.com>; linu=
-x-usb@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH] USB4/TBT device routers should wake up during S0ix when =
-something gets connected/disconnected or a DP monitor gets plugged in
->
-> Device routers don't wake up during S0ix when something is plugged in/out=
- or if a DP monitor gets connected. This causes the linux device to not wak=
-e up during S0ix cycling as the host router didn't wake up because the devi=
-ce router didn't. This patch adds a new functionality to linux.
->
-> Signed-off-by: Rajat-Khandelwal <rajat.khandelwal@intel.com>
+> Acked-by: Eric Biggers <ebiggers@google.com>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 > ---
->  drivers/thunderbolt/switch.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  fs/crypto/fname.c       | 8 ++++----
+>  include/linux/fscrypt.h | 5 +++++
+>  2 files changed, 9 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c =
-index d026e305fe5d..4f8056724aa4 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -3067,13 +3067,11 @@ void tb_switch_suspend(struct tb_switch *sw, bool=
- runtime)
->                         tb_switch_suspend(port->remote->sw, runtime);
->         }
->
-> -       if (runtime) {
-> +       if (runtime || device_may_wakeup(&sw->dev)) {
->                 /* Trigger wake when something is plugged in/out */
->                 flags |=3D TB_WAKE_ON_CONNECT | TB_WAKE_ON_DISCONNECT;
->                 flags |=3D TB_WAKE_ON_USB4;
->                 flags |=3D TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE | TB_WAKE_ON=
-_DP;
-> -       } else if (device_may_wakeup(&sw->dev)) {
-> -               flags |=3D TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON=
-_PCIE;
->         }
->
->         tb_switch_set_wake(sw, flags);
-> --
-> 2.17.1
->
+> diff --git a/fs/crypto/fname.c b/fs/crypto/fname.c
+> index a9be4bc74a94..1e4233c95005 100644
+> --- a/fs/crypto/fname.c
+> +++ b/fs/crypto/fname.c
+> @@ -182,8 +182,6 @@ static int fname_decrypt(const struct inode *inode,
+>  static const char base64url_table[65] =3D
+>  	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+>=20=20
+> -#define FSCRYPT_BASE64URL_CHARS(nbytes)	DIV_ROUND_UP((nbytes) * 4, 3)
+> -
+>  /**
+>   * fscrypt_base64url_encode() - base64url-encode some binary data
+>   * @src: the binary data to encode
+> @@ -198,7 +196,7 @@ static const char base64url_table[65] =3D
+>   * Return: the length of the resulting base64url-encoded string in bytes.
+>   *	   This will be equal to FSCRYPT_BASE64URL_CHARS(srclen).
+>   */
+> -static int fscrypt_base64url_encode(const u8 *src, int srclen, char *dst)
+> +int fscrypt_base64url_encode(const u8 *src, int srclen, char *dst)
 
+I know you've ACK'ed this patch already, but I was wondering if you'd be
+open to change these encode/decode interfaces so that they could be used
+for non-url base64 too.
 
-Can you please help double check your email configuration for sending
-patches and responses to the mailing list?
-I've checked the linux-usb mailing list archives and they don't
-capture your original patch email or your forward.
-https://marc.info/?l=3Dlinux-usb&r=3D1&b=3D202203&w=3D2
+My motivation is that ceph has this odd limitation where snapshot names
+can not start with the '_' character.  And I've an RFC that adds snapshot
+names encryption support which, unfortunately, can end up starting with
+this char after base64 encoding.
 
-I did find Mika's response to your forward, though.
+So, my current proposal is to use a different encoding table.  I was
+thinking about the IMAP mailboxes naming which uses '+' and ',' instead of
+the '-' and '_', but any other charset would be OK (except those that
+include '/' of course).  So, instead of adding yet another base64
+implementation to the kernel, I was wondering if you'd be OK accepting a
+patch to add an optional arg to these encoding/decoding functions to pass
+an alternative table.  Or, if you'd prefer, keep the existing interface
+but turning these functions into wrappers to more generic functions.
 
-Let's get this figured out so that folks can have an easier time
-applying your patches for evaluation with b4 or
-similar tools.
+Obviously, Jeff, please feel free to comment too if you have any reserves
+regarding this approach.
 
-Thanks,
-
-Benson
-
+Cheers,
 --=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+Lu=C3=ADs
+
+>  {
+>  	u32 ac =3D 0;
+>  	int bits =3D 0;
+> @@ -217,6 +215,7 @@ static int fscrypt_base64url_encode(const u8 *src, in=
+t srclen, char *dst)
+>  		*cp++ =3D base64url_table[(ac << (6 - bits)) & 0x3f];
+>  	return cp - dst;
+>  }
+> +EXPORT_SYMBOL_GPL(fscrypt_base64url_encode);
+>=20=20
+>  /**
+>   * fscrypt_base64url_decode() - base64url-decode a string
+> @@ -233,7 +232,7 @@ static int fscrypt_base64url_encode(const u8 *src, in=
+t srclen, char *dst)
+>   * Return: the length of the resulting decoded binary data in bytes,
+>   *	   or -1 if the string isn't a valid base64url string.
+>   */
+> -static int fscrypt_base64url_decode(const char *src, int srclen, u8 *dst)
+> +int fscrypt_base64url_decode(const char *src, int srclen, u8 *dst)
+>  {
+>  	u32 ac =3D 0;
+>  	int bits =3D 0;
+> @@ -256,6 +255,7 @@ static int fscrypt_base64url_decode(const char *src, =
+int srclen, u8 *dst)
+>  		return -1;
+>  	return bp - dst;
+>  }
+> +EXPORT_SYMBOL_GPL(fscrypt_base64url_decode);
+>=20=20
+>  bool fscrypt_fname_encrypted_size(const union fscrypt_policy *policy,
+>  				  u32 orig_len, u32 max_len,
+> diff --git a/include/linux/fscrypt.h b/include/linux/fscrypt.h
+> index 91ea9477e9bd..671181d196a8 100644
+> --- a/include/linux/fscrypt.h
+> +++ b/include/linux/fscrypt.h
+> @@ -46,6 +46,9 @@ struct fscrypt_name {
+>  /* Maximum value for the third parameter of fscrypt_operations.set_conte=
+xt(). */
+>  #define FSCRYPT_SET_CONTEXT_MAX_SIZE	40
+>=20=20
+> +/* len of resulting string (sans NUL terminator) after base64 encoding n=
+bytes */
+> +#define FSCRYPT_BASE64URL_CHARS(nbytes)		DIV_ROUND_UP((nbytes) * 4, 3)
+> +
+>  #ifdef CONFIG_FS_ENCRYPTION
+>=20=20
+>  /*
+> @@ -305,6 +308,8 @@ void fscrypt_free_inode(struct inode *inode);
+>  int fscrypt_drop_inode(struct inode *inode);
+>=20=20
+>  /* fname.c */
+> +int fscrypt_base64url_encode(const u8 *src, int len, char *dst);
+> +int fscrypt_base64url_decode(const char *src, int len, u8 *dst);
+>  int fscrypt_setup_filename(struct inode *inode, const struct qstr *iname,
+>  			   int lookup, struct fscrypt_name *fname);
+>=20=20
+> --=20
+>
+> 2.35.1
+>
+

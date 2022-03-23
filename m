@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD8C4E52C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAB04E52CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244175AbiCWNJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S244161AbiCWNKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 09:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244140AbiCWNJH (ORCPT
+        with ESMTP id S244147AbiCWNKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:09:07 -0400
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2AB7CDD3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:07:37 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id D8C75126BE
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 08:07:36 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id X0i8nRxXNdx86X0i8nBpwW; Wed, 23 Mar 2022 08:07:36 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=8+pfNUUQtuD5FnL4aaPjvVlw9+HwXVLMFMf5MupVubU=; b=VokFt6dzrRSC2AKV1MZngq3OL/
-        n0xPdGmYBC9TCUnGZKpxWyoaICvTSnxpd8buWdxP/faPIuDNvNCdqy5c1wqviKXmzykPG8dLPEOvD
-        /+7ixOiPElxQRHPi0Kf5c6quCAYftYFlviKu/kMt9SoZ6nFGbgTVDghVOzq8ntCggjShFaoAdMfNw
-        vo/lNgjZJ7JwLRCAuUGsUk8S8P0zhaq3GSOHTVupoU4jlIkVF1Uw/Wj4nCbiZUNYN27X1QwNUX3+s
-        l68n1Uiq5yev8T+xGiG7L91NOvlq8ZtIeDxG5E4xlr63YKrBr2ppTjm2ZYsN3Gqlfs/8RAtvsgfa+
-        X0lQztCg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54410)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nX0i8-0019B4-3l; Wed, 23 Mar 2022 13:07:36 +0000
-Message-ID: <d6c61a10-e671-3543-5653-ceb3d9ed60cf@roeck-us.net>
-Date:   Wed, 23 Mar 2022 06:07:33 -0700
+        Wed, 23 Mar 2022 09:10:02 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AA626573
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648040912; x=1679576912;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i1O7g1/0dKBggLIHefOqOvGFhlN5lRiK17nkgLtYtdE=;
+  b=a3x2m4SX7xZOj90igaanh7ipksQL31xOJOy1l67WW/+ZRuA59j1JfoR9
+   sJ2wm3T4XOUtQO+GY7uUupq9rk5i1dWTLIU4a4V89kgieQyG91WhrGPM3
+   QUK8skOX1/3wgt4tVRzwV+R7LSXfUMrDNYlg/kUy31RMlaajpG3oTDnva
+   F1dNoCVNCybr5JY0lEETaXINfFGsNKXRnRMhXH7J/v4Ig3YF70o+TX2BV
+   XoDS2NCusz+8VCzuDvB3PBHY32FNvTXYk/BaVPqAzDeWsNlN0rO9LwNik
+   vrJ4X3WzQ3R+Z8cQB4KHDsyTdr4xBe1/i2v9u7L4brXdluAZ2TjFXuAcO
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="245578520"
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="245578520"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 06:08:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
+   d="scan'208";a="544186349"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 23 Mar 2022 06:08:30 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nX0iz-000K4n-Jw; Wed, 23 Mar 2022 13:08:29 +0000
+Date:   Wed, 23 Mar 2022 21:08:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: [intel-tdx:guest-rebased 5/83] ./usr/include/misc/tdx.h:39:2: error:
+ unknown type name 'size_t'
+Message-ID: <202203232011.Qp6mjB89-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4] watchdog: imx2_wdg: Allow ping on suspend
-Content-Language: en-US
-To:     Alistair Francis <alistair@alistair23.me>, shawnguo@kernel.org,
-        linux-watchdog@vger.kernel.org, s.hauer@pengutronix.de,
-        wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, festevam@gmail.com, robh+dt@kernel.org
-References: <20220323115752.360409-1-alistair@alistair23.me>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220323115752.360409-1-alistair@alistair23.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nX0i8-0019B4-3l
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54410
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 7
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 04:57, Alistair Francis wrote:
-> The i.MX watchdog cannot be disabled by software once it has been
-> enabled. This means that it can't be stopped before suspend.
-> 
-> For systems that enter low power mode this is fine, as the watchdog will
-> be automatically stopped by hardware in low power mode. Not all i.MX
-> platforms support low power mode in the mainline kernel. For example the
-> i.MX7D does not enter low power mode and so will be rebooted 2 minutes
-> after entering sleep states.
-> 
-> This patch introduces a device tree property "fsl,ping-during-suspend"
-> that can be used to enable ping on suspend support for these systems.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+tree:   https://github.com/intel/tdx.git guest-rebased
+head:   2445b5e99855f3c241a44d2777a74a777f56048c
+commit: a7b0255d5b64842244f1957e33eb514d8f82866f [5/83] platform/x86: intel_tdx_attest: Add TDX Guest attestation interface driver
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220323/202203232011.Qp6mjB89-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/a7b0255d5b64842244f1957e33eb514d8f82866f
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-rebased
+        git checkout a7b0255d5b64842244f1957e33eb514d8f82866f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-What is the difference to earlier versions ?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Guenter
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/misc/tdx.h:38:11: error: expected ';' at end of declaration list
+           void *buf __user;
+                    ^
+                    ;
+>> ./usr/include/misc/tdx.h:39:2: error: unknown type name 'size_t'
+           size_t len;
+           ^
+   2 errors generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

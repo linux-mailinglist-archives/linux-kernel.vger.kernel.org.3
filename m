@@ -2,160 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD37E4E57DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BF64E57E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 18:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343783AbiCWRyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 13:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S1343794AbiCWRza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 13:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239767AbiCWRyA (ORCPT
+        with ESMTP id S234034AbiCWRz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 13:54:00 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE3585BD0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:52:29 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id j25-20020a056e02219900b002c81019b2fdso1290890ila.16
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 10:52:29 -0700 (PDT)
+        Wed, 23 Mar 2022 13:55:27 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44111B7D8;
+        Wed, 23 Mar 2022 10:53:52 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso2568836pjb.5;
+        Wed, 23 Mar 2022 10:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=av3oVTkIuwelRb9H5lhGzDrkVDnLj9TLsCFgqEGBm3c=;
+        b=nc042apVOa/LPU90QaefUbTbXVcxNcYhxef20yaJri9DYzk5KjZyCYFhFzV5HSeJY0
+         GbjKDOeKzgXufOPBUPQikaXjZM4KsvVmrY//P3Lbyg4g1Kf0zRPJk31rA/c/7g1mBlEA
+         BSDnY5k4WtMcxH+cbQuAMifTDFN25f8iVglUiDfQZjUUNOQyjDPdlRCDadw38jAE4EAW
+         di8V6uxednFOWFHWlDaQi54GWtzxf8d97d/r7QguBDTudmaZhqyfL7BpWqZ6EZP6mfev
+         ax85S7N/bmznNFwyv5+aARRMOUqb3IUFA3B1ihvzaGyGKXHtL0BtBqLEGU/C017eu8//
+         AjOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=zYiQiLP0CS4LsisvZLzMB1pBnXWj26AdiiH/LiFkOlY=;
-        b=HgfkO7xtPQOjMBltKtDWXEUs//FVv+j2DXSJrCsFQRJDVGyox3lHlV2qg0HImE5rZN
-         NR8JPeW00icNk3Y+RDTnYwHF2dl+mGx5m3bY7v4rV2L+JK2z32ZpUc9Ws//1+EmvEceg
-         8DmDJff8A/ugQ0Q7z5oBDNQZ/yTr1anVFvZoSMfT7yFq0UNDtYg5+fbUZuCmCbZa4SQ0
-         j9af6pkrxNXkP5Wu0wJj1EgkjVTnC/TdtRzg/y5EiSFJAMAK2YVeAt8QbxuDIF5jN4LN
-         MyDx091vRQxFtj/s16CKSnUQpasS+oIS+V6D0Kn1kA6uqFd2BBBkd4e8Ls5vc4kY0jAu
-         jz1g==
-X-Gm-Message-State: AOAM531fjQMeHtgT8C9XM3AZN5LWewSHjExT+bcT9vSs5/bGZybzdNNI
-        6r1WD44HzuFjm0tiaHTmdB9n2JZRrXSsCpuJaN2PjhrxU4vG
-X-Google-Smtp-Source: ABdhPJwpotWrqsMzIpJ+Oq2bNctiIO3SBJMqH7N2YbYQPMDqnaAycniduUzH7UpidmAPHmQhOiT07PlBD8IdNL9PdpMdzcda3/T3
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=av3oVTkIuwelRb9H5lhGzDrkVDnLj9TLsCFgqEGBm3c=;
+        b=3V7hZYnmiIIhKg1CDP/EAwTkcZJUvsfBrBqkimlbDB3wjd+RIGbJPg14naoii+RDMt
+         8H9waH2o7ND8X4QG3sa04ZVXoNA/IqjDzzoQdPaQXmzJji+blUNkihEbFsSiLVlPmiAe
+         DXKDAymz3S830CNbA+uTVxbhaa9wZp1TI75TO+UmzDxvaDbaKxwJ5Qna+mKJtvoNbTEg
+         8bLjSZ43MG1Owxv3tNA7RY+S4r/Eupj+D6vaxe7qE0bIQDHKZd/wD5IzvkXGbj74dN0R
+         wfNF+acs7/3dhDAcQWPc2wi3fcVyyUM6gJZERbc7hJpW0KDyXnAujK5vifbNKFKySfYL
+         2D8w==
+X-Gm-Message-State: AOAM533OfHPSH1e4KMzcLOejfTnRj60+lGM1B5v5up9Lb2K9ECcE2YUh
+        iKHGmheWpWkSpdxItI6vahbIvMwFbUx1lw==
+X-Google-Smtp-Source: ABdhPJwtek/jzM+i/NJAZJiG4Q0/h0XtOVsWkXP6Z2u1dbugLKkEqG75TZ4D62RL+m8bI88br8iQwQ==
+X-Received: by 2002:a17:902:ea0c:b0:154:16a6:7025 with SMTP id s12-20020a170902ea0c00b0015416a67025mr1332608plg.104.1648058032076;
+        Wed, 23 Mar 2022 10:53:52 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id s30-20020a056a001c5e00b004f73f27aa40sm515081pfw.161.2022.03.23.10.53.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 10:53:51 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 10:53:49 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 083/104] KVM: x86: Split core of hypercall
+ emulation to helper function
+Message-ID: <20220323175349.GF1964605@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <f3293bd872a916bf33165a2ec0d6fc50533b817f.1646422845.git.isaku.yamahata@intel.com>
+ <CAAhR5DFPsmxYXXXZ9WNW=MDWRRz5jrntPvsnKw7VTrRh5CbohQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:ca50:0:b0:321:42d5:b4af with SMTP id
- i16-20020a02ca50000000b0032142d5b4afmr587393jal.82.1648057949112; Wed, 23 Mar
- 2022 10:52:29 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 10:52:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a0506305dae664f2@google.com>
-Subject: [syzbot] general protection fault in io_kill_timeouts
-From:   syzbot <syzbot+f252f28df734e8521387@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhR5DFPsmxYXXXZ9WNW=MDWRRz5jrntPvsnKw7VTrRh5CbohQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Mar 21, 2022 at 11:32:21AM -0700,
+Sagi Shahar <sagis@google.com> wrote:
 
-syzbot found the following issue on:
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 314ae43e07bf..9acb33a17445 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -9090,26 +9090,15 @@ static int complete_hypercall_exit(struct kvm_vcpu *vcpu)
+> >         return kvm_skip_emulated_instruction(vcpu);
+> >  }
+> >
+> > -int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
+> > +unsigned long __kvm_emulate_hypercall(struct kvm_vcpu *vcpu, unsigned long nr,
+> > +                                     unsigned long a0, unsigned long a1,
+> > +                                     unsigned long a2, unsigned long a3,
+> > +                                     int op_64_bit)
+> >  {
+> > -       unsigned long nr, a0, a1, a2, a3, ret;
+> > -       int op_64_bit;
+> > -
+> > -       if (kvm_xen_hypercall_enabled(vcpu->kvm))
+> > -               return kvm_xen_hypercall(vcpu);
+> > -
+> > -       if (kvm_hv_hypercall_enabled(vcpu))
+> > -               return kvm_hv_hypercall(vcpu);
+> > -
+> > -       nr = kvm_rax_read(vcpu);
+> > -       a0 = kvm_rbx_read(vcpu);
+> > -       a1 = kvm_rcx_read(vcpu);
+> > -       a2 = kvm_rdx_read(vcpu);
+> > -       a3 = kvm_rsi_read(vcpu);
+> > +       unsigned long ret;
+> >
+> >         trace_kvm_hypercall(nr, a0, a1, a2, a3);
+> >
+> > -       op_64_bit = is_64_bit_hypercall(vcpu);
+> >         if (!op_64_bit) {
+> >                 nr &= 0xFFFFFFFF;
+> >                 a0 &= 0xFFFFFFFF;
+> > @@ -9118,11 +9107,6 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
+> >                 a3 &= 0xFFFFFFFF;
+> >         }
+> >
+> > -       if (static_call(kvm_x86_get_cpl)(vcpu) != 0) {
+> > -               ret = -KVM_EPERM;
+> > -               goto out;
+> > -       }
+> > -
+> >         ret = -KVM_ENOSYS;
+> >
+> >         switch (nr) {
+> > @@ -9181,6 +9165,34 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
+> >                 ret = -KVM_ENOSYS;
+> >                 break;
+> >         }
+> > +       return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(__kvm_emulate_hypercall);
+> > +
+> > +int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
+> > +{
+> > +       unsigned long nr, a0, a1, a2, a3, ret;
+> > +       int op_64_bit;
+> > +
+> > +       if (kvm_xen_hypercall_enabled(vcpu->kvm))
+> > +               return kvm_xen_hypercall(vcpu);
+> > +
+> > +       if (kvm_hv_hypercall_enabled(vcpu))
+> > +               return kvm_hv_hypercall(vcpu);
+> > +
+> > +       nr = kvm_rax_read(vcpu);
+> > +       a0 = kvm_rbx_read(vcpu);
+> > +       a1 = kvm_rcx_read(vcpu);
+> > +       a2 = kvm_rdx_read(vcpu);
+> > +       a3 = kvm_rsi_read(vcpu);
+> > +       op_64_bit = is_64_bit_mode(vcpu);
+> 
+> I think this should be "op_64_bit = is_64_bit_hypercall(vcpu);"
+> is_64_bit_mode was replaced with is_64_bit_hypercall to support
+> protected guests here:
+> https://lore.kernel.org/all/87cztf8h43.fsf@vitty.brq.redhat.com/T/
+> 
+> Without it, op_64_bit will be set to 0 for TD VMs which will cause the
+> upper 32 bit of the registers to be cleared in __kvm_emulate_hypercall
 
-HEAD commit:    b61581ae229d Add linux-next specific files for 20220323
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17bbb75b700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=def28433baf109ed
-dashboard link: https://syzkaller.appspot.com/bug?extid=f252f28df734e8521387
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117d3a43700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15538925700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f252f28df734e8521387@syzkaller.appspotmail.com
-
-RDX: 0000000000000f90 RSI: 00000000200000c0 RDI: 00000000000078af
-RBP: 00007fffd1ad3f90 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-general protection fault, probably for non-canonical address 0xdffffc0000000018: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000c0-0x00000000000000c7]
-CPU: 0 PID: 3589 Comm: syz-executor273 Tainted: G        W         5.17.0-next-20220323-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:io_commit_cqring fs/io_uring.c:1812 [inline]
-RIP: 0010:io_kill_timeouts+0x267/0x2ce fs/io_uring.c:10297
-Code: 74 09 3c 03 7f 05 e8 c5 ca a7 f8 49 8d bc 24 c0 00 00 00 b8 ff ff 37 00 44 8b ad 40 03 00 00 48 89 fa 48 c1 e0 2a 48 c1 ea 03 <8a> 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 09 84 d2 74 05 e8 fd
-RSP: 0018:ffffc9000399fcf8 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000018 RSI: ffffffff817ef121 RDI: 00000000000000c0
-RBP: ffff888011a75000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff817ef108 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: ffff888011a75040 R15: 0000000000000001
-FS:  0000555557264300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055a52ec10058 CR3: 0000000024024000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- io_ring_ctx_wait_and_kill+0x1c2/0x327 fs/io_uring.c:10317
- io_uring_create fs/io_uring.c:11385 [inline]
- io_uring_setup.cold+0x10a3/0x263b fs/io_uring.c:11412
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f85ced00069
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fffd1ad3f78 EFLAGS: 00000246 ORIG_RAX: 00000000000001a9
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f85ced00069
-RDX: 0000000000000f90 RSI: 00000000200000c0 RDI: 00000000000078af
-RBP: 00007fffd1ad3f90 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:io_commit_cqring fs/io_uring.c:1812 [inline]
-RIP: 0010:io_kill_timeouts+0x267/0x2ce fs/io_uring.c:10297
-Code: 74 09 3c 03 7f 05 e8 c5 ca a7 f8 49 8d bc 24 c0 00 00 00 b8 ff ff 37 00 44 8b ad 40 03 00 00 48 89 fa 48 c1 e0 2a 48 c1 ea 03 <8a> 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 09 84 d2 74 05 e8 fd
-RSP: 0018:ffffc9000399fcf8 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000018 RSI: ffffffff817ef121 RDI: 00000000000000c0
-RBP: ffff888011a75000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff817ef108 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: ffff888011a75040 R15: 0000000000000001
-FS:  0000555557264300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055a52ec10058 CR3: 0000000024024000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	74 09                	je     0xb
-   2:	3c 03                	cmp    $0x3,%al
-   4:	7f 05                	jg     0xb
-   6:	e8 c5 ca a7 f8       	callq  0xf8a7cad0
-   b:	49 8d bc 24 c0 00 00 	lea    0xc0(%r12),%rdi
-  12:	00
-  13:	b8 ff ff 37 00       	mov    $0x37ffff,%eax
-  18:	44 8b ad 40 03 00 00 	mov    0x340(%rbp),%r13d
-  1f:	48 89 fa             	mov    %rdi,%rdx
-  22:	48 c1 e0 2a          	shl    $0x2a,%rax
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	8a 14 02             	mov    (%rdx,%rax,1),%dl <-- trapping instruction
-  2d:	48 89 f8             	mov    %rdi,%rax
-  30:	83 e0 07             	and    $0x7,%eax
-  33:	83 c0 03             	add    $0x3,%eax
-  36:	38 d0                	cmp    %dl,%al
-  38:	7c 09                	jl     0x43
-  3a:	84 d2                	test   %dl,%dl
-  3c:	74 05                	je     0x43
-  3e:	e8                   	.byte 0xe8
-  3f:	fd                   	std
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Oops, thanks for pointing it out.  I'll fix it up with next respin.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

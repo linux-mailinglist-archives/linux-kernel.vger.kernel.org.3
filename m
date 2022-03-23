@@ -2,215 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1274E4DCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2F74E4DC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242447AbiCWIKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 04:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
+        id S242440AbiCWIKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242450AbiCWIKa (ORCPT
+        with ESMTP id S242445AbiCWIKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:10:30 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60049.outbound.protection.outlook.com [40.107.6.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E2E74DF6;
-        Wed, 23 Mar 2022 01:08:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dfXflOG9BClWulugzAdZUXNMc0NyGVhbhkUENBP5lOiNxxwwVDe7Gqu6Pmg5XC151fxy1pyuhkSAz7iRjolntfmlDQHo0nlUgtM0DUH1raMhhdt3RYdLhQrljkgNVfa4/zY25wpG6tpyjo6xo4xMckz8ah0TySHZv6TW3Q/kUNwy434cdbfAR95zvbHggwvvF+dEOvejluHW2WTnL33ecOFHWPqmKXNqNIVjW4FuPxEdPfxAxC5fpqpr+eAJrvLj4O5/bULQss2IIktMblsnGXyxZuAtPpV2xcOIGxYFANef8ylD/jqilWC0JYxK9pFEIxqAYbNJ+0iYoWu+xD1XnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e66uONHHP7E0l2fzL84Zuc6NN9BsE6jSqD1zwpciaz0=;
- b=QDOj4WVJdUe9j662R+4zON4fsERA9ZhJWQ5JHOn8Dy84lqYPbBHbRdj9W+6kaG+T1h83dvtUhqqWYtsBVEegIQPOZSHWs7mTLO8xAGyp0XEN7cxbxcrp5wp2UfAYg3NpMKKwe1ibJoBaREqefRsCp2TiS9C4Zk/MPopliVzkHjSY05YlKVSkNzuKG4KKSIqAP3Yvv1AnYyByAE+2ZDAHD61MnhuX+niv94LFxNzs61DE7bU/tBGrk6hVi9Jsw2pODcWlDrCprafGHD+XVv7nifjjyg4hhogHNHfEP/q+zxxzJAQbSq7+j1BO9eSmCj+5G70dCNyLqTjmSPsDu+Nsyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
- dkim=pass header.d=vaisala.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e66uONHHP7E0l2fzL84Zuc6NN9BsE6jSqD1zwpciaz0=;
- b=qzSG7zg85UZkHHQoB0MqO9LkK/TGaFK+J3Ai8adsCoMRii5iV2b843JamFzzHNeo9jj2Y+l3QMZ7CV3kH2gzpEold/vPtqRFJOjfN05BSs4XiTrcXevEvZuB6wtGTZf8vmuKpIqQ9zGgWi+HDBCobYJOvZJ4DcF67f1RWVdqeAIsmKpzAYQlHPxfP532w0JPIjFejwi48B7lTKp2lpLrwjMCyNi7A9aD6zIEEuWE++M+XIH/s5+i0E3v1VH5ECc3H/0rP/Y2ohbiDkpVzF5OIYt2kd5Ucn8nB7S9AbIYg9jbWpnrmDD3sEWjWPJ15U65FYtTmglKYS9FRviUKeQkmg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vaisala.com;
-Received: from HE1PR0602MB3625.eurprd06.prod.outlook.com (2603:10a6:7:81::18)
- by AS8PR06MB8214.eurprd06.prod.outlook.com (2603:10a6:20b:3d0::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 23 Mar
- 2022 08:08:55 +0000
-Received: from HE1PR0602MB3625.eurprd06.prod.outlook.com
- ([fe80::c8bc:3aa9:eab3:99e8]) by HE1PR0602MB3625.eurprd06.prod.outlook.com
- ([fe80::c8bc:3aa9:eab3:99e8%7]) with mapi id 15.20.5081.022; Wed, 23 Mar 2022
- 08:08:55 +0000
-From:   Tomas Melin <tomas.melin@vaisala.com>
-To:     claudiu.beznea@microchip.com
-Cc:     Nicolas.Ferre@microchip.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3] net: macb: restart tx after tx used bit read
-Date:   Wed, 23 Mar 2022 10:08:20 +0200
-Message-Id: <20220323080820.137579-1-tomas.melin@vaisala.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <1545040937-6583-1-git-send-email-claudiu.beznea@microchip.com>
-References: <1545040937-6583-1-git-send-email-claudiu.beznea@microchip.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: GV3P280CA0006.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:b::6)
- To HE1PR0602MB3625.eurprd06.prod.outlook.com (2603:10a6:7:81::18)
+        Wed, 23 Mar 2022 04:10:00 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D935B74871
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:08:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648022908; x=1679558908;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bKWUYaPmRwZBXbIQvYluCzRLQ9byY907LwzxS8aSO4k=;
+  b=REAvQ9NyE17g5RFupR8A2MrjkFuSGo5Sx7rET5qbltc54pTtxGOTfCxC
+   cCkcWtAqXAa/xFHk4vmqiN8glMpKkuyxfuV+wXNGqKISo6/sCnyQ8jyo6
+   v5lyQvut8/vK6PgkJP43l66rG/6hOA4mLSLQWdTQ1D8tc0a8uuPGXf4vT
+   ZZgKU1kGpSavzsyQGz/D8tRvce0wgjWJERRbepaIpy/sdRtvy0Wp29SvM
+   JtVOcRuu/kWONrkunoCAuxpRSGyS+Df+vTfIFwQ7yY3dIR11FEt45l+4/
+   5LBt4OTp8v9MrtIdZJuIAhFJBR6LjnOUcdRMCoSgJa9DnTPY+B768KfXc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="245523663"
+X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
+   d="scan'208";a="245523663"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 01:08:28 -0700
+X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
+   d="scan'208";a="560790474"
+Received: from arturlex-mobl1.ger.corp.intel.com (HELO [10.99.249.37]) ([10.99.249.37])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 01:08:27 -0700
+Message-ID: <db933c9e-bf7b-dec6-8022-75074f9cebf7@linux.intel.com>
+Date:   Wed, 23 Mar 2022 09:08:25 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b8fbc32c-8ccb-4236-2702-08da0ca45ffa
-X-MS-TrafficTypeDiagnostic: AS8PR06MB8214:EE_
-X-Microsoft-Antispam-PRVS: <AS8PR06MB82145945D9E5092F7028BA21FD189@AS8PR06MB8214.eurprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KK7K7TbmzpW4Lii/a3v6kBxRTT67HU+f/HvaabMs4asNlKHNOzvHR+RGSxx85nHrakFR8ZKzTTw8RQQRL2TzxsM/ytPAJguzd3mObP3t3BPBCLqbru7eEo7omPCKWDYbtp9Qx5OuSPlIk7hSYk31UEF5t6MujYZnjtGmNWHRppjmFf5Ma3HKyscTohzneApaFi9sTJUdljH9HqdyytgvgWYiFaqDk9o7UTZmlk2kQWbslvxs0FuuRzBZTrKm2ermcqRclOX8QsHh+qvTvsA7P0S8oqjOD8MXTE5DSjIeTf67LSSdRbrjJNNDK+llrGj25oU0YIO//TDDz8xYUXg+hFhvY1MTuheofNqMjshKLq257wPwU3IwY3tSWaF0NFoj1cD5BC0laPM07spSgmeoQwBvGtmHFIYvdPDKQiiYtv4mE9cQI9+U4WGWnpq9Oi6B84wGF2YK3y3WYtvO2xftA7Tab6U/GNGiHpOGzRLu9wm4wLxemWhPxNKJhr35nZDeiGA/7XoXXOcAeuMtSFiQuAqqKvMTLAD1ODg9LQQ6uHt8XDFNp/e4wBZow5PTo0zaF+/JR7eMLbYI0jXQ7a8HbyjTfWgW++KJjMfkrnQLBLVN0ovz7hkBK39U8cMybakajZt5rSxqEmTB1l60BkQlmL8mwdW8wppw6KWcATAA+SFVhVfLZfsqcgDilNN3YzjwuTr9fofSn2hNQKCNA/iiPg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0602MB3625.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(2906002)(38350700002)(38100700002)(6486002)(6666004)(6512007)(6506007)(52116002)(36756003)(508600001)(6916009)(66946007)(2616005)(4326008)(66476007)(66556008)(186003)(1076003)(86362001)(83380400001)(316002)(26005)(8936002)(44832011)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tZjl4Y2dSo1P4ECI5xAcAVjBWduZEdhIX717BoCEomQAKio3V74ncDzY2GbV?=
- =?us-ascii?Q?GITt772ZeiN26Jtr9bnwAiwQt3EILWywROUjzuIn1lM1d5hpGkKfHykmIbw3?=
- =?us-ascii?Q?oU2K9YvNhVhpJqSPwDOt5JqybJqXHMCaMcZ6b21o9RfzzmZ30WewCR2wqZ2W?=
- =?us-ascii?Q?X6W8yUvX+e32Qg5sxFlVivTKe5Dx24jEuEiWtMkUyRI0PxgQr/frQn06xeeF?=
- =?us-ascii?Q?hCgwuNXuL3RB3cNhfQunl5FMOW3MGZZKGFc3b7eT8g4dT3Z70j4wsygVvtyh?=
- =?us-ascii?Q?s8RY0eN8Y7AsXoEi1GB5Y/WJtzel7FTClSLoyCzngW/tyPIXmGOLHOTaAMla?=
- =?us-ascii?Q?C1JappW4UG/JnrKZuGknMrHm13/L4S1B5Puk7HiL5z0+PXzg/BJo3Sf9jwoO?=
- =?us-ascii?Q?t+kLLCR12EjhqWtYKyu47678E7GQVB1rN87/pslGwIH2535gOmr1wvFzsUVn?=
- =?us-ascii?Q?VRreTNa0JlAz2cKDVwnEjYdZXBr5BQQ0Sbzbs0rhVdLj/D+KlVfMeG+Vv3Rn?=
- =?us-ascii?Q?6weSvpz7povvzOIP+JjJiNGI3diFzHf4w4zU1qrIX70NjpLMssN8KoaomX7G?=
- =?us-ascii?Q?snGPFYaD+tse4ueSxVt/JesfCZE+fbTQbnFi2IIrXT0bnBEGTeAqcFsXs7rA?=
- =?us-ascii?Q?nlDQi8jme1QoQcU6o7DjKxu1bJbzUuQl16TWn0CRAGIqdK/fDWLrkiyCAklv?=
- =?us-ascii?Q?DtDW4LohEeyOv+G/4yME3YB8MLhmHGmPjfKlFNpQMg1uthFEt+L5TmSJF8dA?=
- =?us-ascii?Q?xRTgsrG9EfHSE2uGI6sljLRvbJynhIirK5Xxe/CacSQFwhgGo/JydlhluF3K?=
- =?us-ascii?Q?6L6CxzKxxMDxhiuQDxEMKuUekGnFka4Socs3wpPXGuhm9sN1Kq4N9EXJnS7Q?=
- =?us-ascii?Q?twIKcZOHmL7S4B/46xFXmzPCouCkQaIZRFvqpUWOJ/Q5+1u+8gyKHHO8eUr/?=
- =?us-ascii?Q?ATCKqLDlGERV4+i+w/yaVHdFINawJmwfIzLGmU/XnphsfS7PmGOdHTnGvCdY?=
- =?us-ascii?Q?hHdgIbwHrQPvk8A0TlTXkpN2lH5XmN22e5oWw7oa2I2ewQGZ20ReeZ2EpMZC?=
- =?us-ascii?Q?5e6uay8ZrBv+zZPGB+SVF1Xp86aqQ9n5Jw+MXQxfnI2oQtuFCWPDx5ApIGZ3?=
- =?us-ascii?Q?sP9xyW5WGEOjqadvnFXDNE5xweUWsUgei/36cs5d7ZADZyZJntXhK8PqwAl/?=
- =?us-ascii?Q?gpcW7jzhMlAvbAEaeJS7HNhsuVqVBjxWtiQJ+EMUETXmpBx5tXZ0HXSSAFQK?=
- =?us-ascii?Q?wytqSukCxLJjHcAii+ClToJEM35fnhsd/4Ve54A7HzAJZYq4Mpt0C1Qt6vNQ?=
- =?us-ascii?Q?w5tfH3HXlWx5A5kHEFMSaZt4/rbcyxPFN1n+uGREfaixtt0BLIX6A3iGX5/H?=
- =?us-ascii?Q?67ysZdmy7I/XyccdhN3IMDpRl80aE74izqCnbtETcT/f65zbblq5eoc8YfcU?=
- =?us-ascii?Q?O4X9S0vvhaJti+9gB+D6K9awlAd/wz8sJrjs0L6ASxGtReVuO5Hhsw=3D=3D?=
-X-OriginatorOrg: vaisala.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8fbc32c-8ccb-4236-2702-08da0ca45ffa
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0602MB3625.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 08:08:55.3089
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6tsxSxyWbIFt5zRY3PsAJIAVspmHP7H3FhwugircE8fB1pTWYzkGPgYQrUPM9GCsjNYb7d67FPFwTFt57WQgCQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR06MB8214
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/4] ALSA: pcm: Fix races among concurrent prepare and
+ hw_params/hw_free calls
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>, alsa-devel@alsa-project.org
+Cc:     Hu Jiahui <kirin.say@gmail.com>, linux-kernel@vger.kernel.org
+References: <20220322170720.3529-1-tiwai@suse.de>
+ <20220322170720.3529-4-tiwai@suse.de>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20220322170720.3529-4-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-> From: <Claudiu.Beznea@microchip.com>
-> To: <Nicolas.Ferre@microchip.com>, <davem@davemloft.net>
-> Cc: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-> 	<Claudiu.Beznea@microchip.com>
-> Subject: [PATCH v3] net: macb: restart tx after tx used bit read
-> Date: Mon, 17 Dec 2018 10:02:42 +0000	[thread overview]
-> Message-ID: <1545040937-6583-1-git-send-email-claudiu.beznea@microchip.com> (raw)
+On 3/22/2022 6:07 PM, Takashi Iwai wrote:
+> Like the previous fixes to hw_params and hw_free ioctl races, we need
+> to paper over the concurrent prepare ioctl calls against hw_params and
+> hw_free, too.
 > 
-> From: Claudiu Beznea <claudiu.beznea@microchip.com>
+> This patch implements the locking with the existing
+> runtime->buffer_mutex for prepare ioctls.  Unlike the previous case
+> for snd_pcm_hw_hw_params() and snd_pcm_hw_free(), snd_pcm_prepare() is
+> performed to the linked streams, hence the lock can't be applied
+> simply on the top.  For tracking the lock in each linked substream, we
+> modify snd_pcm_action_group() slightly and apply the buffer_mutex for
+> the case stream_lock=false (formerly there was no lock applied)
+> there.
 > 
-> On some platforms (currently detected only on SAMA5D4) TX might stuck
-> even the pachets are still present in DMA memories and TX start was
-> issued for them. This happens due to race condition between MACB driver
-> updating next TX buffer descriptor to be used and IP reading the same
-> descriptor. In such a case, the "TX USED BIT READ" interrupt is asserted.
-> GEM/MACB user guide specifies that if a "TX USED BIT READ" interrupt
-> is asserted TX must be restarted. Restart TX if used bit is read and
-> packets are present in software TX queue. Packets are removed from software
-> TX queue if TX was successful for them (see macb_tx_interrupt()).
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-
-On Xilinx Zynq the above change can cause infinite interrupt loop leading 
-to CPU stall. Seems timing/load needs to be appropriate for this to happen, and currently
-with 1G ethernet this can be triggered normally within minutes when running stress tests
-on the network interface.
-
-The events leading up to the interrupt looping are similar as the issue described in the
-commit message. However in our case, restarting TX does not help at all. Instead
-the controller is stuck on the queue end descriptor generating endless TX_USED           
-interrupts, never breaking out of interrupt routine.
-
-Any chance you remember more details about in which situation restarting TX helped for
-your use case? was tx_qbar at the end of frame or stopped in middle of frame?
-
-thanks,
-Tomas Melin
-
-
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 > ---
+>   sound/core/pcm_native.c | 32 ++++++++++++++++++--------------
+>   1 file changed, 18 insertions(+), 14 deletions(-)
 > 
-> Changes in v3:
-> - remove "inline" keyword
-> 
-> Changes in v2:
-> - use "static inline" instead of "inline static" for macb_tx_restart()
-> 
->  drivers/net/ethernet/cadence/macb_main.c | 21 ++++++++++++++++++++-
->  1 file changed, 20 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-> index 1d86b4d5645a..f920230386ee 100644
-> --- a/drivers/net/ethernet/cadence/macb_main.c
-> +++ b/drivers/net/ethernet/cadence/macb_main.c
-> @@ -61,7 +61,8 @@
->  #define MACB_TX_ERR_FLAGS	(MACB_BIT(ISR_TUND)			\
->  					| MACB_BIT(ISR_RLE)		\
->  					| MACB_BIT(TXERR))
-> -#define MACB_TX_INT_FLAGS	(MACB_TX_ERR_FLAGS | MACB_BIT(TCOMP))
-> +#define MACB_TX_INT_FLAGS	(MACB_TX_ERR_FLAGS | MACB_BIT(TCOMP)	\
-> +					| MACB_BIT(TXUBR))
->  
->  /* Max length of transmit frame must be a multiple of 8 bytes */
->  #define MACB_TX_LEN_ALIGN	8
-> @@ -1312,6 +1313,21 @@ static void macb_hresp_error_task(unsigned long data)
->  	netif_tx_start_all_queues(dev);
->  }
->  
-> +static void macb_tx_restart(struct macb_queue *queue)
-> +{
-> +	unsigned int head = queue->tx_head;
-> +	unsigned int tail = queue->tx_tail;
-> +	struct macb *bp = queue->bp;
-> +
-> +	if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
-> +		queue_writel(queue, ISR, MACB_BIT(TXUBR));
-> +
-> +	if (head == tail)
-> +		return;
-> +
-> +	macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
-> +}
-> +
->  static irqreturn_t macb_interrupt(int irq, void *dev_id)
->  {
->  	struct macb_queue *queue = dev_id;
-> @@ -1369,6 +1385,9 @@ static irqreturn_t macb_interrupt(int irq, void *dev_id)
->  		if (status & MACB_BIT(TCOMP))
->  			macb_tx_interrupt(queue);
->  
-> +		if (status & MACB_BIT(TXUBR))
-> +			macb_tx_restart(queue);
-> +
->  		/* Link change detection isn't possible with RMII, so we'll
->  		 * add that if/when we get our hands on a full-blown MII PHY.
->  		 */
-> -- 
-> 2.7.4
-> 
+> diff --git a/sound/core/pcm_native.c b/sound/core/pcm_native.c
+> index 266895374b83..0e4fbf5fd87b 100644
+> --- a/sound/core/pcm_native.c
+> +++ b/sound/core/pcm_native.c
+> @@ -1190,15 +1190,17 @@ struct action_ops {
+>   static int snd_pcm_action_group(const struct action_ops *ops,
+>   				struct snd_pcm_substream *substream,
+>   				snd_pcm_state_t state,
+> -				bool do_lock)
+> +				bool stream_lock)
+>   {
+>   	struct snd_pcm_substream *s = NULL;
+>   	struct snd_pcm_substream *s1;
+>   	int res = 0, depth = 1;
+>   
+>   	snd_pcm_group_for_each_entry(s, substream) {
+> -		if (do_lock && s != substream) {
+> -			if (s->pcm->nonatomic)
+> +		if (s != substream) {
+> +			if (!stream_lock)
+> +				mutex_lock_nested(&s->runtime->buffer_mutex, depth);
+> +			else if (s->pcm->nonatomic)
+>   				mutex_lock_nested(&s->self_group.mutex, depth);
+>   			else
+>   				spin_lock_nested(&s->self_group.lock, depth);
+
+Maybe
+	if (!stream_lock)
+		mutex_lock_nested(&s->runtime->buffer_mutex, depth);
+	else
+		snd_pcm_group_lock(&s->self_group, s->pcm->nonatomic);
+?
+
+> @@ -1226,18 +1228,18 @@ static int snd_pcm_action_group(const struct action_ops *ops,
+>   		ops->post_action(s, state);
+>   	}
+>    _unlock:
+> -	if (do_lock) {
+> -		/* unlock streams */
+> -		snd_pcm_group_for_each_entry(s1, substream) {
+> -			if (s1 != substream) {
+> -				if (s1->pcm->nonatomic)
+> -					mutex_unlock(&s1->self_group.mutex);
+> -				else
+> -					spin_unlock(&s1->self_group.lock);
+> -			}
+> -			if (s1 == s)	/* end */
+> -				break;
+> +	/* unlock streams */
+> +	snd_pcm_group_for_each_entry(s1, substream) {
+> +		if (s1 != substream) {
+> +			if (!stream_lock)
+> +				mutex_unlock(&s1->runtime->buffer_mutex);
+> +			else if (s1->pcm->nonatomic)
+> +				mutex_unlock(&s1->self_group.mutex);
+> +			else
+> +				spin_unlock(&s1->self_group.lock);
+
+And similarly to above, use snd_pcm_group_unlock() here?
+
+>   		}
+> +		if (s1 == s)	/* end */
+> +			break;
+>   	}
+>   	return res;
+>   }
+> @@ -1367,10 +1369,12 @@ static int snd_pcm_action_nonatomic(const struct action_ops *ops,
+>   
+>   	/* Guarantee the group members won't change during non-atomic action */
+>   	down_read(&snd_pcm_link_rwsem);
+> +	mutex_lock(&substream->runtime->buffer_mutex);
+>   	if (snd_pcm_stream_linked(substream))
+>   		res = snd_pcm_action_group(ops, substream, state, false);
+>   	else
+>   		res = snd_pcm_action_single(ops, substream, state);
+> +	mutex_unlock(&substream->runtime->buffer_mutex);
+>   	up_read(&snd_pcm_link_rwsem);
+>   	return res;
+>   }
+

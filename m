@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E6E4E5292
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3E14E5299
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243564AbiCWM4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
+        id S243722AbiCWM6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiCWM4p (ORCPT
+        with ESMTP id S243616AbiCWM6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:56:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468917C165;
-        Wed, 23 Mar 2022 05:55:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648040112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h7Mrb8Fsde3pJqBhXMbymwp59oXpDJjejh4OrYFjnM4=;
-        b=hD7vXlWlc9G4Pn3agAJBeX4ZaHPKNxd5qebkoqv5Sx1/GV4HrZSFtGuKazVB2jm7f0sQMY
-        fB/6Kt1X6k16xtAWEk8jWDT9rMynh6sxmyiVKs9aKLW4vKvhg9DgX4yOWks59eo089Q7ht
-        oYrcjj3oFU+orOfxUSkg5oo8w88dVwmuy4081sEW+Zb/IawSaPeoc2dvqcSryTyiILDZXD
-        1F7Z4+Al5Y0MF3DhfG8lo9q87NP/2F3O2IEWRMjBCy6mRM98TLKQqgqgQ4DdELmoNVWgeE
-        wZwphF4UXUXDYEQbFA59dkk0REX7BBD6gxF7MECJYSLIhQ2kO/VEPCt6pwX8ng==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648040112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h7Mrb8Fsde3pJqBhXMbymwp59oXpDJjejh4OrYFjnM4=;
-        b=nRgb4kwZpe/J2hdx8rPoulcssST4IC/wXnTL0PSRWvXIqRIWH0pTVtb5U0imEkvX5VUTmJ
-        d8ddEBunaWiUv4CQ==
-To:     Paolo Bonzini <bonzini@gnu.org>, dave.hansen@linux.intel.com
-Cc:     yang.zhong@intel.com, ravi.v.shankar@intel.com, mingo@redhat.com,
-        "Chang S. Bae" <chang.seok.bae@intel.com>, bp@alien8.de,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        KVM list <kvm@vger.kernel.org>
-Subject: Re: ping Re: [PATCH v4 0/2] x86: Fix ARCH_REQ_XCOMP_PERM and update
- the test
-In-Reply-To: <87a6dgam7b.ffs@tglx>
-References: <20220129173647.27981-1-chang.seok.bae@intel.com>
- <a0bded7d-5bc0-12b9-2aca-c1c92d958293@gnu.org> <87a6dgam7b.ffs@tglx>
-Date:   Wed, 23 Mar 2022 13:55:11 +0100
-Message-ID: <877d8kakwg.ffs@tglx>
+        Wed, 23 Mar 2022 08:58:45 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D187C796
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:57:14 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id s42so1471841pfg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dlWHeuOtvbsHkw9sC0AFBolbbZkhOtKQrZPbL7UMiVo=;
+        b=nBRZCUuOz35Bie3BZwHRuFwA7EvWa13fd7C9LX1eFGazkZDIsdOFyFPEo8F08O3aKs
+         sMRaN9zwPj4HnrFW5olDavjqYrsfCdXcKl+SCJUgQ1y8rEzzhrhflSs7ASKmtsK7gcqB
+         akMH04R3rozZEpysdCepSquR55lzMJfiQu0zdlxEUP7p3Z+mXYyxFwtJwtJazEUeHtSe
+         AYDzr+ohyJRV2uBuabmdrSgMquRE6Yx21VyOxtcJ8C0hHN8bQTy1l0TRVccBjXsfZRlm
+         0nC4vz95qM47jecKgpSXTwg3Y3QmN10Y8RQYBGaxhNGqH8Eiki3anzLZ+dHWSkGvu3yW
+         P+lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dlWHeuOtvbsHkw9sC0AFBolbbZkhOtKQrZPbL7UMiVo=;
+        b=MPXmo/W7DFJa5IAzkR4YUUIeYJVMgsoh7l9iGp3he3tsFaPJsHD+qKXtEko7Ez6K/Q
+         evU5hQfh4pL07uY0Jo3dEpI3OQrDAxunW0aIb1NjIKl4CKmXH4p/KP70+PaSG0IoGDGE
+         DJ6ykptjFxmz77lsZXgPVP2/YxVoO3ea23N0HmMlycL2PKnDopfs8Z0iDMtGWAzEU1N3
+         hpHi/xH/nGPo9Yv9aO4vAUnevhw/mqrsMa1Sheavq3cSIX0BUqbe7/jqad08DEvuAI70
+         KQdqlmTqQbPmAYVO9o7rvm+/hyiSnZ6Ns5ibeqI6JElnQOEC7lpKKhNON91hK4Ajyeiz
+         u1MA==
+X-Gm-Message-State: AOAM5319MUdPVlRcdERJi2ZVcAbDAFQhGngWR5D3jRkT1cnyyT6ZzL49
+        QEciTBtY1kk3qr2AhAqlqwZHyQ==
+X-Google-Smtp-Source: ABdhPJxc1Pi8YWlaKoR3Vrc+COpZGAeSLvAEixb+q0mIHCRa6IoNdqFz0C0di4sTLgKUSdkWWn7BaA==
+X-Received: by 2002:a63:5a49:0:b0:382:1ced:330e with SMTP id k9-20020a635a49000000b003821ced330emr22887174pgm.478.1648040233722;
+        Wed, 23 Mar 2022 05:57:13 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id k185-20020a6384c2000000b003821dcd9020sm15716517pgd.27.2022.03.23.05.57.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 05:57:13 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        osalvador@suse.de, david@redhat.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v5 0/4] add hugetlb_free_vmemmap sysctl
+Date:   Wed, 23 Mar 2022 20:55:19 +0800
+Message-Id: <20220323125523.79254-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,30 +71,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23 2022 at 13:27, Thomas Gleixner wrote:
-> On Wed, Mar 23 2022 at 12:04, Paolo Bonzini wrote:
->> can this series be included in 5.18 and CCed to stable?
->
-> working on it. There is another issue with that which I'm currently
-> looking into.
+This series is based on next-20220310.
 
-The size calculation for the kernel state fails to take supervisor
-states into account. Up to 5.18 that did not matter because ENQCMD/PASID
-was disabled. But now it matters...
+This series amis to add hugetlb_free_vmemmap sysctl to enable the feature
+of freeing vmemmap pages of HugeTLB pages.
 
-Thanks,
+v5:
+  - Fix not working properly if one is workig off of a very clean build
+    reported by Luis Chamberlain.
+  - Add Suggested-by for Luis Chamberlain.
 
-        tglx
----
+Thanks.
 
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1625,6 +1625,8 @@ static int __xstate_request_perm(u64 per
- 
- 	/* Calculate the resulting kernel state size */
- 	mask = permitted | requested;
-+	/* Take supervisor states into account */
-+	mask |= xfeatures_mask_supervisor();
- 	ksize = xstate_calculate_size(mask, compacted);
- 
- 	/* Calculate the resulting user state size */
+v4:
+  - Introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2 inspired by Luis.
+
+v3:
+  - Add pr_warn_once() (Mike).
+  - Handle the transition from enabling to disabling (Luis)
+
+v2:
+  - Fix compilation when !CONFIG_MHP_MEMMAP_ON_MEMORY reported by kernel
+    test robot <lkp@intel.com>.
+  - Move sysctl code from kernel/sysctl.c to mm/hugetlb_vmemmap.c.
+
+Muchun Song (4):
+  mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
+  mm: memory_hotplug: override memmap_on_memory when
+    hugetlb_free_vmemmap=on
+  sysctl: allow to set extra1 to SYSCTL_ONE
+  mm: hugetlb_vmemmap: add hugetlb_free_vmemmap sysctl
+
+ Documentation/admin-guide/sysctl/vm.rst |  14 +++++
+ Kbuild                                  |  14 +++++
+ fs/Kconfig                              |   1 +
+ include/linux/memory_hotplug.h          |   9 +++
+ include/linux/mm_types.h                |   2 +
+ kernel/sysctl.c                         |   2 +-
+ mm/Kconfig                              |   3 +
+ mm/hugetlb_vmemmap.c                    | 107 ++++++++++++++++++++++++--------
+ mm/hugetlb_vmemmap.h                    |   4 +-
+ mm/memory_hotplug.c                     |  27 ++++++--
+ mm/struct_page_size.c                   |  19 ++++++
+ scripts/check_struct_page_po2.sh        |   9 +++
+ 12 files changed, 177 insertions(+), 34 deletions(-)
+ create mode 100644 mm/struct_page_size.c
+ create mode 100755 scripts/check_struct_page_po2.sh
+
+-- 
+2.11.0
+

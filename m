@@ -2,102 +2,475 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BFB4E4A4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408544E4A58
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiCWBJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 21:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        id S241057AbiCWBLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 21:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiCWBJ3 (ORCPT
+        with ESMTP id S241034AbiCWBLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 21:09:29 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB28613F7C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:08:00 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id v35so36740101ybi.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:08:00 -0700 (PDT)
+        Tue, 22 Mar 2022 21:11:35 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D516E6FA05
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:10:00 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id r13so39743299ejd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TmS9XqFWOa3npmqi6akNlXoA1MxlQ02g/X1bQSimlGc=;
-        b=eTkTfF7gsKMtnFv0vmxEwLrqozg5VjCqWuUXhurTUUzeR+U70FDajhoT65QVvBq2jk
-         +gYcsgOMJ/1DuyZzyUEYPWah83ud2Xu5pv0Lqv7OZo96rCssZtIIVpY7jJcZRE/Jw5OP
-         aaf/roqvZz0TbF5bcE36CTJLbsk+mCqRtidrsLWZowjhS0VvlnIPbnHN46FkiZET02Iu
-         CORiW9OhJPibBlqvEDZYArUrFavapZu5TFLXG3NsIs7vY8IsBJIwPjeVyCYY/ZuFOStW
-         uGnh+eTIOxFP/28ODOJyNjRsJizlUEp4hAXov/29um/mF2h13qzNWzb7QT/lZBftyhfB
-         SzMw==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Usl1cb51/8av9PlFaE8pZNe2bf5KKJvN2T2RDmfs+5U=;
+        b=aHnC0nri4D5uQSk+Up+F9iO14ux5h+n+BlngUlSSFeHS/nBafyWB5cs4vZ93RjxRy2
+         wJXhLNWWc4Sik01lxZUoXit/e8NGk9gmTwKIthzLrAuEpaZh/OXDTTV5kj4arkx5nlBV
+         9lQ+a3b/01wBnY+xhOVsxRiB6sr0n+zL4SRu1X9Kk8Tid9zvjnlN/06+uOJfUpKf1D+a
+         EyrESDwNVBpZnhUZMlSYX17D9zFLXFZx3X9SRPvtUYZlKfhl5VEftIoXXGtqluU9hmzs
+         AhnTYmCOcYwIIpU0FxoE2e3NPn77ruuyWC/AdHP727WgZeNKirx17nssTJB6pquUPX5I
+         FL+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TmS9XqFWOa3npmqi6akNlXoA1MxlQ02g/X1bQSimlGc=;
-        b=Z3CW1D9seuYe6wKZ24j1fLzdLGLYLo5S5Tedsa0Rxl66f/IvVfXEoIh1m37600a3sy
-         +nitEghVuV3im2O7IwCSYN4f5gwbZmqnRTD/4nycsrr3d7GfhJp0vlTVx7/+RQ8vq0Gm
-         IVmDwtv6jBkNH0KUlyMk1iU9+yLB8FBbBDkqgcGL9KfapQOCE9OpC8s855et+0DFCjVp
-         H9f/n4jllC3pya5qmdRsUMjCf+3s2AFb1F/UDi0Z/16sP92CKyrIcbYQLwbRIwXfLOQP
-         qM5g9z9MJmWIg0mYhXd8Kl7ADehmfEYd50vh585S8Yro2I3pZuASwQ6qD+GW0pm3bv86
-         vLuA==
-X-Gm-Message-State: AOAM531JNuPdZZOX5xF9H4KIog+QMXuNQJcZPE/NqztD4mOLktkAXGSX
-        qFoHiZ/DvMRqAcNuAzpFoeVtyTzCoFQ1HE1gkSVP7g==
-X-Google-Smtp-Source: ABdhPJx4K0OSi5k5jpLqjYDqBixWELdbP6OwP88DLE7SrBoeJU+r2PS2vf0aECo2EprR+alXYONOgw8yE7G4D9fF76E=
-X-Received: by 2002:a25:24d:0:b0:633:6b37:bea1 with SMTP id
- 74-20020a25024d000000b006336b37bea1mr29032850ybc.427.1647997680003; Tue, 22
- Mar 2022 18:08:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Usl1cb51/8av9PlFaE8pZNe2bf5KKJvN2T2RDmfs+5U=;
+        b=e9FTTndhZiuSwRnfL5X2h9Mlf7YwibxDYcKCIfO0YaUvGe79m4fpfJkNraY2bw0Yg6
+         GaVLxo/0zA2ZdDfJWaxrlHlUhenu90/UsNzcPUgRUB8svzL7kb/FHvHoCSlokrCLb2Am
+         0YDLNPwdxrVkdyV6r8ohzn+casncEZeyY5AgvDB09zOB/LS6dkCp6XjeErfBTI6kHmrd
+         yv3gtS99H5/9en/tTkTniOXo27fs0XSmwdGMPljx2hQ2V0fEB4LJfRUG6z72n0XqH739
+         //PvNFmbgWr/Yvu/x0GbXlAXR9dQIU7DIwQKebO9psQ4mQTg4JcBP4S1qZ8SiJl8wekI
+         2Qig==
+X-Gm-Message-State: AOAM531DSlrG9DswM38C/i127Vnt7RSJYMJYOxZIygpW9MS8m9uNpODD
+        NCJOmTXvnYgbavL03YPTrkYoKvrGt+SRUNg+VrM=
+X-Google-Smtp-Source: ABdhPJx2Fe0bZIuqd87mbasfgYXrFbgLcYQO3s8qk+AEOPZGfqexNtyVhVbs6oN/bUxTGEH4Qt7tzAlq7El+neeWNC0=
+X-Received: by 2002:a17:907:c0c:b0:6d1:8c46:6415 with SMTP id
+ ga12-20020a1709070c0c00b006d18c466415mr29543836ejc.326.1647997799095; Tue, 22
+ Mar 2022 18:09:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220309144000.1470138-1-longman@redhat.com>
-In-Reply-To: <20220309144000.1470138-1-longman@redhat.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 23 Mar 2022 09:06:03 +0800
-Message-ID: <CAMZfGtWS581YW4Y8oNU=E_zPnpK=mMdYVSG1F3U3fJNAzBzc+g@mail.gmail.com>
-Subject: Re: [PATCH-mm v3] mm/list_lru: Optimize memcg_reparent_list_lru_node()
-To:     Waiman Long <longman@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 23 Mar 2022 01:09:50 +0000
+Message-ID: <CAHpNFcN_tkiK1hO5HkJtvydLhj8biSLVQ+sFsuidM7wYF8PJPw@mail.gmail.com>
+Subject: GPIO & QFFT : RS : Subject Re: [PATCH] watchdog: gpio_wdt: Support
+ GPO lines with the toggle algorithm
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 10:40 PM Waiman Long <longman@redhat.com> wrote:
+GPIO is used for Super speed output, However Serialised Parallel
+processing allows constant flow:
+
+Examples:
+
+Audio devices such as creative logic ISA & PCI Cards on SUPER
+input mode (Mic & Input ports)16Bit HQ into 256 Drums in 32Bit Super HQ
+
+CPU Coprocessors such as the QFFT : Input & Output alternate lines on pins
+
+Parallel ports in Super IO mode! 4MB/S WOW
+
+Hard Drives IO 120MB/s Write Cycle (Audio Recording Desks & Studio
+Recording Studios)
+
+Tape DECKS : IBM, Fuji, Sony & Samsung TAPE Backups Super IO GPIO :
+1.2GB/s to 72GB/s Compressed
+
+GPIO Could be used on RAM : Examples is 4 special pins on the RAM for
+burst mode!
+
+GPIO is rather more relevant than you think!
+
+Rupert S
+
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.ht=
+ml
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-cancel=
+ing-headphones-of-the-year-a1166868524/
+
+
+https://lkml.org/lkml/2022/3/22/1112
+
+Date Tue, 22 Mar 2022 17:04:53 -0700
+From Guenter Roeck <>
+Subject Re: [PATCH] watchdog: gpio_wdt: Support GPO lines with the
+toggle algorithm
+share 0
+On 3/22/22 15:29, Tobias Waldekranz wrote:
+> Support using GPO lines (i.e. GPIOs that are output-only) with
+> gpio_wdt using the "toggle" algorithm.
 >
-> Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
-> to be race free"), we are tracking the total number of lru
-> entries in a list_lru_node in its nr_items field.  In the case of
-> memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
-> is 0.  We don't even need to take the nlru->lock as no new lru entry
-> could be added by a racing list_lru_add() to the draining src_idx memcg
-> at this point.
+> Since its inception, gpio_wdt has configured its GPIO line as an input
+> when using the "toggle" algorithm, even though it is used as an output
+> when kicking. This needlessly barred hardware with output-only pins
+> from using the driver.
+>
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+>
+> Hi,
+>
+> This patch has been in our downstream tree for a long time. We need it
+> because our kick GPIO can't be used as an input.
+>
+> What I really can't figure out is why the driver would request the pin
+> as in input, when it's always going to end up being used as an output
+> anyway.
+>
+> So I thought I'd send it upstream in the hopes of either getting it
+> merged, or an explanation as to why it is needed.
+>
 
-Hi Waiman,
+I _think_ the assumption / idea was that "toggle" implies that the output
+is connected to a pull-up resistor and that the pin either floats or is
+pulled down to ground, causing the signal to toggle. I don't know if/how
+that works in practice, though.
 
-Sorry for the late reply.  Quick question: what if there is an inflight
-list_lru_add()?  How about the following race?
+Guenter
 
-CPU0:                               CPU1:
-list_lru_add()
-    spin_lock(&nlru->lock)
-    l = list_lru_from_kmem(memcg)
-                                    memcg_reparent_objcgs(memcg)
-                                    memcg_reparent_list_lrus(memcg)
-                                        memcg_reparent_list_lru()
-                                            memcg_reparent_list_lru_node()
-                                                if (!READ_ONCE(nlru->nr_items))
-                                                    // Miss reparenting
-                                                    return
-    // Assume 0->1
-    l->nr_items++
-    // Assume 0->1
-    nlru->nr_items++
+>   drivers/watchdog/gpio_wdt.c | 13 +++++--------
+>   1 file changed, 5 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
+> index 0923201ce874..f7686688e0e2 100644
+> --- a/drivers/watchdog/gpio_wdt.c
+> +++ b/drivers/watchdog/gpio_wdt.c
+> @@ -108,7 +108,6 @@ static int gpio_wdt_probe(struct platform_device *pde=
+v)
+>   struct device *dev =3D &pdev->dev;
+>   struct device_node *np =3D dev->of_node;
+>   struct gpio_wdt_priv *priv;
+> - enum gpiod_flags gflags;
+>   unsigned int hw_margin;
+>   const char *algo;
+>   int ret;
+> @@ -122,17 +121,15 @@ static int gpio_wdt_probe(struct platform_device *p=
+dev)
+>   ret =3D of_property_read_string(np, "hw_algo", &algo);
+>   if (ret)
+>   return ret;
+> - if (!strcmp(algo, "toggle")) {
+> +
+> + if (!strcmp(algo, "toggle"))
+>   priv->hw_algo =3D HW_ALGO_TOGGLE;
+> - gflags =3D GPIOD_IN;
+> - } else if (!strcmp(algo, "level")) {
+> + else if (!strcmp(algo, "level"))
+>   priv->hw_algo =3D HW_ALGO_LEVEL;
+> - gflags =3D GPIOD_OUT_LOW;
+> - } else {
+> + else
+>   return -EINVAL;
+> - }
+>
+> - priv->gpiod =3D devm_gpiod_get(dev, NULL, gflags);
+> + priv->gpiod =3D devm_gpiod_get(dev, NULL, GPIOD_OUT_LOW);
+>   if (IS_ERR(priv->gpiod))
+>   return PTR_ERR(priv->gpiod);
+>
 
-IIUC, we use nlru->lock to serialise this scenario.
+*****
 
-Thanks.
+Get the best out of Youtube encoding with GPL QFFT Codecs for :
+Windows,Linux & Android #RockTheHouseGoogle!
+
+Advanced FFT & 3D Audio functions for CPU & GPU
+https://gpuopen.com/true-audio-next/
+
+Multimedia Codec SDK https://gpuopen.com/advanced-media-framework/
+
+(c)Rupert S https://science.n-helix.com
+
+***
+Decoder CB 2021 Codecs
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"aac","codec delay":0,"discard
+decoder delay":false,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed
+16-bit","samples per second":48000,"seek preroll":"0us"}]
+
+kVideoDecoderName "MojoVideoDecoder"
+kVideoPlaybackFreezing 0.10006
+kVideoPlaybackRoughness 3.048
+kVideoTracks [{"alpha mode":"is_opaque","codec":"h264","coded
+size":"426x240","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"426x240","orientation":"0=C2=B0","profile":"h264 baseline","visible
+rect":"0,0 426x240"}]
+
+info "Selected FFmpegAudioDecoder for audio decoding, config: codec:
+mp3, profile: unknown, bytes_per_channel: 2, channel_layout: STEREO,
+channels: 2, samples_per_second: 44100, sample_format: Signed 16-bit
+planar, bytes_per_frame: 4, seek_preroll: 0us, codec_delay: 0, has
+extra data: false, encryption scheme: Unencrypted, discard decoder
+delay: true"
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"mp3","codec delay":0,"discard
+decoder delay":true,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed 16-bit
+planar","samples per second":44100,"seek preroll":"0us"}]
+kBitrate 192000
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":4,"bytes per frame":8,"channel
+layout":"STEREO","channels":2,"codec":"opus","codec
+delay":312,"discard decoder delay":true,"encryption
+scheme":"Unencrypted","has extra
+data":true,"profile":"unknown","sample format":"Float 32-bit","samples
+per second":48000,"seek preroll":"80000us"}]
+
+kVideoDecoderName "VpxVideoDecoder"
+kVideoTracks [{"alpha mode":"is_opaque","codec":"vp9","coded
+size":"1920x1080","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"1920x1080","orientation":"0=C2=B0","profile":"vp9 profile0","visible
+rect":"0,0 1920x1080"}]
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"aac","codec delay":0,"discard
+decoder delay":false,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed
+16-bit","samples per second":44100,"seek preroll":"0us"}]
+
+kVideoDecoderName "MojoVideoDecoder"
+kVideoTracks [{"alpha mode":"is_opaque","codec":"h264","coded
+size":"1920x1080","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"1920x1080","orientation":"0=C2=B0","profile":"h264 main","visible
+rect":"0,0 1920x1080"}]
+***
+
+PlayStation 5 and Xbox Series Spatial Audio Comparison | Technalysis
+Audio 3D Tested : Tempest,ATMOS,DTX,DTS
+
+https://www.youtube.com/watch?v=3DvsC2orqiCwI
+
+*
+
+Waves & Shape FFT original QFFT Audio device & CPU/GPU : (c)RS
+
+The use of an FFT simple unit to output directly: Sound
+& other content such as a BLENDER or DAC Content : (c)RS
+
+FFT Examples :
+
+Analogue smoothed audio ..
+Using a capacitor on the pin output to a micro diode laser (for analogue Fi=
+bre)
+
+Digital output using:
+8 to 128Bit multiple high frequency burst mode..
+
+(Multi Phase step at higher frequency & smooth interpolation)
+Analogue wave converted to digital in key steps through a DAC at
+higher frequency & amplitude.
+
+For many systems an analogue wave makes sense when high speed crystal
+digital is too expensive.
+
+Multiple frequency overlapped digital signals with a time formula is
+also possible.
+
+The mic works by calculating angle on a drum...
+Light.. and timing & dispersion...
+The audio works by QFFT replication of audio function..
+The DAC works by quantifying as Analog digital or Metric Matrix..
+The CPU/GPU by interpreting the data of logic, Space & timing...
+
+We need to calculate Quantum is not the necessary feature;
+
+But it is the highlight of our:
+Data storage cache.
+Our Temporary RAM
+Our Data transport..
+Of our fusion future.
+
+FFT & fast precise wave operations in SiMD
+
+Several features included for Audio & Video : Add to Audio & Video
+drivers & sdk i love you <3 DL
+
+In particular I want Bluetooth audio optimized with SiMD,AVX vector
+instructions & DSP process drivers..
+
+The opportunity presents itself to improve the DAC; In particular of
+the Video cards & Audio devices & HardDrives & BDBlueRay Player Record
+& load functions of the fluctuating laser..
+More than that FFT is logical and fast; Precise & adaptive; FP & SiMD
+present these opportunities with correct FFT operations & SDK's.
+
+3D surround optimised the same, In particular with FFT efficient code,
+As one imagines video is also effected by FFT ..
+
+Video colour & representation & wavelet compression & sharpness restoration=
+..
+Vivid presentation of audio & video & 3D objects and texture; For
+example DOT compression & image,Audio presentation...
+
+SSD & HD technology presents unique opportunities for magnetic waves
+and amplitude speculation & presentation.
+
+FFT : FMA : SiMD instructions & speed : application examples : Audio,
+Colour pallet , Rainbows, LUT, Blood corpuscles with audio & vibration
+interaction, Rain with environmental effects & gravity.. There are
+many application examples of transforms in action (More and more
+complex by example)
+
+High performance SIMD modular arithmetic for polynomial evaluation
+
+FFT Examples :  in the SiMD Folder...
+
+Evaluation of FFT and polynomial X array algebra .. is here handled to
+over 50Bits...
+As we understand it the maths depends on a 64bit value with a 128Bit  ..
+as explained in the article value have to be in identical ranges bit
+wise, However odd bit depth sizes are non conforming (God i need
+coffee!)
+
+In one example (page 9) Most of the maths is 64Bit & One value 128Bit
+"We therefore focus in this article on the use of floating-point (FP)
+FMA (fused multiply-add) instructions for floating-point based modular
+arithmetic. Since the FMA instruction performs two operations (a =E2=88=97 =
+b +
+c) with one single final rounding, it can indeed be used to design a
+fast error-free transformation of the product of two floating-point
+numbers"
+
+Our latest addition is a quite detailed example for us
+High performance SIMD modular arithmetic for
+polynomial evaluation 2020
+
+Pierre Fortin, Ambroise Fleury, Fran=C3=A7ois Lemaire, Michael Monagan
+
+https://hal.archives-ouvertes.fr/hal-02552673/document
+
+Contains multiple algorithm examples & is open about the computer
+operations in use.
+
+Advanced FFT & 3D Audio functions for CPU & GPU
+https://gpuopen.com/true-audio-next/
+
+Multimedia Codec SDK https://gpuopen.com/advanced-media-framework/
+
+(c)Rupert S https://science.n-helix.com
+
+*****
+
+Lets face it, Realtec could well resource the QFFT Audio device &
+transformer/DAC
+
+(c)Rupert S https://science.n-helix.com
+
+document work examples :
+
+https://eurekalert.org/pub_releases/2021-01/epfd-lpb010621.php
+
+"Light-based processors boost machine-learning processing
+ECOLE POLYTECHNIQUE F=C3=89D=C3=89RALE DE LAUSANNE
+
+Research News
+
+IMAGE
+IMAGE: SCHEMATIC REPRESENTATION OF A PROCESSOR FOR MATRIX
+MULTIPLICATIONS WHICH RUNS ON LIGHT. view more
+
+CREDIT: UNIVERSITY OF OXFORD
+
+The exponential growth of data traffic in our digital age poses some
+real challenges on processing power. And with the advent of machine
+learning and AI in, for example, self-driving vehicles and speech
+recognition, the upward trend is set to continue. All this places a
+heavy burden on the ability of current computer processors to keep up
+with demand.
+
+Now, an international team of scientists has turned to light to tackle
+the problem. The researchers developed a new approach and architecture
+that combines processing and data storage onto a single chip by using
+light-based, or "photonic" processors, which are shown to surpass
+conventional electronic chips by processing information much more
+rapidly and in parallel.
+
+The scientists developed a hardware accelerator for so-called
+matrix-vector multiplications, which are the backbone of neural
+networks (algorithms that simulate the human brain), which themselves
+are used for machine-learning algorithms. Since different light
+wavelengths (colors) don't interfere with each other, the researchers
+could use multiple wavelengths of light for parallel calculations. But
+to do this, they used another innovative technology, developed at
+EPFL, a chip-based "frequency comb", as a light source.
+
+"Our study is the first to apply frequency combs in the field of
+artificially neural networks," says Professor Tobias Kippenberg at
+EPFL, one the study's leads. Professor Kippenberg's research has
+pioneered the development of frequency combs. "The frequency comb
+provides a variety of optical wavelengths that are processed
+independently of one another in the same photonic chip."
+
+"Light-based processors for speeding up tasks in the field of machine
+learning enable complex mathematical tasks to be processed at high
+speeds and throughputs," says senior co-author Wolfram Pernice at
+M=C3=BCnster University, one of the professors who led the research. "This
+is much faster than conventional chips which rely on electronic data
+transfer, such as graphic cards or specialized hardware like TPU's
+(Tensor Processing Unit)."
+
+After designing and fabricating the photonic chips, the researchers
+tested them on a neural network that recognizes of hand-written
+numbers. Inspired by biology, these networks are a concept in the
+field of machine learning and are used primarily in the processing of
+image or audio data. "The convolution operation between input data and
+one or more filters - which can identify edges in an image, for
+example, are well suited to our matrix architecture," says Johannes
+Feldmann, now based at the University of Oxford Department of
+Materials. Nathan Youngblood (Oxford University) adds: "Exploiting
+wavelength multiplexing permits higher data rates and computing
+densities, i.e. operations per area of processor, not previously
+attained."
+
+"This work is a real showcase of European collaborative research,"
+says David Wright at the University of Exeter, who leads the EU
+project FunComp, which funded the work. "Whilst every research group
+involved is world-leading in their own way, it was bringing all these
+parts together that made this work truly possible."
+
+The study is published in Nature this week, and has far-reaching
+applications: higher simultaneous (and energy-saving) processing of
+data in artificial intelligence, larger neural networks for more
+accurate forecasts and more precise data analysis, large amounts of
+clinical data for diagnoses, enhancing rapid evaluation of sensor data
+in self-driving vehicles, and expanding cloud computing
+infrastructures with more storage space, computing power, and
+applications software.
+
+###
+
+Reference
+
+J. Feldmann, N. Youngblood, M. Karpov, H. Gehring, X. Li, M. Stappers,
+M. Le Gallo, X. Fu, A. Lukashchuk, A.S. Raja, J. Liu, C.D. Wright, A.
+Sebastian, T.J. Kippenberg, W.H.P. Pernice, H. Bhaskaran. Parallel
+convolution processing using an integrated photonic tensor core.
+Nature 07 January 2021. DOI: 10.1038/s41586-020-03070-1"
+
+Time Measurement
+
+"Let's Play" Station NitroMagika_LightCaster

@@ -2,87 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21BF4E4BDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 05:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004F14E4BDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 05:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241768AbiCWEVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 00:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S241779AbiCWEWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 00:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiCWEVV (ORCPT
+        with ESMTP id S229446AbiCWEWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 00:21:21 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 113B270053;
-        Tue, 22 Mar 2022 21:19:50 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:38400.1514282877
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id F2DF2100225;
-        Wed, 23 Mar 2022 12:19:48 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id fd80e39b552643fb87559fcd61b3a94f for robh@kernel.org;
-        Wed, 23 Mar 2022 12:19:49 CST
-X-Transaction-ID: fd80e39b552643fb87559fcd61b3a94f
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <3d042840-0d4d-bfed-3543-15a5d33e9213@189.cn>
-Date:   Wed, 23 Mar 2022 12:19:47 +0800
+        Wed, 23 Mar 2022 00:22:02 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC8470870;
+        Tue, 22 Mar 2022 21:20:33 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id w7so701405lfd.6;
+        Tue, 22 Mar 2022 21:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pc/hvVo0/6NKpglRsU7c5DEB6PgMyaUIQfdPH5do0+I=;
+        b=B8/vZ43epAmy3zm8teeKI/qHOROvXFw2pqqi7vPAPsEBeqdMz8Pt+h2wZ75zku3TYT
+         WbFHYje2B7Eya5XOrU0sGzEfJjtzxRE93umNgv0tFao6nRnN/QmNlr5CwVxFsI93yrko
+         Tpmsc2fYdj/G7lzLS+knpFvtAmnbzsj+rXPPPleQHeB5Pa3NzRK0le7btPS3JN/L+pZw
+         IOSWaV0xPtckwXx7Uy0KFi2gzLl5BdtQGDcuUwWzJzvnS/byEQ1G1I1gaNI6gGDZQfhe
+         S6slYlZOiCR/YWzOPr6PtjElWmwZTS/9TPCEJswqoTSI7biWZ6b0VX8poP9b2E5q/tY4
+         xQMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pc/hvVo0/6NKpglRsU7c5DEB6PgMyaUIQfdPH5do0+I=;
+        b=CwL6vMt4k1eBANIpumMOIhKspY49mT2f1bjjJE3QBim+jrLAbYKLcqih4gwPqb6sWz
+         kD5GZV/sxd4ML0FhqcfHnyE+NnsfQpI/Yso/57pXI0L5xwJTcMHPZCogZymTpOEB1yuh
+         I3I5tWnNVH54dkJiWAWl5dvAhD8VJJkjcZV4ZQbFfKlADm50g/Z296viatEmgZL/nF/0
+         zFll4jE8/2wafDZLrFyFegh1ilZGQiizE2a35hHYWbwEBQ6MFKvrMNGjbmfsAOQU//JC
+         3YCStg4r+iJZiB1dSufxaeYTS6QLzv0BsswTPAkAM2hEH/rNnVZ+5nj4PLKHx0Y0JMhg
+         AtoQ==
+X-Gm-Message-State: AOAM532wSEqb1MHbasdLodBGxYjNn0IgBx7x+jpL833TJ9NLjoDaXKDC
+        pNRD/beV9NPDFMcSMzoY4WKihT619y4V+fI+U/k=
+X-Google-Smtp-Source: ABdhPJwYUD5lEyXExITlf9Ho8r5Y0Xi7y7bkZfLHtNb1ieORDpPSd1WYv2KM4NKaeou5qsHbZLInXFMrkn3nqTaCftY=
+X-Received: by 2002:a05:6512:b19:b0:446:f1c6:81bd with SMTP id
+ w25-20020a0565120b1900b00446f1c681bdmr20966035lfu.320.1648009232002; Tue, 22
+ Mar 2022 21:20:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kernel test robot <lkp@intel.com>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-8-15330273260@189.cn>
- <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220320135015.19794-1-xiam0nd.tong@gmail.com> <CANT5p=qEmVtgC5gD5G3D1o+7mxLMpQawnh0DSY+dLD-Dyrw5Uw@mail.gmail.com>
+In-Reply-To: <CANT5p=qEmVtgC5gD5G3D1o+7mxLMpQawnh0DSY+dLD-Dyrw5Uw@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 22 Mar 2022 23:20:21 -0500
+Message-ID: <CAH2r5mu-Ci=HL+BkeEYVkW8Qc9jCW7ma7a_yK4-70MgoJgJkhA@mail.gmail.com>
+Subject: Re: [PATCH] cifs: fix incorrect use of list iterator after the loop
+To:     Shyam Prasad N <nspmangalore@gmail.com>
+Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven French <sfrench@samba.org>, jakobkoschel@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tentatively merged into cifs-2.6.git for-next pending additional testing
 
-On 2022/3/23 04:49, Rob Herring wrote:
-> This condition is never true. We're in the 'else' because !state.
+Also added cc:stable 5.17
 
-Thanks for your sharp eyes,  after the gpio emulate i2c driver works, i do not pay much
-attention to it and get hurry to do other things. I will fix this issue at next version
-and reply other problem at a letter time.
+On Tue, Mar 22, 2022 at 1:09 AM Shyam Prasad N via samba-technical
+<samba-technical@lists.samba.org> wrote:
+>
+> On Mon, Mar 21, 2022 at 3:50 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+> >
+> > The bug is here:
+> > if (!tcon) {
+> >         resched = true;
+> >         list_del_init(&ses->rlist);
+> >         cifs_put_smb_ses(ses);
+> >
+> > Because the list_for_each_entry() never exits early (without any
+> > break/goto/return inside the loop), the iterator 'ses' after the
+> > loop will always be an pointer to a invalid struct containing the
+> > HEAD (&pserver->smb_ses_list). As a result, the uses of 'ses' above
+> > will lead to a invalid memory access.
+> >
+> > The original intention should have been to walk each entry 'ses' in
+> > '&tmp_ses_list', delete '&ses->rlist' and put 'ses'. So fix it with
+> > a list_for_each_entry_safe().
+> >
+> > Fixes: 3663c9045f51a ("cifs: check reconnects for channels of active tcons too")
+> > Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> > ---
+> >  fs/cifs/smb2pdu.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+> > index 7e7909b1ae11..f82d6fcb5c64 100644
+> > --- a/fs/cifs/smb2pdu.c
+> > +++ b/fs/cifs/smb2pdu.c
+> > @@ -3858,8 +3858,10 @@ void smb2_reconnect_server(struct work_struct *work)
+> >         tcon = kzalloc(sizeof(struct cifs_tcon), GFP_KERNEL);
+> >         if (!tcon) {
+> >                 resched = true;
+> > -               list_del_init(&ses->rlist);
+> > -               cifs_put_smb_ses(ses);
+> > +               list_for_each_entry_safe(ses, ses2, &tmp_ses_list, rlist) {
+> > +                       list_del_init(&ses->rlist);
+> > +                       cifs_put_smb_ses(ses);
+> > +               }
+> >                 goto done;
+> >         }
+> >
+> >
+> > base-commit: 14702b3b2438e2f2d07ae93b5d695c166e5c83d1
+> > --
+> > 2.17.1
+> >
+>
+> Hi Xiaomeng,
+> Good catch.
+> Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+>
+> Steve, This one needs to be marked for CC stable 5.17+
+>
+> --
+> Regards,
+> Shyam
+>
 
 
+-- 
+Thanks,
+
+Steve

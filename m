@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADB94E4CE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 07:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4268E4E4CE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 07:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242009AbiCWGtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 02:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+        id S242015AbiCWGtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 02:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242003AbiCWGt3 (ORCPT
+        with ESMTP id S242019AbiCWGth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 02:49:29 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80085.outbound.protection.outlook.com [40.107.8.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168CBBD5;
-        Tue, 22 Mar 2022 23:48:00 -0700 (PDT)
+        Wed, 23 Mar 2022 02:49:37 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80059.outbound.protection.outlook.com [40.107.8.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71A95FFA;
+        Tue, 22 Mar 2022 23:48:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CYz7BkiWAeAxIMC8aMXvi1fLlFKI8k/wf9KFBeNw+vQP0IVT/9wDdnVwZRVwTlNPcKSRi0egbniAXq4XDUyJArLIKj+AKWeSAadVXg3DOC/okgOV9BsvrzXmMg8aHOFvVSSrm/fKMfPIogd4IVX0eOQdVK1CIrsSktMmLjrAOdcnmHrPpm0hWU6Pet50KNgncbNdLl8sVHH2vxMcS+BpVFLtyaLR2UwtL5Uaj9b3NRbaOfUnRoNb5VuNKPFCjl6CoJHB6Q+3QD7YG0tINzqMT64NZd7dy3Ap320agiKyRCGfqfSQfn9WNcGloF5+FG/yAYD5IOziMTcTxA/b97ytWA==
+ b=VE4Y0gcofvtb9RfCMEakJAMwQgNsDNFYqcd2CEcAOa+e5SL7DEZxG8txFwcenKsPpLUr21ZELRDFP2iG0Xyd+qU0MjMaXYUbc9p0LYR7Sh9I4BTqufaWcaz39X63GYOivVzRvHgyW1VQCXOP7cnqjJrIPlICc8XIMTGQiOSPy1ygimvkuugyJrx6jg9x7AFAWdzW0PaRK8fGWmHnJs3akA3ztI3GQUm9DztxJaZ3ZU4hJI11NGgfhouO+NcjYlN7jWIWMATqLCrFd5N5Elr7yZsWdf6r8UknyhoKe/GsKDbDAEj4CK/ZDABb9nTI5tJ/csVZgVrVaPDC65o2jxKZyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SpnGXM6ytYbbx3/45kmEsNBRBqknIJ4aIvOZlw1fkWM=;
- b=ZFU/M5RG3b69uUJOSLCq9TqRM6mzs5r5OM8d2Qb7UzTM6fxs9shprOAtYa68MZa86xYXs4ij7w2RoRaGRj7crAyJobIOlFum1NicPNs4Zx11yeViwxS8Ul/KlKeK/VOXjyrLvHJisSXOhkIFWjhiRZ/6NglCHTNOOVPh1TmQs4TIS3n3iXOtad8shWAo1fgG/A+cCNU3Sq03sQCcFmAvYEhtrnYj/OqNKHo2/sRiDzNDaWOyoT83B4SV9V4Hd+tmLEslNZ9qY+bwOcezLqTVylROHnqNzYA5rIwiAYaihVH7HY4xfqqcZXbuVIdGBEpZJgIHgnuHFrjWwUvXEHJxog==
+ bh=A1JA1+8/9D85zjml537ojpP92Fwv/dEYg8OU/ucMc94=;
+ b=Gv54Ru+sxCMKjkouAxGK7+AYil4a9FkDu2EX9JeEGE7IEBvaFSRrlrVoBX6YTntD4wOMD68qAuIN0F1QCXF4n5bDiNYSy35O35yOXiDvHZUePAWf4izBAngeDch7EnSaddcNWrrsLsy8yida00CHtnCesi+vkIkPblAyoZ86NvghFlREShQKzTO+0YxkYNIUFe/Pux6B1h/tW1pY6r5ph+ul66cNr0Wn4Y6zKWTPyPF6ZyquB8MG3fUiohaUBr3vREcDVRgS9tIf0yBTBR61IvmRXTi9meTZkN2mV+A65z+DmuhAj3QyY8BMNFjWF5KrwElXMogfLes/XGyAMybhIw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SpnGXM6ytYbbx3/45kmEsNBRBqknIJ4aIvOZlw1fkWM=;
- b=GRc2d3ZuDY2fu63P4qkH60Aw8GdY3tHDxj8eUPfmMVBggueYa76pgpqbJebzfEFA7XglABVxw3xsgVUuseI2BFvHxWEd7Z3wI9U5D4pwsWzNWFMjB+XZWZ8rfxQaeyH1hH9R02dE7Kw/Gi/8Rle+gh9MaTsURspSsp/lMpA0xDI=
+ bh=A1JA1+8/9D85zjml537ojpP92Fwv/dEYg8OU/ucMc94=;
+ b=S/WG6o7OxG/EvjE/A0DCuGmEfHZTVcM3c/PDUAV5tYWhFFjvbXB6DBMFe5qNADFInWlXaz5oX0BVw9zULfNxnuTZeCPA1f9RV5wEJbGLIAzX1m2nuiFATp2rk+XyCUrIehplk0dJ5HpV460R0AyQJll2WMS5c4REjq27vZGWHLE=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
  by AM8PR04MB7379.eurprd04.prod.outlook.com (2603:10a6:20b:1c4::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 23 Mar
- 2022 06:47:58 +0000
+ 2022 06:48:02 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::1d8b:d8d8:ca2b:efff]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::1d8b:d8d8:ca2b:efff%3]) with mapi id 15.20.5102.016; Wed, 23 Mar 2022
- 06:47:57 +0000
+ 06:48:02 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, shengjiu.wang@nxp.com
 Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 1/2] remoteproc: elf_loader: skip segment with memsz as zero
-Date:   Wed, 23 Mar 2022 14:49:43 +0800
-Message-Id: <20220323064944.1351923-2-peng.fan@oss.nxp.com>
+Subject: [PATCH 2/2] remoteproc: imx_dsp_rproc: use common rproc_elf_load_segments
+Date:   Wed, 23 Mar 2022 14:49:44 +0800
+Message-Id: <20220323064944.1351923-3-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220323064944.1351923-1-peng.fan@oss.nxp.com>
 References: <20220323064944.1351923-1-peng.fan@oss.nxp.com>
@@ -61,51 +61,51 @@ X-ClientProxiedBy: SG2PR06CA0221.apcprd06.prod.outlook.com
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b7e8e48b-58b1-4150-e2c3-08da0c991029
+X-MS-Office365-Filtering-Correlation-Id: d155f3e5-b41e-47f3-f4b1-08da0c99132b
 X-MS-TrafficTypeDiagnostic: AM8PR04MB7379:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM8PR04MB7379F607B32AB948BFDA96E2C9189@AM8PR04MB7379.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <AM8PR04MB7379ABD75E86D9527D6C897DC9189@AM8PR04MB7379.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Er6RvoEIQRM3Gh4mM1pVfpVyNbPeUGbcunbA2zh+pzzvfcibz+X9SlztRIQ0w2liuyiORnp+H42ruPLEDZWulpcjbXXmDuoBmeGIUFf1kQa8SDaZmcQ6xIbRltVra8V0+QUFDb8TiqotEeWH1jxlPqYAuQDqpGzA8V2w5z2UnOT82X4etQL9GsbTArRzd522ygPbt/r0btocIzSzo05oAaIKIUhd67qBlC6gC28leYR6fle6A5vFPczeEezoqLy9LlcUWXSNVTuKZkBj6OlGyFl9A6RBow/CVpQeMtXlX/8aUC4Acl04Lv1GSBeZbvsFh7YzdLkiIwZ4ZXoAPsY6zSCABmjN6uTp2FqFOz8PIcVyC0KEAAuk/WtZMdoNtqE9ONyp0WRp07a+sMG0xnbxJdC5QMgyRjG3lX8yfzl4C4rWk/wrSpkZuO6KqAsg52N10K2PCrIScTGcGeEiOSl5GeAsNZyWg7R5OBRaR/987rpbf41LIOC61l1JVwZGZMX33WS9M99v4q93JTqmRWvG1cR+6FBzAUlmIZ5GXAvo3/uQPnBkctOzzBAxuZqWei/XshwbO6ptZq/eGAIwhBM7txQExVKYNkDO0y0jgRqpWRFtYeaMLSXBru6niz5Qeg/tFDn2ZINYqRzUp8yA7JqYXdJdcGQd58u1TcvvgVsLA0XGJgX9+V9+HPEGS7JjnseTsboT8iaYefgSTlevaHhTMg==
+X-Microsoft-Antispam-Message-Info: 7RtDW0XDobzFZ1LFvlESuUbLdf4PqJdmc1V2t3DbWwmzGTYqiupYzhfx3quFkOQ6aOqEzTvwj+ShPzfe5YAuxltOMnCeBj8+em6zR6jTeVukPqHMlviCvy0peU2F1Zroz5jm8lqkLbyMACSIwNKuu5yozaU5Tx0p5a4oI+PcMtARdsWzGIxI5/p+OnWQQ7KeRS08g5vrVHJJdutUGgaarwB/WHPnZkS17P01vBpq7Qz3N0XSkrtqP0F4o1AiWZtTCMM8ZV35tIqhyEkCKyAgu1krrnLHhfXk0Di+XZZ//hA3G1n/60+vqGe3RBUrEyS5WsxqTgs16t3FqbrPw+wyhe6aS0AnBB4E6ajZPUo1N+ul30HhaRlVmdKwgGDs7MxSZdaH5awjTnrbjtBcXWlGGV+kKkgRgX1pkSnM5lcFRx0PdHpbasG9w7XbAEwYDcer3YSG2B6xnEJK/EKqWVGAEH3BkhpxWCEuso/0o8tpvd0/L2ZBuMPW/20ZHgtO4IUuoIHRUbgbdZxm5KrGM1rqLBP6s5LDq8ieQsqbKT87nRZ9EzihCEvMneEFLhRMX2p/2O+2uK/cYk2EZCDUmmxgXiy1ViZ2VSdBj52hEG4roFX9bhsTpZVhZfucEthuGb5oqdPw4X0qbNnkPN0iIMmqmyZjyU6nChnZBivEA6m+HpzSys0QHl3Sf4Sa5CKwWbmA5pZ8fcxbLEVi/3W3Ht21Yw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(52116002)(6506007)(4326008)(8676002)(66476007)(186003)(26005)(66556008)(2616005)(8936002)(6512007)(5660300002)(1076003)(38350700002)(66946007)(38100700002)(83380400001)(86362001)(6486002)(508600001)(6666004)(316002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TY7yhb6AvFJAqo4LBv52ygqMWO5o6mCwDa8FKq9JaA4HJCJQmyBdFs3SuwAq?=
- =?us-ascii?Q?jXROv1uHOI+adqVcwCjeY2y4Rl/kYNnWOxmotih11DUuF1ozuXrO1qUHDjwm?=
- =?us-ascii?Q?bxgiqGEbXY2zpS2zHxshhm4dCCIk2eD/t1BDq8blpNgeUOyFr6fTAHO+bcyu?=
- =?us-ascii?Q?a8nzYkMkwas75P3LOuGdbjsDYaRzUzFYDqrLffXnBRtohUZFCAQspzAddeGk?=
- =?us-ascii?Q?Oea0xQQ7r9epUn6Id79DcJ5RDjlDpaleIDiJlamlstCCUV0CLoTLmDNITKei?=
- =?us-ascii?Q?1o5oxcZ7+cTd1HJvGZQT/vHEhU5t7gQx9UiEoTuYWs9v6Zw/69JLISj5kcCw?=
- =?us-ascii?Q?DHfK29sPMt1kUs+8MeG2aXkG8VToMB1IzLQRd3trzILyRlZUeltJCbFJA3cq?=
- =?us-ascii?Q?ak0jvVmT0yaT3nI6U5PDRa35AU6m+ftOyuagQ0mMnsBFu27c1l0uHimaas7h?=
- =?us-ascii?Q?y8xffa9LUQ2+8DRAXPibIRlGjs90QZQXmf2zTpicUJNoF9td+37bxzQp1DGw?=
- =?us-ascii?Q?9hooFM81nCPs4ES4l+kQjKpGmNv3+cL9oj6+tK9WgWaktixM6dvEwrbhH7Vn?=
- =?us-ascii?Q?YhlX/jz4JQ/xR1ysSEBDU3J60blnWVj1Jwvl2GRqjh+/YK8o+LkFFob7cUD3?=
- =?us-ascii?Q?J/D7PqGZvxja5Zcuw6arM+u+Qik6qyIVLrlBLJh387Pld2WFt9XPuOf5LlZ8?=
- =?us-ascii?Q?WbYBTaeuc6I3E2YHCKc1UcnEEhxre5aZ1w3ErrLcyvweZjCMA0o3b/Udn8zf?=
- =?us-ascii?Q?uklczuBtQwvML2ZFZhxQIaUbk/M4IDsoiX/FPEFANths8ixrJ+78KONUq8o3?=
- =?us-ascii?Q?2bDzojRTNW6NA2C6GpA52Ce0PKThDEvXR4nIMLVGJfnM4FiuHf8fRfUVQ2KF?=
- =?us-ascii?Q?9Qcxj7DFR9f7pwIrMuSq36S1y2WaruIhJvy0a/dOEL/52lGy9sS2qO76xOUR?=
- =?us-ascii?Q?W3Hd24DFS+sTNv2NjQ9/OpLh3TuYbKG3ixzFm5bRTk0rj3C6HOYv0dtYD4P5?=
- =?us-ascii?Q?U5GL5ooXGXIIGt52rfjp26UTkms0eA18aSgdnF5+ZZEvqo5t8nIxPQjLXhnI?=
- =?us-ascii?Q?cdE36RqAurcV3NgwWNyrLF0inT4QxEjos/N5gbOAeQvRKjY6HEPQFHO3IJkA?=
- =?us-ascii?Q?fFWJdI0y2XFd0ztTlCb6AJe8sKvZQOOpnSnyXoNwoGoBtq/cg6Kn1S6z6IM/?=
- =?us-ascii?Q?wjxd3Yagu7TkE0UaDhI1KylIjOsMtaDams+ovkFX2qD6ooV5Adn0eQjXUGkH?=
- =?us-ascii?Q?/EqTmmn3B40O6uxg50sYKiQxA3p05fMGa4X/msBxkcDR/D/u2a1ZILCieZHa?=
- =?us-ascii?Q?jVDnAlPPgWSS+Iv5X5mPCDXlXg/kLvVYrupbznQZt+GnxLJqPKRWzolfAf5u?=
- =?us-ascii?Q?E+LKhlf0oBi8atfNGqlMqjvPIku0UAtbieMov92OZLLFb0Gib9CaJJgZAY5g?=
- =?us-ascii?Q?+LT4hkzpW9tr7VwLYH4LBiKWBGw1E0qg?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7ROl3HTJkEk27Ymi8CvprzJ/51d6ybv/VRB5ZU/7tJiCIpCbM3ecaHKxOfZ8?=
+ =?us-ascii?Q?BnkiW6sHDsnFdlXxXw8JZ6vEDpU7dSeE0pMiftkgoZTF6zYYBFDzVI7XD2Tc?=
+ =?us-ascii?Q?R0rk8hfbbnezCCzKhXGcobVagu+l53gBUos6E1lGfNm6EKme2mqvgI3Sie0A?=
+ =?us-ascii?Q?AC7ydOC9bjD33zSL1J/Dk7xHUF/xSLtTMCiCrI4zlLYxLBWjwik/q2ufgGd7?=
+ =?us-ascii?Q?QCr5lfStThvfDujeHIL69Y6IC+mDRH86Odmi+9iNux4M7r2g7C5D/1ug6Kw+?=
+ =?us-ascii?Q?ILOWeuR2A20FQwQ8E38xWlMpuGUy+eYtFD+rimIsyf2Bp1bFDuGgDJucsdW+?=
+ =?us-ascii?Q?29q5mcFTA8rO1RniVTWDoQqozIdo5bEHJ2J+F7qs6bLHLlYVnttqDXIJBvgK?=
+ =?us-ascii?Q?jqZi+5VM2rRL9qqwfO33P3H/a3BvmVnPOp77rjIOQfv3RKqjLcUjjHZmY+G7?=
+ =?us-ascii?Q?cuoue4JJFWjqvfh+OvFLrwO+a7LgiEECGdHriTVtxrjh3EdNu6rvFjdg14kq?=
+ =?us-ascii?Q?suIi0l1Trd9hRwC5E03e66iVoQ6rR2pcorW/gBdVVwQ6rxE+4vOOwuHppI4F?=
+ =?us-ascii?Q?xVkDIzEM9vB7xY4mYtyDF0GOuXDR4ytWqmIAOrCiG+k0N0+WL9rGk5fzIU1L?=
+ =?us-ascii?Q?BMMYN4E0vmybmsRuBCmAW8gqwAWFZs9SbuxWyGdnFYwcleVF/nV5hpysVClh?=
+ =?us-ascii?Q?Ncm39PvAvbwlrnuDHVePfXAC0J1JRYfsz8ke99KQswhgNpAA+u9hRHVZ5GKC?=
+ =?us-ascii?Q?NPB2862AtVNgdCOo/WjNHOpV6nSeJEOHX0trRLZibYITzqKoljLiVOmDBubr?=
+ =?us-ascii?Q?Ue4HmLJnsNg2FsH0TIhlm5pprQbxgEdfEROeJiQnRy2kuS9Qn5LcqT7rcen3?=
+ =?us-ascii?Q?eNCEaAAxmMsGJL3b07Mrk8l0vctp6eK9o275FraIWhnzR961FcYX12EeShWF?=
+ =?us-ascii?Q?ftYbw5PimnfYdtwdpUhL4l4ORFTwn/kujJgvuNw0ceUtcTE16FDno6ZawLXK?=
+ =?us-ascii?Q?6VW5py2jDxN1eGiNsUjtHVCOXpkjckmkubm1wW6xXF6gcPrOEKHQuGpowJTy?=
+ =?us-ascii?Q?5HBwJPfvMLSULcWqwDEfSXj4ohLffHoNoisOoNmkpfJCrk8rA7/5bJQzvR2o?=
+ =?us-ascii?Q?AnE/euJhgYvMiH1Kwa+emJAhAEE6VvvcYdM1aDqYzT/cJMzh0yoZSwO/Cc0h?=
+ =?us-ascii?Q?FZ03cDlWY5/mJ/iOV1sK92BAKRbaRXqfUWThXrzcUa5OaqMEmZgbRNM9l2K4?=
+ =?us-ascii?Q?nmY0emuHvXGyzHaOy52Gf5g/9epCjDwyw7HMfRqw24oR0SqRYjp96csZhcQi?=
+ =?us-ascii?Q?G2hHc8BtpX8hNk99wdLjPSwCKyWjk+P8rL3mGFa8qLkp20Nd6GJhWqyCpjol?=
+ =?us-ascii?Q?Lm7utyT9X4hoImKc+gKfMBOSTLWD7LmhjOVHELJxHdprFfenoYtOImrYRnTG?=
+ =?us-ascii?Q?ylBrMd/X17RR2qwnTcW25qEQcYihR8O1?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7e8e48b-58b1-4150-e2c3-08da0c991029
+X-MS-Exchange-CrossTenant-Network-Message-Id: d155f3e5-b41e-47f3-f4b1-08da0c99132b
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 06:47:57.8780
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 06:48:02.3628
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cAPk+kYNKKBfSzRT90Wl7bGoXNcVWAQfwgKx7b18DorRFyxaC6QXwHynEf6kQaIm8c/UJttibeD/yMA6mnt+Vw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: wExV1tHL/0sDvambabGyDs19UOzcrM1vUCWGSbZP5gLz1kvWvyqRoibATsZNgruISwFMjowx0BDrQDu/6KTK1g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7379
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -118,41 +118,128 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-Per elf specification,
-p_filesz: This member gives the number of bytes in the file image of
-the segment; it may be zero.
-p_memsz: This member gives the number of bytes in the memory image
-of the segment; it may be zero.
-
-There is a case that i.MX DSP firmware has segment with PT_LOAD and
-p_memsz/p_filesz set to zero. Such segment needs to be ignored,
-otherwize rproc_da_to_va would report error.
+remoteproc elf loader supports the specific case that segments
+have PT_LOAD and memsz/filesz set to zero, so no duplicate
+code.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/remoteproc/remoteproc_elf_loader.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/remoteproc/imx_dsp_rproc.c | 95 +-----------------------------
+ 1 file changed, 1 insertion(+), 94 deletions(-)
 
-diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-index d635d19a5aa8..cb77f9e4dc70 100644
---- a/drivers/remoteproc/remoteproc_elf_loader.c
-+++ b/drivers/remoteproc/remoteproc_elf_loader.c
-@@ -181,7 +181,14 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
- 		bool is_iomem = false;
- 		void *ptr;
+diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+index 2abee78df96e..eee3c44c2146 100644
+--- a/drivers/remoteproc/imx_dsp_rproc.c
++++ b/drivers/remoteproc/imx_dsp_rproc.c
+@@ -649,99 +649,6 @@ static int imx_dsp_rproc_add_carveout(struct imx_dsp_rproc *priv)
+ 	return 0;
+ }
  
--		if (type != PT_LOAD)
-+		/*
-+		 *  There is a case that with PT_LOAD type, the
-+		 *  filesz = memsz = 0. If memsz = 0, rproc_da_to_va
-+		 *  should return NULL ptr, then error is returned.
-+		 *  So this case should be skipped from the loop.
-+		 *  Add !memsz checking here.
-+		 */
-+		if (type != PT_LOAD || !memsz)
- 			continue;
- 
- 		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
+-/**
+- * imx_dsp_rproc_elf_load_segments() - load firmware segments to memory
+- * @rproc: remote processor which will be booted using these fw segments
+- * @fw: the ELF firmware image
+- *
+- * This function specially checks if memsz is zero or not, otherwise it
+- * is mostly same as rproc_elf_load_segments().
+- */
+-static int imx_dsp_rproc_elf_load_segments(struct rproc *rproc,
+-					   const struct firmware *fw)
+-{
+-	struct device *dev = &rproc->dev;
+-	u8 class = fw_elf_get_class(fw);
+-	u32 elf_phdr_get_size = elf_size_of_phdr(class);
+-	const u8 *elf_data = fw->data;
+-	const void *ehdr, *phdr;
+-	int i, ret = 0;
+-	u16 phnum;
+-
+-	ehdr = elf_data;
+-	phnum = elf_hdr_get_e_phnum(class, ehdr);
+-	phdr = elf_data + elf_hdr_get_e_phoff(class, ehdr);
+-
+-	/* go through the available ELF segments */
+-	for (i = 0; i < phnum; i++, phdr += elf_phdr_get_size) {
+-		u64 da = elf_phdr_get_p_paddr(class, phdr);
+-		u64 memsz = elf_phdr_get_p_memsz(class, phdr);
+-		u64 filesz = elf_phdr_get_p_filesz(class, phdr);
+-		u64 offset = elf_phdr_get_p_offset(class, phdr);
+-		u32 type = elf_phdr_get_p_type(class, phdr);
+-		void *ptr;
+-
+-		/*
+-		 *  There is a case that with PT_LOAD type, the
+-		 *  filesz = memsz = 0. If memsz = 0, rproc_da_to_va
+-		 *  should return NULL ptr, then error is returned.
+-		 *  So this case should be skipped from the loop.
+-		 *  Add !memsz checking here.
+-		 */
+-		if (type != PT_LOAD || !memsz)
+-			continue;
+-
+-		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
+-			type, da, memsz, filesz);
+-
+-		if (filesz > memsz) {
+-			dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
+-				filesz, memsz);
+-			ret = -EINVAL;
+-			break;
+-		}
+-
+-		if (offset + filesz > fw->size) {
+-			dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
+-				offset + filesz, fw->size);
+-			ret = -EINVAL;
+-			break;
+-		}
+-
+-		if (!rproc_u64_fit_in_size_t(memsz)) {
+-			dev_err(dev, "size (%llx) does not fit in size_t type\n",
+-				memsz);
+-			ret = -EOVERFLOW;
+-			break;
+-		}
+-
+-		/* grab the kernel address for this device address */
+-		ptr = rproc_da_to_va(rproc, da, memsz, NULL);
+-		if (!ptr) {
+-			dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
+-				memsz);
+-			ret = -EINVAL;
+-			break;
+-		}
+-
+-		/* put the segment where the remote processor expects it */
+-		if (filesz)
+-			memcpy(ptr, elf_data + offset, filesz);
+-
+-		/*
+-		 * Zero out remaining memory for this segment.
+-		 *
+-		 * This isn't strictly required since dma_alloc_coherent already
+-		 * did this for us. albeit harmless, we may consider removing
+-		 * this.
+-		 */
+-		if (memsz > filesz)
+-			memset(ptr + filesz, 0, memsz - filesz);
+-	}
+-
+-	return ret;
+-}
+-
+ /* Prepare function for rproc_ops */
+ static int imx_dsp_rproc_prepare(struct rproc *rproc)
+ {
+@@ -808,7 +715,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
+ 	.start		= imx_dsp_rproc_start,
+ 	.stop		= imx_dsp_rproc_stop,
+ 	.kick		= imx_dsp_rproc_kick,
+-	.load		= imx_dsp_rproc_elf_load_segments,
++	.load		= rproc_elf_load_segments,
+ 	.parse_fw	= rproc_elf_load_rsc_table,
+ 	.sanity_check	= rproc_elf_sanity_check,
+ 	.get_boot_addr	= rproc_elf_get_boot_addr,
 -- 
 2.25.1
 

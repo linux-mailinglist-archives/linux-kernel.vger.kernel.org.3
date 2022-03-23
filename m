@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046D04E59D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB3F4E59D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243236AbiCWU2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 16:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
+        id S1344639AbiCWUcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 16:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240196AbiCWU2S (ORCPT
+        with ESMTP id S234460AbiCWUcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 16:28:18 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00D085952
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 13:26:47 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-d39f741ba0so2887675fac.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 13:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CY3l8jrztmr/FmAYRC1PzFMTrDaC/FmA5umCglNQWzo=;
-        b=IlojxJRbztX44z+MNWRzeHglp+pkBe0M5oL2i6Rju4lgn04LPaBdCKbcbJicv3H4jD
-         Waxy6v8s3xktxMzX1+py/+mX3o6a1jjeF/atySr3zYZvWQfVQYqvwLYZ3z8AvfS1l3gL
-         NUPfHl4vH2+GipPR2TsuHGkCjZgltMHc82ow7EfJxM5dv/0FWoWE3HSnShK2/CQbM6GF
-         /eTftPZmpctH2pjdnvKGROplxofKGqICS7JxZzyEYkvZlETE9H38ZsuzwhuPz9rQDmK4
-         xVySXS3WBuA61ZY541maNfWwuuSNorRPRGlRQZ6Fnj8z6DwuTdl58YFr09WgzEXuwQRh
-         pSoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CY3l8jrztmr/FmAYRC1PzFMTrDaC/FmA5umCglNQWzo=;
-        b=gV30ZXzKeYLKjU5cMp6oejVF1mMXCl3DVR+GtVAPidXW6puiUNJTitOZZqlqV3XbZE
-         /hXH2pB/lJgCecm+0ex2dnxsID4GUyCcKvPJieLWkoNe+zKsSPnVREDDZXRgCQAENs/F
-         XaFB5LUnIxfywW+MOnhxg3QtJLu/khKP4mZeUqzrNMgICxeleTA/p8NfOkRzx/3GxM2Y
-         tRpVjmIhwh9ew0q2pMCpXP7t46UyFoMqDxOTRx4+qweJqindPSznFHSzUKeDD98wHjHy
-         AS+ggjL0hLiYhJvqS738ERwPZ6kuUSI6uLt3nhSblVy+fLmw/DFaAis0YdBdx5PM0p7q
-         bpQA==
-X-Gm-Message-State: AOAM5306TojN7+9gYWUakE67Q9qH7yC+QUxLg8CHS6aqG2UMF7apWxCZ
-        ge5sfNU1XXMSlz6Lj4XjrOmhyuihP+HzQFlOpYGXkA==
-X-Google-Smtp-Source: ABdhPJwGYjGEvB3uK5JSPiSaZi1AWFpDFPAHkUfpMxUdAMM7thqAGq7S5c50Og7rtJA2STFokZsz3eMKUTKBUXZI4h0=
-X-Received: by 2002:a05:6870:a44c:b0:de:230:730b with SMTP id
- n12-20020a056870a44c00b000de0230730bmr906724oal.48.1648067207061; Wed, 23 Mar
- 2022 13:26:47 -0700 (PDT)
+        Wed, 23 Mar 2022 16:32:20 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB1D8878E;
+        Wed, 23 Mar 2022 13:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=/P+1boOsbCQ6AVBVCSZ/z5hphLHXogBYDH2FQO7KmI4=; b=Ve7FKq/JIk+7trK6q3RWgSvlnS
+        CrLHPojrgili7GrvVHfgwtk8st5K1uZU3yc0M2ag1k7eKYuAezQJZSLfvd38TXJ+CJqTKqZQyoCTZ
+        MdFb4I9j+y0/A8L7pN2t2qd6ftDI59koFx3nbQtPMOFXqAfJAesd3R6FaTdxA0C00l9Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nX7cs-00CL1M-RO; Wed, 23 Mar 2022 21:30:38 +0100
+Date:   Wed, 23 Mar 2022 21:30:38 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 0/5] net: phy: C45-over-C22 access
+Message-ID: <YjuDbqZom8knPVpm@lunn.ch>
+References: <20220323183419.2278676-1-michael@walle.cc>
 MIME-Version: 1.0
-References: <20220303082140.240745-1-bhupesh.sharma@linaro.org>
- <20220303082140.240745-3-bhupesh.sharma@linaro.org> <YifhMiBXRMOCamOt@builder.lan>
-In-Reply-To: <YifhMiBXRMOCamOt@builder.lan>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 24 Mar 2022 01:56:35 +0530
-Message-ID: <CAH=2NtwVfA_OyfV3vopOWqbgv_T==Fdx-P60EniR9qYuvOnAsQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: sm8150: Add ufs power-domain entries
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        robh+dt@kernel.org, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323183419.2278676-1-michael@walle.cc>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+On Wed, Mar 23, 2022 at 07:34:14PM +0100, Michael Walle wrote:
+> Hi,
+> 
+> This is the result of this discussion:
+> https://lore.kernel.org/netdev/240354b0a54b37e8b5764773711b8aa3@walle.cc/
+> 
+> The goal here is to get the GYP215 and LAN8814 running on the Microchip
+> LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, the
+> LAN8814 has a bug which makes it impossible to use C45 on that bus.
+> Fortunately, it was the intention of the GPY215 driver to be used on a C22
+> bus. But I think this could have never really worked, because the
+> phy_get_c45_ids() will always do c45 accesses and thus on MDIO bus drivers
+> which will correctly check for the MII_ADDR_C45 flag and return -EOPNOTSUPP
+> the function call will fail and thus gpy_probe() will fail. This series
+> tries to fix that and will lay the foundation to add a workaround for the
+> LAN8814 bug by forcing an MDIO bus to be c22-only.
+> 
+> At the moment, the probe_capabilities is taken into account to decide if
+> we have to use C45-over-C22. What is still missing from this series is the
+> handling of a device tree property to restrict the probe_capabilities to
+> c22-only.
 
-On Wed, 9 Mar 2022 at 04:35, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
->
-> On Thu 03 Mar 02:21 CST 2022, Bhupesh Sharma wrote:
->
-> > Add power-domain entries for UFS controller & phy nodes
-> > in sm8150 dts.
-> >
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8150.dtsi | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > index 6012322a5984..7aa879eb24d7 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > @@ -1637,6 +1637,8 @@ ufs_mem_hc: ufshc@1d84000 {
-> >                       phy-names = "ufsphy";
-> >                       lanes-per-direction = <2>;
-> >                       #reset-cells = <1>;
-> > +
-> > +                     power-domains = <&gcc UFS_PHY_GDSC>;
->
-> It seems odd that the controller would be in the PHY power-domain?
+We have a problem here with phydev->is_c45.
 
-Ok.
+In phy-core.c, functions __phy_read_mmd() and __phy_write_mmd() it
+means perform c45 transactions over the bus. We know we want to access
+a register in c45 space because we are using an _mmd() function.
 
-> >                       resets = <&gcc GCC_UFS_PHY_BCR>;
-> >                       reset-names = "rst";
-> >
-> > @@ -1687,6 +1689,9 @@ ufs_mem_phy: phy@1d87000 {
-> >                       clocks = <&gcc GCC_UFS_MEM_CLKREF_CLK>,
-> >                                <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
-> >
-> > +                     power-domains = <&gcc UFS_CARD_GDSC>,
-> > +                                     <&gcc UFS_PHY_GDSC>;
->
-> And "card" is typically related to the second UFS interface, so I
-> suspect you only would need the last one of these?
+In phy.c, it means does this PHY have c45 registers and we should
+access that register space, or should we use the c22 register
+space. So far example phy_restart_aneg() decides to either call
+genphy_c45_restart_aneg() or genphy_restart_aneg() depending on
+is_c45.
 
-Right, I will send a fixed v4 version shortly.
+So a PHY with C45 register space but only accessible by C45 over C22
+is probably going to do the wrong thing with the current code.
 
-Thanks,
-Bhupesh
+For this patchset to work, we need to cleanly separate the concepts of
+what sort of transactions to do over the bus, from what register
+spaces the PHY has. We probably want something like phydev->has_c45 to
+indicate the register space is implemented, and phydev->c45_over_c22
+to indicate what sort of transaction should be used in the _mmd()
+functions.
 
-> > +                     power-domain-names = "ufs_card_gdsc", "ufs_phy_gdsc";
-> >                       resets = <&ufs_mem_hc 0>;
-> >                       reset-names = "ufsphy";
-> >                       status = "disabled";
-> > --
-> > 2.35.1
-> >
+Your patches start in that direction, but i don't think it goes far
+enough.
+
+	Andrew

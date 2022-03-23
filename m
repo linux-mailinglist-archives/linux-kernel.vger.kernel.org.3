@@ -2,74 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C13E4E4A2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 01:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D7E4E4A3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 01:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240973AbiCWAtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 20:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S240994AbiCWA42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 20:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiCWAtg (ORCPT
+        with ESMTP id S240982AbiCWA4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 20:49:36 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B641EEE3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:48:07 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id f5-20020a6be805000000b00649b9faf257so12550ioh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:48:07 -0700 (PDT)
+        Tue, 22 Mar 2022 20:56:25 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E4D1C114
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:54:57 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2e612af95e3so1094377b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 17:54:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sfUegMBeYYiiRns59gtWp+YXqbRso2Oj2xnfPVvjevI=;
+        b=U+sX/fLtiqTK3yvsXkikjSeItH+X+nSGQyje2Br7Q4iQiy3UqEuL3dLrgkOhnl8pTR
+         9fFzC3G5a7JJGVRHUgz40lzRl+b6Q0TGQikCkbI/THRdfHLT3Qa1+9kDMgUJv+hLe3Ms
+         a1Z+oGmbhGaq2ON0g4ns2fG5kvHNn+9R4WqA43aSw+KVETGgPErmaIABI7mXxy0ZbXAw
+         xiVAJ97GB5PBWV1VBulnR9ZvuJohS1ARzJ7sWQC7/6BqqZ/ajWUlj7TbZjMaOUDAEtLn
+         c4KMJXD5UnsGl6SoOCdACj8BZh08zN6DuLKCdCeizK7I7lVACXROBgchN+QPTHVgz0uE
+         XRRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=MG5Y8xILdnFlJljeDRhJEgQB6FlTo+9PoQNjAE5QtFg=;
-        b=p477F3aHpIM07oAWFsxc0TWa3tvg5MHvy2eKkKNdoHiJqeNBm6Wc/4+SXFa4jPQvXQ
-         1szyRJIGQKE0v2nztp5hMUE86LPzjayOeD6nBYmdiYqMqRTCBvlEeXVn9W3vS8VFaxq2
-         4gNNSPYA7ojExSd2C2uLOALY5jQVF/cHtlGZ9kxcUzO/ITaJTqcdLPDavYcsF7Zydl4q
-         HVqoYDDX5D89QqgWhKnb8YpFJ8DJhlxPDWvNbTQfWWxbOnlyGvQytgp93u/gv071s5IN
-         f9S7iZwc7QEZMkv+osvRxyQHxBU2uosVO6u79BwOB5XqrOj9osSXFJ0OZ4AAYWFjRxy4
-         6PlA==
-X-Gm-Message-State: AOAM532SYOZRylFKdZAdm0VggiXdsnxzQZY9ipnJ6m4soi8/3s06qSNv
-        4CnXuDsPqHj4FEjxMwH7C4FIRl/PVtPuxolESLNPrNQIJKqG
-X-Google-Smtp-Source: ABdhPJzptHHQrN8r1mX3409unrkLHPcL2SBen3Iw3BjiPGI4qJqSBSa7xKT6pKtQAVfZwGv1L/fSJM4YvdlQx/82p0qPPCGBE8T6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sfUegMBeYYiiRns59gtWp+YXqbRso2Oj2xnfPVvjevI=;
+        b=ch0hi4jHP0tHq4wDOuJXThV6sOvtcgnb9imVLpsyuXoHvf/5rdXzmoPEeHz7zpu5CZ
+         nTKJhCP28vhFRQJCRyei7t39ZLqhKL72YOql9D598j0EoNdNpFvBFdMz6dJLjmti0Zfc
+         zTtRjEAbjfKlbyL8ot0QuGEtZYL94D0p/9CKYr4y0jSYfab9+1wHnwEL+nxuZ2+dIynR
+         /CMeJuohU7UxzlbFH0Oew2+leSuelt1L0Onhd1Zlx7R23UEYy3V99B6G5UEiA712jIoZ
+         vJ0n/pklZgM+z5qyDXQ09ytqhtAQuCjjT/J5rIKAdVL+dgwAPpdO4NRe0scye/1VHiiE
+         xhLg==
+X-Gm-Message-State: AOAM530qqbBFrN29Com2YjfBb4jIoHruok5YUwQ6IB9N3A/1r4jJxb8y
+        wjElyhDLCcailla9QjSVEqJ+ewJTF44VZsh0ORZugQ==
+X-Google-Smtp-Source: ABdhPJwP70fUFnI4oX1eztrDbLnE0rxmFFr92MzCuhKOI6K04pTXyBgw2tJIVhHfZeW0+RChnNOSxeXahkwqWvADr/w=
+X-Received: by 2002:a81:108c:0:b0:2e5:cfac:e62e with SMTP id
+ 134-20020a81108c000000b002e5cface62emr27418779ywq.113.1647996896020; Tue, 22
+ Mar 2022 17:54:56 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:22e:b0:321:675d:aa77 with SMTP id
- f14-20020a056638022e00b00321675daa77mr1273076jaq.152.1647996487309; Tue, 22
- Mar 2022 17:48:07 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 17:48:07 -0700
-In-Reply-To: <8bcf2234-983e-171f-90dd-ff0c07412b46@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000379f1d05dad8157a@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in add_wait_queue
-From:   syzbot <syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk,
-        gregkh@linuxfoundation.org, io-uring@vger.kernel.org,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <cover.1646422845.git.isaku.yamahata@intel.com> <6e096d8509ef40ce3e25c1e132643e772641241b.1646422845.git.isaku.yamahata@intel.com>
+In-Reply-To: <6e096d8509ef40ce3e25c1e132643e772641241b.1646422845.git.isaku.yamahata@intel.com>
+From:   Erdem Aktas <erdemaktas@google.com>
+Date:   Tue, 22 Mar 2022 17:54:45 -0700
+Message-ID: <CAAYXXYy-LU+FCt3VDubjhwYPk1TEKc9qshPp2r8tTvcXXPRnOQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 073/104] KVM: TDX: track LP tdx vcpu run and
+ teardown vcpus on descroing the guest TD
+To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Cc:     "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Mar 4, 2022 at 11:50 AM <isaku.yamahata@intel.com> wrote:
+>
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> When shutting down the machine, (VMX or TDX) vcpus needs to be shutdown on
+> each pcpu.  Do the similar for TDX with TDX SEAMCALL APIs.
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/vmx/main.c    | 23 +++++++++++--
+>  arch/x86/kvm/vmx/tdx.c     | 70 ++++++++++++++++++++++++++++++++++++--
+>  arch/x86/kvm/vmx/tdx.h     |  2 ++
+>  arch/x86/kvm/vmx/x86_ops.h |  4 +++
+>  4 files changed, 95 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index 2cd5ba0e8788..882358ac270b 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -13,6 +13,25 @@ static bool vt_is_vm_type_supported(unsigned long type)
+>         return type == KVM_X86_DEFAULT_VM || tdx_is_vm_type_supported(type);
+>  }
+>
+> +static int vt_hardware_enable(void)
+> +{
+> +       int ret;
+> +
+> +       ret = vmx_hardware_enable();
+> +       if (ret)
+> +               return ret;
+> +
+> +       tdx_hardware_enable();
+> +       return 0;
+> +}
+> +
+> +static void vt_hardware_disable(void)
+> +{
+> +       /* Note, TDX *and* VMX need to be disabled if TDX is enabled. */
+> +       tdx_hardware_disable();
+> +       vmx_hardware_disable();
+> +}
+> +
+>  static __init int vt_hardware_setup(void)
+>  {
+>         int ret;
+> @@ -199,8 +218,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>
+>         .hardware_unsetup = vt_hardware_unsetup,
+>
+> -       .hardware_enable = vmx_hardware_enable,
+> -       .hardware_disable = vmx_hardware_disable,
+> +       .hardware_enable = vt_hardware_enable,
+> +       .hardware_disable = vt_hardware_disable,
+>         .cpu_has_accelerated_tpr = report_flexpriority,
+>         .has_emulated_msr = vmx_has_emulated_msr,
+>
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index a6b1a8ce888d..690298fb99c7 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -48,6 +48,14 @@ struct tdx_capabilities tdx_caps;
+>  static DEFINE_MUTEX(tdx_lock);
+>  static struct mutex *tdx_mng_key_config_lock;
+>
+> +/*
+> + * A per-CPU list of TD vCPUs associated with a given CPU.  Used when a CPU
+> + * is brought down to invoke TDH_VP_FLUSH on the approapriate TD vCPUS.
+> + * Protected by interrupt mask.  This list is manipulated in process context
+> + * of vcpu and IPI callback.  See tdx_flush_vp_on_cpu().
+> + */
+> +static DEFINE_PER_CPU(struct list_head, associated_tdvcpus);
+> +
+>  static u64 hkid_mask __ro_after_init;
+>  static u8 hkid_start_pos __ro_after_init;
+>
+> @@ -87,6 +95,8 @@ static inline bool is_td_finalized(struct kvm_tdx *kvm_tdx)
+>
+>  static inline void tdx_disassociate_vp(struct kvm_vcpu *vcpu)
+>  {
+> +       list_del(&to_tdx(vcpu)->cpu_list);
+> +
+>         /*
+>          * Ensure tdx->cpu_list is updated is before setting vcpu->cpu to -1,
+>          * otherwise, a different CPU can see vcpu->cpu = -1 and add the vCPU
+> @@ -97,6 +107,22 @@ static inline void tdx_disassociate_vp(struct kvm_vcpu *vcpu)
+>         vcpu->cpu = -1;
+>  }
+>
+> +void tdx_hardware_enable(void)
+> +{
+> +       INIT_LIST_HEAD(&per_cpu(associated_tdvcpus, raw_smp_processor_id()));
+> +}
+> +
+> +void tdx_hardware_disable(void)
+> +{
+> +       int cpu = raw_smp_processor_id();
+> +       struct list_head *tdvcpus = &per_cpu(associated_tdvcpus, cpu);
+> +       struct vcpu_tdx *tdx, *tmp;
+> +
+> +       /* Safe variant needed as tdx_disassociate_vp() deletes the entry. */
+> +       list_for_each_entry_safe(tdx, tmp, tdvcpus, cpu_list)
+> +               tdx_disassociate_vp(&tdx->vcpu);
+> +}
+> +
+>  static void tdx_clear_page(unsigned long page)
+>  {
+>         const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
+> @@ -230,9 +256,11 @@ void tdx_mmu_prezap(struct kvm *kvm)
+>         struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+>         cpumask_var_t packages;
+>         bool cpumask_allocated;
+> +       struct kvm_vcpu *vcpu;
+>         u64 err;
+>         int ret;
+>         int i;
+> +       unsigned long j;
+>
+>         if (!is_hkid_assigned(kvm_tdx))
+>                 return;
+> @@ -248,6 +276,17 @@ void tdx_mmu_prezap(struct kvm *kvm)
+>                 return;
+>         }
+>
+> +       kvm_for_each_vcpu(j, vcpu, kvm)
+> +               tdx_flush_vp_on_cpu(vcpu);
+> +
+> +       mutex_lock(&tdx_lock);
+> +       err = tdh_mng_vpflushdone(kvm_tdx->tdr.pa);
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Hi Isaku,
 
-Reported-and-tested-by: syzbot+950cee6d91e62329be2c@syzkaller.appspotmail.com
+I am wondering about the impact of the failures on these functions. Is
+there any other function which recovers any failures here?
+When I look at the tdx_flush_vp function, it seems like it can fail
+due to task migration so tdx_flush_vp_on_cpu might also fail and if it
+fails, tdh_mng_vpflushdone returns err. Since tdx_vm_teardown does not
+return any error , how the VMM can free the keyid used in this TD.
+Will they be forever in "used state"?
+Also if tdx_vm_teardown fails, the kvm_tdx->hkid is never set to -1
+which will prevent tdx_vcpu_free to free and reclaim the resources
+allocated for the vcpu.
 
-Tested on:
-
-commit:         7d58de1a io_uring: don't recycle provided buffer if pu..
-git tree:       git://git.kernel.dk/linux-block for-5.18/io_uring
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3172c0bf8614827
-dashboard link: https://syzkaller.appspot.com/bug?extid=950cee6d91e62329be2c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+-Erdem
+> +       mutex_unlock(&tdx_lock);
+> +       if (WARN_ON_ONCE(err)) {
+> +               pr_tdx_error(TDH_MNG_VPFLUSHDONE, err, NULL);
+> +               return;
+> +       }
+> +
+>         cpumask_allocated = zalloc_cpumask_var(&packages, GFP_KERNEL);
+>         for_each_online_cpu(i) {
+>                 if (cpumask_allocated &&
+> @@ -472,8 +511,22 @@ int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+>
+>  void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+>  {
+> -       if (vcpu->cpu != cpu)
+> -               tdx_flush_vp_on_cpu(vcpu);
+> +       struct vcpu_tdx *tdx = to_tdx(vcpu);
+> +
+> +       if (vcpu->cpu == cpu)
+> +               return;
+> +
+> +       tdx_flush_vp_on_cpu(vcpu);
+> +
+> +       local_irq_disable();
+> +       /*
+> +        * Pairs with the smp_wmb() in tdx_disassociate_vp() to ensure
+> +        * vcpu->cpu is read before tdx->cpu_list.
+> +        */
+> +       smp_rmb();
+> +
+> +       list_add(&tdx->cpu_list, &per_cpu(associated_tdvcpus, cpu));
+> +       local_irq_enable();
+>  }
+>
+>  void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+> @@ -522,6 +575,19 @@ void tdx_vcpu_free(struct kvm_vcpu *vcpu)
+>                 tdx_reclaim_td_page(&tdx->tdvpx[i]);
+>         kfree(tdx->tdvpx);
+>         tdx_reclaim_td_page(&tdx->tdvpr);
+> +
+> +       /*
+> +        * kvm_free_vcpus()
+> +        *   -> kvm_unload_vcpu_mmu()
+> +        *
+> +        * does vcpu_load() for every vcpu after they already disassociated
+> +        * from the per cpu list when tdx_vm_teardown(). So we need to
+> +        * disassociate them again, otherwise the freed vcpu data will be
+> +        * accessed when do list_{del,add}() on associated_tdvcpus list
+> +        * later.
+> +        */
+> +       tdx_flush_vp_on_cpu(vcpu);
+> +       WARN_ON(vcpu->cpu != -1);
+>  }
+>
+>  void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
+> index 8b1cf9c158e3..180360a65545 100644
+> --- a/arch/x86/kvm/vmx/tdx.h
+> +++ b/arch/x86/kvm/vmx/tdx.h
+> @@ -81,6 +81,8 @@ struct vcpu_tdx {
+>         struct tdx_td_page tdvpr;
+>         struct tdx_td_page *tdvpx;
+>
+> +       struct list_head cpu_list;
+> +
+>         union tdx_exit_reason exit_reason;
+>
+>         bool initialized;
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index ceafd6e18f4e..aae0f4449ec5 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -132,6 +132,8 @@ void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+>  bool tdx_is_vm_type_supported(unsigned long type);
+>  void __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
+>  void tdx_hardware_unsetup(void);
+> +void tdx_hardware_enable(void);
+> +void tdx_hardware_disable(void);
+>
+>  int tdx_vm_init(struct kvm *kvm);
+>  void tdx_mmu_prezap(struct kvm *kvm);
+> @@ -156,6 +158,8 @@ static inline void tdx_pre_kvm_init(
+>  static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
+>  static inline void tdx_hardware_setup(struct kvm_x86_ops *x86_ops) {}
+>  static inline void tdx_hardware_unsetup(void) {}
+> +static inline void tdx_hardware_enable(void) {}
+> +static inline void tdx_hardware_disable(void) {}
+>
+>  static inline int tdx_vm_init(struct kvm *kvm) { return -EOPNOTSUPP; }
+>  static inline void tdx_mmu_prezap(struct kvm *kvm) {}
+> --
+> 2.25.1
+>

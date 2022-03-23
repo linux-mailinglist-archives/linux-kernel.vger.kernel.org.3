@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C046A4E5888
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4397D4E588F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 19:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240166AbiCWSjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 14:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S244654AbiCWSl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 14:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238767AbiCWSjv (ORCPT
+        with ESMTP id S232615AbiCWSl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 14:39:51 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA961E3F5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:38:17 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id r22so4612182ejs.11
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 11:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JsH2SIUTrsYJX8zmjcQSu5hxXE5Ybek62ru5rVjSD7A=;
-        b=eZkOyr5ipSOEyIaKi0RWFAaNJ6zbGXp8L0jzeF10aH5B4vhrsB9UpLMn7mQmn+dQn5
-         wMkGvPw+1qRPsVxG/Ug6yNmt5/Kepqq3YzzD0RVmt3KPRryxnF0eE6qx6PaQfy3P3n0u
-         8WT2X7IgjBlZG112zAKt1B96P4bbzh/u7jBUUIIrC5Wi9Ft23Us/+XHbQGgf6lxb0BCP
-         yTqX5wfdvLCBEDKTdGpCT1T85ke+il9XVbUENQHF2kBATRBpOjAMfX6dg70jbIpq9Gps
-         wTDzqVolirKFCPH5CLgnzfW/YBzltdd3pS4jviyozQhjcthcAF/nNnOhWlxsJRMm7WDj
-         C8hQ==
+        Wed, 23 Mar 2022 14:41:26 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCC91E3F5;
+        Wed, 23 Mar 2022 11:39:56 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id k10so2584442oia.0;
+        Wed, 23 Mar 2022 11:39:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JsH2SIUTrsYJX8zmjcQSu5hxXE5Ybek62ru5rVjSD7A=;
-        b=TVQwzw7n7hbd5wWpLQLcYfhK041nkTblNhYtAeE9wIkhVRO7pft8qhZxFbNEJaQiAC
-         KDZbzDDUaO/58wEN5XOsm2TsJm/rAD5nvJDkMou5bQPrbjUayrbKvZ2Ontuc+fBarlDW
-         NV5dgBo/V3bO/OAQQlayy9Becxt1u7Dyze1PddO5IPv/HVVChurAwFaNKlNJOmYGp1q1
-         i+BQ6UmlR4FjEie3un9+YGZQ45biUTxm9ybSLRgGGly0UgZFH3Mmd07rQmqPa3uDgiqq
-         HCFC3GM239Riyrcw7ilQ3qgvmzpMi8h160waB2i7yKiQowftEmVfgHYiAyNFJXBKqTEg
-         cX7g==
-X-Gm-Message-State: AOAM5320KPo2lxzVVY/anNk37p4aYJnU2kB8poa6CoRfnncXuTmVx4eV
-        X3sae6G7QrOiaXFwfow1mULMy4DtyaNGKrejaKuU7A==
-X-Google-Smtp-Source: ABdhPJyBBF/hTWA2LGiY86ag+BZL5f9TnZ6rcxh1EVMGytKL9CE/oPbM43JdHk6KoChnnPqBvP/t5NTH6fzCJauVAG4=
-X-Received: by 2002:a17:907:9602:b0:6df:e82c:f84 with SMTP id
- gb2-20020a170907960200b006dfe82c0f84mr1587691ejc.590.1648060691197; Wed, 23
- Mar 2022 11:38:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6IJ7cycfuyyCexwHrRxoU1gZ16ubOu37ElUcjTsxXYM=;
+        b=wlZNWcyX2BFTJj9jHXEEegh9pdiRdbQcA7vhY+po6PUKPujJpckeVlGJouvs5f3+ng
+         hUfOH3rRkZiP9QG9wWNSBjC58o/9gEj7Kx73uSCM36+XhP4Gj99jqXFHnQ9sJXzkN3C6
+         5DuURzfPpK9/eu1TiFDey9xdiVknNMh5Kf+8OYEi6ExhrShsHz5qeODsii6uclPqARx/
+         ttRCma6i5h+vTb9dL3HRbDQCYsX5qxijj++2NAR9yHHup+YAHFhCRzSozqumVm3eUydO
+         dqc7e12gcr8RT8WCbtOnJGwqggTKBAX64iy7y2V9uWY5RC+zaLDuwCF3jP8Pa9wjMTf8
+         CWUA==
+X-Gm-Message-State: AOAM533T9jH1gMKYp8lL07BoLXw2rPYsc19/5gSV1B8nbdvzFW9MvDf3
+        bwUaA5xULsHEkGykbet63w==
+X-Google-Smtp-Source: ABdhPJyHW8ZDlvYfWru61+0oXURh2510vlMRwO3N0Pu7nI+5UqvWri99WhDWPAfwIGOqucmbQllVuw==
+X-Received: by 2002:a05:6808:23c8:b0:2ec:cf83:612a with SMTP id bq8-20020a05680823c800b002eccf83612amr5479019oib.255.1648060795836;
+        Wed, 23 Mar 2022 11:39:55 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j145-20020acaeb97000000b002d9f37166c1sm279431oih.17.2022.03.23.11.39.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 11:39:55 -0700 (PDT)
+Received: (nullmailer pid 229564 invoked by uid 1000);
+        Wed, 23 Mar 2022 18:39:54 -0000
+Date:   Wed, 23 Mar 2022 13:39:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>
+Cc:     Maxime Ripard <mripard@kernel.org>, linux-sunxi@lists.linux.dev,
+        Chen-Yu Tsai <wens@csie.org>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 3/3] dt-bindings: arm: sunxi: add A20-olinuxino-lime2
+ Revisions G/G1/G2
+Message-ID: <Yjtpev468IWa59fx@robh.at.kernel.org>
+References: <20220315095244.29718-1-ynezz@true.cz>
+ <20220315095244.29718-4-ynezz@true.cz>
 MIME-Version: 1.0
-References: <20220322144447.3563146-1-tongtiangen@huawei.com> <20220322144447.3563146-5-tongtiangen@huawei.com>
-In-Reply-To: <20220322144447.3563146-5-tongtiangen@huawei.com>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Wed, 23 Mar 2022 14:37:34 -0400
-Message-ID: <CA+CK2bAUKB0SM3dBM0WauGp1WVKVzouQwOy8Z+a4CD38TZctpQ@mail.gmail.com>
-Subject: Re: [PATCH -next v2 4/4] riscv: mm: add support for page table check
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220315095244.29718-4-ynezz@true.cz>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,15 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 10:26 AM Tong Tiangen <tongtiangen@huawei.com> wrote:
->
-> As commit d283d422c6c4 ("x86: mm: add x86_64 support for page table
-> check"), add some necessary page table check hooks into routines that
-> modify user page tables.
->
-> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+On Tue, 15 Mar 2022 10:52:44 +0100, Petr Štetiar wrote:
+> Add DT bindings for A20-olinuxino-lime2 Revisions G/G1/G2 boards.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Petr Štetiar <ynezz@true.cz>
+> ---
+>  Documentation/devicetree/bindings/arm/sunxi.yaml | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
 
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-
-Thanks,
-Pasha
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,78 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB314E4ADC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 03:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F724E4ADE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 03:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241148AbiCWCYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 22:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
+        id S241165AbiCWCZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 22:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiCWCYq (ORCPT
+        with ESMTP id S241154AbiCWCZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 22:24:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E197005A;
-        Tue, 22 Mar 2022 19:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=/Lb1/WyPsA7fMTgF5A6Jux3cNUK0oP7V/t/r4QRdicM=; b=BU0c8AaPNPLJZiPHQ79bI7H0DI
-        j7sWRsBhPnE2grYYMJsUPxpa+jRvcZm/RrEpZoGtjuIS8n/INHTjN7xl4lYijwLsgwEt5L3rdl3bJ
-        BgLFDS5dT0IVpejjnJLnAbwQZ3xa410ta8T8IoQMPJ1oXy4t5YtKbOjS+nXDL/lxxL05QoRgGk/7N
-        v/20hSBNsOgc/4oJllNPNVh0WoBop6W9rX/AKBhk6aT3twrwdWXTJasxpgT5V+ArROjK6tX+gwtTF
-        hBKtInjAjgb901McdWsfyKn7qL/lDhNATdOfCPU2Lmb+LUcA6mHJOptdLGhR/DGvn6vUwcTEFBzMZ
-        m6RJQlDg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWqeT-00C8Yy-Px; Wed, 23 Mar 2022 02:23:10 +0000
-Message-ID: <bda6d230-90d8-fc0f-1c69-4eaf7ee67b89@infradead.org>
-Date:   Tue, 22 Mar 2022 19:23:05 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] Docs/admin: alphabetize some kernel-parameters
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-References: <20220321054813.5059-1-rdunlap@infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220321054813.5059-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 22 Mar 2022 22:25:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0AB7005E;
+        Tue, 22 Mar 2022 19:23:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66650B81DB1;
+        Wed, 23 Mar 2022 02:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6A27C340F2;
+        Wed, 23 Mar 2022 02:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648002209;
+        bh=1cvkF/9sYmW6g5wCOxL9pkp7ASz+ZnvBaAaw5jFv7CA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JynR6umewdVdS9sJsJpEGY4XJKO6Ry9NkATSBVbSdZrtZbNO/nJ3Vn8uJoZEpGoMM
+         PJb0tU3AXQKMzn9qjR5MTBBWRKMFR6Knk2Oll0Km7p+4sGoxqYZylCItGXaNZkhKDL
+         X2rsGmWE3XZSx1C6P5du3W13ExYQEXOQY1+XLbgf1jg3AzfOEAL+if3aH6ESxe5UZo
+         33/lNyykQueClf7VldoZH5cfcqntWvqrX7BPQojeQoO9mHSo21h7dAWTccnG/Yrgkt
+         peNVyyNMQoDBwBWV/uRuq+94RyG/W4LA86A2dmRDBV6uZZnMEsnPKCk7PjdaclQJ1q
+         WLSzftzOI9ODQ==
+Date:   Wed, 23 Mar 2022 11:23:23 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-Id: <20220323112323.65337d76d96836e487064a99@kernel.org>
+In-Reply-To: <Yjneyn8o06svJkY4@hirez.programming.kicks-ass.net>
+References: <20220321112805.1393f9b9@gandalf.local.home>
+        <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
+        <20220321121209.3b95e406@gandalf.local.home>
+        <20220321121549.1c8588c5@gandalf.local.home>
+        <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
+        <20220321124551.3d73660b@gandalf.local.home>
+        <Yjis6hJKUj/WrSwK@hirez.programming.kicks-ass.net>
+        <20220321125419.0a20415c@gandalf.local.home>
+        <YjmAz0MbdW4Q1Cnv@hirez.programming.kicks-ass.net>
+        <20220322091242.1ad0206b@gandalf.local.home>
+        <Yjneyn8o06svJkY4@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jon-
-I'll send a v2 of this one also.
+On Tue, 22 Mar 2022 15:35:54 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-On 3/20/22 22:48, Randy Dunlap wrote:
-> Move some out-of-place kernel parameters into their correct
-> locations.
-> Also add a HIBERNATION keyword in kernel-parameters.rst.
+> On Tue, Mar 22, 2022 at 09:12:42AM -0400, Steven Rostedt wrote:
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> ---
-> This is the first of several similar patches. Hopefully breaking
-> them up will help with patch problems. If there are other suggestions,
-> please let me know.
+> > > Suppose:
+> > > 
+> > > notrace func_B()
+> > > {
+> > > 	...
+> > > }
+> > > 
+> > > func_A()
+> > > {
+> > > 	...
+> > > 	return func_B();
+> > > }
+> > > 
+> > > then inhibiting tail calls would end up looking like:
+> > 
+> > If we inhibit tail calls, then we do not need to make func_B notrace.
 > 
-> Alternate subject: Sorting is hard, let's go shopping
+> Dude, you're arguing in circles :-( the notrace was a given.
 > 
->  Documentation/admin-guide/kernel-parameters.rst |    1 
->  Documentation/admin-guide/kernel-parameters.txt |  113 +++++++-------
->  2 files changed, 58 insertions(+), 56 deletions(-)
+> > > func_A:
+> > > 	call __fentry__
+> > > 	...
+> > > 	call func_B
+> > > 	call __fexit__
+> > > 	ret
+> > > 
+> > > Then A is fully traced, B is invisible, as per spec. What is the
+> > > problem?
+> > 
+> > The above is fine, but then func_B is not a tail call and can also be
+> > traced.
+> 
+> Again, B is notrace as a given. This was all about how to deal with
+> notrace functions.
+> 
+> I suggested inhibiting tail-call to notrace, you said no. You now seem to
+> agree that solves it.
+> 
+> > > The problem you initially had, of doing a tail-call into a notrace, was
+> > > that the __fexit__ call went missing, because notrace will obviously not
+> > > have that. But that's avoided by inhibiting all tail-calls between
+> > > notrace and !notrace functions (note that notrace must also not
+> > > tail-call !notrace).
+> > 
+> > I'm confused by the above. Why can't a notrace tail call a !notrace?
+> > If we tail call to a
+> > 
+> > func_B:
+> > 	call __fentry__
+> > 	...
+> > 	call __fexit__
+> > 	ret
+> > 
+> > then the fentry and fexit show a perfectly valid trace of func_B.
+> 
+> Bah; I thought I had a case this morning, but now I can't seem to recall
+> :/
+> 
+> > > Your worry seems to stem about loosing visiblilty of !notrace functions,
+> > > but AFAICT that doesn't happen.
+> > 
+> > My worry is:
+> > 
+> > func_A:
+> > 	call __fentry__
+> > 	...
+> > 	jmp func_B
+> > 
+> > Where do we do the call __fexit__ ?
+> 
+> In B (or wherever if B again does a tail-call).
+> 
+> > That was the original concern, and I think the proposed solutions have
+> > convoluted our thoughts about what we are trying to fix. So let's go back
+> > to the beginning, and see how to deal with it.
+> > 
+> > That is, we have:
+> > 
+> > func_C:
+> > 	call __fenty__
+> > 	...
+> > 	call func_A:
+> > 	...
+> > 	call func_B:
+> > 	...
+> > 	call __fexit__
+> > 	ret
+> > 
+> > func_A:
+> > 	call __fentry__
+> > 	...
+> 	call __ftail__
+> > 	jmp func_B
+> > 
+> > func_B:
+> > 	call __fentry__
+> > 	...
+> > 	call __fexit__
+> > 	ret
+> > 
+> > Where the above is C calling A and B as normal functions, A calling B as a
+> > tail call and B just being a normal function called by both A and C (and
+> > many other functions).
+> 
+> We need the __ftail__ thing to mark the trace-stack entry of func_A as
+> complete, then any future __fexit__ will be able to pop all completed
+> entries.
+> 
+> In recap:
+> 
+> 	__fentry__ -- push on trace-stack
+> 	__ftail__  -- mark top-most entry complete
+> 	__fexit__  -- mark top-most entry complete;
+> 	              pop all completed entries
+> 
+> inhibit tail-calls to notrace.
+> 
+> > And note, I do not want to limit function tracing (which does not rely on
+> > __fexit__) just because we can't figure out how to handle __fexit__.
+> 
+> I'm not following. Regular function tracing needs none of this.
+> 
+> It's function graph tracing, kretprobes and whatever else this rethook
+> stuff is about that needs this because return trampolines will stop
+> working somewhere in the not too distant future.
 
+I see the __fexit__ is needed, but why __ftail__ is needed? I guess because
+func_B is notrace, in that case the __fexit__ will not be in the func_B.
+Am I correct?
+
+Thank you,
 
 -- 
-~Randy
+Masami Hiramatsu <mhiramat@kernel.org>

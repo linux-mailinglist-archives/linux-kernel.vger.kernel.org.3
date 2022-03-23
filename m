@@ -2,129 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930834E5621
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6994E562C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 17:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245182AbiCWQR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 12:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S245378AbiCWQTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 12:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbiCWQRZ (ORCPT
+        with ESMTP id S233715AbiCWQTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 12:17:25 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED7F5E760
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:15:55 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so3871739pjo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pcx7/9ycFKhUp3zVINYYwi3rKHTntPB1s1CdzdzJkI8=;
-        b=eGGfvi/aUXQQclLi2Amu4UiMJiLdizTXDGRXWO/qo/pjeq0UjwJ+/KmjV1QJc9ydpy
-         pL0ZR9rWXELEPhhUCWfxF8mn7RgGLmXlPvf0DtTZgMVU+r9GW/CSWpNzpJ+9LMDRQ9q5
-         v12h6RkJp5B7xF9FmyJYBNc7GzflaBOdqWriG/uwfJNh8U18BYF8s/42UTwJKxYKgDs3
-         IPg8D7JKTBO3BA/JFEjYbq0nkr4qIDA5RRRfZo5B8ecvmPEJSAeK9HZiZQc8BrVS8kHJ
-         LO6eRGpdTF/k/4UWjOGozhBoRo0xDEdCEJVRLjh5COk7eOXaP5EwZPWVwNPuzQ8Wz0YT
-         EpbA==
+        Wed, 23 Mar 2022 12:19:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C20DC6E7A8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648052261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LMilvWqrMPZjKPNSjn2quNpLYv1XEy4/3uEFo9XhgfY=;
+        b=iImOCK1DsV8u4JB+hZOQFX0P+avcIJwUKWIspr0KYdJuql5oKn4+wnKvmSVtVy9cRKGTGs
+        UerOeZRjcQlE7p3dPcM42b+rQLqTKW0IZzR+AjYOyA+zjVrAMZ+TxZvzHTpY0eaDv5U2Rk
+        KzuSZDkiEC3sY/nZKTBYAmdwy5xl+NI=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-kPzCGWlmNWyfpjXSQULBeg-1; Wed, 23 Mar 2022 12:17:40 -0400
+X-MC-Unique: kPzCGWlmNWyfpjXSQULBeg-1
+Received: by mail-qt1-f197.google.com with SMTP id p6-20020a05622a00c600b002e1cb9508e8so1524107qtw.20
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 09:17:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pcx7/9ycFKhUp3zVINYYwi3rKHTntPB1s1CdzdzJkI8=;
-        b=pTyqXGNbt2/Jg4SzIpsKrp6hlpkfdwB67ZvuwjkNTMu+lHOGxQ3Bv7glX5e187uHb3
-         rWkgdFaB4GS+KUt3vJlj/xPdEs4eyoRU8gsTR/1uSVuPbqW3U1aHnZdLUgX1k+l6D40F
-         xtpBJDD/f6BYVjLONXse5gYYjEmqf0VmO1GvEChtR7rNt2o+La24awrfm1OgU7TBuyiv
-         0xZJofSVeYHtF4YghaVdGx09TVM3ysCdU0PW8KzNVardD26ElHB4yyQcat3i0poOVjY3
-         bvQQoePSTXF/ZYBCsOZQMVhq72TyT0DWl8BLXw9e8lg9EAn1Icpo2wgUQDaNN18S6glX
-         QmWQ==
-X-Gm-Message-State: AOAM531LPeQcmhmM4ktjzsFSzlRBro01lswmRu5duQ4Nvon+cMtpLeVj
-        gXqESr4+mHvZR+5CHQIN8EaYRQ==
-X-Google-Smtp-Source: ABdhPJyxi08PWO08eYKcX0xvVjJbDB4ehRiQE8BTsiU1yHEEjgcdGYY/QQmGaXBPJattZjY/9m5ulQ==
-X-Received: by 2002:a17:90a:dd45:b0:1bc:9466:9b64 with SMTP id u5-20020a17090add4500b001bc94669b64mr12553848pjv.23.1648052155246;
-        Wed, 23 Mar 2022 09:15:55 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id y13-20020a63b50d000000b0038297275c00sm265964pge.34.2022.03.23.09.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 09:15:54 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 10:15:51 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        mike.leach@linaro.org, anshuman.khandual@arm.com,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 15/15] coresight: etm4x: Cleanup TRCRSCTLRn register
- accesses
-Message-ID: <20220323161551.GB3248686@p14s>
-References: <20220304171913.2292458-1-james.clark@arm.com>
- <20220304171913.2292458-16-james.clark@arm.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=LMilvWqrMPZjKPNSjn2quNpLYv1XEy4/3uEFo9XhgfY=;
+        b=K6YRLBmsZfmGqzj3z9kfUkVZDeiN9SWfK1tmwGokPXi0CWLNIq1BfyMwSAQEqORo2U
+         /WlIN467HhIoGhgWSQqNl3cKNIeoafdUzBx7HZTd+dWw0DNqCP9eycW0Y2r+Vb7GyO6n
+         JHf3P9a6A23bzZ7wEvYDBzeN+8NB5xKd2kPOqnCsDUJoPqOVTbOx/9pT9H2MuW59qD5I
+         UyU9JGVJFHPURUbWWtAG50PcZzyVOUvpgQUp7JOJMd1qCZfOr36NhPE69te/Sn+E35kv
+         BNVwhCq/YbL6alFvsAZBcaW6qs12TIcM8MTQUlIyJWI6HkOMiChFgtBS1IeBOWmH+2LM
+         MYuA==
+X-Gm-Message-State: AOAM530/yElH+/TAo7AHSNnuJ4q8PdCKL9WZpiC5lkxuecqSSAAZVuTL
+        oxywsuocb/iOR/GSgBHYMTcFrdITwn8VP5BoCzLqa0+KQD4YMiX1bI1M0WKy0kPPIM3uYZYZQIt
+        sVPHbjk13U9MW1KyJINQIkhLV
+X-Received: by 2002:ac8:7d0f:0:b0:2e1:cd79:6c3f with SMTP id g15-20020ac87d0f000000b002e1cd796c3fmr456904qtb.551.1648052259716;
+        Wed, 23 Mar 2022 09:17:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwI+ts2Y1HOmiplnzOuO6XQHoN928vcCV0rvB/x+YY/nDDPpeIZrag/6oSq8+QdpPyfB2jmMQ==
+X-Received: by 2002:ac8:7d0f:0:b0:2e1:cd79:6c3f with SMTP id g15-20020ac87d0f000000b002e1cd796c3fmr456865qtb.551.1648052259384;
+        Wed, 23 Mar 2022 09:17:39 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id u20-20020a05620a455400b0067ec0628661sm261739qkp.110.2022.03.23.09.17.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 09:17:38 -0700 (PDT)
+Subject: Re: [PATCH v2] livepatch: Reorder to use before freeing a pointer
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220320015143.2208591-1-trix@redhat.com>
+ <YjtCY1QaA6GI3b+7@alley>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <be3ac729-8d1d-0c2e-6d63-aeb23ca04bbd@redhat.com>
+Date:   Wed, 23 Mar 2022 09:17:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304171913.2292458-16-james.clark@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YjtCY1QaA6GI3b+7@alley>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 05:19:12PM +0000, James Clark wrote:
-> This is a no-op change for style and consistency and has no effect on
-> the binary output by the compiler. In sysreg.h fields are defined as
-> the register name followed by the field name and then _MASK. This
-> allows for grepping for fields by name rather than using magic numbers.
-> 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 7 +++++--
->  drivers/hwtracing/coresight/coresight-etm4x.h       | 7 +++++++
->  2 files changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> index 3ae6f4432646..6ea8181816fc 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> @@ -1726,8 +1726,11 @@ static ssize_t res_ctrl_store(struct device *dev,
->  	/* For odd idx pair inversal bit is RES0 */
->  	if (idx % 2 != 0)
->  		/* PAIRINV, bit[21] */
-> -		val &= ~BIT(21);
-> -	config->res_ctrl[idx] = val & GENMASK(21, 0);
-> +		val &= ~TRCRSCTLRn_PAIRINV;
-> +	config->res_ctrl[idx] = val & (TRCRSCTLRn_PAIRINV |
-> +				       TRCRSCTLRn_INV |
-> +				       TRCRSCTLRn_GROUP_MASK |
-> +				       TRCRSCTLRn_SELECT_MASK);
->  	spin_unlock(&drvdata->spinlock);
->  	return size;
->  }
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index 15704982357f..2c412841b126 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -223,6 +223,13 @@
->  #define TRCBBCTLR_MODE				BIT(8)
->  #define TRCBBCTLR_RANGE_MASK			GENMASK(7, 0)
->  
-> +#define TRCRSCTLRn_PAIRINV			BIT(21)
-> +#define TRCRSCTLRn_INV				BIT(20)
-> +#define TRCRSCTLRn_GROUP_MASK			GENMASK(19, 16)
-> +#define TRCRSCTLRn_SELECT_MASK			GENMASK(15, 0)
-> +
-> +
-> +
 
-Two extra lines.
+On 3/23/22 8:53 AM, Petr Mladek wrote:
+> On Sat 2022-03-19 18:51:43, trix@redhat.com wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Clang static analysis reports this issue
+>> livepatch-shadow-fix1.c:113:2: warning: Use of
+>>    memory after it is freed
+>>    pr_info("%s: dummy @ %p, prevented leak @ %p\n",
+>>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> The pointer is freed in the previous statement.
+>> Reorder the pr_info to report before the free.
+>>
+>> Similar issue in livepatch-shadow-fix2.c
+> I have added the following paragraph:
+>
+> <snip>
+> Note that it is a false positive. pr_info() just prints the address.
+> The freed memory is not accessed. Well, the static analyzer could not
+> know this easily.
+> </snip>
+>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+> and pushed the patch into livepatching/livepatching.git,
+> branch for-5.18/selftests-fixes.
+>
+> IMHO, the patch is so trivial and can be added even in this merge
+> window. There is no need to create more dances around it ;-)
+>
+> Let me know if you disagree. I am going to send the pull request
+> on Friday or Monday.
 
->  /*
->   * System instructions to access ETM registers.
->   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> -- 
-> 2.28.0
-> 
+Do whatever is easier for you.  The addition to the commit log is fine.
+
+Thanks
+
+Tom
+
+>
+> Best Regards,
+> Petr
+>
+

@@ -2,409 +2,509 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD294E528D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9CE4E5295
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 13:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243508AbiCWMzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 08:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
+        id S243653AbiCWM6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 08:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiCWMzh (ORCPT
+        with ESMTP id S243616AbiCWM5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:55:37 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2098.outbound.protection.outlook.com [40.107.20.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFB513F1C;
-        Wed, 23 Mar 2022 05:54:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cNLcTkRtxlC7rUB55AnZEwZr6cKfd0zIIIQGbRtaUmYYADlkVhr6atReuvsUHHXYj/0m75cVoig0u05wGxo7dI9Z89ADaJkHuwWhWG4As2xCSGEOyn/4GSKki0h0WgTursntQ2ehfz8kxuhBMcS6xKogyGvdMCwuLZvXn4aUeCN855Fc1+b9blcGp4Bc0958/RlCrxnjmKsAxbx+u3NTW+sJOOanEJAW0uBapArDOElg74yp5e/WpLk8d452IdXPxQu+Wf25qiZgrNYlFwCfi7BFJlzZbX28TJrtIa/s689DItqIsf1D3QN5TN0u914GPGLZgcX7KTzhG8C6mJVsrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2ic+qa52ur2cadCOrpRm7VMem10hEsNw0iuPxhkcA3k=;
- b=V4VFHBqRP0DWGK3lMpxiMo8NnOkJf8pb+vXvGJBas8/tIF5kOGsx/1qrulExop7lYfY98JcgrgAlV6pebGaG+0OdEVuNO7zgarsuk9pJAKpMu+aZV79/Rjjv4A3TZs9HpQx6CXFId4qXe52RDD0qevyr8NGkOiGY79lDxNt5Ct5fmp3QlsfzieES02pH8Ku9C+0T7E6PIfSaMlQiitfYfmnGxJ+dgwQ55C0RyrsErNru0FSUbMSDHrHghcXLMnPVz8pHC28Mx2iZKvwXQvEx3FdCEhMpEd9r0HBJNuv2/WL8CMcCoCyucL8cvIylRWbDZTfULCamHvsYzbASLPMctg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2ic+qa52ur2cadCOrpRm7VMem10hEsNw0iuPxhkcA3k=;
- b=Qi0g1zlMB5alxf+XZgLT8tqpU/K8CU3NClDetUaUqBfoOjhMtmk1Th6fipiCHQZ6TugKxvBuMNnagLUvy8h3aPRwMrRV1prF9sxPW002q6G3daQBnS1QboOZZY02C5ZmwxMPFs5ERyfu+N1tKzyPpg2bN0fORCvL0g80rX/XBKM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by AM9PR02MB7484.eurprd02.prod.outlook.com (2603:10a6:20b:433::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 23 Mar
- 2022 12:54:04 +0000
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::cc:370f:ef33:4de3]) by AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::cc:370f:ef33:4de3%3]) with mapi id 15.20.5102.017; Wed, 23 Mar 2022
- 12:54:04 +0000
-Message-ID: <b2740ed3-22f3-d11f-2bdd-d0a2d29bcc4f@axentia.se>
-Date:   Wed, 23 Mar 2022 13:54:01 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [v6 2/3] i2c: muxes: pca954x: Add MAX735x/MAX736x support
-Content-Language: en-US
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220216074613.235725-1-patrick.rudolph@9elements.com>
- <20220216074613.235725-3-patrick.rudolph@9elements.com>
- <5658941a-bf81-4ecf-3317-82d2a8244021@axentia.se>
- <CALNFmy0vADcLGcNCCGtPhsXXRCxV549Q5vhdv9v0YQ+HjZOhNQ@mail.gmail.com>
-From:   Peter Rosin <peda@axentia.se>
-Organization: Axentia Technologies AB
-In-Reply-To: <CALNFmy0vADcLGcNCCGtPhsXXRCxV549Q5vhdv9v0YQ+HjZOhNQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: GV3P280CA0067.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:150:a::32) To AM0PR02MB4436.eurprd02.prod.outlook.com
- (2603:10a6:208:ed::15)
+        Wed, 23 Mar 2022 08:57:46 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA317C79F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 05:56:14 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22NBEPYW031665;
+        Wed, 23 Mar 2022 12:55:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=2ytGeKMxoBmTgto2N9cyFp+xiH7mIU0L3pZmNm92dhE=;
+ b=cgNAnOvirTEum15O+5uvyKtbn25eo1y0XCujpPi8K30MTC51dFkGY7kQG9B0/M6WSsCD
+ wZ0uHTMxSLkb7sCH/M8njjWQEiJE4r2J7rnCBt6mAPQuOTz/35Ut+y/vFSoxho3hNnvu
+ /0lOXGWxkwNNmKBZOh+4W3PcTbLN8Q/HoZ7jySQbQOCqFM9/Lm/oT2nlFqmz+WkoPVMK
+ jKkyEdpZiiSqOTnEWBmvOUDYv5LOYxfUciM9tcXe1sZRgxTp6xCMRmYaX3TM37n3Yx0x
+ ZlbR2c6PILMtjNlLOiEBR5PQmzXmYMiv+SjwWPcYvkKgNzmM6cX73SAJpP83YDTj/6d5 nA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ew6ss9bj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Mar 2022 12:55:59 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22NCq7aX028102;
+        Wed, 23 Mar 2022 12:55:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3ew6sagaec-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Mar 2022 12:55:58 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 22NCtvmP038486;
+        Wed, 23 Mar 2022 12:55:57 GMT
+Received: from mlluis-mac.uk.oracle.com (dhcp-10-175-220-180.vpn.oracle.com [10.175.220.180])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3ew6sagacx-1;
+        Wed, 23 Mar 2022 12:55:57 +0000
+From:   Miguel Luis <miguel.luis@oracle.com>
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Cc:     miguel.luis@oracle.com, david.edmondson@oracle.com,
+        joao.m.martins@oracle.com
+Subject: [PATCH] iommu/arm: Expose ARM SMMUv3 related registers via sysfs
+Date:   Wed, 23 Mar 2022 11:54:59 -0100
+Message-Id: <20220323125500.76684-1-miguel.luis@oracle.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c8d81734-d604-4965-21ac-08da0ccc358c
-X-MS-TrafficTypeDiagnostic: AM9PR02MB7484:EE_
-X-Microsoft-Antispam-PRVS: <AM9PR02MB748408799F0D33F1609FE4B2BC189@AM9PR02MB7484.eurprd02.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h6YHnPsGHZX1BTJm9NKn+qBrNu5NNy6gn8bRf8qs7A0nrze2A8t3KQkDbmLNZY78GZ0o6UEC/lBmoFI8iQDOFchiwpnV796eYJ6qoIMhHbWHkac3Q4iL8krSVMLHLRasRJkf1yxSrFxlotaNUH/OnUlZZ2wYUkGgpr/npkQKFqpfBLCioxhep+3Ib0VmcnVjQTNW0fBBkExFazwCGLYDN4e2dDAovKg/GwoKpRFB//JrvWoRTb/s6CmZaPdQC23v5MmLaFbZQgZO51a+ytpsaVgMPR4dQv7Kz1yXXsosncHax6ceol4smxhsmF2/uStI4ruAtarNvN/njZKvkAPCzTwiG6fzhS6QnGbNfloBmf5eg899PufYNlI9EDOodLChdkxfVnJGV10RRZYqMOORLl6aySzSQFtgXRXhPkANryBl/7GcxrzUPofiDkR1YqOYLcwcQCBV/yqBvNpCkZbUzoWARIFwChda79R8t4yzCHxmiqmPFMBWbRZB6O1xJbZsi/0u2cteWe2bexWlmN23xdbEGVomdhZyxY4RUtFrbLNsuHwGfuZFtFtluxh5vwij+nqr6ikrXoCnPF5CwbONGo/9XuGrC3qzNIc1z1kMS6IpxVZUOuTnzQLFUMg7N8A59FM69alq2Hq7cg00Pn8ViKt/PMm+6npvGVxvU94lwgkMOBwkj+XZODBvHf5QAlJ4OhCBihUWbkycR5ePeIdvqo3ZPrghX0rx4m978u39SIE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(136003)(376002)(396003)(366004)(346002)(39830400003)(2906002)(6486002)(2616005)(6916009)(316002)(31696002)(5660300002)(86362001)(8936002)(6666004)(36756003)(38100700002)(8676002)(66476007)(186003)(31686004)(66946007)(4326008)(66556008)(26005)(6506007)(53546011)(6512007)(36916002)(83380400001)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QzBPS084WGVuZFMxOXY1WVI4eU9JdGlQOWZSbVpLSVVtV2tXQ1gxZUJ4dWhk?=
- =?utf-8?B?dUJESXdZaUpmb1p4OGdBazRNcEhoQlhjZzFWRkdCd1ArL2xvVTZ2U0dTcTVx?=
- =?utf-8?B?bFVFRHlFb2J4dDNWeWp4a1NkNFJrbWpOMGFqcHpHKzZGVVNrQjBua3YvcVJh?=
- =?utf-8?B?bnBPeFlEWVFTa2tqNXhFTzFqY21FRXRFWEVHUGZQK1ZPd2xVallCYnJua0kv?=
- =?utf-8?B?VUlvcU0zZHJ2Y1VvSno0OEh6dVh0dXF4eHAyUEFkdWtLeitRTnh4TDdPTU94?=
- =?utf-8?B?Y3k5Y3FlcFdnbEpzSElvZEdGWlIzdU9TaitrbEhJMVJyRDJjdU1YWnRaaTI3?=
- =?utf-8?B?S0k0eUgxVVE4SXAzdDJtcDlVa2ZKWEZHUWQ2enpqcnRiVlJGd05LaldjZ29t?=
- =?utf-8?B?aVUwVGtnbmZtdzJZU0RaVUg4c1VqS2RwYXRJZzVJZGVwTzg2T3daNU9PcTRh?=
- =?utf-8?B?bTZraGtTZS9Ud2tOcE1SLy90dEtSNytwS0FWOU8xZGhWRWREdTVjRWY2eHMy?=
- =?utf-8?B?cFNYWjhxa252VUxtYmhGSkFPYW9hTHNrUks0QWFOb0gyU09TSkNBeXBCdDFV?=
- =?utf-8?B?eHNRSDdLcFFLa0NuaXpLdy9RTlpzTTRwSlFDT0xoNTd0aHc1ZXFjaDI5cGVr?=
- =?utf-8?B?eVN0RTJFQ0EyZmNsZlR4WTZVMFZnVk1NV1BaK1pZM01FZysvK05IZ3gzOW9j?=
- =?utf-8?B?cUt4V2VnZVJXdnIwa3FWeDNIQWdsczFBVFJWeDdQdGhWL1NjQUV6ZmQ0cTVk?=
- =?utf-8?B?YjJ1Y1dnOFBOT1FIM1ExQTE1cm9ZNkRIWXU3V2xYeEFZUWZoSFladHZRYTlD?=
- =?utf-8?B?bzlhdVNMczVNalpJeGo4R2I0RWx1aC9RaFFVUGl3c1RBem8zZDRsZ3ArL05W?=
- =?utf-8?B?Mjk3NjRFZkVsellKY1hTMm0yaTl4T1RZd3BGbTV2ZkFsQU54S1FyZGpVL2Fl?=
- =?utf-8?B?OUNEMDhLVUQxTXc1M0JBazJ5VCt2OHBBcElEYm1meHBZVEFoQ096ZmM5MU1o?=
- =?utf-8?B?RXFTcWRDZmdLMmpRZXRmUEVCWWp1RjhGK3lqakZ0cG1VaWdTZGJ3WG50dDV3?=
- =?utf-8?B?Zjk4bVMzbStzTUdzeXVCNTdFNHFmcHRPMEJra0NGVnZ0RHlFMTdZTmVSamRs?=
- =?utf-8?B?WnYrQVdrdExSalJ5WmZoSVRMVm92UFVJMlFUdG10WnN2aUE0V05UVFZXR0xC?=
- =?utf-8?B?WUl0R1N4bCt5cy9JcVJIYUgwNXZhWFVxZURMbnZiZmZDTzRBcTM1M0h1MTR0?=
- =?utf-8?B?TTF6cGxQaTFTNWNBYVVmS0Q0dXQrMkhZUW43dnBHdUZtOXhVdHRsWmIyME9B?=
- =?utf-8?B?NHdXM1BmWW1SQmp1VGVRa0pMU29IMVJVd3Y2dTRlMk1SaG1qcVVRdm01RVFq?=
- =?utf-8?B?Y3NEb2xYZGdUbk0xbHlma05RWGtqWG5jNDRCS2dPNGNjY3JoVW9QeFNkdXVo?=
- =?utf-8?B?SVp0LzEvSjBqbjdOMHcwczRSZWpnbkVRcUZGU1JBSzd3NGFNWEIvMitKMzJi?=
- =?utf-8?B?RkswVTZkMmNjTnZKS3Y2bkE2NThXbWdWQkgybUpPS05uV0lHTGdQeExyYjRH?=
- =?utf-8?B?YmpIa2hmbkd5VWErYVJweER4V3RaaXM5MHMzUVpDbDRxNzZORWtBcGtoSnl3?=
- =?utf-8?B?YzUvY3U4N1hzcHVYNjB3UXprQWFOK3p4OGk5QWZtNUxpdk10RGNoelk3ZTFu?=
- =?utf-8?B?M0tMVzlJN1pLOVZTdXBzZW8xZElHT2krMXFFYTFGamdCQStXalpOdzZCWm5s?=
- =?utf-8?B?RlFWTCtORVAxNDJxTHQrOGRBOTJrNVQyZThEZUE3R2xsTTBCVnUrdE5lN2Ix?=
- =?utf-8?B?YnRBNXZXV0VsRG1yNFNMSkhNZTk3emlUZmljSUxocldQaWtadmJJOXFNYm9X?=
- =?utf-8?B?WUdrbWkzcnhqSEFmZkVBek5qRXNYdldhYS9VbDI5SFp5a1d0SndRRWRFZCtE?=
- =?utf-8?Q?KDtPBXO5jCX9QrnpLaI8FgVSvElbAIjh?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8d81734-d604-4965-21ac-08da0ccc358c
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 12:54:03.9927
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FxU+ulPlp4JR7YQyjc41f3W9tZDaRsA3McPtx5bczb8TGG5cz88mfw65UXoWbMXf
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR02MB7484
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: OGSMRxqAyQkC7kibNZtZ6j0czHE8OkLp
+X-Proofpoint-GUID: OGSMRxqAyQkC7kibNZtZ6j0czHE8OkLp
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-23 13:41, Patrick Rudolph wrote:
-> Hi Peter,
-> thanks for the review.
-> The MAX7358 has indeed the same registers as the MAX7357, but they
-> need to be "unlocked" by sending a magic sequence first.
-> As this isn't implemented by the driver it behaves like the MAX7356
-> with a single register.
-> The additional registers can be hidden again by setting a bit in the
-> config space.
-> Which wording would you prefer to describe this feature?
+Allows userspace to check for SMMUv3 features.
 
-Perhaps: "exposed at POR" -> "exposed without extra commands"
-or something like that. Without the background that the chips
-are different like this at POR, the mention of POR is just
-confusing...
+Expose the following RO registers related to ARM SMMUv3 via sysfs:
+SMMU_IDR0
+SMMU_IDR1
+SMMU_IDR2
+SMMU_IDR3
+SMMU_IDR4
+SMMU_IDR5
+SMMU_IDR6
+SMMU_IIDR
+SMMU_AIDR
 
-But why not send this sequence for MAX7358? Then it occurred to me
-that I expect the MAX7357 to behave pretty much like any of the
-other chips until you touch the enhanced registers. Isn't that the
-case? But why is it then needed to touch the enhanced registers at
-all?
+ # find /sys | grep arm-iommu
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_idr5
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_idr3
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_idr1
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_aidr
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_idr6
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_idr4
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_iidr
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_idr2
+/sys/devices/platform/9050000.smmuv3/iommu/smmu3.0x0000000009050000/arm-iommu/smmu_idr0
 
-I suspect you know the answers, so I'm going the lazy route of just
-asking instead of looking it up myself, hope that's ok...
+Signed-off-by: Miguel Luis <miguel.luis@oracle.com>
+---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 199 ++++++++++++++++----
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |  27 +++
+ 2 files changed, 191 insertions(+), 35 deletions(-)
 
-Cheers,
-Peter
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index 6dc6d8b6b368..7f779d3f88f2 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -3424,17 +3424,16 @@ static int arm_smmu_device_reset(struct arm_smmu_device *smmu, bool bypass)
+ 
+ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ {
+-	u32 reg;
+ 	bool coherent = smmu->features & ARM_SMMU_FEAT_COHERENCY;
+ 
+ 	/* IDR0 */
+-	reg = readl_relaxed(smmu->base + ARM_SMMU_IDR0);
++	smmu->idr0 = readl_relaxed(smmu->base + ARM_SMMU_IDR0);
+ 
+ 	/* 2-level structures */
+-	if (FIELD_GET(IDR0_ST_LVL, reg) == IDR0_ST_LVL_2LVL)
++	if (FIELD_GET(IDR0_ST_LVL, smmu->idr0) == IDR0_ST_LVL_2LVL)
+ 		smmu->features |= ARM_SMMU_FEAT_2_LVL_STRTAB;
+ 
+-	if (reg & IDR0_CD2L)
++	if (smmu->idr0 & IDR0_CD2L)
+ 		smmu->features |= ARM_SMMU_FEAT_2_LVL_CDTAB;
+ 
+ 	/*
+@@ -3442,7 +3441,7 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ 	 * We currently require the same endianness as the CPU, but this
+ 	 * could be changed later by adding a new IO_PGTABLE_QUIRK.
+ 	 */
+-	switch (FIELD_GET(IDR0_TTENDIAN, reg)) {
++	switch (FIELD_GET(IDR0_TTENDIAN, smmu->idr0)) {
+ 	case IDR0_TTENDIAN_MIXED:
+ 		smmu->features |= ARM_SMMU_FEAT_TT_LE | ARM_SMMU_FEAT_TT_BE;
+ 		break;
+@@ -3461,22 +3460,22 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ 	}
+ 
+ 	/* Boolean feature flags */
+-	if (IS_ENABLED(CONFIG_PCI_PRI) && reg & IDR0_PRI)
++	if (IS_ENABLED(CONFIG_PCI_PRI) && smmu->idr0 & IDR0_PRI)
+ 		smmu->features |= ARM_SMMU_FEAT_PRI;
+ 
+-	if (IS_ENABLED(CONFIG_PCI_ATS) && reg & IDR0_ATS)
++	if (IS_ENABLED(CONFIG_PCI_ATS) && smmu->idr0 & IDR0_ATS)
+ 		smmu->features |= ARM_SMMU_FEAT_ATS;
+ 
+-	if (reg & IDR0_SEV)
++	if (smmu->idr0 & IDR0_SEV)
+ 		smmu->features |= ARM_SMMU_FEAT_SEV;
+ 
+-	if (reg & IDR0_MSI) {
++	if (smmu->idr0 & IDR0_MSI) {
+ 		smmu->features |= ARM_SMMU_FEAT_MSI;
+ 		if (coherent && !disable_msipolling)
+ 			smmu->options |= ARM_SMMU_OPT_MSIPOLL;
+ 	}
+ 
+-	if (reg & IDR0_HYP) {
++	if (smmu->idr0 & IDR0_HYP) {
+ 		smmu->features |= ARM_SMMU_FEAT_HYP;
+ 		if (cpus_have_cap(ARM64_HAS_VIRT_HOST_EXTN))
+ 			smmu->features |= ARM_SMMU_FEAT_E2H;
+@@ -3486,11 +3485,11 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ 	 * The coherency feature as set by FW is used in preference to the ID
+ 	 * register, but warn on mismatch.
+ 	 */
+-	if (!!(reg & IDR0_COHACC) != coherent)
++	if (!!(smmu->idr0 & IDR0_COHACC) != coherent)
+ 		dev_warn(smmu->dev, "IDR0.COHACC overridden by FW configuration (%s)\n",
+ 			 coherent ? "true" : "false");
+ 
+-	switch (FIELD_GET(IDR0_STALL_MODEL, reg)) {
++	switch (FIELD_GET(IDR0_STALL_MODEL, smmu->idr0)) {
+ 	case IDR0_STALL_MODEL_FORCE:
+ 		smmu->features |= ARM_SMMU_FEAT_STALL_FORCE;
+ 		fallthrough;
+@@ -3498,19 +3497,19 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ 		smmu->features |= ARM_SMMU_FEAT_STALLS;
+ 	}
+ 
+-	if (reg & IDR0_S1P)
++	if (smmu->idr0 & IDR0_S1P)
+ 		smmu->features |= ARM_SMMU_FEAT_TRANS_S1;
+ 
+-	if (reg & IDR0_S2P)
++	if (smmu->idr0 & IDR0_S2P)
+ 		smmu->features |= ARM_SMMU_FEAT_TRANS_S2;
+ 
+-	if (!(reg & (IDR0_S1P | IDR0_S2P))) {
++	if (!(smmu->idr0 & (IDR0_S1P | IDR0_S2P))) {
+ 		dev_err(smmu->dev, "no translation support!\n");
+ 		return -ENXIO;
+ 	}
+ 
+ 	/* We only support the AArch64 table format at present */
+-	switch (FIELD_GET(IDR0_TTF, reg)) {
++	switch (FIELD_GET(IDR0_TTF, smmu->idr0)) {
+ 	case IDR0_TTF_AARCH32_64:
+ 		smmu->ias = 40;
+ 		fallthrough;
+@@ -3522,19 +3521,20 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ 	}
+ 
+ 	/* ASID/VMID sizes */
+-	smmu->asid_bits = reg & IDR0_ASID16 ? 16 : 8;
+-	smmu->vmid_bits = reg & IDR0_VMID16 ? 16 : 8;
++	smmu->asid_bits = smmu->idr0 & IDR0_ASID16 ? 16 : 8;
++	smmu->vmid_bits = smmu->idr0 & IDR0_VMID16 ? 16 : 8;
+ 
+ 	/* IDR1 */
+-	reg = readl_relaxed(smmu->base + ARM_SMMU_IDR1);
+-	if (reg & (IDR1_TABLES_PRESET | IDR1_QUEUES_PRESET | IDR1_REL)) {
++	smmu->idr1 = readl_relaxed(smmu->base + ARM_SMMU_IDR1);
++
++	if (smmu->idr1 & (IDR1_TABLES_PRESET | IDR1_QUEUES_PRESET | IDR1_REL)) {
+ 		dev_err(smmu->dev, "embedded implementation not supported\n");
+ 		return -ENXIO;
+ 	}
+ 
+ 	/* Queue sizes, capped to ensure natural alignment */
+ 	smmu->cmdq.q.llq.max_n_shift = min_t(u32, CMDQ_MAX_SZ_SHIFT,
+-					     FIELD_GET(IDR1_CMDQS, reg));
++					     FIELD_GET(IDR1_CMDQS, smmu->idr1));
+ 	if (smmu->cmdq.q.llq.max_n_shift <= ilog2(CMDQ_BATCH_ENTRIES)) {
+ 		/*
+ 		 * We don't support splitting up batches, so one batch of
+@@ -3548,13 +3548,13 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ 	}
+ 
+ 	smmu->evtq.q.llq.max_n_shift = min_t(u32, EVTQ_MAX_SZ_SHIFT,
+-					     FIELD_GET(IDR1_EVTQS, reg));
++					     FIELD_GET(IDR1_EVTQS, smmu->idr1));
+ 	smmu->priq.q.llq.max_n_shift = min_t(u32, PRIQ_MAX_SZ_SHIFT,
+-					     FIELD_GET(IDR1_PRIQS, reg));
++					     FIELD_GET(IDR1_PRIQS, smmu->idr1));
+ 
+ 	/* SID/SSID sizes */
+-	smmu->ssid_bits = FIELD_GET(IDR1_SSIDSIZE, reg);
+-	smmu->sid_bits = FIELD_GET(IDR1_SIDSIZE, reg);
++	smmu->ssid_bits = FIELD_GET(IDR1_SSIDSIZE, smmu->idr1);
++	smmu->sid_bits = FIELD_GET(IDR1_SIDSIZE, smmu->idr1);
+ 
+ 	/*
+ 	 * If the SMMU supports fewer bits than would fill a single L2 stream
+@@ -3563,31 +3563,37 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ 	if (smmu->sid_bits <= STRTAB_SPLIT)
+ 		smmu->features &= ~ARM_SMMU_FEAT_2_LVL_STRTAB;
+ 
++	/* IDR2 */
++	smmu->idr2 = readl_relaxed(smmu->base + ARM_SMMU_IDR2);
++
+ 	/* IDR3 */
+-	reg = readl_relaxed(smmu->base + ARM_SMMU_IDR3);
+-	if (FIELD_GET(IDR3_RIL, reg))
++	smmu->idr3 = readl_relaxed(smmu->base + ARM_SMMU_IDR3);
++	if (FIELD_GET(IDR3_RIL, smmu->idr3))
+ 		smmu->features |= ARM_SMMU_FEAT_RANGE_INV;
+ 
++	/* IDR4 */
++	smmu->idr4 = readl_relaxed(smmu->base + ARM_SMMU_IDR4);
++
+ 	/* IDR5 */
+-	reg = readl_relaxed(smmu->base + ARM_SMMU_IDR5);
++	smmu->idr5 = readl_relaxed(smmu->base + ARM_SMMU_IDR5);
+ 
+ 	/* Maximum number of outstanding stalls */
+-	smmu->evtq.max_stalls = FIELD_GET(IDR5_STALL_MAX, reg);
++	smmu->evtq.max_stalls = FIELD_GET(IDR5_STALL_MAX, smmu->idr5);
+ 
+ 	/* Page sizes */
+-	if (reg & IDR5_GRAN64K)
++	if (smmu->idr5 & IDR5_GRAN64K)
+ 		smmu->pgsize_bitmap |= SZ_64K | SZ_512M;
+-	if (reg & IDR5_GRAN16K)
++	if (smmu->idr5 & IDR5_GRAN16K)
+ 		smmu->pgsize_bitmap |= SZ_16K | SZ_32M;
+-	if (reg & IDR5_GRAN4K)
++	if (smmu->idr5 & IDR5_GRAN4K)
+ 		smmu->pgsize_bitmap |= SZ_4K | SZ_2M | SZ_1G;
+ 
+ 	/* Input address size */
+-	if (FIELD_GET(IDR5_VAX, reg) == IDR5_VAX_52_BIT)
++	if (FIELD_GET(IDR5_VAX, smmu->idr5) == IDR5_VAX_52_BIT)
+ 		smmu->features |= ARM_SMMU_FEAT_VAX;
+ 
+ 	/* Output address size */
+-	switch (FIELD_GET(IDR5_OAS, reg)) {
++	switch (FIELD_GET(IDR5_OAS, smmu->idr5)) {
+ 	case IDR5_OAS_32_BIT:
+ 		smmu->oas = 32;
+ 		break;
+@@ -3632,6 +3638,16 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+ 
+ 	dev_info(smmu->dev, "ias %lu-bit, oas %lu-bit (features 0x%08x)\n",
+ 		 smmu->ias, smmu->oas, smmu->features);
++
++	/* IDR6 */
++	smmu->idr6 = readl_relaxed(smmu->base + ARM_SMMU_IDR6);
++
++	/* IIDR */
++	smmu->iidr = readl_relaxed(smmu->base + ARM_SMMU_IIDR);
++
++	/* AIDR */
++	smmu->aidr = readl_relaxed(smmu->base + ARM_SMMU_AIDR);
++
+ 	return 0;
+ }
+ 
+@@ -3752,6 +3768,119 @@ static void __iomem *arm_smmu_ioremap(struct device *dev, resource_size_t start,
+ 	return devm_ioremap_resource(dev, &res);
+ }
+ 
++static ssize_t smmu_idr0_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->idr0);
++}
++static DEVICE_ATTR_RO(smmu_idr0);
++
++static ssize_t smmu_idr1_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->idr1);
++}
++static DEVICE_ATTR_RO(smmu_idr1);
++
++static ssize_t smmu_idr2_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->idr2);
++}
++static DEVICE_ATTR_RO(smmu_idr2);
++
++static ssize_t smmu_idr3_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->idr3);
++}
++static DEVICE_ATTR_RO(smmu_idr3);
++
++static ssize_t smmu_idr4_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->idr4);
++}
++static DEVICE_ATTR_RO(smmu_idr4);
++
++static ssize_t smmu_idr5_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->idr5);
++}
++static DEVICE_ATTR_RO(smmu_idr5);
++
++static ssize_t smmu_idr6_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->idr6);
++}
++static DEVICE_ATTR_RO(smmu_idr6);
++
++static ssize_t smmu_iidr_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->iidr);
++}
++static DEVICE_ATTR_RO(smmu_iidr);
++
++static ssize_t smmu_aidr_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct arm_smmu_device *smmu = dev_to_arm_smmu_device(dev);
++
++	return sprintf(buf, "%x\n", smmu->aidr);
++}
++static DEVICE_ATTR_RO(smmu_aidr);
++
++static struct attribute *arm_iommu_attrs[] = {
++	&dev_attr_smmu_idr0.attr,
++	&dev_attr_smmu_idr1.attr,
++	&dev_attr_smmu_idr2.attr,
++	&dev_attr_smmu_idr3.attr,
++	&dev_attr_smmu_idr4.attr,
++	&dev_attr_smmu_idr5.attr,
++	&dev_attr_smmu_idr6.attr,
++	&dev_attr_smmu_iidr.attr,
++	&dev_attr_smmu_aidr.attr,
++	NULL,
++};
++
++static struct attribute_group arm_iommu_group = {
++	.name = "arm-iommu",
++	.attrs = arm_iommu_attrs,
++};
++
++static const struct attribute_group *arm_iommu_groups[] = {
++	&arm_iommu_group,
++	NULL,
++};
++
+ static int arm_smmu_device_probe(struct platform_device *pdev)
+ {
+ 	int irq, ret;
+@@ -3839,7 +3968,7 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	/* And we're up. Go go go! */
+-	ret = iommu_device_sysfs_add(&smmu->iommu, dev, NULL,
++	ret = iommu_device_sysfs_add(&smmu->iommu, dev, arm_iommu_groups,
+ 				     "smmu3.%pa", &ioaddr);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+index cd48590ada30..ffa1123bf37c 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+@@ -50,9 +50,13 @@
+ #define IDR1_SSIDSIZE			GENMASK(10, 6)
+ #define IDR1_SIDSIZE			GENMASK(5, 0)
+ 
++#define ARM_SMMU_IDR2			0x8
++
+ #define ARM_SMMU_IDR3			0xc
+ #define IDR3_RIL			(1 << 10)
+ 
++#define ARM_SMMU_IDR4			0x10
++
+ #define ARM_SMMU_IDR5			0x14
+ #define IDR5_STALL_MAX			GENMASK(31, 16)
+ #define IDR5_GRAN64K			(1 << 6)
+@@ -69,6 +73,9 @@
+ #define IDR5_VAX			GENMASK(11, 10)
+ #define IDR5_VAX_52_BIT			1
+ 
++#define ARM_SMMU_IIDR			0x18
++#define ARM_SMMU_AIDR			0x1C
++
+ #define ARM_SMMU_CR0			0x20
+ #define CR0_ATSCHK			(1 << 4)
+ #define CR0_CMDQEN			(1 << 3)
+@@ -154,6 +161,8 @@
+ 
+ #define ARM_SMMU_REG_SZ			0xe00
+ 
++#define ARM_SMMU_IDR6			0x0190
++
+ /* Common MSI config fields */
+ #define MSI_CFG0_ADDR_MASK		GENMASK_ULL(51, 2)
+ #define MSI_CFG2_SH			GENMASK(5, 4)
+@@ -669,6 +678,17 @@ struct arm_smmu_device {
+ 
+ 	struct arm_smmu_strtab_cfg	strtab_cfg;
+ 
++	/* SMMU feature registers */
++	u32				idr0;
++	u32				idr1;
++	u32				idr2;
++	u32				idr3;
++	u32				idr4;
++	u32				idr5;
++	u32				idr6;
++	u32				iidr;
++	u32				aidr;
++
+ 	/* IOMMU core code handle */
+ 	struct iommu_device		iommu;
+ 
+@@ -676,6 +696,13 @@ struct arm_smmu_device {
+ 	struct mutex			streams_mutex;
+ };
+ 
++static inline struct arm_smmu_device *dev_to_arm_smmu_device(struct device *dev)
++{
++	struct iommu_device *iommu = dev_to_iommu_device(dev);
++
++	return container_of(iommu, struct arm_smmu_device, iommu);
++}
++
+ struct arm_smmu_stream {
+ 	u32				id;
+ 	struct arm_smmu_master		*master;
+-- 
+2.35.1
 
-> I'll change it to maxim_enhanced_mode.
-
-
-
-> Regards,
-> Patrick
-> 
-> On Sat, Mar 19, 2022 at 3:41 PM Peter Rosin <peda@axentia.se> wrote:
->>
->> Hi!
->>
->> Sorry for the slow review and thanks for your patience...
->>
->> On 2022-02-16 08:46, Patrick Rudolph wrote:
->>> Add support for the following Maxim chips using the existing PCA954x
->>> driver:
->>> - MAX7356
->>> - MAX7357
->>> - MAX7358
->>> - MAX7367
->>> - MAX7368
->>> - MAX7369
->>>
->>> All added Maxim chips behave like the PCA954x, where a single SMBUS byte
->>> write selects up to 8 channels to be bridged to the primary bus.
->>>
->>> The MAX7357 exposes 6 additional registers at Power-On-Reset and is
->>
->> MAX7358 also has the same enhanced mode as the 7357, no?
->>
->> And what do you mean that they are exposed at POR? I can see why they
->> are not exposed /before/ POR, but are they ever /not/ exposed? If they
->> are always exposed when the chip is "alive", then I suggest that the
->> POR wording is dropped, otherwise that the above is reworded to
->> describe when the register are no longer exposed.
->>
->>> configured to:
->>>  - Disabled interrupts on bus locked up detection
->>>  - Enable bus locked-up clearing
->>>  - Disconnect only locked bus instead of all channels
->>>
->>> While the MAX7357/MAX7358 have interrupt support, they don't act as
->>> interrupt controller like the PCA9545 does. Thus don't enable IRQ support
->>> and handle them like the PCA9548.
->>>
->>> Tested using the MAX7357 and verified that the stalled bus is disconnected
->>> while the other channels remain operational.
->>>
->>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->>> ---
->>>  drivers/i2c/muxes/Kconfig           |  4 +-
->>>  drivers/i2c/muxes/i2c-mux-pca954x.c | 92 +++++++++++++++++++++++++++--
->>>  2 files changed, 90 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/i2c/muxes/Kconfig b/drivers/i2c/muxes/Kconfig
->>> index 1708b1a82da2..2ac99d044199 100644
->>> --- a/drivers/i2c/muxes/Kconfig
->>> +++ b/drivers/i2c/muxes/Kconfig
->>> @@ -65,11 +65,11 @@ config I2C_MUX_PCA9541
->>>         will be called i2c-mux-pca9541.
->>>
->>>  config I2C_MUX_PCA954x
->>> -     tristate "NXP PCA954x and PCA984x I2C Mux/switches"
->>> +     tristate "NXP PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C Mux/switches"
->>>       depends on GPIOLIB || COMPILE_TEST
->>>       help
->>>         If you say yes here you get support for the NXP PCA954x
->>> -       and PCA984x I2C mux/switch devices.
->>> +       and PCA984x and Maxim MAX735x/MAX736x I2C mux/switch devices.
->>
->> and and and... :-) Maybe like this?
->>
->>           If you say yes here you get support for NXP PCA954x/PCA984x
->>           and Maxim MAX735x/MAX736x I2C mux/switch devices.
->>
->>>         This driver can also be built as a module.  If so, the module
->>>         will be called i2c-mux-pca954x.
->>> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
->>> index 4ad665757dd8..33b9a6a1fffa 100644
->>> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
->>> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
->>> @@ -4,6 +4,7 @@
->>>   *
->>>   * Copyright (c) 2008-2009 Rodolfo Giometti <giometti@linux.it>
->>>   * Copyright (c) 2008-2009 Eurotech S.p.A. <info@eurotech.it>
->>> + * Copyright (c) 2022 Patrick Rudolph <patrick.rudolph@9elements.com>
->>>   *
->>>   * This module supports the PCA954x and PCA984x series of I2C multiplexer/switch
->>>   * chips made by NXP Semiconductors.
->>> @@ -11,6 +12,12 @@
->>>   *    PCA9540, PCA9542, PCA9543, PCA9544, PCA9545, PCA9546, PCA9547,
->>>   *    PCA9548, PCA9846, PCA9847, PCA9848 and PCA9849.
->>>   *
->>> + * It's also compatible to Maxims MAX735x I2C switch chips, which are controlled
->>> + * as the NXP PCA9548 and the MAX736x chips that act like the PCA9544.
->>> + *
->>> + * This includes the:
->>> + *    MAX7356, MAX7357, MAX7358, MAX7367, MAX7368 and MAX7369
->>> + *
->>>   * These chips are all controlled via the I2C bus itself, and all have a
->>>   * single 8-bit register. The upstream "parent" bus fans out to two,
->>>   * four, or eight downstream busses or channels; which of these
->>> @@ -50,7 +57,30 @@
->>>
->>>  #define PCA954X_IRQ_OFFSET 4
->>>
->>> +/*
->>> + * MAX7357 exposes 7 registers on POR which allow to configure additional
->>> + * features. Disable interrupts, enable bus locked-up clearing,
->>> + * isolate only the locked channel instead of all channels.
->>
->> Same MAX7358 and POR comments as above.
->>
->> The way I understands things are:
->>
->>  * MAX7357/MAX7358 exposes 7 registers which allow setup of
->>  * enhanced mode features. The first of these registers is the
->>  * switch control register that is present in some form on all
->>  * chips supported by this driver.
->>  * The second register is the configuration register, which allows
->>  * to configure additional features. E.g. disable interrupts,
->>  * enable bus locked-up clearing and isolate only the locked
->>  * channel instead of all channels.
->>  * The remaining 5 registers are left as is by this driver.
->>
->>> + */
->>> +#define MAX7357_CONF_INT_ENABLE                      BIT(0)
->>> +#define MAX7357_CONF_FLUSH_OUT                       BIT(1)
->>> +#define MAX7357_CONF_RELEASE_INT             BIT(2)
->>> +#define MAX7357_CONF_LOCK_UP_CLEAR           BIT(3)
->>> +#define MAX7357_CONF_DISCON_SINGLE_CHAN              BIT(4)
->>> +#define MAX7357_CONF_BUS_LOCKUP_DETECTION    BIT(5)
->>> +#define MAX7357_CONF_ENABLE_BASIC_MODE               BIT(6)
->>> +#define MAX7357_CONF_PRECONNECT_TEST         BIT(7)
->>> +
->>> +#define MAX7357_CONF_DEFAULTS (MAX7357_CONF_FLUSH_OUT | \
->>> +      MAX7357_CONF_DISCON_SINGLE_CHAN)
->>> +
->>>  enum pca_type {
->>> +     max_7367,
->>> +     max_7368,
->>> +     max_7369,
->>> +     max_7356,
->>> +     max_7357,
->>> +     max_7358,
->>>       pca_9540,
->>>       pca_9542,
->>>       pca_9543,
->>> @@ -69,6 +99,7 @@ struct chip_desc {
->>>       u8 nchans;
->>>       u8 enable;      /* used for muxes only */
->>>       u8 has_irq;
->>> +     u8 max7357;
->>
->> Perhaps maxim_enhanced_mode is a better name?
->>
->>>       enum muxtype {
->>>               pca954x_ismux = 0,
->>>               pca954x_isswi
->>> @@ -90,8 +121,42 @@ struct pca954x {
->>>       raw_spinlock_t lock;
->>>  };
->>>
->>> -/* Provide specs for the PCA954x types we know about */
->>> +/* Provide specs for the PCA954x and MAX735x types we know about */
->>>  static const struct chip_desc chips[] = {
->>> +     [max_7356] = {
->>> +             .nchans = 8,
->>> +             .muxtype = pca954x_isswi,
->>> +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
->>> +     },
->>> +     [max_7357] = {
->>> +             .nchans = 8,
->>> +             .muxtype = pca954x_isswi,
->>> +             .max7357 = 1,
->>> +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
->>> +     },
->>> +     [max_7358] = {
->>> +             .nchans = 8,
->>> +             .muxtype = pca954x_isswi,
->>> +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
->>> +     },
->>> +     [max_7367] = {
->>> +             .nchans = 4,
->>> +             .muxtype = pca954x_isswi,
->>> +             .has_irq = 1,
->>> +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
->>> +     },
->>> +     [max_7368] = {
->>> +             .nchans = 4,
->>> +             .muxtype = pca954x_isswi,
->>> +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
->>> +     },
->>> +     [max_7369] = {
->>> +             .nchans = 4,
->>> +             .enable = 0x4,
->>> +             .muxtype = pca954x_ismux,
->>> +             .has_irq = 1,
->>> +             .id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
->>> +     },
->>>       [pca_9540] = {
->>>               .nchans = 2,
->>>               .enable = 0x4,
->>> @@ -177,6 +242,12 @@ static const struct chip_desc chips[] = {
->>>  };
->>>
->>>  static const struct i2c_device_id pca954x_id[] = {
->>> +     { "max7356", max_7356 },
->>> +     { "max7357", max_7357 },
->>> +     { "max7358", max_7358 },
->>> +     { "max7367", max_7367 },
->>> +     { "max7368", max_7368 },
->>> +     { "max7369", max_7369 },
->>>       { "pca9540", pca_9540 },
->>>       { "pca9542", pca_9542 },
->>>       { "pca9543", pca_9543 },
->>> @@ -194,6 +265,12 @@ static const struct i2c_device_id pca954x_id[] = {
->>>  MODULE_DEVICE_TABLE(i2c, pca954x_id);
->>>
->>>  static const struct of_device_id pca954x_of_match[] = {
->>> +     { .compatible = "maxim,max7356", .data = &chips[max_7356] },
->>> +     { .compatible = "maxim,max7357", .data = &chips[max_7357] },
->>> +     { .compatible = "maxim,max7358", .data = &chips[max_7358] },
->>> +     { .compatible = "maxim,max7367", .data = &chips[max_7367] },
->>> +     { .compatible = "maxim,max7368", .data = &chips[max_7368] },
->>> +     { .compatible = "maxim,max7369", .data = &chips[max_7369] },
->>>       { .compatible = "nxp,pca9540", .data = &chips[pca_9540] },
->>>       { .compatible = "nxp,pca9542", .data = &chips[pca_9542] },
->>>       { .compatible = "nxp,pca9543", .data = &chips[pca_9543] },
->>> @@ -401,9 +478,16 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
->>>       else
->>>               data->last_chan = 0; /* Disconnect multiplexer */
->>>
->>> -     ret = i2c_smbus_write_byte(client, data->last_chan);
->>> -     if (ret < 0)
->>> -             data->last_chan = 0;
->>> +     if (data->chip->max7357) {
->>> +             ret = i2c_smbus_write_byte_data(client, data->last_chan,
->>> +                                             MAX7357_CONF_DEFAULTS);
->>> +             if (ret < 0)
->>> +                     data->last_chan = 0;
->>> +     } else {
->>> +             ret = i2c_smbus_write_byte(client, data->last_chan);
->>> +             if (ret < 0)
->>> +                     data->last_chan = 0;
->>> +     }
->>>
->>>       return ret;
->>>  }
->>
->> The actual code is simple enough, and looks good.
->>
->> Cheers,
->> Peter

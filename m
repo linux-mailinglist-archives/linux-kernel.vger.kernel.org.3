@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB09D4E4A93
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 247BA4E4A96
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 02:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239123AbiCWBk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Mar 2022 21:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S240157AbiCWBl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Mar 2022 21:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbiCWBkz (ORCPT
+        with ESMTP id S229622AbiCWBl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Mar 2022 21:40:55 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29887220EC
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:39:26 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so338177pjq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:39:26 -0700 (PDT)
+        Tue, 22 Mar 2022 21:41:26 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2C532ED5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:39:58 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id n18so209083plg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Mar 2022 18:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ieZ1YNZMdPMDle0nXlJhObnK0W4J43jf9cWsuNGkhUY=;
-        b=iDjGY+J/5JvZcOb7jtGwUMPA86RmY+2Kd08u46Z4q1s0ZgozamxL6GZnVxGe4jiQ9B
-         Ror0YmrKSXvrr2/xyj9TCPLtJkG0912nL9Ie7pcefbtt+N+D9r41oMa33PsswaGOxZp8
-         rux8O2+CS76kYQHT92Uh9EP/edacCSVf3VpbIHSVcftb00FUq5DbEnC+k2vyEc3Qh3+9
-         IDdiy0OzGMngKa9GfKlpTf23aNO5KBf3MVs56/ELlfGOCUc960xE47idnHnTTZRUd2dE
-         lYRybJS3nHsAG/4MoztI28+HVklC3EkNVZh0JVVGKx31vedl5klbnmrcqcxntEchTSCa
-         LfjQ==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=2ueOjlq15eu7oYpfnlXkQFucNb+A7c4qBM8Kc8VaCtE=;
+        b=W1URGPCPrRJ2ZZEx+kiyBzNSfX9hhFHEuQexMQTNcvyApLOu5B9QKXqB8vtKN81xa8
+         RwJZe0mNGYPJ8QrW0K72E/5DnYNgE8dMWmHEtpZS21oVB+20EVrYeXVhJfyeBoHkMVJm
+         aM2gftiaMc3lxYbV1gU+hdcMqE78CSHPkape7ootr92pLnKA40tu8nXeoOx4MJ9k+99P
+         5xWaph0nEZGjZfz/QrUS1yA20SToq4mjlk73T/URN0MQIrpMg30itCyuMzA5NPrDHI4p
+         XOckKI6B8JVDu0ec9mx70F0y30qXBNPHw6ZqzAbK8Q4xjyOolOG8bvFsjAUjuuBy3TFF
+         /Yww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ieZ1YNZMdPMDle0nXlJhObnK0W4J43jf9cWsuNGkhUY=;
-        b=czyOHaCJsjfqTtEJ0Qs/99cijMgcFKMtI5haroKHLxMBfcPD78vX36tfpxtC1y5rQj
-         Wq6GA3xoXem3MseGI73j+GfPPKWRJDrXZKa6/Y3BiiR7eyApvu0GRKc+vYBCwuqzdu58
-         S7vZqISEdVNcza7FlzJUxTFkQrTAAKdDRQnZLTFVsPvuruEQEpO7kkngpdusuXqs5JA3
-         Y+tW0rwzFh3BCBPNvuUvseHFtia/Z2LozhNEISkEEtCbJxsS7y2ybDXRwYoPoLJKnSjE
-         tdO40mCDbE0Z2nHgugCBOuBTU/nb35uIxXB+0/AUImbvlM4p/vxq+y4CwO4E9R52Xk3T
-         FNdA==
-X-Gm-Message-State: AOAM530tUje+gckjqtvSxZ5Wys/usKg5p5mVvK9RfJvd4ITvI+XP6UM4
-        SFkyAq8wkRJdm8j7wqGXSElW7PLjjgRGCyo2xg==
-X-Google-Smtp-Source: ABdhPJykxCUGEMdCG/iVtspeqcFCatcsR4M7mlCCgk2FUckmO7eqpB1Pl7YNEqGaJ18raP5HtezEbI/KGXBVxP4V/j8=
-X-Received: by 2002:a17:90b:1803:b0:1c7:24c4:ab52 with SMTP id
- lw3-20020a17090b180300b001c724c4ab52mr8404054pjb.240.1647999565452; Tue, 22
- Mar 2022 18:39:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=2ueOjlq15eu7oYpfnlXkQFucNb+A7c4qBM8Kc8VaCtE=;
+        b=0QkgGhDpCJmcDqYYQPTEsRWDZrd1cltoHRthYxspDZ6DHmY9mUlarNkPx/d0bAd6K/
+         CRawzLsZnka+tWe8Yhq55Jkn9vRRGzQ/1kfd3XfX4lSCr4zihxxrCeN6tNCG16WhowAJ
+         g4RcUERaAXtYiQoZUppHx5HR3wsJktASpTA33Hm24PHBhx83rPEFenit092kF3O+1CEB
+         +/vLYCRBiXtqUAEetq6kDALZKRdZ9cCN3eYcfga++xUF+bJBVuRZ40S7Lv/zejDKg3IS
+         Td6c2bRd5UaoG4vofPRww1i7HIxB9Rn/S8H7Mp4D6q2gURutFg0U+i0KobHPrOs5SP4l
+         783A==
+X-Gm-Message-State: AOAM533bQfItNUZFUyWMhq30PmMAAAAP60PWuTPbnHe28cNwizD/J2jv
+        4gDteKpIigSJNsAvH9oBtOsd20aXkVZ33jsYXm6YmC5Vv8G/iQ==
+X-Google-Smtp-Source: ABdhPJyCemkBbr0iy/8AAuAdcEuO1L5SWva5HC++gia6XuC8WzbURILZLfz41Bl0ZSMwmVW9iIcDOHB+zHzx9W/zsLA=
+X-Received: by 2002:a17:90a:430d:b0:1bc:f340:8096 with SMTP id
+ q13-20020a17090a430d00b001bcf3408096mr8379919pjg.93.1647999597006; Tue, 22
+ Mar 2022 18:39:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <1646983382-30036-1-git-send-email-zheyuma97@gmail.com>
- <YjMSMIrbsVZjEw8W@phenom.ffwll.local> <CAMhUBjkohp=-4YZ7x6Yyf4tQr_2zCoR+RVmEZPGLoXTEhNoPFA@mail.gmail.com>
- <Yjnc1A2heVopcyXh@phenom.ffwll.local>
-In-Reply-To: <Yjnc1A2heVopcyXh@phenom.ffwll.local>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Wed, 23 Mar 2022 09:39:14 +0800
-Message-ID: <CAMhUBjnRP+Jb8MY9T02hVH=rQ-hdKxb9UDYpN4twHUywiBoVDQ@mail.gmail.com>
-Subject: Re: [PATCH] drm: drm_bufs: Error out if 'dev->agp' is a null pointer
-To:     Zheyu Ma <zheyuma97@gmail.com>, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@linux.ie,
-        dri-devel@lists.freedesktop.org,
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 22 Mar 2022 18:39:49 -0700
+Message-ID: <CAPcyv4iOwM+qaKdw-BPkDe9Fpc19YVezVVurZ0n0o7OsRsEuJw@mail.gmail.com>
+Subject: [GIT PULL] DAX update for 5.18
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux NVDIMM <nvdimm@lists.linux.dev>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,52 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 10:27 PM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Mon, Mar 21, 2022 at 09:02:47PM +0800, Zheyu Ma wrote:
-> > On Thu, Mar 17, 2022 at 6:49 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > >
-> > > On Fri, Mar 11, 2022 at 07:23:02AM +0000, Zheyu Ma wrote:
-> > > > The user program can control the 'drm_buf_desc::flags' via ioctl system
-> > > > call and enter the function drm_legacy_addbufs_agp(). If the driver
-> > > > doesn't initialize the agp resources, the driver will cause a null
-> > > > pointer dereference.
-> > > >
-> > > > The following log reveals it:
-> > > >     general protection fault, probably for non-canonical address
-> > > >     0xdffffc000000000f: 0000 [#1] PREEMPT SMP KASAN PTI
-> > > >     KASAN: null-ptr-deref in range [0x0000000000000078-0x000000000000007f]
-> > > >     Call Trace:
-> > > >      <TASK>
-> > > >      drm_ioctl_kernel+0x342/0x450 drivers/gpu/drm/drm_ioctl.c:785
-> > > >      drm_ioctl+0x592/0x940 drivers/gpu/drm/drm_ioctl.c:885
-> > > >      vfs_ioctl fs/ioctl.c:51 [inline]
-> > > >      __do_sys_ioctl fs/ioctl.c:874 [inline]
-> > > >      __se_sys_ioctl+0xaa/0xf0 fs/ioctl.c:860
-> > > >      do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > > >      do_syscall_64+0x43/0x90 arch/x86/entry/common.c:80
-> > > >      entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > >
-> > > > Fix this bug by adding a check.
-> > > >
-> > > > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> > >
-> > > You can only hit this if you enabled a DRIVER_LEGACY drm driver, which
-> > > opens you up to tons of other CVEs and issues. What's your .config?
-> >
-> > Yes, I enable the DRM_LEGACY option in the config.
-> > I think you mean this is not a normal configuration file? Do you have
-> > a recommended configuration option for when I want to test the GPU
-> > driver?
->
-> Yeah DRM_LEGACY gives you all kinds of horrible and known-broken
-> interfaces. Don't enable that :-)
->
-> You have a bunch of other drivers enable which require DRM_LEGACY, so
-> those will disable too. Anything else I think would be an upstream bug and
-> we'd need to adjust Kconfig (or fix the code).
+Hi Linus, please pull from:
 
-Thanks for your explanation! I will pay attention next time.
+  git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm tags/dax-for-5.18
 
-Regards,
-Zheyu Ma
+...to receive a small collection of dax fixes for 5.18. Andrew has
+been shepherding major dax features that touch the core -mm through
+his tree, but I still collect the dax updates that are core-mm
+independent. These have been in Linux-next with no reported issue for
+multiple weeks.
+
+---
+
+The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
+
+  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm tags/dax-for-5.18
+
+for you to fetch changes up to db8cd5efeebc4904df1653926102413d088a5c7e:
+
+  dax: Fix missing kdoc for dax_device (2022-03-12 13:46:25 -0800)
+
+----------------------------------------------------------------
+dax for 5.18
+
+- Fix a crash due to a missing rcu_barrier() in dax_fs_exit()
+
+- Fix two miscellaneous doc issues
+
+----------------------------------------------------------------
+Ira Weiny (1):
+      dax: Fix missing kdoc for dax_device
+
+Shiyang Ruan (1):
+      fsdax: fix function description
+
+Tong Zhang (1):
+      dax: make sure inodes are flushed before destroy cache
+
+ drivers/dax/super.c | 2 ++
+ fs/dax.c            | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)

@@ -2,200 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150184E53BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD07A4E53CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244564AbiCWOBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
+        id S244574AbiCWOBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiCWOBK (ORCPT
+        with ESMTP id S244580AbiCWOBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:01:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D2B22523;
-        Wed, 23 Mar 2022 06:59:40 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: adalessandro)
-        with ESMTPSA id 920E81F44C79
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648043978;
-        bh=CVCRQInqJDjYFXXhZlVGu/WWzJnSV1ckB/NiCxYHM4s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gkBRFnj/EbCqALEijYgPG41DsvgsBlPPSNdvWIjYL3RkTEBbI9ow3Q9tRxAb+Pz4U
-         WTZPhFq6pLoEdPtoUeBOXKu5IDXj5BDUlPVp7nlC6y7eSPtaTKRHy4KluFmnc4itme
-         +iMEc49GGtR8yTRk85OrDKl6NDQZIP0uawS+mDGEAPwSdZGcQfImfG74rSZiT8oT0e
-         msp6xjOPcXM2MfPOTPxGcug4vvmKe9D5GuW2uC85vY62n42+5r2GfkOk/6+Nb09kG8
-         7qxlrzkbR2/dElbxizv5edy4W/fJIKf9q/R4MkQVfuyr5toBnUMW/kx6s6wupXdL+1
-         XKb2MYB+0pcFA==
-Message-ID: <d79b0b6a-97fc-52d3-c45b-ac7312e131b3@collabora.com>
-Date:   Wed, 23 Mar 2022 10:59:28 -0300
+        Wed, 23 Mar 2022 10:01:46 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4AC7EA12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:00:15 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r23so1990949edb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 07:00:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4d3TC6ucZyuq0GaJLfYb56R+2q2cWcG09rOvKNcww+Y=;
+        b=rFUzZvUj9PsjZGaz0GrV+BnYRedhsb5f6r1ptV1gfdWwY3xslFCdzrM4x24fCLycBF
+         9MmlSkTxmB5ZKWfAkT//oYix5YBcg1GZ4A2hycMnzXs6IYSldeqDJ8lhln4BxNICUIAj
+         mGDJBuAQAWmHOfAHbGGJKcoRyTOtF9/dlWLZ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4d3TC6ucZyuq0GaJLfYb56R+2q2cWcG09rOvKNcww+Y=;
+        b=upk2T4J/QxUkxQiBAHUAoyIO6mbzeFVMM37595EVG+SLaP0k3ZaGSvqaiOiwHNnQhi
+         Rs3C9eTijd5OiJL56r7E4KDKhktGs+qVhlfvwnuBNjUZeoDwe1cCHQlW1xZ3OTZAFxYm
+         Kodg1yTphp/QdeqMC0peLyW4HeQWmzsbbbzTBqKn/CMTZGoCJ+dlLRLGb4r9KooKOvTH
+         9ak3yxEwChM2RfLHwL5ZK9REHVLO6h5Yp60QdOtxuGb4KogLbEW3zyvZ3Bag/c/Uz11h
+         hT8DmomSQx8G09OLY3FxmKlLFWebPq7DcUKpPRQ6lpxsgOe9elct8iUStgMvUdhBQ+7b
+         /CUg==
+X-Gm-Message-State: AOAM532C2XWXQXJ4eBY+ZanVefk+kE820xNKKsKRxS9kWbClGeDwQugW
+        lLx976SevWBRxYjFKcxzlxibmNpf4ivUmEhWPjh9Bg==
+X-Google-Smtp-Source: ABdhPJydsCbI4K1DE26qhLWLhXVBLuexIeZknzjGHVibPwTP54CzEhxreoeycnCPeXjsI3G4qYdNmj5hUJK4kLkYjKo=
+X-Received: by 2002:a05:6402:5106:b0:419:45cd:7ab0 with SMTP id
+ m6-20020a056402510600b0041945cd7ab0mr235899edd.116.1648044014041; Wed, 23 Mar
+ 2022 07:00:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v4] arm64: dts: imx8mn-bsh-smm-s2pro: Add tlv320aic31xx
- audio card node
-Content-Language: en-US
-To:     shawnguo@kernel.org
-Cc:     broonie@kernel.org, festevam@gmail.com,
-        krzysztof.kozlowski@canonical.com, lgirdwood@gmail.com,
-        michael@amarulasolutions.com, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org
-References: <20220323135601.42435-1-ariel.dalessandro@collabora.com>
-From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-In-Reply-To: <20220323135601.42435-1-ariel.dalessandro@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220322192712.709170-1-mszeredi@redhat.com> <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+ <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com> <d3333dbe-b4b7-8eb9-4a50-8526d95b5394@schaufler-ca.com>
+In-Reply-To: <d3333dbe-b4b7-8eb9-4a50-8526d95b5394@schaufler-ca.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 23 Mar 2022 15:00:01 +0100
+Message-ID: <CAJfpegvwTmaw0bp70-nYQAvs8T=wYyxnDEoA=rOvX8HDZnxCTg@mail.gmail.com>
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shawn,
+On Wed, 23 Mar 2022 at 14:51, Casey Schaufler <casey@schaufler-ca.com> wrote:
 
-Can we get this integrated into the linux-next tree so it's available
-for the merge window?
+> You also need a way to get a list off what attributes are available
+> and/or a way to get all available attributes. Applications and especially
+> libraries shouldn't have to guess what information is relevant. If the
+> attributes change depending on the filesystem and/or LSM involved, and
+> they do, how can a general purpose library function know what data to
+> ask for?
 
-Note that dt-bindings/sound/tlv320aic31xx.h is already merged into
-linux-next.
+Oh, yes.  Even the current prototype does that:
 
-Regards,
-Ariel
+# ~/getvalues / ""
+[] = "mnt" "mntns" "xattr" "data" (len=21)
+# ~/getvalues / "mnt"
+[mnt] = "id" "parentid" "root" "mountpoint" "options" "shared"
+"master" "propagate_from" "unbindable" (len=76)
+# ~/getvalues / "mntns"
+[mntns] = "21" "22" "24" "25" "23" "26" "27" "28" "29" "30" "31" "32" (len=36)
+ ~/getvalues / "mntns:21"
+[mntns:21] = "id" "parentid" "root" "mountpoint" "options" "shared"
+"master" "propagate_from" "unbindable" (len=76)
 
-On 3/23/22 10:56, Ariel D'Alessandro wrote:
-> BSH SystemMaster (SMM) S2 PRO board comes with an audio card based on
-> tlv320aic31xx family codec.
-> 
-> The audio card exposes two playback devices, one of them using the EASRC
-> (Enhanced Asynchronous Sample Rate Converter) module. Note that this
-> would require SDMA and EASRC firmware in order to work.
-> 
-> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
->  .../dts/freescale/imx8mn-bsh-smm-s2pro.dts    | 90 +++++++++++++++++++
->  1 file changed, 90 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
-> index c6a8ed6745c1..fbbb3367037b 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
-> @@ -7,6 +7,7 @@
->  /dts-v1/;
->  
->  #include "imx8mn-bsh-smm-s2-common.dtsi"
-> +#include <dt-bindings/sound/tlv320aic31xx.h>
->  
->  / {
->  	model = "BSH SMM S2 PRO";
-> @@ -16,6 +17,65 @@ memory@40000000 {
->  		device_type = "memory";
->  		reg = <0x0 0x40000000 0x0 0x20000000>;
->  	};
-> +
-> +	sound-tlv320aic31xx {
-> +		compatible = "fsl,imx-audio-tlv320aic31xx";
-> +		model = "tlv320aic31xx-hifi";
-> +		audio-cpu = <&sai3>;
-> +		audio-codec = <&tlv320dac3101>;
-> +		audio-asrc = <&easrc>;
-> +		audio-routing =
-> +			"Ext Spk", "SPL",
-> +			"Ext Spk", "SPR";
-> +		mclk-id = <PLL_CLKIN_BCLK>;
-> +	};
-> +
-> +	vdd_input: vdd_input {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd_input";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +	};
-> +};
-> +
-> +&easrc {
-> +	fsl,asrc-rate = <48000>;
-> +	fsl,asrc-format = <10>;
-> +	status = "okay";
-> +};
-> +
-> +&i2c2 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c2>;
-> +	status = "okay";
-> +
-> +	tlv320dac3101: audio-codec@18 {
-> +		compatible = "ti,tlv320dac3101";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_dac_rst>;
-> +		reg = <0x18>;
-> +		#sound-dai-cells = <0>;
-> +		HPVDD-supply = <&buck4_reg>;
-> +		SPRVDD-supply = <&vdd_input>;
-> +		SPLVDD-supply = <&vdd_input>;
-> +		AVDD-supply = <&buck4_reg>;
-> +		IOVDD-supply = <&buck4_reg>;
-> +		DVDD-supply = <&buck5_reg>;
-> +		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-> +		ai31xx-micbias-vg = <MICBIAS_AVDDV>;
-> +		clocks = <&clk IMX8MN_CLK_SAI3_ROOT>;
-> +	};
-> +};
-> +
-> +&sai3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_sai3>;
-> +	assigned-clocks = <&clk IMX8MN_CLK_SAI3>;
-> +	assigned-clock-parents = <&clk IMX8MN_AUDIO_PLL1_OUT>;
-> +	assigned-clock-rates = <24576000>;
-> +	fsl,sai-mclk-direction-output;
-> +	status = "okay";
->  };
->  
->  /* eMMC */
-> @@ -30,6 +90,36 @@ &usdhc1 {
->  };
->  
->  &iomuxc {
-> +	pinctrl_dac_rst: dacrstgrp {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6		0x19 /* DAC_RST */
-> +		>;
-> +	};
-> +
-> +	pinctrl_espi2: espi2grp {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK		0x082
-> +			MX8MN_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI		0x082
-> +			MX8MN_IOMUXC_ECSPI2_MISO_ECSPI2_MISO		0x082
-> +			MX8MN_IOMUXC_ECSPI2_SS0_ECSPI2_SS0		0x040
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2: i2c2grp {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_I2C2_SCL_I2C2_SCL			0x400000c3
-> +			MX8MN_IOMUXC_I2C2_SDA_I2C2_SDA			0x400000c3
-> +		>;
-> +	};
-> +
-> +	pinctrl_sai3: sai3grp {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC		0xd6
-> +			MX8MN_IOMUXC_SAI3_TXC_SAI3_TX_BCLK		0xd6
-> +			MX8MN_IOMUXC_SAI3_TXD_SAI3_TX_DATA0		0xd6
-> +		>;
-> +	};
-> +
->  	pinctrl_usdhc1: usdhc1grp {
->  		fsl,pins = <
->  			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000090
+I didn't implement enumeration for "data" and "xattr" but that is
+certainly possible and not even difficult to do.
+
+Thanks,
+Miklos

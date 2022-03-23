@@ -2,264 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F744E5AFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 23:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6244E5AEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345077AbiCWWBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 18:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S1345031AbiCWV44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiCWWBn (ORCPT
+        with ESMTP id S242437AbiCWV4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 18:01:43 -0400
-X-Greylist: delayed 454 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Mar 2022 15:00:11 PDT
-Received: from smtp1.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CFE593A2;
-        Wed, 23 Mar 2022 15:00:11 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 483E13C003B;
-        Wed, 23 Mar 2022 22:52:35 +0100 (CET)
-Received: from lxhi-065 (10.72.94.3) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.21; Wed, 23 Mar
- 2022 22:52:34 +0100
-Date:   Wed, 23 Mar 2022 22:52:29 +0100
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        <linux-renesas-soc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v2] i2c: rcar: add SMBus block read support
-Message-ID: <20220323215229.GA9403@lxhi-065>
-References: <20210922160649.28449-1-andrew_gabbasov@mentor.com>
- <CAMuHMdVVDpBAQR+H1TAnpf65aVbAL0Mm0km7Z9L7+1JuF6n1gQ@mail.gmail.com>
- <000001d7badd$a8512d30$f8f38790$@mentor.com>
- <20211006182314.10585-1-andrew_gabbasov@mentor.com>
- <Yg6ls0zyTDe7LQbK@kunai>
+        Wed, 23 Mar 2022 17:56:53 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2B58C7E5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:55:22 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id p17so2859443plo.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 14:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=squareup.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7VUIv+cvVEj+1EStzu/2W/14lXYR/tbe3LkkDVL5xtM=;
+        b=HbV5zSsrm4eCZQ2vLye4VeInQFVOBHpADQefgUnHMvjPxjdECWIep38dj4fMCMpn1w
+         1dzrUJiXP6Ga3aNy6IjqbuTIuqQ6zBKPTa/F168pkXvIB+UXa+ACirJZCnM/SymwniKh
+         VzBpMNi4aA/bGjNCbanMbru9/ScptPqGY2DSA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7VUIv+cvVEj+1EStzu/2W/14lXYR/tbe3LkkDVL5xtM=;
+        b=6quDCRTzeKqvTyUYQ9yImUnN2vXkbo5u/gt0IVjA/R2fHdhUMZu/+riErWoo7Qzk5p
+         Af9TrzPdxhx3uac0zb/BMylWMjFgx5Akqe/OETs6HxIY1voORAVUsOSPkoIASdvGuyU5
+         qu7mG6Sw7SExOzis6rHY2PA/ONTJ0wOutAzo0Be9eIPufdlGSCTodUMX/gFpeJGLEjG3
+         ZiZelCJo/Gl5IqL2OJ+4UExeBBUA8RsO8VVvMTyWfo82CbZrPHUD1P+CLACvZx/YLS3I
+         Tdp52cUg87x3hlbIAz64S39CGyXtoQ9bEI8rsIhV3B+pfrCFLRtgJB8dpSNgk0NSpFX5
+         Pk6Q==
+X-Gm-Message-State: AOAM530loEqtGWE6HnOlC/uXJqgTHyIYhH6GB1690aEAzGaMKSNd/TPk
+        dMnfc3c5yDBAWtnJ7MHIba7yww==
+X-Google-Smtp-Source: ABdhPJx8+bhLdCL9qhzkfR7qb0ptpjWBctNSok1FFUEhMrOnLgitMwygkzGfx3qw0nqYXXbPVYGJzA==
+X-Received: by 2002:a17:90b:390c:b0:1c7:9a94:1797 with SMTP id ob12-20020a17090b390c00b001c79a941797mr4798410pjb.221.1648072521312;
+        Wed, 23 Mar 2022 14:55:21 -0700 (PDT)
+Received: from [172.28.8.20] ([135.84.132.250])
+        by smtp.gmail.com with ESMTPSA id d5-20020a056a0024c500b004fae56b2921sm791501pfv.167.2022.03.23.14.55.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 14:55:20 -0700 (PDT)
+Message-ID: <49641286-078a-736e-3c75-9e03f38bf4f7@squareup.com>
+Date:   Wed, 23 Mar 2022 14:55:18 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Yg6ls0zyTDe7LQbK@kunai>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.3]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v3] wcn36xx: Implement tx_rate reporting
+Content-Language: en-US
+To:     Edmond Gagnon <egagnon@squareup.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318195804.4169686-3-egagnon@squareup.com>
+ <20220323214533.1951791-1-egagnon@squareup.com>
+From:   Benjamin Li <benl@squareup.com>
+In-Reply-To: <20220323214533.1951791-1-egagnon@squareup.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Wolfram,
-Dear Andrew,
-Dear Geert,
+Tested on DB410c (WCN3620, 802.11n/2.4GHz only) running firmware
+CNSS-PR-2-0-1-2-c1-74-130449-3, also with 5.17.
 
-A couple of questions and test results below.
+root@linaro-developer:~# speedtest
+Retrieving speedtest.net configuration...
+Testing from Square (135.84.132.205)...
+Retrieving speedtest.net server list...
+Selecting best server based on ping...
+Hosted by Open5G Inc. (Atherton, CA) [40.28 km]: 11.828 ms
+Testing download speed................................................................................
+Download: 3.00 Mbit/s
+Testing upload speed......................................................................................................
+Upload: 23.69 Mbit/s
+root@linaro-developer:~#
+root@linaro-developer:~# iw wlan0 link
+Connected to 6c:f3:7f:eb:98:21 (on wlan0)
+	SSID: SQ-DEVICETEST
+	freq: 2412
+	RX: 34119054 bytes (37804 packets)
+	TX: 32924504 bytes (35073 packets)
+	signal: -59 dBm
+	rx bitrate: 57.8 MBit/s MCS 5 short GI
+	tx bitrate: 58.5 MBit/s MCS 6
 
-On Thu, Feb 17, 2022 at 08:44:51PM +0100, Wolfram Sang wrote:
-> Hi Andrew,
-> 
-> first sorry that it took so long. The reason here is that my original
-> plan was to add 256-byte support to RECV_LEN in the I2C core and enable
-> it on R-Car afterwards. Sadly, I never found the time to drive this
-> forward. So, all RECV_LEN things got stuck for a while :(
-> 
-> > This patch (adapted) was tested with v4.14, but due to lack of real
-> > hardware with SMBus block read operations support, using "simulation",
-> > that is manual analysis of data, read from plain I2C devices with
-> > SMBus block read request.
-> 
-> You could wire up two R-Car I2C instances, set up one as an I2C slave
-> handled by the I2C testunit and then use the other instance with
-> SMBUS_BLOCK_PROC_CALL which also needs RECV_LEN. Check
-> Documentation/i2c/slave-testunit-backend.rst for details.
+	bss flags:	short-preamble short-slot-time
+	dtim period:	1
+	beacon int:	100
 
-I am obviously not an SMBus expert, but I wonder if simply testing the
-PCA9654 I/O Expander with SMBus support on the H3-Salvator-X target
-could be acceptable as a test procedure? See some test results below.
+Tested-by: Benjamin Li <benl@squareup.com>
 
+Ben
+
+On 3/23/22 2:45 PM, Edmond Gagnon wrote:
+> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
+> rate:
 > 
-> I wonder a bit about the complexity of your patch. In my WIP-branch for
-> 256-byte transfers, I have the following patch. It is only missing the
-> range check for the received byte, but that it easy to add. Do you see
-> anything else missing? If not, I prefer this simpler version because it
-> is less intrusive and the state machine is a bit fragile (due to HW
-> issues with old HW).
+> root@linaro-developer:~# iw wlan0 link
+> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
+>         SSID: SQ-DEVICETEST
+>         freq: 5200
+>         RX: 4141 bytes (32 packets)
+>         TX: 2082 bytes (15 packets)
+>         signal: -77 dBm
+>         rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>         tx bitrate: 6.0 MBit/s
 > 
-> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Date: Sun, 2 Aug 2020 00:24:52 +0200
-> Subject: [PATCH] i2c: rcar: add support for I2C_M_RECV_LEN
+>         bss flags:      short-slot-time
+>         dtim period:    1
+>         beacon int:     100
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
+> firmware message and reports it via ieee80211_ops::sta_statistics.
+> 
+> root@linaro-developer:~# iw wlan0 link
+> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
+>         SSID: SQ-DEVICETEST
+>         freq: 5700
+>         RX: 26788094 bytes (19859 packets)
+>         TX: 1101376 bytes (12119 packets)
+>         signal: -75 dBm
+>         rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>         tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
+> 
+>         bss flags:      short-slot-time
+>         dtim period:    1
+>         beacon int:     100
+> 
+> Tested on MSM8939 with WCN3680B running firmware CNSS-PR-2-0-1-2-c1-00083,
+> and verified by sniffing frames over the air with Wireshark to ensure the
+> MCS indices match.
+> 
+> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
+> Reviewed-by: Benjamin Li <benl@squareup.com>
 > ---
->  drivers/i2c/busses/i2c-rcar.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-> index 217def2d7cb4..e473f5c0a708 100644
-> --- a/drivers/i2c/busses/i2c-rcar.c
-> +++ b/drivers/i2c/busses/i2c-rcar.c
-> @@ -528,6 +528,7 @@ static void rcar_i2c_irq_send(struct rcar_i2c_priv *priv, u32 msr)
->  static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+> Changes in v3:
+>  - Refactored to report tx_rate via ieee80211_ops::sta_statistics
+>  - Dropped get_sta_index patch
+>  - Addressed style comments
+> Changes in v2:
+>  - Refactored to use existing wcn36xx_hal_get_stats_{req,rsp}_msg structs.
+>  - Added more notes about testing.
+>  - Reduced reporting interval to 3000msec.
+>  - Assorted type and memory safety fixes.
+>  - Make wcn36xx_smd_get_stats friendlier to future message implementors.
+> 
+>  drivers/net/wireless/ath/wcn36xx/hal.h  |  7 +++-
+>  drivers/net/wireless/ath/wcn36xx/main.c | 16 +++++++
+>  drivers/net/wireless/ath/wcn36xx/smd.c  | 56 +++++++++++++++++++++++++
+>  drivers/net/wireless/ath/wcn36xx/smd.h  |  2 +
+>  drivers/net/wireless/ath/wcn36xx/txrx.c | 29 +++++++++++++
+>  drivers/net/wireless/ath/wcn36xx/txrx.h |  1 +
+>  6 files changed, 110 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/ath/wcn36xx/hal.h b/drivers/net/wireless/ath/wcn36xx/hal.h
+> index 2a1db9756fd5..46a49f0a51b3 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/hal.h
+> +++ b/drivers/net/wireless/ath/wcn36xx/hal.h
+> @@ -2626,7 +2626,12 @@ enum tx_rate_info {
+>  	HAL_TX_RATE_SGI = 0x8,
+>  
+>  	/* Rate with Long guard interval */
+> -	HAL_TX_RATE_LGI = 0x10
+> +	HAL_TX_RATE_LGI = 0x10,
+> +
+> +	/* VHT rates */
+> +	HAL_TX_RATE_VHT20  = 0x20,
+> +	HAL_TX_RATE_VHT40  = 0x40,
+> +	HAL_TX_RATE_VHT80  = 0x80,
+>  };
+>  
+>  struct ani_global_class_a_stats_info {
+> diff --git a/drivers/net/wireless/ath/wcn36xx/main.c b/drivers/net/wireless/ath/wcn36xx/main.c
+> index b545d4b2b8c4..fc76b090c39f 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/main.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/main.c
+> @@ -1400,6 +1400,21 @@ static int wcn36xx_get_survey(struct ieee80211_hw *hw, int idx,
+>  	return 0;
+>  }
+>  
+> +static void wcn36xx_sta_statistics(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+> +				   struct ieee80211_sta *sta, struct station_info *sinfo)
+> +{
+> +	struct wcn36xx *wcn;
+> +	u8 sta_index;
+> +	int status = 0;
+> +
+> +	wcn = hw->priv;
+> +	sta_index = get_sta_index(vif, wcn36xx_sta_to_priv(sta));
+> +	status = wcn36xx_smd_get_stats(wcn, sta_index, HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
+> +
+> +	if (status)
+> +		wcn36xx_err("wcn36xx_smd_get_stats failed\n");
+> +}
+> +
+>  static const struct ieee80211_ops wcn36xx_ops = {
+>  	.start			= wcn36xx_start,
+>  	.stop			= wcn36xx_stop,
+> @@ -1423,6 +1438,7 @@ static const struct ieee80211_ops wcn36xx_ops = {
+>  	.set_rts_threshold	= wcn36xx_set_rts_threshold,
+>  	.sta_add		= wcn36xx_sta_add,
+>  	.sta_remove		= wcn36xx_sta_remove,
+> +	.sta_statistics		= wcn36xx_sta_statistics,
+>  	.ampdu_action		= wcn36xx_ampdu_action,
+>  #if IS_ENABLED(CONFIG_IPV6)
+>  	.ipv6_addr_change	= wcn36xx_ipv6_addr_change,
+> diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
+> index caeb68901326..8f9aa892e5ec 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/smd.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/smd.c
+> @@ -2627,6 +2627,61 @@ int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 tid, u8 direction, u8 sta_index)
+>  	return ret;
+>  }
+>  
+> +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32 stats_mask,
+> +			  struct station_info *sinfo)
+> +{
+> +	struct wcn36xx_hal_stats_req_msg msg_body;
+> +	struct wcn36xx_hal_stats_rsp_msg *rsp;
+> +	void *rsp_body;
+> +	int ret = 0;
+> +
+> +	if (stats_mask & ~HAL_GLOBAL_CLASS_A_STATS_INFO) {
+> +		wcn36xx_err("stats_mask 0x%x contains unimplemented types\n",
+> +			    stats_mask);
+> +		return -EINVAL;
+> +	}
+> +
+> +	mutex_lock(&wcn->hal_mutex);
+> +	INIT_HAL_MSG(msg_body, WCN36XX_HAL_GET_STATS_REQ);
+> +
+> +	msg_body.sta_id = sta_index;
+> +	msg_body.stats_mask = stats_mask;
+> +
+> +	PREPARE_HAL_BUF(wcn->hal_buf, msg_body);
+> +
+> +	ret = wcn36xx_smd_send_and_wait(wcn, msg_body.header.len);
+> +	if (ret) {
+> +		wcn36xx_err("sending hal_get_stats failed\n");
+> +		goto out;
+> +	}
+> +
+> +	ret = wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len);
+> +	if (ret) {
+> +		wcn36xx_err("hal_get_stats response failed err=%d\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	rsp = (struct wcn36xx_hal_stats_rsp_msg *)wcn->hal_buf;
+> +	rsp_body = (wcn->hal_buf + sizeof(struct wcn36xx_hal_stats_rsp_msg));
+> +
+> +	if (rsp->stats_mask != stats_mask) {
+> +		wcn36xx_err("stats_mask 0x%x differs from requested 0x%x\n",
+> +			    rsp->stats_mask, stats_mask);
+> +		goto out;
+> +	}
+> +
+> +	if (rsp->stats_mask & HAL_GLOBAL_CLASS_A_STATS_INFO) {
+> +		wcn36xx_process_tx_rate((struct ani_global_class_a_stats_info *)rsp_body,
+> +					&sinfo->txrate);
+> +		sinfo->filled |= BIT_ULL(NL80211_STA_INFO_TX_BITRATE);
+> +		rsp_body += sizeof(struct ani_global_class_a_stats_info);
+> +	}
+> +out:
+> +	mutex_unlock(&wcn->hal_mutex);
+> +
+> +	return ret;
+> +}
+> +
+>  static int wcn36xx_smd_trigger_ba_rsp(void *buf, int len, struct add_ba_info *ba_info)
 >  {
->  	struct i2c_msg *msg = priv->msg;
-> +	bool recv_len_init = priv->pos == 0 && msg->flags & I2C_M_RECV_LEN;
+>  	struct wcn36xx_hal_trigger_ba_rsp_candidate *candidate;
+> @@ -3316,6 +3371,7 @@ int wcn36xx_smd_rsp_process(struct rpmsg_device *rpdev,
+>  	case WCN36XX_HAL_ADD_BA_SESSION_RSP:
+>  	case WCN36XX_HAL_ADD_BA_RSP:
+>  	case WCN36XX_HAL_DEL_BA_RSP:
+> +	case WCN36XX_HAL_GET_STATS_RSP:
+>  	case WCN36XX_HAL_TRIGGER_BA_RSP:
+>  	case WCN36XX_HAL_UPDATE_CFG_RSP:
+>  	case WCN36XX_HAL_JOIN_RSP:
+> diff --git a/drivers/net/wireless/ath/wcn36xx/smd.h b/drivers/net/wireless/ath/wcn36xx/smd.h
+> index 957cfa87fbde..3fd598ac2a27 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/smd.h
+> +++ b/drivers/net/wireless/ath/wcn36xx/smd.h
+> @@ -138,6 +138,8 @@ int wcn36xx_smd_add_ba_session(struct wcn36xx *wcn,
+>  int wcn36xx_smd_add_ba(struct wcn36xx *wcn, u8 session_id);
+>  int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 tid, u8 direction, u8 sta_index);
+>  int wcn36xx_smd_trigger_ba(struct wcn36xx *wcn, u8 sta_index, u16 tid, u16 *ssn);
+> +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32 stats_mask,
+> +			  struct station_info *sinfo);
 >  
->  	/* FIXME: sometimes, unknown interrupt happened. Do nothing */
->  	if (!(msr & MDR))
-> @@ -542,11 +543,13 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
->  	} else if (priv->pos < msg->len) {
->  		/* get received data */
->  		msg->buf[priv->pos] = rcar_i2c_read(priv, ICRXTX);
-> +		if (recv_len_init)
-> +			msg->len += msg->buf[0];
->  		priv->pos++;
->  	}
+>  int wcn36xx_smd_update_cfg(struct wcn36xx *wcn, u32 cfg_id, u32 value);
 >  
->  	/* If next received data is the _LAST_, go to new phase. */
-> -	if (priv->pos + 1 == msg->len) {
-> +	if (priv->pos + 1 == msg->len && !recv_len_init) {
->  		if (priv->flags & ID_LAST_MSG) {
->  			rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_STOP);
->  		} else {
-> @@ -889,7 +892,7 @@ static u32 rcar_i2c_func(struct i2c_adapter *adap)
->  	 * I2C_M_IGNORE_NAK (automatically sends STOP after NAK)
->  	 */
->  	u32 func = I2C_FUNC_I2C | I2C_FUNC_SLAVE |
-> -		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-> +		   (I2C_FUNC_SMBUS_EMUL_ALL & ~I2C_FUNC_SMBUS_QUICK);
+> diff --git a/drivers/net/wireless/ath/wcn36xx/txrx.c b/drivers/net/wireless/ath/wcn36xx/txrx.c
+> index df749b114568..8da3955995b6 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/txrx.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/txrx.c
+> @@ -699,3 +699,32 @@ int wcn36xx_start_tx(struct wcn36xx *wcn,
 >  
->  	if (priv->flags & ID_P_HOST_NOTIFY)
->  		func |= I2C_FUNC_SMBUS_HOST_NOTIFY;
-> 
-
-############################################################
-################# PATCH-INDEPENDENT OUTPUT #################
-############################################################
-
-## .config: https://gist.github.com/erosca/690c3e6065b55546e511f9ef8ba59625
-## i2c-tools: https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git/commit/?id=cf3541b8a7
-
-root@rcar-gen3:# uname -r
-5.17.0+
-
-root@rcar-gen3:# cat /sys/firmware/devicetree/base/model 
-Renesas Salvator-X board based on r8a77951
-
-root@rcar-gen3:# i2cdetect -l     
-i2c-7   i2c             e60b0000.i2c                            I2C adapter
-i2c-2   i2c             e6510000.i2c                            I2C adapter
-i2c-4   i2c             e66d8000.i2c                            I2C adapter
-    ^
-     ` i2c-4 is the PCA9654 I/O Expander with SMBus protocol support
-
-root@rcar-gen3:# i2cdetect -y -r 4
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:                         -- -- -- -- -- -- -- -- 
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-20: UU -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-60: UU UU UU UU UU UU -- -- 68 -- UU -- -- -- -- -- 
-70: UU UU UU UU UU UU -- --      
-
-############################################################
-###################### VANILLA v5.17 #######################
-############################################################
-
-root@rcar-gen3:# i2cdetect -F 4
-Functionalities implemented by /dev/i2c-4:
-I2C                              yes
-SMBus Quick Command              no
-SMBus Send Byte                  yes
-SMBus Receive Byte               yes
-SMBus Write Byte                 yes
-SMBus Read Byte                  yes
-SMBus Write Word                 yes
-SMBus Read Word                  yes
-SMBus Process Call               yes
-SMBus Block Write                yes
-SMBus Block Read                 no	<<<--- We aim to enable this
-SMBus Block Process Call         no
-SMBus PEC                        yes
-I2C Block Write                  yes
-I2C Block Read                   yes
-
-root@rcar-gen3:# i2cget -y 4 0x68 0 i 8
-0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08
-
-root@rcar-gen3:# i2cget -y 4 0x68 0 s
-Error: Adapter does not have SMBus block read capability
-
-############################################################
-#################### ANDREW'S V2 PATCH #####################
-############################################################
-
-root@rcar-gen3:# i2cdetect -F 4
-Functionalities implemented by /dev/i2c-4:
-I2C                              yes
-SMBus Quick Command              no
-SMBus Send Byte                  yes
-SMBus Receive Byte               yes
-SMBus Write Byte                 yes
-SMBus Read Byte                  yes
-SMBus Write Word                 yes
-SMBus Read Word                  yes
-SMBus Process Call               yes
-SMBus Block Write                yes
-SMBus Block Read                 yes 	<<<--- Enabled (tested below)
-SMBus Block Process Call         no
-SMBus PEC                        yes
-I2C Block Write                  yes
-I2C Block Read                   yes
-
-root@rcar-gen3:# i2cget -y 4 0x68 0 i 8
-0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08
-
-root@rcar-gen3:# i2cget -y 4 0x68 0 s
-0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08
-
-############################################################
-##################### WOLFRAM'S PATCH ######################
-############################################################
-
-root@rcar-gen3:# i2cdetect -F 4
-Functionalities implemented by /dev/i2c-4:
-I2C                              yes
-SMBus Quick Command              no
-SMBus Send Byte                  yes
-SMBus Receive Byte               yes
-SMBus Write Byte                 yes
-SMBus Read Byte                  yes
-SMBus Write Word                 yes
-SMBus Read Word                  yes
-SMBus Process Call               yes
-SMBus Block Write                yes
-SMBus Block Read                 yes	<<<--- Enabled (tested)
-SMBus Block Process Call         yes	<<<--- Enabled (not tested)
-SMBus PEC                        yes
-I2C Block Write                  yes
-I2C Block Read                   yes
-
-root@rcar-gen3:# i2cget -y 4 0x68 0 i 8
-0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08
-
-root@rcar-gen3:# i2cget -y 4 0x68 0 s
-0xff 0x06 0xff 0x5f 0xff 0x11 0x08 0x08
-
-############################################################
-
-Any comments?
-
-Best regards,
-Eugeniu
+>  	return ret;
+>  }
+> +
+> +void wcn36xx_process_tx_rate(struct ani_global_class_a_stats_info *stats, struct rate_info *info)
+> +{
+> +	/* tx_rate is in units of 500kbps; mac80211 wants them in 100kbps */
+> +	if (stats->tx_rate_flags & HAL_TX_RATE_LEGACY)
+> +		info->legacy = stats->tx_rate * 5;
+> +
+> +	info->flags = 0;
+> +	info->mcs = stats->mcs_index;
+> +	info->nss = 1;
+> +
+> +	if (stats->tx_rate_flags & (HAL_TX_RATE_HT20 | HAL_TX_RATE_HT40))
+> +		info->flags |= RATE_INFO_FLAGS_MCS;
+> +
+> +	if (stats->tx_rate_flags & (HAL_TX_RATE_VHT20 | HAL_TX_RATE_VHT40 | HAL_TX_RATE_VHT80))
+> +		info->flags |= RATE_INFO_FLAGS_VHT_MCS;
+> +
+> +	if (stats->tx_rate_flags & HAL_TX_RATE_SGI)
+> +		info->flags |= RATE_INFO_FLAGS_SHORT_GI;
+> +
+> +	if (stats->tx_rate_flags & (HAL_TX_RATE_HT20 | HAL_TX_RATE_VHT20))
+> +		info->bw = RATE_INFO_BW_20;
+> +
+> +	if (stats->tx_rate_flags & (HAL_TX_RATE_HT40 | HAL_TX_RATE_VHT40))
+> +		info->bw = RATE_INFO_BW_40;
+> +
+> +	if (stats->tx_rate_flags & HAL_TX_RATE_VHT80)
+> +		info->bw = RATE_INFO_BW_80;
+> +}
+> diff --git a/drivers/net/wireless/ath/wcn36xx/txrx.h b/drivers/net/wireless/ath/wcn36xx/txrx.h
+> index b54311ffde9c..fb0d6cabd52b 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/txrx.h
+> +++ b/drivers/net/wireless/ath/wcn36xx/txrx.h
+> @@ -164,5 +164,6 @@ int  wcn36xx_rx_skb(struct wcn36xx *wcn, struct sk_buff *skb);
+>  int wcn36xx_start_tx(struct wcn36xx *wcn,
+>  		     struct wcn36xx_sta *sta_priv,
+>  		     struct sk_buff *skb);
+> +void wcn36xx_process_tx_rate(struct ani_global_class_a_stats_info *stats, struct rate_info *info);
+>  
+>  #endif	/* _TXRX_H_ */

@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3C24E5464
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCC74E5461
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 15:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiCWOky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 10:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
+        id S244855AbiCWOkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240637AbiCWOkw (ORCPT
+        with ESMTP id S240637AbiCWOko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 10:40:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427F77CDF8;
-        Wed, 23 Mar 2022 07:39:23 -0700 (PDT)
+        Wed, 23 Mar 2022 10:40:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCBC574B2;
+        Wed, 23 Mar 2022 07:39:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0CABB81F54;
-        Wed, 23 Mar 2022 14:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF31CC36AE7;
-        Wed, 23 Mar 2022 14:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648046360;
-        bh=7hScU2wmlNgM/yQ8a4259GS5BdEa/xV6MFfLX6ni2K0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rGUjVHiwFih154F83bEJSn4pAvwlxs0HZ959xjNYb1dfz66dbs52/zIKe9ZkvOxSL
-         ABB1VbMccyZ3DNukWHfVl31bXum+b650tADAiJowQ3l0/vjr9pf/pLhKQa2g938vc4
-         p6CJJr3LXDozl2Irqa02DW/bNdcWFdV2HG1yxoizOE0PtjldMlylhiePt3eohsMH1A
-         4RszRhFsCEfqHkaid7K8oVvNhMZLEAtd0I0OcezIbcbtTubaUK5XWnMYWvJeZWKVNH
-         4BbdlWIS12j7Lq4Mspq/RZyPXVSo/LZEgOIgDl1ojcM0kBtE70nVBXY2kPJLOqyqtW
-         7672ie+TjiiKA==
-Received: by mail-ej1-f51.google.com with SMTP id p15so3257740ejc.7;
-        Wed, 23 Mar 2022 07:39:20 -0700 (PDT)
-X-Gm-Message-State: AOAM533iNqFw/QhkVTFWvSi+IjjSF/HDex3qd3NR8/lwO76A0YTpjjrQ
-        aSugkG1dmsWWHof6bpMmqppiU/QUf6qjEmWeTA==
-X-Google-Smtp-Source: ABdhPJw2vEInYJhzD6Sf81xfPAK8TCv4R6vkavYp+uogbKSt/3KF5JGasr6aiXQ1YYxZKamMelaTIzKIIlvJ+HwzOfc=
-X-Received: by 2002:a17:906:58ce:b0:6da:b548:1bbb with SMTP id
- e14-20020a17090658ce00b006dab5481bbbmr307806ejs.14.1648046359044; Wed, 23 Mar
- 2022 07:39:19 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E934761725;
+        Wed, 23 Mar 2022 14:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FED4C340E8;
+        Wed, 23 Mar 2022 14:39:13 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 10:39:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-xfs@vger.kernel.org, Brian Foster <bfoster@redhat.com>
+Subject: [PATCH] tracing: Have trace event string test handle zero length
+ strings
+Message-ID: <20220323103912.097ad3a8@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220308155735.54146-1-alexandre.belloni@bootlin.com> <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 23 Mar 2022 09:39:07 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq++eqGS6xJ6EgwXe2RpZYgbB30kfTvZQx=sGmb-LgVWXg@mail.gmail.com>
-Message-ID: <CAL_Jsq++eqGS6xJ6EgwXe2RpZYgbB30kfTvZQx=sGmb-LgVWXg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: rtc: at91: rename rtt bindings file
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 3:05 PM Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Tue, Mar 8, 2022 at 9:57 AM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> >
-> > atmel,at91sam9-rtc is a confuing name for this file as it is documenting
-> > the RTT used as an RTC and not the other regular RTC (atmel,at91rm9200-rtc
-> > and atmel,at91sam9x5-rtc)
-> >
-> > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > ---
-> >  .../rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml}   | 0
-> >  1 file changed, 0 insertions(+), 0 deletions(-)
-> >  rename Documentation/devicetree/bindings/rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml} (100%)
-> >
-> > diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> > similarity index 100%
-> > rename from Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-> > rename to Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
->
-> Now failing in -next:
->
-> ./Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml:
-> $id: relative path/filename doesn't match actual path or filename
->   expected: http://devicetree.org/schemas/rtc/atmel,at91sam9260-rtt.yaml#
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Still failing...
+If a trace event has in its TP_printk():
 
-Rob
+ "%*.s", len, len ? __get_str(string) : NULL
+
+It is perfectly valid if len is zero and passing in the NULL.
+Unfortunately, the runtime string check at time of reading the trace sees
+the NULL and flags it as a bad string and produces a WARN_ON().
+
+Handle this case by passing into the test function if the format has an
+asterisk (star) and if so, if the length is zero, then mark it as safe.
+
+Link: https://lore.kernel.org/all/YjsWzuw5FbWPrdqq@bfoster/
+
+Cc: stable@vger.kernel.org
+Reported-by: Brian Foster <bfoster@redhat.com>
+Fixes: 9a6944fee68e2 ("tracing: Add a verifier to check string pointers for trace events")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index eb44418574f9..96265a717ca4 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3663,12 +3663,17 @@ static char *trace_iter_expand_format(struct trace_iterator *iter)
+ }
+ 
+ /* Returns true if the string is safe to dereference from an event */
+-static bool trace_safe_str(struct trace_iterator *iter, const char *str)
++static bool trace_safe_str(struct trace_iterator *iter, const char *str,
++			   bool star, int len)
+ {
+ 	unsigned long addr = (unsigned long)str;
+ 	struct trace_event *trace_event;
+ 	struct trace_event_call *event;
+ 
++	/* Ignore strings with no length */
++	if (star && !len)
++		return true;
++
+ 	/* OK if part of the event data */
+ 	if ((addr >= (unsigned long)iter->ent) &&
+ 	    (addr < (unsigned long)iter->ent + iter->ent_size))
+@@ -3854,7 +3859,7 @@ void trace_check_vprintf(struct trace_iterator *iter, const char *fmt,
+ 		 * instead. See samples/trace_events/trace-events-sample.h
+ 		 * for reference.
+ 		 */
+-		if (WARN_ONCE(!trace_safe_str(iter, str),
++		if (WARN_ONCE(!trace_safe_str(iter, str, star, len),
+ 			      "fmt: '%s' current_buffer: '%s'",
+ 			      fmt, show_buffer(&iter->seq))) {
+ 			int ret;
+-- 
+2.35.1
+

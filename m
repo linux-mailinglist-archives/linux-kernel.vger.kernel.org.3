@@ -2,199 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0B14E4DF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3028C4E4DF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 09:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242565AbiCWIR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 04:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S239987AbiCWIQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 04:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239055AbiCWIRW (ORCPT
+        with ESMTP id S229480AbiCWIQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 04:17:22 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EE874DF1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:15:51 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id t25so1371953lfg.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KYpa6RfccL7lgQ3DFXF/bjASQpeaVzOGJrxLauNYQAY=;
-        b=OI99Ma5dkKGq5xoX1MNtEp35uzOAK4SK9dZLORO5oJylBi9zxnRqcsn/0hFad3Vhw1
-         arzXj68X8COLCI8LIvZb4MchqnTHZc5s512bj0YeZ/QAcDfH+/a70AM9uAJ/QDYYlRm3
-         sY6VNtDNHJeIJQrOu9zUroGyzadsME86ABmIkr9mKttRx3WB6xiYvxKRqxX+pNGd7M7E
-         iqr2Wp9ldFsf8wMXyfidaelJunJuCiKocSLLWCPuFE7lva6lcbHL4WbeAYiMQCEv3hLy
-         iiSAIvcjC2f26NWhx0AE8+izwGyAzLquFuiqE+So/cQsNqk15HOS2WD/DkrykOfSVrd/
-         OnLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KYpa6RfccL7lgQ3DFXF/bjASQpeaVzOGJrxLauNYQAY=;
-        b=4LxN8hDNBBDhgzroePDC98IUeGQe9uU4kCSMhN+vaGYq4u090Zgg7XcqZhRZ4e1Ysr
-         qFcdKlTl6kRTDOtV3/RItoiXJM7hMA55i/Dv1coDwBo/xbYiY1tqbI7kSwpNJsiG40kW
-         uOfxMTomP6c+0hWx366Ad/3VXA5fBuUuuoCoMFkkTzk3uFnLsTq+7vTuuiOTFv3iqe56
-         cBsZ3vyrlg+fxSNY/74vpZM37x/KlHZCKZ0VBDJrExOwmzRNsMEbvh+gUNiw4vpuSbu5
-         pp7kbWnhXi1dA38M4lbSxyw1NdQ1u2hFBK7qEonNUrsr9k95QvnX0JSw2csMiN9kitIG
-         VDdA==
-X-Gm-Message-State: AOAM533jIuC0wsEaFMXEFN0d+A7iJUod+YpcJcpnOR/8YKMUwDgCgz5b
-        hiUtuOjBCTsM1AOt6cDwoEsuB2rd9AO94xuVEePBdQ==
-X-Google-Smtp-Source: ABdhPJxXLsL8FKUlSe34JwJ0cRfV0ooDftHOt3TUM6Evsw/1C0Kit2jMagBnuErIWMSnvATB0PDZ18+i+Nd0dmwmeWY=
-X-Received: by 2002:a05:6512:130b:b0:44a:3b2d:3a85 with SMTP id
- x11-20020a056512130b00b0044a3b2d3a85mr4929770lfu.358.1648023349398; Wed, 23
- Mar 2022 01:15:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220317152846.246281-1-ulf.hansson@linaro.org> <98472721-7f3c-3f2b-42a6-d50b51c6191f@foss.st.com>
-In-Reply-To: <98472721-7f3c-3f2b-42a6-d50b51c6191f@foss.st.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 23 Mar 2022 09:15:12 +0100
-Message-ID: <CAPDyKFpAmrdZQEAS8Vs98y5LrdYM4OM0srEo1XiNHy1bV6QT7g@mail.gmail.com>
-Subject: Re: [PATCH] brcmfmac: Avoid keeping power to SDIO card unless WOWL is used
-To:     Yann Gautier <yann.gautier@foss.st.com>
-Cc:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        brcm80211-dev-list.pdl@broadcom.com, linux-kernel@vger.kernel.org,
-        Christophe KERELLO - foss <christophe.kerello@foss.st.com>,
-        Christophe ROULLIER-SCND-02 <christophe.roullier@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 23 Mar 2022 04:16:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EC95BE47
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 01:15:21 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 093B41F37F;
+        Wed, 23 Mar 2022 08:15:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648023320; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g1osbJeXlQpB5//z8F0X+vu5CcbRy6xr+WwjWLHu7ME=;
+        b=Goihwp7Zy9WnNOAl84wO3Q/qKMVMCFj/rWC1JoKHO8SvxgV9u3GK9IUpAB687OYCoBGRaL
+        1PDX7tSszzm8Lx7GqvDWTKs0KXlF3NKQ4X5JQ4NJ/YZJhMsfvtn3W+2x3kRby+cTVHWLhF
+        bFfrcKHpeDcVDmZDpKU2ayVKXhbHloY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648023320;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g1osbJeXlQpB5//z8F0X+vu5CcbRy6xr+WwjWLHu7ME=;
+        b=sC0InqTC4Xpudf7v+aBXZzhHaywMhlBzP21ZVPjCq8EC+vBAPxeA8r7+CM8N6TvhLDSX+b
+        nykL+KVgp4vomXCg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id F0A8DA3B81;
+        Wed, 23 Mar 2022 08:15:19 +0000 (UTC)
+Date:   Wed, 23 Mar 2022 09:15:19 +0100
+Message-ID: <s5hy211ult4.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Amadeusz SX2awiX4ski <amadeuszx.slawinski@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, Hu Jiahui <kirin.say@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+In-Reply-To: <db933c9e-bf7b-dec6-8022-75074f9cebf7@linux.intel.com>
+References: <20220322170720.3529-1-tiwai@suse.de>
+        <20220322170720.3529-4-tiwai@suse.de>
+        <db933c9e-bf7b-dec6-8022-75074f9cebf7@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Mar 2022 at 11:47, Yann Gautier <yann.gautier@foss.st.com> wrote:
->
-> On 3/17/22 16:28, Ulf Hansson wrote:
-> > Keeping the power to the SDIO card during system wide suspend, consumes
-> > energy. Especially on battery driven embedded systems, this can be a
-> > problem. Therefore, let's change the behaviour into allowing the SDIO card
-> > to be powered off, unless WOWL is supported and enabled.
+On Wed, 23 Mar 2022 09:08:25 +0100,
+Amadeusz SX2awiX4ski wrote:
+> 
+> On 3/22/2022 6:07 PM, Takashi Iwai wrote:
+> > Like the previous fixes to hw_params and hw_free ioctl races, we need
+> > to paper over the concurrent prepare ioctl calls against hw_params and
+> > hw_free, too.
 > >
-> > Note that, the downside from this change, is that at system resume the SDIO
-> > card needs to be re-initialized and the FW must re-programmed. Even it that
-> > may take some time to complete, it should we worth it, rather than draining
-> > a battery.
+> > This patch implements the locking with the existing
+> > runtime->buffer_mutex for prepare ioctls.  Unlike the previous case
+> > for snd_pcm_hw_hw_params() and snd_pcm_hw_free(), snd_pcm_prepare() is
+> > performed to the linked streams, hence the lock can't be applied
+> > simply on the top.  For tracking the lock in each linked substream, we
+> > modify snd_pcm_action_group() slightly and apply the buffer_mutex for
+> > the case stream_lock=false (formerly there was no lock applied)
+> > there.
 > >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
 > > ---
+> >   sound/core/pcm_native.c | 32 ++++++++++++++++++--------------
+> >   1 file changed, 18 insertions(+), 14 deletions(-)
 > >
-> > Please note that, I have only compile-tested this patch, so I am relying on help
-> > from Yann and others to run tests on real HW.
-> >
-> > Kind regards
-> > Ulf Hansson
-> >
-> > ---
-> >   .../broadcom/brcm80211/brcmfmac/bcmsdh.c      | 33 +++++++++++--------
-> >   1 file changed, 20 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> > index ac02244a6fdf..351886c9d68e 100644
-> > --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> > +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> > @@ -1119,9 +1119,21 @@ void brcmf_sdio_wowl_config(struct device *dev, bool enabled)
+> > diff --git a/sound/core/pcm_native.c b/sound/core/pcm_native.c
+> > index 266895374b83..0e4fbf5fd87b 100644
+> > --- a/sound/core/pcm_native.c
+> > +++ b/sound/core/pcm_native.c
+> > @@ -1190,15 +1190,17 @@ struct action_ops {
+> >   static int snd_pcm_action_group(const struct action_ops *ops,
+> >   				struct snd_pcm_substream *substream,
+> >   				snd_pcm_state_t state,
+> > -				bool do_lock)
+> > +				bool stream_lock)
 > >   {
-> >       struct brcmf_bus *bus_if = dev_get_drvdata(dev);
-> >       struct brcmf_sdio_dev *sdiodev = bus_if->bus_priv.sdio;
-> > +     mmc_pm_flag_t pm_caps = sdio_get_host_pm_caps(sdiodev->func1);
-> >
-> > -     brcmf_dbg(SDIO, "Configuring WOWL, enabled=%d\n", enabled);
-> > -     sdiodev->wowl_enabled = enabled;
-> > +     /* Power must be preserved to be able to support WOWL. */
-> > +     if (!(pm_caps & MMC_PM_KEEP_POWER))
-> > +             goto notsup;
-> > +
-> > +     if (sdiodev->settings->bus.sdio.oob_irq_supported ||
-> > +         pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
-> > +             sdiodev->wowl_enabled = enabled;
-> > +             brcmf_dbg(SDIO, "Configuring WOWL, enabled=%d\n", enabled);
-> > +             return;
-> > +     }
-> > +
-> > +notsup:
-> > +     brcmf_dbg(SDIO, "WOWL not supported\n");
-> >   }
-> >
-> >   #ifdef CONFIG_PM_SLEEP
-> > @@ -1130,7 +1142,7 @@ static int brcmf_ops_sdio_suspend(struct device *dev)
-> >       struct sdio_func *func;
-> >       struct brcmf_bus *bus_if;
-> >       struct brcmf_sdio_dev *sdiodev;
-> > -     mmc_pm_flag_t pm_caps, sdio_flags;
-> > +     mmc_pm_flag_t sdio_flags;
-> >       int ret = 0;
-> >
-> >       func = container_of(dev, struct sdio_func, dev);
-> > @@ -1142,20 +1154,15 @@ static int brcmf_ops_sdio_suspend(struct device *dev)
-> >       bus_if = dev_get_drvdata(dev);
-> >       sdiodev = bus_if->bus_priv.sdio;
-> >
-> > -     pm_caps = sdio_get_host_pm_caps(func);
-> > -
-> > -     if (pm_caps & MMC_PM_KEEP_POWER) {
-> > -             /* preserve card power during suspend */
-> > +     if (sdiodev->wowl_enabled) {
-> >               brcmf_sdiod_freezer_on(sdiodev);
-> >               brcmf_sdio_wd_timer(sdiodev->bus, 0);
-> >
-> >               sdio_flags = MMC_PM_KEEP_POWER;
-> > -             if (sdiodev->wowl_enabled) {
-> > -                     if (sdiodev->settings->bus.sdio.oob_irq_supported)
-> > -                             enable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
-> > -                     else
-> > -                             sdio_flags |= MMC_PM_WAKE_SDIO_IRQ;
-> > -             }
-> > +             if (sdiodev->settings->bus.sdio.oob_irq_supported)
-> > +                     enable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
-> > +             else
-> > +                     sdio_flags |= MMC_PM_WAKE_SDIO_IRQ;
-> >
-> >               if (sdio_set_host_pm_flags(sdiodev->func1, sdio_flags))
-> >                       brcmf_err("Failed to set pm_flags %x\n", sdio_flags);
->
-> Hi Ulf,
->
-> You are missing the counter part in brcmf_ops_sdio_resume:
->
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> @@ -1190,14 +1190,13 @@ static int brcmf_ops_sdio_resume(struct device *dev)
->          if (func->num != 2)
->                  return 0;
->
-> -       if (!(pm_caps & MMC_PM_KEEP_POWER)) {
-> +       if (!sdiodev->wowl_enabled) {
->                  /* bus was powered off and device removed, probe again */
->                  ret = brcmf_sdiod_probe(sdiodev);
->                  if (ret)
->                          brcmf_err("Failed to probe device on resume\n");
->          } else {
-> -               if (sdiodev->wowl_enabled &&
-> -                   sdiodev->settings->bus.sdio.oob_irq_supported)
-> +               if (sdiodev->settings->bus.sdio.oob_irq_supported)
->
-> disable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
->
->
-> Else, we get an oops when calling brcmf_sdio_sleep.
+> >   	struct snd_pcm_substream *s = NULL;
+> >   	struct snd_pcm_substream *s1;
+> >   	int res = 0, depth = 1;
+> >     	snd_pcm_group_for_each_entry(s, substream) {
+> > -		if (do_lock && s != substream) {
+> > -			if (s->pcm->nonatomic)
+> > +		if (s != substream) {
+> > +			if (!stream_lock)
+> > +				mutex_lock_nested(&s->runtime->buffer_mutex, depth);
+> > +			else if (s->pcm->nonatomic)
+> >   				mutex_lock_nested(&s->self_group.mutex, depth);
+> >   			else
+> >   				spin_lock_nested(&s->self_group.lock, depth);
+> 
+> Maybe
+> 	if (!stream_lock)
+> 		mutex_lock_nested(&s->runtime->buffer_mutex, depth);
+> 	else
+> 		snd_pcm_group_lock(&s->self_group, s->pcm->nonatomic);
+> ?
 
-Yes, of course - thanks for reviewing and testing. A v2 is on the way out.
+No, it must be nested locks with the given subclass.  That's why it
+has been the open code beforehand, too.
 
->
->
-> Best regards,
-> Yann
+> > @@ -1226,18 +1228,18 @@ static int snd_pcm_action_group(const struct action_ops *ops,
+> >   		ops->post_action(s, state);
+> >   	}
+> >    _unlock:
+> > -	if (do_lock) {
+> > -		/* unlock streams */
+> > -		snd_pcm_group_for_each_entry(s1, substream) {
+> > -			if (s1 != substream) {
+> > -				if (s1->pcm->nonatomic)
+> > -					mutex_unlock(&s1->self_group.mutex);
+> > -				else
+> > -					spin_unlock(&s1->self_group.lock);
+> > -			}
+> > -			if (s1 == s)	/* end */
+> > -				break;
+> > +	/* unlock streams */
+> > +	snd_pcm_group_for_each_entry(s1, substream) {
+> > +		if (s1 != substream) {
+> > +			if (!stream_lock)
+> > +				mutex_unlock(&s1->runtime->buffer_mutex);
+> > +			else if (s1->pcm->nonatomic)
+> > +				mutex_unlock(&s1->self_group.mutex);
+> > +			else
+> > +				spin_unlock(&s1->self_group.lock);
+> 
+> And similarly to above, use snd_pcm_group_unlock() here?
 
-Kind regards
-Uffe
+This side would be possible to use that macro but it's still better to
+have the consistent call pattern.
+
+
+thanks,
+
+Takashi

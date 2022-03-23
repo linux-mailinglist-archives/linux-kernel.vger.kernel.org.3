@@ -2,163 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D041E4E53B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01F14E53BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 14:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244539AbiCWN7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 09:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S244552AbiCWOAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 10:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242324AbiCWN7D (ORCPT
+        with ESMTP id S235604AbiCWOAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:59:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EFB7E0A7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:57:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 23 Mar 2022 10:00:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15BE4E02B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 06:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648043916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NPsFKWBDc285bGf4fkPtm66sH099xvtiav0N2gh4FPU=;
+        b=GaL2dwQWRT2fRFMWvcDzObQji9OoNdcP3Q4lAchoT9CoYVn++Ch0l5SuvkTyIN4CbzGoOA
+        //kerV4lhnLxQhzz4X/lBHWUXk6RGL4M9zhmKZkvnDudaGZ7lVi697Xn52z1aInh6Ld8bx
+        jqT3xuKZFxMnnDwk84pbYy+Aje0PA40=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-99w9fyUfPM-3XaVeV6T16Q-1; Wed, 23 Mar 2022 09:58:33 -0400
+X-MC-Unique: 99w9fyUfPM-3XaVeV6T16Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AFFF1210E4;
-        Wed, 23 Mar 2022 13:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648043851; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=itu+LHsaFezNfv+6AfxtF3Pylr5NbpawvSpL4NXWxCc=;
-        b=ZsrLi6jex0eApPlRNLc7tI9/QKRpc0JHSa98ysm8sWkr7DGrC+Q8QNEGa0KJKSw2kCt778
-        tGjirxsi8jSsWMREeU6akSB3TWnB9Q7LtsohMtwJostGPbtBYCb4XwkSkI9FxRdcBNU/1E
-        zu04qCmmAb1TOebmQZ6I/665j4BBvAU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648043851;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=itu+LHsaFezNfv+6AfxtF3Pylr5NbpawvSpL4NXWxCc=;
-        b=E/97Ue1iAv691jvF2gSfULnJn4QIBWV3B/TyrMcNJ7SAzbH5ecCJXsF/zlagV4bEZuGCo+
-        WbIb3S+/6RInXNBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 36D8712FC5;
-        Wed, 23 Mar 2022 13:57:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RHj4C0snO2LpOQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 23 Mar 2022 13:57:31 +0000
-Message-ID: <b4d598ac-006e-1de3-21e5-8afa6aea0538@suse.cz>
-Date:   Wed, 23 Mar 2022 14:57:30 +0100
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7A075106655B;
+        Wed, 23 Mar 2022 13:58:32 +0000 (UTC)
+Received: from ceranb.redhat.com (unknown [10.40.192.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A6C2B403D1A3;
+        Wed, 23 Mar 2022 13:58:30 +0000 (UTC)
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     poros@redhat.com, mschmidt@redhat.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] ice: Fix MAC address setting
+Date:   Wed, 23 Mar 2022 14:58:29 +0100
+Message-Id: <20220323135829.4015645-1-ivecera@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 27/39] kasan, mm: only define ___GFP_SKIP_KASAN_POISON
- with HW_TAGS
-Content-Language: en-US
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Matthew Wilcox <willy@infradead.org>
-References: <cover.1643047180.git.andreyknvl@google.com>
- <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
- <63704e10-18cf-9a82-cffb-052c6046ba7d@suse.cz>
- <YjsaaQo5pqmGdBaY@linutronix.de>
- <CA+fCnZeG5DbxcnER1yWkJ50605_4E1xPtgeTEsSEc89qUg4w6g@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CA+fCnZeG5DbxcnER1yWkJ50605_4E1xPtgeTEsSEc89qUg4w6g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 14:36, Andrey Konovalov wrote:
-> On Wed, Mar 23, 2022 at 2:02 PM Sebastian Andrzej Siewior
-> <bigeasy@linutronix.de> wrote:
->>
->> On 2022-03-23 12:48:29 [+0100], Vlastimil Babka wrote:
->>>> +#ifdef CONFIG_KASAN_HW_TAGS
->>>>  #define ___GFP_SKIP_KASAN_POISON   0x1000000u
->>>> +#else
->>>> +#define ___GFP_SKIP_KASAN_POISON   0
->>>> +#endif
->>>>  #ifdef CONFIG_LOCKDEP
->>>>  #define ___GFP_NOLOCKDEP   0x2000000u
->>>>  #else
->>>> @@ -251,7 +255,9 @@ struct vm_area_struct;
->>>>  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
->>>>
->>>>  /* Room for N __GFP_FOO bits */
->>>> -#define __GFP_BITS_SHIFT (25 + IS_ENABLED(CONFIG_LOCKDEP))
->>>> +#define __GFP_BITS_SHIFT (24 +                                     \
->>>> +                     IS_ENABLED(CONFIG_KASAN_HW_TAGS) +    \
->>>> +                     IS_ENABLED(CONFIG_LOCKDEP))
->>>
->>> This breaks __GFP_NOLOCKDEP, see:
->>> https://lore.kernel.org/all/YjoJ4CzB3yfWSV1F@linutronix.de/
->>
->> This could work because ___GFP_NOLOCKDEP is still 0x2000000u. In
->>         ("kasan, page_alloc: allow skipping memory init for HW_TAGS")
->>         https://lore.kernel.org/all/0d53efeff345de7d708e0baa0d8829167772521e.1643047180.git.andreyknvl@google.com/
->>
->> This is replaced with 0x8000000u which breaks lockdep.
->>
->> Sebastian
-> 
-> Hi Sebastian,
-> 
-> Indeed, sorry for breaking lockdep. Thank you for the report!
-> 
-> I wonder what's the proper fix for this. Perhaps, don't hide KASAN GFP
-> bits under CONFIG_KASAN_HW_TAGS? And then do:
-> 
-> #define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
-> 
-> Vlastimil, Andrew do you have any preference?
+Commit 2ccc1c1ccc671b ("ice: Remove excess error variables") merged
+the usage of 'status' and 'err' variables into single one in
+function ice_set_mac_address(). Unfortunately this causes
+a regression when call of ice_fltr_add_mac() returns -EEXIST because
+this return value does not indicate an error in this case but
+value of 'err' value remains to be -EEXIST till the end of
+the function and is returned to caller.
 
-I guess it's the simplest thing to do for now. For the future we can
-still improve and handle all combinations of kasan/lockdep to occupy as
-few bits as possible and set the shift/mask appropriately. Or consider
-first if it's necessary anyway. I don't know if we really expect at any
-point to start triggering the BUILD_BUG_ON() in radix_tree_init() and
-then only some combination of configs will reduce the flags to a number
-that works. Or is there anything else that depends on __GFP_BITS_SHIFT?
-I mean if we don't expect to go this way, we can just define
-__GFP_BITS_SHIFT as a constant that assumes all the config-dependent
-flags to be defined (not zero).
+Prior this commit this does not happen because return value of
+ice_fltr_add_mac() was stored to 'status' variable first and
+if it was -EEXIST then 'err' remains to be zero.
 
-> If my suggestion sounds good, Andrew, could you directly apply the
-> changes? They are needed for these 3 patches:
-> 
-> kasan, page_alloc: allow skipping memory init for HW_TAGS
-> kasan, page_alloc: allow skipping unpoisoning for HW_TAGS
-> kasan, mm: only define ___GFP_SKIP_KASAN_POISON with HW_TAGS
-> 
-> As these depend on each other, I can't send separate patches that can
-> be folded for all 3.
-> 
-> Thanks!
+The patch fixes the problem by reset 'err' to zero when
+ice_fltr_add_mac() returns -EEXIST.
+
+Fixes: 2ccc1c1ccc671b ("ice: Remove excess error variables")
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 168a41ea37b8..420558d1cd21 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -5474,14 +5474,15 @@ static int ice_set_mac_address(struct net_device *netdev, void *pi)
+ 
+ 	/* Add filter for new MAC. If filter exists, return success */
+ 	err = ice_fltr_add_mac(vsi, mac, ICE_FWD_TO_VSI);
+-	if (err == -EEXIST)
++	if (err == -EEXIST) {
+ 		/* Although this MAC filter is already present in hardware it's
+ 		 * possible in some cases (e.g. bonding) that dev_addr was
+ 		 * modified outside of the driver and needs to be restored back
+ 		 * to this value.
+ 		 */
+ 		netdev_dbg(netdev, "filter for MAC %pM already exists\n", mac);
+-	else if (err)
++		err = 0;
++	} else if (err)
+ 		/* error if the new filter addition failed */
+ 		err = -EADDRNOTAVAIL;
+ 
+-- 
+2.34.1
 

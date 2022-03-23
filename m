@@ -2,99 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7480D4E513B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664284E513D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 12:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243871AbiCWLXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 07:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
+        id S243883AbiCWLXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 07:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243866AbiCWLW4 (ORCPT
+        with ESMTP id S243864AbiCWLXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 07:22:56 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFA37893C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:21:26 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bi12so2174323ejb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q428jPB3LI7YHZ1TPk4eUv6mjfb7Ccik6IuwbzunlN8=;
-        b=qk78RGmu57m+WoTO9wCDpvaz8ymit5RglIS5kWuFOL3VPbzAb56W2jFcujjmoJ/UGs
-         3EMPCUm15+UV7uYDmswOYIvQIRmiOmXioXyrRkhAZgoLMXbJ+zsL9cKQLdgUtLWFtVkT
-         Z3S+uVKDof7qiuUWrur20pLRxaVjPJzXAaT9Emz+jj9qoCBPt4uM9eUeb0J27HVnDGdm
-         aPrDDx/gd+JHrEaI5SEKc48yhCncdM2nrlC5X/9w4AU/s8nHQ0fGcvwlLyX0/6ayhbNl
-         T6vs+W+6SaJZP90z0JVLIAefcdVL2wcfO6TlH6LbtjOol8X4VugVItB/ReHWiQtK6JrY
-         hVxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q428jPB3LI7YHZ1TPk4eUv6mjfb7Ccik6IuwbzunlN8=;
-        b=WFM7XRbKB3fGaWa2Zk+Z1jD/U+SwGy8SC+XEGqZqVxXze9KjVYFlVaZaHJXfzYTOZ9
-         DJEDQifVddR3MiD8cT5Zn1wSseX0dMk8ETnzzR2S1M8/ZXuraRTSMrGFUFT2Qqqm/e0E
-         mYOH+GuJ00ccbbT5QrmADEKLSCA0fsSkAHSxiGxHCFh5/kaFiqv61WX/ZcEnLjleUN/W
-         bv/M4ESGvE2rOCOQaCYvht6X0xl/jP0lt18Mbxr6MqfEkiIwu9mGtSeZf5NbMoOHdy+W
-         dr/ZqHukByQNaJIrodrGJrAhmoPw1UQQXJ0V80RmSJCzFxazeyLB3072mkKLs05G1MoL
-         rKog==
-X-Gm-Message-State: AOAM532GBooFbghwJzF5skBtwbJ/HnJIh0InBLGeKuVF/Z2D2pFvO2vy
-        dMECYqixGDto0v0xMbU0jCLFZ5hr2E0i0KCku/MI
-X-Google-Smtp-Source: ABdhPJyeZxP1pcZPz6bj3JhcI1N6gvpSUjdNdladDO5oGiHAiqqYZoRaKWuZ9Ngs5Pq/FT2Q6BrtFvuDlEhpUxtD9Gs=
-X-Received: by 2002:a17:907:6e09:b0:6e0:6bd1:ab5a with SMTP id
- sd9-20020a1709076e0900b006e06bd1ab5amr1173845ejc.622.1648034484978; Wed, 23
- Mar 2022 04:21:24 -0700 (PDT)
+        Wed, 23 Mar 2022 07:23:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097027938A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 04:21:59 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648034518;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y1DDIKvSFBHGvys+scil0oGzmCVScxpU1UzE7+Rqw74=;
+        b=AiOGH3vWEa+aNlAqH0iIM0ykEkLFsWCBYWVQRHaTuiAf7sPlM0H81aXMJoMkywGQueRhVO
+        KFEU+NtNbfGsb45qKK5Y4gGpZPyaqFhcQ7qct87/XX5xY4xSsALJ2qjkhxwOe85jnbOPGd
+        6kAmKbVACJD8ZpL7NyvmqFPB/P6BpfLm9pE2VSc9c3TqBwgKa+iV7rtUb30fqWieFCOuRb
+        a7qwLYK7pEhORnj6DlHADvywZ824pw/oM83NpipS1I8EB7p1tg3HUfEjkUshaZiS/roWt4
+        bCl/HAjD9YxQgn4xHhFUKQju1qMNKO9balJIy5Ick14yNm6h3uJvKpeTveln2w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648034518;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y1DDIKvSFBHGvys+scil0oGzmCVScxpU1UzE7+Rqw74=;
+        b=Q8ixCOEqgiWjt8lU2QDdeWx2M6WrHcJ3U6D+75dfEaTia2HrbO7aOCoZiq/Ux2Skn8Bpw4
+        HcMDEAT9d7YTRKBA==
+To:     Steven Price <steven.price@arm.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v2] cpu/hotplug: Set st->cpu earlier
+In-Reply-To: <a704e21e-c1a6-6ffd-439c-e715a2633319@arm.com>
+References: <20220316153637.288199-1-steven.price@arm.com>
+ <878rt2atre.ffs@tglx> <bc66bee6-7c99-b289-f5e9-ccaf03d5605d@arm.com>
+ <87wngla932.ffs@tglx> <a704e21e-c1a6-6ffd-439c-e715a2633319@arm.com>
+Date:   Wed, 23 Mar 2022 12:21:48 +0100
+Message-ID: <87czicap83.ffs@tglx>
 MIME-Version: 1.0
-References: <20211227091241.103-1-xieyongji@bytedance.com> <YjotekJZcSvwoZhp@localhost.localdomain>
-In-Reply-To: <YjotekJZcSvwoZhp@localhost.localdomain>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Wed, 23 Mar 2022 19:21:25 +0800
-Message-ID: <CACycT3vz4hYTFpHo0Jphs-xE-k--y63+vedTFAaDRWhpi4_5rg@mail.gmail.com>
-Subject: Re: [PATCH v2] nbd: Don't use workqueue to handle recv work
-To:     Josef Bacik <josef@toxicpanda.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Bart Van Assche <bvanassche@acm.org>,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 4:11 AM Josef Bacik <josef@toxicpanda.com> wrote:
+On Wed, Mar 23 2022 at 10:10, Steven Price wrote:
+> On 22/03/2022 22:58, Thomas Gleixner wrote:
+>> Indeed. But the description is not the only problem here:
+>> 
+>> It's completely uncomprehensible from the code in _cpu_up() _WHY_ this
+>> 
+>>      st->cpu = cpu;
+>>      
+>> assignment has to be there.
+>> 
+>> It's non-sensical if you really think about it, right?
 >
-> On Mon, Dec 27, 2021 at 05:12:41PM +0800, Xie Yongji wrote:
-> > The rescuer thread might take over the works queued on
-> > the workqueue when the worker thread creation timed out.
-> > If this happens, we have no chance to create multiple
-> > recv threads which causes I/O hung on this nbd device.
-> >
-> > To fix it, we can not simply remove the WQ_MEM_RECLAIM
-> > flag since the recv work is in the memory reclaim path.
-> > So this patch tries to create kthreads directly to
-> > handle the recv work instead of using workqueue.
-> >
+> I entirely agree, and I did ask in my v1 posting[1] if anyone could
+> point me to a better place to do the assignment. Vincent suggested
+> moving it earlier in _cpu_up() which is this v2.
 >
-> I still don't understand why we can't drop WQ_MEM_RECLAIM.  IIRC your argument
-> is that we need it because a reconnect could happen under memory pressure and we
-> need to be able to queue work for that.  However your code makes it so we're
-> just doing a kthread_create(), which isn't coming out of some emergency pool, so
-> it's just as likely to fail as a !WQ_MEM_RECLAIM workqueue.  Thanks,
->
+> But it still seems out-of-place to me. I've just had a go at simply
+> removing the 'cpu' member and it doesn't look too bad. I'll post that
+> patch as a follow up. I'm open to other suggestions for the best way to
+> fix this.
 
-I think the key point is the context in which the work thread is
-created. It's the context of the nbd process if using kthread_create()
-to create a workthread (might do some allocation). Then we can benefit
-from the PR_SET_IO_FLUSHER flag, so memory reclaim would never hit the
-page cache on the nbd device. But using queue_work() to create a
-workthread, the actual thread creation happens in the context of the
-work thread rather than the nbd process, so we can't rely on the
-PR_SET_IO_FLUSHER flag to avoid deadlock.
+Yes, we can do that. The alternative solution is to initialize the
+states once upfront. Something like the uncompiled below.
 
 Thanks,
-Yongji
+
+        tglx
+---
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -714,15 +714,6 @@ static int cpuhp_up_callbacks(unsigned i
+ /*
+  * The cpu hotplug threads manage the bringup and teardown of the cpus
+  */
+-static void cpuhp_create(unsigned int cpu)
+-{
+-	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
+-
+-	init_completion(&st->done_up);
+-	init_completion(&st->done_down);
+-	st->cpu = cpu;
+-}
+-
+ static int cpuhp_should_run(unsigned int cpu)
+ {
+ 	struct cpuhp_cpu_state *st = this_cpu_ptr(&cpuhp_state);
+@@ -882,15 +873,28 @@ static int cpuhp_kick_ap_work(unsigned i
+ 
+ static struct smp_hotplug_thread cpuhp_threads = {
+ 	.store			= &cpuhp_state.thread,
+-	.create			= &cpuhp_create,
+ 	.thread_should_run	= cpuhp_should_run,
+ 	.thread_fn		= cpuhp_thread_fun,
+ 	.thread_comm		= "cpuhp/%u",
+ 	.selfparking		= true,
+ };
+ 
++static __init void cpuhp_init_state(void)
++{
++	struct cpuhp_cpu_state *st;
++	int cpu;
++
++	for_each_possible_cpu(cpu) {
++		st = per_cpu_ptr(&cpuhp_state, cpu);
++		init_completion(&st->done_up);
++		init_completion(&st->done_down);
++		st->cpu = cpu;
++	}
++}
++
+ void __init cpuhp_threads_init(void)
+ {
++	cpuhp_init_state();
+ 	BUG_ON(smpboot_register_percpu_thread(&cpuhp_threads));
+ 	kthread_unpark(this_cpu_read(cpuhp_state.thread));
+ }

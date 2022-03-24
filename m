@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E8D4E65B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D26D4E65BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351037AbiCXO4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 10:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S1351101AbiCXO45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 10:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242275AbiCXO4J (ORCPT
+        with ESMTP id S1347268AbiCXO44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 10:56:09 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BFF7486C;
-        Thu, 24 Mar 2022 07:54:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1648133676; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k4RqB7TRAYJBu7Wm3B9VZjS3Tw7CidJf6vGxQitVk5U=;
-        b=JZkuKyp52NeLVnkK54mHEffdaxGZogn6w7EExst0FnYnOjuPeY02hv0eN/B3k7788lYv8O
-        TD1U7aFUKGOnTvCF+8COJRlHOzZDJ25L0JD0yHEfjl3W8KRbReteN5anggoyJQwNAQvYIO
-        a/oYoJyMwMp16R4dCiGVwY/2qGnoACk=
-Date:   Thu, 24 Mar 2022 14:54:17 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2] pinctrl: Ingenic: Add missing UART2 group C for
- X1000/E
-To:     Yunian Yang <reimu@sudomaker.com>
-Cc:     linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <H2899R.18AGJJTC83P61@crapouillou.net>
-In-Reply-To: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
-References: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
+        Thu, 24 Mar 2022 10:56:56 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CA77EA1C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:55:23 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id r7-20020a1c4407000000b0038ccb70e239so39471wma.3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ugHrK80HET8DZ+f74WXVZ6NolmaYIO5eOQX+LhNJahg=;
+        b=AJCj/zXjgICiAM6Sf8VVdd5x8Xm4KQgPnUhD7Eq/Kg/cYJh9gjSoxdFjIVApiwnMSn
+         XyYmCURT4GW6P6ew6BgF2ylK/+uhwjIlgN6aaZ7Pzdp0bt2lPvKzFb+rX47jhI0XTlwB
+         W3SaOfQHkaOHHCIpsqQqG57jkWC1Dl52pB5PGpcR0Sau6xYefwskTmXNuH8CXCX9MK+A
+         41nITgNnzJ0xoAkWgatllGKlTgUZI9H6nd5dI5jxvSQfj56scXisDkBUeiwuxHXvhwrW
+         MaNE0KrJEMS2P/09t2E/ng0jgLuV/TraAlOF2HIu96aGvw228Aylx+sMHjnXJ/lfOYHK
+         mLsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ugHrK80HET8DZ+f74WXVZ6NolmaYIO5eOQX+LhNJahg=;
+        b=53iSi8xZkf+34AWwr1eAeqVVWYW5h5/mLUcntp6kwpfdLeeMYOsr1JVFdLm7pBy31e
+         wFmu4HRWgjRW+hwHprQ5YM8U/kBjwnB6LiIVUAYgFGEnNUZuLOZQDi4b4saUzSiW2suX
+         gIvVf3B2r8mJ6amezyejJyU3iysmrav3EhJ8NGVbQuaGjI6l/Ma5oH/FGBVc3hwauy0/
+         /VA4ObvCD2rNzycLBcHh3TVyhRAdRaWmX7FTACzvVFXZuNqj1Q0M6BjYyYYfE7BBoKc1
+         qtllY69pXp2M/wCfCsjz3lLjpHC7MmB49dojVFad/Ho4huKIV7D0oWMIq8CWJsdghRWe
+         EF7A==
+X-Gm-Message-State: AOAM5334v9aUpblBCz6d+mtga89LkDLaoEH3K0OUz6g4YqqsKfzwiZjA
+        9bCceWxk0DI91+cBFF4mjPV7aQ==
+X-Google-Smtp-Source: ABdhPJzlGM7+aVhd+ESPeY+mOcfoNjBXue9ITUmk62M2qek0XavekfwVYbwwMPo/YwS+kAvuUXPAqA==
+X-Received: by 2002:a7b:c381:0:b0:37b:e01f:c1c0 with SMTP id s1-20020a7bc381000000b0037be01fc1c0mr15024216wmj.98.1648133722411;
+        Thu, 24 Mar 2022 07:55:22 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id f7-20020a1cc907000000b0038c756fe683sm6202357wmb.43.2022.03.24.07.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 07:55:21 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 14:55:19 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH] backlight: replace usage of found with dedicated list
+ iterator variable
+Message-ID: <20220324145519.lcalgtmw3ih4y4li@maple.lan>
+References: <20220324070608.57057-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324070608.57057-1-jakobkoschel@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 24, 2022 at 08:06:08AM +0100, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+> 
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
+> 
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
+> 
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 
-Le jeu., mars 24 2022 at 21:33:56 +0800, Yunian Yang=20
-<reimu@sudomaker.com> a =E9crit :
-> v2: Define PC31 pin only once, noted by Paul Cercueil=20
-> <paul@crapouillou.net>
->     Confirmed to work on hardware. Although the Ingenic folks did=20
-> this twice
->     in their 4.4 kernel fork; not sure why.
->=20
-> X1000/E has a third UART2 pin group selection, which uses the TDI(G2)=20
-> as RX
-> and TDO(G1) as TX. This configuration is becoming increasingly=20
-> popular in
-> newer core boards, such as the Halley2 v4.1. This is done by enabling
-> function 1 of a "virtual pin" PC31. See section 19.3.3 of the X1000
-> Programming Manual for details.
->=20
-> Signed-off-by: Yunian Yang <reimu@sudomaker.com>
-
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> ---
->  drivers/pinctrl/pinctrl-ingenic.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 2712f51eb238..29709059d62b 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -1982,6 +1982,7 @@ static int x1000_uart1_data_a_pins[] =3D { 0x04,=20
-> 0x05, };
->  static int x1000_uart1_data_d_pins[] =3D { 0x62, 0x63, };
->  static int x1000_uart1_hwflow_pins[] =3D { 0x64, 0x65, };
->  static int x1000_uart2_data_a_pins[] =3D { 0x02, 0x03, };
-> +static int x1000_uart2_data_c_pins[] =3D { 0x5f, };
->  static int x1000_uart2_data_d_pins[] =3D { 0x65, 0x64, };
->  static int x1000_sfc_data_pins[] =3D { 0x1d, 0x1c, 0x1e, 0x1f, };
->  static int x1000_sfc_clk_pins[] =3D { 0x1a, };
-> @@ -2058,6 +2059,7 @@ static const struct group_desc x1000_groups[] =3D=20
-> {
->         INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d, 1),
->         INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow, 1),
->         INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a, 2),
-> +       INGENIC_PIN_GROUP("uart2-data-c", x1000_uart2_data_c, 1),
->         INGENIC_PIN_GROUP("uart2-data-d", x1000_uart2_data_d, 0),
->         INGENIC_PIN_GROUP("sfc-data", x1000_sfc_data, 1),
->         INGENIC_PIN_GROUP("sfc-clk", x1000_sfc_clk, 1),
-> @@ -2115,7 +2117,7 @@ static const char *x1000_uart0_groups[] =3D {=20
-> "uart0-data", "uart0-hwflow", };
->  static const char *x1000_uart1_groups[] =3D {
->         "uart1-data-a", "uart1-data-d", "uart1-hwflow",
->  };
-> -static const char *x1000_uart2_groups[] =3D { "uart2-data-a",=20
-> "uart2-data-d", };
-> +static const char *x1000_uart2_groups[] =3D { "uart2-data-a",=20
-> "uart2-data-c", "uart2-data-d", };
->  static const char *x1000_sfc_groups[] =3D { "sfc-data", "sfc-clk",=20
-> "sfc-ce", };
->  static const char *x1000_ssi_groups[] =3D {
->         "ssi-dt-a-22", "ssi-dt-a-29", "ssi-dt-d",
-> --
-> 2.30.2
-
-
+Daniel.

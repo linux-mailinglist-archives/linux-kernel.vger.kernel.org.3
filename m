@@ -2,130 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561F84E6545
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2214E6527
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351190AbiCXOej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 10:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S1347570AbiCXOcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 10:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351105AbiCXOdL (ORCPT
+        with ESMTP id S233438AbiCXOcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 10:33:11 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF898AC060
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:31:36 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KPSMC0fVCz9sTr;
-        Thu, 24 Mar 2022 15:31:03 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fXX7av9XKH1u; Thu, 24 Mar 2022 15:31:03 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KPSLy6msRz9sTs;
-        Thu, 24 Mar 2022 15:30:50 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D32148B783;
-        Thu, 24 Mar 2022 15:30:50 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id OEhdD3TccBAo; Thu, 24 Mar 2022 15:30:50 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.77])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C99528B796;
-        Thu, 24 Mar 2022 15:30:49 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22OEUjqY1811768
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 24 Mar 2022 15:30:45 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22OEUjUL1811767;
-        Thu, 24 Mar 2022 15:30:45 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v1 22/22] powerpc/opcodes: Remove unused PPC_INST_XXX macros
-Date:   Thu, 24 Mar 2022 15:30:12 +0100
-Message-Id: <636d1c500bcd2d09709abca49d4e05ec5c79666a.1648131740.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1648131740.git.christophe.leroy@csgroup.eu>
-References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
+        Thu, 24 Mar 2022 10:32:16 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E134215FFC;
+        Thu, 24 Mar 2022 07:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648132245; x=1679668245;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lOc8RNcui7yAjd2ZB4PWlz7S09gUkQKjknF6hIGlRPY=;
+  b=PVFFSYryWPB6CUjd/A+I8gE6cJkKDlAZOkJ+iUguDCSLdsIoMag8304M
+   kycdudpS4uDn5q/iEMd1jyWkB4vDfKz0dJuC3BUKdxFQqLK8pgoQSqElx
+   UyXeKUhfg77JIiQqg2ikhWTDFH1nz6nfhUkgKyTD6/i4CgbWZ8KIXW73r
+   I=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 24 Mar 2022 07:30:44 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 07:30:44 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 24 Mar 2022 07:30:43 -0700
+Received: from [10.253.74.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
+ 2022 07:30:40 -0700
+Message-ID: <22de32f4-7a3f-ca2d-ba5e-0d0c9adefe3d@quicinc.com>
+Date:   Thu, 24 Mar 2022 22:30:37 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648132152; l=2951; s=20211009; h=from:subject:message-id; bh=UdaOSaO9Qo6g4wVcEhBoMxZ4qqP0e+8Vq+hajWDgYgg=; b=CnDAKVjJyVv4yODoM9pBi5Y4cj64PmspAw78jKlEUahakcKyE290mvmMv8nrlD8KSK3KQMTcLkzt t/Fa6WBxAhIMopyor4pQkPUimqo9PvMC+toJmtVUNzcK0WQ9EGyK
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4 05/10] coresight-tpdm: Add integration test support
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
+ <20220324121734.21531-6-quic_jinlmao@quicinc.com>
+ <Yjxj02nl+hwoYb9C@kroah.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <Yjxj02nl+hwoYb9C@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following PPC_INST_XXX macros are not used anymore
-outside ppc-opcode.h:
-	- PPC_INST_LD
-	- PPC_INST_STD
-	- PPC_INST_ADDIS
-	- PPC_INST_ADD
-	- PPC_INST_DIVD
+Hi Greg,
 
-Remove them.
+On 3/24/2022 8:28 PM, Greg Kroah-Hartman wrote:
+> On Thu, Mar 24, 2022 at 08:17:29PM +0800, Mao Jinlong wrote:
+>> Integration test for tpdm can help to generate the data for
+>> verification of the topology during TPDM software bring up.
+>>
+>> Sample:
+>> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+>> echo 1 > /sys/bus/coresight/devices/tpdm1/enable_source
+>> echo 1 > /sys/bus/coresight/devices/tpdm1/integration_test
+>> echo 2 > /sys/bus/coresight/devices/tpdm1/integration_test
+>> cat /dev/tmc_etf0 > /data/etf-tpdm1.bin
+>>
+>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>> ---
+>>   drivers/hwtracing/coresight/Kconfig          |  9 ++++
+>>   drivers/hwtracing/coresight/coresight-tpdm.c | 56 +++++++++++++++++++-
+>>   drivers/hwtracing/coresight/coresight-tpdm.h |  8 +++
+>>   3 files changed, 72 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
+>> index 5c506a1cd08f..60248fef4089 100644
+>> --- a/drivers/hwtracing/coresight/Kconfig
+>> +++ b/drivers/hwtracing/coresight/Kconfig
+>> @@ -214,4 +214,13 @@ config CORESIGHT_TPDM
+>>   	  To compile this driver as a module, choose M here: the module will be
+>>   	  called coresight-tpdm.
+>>   
+>> +config CORESIGHT_TPDM_INTEGRATION_TEST
+>> +	bool "Enable CoreSight Integration Test For TPDM"
+>> +	depends on CORESIGHT_TPDM
+>> +	help
+>> +	  This option adds support for the CoreSight integration test on this
+>> +	  devie. Coresight architecture provides integration control modes of
+>> +	  operation to facilitate integration testing and software bringup
+>> +	  and/or to instrument topology discovery. The TPDM utilizes integration
+>> +	  mode to accomplish integration testing and software bringup.
+> Why is this a Kconfig option?  Why would you never not want this?
+I refer to "CONFIG_CORESIGHT_CTI_INTEGRATION_REGS" for integration mode.
+>
+>>   endif
+>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+>> index a8d257a591f3..cddd398be0cd 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+>> @@ -124,7 +124,60 @@ static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+>>   			__set_bit(i, drvdata->datasets);
+>>   	}
+>>   	CS_LOCK(drvdata->base);
+>> - }
+>> +}
+>> +
+>> +#ifdef CONFIG_CORESIGHT_TPDM_INTEGRATION_TEST
+> Try to keep #ifdefs out of .c files please.
+I will check to see if it is possible for the integration test function.
+>> +static ssize_t integration_test_store(struct device *dev,
+>> +					  struct device_attribute *attr,
+>> +					  const char *buf,
+>> +					  size_t size)
+>> +{
+>> +	int i, ret = 0;
+>> +	unsigned long val;
+>> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+>> +
+>> +	ret = kstrtoul(buf, 10, &val);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (val != 1 && val != 2)
+>> +		return -EINVAL;
+>> +
+>> +	if (!drvdata->enable)
+>> +		return -EINVAL;
+>> +
+>> +	if (val == 1)
+>> +		val = ATBCNTRL_VAL_64;
+>> +	else
+>> +		val = ATBCNTRL_VAL_32;
+>> +	CS_UNLOCK(drvdata->base);
+>> +	writel_relaxed(0x1, drvdata->base + TPDM_ITCNTRL);
+>> +
+>> +	for (i = 1; i < 5; i++)
+>> +		writel_relaxed(val, drvdata->base + TPDM_ITATBCNTRL);
+>> +
+>> +	writel_relaxed(0, drvdata->base + TPDM_ITCNTRL);
+>> +	CS_LOCK(drvdata->base);
+>> +	return size;
+>> +}
+>> +static DEVICE_ATTR_WO(integration_test);
+>> +#endif /* CORESIGHT_TPDM_INTEGRATION_TEST */
+>> +
+>> +static struct attribute *tpdm_attrs[] = {
+>> +#ifdef CONFIG_CORESIGHT_TPDM_INTEGRATION_TEST
+>> +	&dev_attr_integration_test.attr,
+>> +#endif /* CORESIGHT_TPDM_INTEGRATION_TEST */
+>> +	NULL,
+>> +};
+>> +
+>> +static struct attribute_group tpdm_attr_grp = {
+>> +	.attrs = tpdm_attrs,
+>> +};
+>> +
+>> +static const struct attribute_group *tpdm_attr_grps[] = {
+>> +	&tpdm_attr_grp,
+>> +	NULL,
+>> +};
+> ATTRIBUTE_GROUPS()?
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/ppc-opcode.h | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+Thanks
 
-diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include/asm/ppc-opcode.h
-index 810a28af9dce..4cdda507e816 100644
---- a/arch/powerpc/include/asm/ppc-opcode.h
-+++ b/arch/powerpc/include/asm/ppc-opcode.h
-@@ -285,11 +285,6 @@
- #define PPC_INST_TRECHKPT		0x7c0007dd
- #define PPC_INST_TRECLAIM		0x7c00075d
- #define PPC_INST_TSR			0x7c0005dd
--#define PPC_INST_LD			0xe8000000
--#define PPC_INST_STD			0xf8000000
--#define PPC_INST_ADDIS			0x3c000000
--#define PPC_INST_ADD			0x7c000214
--#define PPC_INST_DIVD			0x7c0003d2
- #define PPC_INST_BRANCH_COND		0x40800000
- 
- #define PPC_INST_OFFSET24_MASK		0x03fffffc
-@@ -460,10 +455,10 @@
- 	(0x100000c7 | ___PPC_RT(vrt) | ___PPC_RA(vra) | ___PPC_RB(vrb) | __PPC_RC21)
- #define PPC_RAW_VCMPEQUB_RC(vrt, vra, vrb) \
- 	(0x10000006 | ___PPC_RT(vrt) | ___PPC_RA(vra) | ___PPC_RB(vrb) | __PPC_RC21)
--#define PPC_RAW_LD(r, base, i)		(PPC_INST_LD | ___PPC_RT(r) | ___PPC_RA(base) | IMM_DS(i))
-+#define PPC_RAW_LD(r, base, i)		(0xe8000000 | ___PPC_RT(r) | ___PPC_RA(base) | IMM_DS(i))
- #define PPC_RAW_LWZ(r, base, i)		(0x80000000 | ___PPC_RT(r) | ___PPC_RA(base) | IMM_L(i))
- #define PPC_RAW_LWZX(t, a, b)		(0x7c00002e | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
--#define PPC_RAW_STD(r, base, i)		(PPC_INST_STD | ___PPC_RS(r) | ___PPC_RA(base) | IMM_DS(i))
-+#define PPC_RAW_STD(r, base, i)		(0xf8000000 | ___PPC_RS(r) | ___PPC_RA(base) | IMM_DS(i))
- #define PPC_RAW_STDCX(s, a, b)		(0x7c0001ad | ___PPC_RS(s) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_LFSX(t, a, b)		(0x7c00042e | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_STFSX(s, a, b)		(0x7c00052e | ___PPC_RS(s) | ___PPC_RA(a) | ___PPC_RB(b))
-@@ -474,8 +469,8 @@
- #define PPC_RAW_ADDE(t, a, b)		(0x7c000114 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_ADDZE(t, a)		(0x7c000194 | ___PPC_RT(t) | ___PPC_RA(a))
- #define PPC_RAW_ADDME(t, a)		(0x7c0001d4 | ___PPC_RT(t) | ___PPC_RA(a))
--#define PPC_RAW_ADD(t, a, b)		(PPC_INST_ADD | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
--#define PPC_RAW_ADD_DOT(t, a, b)	(PPC_INST_ADD | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b) | 0x1)
-+#define PPC_RAW_ADD(t, a, b)		(0x7c000214 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
-+#define PPC_RAW_ADD_DOT(t, a, b)	(0x7c000214 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b) | 0x1)
- #define PPC_RAW_ADDC(t, a, b)		(0x7c000014 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_ADDC_DOT(t, a, b)	(0x7c000014 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b) | 0x1)
- #define PPC_RAW_NOP()			PPC_RAW_ORI(0, 0, 0)
--- 
-2.35.1
+Jinlong Mao
+
 

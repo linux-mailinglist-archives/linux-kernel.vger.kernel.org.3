@@ -2,109 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFC94E6AB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759D44E6AB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355396AbiCXWcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 18:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        id S1355406AbiCXWd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 18:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355389AbiCXWcE (ORCPT
+        with ESMTP id S244280AbiCXWdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 18:32:04 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F75BA325
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:30:31 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e64a6b20eeso66215787b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:30:31 -0700 (PDT)
+        Thu, 24 Mar 2022 18:33:23 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374ADBA321;
+        Thu, 24 Mar 2022 15:31:51 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id mp11-20020a17090b190b00b001c79aa8fac4so3134288pjb.0;
+        Thu, 24 Mar 2022 15:31:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nx70n0suL1GDpxFS4bYKUTt/7IVPxxVYBu7tsC4lV4U=;
-        b=wV1PHTJJBE46LfidocVooxEy6bX7qvq2914zt2Oyz0DEkO1P2b9T4RBK2uyUlfHMXi
-         8L4h61xtgy+nf1Sp5SjH+p+8xOdkyIscKNzC5c+ta5w2ZHwPHdqOR0m4HDH3kZXyKUd+
-         4nVVH+VWPcaO2hF/59Kup2doG3cbGYIsSNIDHELH+X3HMxlxEBK6tWEYjh3cu7KJsdFz
-         8a/veQ9Qdlc7QnvgFXa+xmf3DPpx81MEUB3oDQM46z75GtJbBjRqGYYo8c4Jh72kwjjj
-         qwwd+T0/mXVeNFlmfSMkAwTE6NWBqBCe6huzIpYFivT8APWWXtVemglzRRTu2lcqtEft
-         r1hg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yod7U3OVUg4uNqY5svIcJ1tadGMaHGULBreSABaYdbE=;
+        b=QuqTJS3PzDePlzBY/DjMMkBkQzrT+DWwXza1rW78vN4LS3Okv9LaUrOby+7+OQwKJb
+         l7InH4pGc63+Vlq1lP5rgllByfc4rk60gHLx4qYryHZsK3XlcTechjciXUoOGW0MMDQI
+         FhAtxEFRoCf3qDGGO+Owe7hwesJgEV8vRM+WBl3YKDndSGEjFz1Z8VWDTg2HJfxgaIO0
+         2/7d8gzhyaeHaK9yeqB4O0iP4maWESsP8GENRZJfBRmkseYbbhnMAW0DMI0jT/VHTTaB
+         pvq4ZuQWHADryAj0hGNi2uCOjWSPvDbt+63ribqYQU6IbVBHaqhuMMngHudDqTuMmApV
+         a5EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nx70n0suL1GDpxFS4bYKUTt/7IVPxxVYBu7tsC4lV4U=;
-        b=Y8pHU1yS/kf7ATHWiw4J1jNH2KSoaE5jm0Jh/0lX2kZ676ta9zjPyZF+Wi078aZkOr
-         znlC89Thoi+x5AtGi97dAbwYDoMLARRvzmTQK40m31PCC7LMIrqpESu3kZEbP/XObXl1
-         2oPDNQpas46aprqJoZTokctUxWdGc74IP/740uAqv1xOg49Ze6zXe3ojtAmtQLhSR9/r
-         jKsiqmK0N1hN+11BD5R2n/6xxEO9LTynHJCeBvxHhprdQYZiWP5JZrhd23pHYRNTO0O0
-         PBKyQWwvF8VsJPgeYlgg4SUMtQya94n6tG+/EhXK4gldFPXJZqjlofA6yd6G+kyWLeZp
-         MGlg==
-X-Gm-Message-State: AOAM531tPPfFfNn27XtoGNwPp7c7xJqTck2kA/WmKv9lxrFOXgq8cdqe
-        aVLljFkvi1wF+4KcsSCI4bsOElji598s56ERYN8htw==
-X-Google-Smtp-Source: ABdhPJyX/ehlHwq02rrgBUmaGF0K2xU+m3rjYaoGRrmp/Pny8sEiCtj0Bb3Mr1HrmXMEl0nAG2wa9t/q+Y8pZcewrXk=
-X-Received: by 2002:a81:5706:0:b0:2e5:c451:b257 with SMTP id
- l6-20020a815706000000b002e5c451b257mr7678607ywb.126.1648161030506; Thu, 24
- Mar 2022 15:30:30 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yod7U3OVUg4uNqY5svIcJ1tadGMaHGULBreSABaYdbE=;
+        b=7ggb6F/dSPry/js4Bo0ICBKKswKTO6aRRiooHGLs5O6AasmCz6Uo42YEiGTEMGRAfy
+         neXXlesi+yWyyhzBkZ250a24SYmmEb4sCML1R8XjEFHSC3D5SeQ6mtVparnRWf2vHvAG
+         JWy07Hh31A/G8h6dQAtVKKWtST0wm38IxgCWMSZ30wNb2Jz/B3ELtXMf/O7qQoZZPWcd
+         XoHflKGVytdLHj6finhZ0j8P49E88sCQNmwgnbcF9/ceJX3OL/Ym0q9QTLP+22WmTVxD
+         5NP2xmGc0K7HSxwvjaRgLRedsw0i9jtLhdi0qlWBohvJoDTzS0dZcUe+3dxFuuBW+czU
+         qvrg==
+X-Gm-Message-State: AOAM533raxEXyHnJH6/Pxpf8WowWJkDVwhL2Wl5dYDxSMVElkn6CN0tw
+        qn+xREoZo6aNelvmszKrVcb8S8nHZd0=
+X-Google-Smtp-Source: ABdhPJzQzlT5/1wdqKvYsdjhM4g271o6xMRvl7blS67Dq+GZCg0qJtg2gkck67td4mIs0gl7ZYPiNA==
+X-Received: by 2002:a17:90b:4f8e:b0:1c7:3652:21bc with SMTP id qe14-20020a17090b4f8e00b001c7365221bcmr21085353pjb.38.1648161110040;
+        Thu, 24 Mar 2022 15:31:50 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ip1-20020a17090b314100b001c7b10fe359sm3889234pjb.5.2022.03.24.15.31.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 15:31:49 -0700 (PDT)
+Message-ID: <1e50ca36-fc68-6ba8-b041-09336060a409@gmail.com>
+Date:   Thu, 24 Mar 2022 15:31:47 -0700
 MIME-Version: 1.0
-References: <20220223154405.54912-1-maz@kernel.org> <CACRpkdbEDoPeu=TWmsJ_t-4+NtyiiSCXoj9rymspZt0nC+yrsQ@mail.gmail.com>
- <e39c68c6c8c99fec796461cde33f78df@kernel.org>
-In-Reply-To: <e39c68c6c8c99fec796461cde33f78df@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 24 Mar 2022 23:30:19 +0100
-Message-ID: <CACRpkdZJch7SmMNGhfJ9hpNP+=yy4ZE_8wuATsaqdHQdaMhbAQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] gpiolib: Handle immutable irq_chip structures
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH net] net: phy: broadcom: Fix brcm_fet_config_init()
+Content-Language: en-US
+To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     opendmb@gmail.com, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:BROADCOM ETHERNET PHY DRIVERS" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220324215451.1151297-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220324215451.1151297-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 10:35 AM Marc Zyngier <maz@kernel.org> wrote:
+On 3/24/22 14:54, Florian Fainelli wrote:
+> A Broadcom AC201 PHY (same entry as 5241) would be flagged by the
+> Broadcom UniMAC MDIO controller as not completing the turn around
+> properly since the PHY expects 65 MDC clock cycles to complete a write
+> cycle, and the MDIO controller was only sending 64 MDC clock cycles as
+> determined by looking at a scope shot.
+> 
+> This would make the subsequent read fail with the UniMAC MDIO controller
+> command field having MDIO_READ_FAIL set and we would abort the
+> brcm_fet_config_init() function and thus not probe the PHY at all.
+> 
+> After issuing a software reset, wait for at least 1ms which is well
+> above the 1us reset delay advertised by the datasheet and issue a dummy
+> read to let the PHY turn around the line properly. This read
+> specifically ignores -EIO which would be returned by MDIO controllers
+> checking for the line being turned around.
+> 
+> If we have a genuine read failure, the next read of the interrupt
+> status register would pick it up anyway.
+> 
+> Fixes: d7a2ed9248a3 ("broadcom: Add AC131 phy support")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
 
-> > I'm happy with this approach as long as the 300+ drivers get fixed
-> > and the old way of doing it gets deleted.
->
-> Of course. Note that it will take some time before it actually happens.
-> My current plan is to stick in a pr_warn() each time a driver
-> following the old scheme gets registered, as a nudge for people to
-> update their driver if they care about it.
-
-Fair enough, we have a bunch of those WIP churn tasks in
-GPIO anyways.
-
-What about adding a blurb to:
-drivers/gpio/TODO
-so we have it on the radar?
-
-> Regarding documentation, are you OK with me simply replacing the
-> current code samples with the new approach? It will at least avoid
-> giving people the wrong idea. I also want to write a brief migration
-> guide that people willing to bump up their patch count can follow.
-
-Yup
-
-> I'll repost something once -rc1 is out.
-
-Sounds good!
-
-Yours,
-Linus Walleij
+I will make this a v2 which explicitly includes delay.h to have a 
+definition for usleep_range9) so this commit would apply cleanly to 
+earlier kernels as well. Please do not apply just yet. Thanks!
+-- 
+Florian

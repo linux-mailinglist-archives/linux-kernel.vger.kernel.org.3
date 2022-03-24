@@ -2,145 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508104E5D96
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 04:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F294E5DBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 04:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347981AbiCXDgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 23:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
+        id S232625AbiCXEBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 00:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbiCXDgV (ORCPT
+        with ESMTP id S229699AbiCXEBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 23:36:21 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEF47E09B;
-        Wed, 23 Mar 2022 20:34:50 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id w21so235280wra.2;
-        Wed, 23 Mar 2022 20:34:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=PpfbgiEgnj1bxRm59Q2VEMgDChYwbV2bgnHOirqJF3o=;
-        b=pgQPIuSUHGwh1aWAlPPKdBttPwsKjc1bTCbExBfDE++/0/18IQEDoZgxL1AND8Mvyv
-         wNXLWngA9oa9923u/qfk6r3D84/Ig7X75J0mrnDFLcs2g0uYhf6D7A4l+FBaYKRYJV1P
-         wc1unRDSnGcjZXYwTuup48Bg+g5h7YNMfgl3t6fkhKPl1/A1rvYVDU6ksQBEKwsrIKRA
-         Qorh0Ys4kxo6gcFUKn75vTmxi7qI6NXMJhtF2cJWXFaYThADjP1ecMHQIwmCKo/L2qtE
-         RacxK3Em8VZ49PcY37LEhdotWOXSfQW/sneTWAKNJLyDjU0MP8HXhjgQjqMDJcV9oH/Z
-         5FNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PpfbgiEgnj1bxRm59Q2VEMgDChYwbV2bgnHOirqJF3o=;
-        b=xnbIJ02XNEaSyrcTuBQ6BEVnZA9BGSWKTJw2IldrY0mNI8NU0TrKlzg293zQThoyV6
-         SW0nW/r3JJYMmh+0m6/DVzmTA2+b76e6dsEIJk89D62+fps1ODj2uIFOYN7DGeDl5x4o
-         Y8DiuJTQbiEwynDfNtnsvMPZIb26vFJj/uUGzJlKvXdP3nywMijIFC0TIQ9K+CN71SgV
-         IqaZZfCqlSlY2OewBFcQ9ws22Jn+56SvMXrFNjF+zrg2zOFh45xaYKryD9z+IdJ1Ri3L
-         MAm2Zu+yM02lCk/f5peInd58IZui9mcp4gtFbwNIqSdO68H+WWggXeHP97bf4j9XWnDi
-         AIyA==
-X-Gm-Message-State: AOAM533KuEU+q1LWWrjNELjoP7Vkmy40k6nWPYtFew0oxg/8HsXgzxtW
-        y58L/CsAn6DpE3bFxxjMxYxkE3Qn0/QAMB6B
-X-Google-Smtp-Source: ABdhPJzm5n9YgnoiQpbmM1XYtMMzv9ka0SvRPyJA/efORsrTC1cxp1Yx1JME8T/Jjgp3JXMd1tjpXQ==
-X-Received: by 2002:adf:dfc9:0:b0:203:fb83:83f1 with SMTP id q9-20020adfdfc9000000b00203fb8383f1mr2651277wrn.81.1648092888443;
-        Wed, 23 Mar 2022 20:34:48 -0700 (PDT)
-Received: from hermes ([2604:3d09:e80:800::72d9])
-        by smtp.gmail.com with ESMTPSA id n20-20020a05600c4f9400b0038cbd13e06esm3916892wmq.2.2022.03.23.20.34.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 20:34:48 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 21:34:44 -0600
-From:   Manuel =?iso-8859-1?Q?Sch=F6nlaub?= <manuel.schoenlaub@gmail.com>
-To:     Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: logitech-hidpp: support Color LED feature (8071).
-Message-ID: <Yjvm1F3ZrJnyAOE6@hermes>
-References: <Yifr4etBFPu1a2Ct@hermes>
- <275245e8048fa124055d9ff3d10ce6562294483a.camel@riseup.net>
+        Thu, 24 Mar 2022 00:01:13 -0400
+X-Greylist: delayed 1396 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Mar 2022 20:59:41 PDT
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.4.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EE37CB0E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 20:59:40 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 74449400CDA3D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 22:36:24 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id XEGun4Nor9AGSXEGunyJZy; Wed, 23 Mar 2022 22:36:24 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=YY7UYODrYfO6ZFztsolGDQLqpCq4yPVE6i5YAfHYLoI=; b=Lu6DKMvESPCdgSTJ80ut4y2GR3
+        nI9Sd3kX26GC0KMddmbyXOkSrwlSGYeWxLJqMgtxRN54PhZGniVjoDaxFO5+0hjXH0Dj4+UxxnUyB
+        PJEOh6US6naSa4YGzH5OSZJf0O32wh5hmcpOwU7KFKQfSUhMbz2ZT03tNUqaSFm4mrNXT9dU7ELla
+        IhVmQ6V3D66/4sAKYWioQQdDr0fW9Bm/APeoqh4/VVjUSl4q8fJo059vKRpudunBjXyPJOo0X4281
+        IK2lZMEs2dp4wLkBLHNDS4SesyUBzREeaNozE1q3SND5hlBuzCSJZtoTDyU/TyYpIkkv2vypJwB9T
+        sDVXStJw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54414)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nXEGt-002d2j-Qp; Thu, 24 Mar 2022 03:36:23 +0000
+Message-ID: <920c9f2a-77b6-4d68-a7c2-08967fab70cc@roeck-us.net>
+Date:   Wed, 23 Mar 2022 20:36:22 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <275245e8048fa124055d9ff3d10ce6562294483a.camel@riseup.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 1/2] dt-bindings: watchdog: Add watchdog yaml file for
+ Sunplus SP7021
+Content-Language: en-US
+To:     Xiantao Hu <xt.hu@cqplus1.com>, krzk@kernel.org,
+        wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
+        Rob Herring <robh@kernel.org>
+References: <20220324031805.61316-1-xt.hu@cqplus1.com>
+ <20220324031805.61316-2-xt.hu@cqplus1.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220324031805.61316-2-xt.hu@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nXEGt-002d2j-Qp
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54414
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 10
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 09:22:49PM +0000, Filipe Laíns wrote:
-> On Tue, 2022-03-08 at 16:50 -0700, Manuel Schönlaub wrote:
-> > The HID++ protocol allows to set multicolor (RGB) to a static color.
-> > Multiple of such LED zones per device are supported.
-> > This patch exports said LEDs so that they can be set from userspace.
-> > 
-> > Signed-off-by: Manuel Schönlaub <manuel.schoenlaub@gmail.com>
-> > ---
-> >  drivers/hid/hid-logitech-hidpp.c | 188 +++++++++++++++++++++++++++++++
-> >  1 file changed, 188 insertions(+)
+On 3/23/22 20:18, Xiantao Hu wrote:
+> This adds the documentation for the devicetree bindings of the Sunplus
+> SP7021 watchdog driver, found from SP7021 SoCs and newer.
 > 
-> *snip*
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+> Changes in v8:
+>   - Addressed all comments from Krzysztof Kozlowski.
+>     1.fix the title.
+>     2.fix the lowercase hex in examples.
 > 
-> Hi Manuel,
+>   .../bindings/watchdog/sunplus,sp7021-wdt.yaml | 47 +++++++++++++++++++
+>   MAINTAINERS                                   |  6 +++
+>   2 files changed, 53 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
 > 
-> Thanks for putting this forward, although I am not sure if this is the best way
-> to handle this.
-> 
-> Before anything, could you elaborate a bit on what lead to you wanting this?
-> 
-> There are a couple of reasons why merging this in the kernel might be
-> problematic.
-> 
-> 1) I don't think we will ever support the full capabilities of the devices, so
-> configuration via userspace apps will always be required, and here we are
-> introducing a weird line between the two.
-> 
-> 2) There is already an ecosystem of userspace configuration apps, with which
-> this would conflict. They might not be in the best maintenance state due to lack
-> of time from the maintainers, but moving this functionality to the kernel, which
-> is harder change, and harder to ship to users, will only make that worse.
-> 
-> Cheers,
-> Filipe Laíns
-
-Hi Filipe,
-
-sure.
-
-While I realize that there is e.g. ratbagd which supports a great deal of the
-HIDPP features and should allow you to control LEDs, unfortunately for my G305
-it does not support the LED (and as far as I remember my G403 does not
-work at all with it).
-
-Then I figured that actually having the LEDs in kernel would allow led triggers
-to work with them, so you could do fancy stuff like showing disk or CPU activity
-or free physical memory... and here we are now.
-
-As for supporting the full capabilities of these devices: The patch just adds
-RGB leds, which is something already quite standardized in the linux kernel for
-a variety of devices.
-Some roccat mice even have support for changing the actual DPI in their kernel
-driver, which arguably is a whole different story though and not scope of this patch.
-There are also other features (like on-board profiles) which I would definitely
-see being better off in user space, especially as long as there is no additional
-benefit in having them in the kernel.
-
-Regarding the conflict in userspace: ratbagd currently seems to always write
-LED state in RAM and the on-board profiles at the same time, so I would
-argue that the use case here is different: The user space tools want to
-set the LED color in a persistent way, while here we want to have interaction with
-LED triggers and a more transient way. E.g. the driver would overwrite
-only the transient LED color, not the onboard-profiles.
-
-If that is already too much, what about a module option that allows a user to
-deactivate the feature?
-
-Best Regards,
-
-Manuel
+> diff --git a/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml b/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> new file mode 100644
+> index 000000000..d90271013
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/sunplus,sp7021-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus SoCs Watchdog
+> +
+> +maintainers:
+> +  - XianTao Hu <xt.hu@cqplus1.com>
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: sunplus,sp7021-wdt
+> +
+> +  reg:
+> +    items:
+> +      - description: watchdog registers regions
+> +      - description: miscellaneous control registers regions
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog: watchdog@9c000630 {
+> +        compatible = "sunplus,sp7021-wdt";
+> +        reg = <0x9c000630 0x08>, <0x9c000274 0x04>;
+> +        clocks = <&clkc 0x24>;
+> +        resets = <&rstc 0x14>;
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cd0f68d4a..efdc618a0 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18544,6 +18544,12 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
+>   F:	drivers/rtc/rtc-sunplus.c
+>   
+> +SUNPLUS WATCHDOG DRIVER
+> +M:	Xiantao Hu <xt.hu@cqplus1.com>
+> +L:	linux-watchdog@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> +
+>   SUPERH
+>   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>   M:	Rich Felker <dalias@libc.org>
 

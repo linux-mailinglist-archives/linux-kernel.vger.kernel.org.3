@@ -2,410 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060C14E6646
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AAE4E6648
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351390AbiCXPtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S1351394AbiCXPtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiCXPtI (ORCPT
+        with ESMTP id S237234AbiCXPte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:49:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B4BA0BDF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:47:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A980D6177A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5ADC340EC;
-        Thu, 24 Mar 2022 15:47:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648136855;
-        bh=xqFka1zYU1aqYMYh38mnO0xnB43RjZqGDA9tyHHRcHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XCqaBnhYd15KNVmvL0O2tI0eiMIgMFaZt8d/Tnhyjc2puX81NlkgwrDP3yZquIfuk
-         M06ZitYtr55nP34ihg+Dp8p8o4P+ZRwYNy+YS9gc3VLrzJjumUKKy2zBenGJQaNxF4
-         OxsdyEqhiK2ns88wqUa44legF4ohnoS82PiuUinOHpI/IVWSMIo7lnHtKMTs3S6qPc
-         0dWddN/easWJHu32IFGJg0BcKPLFjLnWQJRw91YnOG6m6y3hJlfH7FRiRKT7Xs5RO4
-         tfz61+Kz9bPJrBO/k9u/JCVjshLZxakjWlXsaeJkZiwd94MoWmhf6qGRDwQUr7DaWp
-         QaMpLWoNdV1MQ==
-Date:   Thu, 24 Mar 2022 08:47:27 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH] x86/config: Make the x86 defconfigs a bit more usable
-Message-ID: <YjySjys3QZAWFlfo@dev-arch.thelio-3990X>
-References: <YjhdcJB4FaLfsoyO@gmail.com>
- <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
- <YjpLiKRUIB4TGJm0@zn.tnic>
- <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
- <YjsCpoRK7W4l6tSh@zn.tnic>
- <CAHk-=wi9pLxm+dXoCaiGO+f0EbhyfAR_L510vD0c2=hj6rbMXg@mail.gmail.com>
- <YjwsUT/6PkRPjnHE@gmail.com>
+        Thu, 24 Mar 2022 11:49:34 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418471151
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:48:01 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id t13so2911198pgn.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KBPHNydxkVOhAgb/0ZNhj4nD6oSionADdioTArt1Vl8=;
+        b=xw1s632XXfTZ+5aXkE0y1UEz+Ir37tpKZWDkoT/TcfGPX0DKhVylkGrYSnUzMbSwkS
+         vzzKz/uO1E2KxTteAPN24oQAxIz46AIsneTL7AEt+T0y7aiePJu6iQ3/C5Xcw6qJT6t+
+         feeV6yAW+u6RVJX8Hh6nJmi/pQ2dGRnVjeL/kdwhOS+fqOU3gSPrflinFVKbIj+vZ7IZ
+         FgSBIodB6z+YLl1FcIOjVYIfSzljeYzQkgplupAm7c+3wxqXvPLF1zOQPAgdJs81O+EM
+         7ALH7gKP81Rc7tW5SDc/Gamo95QS85ultjQQ/pMmBRPRnE2N1flo1XC7Jrms5aYxPo7a
+         waBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KBPHNydxkVOhAgb/0ZNhj4nD6oSionADdioTArt1Vl8=;
+        b=q5exJU/bvoDnRh0QPJ9HfUJkQIB2CaTHOk04Ucs/C8YmvGaXG3oC89a9TqVqZQT/MW
+         HGduT5hBSfunFEFC8utUYSw2zi9qyD2dWY9nN4l7gPJd8g6TztUQQBdz7NbiEeG7Zzzg
+         IOs7AYd93uskhBkKfU1siBMF3FFWAC8fx5WOVoQq6nklh/5p4cCxiK1/n4Vnm8FfidKb
+         W4auws/CvOG2lPhODR73bLEUc9A3iiT2RVr7b3/2rJ9/xknaQAekzd2dI+VuJGRwQ0ZW
+         xM9Rfoo85MeoqWa3OizCDLscUDFA1yUZCAQ7hzZ682hc5nRomWDg50Hg/p4KZp+DiLSz
+         3jeg==
+X-Gm-Message-State: AOAM53194i2R+ouu4wuKIr9GFVtWo37kXqvCSY2G4WiXQSUXuO1suqbt
+        zC3pnqfmd3sg7qOfrYOKWH6s7LAAyJRCZA==
+X-Google-Smtp-Source: ABdhPJxdBKbzy5qcZZECB2sC1zChNs+gKDcohpC+PFNEsG6p3/ykvZBoaVIy22uw3tFP1RXAM443rA==
+X-Received: by 2002:a05:6a00:2310:b0:4fa:7eb1:e855 with SMTP id h16-20020a056a00231000b004fa7eb1e855mr5808228pfh.14.1648136880523;
+        Thu, 24 Mar 2022 08:48:00 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id y3-20020a17090a8b0300b001c735089cc2sm3231580pjn.54.2022.03.24.08.47.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 08:47:59 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 09:47:57 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com
+Subject: Re: [PATCH] remoteproc: core: check rproc->power value before
+ decreasing it
+Message-ID: <20220324154757.GB3514576@p14s>
+References: <1647597096-5480-1-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjwsUT/6PkRPjnHE@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1647597096-5480-1-git-send-email-shengjiu.wang@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ingo,
+Hi Shengjiu,
 
-On Thu, Mar 24, 2022 at 09:31:13AM +0100, Ingo Molnar wrote:
-
-<snip>
-
-> ================>
+On Fri, Mar 18, 2022 at 05:51:36PM +0800, Shengjiu Wang wrote:
+> There are possibility that two 'stop' operation happen
+> in parallel, then the rproc->power may be decreased to
+> -1, that this reference count will be in wrong state.
+> So check rproc->power to make sure it is larger than
+> zero before decreasing it.
 > 
-> From: Ingo Molnar <mingo@kernel.org>
-> Date: Thu, 24 Mar 2022 09:18:36 +0100
-> Subject: [PATCH] x86/config: Make the x86 defconfigs a bit more usable
-> 
->  - Use 'make savedefconfig' to refresh & regenerate the files
->  - Add in KVM boot enablers
->  - Enable the cgroup features most distros rely on
-> 
-> Signed-off-by: Ingo Molnar <mingo@kernel.org>
-
-This should be super helpful, especially for the "reference point and
-minimal test requirements" that you mentioned above, along with being
-able to boot more distributions in QEMU without fiddling with
-kvm_guest.config and menuconfig.
-
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 > ---
->  arch/x86/configs/i386_defconfig   | 50 ++++++++++++++++++++++++++-------------
->  arch/x86/configs/x86_64_defconfig | 38 +++++++++++++++++++++--------
->  2 files changed, 62 insertions(+), 26 deletions(-)
+>  drivers/remoteproc/remoteproc_core.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
-> index 4b2085243aa3..fde771df72cc 100644
-> --- a/arch/x86/configs/i386_defconfig
-> +++ b/arch/x86/configs/i386_defconfig
-> @@ -1,5 +1,7 @@
-> +CONFIG_WERROR=y
->  CONFIG_SYSVIPC=y
->  CONFIG_POSIX_MQUEUE=y
-> +CONFIG_USELIB=y
->  CONFIG_AUDIT=y
->  CONFIG_NO_HZ=y
->  CONFIG_HIGH_RES_TIMERS=y
-> @@ -11,23 +13,30 @@ CONFIG_TASK_XACCT=y
->  CONFIG_TASK_IO_ACCOUNTING=y
->  CONFIG_LOG_BUF_SHIFT=18
->  CONFIG_CGROUPS=y
-> +CONFIG_BLK_CGROUP=y
->  CONFIG_CGROUP_SCHED=y
-> +CONFIG_CGROUP_PIDS=y
-> +CONFIG_CGROUP_RDMA=y
->  CONFIG_CGROUP_FREEZER=y
-> +CONFIG_CGROUP_HUGETLB=y
->  CONFIG_CPUSETS=y
-> +CONFIG_CGROUP_DEVICE=y
->  CONFIG_CGROUP_CPUACCT=y
-> +CONFIG_CGROUP_PERF=y
-> +CONFIG_CGROUP_MISC=y
-> +CONFIG_CGROUP_DEBUG=y
->  CONFIG_BLK_DEV_INITRD=y
-> +CONFIG_KALLSYMS_ALL=y
->  # CONFIG_COMPAT_BRK is not set
->  CONFIG_PROFILING=y
-> -# CONFIG_64BIT is not set
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index c510125769b9..84e065ad8743 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -2075,6 +2075,9 @@ int rproc_shutdown(struct rproc *rproc)
+>  		return ret;
+>  	}
+>  
+> +	if (atomic_read(&rproc->power) <= 0)
+> +		goto out;
+> +
 
-I don't think this is right, this is repeating the problem that was
-fixed by commit 76366050eb1b ("x86/defconfigs: Explicitly unset
-CONFIG_64BIT in i386_defconfig").
+Although the proposed solution will likely work, I think it is best to use
+rproc->state for this.  Simply do the same test as in state_store()[1] and exit
+if the conditions are not satisfied.  Please do the same thing for
+rproc_detach().
 
-$ make ARCH=i386 savedefconfig
+Thanks,
+Mathieu
 
-?
+[1]. https://elixir.bootlin.com/linux/v5.17/source/drivers/remoteproc/remoteproc_sysfs.c#L205
 
->  CONFIG_SMP=y
-> -CONFIG_X86_GENERIC=y
-> -CONFIG_HPET_TIMER=y
-> +CONFIG_HYPERVISOR_GUEST=y
-> +CONFIG_PARAVIRT=y
-> +CONFIG_NR_CPUS=8
->  CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS=y
-> -CONFIG_X86_REBOOTFIXUPS=y
->  CONFIG_MICROCODE_AMD=y
->  CONFIG_X86_MSR=y
->  CONFIG_X86_CPUID=y
-> -CONFIG_HIGHPTE=y
->  CONFIG_X86_CHECK_BIOS_CORRUPTION=y
->  # CONFIG_MTRR_SANITIZER is not set
->  CONFIG_EFI=y
-> @@ -43,12 +52,15 @@ CONFIG_ACPI_BGRT=y
->  CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
->  CONFIG_CPU_FREQ_GOV_ONDEMAND=y
->  CONFIG_X86_ACPI_CPUFREQ=y
-> -CONFIG_EFI_VARS=y
->  CONFIG_KPROBES=y
->  CONFIG_JUMP_LABEL=y
-> +CONFIG_COMPAT_32BIT_TIME=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
->  CONFIG_MODULE_FORCE_UNLOAD=y
-> +CONFIG_BLK_CGROUP_IOLATENCY=y
-> +CONFIG_BLK_CGROUP_IOCOST=y
-> +CONFIG_BLK_CGROUP_IOPRIO=y
->  CONFIG_BINFMT_MISC=y
->  CONFIG_NET=y
->  CONFIG_PACKET=y
-> @@ -103,12 +115,16 @@ CONFIG_IP6_NF_FILTER=y
->  CONFIG_IP6_NF_TARGET_REJECT=y
->  CONFIG_IP6_NF_MANGLE=y
->  CONFIG_NET_SCHED=y
-> +CONFIG_NET_CLS_CGROUP=y
->  CONFIG_NET_EMATCH=y
->  CONFIG_NET_CLS_ACT=y
-> +CONFIG_CGROUP_NET_PRIO=y
->  CONFIG_CFG80211=y
->  CONFIG_MAC80211=y
->  CONFIG_MAC80211_LEDS=y
->  CONFIG_RFKILL=y
-> +CONFIG_NET_9P=y
-> +CONFIG_NET_9P_VIRTIO=y
->  CONFIG_PCI=y
->  CONFIG_PCIEPORTBUS=y
->  CONFIG_PCI_MSI=y
-> @@ -119,13 +135,16 @@ CONFIG_DEVTMPFS=y
->  CONFIG_DEVTMPFS_MOUNT=y
->  CONFIG_DEBUG_DEVRES=y
->  CONFIG_CONNECTOR=y
-> +CONFIG_EFI_VARS=y
-> +CONFIG_EFI_CAPSULE_LOADER=y
->  CONFIG_BLK_DEV_LOOP=y
-> +CONFIG_VIRTIO_BLK=y
->  CONFIG_BLK_DEV_SD=y
->  CONFIG_BLK_DEV_SR=y
->  CONFIG_CHR_DEV_SG=y
->  CONFIG_SCSI_CONSTANTS=y
->  CONFIG_SCSI_SPI_ATTRS=y
-> -# CONFIG_SCSI_LOWLEVEL is not set
-> +CONFIG_SCSI_VIRTIO=y
->  CONFIG_ATA=y
->  CONFIG_SATA_AHCI=y
->  CONFIG_ATA_PIIX=y
-> @@ -143,6 +162,7 @@ CONFIG_MACINTOSH_DRIVERS=y
->  CONFIG_MAC_EMUMOUSEBTN=y
->  CONFIG_NETDEVICES=y
->  CONFIG_NETCONSOLE=y
-> +CONFIG_VIRTIO_NET=y
->  CONFIG_BNX2=y
->  CONFIG_TIGON3=y
->  CONFIG_NET_TULIP=y
-> @@ -170,6 +190,7 @@ CONFIG_SERIAL_8250_SHARE_IRQ=y
->  CONFIG_SERIAL_8250_DETECT_IRQ=y
->  CONFIG_SERIAL_8250_RSA=y
->  CONFIG_SERIAL_NONSTANDARD=y
-> +CONFIG_VIRTIO_CONSOLE=y
->  CONFIG_HW_RANDOM=y
->  CONFIG_NVRAM=y
->  CONFIG_HPET=y
-> @@ -181,12 +202,7 @@ CONFIG_AGP_AMD64=y
->  CONFIG_AGP_INTEL=y
->  CONFIG_DRM=y
->  CONFIG_DRM_I915=y
-> -CONFIG_FB_MODE_HELPERS=y
-> -CONFIG_FB_TILEBLITTING=y
-> -CONFIG_FB_EFI=y
-> -CONFIG_LOGO=y
-> -# CONFIG_LOGO_LINUX_MONO is not set
-> -# CONFIG_LOGO_LINUX_VGA16 is not set
-> +CONFIG_DRM_VIRTIO_GPU=y
->  CONFIG_SOUND=y
->  CONFIG_SND=y
->  CONFIG_SND_HRTIMER=y
-> @@ -219,6 +235,8 @@ CONFIG_USB_STORAGE=y
->  CONFIG_RTC_CLASS=y
->  # CONFIG_RTC_HCTOSYS is not set
->  CONFIG_DMADEVICES=y
-> +CONFIG_VIRTIO_PCI=y
-> +CONFIG_VIRTIO_INPUT=y
->  CONFIG_EEEPC_LAPTOP=y
->  CONFIG_EXT4_FS=y
->  CONFIG_EXT4_FS_POSIX_ACL=y
-> @@ -240,6 +258,7 @@ CONFIG_NFS_FS=y
->  CONFIG_NFS_V3_ACL=y
->  CONFIG_NFS_V4=y
->  CONFIG_ROOT_NFS=y
-> +CONFIG_9P_FS=y
->  CONFIG_NLS_DEFAULT="utf8"
->  CONFIG_NLS_CODEPAGE_437=y
->  CONFIG_NLS_ASCII=y
-> @@ -251,15 +270,14 @@ CONFIG_SECURITY_SELINUX=y
->  CONFIG_SECURITY_SELINUX_BOOTPARAM=y
->  CONFIG_SECURITY_SELINUX_DISABLE=y
->  CONFIG_PRINTK_TIME=y
-> +CONFIG_FRAME_WARN=1024
->  CONFIG_MAGIC_SYSRQ=y
->  CONFIG_DEBUG_KERNEL=y
->  CONFIG_DEBUG_STACK_USAGE=y
-> -CONFIG_DEBUG_STACKOVERFLOW=y
->  # CONFIG_SCHED_DEBUG is not set
->  CONFIG_SCHEDSTATS=y
->  CONFIG_BLK_DEV_IO_TRACE=y
->  CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
->  CONFIG_EARLY_PRINTK_DBGP=y
->  CONFIG_DEBUG_BOOT_PARAMS=y
-> -CONFIG_KALLSYMS_ALL=y
-> -CONFIG_WERROR=y
-> +CONFIG_UNWINDER_FRAME_POINTER=y
-> diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
-> index 38c52e4eb30b..69784505a7a8 100644
-> --- a/arch/x86/configs/x86_64_defconfig
-> +++ b/arch/x86/configs/x86_64_defconfig
-> @@ -1,3 +1,4 @@
-> +CONFIG_WERROR=y
->  CONFIG_SYSVIPC=y
->  CONFIG_POSIX_MQUEUE=y
->  CONFIG_AUDIT=y
-> @@ -11,14 +12,25 @@ CONFIG_TASK_XACCT=y
->  CONFIG_TASK_IO_ACCOUNTING=y
->  CONFIG_LOG_BUF_SHIFT=18
->  CONFIG_CGROUPS=y
-> +CONFIG_BLK_CGROUP=y
->  CONFIG_CGROUP_SCHED=y
-> +CONFIG_CGROUP_PIDS=y
-> +CONFIG_CGROUP_RDMA=y
->  CONFIG_CGROUP_FREEZER=y
-> +CONFIG_CGROUP_HUGETLB=y
->  CONFIG_CPUSETS=y
-> +CONFIG_CGROUP_DEVICE=y
->  CONFIG_CGROUP_CPUACCT=y
-> +CONFIG_CGROUP_PERF=y
-> +CONFIG_CGROUP_MISC=y
-> +CONFIG_CGROUP_DEBUG=y
->  CONFIG_BLK_DEV_INITRD=y
-> +CONFIG_KALLSYMS_ALL=y
->  # CONFIG_COMPAT_BRK is not set
->  CONFIG_PROFILING=y
->  CONFIG_SMP=y
-> +CONFIG_HYPERVISOR_GUEST=y
-> +CONFIG_PARAVIRT=y
->  CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS=y
->  CONFIG_MICROCODE_AMD=y
->  CONFIG_X86_MSR=y
-> @@ -41,12 +53,14 @@ CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
->  CONFIG_CPU_FREQ_GOV_ONDEMAND=y
->  CONFIG_X86_ACPI_CPUFREQ=y
->  CONFIG_IA32_EMULATION=y
-> -CONFIG_EFI_VARS=y
->  CONFIG_KPROBES=y
->  CONFIG_JUMP_LABEL=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
->  CONFIG_MODULE_FORCE_UNLOAD=y
-> +CONFIG_BLK_CGROUP_IOLATENCY=y
-> +CONFIG_BLK_CGROUP_IOCOST=y
-> +CONFIG_BLK_CGROUP_IOPRIO=y
->  CONFIG_BINFMT_MISC=y
->  CONFIG_NET=y
->  CONFIG_PACKET=y
-> @@ -101,12 +115,16 @@ CONFIG_IP6_NF_FILTER=y
->  CONFIG_IP6_NF_TARGET_REJECT=y
->  CONFIG_IP6_NF_MANGLE=y
->  CONFIG_NET_SCHED=y
-> +CONFIG_NET_CLS_CGROUP=y
->  CONFIG_NET_EMATCH=y
->  CONFIG_NET_CLS_ACT=y
-> +CONFIG_CGROUP_NET_PRIO=y
->  CONFIG_CFG80211=y
->  CONFIG_MAC80211=y
->  CONFIG_MAC80211_LEDS=y
->  CONFIG_RFKILL=y
-> +CONFIG_NET_9P=y
-> +CONFIG_NET_9P_VIRTIO=y
->  CONFIG_PCI=y
->  CONFIG_PCIEPORTBUS=y
->  CONFIG_HOTPLUG_PCI=y
-> @@ -116,13 +134,15 @@ CONFIG_DEVTMPFS=y
->  CONFIG_DEVTMPFS_MOUNT=y
->  CONFIG_DEBUG_DEVRES=y
->  CONFIG_CONNECTOR=y
-> +CONFIG_EFI_VARS=y
->  CONFIG_BLK_DEV_LOOP=y
-> +CONFIG_VIRTIO_BLK=y
->  CONFIG_BLK_DEV_SD=y
->  CONFIG_BLK_DEV_SR=y
->  CONFIG_CHR_DEV_SG=y
->  CONFIG_SCSI_CONSTANTS=y
->  CONFIG_SCSI_SPI_ATTRS=y
-> -# CONFIG_SCSI_LOWLEVEL is not set
-> +CONFIG_SCSI_VIRTIO=y
->  CONFIG_ATA=y
->  CONFIG_SATA_AHCI=y
->  CONFIG_ATA_PIIX=y
-> @@ -138,6 +158,7 @@ CONFIG_MACINTOSH_DRIVERS=y
->  CONFIG_MAC_EMUMOUSEBTN=y
->  CONFIG_NETDEVICES=y
->  CONFIG_NETCONSOLE=y
-> +CONFIG_VIRTIO_NET=y
->  CONFIG_TIGON3=y
->  CONFIG_NET_TULIP=y
->  CONFIG_E100=y
-> @@ -162,6 +183,7 @@ CONFIG_SERIAL_8250_SHARE_IRQ=y
->  CONFIG_SERIAL_8250_DETECT_IRQ=y
->  CONFIG_SERIAL_8250_RSA=y
->  CONFIG_SERIAL_NONSTANDARD=y
-> +CONFIG_VIRTIO_CONSOLE=y
->  CONFIG_HW_RANDOM=y
->  # CONFIG_HW_RANDOM_INTEL is not set
->  # CONFIG_HW_RANDOM_AMD is not set
-> @@ -175,12 +197,7 @@ CONFIG_AGP_AMD64=y
->  CONFIG_AGP_INTEL=y
->  CONFIG_DRM=y
->  CONFIG_DRM_I915=y
-> -CONFIG_FB_MODE_HELPERS=y
-> -CONFIG_FB_TILEBLITTING=y
-> -CONFIG_FB_EFI=y
-> -CONFIG_LOGO=y
-> -# CONFIG_LOGO_LINUX_MONO is not set
-> -# CONFIG_LOGO_LINUX_VGA16 is not set
-> +CONFIG_DRM_VIRTIO_GPU=y
->  CONFIG_SOUND=y
->  CONFIG_SND=y
->  CONFIG_SND_HRTIMER=y
-> @@ -213,6 +230,8 @@ CONFIG_USB_STORAGE=y
->  CONFIG_RTC_CLASS=y
->  # CONFIG_RTC_HCTOSYS is not set
->  CONFIG_DMADEVICES=y
-> +CONFIG_VIRTIO_PCI=y
-> +CONFIG_VIRTIO_INPUT=y
->  CONFIG_EEEPC_LAPTOP=y
->  CONFIG_AMD_IOMMU=y
->  CONFIG_INTEL_IOMMU=y
-> @@ -237,6 +256,7 @@ CONFIG_NFS_FS=y
->  CONFIG_NFS_V3_ACL=y
->  CONFIG_NFS_V4=y
->  CONFIG_ROOT_NFS=y
-> +CONFIG_9P_FS=y
->  CONFIG_NLS_DEFAULT="utf8"
->  CONFIG_NLS_CODEPAGE_437=y
->  CONFIG_NLS_ASCII=y
-> @@ -257,5 +277,3 @@ CONFIG_BLK_DEV_IO_TRACE=y
->  CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
->  CONFIG_EARLY_PRINTK_DBGP=y
->  CONFIG_DEBUG_BOOT_PARAMS=y
-> -CONFIG_KALLSYMS_ALL=y
-> -CONFIG_WERROR=y
+>  	/* if the remote proc is still needed, bail out */
+>  	if (!atomic_dec_and_test(&rproc->power))
+>  		goto out;
+> -- 
+> 2.17.1
 > 

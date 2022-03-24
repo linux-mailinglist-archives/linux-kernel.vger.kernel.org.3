@@ -2,259 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123A34E64FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0764E6504
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350864AbiCXOU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 10:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59888 "EHLO
+        id S1350734AbiCXOY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 10:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350848AbiCXOU4 (ORCPT
+        with ESMTP id S242197AbiCXOY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 10:20:56 -0400
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C5DB3F310;
-        Thu, 24 Mar 2022 07:19:23 -0700 (PDT)
-Received: from netfilter.org (unknown [78.30.32.163])
-        by mail.netfilter.org (Postfix) with ESMTPSA id DFA6A6303B;
-        Thu, 24 Mar 2022 15:16:28 +0100 (CET)
-Date:   Thu, 24 Mar 2022 15:19:19 +0100
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Vasily Averin <vasily.averin@linux.dev>
-Cc:     Florian Westphal <fw@strlen.de>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        kernel@openvz.org
-Subject: Re: [PATCH v2] memcg: enable accounting for nft objects
-Message-ID: <Yjx95+4qTtcYFYrv@salvia>
-References: <20220228122429.GC26547@breakpoint.cc>
- <f359be78-c95d-555a-67ec-f665f90e93b8@linux.dev>
+        Thu, 24 Mar 2022 10:24:58 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E545D5C4;
+        Thu, 24 Mar 2022 07:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648131806; x=1679667806;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WWNNb/PA88lHxiO0UiGi9BGlWMjAzl8VpxXqTLSP07I=;
+  b=dKDJpdjZypM6pU4tXT85uQtCTWt/hGL8wiQfZs/+EA230h0yXLw7+luT
+   Pw9wsul3tqu2u0CldCMUv67MDxz+SH/+tGpDg6UMat3Ge8m2EkZVe4LYu
+   WNxoeoM/i7S7U+Ma8/yqSMohN3/+xre5jyi9ToLNddDrZLgL4Os1Jrk0J
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Mar 2022 07:23:26 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 07:23:25 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 24 Mar 2022 07:23:25 -0700
+Received: from [10.253.74.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
+ 2022 07:23:21 -0700
+Message-ID: <e78ff137-fc5e-ff00-0e57-91304288d860@quicinc.com>
+Date:   Thu, 24 Mar 2022 22:23:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f359be78-c95d-555a-67ec-f665f90e93b8@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4 01/10] Use IDR to maintain all the enabled sources'
+ paths.
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
+ <20220324121734.21531-2-quic_jinlmao@quicinc.com>
+ <YjxjXnXAXVXfZqr/@kroah.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <YjxjXnXAXVXfZqr/@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hm. Patch does not apply for some reason. git am complains. And
-manually applying this also fails.
+Hi Greg,
 
-patch -p1 < vasily.averin.txt
-patching file net/netfilter/core.c
-Hunk #1 FAILED at 58.
-1 out of 1 hunk FAILED -- saving rejects to file net/netfilter/core.c.rej
-patching file net/netfilter/nf_tables_api.c
-Hunk #1 FAILED at 1113.
-Hunk #2 FAILED at 1803.
-Hunk #3 FAILED at 2026.
-Hunk #4 FAILED at 2126.
-Hunk #5 FAILED at 2156.
-Hunk #6 FAILED at 2169.
-Hunk #7 FAILED at 2177.
-Hunk #8 FAILED at 2186.
-Hunk #9 FAILED at 2349.
-Hunk #10 FAILED at 2797.
-Hunk #11 FAILED at 3405.
-Hunk #12 FAILED at 3818.
-Hunk #13 FAILED at 4382.
-Hunk #14 FAILED at 5921.
-Hunk #15 FAILED at 6165.
-Hunk #16 FAILED at 6477.
-Hunk #17 FAILED at 6643.
-Hunk #18 FAILED at 7404.
-Hunk #19 FAILED at 7412.
-19 out of 19 hunks FAILED -- saving rejects to file net/netfilter/nf_tables_api.c.rej
+Thanks for your review.
 
-On Mon, Mar 21, 2022 at 08:02:22AM +0300, Vasily Averin wrote:
-> nftables replaces iptables, but it lacks memcg accounting.
-> 
-> This patch account most of the memory allocation associated with nft
-> and should protect the host from misusing nft inside a memcg restricted
-> container.
-> 
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
-> ---
->  net/netfilter/core.c          |  2 +-
->  net/netfilter/nf_tables_api.c | 44 +++++++++++++++++------------------
->  2 files changed, 23 insertions(+), 23 deletions(-)
-> 
-> diff --git a/net/netfilter/core.c b/net/netfilter/core.c
-> index 8a77a3fd69bc..77ae3e8d344c 100644
-> --- a/net/netfilter/core.c
-> +++ b/net/netfilter/core.c
-> @@ -58,7 +58,7 @@ static struct nf_hook_entries *allocate_hook_entries_size(u16 num)
->  	if (num == 0)
->  		return NULL;
-> -	e = kvzalloc(alloc, GFP_KERNEL);
-> +	e = kvzalloc(alloc, GFP_KERNEL_ACCOUNT);
->  	if (e)
->  		e->num_hook_entries = num;
->  	return e;
-> diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-> index d71a33ae39b3..04be94236a34 100644
-> --- a/net/netfilter/nf_tables_api.c
-> +++ b/net/netfilter/nf_tables_api.c
-> @@ -1113,16 +1113,16 @@ static int nf_tables_newtable(struct sk_buff *skb, const struct nfnl_info *info,
->  	}
->  	err = -ENOMEM;
-> -	table = kzalloc(sizeof(*table), GFP_KERNEL);
-> +	table = kzalloc(sizeof(*table), GFP_KERNEL_ACCOUNT);
->  	if (table == NULL)
->  		goto err_kzalloc;
-> -	table->name = nla_strdup(attr, GFP_KERNEL);
-> +	table->name = nla_strdup(attr, GFP_KERNEL_ACCOUNT);
->  	if (table->name == NULL)
->  		goto err_strdup;
->  	if (nla[NFTA_TABLE_USERDATA]) {
-> -		table->udata = nla_memdup(nla[NFTA_TABLE_USERDATA], GFP_KERNEL);
-> +		table->udata = nla_memdup(nla[NFTA_TABLE_USERDATA], GFP_KERNEL_ACCOUNT);
->  		if (table->udata == NULL)
->  			goto err_table_udata;
-> @@ -1803,7 +1803,7 @@ static struct nft_hook *nft_netdev_hook_alloc(struct net *net,
->  	struct nft_hook *hook;
->  	int err;
-> -	hook = kmalloc(sizeof(struct nft_hook), GFP_KERNEL);
-> +	hook = kmalloc(sizeof(struct nft_hook), GFP_KERNEL_ACCOUNT);
->  	if (!hook) {
->  		err = -ENOMEM;
->  		goto err_hook_alloc;
-> @@ -2026,7 +2026,7 @@ static struct nft_rule_blob *nf_tables_chain_alloc_rules(unsigned int size)
->  	if (size > INT_MAX)
->  		return NULL;
-> -	blob = kvmalloc(size, GFP_KERNEL);
-> +	blob = kvmalloc(size, GFP_KERNEL_ACCOUNT);
->  	if (!blob)
->  		return NULL;
-> @@ -2126,7 +2126,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
->  		if (err < 0)
->  			return err;
-> -		basechain = kzalloc(sizeof(*basechain), GFP_KERNEL);
-> +		basechain = kzalloc(sizeof(*basechain), GFP_KERNEL_ACCOUNT);
->  		if (basechain == NULL) {
->  			nft_chain_release_hook(&hook);
->  			return -ENOMEM;
-> @@ -2156,7 +2156,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
->  		if (flags & NFT_CHAIN_HW_OFFLOAD)
->  			return -EOPNOTSUPP;
-> -		chain = kzalloc(sizeof(*chain), GFP_KERNEL);
-> +		chain = kzalloc(sizeof(*chain), GFP_KERNEL_ACCOUNT);
->  		if (chain == NULL)
->  			return -ENOMEM;
-> @@ -2169,7 +2169,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
->  	chain->table = table;
->  	if (nla[NFTA_CHAIN_NAME]) {
-> -		chain->name = nla_strdup(nla[NFTA_CHAIN_NAME], GFP_KERNEL);
-> +		chain->name = nla_strdup(nla[NFTA_CHAIN_NAME], GFP_KERNEL_ACCOUNT);
->  	} else {
->  		if (!(flags & NFT_CHAIN_BINDING)) {
->  			err = -EINVAL;
-> @@ -2177,7 +2177,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
->  		}
->  		snprintf(name, sizeof(name), "__chain%llu", ++chain_id);
-> -		chain->name = kstrdup(name, GFP_KERNEL);
-> +		chain->name = kstrdup(name, GFP_KERNEL_ACCOUNT);
->  	}
->  	if (!chain->name) {
-> @@ -2186,7 +2186,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
->  	}
->  	if (nla[NFTA_CHAIN_USERDATA]) {
-> -		chain->udata = nla_memdup(nla[NFTA_CHAIN_USERDATA], GFP_KERNEL);
-> +		chain->udata = nla_memdup(nla[NFTA_CHAIN_USERDATA], GFP_KERNEL_ACCOUNT);
->  		if (chain->udata == NULL) {
->  			err = -ENOMEM;
->  			goto err_destroy_chain;
-> @@ -2349,7 +2349,7 @@ static int nf_tables_updchain(struct nft_ctx *ctx, u8 genmask, u8 policy,
->  		char *name;
->  		err = -ENOMEM;
-> -		name = nla_strdup(nla[NFTA_CHAIN_NAME], GFP_KERNEL);
-> +		name = nla_strdup(nla[NFTA_CHAIN_NAME], GFP_KERNEL_ACCOUNT);
->  		if (!name)
->  			goto err;
-> @@ -2797,7 +2797,7 @@ static struct nft_expr *nft_expr_init(const struct nft_ctx *ctx,
->  		goto err1;
->  	err = -ENOMEM;
-> -	expr = kzalloc(expr_info.ops->size, GFP_KERNEL);
-> +	expr = kzalloc(expr_info.ops->size, GFP_KERNEL_ACCOUNT);
->  	if (expr == NULL)
->  		goto err2;
-> @@ -3405,7 +3405,7 @@ static int nf_tables_newrule(struct sk_buff *skb, const struct nfnl_info *info,
->  	}
->  	err = -ENOMEM;
-> -	rule = kzalloc(sizeof(*rule) + size + usize, GFP_KERNEL);
-> +	rule = kzalloc(sizeof(*rule) + size + usize, GFP_KERNEL_ACCOUNT);
->  	if (rule == NULL)
->  		goto err_release_expr;
-> @@ -3818,7 +3818,7 @@ static int nf_tables_set_alloc_name(struct nft_ctx *ctx, struct nft_set *set,
->  		free_page((unsigned long)inuse);
->  	}
-> -	set->name = kasprintf(GFP_KERNEL, name, min + n);
-> +	set->name = kasprintf(GFP_KERNEL_ACCOUNT, name, min + n);
->  	if (!set->name)
->  		return -ENOMEM;
-> @@ -4382,11 +4382,11 @@ static int nf_tables_newset(struct sk_buff *skb, const struct nfnl_info *info,
->  	alloc_size = sizeof(*set) + size + udlen;
->  	if (alloc_size < size || alloc_size > INT_MAX)
->  		return -ENOMEM;
-> -	set = kvzalloc(alloc_size, GFP_KERNEL);
-> +	set = kvzalloc(alloc_size, GFP_KERNEL_ACCOUNT);
->  	if (!set)
->  		return -ENOMEM;
-> -	name = nla_strdup(nla[NFTA_SET_NAME], GFP_KERNEL);
-> +	name = nla_strdup(nla[NFTA_SET_NAME], GFP_KERNEL_ACCOUNT);
->  	if (!name) {
->  		err = -ENOMEM;
->  		goto err_set_name;
-> @@ -5921,7 +5921,7 @@ static int nft_add_set_elem(struct nft_ctx *ctx, struct nft_set *set,
->  	err = -ENOMEM;
->  	elem.priv = nft_set_elem_init(set, &tmpl, elem.key.val.data,
->  				      elem.key_end.val.data, elem.data.val.data,
-> -				      timeout, expiration, GFP_KERNEL);
-> +				      timeout, expiration, GFP_KERNEL_ACCOUNT);
->  	if (elem.priv == NULL)
->  		goto err_parse_data;
-> @@ -6165,7 +6165,7 @@ static int nft_del_setelem(struct nft_ctx *ctx, struct nft_set *set,
->  	err = -ENOMEM;
->  	elem.priv = nft_set_elem_init(set, &tmpl, elem.key.val.data,
->  				      elem.key_end.val.data, NULL, 0, 0,
-> -				      GFP_KERNEL);
-> +				      GFP_KERNEL_ACCOUNT);
->  	if (elem.priv == NULL)
->  		goto fail_elem;
-> @@ -6477,7 +6477,7 @@ static struct nft_object *nft_obj_init(const struct nft_ctx *ctx,
->  	}
->  	err = -ENOMEM;
-> -	obj = kzalloc(sizeof(*obj) + ops->size, GFP_KERNEL);
-> +	obj = kzalloc(sizeof(*obj) + ops->size, GFP_KERNEL_ACCOUNT);
->  	if (!obj)
->  		goto err2;
-> @@ -6643,7 +6643,7 @@ static int nf_tables_newobj(struct sk_buff *skb, const struct nfnl_info *info,
->  	obj->key.table = table;
->  	obj->handle = nf_tables_alloc_handle(table);
-> -	obj->key.name = nla_strdup(nla[NFTA_OBJ_NAME], GFP_KERNEL);
-> +	obj->key.name = nla_strdup(nla[NFTA_OBJ_NAME], GFP_KERNEL_ACCOUNT);
->  	if (!obj->key.name) {
->  		err = -ENOMEM;
->  		goto err_strdup;
-> @@ -7404,7 +7404,7 @@ static int nf_tables_newflowtable(struct sk_buff *skb,
->  	nft_ctx_init(&ctx, net, skb, info->nlh, family, table, NULL, nla);
-> -	flowtable = kzalloc(sizeof(*flowtable), GFP_KERNEL);
-> +	flowtable = kzalloc(sizeof(*flowtable), GFP_KERNEL_ACCOUNT);
->  	if (!flowtable)
->  		return -ENOMEM;
-> @@ -7412,7 +7412,7 @@ static int nf_tables_newflowtable(struct sk_buff *skb,
->  	flowtable->handle = nf_tables_alloc_handle(table);
->  	INIT_LIST_HEAD(&flowtable->hook_list);
-> -	flowtable->name = nla_strdup(nla[NFTA_FLOWTABLE_NAME], GFP_KERNEL);
-> +	flowtable->name = nla_strdup(nla[NFTA_FLOWTABLE_NAME], GFP_KERNEL_ACCOUNT);
->  	if (!flowtable->name) {
->  		err = -ENOMEM;
->  		goto err1;
-> -- 
-> 2.25.1
-> 
+On 3/24/2022 8:26 PM, Greg Kroah-Hartman wrote:
+> On Thu, Mar 24, 2022 at 08:17:25PM +0800, Mao Jinlong wrote:
+>> Use hash length of the source's device name to map to the pointer
+>> of the enabled path. Using IDR will be more efficient than using
+>> the list. And there could be other sources except STM and CPU etms
+>> in the new HWs. It is better to maintain all the paths together.
+>>
+>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-core.c | 75 +++++++-------------
+>>   1 file changed, 26 insertions(+), 49 deletions(-)
+> Your subject line is odd.  Please put back the driver subsystem in the
+> subject line so that it makes more sense.
+I will update the subject in next version.
+>
+> And how have you measured "more efficient"?
+
+Using IDR would be better than doing a sequential search as there will 
+be much more device  in future.
+
+>
+> thanks,
+>
+> greg k-h
+
+Thanks
+
+Jinlong Mao
+

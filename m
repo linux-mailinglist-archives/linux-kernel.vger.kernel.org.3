@@ -2,132 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDB64E5FA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B184E5F4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348618AbiCXHpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S1348529AbiCXH14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237386AbiCXHpU (ORCPT
+        with ESMTP id S1348558AbiCXH1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:45:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87B937892B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648107828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2JkyU0YyumtNPR5ZrTimMZIYIDQ559h+78LrW1gfIvI=;
-        b=V9PmdC+P+WYDrqvN5uPetSxBzZxUhwqVj5aStLsALvYPhgo06Q9NJBilN31TDX9w1URbD5
-        4WyYq7BAdeC9N2UK1J0SpIeFLnBePjP8N6NgJajgDoCCWep8Mi7RbiWtsByMNcrO7UCzQ+
-        BMdRUtOFiSoHYmJJSMRrvlGUd5M2S+I=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-451-kgsUNS4ROo-Egf0vZtbzNg-1; Thu, 24 Mar 2022 03:39:21 -0400
-X-MC-Unique: kgsUNS4ROo-Egf0vZtbzNg-1
-Received: by mail-ed1-f70.google.com with SMTP id z22-20020a50cd16000000b0041960ea8555so2508281edi.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:39:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2JkyU0YyumtNPR5ZrTimMZIYIDQ559h+78LrW1gfIvI=;
-        b=XeODrMoI2gFgSjywUrXG2BLleW4NqOP4zAtpyBioGw++kjcQm3tvqDFNDBbmBzdsKZ
-         b8MlKmtTnNAe9WkFE7g6WpdhBXv6Kx5jebu7M/7cPde6EnUjlQV1ROhnE6j7lPpN2/tZ
-         iQddqRqcNSAwWsl6nqe8NPBbmkTpMkToYMXW2H1EaW6vIFhNBVlePPvw2HEupvTaOroS
-         yKDHiQP8CFL7faFFm+8CQg9gjAzrL3VZ7Mzgk5plnHmgz2W4FmndNxFRITfpCyXd6dso
-         Xsw6MS+H1qNnxNw6yrKZ8cbJm6t7oUvlKMsHCOX4lKigwsBla79XdAnEAz3EuhyWCEpw
-         rOEQ==
-X-Gm-Message-State: AOAM530cnSUreJprAf5PrsTLCLTJz/uUtNzZH1d/paPGXjidpdv/nQgV
-        WNzijR9Zvy1/nTV5nzOX9QFxCaSvhMlmnBCsvnVnJWLdmF1MtqU/sXVUezY4r1Mikbl2wKGq8jy
-        ivVnqwq+Bb5Gq19U1FwCvLCXR
-X-Received: by 2002:a17:907:7e96:b0:6da:f7ee:4a25 with SMTP id qb22-20020a1709077e9600b006daf7ee4a25mr4174288ejc.436.1648107560845;
-        Thu, 24 Mar 2022 00:39:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyB4biCBrcPL9gKQvLvT/ULJgefYHh1wmqJtXbE2bRdN6Ru88VKldaGAXNfrtmHkIVSMVNoFA==
-X-Received: by 2002:a17:907:7e96:b0:6da:f7ee:4a25 with SMTP id qb22-20020a1709077e9600b006daf7ee4a25mr4174277ejc.436.1648107560680;
-        Thu, 24 Mar 2022 00:39:20 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id r16-20020a056402019000b00418ed60c332sm1018992edv.65.2022.03.24.00.39.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 00:39:20 -0700 (PDT)
-Message-ID: <2f33bdce-a002-708a-dd65-7bfb6ebc4cd9@redhat.com>
-Date:   Thu, 24 Mar 2022 08:39:19 +0100
+        Thu, 24 Mar 2022 03:27:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B3398F5D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:26:15 -0700 (PDT)
+Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KPGtY2zFZzCql5;
+        Thu, 24 Mar 2022 15:24:05 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500011.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 24 Mar 2022 15:26:13 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 24 Mar 2022 15:26:12 +0800
+From:   Peng Liu <liupeng256@huawei.com>
+To:     <mike.kravetz@oracle.com>, <akpm@linux-foundation.org>,
+        <yaozhenguo1@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <liupeng256@huawei.com>
+Subject: [PATCH] hugetlb: Fix hugepages_setup when deal with pernode
+Date:   Thu, 24 Mar 2022 07:40:37 +0000
+Message-ID: <20220324074037.2024608-1-liupeng256@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Gross <markgross@kernel.org>
-Cc:     "David E. Box" <david.e.box@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220301201659.45ac94cd@canb.auug.org.au>
- <20220324183329.22c97ea1@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220324183329.22c97ea1@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hugepages can be specified to pernode since "hugetlbfs: extend
+the definition of hugepages parameter to support node allocation",
+but the following two problems are observed.
 
-On 3/24/22 08:33, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Tue, 1 Mar 2022 20:16:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the drivers-x86 tree, today's linux-next build (htmldocs)
->> produced these warnings:
->>
->> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Unexpected indentation.
->> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Block quote ends without a blank line; unexpected unindent.
->> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Definition list ends without a blank line; unexpected unindent.
->>
->> Introduced by commit
->>
->>   2546c6000430 ("platform/x86: Add Intel Software Defined Silicon driver")
-> 
-> I am still seeing these warnings.
+1) Confusing behavior is observed when both 1G and 2M hugepage
+is set after "numa=off".
+ cmdline hugepage settings:
+  hugepagesz=1G hugepages=0:3,1:3
+  hugepagesz=2M hugepages=0:1024,1:1024
+ results:
+  HugeTLB registered 1.00 GiB page size, pre-allocated 0 pages
+  HugeTLB registered 2.00 MiB page size, pre-allocated 1024 pages
 
-I replied to your original report on March 1st, but I never got a reply
-to my reply:
+2) Using invalid option values causes the entire kernel boot option
+string to be reported as Unknown.
+ Unknown kernel command line parameters "hugepages=0:1024,1:1024"
 
-"""
-Thank you for the report.
+To fix "1)", hugetlb_hstate_alloc_pages should be called even when
+hugepages_setup going to invalid. To fix "2)", return 1 so that
+init's environment is not polluted with kernel boot options.
 
-So I just did:
+Fixes: b5389086ad7b ("hugetlbfs: extend the definition of hugepages parameter to support node allocation")
+Signed-off-by: Peng Liu <liupeng256@huawei.com>
+---
+ mm/hugetlb.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-touch Documentation/ABI/testing/sysfs-driver-intel_sdsi
-make htmldocs &> log
-
-In a repo with drivers-x86/for-next checked out and checked the generated log files.
-But I'm not seeing these WARNINGs.
-
-Also 'find Documentation/output/ -name "*sdsi*"' does not output anything,
-is there anything special (maybe some extra utilities?) which I need to also enable
-building of htmldocs for the files in Documentation/ABI ?
-"""
-
-If someone can let me know how to reproduce these warnings I would be happy
-to fix them.
-
-Regards,
-
-Hans
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index b34f50156f7e..de8e1d8a2c66 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4189,6 +4189,7 @@ static int __init hugepages_setup(char *s)
+ 		}
+ 	}
+ 
++out:
+ 	/*
+ 	 * Global state is always initialized later in hugetlb_init.
+ 	 * But we need to allocate gigantic hstates here early to still
+@@ -4203,7 +4204,7 @@ static int __init hugepages_setup(char *s)
+ 
+ invalid:
+ 	pr_warn("HugeTLB: Invalid hugepages parameter %s\n", p);
+-	return 0;
++	goto out;
+ }
+ __setup("hugepages=", hugepages_setup);
+ 
+-- 
+2.18.0.huawei.25
 

@@ -2,141 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21974E60C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E35F4E60C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348899AbiCXJBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 05:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S1349067AbiCXJBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 05:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242899AbiCXJBf (ORCPT
+        with ESMTP id S242899AbiCXJBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 05:01:35 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4405C97B8D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:00:04 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id f3so2244810pfe.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=moE3lhU0orNGD+WYGUFvC/ixbs2Ayr8MA1pW3p2i+Qk=;
-        b=SDoW7fqkMXkislH4O/hYEdTxz9Mj5AMwSIlbKlbtSyBWKa8f9DFgalAzC7VYHFHuJD
-         /w5ePUPZ8qJ2RSzubJNGPj8CbSOL72E8pg4dKEe/8fNot4iREXkg0Z8oHpTW0SlS7g1y
-         8uH8of7NcRnK9fFJAiDbHo3T50srUtDnQuUs4VxdSI3U51puSO92+H1jwQ7fodwbP2MN
-         9BkzxZQTakklDJSt/CuAxT0LjpRUvXE332nKzr9olrVKLKEuxCQtOc0DF0/nPYER0AK0
-         1QOvP5a8zoNIVbeHtfwK8HaV2meRU0UYrlAnncXp4wFmM4OatVb8JkEa+/hHU2U2H8XJ
-         7vMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=moE3lhU0orNGD+WYGUFvC/ixbs2Ayr8MA1pW3p2i+Qk=;
-        b=kjHpTWJ7CAqcBfa5woh23JSfz8rfLY+4izehrBNe3nPMQQ+TM3iAlwHaBb3H6SLD0d
-         LFs9/khluAm9K6GRwn6gWJi+8eQYYgeiamvNGBDlrUkeJoZ6sh/CsgEQbMPHSnBmzVEi
-         OfsciaE7LdVIjyrli79EezSy63wWOF39OtHSrpz/CNmOnvDZDQKe25z/mN5SFXF0I11e
-         f5GmEqQKRD557vJX8qJUEzmHX9on0hk0+1piIj2MihIk7KAUpx6eDxrbXrZtwmoFqzTm
-         jH8RIE+7pU8cHdNXOROLxoVZ8NOxjMTWkHgy8fvCGHuntxpiBfbdBdgJePSDWDxmfQJd
-         lNRw==
-X-Gm-Message-State: AOAM530x/PIpkvzEinPkaucdN/Luwus/PnQ7JDiqSXnfo89upQy77x3T
-        nqa5uGvqM378S1hGgDWpFHZ0
-X-Google-Smtp-Source: ABdhPJwoROpeTysCOTaYFdASklJVDFj2JvTNVBcuXGLFinXIxKl8+v+AOv9IrUC9rqMamZVGtXq6nQ==
-X-Received: by 2002:a05:6a00:711:b0:4fa:daf1:94c1 with SMTP id 17-20020a056a00071100b004fadaf194c1mr4025286pfl.52.1648112402841;
-        Thu, 24 Mar 2022 02:00:02 -0700 (PDT)
-Received: from thinkpad ([220.158.158.107])
-        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm2729029pfc.190.2022.03.24.01.59.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 02:00:02 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 14:29:56 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/12] PCI: dwc: Add unroll iATU space support to the
- regions disable method
-Message-ID: <20220324085956.GC2854@thinkpad>
-References: <20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru>
- <20220324012524.16784-4-Sergey.Semin@baikalelectronics.ru>
+        Thu, 24 Mar 2022 05:01:50 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1E5972E1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:00:19 -0700 (PDT)
+Received: from [192.168.12.80] (unknown [182.2.71.236])
+        by gnuweeb.org (Postfix) with ESMTPSA id 47FC67E6FF;
+        Thu, 24 Mar 2022 09:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1648112418;
+        bh=RrYToTS3ZUOh2cUKEiBGqlhtdbPXGZlb2By1N74obmo=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=liz7mWAmJ0S+3flucrB8nF3mKNESBOr0EBylNIiPsZsOTO/gu4z8jHDS6Ranpxxqj
+         8WHPpIjZLgGPMDGMsHUj0mekpUf8EPGL/YRTwoCse7231O8ouA/+9fg/qt3riMqWQp
+         3qJFHaqfNUiOdBj7zosyyJlXM0ZdRMKfN0Pvx3+bjVaNBi+6DU7nAp0GGlhl3TYo22
+         xOobEsFDI0xgT899OwhwWYOfaF8EKLdEa7noAKUFB/jMxG/4v1BYCj4TmQSkYuWeIS
+         Bni97cNJ2RoPJOJIg8AuaF9roVJPy0nceXrX6PW1yWssqyeIe3/nU3QQe69yHK7xKj
+         SIbV6OC5+sIFQ==
+Message-ID: <266d7b7b-b803-51de-280e-35e16aa82248@gnuweeb.org>
+Date:   Thu, 24 Mar 2022 16:00:13 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324012524.16784-4-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Willy Tarreau <w@1wt.eu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        David Laight <David.Laight@aculab.com>
+References: <20220324073039.140946-1-ammarfaizi2@gnuweeb.org>
+ <20220324073039.140946-5-ammarfaizi2@gnuweeb.org>
+ <20220324075728.GC18586@1wt.eu>
+ <CAOG64qMwKYHLrUVro1gFhYqHvm8wq5DUdO7QfK5gG2TKhfnNhA@mail.gmail.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH v1 04/11] tools/nolibc: x86-64: Use appropriate register
+ constraints if exist
+In-Reply-To: <CAOG64qMwKYHLrUVro1gFhYqHvm8wq5DUdO7QfK5gG2TKhfnNhA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:25:14AM +0300, Serge Semin wrote:
-> The dw_pcie_disable_atu() method was introduced in the commit f8aed6ec624f
-> ("PCI: dwc: designware: Add EP mode support"). Since then it hasn't
-> changed at all.  For all that time the method has supported the viewport
-> version of the iATU CSRs only. Basically it works for the DW PCIe IP-cores
-> older than v4.80a since the newer controllers are equipped with the
-> unrolled iATU/eDMA space. It means the methods using it like
-> pci_epc_ops.clear_bar and pci_epc_ops.unmap_addr callbacks just don't work
-> correctly for the DW PCIe controllers with unrolled iATU CSRs. The same
-> concerns the dw_pcie_setup_rc() method, which disables the outbound iATU
-> entries before re-initializing them.
+On 3/24/22 3:33 PM, Alviro Iskandar Setiawan wrote:
+> On Thu, Mar 24, 2022 at 2:57 PM Willy Tarreau <w@1wt.eu> wrote:
+>> On Thu, Mar 24, 2022 at 02:30:32PM +0700, Ammar Faizi wrote:
+>>> Use appropriate register constraints if exist. Don't use register
+>>> variables for all inputs.
+>>>
+>>> Register variables with "r" constraint should be used when we need to
+>>> pass data through a specific register to extended inline assembly that
+>>> doesn't have a specific register constraint associated with it (anything
+>>> outside %rax, %rbx, %rcx, %rdx, %rsi, %rdi).
+>>>
+>>> It also simplifies the macro definition.
+>>
+>> I'm a bit bothered by this one because I went the exact opposite route
+>> in the early design precisely because I found that the current one was
+>> simpler. [...]
+> [...]
+>> I'd say that if there is any technical benefit in doing this (occasional
+>> code improvement or better support for older or exotic compilers), I'd say
+>> "ok go for it", but if it's only a matter of taste, I'm not convinced at
+>> all and am rather seeing this as a regression. Now if there's rough
+>> consensus around this approach I'll abide, but then I'd request that other
+>> archs are adapted as well so that we don't keep a different approach only
+>> for these two ones.
 > 
-> So in order to fix the problems denoted above let's convert the
-> dw_pcie_disable_atu() method to disabling the iATU inbound and outbound
-> regions in the unrolled iATU CSRs in case the DW PCIe controller has been
-> synthesized with the ones support. The former semantics will be remained
-> for the controller having iATU mapped over the viewport.
-> 
-> Fixes: f8aed6ec624f ("PCI: dwc: designware: Add EP mode support")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> I don't see any technical benefit for x86-64, so I don't think there
+> is a need in doing this. Though I personally prefer to use register
+> constraints if they exist instead of register variables for everything
+> (oh yeah, matter of taste since I don't have any technical argument to
+> say it's better respecting the resulting codegen). The only real issue
+> is for the syscall6() implementation on i386 as we've been bitten by a
+> real compiler issue. In short, I am neutral on this change.
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+OK then, I will drop this patch in the next version. I agree that it
+doesn't really show any technical benefit and there is no danger in
+doing the current implementation.
 
-Thanks,
-Mani
+And yes, the syscall6() for i386 is somewhat problematic and we've a
+confirmed bug that lives in many versions of GCC and it's not even fixed
+in the current trunk. It's proven that using register constraints can
+be a valid workaround to deal with this bug.
 
-> ---
->  drivers/pci/controller/dwc/pcie-designware.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index d92c8a25094f..7dc8c360a0d4 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -504,8 +504,18 @@ void dw_pcie_disable_atu(struct dw_pcie *pci, int index,
->  		return;
->  	}
->  
-> -	dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
-> -	dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
-> +	if (pci->iatu_unroll_enabled) {
-> +		if (region == PCIE_ATU_REGION_INBOUND) {
-> +			dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-> +						 ~(u32)PCIE_ATU_ENABLE);
-> +		} else {
-> +			dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-> +						 ~(u32)PCIE_ATU_ENABLE);
-> +		}
-> +	} else {
-> +		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
-> +		dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
-> +	}
->  }
->  
->  int dw_pcie_wait_for_link(struct dw_pcie *pci)
-> -- 
-> 2.35.1
-> 
+2022-03-23 13:50:18 UTC, Jakub Jelinek wrote:
+> Anyway, with the "b" etc. constraints (which is a good idea to use on
+> x86 when it has single register constraints for those but can't be used
+> on other arches which do not have such constraints) you just trigger
+> slightly different path in the RA, [...]
+See the discussion here:
+    
+    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105032#c7
+
+^^^ That is only for syscall6() on i386.
+
+As such, I will drop this patch and another one that does this on i386.
+
+Thanks!
+-- 
+Ammar Faizi

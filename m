@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBFF4E6AA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A314E6AB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355354AbiCXW2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 18:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S1355377AbiCXWag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 18:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238178AbiCXW2F (ORCPT
+        with ESMTP id S244871AbiCXWae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 18:28:05 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A35ABA316;
-        Thu, 24 Mar 2022 15:26:30 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id t14so4953400pgr.3;
-        Thu, 24 Mar 2022 15:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z0kz4cUS7VSjGdMcGeX4YE5SdchuevIjl21XixcoPrA=;
-        b=ArGxX5qaFIK9xgQixjVBt4ZqvGKBlkq0vd6xiO9GjFDFiCMZJuSxTYdycHMJzV83f6
-         SkUJDeXtu9Il2JaE30tqVFV3EA1xN1jG6HEYytLsFPWTSAG/4YGjyZ3c8gcuo/RXPU0m
-         Sv8zgj/ns3Gs1IATig7unygowAGhQnvwtFko4I/sxagcOe+kZWhCArPyqSMxHAUZlQUu
-         4SK75VgaR+Tq7dERobcXbicT6A58q7+jGsv54LODDZXv81T0PPz5WcNG7QrwBDK1iBNW
-         Grw7b7BCGcpeoFN5reA42Rlhet1gOf4TagwGZhqK6VLIQDHmSdn6GeCnLurmq+g5p60c
-         lZRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z0kz4cUS7VSjGdMcGeX4YE5SdchuevIjl21XixcoPrA=;
-        b=FF0tlYbZJxWqmcT2qodAPZo6K37YZTz3JRzbG0uu+EtOp7xhqVSgU5dVXBX6UJ1f77
-         fLSypZRsMo/WRoR91WcK5tNJ7ygheir8USwHnbb2dCuxGhaQppmRBsmSfb/ZmZW/ge7/
-         1LWD2U8kjPtzH3Y/rglpZ6ltf/qIQ0khdzQOuudq74D936DrR6YOKoj2gq8ZWrnk3m3F
-         EDJYcsJtmYI4Z8JvPd1PnrGzHijmYxXttRNYLRDyWZ1oQwwd9xWhVgM/EbY0qIpf3KVu
-         G1ufFbA347hGsCN1XnrAnPiFPjjlgxkOhWduZ5CetXPoUAEtloyeRti6GzXD+cX4MMrU
-         ssfQ==
-X-Gm-Message-State: AOAM533urOG996LxOWTKmmPSM7esaIBV1larSj3kBr5/ubfBlj6uL290
-        Cp+PJrHx1oLGBmAVc0G2aam957ou8CdslDzjBnA=
-X-Google-Smtp-Source: ABdhPJyzWMmr6ULY9oh8mhcm18dEt9qX8Izi79seRS2qM/nJJMXGko5Yu04oDq6v0XeZ1f6lczHH/bcUJB3GNUQRMwc=
-X-Received: by 2002:a63:4e14:0:b0:374:4a37:4966 with SMTP id
- c20-20020a634e14000000b003744a374966mr5568860pgb.118.1648160789824; Thu, 24
- Mar 2022 15:26:29 -0700 (PDT)
+        Thu, 24 Mar 2022 18:30:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5F1427E1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:29:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F613B8250D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 22:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F13C340EC;
+        Thu, 24 Mar 2022 22:28:57 +0000 (UTC)
+Date:   Thu, 24 Mar 2022 18:28:56 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Joe Perches <joe@perches.com>
+Subject: Re: [PATCH] MAINTAINERS: Add arch/powerpc/kernel/trace to TRACING
+Message-ID: <20220324182856.6f6a01d7@gandalf.local.home>
+In-Reply-To: <8e2f707e2efa1fc1d1ffd2f9f6758e8c4a82c83e.1648132613.git.christophe.leroy@csgroup.eu>
+References: <8e2f707e2efa1fc1d1ffd2f9f6758e8c4a82c83e.1648132613.git.christophe.leroy@csgroup.eu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220323124225.91763-1-alvin@pqrs.dk> <YjsZVblL11w8IuRH@lunn.ch>
- <20220323134944.4cn25vs6vaqcdeso@bang-olufsen.dk> <20220323083953.46cdccc8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20220324080402.wu2zsewgqn2wecel@bang-olufsen.dk>
-In-Reply-To: <20220324080402.wu2zsewgqn2wecel@bang-olufsen.dk>
-From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Date:   Thu, 24 Mar 2022 19:26:18 -0300
-Message-ID: <CAJq09z62hjhfW_TYWt1tfmzVTnxzr=pyXq7a2mf55sv0EOhn4Q@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: dsa: realtek: make interface drivers depend
- on OF
-To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Fixes: aac94001067d ("net: dsa: realtek: add new mdio interface for drivers")
+On Thu, 24 Mar 2022 15:38:28 +0100
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-Thanks Alvin for the fix. Maybe you should add both commits.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e127c2fb08a7..3b5943f34568 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19592,6 +19592,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+>  F:	Documentation/trace/ftrace.rst
+>  F:	arch/*/*/*/ftrace.h
+>  F:	arch/*/kernel/ftrace.c
+> +F:	arch/powerpc/kernel/trace/
 
-Acked-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Perhaps replace the above two with:
+   F:   arch/*/*/ftrace*
+   F:   arch/*/*/*/ftrace*
 
-Regards,
+As we also have things like ftrace_32.S, ftrace_64.S
 
-Luiz
+Maybe even add:
+
+   F: arch/*/*/*_ftrace.*
+   F: arch/*/*/*/*_ftrace.*
+
+to catch the "entry_ftrace.S" and friends (needing the leading "_" to not
+get confused by any "bpftrace" files).
+
+?
+
+But in reality, I'm only a reviewer for ftrace in the archs. It really is
+maintained by the arch maintainers. But it is still good that I get Cc'd on
+any ftrace arch related changes.
+
+-- Steve
+
+
+>  F:	fs/tracefs/
+>  F:	include/*/ftrace.h
+>  F:	include/linux/trace*.h
+

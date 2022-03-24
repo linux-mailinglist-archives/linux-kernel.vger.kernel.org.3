@@ -2,129 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BFF4E60C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21974E60C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234192AbiCXI7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
+        id S1348899AbiCXJBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 05:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243847AbiCXI7K (ORCPT
+        with ESMTP id S242899AbiCXJBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:59:10 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2549D0C3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:57:38 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id j15so7714273eje.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:57:38 -0700 (PDT)
+        Thu, 24 Mar 2022 05:01:35 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4405C97B8D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:00:04 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id f3so2244810pfe.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:00:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TZ6s65rDvN8Tqn0qDZEB8Ijp4jvPh0GyNpSk/ZtB3pI=;
-        b=m8uvN3vl8Uzj9zAwWsZQwJeD4SgdTCd74DSTmwxQoZYwKcDUMIa06VjnueJ49ViSg6
-         AH6m1oASGMxV+L7gbdqnZl0DsC1kLdBlx0tkhj9scA0ROyULs+xnhqKjG+EjiECTe9v9
-         fHLplZ4INS5E2/hQbGf40wOuvgjoBCnl4uueQ=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=moE3lhU0orNGD+WYGUFvC/ixbs2Ayr8MA1pW3p2i+Qk=;
+        b=SDoW7fqkMXkislH4O/hYEdTxz9Mj5AMwSIlbKlbtSyBWKa8f9DFgalAzC7VYHFHuJD
+         /w5ePUPZ8qJ2RSzubJNGPj8CbSOL72E8pg4dKEe/8fNot4iREXkg0Z8oHpTW0SlS7g1y
+         8uH8of7NcRnK9fFJAiDbHo3T50srUtDnQuUs4VxdSI3U51puSO92+H1jwQ7fodwbP2MN
+         9BkzxZQTakklDJSt/CuAxT0LjpRUvXE332nKzr9olrVKLKEuxCQtOc0DF0/nPYER0AK0
+         1QOvP5a8zoNIVbeHtfwK8HaV2meRU0UYrlAnncXp4wFmM4OatVb8JkEa+/hHU2U2H8XJ
+         7vMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TZ6s65rDvN8Tqn0qDZEB8Ijp4jvPh0GyNpSk/ZtB3pI=;
-        b=0FrH4c4qd8Y2MW7z/dfgNh0ubO8d22jsqoC0L7hTZ3Q3Zhkjd3TE/NKvd0bbjv4Wup
-         4LLUG+BLh1AwGJABDQOLxb3uw8gHcv5jYcwq1J6YGLCvRdPbKlZv8fbJjmst3izU6+Qx
-         aML5/BK36gjmbUJ6Aju4aLNBXy5UISF361jcyIKXpajTINEQ9Bks5brCNpfZihzw+5yo
-         jYNassPpWurm39NAYGs1gkh4uoSk0C38Lw6bm2xFaVAVXaIh1r1xEcaRPyMHqzkR8uCV
-         dekDuYb228cOLkYLkz4KdqelG/mF0wBBrjTsaMuXMPkvU4bTQlt4xLLkVDY23sV9MPoa
-         P72w==
-X-Gm-Message-State: AOAM53328fCjH0NBqFQXKSy6y0O0IyqFQa+eZH+d1rL9YiuuamM7zrfa
-        SIRVRZWNU+y50GoS2HjX4XCBQ8zaKVi77zVdsLIxUg==
-X-Google-Smtp-Source: ABdhPJz7TgZDeh0+kDj2ymXCRjzBF8dMmiYeu1yauoVqNwsy2kRkXd9LUCYEVYbpcsr51BEAZ9P7D4i0qDYXH2dm+jA=
-X-Received: by 2002:a17:907:c16:b0:6db:1dfc:ca73 with SMTP id
- ga22-20020a1709070c1600b006db1dfcca73mr4602838ejc.192.1648112257373; Thu, 24
- Mar 2022 01:57:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=moE3lhU0orNGD+WYGUFvC/ixbs2Ayr8MA1pW3p2i+Qk=;
+        b=kjHpTWJ7CAqcBfa5woh23JSfz8rfLY+4izehrBNe3nPMQQ+TM3iAlwHaBb3H6SLD0d
+         LFs9/khluAm9K6GRwn6gWJi+8eQYYgeiamvNGBDlrUkeJoZ6sh/CsgEQbMPHSnBmzVEi
+         OfsciaE7LdVIjyrli79EezSy63wWOF39OtHSrpz/CNmOnvDZDQKe25z/mN5SFXF0I11e
+         f5GmEqQKRD557vJX8qJUEzmHX9on0hk0+1piIj2MihIk7KAUpx6eDxrbXrZtwmoFqzTm
+         jH8RIE+7pU8cHdNXOROLxoVZ8NOxjMTWkHgy8fvCGHuntxpiBfbdBdgJePSDWDxmfQJd
+         lNRw==
+X-Gm-Message-State: AOAM530x/PIpkvzEinPkaucdN/Luwus/PnQ7JDiqSXnfo89upQy77x3T
+        nqa5uGvqM378S1hGgDWpFHZ0
+X-Google-Smtp-Source: ABdhPJwoROpeTysCOTaYFdASklJVDFj2JvTNVBcuXGLFinXIxKl8+v+AOv9IrUC9rqMamZVGtXq6nQ==
+X-Received: by 2002:a05:6a00:711:b0:4fa:daf1:94c1 with SMTP id 17-20020a056a00071100b004fadaf194c1mr4025286pfl.52.1648112402841;
+        Thu, 24 Mar 2022 02:00:02 -0700 (PDT)
+Received: from thinkpad ([220.158.158.107])
+        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm2729029pfc.190.2022.03.24.01.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 02:00:02 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 14:29:56 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/12] PCI: dwc: Add unroll iATU space support to the
+ regions disable method
+Message-ID: <20220324085956.GC2854@thinkpad>
+References: <20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324012524.16784-4-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220322192712.709170-1-mszeredi@redhat.com> <20220323225843.GI1609613@dread.disaster.area>
-In-Reply-To: <20220323225843.GI1609613@dread.disaster.area>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Thu, 24 Mar 2022 09:57:26 +0100
-Message-ID: <CAJfpegv6PmZ_RXipBs9UEjv_WfEUtTDE1uNZq+9fBkCzWPvXkw@mail.gmail.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324012524.16784-4-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 at 23:58, Dave Chinner <david@fromorbit.com> wrote:
->
-> On Tue, Mar 22, 2022 at 08:27:12PM +0100, Miklos Szeredi wrote:
+On Thu, Mar 24, 2022 at 04:25:14AM +0300, Serge Semin wrote:
+> The dw_pcie_disable_atu() method was introduced in the commit f8aed6ec624f
+> ("PCI: dwc: designware: Add EP mode support"). Since then it hasn't
+> changed at all.  For all that time the method has supported the viewport
+> version of the iATU CSRs only. Basically it works for the DW PCIe IP-cores
+> older than v4.80a since the newer controllers are equipped with the
+> unrolled iATU/eDMA space. It means the methods using it like
+> pci_epc_ops.clear_bar and pci_epc_ops.unmap_addr callbacks just don't work
+> correctly for the DW PCIe controllers with unrolled iATU CSRs. The same
+> concerns the dw_pcie_setup_rc() method, which disables the outbound iATU
+> entries before re-initializing them.
+> 
+> So in order to fix the problems denoted above let's convert the
+> dw_pcie_disable_atu() method to disabling the iATU inbound and outbound
+> regions in the unrolled iATU CSRs in case the DW PCIe controller has been
+> synthesized with the ones support. The former semantics will be remained
+> for the controller having iATU mapped over the viewport.
+> 
+> Fixes: f8aed6ec624f ("PCI: dwc: designware: Add EP mode support")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-> > - Interfaces for getting various attributes and statistics are fragmented.
-> >   For files we have basic stat, statx, extended attributes, file attributes
-> >   (for which there are two overlapping ioctl interfaces).  For mounts and
-> >   superblocks we have stat*fs as well as /proc/$PID/{mountinfo,mountstats}.
-> >   The latter also has the problem on not allowing queries on a specific
-> >   mount.
->
-> https://xkcd.com/927/
-
-Haha!
-
-> I've said in the past when discussing things like statx() that maybe
-> everything should be addressable via the xattr namespace and
-> set/queried via xattr names regardless of how the filesystem stores
-> the data. The VFS/filesystem simply translates the name to the
-> storage location of the information. It might be held in xattrs, but
-> it could just be a flag bit in an inode field.
-
-Right, that would definitely make sense for inode attributes.
-
-What about other objects' attributes, statistics?   Remember this
-started out as a way to replace /proc/self/mountinfo with something
-that can query individual mount.
-
-> > mnt                    - list of mount parameters
-> > mnt:mountpoint         - the mountpoint of the mount of $ORIGIN
-> > mntns                  - list of mount ID's reachable from the current root
-> > mntns:21:parentid      - parent ID of the mount with ID of 21
-> > xattr:security.selinux - the security.selinux extended attribute
-> > data:foo/bar           - the data contained in file $ORIGIN/foo/bar
->
-> How are these different from just declaring new xattr namespaces for
-> these things. e.g. open any file and list the xattrs in the
-> xattr:mount.mnt namespace to get the list of mount parameters for
-> that mount.
-
-Okay.
-
-> Why do we need a new "xattr in everything but name" interface when
-> we could just extend the one we've already got and formalise a new,
-> cleaner version of xattr batch APIs that have been around for 20-odd
-> years already?
-
-Seems to make sense. But...will listxattr list everyting recursively?
-I guess that won't work, better just list traditional xattrs,
-otherwise we'll likely get regressions, and anyway the point of a
-hierarchical namespace is to be able to list nodes on each level.  We
-can use getxattr() for this purpose, just like getvalues() does in the
-above example.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 Thanks,
-Miklos
+Mani
+
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index d92c8a25094f..7dc8c360a0d4 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -504,8 +504,18 @@ void dw_pcie_disable_atu(struct dw_pcie *pci, int index,
+>  		return;
+>  	}
+>  
+> -	dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
+> -	dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
+> +	if (pci->iatu_unroll_enabled) {
+> +		if (region == PCIE_ATU_REGION_INBOUND) {
+> +			dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
+> +						 ~(u32)PCIE_ATU_ENABLE);
+> +		} else {
+> +			dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
+> +						 ~(u32)PCIE_ATU_ENABLE);
+> +		}
+> +	} else {
+> +		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
+> +		dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
+> +	}
+>  }
+>  
+>  int dw_pcie_wait_for_link(struct dw_pcie *pci)
+> -- 
+> 2.35.1
+> 

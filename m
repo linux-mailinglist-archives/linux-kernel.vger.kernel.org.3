@@ -2,136 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCEF4E5DC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 05:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906834E5DC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 05:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241928AbiCXEHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 00:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
+        id S241943AbiCXEJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 00:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiCXEHj (ORCPT
+        with ESMTP id S229699AbiCXEJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 00:07:39 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DABB7D015;
-        Wed, 23 Mar 2022 21:06:05 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:54418.634531658
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 0AA841002B3;
-        Thu, 24 Mar 2022 12:05:57 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 78d26cf70bc24c698f3751c8db815cac for robh@kernel.org;
-        Thu, 24 Mar 2022 12:06:04 CST
-X-Transaction-ID: 78d26cf70bc24c698f3751c8db815cac
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <6a0d6acd-f778-f3ec-a97a-7c7932579e96@189.cn>
-Date:   Thu, 24 Mar 2022 12:05:55 +0800
+        Thu, 24 Mar 2022 00:09:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7614991ACA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 21:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648094871;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0fkEZc+cdXddFpyjDOTE5EXhIOuXdRohucX74uCvG4U=;
+        b=di2RXBPlLzC20KLR9fuLj7oA7uwsFMVYo/ztXC4RT9wROfWA+6Z7iU1wAWOsmQ3UStmFGr
+        57qG8QtZQzzkqeBLERQg8pmk/7IgHdHeDGB8jQmWXM3Qtp3AyC3C6Q353kkzV7JxeSS4CQ
+        oqlMOYEY65DIy5+qIxJRrvE/iKr1rH8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-jdGNZksWNH6DvdDpEFU2Hw-1; Thu, 24 Mar 2022 00:07:46 -0400
+X-MC-Unique: jdGNZksWNH6DvdDpEFU2Hw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55A9D185A7B2;
+        Thu, 24 Mar 2022 04:07:46 +0000 (UTC)
+Received: from [10.72.12.33] (ovpn-12-33.pek2.redhat.com [10.72.12.33])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4EE4B2166B2D;
+        Thu, 24 Mar 2022 04:07:37 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v5 03/22] KVM: arm64: Support SDEI_VERSION hypercall
+To:     Oliver Upton <oupton@google.com>
+Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
+        linux-kernel@vger.kernel.org, eauger@redhat.com,
+        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
+References: <20220322080710.51727-1-gshan@redhat.com>
+ <20220322080710.51727-4-gshan@redhat.com> <YjoPxLAMIPobBzS0@google.com>
+ <d8e151e5-080b-dc87-b7e0-9031a7928853@redhat.com>
+ <YjtLVqBbL0jyFFZy@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <6f217836-45fb-8833-7bb1-5dc822826f56@redhat.com>
+Date:   Thu, 24 Mar 2022 12:07:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
- controller
+In-Reply-To: <YjtLVqBbL0jyFFZy@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kernel test robot <lkp@intel.com>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-8-15330273260@189.cn>
- <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
- <9ea4d326-ad5f-4f2c-1609-4ca772699d1b@189.cn>
- <YjsclWsqGX3JrknM@robh.at.kernel.org>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <YjsclWsqGX3JrknM@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Oliver,
 
-On 2022/3/23 21:11, Rob Herring wrote:
-> On Wed, Mar 23, 2022 at 12:12:43PM +0800, Sui Jingfeng wrote:
->> On 2022/3/23 04:49, Rob Herring wrote:
->>>> +/*
->>>> + * mainly for dc in ls7a1000 which have builtin gpio emulated i2c
->>>> + *
->>>> + * @index : output channel index, 0 for DVO0, 1 for DVO1
->>>> + */
->>>> +struct lsdc_i2c *lsdc_create_i2c_chan(struct device *dev, void *base, unsigned int index)
+On 3/24/22 12:31 AM, Oliver Upton wrote:
+> On Wed, Mar 23, 2022 at 08:46:40PM +0800, Gavin Shan wrote:
+>> On 3/23/22 2:04 AM, Oliver Upton wrote:
+>>> On Tue, Mar 22, 2022 at 04:06:51PM +0800, Gavin Shan wrote:
+>>>> This supports SDEI_VERSION hypercall by returning v1.1, which is
+>>>> the specification version we're following. The vendor is set to
+>>>> 'KVM'.
+>>>>
+>>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>>>> ---
+>>>>    arch/arm64/kvm/sdei.c | 10 ++++++++++
+>>>>    1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
+>>>> index 8a9b477b8977..5a3a64cd6e84 100644
+>>>> --- a/arch/arm64/kvm/sdei.c
+>>>> +++ b/arch/arm64/kvm/sdei.c
+>>>> @@ -118,6 +118,14 @@ static bool remove_all_vcpu_events(struct kvm_vcpu *vcpu,
+>>>>    	return pending;
+>>>>    }
+>>>> +static unsigned long hypercall_version(struct kvm_vcpu *vcpu)
 >>>> +{
->>>> +	char compat[32] = {0};
->>>> +	unsigned int udelay = 5;
->>>> +	unsigned int timeout = 2200;
->>>> +	int nr = -1;
->>>> +	struct i2c_adapter *adapter;
->>>> +	struct lsdc_i2c *li2c;
->>>> +	struct device_node *i2c_np;
->>>> +	int ret;
->>>> +
->>>> +	li2c = devm_kzalloc(dev, sizeof(*li2c), GFP_KERNEL);
->>>> +	if (!li2c)
->>>> +		return ERR_PTR(-ENOMEM);
->>>> +
->>>> +	li2c->index = index;
->>>> +	li2c->dev = dev;
->>>> +
->>>> +	if (index == 0) {
->>>> +		li2c->sda = 0x01;
->>>> +		li2c->scl = 0x02;
->>>> +	} else if (index == 1) {
->>>> +		li2c->sda = 0x04;
->>>> +		li2c->scl = 0x08;
->>> Just require this to be in DT rather than having some default.
+>>>> +	/* v1.1 and the vendor is KVM */
+>>>> +	return (1UL << SDEI_VERSION_MAJOR_SHIFT) |
+>>>> +	       (1UL << SDEI_VERSION_MINOR_SHIFT) |
+>>>> +	       0x4b564d;
 >>>
->> By design,  I am try very hard to let the code NOT fully  DT dependent. DT is nice , easy to learn and use.
->> But kernel side developer plan to follow UEFI + ACPI Specification on LS3A5000 + LS7A1000 platform. See [1]
->> There will no DT support then, provide a convention support  make the driver more flexible. I want the
->> driver works with minimal requirement. The driver just works on simple boards by put the following dc device
->> node in arch/mips/dts/loongson/loongson64g_4core_ls7a.dts,
-> Pick DT or ACPI for the platform, not both. We don't need to have both
-> in the kernel to support.
->
-> Rob
+>>> It looks like the SDEI specification states that the vendor-defined
+>>> version number is 32 bits. Could we just use one of the
+>>> ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_{0,3} values instead?
+>>>
+>>> ASCII 'KVM' is neat, but in reality guest software will just throw it in
+>>> a macro regardless. Might as well use one of the values we've already
+>>> trained it to use :-)
+>>>
+>>> Also, it would appear that guest discovery of SDEI relies upon KVM
+>>> reporting a valid SDEI version. IMO, this patch should come at the very
+>>> end when KVM actually implements SDEI.
+>>>
+>>
+>> Yeah, I was sticky to the pattern of "KVM". However, I think it's good
+>> to reuse the existing one. Lets use ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2
+>> if you agree. Its first two characters are "VM" at least.
+> 
+> Sounds fine to me. The only other nit I'd say is we should define a
+> macro for it too, something like:
+> 
+>    #define KVM_SDEI_VENDOR	ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2
+> 
 
-Hi Rob,
+Agreed, and the macro will be put into arch/arm64/include/asm/kvm_sdei.h.
+arch/arm64/include/uapi/asm/kvm_sdei_state.h isn't the right place because
+the dependent macro ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2 isn't exposed by
+ABI.
 
-We can only choose DT currently, we love DT, but it is kernel side developer's choice.
-We just avoid deep coupling which tend to lost flexibility.
-All I can and should do is make the drivers works, writing code beautiful does not
-means it can works like a charm.
-
- From what i am understanding, DT is not a strict specification, but in return flexible.
-Force every driver comply with what already have is tend to prohibit innovation.
-It just too late to do so.
+Thanks,
+Gavin
 

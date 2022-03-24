@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931DC4E643A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9164E6437
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350511AbiCXNks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        id S1350501AbiCXNjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350510AbiCXNkm (ORCPT
+        with ESMTP id S1346184AbiCXNjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:40:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7C08A8883
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648129149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w2slyBM8mjDUl55M/QZwQqMkSoJMjceMSkbcnnou6FQ=;
-        b=XIZAG7vkhA9ZyJv/bM33gHX0wJ202/R+kd5wpwo6nMzcwpC8LyOlVxmq22gaCfG02lVnso
-        qWe7vxxfw//Zx0f5RLXU59AJ6+4h26x69XGwoXdfjQ4nSBBtFxI0vYzZ+1TZkjmpkQ7Opk
-        6wg7Ok+W/zA2sutsoDtd0nqNtuex9Fg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-131--ndyMtQ8MDeGWkSY7hdDgQ-1; Thu, 24 Mar 2022 09:39:02 -0400
-X-MC-Unique: -ndyMtQ8MDeGWkSY7hdDgQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 702EA38041CD;
-        Thu, 24 Mar 2022 13:39:01 +0000 (UTC)
-Received: from localhost (ovpn-13-106.pek2.redhat.com [10.72.13.106])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 50BE17BEBE2;
-        Thu, 24 Mar 2022 13:38:59 +0000 (UTC)
-Date:   Thu, 24 Mar 2022 21:38:56 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v5 4/8] crash: generic crash hotplug support
- infrastructure
-Message-ID: <20220324133856.GC354864@MiWiFi-R3L-srv>
-References: <20220303162725.49640-1-eric.devolder@oracle.com>
- <20220303162725.49640-5-eric.devolder@oracle.com>
+        Thu, 24 Mar 2022 09:39:41 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4C228E04
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:38:08 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id v4so4757230pjh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sudomaker-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/sQV5rp+cw1wax1iRP0Va+YLBH7FLeLa8L9B5UtJM84=;
+        b=5C0v6M5Hca9omePnMbOPDpTfrC6UCYwPeyi8waSFJfu9um0WM6EYF/qIWVeK5AbbLF
+         wkZzp6EmIYdKs5gMZh1XNk47iQlsQ6zX5fntXSaFGB8DcHmIx28bwOtiRIuo5dC4+pqQ
+         l1W9DFCo7FFvwRLZi7jKhXI4YAfO3K/rFp6K+jWPQeuU5KTwWssrdLJ+V3kdXBJZAoim
+         cc/p4GjzFLFfwizcm5LzYkDpkcYWYpJkWiOJ4WhVkuC5hAN8JFYhzW4GeAXvSoH/BcU3
+         QJoDIXAw/8cfSVpOhVPSCP7VrjWofUsuatyWBjvKceUeGgf2sg/0iCbAnXGJ1Dj+KCU7
+         oNzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/sQV5rp+cw1wax1iRP0Va+YLBH7FLeLa8L9B5UtJM84=;
+        b=lJmkOXL27Pj6IsUbZxXrQ34hnSJC2vuLR1M6c9uVC244MujM4KISLowFApYBWbtNE0
+         uVEv5GXP2hm8wjdzOi+l+ZmaVgNQQJXlfb9AD6hjP4LXfkQMrge/LBSmk6+BEFZRX5Sf
+         X90dc2XAia/z3L6yDqXVTvBeIShGONfJHceGazoSgUvWv63NNjOZrNp56rgHIfXs4Q0X
+         03/epaPjtKRxvZCqkudLOOv/X4egcKAOp1GUpyZOkRFkY1ynce4pc2g7oLl9gRZYKFZh
+         S1FAS4FbYNvQxtdxLsnY0kxN3LrGUj/yY4voKnYfgpoWHSfxpL0B5MVUCKeg5W/VSUg4
+         coHw==
+X-Gm-Message-State: AOAM5337lcKznFTVaY0mtId0iHOhVdGXGwCwu5f77gPk4IUxXWCeU57E
+        UiF5FlD7y7Bd0vxyropNQFSA1w==
+X-Google-Smtp-Source: ABdhPJz1XaJS5LG/TJcD0dYQ+F6zCb5Vf3z0cQhZ4l5Rv2149Mor9j9sUR8PwJik08KZjzFrZAQAWQ==
+X-Received: by 2002:a17:902:7888:b0:148:adf2:9725 with SMTP id q8-20020a170902788800b00148adf29725mr5824851pll.136.1648129088094;
+        Thu, 24 Mar 2022 06:38:08 -0700 (PDT)
+Received: from [172.16.24.11] ([91.219.212.226])
+        by smtp.gmail.com with ESMTPSA id x2-20020a63aa42000000b0038265eb2495sm2765064pgo.88.2022.03.24.06.38.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 06:38:07 -0700 (PDT)
+Message-ID: <5c1f03d1-f72a-bc6b-92b4-927898aa3b2d@sudomaker.com>
+Date:   Thu, 24 Mar 2022 21:39:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303162725.49640-5-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] pinctrl: Ingenic: Add missing UART2 group C for X1000/E
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     linux-mips@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ea710c27-00e9-065c-77a3-78e3c5f73ed3@sudomaker.com>
+ <3H099R.GNKMFWXCJG5U1@crapouillou.net>
+From:   Yunian Yang <reimu@sudomaker.com>
+In-Reply-To: <3H099R.GNKMFWXCJG5U1@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,222 +75,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/22 at 11:27am, Eric DeVolder wrote:
-> This patch introduces a generic crash hot plug/unplug infrastructure
-> for CPU and memory changes. Upon CPU and memory changes, a generic
-> crash_hotplug_handler() obtains the appropriate lock, does some
-> important house keeping and then dispatches the hot plug/unplug event
-> to the architecture specific arch_crash_hotplug_handler(), and when
-> that handler returns, the lock is released.
+Hi Paul,
+
+Thank you for pointing this out. I sent the refined patch.
+
+On 3/24/22 20:10, Paul Cercueil wrote:
+> Hi Yunian,
 > 
-> This patch modifies crash_core.c to implement a subsys_initcall()
-> function that installs handlers for hot plug/unplug events. If CPU
-> hotplug is enabled, then cpuhp_setup_state() is invoked to register a
-> handler for CPU changes. Similarly, if memory hotplug is enabled, then
-> register_memory_notifier() is invoked to install a handler for memory
-> changes. These handlers in turn invoke the common generic handler
-> crash_hotplug_handler().
+> Le jeu., mars 24 2022 at 20:04:41 +0800, Yunian Yang <reimu@sudomaker.com> a écrit :
+>> X1000/E has a third UART2 pin group selection, which uses the TDI(G2) as RX
+>> and TDO(G1) as TX. This configuration is becoming increasingly popular in
+>> newer core boards, such as the Halley2 v4.1. This is done by enabling
+>> function 1 of a "virtual pin" PC31. See section 19.3.3 of the X1000
+>> Programming Manual for details.
+>>
+>> Signed-off-by: Yunian Yang <reimu@sudomaker.com>
+>> ---
+>>  drivers/pinctrl/pinctrl-ingenic.c | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+>> index 2712f51eb238..29709059d62b 100644
+>> --- a/drivers/pinctrl/pinctrl-ingenic.c
+>> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+>> @@ -1982,6 +1982,7 @@ static int x1000_uart1_data_a_pins[] = { 0x04, 0x05, };
+>>  static int x1000_uart1_data_d_pins[] = { 0x62, 0x63, };
+>>  static int x1000_uart1_hwflow_pins[] = { 0x64, 0x65, };
+>>  static int x1000_uart2_data_a_pins[] = { 0x02, 0x03, };
+>> +static int x1000_uart2_data_c_pins[] = { 0x5f, 0x5f, };
 > 
-> On the CPU side, cpuhp_setup_state_nocalls() is invoked with parameter
-> CPUHP_AP_ONLINE_DYN. While this works, when a CPU is being unplugged,
-> the CPU still shows up in foreach_present_cpu() during the regeneration
-> of the new CPU list, thus the need to explicitly check and exclude the
-> soon-to-be offlined CPU in crash_prepare_elf64_headers().
+> One should be enough.
 > 
-> On the memory side, each un/plugged memory block passes through the
-> handler. For example, if a 1GiB DIMM is hotplugged, that generate 8
-> memory events, one for each 128MiB memblock.
-
-I rewrite the log as below with my understanding. Hope it's simpler to
-help people get what's going on here. Please consider to take if it's
-OK to you or adjust based on this. The code looks good to me.
-
-crash: add generic infrastructure for crash hotplug support 
-
-Upon CPU and memory changes, a generic crash_hotplug_handler() will
-dispatch the hot plug/unplug event to the architecture specific
-arch_crash_hotplug_handler(). During the process, kexec_mutex need be
-held.
-
-To support cpu hotplug, one callback pair are registered to capture
-KEXEC_CRASH_HP_ADD_CPU and KEXEC_CRASH_HP_REMOVE_CPU events via
-cpuhp_setup_state_nocalls(). The callbacks then call
-crash_hotplug_handler() to handle.
-
-To support memory hotplug, a notifier crash_memhp_nb is registered to 
-memory_chain to watch MEM_ONLINE and MEM_OFFLINE events.
-
+> Looks fine otherwise.
 > 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
->  include/linux/kexec.h |  16 +++++++
->  kernel/crash_core.c   | 108 ++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 124 insertions(+)
+> Cheers,
+> -Paul
 > 
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index d7b59248441b..b11d75a6b2bc 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -300,6 +300,13 @@ struct kimage {
->  
->  	/* Information for loading purgatory */
->  	struct purgatory_info purgatory_info;
-> +
-> +#ifdef CONFIG_CRASH_HOTPLUG
-> +	bool hotplug_event;
-> +	int offlinecpu;
-> +	bool elf_index_valid;
-> +	int elf_index;
-> +#endif
->  #endif
->  
->  #ifdef CONFIG_IMA_KEXEC
-> @@ -316,6 +323,15 @@ struct kimage {
->  	unsigned long elf_load_addr;
->  };
->  
-> +#ifdef CONFIG_CRASH_HOTPLUG
-> +void arch_crash_hotplug_handler(struct kimage *image,
-> +	unsigned int hp_action, unsigned long a, unsigned long b);
-> +#define KEXEC_CRASH_HP_REMOVE_CPU   0
-> +#define KEXEC_CRASH_HP_ADD_CPU      1
-> +#define KEXEC_CRASH_HP_REMOVE_MEMORY 2
-> +#define KEXEC_CRASH_HP_ADD_MEMORY   3
-> +#endif /* CONFIG_CRASH_HOTPLUG */
-> +
->  /* kexec interface functions */
->  extern void machine_kexec(struct kimage *image);
->  extern int machine_kexec_prepare(struct kimage *image);
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index 256cf6db573c..76959d440f71 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -9,12 +9,17 @@
->  #include <linux/init.h>
->  #include <linux/utsname.h>
->  #include <linux/vmalloc.h>
-> +#include <linux/highmem.h>
-> +#include <linux/memory.h>
-> +#include <linux/cpuhotplug.h>
->  
->  #include <asm/page.h>
->  #include <asm/sections.h>
->  
->  #include <crypto/sha1.h>
->  
-> +#include "kexec_internal.h"
-> +
->  /* vmcoreinfo stuff */
->  unsigned char *vmcoreinfo_data;
->  size_t vmcoreinfo_size;
-> @@ -491,3 +496,106 @@ static int __init crash_save_vmcoreinfo_init(void)
->  }
->  
->  subsys_initcall(crash_save_vmcoreinfo_init);
-> +
-> +#ifdef CONFIG_CRASH_HOTPLUG
-> +void __weak arch_crash_hotplug_handler(struct kimage *image,
-> +	unsigned int hp_action, unsigned long a, unsigned long b)
-> +{
-> +	pr_warn("crash hp: %s not implemented", __func__);
-> +}
-> +
-> +static void crash_hotplug_handler(unsigned int hp_action,
-> +	unsigned long a, unsigned long b)
-> +{
-> +	/* Obtain lock while changing crash information */
-> +	if (!mutex_trylock(&kexec_mutex))
-> +		return;
-> +
-> +	/* Check kdump is loaded */
-> +	if (kexec_crash_image) {
-> +		pr_debug("crash hp: hp_action %u, a %lu, b %lu", hp_action,
-> +			a, b);
-> +
-> +		/* Needed in order for the segments to be updated */
-> +		arch_kexec_unprotect_crashkres();
-> +
-> +		/* Flag to differentiate between normal load and hotplug */
-> +		kexec_crash_image->hotplug_event = true;
-> +
-> +		/* Now invoke arch-specific update handler */
-> +		arch_crash_hotplug_handler(kexec_crash_image, hp_action, a, b);
-> +
-> +		/* No longer handling a hotplug event */
-> +		kexec_crash_image->hotplug_event = false;
-> +
-> +		/* Change back to read-only */
-> +		arch_kexec_protect_crashkres();
-> +	}
-> +
-> +	/* Release lock now that update complete */
-> +	mutex_unlock(&kexec_mutex);
-> +}
-> +
-> +#if defined(CONFIG_MEMORY_HOTPLUG)
-> +static int crash_memhp_notifier(struct notifier_block *nb,
-> +	unsigned long val, void *v)
-> +{
-> +	struct memory_notify *mhp = v;
-> +	unsigned long start, end;
-> +
-> +	start = mhp->start_pfn << PAGE_SHIFT;
-> +	end = ((mhp->start_pfn + mhp->nr_pages) << PAGE_SHIFT) - 1;
-> +
-> +	switch (val) {
-> +	case MEM_ONLINE:
-> +		crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY,
-> +			start, end-start);
-> +		break;
-> +
-> +	case MEM_OFFLINE:
-> +		crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_MEMORY,
-> +			start, end-start);
-> +		break;
-> +	}
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block crash_memhp_nb = {
-> +	.notifier_call = crash_memhp_notifier,
-> +	.priority = 0
-> +};
-> +#endif
-> +
-> +#if defined(CONFIG_HOTPLUG_CPU)
-> +static int crash_cpuhp_online(unsigned int cpu)
-> +{
-> +	crash_hotplug_handler(KEXEC_CRASH_HP_ADD_CPU, cpu, 0);
-> +	return 0;
-> +}
-> +
-> +static int crash_cpuhp_offline(unsigned int cpu)
-> +{
-> +	crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_CPU, cpu, 0);
-> +	return 0;
-> +}
-> +#endif
-> +
-> +static int __init crash_hotplug_init(void)
-> +{
-> +	int result = 0;
-> +
-> +#if defined(CONFIG_MEMORY_HOTPLUG)
-> +	register_memory_notifier(&crash_memhp_nb);
-> +#endif
-> +
-> +#if defined(CONFIG_HOTPLUG_CPU)
-> +	result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> +				"crash/cpuhp",
-> +				crash_cpuhp_online, crash_cpuhp_offline);
-> +#endif
-> +
-> +	return result;
-> +}
-> +
-> +subsys_initcall(crash_hotplug_init);
-> +#endif /* CONFIG_CRASH_HOTPLUG */
-> -- 
-> 2.27.0
+>>  static int x1000_uart2_data_d_pins[] = { 0x65, 0x64, };
+>>  static int x1000_sfc_data_pins[] = { 0x1d, 0x1c, 0x1e, 0x1f, };
+>>  static int x1000_sfc_clk_pins[] = { 0x1a, };
+>> @@ -2058,6 +2059,7 @@ static const struct group_desc x1000_groups[] = {
+>>         INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d, 1),
+>>         INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow, 1),
+>>         INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a, 2),
+>> +       INGENIC_PIN_GROUP("uart2-data-c", x1000_uart2_data_c, 1),
+>>         INGENIC_PIN_GROUP("uart2-data-d", x1000_uart2_data_d, 0),
+>>         INGENIC_PIN_GROUP("sfc-data", x1000_sfc_data, 1),
+>>         INGENIC_PIN_GROUP("sfc-clk", x1000_sfc_clk, 1),
+>> @@ -2115,7 +2117,7 @@ static const char *x1000_uart0_groups[] = { "uart0-data", "uart0-hwflow", };
+>>  static const char *x1000_uart1_groups[] = {
+>>         "uart1-data-a", "uart1-data-d", "uart1-hwflow",
+>>  };
+>> -static const char *x1000_uart2_groups[] = { "uart2-data-a", "uart2-data-d", };
+>> +static const char *x1000_uart2_groups[] = { "uart2-data-a", "uart2-data-c", "uart2-data-d", };
+>>  static const char *x1000_sfc_groups[] = { "sfc-data", "sfc-clk", "sfc-ce", };
+>>  static const char *x1000_ssi_groups[] = {
+>>         "ssi-dt-a-22", "ssi-dt-a-29", "ssi-dt-d",
+>> -- 
+>> 2.30.2
+> 
 > 
 

@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DA54E63EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B724E63EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350347AbiCXNQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S1350390AbiCXNQM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Mar 2022 09:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbiCXNQE (ORCPT
+        with ESMTP id S1350397AbiCXNQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:16:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA385D5D9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:14:32 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id AA57F210FD;
-        Thu, 24 Mar 2022 13:14:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648127671; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VNnFxSS83AKZ6mnxU8f26Q342BEjDVtjsTkx4noK0Kw=;
-        b=CXiEmbSksC8S0uFG7nfe5goyrnD7vsPUiuu+18xeZ6CQa1oo1MTpp+Bc/iPPAM4YHeED16
-        46aPCruoGBseREY4lOBxtBj6YPCbLipsOT+mDGkwuaVQVLyUg/vYxa1xAh//JWQxhbwipl
-        A++vMknOYm4oUJfX2eoeKM4g89TFxHE=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 721A1A3B89;
-        Thu, 24 Mar 2022 13:14:31 +0000 (UTC)
-Date:   Thu, 24 Mar 2022 14:14:30 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, minchan@kernel.org, surenb@google.com,
-        vbabka@suse.cz, rientjes@google.com, nadav.amit@gmail.com,
-        edgararriaga@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm: madvise: return exact bytes advised with
- process_madvise under error
-Message-ID: <Yjxutr35QLGhjJ57@dhcp22.suse.cz>
-References: <cover.1648046642.git.quic_charante@quicinc.com>
- <0fa1bdb5009e898189f339610b90ecca16f243f4.1648046642.git.quic_charante@quicinc.com>
+        Thu, 24 Mar 2022 09:16:09 -0400
+Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D421E5D5D9;
+        Thu, 24 Mar 2022 06:14:36 -0700 (PDT)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id C720D1231DB;
+        Thu, 24 Mar 2022 14:14:34 +0100 (CET)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id B44BE123009;
+        Thu, 24 Mar 2022 14:14:34 +0100 (CET)
+X-TM-AS-ERS: 10.149.2.84-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
+        by mail4.swissbit.com (Postfix) with ESMTPS;
+        Thu, 24 Mar 2022 14:14:34 +0100 (CET)
+Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
+ (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
+ 2022 14:14:34 +0100
+Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
+ sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
+ 15.02.0986.022; Thu, 24 Mar 2022 14:14:34 +0100
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+Subject: [PATCHv3] mmc: block: Check for errors after write on SPI
+Thread-Topic: [PATCHv3] mmc: block: Check for errors after write on SPI
+Thread-Index: AQHYP4CK2VoQSzZIoUqoVtvoCdsHfA==
+Date:   Thu, 24 Mar 2022 13:14:34 +0000
+Message-ID: <b65d044223cc43898de6698b2a14e0c3@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.154.1.4]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0fa1bdb5009e898189f339610b90ecca16f243f4.1648046642.git.quic_charante@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-TMASE-Version: DDEI-5.1-8.6.1018-26790.007
+X-TMASE-Result: 10--2.484200-10.000000
+X-TMASE-MatchedRID: LVkZzMT5mEprFdvBEmTnvLZ0InVwVLVTn5nfR7I2dFOxPXYIh1l6dlg7
+        cH4SOkOpdWqA+wY3gFZusJxXwmCOnpDH5Y6LoY7BRZfQN+FVqbA1kR+05VC1hsiCh8yBqE+tbiP
+        oclJOCy0MV38Bdz1rogpwpdIIi4oJCtNdSL7NMxRO5y1KmK5bJRSLgSFq3Tnj31GU/N5W5BDfal
+        dUczBqFzyK8WRp1qJNDyVcDYF9X2gcQvLacRAgcPCW/PNRRp/ZeLLCA0PD7aiOS54Qk4fByRJd3
+        nIYBNFRvAQxPUzd//aAUraeY8ICeWgwIvLATTKBC24oEZ6SpSkj80Za3RRg8Al3ZL80ZqgLmFEo
+        HbUHYssj/FwX/s/Fh7qYj8OceYPLKCLLs5ecoDY=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: afa7c4a5-af8a-4365-9656-8d85acbb6163-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,95 +75,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 23-03-22 20:54:10, Charan Teja Kalla wrote:
-> From: Charan Teja Reddy <quic_charante@quicinc.com>
-> 
-> The commit 5bd009c7c9a9 ("mm: madvise: return correct bytes advised with
-> process_madvise") fixes the issue to return number of bytes that are
-> successfully advised before hitting error with iovec elements
-> processing. But, when the user passed unmapped ranges in iovec, the
-> syscall ignores these holes and continues processing and returns ENOMEM
-> in the end, which is same as madvise semantic. This is a problem for
-> vector processing where user may want to know how many bytes were
-> exactly processed in a iovec element to make better decissions in the
-> user space. As in ENOMEM case, we processed all bytes in a iovec element
-> but still returned error which will confuse the user whether it is
-> failed or succeeded to advise.
+Introduce a SEND_STATUS check for writes through SPI to not mark
+an unsuccessful write as successful.
 
-Do you have any specific example where the initial semantic is really
-problematic or is this mostly a theoretical problem you have found when
-reading the code?
+Since SPI SD/MMC does not have states, after a write, the card will
+just hold the line LOW until it is ready again. The driver marks the
+write therefore as completed as soon as it reads something other than
+all zeroes.
+The driver does not distinguish from a card no longer signalling busy
+and it being disconnected (and the line being pulled-up by the host).
+This lead to writes being marked as successful when disconnecting
+a busy card.
+Now the card is ensured to be still connected by an additional CMD13,
+just like non-SPI is ensured to go back to TRAN state.
 
+While at it and since we already poll for the post-write status anyway,
+we might as well check for SPIs error bits (any of them).
 
-> As an example, consider below ranges were passed by the user in struct
-> iovec: iovec1(ranges: vma1), iovec2(ranges: vma2 -- vma3 -- hole) and
-> iovec3(ranges: vma4). In the current implementation, it fully advise
-> iovec1 and iovec2 but just returns number of processed bytes as iovec1
-> range. Then user may repeat the processing of iovec2, which is already
-> processed, which then returns with ENOMEM. Then user may want to skip
-> iovec2 and starts processing from iovec3. Here because of wrong return
-> processed bytes, iovec2 is processed twice.
+The disconnecting card problem is reproducable for me after continuous
+write activity and randomly disconnecting, around every 20-50 tries
+on SPI DS for some card.
 
-I think you should be much more specific why this is actually a problem.
-This would surely be less optimal but is this a correctness issue?
+Fixes: 7213d175e3b6f ("MMC/SD card driver learns SPI")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+v2:
+  - Reorder err and status check for err to take precedence and look cleaner
+v3:
+  - Move the logic into its own function
 
-[...]
-> +	vma = find_vma_prev(mm, start, &prev);
-> +	if (vma && start > vma->vm_start)
-> +		prev = vma;
-> +
-> +	blk_start_plug(&plug);
-> +	for (;;) {
-> +		/*
-> +		 * It it hits a unmapped address range in the [start, end),
-> +		 * stop processing and return ENOMEM.
-> +		 */
-> +		if (!vma || start < vma->vm_start) {
-> +			error = -ENOMEM;
-> +			goto out;
-> +		}
-> +
-> +		tmp = vma->vm_end;
-> +		if (end < tmp)
-> +			tmp = end;
-> +
-> +		error = madvise_vma_behavior(vma, &prev, start, tmp, behavior);
-> +		if (error)
-> +			goto out;
-> +		tmp_bytes_advised += tmp - start;
-> +		start = tmp;
-> +		if (prev && start < prev->vm_end)
-> +			start = prev->vm_end;
-> +		if (start >= end)
-> +			goto out;
-> +		if (prev)
-> +			vma = prev->vm_next;
-> +		else
-> +			vma = find_vma(mm, start);
-> +	}
-> +out:
-> +	/*
-> +	 * partial_bytes_advised may contain non-zero bytes indicating
-> +	 * the number of bytes advised before failure. Holds zero incase
-> +	 * of success.
-> +	 */
-> +	*partial_bytes_advised = error ? tmp_bytes_advised : 0;
+ drivers/mmc/core/block.c | 32 +++++++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
-Although this looks like a fix I am not sure it is future proof.
-madvise_vma_behavior doesn't report which part of the range has been
-really processed. I do not think that currently supported madvise modes
-for process_madvise support an early break out with return to the
-userspace (madvise_cold_or_pageout_pte_range bails on fatal signals for
-example) but this can change in the future and then you are back to
-"imprecise" return value problem. Yes, this is a theoretical problem
-but so it sounds the problem you are trying to fix IMHO. I think it
-would be better to live with imprecise return values reporting rather
-than aiming for perfection which would be fragile and add a future
-maintenance burden.
-
-On the other hand if there are _real_ workloads which suffer from the
-existing semantic then sure the above seems to be an appropriate fix
-AFAICS.
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 4e67c1403cc9..eb539dbe00e8 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1880,6 +1880,33 @@ static inline bool mmc_blk_rq_error(struct mmc_blk_request *brq)
+ 	       brq->data.error || brq->cmd.resp[0] & CMD_ERRORS;
+ }
+ 
++static int mmc_spi_err_check(struct mmc_card *card, struct mmc_queue_req *mqrq)
++{
++	u32 status = 0;
++	int err;
++
++	/*
++	 * SPI does not have a TRAN state we have to wait on, instead the
++	 * card is ready again when it no longer holds the line LOW.
++	 * We still have to ensure two things here before we know the write
++	 * was successful:
++	 * 1. The card has not disconnected during busy and we actually read our
++	 * own pull-up, thinking it was still connected, so ensure it
++	 * still responds.
++	 * 2. Check for any error bits, in particular R1_SPI_IDLE to catch a
++	 * just reconnected card after being disconnected during busy.
++	 */
++	err = __mmc_send_status(card, &status, 0);
++	/* All R1 and R2 bits of SPI are errors in our case */
++	if (err || status) {
++		mqrq->brq.data.bytes_xfered = 0;
++		if (err)
++			return err;
++		return -EIO;
++	}
++	return 0;
++}
++
+ static int mmc_blk_busy_cb(void *cb_data, bool *busy)
+ {
+ 	struct mmc_blk_busy_data *data = cb_data;
+@@ -1903,9 +1930,12 @@ static int mmc_blk_card_busy(struct mmc_card *card, struct request *req)
+ 	struct mmc_blk_busy_data cb_data;
+ 	int err;
+ 
+-	if (mmc_host_is_spi(card->host) || rq_data_dir(req) == READ)
++	if (rq_data_dir(req) == READ)
+ 		return 0;
+ 
++	if (mmc_host_is_spi(card->host))
++		return mmc_spi_err_check(card, mqrq);
++
+ 	cb_data.card = card;
+ 	cb_data.status = 0;
+ 	err = __mmc_poll_for_busy(card->host, 0, MMC_BLK_TIMEOUT_MS,
 -- 
-Michal Hocko
-SUSE Labs
+2.34.1
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+

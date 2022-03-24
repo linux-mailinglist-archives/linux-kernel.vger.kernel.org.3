@@ -2,155 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798384E6071
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7C64E6074
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348993AbiCXIhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
+        id S1348968AbiCXIii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348966AbiCXIhx (ORCPT
+        with ESMTP id S238643AbiCXIih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:37:53 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56C29BBA8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648110981; x=1679646981;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bnfZUWLIjm8t9Ixn8cJIDpc7URz+/YF2WueALdlqm1U=;
-  b=k1SSlupWT9yAIK78CDBdoLaCdzyVqNNWtpgDdMf9N6Axu4VS0OEJqvcK
-   QEikKmIFNEsRCCpdcpzwfeL3D+VjJtuod9g3ifWMOyOZ6gnVQvDlTCoij
-   Y8juApivGicG2dwTcu0aMFk9ytzWl6qDzoc0nG7O1mbELWdU/eVm0kRf+
-   W3SuQU63hQ1FpT6J7jGiey8kIe3eqrA6bm6Y2qazDgrRN9hnInR/w4w+1
-   vXbIyw9okpQ41uQ5qQPl76c6boRuwuoK1zs3SslzbJXIsp52DhmZZ/UJo
-   j6VIvSN7CqBiSjiAHgl+GQhCoPEYUMYtY8MtBpzNPZScY93smEbJmu50c
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="238261295"
-X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
-   d="scan'208";a="238261295"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 01:36:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
-   d="scan'208";a="516089850"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 24 Mar 2022 01:36:17 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXIx6-000KsI-9F; Thu, 24 Mar 2022 08:36:16 +0000
-Date:   Thu, 24 Mar 2022 16:35:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Mark Rutland <mark.rutland@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] arm64: implement stack_trace_save_shadow
-Message-ID: <202203241622.fKuBI2l5-lkp@intel.com>
-References: <0bb72ea8fa88ef9ae3508c23d993952a0ae6f0f9.1648049113.git.andreyknvl@google.com>
+        Thu, 24 Mar 2022 04:38:37 -0400
+Received: from out203-205-251-84.mail.qq.com (unknown [203.205.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D689BBA4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648111021;
+        bh=PdI9M8lLoPowcX452EcX6k9LkvHzZyFe5xCg2aOT5z4=;
+        h=From:To:Cc:Subject:Date;
+        b=uAm3f1PpNwAXNIu1B3NhmmPeEKikVrfse3dGm7mM9ns70KSv9hXo1upo6Djw6makO
+         nKiHvtSr3lJErg2uoD8xZKBg8ONEcsLAOAEsap3FjQPU63FhEf6UexzQCIZdqIyOVn
+         wGCXVSqwGIBgUF8ZhXXKY4cs3DuM/T/YR3Yg9UTI=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc6.qq.com (NewEsmtp) with SMTP
+        id 9378DC37; Thu, 24 Mar 2022 16:36:55 +0800
+X-QQ-mid: xmsmtpt1648111015tha0g0i7j
+Message-ID: <tencent_F71D40EE9851737338A6289EC3A3942EFE09@qq.com>
+X-QQ-XMAILINFO: MR/iVh5QLeieiszZ2O+QJKzXzwRb+Wv/lEVxDjwkYxMewJHYJdFQoHsoWu9iam
+         ajhSQ1Eh+e59SwWAJQNIolA9hH/lQO4f1IuiJrqh01QGQQ8ynx0vMZGFAxTrWV/nL4TZ50nEHhCA
+         PfT6P9/3oSVTf0oUQNZhJhUqNJubqPtVBrsJxit3KUIEdtGymqR2GqkLJrTUzGoAP64J8TY8yV9p
+         9T0ViPj0BviZ2jvNNEeO4NHAnnxVRGooB5Smg4EQfAXjHZ+U7NXD9DeDsulbB2O3WsjEMUwmbUX/
+         ADBjSHLTH7MBY41RUYPX9dQAZ2Nf+IQGfr4sqwcHe+VpytsaAIb0l8FZdedLnu7owihH7/bB0v9w
+         v3e1RXil9eAuCmyr3rNX5QpjaiLmjhYRpbRUNFtpKlT2xwQQxsCDC/myDcvfbciwVlDxBk0aXiIQ
+         6QghgDCatQm7ZwMb0INN9vCio1kfph/qKCCfq+BUMpXVtNXVwrPK680hWRBfVJCqkw7acP3mMia3
+         Bz+5wCSRUSHuDffpafV3/gPepA0ROFJef9Gsx7s+nxaKpeyIQFRfV0LFUVVYToudcy+3otN+loGR
+         TV2OGBWjWfMWM+f8XV5kH6wAGlVxKwqe1uFxN+gqf1S6P+yl890qVRqvI7FjqqQVN/fbXiMgnYpA
+         dL+SUIo8JEJqMcDJYmMpiSylhXfa94+qdeFiHGHkpsTgSA1PD9TvU5C9e+4MnNBOolUOFy1IgNT6
+         qToKziTVG5vtvfM+IMUbXgPDclAYlMtEC9omhpL+vIOMcjZpQnTE2X8QzS/JTU4yt4gJSPLOaaIG
+         zfCgezFDJ2hrNk3bmb9cBHRKhm+JXn48gMqMCAUX9W7Ns4xzoJFz+KnndZsd0gAL886EkEk6H95v
+         L5nGvh0HYjfeqSczSXqrYSc2ynJYrR+aWjFCZIHMGI4x4PVR9+kQHOwcZuktExV5xkpTnsxCMYqi
+         hfz6C6jwuNs/O3Y468qg==
+From:   xkernel.wang@foxmail.com
+To:     robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] drm/msm/mdp5: check the return of kzalloc()
+Date:   Thu, 24 Mar 2022 16:36:44 +0800
+X-OQ-MSGID: <20220324083644.2666-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0bb72ea8fa88ef9ae3508c23d993952a0ae6f0f9.1648049113.git.andreyknvl@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-I love your patch! Perhaps something to improve:
+kzalloc() is a memory allocation function which can return NULL when
+some internal memory errors happen. So it is better to check it to
+prevent potential wrong memory access.
 
-[auto build test WARNING on next-20220323]
-[cannot apply to arm64/for-next/core hnaz-mm/master linus/master v5.17 v5.17-rc8 v5.17-rc7 v5.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-url:    https://github.com/0day-ci/linux/commits/andrey-konovalov-linux-dev/kasan-arm64-scs-stacktrace-collect-stack-traces-from-Shadow-Call-Stack/20220323-233436
-base:    b61581ae229d8eb9f21f8753be3f4011f7692384
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220324/202203241622.fKuBI2l5-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/322e934f3c0bb04b4afb32207ba142153f1dd84e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review andrey-konovalov-linux-dev/kasan-arm64-scs-stacktrace-collect-stack-traces-from-Shadow-Call-Stack/20220323-233436
-        git checkout 322e934f3c0bb04b4afb32207ba142153f1dd84e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/arm64/kernel/stacktrace.c: In function 'arch_stack_walk_shadow':
-   arch/arm64/kernel/stacktrace.c:289:20: error: implicit declaration of function 'task_scs'; did you mean 'task_lock'? [-Werror=implicit-function-declaration]
-     289 |         scs_base = task_scs(current);
-         |                    ^~~~~~~~
-         |                    task_lock
->> arch/arm64/kernel/stacktrace.c:289:18: warning: assignment to 'long unsigned int *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     289 |         scs_base = task_scs(current);
-         |                  ^
-   cc1: some warnings being treated as errors
-
-
-vim +289 arch/arm64/kernel/stacktrace.c
-
-   260	
-   261	noinline notrace int arch_stack_walk_shadow(unsigned long *store,
-   262						    unsigned int size,
-   263						    unsigned int skipnr)
-   264	{
-   265		unsigned long *scs_top, *scs_base, *scs_next;
-   266		unsigned int len = 0, part;
-   267	
-   268		preempt_disable();
-   269	
-   270		/* Get the SCS pointer. */
-   271		asm volatile("mov %0, x18" : "=&r" (scs_top));
-   272	
-   273		/* The top SCS slot is empty. */
-   274		scs_top -= 1;
-   275	
-   276		/* Handle SDEI and hardirq frames. */
-   277		for (part = 0; part < ARRAY_SIZE(scs_parts); part++) {
-   278			scs_next = *this_cpu_ptr(scs_parts[part].saved);
-   279			if (scs_next) {
-   280				scs_base = *this_cpu_ptr(scs_parts[part].base);
-   281				if (walk_shadow_stack_part(scs_top, scs_base, store,
-   282							   size, &skipnr, &len))
-   283					goto out;
-   284				scs_top = scs_next;
-   285			}
-   286		}
-   287	
-   288		/* Handle task and softirq frames. */
- > 289		scs_base = task_scs(current);
-
+diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
+index c6b69af..5f914cc 100644
+--- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
++++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
+@@ -90,15 +90,18 @@ static void mdp5_plane_reset(struct drm_plane *plane)
+ 		__drm_atomic_helper_plane_destroy_state(plane->state);
+ 
+ 	kfree(to_mdp5_plane_state(plane->state));
+-	mdp5_state = kzalloc(sizeof(*mdp5_state), GFP_KERNEL);
++	plane->state = NULL;
+ 
+-	if (plane->type == DRM_PLANE_TYPE_PRIMARY)
+-		mdp5_state->base.zpos = STAGE_BASE;
+-	else
+-		mdp5_state->base.zpos = STAGE0 + drm_plane_index(plane);
+-	mdp5_state->base.normalized_zpos = mdp5_state->base.zpos;
++	mdp5_state = kzalloc(sizeof(*mdp5_state), GFP_KERNEL);
++	if (mdp5_state) {
++		if (plane->type == DRM_PLANE_TYPE_PRIMARY)
++			mdp5_state->base.zpos = STAGE_BASE;
++		else
++			mdp5_state->base.zpos = STAGE0 + drm_plane_index(plane);
++		mdp5_state->base.normalized_zpos = mdp5_state->base.zpos;
+ 
+-	__drm_atomic_helper_plane_reset(plane, &mdp5_state->base);
++		__drm_atomic_helper_plane_reset(plane, &mdp5_state->base);
++	}
+ }
+ 
+ static struct drm_plane_state *
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

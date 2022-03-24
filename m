@@ -2,221 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA1B4E5CA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A334E5CA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347097AbiCXBM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 21:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        id S243529AbiCXBMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 21:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbiCXBM0 (ORCPT
+        with ESMTP id S1347103AbiCXBMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 21:12:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CFF91AEB;
-        Wed, 23 Mar 2022 18:10:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E024B821DC;
-        Thu, 24 Mar 2022 01:10:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5579C340E8;
-        Thu, 24 Mar 2022 01:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648084253;
-        bh=CsZP5UnSAKxZK3a75AHDxNk3N6tA7qLD8H2KhkTJABQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HJy7j2KmJIUPfXGjZpgJuLuo0cE1Na4spt86TjDCiY5dXQDs/1HONbDGUJz4m+zZ+
-         Jr3J8MUDbMwKep69i59cAcfHAz+oW0lPrUxgEAU/++LQN2DiT4jxH3vby+3Imp9Ng0
-         Uqqdn756Ar07iiSWUt5vHQxpdWX1rQPGLWmahEwMKZwC+bxnif9bxcNWV4NCBVVlfa
-         wboCRx8yVXma7pXdL1Ns1zh1IF5xV0qgTOeYyM1Q5TqJ+Pd1Nor0uHMW5xd2Ij+DuZ
-         3Sy6sQRMpBjr96dnryEl/lAF/zFIBboLzpPjJwTdphVutmqhORwtvX20RQaHhz8733
-         +RIzPczgJVxsA==
-Date:   Thu, 24 Mar 2022 10:10:48 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-Id: <20220324101048.c929020fd15bc14b50a3fff1@kernel.org>
-In-Reply-To: <CAKwvOdk8is=R2qhgKuS_CddvtZzgeJC1Uht84x--TcYykfaiHw@mail.gmail.com>
-References: <164724890153.731226.1478494969800777757.stgit@devnote2>
-        <164724892075.731226.14103557516176115189.stgit@devnote2>
-        <20220316191649.GA11547@pswork>
-        <20220318101445.fdb151efe58c6c3a1c572500@kernel.org>
-        <20220321183500.GA4065@pswork>
-        <20220322120311.690f237b63ddfd9c0e4f78ec@kernel.org>
-        <20220322190219.GA26859@pswork>
-        <20220323091617.495bfdf5281a543b27f2656f@kernel.org>
-        <CAKwvOdk8is=R2qhgKuS_CddvtZzgeJC1Uht84x--TcYykfaiHw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 23 Mar 2022 21:12:45 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D027B92304
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1648084274; x=1679620274;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K/sJ8bKhUciZIRzZUdPxmJL072OHBKzj5AY5uZaH5KY=;
+  b=VdPGkiK2e5nHUCOZe1KkDXwnQE3O2VqMq3750TlNgOveNx2WFov487md
+   JtRALPgTo799FKYexA0l+62PEd+NlENir/FWTZoq8yGxBRdTxovGDPZQt
+   Q2Z697JH2BBbufQEydvYMbZ7tLdAiV616wlDUjCg4XE/hkb6cTh5+zyUS
+   /c0yK7jbIlKod5zUKZAVBpGjwheYJgIRWLPxlR05ZcZfCR7ckZvippMEd
+   6TSWynGu+V8okVVxV5nQYTvn7mW6WrNbuXvMqetDknDUng8go+g+Y0o89
+   xSeqG8UYImkF0bYU43RSKPuYli4LZVNgO3Sx+9TBjKDiYMuEAMykM675M
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,205,1643644800"; 
+   d="scan'208";a="196121335"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 24 Mar 2022 09:11:12 +0800
+IronPort-SDR: 2Ack7JwVycFk2dD7u1UQv5LF3tx2Rojimz4nMMJ5yxtDnoka768PRTwsCpPg5z51VNCK6LpSqy
+ B7ycedw9hZX3P1QWBmY20w8NA3hAwf/VYrSWXZoogw/3hV8yxSTTKKsIZdrSKl+EZqVjqwEJaz
+ yHQkBOWAbBGY/mNO5dIgienyRi5vGR3d+k0Gow5WBJcqUgdc9JcNOtQjBvqkzjIGkG57mbmfOI
+ 65phDXD/2tW3D1yi+8Fw/dgNkvgEK0MhW3ea8W4TCKSgAJB1QFXqBpT3CcG9/RXRhvUJxvTzmt
+ G+1KKLhrSdT8USw9I6WYpYl3
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 17:43:05 -0700
+IronPort-SDR: uxb24KKfKzZR8wiegOCh8CQx5bx4vm/CzOK6g5Y7Dw1j9pnr6tPhM2BY5dq+F1jH1Ga2EfYBKF
+ 4OmlvppCo0Rl3xUjtZ6+sH8SE+S3b+0qnB1IwY3VD7sa/SC3YxNbLpOHINvYb9oj3WxEG+bFw/
+ ElNsDY/ZVGqTZ6OcplTWG3ZQMQqMteVhxY8vqhp2lnW+n4PfioefOUDrrwhgiiAjRVZHcVUOH4
+ K5trHlxonv24hA9+Nw5GmuULIXCBcejIgECQfKE2Bm5HbZtMd7IaWQBB4o8nhPlriUlL1lppnN
+ nTs=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 18:11:13 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KP6cJ4rzcz1SVp3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:11:12 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1648084271; x=1650676272; bh=K/sJ8bKhUciZIRzZUdPxmJL072OHBKzj5AY
+        5uZaH5KY=; b=hsGGWUJ0a5Vaz/7o4Nq+f774W1IerSJsvSoveT/AZB9F/670ZKf
+        +Jsu/5IPj5Cvq7qs5tP2YsWJPg0yAIHr/XW+xNORShkiSMN8UTKXsoObW7LD42uE
+        Gy2+KL3B6dUXNX3ZFNXKkhlaLWtOh0y3gDqV4GNHyQI8W8bdRSQjqJnF03pneiR9
+        3si9L/7jdXscINTi0Po1BPXbalFX6qPrcBbM3iHzjiZmtaCgvZc5jUTFQ+pj2Jn8
+        T7ZsHxk4w/4bImJihAOeAXM2ZlXI2flAfHtSVHupcC4PbFQ0CQgaLeFG/MOfhAUX
+        tQHEA6Fu1MHzwJhgEIy0EUcbzQadp4kIZrA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id DsdWUNn_FK9g for <linux-kernel@vger.kernel.org>;
+        Wed, 23 Mar 2022 18:11:11 -0700 (PDT)
+Received: from [10.225.163.114] (unknown [10.225.163.114])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KP6cG20Ghz1Rvlx;
+        Wed, 23 Mar 2022 18:11:10 -0700 (PDT)
+Message-ID: <ff109d7a-e308-3ce0-b7aa-0905e101e5fd@opensource.wdc.com>
+Date:   Thu, 24 Mar 2022 10:11:09 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 04/21] ata: libahci_platform: Convert to using handy
+ devm-ioremap methods
+Content-Language: en-US
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324001628.13028-5-Sergey.Semin@baikalelectronics.ru>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220324001628.13028-5-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Nick,
-
-On Wed, 23 Mar 2022 10:11:53 -0700
-Nick Desaulniers <ndesaulniers@google.com> wrote:
-
-> On Tue, Mar 22, 2022 at 5:16 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Tue, 22 Mar 2022 20:02:19 +0100
-> > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> >
-> > > Hello Masami Hiramatsu,
-> > >
-> > > On Tue, Mar 22, 2022 at 12:03:11PM +0900, Masami Hiramatsu wrote:
-> > > > On Mon, 21 Mar 2022 19:35:00 +0100
-> > > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> > > >
-> > > > > Hello Masami Hiramatsu,
-> > > > >
-> > > > > On Fri, Mar 18, 2022 at 10:14:45AM +0900, Masami Hiramatsu wrote:
-> > > > > > On Wed, 16 Mar 2022 20:16:49 +0100
-> > > > > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> > > > > >
-> > > > > > > Hello Masami Hiramatsu,
-> > > > > > >
-> > > > > > > Also noted that a change in default.bconf requries a clean build, is it
-> > > > > > > expected behaviour?
-> > > > > >
-> > > > > > default.bconf will be always updated if CONFIG_EMBED_BOOT_CONFIG=y. So you can
-> > > > > > do incremental build. (I tested it with the incremental build environment)
-> > > > > >
-> > > > >
-> > > > > Thanks, your observation made me to further experiment ther incremental build.
-> > > > >
-> > > > > Below are the observations I have:
-> > > > >
-> > > > > When I use GCC for a build; yes, the modified default.conf was observed on
-> > > > > the target.
-> > > > >
-> > > > > But when I use clang; either with FULL or THIN LTO, the modified
-> > > > > default.conf doesnt get reflected on the target.
-> > > >
-> > > > Hmm, curious. So you just add 'CC=clang' on the make command line, right?
-> > > Yes, CC=clang ARCH=arm64 LLVM=1. As specified here:
-> > > https://docs.kernel.org/kbuild/llvm.html.
-> 
-> You should just need LLVM=1 (and ARCH=arm64) at this point. LLVM=1
-> implies CC=clang.
-
-OK.
+On 3/24/22 09:16, Serge Semin wrote:
+> Currently the IOMEM AHCI registers space is mapped by means of the
+> two functions invocation: platform_get_resource() is used to get the very
+> first memory resource and devm_ioremap_resource() is called to remap that
+> resource. Device-managed kernel API provides a handy wrapper to perform
+> the same in single function call: devm_platform_ioremap_resource().
 
 > 
-> Also, here's the start of the lore thread for folks:
-> https://lore.kernel.org/linux-doc/164724892075.731226.14103557516176115189.stgit@devnote2/
-
-Thanks for the link!
-
+> While at it seeing many AHCI platform drivers rely on having the AHCI CSR
+> space marked with "ahci" name let's first try to find and remap the CSR
+> IO-mem with that name and only if it fails fallback to getting the very
+> first registers space platform resource.
 > 
-> > >
-> > > > Can you confirm that following line in your build log,
-> > > >
-> > > >   GEN     lib/default.bconf
-> > > >
-> > > Yes, I do see above line. Indeed lib/default.bconf will get incremental
-> > > change.
-> > >
-> > >   GEN     lib/default.bconf
-> > >   CC      lib/bootconfig.o
-> > >   AR      lib/lib.a
-> > >
-> > > > and the timestamp of lib/bootconfig.o is built after lib/default.bconf file?
-> > > >
-> > > Yes, verified timestamp for all above artifacts including vmlinux.o.
-> > >
-> > > ex:
-> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 22K Mar 22 14:50
-> > > ../out/lib/bootconfig.o
-> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 355 Mar 22 14:50
-> > > ../out/lib/default.bconf
-> > > -rw-rw-r-- 1 psrinivasaia psrinivasaia 54M Mar 22 14:50 ../out/vmlinux.o
-> > >
-> > > As said incremnetal change was refelected in artifact default.bconf.
-> > > But not in vmlinux.o/vmlinux, used below command to verify.
-> >
-> > Interesting! This sounds clang's issue, because the make command rebuilds
-> > the object file including new default.bconf, but the linker (lld?)
-> > doesn't link it again correctly.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>  drivers/ata/libahci_platform.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> Sounds like missing FORCE directives in the Makefiles, perhaps?
+> diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+> index 1bd2f1686239..8eabbb5f208c 100644
+> --- a/drivers/ata/libahci_platform.c
+> +++ b/drivers/ata/libahci_platform.c
+> @@ -404,11 +404,13 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+>  
+>  	devres_add(dev, hpriv);
+>  
+> -	hpriv->mmio = devm_ioremap_resource(dev,
+> -			      platform_get_resource(pdev, IORESOURCE_MEM, 0));
+> +	hpriv->mmio = devm_platform_ioremap_resource_byname(pdev, "ahci");
 
-Hmm, as you can see in my patch, the default.bconf (contents) already
-has the FORCE directive as below.
+See __devm_ioremap_resource(): if there is no resource named "ahci" found,
+then this will print an error message ("invalid resource\n"). That may
+confuse users as this error message was not present before. So you may
+want to change this code to something like this:
 
-+ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
-+# Since the specified bootconfig file can be switched, we forcibly update the
-+# default.bconf file always.
-+$(obj)/default.bconf: FORCE
-+       $(call cmd,defbconf)
-+
-+quiet_cmd_defbconf = GEN     $@
-+      cmd_defbconf = cat < /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE) > $@
-+clean-files    += default.bconf
-+$(obj)/bootconfig.o: $(obj)/default.bconf
-+endif
+/*
+ * If the DT provided an "ahci" named resource, use it. Otherwise,
+ * fallback to using the default first resource for the device node.
+ */
+if (platform_get_resource_byname(pdev, IORESOURCE_MEM, "ahci"))
+	hpriv->mmio = devm_platform_ioremap_resource_byname(pdev, "ahci");
+else
+	hpriv->mmio = devm_platform_ioremap_resource(pdev, 0);
+if (IS_ERR(hpriv->mmio)) {
+	rc = PTR_ERR(hpriv->mmio);
+	goto err_out;
+}
 
-And since bootconfig.o depends on the default.bconf, it is at least compiled
-as Padmanabha reported above. If I missed something, please tell me.
+>  	if (IS_ERR(hpriv->mmio)) {
+> -		rc = PTR_ERR(hpriv->mmio);
+> -		goto err_out;
+> +		hpriv->mmio = devm_platform_ioremap_resource(pdev, 0);
+> +		if (IS_ERR(hpriv->mmio)) {
+> +			rc = PTR_ERR(hpriv->mmio);
+> +			goto err_out;
+> +		}
+>  	}
+>  
+>  	for (i = 0; i < AHCI_MAX_CLKS; i++) {
 
-> 
-> Sami, do you recall any issues like this when implementing
-> commit dc5723b02e52 ("kbuild: add support for Clang LTO")
-> ?
-> 
-> >
-> > >
-> > > llvm-objdump  -s -j .init.data ../out/vmlinux
-> > >
-> > > On target too, /proc/bootconfig shows old data.
-> > >
-> > > > And is that related to CONFIG_LTO? What happen if CONFIG_LTO=n?
-> > > >
-> > > Yes;  CONFIG_LTO_NONE=y  issue not observed even with LLVM binutils.
-> >
-> > And this issue is related to LTO. Maybe LTO ignores the '.init.data'
-> > section update. (Perhaps, LTO only checks the function code hash or
-> > something like that instead of the timestamp, and ignore whole object
-> > file if all of them are not updated.)
-> 
-> Sounds like this is a result of the above issue?
-
-As I said above, I used FORCE for the default.bconf and confirmed that
-the bootconfig.c is compiled (updated). Thus I think FORCE correctly
-works.
-
-I'm not sure how LTO is implemented, but if the LTO works based on the
-intermediate representation(IR), I guess it doesn't handle inline asm
-".incbin" directive in IR. I mean if the linker only checks the inline
-asm as a "string" in the .c file, it will miss the update of the contents
-of .incbin directive, because inline asm code itself is not changed.
-However the object file itself is updated, since the .incbin directive
-embeds an external file to the object file.
-This is just my guess. I would like to ask LLVM maintainers to help
-checking the safeness of using ".incbin" directive with LTO.
-(Note that this is also affects other parts which uses .incbin, like
- /proc/config.gz)
-
-Thank you,
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Damien Le Moal
+Western Digital Research

@@ -2,151 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632B34E6AC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B5B4E6AC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355436AbiCXWgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 18:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S1355450AbiCXWlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 18:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355411AbiCXWgK (ORCPT
+        with ESMTP id S244293AbiCXWlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 18:36:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442B9BA321;
-        Thu, 24 Mar 2022 15:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648161278; x=1679697278;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=QPHtBgpmj+pdnRd5iLwaN4PLxXJdwqwY6VkCkPvMiUI=;
-  b=IiNHCWVmW4GELU0s63iDHlhQS2IN4K5h3EHW0CCi1QHq0R4sqO37a+M2
-   9HXWJ1EymCL9mmo6l1elmYR3dVxw+MrtvAP6JSPoq/10oBQXKHUI/4J61
-   FBODsIamFE9tQWS6dIXGOWtbnwjNZfJJ0nifoF1tx6HuDwY7n8dCRECBf
-   1aNdmr8jqXbQ1PsbAdE7XLuWvGeB9ARF3MpC0QgMB5zcYkGUV48fJ5DA/
-   Et2VIITNnqkZp0cEQqu1CJ+3xLRJjEn+jRn3q/Ot2Hbhkex44Wft4UjyJ
-   +rWfVCbqz5o/yUj8GMYCOHaild9ojpCKf2Ul+0N6DwZnW4yjE4flxRJGI
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238447070"
-X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
-   d="scan'208";a="238447070"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 15:34:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
-   d="scan'208";a="650029183"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2022 15:34:33 -0700
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
- <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
-Date:   Fri, 25 Mar 2022 00:36:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 18:41:10 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631F6BA32E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:39:35 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dc7bdd666fso47087707b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=2UXOWK4H/ABoSS6KabIKT0cRAkKR0ZUPw5leAS4VA2Y=;
+        b=mFrw/DyLpphzNFV0Nr7i6+kDrT0/C9GU5c4FP6bzXJk/QsrgjgdsN5pw+Twz+s6tGi
+         qy25SacKdr9ipsWUo6trNsVmt+dTa/NxO3N5FT6aeXplL6+ZEw1LMGDWTo0PQCwb+Bvv
+         4GDi1sgE7Jd6QRrZP/c4HReJ6wxGKYe3J8j58vlNKNI0HzHCFnfQgsW07wf12tX5ifUO
+         PkWd0jUpPH/MCtF459clWjsDteS21Ykgbme/qNhmrt1Ttph7wf3EUSy9EX8Ao16PvJnO
+         QLKcOxdXbMcH953M7Bj/sxYtgU4u2dWspJAXKFL7VZLBu7hfRoPYI0AbX+uq/222BMVD
+         SSYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=2UXOWK4H/ABoSS6KabIKT0cRAkKR0ZUPw5leAS4VA2Y=;
+        b=IYBYusjXhG7MlRPiDWUEq3FlaKgoFlrW9wIMt7lIhU+wPGRA3xRZ2uD6bLxOyhf0+s
+         JyUtyKZjqAv4JCT8aSGOE9zKnT9sUzpwkEZ9PIT2n8KhV4QiT+POUJsSYpxQ964JTAbs
+         R8s9cj1EL9JS+6cdynSuKR3Ap+5nF4B6wzfCnYO9QO3cz6VQ4LxCcK6tNCP2VTAaJ6GQ
+         CVut12b1R4U6F01ZacfyhS9fgLukOpWKkgDq31F+GO96ajbpdsN/vvsp/jmaeHSWAI8C
+         KHZErqTYjPoktnTqRpHtkHRBpZUzpOFlIkAAbb5XtD6GlEQp/NYzTAlQN0rWSai7g7Hv
+         44lA==
+X-Gm-Message-State: AOAM533I67Q+SabjvB2KLnHBXowGkzEB3ETJvlVx+ymoUnstYbMyB1nQ
+        P2pxCK02DOtAHH8n0eeazgG6EduSIVMANdRxAQVE
+X-Google-Smtp-Source: ABdhPJw4BH07SPiQZUc2OcEknGn2R1/wKMDadrW5rM6fMHjf1XTNKTbDi8N9qPU+6gv6J5NGI8IQbzzmpbGwWUQn91RR
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:9892:9f7f:2c27:2968])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:5f11:0:b0:633:ee0c:ab79 with
+ SMTP id t17-20020a255f11000000b00633ee0cab79mr6599611ybb.491.1648161574585;
+ Thu, 24 Mar 2022 15:39:34 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 15:39:28 -0700
+Message-Id: <20220324223929.1893741-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [PATCH 1/2] selftests: fix header dependency for pid_namespace selftests
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev, Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.3.2022 14.27, Heikki Krogerus wrote:
-> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
->> Currently the phy init is done from dwc3 and also xhci which makes the
->> runtime_usage value 2 for the phy which causes issue during runtime
->> suspend. When we run the below command the runtime_status still shows
->> active.
->> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
->>
->> dwc3 manages PHY by own DRD driver, so skip the management by
->> HCD core by setting this quirk.
->>
->> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->> ---
->>  drivers/usb/dwc3/host.c | 13 +++++++++++++
->>  1 file changed, 13 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
->> index eda8719..d4fcf06 100644
->> --- a/drivers/usb/dwc3/host.c
->> +++ b/drivers/usb/dwc3/host.c
->> @@ -13,6 +13,12 @@
->>  #include <linux/platform_device.h>
->>  
->>  #include "core.h"
->> +#include <linux/usb/xhci-plat.h>
->> +#include <linux/usb/xhci-quirks.h>
->> +
->> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
->> +	.quirks = XHCI_SKIP_PHY_INIT,
->> +};
->>  
->>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->>  					int irq, char *name)
->> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->>  		}
->>  	}
->>  
->> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
->> +			sizeof(xhci_plat_dwc3_xhci));
->> +	if (ret) {
->> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
->> +		goto err;
->> +	}
->> +
->>  	ret = platform_device_add(xhci);
->>  	if (ret) {
->>  		dev_err(dwc->dev, "failed to register xHCI device\n");
-> 
-> I think you should just use device property:
-> 
+The way the test target was defined before, when building with clang we
+get a command line like this:
 
-This was suggested in an earlier series, but was rejected as it also added
-the property as a device tree parameter.
+clang -Wall -Werror -g -I../../../../usr/include/ \
+	regression_enomem.c ../pidfd/pidfd.h  -o regression_enomem
 
-I think adding more device properties can be messy in the long run, especially if we
-need to add them for many of the existing xhci quirks.
-We also end up with a mix where some device properties are listed as device tree
-parameters, and some not.
+This yields an error, because clang thinks we want to produce both a *.o
+file, as well as a precompiled header:
 
-Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
-allow those drivers to easily set any existing xhci quirk, or other possible optional
-callbacks.
+clang: error: cannot specify -o when generating multiple output files
 
-cdns3 driver is already doing this, but it includes the full xhci.h header.
-This series cleans up that a bit so cdns3 will only include xhci quirk bits and
-platform data structure.
+gcc, for whatever reason, doesn't exhibit the same behavior which I
+suspect is why the problem wasn't noticed before.
 
-On the downside we add a couple xhci related header files to include/linux/usb/
-Let me know if you see any other issues I missed with this approach.
+This can be fixed simply by using the LOCAL_HDRS infrastructure the
+selftests lib.mk provides. It does the right think and marks the target
+as depending on the header (so if the header changes, we rebuild), but
+it filters the header out of the compiler command line, so we don't get
+the error described above.
 
-Thanks
-Mathias
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/pid_namespace/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/pid_namespace/Makefile b/tools/testing/selftests/pid_namespace/Makefile
+index dcaefa224ca0..edafaca1aeb3 100644
+--- a/tools/testing/selftests/pid_namespace/Makefile
++++ b/tools/testing/selftests/pid_namespace/Makefile
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -g -I../../../../usr/include/
+ 
+-TEST_GEN_PROGS := regression_enomem
++TEST_GEN_PROGS = regression_enomem
+ 
+-include ../lib.mk
++LOCAL_HDRS += $(selfdir)/pidfd/pidfd.h
+ 
+-$(OUTPUT)/regression_enomem: regression_enomem.c ../pidfd/pidfd.h
++include ../lib.mk
+-- 
+2.35.1.1021.g381101b075-goog
+

@@ -2,122 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1864E65EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160A64E65ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347796AbiCXPUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
+        id S1351242AbiCXPVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236651AbiCXPUI (ORCPT
+        with ESMTP id S233752AbiCXPVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:20:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4608148322
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:18:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 24 Mar 2022 11:21:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFB794E38D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:20:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648135207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G2o3gAHoYUZWdzPuaqszpGnV2w4I+J5CWL2jDynP5vs=;
+        b=aeJLE9zAC5deMHJ6MBxD7JZYs13dtlP+tV4ahV1l1hmvB21N/LYIVghaJToi9AVw+VHk/R
+        OHtcFcXpKBgfJWgwpFoevO0U2389mRhFCm1RLQjTSLoFt3kr6Z9R9dRof8UrCb2uSpX5uk
+        HHrNL2knH5i8/yibuNCR4csit8S6y9w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-34-MrmLxTShM8a7PapBdMNDPg-1; Thu, 24 Mar 2022 11:20:05 -0400
+X-MC-Unique: MrmLxTShM8a7PapBdMNDPg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D63B0617B4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0A26C340ED;
-        Thu, 24 Mar 2022 15:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648135115;
-        bh=Ml/tHPbe2zU2+0ldVRiam6quUBs/j+WDsFnjNccGLgU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vGOvaG/iuWm7NfreHvlgk/5oCqJWWQK7rlNntLyOqdbxt6x09bczGQ9A9jWJ1Rbs6
-         RpyuGdoDdWcmImEHs3lXXUfwACVfLIwlLVdo0CLsJkbYt2BiVGkuYnD4US8ZW/SR+7
-         ILzTCr8V/I7zBQs8TvypU5CaYXP1XFPd6K6YWCM4H1yFS3TMZbZAmJNnmIUVpRVPV+
-         AxAFY6J+MfhosCtG4pAs3/E58+krp8AyhTs63UF5h/m4DDLTUbNvpb77Aak8B4OMKM
-         crR9HJPW8sDveivFgJTqve1Ln1koAcUx7QchvO86l5rLJeRzm5CjSpWCnlROA34wPH
-         Wk7LcQI0N5WcQ==
-Date:   Fri, 25 Mar 2022 00:18:31 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] ARM: kprobes: Make __kretprobe_trampoline as a pure asm
- function
-Message-Id: <20220325001831.e363577abe647f99b0714be8@kernel.org>
-In-Reply-To: <CAMj1kXFtrogyse1MOF1KDBuYwtxNDvCu3rF=o7b__83Lu6Fj4A@mail.gmail.com>
-References: <20220315182558.1a056d8b3975932f6589b60f@kernel.org>
-        <164733793626.1008610.12121025094280924953.stgit@devnote2>
-        <20220324152108.b6016621dd6b8297eddd6bb5@kernel.org>
-        <20220324222322.9f59df377b01856f2230a4ea@kernel.org>
-        <CAMj1kXFtrogyse1MOF1KDBuYwtxNDvCu3rF=o7b__83Lu6Fj4A@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D72108AE9AB;
+        Thu, 24 Mar 2022 15:19:35 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C40FD417E36;
+        Thu, 24 Mar 2022 15:19:33 +0000 (UTC)
+Message-ID: <426b70a407b774627187e64b011a64bfb7214b36.camel@redhat.com>
+Subject: Re: [RFCv2 PATCH 08/12] KVM: SVM: Adding support for configuring
+ x2APIC MSRs interception
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 24 Mar 2022 17:19:32 +0200
+In-Reply-To: <20220308163926.563994-9-suravee.suthikulpanit@amd.com>
+References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
+         <20220308163926.563994-9-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
-
-On Thu, 24 Mar 2022 14:34:46 +0100
-Ard Biesheuvel <ardb@kernel.org> wrote:
-
-> --- a/arch/arm/probes/kprobes/core.c
-> +++ b/arch/arm/probes/kprobes/core.c
-> @@ -377,7 +377,7 @@ void __naked __kprobes __kretprobe_trampoline(void)
->  {
->         __asm__ __volatile__ (
->  #ifdef CONFIG_FRAME_POINTER
-> -               "ldr    lr, =__kretprobe_trampoline     \n\t"
-> +               "ldr    lr, .L__kretprobe_trampoline    \n\t"
->         /* __kretprobe_trampoline makes a framepointer on pt_regs. */
->  #ifdef CONFIG_CC_IS_CLANG
->                 "stmdb  sp, {sp, lr, pc}        \n\t"
-> @@ -407,6 +407,11 @@ void __naked __kprobes __kretprobe_trampoline(void)
->                 "bx     lr                      \n\t"
->  #else
->                 "mov    pc, lr                  \n\t"
-> +#endif
-> +#ifdef CONFIG_FRAME_POINTER
-> +               ".align 2                       \n\t"
-> +       ".L__kretprobe_trampoline:              \n\t"
-> +               ".long  __kretprobe_trampoline  \n\t"
->  #endif
->                 : : : "memory");
+On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
+> When enabling x2APIC virtualization (x2AVIC), the interception of
+> x2APIC MSRs must be disabled to let the hardware virtualize guest
+> MSR accesses.
+> 
+> Current implementation keeps track of MSR interception state
+> for generic MSRs in the svm_direct_access_msrs array.
+> For x2APIC MSRs, introduce direct_access_x2apic_msrs array.
+> 
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/svm.c | 67 +++++++++++++++++++++++++++++++-----------
+>  arch/x86/kvm/svm/svm.h |  7 +++++
+>  2 files changed, 57 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 3048f4b758d6..ce3c68a785cf 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -89,7 +89,7 @@ static uint64_t osvw_len = 4, osvw_status;
+>  static DEFINE_PER_CPU(u64, current_tsc_ratio);
+>  #define TSC_RATIO_DEFAULT	0x0100000000ULL
+>  
+> -static const struct svm_direct_access_msrs {
+> +static struct svm_direct_access_msrs {
+>  	u32 index;   /* Index of the MSR */
+>  	bool always; /* True if intercept is initially cleared */
+>  } direct_access_msrs[MAX_DIRECT_ACCESS_MSRS] = {
+> @@ -117,6 +117,9 @@ static const struct svm_direct_access_msrs {
+>  	{ .index = MSR_INVALID,				.always = false },
+>  };
+>  
+> +static struct svm_direct_access_msrs
+> +direct_access_x2apic_msrs[NUM_DIRECT_ACCESS_X2APIC_MSRS + 1];
+> +
+>  /*
+>   * These 2 parameters are used to config the controls for Pause-Loop Exiting:
+>   * pause_filter_count: On processors that support Pause filtering(indicated
+> @@ -609,41 +612,42 @@ static int svm_cpu_init(int cpu)
+>  
 >  }
+>  
+> -static int direct_access_msr_slot(u32 msr)
+> +static int direct_access_msr_slot(u32 msr, struct svm_direct_access_msrs *msrs)
+>  {
+>  	u32 i;
+>  
+> -	for (i = 0; direct_access_msrs[i].index != MSR_INVALID; i++)
+> -		if (direct_access_msrs[i].index == msr)
+> +	for (i = 0; msrs[i].index != MSR_INVALID; i++)
+> +		if (msrs[i].index == msr)
+>  			return i;
+>  
+>  	return -ENOENT;
+>  }
+>  
+> -static void set_shadow_msr_intercept(struct kvm_vcpu *vcpu, u32 msr, int read,
+> -				     int write)
+> +static void set_shadow_msr_intercept(struct kvm_vcpu *vcpu,
+> +				     struct svm_direct_access_msrs *msrs, u32 msr,
+> +				     int read, void *read_bits,
+> +				     int write, void *write_bits)
+>  {
+> -	struct vcpu_svm *svm = to_svm(vcpu);
+> -	int slot = direct_access_msr_slot(msr);direct_access_msrs
+> +	int slot = direct_access_msr_slot(msr, msrs);
+>  
+>  	if (slot == -ENOENT)
+>  		return;
+>  
+>  	/* Set the shadow bitmaps to the desired intercept states */
+>  	if (read)
+> -		set_bit(slot, svm->shadow_msr_intercept.read);
+> +		set_bit(slot, read_bits);
+>  	else
+> -		clear_bit(slot, svm->shadow_msr_intercept.read);
+> +		clear_bit(slot, read_bits);
+>  
+>  	if (write)
+> -		set_bit(slot, svm->shadow_msr_intercept.write);
+> +		set_bit(slot, write_bits);
+>  	else
+> -		clear_bit(slot, svm->shadow_msr_intercept.write);
+> +		clear_bit(slot, write_bits);
+>  }
+>  
+> -static bool valid_msr_intercept(u32 index)
+> +static bool valid_msr_intercept(u32 index, struct svm_direct_access_msrs *msrs)
+>  {
+> -	return direct_access_msr_slot(index) != -ENOENT;
+> +	return direct_access_msr_slot(index, msrs) != -ENOENT;
+>  }
+>  
+>  static bool msr_write_intercepted(struct kvm_vcpu *vcpu, u32 msr)
+> @@ -674,9 +678,12 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
+>  
+>  	/*
+>  	 * If this warning triggers extend the direct_access_msrs list at the
+> -	 * beginning of the file
+> +	 * beginning of the file. The direct_access_x2apic_msrs is only for
+> +	 * x2apic MSRs.
+>  	 */
+> -	WARN_ON(!valid_msr_intercept(msr));
+> +	WARN_ON(!valid_msr_intercept(msr, direct_access_msrs) &&
+> +		(boot_cpu_has(X86_FEATURE_X2AVIC) &&
+> +		 !valid_msr_intercept(msr, direct_access_x2apic_msrs)));
+>  
+>  	/* Enforce non allowed MSRs to trap */
+>  	if (read && !kvm_msr_allowed(vcpu, msr, KVM_MSR_FILTER_READ))
+> @@ -704,7 +711,16 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
+>  void set_msr_interception(struct kvm_vcpu *vcpu, u32 *msrpm, u32 msr,
+>  			  int read, int write)
+>  {
+> -	set_shadow_msr_intercept(vcpu, msr, read, write);
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (msr < 0x800 || msr > 0x8ff)
+> +		set_shadow_msr_intercept(vcpu, direct_access_msrs, msr,
+> +					 read, svm->shadow_msr_intercept.read,
+> +					 write, svm->shadow_msr_intercept.write);
+> +	else
+> +		set_shadow_msr_intercept(vcpu, direct_access_x2apic_msrs, msr,
+> +					 read, svm->shadow_x2apic_msr_intercept.read,
+> +					 write, svm->shadow_x2apic_msr_intercept.write);
+>  	set_msr_interception_bitmap(vcpu, msrpm, msr, read, write);
+>  }
+>  
+> @@ -786,6 +802,22 @@ static void add_msr_offset(u32 offset)
+>  	BUG();
+>  }
+>  
+> +static void init_direct_access_x2apic_msrs(void)
+> +{
+> +	int i;
+> +
+> +	/* Initialize x2APIC direct_access_x2apic_msrs entries */
+> +	for (i = 0; i < NUM_DIRECT_ACCESS_X2APIC_MSRS; i++) {
+> +		direct_access_x2apic_msrs[i].index = boot_cpu_has(X86_FEATURE_X2AVIC) ?
+> +						  (0x800 + i) : MSR_INVALID;
+> +		direct_access_x2apic_msrs[i].always = false;
+> +	}
+> +
+> +	/* Initialize last entry */
+> +	direct_access_x2apic_msrs[i].index = MSR_INVALID;
+> +	direct_access_x2apic_msrs[i].always = false;
+> +}
+> +
+>  static void init_msrpm_offsets(void)
+>  {
+>  	int i;
+> @@ -4750,6 +4782,7 @@ static __init int svm_hardware_setup(void)
+>  	memset(iopm_va, 0xff, PAGE_SIZE * (1 << order));
+>  	iopm_base = page_to_pfn(iopm_pages) << PAGE_SHIFT;
+>  
+> +	init_direct_access_x2apic_msrs();
+>  	init_msrpm_offsets();
+>  
+>  	supported_xcr0 &= ~(XFEATURE_MASK_BNDREGS | XFEATURE_MASK_BNDCSR);
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index b53c83a44ec2..19ad40b8383b 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -29,6 +29,8 @@
+>  
+>  #define MAX_DIRECT_ACCESS_MSRS	20
+>  #define MSRPM_OFFSETS	16
+> +#define NUM_DIRECT_ACCESS_X2APIC_MSRS	0x100
+> +
+>  extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+>  extern bool npt_enabled;
+>  extern bool intercept_smi;
+> @@ -241,6 +243,11 @@ struct vcpu_svm {
+>  		DECLARE_BITMAP(write, MAX_DIRECT_ACCESS_MSRS);
+>  	} shadow_msr_intercept;
+>  
+> +	struct {
+> +		DECLARE_BITMAP(read, NUM_DIRECT_ACCESS_X2APIC_MSRS);
+> +		DECLARE_BITMAP(write, NUM_DIRECT_ACCESS_X2APIC_MSRS);
+> +	} shadow_x2apic_msr_intercept;
+> +
+>  	struct vcpu_sev_es_state sev_es;
+>  
+>  	bool guest_state_loaded;
 
-Yes, I confirmed this works too :-)
 
-Can you send the patch with my Tested-by ?
+I did some homework on this, and it looks mostly correct.
 
-Thank you!
+However I do wonder if we need that separation of svm_direct_access_msrs and 
+direct_access_x2apic_msrs. I understand the peformance wise, the  
+direct_access_msrs will get longer otherwise (but we don't have to allow
+all x2apic msr range, but only known x2apic registers which aren't that many).
 
-> 
-> 
-> On Thu, 24 Mar 2022 at 14:23, Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Thu, 24 Mar 2022 15:21:08 +0900
-> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > > Hi,
-> > >
-> > > I found a better solution for this issue from Ard :-)
-> > >
-> > > https://lore.kernel.org/all/20220203082204.1176734-6-ardb@kernel.org/T/#u
-> > >
-> > > I should use mov_l instead of ldr for loading the symbol address.
-> >
-> > Hm, these macros are only for the pure assembly file (.S), so we have to
-> > split this in a asm file to use that.
-> >
-> 
-> 
-> What about the below?
+One of the things that I see that *is* broken (at least in theory) is nesting.
+
+init_msrpm_offsets goes over direct_access_msrs and puts the offsets of corresponding
+bits in the hardware msr bitmap into the 'msrpm_offsets'
+
+Then on nested VM entry the nested_svm_vmrun_msrpm uses this list to merge the nested
+and host MSR bitmaps.
+Without x2apic msrs, this means that if L1 chooses to allow L2 to access its x2apic msrs
+it won't work. It is not something that L1 would do often but still allowed to overall.
+
+Honestly we need to write track the nested MSR bitmap to avoid updating it on each VM entry,
+then with this hot path eliminated, I don't think there are other places which update
+the msr interception often, and thus we could just put the x2apic msrs into the 
+direct_access_msrs.
+
+Best regards,
+	Maxim Levitsky
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+

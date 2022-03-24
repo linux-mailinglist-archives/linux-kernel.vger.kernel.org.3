@@ -2,149 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEFD4E65F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA68A4E6620
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351289AbiCXPbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
+        id S1351306AbiCXPh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239897AbiCXPbg (ORCPT
+        with ESMTP id S1347796AbiCXPh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:31:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 341C45AA75
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:30:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A64301515;
-        Thu, 24 Mar 2022 08:30:03 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD4A03F73B;
-        Thu, 24 Mar 2022 08:30:02 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 15:29:56 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: clang memcpy calls
-Message-ID: <YjyOdJlda3JcK3he@lakrids>
-References: <YjxTt3pFIcV3lt8I@zn.tnic>
+        Thu, 24 Mar 2022 11:37:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AA2D5BD2E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648136153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5w7kSkFlck7a7bG/2DVHNDf7u0xicIB6ZKaJ9gY3ATY=;
+        b=f7D8B3WL0DvL7pLzIoCIksfpbHssL9dghVzltA48KAswfj8fdIoTMGEsc9sla6qQ9af9iZ
+        yIPhIAtts6+r95UEXrIhOOiojtSgaxITt5hpvbzntaODVwYsbfKReBu8S6JI7ZgNe1IWcW
+        NC7hU6BfTKOc5310+0q2Vbg3ch58fgc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-XqGGEjCyPcyl_IkcahlaPA-1; Thu, 24 Mar 2022 11:35:48 -0400
+X-MC-Unique: XqGGEjCyPcyl_IkcahlaPA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE0503804512;
+        Thu, 24 Mar 2022 15:35:46 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E3CEA401475;
+        Thu, 24 Mar 2022 15:35:44 +0000 (UTC)
+Message-ID: <91692f799dfa1d064b8f2839789869aebcaa6c5f.camel@redhat.com>
+Subject: Re: [RFCv2 PATCH 09/12] KVM: SVM: Refresh AVIC settings when
+ changing APIC mode
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 24 Mar 2022 17:35:43 +0200
+In-Reply-To: <20220308163926.563994-10-suravee.suthikulpanit@amd.com>
+References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
+         <20220308163926.563994-10-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjxTt3pFIcV3lt8I@zn.tnic>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 12:19:19PM +0100, Borislav Petkov wrote:
-> Hi folks,
+On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
+> When APIC mode is updated (e.g. from xAPIC to x2APIC),
+> KVM needs to update AVIC settings accordingly, whic is
+> handled by svm_refresh_apicv_exec_ctrl().
+> 
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 7e5a39a8e698..53559b8dfa52 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -625,7 +625,24 @@ void avic_post_state_restore(struct kvm_vcpu *vcpu)
+>  
+>  void svm_set_virtual_apic_mode(struct kvm_vcpu *vcpu)
+>  {
+> -	return;
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (!lapic_in_kernel(vcpu) || (avic_mode == AVIC_MODE_NONE))
+> +		return;
+> +
+> +	if (kvm_get_apic_mode(vcpu) == LAPIC_MODE_INVALID)
+> +		WARN_ONCE(true, "Invalid local APIC state");
+> +
+> +	svm->vmcb->control.avic_vapic_bar = svm->vcpu.arch.apic_base &
+> +					    VMCB_AVIC_APIC_BAR_MASK;
 
-Hi Boris,
+No need for that - APIC base relocation doesn't work when AVIC is enabled,
+since the page which contains it has to be marked R/W in NPT, which we
+only do for the default APIC base.
 
-> so I've been looking at a recent objtool noinstr warning from clang
-> builds:
-> 
-> vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves .noinstr.text section
-> 
-> The issue is that clang generates a memcpy() call when a struct copy
-> happens:
-> 
->         if (regs != eregs)
->                 *regs = *eregs;
-> 
-> see below for asm output.
-> 
-> While gcc does simply generate an actual "rep; movsq".
+I recently removed the code from AVIC which still tried to set the
+'avic_vapic_bar' like this.
 
-I think there's a more general soundness problem with noinstr here,
-because with the options we pass today it's entirely legitimate for the
-compiler to generate out-of-line calls to a number of support functions
-(e.g. memcpy, but also memset and others), and we either need to inhibit
-out-of-line calls to *any* of those, or ensure the out-of-line copies
-used are never instrumented.
 
-I'm not entirely sure how to prevent this on arm64 short of some
-whole-compilation-unit shennanigans -- we don't have short sequence like
-"rep movsq" that can be easily inlined, and we explicitly instrument
-mem*() when certain KASAN options are selected.
 
-I think we need more compiler help to make noinstr sound generally,
-and/or may need to rethink the way we use noinstr.
+> +	kvm_vcpu_update_apicv(&svm->vcpu);
+> +
+> +	/*
+> +	 * The VM could be running w/ AVIC activated switching from APIC
+> +	 * to x2APIC mode. We need to all refresh to make sure that all
+> +	 * x2AVIC configuration are being done.
 
-Thanks,
-Mark.
+Why? When AVIC is un-inhibited later then the svm_refresh_apicv_exec_ctrl will be called
+again and switch to x2avic mode I think.
 
-> So, how hard would it be to make clang do that too pls?
-> 
-> Oh, and another thing while we're comparing asm: I'd love for clang's
-> -fverbose-asm to issue interleaved C source lines too, like gcc does.
-> 
-> That's it - no pink pony - just "normal" wishes. :-)
-> 
-> GCC:
-> ====
-> 
-> sync_regs:
-> .LASANPC4246:
-> # arch/x86/kernel/traps.c:770: {
->         movq    %rdi, %rsi      # tmp91, eregs
-> # arch/x86/kernel/traps.c:771:  struct pt_regs *regs = (struct pt_regs *)this_cpu_read(cpu_current_top_of_stack) - 1;
-> #APP
-> # 771 "arch/x86/kernel/traps.c" 1
->         movq %gs:cpu_current_top_of_stack(%rip), %rax   # cpu_current_top_of_stack, pfo_val__
-> # 0 "" 2
-> # arch/x86/kernel/traps.c:771:  struct pt_regs *regs = (struct pt_regs *)this_cpu_read(cpu_current_top_of_stack) - 1;
-> #NO_APP
->         subq    $168, %rax      #, <retval>
-> # arch/x86/kernel/traps.c:772:  if (regs != eregs)
->         cmpq    %rdi, %rax      # eregs, <retval>
->         je      .L387   #,
-> # arch/x86/kernel/traps.c:773:          *regs = *eregs;
->         movl    $21, %ecx       #, tmp89
->         movq    %rax, %rdi      # <retval>, <retval>
->         rep movsq
-> .L387:
-> # arch/x86/kernel/traps.c:775: }
->         ret
-> 
-> CLANG:
-> ======
-> 
->         .section        .noinstr.text,"ax",@progbits
->         .globl  sync_regs                       # -- Begin function sync_regs
->         .p2align        6, 0x90
->         .type   sync_regs,@function
-> sync_regs:                              # @sync_regs
-> # %bb.0:                                # %entry
->         pushq   %rbx
->         #APP
->         movq    %gs:cpu_current_top_of_stack(%rip), %rbx
->         #NO_APP
->         addq    $-168, %rbx
->         cmpq    %rdi, %rbx
->         je      .LBB19_2
-> # %bb.1:                                # %if.then
->         movq    %rdi, %rsi
->         movl    $168, %edx
->         movq    %rbx, %rdi
->         callq   memcpy@PLT
-> .LBB19_2:                               # %if.end
->         movq    %rbx, %rax
->         popq    %rbx
->         retq
-> 
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+When AVIC is inhibited, then regardless of x2apic mode, VMCB must not have
+any avic bits set, and all x2apic msrs should be read/write intercepted.,
+thus I don't think that svm_refresh_apicv_exec_ctrl should be force called.
+
+
+> +	 */
+> +	svm_refresh_apicv_exec_ctrl(&svm->vcpu);
+>  }
+>  
+>  void svm_hwapic_irr_update(struct kvm_vcpu *vcpu, int max_irr)
+
+Best regards,
+	Maxim Levitsky
+

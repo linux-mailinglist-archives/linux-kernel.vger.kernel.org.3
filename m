@@ -2,66 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD264E692A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 20:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6022A4E6996
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352890AbiCXTQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 15:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S1353174AbiCXUE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 16:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352823AbiCXTQo (ORCPT
+        with ESMTP id S232830AbiCXUEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 15:16:44 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE48B6D24
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 12:15:11 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id o5so10198988ybe.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 12:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Z0LeIn5cVeaYNuaJmEd4BGZ3EQ0592UmRlXh68ATPqU=;
-        b=rgReT6OdFEsgGhaCRPpaJAOxQ6k+YnrdAp94eYBCESWg/9udF4117hEuJlxSJPOC3n
-         vN5LWCw2vn6aYdBkD6+NczFFu1EH+tpfc1VIZnqq7r8Er81CQcQEKZDO/pUYZV+qFaaV
-         TY4nHOcLifwed6u6PhfLO2dV4lW7CUX3RTW5DNRCY95siXGUUqLzLnpxS+Sr1LEhLlPC
-         Tf7Nzx/aZikfnSscPzmqdA/ATlpTur9R3tnaKf2P67Zg3CQ7YwVbccbdJeFGgsVQq7Ni
-         p0faoI9Ud6zQVy0UztMQzsFFc1RrVzsxx7JXChrdZtkJIV2n1zEsGmgHN4FADvMVWoKc
-         Qigw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Z0LeIn5cVeaYNuaJmEd4BGZ3EQ0592UmRlXh68ATPqU=;
-        b=immPdEg5HZgZoRiR91ouENgtxm7MP39F8G0Efq27p3lGwFmJd1twnDDpK+j9lXD1z6
-         xDdOvWcgq7oA0G4G/x7HXcwoZNb7L2/6VVfvySBYjCDEYcEVVAU3PvV/vlc2eL5Sl/zM
-         CrHmErC8Wks44Z0mYJKDqOiP5gOVWjU+AYlDzUq47n50VsF0Oux0UIIkKqvrbi2r7GrY
-         jmVGUUS4lXgdT7hKqd5uLvaiI+gIKwfSeXcmqlD0TNCVDDaX9bSseN8Nk74tqx1J/xQz
-         wXWWIZiNc25UH2dNtIBafy5qBk3v+c2UoZyhQh1oOrVnRjXz50DKCgjbp3rSqqsSpZPI
-         jEEQ==
-X-Gm-Message-State: AOAM5320zQr4fpVBsvKRVXw+wQ3Dy2PqxfA8bfnV2VJ3AHUfxVgW7gZL
-        jFrJSl55kPpcPN9gRQV4Ot+LHbkcM7S7KaqmEZZaLw==
-X-Google-Smtp-Source: ABdhPJz8H7eFv8w9/IGF1if3KqlcAAovm/FyVXAWyxcW0GbUNS5f/71mzOOXdpyo5cA271dh+/Kp0QW7hLfVJCLDuus=
-X-Received: by 2002:a25:d088:0:b0:633:b902:2d29 with SMTP id
- h130-20020a25d088000000b00633b9022d29mr6003839ybg.626.1648149310377; Thu, 24
- Mar 2022 12:15:10 -0700 (PDT)
+        Thu, 24 Mar 2022 16:04:53 -0400
+X-Greylist: delayed 1499 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 13:03:21 PDT
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.179.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA3D21835
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:03:20 -0700 (PDT)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 5ED962058D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:16:08 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id XSwKn5PSydx86XSwKnn1z0; Thu, 24 Mar 2022 14:16:08 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ZPPzdWk6s/RXLNCY9qFj72xcElUOICSe4hFZHn0LYwo=; b=2gVqLkwGPJTOdqr0cgSfmsFHIm
+        //I+by3GiPA5f+uaLvOy0jFg06sVnwvMfeXloN8Ub9PPust43mRQWozKx+/n+cMCV6FbTtZfsWH89
+        Sy3yLBwdttt6lvfsW/xAA2tK+RO2aLzmMwTJm1mWky1UFp/M7n2hCpLe0J7Pm1ZiId+kD3Mo7DAHS
+        Xo763c3pCsT09/1z+D3nZrDJRGujjs3zH7+RT+83ww7dVYOIs7RyPMH4NU+/NCLYFjFnG+uGQhFJb
+        u+kUWA6fCe0HMsvx8tgAb0dX99IsQ7GAtZLkEwyczOHZLCC5iyJlFxzONinNs3FxL+AF4xFvnMNAN
+        9Pail+Dg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57650 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nXSwJ-002YBS-OP; Thu, 24 Mar 2022 19:16:07 +0000
+Date:   Thu, 24 Mar 2022 12:16:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [git pull] drm for 5.18-rc1
+Message-ID: <20220324191606.GA1120460@roeck-us.net>
+References: <CAPM=9tytg5jd_i3z3C5Y1dii2-cgO11Gjgvaq8qoWn3CGfCreg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220310140542.7483-1-arinc.unal@arinc9.com>
-In-Reply-To: <20220310140542.7483-1-arinc.unal@arinc9.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 24 Mar 2022 20:14:58 +0100
-Message-ID: <CACRpkda1dpxzUuExEHeJn4i=Vcfiunj4Fmup+0y5un8peBUPCw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: rt2880: add missing pin groups and functions
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, erkin.bozoglu@xeront.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPM=9tytg5jd_i3z3C5Y1dii2-cgO11Gjgvaq8qoWn3CGfCreg@mail.gmail.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nXSwJ-002YBS-OP
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57650
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 11
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,21 +81,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 3:06 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
-9.com> wrote:
->
-> Add the missing pin groups:
-> jtag, wdt
->
-> Add the missing functions:
-> i2s, jtag, pcie refclk, pcie rst, pcm, spdif2, spdif3, wdt refclk, wdt rs=
-t
->
-> Sort pin groups and functions in alphabetical order. Fix a typo.
->
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+Hi,
 
-Patch applied.
+On Thu, Mar 24, 2022 at 12:30:02PM +1000, Dave Airlie wrote:
+> Hi Linus,
+> 
+> This is the main drm pull request for 5.18.
+> 
+> The summary changelog is below, lots of work all over,
+> Intel improving DG2 support, amdkfd CRIU support, msm
+> new hw support, and faster fbdev support.
+> 
+> Conflicts:
+> I did a merge into your tree this morning, couple of Kconfig
+> clashes, drm_cache.c needs an ioport.h include to avoid a build
+> fail due to other header refactoring. I think you should be able
+> to handle it.
+> 
+> External interactions:
+> - dma-buf-map gets renamed to iosys-map
+> - this adds a yes/no helper to the strings helpers, and it's used
+>   in some other code.
+> - platform driver for chromeos privacy screen
+> 
+> Let me know if there are any issues.
+> 
+[ ... ]
+>       fbdev: Improve performance of cfb_imageblit()
 
-Yours,
-Linus Walleij
+As reported as reponse to the patch submission, this patch causes crashes
+with qemu's mainstone, z2, and collie emulations. Reverting it fixes the
+problem.
+
+Unable to handle kernel paging request at virtual address e090d000
+[e090d000] *pgd=c0c0b811c0c0b811, *pte=c0c0b000, *ppte=00000000
+Internal error: Oops: 807 [#1] ARM
+CPU: 0 PID: 1 Comm: swapper Not tainted 5.17.0-next-20220324 #1
+Hardware name: Sharp-Collie
+PC is at cfb_imageblit+0x58c/0x6e0
+
+Guenter

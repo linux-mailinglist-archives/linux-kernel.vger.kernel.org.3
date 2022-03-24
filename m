@@ -2,120 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E750D4E62B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122604E62B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349871AbiCXLvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
+        id S1349846AbiCXLwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349846AbiCXLvT (ORCPT
+        with ESMTP id S232088AbiCXLwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:51:19 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41FA9026B;
-        Thu, 24 Mar 2022 04:49:47 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id b24so5288237edu.10;
-        Thu, 24 Mar 2022 04:49:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nhtDJxx+rYit+5kY/+8k4LZTDafDnBdntGoPASkMFmE=;
-        b=UIsVUQiPPIFp3Lb3DFH3S+t2LmDEDdtWT+ph8OpPNYD1z5lZSpWaweBT+SHPXy4T+M
-         qyRbRLDaWWhqXZ3GxzLrdCW5qbCt7i1rkIqmLDpVbK3zCoi6g/kCRThpUwp8WodLFQ0n
-         lzBgE1XF3K+vNejtdtKPvvMC9Lj6vaFBd2Jdhz3lUtmI9wreSQG0XYp1b6flMiat5Zgm
-         aioCBLl886gwY7BEWTSsaQVU6TTmxtTityAk93YLEsPjwWiJ5hEJusOvdVZj6xDwfUAh
-         74IPeMXazPIRNe/XKcIXF2agnrcsX1jGACbhgkkHz1IDgsNHtOS/OBM3T5nlWQZwjNN7
-         Lczw==
-X-Gm-Message-State: AOAM533mEKua0VbgZ/6y8vo78VvKVECXaqvcQvM1OTJJEcCRZTwFUcZw
-        r5k1rdEDFey83/DpRgiS/lgb5Pz6E8JNQg==
-X-Google-Smtp-Source: ABdhPJzdEYTxDqX15SKQ9PEXbajaY2optQk5N/wMsVOMxwQLd2TzNpQ+j8Q59Vhl9DfQ7Z/NyKS8Kg==
-X-Received: by 2002:aa7:de96:0:b0:418:f9ca:67f6 with SMTP id j22-20020aa7de96000000b00418f9ca67f6mr6300917edv.25.1648122586128;
-        Thu, 24 Mar 2022 04:49:46 -0700 (PDT)
-Received: from [192.168.0.156] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id v1-20020a1709064e8100b006e07d033572sm622970eju.33.2022.03.24.04.49.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 04:49:45 -0700 (PDT)
-Message-ID: <414f1ad8-8ee1-9913-c0e8-b4f66f3e7180@kernel.org>
-Date:   Thu, 24 Mar 2022 12:49:43 +0100
+        Thu, 24 Mar 2022 07:52:43 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D53E97BA4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648122671; x=1679658671;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MkKgLOGm8fzuqIUVMGedup+WyqyCao28NBMcOzgaAJM=;
+  b=aTTQwlRv1TRUHYtPU6cZ+/MNjADUF+gAAXK0F97NDetW7q2ve3fEPKpY
+   EumkgIOUbprlWnnVl/olq06aGDnlnJlPB/fHcFaNmKdqsFoXwrY0wwimk
+   fM91TsxUODfG0E59bkKH0RMXg/QLapXqYIEYW2551flgSUZPSRkmkEuvf
+   G50evg9Qc/XUyMa7jNWec3xVugYoM2ohvf8lli3N1DJfXzWjyGQMJjzjk
+   BQtHiPG2H87vB/BWFvW1iQPEZJTzwZGCMb1t6yc/SChKlN4XuyUyIaIco
+   XTZMUp1p4eM4sghSQzFjUYCTQ0St4JJnAHseO+RAMeMvgr2DIN5P0QwtN
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="283214930"
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="283214930"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 04:51:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="649824816"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2022 04:51:09 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXLzg-000L2i-JY; Thu, 24 Mar 2022 11:51:08 +0000
+Date:   Thu, 24 Mar 2022 19:50:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Henningsson <coding@diwic.se>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Jaroslav Kysela <perex@perex.cz>
+Subject: sound/core/rawmidi.c:991:6: warning: variable 'dest_frames' set but
+ not used
+Message-ID: <202203241949.AXselCHw-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/7] ARM: dts: s5pv210: Adjust I2S entries to match spec
-Content-Language: en-US
-To:     Jonathan Bakker <xc-racer2@live.ca>, alim.akhtar@samsung.com
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
- <CY4PR04MB056784D54ADDBB4F57F82D4ACB189@CY4PR04MB0567.namprd04.prod.outlook.com>
- <4ebe2bb9-4f92-2dff-6737-d057e5950b24@kernel.org>
- <f44c9881-6f7b-f4f5-8225-e0c74c83fab1@kernel.org>
- <CY4PR04MB05677B21384FCE2013EB1B94CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <CY4PR04MB05677B21384FCE2013EB1B94CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2022 18:24, Jonathan Bakker wrote:
-> Hi Krzysztof,
-> 
-> On 2022-03-23 8:15 a.m., Krzysztof Kozlowski wrote:
->> On 23/03/2022 16:14, Krzysztof Kozlowski wrote:
->>> On 23/03/2022 16:03, Jonathan Bakker wrote:
->>>> Based on the device tree spec, clocks should be ordered tx/rx.
->>>> Re-order from rx/tx to avoid warnings when running make dtbs_check
->>>>
->>>> Additionally, the number of #sound-dai-cells should be 1, not 0
->>>>
->>>> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
->>>> ---
->>>>  arch/arm/boot/dts/s5pv210-aries.dtsi |  2 +-
->>>>  arch/arm/boot/dts/s5pv210.dtsi       | 18 +++++++++---------
->>>>  2 files changed, 10 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
->>>> index 70ff56daf4cb..503b5a50ef1a 100644
->>>> --- a/arch/arm/boot/dts/s5pv210-aries.dtsi
->>>> +++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
->>>> @@ -644,7 +644,7 @@
->>>>  };
->>>>  
->>>>  &i2s0 {
->>>> -	dmas = <&pdma0 9>, <&pdma0 10>, <&pdma0 11>;
->>>> +	dmas = <&pdma0 10>, <&pdma0 9>, <&pdma0 11>;
->>>>  	status = "okay";
->>>
->>> Except that fix that's the same commit as here:
->>> https://lore.kernel.org/all/20200907161141.31034-26-krzk@kernel.org/
->>> so just extend it.
->>>
->>> sound-dai-cells should go to a separate commit. But are you sure they
->>> are correct? The Fascinate 4G seems to be using them as cells=0.
->>
->> See my previous patch and discussion:
->> https://lore.kernel.org/all/20200907161141.31034-10-krzk@kernel.org/
->>
-> 
-> Thanks, I'd totally forgotten about this series from the past.  I'll re-test
-> those commits and submit your copies of them in v2 if that's OK with you and
-> that they're confirmed functional?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ed4643521e6af8ab8ed1e467630a85884d2696cf
+commit: 08fdced60ca08e34e316a3ab945636fcdfcbc973 ALSA: rawmidi: Add framing mode
+date:   10 months ago
+config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20220324/202203241949.AXselCHw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=08fdced60ca08e34e316a3ab945636fcdfcbc973
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 08fdced60ca08e34e316a3ab945636fcdfcbc973
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/core/
 
-My dma fixes change lacked this aries fix. The sound-dai-cells needed
-more rethinking.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/core/rawmidi.c:991:6: warning: variable 'dest_frames' set but not used [-Wunused-but-set-variable]
+           int dest_frames = 0;
+               ^
+   1 warning generated.
 
 
-Best regards,
-Krzysztof
+vim +/dest_frames +991 sound/core/rawmidi.c
+
+   984	
+   985	static int receive_with_tstamp_framing(struct snd_rawmidi_substream *substream,
+   986				const unsigned char *buffer, int src_count, const struct timespec64 *tstamp)
+   987	{
+   988		struct snd_rawmidi_runtime *runtime = substream->runtime;
+   989		struct snd_rawmidi_framing_tstamp *dest_ptr;
+   990		struct snd_rawmidi_framing_tstamp frame = { .tv_sec = tstamp->tv_sec, .tv_nsec = tstamp->tv_nsec };
+ > 991		int dest_frames = 0;
+   992		int orig_count = src_count;
+   993		int frame_size = sizeof(struct snd_rawmidi_framing_tstamp);
+   994	
+   995		BUILD_BUG_ON(frame_size != 0x20);
+   996		if (snd_BUG_ON((runtime->hw_ptr & 0x1f) != 0))
+   997			return -EINVAL;
+   998	
+   999		while (src_count > 0) {
+  1000			if ((int)(runtime->buffer_size - runtime->avail) < frame_size) {
+  1001				runtime->xruns += src_count;
+  1002				break;
+  1003			}
+  1004			if (src_count >= SNDRV_RAWMIDI_FRAMING_DATA_LENGTH)
+  1005				frame.length = SNDRV_RAWMIDI_FRAMING_DATA_LENGTH;
+  1006			else {
+  1007				frame.length = src_count;
+  1008				memset(frame.data, 0, SNDRV_RAWMIDI_FRAMING_DATA_LENGTH);
+  1009			}
+  1010			memcpy(frame.data, buffer, frame.length);
+  1011			buffer += frame.length;
+  1012			src_count -= frame.length;
+  1013			dest_ptr = (struct snd_rawmidi_framing_tstamp *) (runtime->buffer + runtime->hw_ptr);
+  1014			*dest_ptr = frame;
+  1015			runtime->avail += frame_size;
+  1016			runtime->hw_ptr += frame_size;
+  1017			runtime->hw_ptr %= runtime->buffer_size;
+  1018			dest_frames++;
+  1019		}
+  1020		return orig_count - src_count;
+  1021	}
+  1022	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

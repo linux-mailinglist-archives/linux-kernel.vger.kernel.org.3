@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441BE4E5F49
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 138794E5F50
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348504AbiCXH02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S1348515AbiCXH1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiCXH01 (ORCPT
+        with ESMTP id S234921AbiCXH06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:26:27 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D187A986F5;
-        Thu, 24 Mar 2022 00:24:55 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id t1so4550528edc.3;
-        Thu, 24 Mar 2022 00:24:55 -0700 (PDT)
+        Thu, 24 Mar 2022 03:26:58 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3382986F4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:25:26 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id qa43so7283438ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:25:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=UusJwPTvawwqw4B13062bzCvDRIa/PfzdX6rZ/h/ofQ=;
-        b=BB/x7LbNUE8nHL64NA5MPWmuQTYC0FQt/zHFjd1px6EmZeQg9A8d9798/hSq21tR0h
-         nkXZuo1YJcGC0N7KHdSZ0rH5Av6kBrOL1EDEeQVTBIhOisgr80e83O7jx3wqJDg8j0SU
-         KautTEldNJTsFB/BzKiQW4Yx+WF3FypcXGApTqWh7JT6FCrRDin6k3ufHwa6U/Jxobsw
-         8RzBVUqbGcJeqXQOLh+SjRMQupj9Y2AwEmNisvQwStZ+kzCQ+PVYIPp9uAiRPX00QQ0Z
-         sY4Wbpf4tpCUBsaYF/sGB/xEBhBKE+1RmwTVwQeprQB0V69KvA4FXpc9Zg1kP3pQs7RT
-         oNWw==
+        bh=ouqixWTewNUXByCDOAWSWsgjahXSnZ2j4PO6S0OVSBc=;
+        b=cFugzm9zbfF2ycvf5BO0ObBa7AQEVHzluHn+MgplO8ys+X0ReVhk3ZOkfYRfFH4yH6
+         YKk3XkBP3jZQIDY3wu5m9xl/XGIwMgjbeSsZznDQ6FDQMdc8mDvHDKrUx6RRvDYu0UYX
+         Xjn7GgPG/xKghClCJY6FIUAoq6WusLrrVglke8puMsBnaudwanX8vFEkvBChz2Wjj4+X
+         7Zjj795X79I8/brB6mIYiRu84KYvW0+2I1R8cSMFUiETvoPkRAt1RTMxxuUObnP0rAIk
+         QnoChzCHgwQzx9b4eMHbkDxvQ4/00+NTAsuCzdI4N75XyCfbJdAh7cTQgns+0lOgS2JX
+         GTIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=UusJwPTvawwqw4B13062bzCvDRIa/PfzdX6rZ/h/ofQ=;
-        b=XZz1owOAClExae8lG4LiOq6XL/7DDvbVrNpjWfpmDzsscSpa3yHq7B865922qraodw
-         ySxFRHmcUnblkkZFv71ESBglvAXFRbAtKPK5YT+obHbFbN7TkQkJobLZrFAEGxo2yPuJ
-         DkTJw6wUDf1bX2i4xhjtKsx9BEF9DqKaSUY+OMOqtFyWBVjhlLqVfW+sHk1RfXhg7Bb1
-         Q6No3NzGvQe50vycJiQvVvtn7m7moQqbjNEma2GVSXF0ysUY9Qql8ddKq/CToPUk+PDn
-         4CkQ1hQH2+Kc9qPxtYgoLB+OBBn5aRGD+2r8NFa6EqAaOaaGqbMei+gCO2L7kWvP3rho
-         sxAg==
-X-Gm-Message-State: AOAM531LN2mvmsPKtJV7AAOOlbJaT0rx0F3s78fohIpWU+AyhfadvlJ1
-        dm1Uzv3XprheCQKVt8vkN/o=
-X-Google-Smtp-Source: ABdhPJwtG3kiR6DehJZXY4TNL89bSww86qN8khEh2LznICWoqF4hkhvsQAkiKwIR1EqiDKaIKIxIsA==
-X-Received: by 2002:a50:cfc4:0:b0:413:b19d:d9c0 with SMTP id i4-20020a50cfc4000000b00413b19dd9c0mr5077856edk.384.1648106694346;
-        Thu, 24 Mar 2022 00:24:54 -0700 (PDT)
+        bh=ouqixWTewNUXByCDOAWSWsgjahXSnZ2j4PO6S0OVSBc=;
+        b=pd4WwQyJg5bpFNIS02fzytHfKdeULueiSsUOXFD8nR1i345kc6EnJb3RGMPLfRZZ8D
+         G3oiq6MwROPVhNynOHFnsBYBLXj0Kzhgr+ZT7dSSSvNLXKPx56IlmbtMLUZBkPXbbiY+
+         1gKCjcXNUoEqhf3PL1LQRKa9xwqb6mhlW7eyY+xbc8Tfpjzx7mXaOYbPOpPCrGOG/1Db
+         IB1PiBnj7xiDSwYoyxY5MMkytIyI1pQOC9qfNsC7EavZ4Od8XuZz60FCZRr4VX6u22C2
+         8NLEApO9Bkvyt4d3+MvFHmhoKvnX2rbosMCqLkXqTvDHMdttqYOY8k2MAmrzuDp1fWuz
+         SSbg==
+X-Gm-Message-State: AOAM533TLMTyccAxXCqf8lfkBcqWGrVgqLOSmdo192xQ7sO+ARUS0M5d
+        P2NWvvTFMMK3BCPtYzij8vA=
+X-Google-Smtp-Source: ABdhPJymiAUK06LZKJny7ktqc+xqUskTkOYeuSIDIZ3/CIN69MSr8832ZMuYZAJUQCPnZU2QfZwgDg==
+X-Received: by 2002:a17:907:1dc8:b0:6df:f5fc:f4f9 with SMTP id og8-20020a1709071dc800b006dff5fcf4f9mr4169480ejc.739.1648106725293;
+        Thu, 24 Mar 2022 00:25:25 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id ep16-20020a1709069b5000b006daa26de2fbsm759578ejc.153.2022.03.24.00.24.53
+        by smtp.googlemail.com with ESMTPSA id l9-20020a1709060cc900b006ce04bb8668sm765382ejh.184.2022.03.24.00.25.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:24:54 -0700 (PDT)
+        Thu, 24 Mar 2022 00:25:24 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Andy Gross <agross@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] soc: qcom: pdr: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:24:35 +0100
-Message-Id: <20220324072435.63070-1-jakobkoschel@gmail.com>
+Subject: [PATCH] soc: ti: replace usage of found with dedicated list iterator variable
+Date:   Thu, 24 Mar 2022 08:25:03 +0100
+Message-Id: <20220324072503.63244-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -86,43 +86,111 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/soc/qcom/pdr_interface.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/soc/ti/knav_dma.c        | 26 ++++++++++++--------------
+ drivers/soc/ti/knav_qmss_queue.c | 16 +++++++---------
+ 2 files changed, 19 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/soc/qcom/pdr_interface.c b/drivers/soc/qcom/pdr_interface.c
-index fc580a3c4336..0034af927b48 100644
---- a/drivers/soc/qcom/pdr_interface.c
-+++ b/drivers/soc/qcom/pdr_interface.c
-@@ -304,24 +304,23 @@ static void pdr_indication_cb(struct qmi_handle *qmi,
- 					      notifier_hdl);
- 	const struct servreg_state_updated_ind *ind_msg = data;
- 	struct pdr_list_node *ind;
--	struct pdr_service *pds;
+diff --git a/drivers/soc/ti/knav_dma.c b/drivers/soc/ti/knav_dma.c
+index 700d8eecd8c4..7e126a73e56e 100644
+--- a/drivers/soc/ti/knav_dma.c
++++ b/drivers/soc/ti/knav_dma.c
+@@ -415,9 +415,8 @@ static int of_channel_match_helper(struct device_node *np, const char *name,
+ void *knav_dma_open_channel(struct device *dev, const char *name,
+ 					struct knav_dma_cfg *config)
+ {
+-	struct knav_dma_chan *chan;
+-	struct knav_dma_device *dma;
 -	bool found = false;
-+	struct pdr_service *pds = NULL, *iter;
++	struct knav_dma_device *dma = NULL, *iter1;
++	struct knav_dma_chan *chan = NULL, *iter2;
+ 	int chan_num = -1;
+ 	const char *instance;
  
- 	if (!ind_msg || !ind_msg->service_path[0] ||
- 	    strlen(ind_msg->service_path) > SERVREG_NAME_LENGTH)
- 		return;
- 
- 	mutex_lock(&pdr->list_lock);
--	list_for_each_entry(pds, &pdr->lookups, node) {
--		if (strcmp(pds->service_path, ind_msg->service_path))
-+	list_for_each_entry(iter, &pdr->lookups, node) {
-+		if (strcmp(iter->service_path, ind_msg->service_path))
- 			continue;
- 
--		found = true;
-+		pds = iter;
- 		break;
+@@ -444,33 +443,32 @@ void *knav_dma_open_channel(struct device *dev, const char *name,
  	}
- 	mutex_unlock(&pdr->list_lock);
  
--	if (!found)
-+	if (!pds)
- 		return;
+ 	/* Look for correct dma instance */
+-	list_for_each_entry(dma, &kdev->list, list) {
+-		if (!strcmp(dma->name, instance)) {
+-			found = true;
++	list_for_each_entry(iter1, &kdev->list, list) {
++		if (!strcmp(iter1->name, instance)) {
++			dma = iter1;
+ 			break;
+ 		}
+ 	}
+-	if (!found) {
++	if (!dma) {
+ 		dev_err(kdev->dev, "No DMA instance with name %s\n", instance);
+ 		return (void *)-EINVAL;
+ 	}
  
- 	pr_info("PDR: Indication received from %s, state: 0x%x, trans-id: %d\n",
+ 	/* Look for correct dma channel from dma instance */
+-	found = false;
+-	list_for_each_entry(chan, &dma->chan_list, list) {
++	list_for_each_entry(iter2, &dma->chan_list, list) {
+ 		if (config->direction == DMA_MEM_TO_DEV) {
+-			if (chan->channel == chan_num) {
+-				found = true;
++			if (iter2->channel == chan_num) {
++				chan = iter2;
+ 				break;
+ 			}
+ 		} else {
+-			if (chan->flow == chan_num) {
+-				found = true;
++			if (iter2->flow == chan_num) {
++				chan = iter2;
+ 				break;
+ 			}
+ 		}
+ 	}
+-	if (!found) {
++	if (!chan) {
+ 		dev_err(kdev->dev, "channel %d is not in DMA %s\n",
+ 				chan_num, instance);
+ 		return (void *)-EINVAL;
+diff --git a/drivers/soc/ti/knav_qmss_queue.c b/drivers/soc/ti/knav_qmss_queue.c
+index 2ac3856b8d42..4dbaa8c3636c 100644
+--- a/drivers/soc/ti/knav_qmss_queue.c
++++ b/drivers/soc/ti/knav_qmss_queue.c
+@@ -758,10 +758,9 @@ void *knav_pool_create(const char *name,
+ 					int num_desc, int region_id)
+ {
+ 	struct knav_region *reg_itr, *region = NULL;
+-	struct knav_pool *pool, *pi;
++	struct knav_pool *pool, *pi = NULL, *iter;
+ 	struct list_head *node;
+ 	unsigned last_offset;
+-	bool slot_found;
+ 	int ret;
+ 
+ 	if (!kdev)
+@@ -816,18 +815,17 @@ void *knav_pool_create(const char *name,
+ 	 * the request
+ 	 */
+ 	last_offset = 0;
+-	slot_found = false;
+ 	node = &region->pools;
+-	list_for_each_entry(pi, &region->pools, region_inst) {
+-		if ((pi->region_offset - last_offset) >= num_desc) {
+-			slot_found = true;
++	list_for_each_entry(iter, &region->pools, region_inst) {
++		if ((iter->region_offset - last_offset) >= num_desc) {
++			pi = iter;
+ 			break;
+ 		}
+-		last_offset = pi->region_offset + pi->num_desc;
++		last_offset = iter->region_offset + iter->num_desc;
+ 	}
+-	node = &pi->region_inst;
+ 
+-	if (slot_found) {
++	if (pi) {
++		node = &pi->region_inst;
+ 		pool->region = region;
+ 		pool->num_desc = num_desc;
+ 		pool->region_offset = last_offset;
 
 base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 

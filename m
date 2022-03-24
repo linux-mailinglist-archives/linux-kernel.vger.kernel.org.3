@@ -2,141 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCCD4E68DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B384E68E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352747AbiCXSvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S1352760AbiCXSzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbiCXSvG (ORCPT
+        with ESMTP id S1347682AbiCXSzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:51:06 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E479814B7;
-        Thu, 24 Mar 2022 11:49:34 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id qa43so10968903ejc.12;
-        Thu, 24 Mar 2022 11:49:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aTjAKQGCfPlJln9zd/tK8o/KaPUGxIgYbJ689zU84Xk=;
-        b=l9dUaEWi1Ud+Lyu6tDVSjlrZ6qvX06MHgBWYVHDRdAteNU4CsSVNe+oGVgoYfrt9gn
-         T9gdWGUxxRxyjaUfssVfGO2LxqoWF4yj5qXPKnC/atgRl3MI7YTQ5F1Jd3nxfBKDadrH
-         oMa8D6nLxaFZjqpWnP7kApiddccJdrCRvDirB27Ln9r6xEYchv/cIsli39nQhY52nErQ
-         pWYCZmcDqIASoRCO6lEWegn1ECVW8tiuz7WaTemRiR/rOxkCPzkdS65YsqiSxxl7tp8G
-         rDPM6B95sTsw07Xtwv9bOmiiLACxoGwDIa22x1tXvRkFUIyBSkcBF8Ok12bouNTIDTCk
-         fsyw==
-X-Gm-Message-State: AOAM5324+Ux8ulOGFg8Au3NlguZILvlkXNXqg89IEDERI6y4HCQpziLL
-        CTvhJL8I2rla07TTbetmDrY=
-X-Google-Smtp-Source: ABdhPJx0yh4i61OuUX1h2uflP+3ycICGo/1ZDlu+iOzHHl7m9S9G/8D1Sb3SQLu3dYc1Ps79Pnn4Mg==
-X-Received: by 2002:a17:907:d0d:b0:6df:e215:313d with SMTP id gn13-20020a1709070d0d00b006dfe215313dmr7206776ejc.309.1648147772500;
-        Thu, 24 Mar 2022 11:49:32 -0700 (PDT)
-Received: from [192.168.0.158] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id k16-20020a17090646d000b006e093439cdfsm467351ejs.89.2022.03.24.11.49.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 11:49:31 -0700 (PDT)
-Message-ID: <7d87aee4-1aa8-4e3a-4f67-9ae3981f261e@kernel.org>
-Date:   Thu, 24 Mar 2022 19:49:30 +0100
+        Thu, 24 Mar 2022 14:55:05 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135B924F17;
+        Thu, 24 Mar 2022 11:53:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 471AF1F745;
+        Thu, 24 Mar 2022 18:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648148011;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mxmc7ediERSNp/9oSucpGCHIBIwx+Z1tUQd5pDNQoeU=;
+        b=SMSoMF/bJ+WqVhBx2VnpeAnW0h2DTDGFa9k9yn4j+F4XRJKrDOc+P2fd/xeQt+brez3zWc
+        JY/CjJl/fgfGO/ApgJdVrZMSWY168n+17fPnUEYnZyoSeUxlMIgpiywo6Lp8GnaOWaZdN0
+        dA4ZPr2vF/Un2Kj4efMQCJtlKq7f+d0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648148011;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mxmc7ediERSNp/9oSucpGCHIBIwx+Z1tUQd5pDNQoeU=;
+        b=eMzOJ5+VRV5jfX49BQ5f1H4FKDb83yFqWdTeugv9hJpSYxyxtBQRx5YUXrRnWcS58rzWld
+        cgeOet6JGELJgVAw==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 3106CA3B82;
+        Thu, 24 Mar 2022 18:53:31 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 36686DA7F3; Thu, 24 Mar 2022 19:49:36 +0100 (CET)
+Date:   Thu, 24 Mar 2022 19:49:36 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] btrfs: Remove unused variable in
+ btrfs_{start,write}_dirty_block_groups()
+Message-ID: <20220324184936.GL2237@suse.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Nathan Chancellor <nathan@kernel.org>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        stable@vger.kernel.org
+References: <20220324153644.4079376-1-nathan@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] staging: vchiq_arm: Use bcm2711 compatible string
- for bcm2711-based RPi
-Content-Language: en-US
-To:     Adrien Thierry <athierry@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gaston Gonzalez <gascoar@gmail.com>,
-        Ojaswin Mujoo <ojaswin98@gmail.com>,
-        linux-staging@lists.linux.dev
-References: <20220324172647.167617-1-athierry@redhat.com>
- <20220324172647.167617-3-athierry@redhat.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220324172647.167617-3-athierry@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324153644.4079376-1-nathan@kernel.org>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2022 18:26, Adrien Thierry wrote:
-> Use bcm2711 compatible string in vchiq driver and device tree for
-> bcm2711-based Raspberry Pi (Raspberry Pi 4). This is consistent with
-> what the downstream device tree uses, and allows running the vchiq
-> driver on the upstream kernel with the downstream device tree.
+On Thu, Mar 24, 2022 at 08:36:45AM -0700, Nathan Chancellor wrote:
+> Clang's version of -Wunused-but-set-variable recently gained support for
+> unary operations, which reveals two unused variables:
 > 
-> Signed-off-by: Adrien Thierry <athierry@redhat.com>
-> ---
->  arch/arm/boot/dts/bcm2711-rpi.dtsi                           | 1 +
-
-DTS is always separate, independent of device drivers. If you mix them,
-it's usually a sign of ABI breakage or compatibility issues, so don't
-mix them.
-
->  .../staging/vc04_services/interface/vchiq_arm/vchiq_arm.c    | 5 +++++
->  2 files changed, 6 insertions(+)
+>   fs/btrfs/block-group.c:2949:6: error: variable 'num_started' set but not used [-Werror,-Wunused-but-set-variable]
+>           int num_started = 0;
+>               ^
+>   fs/btrfs/block-group.c:3116:6: error: variable 'num_started' set but not used [-Werror,-Wunused-but-set-variable]
+>           int num_started = 0;
+>               ^
+>   2 errors generated.
 > 
-> diff --git a/arch/arm/boot/dts/bcm2711-rpi.dtsi b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-> index ca266c5d9f9b..c868d1dcaba7 100644
-> --- a/arch/arm/boot/dts/bcm2711-rpi.dtsi
-> +++ b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-> @@ -70,5 +70,6 @@ blconfig: nvram@0 {
->  };
->  
->  &vchiq {
-> +	compatible = "brcm,bcm2711-vchiq";
+> These variables appear to be unused from their introduction, so just
+> remove them to silence the warnings.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: c9dc4c657850 ("Btrfs: two stage dirty block group writeout")
+> Fixes: 1bbc621ef284 ("Btrfs: allow block group cache writeout outside critical section in commit")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1614
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-This looks weird. Is BCM2711 on Raspberry Pi 4 different than other
-BCM2711? Commit msg also does not explain this.
+Added to misc-next, thanks.
 
+> I am requesting a stable backport because this is visible with
+> allmodconfig, which enables CONFIG_WERROR, breaking the build.
 
->  	interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
->  };
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index 3a2e4582db8e..136c664132f4 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -81,6 +81,10 @@ static struct vchiq_drvdata bcm2836_drvdata = {
->  	.cache_line_size = 64,
->  };
->  
-> +static struct vchiq_drvdata bcm2711_drvdata = {
-> +	.cache_line_size = 64,
-> +};
-> +
->  struct vchiq_arm_state {
->  	/* Keepalive-related data */
->  	struct task_struct *ka_thread;
-> @@ -1748,6 +1752,7 @@ void vchiq_platform_conn_state_changed(struct vchiq_state *state,
->  static const struct of_device_id vchiq_of_match[] = {
->  	{ .compatible = "brcm,bcm2835-vchiq", .data = &bcm2835_drvdata },
->  	{ .compatible = "brcm,bcm2836-vchiq", .data = &bcm2836_drvdata },
-> +	{ .compatible = "brcm,bcm2711-vchiq", .data = &bcm2711_drvdata },
+Yeah warning fixes are accepted in stable trees and we care about
+warning-free builds. My gcc 11.1 does not produce any warning with
+-Wunused-but-set-variable and we have extended the set of warnings in
+the directory fs/btrfs/ that also includes that one.
 
-Just re-use bcm2836_drvdata instead of duplicating it.
+> To quote Linus:
+> 
+> "EVERYBODY should have CONFIG_WERROR=y on at least x86-64 and other
+> serious architectures, unless you have some completely random
+> experimental (and broken) compiler."
 
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, vchiq_of_match);
-
-
-Best regards,
-Krzysztof
+I have CONFIG_WERROR disabled, for own development it's quite annoying
+when build fails outside of the code I care about, while I apply visual
+checks of warning-free builds.

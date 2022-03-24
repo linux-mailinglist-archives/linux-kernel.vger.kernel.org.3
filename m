@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CF34E60B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613B74E60B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349042AbiCXIzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
+        id S1349054AbiCXI5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237920AbiCXIzA (ORCPT
+        with ESMTP id S237920AbiCXI5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:55:00 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A8C6C972
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:53:27 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id u3so5596693wrg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dYsVFhCrdFzymQrW11VWatLy1IpiH7e9KgAVON6gbDw=;
-        b=063VACslaS0QkYsACr4TW0iC0t4e+PNhn6Yyx34AqDoKkwGvGnJXLNe1ohXcWWBDIP
-         OZFnAj2CheZsZEo+kcqH0g8dN1FePndHLe0XBS05hHNB85Ggg9mzU0N56RRRNVv8za2X
-         kMu8qsWIokhYI/vf+Gwjg33CGkY52MYVEpai+fqi07rH3aRzuMmsnPi1X+oZrMZ0NBtW
-         cjlj1r0KGSYfJADu/I2DiSD/U9P7CAqmiyc3H+0UxcyySfHo94GL74kLUvwCrlFpCfYe
-         hND/L+W3MSIGUVVRB5TbGTm2n44KZRRnaIVHhQkRskNIkN2kw0UTaQ4sFPJOHeCd515z
-         l7AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dYsVFhCrdFzymQrW11VWatLy1IpiH7e9KgAVON6gbDw=;
-        b=7sRrH6cYGc7xmA1qJs5YOYM6Tw5/rEBIcN471ucAxmyZcyVW2eATxH5Ta2RbTfajzk
-         lXw+RejaG8HE1qOJD7tzel3MAeRdiav1+mabysy0m9k9Z42yUtXSSBB++2Cjhh5ct+T3
-         Xag2EnERBSiMBPnSGEF8TAAbKdHT6VfvWnQVIubMCNLbnsupPRvrdK4eFrgTRjjfWFx1
-         pTQVs8XpJYck64kA6f82su6heb6HpgmtAOqFQhKO83zifdGM9qie+ULClkgYbXGzwfdd
-         rraiSbecanQyvCPEyPPxW2ljposCxthqJMWZ54VcDHdFLHyOmFiUIMpZAu65F6xtK4jp
-         ufLw==
-X-Gm-Message-State: AOAM530l4aZ/FGcnOMVFeJiU8nUtMaEo+pYcZBOGUUypFqcxJfweRLsM
-        QzW/y8j7avR6sYCsuLtAnfJnqg==
-X-Google-Smtp-Source: ABdhPJzKEKzpOf8nBNRu121896sO6b4YUiYtj9LnK0GChJVTz9htGZgmRX9zziTMIJWkkxjX7MvV5Q==
-X-Received: by 2002:a5d:6c69:0:b0:205:8472:e251 with SMTP id r9-20020a5d6c69000000b002058472e251mr3662954wrz.227.1648112005283;
-        Thu, 24 Mar 2022 01:53:25 -0700 (PDT)
-Received: from bojack.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id c7-20020adffb07000000b002058a53f359sm2036154wrr.58.2022.03.24.01.53.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 01:53:24 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     robert.foss@linaro.org, andrzej.hajda@intel.com,
-        Nicolas Belin <nbelin@baylibre.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org, jonas@kwiboo.se,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Laurent.pinchart@ideasonboard.com, jernej.skrabec@gmail.com
-Subject: Re: [PATCH 0/3] drm: bridge: it66121: Add audio support
-Date:   Thu, 24 Mar 2022 09:53:22 +0100
-Message-Id: <164811198461.361879.12488552321734676872.b4-ty@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220316135733.173950-1-nbelin@baylibre.com>
-References: <20220316135733.173950-1-nbelin@baylibre.com>
+        Thu, 24 Mar 2022 04:57:21 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE4D9D074;
+        Thu, 24 Mar 2022 01:55:49 -0700 (PDT)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id BB8B5E491E9;
+        Thu, 24 Mar 2022 09:55:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1648112146;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S+woDWFZcPgqPY0chl6IjyANJVAaopdil00T5QCbF7E=;
+        b=InO0yzyZU3QaeY3J8ths/cL9YOwpfDv9uIL616GmIlQRjsvz8ItHOgN2zT40/Y8FWsRSgP
+        Kppy0V5Ft8HOz3rqo4NleRyvSAa1mMIR41RFSwE19LDUNek97TyGDRKmKZeaTpkkovO202
+        1p5wkp/jtBk8rE5/zx6jClPW0qttBkQ=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Halil Pasic <pasic@linux.ibm.com>, Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Toke =?ISO-8859-1?Q?H=F8iland=2DJ=F8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break ath9k-based AP
+Date:   Thu, 24 Mar 2022 09:55:44 +0100
+Message-ID: <5806580.lOV4Wx5bFT@natalenko.name>
+In-Reply-To: <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
+References: <1812355.tdWV9SEqCh@natalenko.name> <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello.
 
-On Wed, 16 Mar 2022 14:57:30 +0100, Nicolas Belin wrote:
-> This patch series adds the audio support on the it66121 HDMI bridge.
-> 
-> Patch 1 updates the ITE 66121 HDMI bridge bindings in order to support
-> audio.
-> 
-> Patch 2 sets the register page length or window length of the ITE 66121
-> HDMI bridge to 0x100 according to the documentation.
-> 
-> [...]
+On st=C5=99eda 23. b=C5=99ezna 2022 18:27:21 CET Linus Torvalds wrote:
+> On Wed, Mar 23, 2022 at 12:19 AM Oleksandr Natalenko
+> <oleksandr@natalenko.name> wrote:
+> > These commits appeared in v5.17 and v5.16.15, and both kernels are
+> > broken for me. I'm pretty confident these commits make the difference
+> > since I've built both v5.17 and v5.16.15 without them, and it fixed
+> > the issue.
+>=20
+> Can you double-check (or just explicitly confirm if you already did
+> that test) that you need to revert *both* of those commits, and it's
+> the later "rework" fix that triggers it?
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+I can confirm that if I revert aa6f8dcbab47 only, but leave ddbd89deb7d3 in=
+ place, AP works. So, it seems that the latest "rework" triggers the issue =
+for me.
 
-[1/3] dt-bindings: display: bridge: it66121: Add audio support
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=cc2f2df48a17980e815fa09a43b81861f7ebad85
-[2/3] drm: bridge: it66121: Fix the register page length
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=003a1bd6a2a55c16cb2451153533dbedb12bebec
-[3/3] drm: bridge: it66121: Add audio support
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=e0fd83dbe92426e4f09b01111d260d2a7dc72fdb
+Thanks.
 
--- 
-Neil
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
+

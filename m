@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC98D4E632B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389444E6324
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350146AbiCXMVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
+        id S1349237AbiCXMVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350104AbiCXMUv (ORCPT
+        with ESMTP id S1350105AbiCXMUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Mar 2022 08:20:51 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E765A381AF;
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BD54991A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:19:11 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id b130so2261658pga.13
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PSVqUGYCB8wbqp0p5VdHcycQRYblcQrceG961CbBc2A=;
+        b=xv7UNuh3P/pCkD30Cn5aiI+Z9Q2ToAUx3HRW9MfmVNyc2NW9JgXCpNq5u8S36zmwV6
+         UJE5E55gp9RnS8Z5ITwrEq197emD7plU9KYuvosCZHibQGUSyT2OQ6PCjjINl5bwPIzk
+         Ft49iIISlZ26bjImBo2TmZVBgqPQvnZl0HNjDHaogXWcE4lw4KafLyWbfit4ON8Atwco
+         qoh1ALKl1zhdm83knImVa6l3NuN6sx5OpVf3yWm/89XOFFwb2JwLuFS6SGNlUYpKYhYF
+         TrJZF9xQtlONhf/CcyIlX/XCr4cErV81Oc3HzdqYM1RIiZC21XQaS+z39VMGpbotdnmD
+         E8cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PSVqUGYCB8wbqp0p5VdHcycQRYblcQrceG961CbBc2A=;
+        b=sbIB9U5XyO2wHh25Of0XnwDdpVtVBH/1v5V4IEL9SvUOSWCsDhF3jiil136QrXaCbE
+         GOGomDQ4v7Y90STQopIZ+th8dmsRlOsSwGMiMhEsxaBSEi1xrI5scjZSEftUkDOEPU2I
+         7B5h4tSRpKyyIU1W1jaDXoHyzIZL+gXZ6dtWV3SfHW4pzzKeBL39/rothk/hiVOniXfX
+         Fyh+qzm1o39ZAaldWswkv6bV7KMBQezhmuGySRuq05/iRNqm/gUkLDJ8LbQpAs5CSBmL
+         zwQK3BhhzL2lA0OLe87OulTifpnhCvdGLTOIC/Zj/95xNcQLq5rmyumchXVhRmNnJmv6
+         xTnQ==
+X-Gm-Message-State: AOAM530JH2i6JsOiWwUMibJYvcdLdUsYgcnye8ZCUHLz2LhYfAgWd6W6
+        q4bZXG+f//Dmt/WFrboOH+x4
+X-Google-Smtp-Source: ABdhPJyuUdBVtlvKFXLN8XVaL5WdsI//XFeIzHjYqFdNJyAuyLqrhdizNaHwxYMYlooEtPQQZLslCQ==
+X-Received: by 2002:a63:753:0:b0:385:fe06:eb86 with SMTP id 80-20020a630753000000b00385fe06eb86mr3790923pgh.132.1648124351146;
+        Thu, 24 Mar 2022 05:19:11 -0700 (PDT)
+Received: from thinkpad ([220.158.158.107])
+        by smtp.gmail.com with ESMTPSA id p12-20020a63ab0c000000b00381f7577a5csm2428626pgf.17.2022.03.24.05.19.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 24 Mar 2022 05:19:10 -0700 (PDT)
-X-UUID: 6258cb461a494012984001847761f29c-20220324
-X-UUID: 6258cb461a494012984001847761f29c-20220324
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1483301356; Thu, 24 Mar 2022 20:19:06 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 24 Mar 2022 20:19:05 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 24 Mar
- 2022 20:19:04 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 24 Mar 2022 20:19:04 +0800
-Message-ID: <77fe195475c67b092a0bd8b6b6515ee64938ea4f.camel@mediatek.com>
-Subject: Re: [PATCH 3/3] devfreq: mediatek: add platform data to support
- mt8186
-From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fan.chen@mediatek.com>,
-        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
-        <Allen-yy.Lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-Date:   Thu, 24 Mar 2022 20:19:04 +0800
-In-Reply-To: <7f99b453-5510-d7f2-3d9b-b3ac3415fa62@canonical.com>
-References: <20220307122513.11822-1-jia-wei.chang@mediatek.com>
-         <20220307122513.11822-4-jia-wei.chang@mediatek.com>
-         <7f99b453-5510-d7f2-3d9b-b3ac3415fa62@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Date:   Thu, 24 Mar 2022 17:49:05 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/12] PCI: dwc: Discard IP-core version checking on
+ unrolled iATU detection
+Message-ID: <20220324121905.GH2854@thinkpad>
+References: <20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324012524.16784-9-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324012524.16784-9-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,18 +81,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-07 at 22:52 +0100, Krzysztof Kozlowski wrote:
-> On 07/03/2022 13:25, Tim Chang wrote:
-> > add specific platform data to support mt8186.
-> > 
+On Thu, Mar 24, 2022 at 04:25:19AM +0300, Serge Semin wrote:
+> It's pretty much pointless. Even though unrolled version of the internal
+> ATU has been indeed available since DWC PCIe v4.80a IP-core, there is no
+> guarantee it was enabled during the IP-core configuration (Synopsys
+> suggests to contact the Solvnet support for guidance of how to do that for
+> the newer IP-cores). So the only reliable way to find out the unrolled
+> iATU feature availability is indeed to check the iATU viewport register
+> content. In accordance with the reference manual [1] if the register
+> doesn't exist (unrolled iATU is enabled) it's content is fixed with
+> 0xff-s, otherwise it will contain some zeros. So we can freely drop the
+> IP-core version checking in this matter then and use the
+> dw_pcie_iatu_unroll_enabled() method only to detect whether iATU/eDMA
+> space is unrolled.
 > 
-> You just added this driver in patch 2. No need to split such actions
-> because this is initial submission, so it can support two devices.
-> Squash with previous.
-
-Sure, I will squash this commit with previous one.
-
+> [1] DesignWare Cores, PCI Express Controller, Register Desciptions,
+> v.4.90a, December 2016, p.855
 > 
-> Best regards,
-> Krzysztof
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
+
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 3bd1cfd12148..e3d2c11e6998 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -600,15 +600,15 @@ static void dw_pcie_link_set_max_speed(struct dw_pcie *pci, u32 link_gen)
+>  
+>  }
+>  
+> -static u8 dw_pcie_iatu_unroll_enabled(struct dw_pcie *pci)
+> +static bool dw_pcie_iatu_unroll_enabled(struct dw_pcie *pci)
+>  {
+>  	u32 val;
+>  
+>  	val = dw_pcie_readl_dbi(pci, PCIE_ATU_VIEWPORT);
+>  	if (val == 0xffffffff)
+> -		return 1;
+> +		return true;
+>  
+> -	return 0;
+> +	return false;
+>  }
+>  
+>  static void dw_pcie_iatu_detect_regions_unroll(struct dw_pcie *pci)
+> @@ -680,9 +680,8 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
+>  	struct device *dev = pci->dev;
+>  	struct platform_device *pdev = to_platform_device(dev);
+>  
+> -	if (pci->version >= 0x480A || (!pci->version &&
+> -				       dw_pcie_iatu_unroll_enabled(pci))) {
+> -		pci->iatu_unroll_enabled = true;
+> +	pci->iatu_unroll_enabled = dw_pcie_iatu_unroll_enabled(pci);
+> +	if (pci->iatu_unroll_enabled) {
+>  		if (!pci->atu_base) {
+>  			struct resource *res =
+>  				platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
+> -- 
+> 2.35.1
+> 

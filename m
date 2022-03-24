@@ -2,60 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DF34E66F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD914E66FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351678AbiCXQ03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S1351687AbiCXQ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347656AbiCXQ01 (ORCPT
+        with ESMTP id S1351709AbiCXQ14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:26:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CBF6C974;
-        Thu, 24 Mar 2022 09:24:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D9C66187F;
-        Thu, 24 Mar 2022 16:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D80C340EC;
-        Thu, 24 Mar 2022 16:24:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648139094;
-        bh=z0SKDKFfLXgUlaEweN3w20sozNkj9PoC13UdkCxFdwo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R5CiytF7K28XTl+QYrKnUKx8xPaqAdeKr/pOrLvZqjXaSfUjSlummA2mDlVLb/1kU
-         ss9g+9wYHpT9GUXhMkgQ93Y9oGdUXn117X5AXWlBgzDECVEV0MbezFnVT/4OvQ+LrZ
-         vuYGAvlJrvxvVlABtIeQn09HUWGeR4H4xeIRoLnWul2hpCUUva5FvYxzeF76LTJwSP
-         MdS+LK1B3kGU/L39H8wHcfTTEO82bYO3syshdHL/HiJr/ouOVtSxFvUUJ5D8wf+fp1
-         /RCe4jxepKwgrD8nQpkodRwmxOzzRqyLnGAonmL2VRB+Dkj2hkCfhEJ5uOImEH30Kl
-         WP97O+iKdXFKw==
-Date:   Thu, 24 Mar 2022 21:54:47 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [REPOST PATCH v4 06/13] drm/msm/disp/dpu1: Add DSC support in
- hw_ctl
-Message-ID: <YjybTx1b978ecVcF@matsya>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-7-vkoul@kernel.org>
- <20220217222024.mf4cmgtpvvg3bftm@SoMainline.org>
+        Thu, 24 Mar 2022 12:27:56 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E3352E2F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:26:24 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so5616134pjf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=THlTesE5pnJpMjgygbUl5LvnGMnA21m3pPkRkHRIyLs=;
+        b=IB+BHZIabwf6cwu99RiBIESNeVrQdigxyZj7FnvzFEelnrKivuY1eQozI/teZjHXxk
+         3gzsLmXLIJWkwY03X+CFKCSiu/xWTQ2ns7bZO0itYin1uBnKBCuF2G4MFYo8l8+G1L/e
+         eGB8PIFaOuS46/fBGonjRor5Ecggcqp17Z2Bdb+rsbYsG+SJFu030EVYC3nUR6TkxlzL
+         i73ou/EAldHzqgJ6i9zEP+Qc4aeWndHXF/zR5ojE2NS4iRLpCE88Jvsz9a0BAYDTRNwb
+         7nR6KRy2iqwEYi9dajwepE6TqDtM8vdLexOzu5v2MK4FnqAbdWV5zLtbShIIJKUy1m/W
+         cQgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=THlTesE5pnJpMjgygbUl5LvnGMnA21m3pPkRkHRIyLs=;
+        b=LFNBkcJgdBG1dssvHLtY3uYfRAYl5uKNW1uGyyMFRH2rn+S3+qh/xS8hgcWYnO1V3J
+         3tud32pQgjal2IcSuyll/X9SwfrSKyms02jyEbKbLoizEkxt8Kt4fyQjVd0x163I1mHB
+         YcXOy9b6nj0nNOEzG4liBCCYzG6Acw29mmiaNo7S5DrqJmF+dVOvRix6JUNdBevvBCh+
+         TWx+75mXahpSY2x32YWz/uq+d79Lx+5Ih7MDinHKdU2+Y1FapKcx7kQ/PfceQUNyZ1OD
+         UJWCFz0q4QKSbZaJxr6ljbb9ja9A2XHXVbo20mT9EV7sm726eLmg5gdjjIlKJDnziXco
+         FtEA==
+X-Gm-Message-State: AOAM532TSbNmRAZHDRgb+XsIEVOL4sX8ZUo8KDZWMG5Oh2pviCf1TN92
+        tUsjRjsYSOQcvez3ffhvD4Uu
+X-Google-Smtp-Source: ABdhPJyMtDwnipX5epw4YkS4utzdjUYPA/D8b775r+Ka5whUHULFYlklYKHj6Vj7ltUs18/KLnuSsg==
+X-Received: by 2002:a17:902:f643:b0:14d:7b8f:14b3 with SMTP id m3-20020a170902f64300b0014d7b8f14b3mr6815131plg.19.1648139183818;
+        Thu, 24 Mar 2022 09:26:23 -0700 (PDT)
+Received: from thinkpad ([27.111.75.5])
+        by smtp.gmail.com with ESMTPSA id i2-20020a17090ac40200b001bd0e552d27sm3356986pjt.11.2022.03.24.09.26.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 09:26:23 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 21:56:18 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/25] dmaengine: dw-edma: Fix missing src/dst address of
+ the interleaved xfers
+Message-ID: <20220324162618.GP2854@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220217222024.mf4cmgtpvvg3bftm@SoMainline.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220324014836.19149-7-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,59 +83,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17-02-22, 23:20, Marijn Suijten wrote:
-> On 2022-02-10 16:04:16, Vinod Koul wrote:
-> > Later gens of hardware have DSC bits moved to hw_ctl, so configure these
-> > bits so that DSC would work there as well
-> > 
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 11 ++++++++++-
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h |  2 ++
-> >  2 files changed, 12 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > index 02da9ecf71f1..49659165cea8 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > @@ -25,6 +25,8 @@
-> >  #define   CTL_MERGE_3D_ACTIVE           0x0E4
-> >  #define   CTL_INTF_ACTIVE               0x0F4
-> >  #define   CTL_MERGE_3D_FLUSH            0x100
-> > +#define   CTL_DSC_ACTIVE                0x0E8
-> > +#define   CTL_DSC_FLUSH                0x104
-> >  #define   CTL_INTF_FLUSH                0x110
-> >  #define   CTL_INTF_MASTER               0x134
-> >  #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
-> > @@ -34,6 +36,7 @@
-> >  
-> >  #define DPU_REG_RESET_TIMEOUT_US        2000
-> >  #define  MERGE_3D_IDX   23
-> > +#define  DSC_IDX        22
+On Thu, Mar 24, 2022 at 04:48:17AM +0300, Serge Semin wrote:
+> The interleaved DMA transfers support was added in the commit 85e7518f42c8
+> ("dmaengine: dw-edma: Add device_prep_interleave_dma() support"). It
+> seems like the support was broken from the very beginning. Depending on
+> the selected channel either source or destination address are left
+> uninitialized which was obviously wrong. I don't really know how come the
+> original modification was working for the commit author. Anyway let's fix
+> it by initializing the destination address of the eDMA burst descriptors
+> for the DEV_TO_MEM interleaved operations and by initializing the source
+> address of the eDMA burst descriptors for the MEM_TO_DEV interleaved
+> operations.
 > 
-> This define does not seem used in any of these patches.  Is that
-> intended?
+> Fixes: 85e7518f42c8 ("dmaengine: dw-edma: Add device_prep_interleave_dma() support")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-This should used in the below case you pointed, updated now
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-> >  static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> > index 806c171e5df2..9847c9c46d6f 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> > @@ -40,6 +40,7 @@ struct dpu_hw_stage_cfg {
-> >   * @merge_3d:              3d merge block used
-> >   * @intf_mode_sel:         Interface mode, cmd / vid
-> >   * @stream_sel:            Stream selection for multi-stream interfaces
-> > + * @dsc:                   DSC BIT masks
+Thanks,
+Mani
+
+> ---
+>  drivers/dma/dw-edma/dw-edma-core.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Bit masks of what?  Enabled DSCs?  A more verbose doc-comment is desired
-> here, matching the rest of the fields :) - something like "DSC block(s)
-> used" similar to merge_3d?  Or copy the docs from `dsc_mask`, which is
-> the value that is written into this field.
-
-Updated
-
--- 
-~Vinod
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index 519d4b3c9fa0..2010d7f8191f 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -456,6 +456,8 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
+>  				 * and destination addresses are increased
+>  				 * by the same portion (data length)
+>  				 */
+> +			} else if (xfer->type == EDMA_XFER_INTERLEAVED) {
+> +				burst->dar = dst_addr;
+>  			}
+>  		} else {
+>  			burst->dar = dst_addr;
+> @@ -471,6 +473,8 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
+>  				 * and destination addresses are increased
+>  				 * by the same portion (data length)
+>  				 */
+> +			}  else if (xfer->type == EDMA_XFER_INTERLEAVED) {
+> +				burst->sar = src_addr;
+>  			}
+>  		}
+>  
+> -- 
+> 2.35.1
+> 

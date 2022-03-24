@@ -2,199 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10D34E6633
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41F54E663B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351334AbiCXPmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S1351363AbiCXPoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242256AbiCXPmI (ORCPT
+        with ESMTP id S1351343AbiCXPoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:42:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 232FF9D0F9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:40:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648136435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QByLZV/xQidMU0lNxdw0ftNq4EpASOAjZu6w5lmb7uM=;
-        b=AzE9e0vpFf1XqEzdsmhKuvBr2r+X208zSEDMnQgHl4Jgitnu87JL6HGNLVBoElbfHJf1gg
-        gjEHiNZgznIHb+8zmgmFYWBsnRgFajOK6t0aOcmrjt/Tez0zpj7bVLy/k8bXzc9etTxj10
-        JnZ6/ptgDBncRTygqKNe5ghRP8X1Mos=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-343-w3chLnp6PVCqOzMcvnjA0A-1; Thu, 24 Mar 2022 11:40:28 -0400
-X-MC-Unique: w3chLnp6PVCqOzMcvnjA0A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64B7638008A1;
-        Thu, 24 Mar 2022 15:40:27 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 29BE640D296C;
-        Thu, 24 Mar 2022 15:40:24 +0000 (UTC)
-Message-ID: <d7a536300644697a2fae8278c5f37dedeba9e02d.camel@redhat.com>
-Subject: Re: [RFCv2 PATCH 10/12] KVM: SVM: Introduce helper functions to
- (de)activate AVIC and x2AVIC
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com,
-        kernel test robot <lkp@intel.com>
-Date:   Thu, 24 Mar 2022 17:40:24 +0200
-In-Reply-To: <20220308163926.563994-11-suravee.suthikulpanit@amd.com>
-References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
-         <20220308163926.563994-11-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Mar 2022 11:44:11 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48238A1447
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:42:39 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id p15so9967067ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :references:in-reply-to:content-transfer-encoding;
+        bh=kZCJsDwuqFmPdGnVK+OvD0sFJ1NQAHf3rkQ/uko1Ypo=;
+        b=TLgs+/f1fDU/asNFSeTTbfgjarvjKtaY7VH4v6LErCV5kTHXrowQmCYq+4ZwYBZ1k5
+         L7DtOzlE30HO8bY0DShfaoOTFaobumChKR+E5mRqWzSrjrJQsNG4bJLwRQqSwxejBLfA
+         R8B1oNJ32Xs4hsmgRL7crsc7hH5IIa+gMaTKeUYSZq++tzRI3Dxk5PxyHA9bE7bNBWuQ
+         AdtT4WVvDon+nZLvjLoviTiD/LznDmH+itMDO73OCUUCXwZTN3ndBHAztu2kArqId9cj
+         YSMP98LdTwuy1WuvppskGjKRUl9O9vDXstuP3g0sW8QSUmHz3pQKJhoLe1fcOzQdAVnP
+         vpYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
+         :cc:subject:references:in-reply-to:content-transfer-encoding;
+        bh=kZCJsDwuqFmPdGnVK+OvD0sFJ1NQAHf3rkQ/uko1Ypo=;
+        b=nLOFVQVZnDP7Da+z386NE9SzRBO6fRBLdff3zFAZU8WiSnqlQQip2mSFySxvDOH1bC
+         2YaNv3Kzi/YkAm5cboKANcrtcdRs9i0eGKkOeF5FFUbFvujPDGRMkJdlQB8FLkkHdZzA
+         Nh38K09Jvs6ZyZ6H8d1Ya8ewzS3/L6xcjAZNvbE1B6ai/eq8PfcgS9rebfvGFkHSQdsy
+         5G8tKt0U6LrMQnu0H6VlSfXmmrHX5iqvOCt+pNqz95pZBsEYnT3+7QBa25TQOz3mcMXs
+         ZgDJIqAtP1+rR918Uz5RUd80dYSOPHLLwJjhSNjn8ouRs/mMut6Md3MsrWhrjwbNNCHU
+         WUvw==
+X-Gm-Message-State: AOAM532a2twpO7tuj7MFxyMYZi+ZEaVNt+eYvy3e/il+Vofb8u77ojPH
+        Xk2HDJ2brrGOy94PEjvK8SM=
+X-Google-Smtp-Source: ABdhPJzdC5QIuMVd73kQ1G9mQxF9Fvzi6kbhcWRNuv85/Ql+uKrgaDzkXDmNWSYf205OJ0D5ZZ1zEw==
+X-Received: by 2002:a17:906:58cb:b0:6df:f696:9b32 with SMTP id e11-20020a17090658cb00b006dff6969b32mr6597382ejs.384.1648136557640;
+        Thu, 24 Mar 2022 08:42:37 -0700 (PDT)
+Received: from [109.186.89.7] (109-186-89-7.bb.netvision.net.il. [109.186.89.7])
+        by smtp.gmail.com with ESMTPSA id u4-20020aa7db84000000b004136c2c357csm1549665edt.70.2022.03.24.08.42.35
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Thu, 24 Mar 2022 08:42:37 -0700 (PDT)
+Message-ID: <623C9137.3000803@gmail.com>
+Date:   Thu, 24 Mar 2022 17:41:43 +0200
+From:   Eli Billauer <eli.billauer@gmail.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
 MIME-Version: 1.0
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH] char: xillybus: replace usage of found with dedicated
+ list iterator variable
+References: <20220324070939.59297-1-jakobkoschel@gmail.com>
+In-Reply-To: <20220324070939.59297-1-jakobkoschel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
-> Refactor the current logic for (de)activate AVIC into helper functions,
-> and also add logic for (de)activate x2AVIC. The helper function are used
-> when initializing AVIC and switching from AVIC to x2AVIC mode
-> (handled by svm_refresh_spicv_exec_ctrl()).
-> 
-> When an AVIC-enabled guest switches from APIC to x2APIC mode during
-> runtime, the SVM driver needs to perform the following steps:
-> 
-> 1. Set the x2APIC mode bit for AVIC in VMCB along with the maximum
-> APIC ID support for each mode accodingly.
-> 
-> 2. Disable x2APIC MSRs interception in order to allow the hardware
-> to virtualize x2APIC MSRs accesses.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Thanks.
+
+Acked-by: Eli Billauer <eli.billauer@gmail.com>
+
+On 24/03/22 09:09, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+>
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
+>
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
+>
+> Link:https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+> Signed-off-by: Jakob Koschel<jakobkoschel@gmail.com>
 > ---
->  arch/x86/include/asm/svm.h |  1 +
->  arch/x86/kvm/svm/avic.c    | 48 ++++++++++++++++++++++++++++++++++----
->  2 files changed, 44 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index 681a348a9365..f5337022104d 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -248,6 +248,7 @@ enum avic_ipi_failure_cause {
->  	AVIC_IPI_FAILURE_INVALID_BACKING_PAGE,
->  };
->  
-> +#define AVIC_PHYSICAL_MAX_INDEX_MASK	GENMASK_ULL(9, 0)
->  
->  /*
->   * For AVIC, the max index allowed for physical APIC ID
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 53559b8dfa52..b8d6bf6b6ed5 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -66,6 +66,45 @@ struct amd_svm_iommu_ir {
->  	void *data;		/* Storing pointer to struct amd_ir_data */
->  };
->  
-> +static inline void avic_set_x2apic_msr_interception(struct vcpu_svm *svm, bool disable)
-> +{
-> +	int i;
-> +
-> +	for (i = 0x800; i <= 0x8ff; i++)
-> +		set_msr_interception(&svm->vcpu, svm->msrpm, i,
-> +				     !disable, !disable);
-> +}
-> +
-> +static void avic_activate_vmcb(struct vcpu_svm *svm)
-> +{
-> +	struct vmcb *vmcb = svm->vmcb01.ptr;
-> +
-> +	vmcb->control.int_ctl &= ~(AVIC_ENABLE_MASK | X2APIC_MODE_MASK);
-> +	vmcb->control.avic_physical_id &= ~AVIC_PHYSICAL_MAX_INDEX_MASK;
-
-This looks a bit better, I don't 100% like this but let it be.
-
-Honestly I will eventualy add code to calculate and update this maximum
-dynamically to avoid wasting microcode going over the whole table,
-or worse having nested avic code doing so.
-
-
-> +
-> +	vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
-> +	if (apic_x2apic_mode(svm->vcpu.arch.apic)) {
-> +		vmcb->control.int_ctl |= X2APIC_MODE_MASK;
-> +		vmcb->control.avic_physical_id |= X2AVIC_MAX_PHYSICAL_ID;
-> +		/* Disabling MSR intercept for x2APIC registers */
-> +		avic_set_x2apic_msr_interception(svm, false);
-> +	} else {
-> +		vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
-> +		/* Enabling MSR intercept for x2APIC registers */
-> +		avic_set_x2apic_msr_interception(svm, true);
-> +	}
-> +}
-
-> +
-> +static void avic_deactivate_vmcb(struct vcpu_svm *svm)
-> +{
-> +	struct vmcb *vmcb = svm->vmcb01.ptr;
-> +
-> +	vmcb->control.int_ctl &= ~(AVIC_ENABLE_MASK | X2APIC_MODE_MASK);
-> +	vmcb->control.avic_physical_id &= ~AVIC_PHYSICAL_MAX_INDEX_MASK;
-> +
-> +	/* Enabling MSR intercept for x2APIC registers */
-> +	avic_set_x2apic_msr_interception(svm, true);
-> +}
-Makes sense.
-
-
->  
->  /* Note:
->   * This function is called from IOMMU driver to notify
-> @@ -183,13 +222,12 @@ void avic_init_vmcb(struct vcpu_svm *svm)
->  	vmcb->control.avic_backing_page = bpa & AVIC_HPA_MASK;
->  	vmcb->control.avic_logical_id = lpa & AVIC_HPA_MASK;
->  	vmcb->control.avic_physical_id = ppa & AVIC_HPA_MASK;
-> -	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
->  	vmcb->control.avic_vapic_bar = APIC_DEFAULT_PHYS_BASE & VMCB_AVIC_APIC_BAR_MASK;
->  
->  	if (kvm_apicv_activated(svm->vcpu.kvm))
-> -		vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
-> +		avic_activate_vmcb(svm);
->  	else
-> -		vmcb->control.int_ctl &= ~AVIC_ENABLE_MASK;
-> +		avic_deactivate_vmcb(svm);
->  }
->  
->  static u64 *avic_get_physical_id_entry(struct kvm_vcpu *vcpu,
-> @@ -703,9 +741,9 @@ void svm_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
->  		 * accordingly before re-activating.
->  		 */
->  		avic_post_state_restore(vcpu);
-> -		vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
-> +		avic_activate_vmcb(svm);
->  	} else {
-> -		vmcb->control.int_ctl &= ~AVIC_ENABLE_MASK;
-> +		avic_deactivate_vmcb(svm);
->  	}
->  	vmcb_mark_dirty(vmcb, VMCB_AVIC);
->  
-
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
+>   drivers/char/xillybus/xillybus_class.c | 26 ++++++++++++--------------
+>   1 file changed, 12 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/char/xillybus/xillybus_class.c b/drivers/char/xillybus/xillybus_class.c
+> index 5046486011c8..0f238648dcfe 100644
+> --- a/drivers/char/xillybus/xillybus_class.c
+> +++ b/drivers/char/xillybus/xillybus_class.c
+> @@ -174,18 +174,17 @@ void xillybus_cleanup_chrdev(void *private_data,
+>   			     struct device *dev)
+>   {
+>   	int minor;
+> -	struct xilly_unit *unit;
+> -	bool found = false;
+> +	struct xilly_unit *unit = NULL, *iter;
+>
+>   	mutex_lock(&unit_mutex);
+>
+> -	list_for_each_entry(unit,&unit_list, list_entry)
+> -		if (unit->private_data == private_data) {
+> -			found = true;
+> +	list_for_each_entry(iter,&unit_list, list_entry)
+> +		if (iter->private_data == private_data) {
+> +			unit = iter;
+>   			break;
+>   		}
+>
+> -	if (!found) {
+> +	if (!unit) {
+>   		dev_err(dev, "Weird bug: Failed to find unit\n");
+>   		mutex_unlock(&unit_mutex);
+>   		return;
+> @@ -216,22 +215,21 @@ int xillybus_find_inode(struct inode *inode,
+>   {
+>   	int minor = iminor(inode);
+>   	int major = imajor(inode);
+> -	struct xilly_unit *unit;
+> -	bool found = false;
+> +	struct xilly_unit *unit = NULL, *iter;
+>
+>   	mutex_lock(&unit_mutex);
+>
+> -	list_for_each_entry(unit,&unit_list, list_entry)
+> -		if (unit->major == major&&
+> -		    minor>= unit->lowest_minor&&
+> -		    minor<  (unit->lowest_minor + unit->num_nodes)) {
+> -			found = true;
+> +	list_for_each_entry(iter,&unit_list, list_entry)
+> +		if (iter->major == major&&
+> +		    minor>= iter->lowest_minor&&
+> +		    minor<  (iter->lowest_minor + iter->num_nodes)) {
+> +			unit = iter;
+>   			break;
+>   		}
+>
+>   	mutex_unlock(&unit_mutex);
+>
+> -	if (!found)
+> +	if (!unit)
+>   		return -ENODEV;
+>
+>   	*private_data = unit->private_data;
+>
+> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+>    
 

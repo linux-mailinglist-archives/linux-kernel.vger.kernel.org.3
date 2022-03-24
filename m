@@ -2,183 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D654E5FED
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D58464E5FFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348818AbiCXIJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S1348574AbiCXILt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348816AbiCXIJL (ORCPT
+        with ESMTP id S239836AbiCXILq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:09:11 -0400
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F899AE63
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:07:39 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 08:07:30 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1648109256;
-        bh=Aof6LmdJY1v75LpCNBvCRmk7t2mbNOHkydhSgp6jXZs=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=dR5r52xBsQx1fRlPZHdnKj31hFLvyhRwJpIPl/wcfRZVqBgpripdgWf36XcmU1gXL
-         IXi7qEsqCQOsYRKdgONgX4sXuLo5p9HwSWFO89IwlNrv+mS4pEzTtIpAYMWFidwjUA
-         V0A2Nk1DMe7ERWs9TT0r95VK5T4Pvsn5xeJpFwwphx8/Y+f9V+tQNSQ3uJhSBN0Anq
-         9Ki3ARkDez9KX1Fm5SEyYqypQLR2eypsaia0M8897To2d2laxx00dlwzFtDhDA7r16
-         cAWG6aGIOQsf3HeZwCy3u6wPsRykn7TSk8/UnBZSdEIEvjZjheBmQNV2LvfUPDrsgv
-         4nKwbGAn+lkTg==
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
-From:   David Cohen <dacohen@pm.me>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Cohen <dacohen@pm.me>
-Reply-To: David Cohen <dacohen@pm.me>
-Subject: [PATCH v3 2/2] PM: enable dynamic debug support within pm_pr_dbg()
-Message-ID: <20220324080653.454333-3-dacohen@pm.me>
-In-Reply-To: <20220324080653.454333-1-dacohen@pm.me>
-References: <20220324080653.454333-1-dacohen@pm.me>
+        Thu, 24 Mar 2022 04:11:46 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A9B55BDB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:10:15 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id x16-20020a6bfe10000000b006409f03e39eso2655954ioh.7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:10:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=t+jbwm74WRfF5Vzd3FgH+0bxmCGjbH06Iytwh85LND0=;
+        b=Y8B9SSHB+/BQWXDiCx9M8Mst6WOzfCUShwgeEaXFmB12154r1d2SPuyKhYUPTgX/Sd
+         GSU1CFkhhrDyl/IRurolNWlNkRkyL3NzczLnZUvMwca+62VwB7aFtcV64SSw78IHBys5
+         qyhDHHfT+i5w3av6YlHBhi85ci1eqI1VgQ5fGwKVHVqV3xpXFnmEpn5idMwvZ2lLKvim
+         sNGHLtiDsNIxXPRy+6t+1e7vfoGX1v6CeTEad1ruwd8alBJeAtIaTV3XX+beP1sy3sNe
+         iEgq0Ez95dIxVIoZMqdCMRXRN2PThjofO6DRSD4ZHZyH4WatjyCki/YzigwOoE7VsNVc
+         dShg==
+X-Gm-Message-State: AOAM532W4qigriKQnXan7ZM1iPJczY5a55s2UNj81jpK5dvYMYLfr6x6
+        TTWyXGxoQuO3sDxunfdYX+N3HaphNog1DhBoODV5VlfTYVN1
+X-Google-Smtp-Source: ABdhPJyewI41637tag9ZsdIiPUiLSCN1R04hKibsAvdjzY7pq62g5U8s4PEmwEA7W0dpXwluG2x0yCZviUScU4ZAte2D/dJNwK6b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1d03:b0:2c7:e33f:2557 with SMTP id
+ i3-20020a056e021d0300b002c7e33f2557mr2273855ila.15.1648109414852; Thu, 24 Mar
+ 2022 01:10:14 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 01:10:14 -0700
+In-Reply-To: <000000000000acf1e405daebb7c7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000392f6005daf26000@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in __tcp_transmit_skb
+From:   syzbot <syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, kafai@fb.com,
+        kgraul@linux.ibm.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently pm_pr_dbg() is used to filter kernel pm debug messages based
-on pm_debug_messages_on flag. The problem is if we enable/disable this
-flag it will affect all pm_pr_dbg() calls at once, so we can't
-individually control them.
+syzbot has bisected this issue to:
 
-This patch changes pm_pr_dbg() implementation as such:
- - If pm_debug_messages_on is enabled, print the message.
- - If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is
-   enabled, only print the messages explicitly enabled on
-   /sys/kernel/debug/dynamic_debug/control.
- - If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is
-   disabled, don't print the message.
+commit f2f2325ec79970807012dfc9e716cdbb02d9b574
+Author: Eric Dumazet <edumazet@google.com>
+Date:   Fri Feb 4 20:15:46 2022 +0000
 
-Signed-off-by: David Cohen <dacohen@pm.me>
----
- include/linux/suspend.h | 44 ++++++++++++++++++++++++++++++++++++-----
- kernel/power/main.c     | 29 ---------------------------
- 2 files changed, 39 insertions(+), 34 deletions(-)
+    ip6mr: ip6mr_sk_done() can exit early in common cases
 
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 300273ff40cc..70f2921e2e70 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -542,22 +542,56 @@ static inline void unlock_system_sleep(void) {}
- #ifdef CONFIG_PM_SLEEP_DEBUG
- extern bool pm_print_times_enabled;
- extern bool pm_debug_messages_on;
--extern __printf(2, 3) void __pm_pr_dbg(bool defer, const char *fmt, ...);
-+static inline int pm_dyn_debug_messages_on(void)
-+{
-+#ifdef CONFIG_DYNAMIC_DEBUG
-+=09return 1;
-+#else
-+=09return 0;
-+#endif
-+}
-+#ifndef pr_fmt
-+#define pr_fmt(fmt) "PM: " fmt
-+#endif
-+#define __pm_pr_dbg(fmt, ...)=09=09=09=09=09\
-+=09do {=09=09=09=09=09=09=09\
-+=09=09if (pm_debug_messages_on)=09=09=09\
-+=09=09=09printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);=09\
-+=09=09else if (pm_dyn_debug_messages_on())=09=09\
-+=09=09=09pr_debug(fmt, ##__VA_ARGS__);=09\
-+=09} while (0)
-+#define __pm_deferred_pr_dbg(fmt, ...)=09=09=09=09\
-+=09do {=09=09=09=09=09=09=09\
-+=09=09if (pm_debug_messages_on)=09=09=09\
-+=09=09=09printk_deferred(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);=09\
-+=09} while (0)
- #else
- #define pm_print_times_enabled=09(false)
- #define pm_debug_messages_on=09(false)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16299d7b700000
+start commit:   36c2e31ad25b net: geneve: add missing netlink policy and s..
+git tree:       net-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15299d7b700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11299d7b700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4a15e2288cf165c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=090d23ddbd5cd185c2e0
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171eadbd700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12cacda3700000
 
- #include <linux/printk.h>
+Reported-by: syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com
+Fixes: f2f2325ec799 ("ip6mr: ip6mr_sk_done() can exit early in common cases")
 
--#define __pm_pr_dbg(defer, fmt, ...) \
--=09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
-+#define __pm_pr_dbg(fmt, ...) \
-+=09no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-+#define __pm_deferred_pr_dbg(fmt, ...) \
-+=09no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
- #endif
-
-+/**
-+ * pm_pr_dbg - print pm sleep debug messages
-+ *
-+ * If pm_debug_messages_on is enabled, print message.
-+ * If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is enabled=
-,
-+ *=09print message only from instances explicitly enabled on dynamic debug=
-'s
-+ *=09control.
-+ * If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is disable=
-d,
-+ *=09don't print message.
-+ */
- #define pm_pr_dbg(fmt, ...) \
--=09__pm_pr_dbg(false, fmt, ##__VA_ARGS__)
-+=09__pm_pr_dbg(fmt, ##__VA_ARGS__)
-
- #define pm_deferred_pr_dbg(fmt, ...) \
--=09__pm_pr_dbg(true, fmt, ##__VA_ARGS__)
-+=09__pm_deferred_pr_dbg(fmt, ##__VA_ARGS__)
-
- #ifdef CONFIG_PM_AUTOSLEEP
-
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 7e646079fbeb..5242bf2ee469 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -545,35 +545,6 @@ static int __init pm_debug_messages_setup(char *str)
- }
- __setup("pm_debug_messages", pm_debug_messages_setup);
-
--/**
-- * __pm_pr_dbg - Print a suspend debug message to the kernel log.
-- * @defer: Whether or not to use printk_deferred() to print the message.
-- * @fmt: Message format.
-- *
-- * The message will be emitted if enabled through the pm_debug_messages
-- * sysfs attribute.
-- */
--void __pm_pr_dbg(bool defer, const char *fmt, ...)
--{
--=09struct va_format vaf;
--=09va_list args;
--
--=09if (!pm_debug_messages_on)
--=09=09return;
--
--=09va_start(args, fmt);
--
--=09vaf.fmt =3D fmt;
--=09vaf.va =3D &args;
--
--=09if (defer)
--=09=09printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
--=09else
--=09=09printk(KERN_DEBUG "PM: %pV", &vaf);
--
--=09va_end(args);
--}
--
- #else /* !CONFIG_PM_SLEEP_DEBUG */
- static inline void pm_print_times_init(void) {}
- #endif /* CONFIG_PM_SLEEP_DEBUG */
---
-2.35.1
-
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

@@ -2,214 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173984E62C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A884E62DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349910AbiCXL5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S1349924AbiCXMAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346172AbiCXL5P (ORCPT
+        with ESMTP id S241040AbiCXMAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:57:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9603249CBC;
-        Thu, 24 Mar 2022 04:55:43 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 11:55:39 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648122940;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NFzSfnJQPfWQ61qS3sd7xjhFHPK4LiPf59g3D1N0RyE=;
-        b=oWbKqTznDCC6qPoLjcbRt92+W1NUmxPE0HCjoR4Eat4zgmnBdKeYHloROOnpJsb6sFFlyb
-        87Q1WxAtqNaDtEg9E8L+g6iFaErh+2WMqSrmQlMxS+4BHJWtjh11fst2lzYgG6aJomVg21
-        khJqh0myTTdqlHnASOXPqabmWb3mvLHElIydceWhTYDDQPnNYsIouBV+uf2XEggNO/QeCZ
-        JXamixt1JT6YW7xNMniIVqazCZ11IJdl7+dZJBukQ2kRsJxNPKCh3UGwdHwDs1+pZDAK7P
-        sn8+Ah4FbAJczU1/b30BZ4Kw1p3mp2wkrJDMrILcrHkwAg7DEFwkjZ3xtbBHsg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648122940;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NFzSfnJQPfWQ61qS3sd7xjhFHPK4LiPf59g3D1N0RyE=;
-        b=fji+B/LfOkl0RWiaWzjwAIjejXLfzR69s/TxiSu418Ends/ULRe1k80+6+UGXBttoZlOe+
-        mw3oXZnxnsKB95CA==
-From:   "tip-bot2 for Joerg Roedel" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/sev: Unroll string mmio with
- CC_ATTR_GUEST_UNROLL_STRING_IO
-Cc:     Joerg Roedel <jroedel@suse.de>, Borislav Petkov <bp@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220321093351.23976-1-joro@8bytes.org>
-References: <20220321093351.23976-1-joro@8bytes.org>
+        Thu, 24 Mar 2022 08:00:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AABD4339D;
+        Thu, 24 Mar 2022 04:59:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 205C011FB;
+        Thu, 24 Mar 2022 04:59:18 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA0863F73D;
+        Thu, 24 Mar 2022 04:59:14 -0700 (PDT)
+Message-ID: <f984116a-c748-ada0-c073-6e62f486b4f5@arm.com>
+Date:   Thu, 24 Mar 2022 11:59:10 +0000
 MIME-Version: 1.0
-Message-ID: <164812293945.389.13575455229967480197.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] Drivers: hv: vmbus: Propagate VMbus coherence to
+ each VMbus device
+Content-Language: en-GB
+To:     Michael Kelley <mikelley@microsoft.com>, sthemmin@microsoft.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, rafael@kernel.org, lenb@kernel.org,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, hch@lst.de, m.szyprowski@samsung.com,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+References: <1648067472-13000-1-git-send-email-mikelley@microsoft.com>
+ <1648067472-13000-2-git-send-email-mikelley@microsoft.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <1648067472-13000-2-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On 2022-03-23 20:31, Michael Kelley wrote:
+> VMbus synthetic devices are not represented in the ACPI DSDT -- only
+> the top level VMbus device is represented. As a result, on ARM64
+> coherence information in the _CCA method is not specified for
+> synthetic devices, so they default to not hardware coherent.
+> Drivers for some of these synthetic devices have been recently
+> updated to use the standard DMA APIs, and they are incurring extra
+> overhead of unneeded software coherence management.
+> 
+> Fix this by propagating coherence information from the VMbus node
+> in ACPI to the individual synthetic devices. There's no effect on
+> x86/x64 where devices are always hardware coherent.
+> 
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>   drivers/hv/hv_common.c         | 11 +++++++++++
+>   drivers/hv/vmbus_drv.c         | 23 +++++++++++++++++++++++
+>   include/asm-generic/mshyperv.h |  1 +
+>   3 files changed, 35 insertions(+)
+> 
+> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> index 181d16b..820e814 100644
+> --- a/drivers/hv/hv_common.c
+> +++ b/drivers/hv/hv_common.c
+> @@ -20,6 +20,7 @@
+>   #include <linux/panic_notifier.h>
+>   #include <linux/ptrace.h>
+>   #include <linux/slab.h>
+> +#include <linux/dma-map-ops.h>
+>   #include <asm/hyperv-tlfs.h>
+>   #include <asm/mshyperv.h>
+>   
+> @@ -216,6 +217,16 @@ bool hv_query_ext_cap(u64 cap_query)
+>   }
+>   EXPORT_SYMBOL_GPL(hv_query_ext_cap);
+>   
+> +void hv_setup_dma_ops(struct device *dev, bool coherent)
+> +{
+> +	/*
+> +	 * Hyper-V does not offer a vIOMMU in the guest
+> +	 * VM, so pass 0/NULL for the IOMMU settings
+> +	 */
+> +	arch_setup_dma_ops(dev, 0, 0, NULL, coherent);
+> +}
+> +EXPORT_SYMBOL_GPL(hv_setup_dma_ops);
+> +
+>   bool hv_is_hibernation_supported(void)
+>   {
+>   	return !hv_root_partition && acpi_sleep_state_supported(ACPI_STATE_S4);
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index 12a2b37..2d2c54c 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -905,6 +905,14 @@ static int vmbus_probe(struct device *child_device)
+>   	struct hv_device *dev = device_to_hv_device(child_device);
+>   	const struct hv_vmbus_device_id *dev_id;
+>   
+> +	/*
+> +	 * On ARM64, propagate the DMA coherence setting from the top level
+> +	 * VMbus ACPI device to the child VMbus device being added here.
+> +	 * On x86/x64 coherence is assumed and these calls have no effect.
+> +	 */
+> +	hv_setup_dma_ops(child_device,
+> +		device_get_dma_attr(&hv_acpi_dev->dev) == DEV_DMA_COHERENT);
 
-Commit-ID:     fb96320e194066cd9a177989920e8854fa6c1537
-Gitweb:        https://git.kernel.org/tip/fb96320e194066cd9a177989920e8854fa6c1537
-Author:        Joerg Roedel <jroedel@suse.de>
-AuthorDate:    Mon, 21 Mar 2022 10:33:51 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 24 Mar 2022 12:24:04 +01:00
+Would you mind hooking up the hv_bus.dma_configure method to do this? 
+Feel free to fold hv_setup_dma_ops entirely into that if you're not 
+likely to need to call it from anywhere else.
 
-x86/sev: Unroll string mmio with CC_ATTR_GUEST_UNROLL_STRING_IO
+> +
+>   	dev_id = hv_vmbus_get_id(drv, dev);
+>   	if (drv->probe) {
+>   		ret = drv->probe(dev, dev_id);
+> @@ -2428,6 +2436,21 @@ static int vmbus_acpi_add(struct acpi_device *device)
+>   
+>   	hv_acpi_dev = device;
+>   
+> +	/*
+> +	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
+> +	 * method on the top level VMbus device in the DSDT. But devices
+> +	 * are hardware coherent in all current Hyper-V use cases, so fix
+> +	 * up the ACPI device to behave as if _CCA is present and indicates
+> +	 * hardware coherence.
+> +	 */
+> +	ACPI_COMPANION_SET(&device->dev, device);
+> +	if (IS_ENABLED(CONFIG_ACPI_CCA_REQUIRED) &&
+> +	    device_get_dma_attr(&device->dev) == DEV_DMA_NOT_SUPPORTED) {
+> +		pr_info("No ACPI _CCA found; assuming coherent device I/O\n");
+> +		device->flags.cca_seen = true;
+> +		device->flags.coherent_dma = true;
+> +	}
 
-The io-specific memcpy/memset functions use string mmio accesses to do
-their work. Under SEV, the hypervisor can't emulate these instructions
-because they read/write directly from/to encrypted memory.
+I'm not the biggest fan of this, especially since I'm not convinced that 
+there are any out-of-support deployments of ARM64 Hyper-V that can't be 
+updated. However I suppose it's not "real" firmware, and one Hyper-V 
+component is at liberty to hack another Hyper-V component's data if it 
+really wants to...
 
-KVM will inject a page fault exception into the guest when it is asked
-to emulate string mmio instructions for an SEV guest:
+If you can hook up .dma_configure, or clarify if it wouldn't work,
 
-  BUG: unable to handle page fault for address: ffffc90000065068
-  #PF: supervisor read access in kernel mode
-  #PF: error_code(0x0000) - not-present page
-  PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
-  Oops: 0000 [#1] PREEMPT SMP NOPTI
-  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
+Acked-by: Robin Murphy <robin.murphy@arm.com>
 
-As string mmio for an SEV guest can not be supported by the
-hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
-enabled kernels.
+Cheers,
+Robin.
 
-This issue appears when kernels are launched in recent libvirt-managed
-SEV virtual machines, because virt-install started to add a tpm-crb
-device to the guest by default and proactively because, raisins:
-
-  https://github.com/virt-manager/virt-manager/commit/eb58c09f488b0633ed1eea012cd311e48864401e
-
-and as that commit says, the default adding of a TPM can be disabled
-with "virt-install ... --tpm none".
-
-The kernel driver for tpm-crb uses memcpy_to/from_io() functions to
-access MMIO memory, resulting in a page-fault injected by KVM and
-crashing the kernel at boot.
-
-  [ bp: Massage and extend commit message. ]
-
-Fixes: d8aa7eea78a1 ('x86/mm: Add Secure Encrypted Virtualization (SEV) support')
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lore.kernel.org/r/20220321093351.23976-1-joro@8bytes.org
----
- arch/x86/lib/iomem.c | 65 +++++++++++++++++++++++++++++++++++++------
- 1 file changed, 57 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
-index df50451..6954193 100644
---- a/arch/x86/lib/iomem.c
-+++ b/arch/x86/lib/iomem.c
-@@ -22,7 +22,7 @@ static __always_inline void rep_movs(void *to, const void *from, size_t n)
- 		     : "memory");
- }
- 
--void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+static void string_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- {
- 	if (unlikely(!n))
- 		return;
-@@ -38,9 +38,8 @@ void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- 	}
- 	rep_movs(to, (const void *)from, n);
- }
--EXPORT_SYMBOL(memcpy_fromio);
- 
--void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- {
- 	if (unlikely(!n))
- 		return;
-@@ -56,14 +55,64 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- 	}
- 	rep_movs((void *)to, (const void *) from, n);
- }
-+
-+static void unrolled_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	const volatile char __iomem *in = from;
-+	char *out = to;
-+	int i;
-+
-+	for (i = 0; i < n; ++i)
-+		out[i] = in[i];
-+}
-+
-+static void unrolled_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	volatile char __iomem *out = to;
-+	const char *in = from;
-+	int i;
-+
-+	for (i = 0; i < n; ++i)
-+		out[i] = in[i];
-+}
-+
-+static void unrolled_memset_io(volatile void __iomem *a, int b, size_t c)
-+{
-+	volatile char __iomem *mem = a;
-+	int i;
-+
-+	for (i = 0; i < c; ++i)
-+		mem[i] = b;
-+}
-+
-+void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
-+		unrolled_memcpy_fromio(to, from, n);
-+	else
-+		string_memcpy_fromio(to, from, n);
-+}
-+EXPORT_SYMBOL(memcpy_fromio);
-+
-+void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
-+		unrolled_memcpy_toio(to, from, n);
-+	else
-+		string_memcpy_toio(to, from, n);
-+}
- EXPORT_SYMBOL(memcpy_toio);
- 
- void memset_io(volatile void __iomem *a, int b, size_t c)
- {
--	/*
--	 * TODO: memset can mangle the IO patterns quite a bit.
--	 * perhaps it would be better to use a dumb one:
--	 */
--	memset((void *)a, b, c);
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO)) {
-+		unrolled_memset_io(a, b, c);
-+	} else {
-+		/*
-+		 * TODO: memset can mangle the IO patterns quite a bit.
-+		 * perhaps it would be better to use a dumb one:
-+		 */
-+		memset((void *)a, b, c);
-+	}
- }
- EXPORT_SYMBOL(memset_io);
+> +
+>   	result = acpi_walk_resources(device->handle, METHOD_NAME__CRS,
+>   					vmbus_walk_resources, NULL);
+>   
+> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+> index c08758b..c05d2ce 100644
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -269,6 +269,7 @@ static inline int cpumask_to_vpset_noself(struct hv_vpset *vpset,
+>   u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size);
+>   void hyperv_cleanup(void);
+>   bool hv_query_ext_cap(u64 cap_query);
+> +void hv_setup_dma_ops(struct device *dev, bool coherent);
+>   void *hv_map_memory(void *addr, unsigned long size);
+>   void hv_unmap_memory(void *addr);
+>   #else /* CONFIG_HYPERV */

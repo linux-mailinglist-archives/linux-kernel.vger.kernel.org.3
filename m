@@ -2,148 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C0E4E686E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314424E6872
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352533AbiCXSOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
+        id S1346569AbiCXSOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352513AbiCXSOG (ORCPT
+        with ESMTP id S1352531AbiCXSOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:14:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6B8CB7142
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648145551;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4NVnAUSl0gdBiXg0XzzRFvlJNA1grykJ2S0JEY11Nbk=;
-        b=R2GaI+CKH6fUI14NsfMFoUOb3qTZf2TZRTuR519B79HPXh+ugN0kCy2HOb78Cay1bHza3m
-        H/QEmhtMzKhJDkzi9y3I650T7GtVd/2RFNkrwRE1Oelv8z58NPkxc8T1yCWNsp3ejJiVsV
-        c3R8qKU1s8jx8UbfkCRrXjw3pY268UI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-351-TtWAE7ZCNQ6-wo9QOj7MMg-1; Thu, 24 Mar 2022 14:12:30 -0400
-X-MC-Unique: TtWAE7ZCNQ6-wo9QOj7MMg-1
-Received: by mail-ed1-f71.google.com with SMTP id b10-20020a50e38a000000b00418cd24fd27so3507889edm.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:30 -0700 (PDT)
+        Thu, 24 Mar 2022 14:14:39 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10089E32
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:13:03 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id t13so3227851pgn.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B9ualNSGObXfxaCa3kXHHyApJTXDIAKHdNNtrcoqJWI=;
+        b=MExshGDIxKjIurGB37rYruuvymM2AkRYuBHIbyagDRS4ILfNBgz/dqnyI/Zw7/0JLH
+         wZNN5AvUoo66OL1cIYxX8fmi9tBe5WoWxqfanEtjTeLdkgLWSTC7xX3kZofmZDu2ua96
+         qqlcrHM0i7sC6MJ9DvDQfJp9gB5x7jqqtv7Ty4ybLZDUVKYRh4Sv/JH9i+SzLgdveqSS
+         aFzL65g/6jhnp/55WnFCQyqq799VHArujGpCYA8SAPa3ORWs8mP5GpKP8wo4xTyB9qNc
+         RFM11wud888ixz7h25LQpeYIAFQ+FuNkOEBxfuMpPcfLMaVNNOIxsz4tAPgi1r8oD0Fz
+         RKyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4NVnAUSl0gdBiXg0XzzRFvlJNA1grykJ2S0JEY11Nbk=;
-        b=bQnDBpAbZXEetztRIxKTLoEjFNC/e5onYnln3fJ8jtDnyqNsLhXWk/Q2bSMUOkU3U4
-         +H15d91JisUciPwqlcb7uigVvU6wEp/6Pu81Ybu3T7fC8XYJp5+B8Zy/PdBglA2bXzYf
-         QpPfgqkFXlMt0bnusOxs8gI8k2KG9k8Xbikt08of0niuJAe06sYxK4L1WipEa02ODBhZ
-         at5VatBXbqiohzlbsu7h74FcBiPvHSZHfyxKs9CnVLbleBfRyLbgpbHa6BKoCxgMt4t1
-         /vLL8S51cuP4m8TB541W5qs2KpWfVhvlbpIz+2+ieYONf7w3fsLIIxpNj7np3HNFnhjn
-         683A==
-X-Gm-Message-State: AOAM530t6OiQLUguFk8bTP4E+jhCLuqJiITlwbcUizTkYU1O3CMpplNq
-        8Qd+1ACJnbyNVRhrrjrztsWlaB0h09ZgTTPyDaLoHAEnmjFiDIx0+fBd7/XERtbd0spdgem1Xpg
-        /TUcwqhj2oOfSQx/rW7B+h6sA
-X-Received: by 2002:a05:6402:1e90:b0:419:4cdc:8b05 with SMTP id f16-20020a0564021e9000b004194cdc8b05mr8152912edf.211.1648145549303;
-        Thu, 24 Mar 2022 11:12:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzl1pOGNmtNKqaqjzB/IEGNfgxI4RN1wwsYQ2aza86ksmyrLbJxeMnAeF1nCnbY+bzdhFqmxg==
-X-Received: by 2002:a05:6402:1e90:b0:419:4cdc:8b05 with SMTP id f16-20020a0564021e9000b004194cdc8b05mr8152887edf.211.1648145549048;
-        Thu, 24 Mar 2022 11:12:29 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id n9-20020a05640205c900b00418d79d4a61sm1825824edx.97.2022.03.24.11.12.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 11:12:28 -0700 (PDT)
-Message-ID: <fa6ea646-6609-af7f-e43c-ecd4cb54e210@redhat.com>
-Date:   Thu, 24 Mar 2022 19:12:25 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B9ualNSGObXfxaCa3kXHHyApJTXDIAKHdNNtrcoqJWI=;
+        b=7U7xp5fA1CL5XI9aZ1RRqnpGcGiB+fQTdZwBAxjRCUK8byZvgRUfNn5TLUlxJcIAPB
+         BAvP/1FkDokRA7p2diEZG2dRETroLGTSI6s/zWZmuJhiCjVORTMfqISxYD7qM88g9d4p
+         NBxywOMi6H77pO19Ufq7lEWASYU4//s2CYOwYuD/JF3szpq0YuUSn7fFdC4S0niVt4/t
+         eGRi05C5uEqypEW5K+deNS1kcgn/Rv5B4fh1d3Uoak4i0Jd0PtOYttmRggUqyu+RM0B1
+         0MPXdX7fcedTXgZkBS4LQdU+uvEksR0JI1k1kHLcIkWP8VQy+MXpyR2ecYi+97YDkYN+
+         FmeQ==
+X-Gm-Message-State: AOAM532fbQiZv26yWymyrqZl/Rae2e8I/15mJH8wTDgMnWKy0T2n7GgB
+        tV/IPo2u8ZIDR5Oqc6piYuX9
+X-Google-Smtp-Source: ABdhPJyF08kfFc5MvihMf3hsgPrkVapyZtyaD61zjIxm3Yzhqocq4XWT/5Us5T8udLRICCL93zyNOw==
+X-Received: by 2002:a05:6a00:b8e:b0:4fa:de88:9fc7 with SMTP id g14-20020a056a000b8e00b004fade889fc7mr6314709pfj.56.1648145582915;
+        Thu, 24 Mar 2022 11:13:02 -0700 (PDT)
+Received: from thinkpad ([27.111.75.218])
+        by smtp.gmail.com with ESMTPSA id d18-20020a056a0010d200b004fa2e13ce80sm4244469pfu.76.2022.03.24.11.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 11:13:02 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 23:42:55 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/25] dmaengine: dw-edma: Stop checking
+ debugfs_create_*() return value
+Message-ID: <20220324181255.GV2854@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-14-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 2/8] KVM: x86: SVM: use vmcb01 in avic_init_vmcb and
- init_vmcb
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220322172449.235575-1-mlevitsk@redhat.com>
- <20220322172449.235575-3-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220322172449.235575-3-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324014836.19149-14-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/22 18:24, Maxim Levitsky wrote:
->   
->   void avic_init_vmcb(struct vcpu_svm *svm)
->   {
-> -	struct vmcb *vmcb = svm->vmcb;
-> +	struct vmcb *vmcb = svm->vmcb01.ptr;
->   	struct kvm_svm *kvm_svm = to_kvm_svm(svm->vcpu.kvm);
->   	phys_addr_t bpa = __sme_set(page_to_phys(svm->avic_backing_page));
->   	phys_addr_t lpa = __sme_set(page_to_phys(kvm_svm->avic_logical_id_table_page));
+On Thu, Mar 24, 2022 at 04:48:24AM +0300, Serge Semin wrote:
+> First of all they never return NULL. So checking their return value for
+> being not NULL just pointless. Secondly the DebugFS subsystem is designed
+> in a way to be used as simple as possible. So if one of the
+> debugfs_create_*() method in a hierarchy fails, the following methods will
+> just silently return the passed erroneous parental dentry. Finally the
+> code is supposed to be working no matter whether anything DebugFS-related
+> fails. So in order to make code simpler and DebugFS-independent let's drop
+> the debugfs_create_*() methods return value checking in the same way as
+> the most of the kernel drivers do.
+> 
+> Note in order to preserve some memory space we suggest to skip the DebugFS
+> nodes initialization if the file system in unavailable.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Let's do this for consistency with e.g. svm_hv_init_vmcb:
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index b39fe614467a..ab202158137d 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -165,9 +165,8 @@ int avic_vm_init(struct kvm *kvm)
-  	return err;
-  }
-  
--void avic_init_vmcb(struct vcpu_svm *svm)
-+void avic_init_vmcb(struct vcpu_svm *svm, struct vmcb *vmcb)
-  {
--	struct vmcb *vmcb = svm->vmcb01.ptr;
-  	struct kvm_svm *kvm_svm = to_kvm_svm(svm->vcpu.kvm);
-  	phys_addr_t bpa = __sme_set(page_to_phys(svm->avic_backing_page));
-  	phys_addr_t lpa = __sme_set(page_to_phys(kvm_svm->avic_logical_id_table_page));
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index cc02506b7a19..ced8edad0c87 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1123,7 +1123,7 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
-  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SPEC_CTRL, 1, 1);
-  
-  	if (kvm_vcpu_apicv_active(vcpu))
--		avic_init_vmcb(svm);
-+		avic_init_vmcb(svm, vmcb);
-  
-  	if (vgif) {
-  		svm_clr_intercept(svm, INTERCEPT_STGI);
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index d07a5b88ea96..bbac6c24a8b8 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -591,7 +591,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
-  int avic_ga_log_notifier(u32 ga_tag);
-  void avic_vm_destroy(struct kvm *kvm);
-  int avic_vm_init(struct kvm *kvm);
--void avic_init_vmcb(struct vcpu_svm *svm);
-+void avic_init_vmcb(struct vcpu_svm *svm, struct vmcb *vmcb);
-  int avic_incomplete_ipi_interception(struct kvm_vcpu *vcpu);
-  int avic_unaccelerated_access_interception(struct kvm_vcpu *vcpu);
-  int avic_init_vcpu(struct vcpu_svm *svm);
+Thanks,
+Man
 
+> ---
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 20 +++++---------------
+>  1 file changed, 5 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> index 12845a2dc016..808eed212be8 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> @@ -100,9 +100,8 @@ static void dw_edma_debugfs_create_x32(const struct debugfs_entries entries[],
+>  	int i;
+>  
+>  	for (i = 0; i < nr_entries; i++) {
+> -		if (!debugfs_create_file_unsafe(entries[i].name, 0444, dir,
+> -						entries[i].reg,	&fops_x32))
+> -			break;
+> +		debugfs_create_file_unsafe(entries[i].name, 0444, dir,
+> +					   entries[i].reg, &fops_x32);
+>  	}
+>  }
+>  
+> @@ -168,8 +167,6 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dir)
+>  	char name[16];
+>  
+>  	regs_dir = debugfs_create_dir(WRITE_STR, dir);
+> -	if (!regs_dir)
+> -		return;
+>  
+>  	nr_entries = ARRAY_SIZE(debugfs_regs);
+>  	dw_edma_debugfs_create_x32(debugfs_regs, nr_entries, regs_dir);
+> @@ -184,8 +181,6 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dir)
+>  		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+>  
+>  		ch_dir = debugfs_create_dir(name, regs_dir);
+> -		if (!ch_dir)
+> -			return;
+>  
+>  		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].wr, ch_dir);
+>  
+> @@ -237,8 +232,6 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dir)
+>  	char name[16];
+>  
+>  	regs_dir = debugfs_create_dir(READ_STR, dir);
+> -	if (!regs_dir)
+> -		return;
+>  
+>  	nr_entries = ARRAY_SIZE(debugfs_regs);
+>  	dw_edma_debugfs_create_x32(debugfs_regs, nr_entries, regs_dir);
+> @@ -253,8 +246,6 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dir)
+>  		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+>  
+>  		ch_dir = debugfs_create_dir(name, regs_dir);
+> -		if (!ch_dir)
+> -			return;
+>  
+>  		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].rd, ch_dir);
+>  
+> @@ -273,8 +264,6 @@ static void dw_edma_debugfs_regs(void)
+>  	int nr_entries;
+>  
+>  	regs_dir = debugfs_create_dir(REGISTERS_STR, dw->debugfs);
+> -	if (!regs_dir)
+> -		return;
+>  
+>  	nr_entries = ARRAY_SIZE(debugfs_regs);
+>  	dw_edma_debugfs_create_x32(debugfs_regs, nr_entries, regs_dir);
+> @@ -285,6 +274,9 @@ static void dw_edma_debugfs_regs(void)
+>  
+>  void dw_edma_v0_debugfs_on(struct dw_edma_chip *chip)
+>  {
+> +	if (!debugfs_initialized())
+> +		return;
+> +
+>  	dw = chip->dw;
+>  	if (!dw)
+>  		return;
+> @@ -294,8 +286,6 @@ void dw_edma_v0_debugfs_on(struct dw_edma_chip *chip)
+>  		return;
+>  
+>  	dw->debugfs = debugfs_create_dir(dw->name, NULL);
+> -	if (!dw->debugfs)
+> -		return;
+>  
+>  	debugfs_create_u32("mf", 0444, dw->debugfs, &dw->chip->mf);
+>  	debugfs_create_u16("wr_ch_cnt", 0444, dw->debugfs, &dw->wr_ch_cnt);
+> -- 
+> 2.35.1
+> 

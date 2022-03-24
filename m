@@ -2,163 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D6F4E61F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71794E61F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349598AbiCXKuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
+        id S243846AbiCXKtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349609AbiCXKuO (ORCPT
+        with ESMTP id S242718AbiCXKtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:50:14 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF772613E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:29 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id y142so7697557ybe.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o+0BbB+UwcXM8aJXn73uapD7rigb18/OqbdOVcbPmAM=;
-        b=sdZYLnC7or9MsJZXuVE7tMujraBEpTXDao/rNXk4s7kbLOGI0vxxX+lv4/HISysnff
-         glmrpBpohaUWJU+M66NHw2mEbup5sUCYDgmfZXKj3K+zWvAbTMtsN8vJ+r5Vl5qQteWt
-         H5nLU0JZKmqvPPdA9M4ku6yLIgzsVztYd5nP2LI7kqIUoBpprcV140p0xiPrponKCsjt
-         tUrDDPsoOaR/cttvnvRzZp4C5zrJ9dG7egr6ws6xZ5BHpKJ3wBauVpUmHSHAnJzJtOT1
-         xIN8d8fLYL1Q1FXUfVKkQzklW+DuBocraIXbJSgf/Czx66RBJXcYZGiDkbh6OoW7cu87
-         2TLA==
+        Thu, 24 Mar 2022 06:49:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25ACC2DFA
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648118894;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uWRMRQIguPn0xVAvBXNbH51X5fGoB4gdHQSpKWVAiFE=;
+        b=VOjidShX2oiW5ZrE/FhXK7+PFsgLwtaL8PQ/tnPjuntqLUBJHleCMr90YhoNp4ghEAt260
+        PWVplJu0Cdi9CNzSRCkWaC5YkyUkP01lRbDO2eQTQdQw8q/O+2EPor8BQYN9JwzKVOYYvZ
+        wauHas8Y2jca2CVmM9ikHwaj0G/YGPY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592-OB8R4n9-NqyyGhlBaTWkIw-1; Thu, 24 Mar 2022 06:48:13 -0400
+X-MC-Unique: OB8R4n9-NqyyGhlBaTWkIw-1
+Received: by mail-wr1-f71.google.com with SMTP id s8-20020adfc548000000b00203eba1052eso1547943wrf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o+0BbB+UwcXM8aJXn73uapD7rigb18/OqbdOVcbPmAM=;
-        b=mNJ0E0O4PDzXJ5oxosQ6BDvczNZMH8aKNRPwrKAwO4M8q5Gp6YilyiOWoQQoo5u4xO
-         oS9JSAqbTeolnS94uE7npmeR/gvMk3kuWCVSdfiwvVeIORUDndEjGvIx9NPNWdLQvrAw
-         /hKDmasAxOcIZWq62I9QM/UHICw6iSNtMbPacz0xxR1T4NeylRzGCiF8SoTN7xTh/0Tk
-         GVJArjnDiBPSFSw9/oDw/h/SB+tw9Vr1MdgkOy1gu5M9B7FvgqStLlrEBbB2UGxP8vmA
-         wau7RyjU+I+rXj5B/KqIKgXG50kOh/6wcVPqsNRmtT5nBjM/XXf4ZBm8QbJZBgBatkE4
-         hULA==
-X-Gm-Message-State: AOAM530DDiKO0d0SCdZYSnUMDoHTgB3j+LS//jUlk2YbzHZ1a3VA8WbJ
-        DCkaZvauB2ewiM/JLrvzbYACyBYjlbk6zcYjy9Vz3w==
-X-Google-Smtp-Source: ABdhPJwFEXK/yTmINgXCVpOjf1Cb6C655DP2GnP83SY4yCXEPH0EGfJLHgJ19I1FD6u08GBYwPiw2MGUfQLqdEonGeM=
-X-Received: by 2002:a25:943:0:b0:633:883b:3e21 with SMTP id
- u3-20020a250943000000b00633883b3e21mr4000965ybm.132.1648118909179; Thu, 24
- Mar 2022 03:48:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uWRMRQIguPn0xVAvBXNbH51X5fGoB4gdHQSpKWVAiFE=;
+        b=pqA9mTGrGSPRJ0vOh3m03G5JOmBgyqOUe4bTuUbC5UGalpLC/aU+GYT3I1GoxgzlDI
+         c6fBs4xWC+9oCuzuHXjvQOOX0cA3q5G2CWB9pakMXf04DsbPWmBCValhTm2lm64Peilm
+         LSQDyVxEreHo+K+jm8xRW+v2wBL8VLYzO3weaPVDcj6tXZEplwrkSsg1uxJrlK0WJqJ+
+         S+PnMqNtBYmozaDXWDUku1HHSPnC/GqM+UCS4wNZ8h66FEfL2LGhK6x/fWKUNVABtZIk
+         lM+gtf46DYhVWJe5qJOi7NBH8gbItx5OTQ/SPbSgLILDsQhzRMEz6leUwNTi0nzHk4ci
+         w09w==
+X-Gm-Message-State: AOAM531HBvKElTe7MEHaUyZMf21N/wswh+ILDWLJq+RIecj96eZ69+8d
+        0EK0yMe0JqNphpU4d1/c6VqMK2p6xPP5K/mRqkdNYswf7m6tdIZUhIuqIweAJQmbxIm4PJ+CDpu
+        Y4oOkYCRYh3+U8iua4a9jRv9h
+X-Received: by 2002:a1c:3587:0:b0:381:50ff:cbd with SMTP id c129-20020a1c3587000000b0038150ff0cbdmr13551079wma.140.1648118891812;
+        Thu, 24 Mar 2022 03:48:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzRxMJ+YXVZLvhuM9RI7+rgiWVlvl4AwKWXbx5vjGyiTWNJAssKyhMaSULkwjGGH8UgEVT4XA==
+X-Received: by 2002:a1c:3587:0:b0:381:50ff:cbd with SMTP id c129-20020a1c3587000000b0038150ff0cbdmr13551062wma.140.1648118891582;
+        Thu, 24 Mar 2022 03:48:11 -0700 (PDT)
+Received: from redhat.com ([2.55.151.118])
+        by smtp.gmail.com with ESMTPSA id e10-20020a056000178a00b0020414f27a58sm2419815wrg.35.2022.03.24.03.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 03:48:10 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 06:48:05 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
+        peterz@infradead.org, sgarzare@redhat.com, keirf@google.com
+Subject: Re: [PATCH 1/3] virtio: use virtio_device_ready() in
+ virtio_device_restore()
+Message-ID: <20220324064205-mutt-send-email-mst@kernel.org>
+References: <20220324084004.14349-1-jasowang@redhat.com>
+ <20220324084004.14349-2-jasowang@redhat.com>
 MIME-Version: 1.0
-References: <20220323125523.79254-2-songmuchun@bytedance.com>
- <202203240546.MHJzsBaO-lkp@intel.com> <20220323151311.289dd405440932e1d6d80f30@linux-foundation.org>
- <7872f093-e26d-3403-d6cf-c6c1a782242b@intel.com> <CAMZfGtXqETxQPqPLebu=0b2P8RBfKiPymraJZCSK1UGAFGo=dw@mail.gmail.com>
- <4bf80e3a-ada7-942b-5bc1-2a1d2fee17c8@intel.com>
-In-Reply-To: <4bf80e3a-ada7-942b-5bc1-2a1d2fee17c8@intel.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 24 Mar 2022 18:47:52 +0800
-Message-ID: <CAMZfGtVZknHw_Ze7=64GD-wDB_ND5tcJ2rm2eYqdVPHfiUeMyA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
-To:     "Chen, Rong A" <rong.a.chen@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <lkp@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        David Hildenbrand <david@redhat.com>, kbuild-all@lists.01.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324084004.14349-2-jasowang@redhat.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 6:40 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
->
->
->
-> On 3/24/2022 6:20 PM, Muchun Song wrote:
-> > On Thu, Mar 24, 2022 at 5:40 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
-> >>
-> >>
-> >>
-> >> On 3/24/2022 6:13 AM, Andrew Morton wrote:
-> >>> On Thu, 24 Mar 2022 06:06:41 +0800 kernel test robot <lkp@intel.com> wrote:
-> >>>
-> >>>> Hi Muchun,
-> >>>>
-> >>>> Thank you for the patch! Yet something to improve:
-> >>>>
-> >>>> [auto build test ERROR on hnaz-mm/master]
-> >>>> [also build test ERROR on linus/master next-20220323]
-> >>>> [cannot apply to mcgrof/sysctl-next v5.17]
-> >>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> >>>> And when submitting patch, we suggest to use '--base' as documented in
-> >>>> https://git-scm.com/docs/git-format-patch]
-> >>>>
-> >>>> url:    https://github.com/0day-ci/linux/commits/Muchun-Song/add-hugetlb_free_vmemmap-sysctl/20220323-205902
-> >>>> base:   https://github.com/hnaz/linux-mm master
-> >>>> config: arc-randconfig-r043-20220323 (https://download.01.org/0day-ci/archive/20220324/202203240546.MHJzsBaO-lkp@intel.com/config)
-> >>>> compiler: arc-elf-gcc (GCC) 11.2.0
-> >>>> reproduce (this is a W=1 build):
-> >>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >>>>           chmod +x ~/bin/make.cross
-> >>>>           # https://github.com/0day-ci/linux/commit/64211be650af117819368a26d7b86c33df5deea4
-> >>>>           git remote add linux-review https://github.com/0day-ci/linux
-> >>>>           git fetch --no-tags linux-review Muchun-Song/add-hugetlb_free_vmemmap-sysctl/20220323-205902
-> >>>>           git checkout 64211be650af117819368a26d7b86c33df5deea4
-> >>>>           # save the config file to linux build tree
-> >>>>           mkdir build_dir
-> >>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc prepare
-> >>>>
-> >>>> If you fix the issue, kindly add following tag as appropriate
-> >>>> Reported-by: kernel test robot <lkp@intel.com>
-> >>>>
-> >>>> All errors (new ones prefixed by >>):
-> >>>>
-> >>>>>> cc1: fatal error: cannot open 'kernel/bounds.s' for writing: No such file or directory
-> >>>
-> >>> It would take a lot of talent for Munchun to have caused this!
-> >>>
-> >>> Methinks you just ran out of disk space?
-> >>
-> >> Hi Andrew,
-> >>
-> >> Thanks for the reply, I tried to apply this patch to the head of
-> >> mainline and I still can reproduce the error in my local machine:
-> >>
-> >> $ wget -q -O -
-> >> https://lore.kernel.org/lkml/20220323125523.79254-2-songmuchun@bytedance.com/raw
-> >> | git apply -v
-> >> $ mkdir build_dir && wget
-> >> https://download.01.org/0day-ci/archive/20220324/202203240546.MHJzsBaO-lkp@intel.com/config
-> >> -O build_dir/.config
-> >> $ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross
-> >> O=build_dir ARCH=arc olddefconfig prepare
-> >> make --keep-going CONFIG_OF_ALL_DTBS=y CONFIG_DTC=y
-> >> CROSS_COMPILE=/home/nfs/0day/gcc-11.2.0-nolibc/arc-elf/bin/arc-elf-
-> >> --jobs=72 O=build_dir ARCH=arc olddefconfig prepare
-> >> ...
-> >> cc1: fatal error: cannot open 'kernel/bounds.s' for writing: No such
-> >> file or directory
-> >> compilation terminated.
-> >> make[3]: *** [../scripts/Makefile.build:121: kernel/bounds.s] Error 1
-> >> make[3]: Target '__build' not remade because of errors.
-> >> make[2]: *** [../Makefile:1191: prepare0] Error 2
-> >> make[2]: Target 'prepare' not remade because of errors.
-> >>
-> >
-> > Would you help me to test the following patch?  Thanks.
->
-> I have confirmed the patch can fix the issue.
->
+On Thu, Mar 24, 2022 at 04:40:02PM +0800, Jason Wang wrote:
+> From: Stefano Garzarella <sgarzare@redhat.com>
+> 
+> This avoids setting DRIVER_OK twice for those drivers that call
+> virtio_device_ready() in the .restore
 
-Thanks Chen.
+Is this trying to say it's faster?
+If yes this one looks like a red herring. Yes we skip a write but we
+replace it with a read which is not better performance-wise.
+If we want to optimize this, it is better to just do that inside
+virtio_add_status:
+
+
+
+diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+index 75c8d560bbd3..cd943c31bdbb 100644
+--- a/drivers/virtio/virtio.c
++++ b/drivers/virtio/virtio.c
+@@ -161,8 +161,14 @@ static void virtio_config_enable(struct virtio_device *dev)
+ 
+ void virtio_add_status(struct virtio_device *dev, unsigned int status)
+ {
++	unsigned int device_status;
++
+ 	might_sleep();
+-	dev->config->set_status(dev, dev->config->get_status(dev) | status);
++
++	device_status = dev->config->get_status(dev);
++
++	if (status & ~device_status)
++		dev->config->set_status(dev, device_status | status);
+ }
+ EXPORT_SYMBOL_GPL(virtio_add_status);
+ 
+
+> and it will allows us to do
+> extension on virtio_device_ready() without duplicating codes.
+> 
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+>  drivers/virtio/virtio.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index 22f15f444f75..75c8d560bbd3 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -526,8 +526,9 @@ int virtio_device_restore(struct virtio_device *dev)
+>  			goto err;
+>  	}
+>  
+> -	/* Finally, tell the device we're all set */
+> -	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER_OK);
+> +	/* If restore didn't do it, mark device DRIVER_OK ourselves. */
+
+I preferred the original comment, it said why we are doing this,
+new one repeats what code is doing.
+
+> +	if (!(dev->config->get_status(dev) & VIRTIO_CONFIG_S_DRIVER_OK))
+> +		virtio_device_ready(dev);
+>  
+>  	virtio_config_enable(dev);
+>  
+> -- 
+> 2.25.1
+

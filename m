@@ -2,167 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592944E5CDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852924E5CE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345857AbiCXBmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 21:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S1345862AbiCXBnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 21:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240592AbiCXBmP (ORCPT
+        with ESMTP id S240592AbiCXBnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 21:42:15 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076DC92D3F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1648086045; x=1679622045;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4QEMOUcjYeQg6k3oG5z4tHQPgW+dlh1g2Hbu+B/waMM=;
-  b=XO+H4H6DYt2BbpZnn2Ya2Bcqk6Nr5f8PXToxt0TfeHBAlPFC4PctmbGz
-   n3lSM/9CuCwNV6254PE1EWfuuFWISKnUsaoxul4/zgDiGvlTPbESGSz7e
-   fRTWNlB6bA+4cc1Mn0bgV0ODPwk7S8e//pRj90rOvMnpX7/dSgjOhwzLV
-   gAptQOJTcQ4GaFxJF5qC7V2MxvIqMFo7tEGb4IG5xrzuRr5tJ2fh2587o
-   DXjkqNcmYu69+zhfY+x0r/s/OOsvmDgCdM1t8BHrfRM1mKc5PdyBdwWXn
-   8Q58OtWwV5fZE8GNPqwufEgWTyL/pgAZ5QQ9YkQz9DHc4if83CyL04Z7k
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,206,1643644800"; 
-   d="scan'208";a="195019839"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 24 Mar 2022 09:40:44 +0800
-IronPort-SDR: wXQrZ6CzJxL0rNPI8sq5+y5uwE9S6lnz45XEaRC2mOVuFaMl7jak7yqDo+LT0EBBLEGa4xgNwe
- qlVD6vZcbuf32iiwiuh5SbX9qWqSlYQNBUYyEFO63CB9Oxq9dU1Mwa/dqo574PMpowW064hg+J
- gDQpwZgVjSj7C/xUogTevVVCHMgyFJ9Cqt992N3raaql7UaBDEp+gTANzNGRGWCXo9Ij8RCo8T
- 9Gosi2NC7baXgrLjlhpRUdyZyEjsm3jUCWUi7VdSbUQZBlxe8vNJ3Wi0Vm2gAhxc9vWzq1iMCD
- o6C2DNnGWjgEZkk/stL3nUeU
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 18:12:37 -0700
-IronPort-SDR: pDkF/k6bOqkJder5kFa0WVkcBwmyQ1MjfYsADE7ZydGJX3tD2zDu1ZaJFfPpZMjhT+Xu1jwZhl
- qMhjnvgLPQu0J2wTkpqb0x0SeChIlNEBtUh//rjHljPyP6l3RzLZ+pAvna3j1nq0Wrjyr4iQxy
- i6fUHkO48ucwIvrJocWy/MxkwW7/s1DbxIeDfT+Dmp4mOKLsvZOpnkd1LM13rWb+rwPg5nOofo
- XG+yQRqarrkUeXSil671FmLaHYJ/Am9BIySqJnToFEsM8vtzmzn7Hxx4u7CnmYsDF7MwXarI6f
- XNw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 18:40:44 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KP7GM3vVlz1SVp2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:40:43 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1648086042; x=1650678043; bh=4QEMOUcjYeQg6k3oG5z4tHQPgW+dlh1g2Hb
-        u+B/waMM=; b=pbihkB93tzJAeclaFNW5UkmpnyuQLhw10d2p+tvDoXWCvmRO1C2
-        PjZ2bYMDHWtG7STDyf69s12NCUEqA00h14Fe0k94ITUa4nzk2daWAKas1P68w85S
-        Dm0pAArRoYTcIbWNMo9bQttyBPg/Z1AZrlP+0c0K/g52ZQvsfvCaz1WptKASSjRV
-        dJPFJ2q40Y7w5bo6rN7PRlVMpXslfD4u4RtQmshnAGn6JGdQjLXqSJAhhnGZ5Dza
-        tmoxl9PAWx4oPIA0XUcf948Ht8vqGTGH1kWJZyE2dI79VHCuwhMM7YS4hQb1F4rx
-        t0NPAIT2hgXL8Rho6HY0eo62GsEIKYty9gA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id uma-Z5t59WhL for <linux-kernel@vger.kernel.org>;
-        Wed, 23 Mar 2022 18:40:42 -0700 (PDT)
-Received: from [10.225.163.114] (unknown [10.225.163.114])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KP7GK1GLMz1Rvlx;
-        Wed, 23 Mar 2022 18:40:41 -0700 (PDT)
-Message-ID: <ab7f2a2e-0ca9-ed97-e4ed-bf8ef0ed69a5@opensource.wdc.com>
-Date:   Thu, 24 Mar 2022 10:40:40 +0900
+        Wed, 23 Mar 2022 21:43:03 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D68F93189
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:41:32 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2e64a6b20eeso36856197b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:41:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Dkz9ZRVS+nRHJtc9MLa3dbGlHTYZCC9MEJOOMvqLmio=;
+        b=FpaSXwv7nY704lM4lXoFwypZSa9MMUSqkWimagng1EmivUzGuQRMOnAQR/LIHSjA2C
+         ntqlvijW96MMsU3t+rXyYpvCFc4cFlmvjJJLQcfpDE/x/KDg7s+n+MK6VyoeLVwuUFn5
+         6gXBvlQpF9kaIkqZ6uQ3u5rm+4kUMuJL7jiZh/VX85bXHystKtxPN7Ysk/vpkRcEXhEd
+         g5dB1MAVmq0O8dHS4dwHN2bCm11TkQE4PzKPsUiUoD2pi3U+n+Gdo5ltfg4m+pJqHcLW
+         FJIvAIwzJjP1l99G2Ur30LBnHBFX4auEagom3OfVXTK8ZszQJUxpe6U5CSrS7GonaHiY
+         hlvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dkz9ZRVS+nRHJtc9MLa3dbGlHTYZCC9MEJOOMvqLmio=;
+        b=2UM3Za5DwWaajD3OF3SDyIYOfrPx2M4OAqxLNlSMNMybfyJaLiOxIbPRmTj71CX5W7
+         ayS7O6QfzxUSpMAqFqEANo5432wMRd279yoqXBBa3K4HiXb1IpLnueDypPIF1astK3N3
+         cHxoiOBoDSc9JrcIMRsn7azW1mLJ1FTmWNHkmF7Fog5dSiLZ261KVx3YzzfbnKDBMLvl
+         I5YiPRSyTShdUiTVeJSsbjfQ1A02nj7bhebDXYshqYdes8VmqguPPEHCm9e2xStwIvcO
+         eTzkO3r2/6FuT6SrqnwpfeYwTaLiuf/hW/sYw4Cl+oFEvZcu/nOvnZeU4axyO5mbT4v2
+         uwtA==
+X-Gm-Message-State: AOAM532PCskYIcfmOj1I5WJKcDjClxyP8WZcm5EygFHAsk46wA8PZcV/
+        R+g8whuMdC88p6v9Gmnutys1eXXxsNuBiuae1LHKEw==
+X-Google-Smtp-Source: ABdhPJyjNutITyLnHUHPb5Ijg9ZyH4hdOT11T4BUaziz/+zYGx6o4xMuLwd9Od66XZP1MLkigQoRY35jftUfrQA7aUQ=
+X-Received: by 2002:a81:4f87:0:b0:2e5:dc8f:b4e with SMTP id
+ d129-20020a814f87000000b002e5dc8f0b4emr2644515ywb.467.1648086091136; Wed, 23
+ Mar 2022 18:41:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 07/21] ata: libahci_platform: Sanity check the DT child
- nodes number
-Content-Language: en-US
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
- <20220324001628.13028-8-Sergey.Semin@baikalelectronics.ru>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220324001628.13028-8-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <000000000000acf1e405daebb7c7@google.com>
+In-Reply-To: <000000000000acf1e405daebb7c7@google.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 23 Mar 2022 18:41:20 -0700
+Message-ID: <CANn89iKMWp3o7ZS9dL+6GgWR-tr2rOvMKdKxb1=aDmhLB7mFrw@mail.gmail.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in __tcp_transmit_skb
+To:     syzbot <syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com>,
+        Karsten Graul <kgraul@linux.ibm.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yonghong Song <yhs@fb.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/22 09:16, Serge Semin wrote:
-> Having greater than (AHCI_MAX_PORTS = 32) ports detected isn't that
-> critical from the further AHCI-platform initialization point of view since
-> exceeding the ports upper limit will cause allocating more resources than
-> will be used afterwards. But detecting too many child DT-nodes doesn't
-> seem right since it's very unlikely to have it on an ordinary platform. In
-> accordance with the AHCI specification there can't be more than 32 ports
-> implemented at least due to having the CAP.NP field of 4 bits wide and the
-> PI register of dword size. Thus if such situation is found the DTB must
-> have been corrupted and the data read from it shouldn't be reliable. Let's
-> consider that as an erroneous situation and halt further resources
-> allocation.
-> 
-> Note it's logically more correct to have the nports set only after the
-> initialization value is checked for being sane. So while at it let's make
-> sure nports is assigned with a correct value.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+On Wed, Mar 23, 2022 at 5:13 PM syzbot
+<syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    36c2e31ad25b net: geneve: add missing netlink policy and s..
+> git tree:       net-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17c308a5700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=4a15e2288cf165c9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=090d23ddbd5cd185c2e0
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171eadbd700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12cacda3700000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com
+>
+
+AF_SMC does not handle TCP_REPAIR properly.
+
+Look at commit d9e4c129181004e ("mptcp: only admit explicitly
+supported sockopt") for an equivalent bug/fix.
+
+
+> BUG: kernel NULL pointer dereference, address: 0000000000000000
+> #PF: supervisor instruction fetch in kernel mode
+> #PF: error_code(0x0010) - not-present page
+> PGD 13fd5067 P4D 13fd5067 PUD 77ebc067 PMD 0
+> Oops: 0010 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 7423 Comm: syz-executor720 Not tainted 5.17.0-rc8-syzkaller-02803-g36c2e31ad25b #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:0x0
+> Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+> RSP: 0018:ffffc900001d0a60 EFLAGS: 00010246
+> RAX: dffffc0000000000 RBX: ffff88801e00cd10 RCX: 0000000000000100
+> RDX: 1ffff11003c019a3 RSI: ffff8880155c5c80 RDI: ffff888014bac800
+> RBP: ffff888014bac800 R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff87bccdc7 R11: 0000000000000000 R12: ffff8880155c5c80
+> R13: 0000000000000000 R14: ffff888014bacf60 R15: ffff88807527012c
+> FS:  000055555733b3c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffd6 CR3: 00000000757b0000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <IRQ>
+>  __tcp_transmit_skb+0x1098/0x38b0 net/ipv4/tcp_output.c:1371
+>  tcp_transmit_skb net/ipv4/tcp_output.c:1420 [inline]
+>  tcp_xmit_probe_skb+0x28c/0x320 net/ipv4/tcp_output.c:4006
+>  tcp_write_wakeup+0x1bd/0x610 net/ipv4/tcp_output.c:4059
+>  tcp_send_probe0+0x44/0x560 net/ipv4/tcp_output.c:4074
+>  tcp_probe_timer net/ipv4/tcp_timer.c:398 [inline]
+>  tcp_write_timer_handler+0x9ed/0xbc0 net/ipv4/tcp_timer.c:626
+>  tcp_write_timer+0xa2/0x2b0 net/ipv4/tcp_timer.c:642
+>  call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+>  expire_timers kernel/time/timer.c:1466 [inline]
+>  __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
+>  __run_timers kernel/time/timer.c:1715 [inline]
+>  run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
+>  __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+>  invoke_softirq kernel/softirq.c:432 [inline]
+>  __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
+>  irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
+>  sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
+>  </IRQ>
+>  <TASK>
+>  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
+> RIP: 0010:lock_acquire+0x1ef/0x510 kernel/locking/lockdep.c:5607
+> Code: e4 a4 7e 83 f8 01 0f 85 b4 02 00 00 9c 58 f6 c4 02 0f 85 9f 02 00 00 48 83 7c 24 08 00 74 01 fb 48 b8 00 00 00 00 00 fc ff df <48> 01 c3 48 c7 03 00 00 00 00 48 c7 43 08 00 00 00 00 48 8b 84 24
+> RSP: 0018:ffffc90002eaf888 EFLAGS: 00000206
+> RAX: dffffc0000000000 RBX: 1ffff920005d5f13 RCX: 5ad5b746ce328923
+> RDX: 1ffff1100e5374eb RSI: 0000000000000000 RDI: 0000000000000000
+> RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8fe0c947
+> R10: fffffbfff1fc1928 R11: 0000000000000001 R12: 0000000000000002
+> R13: 0000000000000000 R14: ffffffff8bb84ca0 R15: 0000000000000000
+>  rcu_lock_acquire include/linux/rcupdate.h:268 [inline]
+>  rcu_read_lock include/linux/rcupdate.h:694 [inline]
+>  fib_lookup.constprop.0+0x8f/0x460 include/net/ip_fib.h:377
+>  ip_route_output_key_hash_rcu+0xf54/0x2c80 net/ipv4/route.c:2737
+>  ip_route_output_key_hash+0x183/0x2f0 net/ipv4/route.c:2627
+>  __ip_route_output_key include/net/route.h:127 [inline]
+>  ip_route_output_flow+0x23/0x150 net/ipv4/route.c:2857
+>  ip_route_newports include/net/route.h:343 [inline]
+>  tcp_v4_connect+0x12a5/0x1d00 net/ipv4/tcp_ipv4.c:283
+>  __inet_stream_connect+0x8cf/0xed0 net/ipv4/af_inet.c:660
+>  inet_stream_connect+0x53/0xa0 net/ipv4/af_inet.c:724
+>  smc_connect+0x230/0x450 net/smc/af_smc.c:1522
+>  __sys_connect_file+0x155/0x1a0 net/socket.c:1900
+>  __sys_connect+0x161/0x190 net/socket.c:1917
+>  __do_sys_connect net/socket.c:1927 [inline]
+>  __se_sys_connect net/socket.c:1924 [inline]
+>  __x64_sys_connect+0x6f/0xb0 net/socket.c:1924
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f23b4ec0889
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffce8f74658 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+> RAX: ffffffffffffffda RBX: 00007ffce8f746b0 RCX: 00007f23b4ec0889
+> RDX: 0000000000000010 RSI: 00000000200001c0 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 000000000000cf1c R09: 000000000000cf1c
+> R10: 0000000000000004 R11: 0000000000000246 R12: 00007ffce8f746a0
+> R13: 000000000000cf1c R14: 00007ffce8f7469c R15: 431bde82d7b634db
+>  </TASK>
+> Modules linked in:
+> CR2: 0000000000000000
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:0x0
+> Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+> RSP: 0018:ffffc900001d0a60 EFLAGS: 00010246
+> RAX: dffffc0000000000 RBX: ffff88801e00cd10 RCX: 0000000000000100
+> RDX: 1ffff11003c019a3 RSI: ffff8880155c5c80 RDI: ffff888014bac800
+> RBP: ffff888014bac800 R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff87bccdc7 R11: 0000000000000000 R12: ffff8880155c5c80
+> R13: 0000000000000000 R14: ffff888014bacf60 R15: ffff88807527012c
+> FS:  000055555733b3c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffd6 CR3: 00000000757b0000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:   e4 a4                   in     $0xa4,%al
+>    2:   7e 83                   jle    0xffffff87
+>    4:   f8                      clc
+>    5:   01 0f                   add    %ecx,(%rdi)
+>    7:   85 b4 02 00 00 9c 58    test   %esi,0x589c0000(%rdx,%rax,1)
+>    e:   f6 c4 02                test   $0x2,%ah
+>   11:   0f 85 9f 02 00 00       jne    0x2b6
+>   17:   48 83 7c 24 08 00       cmpq   $0x0,0x8(%rsp)
+>   1d:   74 01                   je     0x20
+>   1f:   fb                      sti
+>   20:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
+>   27:   fc ff df
+> * 2a:   48 01 c3                add    %rax,%rbx <-- trapping instruction
+>   2d:   48 c7 03 00 00 00 00    movq   $0x0,(%rbx)
+>   34:   48 c7 43 08 00 00 00    movq   $0x0,0x8(%rbx)
+>   3b:   00
+>   3c:   48                      rex.W
+>   3d:   8b                      .byte 0x8b
+>   3e:   84                      .byte 0x84
+>   3f:   24                      .byte 0x24
+>
+>
 > ---
->  drivers/ata/libahci_platform.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
-> index 4fb9629c03ab..845042295b97 100644
-> --- a/drivers/ata/libahci_platform.c
-> +++ b/drivers/ata/libahci_platform.c
-> @@ -470,15 +470,21 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
->  		}
->  	}
->  
-> -	hpriv->nports = child_nodes = of_get_child_count(dev->of_node);
-> -
->  	/*
-> -	 * If no sub-node was found, we still need to set nports to
-> -	 * one in order to be able to use the
-> +	 * Too many sub-nodes most likely means having something wrong with
-> +	 * firmware. If no sub-node was found, we still need to set nports
-> +	 * to one in order to be able to use the
->  	 * ahci_platform_[en|dis]able_[phys|regulators] functions.
->  	 */
-> -	if (!child_nodes)
-> +	child_nodes = of_get_child_count(dev->of_node);
-> +	if (child_nodes > AHCI_MAX_PORTS) {
-> +		rc = -EINVAL;
-> +		goto err_out;
-> +	} else if (!child_nodes) {
-
-No need for "else" after a return.
-
->  		hpriv->nports = 1;
-> +	} else {
-> +		hpriv->nports = child_nodes;
-> +	}
->  
->  	hpriv->phys = devm_kcalloc(dev, hpriv->nports, sizeof(*hpriv->phys), GFP_KERNEL);
->  	if (!hpriv->phys) {
-
-
--- 
-Damien Le Moal
-Western Digital Research
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches

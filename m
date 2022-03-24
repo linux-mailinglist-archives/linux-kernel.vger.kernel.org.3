@@ -2,51 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773894E6462
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9954E6464
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350608AbiCXNuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S1350628AbiCXNuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350690AbiCXNtz (ORCPT
+        with ESMTP id S1350609AbiCXNuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:49:55 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0069225D2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:48:21 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id u15-20020a92da8f000000b002c863d2f21dso2328178iln.15
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:48:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=RXcdDplmYiIu10iLNKYxW6U02q/5ql00EI27tmcwm+4=;
-        b=vGF/8u/1lJ98ilH1lKD2m1sjSs6X/+WpqHN+3gcYh0djtfQ6/nSIzhwiI6CyJl5xl4
-         ZKTT3G+O2Hp/IU3b0BK2T7pAPoprNNU36nqaGZ5KrlRJBAGsn70xTXW+2FGIA2ocdgjH
-         KvAPrsIYFK/mnf+7rq3LoBegDERQEKiVz0NZ9w+1uIkFe8HH+A9mJraT/gg5qDrvUXVz
-         ddNYjL1+W8Zrx8NcFwNtOme4HqIXu9Kjql0i5b4smVnCoQnf2QASC4a6j3FKFx8utd3h
-         QbOP0gIM9XyOGxoboAY+4eCqKgDOa6KoaVlTzO+ssZcKwykOPApj2jPOjq7UHL2XIxde
-         2sTA==
-X-Gm-Message-State: AOAM5325B6Ywy76iYpCxNHBI0vg6CKPgzxkGPKZiXhOkD5DhHrwkhWsq
-        aq7Nt1vwX959Dat5ZTP2sqhMWGAH3CLLWAqCOQVKSjz8GXZ0
-X-Google-Smtp-Source: ABdhPJxQiWtHUYvdm7ZPIwcyDG+dndPDw9ksTSTh8jlOa0ZqxjDvcJD4+h8LqupS/Mhkb9J54Tsc4RI1wNHtwHsbXcazmAaDWfMZ
+        Thu, 24 Mar 2022 09:50:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CD1DF72
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:48:37 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nXNpC-0002Pq-36; Thu, 24 Mar 2022 14:48:26 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nXNpA-0004wC-NB; Thu, 24 Mar 2022 14:48:24 +0100
+Date:   Thu, 24 Mar 2022 14:48:24 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yangbo Lu <yangbo.lu@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: sja1105q: proper way to solve PHY clk dependecy
+Message-ID: <20220324134824.GG4519@pengutronix.de>
+References: <20220323060331.GA4519@pengutronix.de>
+ <20220323095240.y4xnp6ivz57obyvv@skbuf>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1a8b:b0:321:49df:5591 with SMTP id
- ce11-20020a0566381a8b00b0032149df5591mr3026097jab.246.1648129701333; Thu, 24
- Mar 2022 06:48:21 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 06:48:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000644f1a05daf71983@google.com>
-Subject: [syzbot] KMSAN: uninit-value in do_user_addr_fault (3)
-From:   syzbot <syzbot+6684a9d1b4d61d0b8f3e@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, dvyukov@google.com, elver@google.com,
-        glider@google.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220323095240.y4xnp6ivz57obyvv@skbuf>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:36:12 up 103 days, 22:21, 79 users,  load average: 0.30, 0.23,
+ 0.26
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,60 +62,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello Vladimir,
 
-syzbot found the following issue on:
+thank you for your response!
 
-HEAD commit:    724946410067 x86: kmsan: enable KMSAN builds for x86
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=1734f916700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76f99026248b24e4
-dashboard link: https://syzkaller.appspot.com/bug?extid=6684a9d1b4d61d0b8f3e
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b1cbf2700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=131d38a6700000
+On Wed, Mar 23, 2022 at 11:52:40AM +0200, Vladimir Oltean wrote:
+> Hello Oleksij,
+> 
+> On Wed, Mar 23, 2022 at 07:03:31AM +0100, Oleksij Rempel wrote:
+> > Hi Vladimir,
+> > 
+> > I have SJA1105Q based switch with 3 T1L PHYs connected over RMII
+> > interface. The clk input "XI" of PHYs is connected to "MII0_TX_CLK/REF_CLK/TXC"
+> > pins of the switch. Since this PHYs can't be configured reliably over MDIO
+> > interface without running clk on XI input, i have a dependency dilemma:
+> > i can't probe MDIO bus, without enabling DSA ports.
+> > 
+> > If I see it correctly, following steps should be done:
+> > - register MDIO bus without scanning for PHYs
+> > - define SJA1105Q switch as clock provider and PHYs as clk consumer
+> > - detect and attach PHYs on port enable if clks can't be controlled
+> >   without enabling the port.
+> > - HW reset line of the PHYs should be asserted if we disable port and
+> >   deasserted with proper reinit after port is enabled.
+> > 
+> > Other way would be to init and enable switch ports and PHYs by a bootloader and
+> > keep it enabled.
+> > 
+> > What is the proper way to go?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6684a9d1b4d61d0b8f3e@syzkaller.appspotmail.com
+> The facts, as I see them, are as follows, feel free to debate them.
+> 
+> 1. Scanning the bus is not the problem, but PHY probing is.
+> 
+> If the MDIO bus is registered with of_mdiobus_register() - which is to
+> be expected, since the sja1105 driver only connects to a PHY using a
+> phy-handle - that should set mdio->phy_mask = ~0; which should disable
+> PHY scanning.
+> 
+> But of_mdiobus_register() will still call of_mdiobus_register_phy()
+> which will probe the phy_device. Here, depending on the code path,
+> _some_ PHY reads might be performed - which will return an error if the
+> PHY is missing its clock. For example, if the PHY ID isn't part of the
+> compatible string, fwnode_mdiobus_register_phy() will attempt to read it
+> from the PHY via get_phy_device(). Alternatively, you could put the PHY
+> ID in the DT and this will end up calling phy_device_create().
+> 
+> Then there's the probe() method of the T1L PHY driver, which is the
+> reason why it would be good to know what that driver is. Since its clock
+> might not be available, I expect that this driver doesn't access
+> hardware from probe(), knowing that it is an RMII PHY driver and this is
+> a generic problem for RMII PHYs.
 
-=====================================================
-BUG: KMSAN: uninit-value in arch_stack_walk+0x1ad/0x3c0 arch/x86/kernel/stacktrace.c:21
- arch_stack_walk+0x1ad/0x3c0 arch/x86/kernel/stacktrace.c:21
- stack_trace_save+0x43/0x60 kernel/stacktrace.c:122
- kmsan_save_stack_with_flags mm/kmsan/core.c:80 [inline]
- kmsan_internal_chain_origin+0xa9/0x110 mm/kmsan/core.c:217
- kmsan_internal_memmove_metadata+0x1f2/0x2e0 mm/kmsan/core.c:165
- __msan_memcpy+0x65/0x90 mm/kmsan/instrumentation.c:127
- sock_write_iter+0x605/0x690 net/socket.c:1062
- do_iter_readv_writev+0xa7f/0xc70
- do_iter_write+0x52c/0x1500 fs/read_write.c:851
- vfs_writev fs/read_write.c:924 [inline]
- do_writev+0x645/0xe00 fs/read_write.c:967
- __do_sys_writev fs/read_write.c:1040 [inline]
- __se_sys_writev fs/read_write.c:1037 [inline]
- __x64_sys_writev+0xe5/0x120 fs/read_write.c:1037
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+ack. describing DT with compatible PHYid seems to be good enough.
 
-Local variable regs created at:
- __bpf_prog_run32+0x84/0x180 kernel/bpf/core.c:1796
- bpf_dispatcher_nop_func include/linux/bpf.h:785 [inline]
- __bpf_prog_run include/linux/filter.h:626 [inline]
- bpf_prog_run include/linux/filter.h:633 [inline]
- __bpf_prog_run_save_cb+0x168/0x580 include/linux/filter.h:756
+> 2. The sja1105 driver already does all it reasonably can to make the
+>    RMII PHY happy.
+> 
+> The clocks of a port are enabled/configured from sja1105_clocking_setup_port()
+> which has 3 call paths:
+> (a) during sja1105_setup(), aka during switch initialization, all ports
+>     except RGMII ports have their clocks configured and enabled, via
+>     priv->info->clocking_setup(). The RGMII ports have a clock that
+>     depends upon the link speed, and we don't know the link speed.
+> (b) during sja1105_static_config_reload(). The sja1105 switch needs to
+>     dynamically reset itself at runtime, and this cuts off the clocks
+>     for a while. Again there is a call to priv->info->clocking_setup()
+>     here.
+> (c) during phylink_mac_link_up -> sja1105_adjust_port_config(), a call
+>     is made to sja1105_clocking_setup_port() for RGMII PHYs, because the
+>     speed is now known.
+> 
+> Since DSA calls dsa_slave_phy_setup() _after_ dsa_switch_setup(), this
+> means that by the time the PHY is attached, its config_init() runs, etc,
+> the RMII clock configured by sja1105_setup() should be running.
 
-CPU: 1 PID: 3474 Comm: syz-executor178 Not tainted 5.17.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
+ack. it works.
 
+> 3. Clock gating the PHY won't make it lose its settings.
+> 
+> I expect that during the time when the sja1105 switch needs to reset,
+> the PHY just sees this as a few hundreds of ms during which there are no
+> clock edges on the crystal input pin. Sure, the PHY won't do anything
+> during that time, but this is quite different from a reset, is it not?
+> So asserting the hardware reset line of the PHY during the momentary
+> loss of clock, which is what you seem to suggest, will actively do more
+> harm than good.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+can i be sure that MDIO access happens in the period where PHY is
+supplied with stable clk
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> 4. Making the sja1105 driver a clock provider doesn't solve the problem
+>    in the general sense.
+> 
+> If you make this PHY driver expect the MAC to be a clock provider,
+> are you going to expect that all RMII-capable MAC drivers be patched?
+> For this reason I am in principle opposed to making the sja1105 driver
+> a clock provider, you won't be able to generalize this solution and it
+> would just create a huge mess going forward.
+
+I can imagine optional clk support, but right now i do not have any
+stability issues so no need to spend time on it right now.
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515844E680B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941C94E680D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352393AbiCXRr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
+        id S1352397AbiCXRsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243676AbiCXRr4 (ORCPT
+        with ESMTP id S243676AbiCXRsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:47:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCBAB246A;
-        Thu, 24 Mar 2022 10:46:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 24 Mar 2022 13:48:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F621B2471
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:46:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1A6D619EC;
-        Thu, 24 Mar 2022 17:46:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E33DC340EC;
-        Thu, 24 Mar 2022 17:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648143983;
-        bh=OcjId5T49OJaEhbKeAWDg/6fz9gw1xv3vjc13O1bZ4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LvXXaceKIAoBBrRK+diIA8BIMwyrryXqJrDI0HuOk+l9iDm6ynsThowM61FoxZfgZ
-         6uJ+hfnH35j5RoIm+CckaqMtHudY+GrKSVEE23K2W92lKX+yUbg3tyMCWMEOwhg07K
-         wu2aDxcdkNeadTnuLCXa2M4IKMSmZqCdb1rkCYXs4AEPRTxg4w57Sofn+DvthTNhWg
-         +lT8IQwUXLTkZY82u6Bp83B3AS+REY3iJivS7N4fGaa+jLoZvcOhbsUwnsaZ6KlpyW
-         6yLC76FPrZj6XyEEjkwR9LPsK4a/tHsCUJMGs/CWH1DRFXM/6eoM5fdZhVMJIF9Bss
-         vtFr8DpRlbAbg==
-Date:   Thu, 24 Mar 2022 17:46:21 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-Cc:     Jeff Layton <jlayton@kernel.org>, idryomov@gmail.com,
-        xiubli@redhat.com, ceph-devel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v11 02/51] fscrypt: export fscrypt_base64url_encode
- and fscrypt_base64url_decode
-Message-ID: <YjyubQgfbQbUn4Ct@gmail.com>
-References: <20220322141316.41325-1-jlayton@kernel.org>
- <20220322141316.41325-3-jlayton@kernel.org>
- <87zglgoi1e.fsf@brahms.olymp>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C36C6210FD;
+        Thu, 24 Mar 2022 17:46:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648143994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6nXfRRkwI9pT0Egb62KVCQmh30ZwxB4Oif8GwM6IzOI=;
+        b=1xY/vL7oKZJ+V+m8eO34xNsjEY+2nmP4fLYXPTjyZO5igZctxEsQthD6YKhOoQ3h1rUeX0
+        1zZDjtdUv3hBxsdzuenuKtLvcw+LPtlhLUhhI7vLMkkUeeo/dNs9r8hOHV0c5QE8SzG84F
+        UpWWwitpMlnwJIJccgHs/Js7txlccFo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648143994;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6nXfRRkwI9pT0Egb62KVCQmh30ZwxB4Oif8GwM6IzOI=;
+        b=NIdmExCsToRsefI4UqAAIkxFSFt8oQw61dY77oFrCiMiWbtMf827G30ATuFseMm/EksI4t
+        if+twqt1wnpWsCCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9BF0F13A7F;
+        Thu, 24 Mar 2022 17:46:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xoteJXquPGKhYgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 24 Mar 2022 17:46:34 +0000
+Message-ID: <d35ce303-c72d-2c7f-8785-4aee7237d05e@suse.cz>
+Date:   Thu, 24 Mar 2022 18:46:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87zglgoi1e.fsf@brahms.olymp>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v1 08/15] mm/sl[auo]b: cleanup kmalloc()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        linux-kernel@vger.kernel.org
+References: <20220308114142.1744229-1-42.hyeyoo@gmail.com>
+ <20220308114142.1744229-9-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220308114142.1744229-9-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,87 +82,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 02:33:17PM +0000, Luís Henriques wrote:
-> Hi Eric,
+On 3/8/22 12:41, Hyeonggon Yoo wrote:
+> Now that kmalloc() and kmalloc_node() do same job, make kmalloc()
+> wrapper of kmalloc_node().
 > 
-> Jeff Layton <jlayton@kernel.org> writes:
+> Remove kmalloc_trace() that is now unused. This patch makes slab
+> allocator use kmalloc_node tracepoints in kmalloc().
 > 
-> > Ceph is going to add fscrypt support, but we still want encrypted
-> > filenames to be composed of printable characters, so we can maintain
-> > compatibility with clients that don't support fscrypt.
-> >
-> > We could just adopt fscrypt's current nokey name format, but that is
-> > subject to change in the future, and it also contains dirhash fields
-> > that we don't need for cephfs. Because of this, we're going to concoct
-> > our own scheme for encoding encrypted filenames. It's very similar to
-> > fscrypt's current scheme, but doesn't bother with the dirhash fields.
-> >
-> > The ceph encoding scheme will use base64 encoding as well, and we also
-> > want it to avoid characters that are illegal in filenames. Export the
-> > fscrypt base64 encoding/decoding routines so we can use them in ceph's
-> > fscrypt implementation.
-> >
-> > Acked-by: Eric Biggers <ebiggers@google.com>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >  fs/crypto/fname.c       | 8 ++++----
-> >  include/linux/fscrypt.h | 5 +++++
-> >  2 files changed, 9 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/fs/crypto/fname.c b/fs/crypto/fname.c
-> > index a9be4bc74a94..1e4233c95005 100644
-> > --- a/fs/crypto/fname.c
-> > +++ b/fs/crypto/fname.c
-> > @@ -182,8 +182,6 @@ static int fname_decrypt(const struct inode *inode,
-> >  static const char base64url_table[65] =
-> >  	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
-> >  
-> > -#define FSCRYPT_BASE64URL_CHARS(nbytes)	DIV_ROUND_UP((nbytes) * 4, 3)
-> > -
-> >  /**
-> >   * fscrypt_base64url_encode() - base64url-encode some binary data
-> >   * @src: the binary data to encode
-> > @@ -198,7 +196,7 @@ static const char base64url_table[65] =
-> >   * Return: the length of the resulting base64url-encoded string in bytes.
-> >   *	   This will be equal to FSCRYPT_BASE64URL_CHARS(srclen).
-> >   */
-> > -static int fscrypt_base64url_encode(const u8 *src, int srclen, char *dst)
-> > +int fscrypt_base64url_encode(const u8 *src, int srclen, char *dst)
-> 
-> I know you've ACK'ed this patch already, but I was wondering if you'd be
-> open to change these encode/decode interfaces so that they could be used
-> for non-url base64 too.
-> 
-> My motivation is that ceph has this odd limitation where snapshot names
-> can not start with the '_' character.  And I've an RFC that adds snapshot
-> names encryption support which, unfortunately, can end up starting with
-> this char after base64 encoding.
-> 
-> So, my current proposal is to use a different encoding table.  I was
-> thinking about the IMAP mailboxes naming which uses '+' and ',' instead of
-> the '-' and '_', but any other charset would be OK (except those that
-> include '/' of course).  So, instead of adding yet another base64
-> implementation to the kernel, I was wondering if you'd be OK accepting a
-> patch to add an optional arg to these encoding/decoding functions to pass
-> an alternative table.  Or, if you'd prefer, keep the existing interface
-> but turning these functions into wrappers to more generic functions.
-> 
-> Obviously, Jeff, please feel free to comment too if you have any reserves
-> regarding this approach.
-> 
-> Cheers,
-> -- 
-> Luís
-> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Base64 encoding/decoding is trivial enough that I think you should just add your
-own functions to fs/ceph/ for now if you need yet another Base64 variant.  If we
-were to add general functions that allow "building your own" Base64 variant, I
-think they'd belong in lib/, not fs/crypto/.  (I objected to lib/ in the first
-version of Jeff's patchset because that patchset proposed adding just the old,
-idiosyncratic fscrypt Base64 variant to lib/ and just calling it "base64", which
-was misleading.  But, if there were to be properly documented functions to
-"build your own" Base64 variant, allowing control over both the character set
-and whether padding is done, lib/ would be the place...)
+Actually there are more things to fix than the commit log.
 
-- Eric
+> +#ifndef CONFIG_SLOB
+> +static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
+> +{
+> +	if (__builtin_constant_p(size)) {
+> +		unsigned int index;
+> +
+> +		if (size > KMALLOC_MAX_CACHE_SIZE)
+> +			return kmalloc_large(size, flags);
+
+Should use kmalloc_large_node().
+
+> +
+> +		index = kmalloc_index(size);
+> +
+> +		if (!index)
+> +			return ZERO_SIZE_PTR;
+> +
+> +		return kmem_cache_alloc_node_trace(
+> +				kmalloc_caches[kmalloc_type(flags)][index],
+> +						flags, node, size);
+> +	}
+> +	return __kmalloc_node(size, flags, node);
+> +}
+> +#else
+> +static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
+> +{
+> +	if (__builtin_constant_p(size) && size > KMALLOC_MAX_CACHE_SIZE)
+> +		return kmalloc_large(size, flags);
+
+And here.
+
+> +
+> +	return __kmalloc_node(size, flags, node);
+> +}
+> +#endif

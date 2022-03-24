@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2F64E6395
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348E44E6396
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350320AbiCXMqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S1350286AbiCXMq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350282AbiCXMqP (ORCPT
+        with ESMTP id S1350305AbiCXMqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Mar 2022 08:46:15 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116FE3B3FD
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:44:33 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id e5so4579183pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V3tFbH35BFupdR5bw1hQ7Wrji66feBlGYcQAWCV7aQM=;
-        b=ceyT+O0AlPmogMlbBEf0jmw/Z26cnyOFpgkiYjvQXlXJoHkP8J4lAjcaMJIqY+EBTY
-         y5AYcKxoM0O+vEtt4C60iahHShQ9MeHn7EVXj4LTs4JIfw9c9et361Uhy/nUAXJW+/xT
-         +sbe0c9Tzke8XuUiPnnO6pXrp0TwLsjlFskgA=
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8B93A5C1;
+        Thu, 24 Mar 2022 05:44:37 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id bx5so4617842pjb.3;
+        Thu, 24 Mar 2022 05:44:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V3tFbH35BFupdR5bw1hQ7Wrji66feBlGYcQAWCV7aQM=;
-        b=0Ic+uAO4HsuGA0IWhBcu02z1Fs/kERB4FEV5HDxuvyVMiRAvi8NtXSj+rvml6DiG/p
-         r22lITFdtDe34UjVGxfXLt7qTHJBUscu1QF2Buee/SNmIz8HmazdgqIwrQGAoW+wy9Su
-         FgKlmMcqHMK2ydFo8pcFkgdlXybRkJE7QiJTP0yxEaZkQBo2w3aXZ15iiCvikExzPqIC
-         atvjBA/FgmpNtzqO/Qz4elnm5+WM4PGYqwI18wSfgpPkQmMY05nuLT4sep0+Qgm+Wwg+
-         EgsPcwkHcuE1M2fCv91T6P++zaKLrow24xYI5jrvRnoHrgccLkYoi2rIXmS/A0UEspVs
-         c2sQ==
-X-Gm-Message-State: AOAM531Se4f0sfPfO7YBoIIOqV/9vYB4jOL2+XLtrecWCBG0Sni4Vysd
-        PhjDKh/HOkHxnpN6qCNGnlpiNA==
-X-Google-Smtp-Source: ABdhPJxP42NMb0GQrTrXWtdr66SfCJdveNo9QEKIWJol7H+ZIpB+Eao3a8ALGd36qKQJGXCtv+cUHA==
-X-Received: by 2002:a17:902:f291:b0:153:caaf:17fd with SMTP id k17-20020a170902f29100b00153caaf17fdmr5655877plc.89.1648125872376;
-        Thu, 24 Mar 2022 05:44:32 -0700 (PDT)
-Received: from shiro.work ([2400:4162:2428:2f01:7285:c2ff:fe8e:66d7])
-        by smtp.googlemail.com with ESMTPSA id t10-20020a056a00138a00b004fa9c9fda44sm3786924pfg.89.2022.03.24.05.44.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 05:44:32 -0700 (PDT)
-From:   Daniel Palmer <daniel@0x0f.com>
-To:     devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        robh+dt@kernel.org, andriy.shevchenko@linux.intel.com,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        romain.perier@gmail.com, Daniel Palmer <daniel@0x0f.com>
-Subject: [PATCH 4/4] ARM: dts: mstar: Add second UART to base dtsi.
-Date:   Thu, 24 Mar 2022 21:44:02 +0900
-Message-Id: <20220324124402.3631379-5-daniel@0x0f.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220324124402.3631379-1-daniel@0x0f.com>
-References: <20220324124402.3631379-1-daniel@0x0f.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HZwsIhjtgSAmnia0/qaT3RxixpuiveiXDCzTc8KKHGA=;
+        b=rUjQxZuaozbndvZ/yS5THFwiW+bZ5QuG4Lqq5dvYjTeIduF31GN/HtKtoOSvObcGAo
+         dxEDvdqjRyvhT1gZZWnc79Cj9RfBY0uI6KyokvKyiG3iN0auNRSlBsU7+SKiwnoiIunr
+         6Z+Ke0kANGP9QVeoDOs4FGtloXeTEzsSPX0DiHdRUz4rs7H4HLbUwGf3Ne0H2qMCePGY
+         0TVItaZALuzobzeh+LLYhJUxofsJN9eJ//Ym9SjF1Y6lhU5+COo3KrZ7itFmZFiUCo2T
+         sDgeuRYQmEToy3hS7qa6YZPfr9JXizPhQgSyT0bYUReW80Joq7hC+zDMlrOdZ7aQyHDx
+         Q/+w==
+X-Gm-Message-State: AOAM531mhgGtLCssF6BmxMR0PqtWKk4vPE8ZqSgmOJgYPLmd2R0Kl1rR
+        TZYgyP+/AkSPNyH+cHgEmEA=
+X-Google-Smtp-Source: ABdhPJz9ePb2UO+o7Kg3QBx7giEUT6UhTsxA28zonwRRr36ruXOgSgWc/cpXYsIcs0AGEZGbkpjykQ==
+X-Received: by 2002:a17:903:3091:b0:153:9dcf:de71 with SMTP id u17-20020a170903309100b001539dcfde71mr5671611plc.7.1648125876217;
+        Thu, 24 Mar 2022 05:44:36 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b00385f29b02b2sm2669252pgc.50.2022.03.24.05.44.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 05:44:35 -0700 (PDT)
+Message-ID: <0034b2f8-0eba-f700-6fff-03cf5b8c8332@acm.org>
+Date:   Thu, 24 Mar 2022 05:44:33 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] scsi: ufs: core: Remove unused field in struct ufs_hba
+Content-Language: en-US
+To:     keosung.park@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20220324070146epcms2p577d43ce3e7cbd36aa964f3842e49b2ba@epcms2p5>
+ <413601558.101648105683746.JavaMail.epsvc@epcpadp4>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <413601558.101648105683746.JavaMail.epsvc@epcpadp4>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the second UART to the base dtsi.
+On 3/24/22 00:01, Keoseong Park wrote:
+> Remove unused field "rpm_lvl_attr" and "spm_lvl_attr" in struct ufs_hba.
+> Commit cbb6813ee771 ("scsi: ufs: sysfs: attribute group for existing
+> sysfs entries.") removed all code using that field.
+> 
+> Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+> ---
+>   drivers/scsi/ufs/ufshcd.h | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> index 88c20f3608c2..94f545be183a 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -820,8 +820,6 @@ struct ufs_hba {
+>   	enum ufs_pm_level rpm_lvl;
+>   	/* Desired UFS power management level during system PM */
+>   	enum ufs_pm_level spm_lvl;
+> -	struct device_attribute rpm_lvl_attr;
+> -	struct device_attribute spm_lvl_attr;
+>   	int pm_op_in_progress;
+>   
+>   	/* Auto-Hibernate Idle Timer register value */
 
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
----
- arch/arm/boot/dts/mstar-v7.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/arm/boot/dts/mstar-v7.dtsi b/arch/arm/boot/dts/mstar-v7.dtsi
-index 8464a8f1b136..baf2422b9854 100644
---- a/arch/arm/boot/dts/mstar-v7.dtsi
-+++ b/arch/arm/boot/dts/mstar-v7.dtsi
-@@ -182,6 +182,14 @@ pm_uart: uart@221000 {
- 				clock-frequency = <172000000>;
- 				status = "disabled";
- 			};
-+
-+			uart1: uart@221200 {
-+				compatible = "mstar,msc313-uart", "snps,dw-apb-uart";
-+				reg = <0x221200 0x100>;
-+				reg-shift = <3>;
-+				interrupts-extended = <&intc_irq GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		imi: sram@a0000000 {
--- 
-2.35.1
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

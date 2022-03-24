@@ -2,144 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE10A4E61D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15584E61DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349542AbiCXKg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S1349555AbiCXKhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbiCXKg1 (ORCPT
+        with ESMTP id S234052AbiCXKhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:36:27 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7698A6D955;
-        Thu, 24 Mar 2022 03:34:55 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id x8-20020a9d6288000000b005b22c373759so2977128otk.8;
-        Thu, 24 Mar 2022 03:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rkUOtyTHE/TYF3m2vqOCfIm2T9ySzNIzBEKj/tfGQiA=;
-        b=IjGlTehpEGtuYtSpr81vczsx73SdQa/f7uvnLaVxETKjnKAUSvlzJEnv/BiHQMRZ0n
-         n1F96baOYoQNOFo6YmOcPq5nw7v9sq/bnT5xIbTzA9OQEbLdSwjwbyyRmsDVCHYhltLi
-         wU20EnegAcKOUheWyZAYk1p5OLZUnY5K4ULqL0NOPNWMj+2Vya3W3Rn1sM8GOxohMzSY
-         tuvbYMaq5Ix/137uTdxfusAwDk6ztd+fmdbN058ynV/JjWBbKdtxm/vxZ05qNQZZUJoP
-         PYHH91cMRp289yd4itig77E6QdTlxk2F6wKIyXGDVhnf0XMpxWaNtafX5LuSKlSbErcp
-         G2kA==
+        Thu, 24 Mar 2022 06:37:12 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43CD6E343;
+        Thu, 24 Mar 2022 03:35:40 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id h23so5957169wrb.8;
+        Thu, 24 Mar 2022 03:35:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rkUOtyTHE/TYF3m2vqOCfIm2T9ySzNIzBEKj/tfGQiA=;
-        b=VX7urL+W/0zctLzsvd1MB6FycMQLnaLsfnU2rGQpPx5Qu9rcygJi1TOKsRVb82RMxs
-         /j09rG7+Bs95g5fMexQv65g85cXAvRfhq2oau85+r6yhDvUqTtQiCXT5Ga0Wd/uskBV9
-         GyX+cqdQZ73joz+7I+iR1BCRjFAQJwVF+BFOsU0skQi3LqWEEdsZULjd35V8OUU/7zoz
-         x/i7oewEFEmvy/E037XvJp12orNOyI+OHtI06RlTl75X6LM6m+yhB3HUFXuNa3XiiDrP
-         rw7FwXlxZAp3/HlHGDp9w00fPbwcKLhYXhv0aBIgfMeuKFln7CmkPVEKfFODgUfxCfp8
-         GvCg==
-X-Gm-Message-State: AOAM5332W9GixEZVa/KSqWK6mRiMUMxmnu43THK4BQwQPJX17vgZLR5K
-        Eau2chewcM+Ie0xN8NLY2pjPKHaV4op8+I8e7yeKxqJMP/Y=
-X-Google-Smtp-Source: ABdhPJy7l9oWwPJ6OBUoAM36bkcS3M/p+SgBdY21YnbhlrHpkdnSvtMHV60SdyXuXWDEemHIwn3a/agyAEnhEiMyBKI=
-X-Received: by 2002:a9d:5cc8:0:b0:5b2:35ae:7ad6 with SMTP id
- r8-20020a9d5cc8000000b005b235ae7ad6mr1700616oti.275.1648118094832; Thu, 24
- Mar 2022 03:34:54 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Hl2300Q3yIYem3DeC+yC//jG0rxJse6f6bzV8oQgUaM=;
+        b=ntpYkL11pqS1uDnrG5GLYj2kGVH0oAkfy+4GEMgGEiXezRxPAj7CYovBiJtKllgRWH
+         8deT7boIS+q4Ha+uQpI0Rdap0mgkAL2ABnJ10FAQOPXhHW0p8ZsXRcgVfJC+Kf/yRMhj
+         DbwHuWO1cP8/B6cFxhsS9YejIAaaqptiE3kGIAJpz8ttP8fKHP63nhvQpO/uawLl7epk
+         5BVLh1BqYFVA2njF1IHntUyDcpCxvN/yVvAC75twPXjo9vnDGuTSxZZzzzMMD9cV5ZzA
+         LCmL5N4lWiDT/E3Cg4+BdcbMZaM3lqrsVf0eum21z4/Zb5YbnMFqjC4xJDJDujWLoIlR
+         Oygg==
+X-Gm-Message-State: AOAM5334uXguZa3bYLGkpBt0/2mCFpI0dxQf7MZrSYsK18ozTgZO8pe+
+        8DUcLorZ6Sj9jR2gviR1aCk=
+X-Google-Smtp-Source: ABdhPJwANYW3gavd2FfSPJq7cxASPsyPRneOA9YZPkOtAZJvpNCCGUbBtreV69ExMOluQQWYohSkSg==
+X-Received: by 2002:adf:fc47:0:b0:203:dda1:4311 with SMTP id e7-20020adffc47000000b00203dda14311mr3975119wrs.301.1648118139226;
+        Thu, 24 Mar 2022 03:35:39 -0700 (PDT)
+Received: from [192.168.0.156] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id z18-20020a5d6412000000b0020400dde72esm2233790wru.37.2022.03.24.03.35.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 03:35:38 -0700 (PDT)
+Message-ID: <18c791ce-059a-87a5-eaf4-057f8e232fe7@kernel.org>
+Date:   Thu, 24 Mar 2022 11:35:37 +0100
 MIME-Version: 1.0
-References: <20220322192712.709170-1-mszeredi@redhat.com> <20220323225843.GI1609613@dread.disaster.area>
- <CAJfpegv6PmZ_RXipBs9UEjv_WfEUtTDE1uNZq+9fBkCzWPvXkw@mail.gmail.com>
-In-Reply-To: <CAJfpegv6PmZ_RXipBs9UEjv_WfEUtTDE1uNZq+9fBkCzWPvXkw@mail.gmail.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 24 Mar 2022 12:34:43 +0200
-Message-ID: <CAOQ4uxhbm2mtTp8PmgEq5KmwTe0n6MRRGhShXM=Ot6Bz87HXjA@mail.gmail.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/4] dt-bindings: cpufreq: mediatek: add mt8186 cpufreq
+ dt-bindings
+Content-Language: en-US
+To:     Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, fan.chen@mediatek.com,
+        louis.yu@mediatek.com, roger.lu@mediatek.com,
+        Allen-yy.Lin@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        hsinyi@google.com,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
+ <20220307122151.11666-3-jia-wei.chang@mediatek.com>
+ <d5c5e3f7-7f50-6c57-f82a-41d5494ea514@canonical.com>
+ <c150e9ed7faa4c06f55f7d7623655b65c8575121.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <c150e9ed7faa4c06f55f7d7623655b65c8575121.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > I've said in the past when discussing things like statx() that maybe
-> > everything should be addressable via the xattr namespace and
-> > set/queried via xattr names regardless of how the filesystem stores
-> > the data. The VFS/filesystem simply translates the name to the
-> > storage location of the information. It might be held in xattrs, but
-> > it could just be a flag bit in an inode field.
->
-> Right, that would definitely make sense for inode attributes.
+On 24/03/2022 10:42, Jia-Wei Chang wrote:
+> On Mon, 2022-03-07 at 19:59 +0100, Krzysztof Kozlowski wrote:
+>> On 07/03/2022 13:21, Tim Chang wrote:
+>>> 1. add cci property.
+>>> 2. add example of MT8186.
+>>
+>> One logical change at a time. Are these related? Why entirely new
+>> example just for "cci" node? Maybe this should be part of existing
+>> example?
+> 
+> Yes, the cci property is required in some SoC, e.g. mt8183 and mt8186,
+> because cpu and cci share the same power supplies.
 
-Why limit to inode attributes?
-The argument of getxattr()/fgetxattr() is exactly the same as
-the argument for statfs()fstatfs() and the latter returns the attributes
-of the sb and the mnt (i.e. calculate_f_flags()).
+I asked why this cannot be part of existing example.
 
-I don't see a problem with querying attributes of a mount/sb the same
-way as long as the namespace is clear about what is the object that
-is being queried (e.g. getxattr(path, "fsinfo.sbiostats.rchar",...).
+> I will update the commit message and add an example of mt8186 to
+> present usage of cci.
 
->
-> What about other objects' attributes, statistics?   Remember this
-> started out as a way to replace /proc/self/mountinfo with something
-> that can query individual mount.
->
-> > > mnt                    - list of mount parameters
-> > > mnt:mountpoint         - the mountpoint of the mount of $ORIGIN
-> > > mntns                  - list of mount ID's reachable from the current root
-> > > mntns:21:parentid      - parent ID of the mount with ID of 21
-> > > xattr:security.selinux - the security.selinux extended attribute
-> > > data:foo/bar           - the data contained in file $ORIGIN/foo/bar
-> >
-> > How are these different from just declaring new xattr namespaces for
-> > these things. e.g. open any file and list the xattrs in the
-> > xattr:mount.mnt namespace to get the list of mount parameters for
-> > that mount.
->
-> Okay.
->
-> > Why do we need a new "xattr in everything but name" interface when
-> > we could just extend the one we've already got and formalise a new,
-> > cleaner version of xattr batch APIs that have been around for 20-odd
-> > years already?
->
-> Seems to make sense. But...will listxattr list everyting recursively?
-> I guess that won't work, better just list traditional xattrs,
-> otherwise we'll likely get regressions, and anyway the point of a
-> hierarchical namespace is to be able to list nodes on each level.  We
-> can use getxattr() for this purpose, just like getvalues() does in the
-> above example.
->
+You added the example here, didn't you?
 
-FYI, there are already precedents for "virtual" xattrs, see the user.smb3.*
-family in fs/cifs/xattr.c for example.
-
-Those cifs "virtual" (or "remote") xattrs are not listed by listxattr, even
-though they ARE properties of the file which are very relevant for backup.
-
-Currently, they use the user.* namespace, but the values could be
-also exposed via a more generic fsinfo.* namespace that is dedicated
-to these sort of things and then, as you suggest, getxattr(path, "fsinfo",...)
-can list "smb3" for cifs.
-
-I like where this is going :)
-
-Thanks,
-Amir.
+Best regards,
+Krzysztof

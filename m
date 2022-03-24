@@ -2,182 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8712A4E6696
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7104E669E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351515AbiCXQEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
+        id S1346626AbiCXQH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243557AbiCXQEh (ORCPT
+        with ESMTP id S243557AbiCXQHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:04:37 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE973AA;
-        Thu, 24 Mar 2022 09:03:03 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6F6FF2222E;
-        Thu, 24 Mar 2022 17:03:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648137781;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kOeoWOP9P8ui80SyFUlad9ju5LUWsfcnsPplOFlDO70=;
-        b=EeKxMp06ZQk8ui1RpJzLu7AJ8sC9SP8bJawlTrirSxK7N4gPhe+cvKGGPvrx11fj8j0fiz
-        i8I5Y6C7jeOAYZ+NWFSwM96K9gEBFT+0WCuO1y6T2aRH6L3xuA7mqiNhGhX7EqVba63aJ4
-        h925PIv4NCf3XOdylWO1/ktUHnhU/y8=
+        Thu, 24 Mar 2022 12:07:44 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87391035
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:06:09 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id u10-20020a5ec00a000000b00648e5804d5bso3366794iol.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:06:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=FbzRbiu5vJCDRMtVtSTdRIE8gG5etNsd6nvcljrLMyY=;
+        b=QKcFHkyH6yt+2MAflFDip0qsfVSl4wR25li2Kcux98DQaaSvqetu8dPMo2o+WJtcGY
+         mEn2rs2IRWmSwC3DPQPzV4Jh1Vhn7AZAysAt6/Zh+s/axr0HPubFdDMKpbmuFxpWOzta
+         ypaQt6Ejbo1vlHuktLJJVPehcq88xGeZJb33UoNUVEZBmIcxQ0NlTnsjfcyUMpRMcha0
+         sY+xXdbA/MMZGdyogkSa25CDwcI/PydKpw3UPkagUGIL4N5CJfy3lYzxe5pZrpi2b1Bl
+         bXo0xJEhN++q8lWBGcRXDs3OvrUZeuZltLQ7CAPff1yJPTJweobM3MA2Xeu36DFwG2wz
+         rk4Q==
+X-Gm-Message-State: AOAM531pExU8s3zj0hwmM5giz9Z02SRpMYWU+kYbZiZbdot8qrQQjigt
+        9UDfDBuGzUaKzRsfV9fY1fwP2l6AvEENqXEJ0zb9LZZqS2Rk
+X-Google-Smtp-Source: ABdhPJxZkWsrdCGt6DrEiMHFZWjgkikINkI3G4vtYbV6h142DwTtAkEg7dOMGUx2joKmKnqq/26KBBrRRcz3b843x8qnBKCCPJWi
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 24 Mar 2022 17:03:00 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
-In-Reply-To: <Yju+SGuZ9aB52ARi@lunn.ch>
-References: <20220323183419.2278676-1-michael@walle.cc>
- <20220323183419.2278676-5-michael@walle.cc> <Yjt99k57mM5PQ8bT@lunn.ch>
- <8304fb3578ee38525a158af768691e75@walle.cc> <Yju+SGuZ9aB52ARi@lunn.ch>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <30012bd8256be3be9977bd15d1486c84@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6602:2ac3:b0:649:1357:44b8 with SMTP id
+ m3-20020a0566022ac300b00649135744b8mr3140855iov.159.1648137969221; Thu, 24
+ Mar 2022 09:06:09 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 09:06:09 -0700
+In-Reply-To: <20220324133429.3841-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000032471505daf90696@google.com>
+Subject: Re: [syzbot] INFO: task can't die in vmci_qp_broker_detach
+From:   syzbot <syzbot+6e07eb10996f8ea7a825@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-24 01:41, schrieb Andrew Lunn:
->> > Thinking out loud...
->> >
->> > 1) We have a C22 only bus. Easy, C45 over C22 should be used.
->> >
->> > 2) We have a C45 only bus. Easy, C45 should be used, and it will of
->> >    probed that way.
->> >
->> > 3) We have a C22 and C45 bus, but MDIOBUS_NO_CAP. It will probe C22,
->> >    but ideally we want to swap to C45.
->> >
->> > 4) We have a C22 and C45 bus, MDIOBUS_C22_C45. It will probe C22, but
->> >    ideally we want to swap to C45.
->> 
->> I presume you are speaking of
->> https://elixir.bootlin.com/linux/v5.17/source/drivers/net/phy/mdio_bus.c#L700
-> 
-> Yes.
-> 
->> Shouldn't that be the other way around then? How would you tell if
->> you can do C45?
-> 
-> For a long time, only C22 was probed. To actually make use of a C45
-> only PHY, you had to have a compatible string in DT which indicated a
-> C45 device is present on the bus. But then none DT systems came along
-> which needed to find a C45 only PHY during probe without the hint it
-> is was actually there. That is when the probe capabilities we added,
-> and the scan extended to look for a C45 device if the capabilities
-> indicates the bus actually supported it. But to keep backwards
-> compatibility, C22 was scanned first and then C45 afterwards.
+Hello,
 
-Ok, I figured.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> To some extent, we need to separate finding the device on the bus to
-> actually using the device. The device might respond to C22, give us
-> its ID, get the correct driver loaded based on that ID, and the driver
-> then uses the C45 address space to actually configure the PHY.
-> 
-> Then there is the Marvel 10G PHY. It responds to C22, but returns 0
-> for the ID! There is a special case for this in the code, it then
-> looks in the C45 space and uses the ID from there, if it finds
-> something useful.
-> 
-> So as i said in my reply to the cover letter, we have two different
-> state variables:
-> 
-> 1) The PHY has the C45 register space.
-> 
-> 2) We need to either use C45 transfers, or C45 over C22 transfers to
->    access the C45 register space.
-> 
-> And we potentially have a chicken/egg problem. The PHY driver knows
-> 1), but in order to know what driver to load we need the ID registers
-> from the PHY, or some external hint like DT. We are also currently
-> only probing C22, or C45, but not C45 over C22. And i'm not sure we
-> actually can probe C45 over C22 because there are C22 only PHYs which
-> use those two register for other things. So we are back to the driver
-> again which does know if C45 over C22 will work.
+Reported-and-tested-by: syzbot+6e07eb10996f8ea7a825@syzkaller.appspotmail.com
 
-Isn't it safe to assume that if a PHY implements the indirect
-registers for c45 in its c22 space that it will also have a valid
-PHY ID and then the it's driver will be probed? So if a PHY is
-probed as c22 its driver might tell us "wait, it's actually a c45
-phy and hey for your convenience it also have the indirect registers
-in c22". We can then set has_c45 and maybe c45_over_c22 (also depending
-on the bus capabilities).
+Tested on:
 
-> So phydev->has_c45 we can provisionally set if we probed the PHY by
-> C45. But the driver should also set it if it knows better, or even the
-> core can set it the first time the driver uses an _mmd API call.
+commit:         6b1f86f8 Merge tag 'folio-5.18b' of git://git.infradea..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bc982714c733be2b
+dashboard link: https://syzkaller.appspot.com/bug?extid=6e07eb10996f8ea7a825
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15b451db700000
 
-I'm not sure about the _mmd calls, there are PHYs which have MMDs
-(I guess EEE is an example?) but are not capable of C45 accesses.
-
-> phydev->c45_over_c22 we are currently in a bad shape for. We cannot
-> reliably say the bus master supports C45. If the bus capabilities say
-> C22 only, we can set phydev->c45_over_c22. If the bus capabilities
-> list C45, we can set it false. But that only covers a few busses, most
-> don't have any capabilities set. We can try a C45 access and see if we
-> get an -EOPNOTSUPP, in which case we can set phydev->c45_over_c22. But
-> the bus driver could also do the wrong thing, issue a C22 transfer and
-> give us back rubbish.
-
-First question, what do you think about keeping the is_c45 property but
-with a different meaning and add use_c45_over_c22. That way it will be
-less code churn:
-
-  * @is_c45:  Set to true if this PHY has clause 45 address space.
-  * @use_c45_over_c22:  Set to true if c45-over-c22 addressing is used.
-
-  1) c45 phy probed as c45 -> is_c45 = 1, like it is at the moment
-     use c45 transfers
-2a) c45 phy probed as c22 -> is_c45 = 1, use_c45_over_c22 = 0
-     use c45 transfers
-2b) c45 phy probed as c22 -> is_c45 = 1, use_c45_over_c22 = 1
-     use c22 transfers
-
-Did I miss something?
-
-To promote from c22 to c45 we could look at a flag in the PHY
-driver. That should be basically that what the gpy driver is trying
-to do with the "if (!is_c45) get_c45_ids()" (but fail).
-
-> So i think we do need to review all the bus drivers and any which do
-> support C45 need their capabilities set to indicate that. We can then
-> set phydev->c45_over_c22.
-
-I could add the probe_capabilites, or at least I could try. But it won't
-tell us if the PHY is capable of the indirect addressing. So we aren't
-much further in this regard. But IMHO this can be done incrementally
-if someone is interested in having that feature. He should also be in
-the position to test it properly.
-
-[just saw your latest mail while writing this, so half of it is done
-anyway, btw, I did the same today ;)]
-
--michael
+Note: testing is done by a robot and is best-effort only.

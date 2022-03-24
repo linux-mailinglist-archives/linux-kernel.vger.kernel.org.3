@@ -2,119 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A2E4E5D79
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 04:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A4A4E5D84
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 04:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347943AbiCXDUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 23:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S1347969AbiCXDWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 23:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244337AbiCXDUH (ORCPT
+        with ESMTP id S237620AbiCXDWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 23:20:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3555DFCB;
-        Wed, 23 Mar 2022 20:18:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7FEA6199C;
-        Thu, 24 Mar 2022 03:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F408BC340E9;
-        Thu, 24 Mar 2022 03:18:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GLvc05F/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1648091909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aEOduEdFqKFMsa9nTvbpRapPlloyfuvJVgMDVaG/kLk=;
-        b=GLvc05F/ZBFHwRQoMoOJCs6oatQ73VJN9ev+Gl4S0u4drEeyAo50IQndQTv0n/37WzAoxI
-        Jr/9Gk9q73hjAKXycqTBurBsapuNvWr3Rw3CD/sGVs3KO46n/5OnC9D4gP9h/ag03/O6Xc
-        3n/jr0dET87Aw2YPNdPQcKiUsxR5Q1k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fc86e14f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 24 Mar 2022 03:18:28 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id f38so6247787ybi.3;
-        Wed, 23 Mar 2022 20:18:28 -0700 (PDT)
-X-Gm-Message-State: AOAM5338wvh+XSteC7liNIrnmEXtdyDhPE8Q6NIHn0oMDo9otX4ihqNL
-        xIbU/tlezO6erN98xui0YyYAdvcf8ongkMSBX9c=
-X-Google-Smtp-Source: ABdhPJxxixvasKF5K+F4iJp7DM3PyC2Qdmh51RlYyfsnm4HKDWCuCjmR8heKzY7GsSAZI+e4HnmwS2ez/CC3rZNar8A=
-X-Received: by 2002:a25:b905:0:b0:61e:23e4:949f with SMTP id
- x5-20020a25b905000000b0061e23e4949fmr2995975ybj.373.1648091907198; Wed, 23
- Mar 2022 20:18:27 -0700 (PDT)
+        Wed, 23 Mar 2022 23:22:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4582D1ED;
+        Wed, 23 Mar 2022 20:20:36 -0700 (PDT)
+Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KP9Rl2NqlzfZS0;
+        Thu, 24 Mar 2022 11:18:59 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ kwepemi500007.china.huawei.com (7.221.188.207) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 24 Mar 2022 11:20:33 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 24 Mar 2022 11:20:32 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <tglx@linutronix.de>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH] perf/x86: Unify format of events sysfs show
+Date:   Thu, 24 Mar 2022 11:19:57 +0800
+Message-ID: <20220324031957.135595-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-References: <20220322191436.110963-1-Jason@zx2c4.com> <1648009787.fah6dos6ya.none@localhost>
- <CAHmME9rsvxczJrhPwRX6nyrh9NB2AuJqkEKrTLx-G-T1J6_czQ@mail.gmail.com>
-In-Reply-To: <CAHmME9rsvxczJrhPwRX6nyrh9NB2AuJqkEKrTLx-G-T1J6_czQ@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 23 Mar 2022 21:18:16 -0600
-X-Gmail-Original-Message-ID: <CAHmME9ovJpdcuuZhNKrOTUc8XvKDDdC+axhAmOD9iESnRR7JqA@mail.gmail.com>
-Message-ID: <CAHmME9ovJpdcuuZhNKrOTUc8XvKDDdC+axhAmOD9iESnRR7JqA@mail.gmail.com>
-Subject: Re: [PATCH] random: allow writes to /dev/urandom to influence fast init
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Jann Horn <jannh@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Sysfs show formats of files in /sys/devices/cpu/events/ are not unified,
+some end with "\n", and some do not. Modify sysfs show format of events
+defined by EVENT_ATTR_STR to end with "\n".
 
-On Tue, Mar 22, 2022 at 10:47 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> Very much so, thanks again. What I take away from your results is:
->
-> - RNDADDTOENTCNT is in active use in a safe way. Sure, RNDADDENTROPY
-> is still much better, but RNDADDTOENTCNT isn't entirely broken in the
-> above configurations either.
-> - This patch would make RNDADDTOENTCNT unsafe for some of the above
-> configurations in a way that it currently isn't unsafe.
-> - Plenty of things are seeding the RNG correctly, and buildroot's
-> shell script is just "doing it wrong".
->
-> On that last point, I should reiterate that buildroot's shell script
-> still isn't actually initializing the RNG, despite what it says in its
-> echo; there's never been a way to initialize the RNG from a shell
-> script, without calling out to various special purpose ioctl-aware
-> binaries.
+Before:
+  $ ls /sys/devices/cpu/events/* | xargs -i sh -c 'echo -n "{}: "; cat -A {}; echo'
+  branch-instructions: event=0xc4$
 
-Based on this, the fact that shell scripts cannot seed the RNG anyway,
-and due to the hazards in trying to retrofit some heuristics onto an
-interface that was never designed to work like this, I'm convinced at
-this point that the right course of action here is to leave this
-alone. There's no combination of /dev/urandom write hacks/heuristics
-that do the right thing without creating some big problem elsewhere.
-It just does not have the right semantics for it, and changing the
-existing semantics will break existing users.
+  branch-misses: event=0xc5$
 
-In light of that conclusion, I'm going to work with every userspace
-downstream I can find to help them fix their file-based seeding, if it
-has bugs. I've started talking with the buildroot folks, and then I'll
-speak with the OpenRC people (being a Gentoo dev, that should be easy
-going). Systemd does the right thing already.
+  bus-cycles: event=0x3c,umask=0x01$
 
-I wrote a little utility for potential inclusion in
-busybox/util-linux/whatever when it matures beyond its current age of
-being half hour old:
-- https://git.zx2c4.com/seedrng/about/
-- https://git.zx2c4.com/seedrng/tree/seedrng.c
-So I'll see what the buildroot people think of this and take it from there.
+  cache-misses: event=0x2e,umask=0x41$
 
-The plus side of doing all this is that, if the efforts pan out, it
-means there'll actually be proper seeding on devices that don't
-currently do that, which then might lead to a better ecosystem and
-less boot time blocking and all that jazz.
+  cache-references: event=0x2e,umask=0x4f$
 
-Jason
+  cpu-cycles: event=0x3c$
+
+  instructions: event=0xc0$
+
+  ref-cycles: event=0x00,umask=0x03$
+
+  slots: event=0x00,umask=0x4
+  topdown-bad-spec: event=0x00,umask=0x81
+  topdown-be-bound: event=0x00,umask=0x83
+  topdown-fe-bound: event=0x00,umask=0x82
+  topdown-retiring: event=0x00,umask=0x80
+
+After:
+  $ ls /sys/devices/cpu/events/* | xargs -i sh -c 'echo -n "{}: "; cat -A {}; echo'
+  /sys/devices/cpu/events/branch-instructions: event=0xc4$
+
+  /sys/devices/cpu/events/branch-misses: event=0xc5$
+
+  /sys/devices/cpu/events/bus-cycles: event=0x3c,umask=0x01$
+
+  /sys/devices/cpu/events/cache-misses: event=0x2e,umask=0x41$
+
+  /sys/devices/cpu/events/cache-references: event=0x2e,umask=0x4f$
+
+  /sys/devices/cpu/events/cpu-cycles: event=0x3c$
+
+  /sys/devices/cpu/events/instructions: event=0xc0$
+
+  /sys/devices/cpu/events/ref-cycles: event=0x00,umask=0x03$
+
+  /sys/devices/cpu/events/slots: event=0x00,umask=0x4$
+
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+ arch/x86/events/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index eef816fc216d..e3cc099886ab 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -1837,7 +1837,7 @@ ssize_t events_sysfs_show(struct device *dev, struct device_attribute *attr, cha
+ 
+ 	/* string trumps id */
+ 	if (pmu_attr->event_str)
+-		return sprintf(page, "%s", pmu_attr->event_str);
++		return sprintf(page, "%s\n", pmu_attr->event_str);
+ 
+ 	return x86_pmu.events_sysfs_show(page, config);
+ }
+-- 
+2.30.GIT
+

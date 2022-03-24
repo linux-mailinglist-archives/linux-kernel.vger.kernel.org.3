@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195D24E6811
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF484E6814
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352422AbiCXRsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S243732AbiCXRuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243676AbiCXRse (ORCPT
+        with ESMTP id S243695AbiCXRuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:48:34 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607C8B2471;
-        Thu, 24 Mar 2022 10:47:02 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id n35so3174713wms.5;
-        Thu, 24 Mar 2022 10:47:02 -0700 (PDT)
+        Thu, 24 Mar 2022 13:50:50 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD8345515
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:49:17 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id mr5-20020a17090b238500b001c67366ae93so10077751pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:49:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RpJJksH0wfu/m1hwkaHpI10R0iz63qY9JlRehAsmSG4=;
-        b=beKod+HfMm0Bku5wtAVpyK+e9L2eGDgfyGQ8e9UbBgGSjnu7zlrGA5uR/c49Ndjbw8
-         J3+HUUaHI3dwNQWFXzMLGxwSl+eL95Pe0KjHzYSHfvsIRH2X3PFkiekf5hSvZWpM/77I
-         2JmQJ0P7/x8UAujhhJTc+8+f9Hgg8Xea5xROKP3lZlawf26HxUWhJUciens8hEc2qGTY
-         vU/oE4F5QBJbUx20dy2nVwz+olJ8vOCrfLRBMRAp93z/uAD8jMY1CZ/th6bKRziC/Rqa
-         zKSyC5ia/NEI3bNXkY+2qNlprabTePuB9si9yvrYNX8xgySHx1qVup7hQP40EfzwONAX
-         2Iuw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zEwJykqsXAZ6X80xdCJsmBhU7Y1GHKU0ry7GcuK4lio=;
+        b=KNzmAnw4v0LR2R3oCMvi/wlaTekZsKDXsi4Qe81GMseHMhbOywsjMAhCmOEWNNMMOc
+         jLvZm0uH99Lb9Zg5Ce7rsj1Rq85IXk0qy/gXAIuewjSd7Za/vQ7BGsajcB451j9AuAlV
+         LWGAhlXSFiUx1KR/QyoTN50rUQvqOKT0uEJBa/Q17tIbEXmmiAlN7WC+lFwzVGekNJ7h
+         GfiA2mv6/f849mXI0+O1iDkPp4Rov+res0dYoU4S31ALwE4kyHhX6YCTpS+tNM8JRFZR
+         rJ+bVybxlTX/JPSLsipYICfkEV6jZZW5CBeC+o4B6H3SO76GkmUEcsDTsszzuknQaY7t
+         yOtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RpJJksH0wfu/m1hwkaHpI10R0iz63qY9JlRehAsmSG4=;
-        b=Yzai6EoxFrc47IIc3lt5J8lRdzxWGv04DsmX1yoi1uwk0YqXVem/YKCBJICWrvhjrp
-         WgpOzYI3j4ATLUhkwqWapwNmIlSnQ7PYRuK1XT539bipV/Q0bDCLZP7hhhGEcvldI2AN
-         XAEXTH5Max+KRx/eqoMK7r6XlCM9zs3xgRXWo0tbQj2LQtMZkepTNpKY08bQavD7w6qo
-         ZCKYOgLuwkr4rpC3E86sJ7q34BqB6ok+doykul/YzVpgO3ncl6qNrUSTzKEebM8g+6DO
-         rSSXJD0CIp8EhLpFo9Tat3NZeK1KJjarQw9fjf35XP3RUDhxhUmrD32rTLRDHDNqWHmz
-         I55Q==
-X-Gm-Message-State: AOAM532mljEJQ2S0erS+YESxRXRNtuPOw3SeGcrXV0XPJ6utp+K8yvif
-        FINiAA7UPPByCdXxhbOwGok=
-X-Google-Smtp-Source: ABdhPJyTE3kGibu4AKZzVSRAmH3Y/noKIiLHxSXqmFeNwFfPhf2WonD+XppKjW3aV6MZN7M8s6Lhtw==
-X-Received: by 2002:a1c:f705:0:b0:37d:f2e5:d8ec with SMTP id v5-20020a1cf705000000b0037df2e5d8ecmr15573294wmh.21.1648144020925;
-        Thu, 24 Mar 2022 10:47:00 -0700 (PDT)
-Received: from [192.168.0.32] ([137.101.87.65])
-        by smtp.gmail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm7180786wmn.46.2022.03.24.10.47.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 10:47:00 -0700 (PDT)
-Message-ID: <9925aacc-104f-b5b4-dd9d-26a9950b392b@gmail.com>
-Date:   Thu, 24 Mar 2022 18:46:59 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zEwJykqsXAZ6X80xdCJsmBhU7Y1GHKU0ry7GcuK4lio=;
+        b=WEW/sf2ir7y1nHOhItnbYPofHZaKI86wCkM2WKvYvL/wmvD9XhHYiksEPPXSqeT9+i
+         HZwa2F+MD6csdNIdSSDoqY1b+ihuALRqf+/gVmYKrwUfIsJtskMAa0iqqtyGZdIW2qhb
+         XKwXV/FCPdDC2ReeP+ynmXhU+Y6i8wqlteA//DICO/VbmMCjGnTTzlpg/UygrVz4Dkh7
+         bdBZCNC53/30LA9r9lBci3ovN4CSBlLN/wglYlRHlR5yrax0p/sIlK+KwEm1fnZU6KDA
+         KK8zqMU6+o5rlGq31ihJrzN+1QLnppqjGccb0cguAXLPaA8WvlB43xnjj6kDYcF0Fzzk
+         GmIA==
+X-Gm-Message-State: AOAM530WaOYYK/S+AcX6HRGeKy7BEYTtxS5Gtfrk4BYMA8vhYa1tRyr3
+        SFF1JUF0JsU3xSyU7zIv6SRc
+X-Google-Smtp-Source: ABdhPJx+2PcTCwtG8eip5f/lpHYC7MS4hNIrcymtpB+qRqNlhfPaastqMgbD2iLPyqrdaiwzL79H1w==
+X-Received: by 2002:a17:902:f70b:b0:14d:643d:9c99 with SMTP id h11-20020a170902f70b00b0014d643d9c99mr7222253plo.18.1648144157256;
+        Thu, 24 Mar 2022 10:49:17 -0700 (PDT)
+Received: from thinkpad ([27.111.75.218])
+        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm4374690pfw.188.2022.03.24.10.49.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 10:49:10 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 23:18:59 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 12/25] dmaengine: dw-edma: Fix DebugFS reg entry type
+Message-ID: <20220324174859.GU2854@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-13-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 11/22] arm64: dts: mt8192: Add efuse node
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-12-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220318144534.17996-12-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324014836.19149-13-Sergey.Semin@baikalelectronics.ru>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/03/2022 15:45, Allen-KH Cheng wrote:
-> Add efuse node for mt8192 SoC
+On Thu, Mar 24, 2022 at 04:48:23AM +0300, Serge Semin wrote:
+> debugfs_entries structure declared in the dw-edma-v0-debugfs.c module
+> contains the DebugFS node' register address. The address is declared as
+> dma_addr_t type, but first it's assigned with virtual CPU IOMEM address
+> and then it's cast back to the virtual address. Even though the castes
+> sandwich will unlikely cause any problem since normally DMA address is at
+> least of the same size as the CPU virtual address, it's at the very least
+> redundant if not to say logically incorrect. Let's fix it by just stop
+> casting the pointer back and worth and just preserve the address as a
+> pointer to void with __iomem qualifier.
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Fixes: 305aebeff879 ("dmaengine: Add Synopsys eDMA IP version 0 debugfs support")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Applied thanks
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
 
 > ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 75c21edccf85..6220d6962f58 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -937,6 +937,21 @@
->   			status = "disabled";
->   		};
->   
-> +		efuse: efuse@11c10000 {
-> +			compatible = "mediatek,efuse";
-> +			reg = <0 0x11c10000 0 0x1000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> index 3a899f7f4e8d..12845a2dc016 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> @@ -14,7 +14,7 @@
+>  #include "dw-edma-core.h"
+>  
+>  #define REGS_ADDR(name) \
+> -	((void __force *)&regs->name)
+> +	((void __iomem *)&regs->name)
+>  #define REGISTER(name) \
+>  	{ #name, REGS_ADDR(name) }
+>  
+> @@ -48,12 +48,13 @@ static struct {
+>  
+>  struct debugfs_entries {
+>  	const char				*name;
+> -	dma_addr_t				*reg;
+> +	void __iomem				*reg;
+>  };
+>  
+>  static int dw_edma_debugfs_u32_get(void *data, u64 *val)
+>  {
+> -	void __iomem *reg = (void __force __iomem *)data;
+> +	void __iomem *reg = data;
 > +
-> +			lvts_e_data1: data1@1c0 {
-> +				reg = <0x1c0 0x58>;
-> +			};
-> +
-> +			svs_calibration: calib@580 {
-> +				reg = <0x580 0x68>;
-> +			};
-> +		};
-> +
->   		i2c3: i2c@11cb0000 {
->   			compatible = "mediatek,mt8192-i2c";
->   			reg = <0 0x11cb0000 0 0x1000>,
+>  	if (dw->chip->mf == EDMA_MF_EDMA_LEGACY &&
+>  	    reg >= (void __iomem *)&regs->type.legacy.ch) {
+>  		void __iomem *ptr = &regs->type.legacy.ch;
+> -- 
+> 2.35.1
+> 

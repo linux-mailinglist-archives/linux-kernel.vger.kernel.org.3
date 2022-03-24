@@ -2,271 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192A14E66F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48E24E66EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351667AbiCXQZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S1351650AbiCXQZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351666AbiCXQZp (ORCPT
+        with ESMTP id S1351639AbiCXQZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:25:45 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705D03D4A8;
-        Thu, 24 Mar 2022 09:24:12 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22OEsKmn012509;
-        Thu, 24 Mar 2022 17:23:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=kKmBnOfc0CnmBG1n6w5J+DiHVP5s4O6THfvfi6fXr88=;
- b=XfGDv01oQ5a/zhM/o8KrNMMA7+CxC5ls5fTRREjjtSpFOdKcycgv+7IBF722KycCyNii
- p6TfdFlZojfKDk8uPpngdyBvLyYUs71AD0jGDQa/C/eIpu7SfD2p6Qx4RQnDo5fzvqeI
- dagA+/eNHVuG+pTAFphrqjgV734j3bPXjVI/tpC3ejz8AsOMwOoi0zOQc9cMeSRXzFzZ
- 1rKXPPyYeuea9UOr6J8gTyxE6FY7PHDUBTj+gNulAFC+frBEDzyYvizHUjfeZMmKIX0g
- QagrQJzCwa0Xz4c0Pcwb8foOPHLXWuKUi+6KqD6nkbws1ALXEfVsWTGENUS/mcsJnDxv pA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ew6xkuewr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Mar 2022 17:23:52 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DE7FC10002A;
-        Thu, 24 Mar 2022 17:23:49 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D428723713E;
-        Thu, 24 Mar 2022 17:23:49 +0100 (CET)
-Received: from [10.211.7.7] (10.75.127.48) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 24 Mar
- 2022 17:23:49 +0100
-Message-ID: <668661ca-271b-9a4f-6482-62f1b0190bb2@foss.st.com>
-Date:   Thu, 24 Mar 2022 17:23:27 +0100
+        Thu, 24 Mar 2022 12:25:19 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1D63D4A8;
+        Thu, 24 Mar 2022 09:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Mpi6o7xeN/Ty9X1JVI6zzFbTtsWQQmcFLPuvEEzpv28=; b=5MDxCKDl5ahia3QE0xFnOqhof3
+        xWkDmQm1KTUQo3bK/ac0g4lDScq9s+idUmSQyKHIM0TbXzSt+q3yQp+atePfuO8JVAIbmGgRzBpSp
+        ayUMw3/ehGCG82LzA1108dkosaZh7gJgc65WHvjUgR2n7qk5g8uKtnOnQq1+wG7kXbow=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nXQFL-00CTiC-TQ; Thu, 24 Mar 2022 17:23:35 +0100
+Date:   Thu, 24 Mar 2022 17:23:35 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
+Message-ID: <YjybB/fseibDU4dT@lunn.ch>
+References: <20220323183419.2278676-1-michael@walle.cc>
+ <20220323183419.2278676-5-michael@walle.cc>
+ <Yjt99k57mM5PQ8bT@lunn.ch>
+ <8304fb3578ee38525a158af768691e75@walle.cc>
+ <Yju+SGuZ9aB52ARi@lunn.ch>
+ <30012bd8256be3be9977bd15d1486c84@walle.cc>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] mmc: mmci: stm32: use a buffer for unaligned DMA
- requests
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Christophe Kerello <christophe.kerello@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-mmc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220317111944.116148-1-yann.gautier@foss.st.com>
- <20220317111944.116148-3-yann.gautier@foss.st.com>
- <CAPDyKFqzzKgLHWiy26QW0hvM9kZEATS_c2mXkTuGiFpPaW8YKw@mail.gmail.com>
-From:   Yann Gautier <yann.gautier@foss.st.com>
-In-Reply-To: <CAPDyKFqzzKgLHWiy26QW0hvM9kZEATS_c2mXkTuGiFpPaW8YKw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-24_04,2022-03-24_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30012bd8256be3be9977bd15d1486c84@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/22 12:55, Ulf Hansson wrote:
-> On Thu, 17 Mar 2022 at 12:19, Yann Gautier <yann.gautier@foss.st.com> wrote:
->>
->> In SDIO mode, the sg list for requests can be unaligned with what the
->> STM32 SDMMC internal DMA can support. In that case, instead of failing,
->> use a temporary bounce buffer to copy from/to the sg list.
->> This buffer is limited to 1MB. But for that we need to also limit
->> max_req_size to 1MB. It has not shown any throughput penalties for
->> SD-cards or eMMC.
->>
->> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
->> ---
->>   drivers/mmc/host/mmci_stm32_sdmmc.c | 80 +++++++++++++++++++++++------
->>   1 file changed, 63 insertions(+), 17 deletions(-)
->>
->> diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
->> index 4566d7fc9055..a4414e32800f 100644
->> --- a/drivers/mmc/host/mmci_stm32_sdmmc.c
->> +++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
->> @@ -43,6 +43,9 @@ struct sdmmc_lli_desc {
->>   struct sdmmc_idma {
->>          dma_addr_t sg_dma;
->>          void *sg_cpu;
->> +       dma_addr_t bounce_dma_addr;
->> +       void *bounce_buf;
->> +       bool use_bounce_buffer;
->>   };
->>
->>   struct sdmmc_dlyb {
->> @@ -54,6 +57,7 @@ struct sdmmc_dlyb {
->>   static int sdmmc_idma_validate_data(struct mmci_host *host,
->>                                      struct mmc_data *data)
->>   {
->> +       struct sdmmc_idma *idma = host->dma_priv;
->>          struct scatterlist *sg;
->>          int i;
->>
->> @@ -61,21 +65,23 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
->>           * idma has constraints on idmabase & idmasize for each element
->>           * excepted the last element which has no constraint on idmasize
->>           */
->> +       idma->use_bounce_buffer = false;
->>          for_each_sg(data->sg, sg, data->sg_len - 1, i) {
->>                  if (!IS_ALIGNED(sg->offset, sizeof(u32)) ||
->>                      !IS_ALIGNED(sg->length, SDMMC_IDMA_BURST)) {
->> -                       dev_err(mmc_dev(host->mmc),
->> +                       dev_dbg(mmc_dev(host->mmc),
->>                                  "unaligned scatterlist: ofst:%x length:%d\n",
->>                                  data->sg->offset, data->sg->length);
->> -                       return -EINVAL;
->> +                       idma->use_bounce_buffer = true;
->> +                       return 0;
->>                  }
->>          }
->>
->>          if (!IS_ALIGNED(sg->offset, sizeof(u32))) {
->> -               dev_err(mmc_dev(host->mmc),
->> +               dev_dbg(mmc_dev(host->mmc),
->>                          "unaligned last scatterlist: ofst:%x length:%d\n",
->>                          data->sg->offset, data->sg->length);
->> -               return -EINVAL;
->> +               idma->use_bounce_buffer = true;
->>          }
->>
->>          return 0;
->> @@ -84,18 +90,29 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
->>   static int _sdmmc_idma_prep_data(struct mmci_host *host,
->>                                   struct mmc_data *data)
->>   {
->> -       int n_elem;
->> +       struct sdmmc_idma *idma = host->dma_priv;
->>
->> -       n_elem = dma_map_sg(mmc_dev(host->mmc),
->> -                           data->sg,
->> -                           data->sg_len,
->> -                           mmc_get_dma_dir(data));
->> +       if (idma->use_bounce_buffer) {
->> +               if (data->flags & MMC_DATA_WRITE) {
->> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
->>
->> -       if (!n_elem) {
->> -               dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
->> -               return -EINVAL;
->> -       }
->> +                       sg_copy_to_buffer(data->sg, data->sg_len,
->> +                                         idma->bounce_buf, xfer_bytes);
->> +                       dma_wmb();
->> +               }
->> +       } else {
->> +               int n_elem;
->> +
->> +               n_elem = dma_map_sg(mmc_dev(host->mmc),
->> +                                   data->sg,
->> +                                   data->sg_len,
->> +                                   mmc_get_dma_dir(data));
->>
->> +               if (!n_elem) {
->> +                       dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
->> +                       return -EINVAL;
->> +               }
->> +       }
->>          return 0;
->>   }
->>
->> @@ -112,8 +129,19 @@ static int sdmmc_idma_prep_data(struct mmci_host *host,
->>   static void sdmmc_idma_unprep_data(struct mmci_host *host,
->>                                     struct mmc_data *data, int err)
->>   {
->> -       dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
->> -                    mmc_get_dma_dir(data));
->> +       struct sdmmc_idma *idma = host->dma_priv;
->> +
->> +       if (idma->use_bounce_buffer) {
->> +               if (data->flags & MMC_DATA_READ) {
->> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
->> +
->> +                       sg_copy_from_buffer(data->sg, data->sg_len,
->> +                                           idma->bounce_buf, xfer_bytes);
->> +               }
->> +       } else {
->> +               dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
->> +                            mmc_get_dma_dir(data));
->> +       }
->>   }
->>
->>   static int sdmmc_idma_setup(struct mmci_host *host)
->> @@ -137,6 +165,16 @@ static int sdmmc_idma_setup(struct mmci_host *host)
->>                  host->mmc->max_segs = SDMMC_LLI_BUF_LEN /
->>                          sizeof(struct sdmmc_lli_desc);
->>                  host->mmc->max_seg_size = host->variant->stm32_idmabsize_mask;
->> +
->> +               host->mmc->max_req_size = SZ_1M;
->> +               idma->bounce_buf = dmam_alloc_coherent(dev,
->> +                                                      host->mmc->max_req_size,
->> +                                                      &idma->bounce_dma_addr,
->> +                                                      GFP_KERNEL);
->> +               if (!idma->bounce_buf) {
->> +                       dev_err(dev, "Unable to map allocate DMA bounce buffer.\n");
->> +                       return -ENOMEM;
+> > To some extent, we need to separate finding the device on the bus to
+> > actually using the device. The device might respond to C22, give us
+> > its ID, get the correct driver loaded based on that ID, and the driver
+> > then uses the C45 address space to actually configure the PHY.
+> > 
+> > Then there is the Marvel 10G PHY. It responds to C22, but returns 0
+> > for the ID! There is a special case for this in the code, it then
+> > looks in the C45 space and uses the ID from there, if it finds
+> > something useful.
+> > 
+> > So as i said in my reply to the cover letter, we have two different
+> > state variables:
+> > 
+> > 1) The PHY has the C45 register space.
+> > 
+> > 2) We need to either use C45 transfers, or C45 over C22 transfers to
+> >    access the C45 register space.
+> > 
+> > And we potentially have a chicken/egg problem. The PHY driver knows
+> > 1), but in order to know what driver to load we need the ID registers
+> > from the PHY, or some external hint like DT. We are also currently
+> > only probing C22, or C45, but not C45 over C22. And i'm not sure we
+> > actually can probe C45 over C22 because there are C22 only PHYs which
+> > use those two register for other things. So we are back to the driver
+> > again which does know if C45 over C22 will work.
 > 
-Hi Ulf,
+> Isn't it safe to assume that if a PHY implements the indirect
+> registers for c45 in its c22 space that it will also have a valid
+> PHY ID and then the it's driver will be probed?
 
-> If we fail to allocate the 1M bounce buffer, then we end up always
-> using a PIO based mode, right?
+See: https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy_device.c#L895
+
+No valid ID in C22 space.
+
+> So if a PHY is
+> probed as c22 its driver might tell us "wait, it's actually a c45
+> phy and hey for your convenience it also have the indirect registers
+> in c22". We can then set has_c45 and maybe c45_over_c22 (also depending
+> on the bus capabilities).
+
+In general, if the core can do something, it is better than the driver
+doing it. If the core cannot reliably figure it out, then we have to
+leave it to the drivers. It could well be we need the drivers to set
+has_c45. I would prefer that drivers don't touch c45_over_c22 because
+they don't have the knowledge of what the bus is capable of doing. The
+only valid case i can think of is for a very oddball PHY which has C45
+register space, but cannot actually do C45 transfers, and so C45 over
+C22 is the only option.
+
+> > So phydev->has_c45 we can provisionally set if we probed the PHY by
+> > C45. But the driver should also set it if it knows better, or even the
+> > core can set it the first time the driver uses an _mmd API call.
 > 
-> Perhaps we can allow the above allocation to fail, but then limit us
-> to use DMA only when the buffers are properly aligned? Would that
-> work?
+> I'm not sure about the _mmd calls, there are PHYs which have MMDs
+> (I guess EEE is an example?) but are not capable of C45 accesses.
+
+Ah, yes, i forgot about EEE. That was a bad idea.
+
+> > phydev->c45_over_c22 we are currently in a bad shape for. We cannot
+> > reliably say the bus master supports C45. If the bus capabilities say
+> > C22 only, we can set phydev->c45_over_c22. If the bus capabilities
+> > list C45, we can set it false. But that only covers a few busses, most
+> > don't have any capabilities set. We can try a C45 access and see if we
+> > get an -EOPNOTSUPP, in which case we can set phydev->c45_over_c22. But
+> > the bus driver could also do the wrong thing, issue a C22 transfer and
+> > give us back rubbish.
 > 
-We have never supported PIO mode with STM32 variant.
-We only support DMA single buffer or DMA LLI.
-As we cannot have DMA LLI for unaligned access, we'll default to single 
-mode.
-If allocation fails, it then won't work.
-Maybe we shouldn't fail here, and just check idma->bounce_buf in 
-validate data function. If buffer is not allocated, we just return 
--EINVAL as it was done before.
-
-Best regards,
-Yann
-
->> +               }
->>          } else {
->>                  host->mmc->max_segs = 1;
->>                  host->mmc->max_seg_size = host->mmc->max_req_size;
->> @@ -154,8 +192,16 @@ static int sdmmc_idma_start(struct mmci_host *host, unsigned int *datactrl)
->>          struct scatterlist *sg;
->>          int i;
->>
->> -       if (!host->variant->dma_lli || data->sg_len == 1) {
->> -               writel_relaxed(sg_dma_address(data->sg),
->> +       if (!host->variant->dma_lli || data->sg_len == 1 ||
->> +           idma->use_bounce_buffer) {
->> +               u32 dma_addr;
->> +
->> +               if (idma->use_bounce_buffer)
->> +                       dma_addr = idma->bounce_dma_addr;
->> +               else
->> +                       dma_addr = sg_dma_address(data->sg);
->> +
->> +               writel_relaxed(dma_addr,
->>                                 host->base + MMCI_STM32_IDMABASE0R);
->>                  writel_relaxed(MMCI_STM32_IDMAEN,
->>                                 host->base + MMCI_STM32_IDMACTRLR);
+> First question, what do you think about keeping the is_c45 property but
+> with a different meaning and add use_c45_over_c22. That way it will be
+> less code churn:
 > 
-> Kind regards
-> Uffe
+>  * @is_c45:  Set to true if this PHY has clause 45 address space.
+>  * @use_c45_over_c22:  Set to true if c45-over-c22 addressing is used.
 
+I prefer to change is_c45. We then get the compiler to help us with
+code review. The build bots will tell us about any code we fail to
+check and change. It will also help anybody with out of tree code
+making use of is_c45.
+
+       Andrew

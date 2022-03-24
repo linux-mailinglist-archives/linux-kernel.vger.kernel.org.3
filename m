@@ -2,131 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6044E625A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C80194E625F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243592AbiCXLVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S236369AbiCXLXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236369AbiCXLVB (ORCPT
+        with ESMTP id S242748AbiCXLWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:21:01 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B563C558B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:19:29 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4C0191EC04F9;
-        Thu, 24 Mar 2022 12:19:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1648120764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=zQ487WGGxoU+PaAQiF6Z96QlXNCWPl8aoNSJ7IshVJ8=;
-        b=fQB156FoQMS/bM1ss8dkbyOOZIvEx+opgWLoP6Jb/LSVXWv40/w5Df61jEVhjjMICBLozD
-        0o1VC9MdAlaJYx7Ba///m/C10EweJbQvDInMTpKR6ps8imKToZxgXwh1A46FKRBcVtawCr
-        uA6hE8op4Cllx/rOHdDTsqOXT/1cR7I=
-Date:   Thu, 24 Mar 2022 12:19:19 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: clang memcpy calls
-Message-ID: <YjxTt3pFIcV3lt8I@zn.tnic>
+        Thu, 24 Mar 2022 07:22:55 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D7C558B;
+        Thu, 24 Mar 2022 04:21:23 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id lr4so41755ejb.11;
+        Thu, 24 Mar 2022 04:21:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vCtXvC6NKv02vJBz9LwhC/wnC/pxcDKfv/yu+jbUxCw=;
+        b=WnO7W+D4zCkjflkpcOP6eubCKOXUG6KE9hdKLdtEuHdptehxDwpXj2+qGniJaBTKIp
+         DinDQwothfNOcKDlBMZ8SQf2wlnnmcNdkYIcd5I3fI6CumuDlTQRge6ZiKF+nr8bZ2r5
+         ELkMmHIKQipkIlLTjdWwLP9Z2HuZaAmrE3PPMKimlIYYkG9DpAEXh/hS3BsXf8DVK7ot
+         uedAtZ5M6vmGHfW5YYR4XHASL+CI03fnRu65Uvz6xSTMojjWJP4poOqzln5cKs3Jzuih
+         O8KyKYVEsISybRwuFl042cQCQdx2cZco0tnZee5J0BAyAk+eptpem/8W07teWN6MCF6K
+         yOUg==
+X-Gm-Message-State: AOAM5323g5yljcOwtN9l/p40SrEQvqC9Z5sUdRIjHDXsilL7QWdSbOAd
+        L0/UJ4r2s1K8MQ6UZvFdMuQ=
+X-Google-Smtp-Source: ABdhPJyCTxGliZdVLfNGUT8I7TgpabWX5335rJB94c1ko8edVYQAv0GtvE97R3/yB5clVvYbu1npPQ==
+X-Received: by 2002:a17:907:c05:b0:6db:f118:8834 with SMTP id ga5-20020a1709070c0500b006dbf1188834mr5284672ejc.536.1648120881620;
+        Thu, 24 Mar 2022 04:21:21 -0700 (PDT)
+Received: from [192.168.0.156] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id a18-20020a1709063e9200b006e0527baa77sm996889ejj.92.2022.03.24.04.21.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 04:21:20 -0700 (PDT)
+Message-ID: <b15567c7-98e9-2d01-d1a5-7675136c625d@kernel.org>
+Date:   Thu, 24 Mar 2022 12:21:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: clock: fix dt_binding_check error for
+ qcom,gcc-other.yaml
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220323194248.26970-1-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220323194248.26970-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+On 23/03/2022 20:42, Ansuel Smith wrote:
+> qcom,gcc-other Documentation lacks a '|' for the description. This cause
+> dt_binding_check to incorrectly parse "See also:" as a new value.
+> Add the missing '|' to correctly parse the description.
+> 
+> Fixes: a03965ed1310 ("dt-bindings: clock: split qcom,gcc.yaml to common and specific schema")
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-so I've been looking at a recent objtool noinstr warning from clang
-builds:
+Reported-by: Rob Herring <robh@kernel.org>
 
-vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves .noinstr.text section
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-The issue is that clang generates a memcpy() call when a struct copy
-happens:
-
-        if (regs != eregs)
-                *regs = *eregs;
-
-see below for asm output.
-
-While gcc does simply generate an actual "rep; movsq".
-
-So, how hard would it be to make clang do that too pls?
-
-Oh, and another thing while we're comparing asm: I'd love for clang's
--fverbose-asm to issue interleaved C source lines too, like gcc does.
-
-That's it - no pink pony - just "normal" wishes. :-)
-
-GCC:
-====
-
-sync_regs:
-.LASANPC4246:
-# arch/x86/kernel/traps.c:770: {
-        movq    %rdi, %rsi      # tmp91, eregs
-# arch/x86/kernel/traps.c:771:  struct pt_regs *regs = (struct pt_regs *)this_cpu_read(cpu_current_top_of_stack) - 1;
-#APP
-# 771 "arch/x86/kernel/traps.c" 1
-        movq %gs:cpu_current_top_of_stack(%rip), %rax   # cpu_current_top_of_stack, pfo_val__
-# 0 "" 2
-# arch/x86/kernel/traps.c:771:  struct pt_regs *regs = (struct pt_regs *)this_cpu_read(cpu_current_top_of_stack) - 1;
-#NO_APP
-        subq    $168, %rax      #, <retval>
-# arch/x86/kernel/traps.c:772:  if (regs != eregs)
-        cmpq    %rdi, %rax      # eregs, <retval>
-        je      .L387   #,
-# arch/x86/kernel/traps.c:773:          *regs = *eregs;
-        movl    $21, %ecx       #, tmp89
-        movq    %rax, %rdi      # <retval>, <retval>
-        rep movsq
-.L387:
-# arch/x86/kernel/traps.c:775: }
-        ret
-
-CLANG:
-======
-
-        .section        .noinstr.text,"ax",@progbits
-        .globl  sync_regs                       # -- Begin function sync_regs
-        .p2align        6, 0x90
-        .type   sync_regs,@function
-sync_regs:                              # @sync_regs
-# %bb.0:                                # %entry
-        pushq   %rbx
-        #APP
-        movq    %gs:cpu_current_top_of_stack(%rip), %rbx
-        #NO_APP
-        addq    $-168, %rbx
-        cmpq    %rdi, %rbx
-        je      .LBB19_2
-# %bb.1:                                # %if.then
-        movq    %rdi, %rsi
-        movl    $168, %edx
-        movq    %rbx, %rdi
-        callq   memcpy@PLT
-.LBB19_2:                               # %if.end
-        movq    %rbx, %rax
-        popq    %rbx
-        retq
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best regards,
+Krzysztof

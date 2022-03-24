@@ -2,132 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127A54E6A30
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 22:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7444E6A37
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 22:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355168AbiCXVVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 17:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        id S245478AbiCXVZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 17:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355160AbiCXVVf (ORCPT
+        with ESMTP id S236231AbiCXVZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 17:21:35 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0845A58829;
-        Thu, 24 Mar 2022 14:20:02 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so4193855otj.10;
-        Thu, 24 Mar 2022 14:20:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nZWBFSxF5EcD/7zsReIxioOFi/XH9lIHO9AjBk+DuYQ=;
-        b=nE9Ow8k5hgST1QdGtELUdJ8kKHfSfPGRUplZWzHdvjV3GY8jr/Ccl95o9YXY76oHFQ
-         mmyXX+U7h/KbwVVesDr/rqKmOaLub8ER5oWVV0NfslO/DE8lrBFH5C/mYCdmf/yyxzPk
-         BuwOEGsiHFDKE3vsjkPf0hlEtDQYrBzUwh9JhNLKhP96TBMfatvMopvWf9gkWrwxiXhv
-         1qqtmpxRsElsiHoOlC5oz735+D/6OvMhSLNzSAmzQjTATrtgQz6kOOKgo4vjMhM5LPjW
-         XTTCzHQgCnBGRqZjRxAz8+xvPq4dE3/q5DuU36RCjGfpiALMzRPQDfzTk9lit6wHSYtU
-         ex4w==
-X-Gm-Message-State: AOAM5311zvWso6A/iItgK707GXHoPum5nhNWsYHoU16otWmV18HjZ3Nl
-        NuO/rM9yzJFs0/Al5yA2lQ==
-X-Google-Smtp-Source: ABdhPJyODYrocQIME0OAE9G5smC2auk9j+xSOw5TB2oty2nbpPQU2zFSF3ULc0wpM/GONsqTcT7sJw==
-X-Received: by 2002:a9d:7319:0:b0:5cd:121e:e11 with SMTP id e25-20020a9d7319000000b005cd121e0e11mr3043744otk.148.1648156801286;
-        Thu, 24 Mar 2022 14:20:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t10-20020a056830224a00b005cd9db03fabsm1806726otd.78.2022.03.24.14.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 14:20:00 -0700 (PDT)
-Received: (nullmailer pid 2592144 invoked by uid 1000);
-        Thu, 24 Mar 2022 21:19:59 -0000
-Date:   Thu, 24 Mar 2022 16:19:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fei Shao <fshao@chromium.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        "roy-cw.yeh" <roy-cw.yeh@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Nancy Lin <nancy.lin@mediatek.com>, singo.chang@mediatek.com,
-        DTML <devicetree@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: Re: [PATCH v2 0/4] Fix MediaTek display dt-bindings issues
-Message-ID: <Yjzgf10zAhrkpYde@robh.at.kernel.org>
-References: <20220309134702.9942-1-jason-jh.lin@mediatek.com>
- <CAL_Jsq+=hTKTjB8rR77_uQYKDWHzLyTdeU7zbixSCZCNrdmNvg@mail.gmail.com>
- <CAAOTY__kzL8YuGo-oKct4c_bL-Ch5rW8wBpkhOXkK+a10gNXVg@mail.gmail.com>
+        Thu, 24 Mar 2022 17:25:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05B87523D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648157036; x=1679693036;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TFVmmE68w5PAlm1eCk6jW8LJhCaTqd9/hJZYjLamrY4=;
+  b=ZFEBkdm4svlyFNsO91M7XbqHvMMopFC39A9D5UleN47m15yTjSIcqGDt
+   wV03xoFlZGOqO9FGI622xeB2CnOsms6dfPmoWj2KZXrXn1srexGGL1w2P
+   VyQC6/o1GUMlGwLN+7E/kP9i5u+t4qCLLDYAF6Uc76W73jADfZLmKMAZk
+   aUIDCgf+wG3ZLbmLNg/r3UJn/hs/h4DLwsmAX+HcewtEvrTIeqFX39UdJ
+   Mp3suNgfM7gY8ejcCcpPG62a54BWjL1kHp5SrzGNPhDnme9AuorhPssBj
+   rsE2rWQHZAU/K2jui7lEoW/rHdoPjA2KlNf1BGDFO0C7ydfqc4YLoslpu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="239096510"
+X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
+   d="scan'208";a="239096510"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 14:23:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
+   d="scan'208";a="501551845"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 24 Mar 2022 14:23:55 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXUvy-000LSJ-GJ; Thu, 24 Mar 2022 21:23:54 +0000
+Date:   Fri, 25 Mar 2022 05:23:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yuri Nudelman <ynudelman@habana.ai>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Oded Gabbay <ogabbay@kernel.org>
+Subject: [RFC PATCH ogabbay] habanalabs: hl_ts_behavior can be static
+Message-ID: <20220324212311.GA31334@d379d0dc8a82>
+References: <202203250539.2vJ8t5I0-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAOTY__kzL8YuGo-oKct4c_bL-Ch5rW8wBpkhOXkK+a10gNXVg@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <202203250539.2vJ8t5I0-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 09:25:44PM +0800, Chun-Kuang Hu wrote:
-> Hi, Rob:
-> 
-> Rob Herring <robh@kernel.org> 於 2022年3月23日 週三 下午10:10寫道：
-> >
-> > On Wed, Mar 9, 2022 at 7:47 AM jason-jh.lin <jason-jh.lin@mediatek.com> wrote:
-> > >
-> > > The vdosys0 series carried a nice dt-bindings conversion of the old
-> > > txt documentation for the entire mediatek-drm driver, but some of
-> > > the issues in there weren't seen.
-> > >
-> > > This series is fixing all of the issues pointed out by a
-> > > `dt_binding_check` run, followed by `dtbs_check`.
-> > >
-> > > Change in v2:
-> > > - remove mediatek,ethdr.yaml file
-> > > - change include header of mediatek,ovl-2l.yaml from mt8173 to mt8183
-> > >
-> > > AngeloGioacchino Del Regno (3):
-> > >   dt-bindings: display: mediatek, mutex: Fix mediatek, gce-events type
-> > >   dt-bindings: display: mediatek, ovl: Fix 'iommu' required property
-> > >     typo
-> > >   dt-bindings: display: mediatek: Fix examples on new bindings
-> > >
-> > > jason-jh.lin (1):
-> > >   Revert "dt-bindings: display: mediatek: add ethdr definition for
-> > >     mt8195"
-> >
-> > Can this series get applied soon? linux-next is still broken.
-> >
-> > If it hits Linus' tree, I will be applying them.
-> 
-> I've applied this series to my tree [1], but now is merge window, so I
-> plan to send this series through Dave's tree after 5.18-rc1. Would
-> this be too late for you?
+drivers/misc/habanalabs/common/memory.c:2137:28: warning: symbol 'hl_ts_behavior' was not declared. Should it be static?
 
-Yes, people base their development on -rc1 and it would be nice to have 
-a functional tree.
+Fixes: 079c2434d6e8 ("habanalabs: convert ts to use unified memory manager")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+ drivers/misc/habanalabs/common/memory.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-There's not really any need to wait to send fixes.
-
-Rob
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index a9bf1a5f4a867..003f0f145c090 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -2134,7 +2134,7 @@ static int hl_ts_alloc_buf(struct hl_mmap_mem_buf *buf, gfp_t gfp, void *args)
+ 	return -ENOMEM;
+ }
+ 
+-struct hl_mmap_mem_buf_ops hl_ts_behavior = {
++static struct hl_mmap_mem_buf_ops hl_ts_behavior = {
+ 	.mmap = hl_ts_mmap,
+ 	.alloc = hl_ts_alloc_buf,
+ 	.release = ts_buff_release,

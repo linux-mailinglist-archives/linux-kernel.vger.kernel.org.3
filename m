@@ -2,115 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AA84E620E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7F24E6212
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347340AbiCXLFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S1349647AbiCXLGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242588AbiCXLFt (ORCPT
+        with ESMTP id S242588AbiCXLGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:05:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC5D15BD0E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648119857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QzKBoZ1rRX3VzCL9ZTZ74cnxlXwhmkLuajM8brTFu9o=;
-        b=dIUpmJ4EFc2Anj1E8/l9oJo/6SZZUgKNnGoaQbh1c6ZoqO3cYwpgfiichw0Z4LxU2LmpbE
-        jcGfS+D5BckbdXcduU1m8i/gC41Hp7ZT1RFeJPoYLe+fytnUaBDKSQ0LTcsbeZUaWA/Qax
-        1dnPqlewLXLM4xnmZTYZQPEos3GtN+s=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-323-c-6Bzi45NqOqP5hFmWNDeQ-1; Thu, 24 Mar 2022 07:04:16 -0400
-X-MC-Unique: c-6Bzi45NqOqP5hFmWNDeQ-1
-Received: by mail-qv1-f71.google.com with SMTP id h18-20020a05621402f200b00440cedaa9a2so3324438qvu.17
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:04:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QzKBoZ1rRX3VzCL9ZTZ74cnxlXwhmkLuajM8brTFu9o=;
-        b=Gt9bPGHdhJC846xSKp7/sSMPRLd7Qcr0YLXNERV/p7Q1sL9G37y1MATx0dm6uwcksV
-         3YHYOr+cUwTLlHSiNYWusVV/hKiHVMhSoqPCh9hj+yr6xxfdlujelbuiXqwYBzcqntgx
-         nbEI8HCcOJJKRPSgidwxY6EUXwcsUIWcyYSp20H2YZgOpj0VIVseVkmDdcB04UcanejR
-         rWO6wJ5+YMXlTqvQFoBOdSG2iAy/5buxY799A4pelobVG9YvQP4re+2rugHZ3Bn14owW
-         LwQQYnSyDxS7FieaSKARwEHggYtT2A8VtWLQzq4tMivc17Bg8HhFmm78Ke/uTDKUQPSX
-         QjtA==
-X-Gm-Message-State: AOAM530+YPeAcY1S25CUfWrAJAQ1GF6mM92xFjESF0OGzJaFRYJ0e+4a
-        Ik7+0Q4Cb+NUAWc2CFcRlJDXqtBGRT21f7CKvTTYxrpxAFKjuPfEGoXI1NdZjUvkoaRsybVWcqz
-        b0+Oo6d/0DCk3uBELCGUizdzS
-X-Received: by 2002:a05:622a:1491:b0:2e2:2faa:dd47 with SMTP id t17-20020a05622a149100b002e22faadd47mr3827498qtx.142.1648119855068;
-        Thu, 24 Mar 2022 04:04:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzp/wQU8MsdSrsLRUuClD5GYcuKTmcmliL/h8xBYtLUnGZZtN/JCvCQVu4EX161cOJ6FTBdng==
-X-Received: by 2002:a05:622a:1491:b0:2e2:2faa:dd47 with SMTP id t17-20020a05622a149100b002e22faadd47mr3827473qtx.142.1648119854871;
-        Thu, 24 Mar 2022 04:04:14 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-12-25-114.business.telecomitalia.it. [87.12.25.114])
-        by smtp.gmail.com with ESMTPSA id f14-20020ac8068e000000b002dd1bc00eadsm2010781qth.93.2022.03.24.04.04.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 04:04:14 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 12:04:09 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, keirf@google.com
-Subject: Re: [PATCH 2/3] virtio: use virtio_reset_device() when possible
-Message-ID: <20220324110409.d3s4cgbomuaezv6h@sgarzare-redhat>
-References: <20220324084004.14349-1-jasowang@redhat.com>
- <20220324084004.14349-3-jasowang@redhat.com>
+        Thu, 24 Mar 2022 07:06:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B0615BD0E;
+        Thu, 24 Mar 2022 04:05:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3FD11515;
+        Thu, 24 Mar 2022 04:05:16 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E8DC3F73D;
+        Thu, 24 Mar 2022 04:05:13 -0700 (PDT)
+Message-ID: <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com>
+Date:   Thu, 24 Mar 2022 11:05:08 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220324084004.14349-3-jasowang@redhat.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+Content-Language: en-GB
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+References: <1812355.tdWV9SEqCh@natalenko.name>
+ <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
+ <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <4386660.LvFx2qVVIh@natalenko.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:40:03PM +0800, Jason Wang wrote:
->This allows us to do common extension without duplicating codes.
->
->Signed-off-by: Jason Wang <jasowang@redhat.com>
->---
-> drivers/virtio/virtio.c | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->
->diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
->index 75c8d560bbd3..8dde44ea044a 100644
->--- a/drivers/virtio/virtio.c
->+++ b/drivers/virtio/virtio.c
->@@ -430,7 +430,7 @@ int register_virtio_device(struct virtio_device *dev)
->
-> 	/* We always start by resetting the device, in case a previous
-> 	 * driver messed it up.  This also tests that code path a little. */
->-	dev->config->reset(dev);
->+	virtio_reset_device(dev);
->
-> 	/* Acknowledge that we've seen the device. */
-> 	virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
->@@ -496,7 +496,7 @@ int virtio_device_restore(struct virtio_device *dev)
->
-> 	/* We always start by resetting the device, in case a previous
-> 	 * driver messed it up. */
->-	dev->config->reset(dev);
->+	virtio_reset_device(dev);
->
-> 	/* Acknowledge that we've seen the device. */
-> 	virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
->-- 
->2.25.1
->
+On 2022-03-24 10:25, Oleksandr Natalenko wrote:
+> Hello.
+> 
+> On čtvrtek 24. března 2022 6:57:32 CET Christoph Hellwig wrote:
+>> On Wed, Mar 23, 2022 at 08:54:08PM +0000, Robin Murphy wrote:
+>>> I'll admit I still never quite grasped the reason for also adding the
+>>> override to swiotlb_sync_single_for_device() in aa6f8dcbab47, but I think
+>>> by that point we were increasingly tired and confused and starting to
+>>> second-guess ourselves (well, I was, at least). I don't think it's wrong
+>>> per se, but as I said I do think it can bite anyone who's been doing
+>>> dma_sync_*() wrong but getting away with it until now. If ddbd89deb7d3
+>>> alone turns out to work OK then I'd be inclined to try a partial revert of
+>>> just that one hunk.
+>>
+>> Agreed.  Let's try that first.
+>>
+>> Oleksandr, can you try the patch below:
+>>
+>>
+>> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+>> index 6db1c475ec827..6c350555e5a1c 100644
+>> --- a/kernel/dma/swiotlb.c
+>> +++ b/kernel/dma/swiotlb.c
+>> @@ -701,13 +701,10 @@ void swiotlb_tbl_unmap_single(struct device *dev, phys_addr_t tlb_addr,
+>>   void swiotlb_sync_single_for_device(struct device *dev, phys_addr_t tlb_addr,
+>>   		size_t size, enum dma_data_direction dir)
+>>   {
+>> -	/*
+>> -	 * Unconditional bounce is necessary to avoid corruption on
+>> -	 * sync_*_for_cpu or dma_ummap_* when the device didn't overwrite
+>> -	 * the whole lengt of the bounce buffer.
+>> -	 */
+>> -	swiotlb_bounce(dev, tlb_addr, size, DMA_TO_DEVICE);
+>> -	BUG_ON(!valid_dma_direction(dir));
+>> +	if (dir == DMA_TO_DEVICE || dir == DMA_BIDIRECTIONAL)
+>> +		swiotlb_bounce(dev, tlb_addr, size, DMA_TO_DEVICE);
+>> +	else
+>> +		BUG_ON(dir != DMA_FROM_DEVICE);
+>>   }
+>>   
+>>   void swiotlb_sync_single_for_cpu(struct device *dev, phys_addr_t tlb_addr,
+>>
+> 
+> With this patch the AP works for me.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Cool, thanks for confirming. So I think ath9k probably is doing 
+something dodgy with dma_sync_*(), but if Linus prefers to make the 
+above change rather than wait for that to get figured out, I believe 
+that should be fine.
 
+The crucial part of the "rework" patch is that we'll unconditionally 
+initialise the SWIOTLB bounce slot as it's allocated in 
+swiotlb_tbl_map_single(), regardless of DMA_ATTR_SKIP_CPU_SYNC. As long 
+as that happens, we're safe in terms of leaking data from previous 
+mappings, and any possibility for incorrect sync usage to lose 
+newly-written DMA data is at least no worse than it always has been. The 
+most confusion was around how the proposed DMA_ATTR_OVERWRITE attribute 
+would need to interact with DMA_ATTR_SKIP_CPU_SYNC to remain safe but 
+still have any useful advantage, so unless and until anyone wants to 
+revisit that, this should remain comparatively simple to reason about.
+
+Cheers,
+Robin.

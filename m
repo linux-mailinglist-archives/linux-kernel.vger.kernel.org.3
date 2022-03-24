@@ -2,115 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD434E6037
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2FC4E6038
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348394AbiCXISb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S1348818AbiCXITI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239836AbiCXIS2 (ORCPT
+        with ESMTP id S1344245AbiCXITE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:18:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFF19BAD8;
-        Thu, 24 Mar 2022 01:16:55 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 08:16:52 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648109813;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QTxcOWxuZF08C7LwzQu1z3MgI4m/xWk8ZyLCOHh42dE=;
-        b=Cx9/rJR2KN8BjXrQXkwy94qb/2mU0uyMFCAwoNpf6rcucAoRy/0lJHsbT958kxt80BnmhQ
-        7S0JrpbWUsCuNfmOVwdwMDuxiMf3U8B8exBZ/ogk+4Rg1Y2/ONmpY+Ehuhdw39XBjt4WS2
-        emSKQPjTlCr7YMCUrsQJBXR/GPe7+Pe6Jch+PUsic25BUpfMskNT/r7q3VoMx/XWvEZq11
-        QXBsMi5hCzhkUOx13/j0be4rezo4ldItIiVoHCyLGdokgS9dcTZURE/sPkY4jeNnEjAlSx
-        E5hrR2TDHsyCgybvwmeaCbvoeEmTG2U5kKZfAK46X4tNgtV8j5B8Fa89rJgnow==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648109813;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QTxcOWxuZF08C7LwzQu1z3MgI4m/xWk8ZyLCOHh42dE=;
-        b=auqCzT6YcadE7TqnhYMsIlKFx2Bk4vpjBVlUtxPb9JZxCQ3P5jUcfCbgj6xG/XFl5qXvsV
-        LBcW5OYZQ5M10rCw==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/defconfig: Enable WERROR
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <YjsCpoRK7W4l6tSh@zn.tnic>
-References: <YjsCpoRK7W4l6tSh@zn.tnic>
+        Thu, 24 Mar 2022 04:19:04 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA929BAD8;
+        Thu, 24 Mar 2022 01:17:34 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id k6so3940796plg.12;
+        Thu, 24 Mar 2022 01:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hORjNt7p5srcJ67bMMlDpkQB9q4uSrSXFGrY1gkdpyM=;
+        b=DtTX2JxVBf6yhnC62Db+CzG9bXaA8mhg9UCbbPZNW+GyzyL7rBq86kihF/Opgl3srC
+         38XE78gQnh4WIDQ8vO5spyJ2XP7JictzL0wMOB1efDlfBP/LYGn47CCKtq7Iz8k0QQdP
+         VGVTum9u1MHagE3tymJ5NzU7qLJiv4+sXKF2SIEK5CFfoN0nqilJkW1qwyB0CsM/MvAk
+         TJgVac41aq77uuevcv0RxJRhmees0hJsOBsxU8WEFycsr8JDRPa50Lk8EQWzGgAjTWNw
+         EEx5iufcBP4b2G3eKNFf8sMYzvqEAkGJB+dnyb8DkuaR0G9x9BgnXPGF8HlCUlt7ZYZS
+         N9yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hORjNt7p5srcJ67bMMlDpkQB9q4uSrSXFGrY1gkdpyM=;
+        b=zhLxCJUaU+3IADyvU6K7Wj61rMm17eXgNq1iTZ476Wg/ceh0JzGdE2WZt4SfCBLDgZ
+         VCDh8gKwDYewLjCOXAQki8JuS+cp1UfaWDYVLi3FgQ+CtVEHLyndzmv6XHB6HlelWHaK
+         VSvR0m9tqAkVP19kz3WGSWXcKhyzMVtYPQl33nDjMMoCvfTzPgMM9i2pCVld9sMkmv91
+         yoYe3D8cy38iLDbZgi+SJjwu6uZcKCQVLOK/i+WEgYuqQHv6b2qhdIivgoA0dlCaIhCh
+         s6N2+Ppw2Z7GldOZpXgJXaEX3+x+WJkVamCkRFe5ZJjZ/nYgUAO3/u9xsaXELxjK+sX0
+         vIjw==
+X-Gm-Message-State: AOAM532tNsvrUvfmgbXLNh5b7rU5xluJCOv28pRum9wswSC08UTd7RQg
+        3W4g0akRAA4CKFYWt1c2CFA=
+X-Google-Smtp-Source: ABdhPJx0Aio1HaPIhWX18pWOGE3LqBOkeNBrQ1px/ic2IcbQkrSdu4cDz1rcU3RndGPZjxu3+CngSA==
+X-Received: by 2002:a17:902:930b:b0:14d:b0c0:1f71 with SMTP id bc11-20020a170902930b00b0014db0c01f71mr4574601plb.113.1648109853554;
+        Thu, 24 Mar 2022 01:17:33 -0700 (PDT)
+Received: from slim.das-security.cn ([103.84.139.53])
+        by smtp.gmail.com with ESMTPSA id y9-20020a056a00180900b004faa45a2230sm2451502pfa.210.2022.03.24.01.17.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 01:17:33 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] media: uvc_v4l2: fix possible memory leak in uvc_ioctl_ctrl_map
+Date:   Thu, 24 Mar 2022 16:17:18 +0800
+Message-Id: <20220324081718.41091-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <164810981264.389.6376024733991867139.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+map->name needs to be freed when uvc_ioctl_ctrl_map fails.
 
-Commit-ID:     b9080ba4a6ec56447f263082825a4fddb873316b
-Gitweb:        https://git.kernel.org/tip/b9080ba4a6ec56447f263082825a4fddb873316b
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Wed, 23 Mar 2022 12:21:10 +01:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Thu, 24 Mar 2022 09:10:56 +01:00
-
-x86/defconfig: Enable WERROR
-
-To quote Linus:
-
-  "EVERYBODY should have CONFIG_WERROR=y on at least x86-64 and other
-   serious architectures, unless you have some completely random
-   experimental (and broken) compiler.
-
-New compiler warnings are not acceptable."
-
-So this should make at least the most obvious and common ones not go
-unnoticed.
-
-Acked-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/YjsCpoRK7W4l6tSh@zn.tnic
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 ---
- arch/x86/configs/i386_defconfig   | 1 +
- arch/x86/configs/x86_64_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/media/usb/uvc/uvc_v4l2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
-index 71124cf..4b20852 100644
---- a/arch/x86/configs/i386_defconfig
-+++ b/arch/x86/configs/i386_defconfig
-@@ -262,3 +262,4 @@ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
- CONFIG_EARLY_PRINTK_DBGP=y
- CONFIG_DEBUG_BOOT_PARAMS=y
- CONFIG_KALLSYMS_ALL=y
-+CONFIG_WERROR=y
-diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
-index 92b1169..38c52e4 100644
---- a/arch/x86/configs/x86_64_defconfig
-+++ b/arch/x86/configs/x86_64_defconfig
-@@ -258,3 +258,4 @@ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
- CONFIG_EARLY_PRINTK_DBGP=y
- CONFIG_DEBUG_BOOT_PARAMS=y
- CONFIG_KALLSYMS_ALL=y
-+CONFIG_WERROR=y
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 711556d13d03..e46a2f3b06cb 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -93,6 +93,7 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
+ 
+ 	kfree(map->menu_info);
+ free_map:
++	kfree(map->name);
+ 	kfree(map);
+ 
+ 	return ret;
+-- 
+2.25.1
+

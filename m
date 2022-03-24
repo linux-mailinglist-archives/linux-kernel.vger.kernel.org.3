@@ -2,148 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389444E6324
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD9F4E632F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349237AbiCXMVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S1345734AbiCXMVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350105AbiCXMUv (ORCPT
+        with ESMTP id S1344524AbiCXMVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:20:51 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BD54991A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:19:11 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id b130so2261658pga.13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PSVqUGYCB8wbqp0p5VdHcycQRYblcQrceG961CbBc2A=;
-        b=xv7UNuh3P/pCkD30Cn5aiI+Z9Q2ToAUx3HRW9MfmVNyc2NW9JgXCpNq5u8S36zmwV6
-         UJE5E55gp9RnS8Z5ITwrEq197emD7plU9KYuvosCZHibQGUSyT2OQ6PCjjINl5bwPIzk
-         Ft49iIISlZ26bjImBo2TmZVBgqPQvnZl0HNjDHaogXWcE4lw4KafLyWbfit4ON8Atwco
-         qoh1ALKl1zhdm83knImVa6l3NuN6sx5OpVf3yWm/89XOFFwb2JwLuFS6SGNlUYpKYhYF
-         TrJZF9xQtlONhf/CcyIlX/XCr4cErV81Oc3HzdqYM1RIiZC21XQaS+z39VMGpbotdnmD
-         E8cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PSVqUGYCB8wbqp0p5VdHcycQRYblcQrceG961CbBc2A=;
-        b=sbIB9U5XyO2wHh25Of0XnwDdpVtVBH/1v5V4IEL9SvUOSWCsDhF3jiil136QrXaCbE
-         GOGomDQ4v7Y90STQopIZ+th8dmsRlOsSwGMiMhEsxaBSEi1xrI5scjZSEftUkDOEPU2I
-         7B5h4tSRpKyyIU1W1jaDXoHyzIZL+gXZ6dtWV3SfHW4pzzKeBL39/rothk/hiVOniXfX
-         Fyh+qzm1o39ZAaldWswkv6bV7KMBQezhmuGySRuq05/iRNqm/gUkLDJ8LbQpAs5CSBmL
-         zwQK3BhhzL2lA0OLe87OulTifpnhCvdGLTOIC/Zj/95xNcQLq5rmyumchXVhRmNnJmv6
-         xTnQ==
-X-Gm-Message-State: AOAM530JH2i6JsOiWwUMibJYvcdLdUsYgcnye8ZCUHLz2LhYfAgWd6W6
-        q4bZXG+f//Dmt/WFrboOH+x4
-X-Google-Smtp-Source: ABdhPJyuUdBVtlvKFXLN8XVaL5WdsI//XFeIzHjYqFdNJyAuyLqrhdizNaHwxYMYlooEtPQQZLslCQ==
-X-Received: by 2002:a63:753:0:b0:385:fe06:eb86 with SMTP id 80-20020a630753000000b00385fe06eb86mr3790923pgh.132.1648124351146;
-        Thu, 24 Mar 2022 05:19:11 -0700 (PDT)
-Received: from thinkpad ([220.158.158.107])
-        by smtp.gmail.com with ESMTPSA id p12-20020a63ab0c000000b00381f7577a5csm2428626pgf.17.2022.03.24.05.19.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 05:19:10 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 17:49:05 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/12] PCI: dwc: Discard IP-core version checking on
- unrolled iATU detection
-Message-ID: <20220324121905.GH2854@thinkpad>
-References: <20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru>
- <20220324012524.16784-9-Sergey.Semin@baikalelectronics.ru>
+        Thu, 24 Mar 2022 08:21:31 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9560C35262;
+        Thu, 24 Mar 2022 05:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648124399; x=1679660399;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6ZFdlgkUlrg1RA91ERKHsxNCJjmhkRGWCp0W1Zaki/Y=;
+  b=nnlwdpRcLsjLo2Du/2k2x2MC3WjPhThQ3zV9lvjOU9HgsNjzcE0QILDq
+   w9wndo0vRYJXP0F1/c2Vf1t3gNHIPXNpjYaTlKdKikPHRTU8fJdZHOu8d
+   f7S+OROnQhRVU/lgEFUKaTrFmQMBJlQsSn4FxmuU1X5+V0Sk8GVcRN3h1
+   gP1JOLnfH0PNt8qB6URAIpN8tr9Ha8n0HXVVdaUyncyw/gtuePSuHZDIs
+   tWZYFOOWv+gahtQvtuk4DIgOvOSItZ5cN6b/2/Nvh1iGPoziUBH1DpB6n
+   xzLm1CekQgzgGYfxgt+AfRkOo8SjY4Hn7Q0DZKVe05Ny14FD+hr4vu0Rr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="321561461"
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="321561461"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:19:58 -0700
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="649834499"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:19:55 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 24 Mar 2022 14:19:52 +0200
+Date:   Thu, 24 Mar 2022 14:19:52 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH] thunderbolt: replace usage of found with dedicated list
+ iterator variable
+Message-ID: <Yjxh6Md0F955FC4A@lahna>
+References: <20220324072700.63787-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220324012524.16784-9-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220324072700.63787-1-jakobkoschel@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:25:19AM +0300, Serge Semin wrote:
-> It's pretty much pointless. Even though unrolled version of the internal
-> ATU has been indeed available since DWC PCIe v4.80a IP-core, there is no
-> guarantee it was enabled during the IP-core configuration (Synopsys
-> suggests to contact the Solvnet support for guidance of how to do that for
-> the newer IP-cores). So the only reliable way to find out the unrolled
-> iATU feature availability is indeed to check the iATU viewport register
-> content. In accordance with the reference manual [1] if the register
-> doesn't exist (unrolled iATU is enabled) it's content is fixed with
-> 0xff-s, otherwise it will contain some zeros. So we can freely drop the
-> IP-core version checking in this matter then and use the
-> dw_pcie_iatu_unroll_enabled() method only to detect whether iATU/eDMA
-> space is unrolled.
-> 
-> [1] DesignWare Cores, PCI Express Controller, Register Desciptions,
-> v.4.90a, December 2016, p.855
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Hi Jakob,
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
-
-> ---
->  drivers/pci/controller/dwc/pcie-designware.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
+On Thu, Mar 24, 2022 at 08:27:00AM +0100, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index 3bd1cfd12148..e3d2c11e6998 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -600,15 +600,15 @@ static void dw_pcie_link_set_max_speed(struct dw_pcie *pci, u32 link_gen)
->  
->  }
->  
-> -static u8 dw_pcie_iatu_unroll_enabled(struct dw_pcie *pci)
-> +static bool dw_pcie_iatu_unroll_enabled(struct dw_pcie *pci)
->  {
->  	u32 val;
->  
->  	val = dw_pcie_readl_dbi(pci, PCIE_ATU_VIEWPORT);
->  	if (val == 0xffffffff)
-> -		return 1;
-> +		return true;
->  
-> -	return 0;
-> +	return false;
->  }
->  
->  static void dw_pcie_iatu_detect_regions_unroll(struct dw_pcie *pci)
-> @@ -680,9 +680,8 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
->  	struct device *dev = pci->dev;
->  	struct platform_device *pdev = to_platform_device(dev);
->  
-> -	if (pci->version >= 0x480A || (!pci->version &&
-> -				       dw_pcie_iatu_unroll_enabled(pci))) {
-> -		pci->iatu_unroll_enabled = true;
-> +	pci->iatu_unroll_enabled = dw_pcie_iatu_unroll_enabled(pci);
-> +	if (pci->iatu_unroll_enabled) {
->  		if (!pci->atu_base) {
->  			struct resource *res =
->  				platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
-> -- 
-> 2.35.1
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
 > 
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
+> 
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+
+Looks good to me. I will pick this up to Thunderbolt tree after the
+merge window closes.

@@ -2,193 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5482E4E5D4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DD04E5D57
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347835AbiCXCqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 22:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S1347867AbiCXCsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 22:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiCXCqC (ORCPT
+        with ESMTP id S242681AbiCXCsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 22:46:02 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAE45D5D5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:44:29 -0700 (PDT)
-Received: from kwepemi100013.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KP8f53mB4zfZCQ;
-        Thu, 24 Mar 2022 10:42:53 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100013.china.huawei.com (7.221.188.136) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 24 Mar 2022 10:44:27 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 24 Mar 2022 10:44:25 +0800
-Message-ID: <a8021f23-7878-bba4-6727-732f8e34c196@huawei.com>
-Date:   Thu, 24 Mar 2022 10:44:25 +0800
+        Wed, 23 Mar 2022 22:48:42 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D88939CC;
+        Wed, 23 Mar 2022 19:47:11 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso3768781pjb.5;
+        Wed, 23 Mar 2022 19:47:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=90v/5Py9W7EAZEot7188HYCPw8B0VfqItjFqNp0yU8I=;
+        b=dxrv0V3AiE2m0/WOX54xvV5yxB0eJv9FvLmxGfHi84fR/RWgBOp4yXdDNToYvyAawj
+         kFAqEG2QtJP6dJm1A/UKmq+1eB7PdUAV/zCkGhgbi9FbsP45vrQ9Soh8L719JjYtuwIg
+         N8NN/8zPbZSLvzEiIEYCgbzuHQ3nWPE/VgE7HlJAPPawvyRDtRTBtdnSAeEjeXLRRFJY
+         hF4aVeYUjd1A+GEfDEvARaNz62S+hP9Rhjqv1hfCPw9ceQkOiviCfxLNeiibnjpNAGNi
+         /6516352cSybYQDMu2cYXhPHBes/c1Nn7vARgXL0a/M/f8rTpmQpxgaP5aNDcNn0GcUs
+         QfDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=90v/5Py9W7EAZEot7188HYCPw8B0VfqItjFqNp0yU8I=;
+        b=L+Nkts2qPDy28GS2t9yQVU9DCQCizPhOys0HQG12B6SJ1XWGlFlFx8bi41rtihAc7u
+         SxHlRpN3m5QDWwTzWK4IrpjM8/va7gN8nUsnb385S0vHSv+RHL4H7agXmRRxanby//d6
+         /Ke9oBd/6P9gQY25ZNFhi2P6FbBHGTnnlz3STl3DOfbjE3xIsSq2QVdUxyLCoootMnzU
+         Cbf574csqaVdregMOf0+FOlyVv2HiSYbV3eMJLFYXov7eJ1mEedIoNh8ftXxgD6bcTqI
+         2HjMZ9rbT4Agz1a5vaLjd6g4pi8Zgo5PTMCkeWQ4MYJg9uO8Mlimihe5KFi1ZlwEn2k3
+         NBDg==
+X-Gm-Message-State: AOAM531iqzff1cAlAU97hVhfidLAinJRwh1xDXqSq7SIAFL8vnZ2AgHW
+        5/5wIPNPNcLJS25BXLSFTTuZCWQACPBzXEak0Hc=
+X-Google-Smtp-Source: ABdhPJzEvjnYd7B0WIGRcPh8gW/FvpiuSCSRc80jOwhBs6SPVLjct24P89mwBuS0aVh2B9zE/pT9CUr0CDpyaw6jaGg=
+X-Received: by 2002:a17:903:1cd:b0:154:5edf:5704 with SMTP id
+ e13-20020a17090301cd00b001545edf5704mr3481459plh.26.1648090031398; Wed, 23
+ Mar 2022 19:47:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH -next v2 2/4] mm: page_table_check: add hooks to public
- helpers
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+References: <20220317234827.447799-1-shy828301@gmail.com> <YjvNzvdcagflTejJ@mit.edu>
+In-Reply-To: <YjvNzvdcagflTejJ@mit.edu>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 23 Mar 2022 19:46:59 -0700
+Message-ID: <CAHbLzkqTeD_VB0znsBNt8HjjPceqU-uKh6TF3jNVVjZn4dbBLw@mail.gmail.com>
+Subject: Re: [v2 PATCH 0/8] Make khugepaged collapse readonly FS THP more consistent
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Rik van Riel <riel@surriel.com>,
+        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20220322144447.3563146-1-tongtiangen@huawei.com>
- <20220322144447.3563146-3-tongtiangen@huawei.com>
- <CA+CK2bAa96oE0FbtJUjAJ=vpuzQsW3R60K9SUhca6mZ3BL1f8w@mail.gmail.com>
- <0c95c24d-b980-a8b3-9c68-e10d16e05e10@huawei.com>
- <CA+CK2bAhxZEyirFHjwEB6aRDqH8ZzbJu_NELaT+vBAuDtDh9PQ@mail.gmail.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <CA+CK2bAhxZEyirFHjwEB6aRDqH8ZzbJu_NELaT+vBAuDtDh9PQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        darrick.wong@oracle.com, Linux MM <linux-mm@kvack.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 23, 2022 at 6:48 PM Theodore Ts'o <tytso@mit.edu> wrote:
+>
+> On Thu, Mar 17, 2022 at 04:48:19PM -0700, Yang Shi wrote:
+> >
+> > The patch 1 ~ 7 are minor bug fixes, clean up and preparation patches.
+> > The patch 8 converts ext4 and xfs.  We may need convert more filesystems,
+> > but I'd like to hear some comments before doing that.
+>
+> Adding a hard-coded call to khugepage_enter_file() in ext4 and xfs,
+> and potentially, each file system, seems kludgy as all heck.  Is there
+> any reason not to simply call it in the mm code which calls f_op->mmap()?
 
+Thanks, Ted. Very good point. I just didn't think of it. I think it is
+doable. We may be able to clean up the code further.
 
-在 2022/3/24 10:12, Pasha Tatashin 写道:
-> On Wed, Mar 23, 2022 at 10:07 PM Tong Tiangen <tongtiangen@huawei.com> wrote:
->>
->>
->>
->> 在 2022/3/24 1:42, Pasha Tatashin 写道:
->>> On Tue, Mar 22, 2022 at 10:25 AM Tong Tiangen <tongtiangen@huawei.com> wrote:
->>>>
->>>> Move ptep_clear() to the include/linux/pgtable.h and add page table check
->>>> relate hooks to some helpers, it's prepare for support page table check
->>>> feature on new architecture.
->>>>
->>>> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->>>> ---
->>>>    arch/x86/include/asm/pgtable.h | 10 ----------
->>>>    include/linux/pgtable.h        | 27 +++++++++++++++++++--------
->>>>    2 files changed, 19 insertions(+), 18 deletions(-)
->>>>
->>>> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
->>>> index 8cd6514e3052..8c85f2eabbaa 100644
->>>> --- a/arch/x86/include/asm/pgtable.h
->>>> +++ b/arch/x86/include/asm/pgtable.h
->>>> @@ -1077,16 +1077,6 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
->>>>           return pte;
->>>>    }
->>>>
->>>> -#define __HAVE_ARCH_PTEP_CLEAR
->>>> -static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
->>>> -                             pte_t *ptep)
->>>> -{
->>>> -       if (IS_ENABLED(CONFIG_PAGE_TABLE_CHECK))
->>>> -               ptep_get_and_clear(mm, addr, ptep);
->>>> -       else
->>>> -               pte_clear(mm, addr, ptep);
->>>> -}
->>>> -
->>>>    #define __HAVE_ARCH_PTEP_SET_WRPROTECT
->>>>    static inline void ptep_set_wrprotect(struct mm_struct *mm,
->>>>                                         unsigned long addr, pte_t *ptep)
->>>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
->>>> index f4f4077b97aa..d27fd0ed84a9 100644
->>>> --- a/include/linux/pgtable.h
->>>> +++ b/include/linux/pgtable.h
->>>> @@ -12,6 +12,7 @@
->>>>    #include <linux/bug.h>
->>>>    #include <linux/errno.h>
->>>>    #include <asm-generic/pgtable_uffd.h>
->>>> +#include <linux/page_table_check.h>
->>>>
->>>>    #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_FOLDED) - \
->>>>           defined(__PAGETABLE_PMD_FOLDED) != CONFIG_PGTABLE_LEVELS
->>>> @@ -259,14 +260,6 @@ static inline int pmdp_clear_flush_young(struct vm_area_struct *vma,
->>>>    #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->>>>    #endif
->>>>
->>>> -#ifndef __HAVE_ARCH_PTEP_CLEAR
->>>> -static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
->>>> -                             pte_t *ptep)
->>>> -{
->>>> -       pte_clear(mm, addr, ptep);
->>>> -}
->>>> -#endif
->>>> -
->>>>    #ifndef __HAVE_ARCH_PTEP_GET_AND_CLEAR
->>>>    static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
->>>>                                          unsigned long address,
->>>> @@ -274,10 +267,23 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
->>>>    {
->>>>           pte_t pte = *ptep;
->>>>           pte_clear(mm, address, ptep);
->>>> +       page_table_check_pte_clear(mm, address, pte);
->>>>           return pte;
->>>>    }
->>>>    #endif
->>>>
->>>> +#ifndef __HAVE_ARCH_PTEP_CLEAR
->>>> +static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
->>>> +                             pte_t *ptep)
->>>> +{
->>>> +#ifdef CONFIG_PAGE_TABLE_CHECK
->>>> +       ptep_get_and_clear(mm, addr, ptep);
->>>> +#else
->>>> +       pte_clear(mm, addr, ptep);
->>>> +#endif
->>>
->>> I have a preference to use if (IS_ENABLED(CONFIG_PAGE_TABLE_CHECK))
->>> instead of #ifdef. The end result is the same. Otherwise it looks
->>> good.
->>>
->>> Thanks,
->>> Pasha
->>> .
->>
->> I have a little hesitation when making this change , in theory, add if
->> here may affect the performance a little in some scenarios. However, the
->> impact on the whole call path should be small.
-> 
-> I do not think so, the compiler should optimize out IS_ENABLED() when
-> not enabled, no?
-> 
-
-You are right.
-
-https://www.kernel.org/doc/Documentation/process/coding-style.rst
-
-The compiler will constant-fold the conditional away, and include or 
-exclude the block of code just as with an #ifdef, so this will **not add 
-any runtime overhead**.
-
-Thanks :)
-
->>
->> I will send v3 using if (IS_ENABLED(CONFIG_PAGE_TABLE_CHECK)).
->>
->> Thanks.
->> Tong
->> .
-> .
+>
+>                                  - Ted

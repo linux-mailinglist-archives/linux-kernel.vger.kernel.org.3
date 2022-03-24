@@ -2,87 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD7C4E689C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B46754E689E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352621AbiCXSZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S1352628AbiCXS0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiCXSZl (ORCPT
+        with ESMTP id S233548AbiCXS03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:25:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DAF4A7764
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648146248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BJQ4AT1Ezm+OM7uYaunbGJGeDkJH79IfuLeFbVntUZE=;
-        b=hVXDoHuciM9hXwo098qRONk02GsADAE8x6Tc1IuhiEYm8btWjINZZ7RXYnq5M498grgvd8
-        WI8j/tiSx51rtfGNRRi82klZ82zW0uIqrVKFEBgFL4KkOfXPCKaw0SSXqgfYNJ1bSqbID2
-        c+vhlKdkZSu88lznh8DJGW8C+1bU5t0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-zf1b6xATMfmmrEwuC2HooQ-1; Thu, 24 Mar 2022 14:24:06 -0400
-X-MC-Unique: zf1b6xATMfmmrEwuC2HooQ-1
-Received: by mail-wr1-f69.google.com with SMTP id z1-20020adfec81000000b001f1f7e7ec99so1958165wrn.17
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:24:06 -0700 (PDT)
+        Thu, 24 Mar 2022 14:26:29 -0400
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA416A7764;
+        Thu, 24 Mar 2022 11:24:56 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id i64-20020a1c3b43000000b0038ce25c870dso307053wma.1;
+        Thu, 24 Mar 2022 11:24:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=BJQ4AT1Ezm+OM7uYaunbGJGeDkJH79IfuLeFbVntUZE=;
-        b=6s5OMRIk8htVu2K5T4qAd+8KW4U0v3medn5knYw8c2h8wuCcZOAZDmks3eegk7cTb3
-         gaP69I9+C34IRkppZZmLFmNPLzqDha1Mr2ZNYnJBtCMqwlawpKpdW7hW4P05ifVxh39q
-         xbvu5HjCWX90GMYzrjVPWgGOye0/sYiFLvJjCeSar4Mghcq58QZw6je17yOzy3gz1BUa
-         qe4vjgO4Jt+GBzz4GFmHKGkCBlF+Q1/+Iu4H9kNNs5dC/gxgM6xC+/BxlOaP/2MtFLEs
-         uVSFTSc81ucm3DmaTAFo4pusdUqB7gaLpertDucl8IWV4vj4felvIy7s1x78gzmsag/J
-         dZcA==
-X-Gm-Message-State: AOAM5327X3POGy40MA1Y+/LzsKjtYGiGeHmYLce8mWd7szI7i4+luvYv
-        iS1pzOHLlfSvHFylnMOEdoshghKIieoxGHzNdBoNuEY3JLzp45u5wzFuEbOibfu3AgCzh8ZnRH/
-        mtOUD0txzEZrr0OwD431Ez3Dl
-X-Received: by 2002:a5d:4a0f:0:b0:1ed:d377:288a with SMTP id m15-20020a5d4a0f000000b001edd377288amr5542426wrq.3.1648146244540;
-        Thu, 24 Mar 2022 11:24:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzCPjRof9hOHTEcZ0tmLN1KWm/QUI1HGnj1f9hRLaiYWf0GX/hWiVdh77H1Ueh5vTfpR0fp+g==
-X-Received: by 2002:a5d:4a0f:0:b0:1ed:d377:288a with SMTP id m15-20020a5d4a0f000000b001edd377288amr5542414wrq.3.1648146244333;
-        Thu, 24 Mar 2022 11:24:04 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id z12-20020a5d4d0c000000b002057d6f7053sm3210955wrt.47.2022.03.24.11.24.03
+        bh=OSMRMGJIbC2C7MmSEVIz7xmNnY44imVmj50ReOAokX8=;
+        b=cNxTnFSY0z4/r7En30CYp5cOiHFTVbgaXrJUZ3iJjnXjJPIC576JjEud1IVQNHxFP7
+         5FKH7lk62OI35PP3O/G9Z1OOaDqvt773/3ybj5YYCaC4Wy6FFMfgF1mni8LWehnP8kkP
+         LqnTZ+6vs1LFiTaQAx/DFNIpVXyBIsN0VhKDKEyWkZN6JVQlGotMNekqsfK1N4p1dHlS
+         jT99Lu0GdBJvahlk9OzVtR+kEyTeK0gw+CJyIQnSbALGd9vJxTwbiXEuIyiQl7WRyi6Y
+         4zjlcKNqslIFqgg4JBa5zfUdM6KS4M565fkihWNPjFtYZnKCjBxryiwRbd4/WlOZJ5Gb
+         O5lg==
+X-Gm-Message-State: AOAM5302Dg0EiGSwYamyNdq1gGsZ0aWSPHtNQe1nJlat3bqK9KQQJxya
+        nMhYyKAff7BAndjFZSwo408=
+X-Google-Smtp-Source: ABdhPJw/rF4r9nj7mbhYkVwCX7Am9nyFPeXI9rzmEK5DHmc29JhjK+K5TqRBneG0OxI0IImKNt+b6Q==
+X-Received: by 2002:a1c:4e18:0:b0:38c:bd8d:6bd9 with SMTP id g24-20020a1c4e18000000b0038cbd8d6bd9mr5945883wmh.94.1648146295269;
+        Thu, 24 Mar 2022 11:24:55 -0700 (PDT)
+Received: from [192.168.0.158] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id l13-20020adfbd8d000000b002040daf5dffsm4763014wrh.18.2022.03.24.11.24.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 11:24:03 -0700 (PDT)
-Message-ID: <848bba1a-66f2-a3eb-510e-9322b729c8ec@redhat.com>
-Date:   Thu, 24 Mar 2022 19:24:02 +0100
+        Thu, 24 Mar 2022 11:24:54 -0700 (PDT)
+Message-ID: <622e5de3-12b3-0f5f-1c1b-6e062c39a626@kernel.org>
+Date:   Thu, 24 Mar 2022 19:24:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 3/6] KVM: x86: nSVM: support PAUSE filtering when L0
- doesn't intercept PAUSE
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/3] dt-bindings: mtd: ti,elm: Convert to yaml
 Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>
-References: <20220322174050.241850-1-mlevitsk@redhat.com>
- <20220322174050.241850-4-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220322174050.241850-4-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Roger Quadros <rogerq@kernel.org>, miquel.raynal@bootlin.com,
+        robh+dt@kernel.org
+Cc:     richard@nod.at, vigneshr@ti.com, kishon@ti.com, nm@ti.com,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220323111851.4699-1-rogerq@kernel.org>
+ <20220323111851.4699-2-rogerq@kernel.org>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220323111851.4699-2-rogerq@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,15 +67,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/22 18:40, Maxim Levitsky wrote:
-> Allow L1 to use PAUSE filtering if L0 doesn't use it.
+On 23/03/2022 12:18, Roger Quadros wrote:
+> Convert elm.txt to ti,elm.yaml.
 > 
-> Signed-off-by: Maxim Levitsky<mlevitsk@redhat.com>
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/mtd/elm.txt | 16 -------
+>  .../devicetree/bindings/mtd/ti,elm.yaml       | 48 +++++++++++++++++++
+>  2 files changed, 48 insertions(+), 16 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/elm.txt
+>  create mode 100644 Documentation/devicetree/bindings/mtd/ti,elm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/elm.txt b/Documentation/devicetree/bindings/mtd/elm.txt
+> deleted file mode 100644
+> index 59ddc61c1076..000000000000
+> --- a/Documentation/devicetree/bindings/mtd/elm.txt
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -Error location module
+> -
+> -Required properties:
+> -- compatible: Must be "ti,am3352-elm"
+> -- reg: physical base address and size of the registers map.
+> -- interrupts: Interrupt number for the elm.
+> -
+> -Optional properties:
+> -- ti,hwmods: Name of the hwmod associated to the elm
+> -
+> -Example:
+> -elm: elm@0 {
+> -	compatible = "ti,am3352-elm";
+> -	reg = <0x48080000 0x2000>;
+> -	interrupts = <4>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/mtd/ti,elm.yaml b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
+> new file mode 100644
+> index 000000000000..24ed0fb84204
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
+> @@ -0,0 +1,48 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/ti,elm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments Error Location Module (ELM).
+> +
+> +maintainers:
+> +  - Roger Quadros <rogerq@kernel.org>
+> +
+> +description:
+> +  ELM module is used together with GPMC and NAND Flash to detect
+> +  errors and the location of the error based on BCH algorithms
+> +  so they can be corrected if possible.
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-Can you enlarge the commit message to explain the logic in 
-nested_vmcb02_prepare_control?
+No items, just const.
 
-Thanks,
+> +      - const: ti,am3352-elm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  ti,hwmods:
+> +    description:
+> +      Name of the HWMOD associated with ELM. This is for legacy
+> +      platforms only.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    deprecated: true
 
-Paolo
+It was not deprecated before. Could you explain it in commit msg because
+it is not a conversion only.
 
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    elm: elm@0 {
+
+This is error correction, right? So generic node name "ecc"?
+
+> +        compatible = "ti,am3352-elm";
+> +        reg = <0x0 0x2000>;
+> +        interrupts = <4>;
+> +    };
+
+
+Best regards,
+Krzysztof

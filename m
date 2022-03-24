@@ -2,150 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25554E6A58
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 22:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976E24E6A54
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 22:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355184AbiCXVkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 17:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S1355191AbiCXVlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 17:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354221AbiCXVkO (ORCPT
+        with ESMTP id S1355203AbiCXVlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 17:40:14 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02B836B6B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:38:41 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e61c5a0eb7so45810997b3.22
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=iKkzGcGXHNcNBC8QzCNubVd1VUuqnCpLdh8zslocqU0=;
-        b=JVbOmq76XrgynnBO5Yhxuas50bYdBiMTf7e2IRWZzuXOwZnZDGqhmUDVmzJ/ZkYW9C
-         ikB/1e4diohU0+QBEeuTLaRtpmtN56uFgGKJxf0sleQIO2brQqw1GNfXU2vGCCr0QOPS
-         hAp92VeJiPj93PD3VRCf0Xze5IEsn/t1UdAr9vr9ZZF0Gdxdwum1c3Nfp5AVn0GhW5xA
-         kzkEkISLYgP/gYhc/cWYUWCi/ozbgfwwZukixDEcO4Mbuj+zCQ3YgTxzG/Mje1mORDHq
-         ZAWAEF2hXJ56RT0BKDiP33cUzznaD3L/baMvqQAPGb7BWkPoCyz2nsln57WD90fRxYj1
-         mdIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=iKkzGcGXHNcNBC8QzCNubVd1VUuqnCpLdh8zslocqU0=;
-        b=tIpFziZieboNVs2NN5AC85afEl5hUJDH3s0XMpkKCTaVQFhyEePBWMzMo8QDRW112x
-         Q/+OoJsdjjlxPQgcQb3YXoSGqDFYvnKT2vmXBUlFhpsqxANW7ALLLrB0kyXjjrfPntGH
-         BvpjjIRGx5nFOyqqQcNCmF3r2ldDulN2jre9NHcsgR7hLtQYA0z/9DdkaiYGraK1l/0n
-         pXU42jaIUcOcIMWIW5mn6wefYYLftWO4T2yhWdd9LMQqxn6WjkWig2VRhJRFuEeb5E2i
-         tpd9GC5LWxIgSEdXydL8nidiuCvLNoyJSC6mzr7RNNgfCoVygVLPou/WrRkmrtpfU7oP
-         NUAQ==
-X-Gm-Message-State: AOAM531JMyntz8WRMJknrCOzsd7kDfQC3a/mqSlmxmTt/cH5Twas7pI5
-        xGZc6HY4aIjvfbPQx2WvV+4yr8iarf+/EXw=
-X-Google-Smtp-Source: ABdhPJxTr1QrHSXm1+rYF8oG4K+DdHiIEldvDy9VQkzZg+de7iMSrqbdS1scNMr0ut5PICcY5RvxcTwXgt/GceE=
-X-Received: from tansuresh.svl.corp.google.com ([2620:15c:2c5:13:849f:5cb9:7db8:508a])
- (user=tansuresh job=sendgmr) by 2002:a05:6902:1d1:b0:636:fa07:4b9a with SMTP
- id u17-20020a05690201d100b00636fa074b9amr6337359ybh.590.1648157920886; Thu,
- 24 Mar 2022 14:38:40 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 14:38:33 -0700
-Message-Id: <20220324213833.3056034-1-tansuresh@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH 2/3] PCI: Support asynchronous shutdown
-From:   Tanjore Suresh <tansuresh@google.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tanjore Suresh <tansuresh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 17:41:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AD4654B7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648158005; x=1679694005;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VTSq1ix+3EBzR/DNpL0fzWXKaftzrn905lBpVaHr6Do=;
+  b=Okncc7gOlKqSfxJnXQPE3Sx4A2XXQ41BKG5I8TvL1XUBnOYVFJjPUeq7
+   KLbrqdaGs3zCybZltJ7tdFp72JSrs6blW9g9zK5dWWQ2s5cPVV0Ul+oHg
+   OiCEPqsmHM2IN1p5Rff2XJehwuHdKsTzz5cWTjd3YxhMQMqub7wMqehjO
+   tqcrAdBSXUaBj3sCcOV5lORuPDyTIE1RnAcyF8K9euHX2NUXhJ2qbiE+5
+   /RKkTgs6AsWhto3EngXgJOusodMfLDJNAORs3y0c/09vbZj3Cqt49LxrQ
+   N8NwptNYLCDTlZvNNkrwDmIkc19ufV0kbhj25L3OoaIHWxgSR9sBao5tu
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238437324"
+X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
+   d="scan'208";a="238437324"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 14:40:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
+   d="scan'208";a="650014103"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2022 14:40:00 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXVBX-000LT5-JQ; Thu, 24 Mar 2022 21:39:59 +0000
+Date:   Fri, 25 Mar 2022 05:39:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, Mark Rutland <mark.rutland@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] arm64, scs: save scs_sp values per-cpu when
+ switching stacks
+Message-ID: <202203250512.yMAPu8rv-lkp@intel.com>
+References: <f75c58b17bfaa419f84286cd174e3a08f971b779.1648049113.git.andreyknvl@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f75c58b17bfaa419f84286cd174e3a08f971b779.1648049113.git.andreyknvl@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enhances the base PCI driver to add support for asynchronous
-shutdown.
+Hi,
 
-Assume a device takes n secs to shutdown. If a machine has been
-populated with M such devices, the total time spent in shutting down
-all the devices will be M * n secs, if the shutdown is done
-synchronously. For example, if NVMe PCI Controllers take 5 secs
-to shutdown and if there are 16 such NVMe controllers in a system,
-system will spend a total of 80 secs to shutdown all
-NVMe devices in that system.
+I love your patch! Yet something to improve:
 
-In order to speed up the shutdown time, asynchronous interface to
-shutdown has been implemented. This will significantly reduce
-the machine reboot time.
+[auto build test ERROR on next-20220323]
+[also build test ERROR on v5.17]
+[cannot apply to arm64/for-next/core hnaz-mm/master linus/master v5.17 v5.17-rc8 v5.17-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Signed-off-by: Tanjore Suresh <tansuresh@google.com>
----
- drivers/pci/pci-driver.c | 17 ++++++++++++++---
- include/linux/pci.h      |  2 ++
- 2 files changed, 16 insertions(+), 3 deletions(-)
+url:    https://github.com/0day-ci/linux/commits/andrey-konovalov-linux-dev/kasan-arm64-scs-stacktrace-collect-stack-traces-from-Shadow-Call-Stack/20220323-233436
+base:    b61581ae229d8eb9f21f8753be3f4011f7692384
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220325/202203250512.yMAPu8rv-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/da5bedb1ac7aa0b303f6d996d306e675860b6e12
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review andrey-konovalov-linux-dev/kasan-arm64-scs-stacktrace-collect-stack-traces-from-Shadow-Call-Stack/20220323-233436
+        git checkout da5bedb1ac7aa0b303f6d996d306e675860b6e12
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-index 4ceeb75fc899..0d0b46d71e88 100644
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -501,14 +501,16 @@ static void pci_device_remove(struct device *dev)
- 	pci_dev_put(pci_dev);
- }
- 
--static void pci_device_shutdown(struct device *dev)
-+static void pci_device_shutdown_pre(struct device *dev)
- {
- 	struct pci_dev *pci_dev = to_pci_dev(dev);
- 	struct pci_driver *drv = pci_dev->driver;
- 
- 	pm_runtime_resume(dev);
- 
--	if (drv && drv->shutdown)
-+	if (drv && drv->shutdown_pre)
-+		drv->shutdown_pre(pci_dev);
-+	else if (drv && drv->shutdown)
- 		drv->shutdown(pci_dev);
- 
- 	/*
-@@ -522,6 +524,14 @@ static void pci_device_shutdown(struct device *dev)
- 		pci_clear_master(pci_dev);
- }
- 
-+static void pci_device_shutdown_post(struct device *dev)
-+{
-+	struct pci_dev *pci_dev = to_pci_dev(dev);
-+	struct pci_driver *drv = pci_dev->driver;
-+
-+	if (drv && drv->shutdown_post)
-+		drv->shutdown_post(pci_dev);
-+}
- #ifdef CONFIG_PM
- 
- /* Auxiliary functions used for system resume and run-time resume. */
-@@ -1625,7 +1635,8 @@ struct bus_type pci_bus_type = {
- 	.uevent		= pci_uevent,
- 	.probe		= pci_device_probe,
- 	.remove		= pci_device_remove,
--	.shutdown	= pci_device_shutdown,
-+	.shutdown_pre	= pci_device_shutdown_pre,
-+	.shutdown_post	= pci_device_shutdown_post,
- 	.dev_groups	= pci_dev_groups,
- 	.bus_groups	= pci_bus_groups,
- 	.drv_groups	= pci_drv_groups,
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 60d423d8f0c4..bdd3a4d65a19 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -904,6 +904,8 @@ struct pci_driver {
- 	int  (*suspend)(struct pci_dev *dev, pm_message_t state);	/* Device suspended */
- 	int  (*resume)(struct pci_dev *dev);	/* Device woken up */
- 	void (*shutdown)(struct pci_dev *dev);
-+	void (*shutdown_pre)(struct pci_dev *dev);
-+	void (*shutdown_post)(struct pci_dev *dev);
- 	int  (*sriov_configure)(struct pci_dev *dev, int num_vfs); /* On PF */
- 	int  (*sriov_set_msix_vec_count)(struct pci_dev *vf, int msix_vec_count); /* On PF */
- 	u32  (*sriov_get_vf_total_msix)(struct pci_dev *pf);
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/arm64/kernel/sdei.c: In function 'free_sdei_scs':
+>> arch/arm64/kernel/sdei.c:124:33: error: 'sdei_shadow_call_stack_normal_ptr' undeclared (first use in this function)
+     124 |                 _free_sdei_scs(&sdei_shadow_call_stack_normal_ptr, cpu);
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/sdei.c:124:33: note: each undeclared identifier is reported only once for each function it appears in
+>> arch/arm64/kernel/sdei.c:125:33: error: 'sdei_shadow_call_stack_critical_ptr' undeclared (first use in this function); did you mean 'sdei_stack_critical_ptr'?
+     125 |                 _free_sdei_scs(&sdei_shadow_call_stack_critical_ptr, cpu);
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                 sdei_stack_critical_ptr
+   arch/arm64/kernel/sdei.c: In function 'init_sdei_scs':
+   arch/arm64/kernel/sdei.c:150:39: error: 'sdei_shadow_call_stack_normal_ptr' undeclared (first use in this function)
+     150 |                 err = _init_sdei_scs(&sdei_shadow_call_stack_normal_ptr, cpu);
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/sdei.c:153:39: error: 'sdei_shadow_call_stack_critical_ptr' undeclared (first use in this function); did you mean 'sdei_stack_critical_ptr'?
+     153 |                 err = _init_sdei_scs(&sdei_shadow_call_stack_critical_ptr, cpu);
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                       sdei_stack_critical_ptr
+
+
+vim +/sdei_shadow_call_stack_normal_ptr +124 arch/arm64/kernel/sdei.c
+
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  118  
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  119  static void free_sdei_scs(void)
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  120  {
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  121  	int cpu;
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  122  
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  123  	for_each_possible_cpu(cpu) {
+ac20ffbb0279aae Sami Tolvanen 2020-11-30 @124  		_free_sdei_scs(&sdei_shadow_call_stack_normal_ptr, cpu);
+ac20ffbb0279aae Sami Tolvanen 2020-11-30 @125  		_free_sdei_scs(&sdei_shadow_call_stack_critical_ptr, cpu);
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  126  	}
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  127  }
+ac20ffbb0279aae Sami Tolvanen 2020-11-30  128  
+
 -- 
-2.35.1.1021.g381101b075-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

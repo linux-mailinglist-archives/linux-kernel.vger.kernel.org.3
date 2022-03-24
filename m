@@ -2,192 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED564E69B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD554E69BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353262AbiCXUQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 16:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
+        id S1353264AbiCXUSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 16:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353252AbiCXUQW (ORCPT
+        with ESMTP id S243089AbiCXUSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 16:16:22 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-eus2azon11020015.outbound.protection.outlook.com [52.101.56.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4A7B2448;
-        Thu, 24 Mar 2022 13:14:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Padc8tntDgANumuWrWoSCGkTph770iIVyVnftd4u06xqZeDOP3D4KV+Yl5zEpcoRFKdhvsko7WN/ROt+kg7x7juWCvXldO7YNstnmrWC0jr25501zCIoTvuKK2iXGa1zqTy2hskCdKZkTHHbV9qZ2eX03PiNwb18Eup+X17L+qhH0zQZTyuQdT144w1zay4VcH1sr2oDAOZ3djGscgVnZhVPsAxn0EYTVsz8NnWJ2Yc+aD5bvPLH+fZw3w3k6zPGCQ8Z9KODoD4knDx1cxdNnEwbNY7LJK8YGvT7XPJLOzginCnlA7I3PSGB+I+VnxvG00+gS68dMWDs+WO1r2p+8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=egB9+PUoCc78LftnzLiD34Y77fgijMu5bezd3AHfzVA=;
- b=nKh0AoA0klLKEWPpDvw7BB3vouHzEnsEyVEgYR65e0OcS/w0mdhVIxV7eiGK7h8DPOmkiGhc0b4Gaa0TDpv2MP0A303Gg/MJIDwW0AHqJ2Py74lKinbPj/oKxT4ENKuHxL7WLdUJ6Leq172OL35Ql4ytc48a008ZN9WTk1EIAoxDNdN8xgdEUlua/0ACVbn2fkfftsVJr+NlJ9sPMrup2URMmQMSGPcFCdh1bCp78Cp0MGBQVysBziL18MDvIQGcEBmAXglhU36dmIBRsBFE6244vkyPd1lEAIoaWZy8aBF3AktQbtw1MbX3jD7y3wmdhho3XYQhuvhiw8Hx6z5r2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=egB9+PUoCc78LftnzLiD34Y77fgijMu5bezd3AHfzVA=;
- b=hufw3Y69R2mCVB4Srwn1NFyznRNXYwBpsEPS8LVifivRNicMloNXtX7BZGlwl286DQqq7gAsup5qKzEG3aYX2edKEO0z0W4d4I61s/LlQ01viu4sZrRtEtKk9S10HeS0qnDiXgCWYv66iFc1QsI5zS531nmpW03EpOM7a2g5nag=
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
- by SA0PR21MB1882.namprd21.prod.outlook.com (2603:10b6:806:d8::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.5; Thu, 24 Mar
- 2022 20:14:47 +0000
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::71de:a6ad:facf:dfbe]) by PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::71de:a6ad:facf:dfbe%5]) with mapi id 15.20.5123.010; Thu, 24 Mar 2022
- 20:14:47 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     jason <jason@zx2c4.com>
-CC:     Ard Biesheuvel <ardb@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-crypto <linux-crypto@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: RE: [PATCH 2/3 v6] ACPI: allow longer device IDs
-Thread-Topic: [PATCH 2/3 v6] ACPI: allow longer device IDs
-Thread-Index: AQHYLNK4fL59pmJF2Ea4CQMRQ5s3a6ypbsWAgAAEo4CAAAbTAIAAB7CAgAACs/CAAATqAIAAA+TAgAADDwCAImLl4IAAJSUAgAL2u4CAAAaDgIAABp/Q
-Date:   Thu, 24 Mar 2022 20:14:47 +0000
-Message-ID: <PH0PR21MB302535C67863043B608710BDD7199@PH0PR21MB3025.namprd21.prod.outlook.com>
-References: <CAHmME9qHnvwrxEue4Pdm_E1qZQGXFuR9orJSKCWj8fH5TSh6fA@mail.gmail.com>
- <20220228183355.9090-1-Jason@zx2c4.com>
- <CAHp75VcjrD3kwN1BfWpjKXaVpG7MHfftMUscSGhcJfStm4b-Xg@mail.gmail.com>
- <CAMj1kXFmEAKJRHCiuXyGECCmOs0+xX9AVeBDxfuD0XuX2TQ2Uw@mail.gmail.com>
- <Yh0+LA8B1jw8tnl9@smile.fi.intel.com>
- <CAHmME9qW4EiYU6_kTffMdK5ijJY1DF6YRt=gDjj1vKqDxB0Raw@mail.gmail.com>
- <MN0PR21MB3098981B77F513976A62CA57D7019@MN0PR21MB3098.namprd21.prod.outlook.com>
- <CAMj1kXFZZoOeXnjxdU+gOJTN=Szn=eiXgRhSS9_nnHgwADNHjA@mail.gmail.com>
- <MN0PR21MB3098EC13B4E8488E692DB28AD7019@MN0PR21MB3098.namprd21.prod.outlook.com>
- <CAMj1kXFe-B=n1zp6M0yBuqJmmfOXTFbkzj29iK+QpPGK=LxRmA@mail.gmail.com>
- <PH0PR21MB30253A8BA8B189686B8E65EAD7179@PH0PR21MB3025.namprd21.prod.outlook.com>
- <CAMj1kXEExWbD9imqNUr1RYRzJmbQX5i3CdG7MPseQh8Q=N1y9g@mail.gmail.com>
- <PH0PR21MB30251D429344378FE8D47E35D7199@PH0PR21MB3025.namprd21.prod.outlook.com>
- <CAHmME9pZW_nu3nACPHO063t8gViMRfV7JFXUjbzDt+f362NEgA@mail.gmail.com>
-In-Reply-To: <CAHmME9pZW_nu3nACPHO063t8gViMRfV7JFXUjbzDt+f362NEgA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=4f69e02b-f4ee-454f-a716-01224d62f761;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-03-24T20:09:06Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7a5c86d2-5ddb-4bf9-b156-08da0dd2f189
-x-ms-traffictypediagnostic: SA0PR21MB1882:EE_
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-atpmessageproperties: SA|SL
-x-microsoft-antispam-prvs: <SA0PR21MB188200C0260CC866BC10BD10D7199@SA0PR21MB1882.namprd21.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ylL9VLyyfdbC9mLm99s4y0QFonaRWmIZLUrVeg4VpAK8WQR2QR89pmp3q5TLlY+RZdKOnPAyMXq5L8amH3VBfeLVAZ3z+Zws9XZwa2OwHvSyZ7MW35CKawqNwrL3/KcD9/QQs+2YlClwsRsiKlU03P9nphRF6AkVPws+ywCiGJVQ/heTCmGwKA535W4IYQm5IJO9MRtPnjZleJqTlxR+zvcyXErVecUXHZTdKGcu7n4e5/8A9BrHCklAtCnFDLPD9P/R7CSJN4C3iXG4mwKMqNDHd2lJ+88xtsrTRgIFb8At3TlRRVCEgaBkydbJlffvI21cu3bVLsSoiA5lc6gZ6K7iSKmVLiuztq2uX+C/PSgT7VlY6BhJbuZBhHf2QMPJS1bm0h0htp41PbvqbmAjW25QQF1fSPRu+YU/Xt+LfcbPwUmN2v1MZoX9i/z1fg7ja1VuKMMCJcZ+tmbABLXCDK74jHYjDtN7xT42pYZCasiF8dGgT98XKtHTgnm3ZGRI0wnwBj6aO/VhpWJnjNLYkzprIGVTub5YdiySJCcnadI5F/Rra+h7ClqTB1jUinLei2n59Bsw/PB3187Hf4rj6lk1wkSNP6AFa6DG9MsQkT6KN/tpjrlViayDRPnTqugELa/XzdvPT5Manz3rcT19IWrnLYY5GgGe4KkfnRgKN4Rk0ZDNB16kT+HSGKaxzn2fyjF8JDJ8VhjbYXIR6ZYVZ52Ph2aumL9dFo67rvv7abxSeXa4bmd3J/L1WeTbri/tRFLM58BuGtniLSsLArR3WlJ3YLndFJ81AJ1uvLfs0QSh/tdf3Bg+iv47RPvFJu7ZOoH8d1sqv5vKkz1lGu/Y7p+92JFEHjpYAgiqc5Vvp6Q=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(66476007)(66946007)(8676002)(66446008)(508600001)(55016003)(4326008)(8990500004)(76116006)(66556008)(64756008)(7416002)(5660300002)(9686003)(52536014)(38100700002)(2906002)(33656002)(10290500003)(6916009)(54906003)(966005)(316002)(71200400001)(8936002)(186003)(7696005)(83380400001)(26005)(6506007)(86362001)(38070700005)(82950400001)(122000001)(82960400001)(148743002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4sHjSwuGRxh6isD/m089H+dO9Pz/L9OERK6M++AOvLGmwiyVZzsR1vZy7UIz?=
- =?us-ascii?Q?CcDUjblYtFSO9wq4OD6O5YdGbg+tvc47/TaxZ41qq9xkWIfBmEOXbZh9arr8?=
- =?us-ascii?Q?/oQ+TYWugu5eZz1EUVG+CDAmcHU6GzT5GIn6Ffosyljf0HD1MTPh8aqO4r9A?=
- =?us-ascii?Q?T2spJNJQp2wHmzZDEoofETtDOXPtkoZRIWDuZN44Zz79/BGLKCshKDKUuK53?=
- =?us-ascii?Q?+nFteJiY7/Lg9owpUl0xe/oZvO4weLusmcYQ3PFbc8hEFOD80b22yxD8xf43?=
- =?us-ascii?Q?l2uzfUYv5qmb1cud4wXpQn4gagqHwFGVEV51fB0D5qgyY29vw0CQZmnwxxre?=
- =?us-ascii?Q?EH8NmtBrQrag31WzDAgLN4UMl732SHds0NsDIzmQn1H/K1RqyVlEw7Ddkgao?=
- =?us-ascii?Q?uznZ3u/0gGKn1exvZx/9YHyhQS/2eSlI253qntuSioGmCQ45XKWlXb3iOeYK?=
- =?us-ascii?Q?L/z+yDcH4nDK3lE/WYnbYaAvi0JpIPdAm7BrUbeWQOgymaz3bAf6/0YPHqyw?=
- =?us-ascii?Q?lG4J1+X1eMnD1D9oanNR15fkVFugV7R6qxji56fLKEOE2k30VhIb62T11TB4?=
- =?us-ascii?Q?Pv/fnP616Qo2eTIylongWUhdQFD7PexQ0ySQ1Bi6nHTMkLD/VePVC6+X85Gn?=
- =?us-ascii?Q?yDUsPYopsyFizwspLK0jRRebujFwCB+s+P35QRqRRJoaMQdwPpXtflxDEB+g?=
- =?us-ascii?Q?7tPk1x7C2hgQUlD4fHwMkgf5lzwjrbp1aluNNaeZ82pS7VdcT8HDcP2U6TtC?=
- =?us-ascii?Q?c2RBmuEk4y1ua9jJnxnDPM2G9IifYCWw/8IElp6a8fzWIOjzOjG1faNl3qky?=
- =?us-ascii?Q?Z7+xhsoZM/PB5AXNrCaLWLGPUwhci0BOAhp8Cqw4rBTEzM1cIdWYuEfuyQhx?=
- =?us-ascii?Q?MiUy5rRhAuHbRUBLWhqyaHhG8l5hxX4qPMbnI0rMG2CvLx8/umdPIAB2waYO?=
- =?us-ascii?Q?Q/Znmzt29EODBltymOAHxxCx0inriYTSbaPihNFg4eLHjKX6e5ZqGNLLUxNw?=
- =?us-ascii?Q?4YqWZ4lwijyqm7mk3oFGEnSDnlZMjyHwtI/Emqn5WrsPM6/BXe7NkPhy8pxv?=
- =?us-ascii?Q?WEKkf/er+WqnMN4Uvp7rEVEOLVzfXadpJ5gxecBkhGhOfFl5EJDitPrY29Sc?=
- =?us-ascii?Q?0VvUG/KmDycay2Z7b8elcZ7nLMPOOrxb8+KV0GqocbX+fx4eJlKDA5NZ+Ekf?=
- =?us-ascii?Q?KLIyBrpWFIxtxhz9OinT+75tXqJJddgxYYZrzMO6ad+d0mcBzSij9HEcdroo?=
- =?us-ascii?Q?iMXZJv4JrC33zVX4dH6pdp9vE4TP8hoWzRqrRvwuM3OBcb7x1WMrOsq8zmnL?=
- =?us-ascii?Q?5Cce6bYRPaIJRSH1lB3wl79j9D/5ocMG7RNfjqM44foNrme+5ewQjCnCFeua?=
- =?us-ascii?Q?XsZRzwnV6IvXcoruCsOufOtAdvkkULJFPoL8f3U5tx0LIZkWwl0jliWjzimJ?=
- =?us-ascii?Q?DQo/xb3fBeIm4ADecp4QDS8BV2KlWdxuLdGMoQw6/MnD6vICEkM6eiT/pGma?=
- =?us-ascii?Q?BPYGKLFlEpi7NgtyNH3NT+Mr5ZJa83GFH39lYlWpd3/S5LUHoSN3rA3LLlDN?=
- =?us-ascii?Q?9SDFdY+C0QybxBIUBvxNDMKOIy8rvwuOV7xMDqQ7g+kPdUF4xws3gTQ+LB1h?=
- =?us-ascii?Q?qPjtvKmyWw3bB7CmA8RF5q/zsq1ISlJL1aEuMWpyu/3hSLJzqxBbN4WcMGrl?=
- =?us-ascii?Q?rQ0wp3ldlBjDPrm5MLGAUTAHk39IWL/MLhZtNtBSsWcYTpPAw8Zmg1Crqib6?=
- =?us-ascii?Q?ZdGeqz4Me3OvO5rrDw5SuLUzVmetUiQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 24 Mar 2022 16:18:42 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECB326E9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:17:09 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id t13so3485153pgn.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vvhzKYHeLjR6iFrBrY2eRdssp7T8VuQTF1cgPnun9tU=;
+        b=Dkz6aoAiH79t0F9ceUKw95qE6p3TvMeElZz+mooOeci4+rp7qruJz16sjJqMG2g/Ed
+         Bv3BWjBCBNL+LMyupB/9KXb/iCjyoTMObeGksAFrZQ5xJR+2LnU/JP3WlGXp5PVrw+Mm
+         bhcMId5OR2grnZfGjv83VPjReAKid5CG6oyWzFlX00Dg+A/nG7k9wg6meW2M8VLNef/G
+         KbDOMt8cxkxD7Fo/SzLNwv5C4coJOqQIWFc33cn6XLQtk9/dSymnv5c2B4IUlQTIxn6n
+         MHWwdfXixOw7vmJG34Vk58RiRtOSijO3NXZ5dnB9KJThzAIpPpN7nMUbuZ75bjPMi8Ch
+         mbqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vvhzKYHeLjR6iFrBrY2eRdssp7T8VuQTF1cgPnun9tU=;
+        b=jPAfKarhc+UJvaGQdX8qPbbulSVkKedHrA24AH2QulHLJj0lvKmQzOhcWP+XIKPFGU
+         qt/DFaNZjhmYZ4+Xmq+vx7p1O1rihQy63O4dF70VDa7HabDlqZGmsA0hzMWrQth/zGBs
+         7sKrVGh9TaWIR4LQXkZpvqUwk/TJrHFT4o9dPKpF1sqsylNVgo+UCnSzRlSP7Z5n0Mev
+         NCPVlHtLExo/oiqu3cHs5s3vK9b8tJXd3v0zYUUgqaV2mIObIlk+GiiU4VLD1L1RcqBl
+         hrfvTsqoGu/zSScqCDzOjbkDqV1afbfD0IWSCAnv72qRZ7Q4JZhOQDag9h7GvFHXrZd/
+         hC+A==
+X-Gm-Message-State: AOAM533Oy0MMEaBNH/KrwlGLCfN7sgOeBgd/alstWAEQ3VROb/vI8NUz
+        SJG0BwujUHXpsYyG2+y0v3jIFg==
+X-Google-Smtp-Source: ABdhPJw7wXA+2HCR3ZtcnCvgiJUSC2XIWuKPagWMMEn3DFHaZrXzfED7gFPCpBoaIvt5yNr/c7J0TQ==
+X-Received: by 2002:a05:6a00:1687:b0:4e1:45d:3ded with SMTP id k7-20020a056a00168700b004e1045d3dedmr6565477pfc.0.1648153028986;
+        Thu, 24 Mar 2022 13:17:08 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 3-20020a630003000000b003828fc1455esm3283860pga.60.2022.03.24.13.17.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 13:17:08 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 20:17:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/mmu: Don't rebuild page when the page is synced
+ and no tlb flushing is required
+Message-ID: <YjzRwDSPQNbpTrZ9@google.com>
+References: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR21MB3025.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a5c86d2-5ddb-4bf9-b156-08da0dd2f189
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2022 20:14:47.1822
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z32wOs/JtyzbjKNNiRggkTT9qvS5G8jl7Uq0X0fTmLqQhDdssdl6Xn9joeL2etZU24hmBshePN3M8ouIlZESUvqRotFiMAYMeZ2mY8Jv1cQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR21MB1882
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com> Sent: Thursday, March 24, 2022 1=
-2:45 PM
->=20
-> On 3/24/22, Michael Kelley (LINUX) <mikelley@microsoft.com> wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org> Sent: Tuesday, March 22, 2022 3:=
-07
-> > PM
-> >>
-> >> On Tue, 22 Mar 2022 at 20:59, Michael Kelley (LINUX)
-> >> <mikelley@microsoft.com> wrote:
-> >> >
-> >> > The Hyper-V guys pass along their thanks for your suggestion.  They
-> >> > have
-> >> > created an internal build with the change and verified that it
-> >> > preserves
-> >> > compatibility with Windows guests.  I've tested with Linux guests an=
-d
-> >> > Jason's new driver (modified to look for "VMGENCTR"), and it all loo=
-ks
-> >> > good.
-> >> > It will take a little while to wend its way through the Windows/Hype=
-r-V
-> >> > release system, but they are planning to take the change.
-> >> >
-> >>
-> >> Thanks for reporting back.
-> >>
-> >> Will the spec be updated accordingly?
-> >
-> > The Hyper-V team is looking into updating the spec.  The document
-> > is 10 years old, so they need to find the original source for the PDF.
-> >
->=20
-> Lol, here's the docx:
-> https://download.microsoft.com/download/3/1/C/31CFC307-98CA-4CA5-914C-D97=
-72691E214/VirtualMachineGenerationID.docx
+On Tue, Mar 15, 2022, Hou Wenlong wrote:
+> Before Commit c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page()
+> to return true when remote flush is needed"), the return value
+> of kvm_sync_page() indicates whether the page is synced, and
+> kvm_mmu_get_page() would rebuild page when the sync fails.
+> But now, kvm_sync_page() returns false when the page is
+> synced and no tlb flushing is required, which leads to
+> rebuild page in kvm_mmu_get_page(). So return the return
+> value of mmu->sync_page() directly and check it in
+> kvm_mmu_get_page(). If the sync fails, the page will be
+> zapped and the invalid_list is not empty, so set flush as
+> true is accepted in mmu_sync_children().
+> 
+> Fixes: c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page() to return true when remote flush is needed")
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 3b8da8b0745e..8efd165ee27c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1866,17 +1866,14 @@ static void kvm_mmu_commit_zap_page(struct kvm *kvm,
+>  	  &(_kvm)->arch.mmu_page_hash[kvm_page_table_hashfn(_gfn)])	\
+>  		if ((_sp)->gfn != (_gfn) || (_sp)->role.direct) {} else
+>  
+> -static bool kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+> +static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  			 struct list_head *invalid_list)
+>  {
+>  	int ret = vcpu->arch.mmu->sync_page(vcpu, sp);
+>  
+> -	if (ret < 0) {
+> +	if (ret < 0)
+>  		kvm_mmu_prepare_zap_page(vcpu->kvm, sp, invalid_list);
+> -		return false;
+> -	}
+> -
+> -	return !!ret;
+> +	return ret;
 
-Indeed!  My mistake.  I just assumed it was a PDF without even looking at i=
-t. :-(
-Somebody internally here also just commented that it was weird to have a .d=
-ocx
-file posted for download.
+Hrm, this creates an oddity in mmu_sync_children(), which does a logical-OR of
+the result into a boolean.  It doesn't actually change the functionality since
+kvm_mmu_remote_flush_or_zap() will prioritize invalid_list, but it's weird.
 
-Regardless, that removes one hurdle to making updates!
+What about checking invalid_list directly and keeping the boolean return?  Compile
+tested only.
 
-Michael
+From: Sean Christopherson <seanjc@google.com>
+Date: Thu, 24 Mar 2022 13:07:32 -0700
+Subject: [PATCH] KVM: x86/mmu: Fix shadow reuse when unsync sp doesn't need
+ TLB flush
+
+Use invalid_list to detect if synchronizing an unsync shadow page failed
+and resulted in the page being zapped.  Since commit c3e5e415bc1e ("KVM:
+X86: Change kvm_sync_page() to return true when remote flush is needed"),
+kvm_sync_page() returns whether or not a TLB flush is required, it doesn't
+provide any indication as to whether or not the sync was successful.  If
+the sync is successful but doesn't require a TLB flush, checking the
+TLB flush result will cause KVM to unnecessarily rebuild the shadow page.
+
+Fixes: c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page() to return true when remote flush is needed")
+Cc: stable@vger.kernel.org
+Reported-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 1361eb4599b4..b6350fec1b11 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2086,16 +2086,19 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
+ 			 * This way the validity of the mapping is ensured, but the
+ 			 * overhead of write protection is not incurred until the
+ 			 * guest invalidates the TLB mapping.  This allows multiple
+-			 * SPs for a single gfn to be unsync.
+-			 *
++			 * SPs for a single gfn to be unsync.  kvm_sync_page()
++			 * returns true if a TLB flush is needed to ensure the
++			 * guest sees the synchronized shadow page.
++			 */
++			if (kvm_sync_page(vcpu, sp, &invalid_list))
++				kvm_flush_remote_tlbs(vcpu->kvm);
++
++			/*
+ 			 * If the sync fails, the page is zapped.  If so, break
+ 			 * in order to rebuild it.
+ 			 */
+-			if (!kvm_sync_page(vcpu, sp, &invalid_list))
++			if (!list_empty(&invalid_list))
+ 				break;
+-
+-			WARN_ON(!list_empty(&invalid_list));
+-			kvm_flush_remote_tlbs(vcpu->kvm);
+ 		}
+
+ 		__clear_sp_write_flooding_count(sp);
+
+base-commit: 9b6a3be37eacee49a659232e86019e733597c045
+--
+
+

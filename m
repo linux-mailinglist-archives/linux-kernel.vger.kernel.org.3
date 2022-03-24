@@ -2,61 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC134E6A9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214834E6A9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355327AbiCXWVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 18:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S1355346AbiCXWZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 18:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242692AbiCXWVv (ORCPT
+        with ESMTP id S1355296AbiCXWZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 18:21:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E808792855
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:20:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A459EB826A1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 22:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D317C340F5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 22:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648160415;
-        bh=yckN+MdsKZxNF8aOhJMOgBhFmt6WG9OpxVOqNrPyzqE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ey4FiSSKjRMZ+8SrrZ+VAvpYQeonmWi6DZbMFmyfKzefayuqQ5+Mso6YEsY7VDGz0
-         ei94QYctelUOVAgC3uIrSbbMMXMUvowkoTfHflF2m2DX6cKU4qXJubxl1VtpgdLmgT
-         qLUI4iCRDMbuVX55ZkjmJ3ulA3JvogfwXxGPfu1XBdV7uqP6cKgdgHYwiSb6LPZH7F
-         xUAVm8w39EyRsCiNBnDrUUugemnB6O1xUV2AOziOkTYQjiv8CFT//AT3pn3NBm98qz
-         Z5PCXELUCbdNXdpfEDXnR54Y6WJCFV5iVziHY+9B8itCLGn8nH0MPxdB5XKNvaeNEY
-         qzz8BadUAXPJA==
-Received: by mail-ej1-f41.google.com with SMTP id dr20so11935393ejc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:20:15 -0700 (PDT)
-X-Gm-Message-State: AOAM532Hbji6icpa+tW4T9rFY89mUWLgqRLbK4HHTh/VBdnFRF6CVF2i
-        Wxv5tRQcVDbZfv1Ov6p7wU5SVwbw3CmzPa+kpQ==
-X-Google-Smtp-Source: ABdhPJxHVFFf7b6MkecoVe5kNuoMPvBab+rmSG9rTkwHitqqDwBRgcvY2X7bD2iP8YTLDR/KQM8MuV+Voe9Yyjz4/2E=
-X-Received: by 2002:a17:907:2ce6:b0:6df:a489:d2e1 with SMTP id
- hz6-20020a1709072ce600b006dfa489d2e1mr8366419ejc.264.1648160413423; Thu, 24
- Mar 2022 15:20:13 -0700 (PDT)
+        Thu, 24 Mar 2022 18:25:29 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715FE2AE13
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:23:56 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id a17so7234345edm.9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a6MBbcTTX+22LzDQ6ECr2bIqiwia88/SS+r4U6tgNmU=;
+        b=CvOL71164K8S1OKOR/5ZUvKVejQ6sOY5QjWJX0UL0Zhx3WKZh2jNAzhPX6Z3RbeiCK
+         1CtOryJHYEtEZFtFzE7ANmMwsbBx35uLSeqzmt/+/QfSGiwGCvj/y7z8eTzi3tIooWQN
+         IZI/EFul54Q9URG80JKdNUuBowY2MUYYRAkrU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a6MBbcTTX+22LzDQ6ECr2bIqiwia88/SS+r4U6tgNmU=;
+        b=P/9xwm9e9CtGt3oZ8hlFiyQ3wrtA8aTjyRbVwPN5kKk3GA102m7nqx+qnHw5JtLytl
+         eTYPWd6PD8baMUT1aDRwOsSnyRqc6Qio63vg0qPFyQSJthPalLEKaxtc/JksQC46DwgD
+         /siPrqR6EiSzcY/Go/31MtYT/zLf1pknTselMEqSp2XTJ5Mpg1wDhDj/Gil0OaKhNrWS
+         HqU0GFbB/D63ArELnihvDvGoAWb4/EownsT6k0W3rxiXXSo6ib3qBkCiEdPSiFBdXPKP
+         FwPJrlw+YYJ1TYEJVflad06gUdLSKLHGgGiJGEjjE5MF7tlrB7PEo8uiZ1ulGZpbDgWE
+         ZooQ==
+X-Gm-Message-State: AOAM533fdLjVSXK2CkjbzlbEIAYO8yPBwLn9AgoCHT1tGXqyKFaV2QOH
+        LFgqT+szN3kkrw7htkrm+1TOqJ0OkRgyX7U+
+X-Google-Smtp-Source: ABdhPJwpydlsVLyhoHLJEINebrF64sM4s7FZrWmPz/SCzSZCTsAVjRUG7PSkqeFD8WywXtqDpuurpA==
+X-Received: by 2002:a05:6402:9:b0:419:3c6e:b0d5 with SMTP id d9-20020a056402000900b004193c6eb0d5mr9308721edu.216.1648160634495;
+        Thu, 24 Mar 2022 15:23:54 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id kw5-20020a170907770500b006db075e5358sm1587182ejc.66.2022.03.24.15.23.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 15:23:53 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id a1so8503708wrh.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:23:53 -0700 (PDT)
+X-Received: by 2002:a5d:4491:0:b0:203:f63a:e89b with SMTP id
+ j17-20020a5d4491000000b00203f63ae89bmr6363442wrq.342.1648160632993; Thu, 24
+ Mar 2022 15:23:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAPM=9tytg5jd_i3z3C5Y1dii2-cgO11Gjgvaq8qoWn3CGfCreg@mail.gmail.com>
-In-Reply-To: <CAPM=9tytg5jd_i3z3C5Y1dii2-cgO11Gjgvaq8qoWn3CGfCreg@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 24 Mar 2022 17:20:02 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJqb6HYN5cw7GsyFobZxFmhU-ci8w4HKQEdFsx=bC_F3w@mail.gmail.com>
-Message-ID: <CAL_JsqJqb6HYN5cw7GsyFobZxFmhU-ci8w4HKQEdFsx=bC_F3w@mail.gmail.com>
-Subject: Re: [git pull] drm for 5.18-rc1
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
+References: <20220324101242.v1.1.Iebdb5af0db7d3d6364cb229a27cd7c668f1063ae@changeid>
+ <CAD=FV=XchtJx3ZsL4Bxj29b_-43E8p2fiJ5SBQSzbW8wp+gNfg@mail.gmail.com> <YjzsqyEhxOLwJzUL@google.com>
+In-Reply-To: <YjzsqyEhxOLwJzUL@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 24 Mar 2022 15:23:40 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W45wydNfUc1vAx228_yQrE6uzyucBhT6sc5_iqktva=A@mail.gmail.com>
+Message-ID: <CAD=FV=W45wydNfUc1vAx228_yQrE6uzyucBhT6sc5_iqktva=A@mail.gmail.com>
+Subject: Re: [PATCH v1] arm64: dts: qcom: sc7280: Add device tree for
+ herobrine villager
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,182 +81,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 3:32 AM Dave Airlie <airlied@gmail.com> wrote:
->
-> Hi Linus,
->
-> This is the main drm pull request for 5.18.
->
-> The summary changelog is below, lots of work all over,
-> Intel improving DG2 support, amdkfd CRIU support, msm
-> new hw support, and faster fbdev support.
->
-> Conflicts:
-> I did a merge into your tree this morning, couple of Kconfig
-> clashes, drm_cache.c needs an ioport.h include to avoid a build
-> fail due to other header refactoring. I think you should be able
-> to handle it.
->
-> External interactions:
-> - dma-buf-map gets renamed to iosys-map
-> - this adds a yes/no helper to the strings helpers, and it's used
->   in some other code.
-> - platform driver for chromeos privacy screen
->
-> Let me know if there are any issues.
->
-> Regards,
-> Dave.
->
-> drm-next-2022-03-24:
-> drm for 5.18-rc1
->
-> dma-buf:
-> - rename dma-buf-map to iosys-map
->
-> core:
-> - move buddy allocator to core
-> - add pci/platform init macros
-> - improve EDID parser deep color handling
-> - EDID timing type 7 support
-> - add GPD Win Max quirk
-> - add yes/no helpers to string_helpers
-> - flatten syncobj chains
-> - add nomodeset support to lots of drivers
-> - improve fb-helper clipping support
-> - add default property value interface
->
-> fbdev:
-> - improve fbdev ops speed
->
-> ttm:
-> - add a backpointer from ttm bo->ttm resource
->
-> dp:
-> - move displayport headers
-> - add a dp helper module
->
-> bridge:
-> - anx7625 atomic support, HDCP support
->
-> panel:
-> - split out panel-lvds and lvds bindings
-> - find panels in OF subnodes
->
-> privacy:
-> - add chromeos privacy screen support
->
-> fb:
-> - hot unplug fw fb on forced removal
->
-> simpledrm:
-> - request region instead of marking ioresource busy
-> - add panel oreintation property
->
-> udmabuf:
-> - fix oops with 0 pages
->
-> amdgpu:
-> - power management code cleanup
-> - Enable freesync video mode by default
-> - RAS code cleanup
-> - Improve VRAM access for debug using SDMA
-> - SR-IOV rework special register access and fixes
-> - profiling power state request ioctl
-> - expose IP discovery via sysfs
-> - Cyan skillfish updates
-> - GC 10.3.7, SDMA 5.2.7, DCN 3.1.6 updates
-> - expose benchmark tests via debugfs
-> - add module param to disable XGMI for testing
-> - GPU reset debugfs register dumping support
->
-> amdkfd:
-> - CRIU support
-> - SDMA queue fixes
->
-> radeon:
-> - UVD suspend fix
-> - iMac backlight fix
->
-> i915:
-> - minimal parallel submission for execlists
-> - DG2-G12 subplatform added
-> - DG2 programming workarounds
-> - DG2 accelerated migration support
-> - flat CCS and CCS engine support for XeHP
-> - initial small BAR support
-> - drop fake LMEM support
-> - ADL-N PCH support
-> - bigjoiner updates
-> - introduce VMA resources and async unbinding
-> - register definitions cleanups
-> - multi-FBC refactoring
-> - DG1 OPROM over SPI support
-> - ADL-N platform enabling
-> - opregion mailbox #5 support
-> - DP MST ESI improvements
-> - drm device based logging
-> - async flip optimisation for DG2
-> - CPU arch abstraction fixes
-> - improve GuC ADS init to work on aarch64
-> - tweak TTM LRU priority hint
-> - GuC 69.0.3 support
-> - remove short term execbuf pins
->
-> nouveau:
-> - higher DP/eDP bitrates
-> - backlight fixes
->
-> msm:
-> - dpu + dp support for sc8180x
-> - dp support for sm8350
-> - dpu + dsi support for qcm2290
-> - 10nm dsi phy tuning support
-> - bridge support for dp encoder
-> - gpu support for additional 7c3 SKUs
->
-> ingenic:
-> - HDMI support for JZ4780
-> - aux channel EDID support
->
-> ast:
-> - AST2600 support
-> - add wide screen support
-> - create DP/DVI connectors
->
-> omapdrm:
-> - fix implicit dma_buf fencing
->
-> vc4:
-> - add CSC + full range support
-> - better display firmware handoff
->
-> panfrost:
-> - add initial dual-core GPU support
->
-> stm:
-> - new revision support
-> - fb handover support
->
-> mediatek:
-> - transfer display binding document to yaml format.
-> - add mt8195 display device binding.
+Hi,
 
-FYI, this breaks the DT bindings. The relevant patches didn't get
-reviewed nor run thru automated testing because their encoding was
-'charset=y'[1]. (While email clients seem to just ignore that
-encoding, patchwork and b4 do not.) linux-next is still broken and has
-been since Mar 2[2]. v2 of the fixes[3] have been posted since Mar 9,
-and still aren't in linux-next.
+On Thu, Mar 24, 2022 at 3:12 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> On Thu, Mar 24, 2022 at 12:59:51PM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Thu, Mar 24, 2022 at 10:13 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+> > >
+> > > Add a basic device tree for the herobrine villager board.
+> > >
+> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > ---
+> > >
+> > >  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+> > >  .../dts/qcom/sc7280-herobrine-villager-r0.dts | 274 ++++++++++++++++++
+> > >  2 files changed, 275 insertions(+)
+> >
+> > Question: how does this interact with the patch:
+> >
+> > https://lore.kernel.org/r/20220316172814.v1.3.Iad21bd53f3ac14956b8dbbf3825fc7ab29abdf97@changeid/
+> >
+> > Specifically, if that patch lands first don't you need to add a patch
+> > to turn on "pp3300_codec" ?
+>
+> Right, I missed that. I'll add it in the next version, thanks!
 
-It doesn't have to be fixed in this PR, but it needs to be fixed
-before rc1. Otherwise, no one can test their bindings using rc1. In
-general, there's no reason fixes need to wait until after rc1 as
-Chun-Kuang suggests[4].
+Great! Make sure to list that other patch as a dependency somewhere
+too to help Bjorn when he's able to apply. ;-)
 
-Rob
 
-[1] https://lore.kernel.org/all/CAL_JsqLU0m9C1OPdiBPTkofB4sfiAeUPbFHp0w8caWyP4XPOEw@mail.gmail.com/
-[2] https://lore.kernel.org/all/CAL_Jsq+6k5EqouAO2Xm=GpBz3Pi-wfB-ixGwfyC+Y+qOrjUFTg@mail.gmail.com/
-[3] https://lore.kernel.org/all/Yjzgf10zAhrkpYde@robh.at.kernel.org/
-[4] https://lore.kernel.org/all/CAAOTY__kzL8YuGo-oKct4c_bL-Ch5rW8wBpkhOXkK+a10gNXVg@mail.gmail.com/
+> > I was also looking at whether we should be enabling the wf_cam
+> > regulators for villager. I believe that answer is "no",
+>
+> I agree to keep them disabled.
+>
+> > but _also_ I believe that we should be _disabling_ the uf_cam
+> > regulators for villager, right?
+>
+> it is not clear yo me which regulator you have in mind for the UF cam,
+> could you clarify?
+
+I was thinking of the ones next to the rainbows and unicorns in the
+device tree. Oh wait, those were just in my imagination. Please
+disregard.
+
+-Doug

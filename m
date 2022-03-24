@@ -2,58 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDF94E69DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F42A4E69B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353423AbiCXUer convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Mar 2022 16:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S1353248AbiCXUQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 16:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345637AbiCXUeq (ORCPT
+        with ESMTP id S244080AbiCXUQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 16:34:46 -0400
-X-Greylist: delayed 1232 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 13:33:13 PDT
-Received: from mail2.intersystems.com (mail2.intersystems.com [38.105.105.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8270FDF7F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:33:11 -0700 (PDT)
-X-InterSystems: Sent from InterSystems
-X-InterSystems: Sent from InterSystems
-X-InterSystems: Sent from InterSystems
-X-InterSystems: Sent from InterSystems
-From:   Ray Fucillo <Ray.Fucillo@intersystems.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: scalability regressions related to hugetlb_fault() changes
-Thread-Topic: scalability regressions related to hugetlb_fault() changes
-Thread-Index: AQHYP7uAL1vA/rQijE+hDIc6LhXGuA==
-Date:   Thu, 24 Mar 2022 20:12:35 +0000
-Message-ID: <D3204B1E-50A1-4261-8C75-3DF77A302502@intersystems.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.17.254.204]
-x-c2processedorg: 5d7e5ca7-6395-445f-80da-8568a4fc58e5
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <48F2A26C80B440459846FEED0F086F05@exchangemail.iscinternal.com>
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_20,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 24 Mar 2022 16:16:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C48114089;
+        Thu, 24 Mar 2022 13:14:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7AFABCE2671;
+        Thu, 24 Mar 2022 20:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B586AC340EE;
+        Thu, 24 Mar 2022 20:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648152873;
+        bh=O17HJ0U7T0jN05O3ubot79yzqYT8pQ8+1AExKn0Rgm0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dgKpk3vdDe2T/GCbpb8PUN4NlDmtOztDuFHlzIj7WOAR8rudkzFetag9HtEulfc1G
+         q1D74tdymJjKN1ulwvSoz5Fx8OT8ljG07eRPfnmeEl0FRjyhcUz8z7XgcC4Ik2ydM0
+         Y+2aeCtQBAEdrk20FI0Op8uNvoOQUVxy/TZSLnt4MlX0sVe9w8Srf2MQKX/YR7BiB/
+         PFP32eg5hpkX5/E3H78o4ltTvFkXuTwNOhBqtt/duIqpsEFBHtVy62MCSamQUzHvE1
+         eyekA7k5IIVPqIqlVdf5Z8mFhwz+mCqa2U7Zu41zjtpQpveHlW14M7f3DCilfQuK7U
+         H3abI8ynd7qBQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nXTqp-00Gn91-5R; Thu, 24 Mar 2022 20:14:31 +0000
+Date:   Thu, 24 Mar 2022 20:14:30 +0000
+Message-ID: <87ee2rxg49.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
+        Biwen Li <biwen.li@nxp.com>, "Z.Q. Hou" <zhiqiang.hou@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [RFC PATCH devicetree 00/10] Do something about ls-extirq interrupt-map breakage
+In-Reply-To: <20220324190904.boo2izjc3mym2wkh@skbuf>
+References: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
+        <87ilvrk1r0.wl-maz@kernel.org>
+        <20211214095853.4emzycaxkuqr4tun@skbuf>
+        <87czlzjxmz.wl-maz@kernel.org>
+        <20220324171041.t5yoocinj6gizcc7@skbuf>
+        <87lewz5kr5.wl-maz@kernel.org>
+        <20220324173405.nusk6247ouvek46y@skbuf>
+        <87k0cj5io4.wl-maz@kernel.org>
+        <20220324190904.boo2izjc3mym2wkh@skbuf>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vladimir.oltean@nxp.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, shawnguo@kernel.org, leoyang.li@nxp.com, biwen.li@nxp.com, zhiqiang.hou@nxp.com, kurt@linutronix.de, linux@rasmusvillemoes.dk
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In moving to newer versions of the kernel, our customers have experienced dramatic new scalability problems in our database application, InterSystems IRIS.  Our research has narrowed this down to new processes that attach to the database's shared memory segment taking very long delays (in some cases ~100ms!) acquiring the i_mmap_lock_read() in hugetlb_fault() as they fault in the huge page for the first time.  The addition of this lock in hugetlb_fault() matches the versions where we see this problem.  It's not just slowing the new process that incurs the delay, but backing up other processes if the page fault occurs inside a critical section within the database application.
+On Thu, 24 Mar 2022 19:09:05 +0000,
+Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> 
+> On Thu, Mar 24, 2022 at 06:06:51PM +0000, Marc Zyngier wrote:
+> > > I was just raising this as what I thought would be a simple and
+> > > non-controversial counter example to your remark "If you change something,
+> > > you *must* guarantee forward *and* backward compatibility."
+> > 
+> > If you change something *in the binding*, which was implicit in the
+> > context, and makes no sense out of context.
+> > 
+> > > Practically speaking, what has happened is that the board DT appeared in
+> > > kernel N, the ls-extirq driver in kernel N+1, and the DT was updated to
+> > > enable PHY interrupts in kernel N+2. That DT update practically broke
+> > > kernel N from running correctly on DTs taken from kernel N+2 onwards.
+> > > This is the observable behavior, we can find as many justifications for
+> > > it as we wish.
+> > 
+> > Well, you can also argue that the DT was broken at N and N+1 for not
+> > describing the HW correctly and completely. No binding has changed
+> > here. Your DT was incomplete, and someone fixed it for you.
+> > 
+> > We can argue this things forever and a half. I've laid down the ground
+> > rules for the stuff I maintain. If you're not happy with this, you can
+> > fix it by either removing the NXP hardware from the tree, or taking
+> > over from me as the irqchip maintainer. I'd be perfectly happy with
+> > any (and even more, with both) of these outcomes.
+> 
+> Ok, my intention wasn't to inflame you even though the way in which I
+> presented the problem might have suggested otherwise.
+> 
+> With my developer hat I still don't agree with you even with the
+> additional clarification you've made that you were referring only to
+> bindings and not to any and all DT changes. The reason being that the DT
+> blob is a whole, and it doesn't matter if there's a regression because
+> of a binding change or something else, you still need to be prepared to
+> update it, sometimes in lockstep with the kernel, like it or not.
 
-Is there something that can be improved here?  
+<rant>
+No. This doesn't happen on systems that ship the DT as part of their
+firmware, and this doesn't happen with ACPI either. This only happens
+on platform that are maintained like the NXP, Marvell, and other
+similar platforms that are being used as a job security tool by doing
+piecemeal enablement.
 
-The read locks in hugetlb_fault() contend with write locks that seem to be taken in very common application code paths: shmat(), process exit, fork() (not vfork()), shmdt(), presumably others.  So hugetlb_fault() contending to read turns out to be common.  When the system is loaded, there will be many new processes faulting in pages that may blocks the write lock, which in turn blocks more readers in fault behind it, and so on...  I don't think there's any support for shared page tables in hugetlb to avoid the faults altogether.
+Properly maintained systems have had the same DT for years. Features
+have been added over time, yet without breaking compatibility in
+either direction. Yes, it requires some effort and planning. And even
+quirks at times. Yet they don't break.
 
-Switching to 1GB huge pages instead of 2MB is a good mitigation in reducing the frequency of fault, but not a complete solution.
+Amusingly, some of these better supported platforms do not have their
+DT in the kernel tree. Synquacer, for example. Keeping the DTs in the
+kernel tree has been one of the worse decision we have ever made. It
+has simply moved the board files of old to a different place, under
+the guise of separating description and code.  In practice, it
+abstracted nothing at all, only made it more complicated because
+people are treating DT as an integral part of the kernel code base,
+which it really shouldn't be.
+</rant>
 
-Thanks for considering.
+> But as a user, I just wanted to get an opinion from you what can we do
+> to deal better with this situation: optional interrupt provided by
+> device with missing driver, which of_irq_get() doesn't seem to understand.
+> There are more angles to this than just "new DT with old kernel". It can
+> also be new kernel, but ls-extirq driver disabled, and I still see that
+> as a kernel <-> DT compatibility concern.
 
-Ray
+If you're missing a driver, that's a user error. Or rather, a platform
+maintainer error for not establishing the correct dependencies. This
+has nothing to do with the DT. As for optional interrupts, that has
+nothing to do with the DT either, but with the kernel code that
+requests it. If you think the kernel should do better, you can always
+post a patch.
+
+And I'm done on that subject.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

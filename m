@@ -2,78 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B664D4E6365
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5ED04E6373
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350210AbiCXMbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
+        id S1350158AbiCXMgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233678AbiCXMbU (ORCPT
+        with ESMTP id S233678AbiCXMgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:31:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60E0A94E9;
-        Thu, 24 Mar 2022 05:29:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EB4BB801B9;
-        Thu, 24 Mar 2022 12:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B81C340EC;
-        Thu, 24 Mar 2022 12:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648124986;
-        bh=3DoK7n9nDP2CGFgPXTe97QnveDO+h1oyIl//9nYasVY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IJq7vKfG82kt8jIdTOpib4NKU/d4K/dKlQpMN4zxXnxRbBL6g0IN7IcbjHbeaPUd9
-         Dk05bOIA6Jb3wTnvL8F3mjlFPNx3AA4uKg9ttlUDvH1KyrAS9QRk4J3HW+Id1XXhyJ
-         uqO7NIFLdbWR7Ks6oTXJ+nsGntmdvd0mE6NKC9OU=
-Date:   Thu, 24 Mar 2022 13:29:43 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH] net: stmmac: dwmac-qcom-ethqos: Enable RGMII functional
- clock on resume
-Message-ID: <YjxkNzJMGt0f2XYF@kroah.com>
-References: <20220323033255.2282930-1-bjorn.andersson@linaro.org>
- <CAH=2NtyChidtrBVBL=RNjPaYYmtTuN0N4fbMx4DRBD6hXxHguQ@mail.gmail.com>
+        Thu, 24 Mar 2022 08:36:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5950C0F;
+        Thu, 24 Mar 2022 05:35:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57BF11FB;
+        Thu, 24 Mar 2022 05:35:16 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B9F03F73D;
+        Thu, 24 Mar 2022 05:35:12 -0700 (PDT)
+Message-ID: <b56621da-0f8a-06d5-15a1-7034e4274620@arm.com>
+Date:   Thu, 24 Mar 2022 12:35:09 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH=2NtyChidtrBVBL=RNjPaYYmtTuN0N4fbMx4DRBD6hXxHguQ@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 2/2] PCI: hv: Propagate coherence from VMbus device to
+ PCI device
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     Michael Kelley <mikelley@microsoft.com>, sthemmin@microsoft.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, rafael@kernel.org, lenb@kernel.org,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, hch@lst.de, m.szyprowski@samsung.com,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+References: <1648067472-13000-1-git-send-email-mikelley@microsoft.com>
+ <1648067472-13000-3-git-send-email-mikelley@microsoft.com>
+ <e6d9af22-df69-bf6a-7877-b916918d0682@arm.com>
+In-Reply-To: <e6d9af22-df69-bf6a-7877-b916918d0682@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 03:08:08PM +0530, Bhupesh Sharma wrote:
-> +Cc: stable tree as I think this is an important fix for stmmac
-> dwmac-qcom-ethernet driver and affects ethernet functionality on QCOM
-> boards which use this driver.
+On 2022-03-24 12:23, Robin Murphy wrote:
+> On 2022-03-23 20:31, Michael Kelley wrote:
+>> PCI pass-thru devices in a Hyper-V VM are represented as a VMBus
+>> device and as a PCI device.  The coherence of the VMbus device is
+>> set based on the VMbus node in ACPI, but the PCI device has no
+>> ACPI node and defaults to not hardware coherent.  This results
+>> in extra software coherence management overhead on ARM64 when
+>> devices are hardware coherent.
+>>
+>> Fix this by setting up the PCI host bus so that normal
+>> PCI mechanisms will propagate the coherence of the VMbus
+>> device to the PCI device. There's no effect on x86/x64 where
+>> devices are always hardware coherent.
+> 
+> Honestly, I don't hate this :)
+> 
+> It seems conceptually accurate, as far as I understand, and in 
+> functional terms I'm starting to think it might even be the most correct 
+> approach anyway. In the physical world we might be surprised to find the 
+> PCI side of a host bridge
 
-<formletter>
+And of course by "the PCI side of a host bridge" I think I actually mean 
+"a PCI root bus", because in my sloppy terminology I'm thinking about 
+hardware bridging from PCI(e) to some SoC-internal protocol, which does 
+not have to imply an actual PCI-visible Host Bridge device...
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+Robin.
 
-</formletter>
+> behind anything other than some platform/ACPI 
+> device representing the other side of a physical host bridge or root 
+> complex, but who's to say that a paravirtual world can't present a more 
+> abstract topology? Either way, a one-line way of tying in to the 
+> standard flow is hard to turn down.
+> 
+> Acked-by: Robin Murphy <robin.murphy@arm.com>
+> 
+>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>> ---
+>>   drivers/pci/controller/pci-hyperv.c | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/pci/controller/pci-hyperv.c 
+>> b/drivers/pci/controller/pci-hyperv.c
+>> index ae0bc2f..88b3b56 100644
+>> --- a/drivers/pci/controller/pci-hyperv.c
+>> +++ b/drivers/pci/controller/pci-hyperv.c
+>> @@ -3404,6 +3404,15 @@ static int hv_pci_probe(struct hv_device *hdev,
+>>       hbus->bridge->domain_nr = dom;
+>>   #ifdef CONFIG_X86
+>>       hbus->sysdata.domain = dom;
+>> +#elif defined(CONFIG_ARM64)
+>> +    /*
+>> +     * Set the PCI bus parent to be the corresponding VMbus
+>> +     * device. Then the VMbus device will be assigned as the
+>> +     * ACPI companion in pcibios_root_bridge_prepare() and
+>> +     * pci_dma_configure() will propagate device coherence
+>> +     * information to devices created on the bus.
+>> +     */
+>> +    hbus->sysdata.parent = hdev->device.parent;
+>>   #endif
+>>       hbus->hdev = hdev;
+> _______________________________________________
+> iommu mailing list
+> iommu@lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/iommu

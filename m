@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1D44E6AE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDA14E6AE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355560AbiCXWzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 18:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        id S1355568AbiCXXAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 19:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238115AbiCXWzm (ORCPT
+        with ESMTP id S238115AbiCXXAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 18:55:42 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F02416F4AF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 15:54:08 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-231-THU0TZx9N2OyJfewrvht5w-1; Thu, 24 Mar 2022 22:54:05 +0000
-X-MC-Unique: THU0TZx9N2OyJfewrvht5w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 24 Mar 2022 22:54:05 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 24 Mar 2022 22:54:05 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Nick Desaulniers' <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>
-CC:     Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: RE: clang memcpy calls
-Thread-Topic: clang memcpy calls
-Thread-Index: AQHYP68jFJQQj1SZ3U2APgeueTpytqzPHokA
-Date:   Thu, 24 Mar 2022 22:54:04 +0000
-Message-ID: <7c95cb9c9255448bb74d1f1f694abffb@AcuMS.aculab.com>
-References: <YjxTt3pFIcV3lt8I@zn.tnic>
- <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
-In-Reply-To: <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 24 Mar 2022 19:00:14 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AC4BAB9D;
+        Thu, 24 Mar 2022 15:58:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KPgcr2H6mz4xQv;
+        Fri, 25 Mar 2022 09:58:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1648162717;
+        bh=HUHF4CksvsqpNJ127PIKPVtDevMByiZc7pwqv+FoKn0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E9S014tLW2G3Zdc4C7Vsfb4OeyHSThjg2V6yv25OMLJHrTVX+qGhZdea2eq2kG951
+         LaB31hxgyjnQ3wR/XeqrbrfblpYYszUPJTiaMfjWJ7s0C91Ubi2SBSIbIDZHvLA/AZ
+         xg0nd9iL/aOcOpvJd3eENso8frLdiWN42inQqoiBQQQsnRjVHpoVeHNc2wprB5JiyC
+         Kh2omvzcjBRN9x9Ng2wYnOQUieGREx6HvAyX7hlsXuVHp5rmJl3kvm/9ijKJ9K8ky6
+         vE3D2fkdzWG0Wj+ERF5RE6rVFcspDMfqVKvSdUFxdknSuIoaOzf8nX9+laXRJbDxot
+         /EAYmAuUYnTQw==
+Date:   Fri, 25 Mar 2022 09:58:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the h8300 tree with the asm-generic
+ tree
+Message-ID: <20220325095835.0782c6e6@canb.auug.org.au>
+In-Reply-To: <20220228114018.30fda009@canb.auug.org.au>
+References: <20220228114018.30fda009@canb.auug.org.au>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/XwZLdLw0TUUkynjymw9a4Ig";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAyNCBNYXJjaCAyMDIyIDE4OjQ0DQo+IA0K
-PiBPbiBUaHUsIE1hciAyNCwgMjAyMiBhdCA0OjE5IEFNIEJvcmlzbGF2IFBldGtvdiA8YnBAYWxp
-ZW44LmRlPiB3cm90ZToNCj4gPg0KPiA+IEhpIGZvbGtzLA0KPiA+DQo+ID4gc28gSSd2ZSBiZWVu
-IGxvb2tpbmcgYXQgYSByZWNlbnQgb2JqdG9vbCBub2luc3RyIHdhcm5pbmcgZnJvbSBjbGFuZw0K
-PiA+IGJ1aWxkczoNCj4gPg0KPiA+IHZtbGludXgubzogd2FybmluZzogb2JqdG9vbDogc3luY19y
-ZWdzKCkrMHgyMDogY2FsbCB0byBtZW1jcHkoKSBsZWF2ZXMgLm5vaW5zdHIudGV4dCBzZWN0aW9u
-DQo+ID4NCj4gPiBUaGUgaXNzdWUgaXMgdGhhdCBjbGFuZyBnZW5lcmF0ZXMgYSBtZW1jcHkoKSBj
-YWxsIHdoZW4gYSBzdHJ1Y3QgY29weQ0KPiA+IGhhcHBlbnM6DQo+ID4NCj4gPiAgICAgICAgIGlm
-IChyZWdzICE9IGVyZWdzKQ0KPiA+ICAgICAgICAgICAgICAgICAqcmVncyA9ICplcmVnczsNCj4g
-DQo+IFNwZWNpZmljYWxseSwgdGhpcyBpcyBjb3B5aW5nIG9uZSBzdHJ1Y3QgcHRfcmVncyB0byBh
-bm90aGVyLiBJdCBsb29rcw0KPiBsaWtlIHRoZSBzaXplb2Ygc3RydWN0IHB0X3JlZ3MgaXMganVz
-dCBsYXJnZSBlbm91Z2ggdG8gaGF2ZSBjbGFuZyBlbWl0DQo+IHRoZSBsaWJjYWxsLg0KPiBodHRw
-czovL2dvZGJvbHQub3JnL3ovc2N4NmFhOGpxDQo+IE90aGVyd2lzZSBjbGFuZyB3aWxsIGFsc28g
-dXNlIHJlcDsgbW92c3E7IHdoZW4gLW1uby1zc2UgLU8yIGlzIHNldCBhbmQNCj4gdGhlIHN0cnVj
-dHMgYXJlIGJlbG93IEFSQklUUkFSWV9USFJFU0hPTEQuICBTaG91bGQgQVJCSVRSQVJZX1RIUkVT
-SE9MRA0KPiBiZSByYWlzZWQgc28gdGhhdCB3ZSBjb250aW51ZSB0byBpbmxpbmUgdGhlIG1lbWNw
-eT8gKnNocnVnKg0KDQpJJ3ZlIGp1c3QgbG9va2VkIGF0IHNvbWUgaW5zdHJ1Y3Rpb24gdGltaW5n
-cy4NCkZvciAzMiBieXRlIGFsaWduZWQgY29waWVzIGl0IGFjdHVhbGx5IGxvb2tzIGxpa2UgJ3Jl
-cCBtb3ZzJw0KKHByb2JhYmx5IG1vdnNxKSBpcyBhY3R1YWxseSByZWFzb25hYmxlIGZvciBsYXJn
-ZSBidWZmZXJzDQpvbiBhbGwgbWFpbnN0cmVhbSBJbnRlbCBjcHUgc2luY2Ugc2FuZHkgYnJpZ2Uu
-DQpPbiB0aGUgbW9yZSByZWNlbnQgb25lcyBpdCBydW5zIGF0IDMyIGJ5dGVzL2Nsb2NrLg0KSXQg
-bWF5IG5vdCBiZSB0aGF0IGJhZCBmb3Igc2hvcnRlciBhbmQgbm9uIDMyIGJ5dGUgYWxpZ25lZA0K
-YnVmZmVycyBhcyB3ZWxsLg0KDQpDZXJ0YWlubHkgSSBjYW4ndCBzZWUgYSByZWFzb24gZm9yIGNh
-bGxpbmcgbWVtY3B5KCkgZm9yDQpsYXJnZSBjb3BpZXMhDQoNCkF0IGxlYXN0IG5vIG9uZSB1c2Vz
-IFA0IGFueSBtb3JlLCBzZXR1cCBsYXRlbmN5IHdhcyBzb21ldGhpbmcNCmxpa2UgMTg2IGNsb2Nr
-cyENCg0KSSB3YXMgdGhpbmtpbmcgdGhhdCAncmVwIG1vdnNxJyBvbmx5IG1hZGUgYW55IHNlbnNl
-IHdpdGggLU9zLg0KQnV0IGl0IHNlZW1zIHRvIGJlIGJldHRlciB0aGFuIEkgdGhvdWdodC4NCihJ
-IG1pZ2h0IGV2ZW4gaGF2ZSBtZWFzdXJlZCBpdCBydW5uaW5nICdmYXN0JyBvbiBJdnkgYnJpZGdl
-LikNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBS
-b2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9u
-IE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+--Sig_/XwZLdLw0TUUkynjymw9a4Ig
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
+
+On Mon, 28 Feb 2022 11:41:06 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the h8300 tree got a conflict in:
+>=20
+>   arch/h8300/mm/memory.c
+>=20
+> between commit:
+>=20
+>   967747bbc084 ("uaccess: remove CONFIG_SET_FS")
+>=20
+> from the asm-generic tree and commit:
+>=20
+>   81dd24966885 ("h8300: remove memory.c")
+>=20
+> from the h8300 tree.
+>=20
+> I fixed it up (I just removed the file) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+
+This is now a conflict between the h8300 tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XwZLdLw0TUUkynjymw9a4Ig
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI895sACgkQAVBC80lX
+0Gz1+ggAlgD5kR4NYM3USADTFC8xifGltOIc846LzIXjH4Z/Wa36Zbsb9GFpN9tK
+gjunpcFuuVtt3bGK0aWc9TG5uEskOLLniut+uaR6db0omohZt5vdo7z4MbH83GjH
+ahESsb6Ra2qi50Zflwc95SY2vZ4SiX4x9KAyF5fHlcKr1nDxiVvnJd/s8PpF8RFS
+mWR1ZwxyRN+8BqOK7deJBZGU743cvgu/8rKvEMatepOokKmxfCAywnBosxBZ0CUo
+AMkuaphU+iw9YV4i4dVlOFUJ8L6EiXBdfA1547khxtBUJkVtQH1ApxeNC0nl7woD
+5pl6hvfr5kvse6dhKYZ4vre3vks7Nw==
+=Qm79
+-----END PGP SIGNATURE-----
+
+--Sig_/XwZLdLw0TUUkynjymw9a4Ig--

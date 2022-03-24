@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB834E614A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A644E6150
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349349AbiCXJup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 05:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
+        id S1349354AbiCXJxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 05:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239549AbiCXJun (ORCPT
+        with ESMTP id S241065AbiCXJxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 05:50:43 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15A84EF6F;
-        Thu, 24 Mar 2022 02:49:11 -0700 (PDT)
-X-UUID: b52eb9a7d30c473c87e0d2785ec59a2c-20220324
-X-UUID: b52eb9a7d30c473c87e0d2785ec59a2c-20220324
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 158482102; Thu, 24 Mar 2022 17:49:08 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 24 Mar 2022 17:49:07 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 24 Mar 2022 17:49:07 +0800
-Message-ID: <076256c903e71137b4b4b2891388509ceb009dfa.camel@mediatek.com>
-Subject: Re: [PATCH 4/4] cpufreq: mediatek: add platform data and clean up
- voltage tracking logic
-From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <fan.chen@mediatek.com>,
-        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
-        <Allen-yy.Lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-Date:   Thu, 24 Mar 2022 17:49:07 +0800
-In-Reply-To: <a728aaa0-bde9-b9a9-971a-2e4b52f2b7bf@canonical.com>
-References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
-         <20220307122151.11666-5-jia-wei.chang@mediatek.com>
-         <a728aaa0-bde9-b9a9-971a-2e4b52f2b7bf@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 24 Mar 2022 05:53:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00F75549E;
+        Thu, 24 Mar 2022 02:52:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4DD1E1F38D;
+        Thu, 24 Mar 2022 09:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648115519; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7gpGpR3wa2+cKOuymKs7lOAFj3Lr0LMnbgKaKE1lmS0=;
+        b=BGawxnk4ZkQIE7RH/c/DMxnbfBkVfcFqPuS610Wd3K1lipapLcY5WY8j8HJStzYE0qHan9
+        vrS4rkjy97O26ObUlec4H4FLbLds3Pdx2zDW0dSGgyhnAZScTDYtdQ/kEqDrcs3RcUTORB
+        ad8lq6Av0xdWgp0oZGGgHRSkCsgq2j8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC35813A78;
+        Thu, 24 Mar 2022 09:51:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8GeWND4/PGLKQQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 24 Mar 2022 09:51:58 +0000
+Date:   Thu, 24 Mar 2022 10:51:57 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Tejun Heo <tj@kernel.org>, Chris Down <chris@chrisdown.name>
+Subject: Re: [RFC PATCH] mm: memcg: Do not count memory.low reclaim if it
+ does not happen
+Message-ID: <20220324095157.GA16685@blackbody.suse.cz>
+References: <20220322182248.29121-1-mkoutny@suse.com>
+ <YjuUuLW+8iRtYOmP@carbon.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjuUuLW+8iRtYOmP@carbon.dhcp.thefacebook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-07 at 20:03 +0100, Krzysztof Kozlowski wrote:
-> On 07/03/2022 13:21, Tim Chang wrote:
-> > 1. add required header files and remove unnecessary header files.
-> > 2. some soc needs different min/max voltage shift and voltage
-> > tracking
-> >    attributes. make these variables into platform data to support
-> >    future soc.
-> > 3. add need_voltage_tracking variable to platforma data. if true,
-> > it
-> >    indicates soc is required to realize the voltage tracking
-> > between
-> >    voltage of sram and voltage of cpu by software approach.
-> > otherwise,
-> >    the voltage tracking is realized by hardware approach.
-> > 4. add opp frequency look-up function as mtk_cpufreq_get() and
-> >    registered in cpufreq framework.
-> > 5. update voltage_tracking() logic and drv_init(). in drv_init(),
-> > it
-> >    always sets highest opp voltage before return. it could prevent
-> > from
-> >    high-freqeuncy-low-voltage issue if two or more clients using
-> > the
-> >    same regulator.
-> 
-> One change at a time.
+On Wed, Mar 23, 2022 at 02:44:24PM -0700, Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> Does it mean that in the following configuration:
+> 	`parent .low=50M
+> 	  ` s1	.low=0M   .current=50M
+> 	  ` s2  .low=0M   .current=50M
+> there will be no memory.events::low at all? (assuming the recursive thing is on)
 
-Sure, I will split the change and send one change in one commit.
+True, no memory.events:low among siblings.
+Number of memory.events:low in the parent depends on how much has to be
+reclaimed (>50M means carving into parent's protection, hence it'll be
+counted).
 
-> 
-> > 
-> > Signed-off-by: Jia-Wei Chang <
-> > jia-wei.chang@mediatek.corp-partner.google.com>
-> 
-> Your SoB does not match from field.
+This is a quantitative change in the events reporting (point 1 of
+RFCness), my understanding is that the potential events due to recursive
+surplus protection carry no new information regarding configured
+memory.low.
 
-I will update it for the whole series in next version.
 
-> 
-> Best regards,
-> Krzysztof
-
+Michal

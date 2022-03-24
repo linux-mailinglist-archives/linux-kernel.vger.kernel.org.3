@@ -2,193 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD174E6308
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5404E630B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349989AbiCXMSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S1350012AbiCXMTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349980AbiCXMSN (ORCPT
+        with ESMTP id S237496AbiCXMTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:18:13 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2155099EDF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:16:42 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id t14so3679644pgr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:16:42 -0700 (PDT)
+        Thu, 24 Mar 2022 08:19:41 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593742ADA;
+        Thu, 24 Mar 2022 05:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VsMoQ6a5yHypTrD9qrKDAaRCbFUvI6woBhxzZufr/gQ=;
-        b=QeMdmwBAlF5KAuarUQclZ5ZRvKv4i2+eqIGN32O/mxGN1JFuvF6NKTCjK8FPf1WzMe
-         Ccoj0wKaHA5Tn0fyll0sjCTzlYSuUdlO5uggegLDtuEfNtbXmobAT3+sR4HNGn0SWb/s
-         VdjvJS6kwWytLJP7tdHxrKw/myZYZkoeK926dU1WWAQX3n8/iw3Cbes5lTqO9ThGYFFZ
-         kpZVgIcbn1l63M72c1q7L3wl3w/T9zCXvdchwpllRy5JRRWP+CT9fdiQ54Fzr+pSiCBh
-         f0hL/WBAb6KslNlK5zbMIvWDia6Xq70KlyN8M3A9/PCD215Fqdajzgxaq8jf/3PpUZxZ
-         QUFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VsMoQ6a5yHypTrD9qrKDAaRCbFUvI6woBhxzZufr/gQ=;
-        b=wLA82yQ1+HAyxcEVLIQzn3IH4bET0zoxn0EqZr2Z3509m4c8cMSi7DFYFE3Epa+pIO
-         XAOPbDsCFNSKuRfddJ+19JKGQcC8/tSTZwzmiLL4V0GIyQBzjhSZgJq8P2lvwIYZQMKl
-         YT9ZAtn9cfbZuIKHyf2b56kXeCXRFh8D8WME5pxgyJypWwdJQSc9iuRRvznz+TGeP9LX
-         s1bXHOcSyiYGe4FXLZ+jnnvrX7CV64RWCSoCOzjgEdioWbYCrozQC9OsqD1Ugvhmb1Fh
-         4kinMPlV7dabnCRFuMm8gAnKLnMyvb3OB3hM1tUZVErs7/eDgRWwvCPjex+B0p6pllV6
-         nhiA==
-X-Gm-Message-State: AOAM530HK7X05stYNpuIOsXRPOQKN0KkR34rZJbF4aiiFsjJKM/sLPvD
-        x9vk9Qze0RiYFsEeMcMrSGKcnA==
-X-Google-Smtp-Source: ABdhPJypoVx1bf/+/f0PU9KTcPgh58skt21jmyiixnpzbP1eozq/x0NuCqhl1yY7OBtxWORA63nZDQ==
-X-Received: by 2002:a63:1f55:0:b0:382:65eb:3073 with SMTP id q21-20020a631f55000000b0038265eb3073mr3839199pgm.624.1648124201594;
-        Thu, 24 Mar 2022 05:16:41 -0700 (PDT)
-Received: from sunil-laptop ([49.206.7.17])
-        by smtp.gmail.com with ESMTPSA id s30-20020a056a001c5e00b004f75773f3fcsm3295399pfw.119.2022.03.24.05.16.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 05:16:41 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 17:46:31 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Abner Chang <abner.chang@hpe.com>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH 1/1] riscv/efi_stub: Add support for
- RISCV_EFI_BOOT_PROTOCOL
-Message-ID: <20220324121631.GA39769@sunil-laptop>
-References: <20220324112534.209959-1-sunilvl@ventanamicro.com>
- <20220324112534.209959-2-sunilvl@ventanamicro.com>
- <14f87d29-ebc9-51a3-020c-353878bcb1ba@canonical.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648124288; x=1679660288;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=fnaxbB5XHqaInLeoQc9+HHpSFyMX+LD6J0Omyaythxk=;
+  b=TNbc337RXSiXJnHGOftYq0kztPeuO9lgLWnYWEfkK4I+j/8+SuZNOTe4
+   8y4OipscfnWTaAgeo1cPJoxN7GMOkdtLi5ZG1SI0mVOnGXUAOgU/htXD6
+   s2nyZFE1hpdv0n4Xcn8wWXFRLoo0NMVayrNgu59mcdtKxnn+uy0wJGFs1
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 24 Mar 2022 05:18:05 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:18:04 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 24 Mar 2022 05:18:04 -0700
+Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 24 Mar 2022 05:18:00 -0700
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH v4 00/10] Coresight: Add support for TPDM and TPDA
+Date:   Thu, 24 Mar 2022 20:17:24 +0800
+Message-ID: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <14f87d29-ebc9-51a3-020c-353878bcb1ba@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 12:46:12PM +0100, Heinrich Schuchardt wrote:
-> On 3/24/22 12:25, Sunil V L wrote:
-> > This patch adds the support for getting the boot hart ID in
-> > Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL. This protocol
-> > is preferred method over existing DT based solution since it
-> > works irrespective of DT or ACPI.
-> > 
-> > The specification of the protocol is hosted at:
-> > https://github.com/riscv-non-isa/riscv-uefi
-> > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> 
-> This seems to be v3 of the patch. v2 is available in
-> https://lore.kernel.org/all/20220303145944.307321-2-sunilvl@ventanamicro.com/
-> 
-> v3 replaces a message in efi_status_t check_platform_features():
-> 
-> <+   efi_err("/chosen/boot-hartid missing or invalid!\n");
-> >+   efi_err("Failed to get boot hartid!\n");
+This series adds support for the trace performance monitoring and
+diagnostics hardware (TPDM and TPDA). It is composed of two major
+elements.
+a) Changes for original coresight framework to support for TPDM and TPDA.
+b) Add driver code for TPDM and TPDA.
 
-Yes, that's correct. Sorry I missed the version. I resent the patch with
-version and your RB tag added.
+Introduction of changes for original coresight framework
+Support TPDM as new coresight source.
+Since only STM and ETM are supported as coresight source originally.
+TPDM is a newly added coresight source. We need to change
+the original way of saving coresight path to support more types source
+for coresight driver.
+The following patch is to add support more coresight sources.
+     Use IDR to maintain all the enabled sources' paths.
 
-Thanks!
-Sunil
-> 
-> Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-> 
-> > ---
-> >   drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
-> >   drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
-> >   include/linux/efi.h                       |  1 +
-> >   3 files changed, 32 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> > index edb77b0621ea..aced62a0907e 100644
-> > --- a/drivers/firmware/efi/libstub/efistub.h
-> > +++ b/drivers/firmware/efi/libstub/efistub.h
-> > @@ -720,6 +720,13 @@ union efi_tcg2_protocol {
-> >   	} mixed_mode;
-> >   };
-> > +struct riscv_efi_boot_protocol {
-> > +	u64 revision;
-> > +
-> > +	efi_status_t (__efiapi * get_boot_hartid)(struct riscv_efi_boot_protocol *this,
-> > +						  size_t *boot_hartid);
-> > +};
-> > +
-> >   typedef union efi_load_file_protocol efi_load_file_protocol_t;
-> >   typedef union efi_load_file_protocol efi_load_file2_protocol_t;
-> > diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-> > index 9c460843442f..012504f6f9a4 100644
-> > --- a/drivers/firmware/efi/libstub/riscv-stub.c
-> > +++ b/drivers/firmware/efi/libstub/riscv-stub.c
-> > @@ -23,7 +23,7 @@
-> >   typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
-> > -static u32 hartid;
-> > +static size_t hartid;
-> >   static int get_boot_hartid_from_fdt(void)
-> >   {
-> > @@ -47,14 +47,33 @@ static int get_boot_hartid_from_fdt(void)
-> >   	return 0;
-> >   }
-> > +static efi_status_t get_boot_hartid_from_efi(void)
-> > +{
-> > +	efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
-> > +	efi_status_t status;
-> > +	struct riscv_efi_boot_protocol *boot_protocol;
-> > +
-> > +	status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
-> > +			     (void **)&boot_protocol);
-> > +	if (status == EFI_SUCCESS) {
-> > +		status = efi_call_proto(boot_protocol,
-> > +					get_boot_hartid, &hartid);
-> > +	}
-> > +	return status;
-> > +}
-> > +
-> >   efi_status_t check_platform_features(void)
-> >   {
-> >   	int ret;
-> > +	efi_status_t status;
-> > -	ret = get_boot_hartid_from_fdt();
-> > -	if (ret) {
-> > -		efi_err("/chosen/boot-hartid missing or invalid!\n");
-> > -		return EFI_UNSUPPORTED;
-> > +	status = get_boot_hartid_from_efi();
-> > +	if (status != EFI_SUCCESS) {
-> > +		ret = get_boot_hartid_from_fdt();
-> > +		if (ret) {
-> > +			efi_err("Failed to get boot hartid!\n");
-> > +			return EFI_UNSUPPORTED;
-> > +		}
-> >   	}
-> >   	return EFI_SUCCESS;
-> >   }
-> > diff --git a/include/linux/efi.h b/include/linux/efi.h
-> > index ccd4d3f91c98..9822c730207c 100644
-> > --- a/include/linux/efi.h
-> > +++ b/include/linux/efi.h
-> > @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
-> >   #define EFI_CONSOLE_OUT_DEVICE_GUID		EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
-> >   #define APPLE_PROPERTIES_PROTOCOL_GUID		EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
-> >   #define EFI_TCG2_PROTOCOL_GUID			EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
-> > +#define RISCV_EFI_BOOT_PROTOCOL_GUID		EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
-> >   #define EFI_LOAD_FILE_PROTOCOL_GUID		EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
-> >   #define EFI_LOAD_FILE2_PROTOCOL_GUID		EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
-> >   #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
-> 
+Introduction of TPDM and TPDA
+TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
+short serves as data collection component for various dataset types
+specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+architecture) spec. The primary use case of the TPDM is to collect data
+from different data sources and send it to a TPDA for packetization,
+timestamping and funneling.
+     Coresight: Add coresight TPDM source driver
+     dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+     coresight-tpdm: Add DSB dataset support
+     coresight-tpdm: Add integration test support
+     docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+
+TPDA - The trace performance monitoring and diagnostics aggregator or
+TPDA in short serves as an arbitration and packetization engine for the
+performance monitoring and diagnostics network as specified in the QPMDA
+(Qualcomm performance monitoring and diagnostics architecture)
+specification. The primary use case of the TPDA is to provide
+packetization, funneling and timestamping of Monitor data as specified
+in the QPMDA specification.
+The following patch is to add driver for TPDA.
+     Coresight: Add TPDA link driver
+     dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+
+The last patch of this series is a device tree modification, which add
+the TPDM and TPDA configuration to device tree for validating.
+    ARM: dts: msm: Add coresight components for SM8250
+    ARM: dts: msm: Add tpdm mm/prng for sm8250
+
+Once this series patches are applied properly, the tpdm and tpda nodes
+should be observed at the coresight path /sys/bus/coresight/devices
+e.g.
+/sys/bus/coresight/devices # ls -l | grep tpd
+tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
+
+We can use the commands are similar to the below to validate TPDMs.
+Enable coresight sink first.
+
+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+The test data will be collected in the coresight sink which is enabled.
+If rwp register of the sink is keeping updating when do
+integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+generated from TPDM to sink.
+
+There must be a tpda between tpdm and the sink. When there are some
+other trace event hw components in the same HW block with tpdm, tpdm
+and these hw components will connect to the coresight funnel. When
+there is only tpdm trace hw in the HW block, tpdm will connect to
+tpda directly.
+  
+    +---------------+                +-------------+
+    |  tpdm@6c08000 |                |tpdm@684C000 |
+    +-------|-------+                +------|------+
+            |                               |
+    +-------|-------+                       |
+    | funnel@6c0b000|                       |
+    +-------|-------+                       |
+            |                               |
+    +-------|-------+                       |
+    |funnel@6c2d000 |                       |
+    +-------|-------+                       |
+            |                               |
+            |    +---------------+          |
+            +----- tpda@6004000  -----------+
+                 +-------|-------+
+                         |
+                 +-------|-------+
+                 |funnel@6005000 |
+                 +---------------+
+
+This patch series depends on patch series
+"coresight: Add new API to allocate trace source ID values".
+https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220308205000.27646-1-mike.leach@linaro.org/ 
+
+Changes from V3:
+1. Drop trace id for tpdm source as its trace atid is defined by the tpda.
+Allocate tpda's atid dynamically.  (Mike Leach)
+
+Mao Jinlong (10):
+  Use IDR to maintain all the enabled sources' paths.
+  Coresight: Add coresight TPDM source driver
+  dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+  coresight-tpdm: Add DSB dataset support
+  coresight-tpdm: Add integration test support
+  docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+  Coresight: Add TPDA link driver
+  dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+  ARM: dts: msm: Add coresight components for SM8250
+  ARM: dts: msm: Add tpdm mm/prng for sm8250
+
+ .../testing/sysfs-bus-coresight-devices-tpdm  |   5 +
+ .../bindings/arm/coresight-tpda.yaml          | 119 +++
+ .../bindings/arm/coresight-tpdm.yaml          |  99 +++
+ .../devicetree/bindings/arm/coresight.txt     |   7 +
+ MAINTAINERS                                   |   1 +
+ .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 708 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +
+ drivers/hwtracing/coresight/Kconfig           |  33 +
+ drivers/hwtracing/coresight/Makefile          |   2 +
+ drivers/hwtracing/coresight/coresight-core.c  |  79 +-
+ drivers/hwtracing/coresight/coresight-tpda.c  | 192 +++++
+ drivers/hwtracing/coresight/coresight-tpda.h  |  32 +
+ drivers/hwtracing/coresight/coresight-tpdm.c  | 260 +++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h  |  56 ++
+ include/linux/coresight.h                     |   1 +
+ 15 files changed, 1546 insertions(+), 50 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+
+-- 
+2.17.1
+

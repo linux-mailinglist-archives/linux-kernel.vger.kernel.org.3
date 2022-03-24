@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61834E6541
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5072F4E6529
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351025AbiCXOdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 10:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S1350966AbiCXOc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 10:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351085AbiCXOdK (ORCPT
+        with ESMTP id S1350232AbiCXOc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 10:33:10 -0400
+        Thu, 24 Mar 2022 10:32:27 -0400
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0455A27DD
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:31:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9147AA27DB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:30:55 -0700 (PDT)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KPSMB0qj8z9sTq;
-        Thu, 24 Mar 2022 15:31:02 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4KPSLz0wTJz9sV3;
+        Thu, 24 Mar 2022 15:30:51 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4fwzZXCaaTDa; Thu, 24 Mar 2022 15:31:02 +0100 (CET)
+        with ESMTP id xITyY5qnQeet; Thu, 24 Mar 2022 15:30:51 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KPSLy6mjrz9sTr;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KPSLy2b5Kz9sTc;
         Thu, 24 Mar 2022 15:30:50 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D09408B781;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3DE9C8B7AA;
         Thu, 24 Mar 2022 15:30:50 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 81EnaXSMAd2w; Thu, 24 Mar 2022 15:30:50 +0100 (CET)
+        with ESMTP id Wra1eX0Kb7pj; Thu, 24 Mar 2022 15:30:50 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.77])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D876C8B799;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 924DD8B781;
         Thu, 24 Mar 2022 15:30:49 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22OEUim51811746
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22OEUiNo1811750
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Thu, 24 Mar 2022 15:30:44 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22OEUiBn1811745;
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22OEUiL81811749;
         Thu, 24 Mar 2022 15:30:44 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
@@ -52,14 +52,14 @@ To:     "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v1 17/22] powerpc/inst: Add __copy_inst_from_kernel_nofault()
-Date:   Thu, 24 Mar 2022 15:30:07 +0100
-Message-Id: <3ff47a837d8dfb6305592f3d8caef6aa2d85fbc2.1648131740.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v1 18/22] powerpc/ftrace: Don't use copy_from_kernel_nofault() in module_trampoline_target()
+Date:   Thu, 24 Mar 2022 15:30:08 +0100
+Message-Id: <a69258e6e1f5d966b80e51c8ac9aec5696b4c344.1648131740.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1648131740.git.christophe.leroy@csgroup.eu>
 References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648132151; l=1534; s=20211009; h=from:subject:message-id; bh=uNUWZzzzPfrKXF6jD9unCulUYAF0cNf3EZC4MAgTHXc=; b=EGbvzHqpKG4FYz/NL7buG6q98rlXZaZujqm1KTTL7aeMlPD3bSu65ZmJjbUEWDyz+vsGtgM8KoCP NtpwT7sZAbOEMmExdeDaXGk21cAHDplor+sHP/FAsTzMlQP+g2dZ
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648132152; l=1852; s=20211009; h=from:subject:message-id; bh=Dkafy5NvUjSHjq7KoYZeDuZLfb4PxqJ6RzfaxFY7ijA=; b=mGsxDCVO37ZGzOz43c9mDE1B71zJx+va/Y7Gu0M7jRs4SyLb2NS+dAgYbW+DyKNCOTHin7c/TzVt gNXsfn30CWIpdD7J0kmV67ozOTUV+acOkA7vA1S9fLtQb9UbtfMC
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -71,50 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the same model as get_user() versus __get_user(),
-introduce __copy_inst_from_kernel_nofault() which doesn't
-check address.
+module_trampoline_target() is quite a hot path used when
+activating/deactivating function tracer.
 
-To be used by callers that have already checked that the adress
-is a kernel address.
+Avoid the heavy copy_from_kernel_nofault() by doing four calls
+to copy_inst_from_kernel_nofault().
+
+Use __copy_inst_from_kernel_nofault() for the 3 last calls. First call
+is done to copy_from_kernel_nofault() to check address is within
+kernel space. No risk to wrap out the top of kernel space because the
+last page is never mapped so if address is in last page the first copy
+will fails and the other ones will never be performed.
+
+And also make it notrace just like all functions that call it.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/powerpc/include/asm/inst.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ arch/powerpc/kernel/module_32.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/inst.h b/arch/powerpc/include/asm/inst.h
-index 80b6d74146c6..b49aae9f6f27 100644
---- a/arch/powerpc/include/asm/inst.h
-+++ b/arch/powerpc/include/asm/inst.h
-@@ -158,13 +158,10 @@ static inline char *__ppc_inst_as_str(char str[PPC_INST_STR_LEN], ppc_inst_t x)
- 	__str;				\
- })
- 
--static inline int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
-+static inline int __copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
- {
- 	unsigned int val, suffix;
- 
--	if (unlikely(!is_kernel_addr((unsigned long)src)))
--		return -ERANGE;
--
- /* See https://github.com/ClangBuiltLinux/linux/issues/1521 */
- #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 140000
- 	val = suffix = 0;
-@@ -181,4 +178,12 @@ static inline int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
- 	return -EFAULT;
+diff --git a/arch/powerpc/kernel/module_32.c b/arch/powerpc/kernel/module_32.c
+index 2aa368ce21c9..1282cfd672f2 100644
+--- a/arch/powerpc/kernel/module_32.c
++++ b/arch/powerpc/kernel/module_32.c
+@@ -289,13 +289,19 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
  }
  
-+static inline int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
-+{
-+	if (unlikely(!is_kernel_addr((unsigned long)src)))
-+		return -ERANGE;
-+
-+	return __copy_inst_from_kernel_nofault(inst, src);
-+}
-+
- #endif /* _ASM_POWERPC_INST_H */
+ #ifdef CONFIG_FUNCTION_TRACER
+-int module_trampoline_target(struct module *mod, unsigned long addr,
+-			     unsigned long *target)
++notrace int module_trampoline_target(struct module *mod, unsigned long addr,
++				     unsigned long *target)
+ {
+ 	unsigned int jmp[4];
+ 
+ 	/* Find where the trampoline jumps to */
+-	if (copy_from_kernel_nofault(jmp, (void *)addr, sizeof(jmp)))
++	if (copy_inst_from_kernel_nofault(jmp, (void *)addr))
++		return -EFAULT;
++	if (__copy_inst_from_kernel_nofault(jmp + 1, (void *)addr + 4))
++		return -EFAULT;
++	if (__copy_inst_from_kernel_nofault(jmp + 2, (void *)addr + 8))
++		return -EFAULT;
++	if (__copy_inst_from_kernel_nofault(jmp + 3, (void *)addr + 12))
+ 		return -EFAULT;
+ 
+ 	/* verify that this is what we expect it to be */
 -- 
 2.35.1
 

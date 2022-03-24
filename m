@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEF84E6635
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC754E6639
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351336AbiCXPn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S1351347AbiCXPnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242256AbiCXPn2 (ORCPT
+        with ESMTP id S1351341AbiCXPnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:43:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6703EBE2C;
-        Thu, 24 Mar 2022 08:41:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 24 Mar 2022 11:43:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A4B5A0BDF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648136529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IMj4s22XC9mKB2LB6VUx9T2+5iAB0BQpdb6M6ZtJ8Ig=;
+        b=ZPfi78EBgdE/GbIH2Gr9Kd/l76YCDNPttuKj0/jE9XM87umlMCzToJBLF9dG6/v0VENlSn
+        vC59ewpyrr/uYdCpWCR+NHHveN8g0s+hPQLkxYbJltgwvrjKP4VTfDZwvERWTLzfs9bt5v
+        cIJK0y+uhROmM2ltfyk+9gPGSpGRXyE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-567-lTdNTWANPHmO0ftlTvow3w-1; Thu, 24 Mar 2022 11:42:04 -0400
+X-MC-Unique: lTdNTWANPHmO0ftlTvow3w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F213661834;
-        Thu, 24 Mar 2022 15:41:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5703C340EC;
-        Thu, 24 Mar 2022 15:41:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648136515;
-        bh=doZwDOyg5aAln9B5DrZ3TY24Ms37FN+svJ7hBf9kLOA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D2es6RjpWpnvAYmQBArcDtITQiqCqQkxdHOTn+VLib8RpjRqoz7Bk42YaQeIkW4B+
-         YV4riix7mFJO6aTCfBltJ+fHD9NcvbmSVUgVRccYTsAThnjUvTUElpQVWLkEmXn3XP
-         0KARQD6J5sux0XLqkyQczgxTdKj6a0blrlIj64sjOTOnkhpG5IQOzN1na+sGcth01V
-         BHerFSDNphjfIgtjIwzEyNtiuKx5MEFUnf8zYDfP5QxivQK6NnsEXMMHf83nTw7iCV
-         0JmhQp4Rh9K55bYoS3LHd/KRXZDaoGGhW53QMIr6NdwapjmHHWkxiYfwY5Yfp7IlAG
-         xZBPVqEuXQxJA==
-Date:   Thu, 24 Mar 2022 21:11:50 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [REPOST PATCH v4 07/13] drm/msm/disp/dpu1: Add support for DSC
- in encoder
-Message-ID: <YjyRPhdoiLw4gOtD@matsya>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-8-vkoul@kernel.org>
- <20220217223239.2i256klkbjkogovz@SoMainline.org>
- <YjsxaJrvxgtO5ecC@matsya>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF52E1066543;
+        Thu, 24 Mar 2022 15:42:03 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B1C8758BABB;
+        Thu, 24 Mar 2022 15:42:01 +0000 (UTC)
+Message-ID: <9875fd216464cabcc14cbaa2df374b2b3dc937bb.camel@redhat.com>
+Subject: Re: [RFCv2 PATCH 11/12] KVM: SVM: Do not throw warning when calling
+ avic_vcpu_load on a running vcpu
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 24 Mar 2022 17:42:00 +0200
+In-Reply-To: <20220308163926.563994-12-suravee.suthikulpanit@amd.com>
+References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
+         <20220308163926.563994-12-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjsxaJrvxgtO5ecC@matsya>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-03-22, 20:10, Vinod Koul wrote:
-> On 17-02-22, 23:32, Marijn Suijten wrote:
-> > On 2022-02-10 16:04:17, Vinod Koul wrote:
-
-> > > +
-> > > +	slice_count = dsc->drm->slice_count;
-> > > +	slice_per_intf = DIV_ROUND_UP(width, dsc->drm->slice_width);
-> > > +
-> > > +	/*
-> > > +	 * If slice_count is greater than slice_per_intf then default to 1.
-> > > +	 * This can happen during partial update.
-> > > +	 */
-> > > +	if (slice_count > slice_per_intf)
-> > > +		slice_count = 1;
-> > > +
-> > > +	bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
-> > > +				      dsc->drm->bits_per_pixel, 8);
-> > > +	total_bytes_per_intf = bytes_in_slice * slice_per_intf;
-> > > +
-> > > +	dsc->eol_byte_num = total_bytes_per_intf % 3;
-> > > +	dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
-> > > +	dsc->bytes_in_slice = bytes_in_slice;
-> > > +	dsc->bytes_per_pkt = bytes_in_slice * slice_count;
-> > > +	dsc->pkt_per_line = slice_per_intf / slice_count;
-> > > +}
-> > 
-> > I've seen the same calculations duplicated twice in dsi code.  Since the
-> > msm_display_dsc_config struct is available in a header, perhaps a single
-> > - easily reviewable and maintainable - calculation function should be
-> > available there too?
+On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
+> Originalliy, this WARN_ON is designed to detect when calling
+> avic_vcpu_load() on an already running vcpu in AVIC mode (i.e. the AVIC
+> is_running bit is set).
 > 
-> Let me try check if we can make it common..
+> However, for x2AVIC, the vCPU can switch from xAPIC to x2APIC mode while in
+> running state, in which the avic_vcpu_load() will be called from
+> svm_refresh_apicv_exec_ctrl().
+> 
+> Therefore, remove this warning since it is no longer appropriate.
+> 
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index b8d6bf6b6ed5..015888aad8fc 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -1038,7 +1038,6 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+>  		return;
+>  
+>  	entry = READ_ONCE(*(svm->avic_physical_id_cache));
+> -	WARN_ON(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
+>  
+>  	entry &= ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK;
+>  	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
 
-I rechecked and we can actually remove this as we do this caln in timing
-and update the dsc structure there. So this fn is dropped now
 
--- 
-~Vinod
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+

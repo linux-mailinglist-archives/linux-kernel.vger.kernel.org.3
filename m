@@ -2,291 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA804E6585
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CE04E6586
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242275AbiCXOn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 10:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S1350966AbiCXOnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 10:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351220AbiCXOnE (ORCPT
+        with ESMTP id S1351331AbiCXOnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 10:43:04 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8518CAA02A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:41:31 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id r7so5832023wrc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=Nkf6HJTCG+OAuqULdufe22oqKualm2SIRycYw6CQ/jg=;
-        b=rSw/ho8JqMrlsVZkqkd1VvZH49gGpEa3MnrBx3dKKndUub5bbC+zwNf14RXbfe39j0
-         Z+9oW8ewPDZGUbsrcTMcaZ5x7U2ftP+jlMTJ68T/b5PU9XCgAlnewPoWP019p6wX1O2B
-         LBSR3G7RI5BDdlrI/kyjCVE27Y9cXHazCsrxrQlkGDJjDvuehpdudVc+f4rxlk7jgNKK
-         BxhBO2x8643Y0b3gjTQczhHvrrym0SIxMQqq9yUc10hjJ6Yltmv75atixU3dsQ+8+6oo
-         s8Y45CE655Yblt0Zr+Ebg9Arhsxf2VMocFWBY0lilwQkjaKn+qkfVELKxszxUOaS3U7f
-         ghrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=Nkf6HJTCG+OAuqULdufe22oqKualm2SIRycYw6CQ/jg=;
-        b=uW/PqlpO76FilbPYO70R/KkQmf5v07as25/BP7HCGbhZFaHx7Mfr/07VvDPeAr1OqU
-         UKgezecAYKNixeic1F2oZL2DoBQZu0ugOWGp0iipVO65tnj//v+2YvB39mnqWzY3kmDt
-         xVlrY8SNH8ltj3sEuJuEGrFm33udOotLyUEOj4dssvIA1aUjuQ33a1C21pVALrLGYEol
-         Vp1oqg2YDZ5qKezBJYxwNWJlz6L28p274qcW2I2Z/i1TrFK25wRXdPxN6qdXWLpsHsUq
-         k3qu8fLIHo0VBnTHaeI3anDIxdJmK4cI0bmHMfMs45g4APm84wmuW4hiuGq+GDDgwDj5
-         Hayg==
-X-Gm-Message-State: AOAM531O7VQtaFVhKTsLhaXWNph0P4MAJX0yaotgq71kBxbt7CDPCe2z
-        GKKIaemz7+QbXw5cDyiteINndQ==
-X-Google-Smtp-Source: ABdhPJwwzqAXtbAruSTKmAhmyTNCHeMmcClYZAvh3ysqyqRhXGIuacRT4TVScrg9SJMum5mGtsc1oA==
-X-Received: by 2002:a05:6000:18a8:b0:203:eb58:9733 with SMTP id b8-20020a05600018a800b00203eb589733mr4936806wri.151.1648132890014;
-        Thu, 24 Mar 2022 07:41:30 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm2290487wmh.31.2022.03.24.07.41.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 07:41:29 -0700 (PDT)
-Message-ID: <8c1a9f2f-2000-c5be-0720-38fcea0394a3@linaro.org>
-Date:   Thu, 24 Mar 2022 14:41:28 +0000
+        Thu, 24 Mar 2022 10:43:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFEEDAA02A;
+        Thu, 24 Mar 2022 07:41:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 708AA1515;
+        Thu, 24 Mar 2022 07:41:48 -0700 (PDT)
+Received: from [10.57.41.19] (unknown [10.57.41.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B8173F73D;
+        Thu, 24 Mar 2022 07:41:45 -0700 (PDT)
+Message-ID: <e3cf16f2-e9d7-b169-cccf-038df5acdb79@arm.com>
+Date:   Thu, 24 Mar 2022 14:41:41 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3] wcn36xx: Implement tx_rate reporting
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Edmond Gagnon <egagnon@squareup.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-Cc:     Benjamin Li <benl@squareup.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318195804.4169686-3-egagnon@squareup.com>
- <20220323214533.1951791-1-egagnon@squareup.com>
- <9c90300e-ac2d-be53-a7c9-7b00a059204e@nexus-software.ie>
-In-Reply-To: <9c90300e-ac2d-be53-a7c9-7b00a059204e@nexus-software.ie>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] Drivers: hv: vmbus: Propagate VMbus coherence to
+ each VMbus device
+Content-Language: en-GB
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+References: <1648067472-13000-1-git-send-email-mikelley@microsoft.com>
+ <1648067472-13000-2-git-send-email-mikelley@microsoft.com>
+ <f984116a-c748-ada0-c073-6e62f486b4f5@arm.com>
+ <PH0PR21MB3025C5DFB189B9609F7A601FD7199@PH0PR21MB3025.namprd21.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <PH0PR21MB3025C5DFB189B9609F7A601FD7199@PH0PR21MB3025.namprd21.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2022 12:42, Bryan O'Donoghue wrote:
-> On 23/03/2022 21:45, Edmond Gagnon wrote:
->> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
->> rate:
+On 2022-03-24 13:18, Michael Kelley (LINUX) wrote:
+> From: Robin Murphy <robin.murphy@arm.com> Sent: Thursday, March 24, 2022 4:59 AM
 >>
->> root@linaro-developer:~# iw wlan0 link
->> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
->>          SSID: SQ-DEVICETEST
->>          freq: 5200
->>          RX: 4141 bytes (32 packets)
->>          TX: 2082 bytes (15 packets)
->>          signal: -77 dBm
->>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
->>          tx bitrate: 6.0 MBit/s
+>> On 2022-03-23 20:31, Michael Kelley wrote:
+>>> VMbus synthetic devices are not represented in the ACPI DSDT -- only
+>>> the top level VMbus device is represented. As a result, on ARM64
+>>> coherence information in the _CCA method is not specified for
+>>> synthetic devices, so they default to not hardware coherent.
+>>> Drivers for some of these synthetic devices have been recently
+>>> updated to use the standard DMA APIs, and they are incurring extra
+>>> overhead of unneeded software coherence management.
+>>>
+>>> Fix this by propagating coherence information from the VMbus node
+>>> in ACPI to the individual synthetic devices. There's no effect on
+>>> x86/x64 where devices are always hardware coherent.
+>>>
+>>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>>> ---
+>>>    drivers/hv/hv_common.c         | 11 +++++++++++
+>>>    drivers/hv/vmbus_drv.c         | 23 +++++++++++++++++++++++
+>>>    include/asm-generic/mshyperv.h |  1 +
+>>>    3 files changed, 35 insertions(+)
+>>>
+>>> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+>>> index 181d16b..820e814 100644
+>>> --- a/drivers/hv/hv_common.c
+>>> +++ b/drivers/hv/hv_common.c
+>>> @@ -20,6 +20,7 @@
+>>>    #include <linux/panic_notifier.h>
+>>>    #include <linux/ptrace.h>
+>>>    #include <linux/slab.h>
+>>> +#include <linux/dma-map-ops.h>
+>>>    #include <asm/hyperv-tlfs.h>
+>>>    #include <asm/mshyperv.h>
+>>>
+>>> @@ -216,6 +217,16 @@ bool hv_query_ext_cap(u64 cap_query)
+>>>    }
+>>>    EXPORT_SYMBOL_GPL(hv_query_ext_cap);
+>>>
+>>> +void hv_setup_dma_ops(struct device *dev, bool coherent)
+>>> +{
+>>> +	/*
+>>> +	 * Hyper-V does not offer a vIOMMU in the guest
+>>> +	 * VM, so pass 0/NULL for the IOMMU settings
+>>> +	 */
+>>> +	arch_setup_dma_ops(dev, 0, 0, NULL, coherent);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(hv_setup_dma_ops);
+>>> +
+>>>    bool hv_is_hibernation_supported(void)
+>>>    {
+>>>    	return !hv_root_partition && acpi_sleep_state_supported(ACPI_STATE_S4);
+>>> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+>>> index 12a2b37..2d2c54c 100644
+>>> --- a/drivers/hv/vmbus_drv.c
+>>> +++ b/drivers/hv/vmbus_drv.c
+>>> @@ -905,6 +905,14 @@ static int vmbus_probe(struct device *child_device)
+>>>    	struct hv_device *dev = device_to_hv_device(child_device);
+>>>    	const struct hv_vmbus_device_id *dev_id;
+>>>
+>>> +	/*
+>>> +	 * On ARM64, propagate the DMA coherence setting from the top level
+>>> +	 * VMbus ACPI device to the child VMbus device being added here.
+>>> +	 * On x86/x64 coherence is assumed and these calls have no effect.
+>>> +	 */
+>>> +	hv_setup_dma_ops(child_device,
+>>> +		device_get_dma_attr(&hv_acpi_dev->dev) == DEV_DMA_COHERENT);
 >>
->>          bss flags:      short-slot-time
->>          dtim period:    1
->>          beacon int:     100
->>
->> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
->> firmware message and reports it via ieee80211_ops::sta_statistics.
->>
->> root@linaro-developer:~# iw wlan0 link
->> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
->>          SSID: SQ-DEVICETEST
->>          freq: 5700
->>          RX: 26788094 bytes (19859 packets)
->>          TX: 1101376 bytes (12119 packets)
->>          signal: -75 dBm
->>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
->>          tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
->>
->>          bss flags:      short-slot-time
->>          dtim period:    1
->>          beacon int:     100
->>
->> Tested on MSM8939 with WCN3680B running firmware 
->> CNSS-PR-2-0-1-2-c1-00083,
->> and verified by sniffing frames over the air with Wireshark to ensure the
->> MCS indices match.
->>
->> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
->> Reviewed-by: Benjamin Li <benl@squareup.com>
->> ---
->>
->> Changes in v3:
->>   - Refactored to report tx_rate via ieee80211_ops::sta_statistics
->>   - Dropped get_sta_index patch
->>   - Addressed style comments
->> Changes in v2:
->>   - Refactored to use existing wcn36xx_hal_get_stats_{req,rsp}_msg 
->> structs.
->>   - Added more notes about testing.
->>   - Reduced reporting interval to 3000msec.
->>   - Assorted type and memory safety fixes.
->>   - Make wcn36xx_smd_get_stats friendlier to future message implementors.
->>
->>   drivers/net/wireless/ath/wcn36xx/hal.h  |  7 +++-
->>   drivers/net/wireless/ath/wcn36xx/main.c | 16 +++++++
->>   drivers/net/wireless/ath/wcn36xx/smd.c  | 56 +++++++++++++++++++++++++
->>   drivers/net/wireless/ath/wcn36xx/smd.h  |  2 +
->>   drivers/net/wireless/ath/wcn36xx/txrx.c | 29 +++++++++++++
->>   drivers/net/wireless/ath/wcn36xx/txrx.h |  1 +
->>   6 files changed, 110 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/wireless/ath/wcn36xx/hal.h 
->> b/drivers/net/wireless/ath/wcn36xx/hal.h
->> index 2a1db9756fd5..46a49f0a51b3 100644
->> --- a/drivers/net/wireless/ath/wcn36xx/hal.h
->> +++ b/drivers/net/wireless/ath/wcn36xx/hal.h
->> @@ -2626,7 +2626,12 @@ enum tx_rate_info {
->>       HAL_TX_RATE_SGI = 0x8,
->>       /* Rate with Long guard interval */
->> -    HAL_TX_RATE_LGI = 0x10
->> +    HAL_TX_RATE_LGI = 0x10,
->> +
->> +    /* VHT rates */
->> +    HAL_TX_RATE_VHT20  = 0x20,
->> +    HAL_TX_RATE_VHT40  = 0x40,
->> +    HAL_TX_RATE_VHT80  = 0x80,
->>   };
->>   struct ani_global_class_a_stats_info {
->> diff --git a/drivers/net/wireless/ath/wcn36xx/main.c 
->> b/drivers/net/wireless/ath/wcn36xx/main.c
->> index b545d4b2b8c4..fc76b090c39f 100644
->> --- a/drivers/net/wireless/ath/wcn36xx/main.c
->> +++ b/drivers/net/wireless/ath/wcn36xx/main.c
->> @@ -1400,6 +1400,21 @@ static int wcn36xx_get_survey(struct 
->> ieee80211_hw *hw, int idx,
->>       return 0;
->>   }
->> +static void wcn36xx_sta_statistics(struct ieee80211_hw *hw, struct 
->> ieee80211_vif *vif,
->> +                   struct ieee80211_sta *sta, struct station_info 
->> *sinfo)
+>> Would you mind hooking up the hv_bus.dma_configure method to do this?
+>> Feel free to fold hv_setup_dma_ops entirely into that if you're not
+>> likely to need to call it from anywhere else.
 > 
-> 
-> Consider running this through checkpatch.pl and fixing most of the 
-> complaints, use your discretion.
-> 
-> scripts/checkpatch.pl --strict 
-> ~/Development/patches/linux/wifi/v3-wcn36xx-Implement-tx_rate-reporting.patch 
-> 
-> 
-> static void wcn36xx_sta_statistics(struct ieee80211_hw *hw,
->                                     struct ieee80211_vif *vif,
->                                     struct ieee80211_sta *sta,
->                                     struct station_info *sinfo)
-> 
->> +{
->> +    struct wcn36xx *wcn;
->> +    u8 sta_index;
->> +    int status = 0;
->> +
->> +    wcn = hw->priv;
->> +    sta_index = get_sta_index(vif, wcn36xx_sta_to_priv(sta));
->> +    status = wcn36xx_smd_get_stats(wcn, sta_index, 
->> HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
-> 
-> status = wcn36xx_smd_get_stats(wcn, sta_index,
->                                 HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
-> 
-> 
->> +
->> +    if (status)
->> +        wcn36xx_err("wcn36xx_smd_get_stats failed\n");
->> +}
->> +
->>   static const struct ieee80211_ops wcn36xx_ops = {
->>       .start            = wcn36xx_start,
->>       .stop            = wcn36xx_stop,
->> @@ -1423,6 +1438,7 @@ static const struct ieee80211_ops wcn36xx_ops = {
->>       .set_rts_threshold    = wcn36xx_set_rts_threshold,
->>       .sta_add        = wcn36xx_sta_add,
->>       .sta_remove        = wcn36xx_sta_remove,
->> +    .sta_statistics        = wcn36xx_sta_statistics,
->>       .ampdu_action        = wcn36xx_ampdu_action,
->>   #if IS_ENABLED(CONFIG_IPV6)
->>       .ipv6_addr_change    = wcn36xx_ipv6_addr_change,
->> diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c 
->> b/drivers/net/wireless/ath/wcn36xx/smd.c
->> index caeb68901326..8f9aa892e5ec 100644
->> --- a/drivers/net/wireless/ath/wcn36xx/smd.c
->> +++ b/drivers/net/wireless/ath/wcn36xx/smd.c
->> @@ -2627,6 +2627,61 @@ int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 
->> tid, u8 direction, u8 sta_index)
->>       return ret;
->>   }
->> +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32 
->> stats_mask,
->> +              struct station_info *sinfo)
->> +{
->> +    struct wcn36xx_hal_stats_req_msg msg_body;
->> +    struct wcn36xx_hal_stats_rsp_msg *rsp;
->          struct ani_global_class_a_stats_info *stats_info;
->> +    void *rsp_body;
->> +    int ret = 0;
->> +
->> +    if (stats_mask & ~HAL_GLOBAL_CLASS_A_STATS_INFO) {
->> +        wcn36xx_err("stats_mask 0x%x contains unimplemented types\n",
->> +                stats_mask);
->> +        return -EINVAL;
->> +    }
->> +
->> +    mutex_lock(&wcn->hal_mutex);
->> +    INIT_HAL_MSG(msg_body, WCN36XX_HAL_GET_STATS_REQ);
->> +
->> +    msg_body.sta_id = sta_index;
->> +    msg_body.stats_mask = stats_mask;
->> +
->> +    PREPARE_HAL_BUF(wcn->hal_buf, msg_body);
->> +
->> +    ret = wcn36xx_smd_send_and_wait(wcn, msg_body.header.len);
->> +    if (ret) {
->> +        wcn36xx_err("sending hal_get_stats failed\n");
->> +        goto out;
->> +    }
->> +
->> +    ret = wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len);
->> +    if (ret) {
->> +        wcn36xx_err("hal_get_stats response failed err=%d\n", ret);
->> +        goto out;
->> +    }
->> +
->> +    rsp = (struct wcn36xx_hal_stats_rsp_msg *)wcn->hal_buf;
->> +    rsp_body = (wcn->hal_buf + sizeof(struct 
->> wcn36xx_hal_stats_rsp_msg));
->> +
->> +    if (rsp->stats_mask != stats_mask) {
->> +        wcn36xx_err("stats_mask 0x%x differs from requested 0x%x\n",
->> +                rsp->stats_mask, stats_mask);
->> +        goto out;
->> +    }
->> +
-> If you take a pointer and cast it, then you won't have this very long 
-> line with the cast
-> 
->          stats_info = (struct ani_global_class_a_stats_info *)rsp_body;
->> +    if (rsp->stats_mask & HAL_GLOBAL_CLASS_A_STATS_INFO) {
->> +        wcn36xx_process_tx_rate((struct ani_global_class_a_stats_info 
->> *)rsp_body,
->> +                    &sinfo->txrate);
->                  wcn36xx_process_tx_rate(stats_info, &sinfo->txrate);
-> 
-> 
-> Other than that LGTM
-> 
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> I'm pretty sure using hv_bus.dma_configure() is doable.  A separate
+> hv_setup_dma_ops() is still needed because arch_setup_dma_ops() isn't
+> exported and this VMbus driver can be built as a module.
 
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Ah, right you are, I keep forgetting that.
+
+>>> +
+>>>    	dev_id = hv_vmbus_get_id(drv, dev);
+>>>    	if (drv->probe) {
+>>>    		ret = drv->probe(dev, dev_id);
+>>> @@ -2428,6 +2436,21 @@ static int vmbus_acpi_add(struct acpi_device *device)
+>>>
+>>>    	hv_acpi_dev = device;
+>>>
+>>> +	/*
+>>> +	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
+>>> +	 * method on the top level VMbus device in the DSDT. But devices
+>>> +	 * are hardware coherent in all current Hyper-V use cases, so fix
+>>> +	 * up the ACPI device to behave as if _CCA is present and indicates
+>>> +	 * hardware coherence.
+>>> +	 */
+>>> +	ACPI_COMPANION_SET(&device->dev, device);
+>>> +	if (IS_ENABLED(CONFIG_ACPI_CCA_REQUIRED) &&
+>>> +	    device_get_dma_attr(&device->dev) == DEV_DMA_NOT_SUPPORTED) {
+>>> +		pr_info("No ACPI _CCA found; assuming coherent device I/O\n");
+>>> +		device->flags.cca_seen = true;
+>>> +		device->flags.coherent_dma = true;
+>>> +	}
+>>
+>> I'm not the biggest fan of this, especially since I'm not convinced that
+>> there are any out-of-support deployments of ARM64 Hyper-V that can't be
+>> updated. However I suppose it's not "real" firmware, and one Hyper-V
+>> component is at liberty to hack another Hyper-V component's data if it
+>> really wants to...
+> 
+> Agreed, it's a hack.  But Hyper-V instances are out there as part of
+> Windows 10/11 on ARM64 PCs, and they run ARM64 VMs for the
+> Windows Subsystem for Linux.  Microsoft gets pilloried for breaking
+> stuff, and this removes the potential for that happening if someone
+> runs a new Linux kernel version in that VM.
+
+And actually that one's on me as well - for some reason I was thinking 
+that this had never worked, and therefore you could likely get a Hyper-V 
+update pushed out long before users get this patch through distros, but 
+of course it only becomes an issue now because previously there was no 
+connection to any ACPI node at all. As I said, personally I'm happy to 
+consider this a Hyper-V internal workaround, but if anyone else objects 
+to poking at the ACPI flags, I suppose you've also got the fallback 
+option of flipping it around and making the ACPI_COMPANION_SET() 
+conditional, so that the behaviour for older versions remains entirely 
+unchanged. If it happens, feel free to keep my ack for that approach too.
+
+Cheers,
+Robin.
+
+> 
+> Michael
+> 
+>>
+>> If you can hook up .dma_configure, or clarify if it wouldn't work,
+>>
+>> Acked-by: Robin Murphy <robin.murphy@arm.com>
+>>
+>> Cheers,
+>> Robin.
+>>
+>>> +
+>>>    	result = acpi_walk_resources(device->handle, METHOD_NAME__CRS,
+>>>    					vmbus_walk_resources, NULL);
+>>>
+>>> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+>>> index c08758b..c05d2ce 100644
+>>> --- a/include/asm-generic/mshyperv.h
+>>> +++ b/include/asm-generic/mshyperv.h
+>>> @@ -269,6 +269,7 @@ static inline int cpumask_to_vpset_noself(struct hv_vpset
+>> *vpset,
+>>>    u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size);
+>>>    void hyperv_cleanup(void);
+>>>    bool hv_query_ext_cap(u64 cap_query);
+>>> +void hv_setup_dma_ops(struct device *dev, bool coherent);
+>>>    void *hv_map_memory(void *addr, unsigned long size);
+>>>    void hv_unmap_memory(void *addr);
+>>>    #else /* CONFIG_HYPERV */

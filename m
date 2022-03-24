@@ -2,172 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29694E6443
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148924E6447
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350540AbiCXNoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S1350542AbiCXNqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238731AbiCXNoW (ORCPT
+        with ESMTP id S238731AbiCXNqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:44:22 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A501A94D2;
-        Thu, 24 Mar 2022 06:42:50 -0700 (PDT)
-Received: by mail-oi1-f173.google.com with SMTP id k10so4952440oia.0;
-        Thu, 24 Mar 2022 06:42:50 -0700 (PDT)
+        Thu, 24 Mar 2022 09:46:39 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DE728D;
+        Thu, 24 Mar 2022 06:45:07 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso2596645wmz.4;
+        Thu, 24 Mar 2022 06:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=oZ1sQ/s8ZI7VgUG5Kyss6T5kos76Vzc3N9Tcf43ykvg=;
+        b=G1JkArYGVVqnvhMr0qayvYA2Sda9lv02t5+m+9n88gcrFN9uhb2xuY0llB1i+61IvZ
+         4hij9LmZumxp4RR95ieNjVtHKomSK73vmTrY/r1JhH461/XofR0XGM2Ug4IGwh1hYlUI
+         D7ENMuCJN9Fg1PCefQIR1sMxdlu2FcrMva5KyQbeXUjjfKhhABTfFsc0VtYCNtiON0Rt
+         CtHneiW4E1O1ixBk7/Qwm+5pyqISgt4/9k2fDIgF3f3SKRgnuevdXSwA2XgWpzw3bWGv
+         1/DBHI6kd3VTGsuKTbr53WaThAavZs52kv5+YtURwo1MA3CoUmIo4S341dKjmvL7+Cb4
+         XpvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=k0XLE9bSSftZDbfLEu3mqCg9VES7NclFvpk1DiwzsCU=;
-        b=p6GCh5GiyGdgcTRqCr9sf40dOthH6RFI9f3DQBGolTm/yV4gKKEQjYDjbRZE/pdake
-         cvZ62/ccounWNOFXPUdn9eldhe/nvapUKjbFYnWXk8G4+V8gxccWZbTrPBitgz+oqRtx
-         z4Ov0qE3B2E8yswlz2d8goxHWD0dhy7D3wzpc0di3VYkD7EsiV0sq5u/AQNJEpswkqhE
-         EGiEkmZ/tH7ppP9mbgmYcdJllVRvXazs6eOG1AgmhLQtkPuvjK1hvK/RSRQ3Tpa81aue
-         AKdKBhBqlOu9WNRQXrOnbsMobPSn2KeiU6hBnBw1gxjRFamHuC0ZBWChRjA7lQL8cPHu
-         2NoA==
-X-Gm-Message-State: AOAM5321WR9boytR//PFppQwEoutBjKjXQBJX4xslhotWAEHyqtKACVt
-        EFepRFTzlibv4e6HS5wpVw==
-X-Google-Smtp-Source: ABdhPJzqqN+FJJDwdKcMMRgy5goFaR/Q6upsH/doVxugr8UxtoUj4bHD6zeF85BdW4NQ+asO8xTuOw==
-X-Received: by 2002:a05:6808:208b:b0:2d3:a5cc:540 with SMTP id s11-20020a056808208b00b002d3a5cc0540mr2700275oiw.41.1648129369806;
-        Thu, 24 Mar 2022 06:42:49 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm1463006oiv.21.2022.03.24.06.42.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oZ1sQ/s8ZI7VgUG5Kyss6T5kos76Vzc3N9Tcf43ykvg=;
+        b=5fm8KhmeRSio7sa7QgSXuWIoDFeffrjYNii49MubaLCcLVJF9Si4LuYSac33/eEwZ8
+         SvaR0jPCUmtNWfEnlo5KCDNbqByceyiPlHj0mKrrpRQghcphBNT5GIcCSNsbgbw5iW+I
+         5NTAGqvrHVgdZecky4kYaQxPqhPI6suM7HOXLFOB5v1ZHCWIPvMHdV/heYTIgX3fjMjX
+         M4J0p0TL9IaguLTOC92nfmAtXdv58Mty9Epl8PFPd+0mYG/DVUnVj9NyMz8smd11sMv4
+         QEfEXnRPzbhcWnIxf3SPCjUnN5/rYQniMVp5qeib3piD5zgTdHHtFhx4BvwruFWFleAy
+         aN4g==
+X-Gm-Message-State: AOAM530puyARNQNna3LTmkSX2DTvzoKx/U42pdQJDntOnOtbwncULqmN
+        hkex2ctSMJNJoG/PeRLCfr0gd21FmCo=
+X-Google-Smtp-Source: ABdhPJzbRhiMs7w2yHcB9tUaqUaDFJA0Sma/O8lYUcRw7b1jV70ocMyqdUL5ilw2TzSeD4D/v0r+7g==
+X-Received: by 2002:a05:600c:1d11:b0:38c:97f4:197b with SMTP id l17-20020a05600c1d1100b0038c97f4197bmr14576154wms.88.1648129505617;
+        Thu, 24 Mar 2022 06:45:05 -0700 (PDT)
+Received: from localhost.localdomain ([64.64.123.65])
+        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm2620590wmb.3.2022.03.24.06.45.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 06:42:48 -0700 (PDT)
-Received: (nullmailer pid 1940986 invoked by uid 1000);
-        Thu, 24 Mar 2022 13:42:47 -0000
-Date:   Thu, 24 Mar 2022 08:42:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <Yjx1V1Lx0bAtgsCp@robh.at.kernel.org>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-8-15330273260@189.cn>
- <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
- <33766d08-bd88-2234-0f85-5926e4256dfb@189.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <33766d08-bd88-2234-0f85-5926e4256dfb@189.cn>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 06:45:05 -0700 (PDT)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] fs: btrfs: fix possible use-after-free bug in error handling code of btrfs_get_root_ref()
+Date:   Thu, 24 Mar 2022 06:44:54 -0700
+Message-Id: <20220324134454.15192-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 09:39:49AM +0800, Sui Jingfeng wrote:
-> 
-> On 2022/3/23 04:49, Rob Herring wrote:
-> > On Tue, Mar 22, 2022 at 12:29:16AM +0800, Sui Jingfeng wrote:
-> > > From: suijingfeng <suijingfeng@loongson.cn>
-> > > 
-> > > There is a display controller in loongson's LS2K1000 SoC and LS7A1000
-> > > bridge chip, the display controller is a PCI device in those chips. It
-> > > has two display pipes but with only one hardware cursor. Each way has
-> > > a DVO interface which provide RGB888 signals, vertical & horizontal
-> > > synchronisations, data enable and the pixel clock. Each CRTC is able to
-> > > scanout from 1920x1080 resolution at 60Hz, the maxmium resolution is
-> > > 2048x2048 according to the hardware spec. Loongson display controllers
-> > > are simple which require scanout buffers to be physically contiguous.
+In btrfs_get_root_ref(), when btrfs_insert_fs_root() fails,
+btrfs_put_root() will be called to possibly free the memory area of
+the variable root. However, this variable is then used again in error
+handling code after "goto fail", when ret is not -EEXIST.
 
-[...]
+To fix this possible bug, btrfs_put_root() is only called when ret is 
+-EEXIST for "goto again".
 
-> > > +			val |= mask;
-> > > +		else
-> > > +			val &= ~mask;
-> > > +		writeb(val, li2c->dat_reg);
-> > Shouldn't you set the data register low first and then change the
-> > direction? Otherwise, you may be driving high for a moment. However, if
-> > high is always done by setting the direction as input, why write the
-> > data register each time? I'm assuming whatever is written to the dat_reg
-> > is maintained regardless of pin state.
-> > 
-> When the pin is input, i am not sure value written to it will be preserved.
-> 
-> I'm worry about it get flushed by the external input value.
-> 
-> Because the output data register is same with the input data register(
-> offset is  0x1650).
-> 
-> The hardware designer do not provided a  separation.
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ fs/btrfs/disk-io.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Usually for GPIO data registers the read value is current pin state 
-regardless of direction and the written value is what to drive as an 
-output. But your h/w could be different.
+diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+index b30309f187cf..126f244cdf88 100644
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -1850,9 +1850,10 @@ static struct btrfs_root *btrfs_get_root_ref(struct btrfs_fs_info *fs_info,
+ 
+ 	ret = btrfs_insert_fs_root(fs_info, root);
+ 	if (ret) {
+-		btrfs_put_root(root);
+-		if (ret == -EEXIST)
++		if (ret == -EEXIST) {
++			btrfs_put_root(root);
+ 			goto again;
++		}
+ 		goto fail;
+ 	}
+ 	return root;
+-- 
+2.17.1
 
-
-> > > +
-> > > +		/* Optional properties which made the driver more flexible */
-> > > +		of_property_read_u32(i2c_np, "udelay", &udelay);
-> > > +		of_property_read_u32(i2c_np, "timeout", &timeout);
-> > These aren't documented. Do you really need them in DT?
-> 
-> Yes, in very rare case:
-> 
-> When debugging, sometimes one way I2C works, another way I2C not on specific
-> board.
-
-This is not specific to you, so why do you solve it in a way that only 
-works for you? If you want to add tuning parameters to the i2c bit 
-algorithm, why don't you do so in a way that works for all users? I'm 
-sure the I2C maintainer and others have some opinion on this, but 
-they'll never see it hidden away in some display driver.
-
-
-> and you want to see what will happen if you change it from 5 to 2.
-> 
-> modify device tree is enough, have to recompile the kernel and driver
-> modules every time.
-
-Modifying the DT is not the easiest way to debug either.
-
-
-> It is optional through.
-
-Lots of properties are optional, what's your point?
-
-
-> Please do not ask me to document such a easy thing,
-
-Everything must be documented. There's nothing more to discuss.
-
-
-> DT itself is a documention, human readable,  it already speak for itself.
-
-It is machine readable too. Undocumented properties generate warnings 
-now.
-
-Rob

@@ -2,88 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F402A4E663A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830054E6642
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351341AbiCXPoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S1351374AbiCXPql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351343AbiCXPn7 (ORCPT
+        with ESMTP id S1344411AbiCXPqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:43:59 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11D3BA0BDF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:42:25 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 22OFgAuG019967;
-        Thu, 24 Mar 2022 16:42:10 +0100
-Date:   Thu, 24 Mar 2022 16:42:10 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nugraha <richiisei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        David Laight <David.Laight@aculab.com>
-Subject: Re: [PATCH v1 04/11] tools/nolibc: x86-64: Use appropriate register
- constraints if exist
-Message-ID: <20220324154210.GC19142@1wt.eu>
-References: <20220324073039.140946-1-ammarfaizi2@gnuweeb.org>
- <20220324073039.140946-5-ammarfaizi2@gnuweeb.org>
- <20220324075728.GC18586@1wt.eu>
- <CAOG64qMwKYHLrUVro1gFhYqHvm8wq5DUdO7QfK5gG2TKhfnNhA@mail.gmail.com>
+        Thu, 24 Mar 2022 11:46:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D8D2A72D;
+        Thu, 24 Mar 2022 08:45:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67866B82407;
+        Thu, 24 Mar 2022 15:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E38CC340ED;
+        Thu, 24 Mar 2022 15:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648136705;
+        bh=W0ujt+uG7tz/cIu1lu+5YA1hm5s0h2ZhoEP/N2GqCNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TQh+1RpC7VntD7RlSC5lAgWlzPhTHIAkGED39r+s/JdbooGd8ji13vIJB03pDmxkh
+         Fd8GqQz/ZfGHH6K+fds7hOrn3/PMlTlJQPrPhhPLypqP+RjZK6nxfOgICOC1it3YZw
+         uZ2mrkFT9b3HQpYSyAM1X72krcAWAg9HFmxgKexrJW+eS5ICZ3LlxREsM5ErvDIZBv
+         9FdqXZX7JOgBdihel1e/F9rWyOx0Sr1YF02M36e3u7bBe4eoBrdmGpoXluAcqVH0R/
+         8Z/9Tna+AxpxzMG53tnDFBBxs0nW6n4PLrAUzcw4ptpiOPAdaZZIWKHjwiSd9l5YHh
+         B4Qhic+fWJoXw==
+Date:   Thu, 24 Mar 2022 21:15:00 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: Re: [REPOST PATCH v4 13/13] drm/msm/dsi: Add support for DSC
+ configuration
+Message-ID: <YjyR/LrBeXeVd2J3@matsya>
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-14-vkoul@kernel.org>
+ <977340f4-1a5d-a103-4669-ab0168df8cd6@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOG64qMwKYHLrUVro1gFhYqHvm8wq5DUdO7QfK5gG2TKhfnNhA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <977340f4-1a5d-a103-4669-ab0168df8cd6@linaro.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 03:33:57PM +0700, Alviro Iskandar Setiawan wrote:
-> On Thu, Mar 24, 2022 at 2:57 PM Willy Tarreau <w@1wt.eu> wrote:
-> > On Thu, Mar 24, 2022 at 02:30:32PM +0700, Ammar Faizi wrote:
-> > > Use appropriate register constraints if exist. Don't use register
-> > > variables for all inputs.
-> > >
-> > > Register variables with "r" constraint should be used when we need to
-> > > pass data through a specific register to extended inline assembly that
-> > > doesn't have a specific register constraint associated with it (anything
-> > > outside %rax, %rbx, %rcx, %rdx, %rsi, %rdi).
-> > >
-> > > It also simplifies the macro definition.
-> >
-> > I'm a bit bothered by this one because I went the exact opposite route
-> > in the early design precisely because I found that the current one was
-> > simpler. [...]
-> [...]
-> > I'd say that if there is any technical benefit in doing this (occasional
-> > code improvement or better support for older or exotic compilers), I'd say
-> > "ok go for it", but if it's only a matter of taste, I'm not convinced at
-> > all and am rather seeing this as a regression. Now if there's rough
-> > consensus around this approach I'll abide, but then I'd request that other
-> > archs are adapted as well so that we don't keep a different approach only
-> > for these two ones.
+On 21-02-22, 05:11, Dmitry Baryshkov wrote:
+> On 10/02/2022 13:34, Vinod Koul wrote:
+> > When DSC is enabled, we need to configure DSI registers accordingly and
+> > configure the respective stream compression registers.
+> > 
+> > Add support to calculate the register setting based on DSC params and
+> > timing information and configure these registers.
+> > 
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> >   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  10 +++
+> >   drivers/gpu/drm/msm/dsi/dsi_host.c | 109 ++++++++++++++++++++++++++++-
+> >   2 files changed, 118 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > index 49b551ad1bff..c1c85df58c4b 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > @@ -706,4 +706,14 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
+> >   #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
+> > +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
+> > +
+> > +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL2			0x000002a0
+> > +
+> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
+> > +
+> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
+> > +
+> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL3			0x000002ac
+> > +
+> >   #endif /* DSI_XML */
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > index 438c80750682..3d8d5a1daaa3 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > @@ -908,6 +908,20 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
+> >   		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
+> >   }
+> > +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
+> > +				  int pic_width, int pic_height)
+> > +{
+> > +	if (!dsc || !pic_width || !pic_height) {
+> > +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	dsc->drm->pic_width = pic_width;
+> > +	dsc->drm->pic_height = pic_height;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >   {
+> >   	struct drm_display_mode *mode = msm_host->mode;
+> > @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >   		hdisplay /= 2;
+> >   	}
+> > +	if (msm_host->dsc) {
+> > +		struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +
+> > +		/* update dsc params with timing params */
+> > +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
+> > +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
+> > +
+> > +		/* we do the calculations for dsc parameters here so that
+> > +		 * panel can use these parameters
+> > +		 */
+> > +		dsi_populate_dsc_params(dsc);
+> > +
+> > +		/* Divide the display by 3 but keep back/font porch and
+> > +		 * pulse width same
+> > +		 */
+> > +		h_total -= hdisplay;
+> > +		hdisplay /= 3;
+> > +		h_total += hdisplay;
+> > +		ha_end = ha_start + hdisplay;
+> > +	}
+> > +
+> >   	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
+> > +		if (msm_host->dsc) {
+> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +			u32 reg, intf_width, slice_per_intf;
+> > +			u32 total_bytes_per_intf;
+> > +
+> > +			/* first calculate dsc parameters and then program
+> > +			 * compress mode registers
+> > +			 */
+> > +			intf_width = hdisplay;
+> > +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+> > +
+> > +			dsc->drm->slice_count = 1;
+> > +			dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * 8, 8);
+> > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
+> > +
+> > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> > +			dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
+> > +			dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
+> > +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> > +
+> > +			reg = dsc->bytes_per_pkt << 16;
+> > +			reg |= (0x0b << 8);    /* dtype of compressed image */
+> > +
+> > +			/* pkt_per_line:
+> > +			 * 0 == 1 pkt
+> > +			 * 1 == 2 pkt
+> > +			 * 2 == 4 pkt
+> > +			 * 3 pkt is not supported
+> > +			 * above translates to ffs() - 1
+> > +			 */
+> > +			reg |= (ffs(dsc->pkt_per_line) - 1) << 6;
+> > +
+> > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> > +			reg |= dsc->eol_byte_num << 4;
+> > +			reg |= 1;
+> > +
+> > +			dsi_write(msm_host,
+> > +				  REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
+> > +		}
+> > +
+> >   		dsi_write(msm_host, REG_DSI_ACTIVE_H,
+> >   			DSI_ACTIVE_H_START(ha_start) |
+> >   			DSI_ACTIVE_H_END(ha_end));
+> > @@ -959,8 +1034,40 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >   			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
+> >   			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
+> >   	} else {		/* command mode */
+> > +		if (msm_host->dsc) {
+> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +			u32 reg, reg_ctrl, reg_ctrl2;
+> > +			u32 slice_per_intf, bytes_in_slice, total_bytes_per_intf;
+> > +
+> > +			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
+> > +			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+> > +
+> > +			slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
+> > +			bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
+> > +						      dsc->drm->bits_per_pixel, 8);
+> > +			dsc->drm->slice_chunk_size = bytes_in_slice;
+> > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
 > 
-> I don't see any technical benefit for x86-64, so I don't think there
-> is a need in doing this. Though I personally prefer to use register
-> constraints if they exist instead of register variables for everything
-> (oh yeah, matter of taste since I don't have any technical argument to
-> say it's better respecting the resulting codegen). The only real issue
-> is for the syscall6() implementation on i386 as we've been bitten by a
-> real compiler issue. In short, I am neutral on this change.
+> Should we use dsc->bytes_in_slice or just bytes_in_slice here?
 
-Just to be clear, I usually only use register constraints as well but I
-changed this for the syscalls since they were not sufficient, and found
-that the mix of the two was really not great to deal with.
+This should be dsc->bytes_in_slice, fixed up now. Thanks for pointing
 
-Thanks,
-Willy
+-- 
+~Vinod

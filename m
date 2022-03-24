@@ -2,95 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FF74E5CAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 195AD4E5CAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347129AbiCXBRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 21:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S1347139AbiCXBVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 21:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240020AbiCXBRO (ORCPT
+        with ESMTP id S230416AbiCXBVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 21:17:14 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071C992332
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:15:44 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id h63so3803055iof.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+3eskjEc/QTrEtiTQAsNWMH7sh9g2uOi0boElmWN8Nw=;
-        b=rkAfy1Vo/25ZZL9cLvSrPTrqVh7oMaToZ2hi6TEAY1kq98EDsuWajVObyirTn5bzTw
-         5P2yWOKzm7dUWBfx4ZrG2iUDJsYazG4tbNdL4EuanrPllwCjJK4EpzVT2ha7b8yQ4lrc
-         vi+f85MkwKtnicJOU4CyarwDSDnfeGIbvla7t6N+FKHFyWAjg0wgntd9lNVl59zdkI5c
-         1gy7Qzd5G0RkS+tPcb2Eco7NmOvUy3TepIc+uGQO84YzyjgjLh4QO8Uq5C5c2a3hMPCc
-         EY7XObU9MYvWh3o37Hag62nE7eGzfW7WG0hJpYkJuPUtCHQ0T+iUjSoZLoU+vbI/MBCR
-         vk5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+3eskjEc/QTrEtiTQAsNWMH7sh9g2uOi0boElmWN8Nw=;
-        b=hAqiLrzRy93oJk8LKMyVFy76G1VeK52qqyPXo1W3A70h9TUX3iMf1a6APXy8H6tiVk
-         DTyFdGVJLUox0ktdv2tpvY4Q0nFHjFUpNdtMhyaWrxY7iXUBB/r1r0tQXGHgp5Ml9me7
-         8JL/nGTJTeszEdUX0hQTbzZqme/FaFzXyXZnKNlF/41UtzuA+QLNlYjT3v57mfhLrs2m
-         mkG3k/4K0RltxZLmeqxmqb8cqxNlNMkrhy3E4cOzjv9i6652VYktMIUy8hz2Mmwuw8HQ
-         jiM6dHNIH30EHP9OEjAiEgdB0LEIdFUSYU0ZEBjMaw0k9SZeAKREc5if0gbWcSiX9JPb
-         p0vQ==
-X-Gm-Message-State: AOAM5311CiCrEG9f7UNkmv26eqIBLererwSan0opZ75uPnUd6dGhtdbM
-        vQBlYVmdyAgmatTGSRDWX8y4P2RxnwSWNw==
-X-Google-Smtp-Source: ABdhPJxa6RFFGKKY16VYQtazOWfGWpWQr6Y/g04mS57LUFavYz5qZREvFeqEZZ81c//KyV+QEIu+zQ==
-X-Received: by 2002:a05:6638:2217:b0:31a:1fa6:cc97 with SMTP id l23-20020a056638221700b0031a1fa6cc97mr1529147jas.294.1648084543170;
-        Wed, 23 Mar 2022 18:15:43 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id h24-20020a6bfb18000000b006497692016bsm785969iog.15.2022.03.23.18.15.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 18:15:42 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 01:15:39 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com, jmattson@google.com
-Subject: Re: [PATCH 3/3] Documentation: KVM: add API issues section
-Message-ID: <YjvGO0Q8DEeR52i4@google.com>
-References: <20220322110712.222449-1-pbonzini@redhat.com>
- <20220322110712.222449-4-pbonzini@redhat.com>
- <Yjtj8qESPWIL221r@google.com>
- <a35f9408-9d54-654c-6639-64192f03ba3b@redhat.com>
+        Wed, 23 Mar 2022 21:21:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF3E92872
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:19:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C74F061935
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:19:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC3DC340E8;
+        Thu, 24 Mar 2022 01:19:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648084792;
+        bh=AQPkONeeX9Mmd8uAyGJ81vDu5mMQfBPlJvdrvezgBx8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=e1Ohmw1U0seEsCxy3YerR+k9WDMzwZgzmpw7shvYLIRXjNsWXy5LZ0W9SEgmKZTPO
+         1vLtAvXkVV4zTXaP/wBcJx1rFQzk7T2rwLfiTjxBOHRG8xmSIo1kWwTNRU+PRkldMZ
+         gJHfLwduN1D0PDoKoQZE5luYJ/1ZwmBC57DAlm6X2v2bNSh1prkQ0YNzolSRLxlYPr
+         Q86raR4qRv7U4YjgpjcjkRTbXY00iq42uRJMcrleTqN8LRQEFKcGxfRIK0edLaflGv
+         09PSjc2t9isBPbmgbCul60c5Bl0PVHu6THIcEIqVzmzLX7L1sJWfa92futJuVnor8G
+         jEkhNAeZMRFHg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A54F25C0192; Wed, 23 Mar 2022 18:19:51 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 18:19:51 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 4/4] rcu: Name internal polling flag
+Message-ID: <20220324011951.GA1178492@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220316144255.336021-1-frederic@kernel.org>
+ <20220316144255.336021-5-frederic@kernel.org>
+ <20220322021107.GP4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220322103224.GA701946@lothringen>
+ <20220324010402.GU4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a35f9408-9d54-654c-6639-64192f03ba3b@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220324010402.GU4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 10:32:50PM +0100, Paolo Bonzini wrote:
-> On 3/23/22 19:16, Oliver Upton wrote:
-> > Do you think we should vent about our mistakes inline with the
-> > descriptions of the corresponding UAPI? One example that comes to mind
-> > is ARM's CNTV_CVAL_EL0/CNTVCT_EL0 mixup, which is mentioned in 4.68
-> > 'KVM_SET_ONE_REG'. That, of course, doesn't cover the
-> > previously-undocumented bits of UAPI that are problematic:)
+On Wed, Mar 23, 2022 at 06:04:02PM -0700, Paul E. McKenney wrote:
+> On Tue, Mar 22, 2022 at 11:32:24AM +0100, Frederic Weisbecker wrote:
+> > On Mon, Mar 21, 2022 at 07:11:07PM -0700, Paul E. McKenney wrote:
+> > > On Wed, Mar 16, 2022 at 03:42:55PM +0100, Frederic Weisbecker wrote:
+> > > > Give a proper self-explanatory name to the expedited grace period
+> > > > internal polling flag.
+> > > > 
+> > > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > > > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > > > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > > > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> > > > Cc: Joel Fernandes <joel@joelfernandes.org>
+> > > > ---
+> > > >  kernel/rcu/rcu.h      | 5 +++++
+> > > >  kernel/rcu/tree.c     | 2 +-
+> > > >  kernel/rcu/tree_exp.h | 9 +++++----
+> > > >  3 files changed, 11 insertions(+), 5 deletions(-)
+> > > > 
+> > > > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> > > > index eccbdbdaa02e..8a62bb416ba4 100644
+> > > > --- a/kernel/rcu/rcu.h
+> > > > +++ b/kernel/rcu/rcu.h
+> > > > @@ -30,6 +30,11 @@
+> > > >  #define RCU_GET_STATE_USE_NORMAL	0x2
+> > > >  #define RCU_GET_STATE_BAD_FOR_NORMAL	(RCU_GET_STATE_FROM_EXPEDITED | RCU_GET_STATE_USE_NORMAL)
+> > > >  
+> > > > +/*
+> > > > + * Low-order bit definitions for polled grace-period internals.
+> > > > + */
+> > > > +#define RCU_EXP_SEQ_POLL_DONE 0x1
+> > > > +
+> > > >  /*
+> > > >   * Return the counter portion of a sequence number previously returned
+> > > >   * by rcu_seq_snap() or rcu_seq_current().
+> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > index 5da381a3cbe5..b3223b365f9f 100644
+> > > > --- a/kernel/rcu/tree.c
+> > > > +++ b/kernel/rcu/tree.c
+> > > > @@ -4679,7 +4679,7 @@ static void __init rcu_init_one(void)
+> > > >  			spin_lock_init(&rnp->exp_lock);
+> > > >  			mutex_init(&rnp->boost_kthread_mutex);
+> > > >  			raw_spin_lock_init(&rnp->exp_poll_lock);
+> > > > -			rnp->exp_seq_poll_rq = 0x1;
+> > > > +			rnp->exp_seq_poll_rq = RCU_EXP_SEQ_POLL_DONE;
+> > > >  			INIT_WORK(&rnp->exp_poll_wq, sync_rcu_do_polled_gp);
+> > > >  		}
+> > > >  	}
+> > > > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> > > > index c4a19c6a83cf..7ccb909d6355 100644
+> > > > --- a/kernel/rcu/tree_exp.h
+> > > > +++ b/kernel/rcu/tree_exp.h
+> > > > @@ -910,14 +910,14 @@ static void sync_rcu_do_polled_gp(struct work_struct *wp)
+> > > >  	unsigned long s;
+> > > >  
+> > > >  	s = READ_ONCE(rnp->exp_seq_poll_rq);
+> > > > -	if (s & 0x1)
+> > > > +	if (s & RCU_EXP_SEQ_POLL_DONE)
+> > > >  		return;
+> > > >  	while (!sync_exp_work_done(s))
+> > > >  		__synchronize_rcu_expedited(true);
+> > > 
+> > > One additional question.  If we re-read rnp->exp_seq_poll_rq on each pass
+> > > through the loop, wouldn't we have less trouble with counter wrap?
+> > 
+> > We can indeed do that, though it won't eliminate the possibility of wrapping.
 > 
-> It depends.  My intention was to use this document more for hidden
-> interdependencies, in this case between KVM_GET_SUPPORTED_CPUID and
-> KVM_CREATE_IRQCHIP, KVM_ENABLE_CAP(KVM_CAP_IRQCHIP_SPLIT),
-> KVM_CAP_TSC_DEADLINE_TIMER.
+> True.  But in conjunction with an exact check for expired grace-period
+> sequence number, it reduces the maximum addtional penalty for wrapping
+> to two grace periods.
 
-Ah good point. I agree bad cross interactions need to be called out
-separately.
+Oh, and I did finally queue this series for testing and further review.
 
-Thanks!
+							Thanx, Paul
 
---
-Oliver
+> > > >  	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+> > > >  	s = rnp->exp_seq_poll_rq;
+> > > > -	if (!(s & 0x1) && sync_exp_work_done(s))
+> > > > -		WRITE_ONCE(rnp->exp_seq_poll_rq, s | 0x1);
+> > > > +	if (!(s & RCU_EXP_SEQ_POLL_DONE) && sync_exp_work_done(s))
+> > > > +		WRITE_ONCE(rnp->exp_seq_poll_rq, s | RCU_EXP_SEQ_POLL_DONE);
+> > > >  	raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
+> > > >  }
+> > > >  
+> > > > @@ -946,7 +946,8 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
+> > > >  	rnp = rdp->mynode;
+> > > >  	if (rcu_init_invoked())
+> > > >  		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+> > > > -	if ((rnp->exp_seq_poll_rq & 0x1) || ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
+> > > > +	if ((rnp->exp_seq_poll_rq & RCU_EXP_SEQ_POLL_DONE) ||
+> > > > +	    ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
+> > > >  		WRITE_ONCE(rnp->exp_seq_poll_rq, s);
+> > > >  		if (rcu_init_invoked())
+> > > >  			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
+> > > > -- 
+> > > > 2.25.1
+> > > > 

@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5414E62C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0864E62D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237338AbiCXL4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S1349921AbiCXL5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346172AbiCXL4d (ORCPT
+        with ESMTP id S1346172AbiCXL5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:56:33 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757E01D0C6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:55:01 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id u3so6301046wrg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:55:01 -0700 (PDT)
+        Thu, 24 Mar 2022 07:57:45 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A15A7744
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:56:13 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q14so5781916ljc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HOkV9qsSBetFWbuRvijcZUKcVy03YutgM/62olPjrWo=;
-        b=eoUnCk8iLScTCQ2u15oA+x7pZSnhAdHxhl9jlWpsc1JE7BafYyR8iomO4CiISo/hWB
-         LCC2oxrWX7LTEFkxtrqr//ys7fn7xJtYqzgIlClhyEouGx2OZyY2aEbiFxPhlRKaD+oD
-         kA5IW0a03Vrnv/VkjE44EDC6lMSCNrADry6SxvKSmedG4u8NOYd2ttrHxgn/+OrXs04/
-         eflBmR0Nung5sycTkxRCVz9yRnP5uHC1r3/Z1qKK0hP2bTSxFle9oye6ziYYfoIDIUNM
-         EUs26GC7zEqlpx8IzvGwQ6G2WoLpO9s+Op+u600yqTjKNRqetKoFc6t+ZJij2EsoMers
-         2dkg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=20qzSFu8WfFwCVYdzmq5hRnnFKw8ZDXsTSDNJQxzips=;
+        b=F29pMukvvs0UY7bTUtc1Tt9UgguPPK1AYFQx+T/yGyVZ+Y5Kzfd8qOBxFztYBt54Cn
+         Ord0ThryohwhU38ZYzUtx2JM/TNVre58iFvSf6gz7nsFXurdeVbJsVGfn2Mzr5GfTACa
+         trP9aVf/PauBXoHeuEzqVtqUaMxjGDOPzP9mJ0oOvgkjUN+kXI0BLq0XB/ONhoMIYEpy
+         BopNgDvFptw0AiKJd4E1t3M0DWnXWV5g+5E1tZ/g/NLPLVv+yb//veNSaZCFdVKTVFtt
+         2D/jQhdtUH18hJDdEFI5bdzei/dowxx0vsllHWmQ6uMte3hIezf7/lLnebGbox7gBFVd
+         2ynQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HOkV9qsSBetFWbuRvijcZUKcVy03YutgM/62olPjrWo=;
-        b=cAlK1DPaQSvDkTPvgAH9DNbA0EwizoF9nCTRhYpQHfKPgfYqeF2nYAcmCIYImahHUb
-         KijFepi6bnjvN8GdWZAp1PnvVjyb7aMGXNPGMM6aVYBGKUKLQQpEwNftvzNe3V7cuT+s
-         1QCu/D/6J//B/vLyCCjHM0/3SGo1Pup41g+1S9MxqZWJS8Ze+gub2ggAb95fV5z/+WlK
-         O/vP5JvSuRZPPetctHJj2+cwAACBtu3jLzyOs3Mh5xl61TrPqgbG1TEDvBGF0+gglUIe
-         VdRu4NUuBbv/qa9VhHMJssIYBVkU/7Ppdw8fTESUf+MSIkTo/k/Sz/ZTUjclwY+Tz8js
-         vpMw==
-X-Gm-Message-State: AOAM531ozcDtN305z5NqUfSLpBxEAYmaf32UonHAPL1TYH9xXz3O755l
-        +04SmiJjBJRTcMsQkQmPgd/3Fg==
-X-Google-Smtp-Source: ABdhPJw1+873Nh7YA5zj7/vLCI3L6hUQAIzDJMmF0efFXBLYSsJezjsQfGWeD5iP/wqFU3FxZ7wNeg==
-X-Received: by 2002:adf:e343:0:b0:1f0:7a2:99f2 with SMTP id n3-20020adfe343000000b001f007a299f2mr4479185wrj.96.1648122899838;
-        Thu, 24 Mar 2022 04:54:59 -0700 (PDT)
-Received: from localhost.localdomain ([49.206.7.17])
-        by smtp.gmail.com with ESMTPSA id i9-20020a5d5849000000b002058631cfacsm2543857wrf.61.2022.03.24.04.54.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 04:54:59 -0700 (PDT)
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Abner Chang <abner.chang@hpe.com>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH V3 1/1] riscv/efi_stub: Add support for RISCV_EFI_BOOT_PROTOCOL
-Date:   Thu, 24 Mar 2022 17:24:38 +0530
-Message-Id: <20220324115438.210390-2-sunilvl@ventanamicro.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220324115438.210390-1-sunilvl@ventanamicro.com>
-References: <20220324115438.210390-1-sunilvl@ventanamicro.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=20qzSFu8WfFwCVYdzmq5hRnnFKw8ZDXsTSDNJQxzips=;
+        b=YIZW/80grD8Iq8E73LtAnoThEilmUmE3ozrhKV8jNK+qhi539ZYpX0H42+N295FP1a
+         19djNbAb7amN5Vpqvi9MjZXJAhfXIwclMRrc1RgDFc6BgJSiX2dIlseHTzoN8uCb6rzB
+         aDLgeA03LlE0WAIINaVqbFBggqHUXfulAcKnbQnVp8D4kwM/iK1DSBRSmusWUzyy+wwq
+         B396uCJMUbWATiKHaZDt49/pJgfds0gYdoP266vAEqMaj1ESr2E7k07DiO6roO3L0c9u
+         dznxS/Pfz5L8OrDJH+Yds3UJ6XnY4Bxp7xxqLLWiq0dYn7ratigndzIY2P2awLB9vULq
+         O39g==
+X-Gm-Message-State: AOAM533+9Eln1TCZ2qZXn9ZMcz3p6o1cXOO2uE+BE9G1i48ex06jGVq6
+        hAXkppyqW2HewJPmScoUpfyhpedGTZOIV53V97w+Ow==
+X-Google-Smtp-Source: ABdhPJw0GZRItCAMGMn5UV2L1PQyIs1R+7qQj5XrMCVRXWMeIg8BqBj3QSlStxt7HTPELqkp6gmVtw+jQBG/FeW7xHw=
+X-Received: by 2002:a2e:9cc5:0:b0:239:da6e:290d with SMTP id
+ g5-20020a2e9cc5000000b00239da6e290dmr3744841ljj.4.1648122971468; Thu, 24 Mar
+ 2022 04:56:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220317111944.116148-1-yann.gautier@foss.st.com> <20220317111944.116148-3-yann.gautier@foss.st.com>
+In-Reply-To: <20220317111944.116148-3-yann.gautier@foss.st.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 24 Mar 2022 12:55:35 +0100
+Message-ID: <CAPDyKFqzzKgLHWiy26QW0hvM9kZEATS_c2mXkTuGiFpPaW8YKw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mmc: mmci: stm32: use a buffer for unaligned DMA requests
+To:     Yann Gautier <yann.gautier@foss.st.com>
+Cc:     Christophe Kerello <christophe.kerello@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mmc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -80,104 +73,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the support for getting the boot hart ID in
-Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL. This protocol
-is preferred method over existing DT based solution since it
-works irrespective of DT or ACPI.
+On Thu, 17 Mar 2022 at 12:19, Yann Gautier <yann.gautier@foss.st.com> wrote:
+>
+> In SDIO mode, the sg list for requests can be unaligned with what the
+> STM32 SDMMC internal DMA can support. In that case, instead of failing,
+> use a temporary bounce buffer to copy from/to the sg list.
+> This buffer is limited to 1MB. But for that we need to also limit
+> max_req_size to 1MB. It has not shown any throughput penalties for
+> SD-cards or eMMC.
+>
+> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+> ---
+>  drivers/mmc/host/mmci_stm32_sdmmc.c | 80 +++++++++++++++++++++++------
+>  1 file changed, 63 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
+> index 4566d7fc9055..a4414e32800f 100644
+> --- a/drivers/mmc/host/mmci_stm32_sdmmc.c
+> +++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
+> @@ -43,6 +43,9 @@ struct sdmmc_lli_desc {
+>  struct sdmmc_idma {
+>         dma_addr_t sg_dma;
+>         void *sg_cpu;
+> +       dma_addr_t bounce_dma_addr;
+> +       void *bounce_buf;
+> +       bool use_bounce_buffer;
+>  };
+>
+>  struct sdmmc_dlyb {
+> @@ -54,6 +57,7 @@ struct sdmmc_dlyb {
+>  static int sdmmc_idma_validate_data(struct mmci_host *host,
+>                                     struct mmc_data *data)
+>  {
+> +       struct sdmmc_idma *idma = host->dma_priv;
+>         struct scatterlist *sg;
+>         int i;
+>
+> @@ -61,21 +65,23 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
+>          * idma has constraints on idmabase & idmasize for each element
+>          * excepted the last element which has no constraint on idmasize
+>          */
+> +       idma->use_bounce_buffer = false;
+>         for_each_sg(data->sg, sg, data->sg_len - 1, i) {
+>                 if (!IS_ALIGNED(sg->offset, sizeof(u32)) ||
+>                     !IS_ALIGNED(sg->length, SDMMC_IDMA_BURST)) {
+> -                       dev_err(mmc_dev(host->mmc),
+> +                       dev_dbg(mmc_dev(host->mmc),
+>                                 "unaligned scatterlist: ofst:%x length:%d\n",
+>                                 data->sg->offset, data->sg->length);
+> -                       return -EINVAL;
+> +                       idma->use_bounce_buffer = true;
+> +                       return 0;
+>                 }
+>         }
+>
+>         if (!IS_ALIGNED(sg->offset, sizeof(u32))) {
+> -               dev_err(mmc_dev(host->mmc),
+> +               dev_dbg(mmc_dev(host->mmc),
+>                         "unaligned last scatterlist: ofst:%x length:%d\n",
+>                         data->sg->offset, data->sg->length);
+> -               return -EINVAL;
+> +               idma->use_bounce_buffer = true;
+>         }
+>
+>         return 0;
+> @@ -84,18 +90,29 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
+>  static int _sdmmc_idma_prep_data(struct mmci_host *host,
+>                                  struct mmc_data *data)
+>  {
+> -       int n_elem;
+> +       struct sdmmc_idma *idma = host->dma_priv;
+>
+> -       n_elem = dma_map_sg(mmc_dev(host->mmc),
+> -                           data->sg,
+> -                           data->sg_len,
+> -                           mmc_get_dma_dir(data));
+> +       if (idma->use_bounce_buffer) {
+> +               if (data->flags & MMC_DATA_WRITE) {
+> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
+>
+> -       if (!n_elem) {
+> -               dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
+> -               return -EINVAL;
+> -       }
+> +                       sg_copy_to_buffer(data->sg, data->sg_len,
+> +                                         idma->bounce_buf, xfer_bytes);
+> +                       dma_wmb();
+> +               }
+> +       } else {
+> +               int n_elem;
+> +
+> +               n_elem = dma_map_sg(mmc_dev(host->mmc),
+> +                                   data->sg,
+> +                                   data->sg_len,
+> +                                   mmc_get_dma_dir(data));
+>
+> +               if (!n_elem) {
+> +                       dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
+> +                       return -EINVAL;
+> +               }
+> +       }
+>         return 0;
+>  }
+>
+> @@ -112,8 +129,19 @@ static int sdmmc_idma_prep_data(struct mmci_host *host,
+>  static void sdmmc_idma_unprep_data(struct mmci_host *host,
+>                                    struct mmc_data *data, int err)
+>  {
+> -       dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
+> -                    mmc_get_dma_dir(data));
+> +       struct sdmmc_idma *idma = host->dma_priv;
+> +
+> +       if (idma->use_bounce_buffer) {
+> +               if (data->flags & MMC_DATA_READ) {
+> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
+> +
+> +                       sg_copy_from_buffer(data->sg, data->sg_len,
+> +                                           idma->bounce_buf, xfer_bytes);
+> +               }
+> +       } else {
+> +               dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
+> +                            mmc_get_dma_dir(data));
+> +       }
+>  }
+>
+>  static int sdmmc_idma_setup(struct mmci_host *host)
+> @@ -137,6 +165,16 @@ static int sdmmc_idma_setup(struct mmci_host *host)
+>                 host->mmc->max_segs = SDMMC_LLI_BUF_LEN /
+>                         sizeof(struct sdmmc_lli_desc);
+>                 host->mmc->max_seg_size = host->variant->stm32_idmabsize_mask;
+> +
+> +               host->mmc->max_req_size = SZ_1M;
+> +               idma->bounce_buf = dmam_alloc_coherent(dev,
+> +                                                      host->mmc->max_req_size,
+> +                                                      &idma->bounce_dma_addr,
+> +                                                      GFP_KERNEL);
+> +               if (!idma->bounce_buf) {
+> +                       dev_err(dev, "Unable to map allocate DMA bounce buffer.\n");
+> +                       return -ENOMEM;
 
-The specification of the protocol is hosted at:
-https://github.com/riscv-non-isa/riscv-uefi
+If we fail to allocate the 1M bounce buffer, then we end up always
+using a PIO based mode, right?
 
-Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
----
- drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
- drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
- include/linux/efi.h                       |  1 +
- 3 files changed, 32 insertions(+), 5 deletions(-)
+Perhaps we can allow the above allocation to fail, but then limit us
+to use DMA only when the buffers are properly aligned? Would that
+work?
 
-diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-index edb77b0621ea..aced62a0907e 100644
---- a/drivers/firmware/efi/libstub/efistub.h
-+++ b/drivers/firmware/efi/libstub/efistub.h
-@@ -720,6 +720,13 @@ union efi_tcg2_protocol {
- 	} mixed_mode;
- };
- 
-+struct riscv_efi_boot_protocol {
-+	u64 revision;
-+
-+	efi_status_t (__efiapi * get_boot_hartid)(struct riscv_efi_boot_protocol *this,
-+						  size_t *boot_hartid);
-+};
-+
- typedef union efi_load_file_protocol efi_load_file_protocol_t;
- typedef union efi_load_file_protocol efi_load_file2_protocol_t;
- 
-diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-index 9c460843442f..012504f6f9a4 100644
---- a/drivers/firmware/efi/libstub/riscv-stub.c
-+++ b/drivers/firmware/efi/libstub/riscv-stub.c
-@@ -23,7 +23,7 @@
- 
- typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
- 
--static u32 hartid;
-+static size_t hartid;
- 
- static int get_boot_hartid_from_fdt(void)
- {
-@@ -47,14 +47,33 @@ static int get_boot_hartid_from_fdt(void)
- 	return 0;
- }
- 
-+static efi_status_t get_boot_hartid_from_efi(void)
-+{
-+	efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
-+	efi_status_t status;
-+	struct riscv_efi_boot_protocol *boot_protocol;
-+
-+	status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
-+			     (void **)&boot_protocol);
-+	if (status == EFI_SUCCESS) {
-+		status = efi_call_proto(boot_protocol,
-+					get_boot_hartid, &hartid);
-+	}
-+	return status;
-+}
-+
- efi_status_t check_platform_features(void)
- {
- 	int ret;
-+	efi_status_t status;
- 
--	ret = get_boot_hartid_from_fdt();
--	if (ret) {
--		efi_err("/chosen/boot-hartid missing or invalid!\n");
--		return EFI_UNSUPPORTED;
-+	status = get_boot_hartid_from_efi();
-+	if (status != EFI_SUCCESS) {
-+		ret = get_boot_hartid_from_fdt();
-+		if (ret) {
-+			efi_err("Failed to get boot hartid!\n");
-+			return EFI_UNSUPPORTED;
-+		}
- 	}
- 	return EFI_SUCCESS;
- }
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index ccd4d3f91c98..9822c730207c 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
- #define EFI_CONSOLE_OUT_DEVICE_GUID		EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
- #define APPLE_PROPERTIES_PROTOCOL_GUID		EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
- #define EFI_TCG2_PROTOCOL_GUID			EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
-+#define RISCV_EFI_BOOT_PROTOCOL_GUID		EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
- #define EFI_LOAD_FILE_PROTOCOL_GUID		EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
- #define EFI_LOAD_FILE2_PROTOCOL_GUID		EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
- #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
--- 
-2.25.1
+> +               }
+>         } else {
+>                 host->mmc->max_segs = 1;
+>                 host->mmc->max_seg_size = host->mmc->max_req_size;
+> @@ -154,8 +192,16 @@ static int sdmmc_idma_start(struct mmci_host *host, unsigned int *datactrl)
+>         struct scatterlist *sg;
+>         int i;
+>
+> -       if (!host->variant->dma_lli || data->sg_len == 1) {
+> -               writel_relaxed(sg_dma_address(data->sg),
+> +       if (!host->variant->dma_lli || data->sg_len == 1 ||
+> +           idma->use_bounce_buffer) {
+> +               u32 dma_addr;
+> +
+> +               if (idma->use_bounce_buffer)
+> +                       dma_addr = idma->bounce_dma_addr;
+> +               else
+> +                       dma_addr = sg_dma_address(data->sg);
+> +
+> +               writel_relaxed(dma_addr,
+>                                host->base + MMCI_STM32_IDMABASE0R);
+>                 writel_relaxed(MMCI_STM32_IDMAEN,
+>                                host->base + MMCI_STM32_IDMACTRLR);
 
+Kind regards
+Uffe

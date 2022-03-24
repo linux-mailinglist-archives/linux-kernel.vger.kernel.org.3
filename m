@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5063C4E5D47
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13EF4E5D48
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347808AbiCXCnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 22:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S1347824AbiCXCnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 22:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiCXCno (ORCPT
+        with ESMTP id S1347826AbiCXCnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 22:43:44 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D27939CD;
-        Wed, 23 Mar 2022 19:42:13 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id y142so6100858ybe.11;
-        Wed, 23 Mar 2022 19:42:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bq+5q/LUFVvKeFoA9Q8Sa2EEy5fY9kO3b6Q0RwFcT+M=;
-        b=NeTZ/xoEakoE9tymnST82PXzga/NTsC+AurpGjR1Wyt+KIolWF/FqaEV7hzaQohUP5
-         HwTe7PrKTiw4puxCGeX6KAGEvLLZ4JkYxggAvoULjAzsKaJiNGWsBDqXgFMwNNHgAabz
-         qwQPUOOz2Pz3lNnf2AXmH3ckngp1a8lXBAUm+eZF83D3VApmtvE1gFF+9cJQAACq1Quc
-         6GN87dNCxNp9R4lCiBZTBgnditFebZkmkgFRMrehneEByAP88DLkE2gGd25opikqaZDT
-         GLU/R0YF7b3dChCFBZaJL/cF8mT5xlV39vvnHuB6aQIaAB3dyhrOBO1dIa8fOXx/Kv4b
-         eSgA==
-X-Gm-Message-State: AOAM532aHPOmCJKF1t6NiFy1SCb4Oail1zGg9UDgDsQMFxLmZHsAExuc
-        PLmwuPmEgjVeghTPtHqXQoXjz0xt5Xm3tb9hlYK+1YpC/c0z7g==
-X-Google-Smtp-Source: ABdhPJziSYCyql+0Kv8XlVNqbr2ofruuie+pCnMX37bMuuM+FvKjDm9W3ej9ZdR3kL6WfSaqPniODXBiYtiM3+EupHY=
-X-Received: by 2002:a5b:8cc:0:b0:634:7343:9953 with SMTP id
- w12-20020a5b08cc000000b0063473439953mr2807315ybq.142.1648089732442; Wed, 23
- Mar 2022 19:42:12 -0700 (PDT)
+        Wed, 23 Mar 2022 22:43:52 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8047939DF;
+        Wed, 23 Mar 2022 19:42:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V82lYat_1648089737;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V82lYat_1648089737)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 24 Mar 2022 10:42:18 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     konishi.ryusuke@gmail.com
+Cc:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next v2] fs: Fix some kernel-doc comments
+Date:   Thu, 24 Mar 2022 10:42:15 +0800
+Message-Id: <20220324024215.63479-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com>
- <CAKwvOdmSV3Nse+tGMBXvN=QvnOs6-ODZRJB0OF5Pd6BVb-scFw@mail.gmail.com>
-In-Reply-To: <CAKwvOdmSV3Nse+tGMBXvN=QvnOs6-ODZRJB0OF5Pd6BVb-scFw@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 24 Mar 2022 11:42:01 +0900
-Message-ID: <CAMZ6RqJ7B_Yqs0jE0nmkX2Z=xh7Jj6J_ihP=ybLVn5VXY+5kTA@mail.gmail.com>
-Subject: Re: [PATCH] x86: bug.h: merge annotate_reachable into _BUG_FLAGS for __WARN_FLAGS
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Charlemagne Lasse <charlemagnelasse@gmail.com>,
-        jpoimboe@redhat.com, adobriyan@gmail.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, linux-sparse@vger.kernel.org,
-        llvm@lists.linux.dev, luc.vanoostenryck@gmail.com,
-        mingo@redhat.com, nathan@kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, x86@kernel.org, Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 24 Mar 2022 at 04:41, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> On Wed, Mar 23, 2022 at 12:30 PM Charlemagne Lasse
-> <charlemagnelasse@gmail.com> wrote:
-> >
-> > > @@ -75,9 +77,9 @@ do {                                \
-> > >   */
-> > >  #define __WARN_FLAGS(flags)                    \
-> > >  do {                                \
-> > > +    __auto_type f = BUGFLAG_WARNING|(flags);        \
-> > >      instrumentation_begin();                \
-> > > -    _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));        \
-> > > -    annotate_reachable();                    \
-> > > +    _BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);            \
-> > >      instrumentation_end();                    \
-> > >  } while (0)
-> >
-> > This causes following sparse warning on x86:
-> >
-> > make allnoconfig && touch init/version.c && make CHECK="sparse
-> > -Wshadow"  C=1 init/version.o
-> > #
-> > # No change to .config
-> > #
-> >  CALL    scripts/checksyscalls.sh
-> >  CALL    scripts/atomic/check-atomics.sh
-> >  CHK     include/generated/compile.h
-> >  CC      init/version.o
-> >  CHECK   init/version.c
-> > init/version.c: note: in included file (through
-> > include/linux/rculist.h, include/linux/pid.h, include/linux/sched.h,
-> > include/linux/utsname.h):
-> > ./include/linux/rcupdate.h:1007:9: warning: symbol 'f' shadows an earlier one
-> > ./include/linux/rcupdate.h:1001:47: originally declared here
->
-> Thanks for the report. There was already a fix sent for this:
-> https://lore.kernel.org/lkml/20220317065743.8467-1-mailhol.vincent@wanadoo.fr/
-> but it doesn't mention that sparse is warning about this, too.
->
-> I think if Vincent sent a v3 that mentioned that sparse is warning
-> about this, too, and cc'ed you, you could then supply
-> signed-off/tested-by tags (or just do so on v2, though it doesn't
-> mention sparse), and maybe Josh would be so kind as to pick that up?
+The description of @flags in nilfs_dirty_inode() kernel-doc
+comment is missing, and some functions had kernel-doc that
+used a hash instead of a colon to separate the parameter
+name from the one line description.
 
-Thank Nick, I did as you suggested. Here is the v3:
-https://lore.kernel.org/all/20220324023742.106546-1-mailhol.vincent@wanadoo.fr/
+Fix them to remove some warnings found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
 
-Yours sincerely,
-Vincent Mailhol
+fs/nilfs2/inode.c:73: warning: Function parameter or member 'inode' not
+described in 'nilfs_get_block'
+fs/nilfs2/inode.c:73: warning: Function parameter or member 'blkoff' not
+described in 'nilfs_get_block'
+fs/nilfs2/inode.c:73: warning: Function parameter or member 'bh_result'
+not described in 'nilfs_get_block'
+fs/nilfs2/inode.c:73: warning: Function parameter or member 'create' not
+described in 'nilfs_get_block'
+fs/nilfs2/inode.c:145: warning: Function parameter or member 'file' not
+described in 'nilfs_readpage'
+fs/nilfs2/inode.c:145: warning: Function parameter or member 'page' not
+described in 'nilfs_readpage'
+fs/nilfs2/inode.c:968: warning: Function parameter or member 'flags' not
+described in 'nilfs_dirty_inode'
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+
+--Changes in v2:
+Modified description of @flags in nilfs_dirty_inode() kernel-doc comment
+
+ fs/nilfs2/inode.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/fs/nilfs2/inode.c b/fs/nilfs2/inode.c
+index 476a4a649f38..ae0afc6a30bb 100644
+--- a/fs/nilfs2/inode.c
++++ b/fs/nilfs2/inode.c
+@@ -59,10 +59,10 @@ void nilfs_inode_sub_blocks(struct inode *inode, int n)
+ 
+ /**
+  * nilfs_get_block() - get a file block on the filesystem (callback function)
+- * @inode - inode struct of the target file
+- * @blkoff - file block number
+- * @bh_result - buffer head to be mapped on
+- * @create - indicate whether allocating the block or not when it has not
++ * @inode: inode struct of the target file
++ * @blkoff: file block number
++ * @bh_result: buffer head to be mapped on
++ * @create: indicate whether allocating the block or not when it has not
+  *      been allocated yet.
+  *
+  * This function does not issue actual read request of the specified data
+@@ -138,8 +138,8 @@ int nilfs_get_block(struct inode *inode, sector_t blkoff,
+ /**
+  * nilfs_readpage() - implement readpage() method of nilfs_aops {}
+  * address_space_operations.
+- * @file - file struct of the file to be read
+- * @page - the page to be read
++ * @file: file struct of the file to be read
++ * @page: the page to be read
+  */
+ static int nilfs_readpage(struct file *file, struct page *page)
+ {
+@@ -957,6 +957,7 @@ int __nilfs_mark_inode_dirty(struct inode *inode, int flags)
+ /**
+  * nilfs_dirty_inode - reflect changes on given inode to an inode block.
+  * @inode: inode of the file to be registered.
++ * @flags: flags to determine the dirty state of the inode
+  *
+  * nilfs_dirty_inode() loads a inode block containing the specified
+  * @inode and copies data from a nilfs_inode to a corresponding inode
+-- 
+2.20.1.7.g153144c
+

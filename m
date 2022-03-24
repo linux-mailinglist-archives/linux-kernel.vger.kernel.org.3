@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9954E6464
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6774E6467
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350628AbiCXNuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S1350542AbiCXNul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350609AbiCXNuN (ORCPT
+        with ESMTP id S1345620AbiCXNuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:50:13 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CD1DF72
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:48:37 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nXNpC-0002Pq-36; Thu, 24 Mar 2022 14:48:26 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nXNpA-0004wC-NB; Thu, 24 Mar 2022 14:48:24 +0100
-Date:   Thu, 24 Mar 2022 14:48:24 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yangbo Lu <yangbo.lu@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: sja1105q: proper way to solve PHY clk dependecy
-Message-ID: <20220324134824.GG4519@pengutronix.de>
-References: <20220323060331.GA4519@pengutronix.de>
- <20220323095240.y4xnp6ivz57obyvv@skbuf>
+        Thu, 24 Mar 2022 09:50:37 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B550CE17;
+        Thu, 24 Mar 2022 06:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648129744; x=1679665744;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=ISZkT7ez62uWWDwYq2cHf4s9T2fz9Gv58AVd0CvmmJA=;
+  b=OeVpqSta5zIxuud0mxBoyein1eOvDvt1laKF7gY1b/gKR6x2sXo+LZHO
+   yQknolA54jAu80kx5PZoiImNlx0kcMxVVbIYh1Xm0juh+vECjZNIpZolJ
+   hjyaR2SU74Ui0PuJ8T2mBHJM6ko8Q1Wa8H3CAD4WXhng7FIUKouTiUQmg
+   Q=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Mar 2022 06:49:04 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 06:49:03 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 24 Mar 2022 06:49:03 -0700
+Received: from [10.110.37.17] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
+ 2022 06:49:02 -0700
+Message-ID: <0419edf0-89ba-7db8-7f8f-7682d2af3e7c@quicinc.com>
+Date:   Thu, 24 Mar 2022 06:48:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220323095240.y4xnp6ivz57obyvv@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:36:12 up 103 days, 22:21, 79 users,  load average: 0.30, 0.23,
- 0.26
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1 1/3] ARM: dts: aspeed: Add video engine
+Content-Language: en-US
+To:     Howard Chiu <howard_chiu@aspeedtech.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <SG2PR06MB2315C9F4348D39DA1A448852E6199@SG2PR06MB2315.apcprd06.prod.outlook.com>
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+In-Reply-To: <SG2PR06MB2315C9F4348D39DA1A448852E6199@SG2PR06MB2315.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,112 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Vladimir,
+Hi Howard,
 
-thank you for your response!
-
-On Wed, Mar 23, 2022 at 11:52:40AM +0200, Vladimir Oltean wrote:
-> Hello Oleksij,
+On 3/24/2022 12:27 AM, Howard Chiu wrote:
+> The ast2600 SoC has an embedded video engine
 > 
-> On Wed, Mar 23, 2022 at 07:03:31AM +0100, Oleksij Rempel wrote:
-> > Hi Vladimir,
-> > 
-> > I have SJA1105Q based switch with 3 T1L PHYs connected over RMII
-> > interface. The clk input "XI" of PHYs is connected to "MII0_TX_CLK/REF_CLK/TXC"
-> > pins of the switch. Since this PHYs can't be configured reliably over MDIO
-> > interface without running clk on XI input, i have a dependency dilemma:
-> > i can't probe MDIO bus, without enabling DSA ports.
-> > 
-> > If I see it correctly, following steps should be done:
-> > - register MDIO bus without scanning for PHYs
-> > - define SJA1105Q switch as clock provider and PHYs as clk consumer
-> > - detect and attach PHYs on port enable if clks can't be controlled
-> >   without enabling the port.
-> > - HW reset line of the PHYs should be asserted if we disable port and
-> >   deasserted with proper reinit after port is enabled.
-> > 
-> > Other way would be to init and enable switch ports and PHYs by a bootloader and
-> > keep it enabled.
-> > 
-> > What is the proper way to go?
-
-> The facts, as I see them, are as follows, feel free to debate them.
+> Signed-off-by: Howard Chiu <howard_chiu@aspeedtech.com>
+> ---
+>   arch/arm/boot/dts/aspeed-g6.dtsi | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
 > 
-> 1. Scanning the bus is not the problem, but PHY probing is.
-> 
-> If the MDIO bus is registered with of_mdiobus_register() - which is to
-> be expected, since the sja1105 driver only connects to a PHY using a
-> phy-handle - that should set mdio->phy_mask = ~0; which should disable
-> PHY scanning.
-> 
-> But of_mdiobus_register() will still call of_mdiobus_register_phy()
-> which will probe the phy_device. Here, depending on the code path,
-> _some_ PHY reads might be performed - which will return an error if the
-> PHY is missing its clock. For example, if the PHY ID isn't part of the
-> compatible string, fwnode_mdiobus_register_phy() will attempt to read it
-> from the PHY via get_phy_device(). Alternatively, you could put the PHY
-> ID in the DT and this will end up calling phy_device_create().
-> 
-> Then there's the probe() method of the T1L PHY driver, which is the
-> reason why it would be good to know what that driver is. Since its clock
-> might not be available, I expect that this driver doesn't access
-> hardware from probe(), knowing that it is an RMII PHY driver and this is
-> a generic problem for RMII PHYs.
+> diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
+> index c32e87fad4dc..41d5087f7d92 100644
+> --- a/arch/arm/boot/dts/aspeed-g6.dtsi
+> +++ b/arch/arm/boot/dts/aspeed-g6.dtsi
+> @@ -389,6 +389,17 @@ sbc: secure-boot-controller@1e6f2000 {
+>   				reg = <0x1e6f2000 0x1000>;
+>   			};
+>   
+> +			video: video@1e700000 {
+> +				compatible = "aspeed,ast2600-video-engine";
+> +				reg = <0x1e700000 0x1000>;
+> +				clocks = <&syscon ASPEED_CLK_GATE_VCLK>,
+> +					 <&syscon ASPEED_CLK_GATE_ECLK>;
+> +				clock-names = "vclk", "eclk";
+> +				interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +				resets = <&syscon ASPEED_RESET_VIDEO>;
 
-ack. describing DT with compatible PHYid seems to be good enough.
+Video engine reset is handled by clk-ast2600.c so you don't need to add
+'resets'.
 
-> 2. The sja1105 driver already does all it reasonably can to make the
->    RMII PHY happy.
-> 
-> The clocks of a port are enabled/configured from sja1105_clocking_setup_port()
-> which has 3 call paths:
-> (a) during sja1105_setup(), aka during switch initialization, all ports
->     except RGMII ports have their clocks configured and enabled, via
->     priv->info->clocking_setup(). The RGMII ports have a clock that
->     depends upon the link speed, and we don't know the link speed.
-> (b) during sja1105_static_config_reload(). The sja1105 switch needs to
->     dynamically reset itself at runtime, and this cuts off the clocks
->     for a while. Again there is a call to priv->info->clocking_setup()
->     here.
-> (c) during phylink_mac_link_up -> sja1105_adjust_port_config(), a call
->     is made to sja1105_clocking_setup_port() for RGMII PHYs, because the
->     speed is now known.
-> 
-> Since DSA calls dsa_slave_phy_setup() _after_ dsa_switch_setup(), this
-> means that by the time the PHY is attached, its config_init() runs, etc,
-> the RMII clock configured by sja1105_setup() should be running.
+> +				status = "disabled";
+> +			};
+> +
 
-ack. it works.
+This node was already added back by this change.
+https://lore.kernel.org/all/CACPK8XfPPLoS=mhwbAHY4EfVad=1_dnhB+gaHBjPj1wWbWE4gg@mail.gmail.com/
 
-> 3. Clock gating the PHY won't make it lose its settings.
-> 
-> I expect that during the time when the sja1105 switch needs to reset,
-> the PHY just sees this as a few hundreds of ms during which there are no
-> clock edges on the crystal input pin. Sure, the PHY won't do anything
-> during that time, but this is quite different from a reset, is it not?
-> So asserting the hardware reset line of the PHY during the momentary
-> loss of clock, which is what you seem to suggest, will actively do more
-> harm than good.
+Cheers,
 
-can i be sure that MDIO access happens in the period where PHY is
-supplied with stable clk
+-Jae
 
-> 4. Making the sja1105 driver a clock provider doesn't solve the problem
->    in the general sense.
-> 
-> If you make this PHY driver expect the MAC to be a clock provider,
-> are you going to expect that all RMII-capable MAC drivers be patched?
-> For this reason I am in principle opposed to making the sja1105 driver
-> a clock provider, you won't be able to generalize this solution and it
-> would just create a huge mess going forward.
-
-I can imagine optional clk support, but right now i do not have any
-stability issues so no need to spend time on it right now.
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+>   			gpio0: gpio@1e780000 {
+>   				#gpio-cells = <2>;
+>   				gpio-controller;

@@ -2,127 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4554E686A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C0E4E686E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352528AbiCXSOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S1352533AbiCXSOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347805AbiCXSOE (ORCPT
+        with ESMTP id S1352513AbiCXSOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:14:04 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB5DB6E5E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:31 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id y6so3047880plg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eVas7rSAou2utAAYyG+KdmDyPsGts9SfpHbo6bgzccc=;
-        b=fg0CQFG+ey99c3Kw8AMhUXok74QqW5Uri8wM4K8vYFBngy7cnH2EGVVvS1MwVRJDh8
-         FJqDB/YbdfxfDGw1AU/fqYF19SMpg4wkOrlQtNpN6zeSBgOGX33dQxj/2Wtm9O/IdlNJ
-         cKgTDTSyusZTq6+NV5sLmiX7qRTEtP/2avXv2Pju+TbbT7Hr4QLKEWykL9GZ4KQ7AALp
-         D7VEDHxTqJT3v4rz99vpvkQz/dNYHCPZh3QZeqgjZ0GgFyGF7SHV7vNnPMkecFo8pN5L
-         lXSyUMHD7NWagG0/OpCAxofnnlP47gDraXCq5QpR8whR8xYz95E+8xNrRLpnGKRYSzck
-         rWyQ==
+        Thu, 24 Mar 2022 14:14:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6B8CB7142
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648145551;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4NVnAUSl0gdBiXg0XzzRFvlJNA1grykJ2S0JEY11Nbk=;
+        b=R2GaI+CKH6fUI14NsfMFoUOb3qTZf2TZRTuR519B79HPXh+ugN0kCy2HOb78Cay1bHza3m
+        H/QEmhtMzKhJDkzi9y3I650T7GtVd/2RFNkrwRE1Oelv8z58NPkxc8T1yCWNsp3ejJiVsV
+        c3R8qKU1s8jx8UbfkCRrXjw3pY268UI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-351-TtWAE7ZCNQ6-wo9QOj7MMg-1; Thu, 24 Mar 2022 14:12:30 -0400
+X-MC-Unique: TtWAE7ZCNQ6-wo9QOj7MMg-1
+Received: by mail-ed1-f71.google.com with SMTP id b10-20020a50e38a000000b00418cd24fd27so3507889edm.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=eVas7rSAou2utAAYyG+KdmDyPsGts9SfpHbo6bgzccc=;
-        b=YsAW/s1S2Cx2UtZXedzzlpMVItpAcZCCPDa7xMzpF8enj8HKAMnLjCd3aE0t2hg2Ae
-         oyJMjpyP+pMDrbO6RoJi23mvXB8hO2HlpB+eo+pgNqYOnY8kcqunPGiS1zQ9o91LeX9D
-         atV08MJlaRSrkmjG1igm94Xo+6hREcRoi/ZPa45ip+kI2VdXh3ocv9W1KbprlGFqtBX5
-         2nPvJjotk8232VOibQAzCjMHQIxsIZ9ByGftgH3vtopukBKtzQVjxwohNdmVWNnBSf8H
-         7ZyvaqltcpQzwptqGEriUBJlfZNo+YRvyzWpZOZWC0ZJJyGbKNzCyoPqByLb3TAumxke
-         nZ+A==
-X-Gm-Message-State: AOAM533KKXBabUA62qwdg3cYNkojOQ6QJwq3QllxmeOOQJKfqllM6dyf
-        16cLCoPifTR/jvk34qD2s1sy
-X-Google-Smtp-Source: ABdhPJwZHFFgB0y5nweFFiqApmDXuKr5fZr1/oRbmXVFv0+V0BJHSHh3uwGMsw3KFY4ENUbmQbgzhg==
-X-Received: by 2002:a17:902:b68c:b0:153:bd06:85ad with SMTP id c12-20020a170902b68c00b00153bd0685admr7133646pls.99.1648145551272;
-        Thu, 24 Mar 2022 11:12:31 -0700 (PDT)
-Received: from localhost.localdomain ([27.111.75.218])
-        by smtp.gmail.com with ESMTPSA id j20-20020a62e914000000b004fa3bd9bef0sm3816013pfh.110.2022.03.24.11.12.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 11:12:30 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] remoteproc: Don't bother checking the return value of debugfs_create*
-Date:   Thu, 24 Mar 2022 23:42:24 +0530
-Message-Id: <20220324181224.21542-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        bh=4NVnAUSl0gdBiXg0XzzRFvlJNA1grykJ2S0JEY11Nbk=;
+        b=bQnDBpAbZXEetztRIxKTLoEjFNC/e5onYnln3fJ8jtDnyqNsLhXWk/Q2bSMUOkU3U4
+         +H15d91JisUciPwqlcb7uigVvU6wEp/6Pu81Ybu3T7fC8XYJp5+B8Zy/PdBglA2bXzYf
+         QpPfgqkFXlMt0bnusOxs8gI8k2KG9k8Xbikt08of0niuJAe06sYxK4L1WipEa02ODBhZ
+         at5VatBXbqiohzlbsu7h74FcBiPvHSZHfyxKs9CnVLbleBfRyLbgpbHa6BKoCxgMt4t1
+         /vLL8S51cuP4m8TB541W5qs2KpWfVhvlbpIz+2+ieYONf7w3fsLIIxpNj7np3HNFnhjn
+         683A==
+X-Gm-Message-State: AOAM530t6OiQLUguFk8bTP4E+jhCLuqJiITlwbcUizTkYU1O3CMpplNq
+        8Qd+1ACJnbyNVRhrrjrztsWlaB0h09ZgTTPyDaLoHAEnmjFiDIx0+fBd7/XERtbd0spdgem1Xpg
+        /TUcwqhj2oOfSQx/rW7B+h6sA
+X-Received: by 2002:a05:6402:1e90:b0:419:4cdc:8b05 with SMTP id f16-20020a0564021e9000b004194cdc8b05mr8152912edf.211.1648145549303;
+        Thu, 24 Mar 2022 11:12:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzl1pOGNmtNKqaqjzB/IEGNfgxI4RN1wwsYQ2aza86ksmyrLbJxeMnAeF1nCnbY+bzdhFqmxg==
+X-Received: by 2002:a05:6402:1e90:b0:419:4cdc:8b05 with SMTP id f16-20020a0564021e9000b004194cdc8b05mr8152887edf.211.1648145549048;
+        Thu, 24 Mar 2022 11:12:29 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id n9-20020a05640205c900b00418d79d4a61sm1825824edx.97.2022.03.24.11.12.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 11:12:28 -0700 (PDT)
+Message-ID: <fa6ea646-6609-af7f-e43c-ecd4cb54e210@redhat.com>
+Date:   Thu, 24 Mar 2022 19:12:25 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/8] KVM: x86: SVM: use vmcb01 in avic_init_vmcb and
+ init_vmcb
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20220322172449.235575-1-mlevitsk@redhat.com>
+ <20220322172449.235575-3-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220322172449.235575-3-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DebugFS APIs are designed to return only the error pointers and not NULL
-in the case of failure. So these return pointers are safe to be passed on
-to the successive debugfs_create* APIs.
+On 3/22/22 18:24, Maxim Levitsky wrote:
+>   
+>   void avic_init_vmcb(struct vcpu_svm *svm)
+>   {
+> -	struct vmcb *vmcb = svm->vmcb;
+> +	struct vmcb *vmcb = svm->vmcb01.ptr;
+>   	struct kvm_svm *kvm_svm = to_kvm_svm(svm->vcpu.kvm);
+>   	phys_addr_t bpa = __sme_set(page_to_phys(svm->avic_backing_page));
+>   	phys_addr_t lpa = __sme_set(page_to_phys(kvm_svm->avic_logical_id_table_page));
 
-Therefore, let's just get rid of the checks.
+Let's do this for consistency with e.g. svm_hv_init_vmcb:
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/remoteproc/remoteproc_debugfs.c | 17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-index b5a1e3b697d9..2e2c4a31c154 100644
---- a/drivers/remoteproc/remoteproc_debugfs.c
-+++ b/drivers/remoteproc/remoteproc_debugfs.c
-@@ -386,16 +386,8 @@ void rproc_remove_trace_file(struct dentry *tfile)
- struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
- 				       struct rproc_debug_trace *trace)
- {
--	struct dentry *tfile;
--
--	tfile = debugfs_create_file(name, 0400, rproc->dbg_dir, trace,
-+	return debugfs_create_file(name, 0400, rproc->dbg_dir, trace,
- 				    &trace_rproc_ops);
--	if (!tfile) {
--		dev_err(&rproc->dev, "failed to create debugfs trace entry\n");
--		return NULL;
--	}
--
--	return tfile;
- }
- 
- void rproc_delete_debug_dir(struct rproc *rproc)
-@@ -411,8 +403,6 @@ void rproc_create_debug_dir(struct rproc *rproc)
- 		return;
- 
- 	rproc->dbg_dir = debugfs_create_dir(dev_name(dev), rproc_dbg);
--	if (!rproc->dbg_dir)
--		return;
- 
- 	debugfs_create_file("name", 0400, rproc->dbg_dir,
- 			    rproc, &rproc_name_ops);
-@@ -430,11 +420,8 @@ void rproc_create_debug_dir(struct rproc *rproc)
- 
- void __init rproc_init_debugfs(void)
- {
--	if (debugfs_initialized()) {
-+	if (debugfs_initialized())
- 		rproc_dbg = debugfs_create_dir(KBUILD_MODNAME, NULL);
--		if (!rproc_dbg)
--			pr_err("can't create debugfs dir\n");
--	}
- }
- 
- void __exit rproc_exit_debugfs(void)
--- 
-2.25.1
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index b39fe614467a..ab202158137d 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -165,9 +165,8 @@ int avic_vm_init(struct kvm *kvm)
+  	return err;
+  }
+  
+-void avic_init_vmcb(struct vcpu_svm *svm)
++void avic_init_vmcb(struct vcpu_svm *svm, struct vmcb *vmcb)
+  {
+-	struct vmcb *vmcb = svm->vmcb01.ptr;
+  	struct kvm_svm *kvm_svm = to_kvm_svm(svm->vcpu.kvm);
+  	phys_addr_t bpa = __sme_set(page_to_phys(svm->avic_backing_page));
+  	phys_addr_t lpa = __sme_set(page_to_phys(kvm_svm->avic_logical_id_table_page));
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index cc02506b7a19..ced8edad0c87 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1123,7 +1123,7 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
+  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SPEC_CTRL, 1, 1);
+  
+  	if (kvm_vcpu_apicv_active(vcpu))
+-		avic_init_vmcb(svm);
++		avic_init_vmcb(svm, vmcb);
+  
+  	if (vgif) {
+  		svm_clr_intercept(svm, INTERCEPT_STGI);
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index d07a5b88ea96..bbac6c24a8b8 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -591,7 +591,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
+  int avic_ga_log_notifier(u32 ga_tag);
+  void avic_vm_destroy(struct kvm *kvm);
+  int avic_vm_init(struct kvm *kvm);
+-void avic_init_vmcb(struct vcpu_svm *svm);
++void avic_init_vmcb(struct vcpu_svm *svm, struct vmcb *vmcb);
+  int avic_incomplete_ipi_interception(struct kvm_vcpu *vcpu);
+  int avic_unaccelerated_access_interception(struct kvm_vcpu *vcpu);
+  int avic_init_vcpu(struct vcpu_svm *svm);
 

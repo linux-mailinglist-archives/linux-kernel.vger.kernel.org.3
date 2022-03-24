@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517664E6238
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F234E623D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349708AbiCXLQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S1349727AbiCXLSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239751AbiCXLQT (ORCPT
+        with ESMTP id S1349720AbiCXLSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:16:19 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8219F6C8;
-        Thu, 24 Mar 2022 04:14:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648120487; x=1679656487;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=82T1//IDxRxWMoKx8jXyzu8qZyLKygsREbSeX2E2PMA=;
-  b=jltTZbK5SuOJnc7mZDr4RSP8jJWju0AcCNLisFii5n3n/f3NDDclPeSQ
-   cczdu1oPQdO3ztM7k4bwEPATbzvFhZnUHgqTRLwbSWaiIXC0Ha6JrBsPU
-   7p6d8ajmBjcBFsfqbpx9mbOjnw1kknBT6KY5bCs0hJD0f4M0ftjGAYuHe
-   GsOYQ8VWto2G3Fy6gpxWCMH1S+lZGPugTJkp0Te3OmsRjrHZan4j6NQu8
-   86Uv5C0P3vyGV6ks4FvtxQVn5hDsXE6Js7kKIS39JSRSvqRMi7p40BVlK
-   qeEs5zcWiwQRYJ42E1kN6VRr7Cs3vjNYy+nJiN/qVowoBk3yy0u/ggkzQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="258302716"
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="258302716"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 04:14:41 -0700
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="519742130"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 04:14:39 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Check the validity of the boost_kthread_task pointer
-Date:   Thu, 24 Mar 2022 19:15:15 +0800
-Message-Id: <20220324111515.1810160-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 24 Mar 2022 07:18:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7A1A66DA
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:17:10 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nXLSe-0005xo-30; Thu, 24 Mar 2022 12:17:00 +0100
+Message-ID: <ecc8cee6-e890-278e-2916-e7fd45276e6f@pengutronix.de>
+Date:   Thu, 24 Mar 2022 12:16:58 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/4] dt-bindings: imx: add nvmem property
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, Peng Fan <peng.fan@nxp.com>,
+        netdev@vger.kernel.org, s.hauer@pengutronix.de,
+        linux-mmc@vger.kernel.org, qiangqing.zhang@nxp.com,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        robh+dt@kernel.org, mkl@pengutronix.de, linux-imx@nxp.com,
+        kernel@pengutronix.de, kuba@kernel.org, krzk+dt@kernel.org,
+        pabeni@redhat.com, shawnguo@kernel.org, davem@davemloft.net,
+        wg@grandegger.com, festevam@gmail.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+References: <20220324042024.26813-1-peng.fan@oss.nxp.com>
+ <20220324111104.cd7clpkzzedtcrja@pengutronix.de>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220324111104.cd7clpkzzedtcrja@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The boost kthreads may spawn failed, although the probability of
-creation failure is very low, in consideration of the robustness
-of the code, add boost_kthread_task pointer detection.
+Hi,
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_plugin.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 24.03.22 12:11, Uwe Kleine-König wrote:
+> I'd rather not have that in an official binding as the syntax is
+> orthogonal to status = "..." but the semantic isn't. Also if we want
+> something like that, I'd rather not want to adapt all bindings, but
+> would like to see this being generic enough to be described in a single
+> catch-all binding.
 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 6b9bcd45c7b2..fd642f14f31f 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -1125,7 +1125,8 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
- 	__releases(rnp->lock)
- {
- 	raw_lockdep_assert_held_rcu_node(rnp);
--	if (!rcu_preempt_blocked_readers_cgp(rnp) && rnp->exp_tasks == NULL) {
-+	if (!rnp->boost_kthread_task ||
-+			(!rcu_preempt_blocked_readers_cgp(rnp) && rnp->exp_tasks == NULL)) {
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 		return;
- 	}
+Cc += Srini who maintains the NVMEM bindings.
+
+> I also wonder if it would be nicer to abstract that as something like:
+> 
+> 	/ {
+> 		fuse-info {
+> 			compatible = "otp-fuse-info";
+> 
+> 			flexcan {
+> 				devices = <&flexcan1>, <&flexcan2>;
+> 				nvmem-cells = <&flexcan_disabled>;
+> 				nvmem-cell-names = "disabled";
+> 			};
+> 
+> 			m7 {
+> 				....
+> 			};
+> 		};
+> 	};
+> 
+> as then the driver evaluating this wouldn't need to iterate over the
+> whole dtb but just over this node. But I'd still keep this private to
+> the bootloader and not describe it in the generic binding.
+
+I like this, but being for bootloader consumption only doesn't mean that
+this shouldn't be documented upstream. It's fine to have the binding,
+even if Linux isn't expected to implement it.
+
+Cheers,
+Ahmad
+
+> 
+> Just my 0.02€
+> Uwe
+
+
 -- 
-2.25.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

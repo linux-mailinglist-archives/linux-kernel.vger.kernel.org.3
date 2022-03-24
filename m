@@ -2,63 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC754E6639
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F402A4E663A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351347AbiCXPnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S1351341AbiCXPoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351341AbiCXPnm (ORCPT
+        with ESMTP id S1351343AbiCXPn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:43:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A4B5A0BDF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648136529;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IMj4s22XC9mKB2LB6VUx9T2+5iAB0BQpdb6M6ZtJ8Ig=;
-        b=ZPfi78EBgdE/GbIH2Gr9Kd/l76YCDNPttuKj0/jE9XM87umlMCzToJBLF9dG6/v0VENlSn
-        vC59ewpyrr/uYdCpWCR+NHHveN8g0s+hPQLkxYbJltgwvrjKP4VTfDZwvERWTLzfs9bt5v
-        cIJK0y+uhROmM2ltfyk+9gPGSpGRXyE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-567-lTdNTWANPHmO0ftlTvow3w-1; Thu, 24 Mar 2022 11:42:04 -0400
-X-MC-Unique: lTdNTWANPHmO0ftlTvow3w-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF52E1066543;
-        Thu, 24 Mar 2022 15:42:03 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B1C8758BABB;
-        Thu, 24 Mar 2022 15:42:01 +0000 (UTC)
-Message-ID: <9875fd216464cabcc14cbaa2df374b2b3dc937bb.camel@redhat.com>
-Subject: Re: [RFCv2 PATCH 11/12] KVM: SVM: Do not throw warning when calling
- avic_vcpu_load on a running vcpu
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Mar 2022 17:42:00 +0200
-In-Reply-To: <20220308163926.563994-12-suravee.suthikulpanit@amd.com>
-References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
-         <20220308163926.563994-12-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Mar 2022 11:43:59 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11D3BA0BDF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:42:25 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 22OFgAuG019967;
+        Thu, 24 Mar 2022 16:42:10 +0100
+Date:   Thu, 24 Mar 2022 16:42:10 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH v1 04/11] tools/nolibc: x86-64: Use appropriate register
+ constraints if exist
+Message-ID: <20220324154210.GC19142@1wt.eu>
+References: <20220324073039.140946-1-ammarfaizi2@gnuweeb.org>
+ <20220324073039.140946-5-ammarfaizi2@gnuweeb.org>
+ <20220324075728.GC18586@1wt.eu>
+ <CAOG64qMwKYHLrUVro1gFhYqHvm8wq5DUdO7QfK5gG2TKhfnNhA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOG64qMwKYHLrUVro1gFhYqHvm8wq5DUdO7QfK5gG2TKhfnNhA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,38 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
-> Originalliy, this WARN_ON is designed to detect when calling
-> avic_vcpu_load() on an already running vcpu in AVIC mode (i.e. the AVIC
-> is_running bit is set).
+On Thu, Mar 24, 2022 at 03:33:57PM +0700, Alviro Iskandar Setiawan wrote:
+> On Thu, Mar 24, 2022 at 2:57 PM Willy Tarreau <w@1wt.eu> wrote:
+> > On Thu, Mar 24, 2022 at 02:30:32PM +0700, Ammar Faizi wrote:
+> > > Use appropriate register constraints if exist. Don't use register
+> > > variables for all inputs.
+> > >
+> > > Register variables with "r" constraint should be used when we need to
+> > > pass data through a specific register to extended inline assembly that
+> > > doesn't have a specific register constraint associated with it (anything
+> > > outside %rax, %rbx, %rcx, %rdx, %rsi, %rdi).
+> > >
+> > > It also simplifies the macro definition.
+> >
+> > I'm a bit bothered by this one because I went the exact opposite route
+> > in the early design precisely because I found that the current one was
+> > simpler. [...]
+> [...]
+> > I'd say that if there is any technical benefit in doing this (occasional
+> > code improvement or better support for older or exotic compilers), I'd say
+> > "ok go for it", but if it's only a matter of taste, I'm not convinced at
+> > all and am rather seeing this as a regression. Now if there's rough
+> > consensus around this approach I'll abide, but then I'd request that other
+> > archs are adapted as well so that we don't keep a different approach only
+> > for these two ones.
 > 
-> However, for x2AVIC, the vCPU can switch from xAPIC to x2APIC mode while in
-> running state, in which the avic_vcpu_load() will be called from
-> svm_refresh_apicv_exec_ctrl().
-> 
-> Therefore, remove this warning since it is no longer appropriate.
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index b8d6bf6b6ed5..015888aad8fc 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -1038,7 +1038,6 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
->  		return;
->  
->  	entry = READ_ONCE(*(svm->avic_physical_id_cache));
-> -	WARN_ON(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
->  
->  	entry &= ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK;
->  	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
+> I don't see any technical benefit for x86-64, so I don't think there
+> is a need in doing this. Though I personally prefer to use register
+> constraints if they exist instead of register variables for everything
+> (oh yeah, matter of taste since I don't have any technical argument to
+> say it's better respecting the resulting codegen). The only real issue
+> is for the syscall6() implementation on i386 as we've been bitten by a
+> real compiler issue. In short, I am neutral on this change.
 
+Just to be clear, I usually only use register constraints as well but I
+changed this for the syscalls since they were not sufficient, and found
+that the mix of the two was really not great to deal with.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
+Thanks,
+Willy

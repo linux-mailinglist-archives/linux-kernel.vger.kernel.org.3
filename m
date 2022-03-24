@@ -2,161 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951674E627B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABF24E6282
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344687AbiCXLbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S1349818AbiCXLcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235263AbiCXLbD (ORCPT
+        with ESMTP id S235263AbiCXLcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:31:03 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D7B1F60D;
-        Thu, 24 Mar 2022 04:29:32 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="240509841"
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="240509841"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 04:29:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="717783370"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 04:29:29 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1nXLe9-005mjT-Ua;
-        Thu, 24 Mar 2022 13:28:53 +0200
-Date:   Thu, 24 Mar 2022 13:28:53 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] serial: 8250: Add proper clock handling for
- OxSemi PCIe devices
-Message-ID: <YjxV9bsfdzdtgM6K@smile.fi.intel.com>
-References: <alpine.DEB.2.21.2106260539240.37803@angie.orcam.me.uk>
- <alpine.DEB.2.21.2106260604540.37803@angie.orcam.me.uk>
- <YOyi0cPdIVSCcpmw@surfacebook.localdomain>
- <alpine.DEB.2.21.2107130150420.9461@angie.orcam.me.uk>
- <CAHp75VfnCG-C6bUzhhC9jQGOSgMXVLZ=QtH0mdhAD85yeqBC7A@mail.gmail.com>
- <alpine.DEB.2.21.2107131504270.9461@angie.orcam.me.uk>
- <CAHp75VeS3UdK5o4cEKuT=nz+Yob9FBv6RNJ-i116pFZQTGuyuQ@mail.gmail.com>
- <alpine.DEB.2.21.2202052213110.34636@angie.orcam.me.uk>
- <YjSL34DkktVVahmy@smile.fi.intel.com>
- <alpine.DEB.2.21.2203232126220.52439@angie.orcam.me.uk>
+        Thu, 24 Mar 2022 07:32:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63A3739681;
+        Thu, 24 Mar 2022 04:30:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B74C511FB;
+        Thu, 24 Mar 2022 04:30:45 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D247D3F73D;
+        Thu, 24 Mar 2022 04:30:42 -0700 (PDT)
+Message-ID: <0baff803-b0ea-529f-095a-897398b4f63f@arm.com>
+Date:   Thu, 24 Mar 2022 11:30:38 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2203232126220.52439@angie.orcam.me.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 03/25] dma-direct: take dma-ranges/offsets into account in
+ resource mapping
+Content-Language: en-GB
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-4-Sergey.Semin@baikalelectronics.ru>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220324014836.19149-4-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 09:59:28PM +0000, Maciej W. Rozycki wrote:
-> On Fri, 18 Mar 2022, Andy Shevchenko wrote:
+On 2022-03-24 01:48, Serge Semin wrote:
+> A basic device-specific linear memory mapping was introduced back in
+> commit ("dma: Take into account dma_pfn_offset") as a single-valued offset
+> preserved in the device.dma_pfn_offset field, which was initialized for
+> instance by means of the "dma-ranges" DT property. Afterwards the
+> functionality was extended to support more than one device-specific region
+> defined in the device.dma_range_map list of maps. But all of these
+> improvements concerned a single pointer, page or sg DMA-mapping methods,
+> while the system resource mapping function turned to miss the
+> corresponding modification. Thus the dma_direct_map_resource() method now
+> just casts the CPU physical address to the device DMA address with no
+> dma-ranges-based mapping taking into account, which is obviously wrong.
+> Let's fix it by using the phys_to_dma_direct() method to get the
+> device-specific bus address from the passed memory resource for the case
+> of the directly mapped DMA.
+
+It may not have been well-documented at the time, but this was largely 
+intentional. The assumption based on known systems was that where 
+dma_pfn_offset existed, it would *not* apply to peer MMIO addresses.
+
+For instance, DTs for TI Keystone 2 platforms only describe an offset 
+for RAM:
+
+	dma-ranges = <0x80000000 0x8 0x00000000 0x80000000>;
+
+but a DMA controller might also want to access something in the MMIO 
+range 0x0-0x7fffffff, of which it still has an identical non-offset 
+view. If a driver was previously using dma_map_resource() for that, it 
+would now start getting DMA_MAPPING_ERROR because the dma_range_map 
+exists but doesn't describe the MMIO region. I agree that in hindsight 
+it's not an ideal situation, but it's how things have ended up, so at 
+this point I'm wary of making potentially-breaking changes.
+
+May I ask what exactly your setup looks like, if you have a DMA 
+controller with an offset view of its "own" MMIO space?
+
+Thanks,
+Robin.
+
+> Fixes: 25f1e1887088 ("dma: Take into account dma_pfn_offset")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>   kernel/dma/direct.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > >  It does allow one to program the full clock divider range of the OxSemi 
-> > > devices.  I find it appropriate according to my engineer's code of good 
-> > > practices.  And it doesn't cause any burden for non-OxSemi code.
-> > 
-> > How BOTHER does prevent you doing the same?
-> 
->  It does not allow you to set arbitrary serial port clock rates.  You can 
-> only set integer baud rates,
-
-Why do you need fractional baud rates? What is the practical use of that, please?
-
->	and then only those that do not exceed the [1;65535] clock divisor
->	range.
-
-Can you be more specific as I can't see how it's possible in practice? In
-several 8250 drivers we are able to set whatever we want to the limits of
-the hardware.
-
-> > >  So I have had a look at how it has been done for other drivers and I have 
-> > > now convinced myself against such a split.  The primary reason for this 
-> > > conclusion is that there is no basic infrastructure for such a split and 
-> > > the ultimate result is code duplication with no clear benefit to justify 
-> > > it.
-> > 
-> > Justification for split is to keep certain quirks out of the scope of the
-> > generic driver. I'm not sure what duplication you are talking about if the
-> > LOC statistics shows otherwise.
-> 
->  All the init/remove code is almost the same across all the devices.
-
-Each of the platform has its own constraints and what you see as a repetition
-is just a similarity. If you have an idea of the common probe function, please
-share.
-
-Also, don't forget the memory footprint case at run time. In embedded world
-we do not need 8250 code that is not supported by the platform in question.
-
-The split allows to disable / remove the code that is not needed.
-
-> And suspend/resume and PCI error handling code has been removed from the
-> split off devices,
-
-This is managed by PCI core. Any specifics, please?
-
->	and for the functional regression to be fixed:
-> 
-> 1. this code would have to be replicated, or
-> 
-> 2. handlers from the generic 8250_pci.c driver exported and referred to, 
->    or
-> 
-> 3. some kind of a helper library (or a core module) created providing this 
->    stuff to 8250_*.c drivers as required.
-
-Which functional regression? You mean if it will be found then it needs to
-be fixed in several places?
-
->  I guess the latter is the minimum that could convince me this driver
-> framework is usable for implementing device-specific drivers (as I find 
-> the other variants rather miserable hacks).
-> 
->  Plus there would have to be clear information provided to the users as 
-> otherwise people will be rather confused as to why 3 out of their 4 16x50 
-> PCI/e serial cards work with 8250_pci.c while the remaining one does not 
-> (probably broken, or is it?).
-
-The default configuration after the split assumes that the driver is enabled
-by the very same kernel configuration. Otherwise distributions will choose
-what they consider better for their users and customers.
-
-> > You may not want to get the idea, it's fine. The rationale is simple:
-> > isolate quirks for certain platform(s) in one place. Each platform
-> > in a separate module.
-> 
->  What is a platform in your terminology?  A PCI/e option card you can 
-> install in about any modern computer?  I usually think of platforms as 
-> specific families of computers rather than option cards.  Variants of 
-> otherwise the same device are usually handled with a single driver in 
-> Linux.
-
-It might be PCIe card, it might be soldered on the motherboard, it can
-be part of the SoC.
-
-By platform I assume the certain SoC + certain discrete components wired
-in a certain way (PCB level). In your case it's a motherboard with PCIe
-serial port card.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+> index 50f48e9e4598..9ce8192b29ab 100644
+> --- a/kernel/dma/direct.c
+> +++ b/kernel/dma/direct.c
+> @@ -497,7 +497,7 @@ int dma_direct_map_sg(struct device *dev, struct scatterlist *sgl, int nents,
+>   dma_addr_t dma_direct_map_resource(struct device *dev, phys_addr_t paddr,
+>   		size_t size, enum dma_data_direction dir, unsigned long attrs)
+>   {
+> -	dma_addr_t dma_addr = paddr;
+> +	dma_addr_t dma_addr = phys_to_dma_direct(dev, paddr);
+>   
+>   	if (unlikely(!dma_capable(dev, dma_addr, size, false))) {
+>   		dev_err_once(dev,

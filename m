@@ -2,108 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F234E623D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6044E625A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349727AbiCXLSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S243592AbiCXLVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349720AbiCXLSm (ORCPT
+        with ESMTP id S236369AbiCXLVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:18:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7A1A66DA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:17:10 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nXLSe-0005xo-30; Thu, 24 Mar 2022 12:17:00 +0100
-Message-ID: <ecc8cee6-e890-278e-2916-e7fd45276e6f@pengutronix.de>
-Date:   Thu, 24 Mar 2022 12:16:58 +0100
+        Thu, 24 Mar 2022 07:21:01 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B563C558B
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:19:29 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4C0191EC04F9;
+        Thu, 24 Mar 2022 12:19:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1648120764;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=zQ487WGGxoU+PaAQiF6Z96QlXNCWPl8aoNSJ7IshVJ8=;
+        b=fQB156FoQMS/bM1ss8dkbyOOZIvEx+opgWLoP6Jb/LSVXWv40/w5Df61jEVhjjMICBLozD
+        0o1VC9MdAlaJYx7Ba///m/C10EweJbQvDInMTpKR6ps8imKToZxgXwh1A46FKRBcVtawCr
+        uA6hE8op4Cllx/rOHdDTsqOXT/1cR7I=
+Date:   Thu, 24 Mar 2022 12:19:19 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: clang memcpy calls
+Message-ID: <YjxTt3pFIcV3lt8I@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 0/4] dt-bindings: imx: add nvmem property
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, Peng Fan <peng.fan@nxp.com>,
-        netdev@vger.kernel.org, s.hauer@pengutronix.de,
-        linux-mmc@vger.kernel.org, qiangqing.zhang@nxp.com,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        robh+dt@kernel.org, mkl@pengutronix.de, linux-imx@nxp.com,
-        kernel@pengutronix.de, kuba@kernel.org, krzk+dt@kernel.org,
-        pabeni@redhat.com, shawnguo@kernel.org, davem@davemloft.net,
-        wg@grandegger.com, festevam@gmail.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20220324042024.26813-1-peng.fan@oss.nxp.com>
- <20220324111104.cd7clpkzzedtcrja@pengutronix.de>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220324111104.cd7clpkzzedtcrja@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi folks,
 
-On 24.03.22 12:11, Uwe Kleine-König wrote:
-> I'd rather not have that in an official binding as the syntax is
-> orthogonal to status = "..." but the semantic isn't. Also if we want
-> something like that, I'd rather not want to adapt all bindings, but
-> would like to see this being generic enough to be described in a single
-> catch-all binding.
+so I've been looking at a recent objtool noinstr warning from clang
+builds:
 
-Cc += Srini who maintains the NVMEM bindings.
+vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves .noinstr.text section
 
-> I also wonder if it would be nicer to abstract that as something like:
-> 
-> 	/ {
-> 		fuse-info {
-> 			compatible = "otp-fuse-info";
-> 
-> 			flexcan {
-> 				devices = <&flexcan1>, <&flexcan2>;
-> 				nvmem-cells = <&flexcan_disabled>;
-> 				nvmem-cell-names = "disabled";
-> 			};
-> 
-> 			m7 {
-> 				....
-> 			};
-> 		};
-> 	};
-> 
-> as then the driver evaluating this wouldn't need to iterate over the
-> whole dtb but just over this node. But I'd still keep this private to
-> the bootloader and not describe it in the generic binding.
+The issue is that clang generates a memcpy() call when a struct copy
+happens:
 
-I like this, but being for bootloader consumption only doesn't mean that
-this shouldn't be documented upstream. It's fine to have the binding,
-even if Linux isn't expected to implement it.
+        if (regs != eregs)
+                *regs = *eregs;
 
-Cheers,
-Ahmad
+see below for asm output.
 
-> 
-> Just my 0.02€
-> Uwe
+While gcc does simply generate an actual "rep; movsq".
+
+So, how hard would it be to make clang do that too pls?
+
+Oh, and another thing while we're comparing asm: I'd love for clang's
+-fverbose-asm to issue interleaved C source lines too, like gcc does.
+
+That's it - no pink pony - just "normal" wishes. :-)
+
+GCC:
+====
+
+sync_regs:
+.LASANPC4246:
+# arch/x86/kernel/traps.c:770: {
+        movq    %rdi, %rsi      # tmp91, eregs
+# arch/x86/kernel/traps.c:771:  struct pt_regs *regs = (struct pt_regs *)this_cpu_read(cpu_current_top_of_stack) - 1;
+#APP
+# 771 "arch/x86/kernel/traps.c" 1
+        movq %gs:cpu_current_top_of_stack(%rip), %rax   # cpu_current_top_of_stack, pfo_val__
+# 0 "" 2
+# arch/x86/kernel/traps.c:771:  struct pt_regs *regs = (struct pt_regs *)this_cpu_read(cpu_current_top_of_stack) - 1;
+#NO_APP
+        subq    $168, %rax      #, <retval>
+# arch/x86/kernel/traps.c:772:  if (regs != eregs)
+        cmpq    %rdi, %rax      # eregs, <retval>
+        je      .L387   #,
+# arch/x86/kernel/traps.c:773:          *regs = *eregs;
+        movl    $21, %ecx       #, tmp89
+        movq    %rax, %rdi      # <retval>, <retval>
+        rep movsq
+.L387:
+# arch/x86/kernel/traps.c:775: }
+        ret
+
+CLANG:
+======
+
+        .section        .noinstr.text,"ax",@progbits
+        .globl  sync_regs                       # -- Begin function sync_regs
+        .p2align        6, 0x90
+        .type   sync_regs,@function
+sync_regs:                              # @sync_regs
+# %bb.0:                                # %entry
+        pushq   %rbx
+        #APP
+        movq    %gs:cpu_current_top_of_stack(%rip), %rbx
+        #NO_APP
+        addq    $-168, %rbx
+        cmpq    %rdi, %rbx
+        je      .LBB19_2
+# %bb.1:                                # %if.then
+        movq    %rdi, %rsi
+        movl    $168, %edx
+        movq    %rbx, %rdi
+        callq   memcpy@PLT
+.LBB19_2:                               # %if.end
+        movq    %rbx, %rax
+        popq    %rbx
+        retq
 
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

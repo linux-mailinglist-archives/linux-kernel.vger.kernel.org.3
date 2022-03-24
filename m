@@ -2,296 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E484E9BC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E6C4E9CD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240623AbiC1QCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
+        id S239553AbiC1QrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235079AbiC1QC3 (ORCPT
+        with ESMTP id S242895AbiC1QqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:02:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B24861A2C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648483246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oxOO4gJbn0ydaUcqbE+9zc/rIqqndD63o24mIhA8iJM=;
-        b=NJHEz2Ks11IJZQnbceggTwR2UCMqJWvUG2weR/50dPeU/O0qV5++MC/Rkqf3CBzMRJt6kv
-        U/OPJ7kYxJQK9E21k4fA+u4kHOELjpSqSKIwRvFaPU+Zsfm7XKaKN9M/f6i9wUNL2WwuV9
-        cEYWcPEu5BVV7jF7mmDgpjtbxBozyA4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-341-7W1Y8D9BPTyYlCdSe46Ysg-1; Mon, 28 Mar 2022 12:00:43 -0400
-X-MC-Unique: 7W1Y8D9BPTyYlCdSe46Ysg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2068A18A6581;
-        Mon, 28 Mar 2022 16:00:40 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A61AC080A5;
-        Mon, 28 Mar 2022 16:00:26 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Anna Schumaker <anna.schumaker@netapp.com>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Steve French <sfrench@samba.org>, ceph-devel@vger.kernel.org,
-        dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] netfs: Prep for write helpers
+        Mon, 28 Mar 2022 12:46:03 -0400
+Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EED20220C4;
+        Mon, 28 Mar 2022 09:44:16 -0700 (PDT)
+Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8D61D1E493A;
+        Thu, 24 Mar 2022 04:48:38 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 8D61D1E493A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1648086518;
+        bh=ckQ87WPTnxT61AdGkyIyqSu26w060GYud1Srpg67xm4=;
+        h=From:To:CC:Subject:Date:From;
+        b=he4V38X6dd//0y+FYKe4vGFADj13n3EASg9+bLhxKdCjTRJMit7YnSaSbYRJSZDtT
+         iy3LC4cDfQHtdZjiJIoWZCW4YSqg2G3HXApFq7HiyBQuvB/ppDokCGcmo6oGIPPLrQ
+         sl6COO0bZAZ4+AotOv9FDl4H3Zzzy27b1XQIXENs=
+Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 24 Mar 2022 04:48:38 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        <linux-pci@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/25] dmaengine: dw-edma: Add RP/EP local DMA controllers support
+Date:   Thu, 24 Mar 2022 04:48:11 +0300
+Message-ID: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2181379.1648196143.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-From:   David Howells <dhowells@redhat.com>
-Date:   Mon, 28 Mar 2022 17:00:25 +0100
-Message-ID: <2639515.1648483225@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This is a final patchset in the series created in the framework of
+my Baikal-T1 PCIe/eDMA-related work:
 
-Here's my next batch of netfs changes, if you could pull them?  Note that
-this has dependencies on ceph changes in Ilya's pull request and there are
-some minor conflicts with Willy's folio patches that you've already pulled
-for which Stephen Rothwell has posted adjustments for linux-next[9][10].
+[1: In-progress] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
+Link: --submitted--
+[2: In-progress] PCI: dwc: Various fixes and cleanups
+Link: --submitted--
+[3: In-progress] PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
+Link: --submitted--
+[4: In-progress] dmaengine: dw-edma: Add RP/EP local DMA controllers support
+Link: --you are looking at it--
 
-Having had a go at implementing write helpers and content encryption
-support in netfslib, it seems that the netfs_read_{,sub}request structs and
-the equivalent write request structs were almost the same and so should be
-merged, thereby requiring only one set of alloc/get/put functions and a
-common set of tracepoints.
+Note it is recommended to merge the last patchset after the former ones in
+order to prevent merge conflicts. @Bjorn could you merge in this patchset
+through your PCIe repo? After getting all the ack'es of course.
 
-Merging the structs also has the advantage that if a bounce buffer is added
-to the request struct, a read operation can be performed to fill the bounce
-buffer, the contents of the buffer can be modified and then a write
-operation can be performed on it to send the data wherever it needs to go
-using the same request structure all the way through.  The I/O handlers
-would then transparently perform any required crypto.  This should make it
-easier to perform RMW cycles if needed.
+Please note originally this series was self content, but due to Frank
+being a bit faster in his work submission I had to rebase my patchset onto
+his one. So now this patchset turns to be dependent on the Frank' work:
+Link: https://lore.kernel.org/dmaengine/20220310192457.3090-1-Frank.Li@nxp.com/
+So please review and merge his series first before applying this one.
 
-The potentially common functions and structs, however, by their names all
-proclaim themselves to be associated with the read side of things.  The
-bulk of these changes alter this in the following ways:
+@Frank, @Manivannan as we agreed here:
+Link: https://lore.kernel.org/dmaengine/20220309211204.26050-6-Frank.Li@nxp.com/
+this series contains two patches with our joint work. Here they are:
+[PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
+[PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
+@Frank, could you please pick them up and add them to your series in place
+of the patches:
+[PATCH v5 6/9] dmaengine: dw-edma: Don't rely on the deprecated "direction" member
+Link: https://lore.kernel.org/dmaengine/20220310192457.3090-7-Frank.Li@nxp.com/
+[PATCH v5 5/9] dmaengine: dw-edma: Fix programming the source & dest addresses for ep
+Link: https://lore.kernel.org/dmaengine/20220310192457.3090-6-Frank.Li@nxp.com/
+respectively?
 
- (1) Rename struct netfs_read_{,sub}request to netfs_io_{,sub}request.
+@Frank please don't forget to fix your series so the chip->dw field is
+initialized after all the probe() initializations are done. For that sake
+you also need to make sure that the dw_edma_irq_request(),
+dw_edma_channel_setup() and dw_edma_v0_core_debugfs_on() methods take
+dw_edma structure pointer as a parameter.
 
- (2) Rename some enums, members and flags to make them more appropriate.
+Here is a short summary regarding this patchset. The series starts with
+fixes patches. The very first two patches have been modified based on
+discussion with @Frank and @Manivannan as I noted in the previous
+paragraph. They concern fixing the Read/Write channels xfer semantics.
+See the patches description for more details. After that goes the fix of
+the dma_direct_map_resource() method, which turned out to be not working
+correctly for the case of having devive.dma_range_map being non-empty
+(non-empty dma-ranges DT property). Then we discovered that the
+dw-edma-pcie.c driver incorrectly initializes the LL/DT base addresses for
+the platforms with not matching CPU and PCIe memory spaces. It is fixed by
+using the pci_bus_address() method to get a correct base address. After
+that you can find a series of interleaved xfers fixes. It turned out the
+interleaved transfers implementation didn't work quite correctly from the
+very beginning for instance missing src/dst addresses initialization, etc.
+In the framework of the next two patches we suggest to add a new
+platform-specific callback - pci_addrees() and use to convert the CPU
+address to the PCIe space address. It is at least required for the DW eDAM
+remote End-point setup on the platforms with not-matching address spaces.
+In case of the DW eDMA local RP/EP setup the conversion will be done
+automatically by the outbound iATU (if no DMA-bypass flag is specified for
+the corresponding iATU window). Then we introduce a set of patches to make
+the DebugFS part of the code supporting the multi-eDMA controllers
+platforms. It starts with several cleanup patches and is closed joining
+the Read/Write channels into a single DMA-device as they originally should
+have been. After that you can find the patches with adding the non-atomic
+io-64 methods usage, dropping DT-region descriptors allocation, replacing
+chip IDs with device name. In addition to that in order to have the eDMA
+embedded into the DW PCIe RP/EP supported we need to bypass the
+dma-ranges-based memory ranges mapping since in case of the root port DT
+node it's applicable for the peripheral PCIe devices only. Finally at the
+series closure we introduce a generic DW eDMA controller support being
+available in the DW PCIe Host/End-point driver.
 
- (3) Adjust some comments to match.
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: "Krzysztof Wilczyński" <kw@linux.com>
+Cc: linux-pci@vger.kernel.org
+Cc: dmaengine@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
- (4) Drop "read"/"rreq" from the names of common functions.  For instance,
-     netfs_get_read_request() becomes netfs_get_request().
+Serge Semin (25):
+  dmaengine: dw-edma: Drop dma_slave_config.direction field usage
+  dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction
+    semantics
+  dma-direct: take dma-ranges/offsets into account in resource mapping
+  dmaengine: Fix dma_slave_config.dst_addr description
+  dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
+  dmaengine: dw-edma: Fix missing src/dst address of the interleaved
+    xfers
+  dmaengine: dw-edma: Don't permit non-inc interleaved xfers
+  dmaengine: dw-edma: Fix invalid interleaved xfers semantics
+  dmaengine: dw-edma: Add CPU to PCIe bus address translation
+  dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
+    glue-driver
+  dmaengine: dw-edma: Drop chancnt initialization
+  dmaengine: dw-edma: Fix DebugFS reg entry type
+  dmaengine: dw-edma: Stop checking debugfs_create_*() return value
+  dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
+  dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
+  dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
+  dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
+  dmaengine: dw-edma: Join Write/Read channels into a single device
+  dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
+  dmaengine: dw-edma: Use non-atomic io-64 methods
+  dmaengine: dw-edma: Drop DT-region allocation
+  dmaengine: dw-edma: Replace chip ID number with device name
+  dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
+  dmaengine: dw-edma: Skip cleanup procedure if no private data found
+  PCI: dwc: Add DW eDMA engine support
 
- (5) The ->init_rreq() and ->issue_op() methods become ->init_request() and
-     ->issue_read().  I've kept the latter as a read-specific function and
-     in another branch added an ->issue_write() method.
+ drivers/dma/dw-edma/dw-edma-core.c            | 249 +++++++------
+ drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
+ drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
+ drivers/dma/dw-edma/dw-edma-v0-core.c         |  76 ++--
+ drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
+ drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 350 ++++++++----------
+ drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
+ .../pci/controller/dwc/pcie-designware-ep.c   |   4 +
+ .../pci/controller/dwc/pcie-designware-host.c |  13 +-
+ drivers/pci/controller/dwc/pcie-designware.c  | 188 ++++++++++
+ drivers/pci/controller/dwc/pcie-designware.h  |  23 +-
+ include/linux/dma/edma.h                      |  18 +-
+ include/linux/dmaengine.h                     |   2 +-
+ kernel/dma/direct.c                           |   2 +-
+ 14 files changed, 598 insertions(+), 367 deletions(-)
 
-The driver source is then reorganised into a number of files:
-
-	fs/netfs/buffered_read.c	Create read reqs to the pagecache
-	fs/netfs/io.c			Dispatchers for read and write reqs
-	fs/netfs/main.c			Some general miscellaneous bits
-	fs/netfs/objects.c		Alloc, get and put functions
-	fs/netfs/stats.c		Optional procfs statistics.
-
-and future development can be fitted into this scheme, e.g.:
-
-	fs/netfs/buffered_write.c	Modify the pagecache
-	fs/netfs/buffered_flush.c	Writeback from the pagecache
-	fs/netfs/direct_read.c		DIO read support
-	fs/netfs/direct_write.c		DIO write support
-	fs/netfs/unbuffered_write.c	Write modifications directly back
-
-Beyond the above changes, there are also some changes that affect how
-things work:
-
- (1) Make fscache_end_operation() generally available.
-
- (2) In the netfs tracing header, generate enums from the symbol -> string
-     mapping tables rather than manually coding them.
-
- (3) Add a struct for filesystems that uses netfslib to put into their
-     inode wrapper structs to hold extra state that netfslib is interested
-     in, such as the fscache cookie.  This allows netfslib functions to be
-     set in filesystem operation tables and jumped to directly without
-     having to have a filesystem wrapper.
-
- (4) Add a member to the struct added in (3) to track the remote inode
-     length as that may differ if local modifications are buffered.  We may
-     need to supply an appropriate EOF pointer when storing data (in AFS
-     for example).
-
- (5) Pass extra information to netfs_alloc_request() so that the
-     ->init_request() hook can access it and retain information to indicate
-     the origin of the operation.
-
- (6) Make the ->init_request() hook return an error, thereby allowing a
-     filesystem that isn't allowed to cache an inode (ceph or cifs, for
-     example) to skip readahead.
-
- (7) Switch to using refcount_t for subrequests and add tracepoints to log
-     refcount changes for the request and subrequest structs.
-
- (8) Add a function to consolidate dispatching a read request.  Similar
-     code is used in three places and another couple are likely to be added
-     in the future.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-Tested-by: Jeff Layton <jlayton@kernel.org>
-Tested-by: Dominique Martinet <asmadeus@codewreck.org> # 9p
-Tested-by: Marc Dionne <marc.dionne@auristor.com> # afs
-
----
-
-Changes
-=======
-ver #4)
- - Move the check for NETFS_READAHEAD up in ceph_init_request()[7].
- - Fix netfs_is_cache_enabled() to check cookie->cache_priv to see if a
-   cache is present[8].
- - Fix netfs_skip_folio_read() to zero out all of the page, not just some
-   of it[8].
-
-ver #3)
- - Rebased one patch back on the ceph tree as the top patch got removed[4].
- - Split out the bit to move ceph cap-getting on readahead out from the
-   patch adding an inode context[5].
- - Made ceph_init_request() store the caps got in rreq->netfs_priv for
-   later freeing.
- - Comment the need to keep the netfs inode context contiguous with the VFS
-   inode struct[6].
- - Altered the traces to use 'R=' consistently to denote a request debug ID.
- 
-ver #2)
- - Changed kdoc references to renamed files[1].
- - Switched the begin-read-function patch and the prepare-to-split patch as
-   fewer functions then need unstatic'ing.
- - Fixed an uninitialised var in netfs_begin_read()[2][3].
- - Fixed a refleak caused by an unremoved line when netfs_begin_read() was
-   introduced.
- - Used "#if IS_ENABLED()" in netfs_i_cookie(), not "#ifdef".
- - Implemented missing bit of ceph readahead through netfs_readahead().
- - Rearranged the patch order to make the ceph readahead possible.
-
-Link: https://lore.kernel.org/r/20220303202811.6a1d53a1@canb.auug.org.au/ [1]
-Link: https://lore.kernel.org/r/20220303163826.1120936-1-nathan@kernel.org/ [2]
-Link: https://lore.kernel.org/r/20220303235647.1297171-1-colin.i.king@gmail.com/ [3]
-Link: https://lore.kernel.org/r/527234d849b0de18b326d6db0d59070b70d19b7e.camel@kernel.org/ [4]
-Link: https://lore.kernel.org/r/8af0d47f17d89c06bbf602496dd845f2b0bf25b3.camel@kernel.org/ [5]
-Link: https://lore.kernel.org/r/beaf4f6a6c2575ed489adb14b257253c868f9a5c.camel@kernel.org/ [6]
-Link: https://lore.kernel.org/r/dd054c962818716e718bd9b446ee5322ca097675.camel@redhat.com/ [7]
-Link: https://lore.kernel.org/r/3536452.1647421585@warthog.procyon.org.uk/ [8]
-Link: https://lore.kernel.org/r/20220324105317.67a81b0e@canb.auug.org.au/ [9]
-Link: https://lore.kernel.org/r/20220324105426.5250396a@canb.auug.org.au/ [10]
-Link: https://lore.kernel.org/r/164622970143.3564931.3656393397237724303.stgit@warthog.procyon.org.uk/ # v1
-Link: https://lore.kernel.org/r/164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk/ # v2
-Link: https://lore.kernel.org/r/164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk/ # v3
-
----
-The following changes since commit ad5255c1ea9c64b350efe732c90e63063b2bbbe0:
-
-  ceph: misc fix for code style and logs (2022-03-01 18:26:37 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/netfs-prep-20220318
-
-for you to fetch changes up to ab487a4cdfca3d1ef12795a49eafe1144967e617:
-
-  afs: Maintain netfs_i_context::remote_i_size (2022-03-18 09:29:05 +0000)
-
-----------------------------------------------------------------
-Netfs prep for write helpers
-
-----------------------------------------------------------------
-David Howells (19):
-      netfs: Generate enums from trace symbol mapping lists
-      netfs: Rename netfs_read_*request to netfs_io_*request
-      netfs: Finish off rename of netfs_read_request to netfs_io_request
-      netfs: Split netfs_io_* object handling out
-      netfs: Adjust the netfs_rreq tracepoint slightly
-      netfs: Trace refcounting on the netfs_io_request struct
-      netfs: Trace refcounting on the netfs_io_subrequest struct
-      netfs: Adjust the netfs_failure tracepoint to indicate non-subreq lines
-      netfs: Refactor arguments for netfs_alloc_read_request
-      netfs: Change ->init_request() to return an error code
-      ceph: Make ceph_init_request() check caps on readahead
-      netfs: Add a netfs inode context
-      netfs: Add a function to consolidate beginning a read
-      netfs: Prepare to split read_helper.c
-      netfs: Rename read_helper.c to io.c
-      netfs: Split fs/netfs/read_helper.c
-      netfs: Split some core bits out into their own file
-      netfs: Keep track of the actual remote file size
-      afs: Maintain netfs_i_context::remote_i_size
-
-Jeffle Xu (1):
-      fscache: export fscache_end_operation()
-
- Documentation/filesystems/netfs_library.rst |  140 ++--
- fs/9p/cache.c                               |   10 +-
- fs/9p/v9fs.c                                |    4 +-
- fs/9p/v9fs.h                                |   13 +-
- fs/9p/vfs_addr.c                            |   62 +-
- fs/9p/vfs_inode.c                           |   13 +-
- fs/afs/dynroot.c                            |    1 +
- fs/afs/file.c                               |   41 +-
- fs/afs/inode.c                              |   32 +-
- fs/afs/internal.h                           |   23 +-
- fs/afs/super.c                              |    4 +-
- fs/afs/write.c                              |   10 +-
- fs/cachefiles/io.c                          |   10 +-
- fs/ceph/addr.c                              |  116 ++-
- fs/ceph/cache.c                             |   28 +-
- fs/ceph/cache.h                             |   15 +-
- fs/ceph/inode.c                             |    6 +-
- fs/ceph/super.h                             |   17 +-
- fs/cifs/cifsglob.h                          |   10 +-
- fs/cifs/fscache.c                           |   19 +-
- fs/cifs/fscache.h                           |    2 +-
- fs/fscache/internal.h                       |   11 -
- fs/netfs/Makefile                           |    8 +-
- fs/netfs/buffered_read.c                    |  428 ++++++++++
- fs/netfs/internal.h                         |   50 +-
- fs/netfs/io.c                               |  657 +++++++++++++++
- fs/netfs/main.c                             |   20 +
- fs/netfs/objects.c                          |  160 ++++
- fs/netfs/read_helper.c                      | 1205 ---------------------------
- fs/netfs/stats.c                            |    1 -
- fs/nfs/fscache.c                            |    8 -
- include/linux/fscache.h                     |   14 +
- include/linux/netfs.h                       |  162 +++-
- include/trace/events/cachefiles.h           |    6 +-
- include/trace/events/netfs.h                |  190 +++--
- 35 files changed, 1868 insertions(+), 1628 deletions(-)
- create mode 100644 fs/netfs/buffered_read.c
- create mode 100644 fs/netfs/io.c
- create mode 100644 fs/netfs/main.c
- create mode 100644 fs/netfs/objects.c
- delete mode 100644 fs/netfs/read_helper.c
+-- 
+2.35.1
 

@@ -2,120 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F0E4E61EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D6F4E61F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349587AbiCXKrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
+        id S1349598AbiCXKuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239291AbiCXKrt (ORCPT
+        with ESMTP id S1349609AbiCXKuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:47:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98FFA23BED
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648118777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SY8Zpg3HfKN7OLvRr+t2R2NBXsTqrDCHJm44fgalnyI=;
-        b=H+0yYJohDgCfJzHIuhECwrzd2IoNwfRHJLnGknVRPE/PJlqjJBQiKjzhKgj2EWseTvCXdD
-        gPbsufjNdnWqCpmARxMlLF3+JZZlWK+SXlljE2iKp2sPrUOps9Osl0VJtkVGwoTKRt+pVM
-        zyXlIr2FjBeAU5tKMFoUxDt8NBET5UE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-49-BW_Gel20NwSvlDuFsDzpNg-1; Thu, 24 Mar 2022 06:46:16 -0400
-X-MC-Unique: BW_Gel20NwSvlDuFsDzpNg-1
-Received: by mail-wr1-f72.google.com with SMTP id e10-20020adf9bca000000b002059b6ffa18so200189wrc.14
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:46:16 -0700 (PDT)
+        Thu, 24 Mar 2022 06:50:14 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF772613E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:29 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id y142so7697557ybe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o+0BbB+UwcXM8aJXn73uapD7rigb18/OqbdOVcbPmAM=;
+        b=sdZYLnC7or9MsJZXuVE7tMujraBEpTXDao/rNXk4s7kbLOGI0vxxX+lv4/HISysnff
+         glmrpBpohaUWJU+M66NHw2mEbup5sUCYDgmfZXKj3K+zWvAbTMtsN8vJ+r5Vl5qQteWt
+         H5nLU0JZKmqvPPdA9M4ku6yLIgzsVztYd5nP2LI7kqIUoBpprcV140p0xiPrponKCsjt
+         tUrDDPsoOaR/cttvnvRzZp4C5zrJ9dG7egr6ws6xZ5BHpKJ3wBauVpUmHSHAnJzJtOT1
+         xIN8d8fLYL1Q1FXUfVKkQzklW+DuBocraIXbJSgf/Czx66RBJXcYZGiDkbh6OoW7cu87
+         2TLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=SY8Zpg3HfKN7OLvRr+t2R2NBXsTqrDCHJm44fgalnyI=;
-        b=x2Vn501NvwOR0xkZpLRCQFHtJ8vWnJao4fU2y32SPQb3rLOp5MAE9Tjt4BN+QaszB1
-         89ggXN73aY69NJtMLfYTYdWlVxNgQbrm9KYZ3YAvAVZ3WIaS7EUh7dYbDYrOwQ1btVQj
-         pjs8zfHofxBPs32MP9xu1DfQUfODW3iQeEGETaXCodu9q5sLlIydF+iJavWtGv1zIdnH
-         0k1uFksgJ4wh/f9rcy6fOqpXNCObwkF3RwH6rrX8Sm8UloBFy523AxarVQ2Bc+cZMrJx
-         iwIJI2MJHGIQH9jVJcM5gegcUI8Fs9SnbDsL4bFdAXyNttSWgb6tI8Y1MJ4tq01XEgMZ
-         +sGg==
-X-Gm-Message-State: AOAM5305V/ixdu2oj/w5LpscusB7bMNWy6S3KqR/KlWJNV9xTVUacdnw
-        7YhFGov/7ahKhCj/aFUVpp+gIkF3a+lZOLaKT6i0nr8UaJb3ALjJN4e8ytpBJhUA9Uv2jujiBDQ
-        X0Ihijd8r7yZSikmptzCfu+D6
-X-Received: by 2002:a05:6000:1083:b0:203:fbd3:937e with SMTP id y3-20020a056000108300b00203fbd3937emr3947179wrw.139.1648118775384;
-        Thu, 24 Mar 2022 03:46:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxqwK363x/lQQ7GkLV8cbmtKe+6jv7+DtEPxZLenuGRyjD62htTnjjltK8uF850hOZimwkWcw==
-X-Received: by 2002:a05:6000:1083:b0:203:fbd3:937e with SMTP id y3-20020a056000108300b00203fbd3937emr3947168wrw.139.1648118775167;
-        Thu, 24 Mar 2022 03:46:15 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-232-135.dyn.eolo.it. [146.241.232.135])
-        by smtp.gmail.com with ESMTPSA id t4-20020a05600001c400b00203fb5dcf29sm2188758wrx.40.2022.03.24.03.46.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 03:46:14 -0700 (PDT)
-Message-ID: <7393b673c626fd75f2b4f8509faa5459254fb87c.camel@redhat.com>
-Subject: Re: [PATCH] bnx2x: replace usage of found with dedicated list
- iterator variable
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Ariel Elior <aelior@marvell.com>
-Cc:     Sudarsana Kalluru <skalluru@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Date:   Thu, 24 Mar 2022 11:46:13 +0100
-In-Reply-To: <20220324070816.58599-1-jakobkoschel@gmail.com>
-References: <20220324070816.58599-1-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o+0BbB+UwcXM8aJXn73uapD7rigb18/OqbdOVcbPmAM=;
+        b=mNJ0E0O4PDzXJ5oxosQ6BDvczNZMH8aKNRPwrKAwO4M8q5Gp6YilyiOWoQQoo5u4xO
+         oS9JSAqbTeolnS94uE7npmeR/gvMk3kuWCVSdfiwvVeIORUDndEjGvIx9NPNWdLQvrAw
+         /hKDmasAxOcIZWq62I9QM/UHICw6iSNtMbPacz0xxR1T4NeylRzGCiF8SoTN7xTh/0Tk
+         GVJArjnDiBPSFSw9/oDw/h/SB+tw9Vr1MdgkOy1gu5M9B7FvgqStLlrEBbB2UGxP8vmA
+         wau7RyjU+I+rXj5B/KqIKgXG50kOh/6wcVPqsNRmtT5nBjM/XXf4ZBm8QbJZBgBatkE4
+         hULA==
+X-Gm-Message-State: AOAM530DDiKO0d0SCdZYSnUMDoHTgB3j+LS//jUlk2YbzHZ1a3VA8WbJ
+        DCkaZvauB2ewiM/JLrvzbYACyBYjlbk6zcYjy9Vz3w==
+X-Google-Smtp-Source: ABdhPJwFEXK/yTmINgXCVpOjf1Cb6C655DP2GnP83SY4yCXEPH0EGfJLHgJ19I1FD6u08GBYwPiw2MGUfQLqdEonGeM=
+X-Received: by 2002:a25:943:0:b0:633:883b:3e21 with SMTP id
+ u3-20020a250943000000b00633883b3e21mr4000965ybm.132.1648118909179; Thu, 24
+ Mar 2022 03:48:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220323125523.79254-2-songmuchun@bytedance.com>
+ <202203240546.MHJzsBaO-lkp@intel.com> <20220323151311.289dd405440932e1d6d80f30@linux-foundation.org>
+ <7872f093-e26d-3403-d6cf-c6c1a782242b@intel.com> <CAMZfGtXqETxQPqPLebu=0b2P8RBfKiPymraJZCSK1UGAFGo=dw@mail.gmail.com>
+ <4bf80e3a-ada7-942b-5bc1-2a1d2fee17c8@intel.com>
+In-Reply-To: <4bf80e3a-ada7-942b-5bc1-2a1d2fee17c8@intel.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 24 Mar 2022 18:47:52 +0800
+Message-ID: <CAMZfGtVZknHw_Ze7=64GD-wDB_ND5tcJ2rm2eYqdVPHfiUeMyA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
+To:     "Chen, Rong A" <rong.a.chen@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kernel test robot <lkp@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>, kbuild-all@lists.01.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Mar 24, 2022 at 6:40 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
+>
+>
+>
+> On 3/24/2022 6:20 PM, Muchun Song wrote:
+> > On Thu, Mar 24, 2022 at 5:40 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
+> >>
+> >>
+> >>
+> >> On 3/24/2022 6:13 AM, Andrew Morton wrote:
+> >>> On Thu, 24 Mar 2022 06:06:41 +0800 kernel test robot <lkp@intel.com> wrote:
+> >>>
+> >>>> Hi Muchun,
+> >>>>
+> >>>> Thank you for the patch! Yet something to improve:
+> >>>>
+> >>>> [auto build test ERROR on hnaz-mm/master]
+> >>>> [also build test ERROR on linus/master next-20220323]
+> >>>> [cannot apply to mcgrof/sysctl-next v5.17]
+> >>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> >>>> And when submitting patch, we suggest to use '--base' as documented in
+> >>>> https://git-scm.com/docs/git-format-patch]
+> >>>>
+> >>>> url:    https://github.com/0day-ci/linux/commits/Muchun-Song/add-hugetlb_free_vmemmap-sysctl/20220323-205902
+> >>>> base:   https://github.com/hnaz/linux-mm master
+> >>>> config: arc-randconfig-r043-20220323 (https://download.01.org/0day-ci/archive/20220324/202203240546.MHJzsBaO-lkp@intel.com/config)
+> >>>> compiler: arc-elf-gcc (GCC) 11.2.0
+> >>>> reproduce (this is a W=1 build):
+> >>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >>>>           chmod +x ~/bin/make.cross
+> >>>>           # https://github.com/0day-ci/linux/commit/64211be650af117819368a26d7b86c33df5deea4
+> >>>>           git remote add linux-review https://github.com/0day-ci/linux
+> >>>>           git fetch --no-tags linux-review Muchun-Song/add-hugetlb_free_vmemmap-sysctl/20220323-205902
+> >>>>           git checkout 64211be650af117819368a26d7b86c33df5deea4
+> >>>>           # save the config file to linux build tree
+> >>>>           mkdir build_dir
+> >>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc prepare
+> >>>>
+> >>>> If you fix the issue, kindly add following tag as appropriate
+> >>>> Reported-by: kernel test robot <lkp@intel.com>
+> >>>>
+> >>>> All errors (new ones prefixed by >>):
+> >>>>
+> >>>>>> cc1: fatal error: cannot open 'kernel/bounds.s' for writing: No such file or directory
+> >>>
+> >>> It would take a lot of talent for Munchun to have caused this!
+> >>>
+> >>> Methinks you just ran out of disk space?
+> >>
+> >> Hi Andrew,
+> >>
+> >> Thanks for the reply, I tried to apply this patch to the head of
+> >> mainline and I still can reproduce the error in my local machine:
+> >>
+> >> $ wget -q -O -
+> >> https://lore.kernel.org/lkml/20220323125523.79254-2-songmuchun@bytedance.com/raw
+> >> | git apply -v
+> >> $ mkdir build_dir && wget
+> >> https://download.01.org/0day-ci/archive/20220324/202203240546.MHJzsBaO-lkp@intel.com/config
+> >> -O build_dir/.config
+> >> $ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross
+> >> O=build_dir ARCH=arc olddefconfig prepare
+> >> make --keep-going CONFIG_OF_ALL_DTBS=y CONFIG_DTC=y
+> >> CROSS_COMPILE=/home/nfs/0day/gcc-11.2.0-nolibc/arc-elf/bin/arc-elf-
+> >> --jobs=72 O=build_dir ARCH=arc olddefconfig prepare
+> >> ...
+> >> cc1: fatal error: cannot open 'kernel/bounds.s' for writing: No such
+> >> file or directory
+> >> compilation terminated.
+> >> make[3]: *** [../scripts/Makefile.build:121: kernel/bounds.s] Error 1
+> >> make[3]: Target '__build' not remade because of errors.
+> >> make[2]: *** [../Makefile:1191: prepare0] Error 2
+> >> make[2]: Target 'prepare' not remade because of errors.
+> >>
+> >
+> > Would you help me to test the following patch?  Thanks.
+>
+> I have confirmed the patch can fix the issue.
+>
 
-On Thu, 2022-03-24 at 08:08 +0100, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
-> 
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-
-This looks like a purely net-next change, and we are in the merge
-window: net-next is closed for the time being. Could you please re-post
-after net-next re-open?
-
-Additionally, I suggest you to bundle the net-next patches in a single
-series, namely:
-
-bnx2x: replace usage of found with dedicated list iterator variable 
-octeontx2-pf: replace usage of found with dedicated list iterator variable 
-sctp: replace usage of found with dedicated list iterator variable 
-taprio: replace usage of found with dedicated list iterator variable 
-
-that will simplify the processing, thanks!
-
-Paolo
-
+Thanks Chen.

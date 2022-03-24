@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138794E5F50
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9014E5F4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348515AbiCXH1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S1348520AbiCXH13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiCXH06 (ORCPT
+        with ESMTP id S234921AbiCXH11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:26:58 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3382986F4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:25:26 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id qa43so7283438ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:25:26 -0700 (PDT)
+        Thu, 24 Mar 2022 03:27:27 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EFA986F4;
+        Thu, 24 Mar 2022 00:25:56 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id r13so7327601ejd.5;
+        Thu, 24 Mar 2022 00:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ouqixWTewNUXByCDOAWSWsgjahXSnZ2j4PO6S0OVSBc=;
-        b=cFugzm9zbfF2ycvf5BO0ObBa7AQEVHzluHn+MgplO8ys+X0ReVhk3ZOkfYRfFH4yH6
-         YKk3XkBP3jZQIDY3wu5m9xl/XGIwMgjbeSsZznDQ6FDQMdc8mDvHDKrUx6RRvDYu0UYX
-         Xjn7GgPG/xKghClCJY6FIUAoq6WusLrrVglke8puMsBnaudwanX8vFEkvBChz2Wjj4+X
-         7Zjj795X79I8/brB6mIYiRu84KYvW0+2I1R8cSMFUiETvoPkRAt1RTMxxuUObnP0rAIk
-         QnoChzCHgwQzx9b4eMHbkDxvQ4/00+NTAsuCzdI4N75XyCfbJdAh7cTQgns+0lOgS2JX
-         GTIQ==
+        bh=XVilrVPHAzNXojXt+GjJOL6H62xOPCwBdLhdn2DWXIM=;
+        b=otovnpD5nrCVnZOsLSqe8I1OIJRwaeI6Wprpx5/aY+tLRP2xckrtLUD/siXLU0Txf3
+         21HyGWc+9cV2Rn0XxJyTxE6UL5SEDgTZw98y9gKL3wnDu0AEcS/eFNTmcJm4p2Y8Bfg9
+         QTEjKShf9Y8EAQ/C9rEPAfjempmv8JNNth7q8lGJ6Vr2y90i4WZVXozSuNiDgHBgcd7U
+         ZjfRmpiI6Ou7+clTpm9JLqeDfSaHFj4Eev5TNir7uoSlHyP0sxtAG35Kuy+WV0TsirBo
+         0XCSnJKarnaRYK/EGYD4aYAaWI1Hx+7q/SleHBCKJHXoL+NxnOez9BUQc2A4WYp4otFp
+         UM+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ouqixWTewNUXByCDOAWSWsgjahXSnZ2j4PO6S0OVSBc=;
-        b=pd4WwQyJg5bpFNIS02fzytHfKdeULueiSsUOXFD8nR1i345kc6EnJb3RGMPLfRZZ8D
-         G3oiq6MwROPVhNynOHFnsBYBLXj0Kzhgr+ZT7dSSSvNLXKPx56IlmbtMLUZBkPXbbiY+
-         1gKCjcXNUoEqhf3PL1LQRKa9xwqb6mhlW7eyY+xbc8Tfpjzx7mXaOYbPOpPCrGOG/1Db
-         IB1PiBnj7xiDSwYoyxY5MMkytIyI1pQOC9qfNsC7EavZ4Od8XuZz60FCZRr4VX6u22C2
-         8NLEApO9Bkvyt4d3+MvFHmhoKvnX2rbosMCqLkXqTvDHMdttqYOY8k2MAmrzuDp1fWuz
-         SSbg==
-X-Gm-Message-State: AOAM533TLMTyccAxXCqf8lfkBcqWGrVgqLOSmdo192xQ7sO+ARUS0M5d
-        P2NWvvTFMMK3BCPtYzij8vA=
-X-Google-Smtp-Source: ABdhPJymiAUK06LZKJny7ktqc+xqUskTkOYeuSIDIZ3/CIN69MSr8832ZMuYZAJUQCPnZU2QfZwgDg==
-X-Received: by 2002:a17:907:1dc8:b0:6df:f5fc:f4f9 with SMTP id og8-20020a1709071dc800b006dff5fcf4f9mr4169480ejc.739.1648106725293;
-        Thu, 24 Mar 2022 00:25:25 -0700 (PDT)
+        bh=XVilrVPHAzNXojXt+GjJOL6H62xOPCwBdLhdn2DWXIM=;
+        b=jfzqnxW9w4TZhkya9vuopczhWxzMhx4XRtO7Cb7Gi/ZsDR5QWcRZbO+3XtPczBrqal
+         KJbw1kHdCQrtRgFD7qv8HdThMsYJkDMI1v45B+OmdvyKLButgG2CTw8FHBubRX3RQ1o4
+         WE2Dg0VAXT4HO37G1ASAvJVBBkN6Af7d2P91ttPTjK+Otu+NrPVmVOw1xWGU8rwbCPre
+         Ng6zWd5TyD5yhJrA8EdBDPs/AEeo0gyJ4hzrYqxiPrQYIkYhGux9BCf4RbALXWkiv6X9
+         vrH+cTe7u4klWYrw1XWEJAtHGtO8RsfmE8SPCIYI3vqcZbmsk73qWje0buwmDgqrZsJc
+         UVCQ==
+X-Gm-Message-State: AOAM531M3XDF/QkWmEeauynp2NfFLA1jjgaoyjgxr+DMWkvXLODsUX6s
+        EIeO1bVemxEFAjh4mpZZ0XA=
+X-Google-Smtp-Source: ABdhPJzRiymZM6GpooNPxU4tvHwmcChIBJjf+hQ5ofKWj78Tx4y6dAWhErrocnZuydc4KL0kfbKuNg==
+X-Received: by 2002:a17:907:8a25:b0:6d7:d59:6912 with SMTP id sc37-20020a1709078a2500b006d70d596912mr4275772ejc.259.1648106754763;
+        Thu, 24 Mar 2022 00:25:54 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id l9-20020a1709060cc900b006ce04bb8668sm765382ejh.184.2022.03.24.00.25.24
+        by smtp.googlemail.com with ESMTPSA id hg11-20020a1709072ccb00b006cee4fb36c7sm770476ejc.64.2022.03.24.00.25.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:25:24 -0700 (PDT)
+        Thu, 24 Mar 2022 00:25:54 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] soc: ti: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:25:03 +0100
-Message-Id: <20220324072503.63244-1-jakobkoschel@gmail.com>
+Subject: [PATCH] spi: spidev: replace usage of found with dedicated list iterator variable
+Date:   Thu, 24 Mar 2022 08:25:34 +0100
+Message-Id: <20220324072534.63420-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -86,111 +85,38 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/soc/ti/knav_dma.c        | 26 ++++++++++++--------------
- drivers/soc/ti/knav_qmss_queue.c | 16 +++++++---------
- 2 files changed, 19 insertions(+), 23 deletions(-)
+ drivers/spi/spidev.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/soc/ti/knav_dma.c b/drivers/soc/ti/knav_dma.c
-index 700d8eecd8c4..7e126a73e56e 100644
---- a/drivers/soc/ti/knav_dma.c
-+++ b/drivers/soc/ti/knav_dma.c
-@@ -415,9 +415,8 @@ static int of_channel_match_helper(struct device_node *np, const char *name,
- void *knav_dma_open_channel(struct device *dev, const char *name,
- 					struct knav_dma_cfg *config)
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index a5cceca8b82b..2c5e685826ad 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -561,19 +561,20 @@ spidev_compat_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 
+ static int spidev_open(struct inode *inode, struct file *filp)
  {
--	struct knav_dma_chan *chan;
--	struct knav_dma_device *dma;
--	bool found = false;
-+	struct knav_dma_device *dma = NULL, *iter1;
-+	struct knav_dma_chan *chan = NULL, *iter2;
- 	int chan_num = -1;
- 	const char *instance;
+-	struct spidev_data	*spidev;
++	struct spidev_data	*spidev = NULL, *iter;
+ 	int			status = -ENXIO;
  
-@@ -444,33 +443,32 @@ void *knav_dma_open_channel(struct device *dev, const char *name,
- 	}
+ 	mutex_lock(&device_list_lock);
  
- 	/* Look for correct dma instance */
--	list_for_each_entry(dma, &kdev->list, list) {
--		if (!strcmp(dma->name, instance)) {
--			found = true;
-+	list_for_each_entry(iter1, &kdev->list, list) {
-+		if (!strcmp(iter1->name, instance)) {
-+			dma = iter1;
+-	list_for_each_entry(spidev, &device_list, device_entry) {
+-		if (spidev->devt == inode->i_rdev) {
++	list_for_each_entry(iter, &device_list, device_entry) {
++		if (iter->devt == inode->i_rdev) {
+ 			status = 0;
++			spidev = iter;
  			break;
  		}
  	}
--	if (!found) {
-+	if (!dma) {
- 		dev_err(kdev->dev, "No DMA instance with name %s\n", instance);
- 		return (void *)-EINVAL;
- 	}
  
- 	/* Look for correct dma channel from dma instance */
--	found = false;
--	list_for_each_entry(chan, &dma->chan_list, list) {
-+	list_for_each_entry(iter2, &dma->chan_list, list) {
- 		if (config->direction == DMA_MEM_TO_DEV) {
--			if (chan->channel == chan_num) {
--				found = true;
-+			if (iter2->channel == chan_num) {
-+				chan = iter2;
- 				break;
- 			}
- 		} else {
--			if (chan->flow == chan_num) {
--				found = true;
-+			if (iter2->flow == chan_num) {
-+				chan = iter2;
- 				break;
- 			}
- 		}
+-	if (status) {
++	if (!spidev) {
+ 		pr_debug("spidev: nothing for minor %d\n", iminor(inode));
+ 		goto err_find_dev;
  	}
--	if (!found) {
-+	if (!chan) {
- 		dev_err(kdev->dev, "channel %d is not in DMA %s\n",
- 				chan_num, instance);
- 		return (void *)-EINVAL;
-diff --git a/drivers/soc/ti/knav_qmss_queue.c b/drivers/soc/ti/knav_qmss_queue.c
-index 2ac3856b8d42..4dbaa8c3636c 100644
---- a/drivers/soc/ti/knav_qmss_queue.c
-+++ b/drivers/soc/ti/knav_qmss_queue.c
-@@ -758,10 +758,9 @@ void *knav_pool_create(const char *name,
- 					int num_desc, int region_id)
- {
- 	struct knav_region *reg_itr, *region = NULL;
--	struct knav_pool *pool, *pi;
-+	struct knav_pool *pool, *pi = NULL, *iter;
- 	struct list_head *node;
- 	unsigned last_offset;
--	bool slot_found;
- 	int ret;
- 
- 	if (!kdev)
-@@ -816,18 +815,17 @@ void *knav_pool_create(const char *name,
- 	 * the request
- 	 */
- 	last_offset = 0;
--	slot_found = false;
- 	node = &region->pools;
--	list_for_each_entry(pi, &region->pools, region_inst) {
--		if ((pi->region_offset - last_offset) >= num_desc) {
--			slot_found = true;
-+	list_for_each_entry(iter, &region->pools, region_inst) {
-+		if ((iter->region_offset - last_offset) >= num_desc) {
-+			pi = iter;
- 			break;
- 		}
--		last_offset = pi->region_offset + pi->num_desc;
-+		last_offset = iter->region_offset + iter->num_desc;
- 	}
--	node = &pi->region_inst;
- 
--	if (slot_found) {
-+	if (pi) {
-+		node = &pi->region_inst;
- 		pool->region = region;
- 		pool->num_desc = num_desc;
- 		pool->region_offset = last_offset;
 
 base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 

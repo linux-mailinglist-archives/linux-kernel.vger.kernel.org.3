@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830054E6642
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0332D4E6644
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351374AbiCXPql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S1351381AbiCXPrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344411AbiCXPqk (ORCPT
+        with ESMTP id S229868AbiCXPri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:46:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D8D2A72D;
-        Thu, 24 Mar 2022 08:45:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67866B82407;
-        Thu, 24 Mar 2022 15:45:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E38CC340ED;
-        Thu, 24 Mar 2022 15:45:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648136705;
-        bh=W0ujt+uG7tz/cIu1lu+5YA1hm5s0h2ZhoEP/N2GqCNM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TQh+1RpC7VntD7RlSC5lAgWlzPhTHIAkGED39r+s/JdbooGd8ji13vIJB03pDmxkh
-         Fd8GqQz/ZfGHH6K+fds7hOrn3/PMlTlJQPrPhhPLypqP+RjZK6nxfOgICOC1it3YZw
-         uZ2mrkFT9b3HQpYSyAM1X72krcAWAg9HFmxgKexrJW+eS5ICZ3LlxREsM5ErvDIZBv
-         9FdqXZX7JOgBdihel1e/F9rWyOx0Sr1YF02M36e3u7bBe4eoBrdmGpoXluAcqVH0R/
-         8Z/9Tna+AxpxzMG53tnDFBBxs0nW6n4PLrAUzcw4ptpiOPAdaZZIWKHjwiSd9l5YHh
-         B4Qhic+fWJoXw==
-Date:   Thu, 24 Mar 2022 21:15:00 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [REPOST PATCH v4 13/13] drm/msm/dsi: Add support for DSC
- configuration
-Message-ID: <YjyR/LrBeXeVd2J3@matsya>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-14-vkoul@kernel.org>
- <977340f4-1a5d-a103-4669-ab0168df8cd6@linaro.org>
+        Thu, 24 Mar 2022 11:47:38 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F628A1447
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648136767; x=1679672767;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=L3OkSQZxRRvVfIIG+Cdml9Xl0GKcyK9pZQQERSUUIuM=;
+  b=RzL5f4uYx1JOodVAPrveHRGj6CZfsOsRloYl9vffTd54n5p5q5bedwBh
+   VYnTdlgw5w8YLmQfoaNojelJdhOvINxkTkM0XSC9I/TXDehB+oAwuz1dj
+   B8HEtSyNdcUuhJNnCPYDCmYMhNIP+YxHBW3X99d3zA6eoQHflAqQDDgYS
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 24 Mar 2022 08:46:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 08:46:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 24 Mar 2022 08:46:05 -0700
+Received: from [10.216.20.42] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
+ 2022 08:46:01 -0700
+Message-ID: <602dcc82-519b-bafd-19e6-b373abe572d4@quicinc.com>
+Date:   Thu, 24 Mar 2022 21:15:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <977340f4-1a5d-a103-4669-ab0168df8cd6@linaro.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+Subject: Re: [PATCH 2/2] mm: madvise: return exact bytes advised with
+ process_madvise under error
+To:     Michal Hocko <mhocko@suse.com>
+CC:     <akpm@linux-foundation.org>, <minchan@kernel.org>,
+        <surenb@google.com>, <vbabka@suse.cz>, <rientjes@google.com>,
+        <nadav.amit@gmail.com>, <edgararriaga@google.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>
+References: <cover.1648046642.git.quic_charante@quicinc.com>
+ <0fa1bdb5009e898189f339610b90ecca16f243f4.1648046642.git.quic_charante@quicinc.com>
+ <Yjxutr35QLGhjJ57@dhcp22.suse.cz>
+Content-Language: en-US
+In-Reply-To: <Yjxutr35QLGhjJ57@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,151 +72,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-02-22, 05:11, Dmitry Baryshkov wrote:
-> On 10/02/2022 13:34, Vinod Koul wrote:
-> > When DSC is enabled, we need to configure DSI registers accordingly and
-> > configure the respective stream compression registers.
-> > 
-> > Add support to calculate the register setting based on DSC params and
-> > timing information and configure these registers.
-> > 
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  10 +++
-> >   drivers/gpu/drm/msm/dsi/dsi_host.c | 109 ++++++++++++++++++++++++++++-
-> >   2 files changed, 118 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > index 49b551ad1bff..c1c85df58c4b 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > @@ -706,4 +706,14 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
-> >   #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
-> > +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
-> > +
-> > +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL2			0x000002a0
-> > +
-> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
-> > +
-> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
-> > +
-> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL3			0x000002ac
-> > +
-> >   #endif /* DSI_XML */
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > index 438c80750682..3d8d5a1daaa3 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > @@ -908,6 +908,20 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
-> >   		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
-> >   }
-> > +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
-> > +				  int pic_width, int pic_height)
-> > +{
-> > +	if (!dsc || !pic_width || !pic_height) {
-> > +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	dsc->drm->pic_width = pic_width;
-> > +	dsc->drm->pic_height = pic_height;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >   {
-> >   	struct drm_display_mode *mode = msm_host->mode;
-> > @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >   		hdisplay /= 2;
-> >   	}
-> > +	if (msm_host->dsc) {
-> > +		struct msm_display_dsc_config *dsc = msm_host->dsc;
-> > +
-> > +		/* update dsc params with timing params */
-> > +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
-> > +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
-> > +
-> > +		/* we do the calculations for dsc parameters here so that
-> > +		 * panel can use these parameters
-> > +		 */
-> > +		dsi_populate_dsc_params(dsc);
-> > +
-> > +		/* Divide the display by 3 but keep back/font porch and
-> > +		 * pulse width same
-> > +		 */
-> > +		h_total -= hdisplay;
-> > +		hdisplay /= 3;
-> > +		h_total += hdisplay;
-> > +		ha_end = ha_start + hdisplay;
-> > +	}
-> > +
-> >   	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> > +		if (msm_host->dsc) {
-> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> > +			u32 reg, intf_width, slice_per_intf;
-> > +			u32 total_bytes_per_intf;
-> > +
-> > +			/* first calculate dsc parameters and then program
-> > +			 * compress mode registers
-> > +			 */
-> > +			intf_width = hdisplay;
-> > +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
-> > +
-> > +			dsc->drm->slice_count = 1;
-> > +			dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * 8, 8);
-> > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
-> > +
-> > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-> > +			dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
-> > +			dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
-> > +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
-> > +
-> > +			reg = dsc->bytes_per_pkt << 16;
-> > +			reg |= (0x0b << 8);    /* dtype of compressed image */
-> > +
-> > +			/* pkt_per_line:
-> > +			 * 0 == 1 pkt
-> > +			 * 1 == 2 pkt
-> > +			 * 2 == 4 pkt
-> > +			 * 3 pkt is not supported
-> > +			 * above translates to ffs() - 1
-> > +			 */
-> > +			reg |= (ffs(dsc->pkt_per_line) - 1) << 6;
-> > +
-> > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-> > +			reg |= dsc->eol_byte_num << 4;
-> > +			reg |= 1;
-> > +
-> > +			dsi_write(msm_host,
-> > +				  REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
-> > +		}
-> > +
-> >   		dsi_write(msm_host, REG_DSI_ACTIVE_H,
-> >   			DSI_ACTIVE_H_START(ha_start) |
-> >   			DSI_ACTIVE_H_END(ha_end));
-> > @@ -959,8 +1034,40 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >   			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
-> >   			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
-> >   	} else {		/* command mode */
-> > +		if (msm_host->dsc) {
-> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> > +			u32 reg, reg_ctrl, reg_ctrl2;
-> > +			u32 slice_per_intf, bytes_in_slice, total_bytes_per_intf;
-> > +
-> > +			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
-> > +			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
-> > +
-> > +			slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
-> > +			bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
-> > +						      dsc->drm->bits_per_pixel, 8);
-> > +			dsc->drm->slice_chunk_size = bytes_in_slice;
-> > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
+Thanks Michal for the inputs.
+
+On 3/24/2022 6:44 PM, Michal Hocko wrote:
+> On Wed 23-03-22 20:54:10, Charan Teja Kalla wrote:
+>> From: Charan Teja Reddy <quic_charante@quicinc.com>
+>>
+>> The commit 5bd009c7c9a9 ("mm: madvise: return correct bytes advised with
+>> process_madvise") fixes the issue to return number of bytes that are
+>> successfully advised before hitting error with iovec elements
+>> processing. But, when the user passed unmapped ranges in iovec, the
+>> syscall ignores these holes and continues processing and returns ENOMEM
+>> in the end, which is same as madvise semantic. This is a problem for
+>> vector processing where user may want to know how many bytes were
+>> exactly processed in a iovec element to make better decissions in the
+>> user space. As in ENOMEM case, we processed all bytes in a iovec element
+>> but still returned error which will confuse the user whether it is
+>> failed or succeeded to advise.
+> Do you have any specific example where the initial semantic is really
+> problematic or is this mostly a theoretical problem you have found when
+> reading the code?
 > 
-> Should we use dsc->bytes_in_slice or just bytes_in_slice here?
+> 
+>> As an example, consider below ranges were passed by the user in struct
+>> iovec: iovec1(ranges: vma1), iovec2(ranges: vma2 -- vma3 -- hole) and
+>> iovec3(ranges: vma4). In the current implementation, it fully advise
+>> iovec1 and iovec2 but just returns number of processed bytes as iovec1
+>> range. Then user may repeat the processing of iovec2, which is already
+>> processed, which then returns with ENOMEM. Then user may want to skip
+>> iovec2 and starts processing from iovec3. Here because of wrong return
+>> processed bytes, iovec2 is processed twice.
+> I think you should be much more specific why this is actually a problem.
+> This would surely be less optimal but is this a correctness issue?
+> 
 
-This should be dsc->bytes_in_slice, fixed up now. Thanks for pointing
+Yes, this is a problem found when reading the code, but IMO we can
+easily expect an invalid vma/hole in the passed range because we are
+operating on other process VMA. More than solving the problem of being
+less optimal, this can be looked in the direction of helping the user to
+take better policy decisions with this syscall. And, not better policy
+decisions from user is just being sub optimal(i.e. issuing the syscall
+again on the processed range) with this syscall.
 
--- 
-~Vinod
+Having said that, at present I don't have any reports/unit test showing
+the existing semantic is really a problematic.
+
+> [...]
+>> +	vma = find_vma_prev(mm, start, &prev);
+>> +	if (vma && start > vma->vm_start)
+>> +		prev = vma;
+>> +
+>> +	blk_start_plug(&plug);
+>> +	for (;;) {
+>> +		/*
+>> +		 * It it hits a unmapped address range in the [start, end),
+>> +		 * stop processing and return ENOMEM.
+>> +		 */
+>> +		if (!vma || start < vma->vm_start) {
+>> +			error = -ENOMEM;
+>> +			goto out;
+>> +		}
+>> +
+>> +		tmp = vma->vm_end;
+>> +		if (end < tmp)
+>> +			tmp = end;
+>> +
+>> +		error = madvise_vma_behavior(vma, &prev, start, tmp, behavior);
+>> +		if (error)
+>> +			goto out;
+>> +		tmp_bytes_advised += tmp - start;
+>> +		start = tmp;
+>> +		if (prev && start < prev->vm_end)
+>> +			start = prev->vm_end;
+>> +		if (start >= end)
+>> +			goto out;
+>> +		if (prev)
+>> +			vma = prev->vm_next;
+>> +		else
+>> +			vma = find_vma(mm, start);
+>> +	}
+>> +out:
+>> +	/*
+>> +	 * partial_bytes_advised may contain non-zero bytes indicating
+>> +	 * the number of bytes advised before failure. Holds zero incase
+>> +	 * of success.
+>> +	 */
+>> +	*partial_bytes_advised = error ? tmp_bytes_advised : 0;
+> Although this looks like a fix I am not sure it is future proof.
+> madvise_vma_behavior doesn't report which part of the range has been
+> really processed. I do not think that currently supported madvise modes
+> for process_madvise support an early break out with return to the
+> userspace (madvise_cold_or_pageout_pte_range bails on fatal signals for
+> example) but this can change in the future and then you are back to
+> "imprecise" return value problem. Yes, this is a theoretical problem
+
+Agree here with the "imprecise" return value problem with processing a
+VMA range. Yes when it is decided to return proper processed value from
+madvise_vma_behavior(), this code too may need the maintenance.
+
+> but so it sounds the problem you are trying to fix IMHO. I think it
+> would be better to live with imprecise return values reporting rather
+> than aiming for perfection which would be fragile and add a future
+> maintenance burden.
+>
+Hmm. Should atleast this imprecise return values be documented in man
+page or in madvise.c file?
+
+> On the other hand if there are _real_ workloads which suffer from the
+> existing semantic then sure the above seems to be an appropriate fix
+> AFAICS.
+
+
+> -- Michal Hocko SUSE Labs

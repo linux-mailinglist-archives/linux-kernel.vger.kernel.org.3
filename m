@@ -2,237 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852924E5CE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869C74E5CE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345862AbiCXBnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 21:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
+        id S1345971AbiCXBnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 21:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240592AbiCXBnD (ORCPT
+        with ESMTP id S1346216AbiCXBnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 21:43:03 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D68F93189
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:41:32 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2e64a6b20eeso36856197b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:41:32 -0700 (PDT)
+        Wed, 23 Mar 2022 21:43:18 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47786931BA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:41:46 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 25so4247237ljv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:41:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Dkz9ZRVS+nRHJtc9MLa3dbGlHTYZCC9MEJOOMvqLmio=;
-        b=FpaSXwv7nY704lM4lXoFwypZSa9MMUSqkWimagng1EmivUzGuQRMOnAQR/LIHSjA2C
-         ntqlvijW96MMsU3t+rXyYpvCFc4cFlmvjJJLQcfpDE/x/KDg7s+n+MK6VyoeLVwuUFn5
-         6gXBvlQpF9kaIkqZ6uQ3u5rm+4kUMuJL7jiZh/VX85bXHystKtxPN7Ysk/vpkRcEXhEd
-         g5dB1MAVmq0O8dHS4dwHN2bCm11TkQE4PzKPsUiUoD2pi3U+n+Gdo5ltfg4m+pJqHcLW
-         FJIvAIwzJjP1l99G2Ur30LBnHBFX4auEagom3OfVXTK8ZszQJUxpe6U5CSrS7GonaHiY
-         hlvA==
+        bh=4VmCNpUktJfhcqAvDV0WxH3zaT4vDImvmvOoWvKF5Gs=;
+        b=UW43zwyr7VzAWy0J7pa4I6DoGCPEoRpfqb5FRW/fgJtPoxaaWAvDDDKni4bVmn2CF7
+         FoneE+ygtfrCccxNCf0tihRpQDykhG7fSiKsrY9JTHmw2Y8gDqaIcBn8lATXk5HEBP5w
+         6YLjgN/7mQ4ZVp+a/2pjFriUi925WrG0ZXVCQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Dkz9ZRVS+nRHJtc9MLa3dbGlHTYZCC9MEJOOMvqLmio=;
-        b=2UM3Za5DwWaajD3OF3SDyIYOfrPx2M4OAqxLNlSMNMybfyJaLiOxIbPRmTj71CX5W7
-         ayS7O6QfzxUSpMAqFqEANo5432wMRd279yoqXBBa3K4HiXb1IpLnueDypPIF1astK3N3
-         cHxoiOBoDSc9JrcIMRsn7azW1mLJ1FTmWNHkmF7Fog5dSiLZ261KVx3YzzfbnKDBMLvl
-         I5YiPRSyTShdUiTVeJSsbjfQ1A02nj7bhebDXYshqYdes8VmqguPPEHCm9e2xStwIvcO
-         eTzkO3r2/6FuT6SrqnwpfeYwTaLiuf/hW/sYw4Cl+oFEvZcu/nOvnZeU4axyO5mbT4v2
-         uwtA==
-X-Gm-Message-State: AOAM532PCskYIcfmOj1I5WJKcDjClxyP8WZcm5EygFHAsk46wA8PZcV/
-        R+g8whuMdC88p6v9Gmnutys1eXXxsNuBiuae1LHKEw==
-X-Google-Smtp-Source: ABdhPJyjNutITyLnHUHPb5Ijg9ZyH4hdOT11T4BUaziz/+zYGx6o4xMuLwd9Od66XZP1MLkigQoRY35jftUfrQA7aUQ=
-X-Received: by 2002:a81:4f87:0:b0:2e5:dc8f:b4e with SMTP id
- d129-20020a814f87000000b002e5dc8f0b4emr2644515ywb.467.1648086091136; Wed, 23
- Mar 2022 18:41:31 -0700 (PDT)
+        bh=4VmCNpUktJfhcqAvDV0WxH3zaT4vDImvmvOoWvKF5Gs=;
+        b=0yQemasrQqNBcWY2Gb5+j9FxO5v95LwbytgMElyDX/0vYS24P/cK0AW/aOXTCnBb0M
+         +f9HbMw8vLfzSTVrgHUWWKHqvrF5mqTpynJM1gmC8VUMFLio/7iH8LweRYHP0JNlMp3T
+         KRUaj9K/Unh9qbrQiHrVZZhF8dGMFhOEVtfym9GeEF9cXFo652S3Ugr41P7qjEor5Jh+
+         rWTzehXH2QgomfLXi1hYMo9YfY23D5L5RvU8J1ERgBU3F3eMATaU/d1+y9sk/owT/W81
+         E9Tc0LIJd3rp6U6t0FkaadEI9LJauNFh+ZqJIyAJD+PAI+M4t2hcV5jXMPeeHBAFehB2
+         HTBQ==
+X-Gm-Message-State: AOAM5325uHkkdDq0kFN5UfpzpgrUTqGZaKiraMIBA2yUupWjUB6MetFU
+        Gy8fe9sWDpL8aIUjCU5dwvvpMfU2v1FYqpNX1SE=
+X-Google-Smtp-Source: ABdhPJzgPn7+l//sC8+ff0+SLUnmdM2qluZKvfg7uWkdeTGxC+ijJAK7vKjhc3vrkzktV2yKqi84vQ==
+X-Received: by 2002:a2e:5318:0:b0:249:8375:81ab with SMTP id h24-20020a2e5318000000b00249837581abmr2259034ljb.243.1648086104252;
+        Wed, 23 Mar 2022 18:41:44 -0700 (PDT)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id 206-20020a2e09d7000000b00247eb27d491sm150658ljj.103.2022.03.23.18.41.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 18:41:43 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id u3so4306697ljd.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:41:43 -0700 (PDT)
+X-Received: by 2002:a2e:9904:0:b0:247:ec95:fdee with SMTP id
+ v4-20020a2e9904000000b00247ec95fdeemr2372025lji.291.1648086103115; Wed, 23
+ Mar 2022 18:41:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000acf1e405daebb7c7@google.com>
-In-Reply-To: <000000000000acf1e405daebb7c7@google.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 23 Mar 2022 18:41:20 -0700
-Message-ID: <CANn89iKMWp3o7ZS9dL+6GgWR-tr2rOvMKdKxb1=aDmhLB7mFrw@mail.gmail.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in __tcp_transmit_skb
-To:     syzbot <syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com>,
-        Karsten Graul <kgraul@linux.ibm.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Yonghong Song <yhs@fb.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+References: <CAK8P3a29JCfCNWrJ-x7S+kewcSBpeguyo8fmUTt_V4gfrW3=HA@mail.gmail.com>
+ <CAK8P3a182FVbZ5QfVhMr20nxQN31fK29Csr_GRp_WpFoBFEPzQ@mail.gmail.com> <CAK8P3a1oGWkyPHZ-gV3pP94hOrJJFBsvvkuzzXBhaYpbzEGR5w@mail.gmail.com>
+In-Reply-To: <CAK8P3a1oGWkyPHZ-gV3pP94hOrJJFBsvvkuzzXBhaYpbzEGR5w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Mar 2022 18:41:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whLyCDkXfMoAYFWX4qbLg7KajXiQWLNhfcaN5EB3HuO5w@mail.gmail.com>
+Message-ID: <CAHk-=whLyCDkXfMoAYFWX4qbLg7KajXiQWLNhfcaN5EB3HuO5w@mail.gmail.com>
+Subject: Re: [GIT PULL 4/4] ARM: DT updates for 5.18
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 5:13 PM syzbot
-<syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com> wrote:
+On Wed, Mar 23, 2022 at 4:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    36c2e31ad25b net: geneve: add missing netlink policy and s..
-> git tree:       net-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17c308a5700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4a15e2288cf165c9
-> dashboard link: https://syzkaller.appspot.com/bug?extid=090d23ddbd5cd185c2e0
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171eadbd700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12cacda3700000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com
->
+> The new machines are really too many to list, but I'll do it anyway:
 
-AF_SMC does not handle TCP_REPAIR properly.
+Heh.
 
-Look at commit d9e4c129181004e ("mptcp: only admit explicitly
-supported sockopt") for an equivalent bug/fix.
-
-
-> BUG: kernel NULL pointer dereference, address: 0000000000000000
-> #PF: supervisor instruction fetch in kernel mode
-> #PF: error_code(0x0010) - not-present page
-> PGD 13fd5067 P4D 13fd5067 PUD 77ebc067 PMD 0
-> Oops: 0010 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 7423 Comm: syz-executor720 Not tainted 5.17.0-rc8-syzkaller-02803-g36c2e31ad25b #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:0x0
-> Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-> RSP: 0018:ffffc900001d0a60 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: ffff88801e00cd10 RCX: 0000000000000100
-> RDX: 1ffff11003c019a3 RSI: ffff8880155c5c80 RDI: ffff888014bac800
-> RBP: ffff888014bac800 R08: 0000000000000000 R09: 0000000000000000
-> R10: ffffffff87bccdc7 R11: 0000000000000000 R12: ffff8880155c5c80
-> R13: 0000000000000000 R14: ffff888014bacf60 R15: ffff88807527012c
-> FS:  000055555733b3c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffffffffd6 CR3: 00000000757b0000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <IRQ>
->  __tcp_transmit_skb+0x1098/0x38b0 net/ipv4/tcp_output.c:1371
->  tcp_transmit_skb net/ipv4/tcp_output.c:1420 [inline]
->  tcp_xmit_probe_skb+0x28c/0x320 net/ipv4/tcp_output.c:4006
->  tcp_write_wakeup+0x1bd/0x610 net/ipv4/tcp_output.c:4059
->  tcp_send_probe0+0x44/0x560 net/ipv4/tcp_output.c:4074
->  tcp_probe_timer net/ipv4/tcp_timer.c:398 [inline]
->  tcp_write_timer_handler+0x9ed/0xbc0 net/ipv4/tcp_timer.c:626
->  tcp_write_timer+0xa2/0x2b0 net/ipv4/tcp_timer.c:642
->  call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
->  expire_timers kernel/time/timer.c:1466 [inline]
->  __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
->  __run_timers kernel/time/timer.c:1715 [inline]
->  run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
->  __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
->  invoke_softirq kernel/softirq.c:432 [inline]
->  __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
->  irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
->  sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
->  </IRQ>
->  <TASK>
->  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
-> RIP: 0010:lock_acquire+0x1ef/0x510 kernel/locking/lockdep.c:5607
-> Code: e4 a4 7e 83 f8 01 0f 85 b4 02 00 00 9c 58 f6 c4 02 0f 85 9f 02 00 00 48 83 7c 24 08 00 74 01 fb 48 b8 00 00 00 00 00 fc ff df <48> 01 c3 48 c7 03 00 00 00 00 48 c7 43 08 00 00 00 00 48 8b 84 24
-> RSP: 0018:ffffc90002eaf888 EFLAGS: 00000206
-> RAX: dffffc0000000000 RBX: 1ffff920005d5f13 RCX: 5ad5b746ce328923
-> RDX: 1ffff1100e5374eb RSI: 0000000000000000 RDI: 0000000000000000
-> RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8fe0c947
-> R10: fffffbfff1fc1928 R11: 0000000000000001 R12: 0000000000000002
-> R13: 0000000000000000 R14: ffffffff8bb84ca0 R15: 0000000000000000
->  rcu_lock_acquire include/linux/rcupdate.h:268 [inline]
->  rcu_read_lock include/linux/rcupdate.h:694 [inline]
->  fib_lookup.constprop.0+0x8f/0x460 include/net/ip_fib.h:377
->  ip_route_output_key_hash_rcu+0xf54/0x2c80 net/ipv4/route.c:2737
->  ip_route_output_key_hash+0x183/0x2f0 net/ipv4/route.c:2627
->  __ip_route_output_key include/net/route.h:127 [inline]
->  ip_route_output_flow+0x23/0x150 net/ipv4/route.c:2857
->  ip_route_newports include/net/route.h:343 [inline]
->  tcp_v4_connect+0x12a5/0x1d00 net/ipv4/tcp_ipv4.c:283
->  __inet_stream_connect+0x8cf/0xed0 net/ipv4/af_inet.c:660
->  inet_stream_connect+0x53/0xa0 net/ipv4/af_inet.c:724
->  smc_connect+0x230/0x450 net/smc/af_smc.c:1522
->  __sys_connect_file+0x155/0x1a0 net/socket.c:1900
->  __sys_connect+0x161/0x190 net/socket.c:1917
->  __do_sys_connect net/socket.c:1927 [inline]
->  __se_sys_connect net/socket.c:1924 [inline]
->  __x64_sys_connect+0x6f/0xb0 net/socket.c:1924
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f23b4ec0889
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffce8f74658 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
-> RAX: ffffffffffffffda RBX: 00007ffce8f746b0 RCX: 00007f23b4ec0889
-> RDX: 0000000000000010 RSI: 00000000200001c0 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 000000000000cf1c R09: 000000000000cf1c
-> R10: 0000000000000004 R11: 0000000000000246 R12: 00007ffce8f746a0
-> R13: 000000000000cf1c R14: 00007ffce8f7469c R15: 431bde82d7b634db
->  </TASK>
-> Modules linked in:
-> CR2: 0000000000000000
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:0x0
-> Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-> RSP: 0018:ffffc900001d0a60 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: ffff88801e00cd10 RCX: 0000000000000100
-> RDX: 1ffff11003c019a3 RSI: ffff8880155c5c80 RDI: ffff888014bac800
-> RBP: ffff888014bac800 R08: 0000000000000000 R09: 0000000000000000
-> R10: ffffffff87bccdc7 R11: 0000000000000000 R12: ffff8880155c5c80
-> R13: 0000000000000000 R14: ffff888014bacf60 R15: ffff88807527012c
-> FS:  000055555733b3c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffffffffd6 CR3: 00000000757b0000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:   e4 a4                   in     $0xa4,%al
->    2:   7e 83                   jle    0xffffff87
->    4:   f8                      clc
->    5:   01 0f                   add    %ecx,(%rdi)
->    7:   85 b4 02 00 00 9c 58    test   %esi,0x589c0000(%rdx,%rax,1)
->    e:   f6 c4 02                test   $0x2,%ah
->   11:   0f 85 9f 02 00 00       jne    0x2b6
->   17:   48 83 7c 24 08 00       cmpq   $0x0,0x8(%rsp)
->   1d:   74 01                   je     0x20
->   1f:   fb                      sti
->   20:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
->   27:   fc ff df
-> * 2a:   48 01 c3                add    %rax,%rbx <-- trapping instruction
->   2d:   48 c7 03 00 00 00 00    movq   $0x0,(%rbx)
->   34:   48 c7 43 08 00 00 00    movq   $0x0,0x8(%rbx)
->   3b:   00
->   3c:   48                      rex.W
->   3d:   8b                      .byte 0x8b
->   3e:   84                      .byte 0x84
->   3f:   24                      .byte 0x24
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+                   Linus

@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF184E5F12
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078704E5F15
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242320AbiCXHG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S1346084AbiCXHII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiCXHGY (ORCPT
+        with ESMTP id S230024AbiCXHIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:06:24 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C225E7DE23;
-        Thu, 24 Mar 2022 00:04:52 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id u26so4470528eda.12;
-        Thu, 24 Mar 2022 00:04:52 -0700 (PDT)
+        Thu, 24 Mar 2022 03:08:07 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A62491AE6;
+        Thu, 24 Mar 2022 00:06:32 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id qx21so7200568ejb.13;
+        Thu, 24 Mar 2022 00:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QmJzxumpLQcs11vK+3c+4EgOpxANBX6MJwGXngCOMXo=;
-        b=LL2eN8sSyTOZ859wDP3jr4bcEgBnKx5LwkENba4N6GLZYypfPt211FxmqWSDMQJHge
-         TBqhuCw1rBMDXoSc/gzl5gOJ1TI1kDob/jdIsXZkyNYAz1UAsVpzcbn2UIeS8Yw6vncg
-         Zp97G7vdkkt14jKJHjWur/+xxokAcjm2zQL0uJip4RCrPICFsRErLZ7DMGBB6ia+uHMm
-         EYuObp7A3gzYScsUT8dfPLP/11gWH/60IMuyM9a+kJ4+di4B2jIEekA5G6fvVRSSyk0Q
-         DZAHcILhTGzONIWvnQxHIbkKgmoK85UhJ6Z1hgi/0MWK9nQ/YQ+QUa4IArzulTJnhAow
-         mwOQ==
+        bh=gyjq9zdDhX6RlmCOAFpwWrWqHwqUR/OK0/YrxmP9mpE=;
+        b=Nkjpyy9ZyUVLrvtPqSrFBmdZO0gQSf1HZ/lGBJRfGxBuIBZvGttXqZ9Yi3goQh7XwP
+         tfW0Aw+eZLOvvUmz/j/Ai7HSKUSx6k+BabRVwHINjfk8kUS2Uw21dwDbKlTNdy8KtMM9
+         p/L3+1ko9RSZVa0HmXTnTCIYJjgGNZCLW3T6qf+DSysj0876kU9Eq+/DTF/Lr4o7XEri
+         4TuTn/f6u+YF6CY1ZRbfdZWyq3ruzVaUw/79lzXKHUckh9mj1k+XyDdXCoLwR983TPN5
+         /atmeF97PAqqSGvq9PatGilN75mw2mcLsQz0DM5cVYj0HVJBseb8f40KfqE3m/EuD1a1
+         GCvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QmJzxumpLQcs11vK+3c+4EgOpxANBX6MJwGXngCOMXo=;
-        b=SLoPAfXFBu+pl+qVsWAo1kxeayrAcwg5oLfDW8KzeSv7eNul03TFD2YOZLu7l3CBrW
-         +oDdAQgl/taNFePa9YCmHai1NYoqzLbhfc7YuxRnqjzRPpdJx/MekwP6q1lSF+YkRFLW
-         7OEtcVFPACXCZcZqAT30ZGK6ZCsHeXZ1f8HY/zz7qrVgsIQF0rxJMCui5Z5u16GVVPIj
-         hOeIxN6+OZpd8GZXTM33eF/8nG97UJjjlXIsoljK2N0pUg11L5tMzB9/X6TZFY3Jlfmk
-         mdOnSBrFr+lu+Iytftd7HJXs51okyaXAe/sc+GwgmTancAHyM9C3T7HM3kamnRcwAoTZ
-         fC/w==
-X-Gm-Message-State: AOAM533ajCSGf2GuhhL8L9qsAK4RHyc5BG2xV07K+FYkGiWWs4wRXHsh
-        D/c2iQL0+4vN41DnFPJ95mw=
-X-Google-Smtp-Source: ABdhPJyiRVrIl5E62lC8T6N06sfiBY9MLsiGEZ1cVBohHNstoW03QKjOTDNUo/ItSF2GAqvqzrPrpg==
-X-Received: by 2002:a50:fe0d:0:b0:415:e2ee:65af with SMTP id f13-20020a50fe0d000000b00415e2ee65afmr4811578edt.383.1648105491201;
-        Thu, 24 Mar 2022 00:04:51 -0700 (PDT)
+        bh=gyjq9zdDhX6RlmCOAFpwWrWqHwqUR/OK0/YrxmP9mpE=;
+        b=GQaGX8FUnvLt1BpqLeVedrXeRHOGwoRcCfsd5uOg4y+OUXpDRuFGuZ/w98Px5z+Dqh
+         ClS1dDItgg0/+dT63cNgkrZg5iOa2l1uRobm3mtFZBL6thzPP8VbLiZ8wgJI+xtWBw/q
+         V1QABMOIDIiMhD2LpFleSWOjFtn/5LGkFZBF0D+SsaqVfUf15O0ygpxurVSD3T+UfO55
+         nPKd2E+f7pY9azfNPUwvs3AG52Hv5AI/4sv8eLn+xxZbWhVQ+5/ajBtzKgq0prkWcCTc
+         x9p2qEXbb6oL+exy2j3s3ChcixaG6nO+HlkAZhd2x972uItDF8fOKPjsQ29lbb1CVCLI
+         +s1g==
+X-Gm-Message-State: AOAM5314nk0lHpnqzeQhJZRCGXdSy33J1le/lMJHM2+0OZivGHf+3lxe
+        k7mICAfjG/XQ6UHsS7CWQHU=
+X-Google-Smtp-Source: ABdhPJyUE78skfv/AqLpnp/mVa6k6QKT8XGbJKI2o7hjsYtY7V0495iNlUhXbzcX1tm6egg7oWrh5w==
+X-Received: by 2002:a17:907:60c8:b0:6da:83f0:9eaa with SMTP id hv8-20020a17090760c800b006da83f09eaamr4064343ejc.605.1648105591138;
+        Thu, 24 Mar 2022 00:06:31 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id d24-20020a1709067a1800b006e021f4c1c3sm753022ejo.166.2022.03.24.00.04.49
+        by smtp.googlemail.com with ESMTPSA id o7-20020a17090608c700b006cef23cf158sm763537eje.175.2022.03.24.00.06.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:04:50 -0700 (PDT)
+        Thu, 24 Mar 2022 00:06:30 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] ACPI: ipmi: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:04:41 +0100
-Message-Id: <20220324070441.56591-1-jakobkoschel@gmail.com>
+Subject: [PATCH] backlight: replace usage of found with dedicated list iterator variable
+Date:   Thu, 24 Mar 2022 08:06:08 +0100
+Message-Id: <20220324070608.57057-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -85,102 +88,38 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/acpi/acpi_ipmi.c | 39 ++++++++++++++++++---------------------
- 1 file changed, 18 insertions(+), 21 deletions(-)
+ drivers/video/backlight/backlight.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/acpi/acpi_ipmi.c b/drivers/acpi/acpi_ipmi.c
-index a5fe2926bf50..0555f68c2dfd 100644
---- a/drivers/acpi/acpi_ipmi.c
-+++ b/drivers/acpi/acpi_ipmi.c
-@@ -353,29 +353,27 @@ static void ipmi_flush_tx_msg(struct acpi_ipmi_device *ipmi)
- static void ipmi_cancel_tx_msg(struct acpi_ipmi_device *ipmi,
- 			       struct acpi_ipmi_msg *msg)
+diff --git a/drivers/video/backlight/backlight.c b/drivers/video/backlight/backlight.c
+index 4ae6fae94ac2..c05380d7a09e 100644
+--- a/drivers/video/backlight/backlight.c
++++ b/drivers/video/backlight/backlight.c
+@@ -479,19 +479,18 @@ EXPORT_SYMBOL(backlight_device_register);
+  */
+ struct backlight_device *backlight_device_get_by_type(enum backlight_type type)
  {
--	struct acpi_ipmi_msg *tx_msg, *temp;
--	bool msg_found = false;
-+	struct acpi_ipmi_msg *tx_msg = NULL, *iter, *temp;
- 	unsigned long flags;
+-	bool found = false;
+-	struct backlight_device *bd;
++	struct backlight_device *bd = NULL, *iter;
  
- 	spin_lock_irqsave(&ipmi->tx_msg_lock, flags);
--	list_for_each_entry_safe(tx_msg, temp, &ipmi->tx_msg_list, head) {
--		if (msg == tx_msg) {
--			msg_found = true;
--			list_del(&tx_msg->head);
-+	list_for_each_entry_safe(iter, temp, &ipmi->tx_msg_list, head) {
-+		if (msg == iter) {
-+			tx_msg = iter;
-+			list_del(&iter->head);
+ 	mutex_lock(&backlight_dev_list_mutex);
+-	list_for_each_entry(bd, &backlight_dev_list, entry) {
+-		if (bd->props.type == type) {
+-			found = true;
++	list_for_each_entry(iter, &backlight_dev_list, entry) {
++		if (iter->props.type == type) {
++			bd = iter;
  			break;
  		}
  	}
- 	spin_unlock_irqrestore(&ipmi->tx_msg_lock, flags);
+ 	mutex_unlock(&backlight_dev_list_mutex);
  
--	if (msg_found)
-+	if (tx_msg)
- 		acpi_ipmi_msg_put(tx_msg);
+-	return found ? bd : NULL;
++	return bd;
  }
+ EXPORT_SYMBOL(backlight_device_get_by_type);
  
- static void ipmi_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
- {
- 	struct acpi_ipmi_device *ipmi_device = user_msg_data;
--	bool msg_found = false;
--	struct acpi_ipmi_msg *tx_msg, *temp;
-+	struct acpi_ipmi_msg *tx_msg = NULL, *iter, *temp;
- 	struct device *dev = ipmi_device->dev;
- 	unsigned long flags;
- 
-@@ -387,16 +385,16 @@ static void ipmi_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
- 	}
- 
- 	spin_lock_irqsave(&ipmi_device->tx_msg_lock, flags);
--	list_for_each_entry_safe(tx_msg, temp, &ipmi_device->tx_msg_list, head) {
--		if (msg->msgid == tx_msg->tx_msgid) {
--			msg_found = true;
--			list_del(&tx_msg->head);
-+	list_for_each_entry_safe(iter, temp, &ipmi_device->tx_msg_list, head) {
-+		if (msg->msgid == iter->tx_msgid) {
-+			tx_msg = iter;
-+			list_del(&iter->head);
- 			break;
- 		}
- 	}
- 	spin_unlock_irqrestore(&ipmi_device->tx_msg_lock, flags);
- 
--	if (!msg_found) {
-+	if (!tx_msg) {
- 		dev_warn(dev,
- 			 "Unexpected response (msg id %ld) is returned.\n",
- 			 msg->msgid);
-@@ -482,15 +480,14 @@ static void ipmi_register_bmc(int iface, struct device *dev)
- 
- static void ipmi_bmc_gone(int iface)
- {
--	struct acpi_ipmi_device *ipmi_device, *temp;
--	bool dev_found = false;
-+	struct acpi_ipmi_device *ipmi_device = NULL, *iter, *temp;
- 
- 	mutex_lock(&driver_data.ipmi_lock);
--	list_for_each_entry_safe(ipmi_device, temp,
-+	list_for_each_entry_safe(iter, temp,
- 				 &driver_data.ipmi_devices, head) {
--		if (ipmi_device->ipmi_ifnum != iface) {
--			dev_found = true;
--			__ipmi_dev_kill(ipmi_device);
-+		if (iter->ipmi_ifnum != iface) {
-+			ipmi_device = iter;
-+			__ipmi_dev_kill(iter);
- 			break;
- 		}
- 	}
-@@ -500,7 +497,7 @@ static void ipmi_bmc_gone(int iface)
- 					struct acpi_ipmi_device, head);
- 	mutex_unlock(&driver_data.ipmi_lock);
- 
--	if (dev_found) {
-+	if (ipmi_device) {
- 		ipmi_flush_tx_msg(ipmi_device);
- 		acpi_ipmi_dev_put(ipmi_device);
- 	}
 
 base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 

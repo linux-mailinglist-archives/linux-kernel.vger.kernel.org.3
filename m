@@ -2,151 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334BC4E60D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07794E60DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349123AbiCXJGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 05:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
+        id S1349126AbiCXJJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 05:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349130AbiCXJGw (ORCPT
+        with ESMTP id S240160AbiCXJJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 05:06:52 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148DA9D0E9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:05:21 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id t4so263495pgc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:05:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yqJ0gIjpeVMlWyc7MJuaJMsxiwBxgODQXJJnEu6bpCg=;
-        b=IakckRWyyGYbDlEYV1kSZnwfC5kgsa0ongZEhYhi8jWLiSjR5rEaZstY9FxsMUxK16
-         TRqPrrB8bAOoAz1nAwzLer+6mTMGRIWN4Tr2MwsXK1Acph6M1Gm/pZxm2FHxQWefSQ2O
-         HOL0bDqpB5ES8GeU61fvkILekK7JrocdLikJ47Qid4Bkfer/9ncAgqtwIT73gFKyaFkc
-         VvWAICnU+PnhS0NnBlFToV2q2LqpijhH6MtcTNkvv8yt7MCdmvhpTpaMkivM1hDftO5F
-         KCDx6EHrr2L28N5YIdtc6Bkde84kOaev+gmOM5WdIkpg6tNmgzf6/Os9pG3OCQ8V0MHM
-         bU0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yqJ0gIjpeVMlWyc7MJuaJMsxiwBxgODQXJJnEu6bpCg=;
-        b=JMZTWsLz4ZC3VkzKtuniBKgvWDvCNmzedK7ObXoY2H8VDyZ+DUjj61/AiLYtYY3GYb
-         0vqetWc0anUo2LBF4xfUx1MajMKYehWrSJqwNFOo8TPJJZx+czrslmOUB/CGVvp4GfRY
-         dHof9o9+di2LOIhNZycaA5IrX6h/NIdrilxEDLgGPv1d3jQLWYs1jof+ZlKJEtDWhH5Z
-         rA8/Uq/Kgi+0G7TdU4cuqpEBdllnHGm1WSnOrxWYT4eleTPcWtF9OQzWLCK4A2C87Jg9
-         l9B61WDVpI9u+mIZDAAOebJ4/thSiz0gAiFSu8Iquinvb9zJZZTvIPWVAp2sKSJuBdkl
-         S78w==
-X-Gm-Message-State: AOAM53233Q92lW8+DzLObNlUeFAFz9LTcnz0IJuFqu/iDYfItYRSZ/vQ
-        CgOtx/1h5thHsMMq8Ihsx08o
-X-Google-Smtp-Source: ABdhPJwFJwQrEPCoGJK6NSu/gLxMfEWgGH4jan2ZS2M4FMBWQJOnOhfRWz2BWsLgGF6m4EgvDYZKoA==
-X-Received: by 2002:a05:6a00:1254:b0:4fa:874e:1319 with SMTP id u20-20020a056a00125400b004fa874e1319mr4334055pfi.14.1648112720492;
-        Thu, 24 Mar 2022 02:05:20 -0700 (PDT)
-Received: from thinkpad ([220.158.158.107])
-        by smtp.gmail.com with ESMTPSA id pj9-20020a17090b4f4900b001c744034e7csm9402403pjb.2.2022.03.24.02.05.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 02:05:20 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 14:35:14 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/12] PCI: dwc: Disable outbound windows for controllers
- with iATU
-Message-ID: <20220324090514.GD2854@thinkpad>
-References: <20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru>
- <20220324012524.16784-5-Sergey.Semin@baikalelectronics.ru>
+        Thu, 24 Mar 2022 05:09:10 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4468A9D0E2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:07:38 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 24 Mar
+ 2022 17:07:29 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 24 Mar
+ 2022 17:07:29 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <patrik.r.jakobsson@gmail.com>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        "Haowen Bai" <baihaowen@meizu.com>
+Subject: [PATCH] drm: gma500: clean up some style problems reported by checkpatch.pl
+Date:   Thu, 24 Mar 2022 17:07:28 +0800
+Message-ID: <1648112848-29052-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324012524.16784-5-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:25:15AM +0300, Serge Semin wrote:
-> In accordance with the dw_pcie_setup_rc() method semantics and judging by
-> what the comment added in commit dd193929d91e ("PCI: designware: Explain
-> why we don't program ATU for some platforms") states there are DWC
-> PCIe-available platforms like Keystone (pci-keystone.c) or Amazon's
-> Annapurna Labs (pcie-al.c) which don't have the DW PCIe internal ATU
-> enabled and use it's own address translation approach implemented. In
-> these cases at the very least there is no point in touching the DW PCIe
-> iATU CSRs. Moreover depending on the vendor-specific address translation
-> implementation it might be even erroneous. So let's move the iATU windows
-> disabling procedure to being under the corresponding conditional statement
-> clause thus performing that procedure only if the iATU is expected to be
-> available on the platform.
-> 
-> Fixes: 458ad06c4cdd ("PCI: dwc: Ensure all outbound ATU windows are reset")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+WARNING: Statements should start on a tabstop
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+WARNING: Missing a blank line after declarations
 
-Thanks,
-Mani
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/gpu/drm/gma500/mid_bios.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> ---
->  drivers/pci/controller/dwc/pcie-designware-host.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index f89e6552139b..a048d88e0c30 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -566,7 +566,6 @@ static struct pci_ops dw_pcie_ops = {
->  
->  void dw_pcie_setup_rc(struct pcie_port *pp)
->  {
-> -	int i;
->  	u32 val, ctrl, num_ctrls;
->  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
->  
-> @@ -618,19 +617,22 @@ void dw_pcie_setup_rc(struct pcie_port *pp)
->  		PCI_COMMAND_MASTER | PCI_COMMAND_SERR;
->  	dw_pcie_writel_dbi(pci, PCI_COMMAND, val);
->  
-> -	/* Ensure all outbound windows are disabled so there are multiple matches */
-> -	for (i = 0; i < pci->num_ob_windows; i++)
-> -		dw_pcie_disable_atu(pci, i, DW_PCIE_REGION_OUTBOUND);
-> -
->  	/*
->  	 * If the platform provides its own child bus config accesses, it means
->  	 * the platform uses its own address translation component rather than
->  	 * ATU, so we should not program the ATU here.
->  	 */
->  	if (pp->bridge->child_ops == &dw_child_pcie_ops) {
-> -		int atu_idx = 0;
-> +		int i, atu_idx = 0;
->  		struct resource_entry *entry;
->  
-> +		/*
-> +		 * Ensure all outbound windows are disabled so there are
-> +		 * multiple matches
-> +		 */
-> +		for (i = 0; i < pci->num_ob_windows; i++)
-> +			dw_pcie_disable_atu(pci, i, DW_PCIE_REGION_OUTBOUND);
-> +
->  		/* Get last memory resource entry */
->  		resource_list_for_each_entry(entry, &pp->bridge->windows) {
->  			if (resource_type(entry->res) != IORESOURCE_MEM)
-> -- 
-> 2.35.1
-> 
+diff --git a/drivers/gpu/drm/gma500/mid_bios.c b/drivers/gpu/drm/gma500/mid_bios.c
+index 7e76790..71942c2 100644
+--- a/drivers/gpu/drm/gma500/mid_bios.c
++++ b/drivers/gpu/drm/gma500/mid_bios.c
+@@ -50,8 +50,8 @@ static void mid_get_fuse_settings(struct drm_device *dev)
+ 	DRM_INFO("internal display is %s\n",
+ 		 dev_priv->iLVDS_enable ? "LVDS display" : "MIPI display");
+ 
+-	 /* Prevent runtime suspend at start*/
+-	 if (dev_priv->iLVDS_enable) {
++	/* Prevent runtime suspend at start*/
++	if (dev_priv->iLVDS_enable) {
+ 		dev_priv->is_lvds_on = true;
+ 		dev_priv->is_mipi_on = false;
+ 	} else {
+@@ -325,6 +325,7 @@ static void mid_get_vbt_data(struct drm_psb_private *dev_priv)
+ int mid_chip_setup(struct drm_device *dev)
+ {
+ 	struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
++
+ 	mid_get_fuse_settings(dev);
+ 	mid_get_vbt_data(dev_priv);
+ 	mid_get_pci_revID(dev_priv);
+-- 
+2.7.4
+

@@ -2,482 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5BE4E6127
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D4A4E612B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349270AbiCXJf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 05:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
+        id S242598AbiCXJjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 05:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349238AbiCXJfl (ORCPT
+        with ESMTP id S233759AbiCXJjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 05:35:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4DB1EC51
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:34:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57CC1B82324
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:34:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA3F3C340EC;
-        Thu, 24 Mar 2022 09:34:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648114445;
-        bh=E3iRW+5Yj5mdkvV8ijhg+B/u0XiR6JgZH+cB5GsaIjw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IfUeH/ucKQo8mTi4Ey8YaN5J2sdejP/TeY9j8bGJTw6JOUeDdD55aiYMk2C9cPMTF
-         3BY22mDu9XUmZGDc7FGn1ZV6DZuVWRA7pPqWeihUCJ/eE52Vo2qrdhSfUiZq5IQ4Uk
-         1wdSKe3OZzdL0kpkIn05WZ/T8IcgwBHmFdKvh2Y+DW9hClh/+4Y1+V95y/D1ye5SBF
-         WGrD/GTddl8gntoEQH/Q0pN7GsXobKAUX8GDcN0YEO2T7n2TSmV7HOin/YuGODtnek
-         QLbL3M0GNXW49UDuPfZ/8+OLnIKkwwSnCn8nBBTkgoA4XCpQ4fbCbWzTQlbePGN0Ep
-         5Ztu8ejL3NMsQ==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ohad Sharabi <osharabi@habana.ai>
-Subject: [PATCH 7/7] habanalabs/gaudi: add debugfs to fetch internal sync status
-Date:   Thu, 24 Mar 2022 11:33:49 +0200
-Message-Id: <20220324093349.3245973-7-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220324093349.3245973-1-ogabbay@kernel.org>
-References: <20220324093349.3245973-1-ogabbay@kernel.org>
+        Thu, 24 Mar 2022 05:39:09 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093369F388
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1648114654; x=1679650654;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=y3UPW/SDXedR90NbtEX+BLz6j5obhBVZubDTYoHcgBQ=;
+  b=0VLi11zF16JJBniG6J8RDGJnKreLKEFMYjnvDyXf4FnRE5S6bc9UKTPf
+   FQgvf7TRUM8sdxGIbPW5KTB2cFj6RpIjv1xsg9u61l0rcsym77xiDnrdl
+   4tZN5dYCy++Ht1/uXQQ2/8pZo/T37l9PIyneij45DDuuKq5IcpWSiVuw2
+   fgVx608PUa5A0cjxyyr09a9cOtaBztnb7bNTG5WKaq+cNaiMlpE1u9ZSP
+   wmzBN2RxJfFXMXUCZeVcZWJIxRa69jdLM7luErD4l9rnV/ZKPq4ebwLUJ
+   jclTnfgPLqqisuePc2XaAyktl/Kwe5+LwJCIL/QsmcLHylzw2kfe6JRUb
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,206,1643698800"; 
+   d="scan'208";a="166958635"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Mar 2022 02:37:34 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 24 Mar 2022 02:37:34 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Thu, 24 Mar 2022 02:37:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jkv2jun2pUhy3DVeMXPwU994f0px9K/7PuSm5i2RSoMerPpv0KfxdYMfXujvblP6+FpxQpnhcmnCfO2JxfZCJinciBloLb063TgqFeXk/82QwIfPS5n40bmwP7Ivwl7KSB2/Ox/LJdC3iRIKgckUrP8ntHPtYNfmFSfjQapmrSQ7tmuAx4yoi71nFzbxepKAz+xHOWS3s1esWbIYAOJhpc36sZIZIhMqq3ia8kLRb82e8iFft5X7OuM9giD/0sqiWajWjYW+h2DEdby/TjrIKxiabQW/St7sqV7I4MBQLfVEz0LmuMRMQkndy6wddkUm7ICnd2s50gEWVH5fv/OjcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y3UPW/SDXedR90NbtEX+BLz6j5obhBVZubDTYoHcgBQ=;
+ b=XrPaBKqIZbTuw2YX5jnwqekbWuYBVuWnzCXs44JXOuADxHlkCeVNcTrUFr2agOAKChhFqhBZeMwfSd7lzsmGQDDa5JF27zPgJvfZOUdeKxzkottuPI7pQYpKH8U9fxPxMzifnqyxqnBlLGNvlk1Z+YrjFLQGmfFb+Hzhge5TFA7i1h5UVHOzQMeCdwNxNLMHuQN/8IvBfSGo1txBkYEw3Jtb++jmHTPmOGErgDAHp6uXEV/bz21qDBxUU2GJy9E6D7clM8qT32r9vyh3BLFf2yrj9KVnAbI/OAD7HfC828MoAzvOrfYfMqD3DH6WzUltyJ6K4+cupXpQBCFWBhUngg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y3UPW/SDXedR90NbtEX+BLz6j5obhBVZubDTYoHcgBQ=;
+ b=rN3ta8ekrKuXzk+F6Q3TN/psaqyJcLSaQ5Q+I4IRe4rTkmhZjK3CdTVW7B8jvbN15iWcwJndHiz5IB5B5H7ulTqVZqNOBBUjmPwuMrBp3Hi6x/ZqpodxcEBTvMVEb+NrgGbQavEtVGC8E65FcApkax4+QqFl5KaOxfQb3yp3YoI=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:95::7)
+ by SA0PR11MB4526.namprd11.prod.outlook.com (2603:10b6:806:96::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Thu, 24 Mar
+ 2022 09:37:29 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::dc95:437b:6564:f220]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::dc95:437b:6564:f220%7]) with mapi id 15.20.5102.017; Thu, 24 Mar 2022
+ 09:37:29 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <mick@ics.forth.gr>, <palmer@dabbelt.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>
+Subject: Re: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
+Thread-Topic: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
+Thread-Index: AQHYPfD9vlSdDPqFi0CW4KmZ/C3YmqzOSr8A
+Date:   Thu, 24 Mar 2022 09:37:29 +0000
+Message-ID: <ebaa9b4e-9e37-e2f4-2bee-37d324e7302b@microchip.com>
+References: <20220322132839.3653682-1-mick@ics.forth.gr>
+In-Reply-To: <20220322132839.3653682-1-mick@ics.forth.gr>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0d320fda-24a7-4ffe-49cc-08da0d79ea06
+x-ms-traffictypediagnostic: SA0PR11MB4526:EE_
+x-microsoft-antispam-prvs: <SA0PR11MB452626385672FEC8FCDB2D1998199@SA0PR11MB4526.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iilojRwX+LK4A3lzWOgYzayyys9OAoTdUKMsXjtEz3UKQcNRQqKvow/W0ewB6Cy/DUGc6MTFTaBDGR7esBslKmhHIN6E8ASHULyXwHgT0fQMnFHafSYq0yccVLSCh1AORGPjmxRPZs6q+ONw8Gq21VsMnvACZBETH7x52tQECs5y8KV8JzH/kSa8l10bFrEHfEBPTDdYrHNRbyg7KDgmHOEWysfMBGMYJBNzBsTgLSPVC0LX09PqYzczytPhA/rDcAJFUJfNfP01KllZIsUZHFulmDtr7VnSCofY6214wq8xhSVyawsagtJBOcThIiUrUSQhPY/sGArjT3DDaTsXEYh1+xJYVZ4xFi5FCbltnb2uC0GkxusYJgPClUkav+daDyd9j0TPNcVXJqA3OLJyrP9Sb1Cts+yQ4G+b4IFSpTtCGGWCmHZCw/lWK6y2b5W8696P046IqMG+gJZ2Nd+RmwBC6yKsBNxh+YlEja84DsKyuD8p/Vlb7gcGZ+Zc8xMSAhlSpjISqwzhUnjr4M2LsVv4FKDS1pu5UXZ/hQYNcyIvrRKksLWMaGHQOWbPPictAGoh/UycAWQisooUs33ocWN7LsO6ve3h4+NcmoJIIjsouIEdbtiONDDmBekV1sgQOWTfXQkqWwo9ZoOU1d+KdP5NsHVEiMQpot8XDrz7Te/ivmoEwRw73RVt9ZS2MwZLh5iqtqpSSY00nthg1M5ZfWiiPKeNaHFLgDFC2dkV0pcaBZbXpy//tBj6RS9Gca0BBbwya+HZy5lyaXjEnlUwog==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(2906002)(71200400001)(36756003)(38070700005)(6506007)(6512007)(8676002)(316002)(91956017)(110136005)(66446008)(54906003)(66556008)(64756008)(66946007)(66476007)(26005)(76116006)(38100700002)(508600001)(186003)(6486002)(5660300002)(2616005)(8936002)(31686004)(83380400001)(31696002)(122000001)(86362001)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U3BEeSt0UVRxQ0pwcGdUSHNMcUlHcU05amtuNEJiVHl3ZUoza1kvWi93Y0tx?=
+ =?utf-8?B?ODJPU3cvWTNLTzFCT3IvclgxNjlNak5lNnc0VWpjcWpzQVlMbGl2RzBLLzZT?=
+ =?utf-8?B?U2N2d0ErYWtJUDg2UkFZc3hJUFdHRGhjM3BnUzR4a1VLVmlvSXg1NHVqSi8x?=
+ =?utf-8?B?enBTa3U3d0FEYTNQWk05b0p3clNZNVZQTTBoU3g2cGxBNHVCWE9QN2ZNMTgx?=
+ =?utf-8?B?NForRmErODRVTXhWSDYvckdEaEt6UXRlend4SlBGMFlhSmprWFYzSit5RGlP?=
+ =?utf-8?B?cU1pUmk1dW16VFVEVE9KSHY4NXlleHNSZVNBOWRKTVMzcFpQMU92U2VZbmh2?=
+ =?utf-8?B?T2hzdGhQMzJQMDVPZlQwOVlad3dCMyt1dlhYOHBmSnFzWGNic2pncjFIY3lp?=
+ =?utf-8?B?TFNoVWo0MDMyNlNldE54S2Vub0t5SWRtS1V5ZXF3aW1uUjVIbXZ5Z3ZyMUxM?=
+ =?utf-8?B?Q2FJd3dqUjI1OXdzYSs3VjZ2M3IyMUZjQk45NXBVUFA2cU0vN0JKVXhKWWs2?=
+ =?utf-8?B?K3hqc29VRXJTTnBRNThqTUFDa3RJZXNqeDJnbkphalJ5V1BVMXp1N2hBSnpn?=
+ =?utf-8?B?dUNwKzVOYWJWeTNjUHExYUpNY1RRaHMxbXdtRzRTMzRRMzZEZkNRWVdmZUFJ?=
+ =?utf-8?B?djZSTmhYQVhGMFQ0R3hydmNvMDFnQk9ydldnM3NhYUZIQlFMSDQ1cUY2NTUv?=
+ =?utf-8?B?Tm41SjBFZGoxL0V0Vys5TGJYcXBjOXpLQkIrWmk4U0RrR1hvUzdDTitSYjE5?=
+ =?utf-8?B?dUtucHhDZy9ncTNTRVJUamNFYUNWNGxJZDlRekROM3ZUSFdvMG5BNUN6M3lx?=
+ =?utf-8?B?MzdUVzJxQkRHUjZXMWc3a3NYT2htTXljNURGSnIzVHdSOXlvVCt2R2JoeTlC?=
+ =?utf-8?B?eGUzZ3VNM29JNkpuS1ZzZUZMUmhlRFI4TWxjK0hVQ2IwdjRVTGJLZjlnRVZv?=
+ =?utf-8?B?bmJoUytNcUxwd2FsVGxiNzdYUUNYOVUvbTBJN2RjTnR4dE44ZnZQd1JrUkZ2?=
+ =?utf-8?B?OVpVWmczSFBLWVdNTTAxL2ZwNHBkOVUrdDdGKzhnM1NjcGJOOUJrZVEwcFQ0?=
+ =?utf-8?B?bFdaOHhjV1JaOG9XdHFadmVJRldyaExVUlhHbmxyb0Q1ZTFXa3V3T2ppVEhH?=
+ =?utf-8?B?RHdQZmVXZHQyVkRKRXAxNHNoTUVxRzRiWHpMR0dNSXZCMVF0N1BkNUNYSVhr?=
+ =?utf-8?B?VnlXRkFlYnovd0t0N05FdXA4VDN5S3RNWERPeTdPTkYyOENpOWF4Sk5PWmtH?=
+ =?utf-8?B?SXFMOXZhYkFGMFlBNXNtSHBvck9oKzJVSGUvaVpjTW5hT1J5NTBxb1pVem9q?=
+ =?utf-8?B?K0Zkek9xU3M5Wm4yQkEzMzcvblozTHZWM1J2bFlrZ3kwenladzlXdGw0MDRa?=
+ =?utf-8?B?cWlmcit3dGxDL3FpbEgzSjFyT1MzR2ZPNGliTXRNZkc0WnVhN09JZy8wUXVY?=
+ =?utf-8?B?empGaExhVVZDWk16aVN4c1VQZ3h4RzJJV2k3L2ZyaFJGNGFhc095VVVtYWtl?=
+ =?utf-8?B?TGd4VFpleTJOK1VCOHp2Ui9MNkFuMElaQndxcmszMTE2ZHNSSmp3azNXV1FY?=
+ =?utf-8?B?cjJ6b3ZnL1E3em51UVhqSmJnbnJoSDlwNS9NQmFQWUZ5Z2h4cHpVcUM3Vlpi?=
+ =?utf-8?B?NjZYSjlvUlYzUVZxYjBCYkdlcEFqZkdjRnZBMlh2M2s0amdSVTFuMjloR0Vy?=
+ =?utf-8?B?bTdHS1czYURqYW5Velc1bTZUNVBrbGpUamZNSWhPejJ0OWFFc3V5UHFCSzJ6?=
+ =?utf-8?B?aWVoaEd1YjFFUEJQalNvRUx6ZGN1TzhiWEFjeXduVDNRZXNEd0VCeEhRM2Rs?=
+ =?utf-8?B?Q3dWSExEK1dzVXVPdGE0ZWxqbUlheStQRVgzZDZGMmQ4R1EyU1B3RjltbnRn?=
+ =?utf-8?B?NXVlUXh2SXduai85ZFp3U3ZBTzZ1dWR4SmpiNklBeTlsWVQrTi9KVjJ0b3Bt?=
+ =?utf-8?Q?kePjb4zuadxoWg1tDhrUqg1HtEGYpuNx?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0793EB7036045E43B4E19E9CE432213E@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d320fda-24a7-4ffe-49cc-08da0d79ea06
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2022 09:37:29.4207
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ErXRpiCU5wtW7utEUYjkONaJ7bcrEUyW3Z3L7ecCZ8ULecE5pCEef2XnxWwe4+d+GHPx5L+711q8MDnA6DheTK9PTKCND5fXb8qHhRmJxfU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4526
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ohad Sharabi <osharabi@habana.ai>
-
-When Gaudi device is secured the monitors data in the configuration
-space is blocked from PCI access.
-As we need to enable user to get sync-manager monitors registers when
-debugging, this patch adds a debugfs that dumps the information to a
-binary file (blob).
-When a root user will trigger the dump, the driver will send request to
-the f/w to fill a data structure containing dump of all monitors
-registers.
-
-Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- .../ABI/testing/debugfs-driver-habanalabs     | 24 +++++
- drivers/misc/habanalabs/common/debugfs.c      | 87 ++++++++++++++++---
- drivers/misc/habanalabs/common/firmware_if.c  | 47 ++++++++++
- drivers/misc/habanalabs/common/habanalabs.h   | 13 ++-
- drivers/misc/habanalabs/gaudi/gaudi.c         | 11 +++
- drivers/misc/habanalabs/goya/goya.c           |  6 ++
- .../misc/habanalabs/include/common/cpucp_if.h | 38 ++++++++
- 7 files changed, 210 insertions(+), 16 deletions(-)
-
-diff --git a/Documentation/ABI/testing/debugfs-driver-habanalabs b/Documentation/ABI/testing/debugfs-driver-habanalabs
-index bcf6915987e4..84bf3da2bb27 100644
---- a/Documentation/ABI/testing/debugfs-driver-habanalabs
-+++ b/Documentation/ABI/testing/debugfs-driver-habanalabs
-@@ -190,6 +190,30 @@ Description:    Check and display page fault or access violation mmu errors for
-                 echo "0x200" > /sys/kernel/debug/habanalabs/hl0/mmu_error
-                 cat /sys/kernel/debug/habanalabs/hl0/mmu_error
- 
-+What:           /sys/kernel/debug/habanalabs/hl<n>/monitor_dump
-+Date:           Mar 2022
-+KernelVersion:  5.19
-+Contact:        osharabi@habana.ai
-+Description:    Allows the root user to dump monitors status from the device's
-+                protected config space.
-+                This property is a binary blob that contains the result of the
-+                monitors registers dump.
-+                This custom interface is needed (instead of using the generic
-+                Linux user-space PCI mapping) because this space is protected
-+                and cannot be accessed using PCI read.
-+                This interface doesn't support concurrency in the same device.
-+                Only supported on GAUDI.
-+
-+What:           /sys/kernel/debug/habanalabs/hl<n>/monitor_dump_trig
-+Date:           Mar 2022
-+KernelVersion:  5.19
-+Contact:        osharabi@habana.ai
-+Description:    Triggers dump of monitor data. The value to trigger the operation
-+                must be 1. Triggering the monitor dump operation initiates dump of
-+                current registers values of all monitors.
-+                When the write is finished, the user can read the "monitor_dump"
-+                blob
-+
- What:           /sys/kernel/debug/habanalabs/hl<n>/set_power_state
- Date:           Jan 2019
- KernelVersion:  5.1
-diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
-index f18495545854..30c637eaf59b 100644
---- a/drivers/misc/habanalabs/common/debugfs.c
-+++ b/drivers/misc/habanalabs/common/debugfs.c
-@@ -829,23 +829,67 @@ static ssize_t hl_dma_size_write(struct file *f, const char __user *buf,
- 	}
- 
- 	/* Free the previous allocation, if there was any */
--	entry->blob_desc.size = 0;
--	vfree(entry->blob_desc.data);
-+	entry->data_dma_blob_desc.size = 0;
-+	vfree(entry->data_dma_blob_desc.data);
- 
--	entry->blob_desc.data = vmalloc(size);
--	if (!entry->blob_desc.data)
-+	entry->data_dma_blob_desc.data = vmalloc(size);
-+	if (!entry->data_dma_blob_desc.data)
- 		return -ENOMEM;
- 
- 	rc = hdev->asic_funcs->debugfs_read_dma(hdev, addr, size,
--						entry->blob_desc.data);
-+						entry->data_dma_blob_desc.data);
- 	if (rc) {
- 		dev_err(hdev->dev, "Failed to DMA from 0x%010llx\n", addr);
--		vfree(entry->blob_desc.data);
--		entry->blob_desc.data = NULL;
-+		vfree(entry->data_dma_blob_desc.data);
-+		entry->data_dma_blob_desc.data = NULL;
- 		return -EIO;
- 	}
- 
--	entry->blob_desc.size = size;
-+	entry->data_dma_blob_desc.size = size;
-+
-+	return count;
-+}
-+
-+static ssize_t hl_monitor_dump_trigger(struct file *f, const char __user *buf,
-+					size_t count, loff_t *ppos)
-+{
-+	struct hl_dbg_device_entry *entry = file_inode(f)->i_private;
-+	struct hl_device *hdev = entry->hdev;
-+	u32 size, trig;
-+	ssize_t rc;
-+
-+	if (hdev->reset_info.in_reset) {
-+		dev_warn_ratelimited(hdev->dev, "Can't dump monitors during reset\n");
-+		return 0;
-+	}
-+	rc = kstrtouint_from_user(buf, count, 10, &trig);
-+	if (rc)
-+		return rc;
-+
-+	if (trig != 1) {
-+		dev_err(hdev->dev, "Must write 1 to trigger monitor dump\n");
-+		return -EINVAL;
-+	}
-+
-+	size = sizeof(struct cpucp_monitor_dump);
-+
-+	/* Free the previous allocation, if there was any */
-+	entry->mon_dump_blob_desc.size = 0;
-+	vfree(entry->mon_dump_blob_desc.data);
-+
-+	entry->mon_dump_blob_desc.data = vmalloc(size);
-+	if (!entry->mon_dump_blob_desc.data)
-+		return -ENOMEM;
-+
-+	rc = hdev->asic_funcs->get_monitor_dump(hdev, entry->mon_dump_blob_desc.data);
-+	if (rc) {
-+		dev_err(hdev->dev, "Failed to dump monitors\n");
-+		vfree(entry->mon_dump_blob_desc.data);
-+		entry->mon_dump_blob_desc.data = NULL;
-+		return -EIO;
-+	}
-+
-+	entry->mon_dump_blob_desc.size = size;
- 
- 	return count;
- }
-@@ -1235,6 +1279,11 @@ static const struct file_operations hl_dma_size_fops = {
- 	.write = hl_dma_size_write
- };
- 
-+static const struct file_operations hl_monitor_dump_fops = {
-+	.owner = THIS_MODULE,
-+	.write = hl_monitor_dump_trigger
-+};
-+
- static const struct file_operations hl_i2c_data_fops = {
- 	.owner = THIS_MODULE,
- 	.read = hl_i2c_data_read,
-@@ -1350,8 +1399,10 @@ void hl_debugfs_add_device(struct hl_device *hdev)
- 	if (!dev_entry->entry_arr)
- 		return;
- 
--	dev_entry->blob_desc.size = 0;
--	dev_entry->blob_desc.data = NULL;
-+	dev_entry->data_dma_blob_desc.size = 0;
-+	dev_entry->data_dma_blob_desc.data = NULL;
-+	dev_entry->mon_dump_blob_desc.size = 0;
-+	dev_entry->mon_dump_blob_desc.data = NULL;
- 
- 	INIT_LIST_HEAD(&dev_entry->file_list);
- 	INIT_LIST_HEAD(&dev_entry->cb_list);
-@@ -1470,7 +1521,18 @@ void hl_debugfs_add_device(struct hl_device *hdev)
- 	debugfs_create_blob("data_dma",
- 				0400,
- 				dev_entry->root,
--				&dev_entry->blob_desc);
-+				&dev_entry->data_dma_blob_desc);
-+
-+	debugfs_create_file("monitor_dump_trig",
-+				0200,
-+				dev_entry->root,
-+				dev_entry,
-+				&hl_monitor_dump_fops);
-+
-+	debugfs_create_blob("monitor_dump",
-+				0400,
-+				dev_entry->root,
-+				&dev_entry->mon_dump_blob_desc);
- 
- 	debugfs_create_x8("skip_reset_on_timeout",
- 				0644,
-@@ -1509,7 +1571,8 @@ void hl_debugfs_remove_device(struct hl_device *hdev)
- 
- 	mutex_destroy(&entry->file_mutex);
- 
--	vfree(entry->blob_desc.data);
-+	vfree(entry->data_dma_blob_desc.data);
-+	vfree(entry->mon_dump_blob_desc.data);
- 
- 	for (i = 0; i < ARRAY_SIZE(entry->state_dump); ++i)
- 		vfree(entry->state_dump[i]);
-diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
-index 42dce28ca815..13e09183df18 100644
---- a/drivers/misc/habanalabs/common/firmware_if.c
-+++ b/drivers/misc/habanalabs/common/firmware_if.c
-@@ -821,6 +821,53 @@ int hl_fw_get_eeprom_data(struct hl_device *hdev, void *data, size_t max_size)
- 	return rc;
- }
- 
-+int hl_fw_get_monitor_dump(struct hl_device *hdev, void *data)
-+{
-+	struct cpucp_monitor_dump *mon_dump_cpu_addr;
-+	dma_addr_t mon_dump_dma_addr;
-+	struct cpucp_packet pkt = {};
-+	u32 *src_ptr, *dst_ptr;
-+	size_t data_size;
-+	u64 result;
-+	int i, rc;
-+
-+	data_size = sizeof(struct cpucp_monitor_dump);
-+	mon_dump_cpu_addr = hdev->asic_funcs->cpu_accessible_dma_pool_alloc(hdev, data_size,
-+										&mon_dump_dma_addr);
-+	if (!mon_dump_cpu_addr) {
-+		dev_err(hdev->dev,
-+			"Failed to allocate DMA memory for CPU-CP monitor-dump packet\n");
-+		return -ENOMEM;
-+	}
-+
-+	memset(mon_dump_cpu_addr, 0, data_size);
-+
-+	pkt.ctl = cpu_to_le32(CPUCP_PACKET_MONITOR_DUMP_GET << CPUCP_PKT_CTL_OPCODE_SHIFT);
-+	pkt.addr = cpu_to_le64(mon_dump_dma_addr);
-+	pkt.data_max_size = cpu_to_le32(data_size);
-+
-+	rc = hdev->asic_funcs->send_cpu_message(hdev, (u32 *) &pkt, sizeof(pkt),
-+							HL_CPUCP_MON_DUMP_TIMEOUT_USEC, &result);
-+	if (rc) {
-+		dev_err(hdev->dev, "Failed to handle CPU-CP monitor-dump packet, error %d\n", rc);
-+		goto out;
-+	}
-+
-+	/* result contains the actual size */
-+	src_ptr = (u32 *)mon_dump_cpu_addr;
-+	dst_ptr = data;
-+	for (i = 0; i < (data_size / sizeof(u32)); i++) {
-+		*dst_ptr = le32_to_cpu(*src_ptr);
-+		src_ptr++;
-+		dst_ptr++;
-+	}
-+
-+out:
-+	hdev->asic_funcs->cpu_accessible_dma_pool_free(hdev, data_size, mon_dump_cpu_addr);
-+
-+	return rc;
-+}
-+
- int hl_fw_cpucp_pci_counters_get(struct hl_device *hdev,
- 		struct hl_info_pci_counters *counters)
- {
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 1f7758fed51e..ece83b264b97 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -61,6 +61,7 @@
- 
- #define HL_CPUCP_INFO_TIMEOUT_USEC	10000000 /* 10s */
- #define HL_CPUCP_EEPROM_TIMEOUT_USEC	10000000 /* 10s */
-+#define HL_CPUCP_MON_DUMP_TIMEOUT_USEC	10000000 /* 10s */
- 
- #define HL_FW_STATUS_POLL_INTERVAL_USEC		10000 /* 10ms */
- 
-@@ -1293,6 +1294,7 @@ struct fw_load_mgr {
-  * @hw_queues_unlock: release H/W queues lock.
-  * @get_pci_id: retrieve PCI ID.
-  * @get_eeprom_data: retrieve EEPROM data from F/W.
-+ * @get_monitor_dump: retrieve monitor registers dump from F/W.
-  * @send_cpu_message: send message to F/W. If the message is timedout, the
-  *                    driver will eventually reset the device. The timeout can
-  *                    be determined by the calling function or it can be 0 and
-@@ -1426,8 +1428,8 @@ struct hl_asic_funcs {
- 	void (*hw_queues_lock)(struct hl_device *hdev);
- 	void (*hw_queues_unlock)(struct hl_device *hdev);
- 	u32 (*get_pci_id)(struct hl_device *hdev);
--	int (*get_eeprom_data)(struct hl_device *hdev, void *data,
--				size_t max_size);
-+	int (*get_eeprom_data)(struct hl_device *hdev, void *data, size_t max_size);
-+	int (*get_monitor_dump)(struct hl_device *hdev, void *data);
- 	int (*send_cpu_message)(struct hl_device *hdev, u32 *msg,
- 				u16 len, u32 timeout, u64 *result);
- 	int (*pci_bars_map)(struct hl_device *hdev);
-@@ -2021,7 +2023,8 @@ struct hl_debugfs_entry {
-  * @userptr_spinlock: protects userptr_list.
-  * @ctx_mem_hash_list: list of available contexts with MMU mappings.
-  * @ctx_mem_hash_spinlock: protects cb_list.
-- * @blob_desc: descriptor of blob
-+ * @data_dma_blob_desc: data DMA descriptor of blob.
-+ * @mon_dump_blob_desc: monitor dump descriptor of blob.
-  * @state_dump: data of the system states in case of a bad cs.
-  * @state_dump_sem: protects state_dump.
-  * @addr: next address to read/write from/to in read/write32.
-@@ -2050,7 +2053,8 @@ struct hl_dbg_device_entry {
- 	spinlock_t			userptr_spinlock;
- 	struct list_head		ctx_mem_hash_list;
- 	spinlock_t			ctx_mem_hash_spinlock;
--	struct debugfs_blob_wrapper	blob_desc;
-+	struct debugfs_blob_wrapper	data_dma_blob_desc;
-+	struct debugfs_blob_wrapper	mon_dump_blob_desc;
- 	char				*state_dump[HL_STATE_DUMP_HIST_LEN];
- 	struct rw_semaphore		state_dump_sem;
- 	u64				addr;
-@@ -3183,6 +3187,7 @@ int hl_fw_cpucp_handshake(struct hl_device *hdev,
- 				u32 sts_boot_dev_sts1_reg, u32 boot_err0_reg,
- 				u32 boot_err1_reg);
- int hl_fw_get_eeprom_data(struct hl_device *hdev, void *data, size_t max_size);
-+int hl_fw_get_monitor_dump(struct hl_device *hdev, void *data);
- int hl_fw_cpucp_pci_counters_get(struct hl_device *hdev,
- 		struct hl_info_pci_counters *counters);
- int hl_fw_cpucp_total_energy_get(struct hl_device *hdev,
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 2101abf1d092..fdcdf47087c8 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -8500,6 +8500,16 @@ static int gaudi_get_eeprom_data(struct hl_device *hdev, void *data,
- 	return hl_fw_get_eeprom_data(hdev, data, max_size);
- }
- 
-+static int gaudi_get_monitor_dump(struct hl_device *hdev, void *data)
-+{
-+	struct gaudi_device *gaudi = hdev->asic_specific;
-+
-+	if (!(gaudi->hw_cap_initialized & HW_CAP_CPU_Q))
-+		return 0;
-+
-+	return hl_fw_get_monitor_dump(hdev, data);
-+}
-+
- /*
-  * this function should be used only during initialization and/or after reset,
-  * when there are no active users.
-@@ -9459,6 +9469,7 @@ static const struct hl_asic_funcs gaudi_funcs = {
- 	.hw_queues_unlock = gaudi_hw_queues_unlock,
- 	.get_pci_id = gaudi_get_pci_id,
- 	.get_eeprom_data = gaudi_get_eeprom_data,
-+	.get_monitor_dump = gaudi_get_monitor_dump,
- 	.send_cpu_message = gaudi_send_cpu_message,
- 	.pci_bars_map = gaudi_pci_bars_map,
- 	.init_iatu = gaudi_init_iatu,
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index bc8431e4b50b..36b3cf57aaae 100644
---- a/drivers/misc/habanalabs/goya/goya.c
-+++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -5680,6 +5680,11 @@ static void goya_get_valid_dram_page_orders(struct hl_info_dev_memalloc_page_siz
- 	info->page_order_bitmask = 0;
- }
- 
-+static int goya_get_monitor_dump(struct hl_device *hdev, void *data)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- static int goya_mmu_prefetch_cache_range(struct hl_device *hdev, u32 flags, u32 asid, u64 va,
- 					u64 size)
- {
-@@ -5739,6 +5744,7 @@ static const struct hl_asic_funcs goya_funcs = {
- 	.hw_queues_unlock = goya_hw_queues_unlock,
- 	.get_pci_id = goya_get_pci_id,
- 	.get_eeprom_data = goya_get_eeprom_data,
-+	.get_monitor_dump = goya_get_monitor_dump,
- 	.send_cpu_message = goya_send_cpu_message,
- 	.pci_bars_map = goya_pci_bars_map,
- 	.init_iatu = goya_init_iatu,
-diff --git a/drivers/misc/habanalabs/include/common/cpucp_if.h b/drivers/misc/habanalabs/include/common/cpucp_if.h
-index f00db22f98fb..645fda75ed27 100644
---- a/drivers/misc/habanalabs/include/common/cpucp_if.h
-+++ b/drivers/misc/habanalabs/include/common/cpucp_if.h
-@@ -389,6 +389,14 @@ enum pq_init_status {
-  *
-  * CPUCP_PACKET_ENGINE_CORE_ASID_SET -
-  *       Packet to perform engine core ASID configuration
-+ *
-+ * CPUCP_PACKET_MONITOR_DUMP_GET -
-+ *       Get monitors registers dump from the CpuCP kernel.
-+ *       The CPU will put the registers dump in the a buffer allocated by the driver
-+ *       which address is passed via the CpuCp packet. In addition, the host's driver
-+ *       passes the max size it allows the CpuCP to write to the structure, to prevent
-+ *       data corruption in case of mismatched driver/FW versions.
-+ *       Relevant only to Gaudi.
-  */
- 
- enum cpucp_packet_id {
-@@ -439,6 +447,11 @@ enum cpucp_packet_id {
- 	CPUCP_PACKET_POWER_SET,			/* internal */
- 	CPUCP_PACKET_RESERVED,			/* not used */
- 	CPUCP_PACKET_ENGINE_CORE_ASID_SET,	/* internal */
-+	CPUCP_PACKET_RESERVED2,			/* not used */
-+	CPUCP_PACKET_RESERVED3,			/* not used */
-+	CPUCP_PACKET_RESERVED4,			/* not used */
-+	CPUCP_PACKET_RESERVED5,			/* not used */
-+	CPUCP_PACKET_MONITOR_DUMP_GET,		/* debugfs */
- };
- 
- #define CPUCP_PACKET_FENCE_VAL	0xFE8CE7A5
-@@ -889,4 +902,29 @@ struct cpucp_hbm_row_replaced_rows_info {
- 	struct cpucp_hbm_row_info replaced_rows[CPUCP_HBM_ROW_REPLACE_MAX];
- };
- 
-+/*
-+ * struct dcore_monitor_regs_data - DCORE monitor regs data.
-+ * the structure follows sync manager block layout. relevant only to Gaudi.
-+ * @mon_pay_addrl: array of payload address low bits.
-+ * @mon_pay_addrh: array of payload address high bits.
-+ * @mon_pay_data: array of payload data.
-+ * @mon_arm: array of monitor arm.
-+ * @mon_status: array of monitor status.
-+ */
-+struct dcore_monitor_regs_data {
-+	__le32 mon_pay_addrl[512];
-+	__le32 mon_pay_addrh[512];
-+	__le32 mon_pay_data[512];
-+	__le32 mon_arm[512];
-+	__le32 mon_status[512];
-+};
-+
-+/* contains SM data for each SYNC_MNGR (relevant only to Gaudi) */
-+struct cpucp_monitor_dump {
-+	struct dcore_monitor_regs_data sync_mngr_w_s;
-+	struct dcore_monitor_regs_data sync_mngr_e_s;
-+	struct dcore_monitor_regs_data sync_mngr_w_n;
-+	struct dcore_monitor_regs_data sync_mngr_e_n;
-+};
-+
- #endif /* CPUCP_IF_H */
--- 
-2.25.1
-
+DQpPbiAyMi8wMy8yMDIyIDEzOjI4LCBOaWNrIEtvc3NpZmlkaXMgd3JvdGU6DQo+IEluIGNhc2Ug
+dGhlIERUQiBwcm92aWRlZCBieSB0aGUgYm9vdGxvYWRlci9Cb290Uk9NIGlzIGJlZm9yZSB0aGUg
+a2VybmVsDQo+IGltYWdlIG9yIG91dHNpZGUgL21lbW9yeSwgd2Ugd29uJ3QgYmUgYWJsZSB0byBh
+Y2Nlc3MgaXQgdGhyb3VnaCB0aGUNCj4gbGluZWFyIG1hcHBpbmcsIGFuZCBnZXQgYSBzZWdmYXVs
+dCBvbiBzZXR1cF9hcmNoKCkuIEN1cnJlbnRseSBPcGVuU0JJDQo+IHJlbG9jYXRlcyBEVEIgYnV0
+IHRoYXQncyBub3QgYWx3YXlzIHRoZSBjYXNlIChlLmcuIGlmIEZXX0pVTVBfRkRUX0FERFINCj4g
+aXMgbm90IHNwZWNpZmllZCksIGFuZCBpdCdzIGFsc28gbm90IHRoZSBtb3N0IHBvcnRhYmxlIGFw
+cHJvYWNoIHNpbmNlDQo+IHRoZSBkZWZhdWx0IEZXX0pVTVBfRkRUX0FERFIgb2YgdGhlIGdlbmVy
+aWMgcGxhdGZvcm0gcmVsb2NhdGVzIHRoZSBEVEINCj4gYXQgYSBzcGVjaWZpYyBvZmZzZXQgdGhh
+dCBtYXkgbm90IGJlIGF2YWlsYWJsZS4gVG8gYXZvaWQgdGhpcyBzaXR1YXRpb24NCj4gY29weSBE
+VEIgc28gdGhhdCBpdCdzIHZpc2libGUgdGhyb3VnaCB0aGUgbGluZWFyIG1hcHBpbmcuDQo+IA0K
+PiBTaWduZWQtb2ZmLWJ5OiBOaWNrIEtvc3NpZmlkaXMgPG1pY2tAaWNzLmZvcnRoLmdyPg0KDQpB
+bGJlaXQgaW4gYSBiYWNrcG9ydCwgSSB0ZXN0ZWQgdGhpcyBvbiBhIFBvbGFyRmlyZSBTb0MgYmFz
+ZWQgYm9hcmQuDQpTbyBJIGd1ZXNzLCBUZXN0ZWQtYnk6IENvbm9yIERvb2xleSA8Y29ub3IuZG9v
+bGV5QG1pY3JvY2hpcC5jb20+DQoNCkFuZCBhIGxvdCBjbGVhbmVyIHRoYW4gdXNpbmcgY3JlYXRl
+X3BnZF9tYXBwaW5nIGluIHNldHVwX3ZtX2ZpbmFsIHRvIGRvIGl0IDopDQoNClRoYW5rcywNCkNv
+bm9yLg0KDQo+IC0tLQ0KPiAgIGFyY2gvcmlzY3YvbW0vaW5pdC5jIHwgMjEgKysrKysrKysrKysr
+KysrKysrKy0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDE5IGluc2VydGlvbnMoKyksIDIgZGVsZXRp
+b25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9yaXNjdi9tbS9pbml0LmMgYi9hcmNoL3Jp
+c2N2L21tL2luaXQuYw0KPiBpbmRleCAwZDU4ODAzMmQuLjY5N2E5YWVkNCAxMDA2NDQNCj4gLS0t
+IGEvYXJjaC9yaXNjdi9tbS9pbml0LmMNCj4gKysrIGIvYXJjaC9yaXNjdi9tbS9pbml0LmMNCj4g
+QEAgLTIwNiw4ICsyMDYsMjUgQEAgc3RhdGljIHZvaWQgX19pbml0IHNldHVwX2Jvb3RtZW0odm9p
+ZCkNCj4gICAJICogZWFybHlfaW5pdF9mZHRfcmVzZXJ2ZV9zZWxmKCkgc2luY2UgX19wYSgpIGRv
+ZXMNCj4gICAJICogbm90IHdvcmsgZm9yIERUQiBwb2ludGVycyB0aGF0IGFyZSBmaXhtYXAgYWRk
+cmVzc2VzDQo+ICAgCSAqLw0KPiAtCWlmICghSVNfRU5BQkxFRChDT05GSUdfQlVJTFRJTl9EVEIp
+KQ0KPiAtCQltZW1ibG9ja19yZXNlcnZlKGR0Yl9lYXJseV9wYSwgZmR0X3RvdGFsc2l6ZShkdGJf
+ZWFybHlfdmEpKTsNCj4gKwlpZiAoIUlTX0VOQUJMRUQoQ09ORklHX0JVSUxUSU5fRFRCKSkgew0K
+PiArCQkvKg0KPiArCQkgKiBJbiBjYXNlIHRoZSBEVEIgaXMgbm90IGxvY2F0ZWQgaW4gYSBtZW1v
+cnkgcmVnaW9uIHdlIHdvbid0DQo+ICsJCSAqIGJlIGFibGUgdG8gbG9jYXRlIGl0IGxhdGVyIG9u
+IHZpYSB0aGUgbGluZWFyIG1hcHBpbmcgYW5kDQo+ICsJCSAqIGdldCBhIHNlZ2ZhdWx0IHdoZW4g
+YWNjZXNzaW5nIGl0IHZpYSBfX3ZhKGR0Yl9lYXJseV9wYSkuDQo+ICsJCSAqIFRvIGF2b2lkIHRo
+aXMgc2l0dWF0aW9uIGNvcHkgRFRCIHRvIGEgbWVtb3J5IHJlZ2lvbi4NCj4gKwkJICogTm90ZSB0
+aGF0IG1lbWJsb2NrX3BoeXNfYWxsb2Mgd2lsbCBhbHNvIHJlc2VydmUgRFRCIHJlZ2lvbi4NCj4g
+KwkJICovDQo+ICsJCWlmICghbWVtYmxvY2tfaXNfbWVtb3J5KGR0Yl9lYXJseV9wYSkpIHsNCj4g
+KwkJCXNpemVfdCBmZHRfc2l6ZSA9IGZkdF90b3RhbHNpemUoZHRiX2Vhcmx5X3ZhKTsNCj4gKwkJ
+CXBoeXNfYWRkcl90IG5ld19kdGJfZWFybHlfcGEgPSBtZW1ibG9ja19waHlzX2FsbG9jKGZkdF9z
+aXplLCBQQUdFX1NJWkUpOw0KPiArCQkJdm9pZCAqbmV3X2R0Yl9lYXJseV92YSA9IGVhcmx5X21l
+bXJlbWFwKG5ld19kdGJfZWFybHlfcGEsIGZkdF9zaXplKTsNCj4gKw0KPiArCQkJbWVtY3B5KG5l
+d19kdGJfZWFybHlfdmEsIGR0Yl9lYXJseV92YSwgZmR0X3NpemUpOw0KPiArCQkJZWFybHlfbWVt
+dW5tYXAobmV3X2R0Yl9lYXJseV92YSwgZmR0X3NpemUpOw0KPiArCQkJX2R0Yl9lYXJseV9wYSA9
+IG5ld19kdGJfZWFybHlfcGE7DQo+ICsJCX0gZWxzZQ0KPiArCQkJbWVtYmxvY2tfcmVzZXJ2ZShk
+dGJfZWFybHlfcGEsIGZkdF90b3RhbHNpemUoZHRiX2Vhcmx5X3ZhKSk7DQo+ICsJfQ0KPiAgIA0K
+PiAgIAllYXJseV9pbml0X2ZkdF9zY2FuX3Jlc2VydmVkX21lbSgpOw0KPiAgIAlkbWFfY29udGln
+dW91c19yZXNlcnZlKGRtYTMyX3BoeXNfbGltaXQpOw0K

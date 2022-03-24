@@ -2,203 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24ACE4E67C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B194E67C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352265AbiCXR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S1352277AbiCXR2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351424AbiCXR1i (ORCPT
+        with ESMTP id S1351424AbiCXR2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:27:38 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC40A94CC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:26:03 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id q11so5434782pln.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0mJjHBJTkqZcOIirK3ZwecAliSrcR7zrlWYhs3ogbow=;
-        b=aJeKCC4or3w6Ev7MU7tqFxQK8ZE1KuHaPNUhynDNRMKBxmE+fvAyR2BZBgy5Vq+w0u
-         ZFnPAbaW8R3AHaAqUs8hvC5k1BJKbjxmXHATc0q6eLnokaafp9tuYlgNotbEF9AeKsCl
-         pJvegaGUVV3KOGJKbDpiwmsCAUGXlFGBW89cuFdrVb34oLxl+V3oaveiW5mfDykPB9E3
-         w3nE9cQuVhbi07iRuF/lexi7+fTol7MUJShAxpxMPDoKSrMc6ES7AwgwBaTHc7acam0Q
-         PbAZfls5yljev6Jw+cuq0ZwMryPPyxxRFNFMBm7o948CwLp+8Yk4KWEPQWPWPWHEr0xN
-         krCQ==
+        Thu, 24 Mar 2022 13:28:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1041B1A9C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648142824;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=liRbImRNW+7P8M0AFLGtjRyZSDyrWzFoWmyeKMsK9gQ=;
+        b=B12Z8zRexv7Tys+ZC8uIawi/jFNr6wTX2Wbt/iA0JnNzQ5NtA4K8J1RQ986i8CXPazHztD
+        2pBKhSdfdXPFGm6DIeX+lOi+Y4/zF5o3BrMDk44xM0n1CzmXR/pRRs2WBR62H/qUTGsM1q
+        MWMVZJuDFDXjFD8m2ajMa1OZ0t0LjPE=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-381-9U8aWrC0P3CJqDd7yigCfA-1; Thu, 24 Mar 2022 13:27:03 -0400
+X-MC-Unique: 9U8aWrC0P3CJqDd7yigCfA-1
+Received: by mail-qk1-f200.google.com with SMTP id bj2-20020a05620a190200b005084968bb24so3489824qkb.23
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:27:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0mJjHBJTkqZcOIirK3ZwecAliSrcR7zrlWYhs3ogbow=;
-        b=zXsYt18YK15YirubxRsLzWffUypgva7Xr0AYpUnV2vaAGVnebPV+MD+BHSEaZu0aCV
-         CMEbAZTMq9m+AT5p+1ls40m6Kd9QxdV3f/rgHnrGJ7/bmf1RZdCR7Ave8hUnQ4NAprA7
-         UGmNu17Vqdb8KchTJPWGgyeoALh//Lzo2fRaK2HrHCgB/W1v9PJ0RWfI6KrxTJgcFfC3
-         kWUvGfGxbDOgdyqAHqMiExAYKgxvFfjFXLWVmciBMgpwGejZXiQuJYhFotcP6zi2k4a1
-         4z4uz/3DjcQ8vyR2TNfO9tJeUkd+DG+w4305FMsXLNaimKoDsfoXh+ldc91KWL53ClQT
-         OA8Q==
-X-Gm-Message-State: AOAM530BS1l2Azf6hDJKx99TO9jSZj1Y0xppn+8LLu/OZreyXhxEtUXg
-        VP59rUIr/i8oGYOXufvOlP29
-X-Google-Smtp-Source: ABdhPJwPe1MKGIP/Gs/Zjeasyw9s/FQMIYYnPnHM/QJvBePTmWpP3ucDYPiSrIV+3oxnnMP/m87LQg==
-X-Received: by 2002:a17:902:8b87:b0:14d:7920:e54a with SMTP id ay7-20020a1709028b8700b0014d7920e54amr6976857plb.140.1648142762660;
-        Thu, 24 Mar 2022 10:26:02 -0700 (PDT)
-Received: from thinkpad ([27.111.75.218])
-        by smtp.gmail.com with ESMTPSA id v23-20020a17090a521700b001bbfc181c93sm9691528pjh.19.2022.03.24.10.25.57
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=liRbImRNW+7P8M0AFLGtjRyZSDyrWzFoWmyeKMsK9gQ=;
+        b=QjiVc/+WJtkcJ8YXaBW68uOU+zfEl4TxE/0BZAydGAZxdsnmKOWr3DfmjddfEkf3EG
+         ey2gebbtv6ZaHlAiSipzwAPWUiCADymhic3bYkj1s9rttNysLTnZ/Bs7ZSHR5HMS/uEH
+         te91GOnECrHGDAmWNHs1lAsxlyAGnrGKjrhhKp/nFjbIrQh4OZA9H0aJ/FXTem+ImtL6
+         cJAbQ+Q8UVU6NUDPZ82BFVHl3SSQV7ZKMWOqdmofZu6LCCaplrNfaSVPr7VS29ebxyDx
+         isvLCVOpFIyyykmQzJVWlnr4uR2aUc7jxbryU/CpR0H8T4u7mg75XRE3hXnEY3e0ehB5
+         EkLw==
+X-Gm-Message-State: AOAM533BEqiOhDNFptxmi1Alrw29eKWoQEBjsm+1aoKVr2woWveWzten
+        +GE4BJHNlwyYYKIH0BOXI6DhE/yhDUS+UL3pvhQ/3ASydvvx9286nhcf5mUcZ9des26LGlClfqx
+        Q4t0qkTKz7CR/3amQOqjcEml9vF/HkPzUYTcBL/6Zy8HKnF5VVKo2wXQ0kB5mj+ufRwHT+zmPdg
+        7J
+X-Received: by 2002:a05:620a:370c:b0:680:9d9e:ecfe with SMTP id de12-20020a05620a370c00b006809d9eecfemr3825830qkb.307.1648142821979;
+        Thu, 24 Mar 2022 10:27:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwoRa+4NSOlOggFdzYFCyPhvXbLJa7Ooafl0DS0H8lqYYl0wdhBQkyvH/e0Vt0LXWhsBn5ANQ==
+X-Received: by 2002:a05:620a:370c:b0:680:9d9e:ecfe with SMTP id de12-20020a05620a370c00b006809d9eecfemr3825800qkb.307.1648142821680;
+        Thu, 24 Mar 2022 10:27:01 -0700 (PDT)
+Received: from fedora.hitronhub.home (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
+        by smtp.gmail.com with ESMTPSA id bm21-20020a05620a199500b0067d5e6c7bd8sm1886515qkb.56.2022.03.24.10.27.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 10:26:02 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 22:55:54 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/25] dmaengine: dw-edma: Add CPU to PCIe bus address
- translation
-Message-ID: <20220324172554.GR2854@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-10-Sergey.Semin@baikalelectronics.ru>
+        Thu, 24 Mar 2022 10:27:00 -0700 (PDT)
+From:   Adrien Thierry <athierry@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrien Thierry <athierry@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gaston Gonzalez <gascoar@gmail.com>,
+        Ojaswin Mujoo <ojaswin98@gmail.com>,
+        linux-staging@lists.linux.dev
+Subject: [PATCH v2 0/2] Add support for bcm2711 in vchiq_arm
+Date:   Thu, 24 Mar 2022 13:26:45 -0400
+Message-Id: <20220324172647.167617-1-athierry@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324014836.19149-10-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:48:20AM +0300, Serge Semin wrote:
-> Starting from commit 9575632052ba ("dmaengine: make slave address
-> physical") the source and destination addresses of the DMA-slave device
-> have been converted to being defined in CPU address space. It's DMA-device
-> driver responsibility to properly convert them to the reachable DMA bus
-> spaces. In case of the DW eDMA device, the source or destination
-> peripheral (slave) devices reside PCIe bus space. Thus we need to perform
-> the PCIe Host/EP windows-based (i.e. ranges DT-property) addresses
-> translation otherwise the eDMA transactions won't work as expected (or can
-> be even harmful) in case if the CPU and PCIe address spaces don't match.
-> 
-> Note 1. Even though the DMA interleaved template has both source and
-> destination addresses declared of dma_addr_t type only CPU memory range is
-> supposed to be mapped in a way so to be seen by the DMA device since it's
-> a subject of the DMA getting towards the system side. The device part must
-> not be mapped since slave device resides in the PCIe bus space, which
-> isn't affected by IOMMUs or iATU translations. DW PCIe eDMA generates
-> corresponding MWr/MRd TLPs on its own.
-> 
-> Note 2. This functionality is mainly required for the remote eDMA setup
-> since the CPU address must be manually translated into the PCIe bus space
-> before being written to LLI.{SAR,DAR}. If eDMA is embedded into the
-> locally accessible DW PCIe RP/EP software-based translation isn't required
-> since it will be done by hardware by means of the Outbound iATU as long as
-> the DMA_BYPASS flag is cleared. If the later flag is set or there is no
-> Outbound iATU entry found to which the SAR or DAR falls in (for Read and
-> Write channel respectfully), there won't be any translation performed but
-> DMA will proceed with the corresponding source/destination address as is.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+The goal of this patch series is to use the bcm2711 compatible string in
+vchiq_arm for the Raspberry Pi 4. This allows using the downstream device
+tree with the upstream kernel.
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+Changes since v1:
+- Removed duplicate compatible string for bcm2711 in
+  brcm,bcm2835-vchiq.yaml
 
-Thanks,
-Mani
+Adrien Thierry (2):
+  dt-bindings: soc: bcm: bcm2835-vchiq: Add support for bcm2711
+  staging: vchiq_arm: Use bcm2711 compatible string for bcm2711-based
+    RPi
 
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 18 +++++++++++++++++-
->  include/linux/dma/edma.h           | 15 +++++++++++++++
->  2 files changed, 32 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index 97743fe44ebf..418b201fef67 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -40,6 +40,17 @@ struct dw_edma_desc *vd2dw_edma_desc(struct virt_dma_desc *vd)
->  	return container_of(vd, struct dw_edma_desc, vd);
->  }
->  
-> +static inline
-> +u64 dw_edma_get_pci_address(struct dw_edma_chan *chan, phys_addr_t cpu_addr)
-> +{
-> +	struct dw_edma_chip *chip = chan->dw->chip;
-> +
-> +	if (chip->ops->pci_address)
-> +		return chip->ops->pci_address(chip->dev, cpu_addr);
-> +
-> +	return cpu_addr;
-> +}
-> +
->  static struct dw_edma_burst *dw_edma_alloc_burst(struct dw_edma_chunk *chunk)
->  {
->  	struct dw_edma_burst *burst;
-> @@ -328,11 +339,11 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
->  {
->  	struct dw_edma_chan *chan = dchan2dw_edma_chan(xfer->dchan);
->  	enum dma_transfer_direction dir = xfer->direction;
-> -	phys_addr_t src_addr, dst_addr;
->  	struct scatterlist *sg = NULL;
->  	struct dw_edma_chunk *chunk;
->  	struct dw_edma_burst *burst;
->  	struct dw_edma_desc *desc;
-> +	u64 src_addr, dst_addr;
->  	size_t fsz = 0;
->  	u32 cnt = 0;
->  	int i;
-> @@ -407,6 +418,11 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
->  		dst_addr = chan->config.dst_addr;
->  	}
->  
-> +	if (dir == DMA_DEV_TO_MEM)
-> +		src_addr = dw_edma_get_pci_address(chan, (phys_addr_t)src_addr);
-> +	else
-> +		dst_addr = dw_edma_get_pci_address(chan, (phys_addr_t)dst_addr);
-> +
->  	if (xfer->type == EDMA_XFER_CYCLIC) {
->  		cnt = xfer->xfer.cyclic.cnt;
->  	} else if (xfer->type == EDMA_XFER_SCATTER_GATHER) {
-> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-> index 5abac9640a4e..5cc87cfdd685 100644
-> --- a/include/linux/dma/edma.h
-> +++ b/include/linux/dma/edma.h
-> @@ -23,8 +23,23 @@ struct dw_edma_region {
->  	size_t		sz;
->  };
->  
-> +/**
-> + * struct dw_edma_core_ops - platform-specific eDMA methods
-> + * @irq_vector:		Get IRQ number of the passed eDMA channel. Note the
-> + *                      method accepts the channel id in the end-to-end
-> + *                      numbering with the eDMA write channels being placed
-> + *                      first in the row.
-> + * @pci_address:	Get PCIe bus address corresponding to the passed CPU
-> + *			address. Note there is no need in specifying this
-> + *			function if the address translation is performed by
-> + *			the DW PCIe RP/EP controller with the DW eDMA device in
-> + *			subject and DMA_BYPASS isn't set for all the outbound
-> + *			iATU windows. That will be done by the controller
-> + *			automatically.
-> + */
->  struct dw_edma_core_ops {
->  	int (*irq_vector)(struct device *dev, unsigned int nr);
-> +	u64 (*pci_address)(struct device *dev, phys_addr_t cpu_addr);
->  };
->  
->  enum dw_edma_map_format {
-> -- 
-> 2.35.1
-> 
+ .../devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.yaml      | 5 +++++
+ arch/arm/boot/dts/bcm2711-rpi.dtsi                           | 1 +
+ .../staging/vc04_services/interface/vchiq_arm/vchiq_arm.c    | 5 +++++
+ 3 files changed, 11 insertions(+)
+
+
+base-commit: ed4643521e6af8ab8ed1e467630a85884d2696cf
+-- 
+2.35.1
+

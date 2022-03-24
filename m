@@ -2,166 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEFB4E60D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0184E60D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349101AbiCXJFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 05:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S1347014AbiCXJGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 05:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242531AbiCXJFv (ORCPT
+        with ESMTP id S1345706AbiCXJGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 05:05:51 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2068.outbound.protection.outlook.com [40.107.236.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8519D072;
-        Thu, 24 Mar 2022 02:04:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h7LNVLR/BXMeER8dymfdddVXpLR64NqL1Rl4iaxgx0YQhOLl42E/jdP+uJnM7zGc7elLy+/WHearR87z8gjUJ9POW7qeBykZ411mGPnkoC8ieReYT6R9kjUuk0dMDpKMVoaIamL6tNmUTISZvKY4uRVWVWUgMGOt2rjywaZllqmye3T1Gb9ga+3vTwOGZ/p3JURpuYg0ra1Ax9hPwlAN8cY7SVBqCNFa2FypqDC0rIF7Yrd7cXBfvUekEmoNCZN3faZGjVItL8sylSWAyqS7EQynVAba8PknK/H1jowSl4i93eFLU/Ny+EUUhi4qe8oggfIACT86Z1q6YpSlxTRJsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SfjNmDwryouSBRBxGUZg+jEjZF6DxcuKkyfy7yqXY+4=;
- b=IeRRAb12c9lAeUv/QVNOJrAT3tNUBQ69evhDRihJ7xM1vE74mx9JfuHlen6lhzeg+H/XP6LTUqn2QVlHsb4821umxrIAXtznpAtWzVmsGfc+jTt6d911fRAzAejqA3YQc63w4VXjO0IsOxgrnwwrjId2vTgmyxBDdkl71xg0Mx6yirc1Oia6ityq8o+KQj2h9fjJZB4PBCWvoiWWrrS2j2ZzDEuRU/9XHYBdoBm9yzLYJyyv/08OTwKuuwEQgxqRpY4ih3q+LtoM7Vtze2h7VCfpJTi2C7KA6FvuuVXUQaig6MQ+X/SaWoHHqmun9lzStFf5Gc/Mx2+Bb0ravy8b1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SfjNmDwryouSBRBxGUZg+jEjZF6DxcuKkyfy7yqXY+4=;
- b=PBrxGqOpaNZT7g1nZHGrJRonvpYO8gGkgdDsbmVyNMGortLzLvGHgNyqrQx/KMS+ANQk9uRwijM/TO0gIzWAPZdlb2+Ld6FokaevcszpCTZqhMUKWeHc82i0r9BnoDJAEzSoQ07GXGtYGBUPWQNqtdFbf2fEutX5G4XhCtjnYya1lPqGpWhimscmdQNz6Ag1b0xg3ipem/1ubcEZCyEmM82juI3Hub3eit/NRTvlgwAStoCuTAEACXhDmzk8AjPJHXegxqPwcWad5NGRIh8ZYV5qgmzTuAS+HwInLBL7UQwB3RTEsKg2wXVr/ySpnqphocKxme/v1EyhCaA+qTSYrg==
-Received: from DM6PR02CA0147.namprd02.prod.outlook.com (2603:10b6:5:332::14)
- by PH0PR12MB5402.namprd12.prod.outlook.com (2603:10b6:510:ef::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Thu, 24 Mar
- 2022 09:04:17 +0000
-Received: from DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:332:cafe::93) by DM6PR02CA0147.outlook.office365.com
- (2603:10b6:5:332::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17 via Frontend
- Transport; Thu, 24 Mar 2022 09:04:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT011.mail.protection.outlook.com (10.13.172.108) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5102.17 via Frontend Transport; Thu, 24 Mar 2022 09:04:17 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 24 Mar
- 2022 09:04:17 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
- 2022 02:04:16 -0700
-Received: from kkartik-desktop.nvidia.com (10.127.8.12) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Thu, 24 Mar 2022 02:04:13 -0700
-From:   Kartik <kkartik@nvidia.com>
-To:     <kkartik@nvidia.com>, <ldewangan@nvidia.com>,
-        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>
-Subject: [PATCH] serial: tegra: Correct error handling sequence
-Date:   Thu, 24 Mar 2022 14:34:04 +0530
-Message-ID: <1648112644-16950-1-git-send-email-kkartik@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Thu, 24 Mar 2022 05:06:16 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3926B9D0E0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:04:45 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id p22so4647472iod.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:04:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hLMKV9xpskYCVwglq78GATmb0tIIibhlp1DIF9X1vs4=;
+        b=M3lv1AuPL0bisoKr/J5KZ1FwUPCvwXbvAdzS/hiR5rP244r3TgkDcow2eDyuuEGDDk
+         c+o7pktkIbCOubIuKY//azUU3n3YZptU38aBU2aBOnCJc2ubkDny33EkQ7NTXmR/o0ll
+         GM1Ij/CWFNFkd5ucVKDI7wHASjpbDf1r0PWQslsdP0QiCHzfD3zYGVN3LkRjYnifBrDc
+         Rq4nypvBxisQf7lVWW3s394AXXfIZhqmEAJOvxObl2qZUzpbyvutVBPq2WsD4ofBWJfT
+         khfLN1696wse01rBubQKvjAbYq1UDLd2og8pI292HKgkwdFyi6zd/u8gHhPCvaNAwnKb
+         YgTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hLMKV9xpskYCVwglq78GATmb0tIIibhlp1DIF9X1vs4=;
+        b=jVV1vU7qD2G3fJDE6IWZDG1W3LTy8phrl4aeP7Ml3otHsz/ZvzYQazhkMMR4Bpp4YL
+         3yukvBsmxFuyYkoSNPMyn1ca0kU0FFoDknv6Ag5PTYNG2dDwqGSjlByzkiZydcz68d/h
+         2a2RfBpBWF0At24a7860a3ODOIjJfoBCvBf9b4FCcnru+gUaroGoV/hNxnoUEt4zE1Ib
+         ujG8/HvJPQ9n6qmcQpBjTdyDiK376ZVzk3E2PqCWN6JkBOxbvfljYvivRZl5cOEWmzTI
+         oFpkJcFyrsHqvUxZ7uihD/AYnA3OcQZvIdm4uyEOYlsyEqd7J2Afw2L8rFIIa2b+W+NB
+         tRiA==
+X-Gm-Message-State: AOAM531H6PAT1SXe9Kgo9tyq61ELxGd8GmEGyRR27q1f6u9C0wvo4LQk
+        0TiNOcdH1sE4qufzmHPj6j1d2A==
+X-Google-Smtp-Source: ABdhPJy2wQnPDXYvg4eqx/57EAShdK7goC7DKCpVmFwW7MpIDLqBzkUr18ydysDB5iUU99AzRq2VJg==
+X-Received: by 2002:a05:6638:b25:b0:317:3c79:d625 with SMTP id c5-20020a0566380b2500b003173c79d625mr2223397jab.63.1648112684101;
+        Thu, 24 Mar 2022 02:04:44 -0700 (PDT)
+Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
+        by smtp.gmail.com with ESMTPSA id b1-20020a92a041000000b002c8214b2f65sm1235267ilm.61.2022.03.24.02.04.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 02:04:43 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 09:04:40 +0000
+From:   Oliver Upton <oupton@google.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
+        linux-kernel@vger.kernel.org, eauger@redhat.com,
+        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
+Subject: Re: [PATCH v5 02/22] KVM: arm64: Add SDEI virtualization
+ infrastructure
+Message-ID: <Yjw0KFZ+DG0A1KxK@google.com>
+References: <20220322080710.51727-1-gshan@redhat.com>
+ <20220322080710.51727-3-gshan@redhat.com>
+ <YjtUufdsWYxqdGa+@google.com>
+ <4d4e5645-4443-c233-6d25-97e68d804512@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d8df0955-e2c5-4a94-020b-08da0d7546ea
-X-MS-TrafficTypeDiagnostic: PH0PR12MB5402:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR12MB540239AFED02B7FE95C3C0DACD199@PH0PR12MB5402.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mUmYpnoy2dPGdG4afOIU8QAcNNjUBi3Z9IeqQKoWnL8EFZHnh6B2b/orV3K6wne4+WSADhcGPyUY8/RTxcDtL0UNauVFAVso8h0fpT58VFQ7Tt+uuWSO+5ueMd7Qa0VlvXMGWQUW/OT7yUMYR4lQkga1r+V/GCV5qcGisRcDfk42jDNG/myRc6SDpfY1iakRQBvNlVLHkMYr9PELasDsjY37NWWDvtj0zAsrwOM70I0ERSqe9xHXfx4OsCnqqzYraIOr0YyqsFap+1YiYfAdYi7acmMO9duZYF+mJMbMWTnCAkxRIbeXAVNGfV4j3Qi5nJ5e4dnGAoaUMv9rvO2Gfw7fRa2kAKXn+k/SXmhWmI5Hw5qMP1+U+Sa5uHv+nIUJ2mXbcIkNYBl0zkW1wGdUGK7ImaYIwb1gZnApWq/CJKbCkxEt3sbZcZq6fKHyaxTZoEe4+NMjxjVeQkQKNlDtw2ckYjK1ahHB0m7Zz37F9AHG0YIAktwq3Id5BVDlSyh19YKmZ3iv5qpaDKjJnOYLh1kAelgnU36S17cHbdCJctYga0x1uaswuRqQjDBBMaaHK8YR02Fa6UgJwpiEuf6SpgnqEfUgaNt5a4B32c/J9g9g0OyFnM0mk0kuCTTOGfNJMRwh5wSLCltuYmNZeF/UcpKebfj6NRUfW8zPt63Q7FRKbsFjde6BR2jZilg6bemihg65bTArHJFM7n0cYRUOfA==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(47076005)(36860700001)(82310400004)(86362001)(40460700003)(110136005)(316002)(81166007)(356005)(5660300002)(8676002)(2906002)(70206006)(70586007)(36756003)(508600001)(336012)(186003)(26005)(2616005)(426003)(83380400001)(8936002)(7696005)(6666004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2022 09:04:17.7016
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8df0955-e2c5-4a94-020b-08da0d7546ea
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5402
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d4e5645-4443-c233-6d25-97e68d804512@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kartik <kkartik@nvidia.com>
+On Thu, Mar 24, 2022 at 02:54:00PM +0800, Gavin Shan wrote:
+> > > +#define KVM_SDEI_DEFAULT_EVENT	0
+> > > +
+> > > +#define KVM_SDEI_MAX_VCPUS	512	/* Aligned to 64 */
+> > > +#define KVM_SDEI_MAX_EVENTS	128
+> > 
+> > I would *strongly* recommend against having these limits. I find the
+> > vCPU limit especially concerning, because we're making KVM_MAX_VCPUS
+> > ABI, which it definitely is not. Anything that deals with a vCPU should
+> > be accessed through a vCPU FD (and thus agnostic to the maximum number
+> > of vCPUs) to avoid such a complication.
+> > 
+> 
+> For KVM_SDEI_DEFAULT_EVENT, which corresponds to the software signaled
+> event. As you suggested on PATCH[15/22], we can't assume its usage.
+> I will define it with SDEI_SW_SIGNALED_EVENT in uapi/linux/arm_sdei.h
+> 
+> For KVM_SDEI_MAX_EVENTS, it will be moved from this header file to
+> kvm_sdei.h after static arrays to hold the data structures or their
+> pointers are used, as you suggested early for this patch (PATCH[02/22]).
+> 
+> There are two types of (SDEI) events: shared and private. For the private
+> event, it can be registered independently from the vcpus. It also means
+> the address and argument for the entry points, corresponding to @ep_address
+> and @ep_arg in struct kvm_sdei_registered_event, can be different on
+> the individual vcpus. However, all the registered/enabled states and
+> the entry point address and argument are same on all vcpus for the shared
+> event. KVM_SDEI_MAX_VCPUS was introduced to use same data structure to
+> represent both shared and private event.
 
-In the current error handling sequence the driver checks for break
-error at the end.
+You're providing a great deal of abstraction around the SDEI
+specification, but I really am unconvinced that KVM needs that. This
+series needs to add support for a single SDEI event (event 0) and async
+PF to follow. Since we are going to support a static set of events under
+KVM I believe a lot of the complexity in this design should fade away.
 
-By handling the break error first, we can avoid a situation where the
-driver keeps processing the errors which can be caused by an unhandled
-break error.
+> > > +struct kvm_sdei_exposed_event_state {
+> > > +	__u64	num;
+> > > +
+> > > +	__u8	type;
+> > > +	__u8	signaled;
+> > > +	__u8	priority;
+> > > +	__u8	padding[5];
+> > > +	__u64	notifier;
+> > 
+> > Wait, isn't this a kernel function pointer!?
+> > 
+> 
+> Yeah, it is a kernel function pointer, used by Async PF to know if
+> the corresponding event has been handled or not. Async PF can cancel
+> the previously injected event for performance concerns. Either Async PF
+> or SDEI needs to migrate it. To keep SDEI transparent enough to Async PF,
+> SDEI is responsible for its migration.
 
-Signed-off-by: kartik <kkartik@nvidia.com>
----
- drivers/tty/serial/serial-tegra.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+But this is a UAPI header, why would we even consider giving userspace a
+window into the kernel like this? Couldn't userspace crash the kernel by
+writing whatever it wants to this field, knowing that it will call it as
+a function pointer?
 
-diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-index b6223fa..ba78a02 100644
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -440,7 +440,19 @@ static char tegra_uart_decode_rx_error(struct tegra_uart_port *tup,
- 	char flag = TTY_NORMAL;
- 
- 	if (unlikely(lsr & TEGRA_UART_LSR_ANY)) {
--		if (lsr & UART_LSR_OE) {
-+		if (lsr & UART_LSR_BI) {
-+			/*
-+			 * Break error
-+			 * If FIFO read error without any data, reset Rx FIFO
-+			 */
-+			if (!(lsr & UART_LSR_DR) && (lsr & UART_LSR_FIFOE))
-+				tegra_uart_fifo_reset(tup, UART_FCR_CLEAR_RCVR);
-+			if (tup->uport.ignore_status_mask & UART_LSR_BI)
-+				return TTY_BREAK;
-+			flag = TTY_BREAK;
-+			tup->uport.icount.brk++;
-+			dev_dbg(tup->uport.dev, "Got Break\n");
-+		} else if (lsr & UART_LSR_OE) {
- 			/* Overrrun error */
- 			flag = TTY_OVERRUN;
- 			tup->uport.icount.overrun++;
-@@ -454,18 +466,6 @@ static char tegra_uart_decode_rx_error(struct tegra_uart_port *tup,
- 			flag = TTY_FRAME;
- 			tup->uport.icount.frame++;
- 			dev_dbg(tup->uport.dev, "Got frame errors\n");
--		} else if (lsr & UART_LSR_BI) {
--			/*
--			 * Break error
--			 * If FIFO read error without any data, reset Rx FIFO
--			 */
--			if (!(lsr & UART_LSR_DR) && (lsr & UART_LSR_FIFOE))
--				tegra_uart_fifo_reset(tup, UART_FCR_CLEAR_RCVR);
--			if (tup->uport.ignore_status_mask & UART_LSR_BI)
--				return TTY_BREAK;
--			flag = TTY_BREAK;
--			tup->uport.icount.brk++;
--			dev_dbg(tup->uport.dev, "Got Break\n");
- 		}
- 		uart_insert_char(&tup->uport, lsr, UART_LSR_OE, 0, flag);
- 	}
--- 
-2.7.4
+Security aside, there's no guarantee that a function winds up at the
+same address between compiler versions or kernel versions.
 
+Overall, I don't think that userspace should have the ability to add
+arbitrary SDEI events. KVM takes ownership of its own vendor-specific
+ABI in patch 3/22 by declaring its vendor identifier, so any new events
+we support must remain within KVM. There is going to be some state that
+will need to be migrated for KVM's SDEI events, that ought to be
+surfaced to userspace through the KVM_{GET,SET}_ONE_REG ioctls.
+
+Given that there isn't much userspace involvement to make SDEI
+work, do you think it would be possible to drop the proposed UAPI from
+your series and work on enabling software-signaled SDEI events within
+KVM first? By this I mean a VM running under KVM shouldn't require any
+ioctls to make it work.
+
+In so doing, we can discover exactly what the mechanics look like in KVM
+and only then talk about the necessary UAPI to migrate state. One piece
+of the mechanics that is top of mind which I'd like to see addressed is
+the use of linked lists and the preallocations that have been made in
+structures. KVM will know how many events exist at compile time, so we
+can represent these statically.
+
+> > > +};
+> > > +
+> > > +struct kvm_sdei_registered_event_state {
+> > 
+> > You should fold these fields together with kvm_sdei_exposed_event_state
+> > into a single 'kvm_sdei_event' structure:
+> > 
+> 
+> @route_mode and @route_affinity can't be configured or modified until
+> the event is registered. Besides, they're only valid to the shared
+> events. For private events, they don't have the routing needs. It means
+> those two fields would be part of struct kvm_sdei_registered_event instead
+> of kvm_sdei_exposed_event.
+> 
+> 
+> > > +	__u64	num;
+> > > +
+> > > +	__u8	route_mode;
+> > > +	__u8	padding[3];
+> > > +	__u64	route_affinity;
+> > 
+> > And these shouldn't be UAPI at the VM scope. Each of these properties
+> > could be accessed via a synthetic/'pseudo-firmware' register on a vCPU FD:
+> > 
+> 
+> They're accessed through vcpu or kvm fd depending on what type the event
+> is. For the VM-owned shared event, they're accessed through KVM fd. For the
+> vcpu-owned private event, they're accessed through vcpu fd.
+
+Some of the state that you represent in struct kvm_sdei_registered_event_state
+is really per-vCPU state. Any time that there's data available at a vCPU
+granularity userspace should access it with a vCPU FD.
+
+> I'm not sure if I catch the idea to have a synthetic register and I'm to
+> confirm. If I'm correct, you're talking about the "IMPLEMENTATION DEFINED"
+> system register, whose OP0 and CRn are 0B11 and 0B1x11. If two implementation
+> defined registers can be adopted, I don't think we need to expose anything
+> through ABI. All the operations and the needed data can be passed through
+> the system registers.
+
+No, I'm not talking about the guest-facing interface. I'm talking about
+what gets exposed to userspace to migrate the VM's state. For parts of
+the guest that do not map to an architectural construct, we've defined
+the concept of a firmware pseudo-register. What that really means is we
+expose a register to userspace that is inaccessible from the guest which
+migrates KVM's nonarchitected state. We are abusing the fact that VMMs
+will save/restore whatever registers are reported on KVM_GET_REG_LIST to
+trick it into migrating KVM state, and it has worked quite nicely to
+avoid adding new ioctls for new features. It also means that older VMMs
+are capable of utilizing new KVM features, so long as they obey the
+prescribed rules.
+
+--
+Thanks,
+Oliver

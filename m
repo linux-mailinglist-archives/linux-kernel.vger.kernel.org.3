@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D645D4E5F18
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DA04E5F1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348318AbiCXHKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S1348356AbiCXHLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239320AbiCXHKN (ORCPT
+        with ESMTP id S241560AbiCXHLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:10:13 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFE298582;
-        Thu, 24 Mar 2022 00:08:41 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b15so4528149edn.4;
-        Thu, 24 Mar 2022 00:08:41 -0700 (PDT)
+        Thu, 24 Mar 2022 03:11:39 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069DB97BB8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:10:08 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id qa43so7224612ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2DIzib4o08iye1kgkTSG9/ojDh+JAr+HPIElFaP/bcc=;
-        b=lCt1RxMJ8zVYgbMpVAzhxiZ+KgXTt3FIQ+H89ZtLkKjrJv8w9eNH6KMwtYvtj0uExe
-         UZn3pEZaC3AIqEE4+pWQkIAZ7ZrvcNbzH5dSG3fiib5d79iTSZhT69z7PrzcERJzJDNc
-         3AOqoHYV4FPfo/VS+S1F2UdiTU9olX8B1f/CMNdFJf8UwSeOWNhUW9NMekVC3GmjGUtw
-         /wcr5dFrrFGLa3xkuxoAyNxrVP1zc0Kj7okXMZYS748aapUQltGkHAij6675zRIquCLx
-         79xFJ0XwnTgY8P1OMsZWMAPXjRr3C/RDx6gZpZ0Eyr/tSwVKf6lB/fhxxTZxZaCHTE3K
-         CUTg==
+        bh=IN45MgxtWaRfpFlpfKUe4+VRGIjivM/4DTp3sJLsU/4=;
+        b=ZGWRPQjImZea5J4l1+miHMp2VkmI8bMon5blENgAEZtH59PeX1lrclVTlN9ey45hTG
+         nvCBZtoi2vurUaOLO9tON8ae9KCDaaPTumvj3/2eBFHH2CHYH9mqVwqxbRMbf7/HQfUa
+         S7cXgvP1NOJBMvjdTKB0dm75CMTlBCxMoQJSe7mDk/RiOAYZWbToziU7EEIEtEhppGHI
+         iN+cHgDK8X8VnuudYNulzVWdAAe/i0BGODqq0FH9xxiYFWV8MaLvwerkKxWjURTfrNDm
+         d3Gb/KpUiwEZ2SKMF6NCu/bz8dyszxt/OnnQSXPOh7b1+RnQk/LICZ5H0J3aKi0I5piG
+         B7wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2DIzib4o08iye1kgkTSG9/ojDh+JAr+HPIElFaP/bcc=;
-        b=meGu1iKHuj2FlCWYCWfJt/4xyN0rMaqxQ85Cad+lYEwLu503GmrWg9DZ7e0IwS/4R2
-         GiSFcbMGb9OzEV/60ILSUzdRy0Ekrz5XELxafvyl8T5ykZ0sJ4OgK4DiSRy/vAM2JejB
-         FHtILsdMCc3WB5lgUH8XufjweGdKWOG94OW5CLwus7q8jC40fYiTih8kiZ7+1YAzjS1g
-         9ljUUuRz+zh+0JOLK+o1jondCa3mkuH4feiUMzxsQIcbBMcc83JLZqKZIc/TxF151G/7
-         b3x+Er3NJSJtqbKM5kzAp52dNc5g/7EkesbYcuV+SBsLXaAF5j4K2TMnLiv7rLGb7Ds9
-         VWRg==
-X-Gm-Message-State: AOAM533PN06hiRkO9UYe22nPuJNYHtV4HDslmN10TIMV20aOZ2f4i/Ew
-        geAj+/YG1bjXl2FuQEeTXxg=
-X-Google-Smtp-Source: ABdhPJyGuOyR40tiN+XJl/Z+fRAxZlJTj44MIkp0nzo3GoVPoeQNYup2mTfdo8v+ARKWzr7xiqqi6g==
-X-Received: by 2002:a05:6402:506:b0:419:46b2:2433 with SMTP id m6-20020a056402050600b0041946b22433mr4938255edv.21.1648105719877;
-        Thu, 24 Mar 2022 00:08:39 -0700 (PDT)
+        bh=IN45MgxtWaRfpFlpfKUe4+VRGIjivM/4DTp3sJLsU/4=;
+        b=nTRfsk7Ks+qfbu/UxKD8shV1MUoC1PW1I63w47TaOZtvY9V2IqO8tkXd+TcOKZPFyM
+         gLrtRwvD+/b3GQi3i13mLiINC1yR52ejaeV+pnpVahUDkgp690weImrSVks+CIjPhPD+
+         V3mdizHGl32WxN1sNXEh4zbBfEtuE/LYqAf8AelI7gx84iRJpBGUWNjp8PapyIZI2Zmf
+         XcsESG5gzV1ljf+2DhFB0pJvV+yg5B/LMagUJCqWz4v/I6TMfHdzg0czEwue+7AQnlRx
+         oOucjfHcyyh8ECvwh39toQcdfEnuCO3fRuNJmxLHQYE3lAq2RaRGrkwSftPHOwT0ORcA
+         ZHHQ==
+X-Gm-Message-State: AOAM532ePgxQ/kwRLN8qcJuuDkLPGNtisIUC/xPI7qEvxM8eJsfBRIft
+        6k9heP5AjfHRrMIYkrMDee7D2+XCezfW4g==
+X-Google-Smtp-Source: ABdhPJxqL1XOMNYqbzWPWVkaylmarCxByO5dsHWi2Hikj9Q9L6wpOkei4fY9CS4CNY+aTnxg5leEjA==
+X-Received: by 2002:a17:907:a0c8:b0:6e0:7d03:3067 with SMTP id hw8-20020a170907a0c800b006e07d033067mr1646110ejc.609.1648105805766;
+        Thu, 24 Mar 2022 00:10:05 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id o2-20020a50d802000000b00410d7f0c52csm1011976edj.8.2022.03.24.00.08.38
+        by smtp.googlemail.com with ESMTPSA id c11-20020a056402120b00b004196059efd1sm971020edw.75.2022.03.24.00.10.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:08:39 -0700 (PDT)
+        Thu, 24 Mar 2022 00:10:05 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Ariel Elior <aelior@marvell.com>
-Cc:     Sudarsana Kalluru <skalluru@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] bnx2x: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:08:16 +0100
-Message-Id: <20220324070816.58599-1-jakobkoschel@gmail.com>
+Subject: [PATCH] char: xillybus: replace usage of found with dedicated list iterator variable
+Date:   Thu, 24 Mar 2022 08:09:39 +0100
+Message-Id: <20220324070939.59297-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -89,39 +86,67 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/char/xillybus/xillybus_class.c | 26 ++++++++++++--------------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-index c19b072f3a23..fe985ddb35db 100644
---- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-@@ -12971,20 +12971,19 @@ static int bnx2x_vlan_rx_add_vid(struct net_device *dev, __be16 proto, u16 vid)
- 
- static int bnx2x_vlan_rx_kill_vid(struct net_device *dev, __be16 proto, u16 vid)
+diff --git a/drivers/char/xillybus/xillybus_class.c b/drivers/char/xillybus/xillybus_class.c
+index 5046486011c8..0f238648dcfe 100644
+--- a/drivers/char/xillybus/xillybus_class.c
++++ b/drivers/char/xillybus/xillybus_class.c
+@@ -174,18 +174,17 @@ void xillybus_cleanup_chrdev(void *private_data,
+ 			     struct device *dev)
  {
-+	struct bnx2x_vlan_entry *vlan = NULL, *iter;
- 	struct bnx2x *bp = netdev_priv(dev);
--	struct bnx2x_vlan_entry *vlan;
+ 	int minor;
+-	struct xilly_unit *unit;
 -	bool found = false;
- 	int rc = 0;
++	struct xilly_unit *unit = NULL, *iter;
  
- 	DP(NETIF_MSG_IFUP, "Removing VLAN %d\n", vid);
+ 	mutex_lock(&unit_mutex);
  
--	list_for_each_entry(vlan, &bp->vlan_reg, link)
--		if (vlan->vid == vid) {
+-	list_for_each_entry(unit, &unit_list, list_entry)
+-		if (unit->private_data == private_data) {
 -			found = true;
-+	list_for_each_entry(iter, &bp->vlan_reg, link)
-+		if (iter->vid == vid) {
-+			vlan = iter;
++	list_for_each_entry(iter, &unit_list, list_entry)
++		if (iter->private_data == private_data) {
++			unit = iter;
  			break;
  		}
  
 -	if (!found) {
-+	if (!vlan) {
- 		BNX2X_ERR("Unable to kill VLAN %d - not found\n", vid);
- 		return -EINVAL;
- 	}
++	if (!unit) {
+ 		dev_err(dev, "Weird bug: Failed to find unit\n");
+ 		mutex_unlock(&unit_mutex);
+ 		return;
+@@ -216,22 +215,21 @@ int xillybus_find_inode(struct inode *inode,
+ {
+ 	int minor = iminor(inode);
+ 	int major = imajor(inode);
+-	struct xilly_unit *unit;
+-	bool found = false;
++	struct xilly_unit *unit = NULL, *iter;
+ 
+ 	mutex_lock(&unit_mutex);
+ 
+-	list_for_each_entry(unit, &unit_list, list_entry)
+-		if (unit->major == major &&
+-		    minor >= unit->lowest_minor &&
+-		    minor < (unit->lowest_minor + unit->num_nodes)) {
+-			found = true;
++	list_for_each_entry(iter, &unit_list, list_entry)
++		if (iter->major == major &&
++		    minor >= iter->lowest_minor &&
++		    minor < (iter->lowest_minor + iter->num_nodes)) {
++			unit = iter;
+ 			break;
+ 		}
+ 
+ 	mutex_unlock(&unit_mutex);
+ 
+-	if (!found)
++	if (!unit)
+ 		return -ENODEV;
+ 
+ 	*private_data = unit->private_data;
 
 base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 

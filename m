@@ -2,79 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F222F4E6357
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC124E6366
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350200AbiCXMac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S1350217AbiCXMba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241594AbiCXMa3 (ORCPT
+        with ESMTP id S1350215AbiCXMbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:30:29 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F20A94EC;
-        Thu, 24 Mar 2022 05:28:58 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id w4so6386242wrg.12;
-        Thu, 24 Mar 2022 05:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0ov3ZR+ak5DEDpTymdl0/BQjBNtuGJXsPc9qEMjlbkQ=;
-        b=hVtw6rp+xuX0d32ARb62dUhqM4R3VC5pofs48O+4O920vt8CSq/sMLpt+8+LAZTn6e
-         VIElYkUtW8LSN1yoQMFd2i9puNjj5gYEvYDBOb3SSsgi3tPQAHlmFxSvRgtvszbt6FyO
-         NmOZEEZDK1GdAONx5AAxdMlRMLuKDF0uAD55768LvcmNbHzBYo4INUMN+su5fvumLCJ1
-         7ktrUpLJEE/CMXKFSi0V3hAuB4a5tjC8+ZX/61G0VwG54/3FBkrPk9WXLZmeRHMYXL8P
-         XdaRpRUztUdXn2sXDoBLQN3klBO9J8OPo2ShA+q9B8maZSx5U5yC9a+7/BJ9zNKLqQix
-         g6Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0ov3ZR+ak5DEDpTymdl0/BQjBNtuGJXsPc9qEMjlbkQ=;
-        b=JIE/7IGhW+VHth6LxugJU6ZeMFGOdKbfrvRmH5mPN01Fgao3WWDa6r9+9kJ4GVJv3f
-         v63iKoRTIvxt7ebaCYhR/C+nvYXTv089dWMN9/daWb+Ta8Xi6uts7dwrdYlNXyiqQpHx
-         l3LfeYGamFbhV0P5URFwusEU3EE1pDiU4Y5QSHdqWC8cPOtSNqrkGwCxLh+7Dwqsh7f/
-         2ZEj4WhnukhbXCnnQcLahe5heS+MUWaJNfiPmMkKt6vhxwT/mafGqodH2o8keKSYLcEX
-         8L0bpmTcQRxMltzTGD7VcPCQEcp7moW88LjUd0B10nRpWf4Bgxvbrs1Kbw6FWWiCVsS+
-         W3Hg==
-X-Gm-Message-State: AOAM5330URMBCb+Z5MS+DxsL6+K393gROTNGF8T1dmTEjQPYRtvIGMgQ
-        5UTizzDOGxBG9+Qrsudn5wg=
-X-Google-Smtp-Source: ABdhPJzsygHW9SyBpZIAEvN/v/Oz7TkRtXHqmlOfpcjumaG0XM8yQr5RnjRWRQydHA0frLg8LXHT8A==
-X-Received: by 2002:a05:6000:168e:b0:204:fe5:a55 with SMTP id y14-20020a056000168e00b002040fe50a55mr4282985wrd.453.1648124936591;
-        Thu, 24 Mar 2022 05:28:56 -0700 (PDT)
-Received: from [192.168.0.32] ([137.101.87.65])
-        by smtp.gmail.com with ESMTPSA id i74-20020adf90d0000000b0020373ba7beesm3913847wri.0.2022.03.24.05.28.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 05:28:56 -0700 (PDT)
-Message-ID: <0bd165e6-6d2c-7586-44c3-9c257843600f@gmail.com>
-Date:   Thu, 24 Mar 2022 13:28:55 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 05/22] arm64: dts: mt8192: Add usb-phy node
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-6-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220318144534.17996-6-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 08:31:24 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73FFA995A;
+        Thu, 24 Mar 2022 05:29:52 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id D99535C014D;
+        Thu, 24 Mar 2022 08:29:51 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute1.internal (MEProxy); Thu, 24 Mar 2022 08:29:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=Up3dHTMXn3+4fL
+        UoQJEi2QXNKuRNdeUTtoLiyFBrbHM=; b=y9MiYRW2H0kvGQzUrfOSK49obI2x2v
+        k3hmCDgVcsW5ejjQwtxVh3M80/wXFTbFwm3zPmwDhCT5op4dLd5ic7ef0Q9oYJYA
+        OsJhez+oHpUzG6LaOLRNiY3chK3U70ObYI6doFNbRdXGzdCfDKprBiCDX0+/VZBG
+        lG9UYeBAkhot8/BdV7Jx8jDARk4dLluVXfMslc6HW+eLyQWlOtfAPsL2vvma/zDL
+        crtY1YKRuEGHuB+XHMsYd/84K/3xiUFQejncBFMRyM3qrrUo1dILeoJHoVglGU6b
+        sOL5hDSnOqngl+7/vc9jcjQf7d1Batro8RmhFyQDzXM9Wm3/WqZc/nAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=Up3dHTMXn3+4fLUoQJEi2QXNKuRNdeUTtoLiyFBrb
+        HM=; b=nM7p8Gqmnsgq/0LE2Ng99N0xuYBHq3UhCUY5NVZ32LQBa+BEgCb6pV31i
+        tvJrgkWuHvwwWGU2ozl+T9tJk407AWgK6kSY+OxPh8NADs/oJsUKKmJl1UBmvtn3
+        CzVLUQOisYtBp9oULeZ9grWvpQZkDHLva/CyFR/q4lGhmKAd4uxARx0uBW47nRmL
+        J+eNQzmnmV6Bft8daqgJ24iHl7wrJYWdPI1mnOQPovg0338ppxeWmEu0fXpt86+G
+        4DJx09AgKAoVpy0tz7GHbR1GxybRNGjZLy72BVwh0hR4ZLDKQSXtkLp7HMJ2sQGU
+        b61c9FEbBMRe6h1Ykp9rP887L6Yvw==
+X-ME-Sender: <xms:P2Q8Yoga1vwQXDV_yWxUJceE7hQs2YhJ60S9IKk3Q4EDYpFYPisCWg>
+    <xme:P2Q8YhCYVbCU8Nm1JFW6aWNlE3A42O6jMOWpxgNdsX9zEGeY_y3vjH1tqQZ7qme11
+    2uivyAs-Pw_MSpZL5I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegledgfeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepfeetgeekveeftefhgfduheegvdeuuddvieefvddvlefh
+    feehkeetfeeukedtfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:P2Q8YgF3MAHlGghZfDECDNkBdDWMxDS5t4ezS_9p_rQ_cgx8vtxjow>
+    <xmx:P2Q8YpT9XOQvEzForAQ2mE5p0KBbB0FBxU-vFIlzFOoaA-3ubYTh8A>
+    <xmx:P2Q8Yly0HiBnMFzuQ_raMJ7kCKrrGi965YP1wq2ijWiggvu9Ub7t2Q>
+    <xmx:P2Q8Yg9xEShgAe4Q1QmRJo_E91MtDXHlD9kwBo3rbHASRgwN9fYXMg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3F51FFA0AA6; Thu, 24 Mar 2022 08:29:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4911-g925b585eab-fm-20220323.003-g925b585e
+Mime-Version: 1.0
+Message-Id: <490570bf-0e91-471b-b081-5ebd35541522@www.fastmail.com>
+In-Reply-To: <fb188614-0301-3255-c31c-3d443cf17b91@loongson.cn>
+References: <1647615920-23103-1-git-send-email-yangtiezhu@loongson.cn>
+ <1647615920-23103-4-git-send-email-yangtiezhu@loongson.cn>
+ <33241bd3-2f12-954c-6701-56cf563060bb@flygoat.com>
+ <fb188614-0301-3255-c31c-3d443cf17b91@loongson.cn>
+Date:   Thu, 24 Mar 2022 12:29:28 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc:     "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] MIPS: Use memblock_add_node() in early_parse_mem() under
+ CONFIG_NUMA
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,47 +91,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 18/03/2022 15:45, Allen-KH Cheng wrote:
-> Add xhci node for mt8192 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+=E5=9C=A82022=E5=B9=B43=E6=9C=8823=E6=97=A5=E4=B8=89=E6=9C=88 =E4=B8=8A=E5=
+=8D=882:42=EF=BC=8CTiezhu Yang=E5=86=99=E9=81=93=EF=BC=9A
+> On 03/22/2022 09:19 PM, Jiaxun Yang wrote:
+>>
+>>
+>> =E5=9C=A8 2022/3/18 15:05, Tiezhu Yang =E5=86=99=E9=81=93:
+>>> Use memblock_add_node to add new memblock region within a NUMA node
+>>> in early_parse_mem() under CONFIG_NUMA, otherwise the mem parameter
+>>> can not work well.
+>>
+>> Hi Tiezhu,
+>>
+>> pa_to_nid doesn't exist when CONFIG_NUME is disabled.
+>> So probably you want #ifdef macro instead =EF=BC=9F
+>
+> Hi Jiaxun,
+>
+> Thank you for your reply.
+>
+> As far as I can tell, if CONFIG_NUMA is set, IS_ENABLED(CONFIG_NUMA)
+> is 1, pa_to_nid() is defined in the platform dependent header file:
 
-Applied, thanks!
+Yep you're right.
+Apologies for the noise.
 
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 22 ++++++++++++++++++++++
->   1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 195d50894df4..28b93b76fe17 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -875,6 +875,28 @@
->   			#clock-cells = <1>;
->   		};
->   
-> +		u3phy0: t-phy@11e40000 {
-> +			compatible = "mediatek,mt8192-tphy",
-> +				     "mediatek,generic-tphy-v2";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0x0 0x11e40000 0x1000>;
-> +
-> +			u2port0: usb-phy@0 {
-> +				reg = <0x0 0x700>;
-> +				clocks = <&clk26m>;
-> +				clock-names = "ref";
-> +				#phy-cells = <1>;
-> +			};
-> +
-> +			u3port0: usb-phy@700 {
-> +				reg = <0x700 0x900>;
-> +				clocks = <&clk26m>;
-> +				clock-names = "ref";
-> +				#phy-cells = <1>;
-> +			};
-> +		};
-> +
->   		i2c0: i2c@11f00000 {
->   			compatible = "mediatek,mt8192-i2c";
->   			reg = <0 0x11f00000 0 0x1000>,
+For the whole series:
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+Thanks.
+
+>
+> 	arch/mips/include/asm/mach-ip27/mmzone.h
+> 	arch/mips/include/asm/mach-loongson64/mmzone.h
+>
+> if CONFIG_NUMA is not set, IS_ENABLED(CONFIG_NUMA) is 0, pa_to_nid()
+> is always 0 which is defined in arch/mips/include/asm/mmzone.h:
+>
+> 	#ifdef CONFIG_NUMA
+> 	# include <mmzone.h>
+> 	#endif
+>
+> 	#ifndef pa_to_nid
+> 	#define pa_to_nid(addr) 0
+> 	#endif
+>
+> So pa_to_nid() is defined under both CONFIG_NUMA and !CONFIG_NUMA,
+> there is no build error.
+>
+> Additionally, use #ifdef CONFIG_NUMA is also OK, but I prefer to
+> use IS_ENABLED(CONFIG_NUMA).
+>
+> If I am missing something, please let me know, thank you.
+>
+> Thanks,
+> Tiezhu
+>
+>>
+>> Thanks.
+>> - Jiaxun
+>>
+>>>
+>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>> ---
+>>>   arch/mips/kernel/setup.c | 6 +++++-
+>>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+>>> index c8c8f60..50cdc08 100644
+>>> --- a/arch/mips/kernel/setup.c
+>>> +++ b/arch/mips/kernel/setup.c
+>>> @@ -37,6 +37,7 @@
+>>>   #include <asm/cdmm.h>
+>>>   #include <asm/cpu.h>
+>>>   #include <asm/debug.h>
+>>> +#include <asm/mmzone.h>
+>>>   #include <asm/sections.h>
+>>>   #include <asm/setup.h>
+>>>   #include <asm/smp-ops.h>
+>>> @@ -378,7 +379,10 @@ static int __init early_parse_mem(char *p)
+>>>               memblock_end_of_DRAM() - memblock_start_of_DRAM());
+>>>       }
+>>>   -    memblock_add(start, size);
+>>> +    if (IS_ENABLED(CONFIG_NUMA))
+>>> +        memblock_add_node(start, size, pa_to_nid(start), MEMBLOCK_N=
+ONE);
+>>> +    else
+>>> +        memblock_add(start, size);
+>>>         return 0;
+>>>   }
+
+--=20
+- Jiaxun

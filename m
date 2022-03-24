@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B86C4E5E42
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 06:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9501E4E5E4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 06:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348163AbiCXFlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 01:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
+        id S242211AbiCXFq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 01:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347818AbiCXFkg (ORCPT
+        with ESMTP id S232029AbiCXFq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 01:40:36 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F9817AA1;
-        Wed, 23 Mar 2022 22:39:03 -0700 (PDT)
-X-UUID: bbfa5b4b37724a02a787fa705f23e60c-20220324
-X-UUID: bbfa5b4b37724a02a787fa705f23e60c-20220324
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1847726354; Thu, 24 Mar 2022 13:38:57 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 24 Mar 2022 13:38:57 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 24 Mar 2022 13:38:56 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <aaronyu@google.com>, <angelogioacchino.delregno@collabora.com>,
-        <tzungbi@google.com>, <miles.chen@mediatek.com>,
-        <yc.hung@mediatek.com>
-Subject: [PATCH v4 6/6] ASoC: dt-bindings: mediatek: mt8195: support mt8195-mt6359-max98390-rt5682
-Date:   Thu, 24 Mar 2022 13:38:51 +0800
-Message-ID: <20220324053851.27350-7-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220324053851.27350-1-trevor.wu@mediatek.com>
-References: <20220324053851.27350-1-trevor.wu@mediatek.com>
+        Thu, 24 Mar 2022 01:46:57 -0400
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7D2F4F469
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 22:45:24 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id 48ED115F93B;
+        Thu, 24 Mar 2022 14:45:24 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22O5jNXF013758
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 24 Mar 2022 14:45:24 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22O5jMcD042673
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 24 Mar 2022 14:45:23 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 22O5jMuC042672;
+        Thu, 24 Mar 2022 14:45:22 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Jonathan Lassoff <jof@thejof.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] Add FAT messages to printk index
+References: <20220324021957.20173-1-jof@thejof.com>
+Date:   Thu, 24 Mar 2022 14:45:22 +0900
+In-Reply-To: <20220324021957.20173-1-jof@thejof.com> (Jonathan Lassoff's
+        message of "Thu, 24 Mar 2022 02:19:58 +0000")
+Message-ID: <87fsn79a4t.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,26 +51,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds compatible string "mediatek,mt8195-mt6359-max98390-rt5682"
-to support mt8195 board with mt6359, max98390 and rt5682.
+Jonathan Lassoff <jof@thejof.com> writes:
 
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
----
- Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml | 1 +
- 1 file changed, 1 insertion(+)
+> In order for end users to quickly react to new issues that come up in
+> production, it is proving useful to leverage the printk indexing system. This
+> printk index enables kernel developers to use calls to printk() with changable
+> ad-hoc format strings, while still enabling end users to detect changes and
+> develop a semi-stable interface for detecting and parsing these messages.
+>
+> So that detailed FAT messages are captured by this printk index, this patch
+> wraps fat_msg with a macro.
+>
+> PATCH v1 -- Fix indentation with tabs in fat_msg macro
+> PATCH v2 -- Define FAT_PRINTK_PREFIX
+> PATCH v3 -- Fix kernel-doc comment for _fat_msg()
+>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml b/Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml
-index 04953f5b44a4..ad3447ff8b2c 100644
---- a/Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml
-@@ -17,6 +17,7 @@ properties:
-     enum:
-       - mediatek,mt8195_mt6359_rt1019_rt5682
-       - mediatek,mt8195_mt6359_rt1011_rt5682
-+      - mediatek,mt8195_mt6359_max98390_rt5682
- 
-   model:
-     $ref: /schemas/types.yaml#/definitions/string
+Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+
+Thanks.
+
+> ---
+>  fs/fat/fat.h  |  9 ++++++++-
+>  fs/fat/misc.c | 14 ++++++++++----
+>  2 files changed, 18 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/fat/fat.h b/fs/fat/fat.h
+> index 02d4d4234956..2a20a21f2fb9 100644
+> --- a/fs/fat/fat.h
+> +++ b/fs/fat/fat.h
+> @@ -433,8 +433,15 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...);
+>  	__fat_fs_error(sb, 1, fmt , ## args)
+>  #define fat_fs_error_ratelimit(sb, fmt, args...) \
+>  	__fat_fs_error(sb, __ratelimit(&MSDOS_SB(sb)->ratelimit), fmt , ## args)
+> +
+> +#define FAT_PRINTK_PREFIX "%sFAT-fs (%s): "
+> +#define fat_msg(sb, level, fmt, args...)				\
+> +do {									\
+> +	printk_index_subsys_emit(FAT_PRINTK_PREFIX, level, fmt, ##args);\
+> +	_fat_msg(sb, level, fmt, ##args);				\
+> +} while(0)
+>  __printf(3, 4) __cold
+> -void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
+> +void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
+>  #define fat_msg_ratelimit(sb, level, fmt, args...)	\
+>  	do {	\
+>  			if (__ratelimit(&MSDOS_SB(sb)->ratelimit))	\
+> diff --git a/fs/fat/misc.c b/fs/fat/misc.c
+> index 91ca3c304211..855477d89f41 100644
+> --- a/fs/fat/misc.c
+> +++ b/fs/fat/misc.c
+> @@ -42,10 +42,16 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
+>  EXPORT_SYMBOL_GPL(__fat_fs_error);
+>  
+>  /**
+> - * fat_msg() - print preformated FAT specific messages. Every thing what is
+> - * not fat_fs_error() should be fat_msg().
+> + * _fat_msg() - Print a preformatted FAT message based on a superblock.
+> + * @sb: A pointer to a &struct super_block
+> + * @level: A Kernel printk level constant
+> + * @fmt: The printf-style format string to print.
+> + *
+> + * Everything that is not fat_fs_error() should be fat_msg().
+> + *
+> + * fat_msg() wraps _fat_msg() for printk indexing.
+>   */
+> -void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+> +void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+>  {
+>  	struct va_format vaf;
+>  	va_list args;
+> @@ -53,7 +59,7 @@ void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+>  	va_start(args, fmt);
+>  	vaf.fmt = fmt;
+>  	vaf.va = &args;
+> -	printk("%sFAT-fs (%s): %pV\n", level, sb->s_id, &vaf);
+> +	_printk(FAT_PRINTK_PREFIX "%pV\n", level, sb->s_id, &vaf);
+>  	va_end(args);
+>  }
+
 -- 
-2.18.0
-
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

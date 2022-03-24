@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF904E6042
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20E54E5FEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348897AbiCXIXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S1348842AbiCXIJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240325AbiCXIXb (ORCPT
+        with ESMTP id S1348808AbiCXIJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:23:31 -0400
+        Thu, 24 Mar 2022 04:09:08 -0400
 Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 360D19AE74
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:21:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAC524D257
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:06:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
         s=s110527; h=From:Subject:Date:Message-Id; bh=X2PkbZuSv9BM7e1K9t
         z2R+SePk62dCZezpam7namyVY=; b=RtMkhZh21Q/LFBYdsgq3eTqWEKIu73tDrS
@@ -41,7 +41,7 @@ X-CM-SenderInfo: 5xqvxz5sohimizt6il2tof0z/1tbiNALNH1aD-KonPgAAs+
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net

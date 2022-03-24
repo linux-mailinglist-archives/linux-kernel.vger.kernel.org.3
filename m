@@ -2,103 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BD14E5EF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 07:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC124E5EF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 07:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348217AbiCXGxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 02:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        id S1347996AbiCXGzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 02:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiCXGxf (ORCPT
+        with ESMTP id S230331AbiCXGzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 02:53:35 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C1C95494
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 23:51:59 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id e16so6390221lfc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 23:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uv9WDFuf73d36aG534OWTYxmQv2bNKKIk/9hpshgIJU=;
-        b=Kq8gbI9QPeSROVHNU9dFJEHcWJnqsbuUDwE9QvWau9w5fMGGztvKfyqamgfePWtIP2
-         8oUQbzmwhvMTZ9u2HVCqwgMle+PWtNdwGH7Fj7oMF0pqAH35MsL+Or1vbBulcyAt+rvM
-         vc9HCHhIocij9414WGtRFt198fp6E08L02GUCFPiP52kJY/HW+9eFT1mltFFZ3BaG3ln
-         5kqV/NJgdHc6SXLp+Fymz2qAtXl+EUFnP0gtnTg1Wa85RvSt0irE57CUq1s3FJWKFWfW
-         888oKuWc2fQxTuWhxjVsD8mbp8sfCJgRvICccKylPmR/N2tK9/37tW4otVE4laU5vFFv
-         MhzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uv9WDFuf73d36aG534OWTYxmQv2bNKKIk/9hpshgIJU=;
-        b=kqCHiCSLGOg8EVjdR2j1cu+LD19nrYnCmzff9bFsO6EwOZROvhzxLJgo/STCasYBh9
-         bNwCz0aazx83XFDc8MdMn6eGksQiT2FdklLUXWjUOHOA8biJSI7EY0c1nSYNGaSvXppS
-         HLh/pF4u9H0qqyOskpZ8JQYnbb4/j3yjIKdBdgu6jhmMAdzr80cDhl5zBqyb8wYZcjJq
-         jBlUyV4PB70rlLoF8KpihM7RQJ4OBbD+rnbLB8rZMThAv68GSva1z2mcmAZ+ow9eho6y
-         U4S6ngMAXrvZskrAbcucVPCppiWP1UgbyKg9XUpjxgJFx36ec/OFGq/RGxtx+ldtUY1t
-         8vsQ==
-X-Gm-Message-State: AOAM531fhLgt4udy5yAGkrxUfl7tr2PBUeqSqcEyP/3agKwo0p+mMzAp
-        7HQgBShjnoe13PdlyZZ4xxMtGUqZw2ChzF9jSdtodfubU4E=
-X-Google-Smtp-Source: ABdhPJwDfXqglQAx4xkKcgV5qn+FFERkaesBPRjOEZL/Efm6/Fu/ASIYOR/QcdIpx4wkzANYfvK5RODptL0UVCnEAwQ=
-X-Received: by 2002:a05:6512:308e:b0:448:5d75:9729 with SMTP id
- z14-20020a056512308e00b004485d759729mr2598646lfd.663.1648104717736; Wed, 23
- Mar 2022 23:51:57 -0700 (PDT)
+        Thu, 24 Mar 2022 02:55:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DFCD34B8E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 23:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648104853;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uqxLCdovFgJL3F6d8oL7OZj3s1uofXe6x4kAqL3R+ZE=;
+        b=WNynCwWhLybu5kQOgXqZdV0JzGoSUrrXrvXKXSE1MGnu52qNBHsFCwp93o+l2bwpS48/Oj
+        Udav5B5tx9gj0DMgNKmLYFQc1zxdJ/PFboNpRmEkMvPmtsp4MLbGb6A2NU/WbFxr+5Q6j4
+        0eoBQwOaYtYv6/Gfgp3jgCaESmT848g=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-275-EWgYXsDqMoebXbULwH5HzA-1; Thu, 24 Mar 2022 02:54:10 -0400
+X-MC-Unique: EWgYXsDqMoebXbULwH5HzA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B19A61C05AC4;
+        Thu, 24 Mar 2022 06:54:09 +0000 (UTC)
+Received: from [10.72.12.33] (ovpn-12-33.pek2.redhat.com [10.72.12.33])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7AC0140CF8ED;
+        Thu, 24 Mar 2022 06:54:04 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v5 02/22] KVM: arm64: Add SDEI virtualization
+ infrastructure
+To:     Oliver Upton <oupton@google.com>
+Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
+        linux-kernel@vger.kernel.org, eauger@redhat.com,
+        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
+References: <20220322080710.51727-1-gshan@redhat.com>
+ <20220322080710.51727-3-gshan@redhat.com> <YjtUufdsWYxqdGa+@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <4d4e5645-4443-c233-6d25-97e68d804512@redhat.com>
+Date:   Thu, 24 Mar 2022 14:54:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <CAHmME9q55ifnzxE9zLuLT=Hgjv=qcvjU-O-c8G=_o_V_O+p44Q@mail.gmail.com>
-In-Reply-To: <CAHmME9q55ifnzxE9zLuLT=Hgjv=qcvjU-O-c8G=_o_V_O+p44Q@mail.gmail.com>
-From:   Sandy Harris <sandyinchina@gmail.com>
-Date:   Thu, 24 Mar 2022 14:51:45 +0800
-Message-ID: <CACXcFmnb87qqzVkw9GfojPNh5sDkYGsqq9TYxUXBvrC1R+Lr3w@mail.gmail.com>
-Subject: Re: Large post detailing recent Linux RNG improvements
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YjtUufdsWYxqdGa+@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+Hi Oliver,
 
-> Thought I should mention here that I've written up the various RNG
-> things I've been working on for 5.17 & 5.18 here:
-> https://www.zx2c4.com/projects/linux-rng-5.17-5.18/ .
->
-> Feel free to discuss on list here if you'd like, or if you see
-> something you don't like, I'll happily review patches!
+On 3/24/22 1:11 AM, Oliver Upton wrote:
+> More comments, didn't see exactly how all of these structures are
+> getting used.
+> 
 
-Your code includes:
+Ok, thanks for your review and comments.
 
-enum {
-    POOL_BITS = BLAKE2S_HASH_SIZE * 8,
-    POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
-};
+> On Tue, Mar 22, 2022 at 04:06:50PM +0800, Gavin Shan wrote:
+> 
+> [...]
+> 
+>> diff --git a/arch/arm64/include/uapi/asm/kvm_sdei_state.h b/arch/arm64/include/uapi/asm/kvm_sdei_state.h
+>> new file mode 100644
+>> index 000000000000..b14844230117
+>> --- /dev/null
+>> +++ b/arch/arm64/include/uapi/asm/kvm_sdei_state.h
+>> @@ -0,0 +1,72 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>> +/*
+>> + * Definitions of various KVM SDEI event states.
+>> + *
+>> + * Copyright (C) 2022 Red Hat, Inc.
+>> + *
+>> + * Author(s): Gavin Shan <gshan@redhat.com>
+>> + */
+>> +
+>> +#ifndef _UAPI__ASM_KVM_SDEI_STATE_H
+>> +#define _UAPI__ASM_KVM_SDEI_STATE_H
+>> +
+>> +#ifndef __ASSEMBLY__
+>> +#include <linux/types.h>
+>> +
+>> +/*
+>> + * The software signaled event is the default one, which is
+>> + * defined in v1.1 specification.
+>> + */
+>> +#define KVM_SDEI_INVALID_EVENT	0xFFFFFFFF
+> 
+> Isn't the constraint that bit 31 must be zero? (DEN 0054C 4.4 "Event
+> number allocation")
+> 
 
-static struct {
-    struct blake2s_state hash;
-    spinlock_t lock;
-    unsigned int entropy_count;
-} input_pool = {
-    .hash.h = { BLAKE2S_IV0 ^ (0x01010000 | BLAKE2S_HASH_SIZE),
-            BLAKE2S_IV1, BLAKE2S_IV2, BLAKE2S_IV3, BLAKE2S_IV4,
-            BLAKE2S_IV5, BLAKE2S_IV6, BLAKE2S_IV7 },
-    .hash.outlen = BLAKE2S_HASH_SIZE,
-    .lock = __SPIN_LOCK_UNLOCKED(input_pool.lock),
-};
+Yes, bit 31 of the event number should be zero. So this is invalid
+event number, used by struct kvm_sdei_vcpu_state::critical_num
+and normal_num to indicate if there is event being handled on the
+corresponding vcpu. When those fields are set to KVM_SDEI_INVALID_EVENT,
+no event is being handled on the vcpu.
 
-As far as I can tell, you have eliminated the 4K-bit input pool
-that this driver has always used & are just using the hash
-context as the input pool. To me, this looks like an error.
+>> +#define KVM_SDEI_DEFAULT_EVENT	0
+>> +
+>> +#define KVM_SDEI_MAX_VCPUS	512	/* Aligned to 64 */
+>> +#define KVM_SDEI_MAX_EVENTS	128
+> 
+> I would *strongly* recommend against having these limits. I find the
+> vCPU limit especially concerning, because we're making KVM_MAX_VCPUS
+> ABI, which it definitely is not. Anything that deals with a vCPU should
+> be accessed through a vCPU FD (and thus agnostic to the maximum number
+> of vCPUs) to avoid such a complication.
+> 
 
-A side effect of that is losing the latent-entropy attribute
-on input_pool[] so we no longer get initialisation from
-the plugin. Another error.
+For KVM_SDEI_DEFAULT_EVENT, which corresponds to the software signaled
+event. As you suggested on PATCH[15/22], we can't assume its usage.
+I will define it with SDEI_SW_SIGNALED_EVENT in uapi/linux/arm_sdei.h
+
+For KVM_SDEI_MAX_EVENTS, it will be moved from this header file to
+kvm_sdei.h after static arrays to hold the data structures or their
+pointers are used, as you suggested early for this patch (PATCH[02/22]).
+
+There are two types of (SDEI) events: shared and private. For the private
+event, it can be registered independently from the vcpus. It also means
+the address and argument for the entry points, corresponding to @ep_address
+and @ep_arg in struct kvm_sdei_registered_event, can be different on
+the individual vcpus. However, all the registered/enabled states and
+the entry point address and argument are same on all vcpus for the shared
+event. KVM_SDEI_MAX_VCPUS was introduced to use same data structure to
+represent both shared and private event.
+
+If the data belongs to particular vcpu should be accessed through the
+vcpu fd, then we need to split or reorganize the data struct as below.
+
+     /*
+      * The events are exposed through ioctl interface or similar
+      * mechanism (synthetic system registers?) before they can be
+      * registered. struct kvm_sdei_exposed_event instance is reserved
+      * from the kvm's static array on receiving the ioctl command
+      * from VMM.
+      */
+     struct kvm_sdei_exposed_event {
+         __u32   num;
+
+         __u8    type;
+         __u8    signaled;
+         __u8    priority;
+         __u8    padding;
+     };
+
+     /*
+      * The struct kvm_sdei_registered_event instance is allocated or
+      * reserved from the static array. For the shared event, the instance
+      * is linked to kvm, but it will be allocated or reserved from vcpu's
+      * static array and linked to the vcpu if it's a private event.
+      *
+      * The instance is only allocated and reserved upon SDEI_EVENT_REGISTER
+      * hypercall.
+      */
+     struct kvm_sdei_registered_event {
+         __u32   num
+
+#define KVM_SDEI_EVENT_STATE_REGISTERED         (1 << 0)
+#define KVM_SDEI_EVENT_STATE_ENABLE             (1 << 1)
+#define KVM_SDEI_EVENT_STATE_UNREGISTER_PENDING (1 << 2)
+         __u8    state;
+         __u8	route_mode;
+         __u8    padding[2];
+         __u64   route_affinity;
+         __u64	ep_address;
+         __u64	ep_arg;
+         __u64   notifier;
+     }
+
+>> +struct kvm_sdei_exposed_event_state {
+>> +	__u64	num;
+>> +
+>> +	__u8	type;
+>> +	__u8	signaled;
+>> +	__u8	priority;
+>> +	__u8	padding[5];
+>> +	__u64	notifier;
+> 
+> Wait, isn't this a kernel function pointer!?
+> 
+
+Yeah, it is a kernel function pointer, used by Async PF to know if
+the corresponding event has been handled or not. Async PF can cancel
+the previously injected event for performance concerns. Either Async PF
+or SDEI needs to migrate it. To keep SDEI transparent enough to Async PF,
+SDEI is responsible for its migration.
+
+>> +};
+>> +
+>> +struct kvm_sdei_registered_event_state {
+> 
+> You should fold these fields together with kvm_sdei_exposed_event_state
+> into a single 'kvm_sdei_event' structure:
+> 
+
+@route_mode and @route_affinity can't be configured or modified until
+the event is registered. Besides, they're only valid to the shared
+events. For private events, they don't have the routing needs. It means
+those two fields would be part of struct kvm_sdei_registered_event instead
+of kvm_sdei_exposed_event.
+
+
+>> +	__u64	num;
+>> +
+>> +	__u8	route_mode;
+>> +	__u8	padding[3];
+>> +	__u64	route_affinity;
+> 
+> And these shouldn't be UAPI at the VM scope. Each of these properties
+> could be accessed via a synthetic/'pseudo-firmware' register on a vCPU FD:
+> 
+
+They're accessed through vcpu or kvm fd depending on what type the event
+is. For the VM-owned shared event, they're accessed through KVM fd. For the
+vcpu-owned private event, they're accessed through vcpu fd.
+
+I'm not sure if I catch the idea to have a synthetic register and I'm to
+confirm. If I'm correct, you're talking about the "IMPLEMENTATION DEFINED"
+system register, whose OP0 and CRn are 0B11 and 0B1x11. If two implementation
+defined registers can be adopted, I don't think we need to expose anything
+through ABI. All the operations and the needed data can be passed through
+the system registers.
+
+     SYS_REG_SDEI_COMMAND
+         Receives commands like to expose event, register event and change
+         vcpu state etc.
+     SYS_REG_SDEI_DATA
+         The needed data corresponding to the received command.
+
+However, I'm not positive that synthetic register can be used here. When
+Mark Rutland review "PATCH[RFC v1] Async PF support", the implementation
+defined registers can't be used in a very limited way. That time, a set
+of implementation defined registers are defined to identify the asynchronous
+page faults and access to the control data block. However, the idea was
+rejected. Later on, Marc recommended SDEI for Async PF.
+
+https://www.spinics.net/lists/kvm-arm/msg40315.html
+
+
+>> +	__u64	ep_address[KVM_SDEI_MAX_VCPUS];
+>> +	__u64	ep_arg[KVM_SDEI_MAX_VCPUS];
+>> +	__u64	registered[KVM_SDEI_MAX_VCPUS/64];
+>> +	__u64	enabled[KVM_SDEI_MAX_VCPUS/64];
+>> +	__u64	unregister_pending[KVM_SDEI_MAX_VCPUS/64];
+>> +};
+>> +
+>> +struct kvm_sdei_vcpu_event_state {
+>> +	__u64	num;
+>> +
+>> +	__u32	event_count;
+>> +	__u32	padding;
+>> +};
+>> +
+>> +struct kvm_sdei_vcpu_regs_state {
+>> +	__u64	regs[18];
+>> +	__u64	pc;
+>> +	__u64	pstate;
+>> +};
+>> +
+>> +struct kvm_sdei_vcpu_state {
+> 
+> Same goes here, I strongly recommend you try to expose this through the
+> KVM_{GET,SET}_ONE_REG interface if at all possible since it
+> significantly reduces the UAPI burden, both on KVM to maintain it and
+> VMMs to actually use it.
+> 
+
+Yeah, it's much convenient to use the implementation defined register here.
+However, I'm not positive if we can do this. Please see the details I
+provided above :)
+
+Thanks,
+Gavin
+
+

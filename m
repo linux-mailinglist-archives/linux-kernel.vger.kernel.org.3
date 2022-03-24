@@ -2,106 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CBD4E5F17
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF184E5F12
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347313AbiCXHJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S242320AbiCXHG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239320AbiCXHJi (ORCPT
+        with ESMTP id S230024AbiCXHGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:09:38 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B197167FC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:08:06 -0700 (PDT)
-Received: from epcas3p1.samsung.com (unknown [182.195.41.19])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220324070804epoutp04d9bff6c1707b9e5b7207ffe39cfa659d~fP2NKuMRN0876608766epoutp04w
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:08:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220324070804epoutp04d9bff6c1707b9e5b7207ffe39cfa659d~fP2NKuMRN0876608766epoutp04w
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648105684;
-        bh=ffNIsUV0dGzaaQ3R/vm5F/lFr5vlgbrv3cLPh72mp0M=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=PhPMcQoYm/J1/tENWR2tnP6STywWdlSknKCRHh3YP7FlsGLAAMLF+btb+4pdbsfta
-         3F/HLQxg1QFy4S6XXc2aEdfM62M9oeU3+EuyRQAsfsFmCGRrHXhmqT03V6oPQATvo3
-         9lZZUeYpHbPyPs5LqQXq3a2gyDRBueBH9CBhC5sA=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas3p4.samsung.com (KnoxPortal) with ESMTP id
-        20220324070803epcas3p4a9b366231c0c91cffac1cc571a4f917b~fP2Mqlbk21705917059epcas3p4-;
-        Thu, 24 Mar 2022 07:08:03 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp3.localdomain
-        (Postfix) with ESMTP id 4KPGX35N54z4x9QT; Thu, 24 Mar 2022 07:08:03 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: core: Remove unused field in struct ufs_hba
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <413601558.101648105683746.JavaMail.epsvc@epcpadp4>
-Date:   Thu, 24 Mar 2022 16:01:46 +0900
-X-CMS-MailID: 20220324070146epcms2p577d43ce3e7cbd36aa964f3842e49b2ba
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20220324070146epcms2p577d43ce3e7cbd36aa964f3842e49b2ba
-References: <CGME20220324070146epcms2p577d43ce3e7cbd36aa964f3842e49b2ba@epcms2p5>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 24 Mar 2022 03:06:24 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C225E7DE23;
+        Thu, 24 Mar 2022 00:04:52 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id u26so4470528eda.12;
+        Thu, 24 Mar 2022 00:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QmJzxumpLQcs11vK+3c+4EgOpxANBX6MJwGXngCOMXo=;
+        b=LL2eN8sSyTOZ859wDP3jr4bcEgBnKx5LwkENba4N6GLZYypfPt211FxmqWSDMQJHge
+         TBqhuCw1rBMDXoSc/gzl5gOJ1TI1kDob/jdIsXZkyNYAz1UAsVpzcbn2UIeS8Yw6vncg
+         Zp97G7vdkkt14jKJHjWur/+xxokAcjm2zQL0uJip4RCrPICFsRErLZ7DMGBB6ia+uHMm
+         EYuObp7A3gzYScsUT8dfPLP/11gWH/60IMuyM9a+kJ4+di4B2jIEekA5G6fvVRSSyk0Q
+         DZAHcILhTGzONIWvnQxHIbkKgmoK85UhJ6Z1hgi/0MWK9nQ/YQ+QUa4IArzulTJnhAow
+         mwOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QmJzxumpLQcs11vK+3c+4EgOpxANBX6MJwGXngCOMXo=;
+        b=SLoPAfXFBu+pl+qVsWAo1kxeayrAcwg5oLfDW8KzeSv7eNul03TFD2YOZLu7l3CBrW
+         +oDdAQgl/taNFePa9YCmHai1NYoqzLbhfc7YuxRnqjzRPpdJx/MekwP6q1lSF+YkRFLW
+         7OEtcVFPACXCZcZqAT30ZGK6ZCsHeXZ1f8HY/zz7qrVgsIQF0rxJMCui5Z5u16GVVPIj
+         hOeIxN6+OZpd8GZXTM33eF/8nG97UJjjlXIsoljK2N0pUg11L5tMzB9/X6TZFY3Jlfmk
+         mdOnSBrFr+lu+Iytftd7HJXs51okyaXAe/sc+GwgmTancAHyM9C3T7HM3kamnRcwAoTZ
+         fC/w==
+X-Gm-Message-State: AOAM533ajCSGf2GuhhL8L9qsAK4RHyc5BG2xV07K+FYkGiWWs4wRXHsh
+        D/c2iQL0+4vN41DnFPJ95mw=
+X-Google-Smtp-Source: ABdhPJyiRVrIl5E62lC8T6N06sfiBY9MLsiGEZ1cVBohHNstoW03QKjOTDNUo/ItSF2GAqvqzrPrpg==
+X-Received: by 2002:a50:fe0d:0:b0:415:e2ee:65af with SMTP id f13-20020a50fe0d000000b00415e2ee65afmr4811578edt.383.1648105491201;
+        Thu, 24 Mar 2022 00:04:51 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id d24-20020a1709067a1800b006e021f4c1c3sm753022ejo.166.2022.03.24.00.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 00:04:50 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH] ACPI: ipmi: replace usage of found with dedicated list iterator variable
+Date:   Thu, 24 Mar 2022 08:04:41 +0100
+Message-Id: <20220324070441.56591-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused field "rpm_lvl_attr" and "spm_lvl_attr" in struct ufs_hba.
-Commit cbb6813ee771 ("scsi: ufs: sysfs: attribute group for existing
-sysfs entries.") removed all code using that field.
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
+
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
+
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/scsi/ufs/ufshcd.h | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/acpi/acpi_ipmi.c | 39 ++++++++++++++++++---------------------
+ 1 file changed, 18 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 88c20f3608c2..94f545be183a 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -820,8 +820,6 @@ struct ufs_hba {
- 	enum ufs_pm_level rpm_lvl;
- 	/* Desired UFS power management level during system PM */
- 	enum ufs_pm_level spm_lvl;
--	struct device_attribute rpm_lvl_attr;
--	struct device_attribute spm_lvl_attr;
- 	int pm_op_in_progress;
+diff --git a/drivers/acpi/acpi_ipmi.c b/drivers/acpi/acpi_ipmi.c
+index a5fe2926bf50..0555f68c2dfd 100644
+--- a/drivers/acpi/acpi_ipmi.c
++++ b/drivers/acpi/acpi_ipmi.c
+@@ -353,29 +353,27 @@ static void ipmi_flush_tx_msg(struct acpi_ipmi_device *ipmi)
+ static void ipmi_cancel_tx_msg(struct acpi_ipmi_device *ipmi,
+ 			       struct acpi_ipmi_msg *msg)
+ {
+-	struct acpi_ipmi_msg *tx_msg, *temp;
+-	bool msg_found = false;
++	struct acpi_ipmi_msg *tx_msg = NULL, *iter, *temp;
+ 	unsigned long flags;
  
- 	/* Auto-Hibernate Idle Timer register value */
+ 	spin_lock_irqsave(&ipmi->tx_msg_lock, flags);
+-	list_for_each_entry_safe(tx_msg, temp, &ipmi->tx_msg_list, head) {
+-		if (msg == tx_msg) {
+-			msg_found = true;
+-			list_del(&tx_msg->head);
++	list_for_each_entry_safe(iter, temp, &ipmi->tx_msg_list, head) {
++		if (msg == iter) {
++			tx_msg = iter;
++			list_del(&iter->head);
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&ipmi->tx_msg_lock, flags);
+ 
+-	if (msg_found)
++	if (tx_msg)
+ 		acpi_ipmi_msg_put(tx_msg);
+ }
+ 
+ static void ipmi_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
+ {
+ 	struct acpi_ipmi_device *ipmi_device = user_msg_data;
+-	bool msg_found = false;
+-	struct acpi_ipmi_msg *tx_msg, *temp;
++	struct acpi_ipmi_msg *tx_msg = NULL, *iter, *temp;
+ 	struct device *dev = ipmi_device->dev;
+ 	unsigned long flags;
+ 
+@@ -387,16 +385,16 @@ static void ipmi_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
+ 	}
+ 
+ 	spin_lock_irqsave(&ipmi_device->tx_msg_lock, flags);
+-	list_for_each_entry_safe(tx_msg, temp, &ipmi_device->tx_msg_list, head) {
+-		if (msg->msgid == tx_msg->tx_msgid) {
+-			msg_found = true;
+-			list_del(&tx_msg->head);
++	list_for_each_entry_safe(iter, temp, &ipmi_device->tx_msg_list, head) {
++		if (msg->msgid == iter->tx_msgid) {
++			tx_msg = iter;
++			list_del(&iter->head);
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&ipmi_device->tx_msg_lock, flags);
+ 
+-	if (!msg_found) {
++	if (!tx_msg) {
+ 		dev_warn(dev,
+ 			 "Unexpected response (msg id %ld) is returned.\n",
+ 			 msg->msgid);
+@@ -482,15 +480,14 @@ static void ipmi_register_bmc(int iface, struct device *dev)
+ 
+ static void ipmi_bmc_gone(int iface)
+ {
+-	struct acpi_ipmi_device *ipmi_device, *temp;
+-	bool dev_found = false;
++	struct acpi_ipmi_device *ipmi_device = NULL, *iter, *temp;
+ 
+ 	mutex_lock(&driver_data.ipmi_lock);
+-	list_for_each_entry_safe(ipmi_device, temp,
++	list_for_each_entry_safe(iter, temp,
+ 				 &driver_data.ipmi_devices, head) {
+-		if (ipmi_device->ipmi_ifnum != iface) {
+-			dev_found = true;
+-			__ipmi_dev_kill(ipmi_device);
++		if (iter->ipmi_ifnum != iface) {
++			ipmi_device = iter;
++			__ipmi_dev_kill(iter);
+ 			break;
+ 		}
+ 	}
+@@ -500,7 +497,7 @@ static void ipmi_bmc_gone(int iface)
+ 					struct acpi_ipmi_device, head);
+ 	mutex_unlock(&driver_data.ipmi_lock);
+ 
+-	if (dev_found) {
++	if (ipmi_device) {
+ 		ipmi_flush_tx_msg(ipmi_device);
+ 		acpi_ipmi_dev_put(ipmi_device);
+ 	}
+
+base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 
-2.17.1
+2.25.1
 

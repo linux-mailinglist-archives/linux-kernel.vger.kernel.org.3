@@ -2,116 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870D74E69DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC9D4E69E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353428AbiCXUfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 16:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S1353443AbiCXUi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 16:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244145AbiCXUfi (ORCPT
+        with ESMTP id S1346156AbiCXUiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 16:35:38 -0400
+        Thu, 24 Mar 2022 16:38:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EA97B55D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:34:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49622B0D37;
+        Thu, 24 Mar 2022 13:36:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6082560F27
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:34:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E16C340EC;
-        Thu, 24 Mar 2022 20:34:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8DF760F88;
+        Thu, 24 Mar 2022 20:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B981C340EC;
+        Thu, 24 Mar 2022 20:36:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648154044;
-        bh=Hke9uijvJjLH+sMjuC7Gd22j8kyXtDr8eWCu19CgugQ=;
-        h=Date:From:Cc:Subject:From;
-        b=VMyQlL3kUfwrvYNxhv9HC9vK4q/qHFfqhHV03J9LyO/HnFe+yhOcaY3cYsTcFQ9z1
-         vix37R6s1N+ZqGgHNnASFY3ijUPWu2nG4JEUSaXY4P58yUhjlhrPCl4P0gaSVxzGtY
-         yvBG7OVp65+qxAKuXurUirPM4AW2BYadpHtfrYXF5CBB39qQhQgwfrG27d1FcPVzCQ
-         xMNi8NEHxyj8RR0hXJ2qY4YdnvCoW6RBEX2dSlK+1JozFaIcYCAS35Z9NZ4RE/yRK0
-         rZeD5oFFp1cZAB6oaSzXpk08t5p9dR+C57K3AoXm7XEV+TCiReo/0Gl7QoB7Ra9LP0
-         dFNTMeviU/0nA==
+        s=k20201202; t=1648154212;
+        bh=Kx6tBROKdcOdeiKP7X4AbU2NzC0vd6LCDCQ6b1g3bQk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SvPapQeGsj/0s8K1VaONuL2jEDQcMsPYMoapQ4/y5R3vHXZqkq3cpWbj4lY2BaTX1
+         eEIjoAH7+ICIjcDFwNx1vpv/yu5O/ju51k7VNa1kZhw5C/TfvFGdox6eC3CtCD7zBV
+         1lP9nAQU4U6OjjmvQmZX0U5aNXQRsKRhKmUwgw3nLrn+jCpmy+BrcpgLgY6CSBXhud
+         ViNkzdJsjcaEJJVcFVRxNlgVGTXlUAiEkw+PN4SQEJODMIFjHmyxUO3oiyIthH4VuV
+         lTfI4FGlB438hp4zx33DAfcgOsKkIV74Z5TkulgmVtPP8b3DyuO4D08qCMnaN96j3y
+         YchcITBpma4pQ==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CC50840407; Thu, 24 Mar 2022 17:33:59 -0300 (-03)
-Date:   Thu, 24 Mar 2022 17:33:59 -0300
+        id 10E8C40407; Thu, 24 Mar 2022 17:36:50 -0300 (-03)
+Date:   Thu, 24 Mar 2022 17:36:50 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1] tools arch x86: Sync the msr-index.h copy with the
- kernel sources
-Message-ID: <YjzVt8CjAORAsTCo@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        gor@linux.ibm.com, Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>, sumanthk@linux.ibm.com,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [PATCH] perf/stat: Fix perf stat for forked applications
+Message-ID: <YjzWYjO06FwP6Mgy@kernel.org>
+References: <20220317155346.577384-1-tmricht@linux.ibm.com>
+ <Yjr/X+Cuunyo84S3@krava>
+ <CAM9d7cgkwDQCEWRFT2G87fba7MLPR2OtEn6pvHDzpegpR-AMSA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAM9d7cgkwDQCEWRFT2G87fba7MLPR2OtEn6pvHDzpegpR-AMSA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just FYI, I'm carrying this on the perf tools tree:
+Em Wed, Mar 23, 2022 at 01:54:23PM -0700, Namhyung Kim escreveu:
+> On Wed, Mar 23, 2022 at 4:07 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Thu, Mar 17, 2022 at 04:53:46PM +0100, Thomas Richter wrote:
+> > > I have run into the following issue:
+> > >
+> > >  # perf stat -a -e new_pmu/INSTRUCTION_7/ --  mytest -c1 7
+> > >
+> > >  Performance counter stats for 'system wide':
+> > >
+> > >                  0      new_pmu/INSTRUCTION_7/
+> > >
+> > >        0.000366428 seconds time elapsed
+> > >  #
+> > >
+> > > The new PMU for s390 counts the execution of certain CPU instructions.
+> > > The root cause is the extremely small run time of the
+> > > mytest program. It just executes some assembly instructions
+> > > and then exits. In above invocation the instruction is executed
+> > > exactly one time (-c1 option). The PMU is expected to report this one
+> > > time execution by a counter value of one, but fails to do so
+> > > in some cases, not all.
+> > >
+> > > Debugging reveals the invocation of the child process is done
+> > > *before* the counter events are installed and enabled. Tracing
+> > > reveals that sometimes the child process starts and exits before
+> > > the event is installed on all CPUs. The more CPUs the machine has,
+> > > the more often this miscount happens.
+> > >
+> > > Fix this by reversing the start of the work load after the events
+> > > have been installed on the specified CPUs. Now the comment also
+> > > matches the code.
+> > >
+> > > Output after:
+> > >  # perf stat -a -e new_pmu/INSTRUCTION_7/ --  mytest -c1 7
+> > >
+> > >  Performance counter stats for 'system wide':
+> > >
+> > >                  1      new_pmu/INSTRUCTION_7/
+> > >
+> > >        0.000366428 seconds time elapsed
+> > >  #
+> > >
+> > > Now the correct result is reported rock solid all the time regardless
+> > > how many CPUs are online.
+> > >
+> > > Fixes:  acf2892270dc ("perf stat: Use perf_evlist__prepare/start_workload())
+> > >
+> > > Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+> > > Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+> > > Cc: Namhyung Kim <namhyung@kernel.org>
+> > > ---
+> > >  tools/perf/builtin-stat.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> > > index 3f98689dd687..60baa3dadc4b 100644
+> > > --- a/tools/perf/builtin-stat.c
+> > > +++ b/tools/perf/builtin-stat.c
+> > > @@ -955,10 +955,10 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+> > >        * Enable counters and exec the command:
+> > >        */
+> > >       if (forks) {
+> > > -             evlist__start_workload(evsel_list);
+> > >               err = enable_counters();
+> > >               if (err)
+> > >                       return -1;
+> > > +             evlist__start_workload(evsel_list);
+> >
+> > right, without -a the event has enable_on_exec so the race does not
+> > matter, but it's a problem for system wide with fork
+> 
+> Agreed.  Also we may move the enable_counters() and the
+> clock code out of the if block to be shared with the else block.
+> 
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
 
----------
+Thanks, applied and added your comments as "Reviewer notes", and please
+consider using the Reviewed-by tag instead of the Acked-by ones.
 
-To pick up the changes from these csets:
+Thanks anyways, as always!
 
-  7b8f40b3de75c971 ("x86/cpu: Add definitions for the Intel Hardware Feedback Interface")
-
-That cause no changes to tooling:
-
-  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > before
-  $ cp arch/x86/include/asm/msr-index.h tools/arch/x86/include/asm/msr-index.h
-  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > after
-  $ diff -u before after
-  $
-
-Just silences this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/msr-index.h' differs from latest version at 'arch/x86/include/asm/msr-index.h'
-  diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-index.h
-
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/include/asm/msr-index.h | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
-index a4a39c3e0f196747..0e7f303542bf35d6 100644
---- a/tools/arch/x86/include/asm/msr-index.h
-+++ b/tools/arch/x86/include/asm/msr-index.h
-@@ -705,12 +705,14 @@
- 
- #define PACKAGE_THERM_STATUS_PROCHOT		(1 << 0)
- #define PACKAGE_THERM_STATUS_POWER_LIMIT	(1 << 10)
-+#define PACKAGE_THERM_STATUS_HFI_UPDATED	(1 << 26)
- 
- #define MSR_IA32_PACKAGE_THERM_INTERRUPT	0x000001b2
- 
- #define PACKAGE_THERM_INT_HIGH_ENABLE		(1 << 0)
- #define PACKAGE_THERM_INT_LOW_ENABLE		(1 << 1)
- #define PACKAGE_THERM_INT_PLN_ENABLE		(1 << 24)
-+#define PACKAGE_THERM_INT_HFI_ENABLE		(1 << 25)
- 
- /* Thermal Thresholds Support */
- #define THERM_INT_THRESHOLD0_ENABLE    (1 << 15)
-@@ -959,4 +961,8 @@
- #define MSR_VM_IGNNE                    0xc0010115
- #define MSR_VM_HSAVE_PA                 0xc0010117
- 
-+/* Hardware Feedback Interface */
-+#define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
-+#define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
-+
- #endif /* _ASM_X86_MSR_INDEX_H */
--- 
-2.35.1
-
+- Arnaldo

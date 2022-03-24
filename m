@@ -2,152 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366254E67A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108FA4E67A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352214AbiCXRT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S1352221AbiCXRWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345269AbiCXRTz (ORCPT
+        with ESMTP id S1344397AbiCXRWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:19:55 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33ADFDF56;
-        Thu, 24 Mar 2022 10:18:17 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        Thu, 24 Mar 2022 13:22:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20267986F6;
+        Thu, 24 Mar 2022 10:20:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 0C3F22222E;
-        Thu, 24 Mar 2022 18:18:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648142295;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA30619AC;
+        Thu, 24 Mar 2022 17:20:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B782C340EC;
+        Thu, 24 Mar 2022 17:20:44 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jIWOtICf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1648142442;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mW5UfH8Ylkm3/jigdRwLAUC6EVlLm7SjaltxrCgFE7g=;
-        b=CkHlieX6xNiThKeWq282t7PUgDhAZ97n/a0kKkZsS3QLnrE1+q/L10hZGvj8UscSyBNNM7
-        xPJekUK9hwPYqxtZLw4FfrUrByxiiH+3IJcDA3JufWFv6aFEOGmiZcRTHg9yp93g/gIBkg
-        8uOFHdsnA1sZv86gtjXgH3TuYJ14+iU=
+        bh=xB6PKulHp1/cEWNkjE3fDsI4g/vmyOx8TKxWNMPVing=;
+        b=jIWOtICfivw//orbUKop1uPxm/X9yEN5M12kFp6+SL+mY9RcEN7uXVzjiutiLabpgi0H9R
+        suATOPU2xZBBNI9oTbDCSWUwYPkIycAInnkrD4jlGzMxDiLe3KCkyyTpiXO6Vd1SLEKcgC
+        ipwAXnIwhRuLdMhxRft45gNkRv13qHE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7c58b031 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 24 Mar 2022 17:20:41 +0000 (UTC)
+Date:   Thu, 24 Mar 2022 11:20:40 -0600
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Cc:     Jann Horn <jannh@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] random: allow writes to /dev/urandom to influence fast
+ init
+Message-ID: <YjyoaEZLb+GzxJFT@zx2c4.com>
+References: <20220322191436.110963-1-Jason@zx2c4.com>
+ <1648009787.fah6dos6ya.none@localhost>
+ <CAHmME9rsvxczJrhPwRX6nyrh9NB2AuJqkEKrTLx-G-T1J6_czQ@mail.gmail.com>
+ <CAHmME9ovJpdcuuZhNKrOTUc8XvKDDdC+axhAmOD9iESnRR7JqA@mail.gmail.com>
+ <1648138746.2zrnsqdlu7.none@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 24 Mar 2022 18:18:14 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
-In-Reply-To: <YjybB/fseibDU4dT@lunn.ch>
-References: <20220323183419.2278676-1-michael@walle.cc>
- <20220323183419.2278676-5-michael@walle.cc> <Yjt99k57mM5PQ8bT@lunn.ch>
- <8304fb3578ee38525a158af768691e75@walle.cc> <Yju+SGuZ9aB52ARi@lunn.ch>
- <30012bd8256be3be9977bd15d1486c84@walle.cc> <YjybB/fseibDU4dT@lunn.ch>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <0d4a2654acd2cc56f7b17981bf14474e@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1648138746.2zrnsqdlu7.none@localhost>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-24 17:23, schrieb Andrew Lunn:
->> > To some extent, we need to separate finding the device on the bus to
->> > actually using the device. The device might respond to C22, give us
->> > its ID, get the correct driver loaded based on that ID, and the driver
->> > then uses the C45 address space to actually configure the PHY.
->> >
->> > Then there is the Marvel 10G PHY. It responds to C22, but returns 0
->> > for the ID! There is a special case for this in the code, it then
->> > looks in the C45 space and uses the ID from there, if it finds
->> > something useful.
->> >
->> > So as i said in my reply to the cover letter, we have two different
->> > state variables:
->> >
->> > 1) The PHY has the C45 register space.
->> >
->> > 2) We need to either use C45 transfers, or C45 over C22 transfers to
->> >    access the C45 register space.
->> >
->> > And we potentially have a chicken/egg problem. The PHY driver knows
->> > 1), but in order to know what driver to load we need the ID registers
->> > from the PHY, or some external hint like DT. We are also currently
->> > only probing C22, or C45, but not C45 over C22. And i'm not sure we
->> > actually can probe C45 over C22 because there are C22 only PHYs which
->> > use those two register for other things. So we are back to the driver
->> > again which does know if C45 over C22 will work.
->> 
->> Isn't it safe to assume that if a PHY implements the indirect
->> registers for c45 in its c22 space that it will also have a valid
->> PHY ID and then the it's driver will be probed?
-> 
-> See:
-> https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy_device.c#L895
-> 
-> No valid ID in C22 space.
+Hi Alex,
 
-I actually looked at the datasheet and yes, it implements the
-registers 13 and 14 in c22 to access the c45 space. I couldn't
-find any descriptions of other c22 registers though.
+On Thu, Mar 24, 2022 at 10:29 AM Alex Xu (Hello71) <alex_y_xu@yahoo.ca> wrote:
+>
+> Excerpts from Jason A. Donenfeld's message of March 23, 2022 11:18 pm:
+> > Hi all,
+> >
+> > [...]
+> >
+> > In light of that conclusion, I'm going to work with every userspace
+> > downstream I can find to help them fix their file-based seeding, if it
+> > has bugs. I've started talking with the buildroot folks, and then I'll
+> > speak with the OpenRC people (being a Gentoo dev, that should be easy
+> > going). Systemd does the right thing already.
+> >
+> > I wrote a little utility for potential inclusion in
+> > busybox/util-linux/whatever when it matures beyond its current age of
+> > being half hour old:
+> > - https://git.zx2c4.com/seedrng/about/
+> > - https://git.zx2c4.com/seedrng/tree/seedrng.c
+> > So I'll see what the buildroot people think of this and take it from there.
+> >
+> > The plus side of doing all this is that, if the efforts pan out, it
+> > means there'll actually be proper seeding on devices that don't
+> > currently do that, which then might lead to a better ecosystem and
+> > less boot time blocking and all that jazz.
+> >
+> > Jason
+> >
+>
+> The issue, in systemd developers' opinion, is that counting seed file
+> towards entropy initialization potentially causes repeated RNG output if
+> a system is cloned without resetting the seed file. This is discussed at
+> length in https://github.com/systemd/systemd/pull/4513. A few years ago,
+> I wrote most of a program to check machine ID, disk ID, DMI ID, and some
+> other things in order to avoid this issue. Since then, systemd decided
+> to store the random seed in EFI variables, I assume on the basis that
+> machine cloning typically does not clone the EFI variables? In my
+> opinion, since the same argument applies to machine ID, ssh keys, and
+> any other persistent cryptographic (or even non-cryptographic) material,
+> this falls outside the scope of random seeding and into a general
+> machine cloning "sysprep"-like utility.
 
->> So if a PHY is
->> probed as c22 its driver might tell us "wait, it's actually a c45
->> phy and hey for your convenience it also have the indirect registers
->> in c22". We can then set has_c45 and maybe c45_over_c22 (also 
->> depending
->> on the bus capabilities).
-> 
-> In general, if the core can do something, it is better than the driver
-> doing it. If the core cannot reliably figure it out, then we have to
-> leave it to the drivers. It could well be we need the drivers to set
-> has_c45. I would prefer that drivers don't touch c45_over_c22 because
-> they don't have the knowledge of what the bus is capable of doing. The
-> only valid case i can think of is for a very oddball PHY which has C45
-> register space, but cannot actually do C45 transfers, and so C45 over
-> C22 is the only option.
+systemd's seed utility will credit a seed file if the seed file was
+generated properly (e.g. after the RNG was initialized). For that they
+use the user.random-seed-creditable xattr, which is a reasonable way of
+deciding. If that attribute is present, it's credited; if it's not, it's
+not. Here's their source:
 
-And how would you know that the PHY has the needed registers in c22
-space? Or do we assume that every C45 PHY has these registers?
+        /* If we got this random seed data from getrandom() the data is suitable for crediting
+         * entropy later on. Let's keep that in mind by setting an extended attribute. on the file */
+        if (getrandom_worked)
+                if (fsetxattr(seed_fd, "user.random-seed-creditable", "1", 1, 0) < 0)
+                        log_full_errno(ERRNO_IS_NOT_SUPPORTED(errno) ? LOG_DEBUG : LOG_WARNING, errno,
+                                      "Failed to mark seed file as creditable, ignoring: %m");
 
-..
+Since my seedrng.c is designed for more minimal systems (running
+buildroot or openrc or whatever), which might not have xattrs available,
+it distinguishes just based on the filename:
 
->> > phydev->c45_over_c22 we are currently in a bad shape for. We cannot
->> > reliably say the bus master supports C45. If the bus capabilities say
->> > C22 only, we can set phydev->c45_over_c22. If the bus capabilities
->> > list C45, we can set it false. But that only covers a few busses, most
->> > don't have any capabilities set. We can try a C45 access and see if we
->> > get an -EOPNOTSUPP, in which case we can set phydev->c45_over_c22. But
->> > the bus driver could also do the wrong thing, issue a C22 transfer and
->> > give us back rubbish.
->> 
->> First question, what do you think about keeping the is_c45 property 
->> but
->> with a different meaning and add use_c45_over_c22. That way it will be
->> less code churn:
->> 
->>  * @is_c45:  Set to true if this PHY has clause 45 address space.
->>  * @use_c45_over_c22:  Set to true if c45-over-c22 addressing is used.
-> 
-> I prefer to change is_c45. We then get the compiler to help us with
-> code review. The build bots will tell us about any code we fail to
-> check and change. It will also help anybody with out of tree code
-> making use of is_c45.
+	if (new_seed_creditable && rename(NON_CREDITABLE_SEED, CREDITABLE_SEED) < 0) {
+		fprintf(stderr, "ERROR: Unable to make new seed creditable: %s\n", strerror(errno));
+		program_ret |= 1 << 6;
+	}
 
-Ok. Fair enough.
+It's no surprise that these are very similar; I've read systemd's
+seeding logic and contributed a fix to it.
 
--michael
+By the way, if you think something is different or wrong or whatever in
+seedrng.c, please feel free to send me a patch for it. It already
+received its first contribution this morning (from the buildroot
+maintainer). Hopefully the code will reach a good settling point soon,
+and then various projects that want it can just copy and paste it
+verbatim into their environment, and tweak idiomatic things as needed.
+
+Jason

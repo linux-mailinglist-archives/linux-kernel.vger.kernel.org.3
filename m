@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346294E604D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357584E6050
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348899AbiCXI2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S1348903AbiCXI3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242495AbiCXI2M (ORCPT
+        with ESMTP id S240625AbiCXI3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:28:12 -0400
-Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E76029BAF8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=SYdtMX0fUBJBGCRkZr
-        x91FiJtXR+g6Dfi9TegzBMeTM=; b=qdSVARpouAfRPbGS+iy46sNTs3+sdaXlS8
-        FC1UgeHYkfoW6IvAoxmthn9A6gAw44Y/MsSgjgi6wH7kCt59QxrAxbSSlDhbEfa8
-        C5HaMRAu0SWQaHwu8lQ7F0FkiDChh6myl+Z5NiE5BVZ+qZWbivKFeqMZ/ljIF7lB
-        lgVo2TGsA=
-Received: from localhost (unknown [159.226.95.33])
-        by smtp8 (Coremail) with SMTP id DMCowAD3_zc3KzxicLj8Bg--.28399S2;
-        Thu, 24 Mar 2022 16:26:32 +0800 (CST)
-From:   QintaoShen <unSimple1993@163.com>
-To:     Felix.Kuehling@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        QintaoShen <unSimple1993@163.com>
-Subject: [PATCH v1] drm/amdkfd: Check for potential null return of kmalloc_array()
-Date:   Thu, 24 Mar 2022 16:26:23 +0800
-Message-Id: <1648110383-3533-1-git-send-email-unSimple1993@163.com>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: DMCowAD3_zc3KzxicLj8Bg--.28399S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GF4kWF17uF47Ar1kArWDurg_yoWftrg_Gr
-        15Xr9xAr4DCFn5Wry2vw4aqry0yr4rZ3WkXF18t3WfJryfZFyUC348XrWkZ3yfGa4DuFyD
-        tw4DKF4fuFsF9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sR_GYL3UUUUU==
-X-Originating-IP: [159.226.95.33]
-X-CM-SenderInfo: 5xqvxz5sohimizt6il2tof0z/xtbCbgjNH2BbCZsoFAAAsh
+        Thu, 24 Mar 2022 04:29:17 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0C79BAF7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:27:46 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id d5so6765939lfj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=xoSPbru0hWPpcXk1HoCSVQlCJx8nsIwdNqAcwd/eBCs=;
+        b=O8sqEW3QeR+Ilzqg6YCA/YTsGiMqAX3IJ/dRmE8ukPPJ14WfYsBBXbXpIpf5YPqtLg
+         qQ7Fx4c/YMf45FZn2hatzYrIkCJ5gzfqdagu4XodwI8J3/7xOahXpZqg3gFydlXJwPdj
+         5yFifdG8OaVMWSIyZhrPJ53oI0HE6ptoQL9q1tfoi+KRcDeQt5KEbbk86EjYwq2gD+To
+         ZLj0xECgTLFpSPyZp8yxGC5mepcPzZTPwir+sXmkA6CX3NAl0UTAHnxGlUNAWV0ykDzu
+         qjFrDws0hSGYYXU9kwz00i3bmiazKcX/f511L+jLFCctIztd2Bta22BlvIXlub9Y0qOU
+         QQqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=xoSPbru0hWPpcXk1HoCSVQlCJx8nsIwdNqAcwd/eBCs=;
+        b=2CWgC6X00GrKqeki3dZFBbZj9MNCZFxeiR5TQL0+l4+0IUFD6GTjidPO24b45s/0Q3
+         DyVhtw2AUPyYHiLE3lz+OmYkzTVmnMnuPi2VQJavK2+xZlJ7sWBSN1q5uX2FhpnYFcqJ
+         SvJCT9q5SpShLg+zfveBIKrqh5UljzrhnRYHIpIIq6ra6GWbFHhQ126KbU7z3cfNDUDv
+         jZ+w7DOYVz1gRk1CKvAHOsa16hMbsBw/ZQxGCNsoGhVyqBhbFEVyrZt4ZCZWnYvV4aBt
+         av48lPSP+0+9YiJ+TsT3OlEsKHXCz3shAbl8giyDiBW0BqwuL2zYxmCSOWWeFuRpyz7J
+         6IMg==
+X-Gm-Message-State: AOAM5319X+nNj3Hk+CGVieRpz3CVrrACO/rId58nDNGEXgLJ86Ts0fIf
+        ApUv/fFuf91PYbuxOd2ONQUNwDvjm7jzI+bbZeg=
+X-Google-Smtp-Source: ABdhPJxPN6yeeOB28awhzDIE+gRMIWiLnruUA07YY/bs7mXb1WjKYsDDMOZMCYo0qbvcMEcDsELmKhv8TXdFcpZUhVk=
+X-Received: by 2002:a05:6512:15a3:b0:44a:54eb:937e with SMTP id
+ bp35-20020a05651215a300b0044a54eb937emr2937571lfb.456.1648110464970; Thu, 24
+ Mar 2022 01:27:44 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6504:285:0:0:0:0 with HTTP; Thu, 24 Mar 2022 01:27:44
+ -0700 (PDT)
+From:   Eleanor Taylor <militarybase6535@gmail.com>
+Date:   Thu, 24 Mar 2022 01:27:44 -0700
+Message-ID: <CAKHHXJbBMXHXh1uPY-m=ZTm+oqJk_iSic7qf=Lsn38uzVF-uWg@mail.gmail.com>
+Subject: re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the kmalloc_array() may return null, the 'event_waiters[i].wait' would lead to null-pointer dereference.
-Therefore, it is better to check the return value of kmalloc_array() to avoid this confusion.
-
-Signed-off-by: QintaoShen <unSimple1993@163.com>
----
- drivers/gpu/drm/amd/amdkfd/kfd_events.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_events.c b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
-index deeccce..64f4a51 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_events.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
-@@ -749,6 +749,8 @@ static struct kfd_event_waiter *alloc_event_waiters(uint32_t num_events)
- 	event_waiters = kmalloc_array(num_events,
- 					sizeof(struct kfd_event_waiter),
- 					GFP_KERNEL);
-+	if (!event_waiters)
-+		return NULL;
- 
- 	for (i = 0; (event_waiters) && (i < num_events) ; i++) {
- 		init_wait(&event_waiters[i].wait);
 -- 
-2.7.4
+Hello,
+I would like to talk to you
 
+Thanks

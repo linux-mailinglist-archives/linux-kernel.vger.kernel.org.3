@@ -2,94 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB8F4E628C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075E44E62BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347713AbiCXLi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S1349893AbiCXLyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiCXLi5 (ORCPT
+        with ESMTP id S235216AbiCXLyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:38:57 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B2AA66FA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:37:25 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KPNQF6qnszBrb3;
-        Thu, 24 Mar 2022 19:33:25 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 24 Mar
- 2022 19:37:22 +0800
-From:   Zheng Bin <zhengbin13@huawei.com>
-To:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
-        <robert.foss@linaro.org>, <Laurent.pinchart@ideasonboard.com>,
-        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
-        <daniel@ffwll.ch>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <tangyizhou@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH -next] drm/bridge: it6505: Fix build error without DRM_DP_HELPER
-Date:   Thu, 24 Mar 2022 19:52:21 +0800
-Message-ID: <20220324115221.1676625-1-zhengbin13@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 24 Mar 2022 07:54:44 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B81ADAD;
+        Thu, 24 Mar 2022 04:53:11 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id u26so5289952eda.12;
+        Thu, 24 Mar 2022 04:53:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5ltKLzd5hL5HQokDkXemnqLoOTjdJvhrUSmUGjXhOKY=;
+        b=v9UpqE5UxNDfqOhxObQvIBnuVCLY9yhQXbdUzcSOiOMW5TCoKJjlAr9whreuq1ySyf
+         OIhYXneLHk+b/o+GIiatNref+srnHspVNxSdGRlQpX9xf8ZXkCAJWJBV2/2riSSNikWA
+         +s7KZcy8of4oJanviNqJypSORH0XkjiDbfdHwzDsfZeEuapU+ziQ8gmQR1dhct1iuUhU
+         wM6dIaa9tAeTk//mcKX/lYZz/uQ7tj3X+GGc9LWnR5SRyEHVsP8AuwjLfqJF9aQXLrIR
+         yYhEhEXZpQ3V79fUARP3wQHZLXjlrxQn4UcMPyFaUA85AWLGySTRXoutwjLAsPcGzoQ0
+         P+cQ==
+X-Gm-Message-State: AOAM532vn62ZWuGlWLx33WDntRb1nZWaIa74lZSri8tbLFXfRA37VHlz
+        2SQCUPAlUPwhOtKSwqQZWp7yuvvSw17oRQ==
+X-Google-Smtp-Source: ABdhPJz6j4PqEWrxanuEP+vlNZkdiYyWicoY+CmwYGxtZYFcvjcm4oFtqKwL7YtAAZbwP55R+jzUxg==
+X-Received: by 2002:aa7:cd7a:0:b0:419:48ce:3a10 with SMTP id ca26-20020aa7cd7a000000b0041948ce3a10mr6228425edb.312.1648122790189;
+        Thu, 24 Mar 2022 04:53:10 -0700 (PDT)
+Received: from [192.168.0.156] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id da23-20020a056402177700b0041394d8173csm1281621edb.31.2022.03.24.04.53.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 04:53:09 -0700 (PDT)
+Message-ID: <2b33798e-23c2-d4a5-171a-55c28bc40c40@kernel.org>
+Date:   Thu, 24 Mar 2022 12:53:08 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add documentation for AM62 USB
+ Wrapper module
+Content-Language: en-US
+To:     Aswath Govindraju <a-govindraju@ti.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+References: <20220324073425.18607-1-a-govindraju@ti.com>
+ <20220324073425.18607-2-a-govindraju@ti.com>
+ <93fe6a41-3b59-2fbc-6f95-833f337815ee@kernel.org>
+ <41f79aa5-1e04-53f8-ab21-85fe6039e24e@ti.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <41f79aa5-1e04-53f8-ab21-85fe6039e24e@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If DRM_DP_HELPER is not set, bulding fails:
+On 24/03/2022 12:40, Aswath Govindraju wrote:
+> Hi Krzysztof,
+> 
+> On 24/03/22 16:37, Krzysztof Kozlowski wrote:
+>> On 24/03/2022 08:34, Aswath Govindraju wrote:
+>>> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
+>>> controller.
+>>>
+>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>> ---
+>>>
+>>> Changes since v1:
+>>> - made correction in grammer of clocks property description
+>>>   and added maxItems in the interrupts property based on comments
+>>>   received from Roger
+>>> - corrected the title, fixed the description of
+>>>   ti,syscon-phy-pll-refclk, added pattern properties and child node
+>>>   in the example based on the comments from Krzysztof.
+>>>
+>>>  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 117 ++++++++++++++++++
+>>>  1 file changed, 117 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>>> new file mode 100644
+>>> index 000000000000..452bfdc6fb09
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>>> @@ -0,0 +1,117 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/usb/ti,am62-usb.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: TI's AM62 wrapper module for the Synopsys USBSS-DRD controller
+>>> +
+>>> +maintainers:
+>>> +  - Aswath Govindraju <a-govindraju@ti.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: ti,am62-usb
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  ranges: true
+>>> +
+>>> +  power-domains:
+>>> +    description:
+>>> +      PM domain provider node and an args specifier containing
+>>> +      the USB ISO device id value. See,
+>>> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    description: Clock phandle to usb2_refclk
+>>> +    maxItems: 1
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: ref
+>>> +
+>>> +  id-gpio:
+>>> +    description:
+>>> +      GPIO to be used as ID pin
+>>> +    maxItems: 1
+>>
+>> I have doubts about this. If you USB controller handles the ID pin, then
+>> probably this should be moved to usb-connector.yaml. I did not see
+>> id-gpio in any other USB controller blocks.
+>>
+> 
+> Yes, the USB wrapper handles the ID pin operation only. It also reads
+> the status of VBUS by reading a register from its MMR and not using a
+> gpio. After evaluating the role the based on the states if id pin and
+> VBUS, this role is communicated to the dwc3 core driver using extcon.
+> There is no way for the dwc3 driver to detect the role on its own.
+> 
+> 
+> The usb-connector(drivers/usb/common/usb-conn-gpio.c) driver, seems to
+> be implemented for driving the VBUS, based on ID and VBUS pin status.
+> However, in case of the above implementation we need to communicate the
+> detected role to the dwc3 core driver. Also, the wrapper does not
+> control VBUS but it is the dwc3 core driver that drives the VBUS.
+> Therefore, I think the usb-connector implementation cannot be used here.
 
-ld: drivers/gpu/drm/bridge/ite-it6505.o: in function `it6505_link_training_work':
-ite-it6505.c:(.text+0x50d8): undefined reference to `drm_dp_dpcd_write'
-ld: ite-it6505.c:(.text+0x51c4): undefined reference to `drm_dp_link_train_clock_recovery_delay'
-ld: ite-it6505.c:(.text+0x51d7): undefined reference to `drm_dp_dpcd_read_link_status'
-ld: ite-it6505.c:(.text+0x51ec): undefined reference to `drm_dp_clock_recovery_ok'
-ld: ite-it6505.c:(.text+0x5387): undefined reference to `drm_dp_get_adjust_request_voltage'
-ld: ite-it6505.c:(.text+0x539d): undefined reference to `drm_dp_get_adjust_request_pre_emphasis'
-ld: ite-it6505.c:(.text+0x5548): undefined reference to `drm_dp_link_train_channel_eq_delay'
-ld: ite-it6505.c:(.text+0x555b): undefined reference to `drm_dp_dpcd_read_link_status'
-ld: ite-it6505.c:(.text+0x5570): undefined reference to `drm_dp_clock_recovery_ok'
-ld: ite-it6505.c:(.text+0x558d): undefined reference to `drm_dp_channel_eq_ok'
-ld: ite-it6505.c:(.text+0x55da): undefined reference to `drm_dp_get_adjust_request_voltage'
-ld: ite-it6505.c:(.text+0x55f2): undefined reference to `drm_dp_get_adjust_request_pre_emphasis'
-ld: drivers/gpu/drm/bridge/ite-it6505.o: in function `it6505_bridge_detect':
-ite-it6505.c:(.text+0x59f1): undefined reference to `drm_dp_dpcd_read'
-ld: ite-it6505.c:(.text+0x5a16): undefined reference to `drm_dp_bw_code_to_link_rate'
-ld: ite-it6505.c:(.text+0x5a87): undefined reference to `drm_dp_dpcd_read'
-ld: ite-it6505.c:(.text+0x5ac1): undefined reference to `drm_dp_dpcd_write'
-ld: ite-it6505.c:(.text+0x5d43): undefined reference to `drm_dp_link_rate_to_bw_code'
+I don't think about usb-conn-gpio.c but using the binding generic
+binding for usb-X-connector and define a connector with ID.
 
-Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
----
- drivers/gpu/drm/bridge/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Actually Rob could help here.
 
-diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
-index 007e5a282f67..2145b08f9534 100644
---- a/drivers/gpu/drm/bridge/Kconfig
-+++ b/drivers/gpu/drm/bridge/Kconfig
-@@ -78,6 +78,7 @@ config DRM_ITE_IT6505
-         tristate "ITE IT6505 DisplayPort bridge"
-         depends on OF
-         select DRM_KMS_HELPER
-+        select DRM_DP_HELPER
-         select EXTCON
-         help
-           ITE IT6505 DisplayPort bridge chip driver.
---
-2.31.1
+Rob,
+Should the id-gpio be modeled as a property in this glue/wrapper driver
+or rather as part of usb-connector child node?
 
+
+Best regards,
+Krzysztof

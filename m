@@ -2,167 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B724E63EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6116F4E63F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350390AbiCXNQM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Mar 2022 09:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
+        id S1350397AbiCXNSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350397AbiCXNQJ (ORCPT
+        with ESMTP id S231977AbiCXNSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:16:09 -0400
-Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D421E5D5D9;
-        Thu, 24 Mar 2022 06:14:36 -0700 (PDT)
-Received: from mail4.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id C720D1231DB;
-        Thu, 24 Mar 2022 14:14:34 +0100 (CET)
-Received: from mail4.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id B44BE123009;
-        Thu, 24 Mar 2022 14:14:34 +0100 (CET)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail4.swissbit.com (Postfix) with ESMTPS;
-        Thu, 24 Mar 2022 14:14:34 +0100 (CET)
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
- 2022 14:14:34 +0100
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.0986.022; Thu, 24 Mar 2022 14:14:34 +0100
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-Subject: [PATCHv3] mmc: block: Check for errors after write on SPI
-Thread-Topic: [PATCHv3] mmc: block: Check for errors after write on SPI
-Thread-Index: AQHYP4CK2VoQSzZIoUqoVtvoCdsHfA==
-Date:   Thu, 24 Mar 2022 13:14:34 +0000
-Message-ID: <b65d044223cc43898de6698b2a14e0c3@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.154.1.4]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Thu, 24 Mar 2022 09:18:20 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C2F5D5D9;
+        Thu, 24 Mar 2022 06:16:49 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so4855504fac.11;
+        Thu, 24 Mar 2022 06:16:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L4yFfoTfZccYE7Di0YlYjA+29UIzoRBEMm0qGrq7xq0=;
+        b=pyWonZjOu8h2d1LF/imDL6nNHN71qqyZobbj2ihOkPo6OUo09bC2jk8Rr95oxvzyOO
+         n0nOFeGacSWCNPg/Pd8nFqsPW3c3lN5hErE3iMf41+ReawQStFqYoE/SJ6fHuPLAIm7E
+         Qlk6W2djiL6/N/7k+KTsuip3aGJYiW4PBxE6R51FvkxMyimGU0aoQ39/kUyYqbiazh3x
+         5NuLRq1szjfkDgovIsMm6bdmFD82gtl3xs8/Fh02INhGDM420FJbIMGrBvb+aKTmyh73
+         5tlKFcYLRmG4dCNU+ZgNk02+f3lw3e/d28yRApMcKkAwYUp3btfwlqJLlkvEPKmvcRJv
+         A8tQ==
+X-Gm-Message-State: AOAM53033C2yGb7TFTOyRcQbj4DmyPLtMXt5lv5xNKvpFekUBd8BWzXR
+        JyI/5+8cs1bntyQ9qTbfDQ==
+X-Google-Smtp-Source: ABdhPJyWCV888rnqVqehNYjSRgPdI4EiYHkWQq19im/ieDnEq2LtJ//jkVdiM9VQ0b2qos+XqrXknw==
+X-Received: by 2002:a05:6871:811:b0:dd:b8ea:6bb1 with SMTP id q17-20020a056871081100b000ddb8ea6bb1mr6479846oap.43.1648127808262;
+        Thu, 24 Mar 2022 06:16:48 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t10-20020a056830224a00b005cd9db03fabsm1296706otd.78.2022.03.24.06.16.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 06:16:47 -0700 (PDT)
+Received: (nullmailer pid 1905192 invoked by uid 1000);
+        Thu, 24 Mar 2022 13:16:46 -0000
+Date:   Thu, 24 Mar 2022 08:16:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 01/15] dt-bindings: clock: split qcom,gcc.yaml to
+ common and specific schema
+Message-ID: <YjxvPik3jaQHXIzt@robh.at.kernel.org>
+References: <20220224164831.21475-1-ansuelsmth@gmail.com>
+ <20220224164831.21475-2-ansuelsmth@gmail.com>
+ <CAL_JsqLduGK=CyAcgahswFfeA43vh+QPgRgcL4+=piOwWwvJRQ@mail.gmail.com>
+ <Yjt5QxZ4+kdwTtUH@Ansuel-xps.localdomain>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-8.6.1018-26790.007
-X-TMASE-Result: 10--2.484200-10.000000
-X-TMASE-MatchedRID: LVkZzMT5mEprFdvBEmTnvLZ0InVwVLVTn5nfR7I2dFOxPXYIh1l6dlg7
-        cH4SOkOpdWqA+wY3gFZusJxXwmCOnpDH5Y6LoY7BRZfQN+FVqbA1kR+05VC1hsiCh8yBqE+tbiP
-        oclJOCy0MV38Bdz1rogpwpdIIi4oJCtNdSL7NMxRO5y1KmK5bJRSLgSFq3Tnj31GU/N5W5BDfal
-        dUczBqFzyK8WRp1qJNDyVcDYF9X2gcQvLacRAgcPCW/PNRRp/ZeLLCA0PD7aiOS54Qk4fByRJd3
-        nIYBNFRvAQxPUzd//aAUraeY8ICeWgwIvLATTKBC24oEZ6SpSkj80Za3RRg8Al3ZL80ZqgLmFEo
-        HbUHYssj/FwX/s/Fh7qYj8OceYPLKCLLs5ecoDY=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: afa7c4a5-af8a-4365-9656-8d85acbb6163-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yjt5QxZ4+kdwTtUH@Ansuel-xps.localdomain>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a SEND_STATUS check for writes through SPI to not mark
-an unsuccessful write as successful.
+On Wed, Mar 23, 2022 at 08:47:15PM +0100, Ansuel Smith wrote:
+> On Wed, Mar 23, 2022 at 08:55:30AM -0500, Rob Herring wrote:
+> > On Thu, Feb 24, 2022 at 10:48 AM Ansuel Smith <ansuelsmth@gmail.com> wrote:
+> > >
+> > > Split qcom,gcc.yaml to common and specific schema to use it as a
+> > > template for schema that needs to use the gcc bindings and require
+> > > to add additional bindings.
+> > >
+> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > ---
+> > >  .../bindings/clock/qcom,gcc-other.yaml        | 76 +++++++++++++++++++
+> > 
+> > This now throws errors in linux-next:
+> > 
+> > Traceback (most recent call last):
+> >   File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py",
+> > line 816, in resolve_from_url
+> >     document = self.resolve_remote(url)
+> >   File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py",
+> > line 923, in resolve_remote
+> >     result = json.loads(url.read().decode("utf-8"))
+> >   File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+> >     return _default_decoder.decode(s)
+> >   File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+> >     obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+> >   File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+> >     raise JSONDecodeError("Expecting value", s, err.value) from None
+> > json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+> > During handling of the above exception, another exception occurred:
+> > Traceback (most recent call last):
+> >   File "/usr/local/bin/dt-doc-validate", line 70, in <module>
+> >     ret = check_doc(f)
+> >   File "/usr/local/bin/dt-doc-validate", line 36, in check_doc
+> >     for error in
+> > sorted(dtschema.DTValidator.iter_schema_errors(testtree), key=lambda
+> > e: e.linecol):
+> >   File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line
+> > 1016, in iter_schema_errors
+> >     meta_schema = cls.resolver.resolve_from_url(schema['$schema'])
+> >   File "/usr/local/lib/python3.8/dist-packages/jsonschema/validators.py",
+> > line 818, in resolve_from_url
+> >     raise exceptions.RefResolutionError(exc)
+> > jsonschema.exceptions.RefResolutionError: Expecting value: line 1
+> > column 1 (char 0)
+> > ./Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml:
+> > mapping values are not allowed in this context
+> >   in "<unicode string>", line 17, column 11
+> > 
+> > >  .../devicetree/bindings/clock/qcom,gcc.yaml   | 59 +-------------
+> > >  2 files changed, 80 insertions(+), 55 deletions(-)
+> > >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+> > > new file mode 100644
+> > > index 000000000000..4e5903bcd70d
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+> > > @@ -0,0 +1,76 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/clock/qcom,gcc-other.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Qualcomm Global Clock & Reset Controller Binding
+> > > +
+> > > +maintainers:
+> > > +  - Stephen Boyd <sboyd@kernel.org>
+> > > +  - Taniya Das <tdas@codeaurora.org>
+> > > +
+> > > +description:
+> > > +  Qualcomm global clock control module which supports the clocks, resets and
+> > > +  power domains.
+> > > +
+> > > +  See also:
+> > 
+> > I think the problem is here. You need a '|' after 'description' to
+> > preserve formatting and ignore what looks like a mapping.
+> >
+> 
+> Yes, I just sent a patch to fix this.
+> Out of curiosity, any idea why this wasn't flagged by an old run of
+> dt_binding_check? I totally remember running dt_binding_check on these
+> Documentation and I had no problem. There was a bug in the old version
+> and it does now correctly find these kind of errors?
 
-Since SPI SD/MMC does not have states, after a write, the card will
-just hold the line LOW until it is ready again. The driver marks the
-write therefore as completed as soon as it reads something other than
-all zeroes.
-The driver does not distinguish from a card no longer signalling busy
-and it being disconnected (and the line being pulled-up by the host).
-This lead to writes being marked as successful when disconnecting
-a busy card.
-Now the card is ensured to be still connected by an additional CMD13,
-just like non-SPI is ensured to go back to TRAN state.
+Not sure exactly, but I don't think there was any change. v3 didn't 
+have the issue and the bot checks didn't run on v4 or later. Probably 
+because it couldn't apply them.
 
-While at it and since we already poll for the post-write status anyway,
-we might as well check for SPIs error bits (any of them).
-
-The disconnecting card problem is reproducable for me after continuous
-write activity and randomly disconnecting, around every 20-50 tries
-on SPI DS for some card.
-
-Fixes: 7213d175e3b6f ("MMC/SD card driver learns SPI")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
-v2:
-  - Reorder err and status check for err to take precedence and look cleaner
-v3:
-  - Move the logic into its own function
-
- drivers/mmc/core/block.c | 32 +++++++++++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 4e67c1403cc9..eb539dbe00e8 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -1880,6 +1880,33 @@ static inline bool mmc_blk_rq_error(struct mmc_blk_request *brq)
- 	       brq->data.error || brq->cmd.resp[0] & CMD_ERRORS;
- }
- 
-+static int mmc_spi_err_check(struct mmc_card *card, struct mmc_queue_req *mqrq)
-+{
-+	u32 status = 0;
-+	int err;
-+
-+	/*
-+	 * SPI does not have a TRAN state we have to wait on, instead the
-+	 * card is ready again when it no longer holds the line LOW.
-+	 * We still have to ensure two things here before we know the write
-+	 * was successful:
-+	 * 1. The card has not disconnected during busy and we actually read our
-+	 * own pull-up, thinking it was still connected, so ensure it
-+	 * still responds.
-+	 * 2. Check for any error bits, in particular R1_SPI_IDLE to catch a
-+	 * just reconnected card after being disconnected during busy.
-+	 */
-+	err = __mmc_send_status(card, &status, 0);
-+	/* All R1 and R2 bits of SPI are errors in our case */
-+	if (err || status) {
-+		mqrq->brq.data.bytes_xfered = 0;
-+		if (err)
-+			return err;
-+		return -EIO;
-+	}
-+	return 0;
-+}
-+
- static int mmc_blk_busy_cb(void *cb_data, bool *busy)
- {
- 	struct mmc_blk_busy_data *data = cb_data;
-@@ -1903,9 +1930,12 @@ static int mmc_blk_card_busy(struct mmc_card *card, struct request *req)
- 	struct mmc_blk_busy_data cb_data;
- 	int err;
- 
--	if (mmc_host_is_spi(card->host) || rq_data_dir(req) == READ)
-+	if (rq_data_dir(req) == READ)
- 		return 0;
- 
-+	if (mmc_host_is_spi(card->host))
-+		return mmc_spi_err_check(card, mqrq);
-+
- 	cb_data.card = card;
- 	cb_data.status = 0;
- 	err = __mmc_poll_for_busy(card->host, 0, MMC_BLK_TIMEOUT_MS,
--- 
-2.34.1
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
-
+Rob

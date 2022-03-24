@@ -2,168 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524C34E5C90
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 329584E5C93
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240605AbiCXBDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 21:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S1347049AbiCXBFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 21:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347066AbiCXBCz (ORCPT
+        with ESMTP id S239850AbiCXBFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 21:02:55 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5919559B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648083684; x=1679619684;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OGtagVymZrYWDwutMu2wb1lQ4Vl3KkLc8yeJ5JYiQrs=;
-  b=M3lV+od0UQtGgN3B2DamXbPTXtfeBrq75Qrq9ypDcsfWCYKUhZrPADLn
-   +uU9niBRRwz9GutMseg/z1u1LWkq/1OC2euRGbsPkhqu0BH4JA2mHCd2p
-   W6TRTtKRByz+Tv3eaz1+CbiQJXXl/D74rhjNdt+4gCpvrcH+m7ikyzG4S
-   0cp+VATlZBR7/1n2HTnLN0/y7b5+H7jLs4xrftYaLdJRTG1dlfqocB80E
-   VP1du63dlfkETnI+0o8kDGRmV7po7mkbInmVlrchdEZdCQNQBduRN8buv
-   aMKj8LzwLChqmbWXH0scF0r0EGmCumgdIX6pMPRoFHaxutqWXm0UO/6JC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="240420438"
-X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
-   d="scan'208";a="240420438"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 18:01:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
-   d="scan'208";a="519583294"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 23 Mar 2022 18:01:23 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXBqs-000KX9-NG; Thu, 24 Mar 2022 01:01:22 +0000
-Date:   Thu, 24 Mar 2022 09:00:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Pirko <jiri@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_linecards 14/27]
- drivers/net/netdevsim/dev.c:637:23: error: too many arguments to function
- '__nsim_dev_port_add'
-Message-ID: <202203240845.YnY9Pd9I-lkp@intel.com>
+        Wed, 23 Mar 2022 21:05:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB2133894
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:04:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFE3B61922
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AABC340E8;
+        Thu, 24 Mar 2022 01:04:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648083844;
+        bh=rHv7NJgpa63bJ+0QQF4yG6Kjje+PVdEiSiSy51DiNuY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fzGs3EbME7AKoL2gxxtUuBE9AamNUdryf5bW/lJ2MmO78Nx2bPLcbF1bnYlbuOcYN
+         rYHpVIiaX2ZSaaVXiEW0CAvxfmGQMcWPXRC8Cwr5TRvff8iIBy5IlftwBxc0J2Vi75
+         8yxOfPLbQOWLMuCcx2m3EO0/PIdD4B9yHJOUcHBxYRoDq80TASqWiBo59csUjNiWE1
+         uwf5M86rn9Nae2VYG4AdZwv2SWpMe/UR+hTu3QMtwVYHR/vq9+mG1wEM0wWeU0m5j0
+         h7yPL40w2gmuv2DVfbi2Mngl33QZqsEUmxSJHfJtpSJUWbwQzn7tpyzE+sByNSfQ9S
+         jdIEwnSd4dw4w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BCAB65C0192; Wed, 23 Mar 2022 18:04:02 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 18:04:02 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 4/4] rcu: Name internal polling flag
+Message-ID: <20220324010402.GU4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220316144255.336021-1-frederic@kernel.org>
+ <20220316144255.336021-5-frederic@kernel.org>
+ <20220322021107.GP4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220322103224.GA701946@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220322103224.GA701946@lothringen>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
-head:   4a0e7275ecdf8f8cfd4c1a2e9acd45f93f04c0df
-commit: a4347ad737edaf74ab771e14854e259ef224ab1c [14/27] netdevsim: allow port objects to be linked with line cards
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220324/202203240845.YnY9Pd9I-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/a4347ad737edaf74ab771e14854e259ef224ab1c
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
-        git checkout a4347ad737edaf74ab771e14854e259ef224ab1c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+On Tue, Mar 22, 2022 at 11:32:24AM +0100, Frederic Weisbecker wrote:
+> On Mon, Mar 21, 2022 at 07:11:07PM -0700, Paul E. McKenney wrote:
+> > On Wed, Mar 16, 2022 at 03:42:55PM +0100, Frederic Weisbecker wrote:
+> > > Give a proper self-explanatory name to the expedited grace period
+> > > internal polling flag.
+> > > 
+> > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> > > Cc: Joel Fernandes <joel@joelfernandes.org>
+> > > ---
+> > >  kernel/rcu/rcu.h      | 5 +++++
+> > >  kernel/rcu/tree.c     | 2 +-
+> > >  kernel/rcu/tree_exp.h | 9 +++++----
+> > >  3 files changed, 11 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> > > index eccbdbdaa02e..8a62bb416ba4 100644
+> > > --- a/kernel/rcu/rcu.h
+> > > +++ b/kernel/rcu/rcu.h
+> > > @@ -30,6 +30,11 @@
+> > >  #define RCU_GET_STATE_USE_NORMAL	0x2
+> > >  #define RCU_GET_STATE_BAD_FOR_NORMAL	(RCU_GET_STATE_FROM_EXPEDITED | RCU_GET_STATE_USE_NORMAL)
+> > >  
+> > > +/*
+> > > + * Low-order bit definitions for polled grace-period internals.
+> > > + */
+> > > +#define RCU_EXP_SEQ_POLL_DONE 0x1
+> > > +
+> > >  /*
+> > >   * Return the counter portion of a sequence number previously returned
+> > >   * by rcu_seq_snap() or rcu_seq_current().
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index 5da381a3cbe5..b3223b365f9f 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -4679,7 +4679,7 @@ static void __init rcu_init_one(void)
+> > >  			spin_lock_init(&rnp->exp_lock);
+> > >  			mutex_init(&rnp->boost_kthread_mutex);
+> > >  			raw_spin_lock_init(&rnp->exp_poll_lock);
+> > > -			rnp->exp_seq_poll_rq = 0x1;
+> > > +			rnp->exp_seq_poll_rq = RCU_EXP_SEQ_POLL_DONE;
+> > >  			INIT_WORK(&rnp->exp_poll_wq, sync_rcu_do_polled_gp);
+> > >  		}
+> > >  	}
+> > > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> > > index c4a19c6a83cf..7ccb909d6355 100644
+> > > --- a/kernel/rcu/tree_exp.h
+> > > +++ b/kernel/rcu/tree_exp.h
+> > > @@ -910,14 +910,14 @@ static void sync_rcu_do_polled_gp(struct work_struct *wp)
+> > >  	unsigned long s;
+> > >  
+> > >  	s = READ_ONCE(rnp->exp_seq_poll_rq);
+> > > -	if (s & 0x1)
+> > > +	if (s & RCU_EXP_SEQ_POLL_DONE)
+> > >  		return;
+> > >  	while (!sync_exp_work_done(s))
+> > >  		__synchronize_rcu_expedited(true);
+> > 
+> > One additional question.  If we re-read rnp->exp_seq_poll_rq on each pass
+> > through the loop, wouldn't we have less trouble with counter wrap?
+> 
+> We can indeed do that, though it won't eliminate the possibility of wrapping.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+True.  But in conjunction with an exact check for expired grace-period
+sequence number, it reduces the maximum addtional penalty for wrapping
+to two grace periods.
 
-Note: the jpirko-mlxsw/jiri_devel_linecards HEAD 4a0e7275ecdf8f8cfd4c1a2e9acd45f93f04c0df builds fine.
-      It only hurts bisectability.
+							Thanx, Paul
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from ./arch/m68k/include/generated/asm/rwonce.h:1,
-                    from include/linux/compiler.h:255,
-                    from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/wait.h:7,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from include/linux/debugfs.h:15,
-                    from drivers/net/netdevsim/dev.c:18:
-   drivers/net/netdevsim/dev.c: In function 'nsim_esw_switchdev_enable':
-   include/linux/stddef.h:8:14: warning: passing argument 3 of '__nsim_dev_port_add' makes integer from pointer without a cast [-Wint-conversion]
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
-         |              |
-         |              void *
-   drivers/net/netdevsim/dev.c:638:43: note: in expansion of macro 'NULL'
-     638 |                                           NULL, i);
-         |                                           ^~~~
-   drivers/net/netdevsim/dev.c:613:34: note: expected 'unsigned int' but argument is of type 'void *'
-     613 |                     unsigned int port_index);
-         |                     ~~~~~~~~~~~~~^~~~~~~~~~
->> drivers/net/netdevsim/dev.c:637:23: error: too many arguments to function '__nsim_dev_port_add'
-     637 |                 err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
-         |                       ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:612:1: note: declared here
-     612 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         | ^~~~~~~~~~~~~~~~~~~
->> drivers/net/netdevsim/dev.c:651:25: error: too many arguments to function '__nsim_dev_port_del'
-     651 |                         __nsim_dev_port_del(nsim_dev_port, NULL, i);
-         |                         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:614:13: note: declared here
-     614 | static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
-         |             ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c: At top level:
->> drivers/net/netdevsim/dev.c:1393:12: error: conflicting types for '__nsim_dev_port_add'; have 'int(struct nsim_dev *, enum nsim_dev_port_type,  struct nsim_dev_linecard *, unsigned int)'
-    1393 | static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         |            ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:612:1: note: previous declaration of '__nsim_dev_port_add' with type 'int(struct nsim_dev *, enum nsim_dev_port_type,  unsigned int)'
-     612 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         | ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:612:1: warning: '__nsim_dev_port_add' used but never defined
-
-
-vim +/__nsim_dev_port_add +637 drivers/net/netdevsim/dev.c
-
-   629	
-   630	static int nsim_esw_switchdev_enable(struct nsim_dev *nsim_dev,
-   631					     struct netlink_ext_ack *extack)
-   632	{
-   633		struct nsim_dev_port *nsim_dev_port, *tmp;
-   634		int i, err;
-   635	
-   636		for (i = 0; i < nsim_dev_get_vfs(nsim_dev); i++) {
- > 637			err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
-   638						  NULL, i);
-   639			if (err) {
-   640				NL_SET_ERR_MSG_MOD(extack, "Failed to initialize VFs' netdevsim ports");
-   641				pr_err("Failed to initialize VF id=%d. %d.\n", i, err);
-   642				goto err_port_add_vfs;
-   643			}
-   644		}
-   645		nsim_dev->esw_mode = DEVLINK_ESWITCH_MODE_SWITCHDEV;
-   646		return 0;
-   647	
-   648	err_port_add_vfs:
-   649		list_for_each_entry_safe(nsim_dev_port, tmp, &nsim_dev->port_list, list)
-   650			if (nsim_dev_port_is_vf(nsim_dev_port))
- > 651				__nsim_dev_port_del(nsim_dev_port, NULL, i);
-   652		return err;
-   653	}
-   654	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > >  	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+> > >  	s = rnp->exp_seq_poll_rq;
+> > > -	if (!(s & 0x1) && sync_exp_work_done(s))
+> > > -		WRITE_ONCE(rnp->exp_seq_poll_rq, s | 0x1);
+> > > +	if (!(s & RCU_EXP_SEQ_POLL_DONE) && sync_exp_work_done(s))
+> > > +		WRITE_ONCE(rnp->exp_seq_poll_rq, s | RCU_EXP_SEQ_POLL_DONE);
+> > >  	raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
+> > >  }
+> > >  
+> > > @@ -946,7 +946,8 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
+> > >  	rnp = rdp->mynode;
+> > >  	if (rcu_init_invoked())
+> > >  		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+> > > -	if ((rnp->exp_seq_poll_rq & 0x1) || ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
+> > > +	if ((rnp->exp_seq_poll_rq & RCU_EXP_SEQ_POLL_DONE) ||
+> > > +	    ULONG_CMP_LT(rnp->exp_seq_poll_rq, s)) {
+> > >  		WRITE_ONCE(rnp->exp_seq_poll_rq, s);
+> > >  		if (rcu_init_invoked())
+> > >  			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
+> > > -- 
+> > > 2.25.1
+> > > 

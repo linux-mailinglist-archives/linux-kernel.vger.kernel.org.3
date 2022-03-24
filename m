@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAB74E6887
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFDB4E688B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352583AbiCXSUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S1352586AbiCXSVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351134AbiCXSUG (ORCPT
+        with ESMTP id S243033AbiCXSVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:20:06 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB76B0A4D;
-        Thu, 24 Mar 2022 11:18:34 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id mp6-20020a17090b190600b001c6841b8a52so10136779pjb.5;
-        Thu, 24 Mar 2022 11:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:0;136;0cfrom;
-        bh=0EGnpmKX/Afxx+t6ThiAfqay0i13JN+dPpZZ6kF6r38=;
-        b=hz9gnMIkTuT/jHMGeVE9G5Ec1qSJSbCjHMs6fB5udq3q54OD1Laju9EOhuGThzAH43
-         ujtcS7yJtrkGx5hbdD+/HCwqxBXFsTokBRBKd8sFKwPtD2vA52th9WGAxkF+pCt+J9J7
-         Br8OHYyEaKvC6RLQ83+W44/BPGfsT8yKdq983Vy3d2zGSfgyB7qHcVFWW5yGlcji/c62
-         mAyz4VI1oBRyXMSuEEBNS0vET9wiioE04+j94ONEXVANYFbdy0zUwJZiqC7Oq8kduKK6
-         xxGy+ilMI/uwUp17mwih0t87mpKIq44LHNlXjh0oQeyOoCnSoVbNxDvX9Em5CDpfyWUR
-         4/1w==
+        Thu, 24 Mar 2022 14:21:06 -0400
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC628B0D3A;
+        Thu, 24 Mar 2022 11:19:34 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id b19so7775940wrh.11;
+        Thu, 24 Mar 2022 11:19:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:0;136;0cfrom;
-        bh=0EGnpmKX/Afxx+t6ThiAfqay0i13JN+dPpZZ6kF6r38=;
-        b=uLzFXlkzv5wGO2vHDAokSYIMSAF+/qr/2/2KltK08Q4XvRmdWHRw1Nh4vZ6uUlPBEU
-         TumOkfWdUXhIwz+5F6TecfTjjR42JgW9WLQrT8RzloAc8l3bQsQaUI4FPgWMipyGONBD
-         cJABkkkjZ6KBTHmC28aQLISVWFzhmCGC81pCLFsfHatRuXIFI0tpOCXSgHO9DYK4vJw6
-         9xUbm71xB5yn2nqwr2qPWp8r+sro+xY9R9EnW6aEX44Ty+vt19R8OuqcIoOMpZjFkvQq
-         wGEtNteiOFqn753FRH9wTvO7O0gDtnuN2TaFzUMX3DmKFll29bZ4+DKCQZ6EtYJQAh4l
-         ILeA==
-X-Gm-Message-State: AOAM5326Z03fYuI1O8Tx6ng9HuKt8GFMcF59ZU1Y1UIMVN79uRohcOUx
-        jVd89XU1HD983mwZ+DVPMyE=
-X-Google-Smtp-Source: ABdhPJzuYwUK/ixFgtm4b9a6pQZPRwN86hbcbaybj2IaFbFwM9ikvlSK9RAoMa56udS2fcr9SKgzTg==
-X-Received: by 2002:a17:90b:3b81:b0:1c6:f22c:60f3 with SMTP id pc1-20020a17090b3b8100b001c6f22c60f3mr7779976pjb.109.1648145914233;
-        Thu, 24 Mar 2022 11:18:34 -0700 (PDT)
-Received: from localhost ([192.55.54.52])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm4368819pfc.98.2022.03.24.11.18.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 11:18:33 -0700 (PDT)
-From:   isaku.yamahata@gmail.com
-Date:   Thu, 24 Mar 2022 11:18:32 -0700
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dave.hansen@intel.com, seanjc@google.com, pbonzini@redhat.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, peterz@infradead.org,
-        tony.luck@intel.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        isaku.yamahata@intel.com, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v2 17/21] x86/virt/tdx: Configure global KeyID on all
- packages
-Message-ID: <20220324181832.GC1212881@ls.amr.corp.intel.com>
-References: <cover.1647167475.git.kai.huang@intel.com>
- <c36456b0fd4bd50720bc8e8aa35fbb124185ae98.1647167475.git.kai.huang@intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sShruqNvZUchI28ILvTdEo38ieYS+DY+iNhiC6vHsC8=;
+        b=NZDcJ3TMal4QJgsrqPJ0CbE4bvDXYMJm0rdFYtmdBksV4XOGYDjRqkq15EESvfw7mC
+         Ulq4k1LU+kFZD2Hdwu/Jcra5JZR+ALXWdmSEYelp/OMC+kCr/PZ+tBZL5EaSg+AkId61
+         yRXUT2p4Rjf1kN+VW3GxujkRTRp2YiXIW1MUyVBDMCr3ogM+nxrzk/v2jVKEJWIQQFkn
+         3XzgOiDQAzWYOMZI7ny7f9UKiMv621E3RQkX6TlPki5TcUrS4ny7j0YlDatbhp3/cJ6T
+         O6CsiFydZYB+m8WOJWof1X0YSK8wQOebv/QJj5M+GDm8TRNWoylYe74yhJ22LWidwgki
+         JRFQ==
+X-Gm-Message-State: AOAM532ARLEwLlbmuWdxBl/h8B9Hlb/XpEun1ls5BfpEmoMI7fJnWDn4
+        tCAk4kpVU0AAd5YyCklajmk=
+X-Google-Smtp-Source: ABdhPJzC6djT24nFCyVp44IEirJJaFJU/0jVblYX0o/KcYPym7BgkM7Zs06lR+obo/brOCN4fKSFvA==
+X-Received: by 2002:a5d:6d44:0:b0:1e4:9a6d:c171 with SMTP id k4-20020a5d6d44000000b001e49a6dc171mr5714666wri.468.1648145973234;
+        Thu, 24 Mar 2022 11:19:33 -0700 (PDT)
+Received: from [192.168.0.158] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id l15-20020a05600c1d0f00b0038c8ff8e708sm2655396wms.13.2022.03.24.11.19.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 11:19:32 -0700 (PDT)
+Message-ID: <c0ae3465-9185-197f-65a4-49df856bc2e0@kernel.org>
+Date:   Thu, 24 Mar 2022 19:19:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c36456b0fd4bd50720bc8e8aa35fbb124185ae98.1647167475.git.kai.huang@intel.com>
-0;136;0cFrom: Isaku Yamahata <isaku.yamahata@gmail.com>
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 21/26] dt-bindings: crypto: convert rockchip-crypto to
+ yaml
+Content-Language: en-US
+To:     LABBE Corentin <clabbe@baylibre.com>
+Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, krzk+dt@kernel.org,
+        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+References: <20220321200739.3572792-1-clabbe@baylibre.com>
+ <20220321200739.3572792-22-clabbe@baylibre.com>
+ <90ebea0b-1d67-98dc-2b49-a6e3b97a2c4a@kernel.org> <YjyaV68mTsJAr9Xm@Red>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <YjyaV68mTsJAr9Xm@Red>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,91 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 11:49:57PM +1300,
-Kai Huang <kai.huang@intel.com> wrote:
+On 24/03/2022 17:20, LABBE Corentin wrote:
 
-> diff --git a/arch/x86/virt/vmx/tdx.c b/arch/x86/virt/vmx/tdx.c
-> index e03dc3e420db..39b1b7d0417d 100644
-> --- a/arch/x86/virt/vmx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx.c
-> @@ -23,6 +23,7 @@
->  #include <asm/virtext.h>
->  #include <asm/e820/api.h>
->  #include <asm/pgtable.h>
-> +#include <asm/smp.h>
->  #include <asm/tdx.h>
->  #include "tdx.h"
->  
-> @@ -398,6 +399,47 @@ static int seamcall_on_each_cpu(struct seamcall_ctx *sc)
->  	return atomic_read(&sc->err);
->  }
->  
-> +/*
-> + * Call the SEAMCALL on one (any) cpu for each physical package in
-> + * serialized way.  Note for serialized calls 'seamcall_ctx::err'
-> + * doesn't have to be atomic, but for simplicity just reuse it
-> + * instead of adding a new one.
-> + *
-> + * Return -ENXIO if IPI SEAMCALL wasn't run on any cpu, or -EFAULT
-> + * when SEAMCALL fails, or -EPERM when the cpu where SEAMCALL runs
-> + * on is not in VMX operation.  In case of -EFAULT, the error code
-> + * of SEAMCALL is in 'struct seamcall_ctx::seamcall_ret'.
-> + */
-> +static int seamcall_on_each_package_serialized(struct seamcall_ctx *sc)
-> +{
-> +	cpumask_var_t packages;
-> +	int cpu, ret;
-> +
-> +	if (!zalloc_cpumask_var(&packages, GFP_KERNEL))
-> +		return -ENOMEM;
+(...)
+>>
+>>> +    resets:
+>>> +      minItems: 6
+>>> +else:
+>>> +  if:
+>>> +    properties:
+>>> +      compatible:
+>>> +        const: rockchip,rk3328-crypto
+>>> +  then:
+>>> +    properties:
+>>> +      clocks:
+>>> +        minItems: 3
+>>> +      clock-names:
+>>> +        minItems: 3
+>>> +
+>>
+> 
+> I have create a binding update patch (https://github.com/montjoie/linux/commit/da05ef9bb488c16cfd15a47054f5b1161829b6bf)
+> But I have lot of problem, DT are not validating.
+> Example: Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.example.dtb: crypto@ff8a0000: resets: [[4294967295, 174]] is too short
+> 
+> I have tried also to set default resets/maxItems to 3 and setting it to 4 via an if. But I still got error like maxItems cannot be update after initial set.
+> 
+> Any idea on why my new binding update patch is failling ?
 
-Memory leak. This should be freed before returning.
+For such case one way to solve is to:
+1. Define the most relaxed min/maxItems in properties.
+2. Narrow the min/maxItems in allOf for each flavor.
+Something like in clocks for:
+Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
 
 
-> +	for_each_online_cpu(cpu) {
-> +		if (cpumask_test_and_set_cpu(topology_physical_package_id(cpu),
-> +					packages))
-> +			continue;
-> +
-> +		ret = smp_call_function_single(cpu, seamcall_smp_call_function,
-> +				sc, true);
-> +		if (ret)
-> +			return ret;
-> +
-> +		/*
-> +		 * Doesn't have to use atomic_read(), but it doesn't
-> +		 * hurt either.
-> +		 */
-> +		ret = atomic_read(&sc->err);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static inline bool p_seamldr_ready(void)
->  {
->  	return !!p_seamldr_info.p_seamldr_ready;
-> @@ -1316,6 +1358,18 @@ static int config_tdx_module(struct tdmr_info **tdmr_array, int tdmr_num,
->  	return ret;
->  }
->  
-> +static int config_global_keyid(u64 global_keyid)
-
-global_keyid argument isn't used.  Is global variable tdx_global_keyid used?
-
-
-> +{
-> +	struct seamcall_ctx sc = { .fn = TDH_SYS_KEY_CONFIG };
-> +
-> +	/*
-> +	 * TDH.SYS.KEY.CONFIG may fail with entropy error (which is
-> +	 * a recoverable error).  Assume this is exceedingly rare and
-> +	 * just return error if encountered instead of retrying.
-> +	 */
-> +	return seamcall_on_each_package_serialized(&sc);
-> +}
-> +
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Best regards,
+Krzysztof

@@ -2,122 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE9C4E6A26
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 22:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE08A4E6A29
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 22:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354661AbiCXVQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 17:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
+        id S1355072AbiCXVU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 17:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349749AbiCXVQE (ORCPT
+        with ESMTP id S1355056AbiCXVUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 17:16:04 -0400
-X-Greylist: delayed 24396 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 14:14:30 PDT
-Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125CF2898C;
-        Thu, 24 Mar 2022 14:14:29 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1648156468; bh=10YpchtIHtcZ8NSl6ZT7uwLuFlfFgJXa9Oolkv8NtQg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=bgzPaBmGHN+bnivn53/b7ZIz9/UwYFmY03s5yT9g1LzfZvAJ3uIC7ce11QS/c9gDk
-         R+EyTlbehDyeBvELCV6f+pU+CmP91zr7lx482udUYxg9jrlR/ovTm9K8oIjoB/rEha
-         koK3I9RsZ9nIP/hbajSqIVn+Bk0NpwJEeSXvuQ3T1G3hO5g+mSdwUwK93gKKp92h+F
-         OmmTJoRUd4/LgjWY01urisinyN5elIPMT5iEkPrjHSSPHnq9iwLcPxdf+NOnHNHk0j
-         L5ovl1Ohbmz8Q5MEpZ3NdLlM2L2Qx85IIHFm9o24PgoAXbuYmLr7yHvHkB7jVoVtj+
-         eFDzUyYMP1/pw==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-In-Reply-To: <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
-References: <1812355.tdWV9SEqCh@natalenko.name>
- <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
- <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
- <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
- <20220324163132.GB26098@lst.de>
- <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com> <871qyr9t4e.fsf@toke.dk>
- <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
-Date:   Thu, 24 Mar 2022 22:14:28 +0100
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87r16r834b.fsf@toke.dk>
+        Thu, 24 Mar 2022 17:20:22 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C92136B72
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:18:50 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id b16so6931348ioz.3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rnbgqLOTG+5hHU3g7Jzj7aZPIyJgNTDTLENYpZPQ1Pk=;
+        b=jRiwsJKaOQAU2T7ZlBP9cvqGwbi86q52zxQs+4qBJLmMKIUDifclJXOaWlvJaBg5vP
+         C8AOSOwKJO3KonaUrkMwpMR9LnmktD8/86ransj73ulWidklQZL1PbqsHbwy55oVBVwi
+         S+ioh90m37Eun5tK/vqDCrp4eyy9VzAO8Fpea/GMFU7bUZ2bBw4O1gO6qB2W0U1AHIj1
+         uoQKFkiopR60ZeYqU5soQaOqb1f8DFN59yK+8PD/U86hkQuLKfA97CuKy52d7DNINiQ+
+         xRgTXo72NsyVl3VFB7FMKM5R4Pi0PjP+BbRtFKvGrwN0ZMF2oQHSMHhyeyaiGqGNqR2H
+         LTvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rnbgqLOTG+5hHU3g7Jzj7aZPIyJgNTDTLENYpZPQ1Pk=;
+        b=DiMrW2O5FK194EpO0N2eBn6+k8mB52arOK1tKt5IA2APAvMbR2JqCqb176Kx2QzjNT
+         MxnG71+OHkXwoWgZrEryqLBI7yjL3TU7WHODD182YoDrfDYaK2CJPeouipsGuTm7a2Xc
+         y4ZTLDktrfH5PwsBlCJE4FQxubcqV5fytNEnd5tnbxg+ZT+dCmjqaZeSStBjFv0hOlOz
+         mQmc2pBJA+IabG59P7fuyE8INclqv9k+dL7zS6NczzinXx5XBOF48JysOemurlm33EV1
+         NZJ5uWQ4Yyk3NAojsLLF/KX2m6XsTGJlvRocJhD08QVpX7XenGETkn6G+cv4oh4gK2S1
+         zxCQ==
+X-Gm-Message-State: AOAM533WyTkBEM4PXKXeBa2vORKh+QX28GlfUWrtmMMIta3Px32RiDlX
+        7OlMDBwJ7pODX+rzrCKZ1uWDWw/Aaa/hp2wnq/U=
+X-Google-Smtp-Source: ABdhPJzEjs/42FQWILQ6XwMyw+H2YMIxy6QwdRT8YJsRgyqyh/7EfTBDRzbMxZm/hZVCMn56PwNDtWEWzEkFwaRkiO0=
+X-Received: by 2002:a05:6638:dce:b0:31a:256b:6b92 with SMTP id
+ m14-20020a0566380dce00b0031a256b6b92mr3991019jaj.308.1648156729838; Thu, 24
+ Mar 2022 14:18:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220324170929.542348-1-steve@sk2.org>
+In-Reply-To: <20220324170929.542348-1-steve@sk2.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 24 Mar 2022 22:18:39 +0100
+Message-ID: <CANiq72mQXV0sfh6-LKYjc9fMDuJR=t4dMdBD-6y=-Bq3YHDysw@mail.gmail.com>
+Subject: Re: [PATCH] auxdisplay: lcd2s: use simple i2c probe function
+To:     Stephen Kitt <steve@sk2.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> writes:
+Hi Stephen,
 
-> On Thu, Mar 24, 2022 at 10:07 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@t=
-oke.dk> wrote:
->>
->> Right, but is that sync_for_device call really needed?
+On Thu, Mar 24, 2022 at 6:10 PM Stephen Kitt <steve@sk2.org> wrote:
 >
-> Well, imagine that you have a non-cache-coherent DMA (not bounce
-> buffers - just bad hardware)...
+> The i2c probe functions here don't use the id information provided in
+> their second argument, so the single-parameter i2c probe function
+> ("probe_new") can be used instead.
 >
-> So the driver first does that dma_sync_single_for_cpu() for the CPU
-> see the current state (for the non-cache-coherent case it would just
-> invalidate caches).
->
-> The driver then examines the command buffer state, sees that it's
-> still in progress, and does that return -EINPROGRESS.
->
-> It's actually very natural in that situation to flush the caches from
-> the CPU side again. And so dma_sync_single_for_device() is a fairly
-> reasonable thing to do in that situation.
->
-> But it doesn't seem *required*, no. The CPU caches only have a copy of
-> the data in them, no writeback needed (and writeback wouldn't work
-> since DMA from the device may be in progress).
->
-> So I don't think the dma_sync_single_for_device() is *wrong* per se,
-> because the CPU didn't actually do any modifications.
->
-> But yes, I think it's unnecessary - because any later CPU accesses
-> would need that dma_sync_single_for_cpu() anyway, which should
-> invalidate any stale caches.
+> This avoids scanning the identifier tables during probes.
 
-OK, the above was basically how I understood it. Thank you for
-confirming!
+Thanks for the patch -- Andy submitted an equivalent one which I
+queued for -next some days ago.
 
-> And it clearly doesn't work in a bounce-buffer situation, but honestly
-> I don't think a "CPU modified buffers concurrently with DMA" can
-> *ever* work in that situation, so I think it's wrong for a bounce
-> buffer model to ever do anything in the dma_sync_single_for_device()
-> situation.
-
-Right.
-
-> Does removing that dma_sync_single_for_device() actually fix the
-> problem for the ath driver?
-
-I am hoping Oleksandr can help answer that since my own ath9k hardware
-is currently on strike :(
-
--Toke
+Cheers,
+Miguel

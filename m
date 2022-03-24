@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA2F4E5F7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEE44E5F80
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiCXHfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
+        id S1348520AbiCXHfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348706AbiCXHet (ORCPT
+        with ESMTP id S1345603AbiCXHfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:34:49 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF78C6A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:33:03 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bg10so7370068ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p4XcSqi4hilkip9A6euflsFWMknVrb5Cx1p1GP8tqr4=;
-        b=bdyv8sM/IbxgLlqNsgWS4QfHyvT2X0/AWGQYTRSqDdZ9PrqhsvuV8mM+ZxrIyK5Pgd
-         NKDQ6+4xPrAXOoFvvJpjhagUhjV/8IpZ9lXcol3uqQ2poM/tGmQQkk26gCezg4JtF7jq
-         3tXq7mfUuMkI90mOFCP7YO50njmm6YmXTGL3XmwPazWRPfkISRTYlKpxnzpABMdZmpgA
-         og1FfIt3HniAnlSuUD6cKLK9b7Ia36dl/0iQWUpL/sToYfdh9g1mExXow/9FRKenG3a1
-         KWl1JoUmIJdAN9JqGsBUkdWEO6kZJykY+hOO0LYeXOTG4yDT7dx7nHe/08G7aLAQ4HEE
-         xJbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p4XcSqi4hilkip9A6euflsFWMknVrb5Cx1p1GP8tqr4=;
-        b=etpKJMXJTyoIf7y1th7yh5Vo7X4vblOYzP6gGvD+UEHDWM02LoNcHCuq1vlAUaUHlA
-         Pbrh/WYloAt5rHPw3+I4Z+zawJTsZxVMxdOeIWO0lVo05Mi9FkEyoj7gH9Q6F5gBTOnD
-         3Rg0aXu5fkvaEm+/QMbwrfNnGIGn8+VCs2MeSeyCVgAtwORo+UZkNBrug8SKA4PpXZC7
-         ivjx9lhtRHrrPEXKAzJhwTUWgHOluBJHiLOOjMlQVK5tbfxC9SCTAN1elSELLmOH2zfi
-         6PFuHhuGPkBWNVSNRdDFjfxs9e7wB03MrP0HWW+ZM7KS9mXI2sDG46hSQc+LOSQ6f4OT
-         EZjg==
-X-Gm-Message-State: AOAM5305Fi493TXLOVsYMhY3CYccx73fFEO0SfWXE0d8eMXyw3KVL3Dv
-        ix+3VVcLPY2Q3CH/pp5mWFo=
-X-Google-Smtp-Source: ABdhPJyI9A7dnH+iZmfHuDRtn8Mxx20fJ8PXgCgaG9YqLXSdrktGF/XpSS3ERdrQq5VuK/j+3hKCvQ==
-X-Received: by 2002:a17:907:72c5:b0:6da:e99e:226c with SMTP id du5-20020a17090772c500b006dae99e226cmr4246712ejc.515.1648107182221;
-        Thu, 24 Mar 2022 00:33:02 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id r23-20020a056402235700b00419171bc571sm1054724eda.59.2022.03.24.00.33.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:33:01 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Evgeniy Polyakov <zbr@ioremap.net>
-Cc:     linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] w1: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:32:27 +0100
-Message-Id: <20220324073227.66486-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 24 Mar 2022 03:35:03 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B561B6;
+        Thu, 24 Mar 2022 00:33:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KPH5Q4GKQz4xLS;
+        Thu, 24 Mar 2022 18:33:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1648107211;
+        bh=O57ZBYrPDINAUUx0bUCirgO8vfrhhHxthCe7aIDcEOk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QeSOHTW8IT7HnYb6BSsed4NyWLi8uCu6EIrDYegoFGrYffPVsC6qe6269vqPrMyD/
+         i+rqSdcMQ6RRVTdGV6id/jafU+nYGg9ox/32z42V4t1L9so5yuKIMW2Z+KL86m10N7
+         Od8qIUlcGXSL/GRofPwmjWJqSofOfBmHnOQbBb/hWn+BYs431p9NATodGIAK+vANYE
+         P8Rv77jLizzufi45zkVXgYdPLw8i50Lb4OcLio5wNneynzFdCmYu+g5QjEdFbHHCCX
+         bBZVbYd6/Ou2xNNg4l0n9Zf3xumm6njxO+KT0rmmeBEgOkCWX0/MVmWIQTadCpUtYw
+         u3xXRjILizpuw==
+Date:   Thu, 24 Mar 2022 18:33:29 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     "David E. Box" <david.e.box@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
+Message-ID: <20220324183329.22c97ea1@canb.auug.org.au>
+In-Reply-To: <20220301201659.45ac94cd@canb.auug.org.au>
+References: <20220301201659.45ac94cd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/Oo9++qc_i1g+bCsw1KwBD90";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,94 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+--Sig_/Oo9++qc_i1g+bCsw1KwBD90
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+Hi all,
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+On Tue, 1 Mar 2022 20:16:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>=20
+> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Unexpected =
+indentation.
+> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Block quote=
+ ends without a blank line; unexpected unindent.
+> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Definition =
+list ends without a blank line; unexpected unindent.
+>=20
+> Introduced by commit
+>=20
+>   2546c6000430 ("platform/x86: Add Intel Software Defined Silicon driver")
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/w1/w1.c | 32 +++++++++++++++-----------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+I am still seeing these warnings.
 
-diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-index f2ae2e563dc5..1219476cce88 100644
---- a/drivers/w1/w1.c
-+++ b/drivers/w1/w1.c
-@@ -830,49 +830,47 @@ int w1_slave_detach(struct w1_slave *sl)
- 
- struct w1_master *w1_search_master_id(u32 id)
- {
--	struct w1_master *dev;
--	int found = 0;
-+	struct w1_master *dev = NULL, *iter;
- 
- 	mutex_lock(&w1_mlock);
--	list_for_each_entry(dev, &w1_masters, w1_master_entry) {
--		if (dev->id == id) {
--			found = 1;
--			atomic_inc(&dev->refcnt);
-+	list_for_each_entry(iter, &w1_masters, w1_master_entry) {
-+		if (iter->id == id) {
-+			dev = iter;
-+			atomic_inc(&iter->refcnt);
- 			break;
- 		}
- 	}
- 	mutex_unlock(&w1_mlock);
- 
--	return (found)?dev:NULL;
-+	return dev;
- }
- 
- struct w1_slave *w1_search_slave(struct w1_reg_num *id)
- {
- 	struct w1_master *dev;
--	struct w1_slave *sl = NULL;
--	int found = 0;
-+	struct w1_slave *sl = NULL, *iter;
- 
- 	mutex_lock(&w1_mlock);
- 	list_for_each_entry(dev, &w1_masters, w1_master_entry) {
- 		mutex_lock(&dev->list_mutex);
--		list_for_each_entry(sl, &dev->slist, w1_slave_entry) {
--			if (sl->reg_num.family == id->family &&
--					sl->reg_num.id == id->id &&
--					sl->reg_num.crc == id->crc) {
--				found = 1;
-+		list_for_each_entry(iter, &dev->slist, w1_slave_entry) {
-+			if (iter->reg_num.family == id->family &&
-+					iter->reg_num.id == id->id &&
-+					iter->reg_num.crc == id->crc) {
-+				sl = iter;
- 				atomic_inc(&dev->refcnt);
--				atomic_inc(&sl->refcnt);
-+				atomic_inc(&iter->refcnt);
- 				break;
- 			}
- 		}
- 		mutex_unlock(&dev->list_mutex);
- 
--		if (found)
-+		if (sl)
- 			break;
- 	}
- 	mutex_unlock(&w1_mlock);
- 
--	return (found)?sl:NULL;
-+	return sl;
- }
- 
- void w1_reconnect_slaves(struct w1_family *f, int attach)
+--=20
+Cheers,
+Stephen Rothwell
 
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
--- 
-2.25.1
+--Sig_/Oo9++qc_i1g+bCsw1KwBD90
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI8HskACgkQAVBC80lX
+0GzmdAf9Ee5WD9mFVQOACExXVLu/4fz94hieMWq9wlN5BRyAY3hVAR6FIHuk7R0q
+EwLYL9IEWdNLH1jD8XgqsFhrfi57IoXHXAJ0WjLONEH4B+ZHCFj6eXIkO4v/JndX
+lod5PsVIWYsOMRwEWyPhwcViL1uQx19EtdwZ/gHv9UfrNMqn3P1W/vkwFvjBzN62
+7nvL/czwwPWkiJP+/4pjrlZBZWQG8AojL9vH5OU8mbzp74DfMnW7mcai6ghFqwWV
+fK8bNk2/ntu4qD6X0Z+txNz4ft2bh1vR67A1Ci2XFn/Yk2lzUyyLgEeywrtYjmyI
+SL8qAx3efFrhNyWFzqUcuUQI54YK9g==
+=p/0x
+-----END PGP SIGNATURE-----
+
+--Sig_/Oo9++qc_i1g+bCsw1KwBD90--

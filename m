@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6454E5F4B
+	by mail.lfdr.de (Postfix) with ESMTP id 8745A4E5F4C
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348497AbiCXHZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S1348503AbiCXH0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiCXHZb (ORCPT
+        with ESMTP id S234921AbiCXH0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:25:31 -0400
+        Thu, 24 Mar 2022 03:26:00 -0400
 Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2592A986F4;
-        Thu, 24 Mar 2022 00:24:00 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id yy13so7338836ejb.2;
-        Thu, 24 Mar 2022 00:24:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE7898F47;
+        Thu, 24 Mar 2022 00:24:29 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id r13so7321986ejd.5;
+        Thu, 24 Mar 2022 00:24:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=dc7drlj1jlLFeJfvyn32+P0vajF46kNNWGeRvJGukV8=;
-        b=HqQi5kmtgTilXXWLucEpN4C168K/zGBnfq0Ia+Rgs9zVKrODvzYOl4McnsYWU2RioK
-         q7gUgMjWKlcsl/6KVAI7YR+3WLvi39VqJP5ZUCwTsAeqTm9FmC/RtI1V+t6RSIFBBDRu
-         Us67zQeNvvxUc00D8sItkNi1o9JvMMKfKCLmuRiOCFyT1Pd94LDOvRi7Y3FQuOUq7UvM
-         vUvDntywdfNQCMR+dSkzcY50iJ9azOqErgzXXqicWOakSQnqTu4HHZRSdxCLhhMjLZ7q
-         Q6LaLA/X7NM8zkTURU0r9LTh/UXRi0Ab2/XvHfywdH0z56nLpeJo5BpKAGxOmGqzw2Y/
-         tyeA==
+        bh=Hqm0NVjl1XXMxjBpBH/hdq5nmMPm2abv01ReA7/x/Wo=;
+        b=jc61vNvypG8xssQ5Sa5SGOiyHPYWy2w3vcRm9ikKtSb6mRZf8jwhTdjF7NAKDnNERt
+         aPqHgKARnxasEGnWCRl2wXm5C3tteWC9is+hlqrcfogEO8lVsXNIDbsqk9HcB6ATTQJk
+         cZBjKcTn9JumkLi0ujNcD7oEUThNc41DcOd1jx369nrySYCl5WRcwwP4hdo1CiEmZpWz
+         yavWs6Fu1aTDRw6ejoVaa/J9jyIy4fl58nAcMtCpJ3U38Xi5qQbSVq/OAOGkGECzcgVf
+         AT+u+vLuJu5A5Gj+cPj+YZsC5YJzOf+5wltt1XlO8fQdDNiRoVUeokLbVfQxYaQvzBZl
+         wS9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=dc7drlj1jlLFeJfvyn32+P0vajF46kNNWGeRvJGukV8=;
-        b=l+g10yD0GkDjWvYrnu/YRSErMYjUEs8QYn2mxb4KoGirr4onW4ldD9p1j6gJdXImz0
-         Irs/EQ52cKwahIs9AJppJj0VeBu1W5j3AZ76tBaT7XWyI7kK5tCfmQ2U0upCTw3Y98re
-         yTCqKWhxfjokS/Njl9cCziZ5/qnInVdqVhyfrWFyo4IA+JfHQm90PVt2vhr7wBJhvRkb
-         JF0+mQjg332EUhKKGaEB6hJvfg9OAsSZXh1VTU8oWQTH+W3gyPwv097WLFx2iwefkmkD
-         6nwJAY3zVoiGevqTNOiZkJ+5rWmExulezwpcj7ZZKy4l06TfjuN/90DTg75Jbh9MkvAm
-         BZGg==
-X-Gm-Message-State: AOAM533khxq1yVG/gN/1quWhJRpQWPpwwBy9fZZSas9mqFzijnXWrIoP
-        dE3c6KmMBUvQ0Vvn/3WbIos=
-X-Google-Smtp-Source: ABdhPJx1loH3icZmz6GcC3SKyNlA2D1JMRQhRf9/aY9xYIKyGiG7CVa8VQ4h/BYZfQG7yTq5nnf40w==
-X-Received: by 2002:a17:907:72c5:b0:6da:e99e:226c with SMTP id du5-20020a17090772c500b006dae99e226cmr4213687ejc.515.1648106638547;
-        Thu, 24 Mar 2022 00:23:58 -0700 (PDT)
+        bh=Hqm0NVjl1XXMxjBpBH/hdq5nmMPm2abv01ReA7/x/Wo=;
+        b=W/bV6x+XqePycG1xHDwpvBSIpE2WZyOA+pM/t3GgD54aZQHJ9wfls5qC51d07aJwbk
+         hI5Egb2HsHCgMRoaZBwPs1zKlnI4hjECpEqBg61uwRKE+d1SwQ5ZVn8gwDQ8GFnZr+T8
+         uqnha/aMAraOdx6jrZ1sacsgk1BKM4Fz2Fm9XUOaSzDVR1ycGi+NqgdJRYtd4Mr0uQRS
+         LYxfsyXZ4BI0zg2Tkm57HRwsq3oz0uhCDgvGQkJ/9mYFH4hS/9vQYBUkGkt4ezKQD5ar
+         XS9qOL/G7KhbiBUIfoKddXc4BdTFSC+ZpubvgHVjvnVBbP+9LJDWTql9TKtRh6KHGW5S
+         pt/w==
+X-Gm-Message-State: AOAM532c18WxH2RTvsXrb6G8yP1vrJ0XIApP8KDfYx2M8C9GBlUKlFmm
+        hH3HPUlrUhTy8/c6ECDcw+o=
+X-Google-Smtp-Source: ABdhPJxbRkqVNvlTWR3sH2yUZCuNFBR0+azuzE6PIpMu3NWXAVIZpa6jCxvAy33KVcFsHAModpDgxQ==
+X-Received: by 2002:a17:906:c14b:b0:6da:b30d:76a0 with SMTP id dp11-20020a170906c14b00b006dab30d76a0mr4147482ejc.279.1648106667768;
+        Thu, 24 Mar 2022 00:24:27 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id qk30-20020a1709077f9e00b006dfae33d969sm777539ejc.216.2022.03.24.00.23.57
+        by smtp.googlemail.com with ESMTPSA id z22-20020a17090655d600b006d229436793sm766013ejp.223.2022.03.24.00.24.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:23:58 -0700 (PDT)
+        Thu, 24 Mar 2022 00:24:27 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Vlad Yasevich <vyasevich@gmail.com>
-Cc:     Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
+To:     Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc:     Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] sctp: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:22:57 +0100
-Message-Id: <20220324072257.62674-1-jakobkoschel@gmail.com>
+Subject: [PATCH] sh: replace usage of found with dedicated list iterator variable
+Date:   Thu, 24 Mar 2022 08:24:09 +0100
+Message-Id: <20220324072409.62899-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -90,141 +85,62 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- net/sctp/bind_addr.c | 15 +++++++--------
- net/sctp/ipv6.c      | 24 +++++++++++-------------
- net/sctp/protocol.c  | 24 +++++++++++-------------
- 3 files changed, 29 insertions(+), 34 deletions(-)
+ arch/sh/drivers/dma/dma-api.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/net/sctp/bind_addr.c b/net/sctp/bind_addr.c
-index 59e653b528b1..c85ade7863bf 100644
---- a/net/sctp/bind_addr.c
-+++ b/net/sctp/bind_addr.c
-@@ -172,23 +172,22 @@ int sctp_add_bind_addr(struct sctp_bind_addr *bp, union sctp_addr *new,
+diff --git a/arch/sh/drivers/dma/dma-api.c b/arch/sh/drivers/dma/dma-api.c
+index ab9170494dcc..b1a54269b03c 100644
+--- a/arch/sh/drivers/dma/dma-api.c
++++ b/arch/sh/drivers/dma/dma-api.c
+@@ -127,20 +127,19 @@ static int search_cap(const char **haystack, const char *needle)
   */
- int sctp_del_bind_addr(struct sctp_bind_addr *bp, union sctp_addr *del_addr)
+ int request_dma_bycap(const char **dmac, const char **caps, const char *dev_id)
  {
--	struct sctp_sockaddr_entry *addr, *temp;
--	int found = 0;
-+	struct sctp_sockaddr_entry *addr = NULL, *iter, *temp;
+-	unsigned int found = 0;
+-	struct dma_info *info;
++	struct dma_info *info = NULL, *iter;
+ 	const char **p;
+ 	int i;
  
- 	/* We hold the socket lock when calling this function,
- 	 * and that acts as a writer synchronizing lock.
- 	 */
--	list_for_each_entry_safe(addr, temp, &bp->address_list, list) {
--		if (sctp_cmp_addr_exact(&addr->a, del_addr)) {
-+	list_for_each_entry_safe(iter, temp, &bp->address_list, list) {
-+		if (sctp_cmp_addr_exact(&iter->a, del_addr)) {
- 			/* Found the exact match. */
+ 	BUG_ON(!dmac || !caps);
+ 
+-	list_for_each_entry(info, &registered_dmac_list, list)
+-		if (strcmp(*dmac, info->name) == 0) {
 -			found = 1;
--			addr->valid = 0;
--			list_del_rcu(&addr->list);
-+			addr = iter;
-+			iter->valid = 0;
-+			list_del_rcu(&iter->list);
++	list_for_each_entry(iter, &registered_dmac_list, list)
++		if (strcmp(*dmac, iter->name) == 0) {
++			info = iter;
  			break;
  		}
- 	}
  
--	if (found) {
-+	if (addr) {
- 		kfree_rcu(addr, rcu);
- 		SCTP_DBG_OBJCNT_DEC(addr);
- 		return 0;
-diff --git a/net/sctp/ipv6.c b/net/sctp/ipv6.c
-index 470dbdc27d58..803950277f56 100644
---- a/net/sctp/ipv6.c
-+++ b/net/sctp/ipv6.c
-@@ -76,10 +76,8 @@ static int sctp_inet6addr_event(struct notifier_block *this, unsigned long ev,
- 				void *ptr)
+-	if (!found)
++	if (!info)
+ 		return -ENODEV;
+ 
+ 	for (i = 0; i < info->nr_channels; i++) {
+@@ -242,17 +241,16 @@ EXPORT_SYMBOL(dma_wait_for_completion);
+ 
+ int register_chan_caps(const char *dmac, struct dma_chan_caps *caps)
  {
- 	struct inet6_ifaddr *ifa = (struct inet6_ifaddr *)ptr;
--	struct sctp_sockaddr_entry *addr = NULL;
--	struct sctp_sockaddr_entry *temp;
-+	struct sctp_sockaddr_entry *addr = NULL, *iter, *temp;
- 	struct net *net = dev_net(ifa->idev->dev);
--	int found = 0;
+-	struct dma_info *info;
+-	unsigned int found = 0;
++	struct dma_info *info = NULL, *iter;
+ 	int i;
  
- 	switch (ev) {
- 	case NETDEV_UP:
-@@ -97,21 +95,21 @@ static int sctp_inet6addr_event(struct notifier_block *this, unsigned long ev,
- 		break;
- 	case NETDEV_DOWN:
- 		spin_lock_bh(&net->sctp.local_addr_lock);
--		list_for_each_entry_safe(addr, temp,
--					&net->sctp.local_addr_list, list) {
--			if (addr->a.sa.sa_family == AF_INET6 &&
--			    ipv6_addr_equal(&addr->a.v6.sin6_addr,
-+		list_for_each_entry_safe(iter, temp,
-+					 &net->sctp.local_addr_list, list) {
-+			if (iter->a.sa.sa_family == AF_INET6 &&
-+			    ipv6_addr_equal(&iter->a.v6.sin6_addr,
- 					    &ifa->addr) &&
--			    addr->a.v6.sin6_scope_id == ifa->idev->dev->ifindex) {
--				sctp_addr_wq_mgmt(net, addr, SCTP_ADDR_DEL);
--				found = 1;
--				addr->valid = 0;
--				list_del_rcu(&addr->list);
-+			    iter->a.v6.sin6_scope_id == ifa->idev->dev->ifindex) {
-+				sctp_addr_wq_mgmt(net, iter, SCTP_ADDR_DEL);
-+				addr = iter;
-+				iter->valid = 0;
-+				list_del_rcu(&iter->list);
- 				break;
- 			}
+-	list_for_each_entry(info, &registered_dmac_list, list)
+-		if (strcmp(dmac, info->name) == 0) {
+-			found = 1;
++	list_for_each_entry(iter, &registered_dmac_list, list)
++		if (strcmp(dmac, iter->name) == 0) {
++			info = iter;
+ 			break;
  		}
- 		spin_unlock_bh(&net->sctp.local_addr_lock);
--		if (found)
-+		if (addr)
- 			kfree_rcu(addr, rcu);
- 		break;
- 	}
-diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 35928fefae33..6f1d7fd83465 100644
---- a/net/sctp/protocol.c
-+++ b/net/sctp/protocol.c
-@@ -777,10 +777,8 @@ static int sctp_inetaddr_event(struct notifier_block *this, unsigned long ev,
- 			       void *ptr)
- {
- 	struct in_ifaddr *ifa = (struct in_ifaddr *)ptr;
--	struct sctp_sockaddr_entry *addr = NULL;
--	struct sctp_sockaddr_entry *temp;
-+	struct sctp_sockaddr_entry *addr = NULL, *iter, *temp;
- 	struct net *net = dev_net(ifa->ifa_dev->dev);
--	int found = 0;
  
- 	switch (ev) {
- 	case NETDEV_UP:
-@@ -797,20 +795,20 @@ static int sctp_inetaddr_event(struct notifier_block *this, unsigned long ev,
- 		break;
- 	case NETDEV_DOWN:
- 		spin_lock_bh(&net->sctp.local_addr_lock);
--		list_for_each_entry_safe(addr, temp,
--					&net->sctp.local_addr_list, list) {
--			if (addr->a.sa.sa_family == AF_INET &&
--					addr->a.v4.sin_addr.s_addr ==
--					ifa->ifa_local) {
--				sctp_addr_wq_mgmt(net, addr, SCTP_ADDR_DEL);
--				found = 1;
--				addr->valid = 0;
--				list_del_rcu(&addr->list);
-+		list_for_each_entry_safe(iter, temp,
-+					 &net->sctp.local_addr_list, list) {
-+			if (iter->a.sa.sa_family == AF_INET &&
-+			    iter->a.v4.sin_addr.s_addr ==
-+			    ifa->ifa_local) {
-+				sctp_addr_wq_mgmt(net, iter, SCTP_ADDR_DEL);
-+				addr = iter;
-+				iter->valid = 0;
-+				list_del_rcu(&iter->list);
- 				break;
- 			}
- 		}
- 		spin_unlock_bh(&net->sctp.local_addr_lock);
--		if (found)
-+		if (addr)
- 			kfree_rcu(addr, rcu);
- 		break;
- 	}
+-	if (unlikely(!found))
++	if (unlikely(!info))
+ 		return -ENODEV;
+ 
+ 	for (i = 0; i < info->nr_channels; i++, caps++) {
 
 base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 

@@ -2,136 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D514E66D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1D74E66D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351632AbiCXQR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S1347756AbiCXQUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238822AbiCXQRZ (ORCPT
+        with ESMTP id S238822AbiCXQUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:17:25 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55888A94DE;
-        Thu, 24 Mar 2022 09:15:52 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:44942)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nXQ7o-00FoyY-PD; Thu, 24 Mar 2022 10:15:49 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35326 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nXQ7n-007zWn-MU; Thu, 24 Mar 2022 10:15:48 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
-        <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
-        <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
-        <YjudB7XARLlRtBiR@mit.edu>
-        <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
-Date:   Thu, 24 Mar 2022 11:15:29 -0500
-In-Reply-To: <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
-        (Miklos Szeredi's message of "Thu, 24 Mar 2022 09:44:38 +0100")
-Message-ID: <87k0cje38e.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 24 Mar 2022 12:20:12 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31424ECCB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:18:40 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id u30-20020a4a6c5e000000b00320d8dc2438so850536oof.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wvPCDj2XTNMlrGPWwVtye5ut7SMzb+xM6DqJLQvHb50=;
+        b=p8dME+OYbuQou5JQ6WLL6EvTPokbw9NedF7BIxkwAc6oqWuUKkjaJCCq2GZ2GfzSfB
+         gbUqHDUNmTWByxjerMXegradc7/uK4bgsQZcrJupkBAKgwbVLHUr86AvJ3xK6fiR06kC
+         TTbwT/D3L2685E6NVau21m7oyx5evUC25IXsVRdCG8Z2A6IHa95sqqBrgaWYa7tv95/L
+         SgDN6dUD0pymbC46CadKn9w1qU1gminXvvh4I4s1vQ2viSZJcb7vcI5HQnelHoWVFc/Y
+         NArUGQwzkIhjXwkxhDlVomXtmqK2K1NILEttB5MkeUZ2Z9JnUpD1pzmDGWTGjjqbnyR1
+         lFXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wvPCDj2XTNMlrGPWwVtye5ut7SMzb+xM6DqJLQvHb50=;
+        b=RMdNN9RwoX/i5rh7U224IMYfMb0En6wMTCQvaNQJyf6nozBkOHri3wenYE4DVHpQsO
+         aCIaXQyPPG0qGZ6r0kUYDPqaRQGuNYvDJ+4mPMgwPlVXjjEyhnqCi7kJLc771ndWwfoG
+         Xb1JmYWSIef1WPJuGE/iFJ073aCMYp43LrXWbsXB2tzKENA7hIJIs3I1jy6OB1RVzt0S
+         d4KmTNa4xtOwMUcpLkY6i3gwq6kmP9SItHOkdPOxKiB7OUfTlTSyyho1mturou+FI8SM
+         mdNVDxGhQKw7vyd8c0oawe/mzFFdROFHFG2NAsXP3y+9bZpMxm92HLPSSi8HYA3KSa90
+         lwzQ==
+X-Gm-Message-State: AOAM532qq2VyZkCuMVf/PBYvdNOcgFpjqYlnAFKKxxp9KZGjFN4XBAK+
+        WZou0XChB8NjD0Kgg2+9GVTyxvMCs/CztAIjZUxjpA==
+X-Google-Smtp-Source: ABdhPJw4epBS1QQ55tacEXfe2ExBWwbSD38B5hth631QE41Q30ti5s2vLruhg9fANHclMr98ngVFZsuAI6nMg1we0s8=
+X-Received: by 2002:a4a:1ec1:0:b0:324:76e1:c37f with SMTP id
+ 184-20020a4a1ec1000000b0032476e1c37fmr2254671ooq.53.1648138719873; Thu, 24
+ Mar 2022 09:18:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nXQ7n-007zWn-MU;;;mid=<87k0cje38e.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19vB1678/9LcB58fcqerljPtrf744I8h3E=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <000000000000cabcb505dae9e577@google.com> <CAHk-=wjLL3OB8PvFGBLgUs=zip-Q2m1P=UwG+Pw_E8nYDs+MUw@mail.gmail.com>
+ <CAMZfGtW0tN+xYSGGVmxjosTuoRR-mETaNTFNFZu7WuPW2JL9JA@mail.gmail.com>
+ <CAHk-=wgW1hEUaQeX41+3w7AGsXkeE1XOXCMndXs3kFp-XjSVzQ@mail.gmail.com>
+ <CAMZfGtVRWKhAf-fNWcLQgjb0zBZHX3bQ+aYywfiRsapoLacq3g@mail.gmail.com>
+ <CACT4Y+aQOziG8LGiTdyjTTHXJ4tNy2qxJ4yTPy-aUBG9CQB3_w@mail.gmail.com> <CAMZfGtUr6V5pTrPhZukD2_KbB7BLPoKvF6H63HP4pykY36Ou9A@mail.gmail.com>
+In-Reply-To: <CAMZfGtUr6V5pTrPhZukD2_KbB7BLPoKvF6H63HP4pykY36Ou9A@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 24 Mar 2022 17:18:28 +0100
+Message-ID: <CACT4Y+Z5y8moL4ph=2uNoeJ1oZDaq9oJjEqHtrh0t0Ef7Oag2w@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in list_lru_add
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        syzbot <syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Miklos Szeredi <miklos@szeredi.hu>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 472 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (2.4%), b_tie_ro: 10 (2.0%), parse: 0.89
-        (0.2%), extract_message_metadata: 12 (2.5%), get_uri_detail_list: 1.72
-        (0.4%), tests_pri_-1000: 10 (2.1%), tests_pri_-950: 1.27 (0.3%),
-        tests_pri_-900: 1.01 (0.2%), tests_pri_-90: 93 (19.7%), check_bayes:
-        90 (19.2%), b_tokenize: 8 (1.8%), b_tok_get_all: 21 (4.5%),
-        b_comp_prob: 3.1 (0.7%), b_tok_touch_all: 53 (11.3%), b_finish: 1.08
-        (0.2%), tests_pri_0: 323 (68.6%), check_dkim_signature: 0.51 (0.1%),
-        check_dkim_adsp: 3.0 (0.6%), poll_dns_idle: 1.09 (0.2%), tests_pri_10:
-        2.4 (0.5%), tests_pri_500: 14 (2.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miklos Szeredi <miklos@szeredi.hu> writes:
-
-> On Wed, 23 Mar 2022 at 23:20, Theodore Ts'o <tytso@mit.edu> wrote:
->>
->> On Wed, Mar 23, 2022 at 02:24:40PM +0100, Miklos Szeredi wrote:
->> > The reason I stated thinking about this is that Amir wanted a per-sb
->> > iostat interface and dumped it into /proc/PID/mountstats.  And that is
->> > definitely not the right way to go about this.
->> >
->> > So we could add a statfsx() and start filling in new stuff, and that's
->> > what Linus suggested.  But then we might need to add stuff that is not
->> > representable in a flat structure (like for example the stuff that
->> > nfs_show_stats does) and that again needs new infrastructure.
->> >
->> > Another example is task info in /proc.  Utilities are doing a crazy
->> > number of syscalls to get trivial information.  Why don't we have a
->> > procx(2) syscall?  I guess because lots of that is difficult to
->> > represent in a flat structure.  Just take the lsof example: tt's doing
->> > hundreds of thousands of syscalls on a desktop computer with just a
->> > few hundred processes.
->>
->> I'm still a bit puzzled about the reason for getvalues(2) beyond,
->> "reduce the number of system calls".  Is this a performance argument?
+On Thu, 24 Mar 2022 at 17:13, Muchun Song <songmuchun@bytedance.com> wrote:
 >
-> One argument that can't be worked around without batchingis atomicity.
-> Not sure how important that is, but IIRC it was one of the
-> requirements relating to the proposed fsinfo syscall, which this API
-> is meant to supersede.   Performance was also oft repeated regarding
-> the fsinfo API, but I'm less bought into that.
+> On Thu, Mar 24, 2022 at 4:50 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+> >
+> > On Thu, 24 Mar 2022 at 09:44, Muchun Song <songmuchun@bytedance.com> wrote:
+> > >
+> > > On Thu, Mar 24, 2022 at 11:05 AM Linus Torvalds
+> > > <torvalds@linux-foundation.org> wrote:
+> > > >
+> > > > On Wed, Mar 23, 2022 at 7:19 PM Muchun Song <songmuchun@bytedance.com> wrote:
+> > > > >
+> > > > > After this commit, the rules of dentry allocations changed.
+> > > > > The dentry should be allocated by kmem_cache_alloc_lru()
+> > > >
+> > > > Yeah, I looked at that, but I can't find any way there could be other
+> > > > allocations - not only are there strict rules how to initialize
+> > > > everything, but the dentries are free'd using
+> > > >
+> > > >         kmem_cache_free(dentry_cache, dentry);
+> > > >
+> > > > and as a result if they were allocated any other way I would expect
+> > > > things would go south very quickly.
+> > > >
+> > > > The only other thing I could come up with is some breakage in the
+> > > > superblock lifetime so that &dentry->d_sb->s_dentry_lru would have
+> > > > problems, but again, this is *such* core code and not some unusual
+> > > > path, that I would be very very surprised if it wouldn't have
+> > > > triggered other issues long long ago.
+> > > >
+> > > > That's why I'd be more inclined to worry about the list_lru code being
+> > > > somehow broken.
+> > > >
+> > >
+> > > I also have the same concern.  I have been trying for a few hours to
+> > > reproduce this issue, but it didn't oops on my test machine.  And I'll
+> > > continue reproducing this.
+> >
+> > syzbot triggered it 222 times in a day, so it's most likely real:
+> > https://syzkaller.appspot.com/bug?extid=f8c45ccc7d5d45fc5965
+> >
+> > There are 2 reproducers, but they look completely different. May be a race.
+> > You may also try to use syzbot's patch testing feature to get some
+> > additional debug info.
+>
+> Do you know how to tell the syzbot to test the following patch?
+> I found some infos from github, it says "#syz test:", is it like the following?
+> Thanks.
+>
+> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+> master
 
-A silly question.  Have you looked to see if you can perform this work
-with io_uring?
+Yes, this is correct. You can now see the request listed here:
+https://syzkaller.appspot.com/bug?extid=f8c45ccc7d5d45fc5965
 
-I know io_uring does all of the batching already, so I think io_uring is
-as ready as anything is to solve the performance issues, and the general
-small file problem.  There is also the bpf information extractor (Sorry
-I forget what it's proper name is) that also can solve many of the small
-read problems.
+but the patch was truncated (probably you email client messed
+whitespaces). In such case it's more reliable to attach the patch as
+text file.
 
-I am very confused you mention atomicity but I don't see any new
-filesystem hooks or anyway you could implement atomicity for reads
-much less writes in the patch you posted.
 
-If the real target is something like fsinfo that is returning
-information that is not currently available except by possibly
-processing /proc/self/mountinfo perhaps a more targeted name would
-help.
 
-I certainly did not get the impression when skimming your introduction
-to this that you were trying to solve anything except reading a number
-of small files.
-
-Eric
+> diff --git a/mm/list_lru.c b/mm/list_lru.c
+> index c669d87001a6..ddb2ee627d32 100644
+> --- a/mm/list_lru.c
+> +++ b/mm/list_lru.c
+> @@ -67,6 +67,7 @@ list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
+>         struct list_lru_node *nlru = &lru->node[nid];
+>         struct list_lru_one *l = &nlru->lru;
+>         struct mem_cgroup *memcg = NULL;
+> +       int kmemcg_id;
+>
+>         if (!list_lru_memcg_aware(lru))
+>                 goto out;
+> @@ -75,7 +76,13 @@ list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
+>         if (!memcg)
+>                 goto out;
+>
+> -       l = list_lru_from_memcg_idx(lru, nid, memcg_kmem_id(memcg));
+> +       kmemcg_id = memcg_kmem_id(memcg);
+> +       l = list_lru_from_memcg_idx(lru, nid, kmemcg_id);
+> +       if (!l) {
+> +               pr_info("BUG: the memcg(%px)->objcg(%px), kmemcg_id: %d\n",
+> +                       memcg, memcg->objcg, kmemcg_id);
+> +               BUG();
+> +       }
+>  out:
+>         if (memcg_ptr)
+>                 *memcg_ptr = memcg;

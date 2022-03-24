@@ -2,65 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7944E6477
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFCA4E6479
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350685AbiCXNzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
+        id S1350662AbiCXN4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350662AbiCXNzu (ORCPT
+        with ESMTP id S1350682AbiCXNzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:55:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D87D39800;
-        Thu, 24 Mar 2022 06:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648130059; x=1679666059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=e89Vv2Mvsm8AX/GVQLPEwSbd3UxDBlMkPanQzNoNiaU=;
-  b=ekfPARDp3tjpJ6m2XOYe0JHg3xEoLfBBM7IgjwHTxfK+7RQ7M0QBzndi
-   Rpyba/4knDAjL9OTs+35KoLv97jhCLmvdXx4ih1xmY4GCfACIDNU8bBvg
-   1pOJIYufWSIywZL3JYmAO/LjYRJPSgsumnLlgnh26WDgnMVFJBcskudmV
-   94irmyYui8NTMuEyshFyHdbdMijfBPBHmNJcILeJa5E4aWUtKtxvsrCVC
-   oVZsGY2zqU3LSCym0v5KGTAEz/Fo3rMmV1JXZyRI9OIC//kUIigSf071X
-   UzE+R/HpXMsWz4fSsyV/uFc3Gwvwffzdl6O4+UQ0IyQ72I03mRG8eB/pw
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="258334410"
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="258334410"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 06:54:18 -0700
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="519790170"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 06:54:15 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nXNuE-005qrz-Q4;
-        Thu, 24 Mar 2022 15:53:38 +0200
-Date:   Thu, 24 Mar 2022 15:53:38 +0200
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     Christian =?iso-8859-1?Q?L=F6hle?= <CLoehle@hyperstone.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCHv4] mmc: block: Check for errors after write on SPI
-Message-ID: <Yjx34sDWl4bMSCg3@smile.fi.intel.com>
-References: <8052f30adc3747e2beab0e52db26837d@hyperstone.com>
+        Thu, 24 Mar 2022 09:55:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9B23AA51;
+        Thu, 24 Mar 2022 06:54:22 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648130061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bo4oh0xgueLYq/ZucSpzqDXmdQwXHyaJwvL+CGmcSVg=;
+        b=n2mkfR5ErnTI17aWRsmxHA4JLR70o7LNo8nMWo2Hywde6OoRxPhE7FuBCehyVUYtmN1G3g
+        LR69WNhbDCcQwHUYLpAxW19+Yc/BnbOU/OsuSluiKrwmemkwt6mR+R2itDPNa0/SXryA+B
+        kCuS8YmjEQrNRnveOh/6t0UHL91YvI35yh2Pu6lqcJO8BJsbIOsDDUXFO2khgvrNNM0+9w
+        jliDisJJX7RvpVHMGLBZEW83gKb8a7IiUz9oIeVSVCMotpU9dVh6fBO4kvchAtuQaFb7LW
+        bG0sUHiw20ALTFPSI6hAg2iGJsbHDgHEWqn2n0kpsbXQygbXETVImIoVuGE4MA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648130061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bo4oh0xgueLYq/ZucSpzqDXmdQwXHyaJwvL+CGmcSVg=;
+        b=PgKBGTgT2lglTNsJjTiAMUa7pDuUgUiyaQyd3SQh17Ir3RDl04oCLL//HuioEWtDSfDyJ5
+        vBr0yD/TANvOkDCA==
+To:     Artem Savkov <asavkov@redhat.com>, jpoimboe@redhat.com,
+        netdev@vger.kernel.org
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>
+Subject: Re: [PATCH 1/2] timer: introduce upper bound timers
+In-Reply-To: <87tubn8rgk.ffs@tglx>
+References: <20220323111642.2517885-1-asavkov@redhat.com>
+ <20220323111642.2517885-2-asavkov@redhat.com> <87tubn8rgk.ffs@tglx>
+Date:   Thu, 24 Mar 2022 14:54:21 +0100
+Message-ID: <87h77ncv76.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8052f30adc3747e2beab0e52db26837d@hyperstone.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,54 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 01:27:51PM +0000, Christian Löhle wrote:
+On Thu, Mar 24 2022 at 13:28, Thomas Gleixner wrote:
+> On Wed, Mar 23 2022 at 12:16, Artem Savkov wrote:
+>> Add TIMER_UPPER_BOUND flag which allows creation of timers that would
+>> expire at most at specified time or earlier.
+>>
+>> This was previously discussed here:
+>> https://lore.kernel.org/all/20210302001054.4qgrvnkltvkgikzr@treble/T/#u
+>
+> please add the context to the changelog. A link is only supplemental
+> information and does not replace content.
+>
+>>  static inline unsigned calc_index(unsigned long expires, unsigned lvl,
+>> -				  unsigned long *bucket_expiry)
+>> +				  unsigned long *bucket_expiry, bool upper_bound)
+>>  {
+>>  
+>>  	/*
+>> @@ -501,34 +501,39 @@ static inline unsigned calc_index(unsigned long expires, unsigned lvl,
+>>  	 * - Truncation of the expiry time in the outer wheel levels
+>>  	 *
+>>  	 * Round up with level granularity to prevent this.
+>> +	 * Do not perform round up in case of upper bound timer.
+>>  	 */
+>> -	expires = (expires + LVL_GRAN(lvl)) >> LVL_SHIFT(lvl);
+>> +	if (upper_bound)
+>> +		expires = expires >> LVL_SHIFT(lvl);
+>> +	else
+>> +		expires = (expires + LVL_GRAN(lvl)) >> LVL_SHIFT(lvl);
+>
+> While this "works", I fundamentally hate this because it adds an extra
+> conditional into the common case. That affects every user of the timer
+> wheel. We went great length to optimize that code and I'm not really enthused
+> to sacrifice that just because of _one_ use case.
 
-...
+Aside of that this is not mathematically correct. Why?
 
-> v4:
->   - Move block layer handling out of the spi-specific function
+The level selection makes the cutoff at: LEVEL_MAX(lvl) - 1. E.g. 62
+instead of 63 for the first level.
 
-In this case some optimizations are possible. See below.
+The reason is that this accomodates for the + LVL_GRAN(lvl). Now with
+surpressing the roundup this creates a gap. Not a horrible problem, but
+not correct either.
 
-...
+Thanks,
 
-> +static int mmc_spi_err_check(struct mmc_card *card)
-> +{
-> +	u32 status = 0;
-> +	int err;
-> +
-> +	/*
-> +	 * SPI does not have a TRAN state we have to wait on, instead the
-> +	 * card is ready again when it no longer holds the line LOW.
-> +	 * We still have to ensure two things here before we know the write
-> +	 * was successful:
-> +	 * 1. The card has not disconnected during busy and we actually read our
-> +	 * own pull-up, thinking it was still connected, so ensure it
-> +	 * still responds.
-> +	 * 2. Check for any error bits, in particular R1_SPI_IDLE to catch a
-> +	 * just reconnected card after being disconnected during busy.
-> +	 */
-> +	err = __mmc_send_status(card, &status, 0);
-
-> +	/* All R1 and R2 bits of SPI are errors in our case */
-> +	if (err || status) {
-> +		if (err)
-> +			return err;
-> +		return -EIO;
-> +	}
-
-	if (err)
-		return err;
-
-	/* All R1 and R2 bits of SPI are errors in our case */
-	if (status)
-		return -EIO;
-
-> +	return 0;
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+        tglx

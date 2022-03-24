@@ -2,112 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254704E6AEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 23:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F214E6AF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 00:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355576AbiCXXB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 19:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S1355001AbiCXXCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 19:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238115AbiCXXBY (ORCPT
+        with ESMTP id S238115AbiCXXCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 19:01:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA57BABBB;
-        Thu, 24 Mar 2022 15:59:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 24 Mar 2022 19:02:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19851BB089;
+        Thu, 24 Mar 2022 16:00:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KPgfB73YQz4xQv;
-        Fri, 25 Mar 2022 09:59:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648162787;
-        bh=YrHyKn8sq8oIQQutKg3Fk3b8qE0ama8/ojRfwNGRp1w=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A808D615CC;
+        Thu, 24 Mar 2022 23:00:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4E0EC340EC;
+        Thu, 24 Mar 2022 23:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648162843;
+        bh=G1r5q+82NDLJrhAU0vD8OOUagHl0c9TCxr5HqadI45U=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Xz5zvf74L2q37jM1mZsCsT6WWlg+fe0Ju4IleVZMrNqd3RgYzFBTOyw/ZV/w8SFzx
-         GLDoEXpeE/0BO1SiwYqkXZjDmmDnwUAd3wHybDwBAi7U1DgI/6hl+x4jHHfIGFlOVL
-         qQgepxjOar9vfNH8GxleM7jOE5BK4iBjlL+0uRkaFBRse51No8zy96IKeXkNZaJ/vP
-         hJc6VJ7Xqqx+GDKogesHxflMqZKarxSpkJ1CuYuDIYf2Qr5r3cb1g4tuYOEyhIa6hi
-         F24Yy0fKjn2EODNzIJiG5X0rsQwvwR9jK8xy96gtApwQeFVtkiKgiYLE3V3j/dcHAw
-         Nh5Rv1oZSJg7Q==
-Date:   Fri, 25 Mar 2022 09:59:45 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Alan Kao <alankao@andestech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the userns tree with the
- asm-generic tree
-Message-ID: <20220325095945.28cf4f6b@canb.auug.org.au>
-In-Reply-To: <20220315184840.506dd8bf@canb.auug.org.au>
-References: <20220315184840.506dd8bf@canb.auug.org.au>
+        b=nwXx1G/4ADyMDnxksT7HO5PIj79u6EBRhzX6xYaZvE03vw+JZhrQYDSNLvb0DepUD
+         ++auCcDJARgxL7qw5YygCI2BKYUa7nXG6XIrrE/mQYR6dQN2M26j6jeDJ9WPeHZvu0
+         nmgSOTrC7ro8qTHVc5R0u/QEGAEzvXrGxKKINUpNmUdvwENBpuad2WpX6SfX+du2Ba
+         TGX1OaEC83wTk5Nn2qyC569NKo6h4zB8uNwVWPQEIxGrfHZH4XE5Ih7KfZgDGNjVpo
+         HJiWEm5Y1xFCFJtL4cA3DcCmtOjCZK4jmU10My/30Ge13hSggYrQT16228V5MjxNm0
+         N7g9yBEQ17w1g==
+Date:   Thu, 24 Mar 2022 16:00:41 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     <alexandru.tachici@analog.com>
+Cc:     <andrew@lunn.ch>, <o.rempel@pengutronix.de>, <davem@davemloft.net>,
+        <devicetree@vger.kernel.org>, <hkallweit1@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
+        <netdev@vger.kernel.org>, <robh+dt@kernel.org>
+Subject: Re: [PATCH v5 0/7] net: phy: adin1100: Add initial support for
+ ADIN1100 industrial PHY
+Message-ID: <20220324160041.0d775df8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220324112620.46963-1-alexandru.tachici@analog.com>
+References: <20220324112620.46963-1-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PPxsHubqPi7tRD4uqx+aBmk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/PPxsHubqPi7tRD4uqx+aBmk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 24 Mar 2022 13:26:13 +0200 alexandru.tachici@analog.com wrote:
+> The ADIN1100 is a low power single port 10BASE-T1L transceiver designed for
+> industrial Ethernet applications and is compliant with the IEEE 802.3cg
+> Ethernet standard for long reach 10 Mb/s Single Pair Ethernet.
 
-Hi all,
+# Form letter - net-next is closed
 
-On Tue, 15 Mar 2022 18:48:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the userns tree got conflicts in:
->=20
->   arch/nds32/include/asm/syscall.h
->   arch/nds32/kernel/ptrace.c
->   arch/nds32/kernel/signal.c
->=20
-> between commit:
->=20
->   aec499c75cf8 ("nds32: Remove the architecture")
->=20
-> from the asm-generic tree and commits:
->=20
->   153474ba1a4a ("ptrace: Create ptrace_report_syscall_{entry,exit} in ptr=
-ace.h")
->   03248addadf1 ("resume_user_mode: Move to resume_user_mode.h")
->=20
-> from the userns tree.
->=20
-> I fixed it up (I just removed the files) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+We have already sent the networking pull request for 5.18
+and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
 
-These are now conflicts between the userns tree and Linus' tree.
+Please repost when net-next reopens after 5.18-rc1 is cut.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/PPxsHubqPi7tRD4uqx+aBmk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI89+EACgkQAVBC80lX
-0GzXfQgAicz6BMGFFrNEXIe3VOvc0e7gPOqUvLhIueywQFWglzPm3unv5J+EXMQT
-uRj9Nyx14U2Viysot4e/wvKfdFjySyHVQAjvM/NF3RY9IiqmJp50969Bpl3EU0sV
-rozsGE3WEtVEkRFzHDN0XbukZ154MUT9y2+qxQ+lg11n2cWb9VeMgijco1YKeK29
-GZKjmuVglXmI7j03dqjPUr/bCBM6S5nNetk9Yhy+AimO6nP/hKFdPP/FMcQDEmKy
-CU24ep6bzQONhyZJJUyokFVJeJNOKmQeMcg/kKZq+fnQkK3PGJTqI0OKl11u84Xy
-osJHAc2GsppBOk/S4KQlS2Xfh/ZL9A==
-=ozKz
------END PGP SIGNATURE-----
-
---Sig_/PPxsHubqPi7tRD4uqx+aBmk--
+RFC patches sent for review only are obviously welcome at any time.

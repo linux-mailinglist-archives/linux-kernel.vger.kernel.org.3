@@ -2,75 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7CA4E69DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 870D74E69DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353419AbiCXUeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 16:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
+        id S1353428AbiCXUfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 16:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348388AbiCXUeE (ORCPT
+        with ESMTP id S244145AbiCXUfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 16:34:04 -0400
-Received: from m228-6.mailgun.net (m228-6.mailgun.net [159.135.228.6])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id DF4A7B82E2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:32:31 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
- s=k1; t=1648153951; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: To: To: From: From: References: Subject: Subject:
- MIME-Version: Date: Message-ID: Sender: Sender;
- bh=ayLctIQyJDZRSNPz2rKUYe+2VjcPBRi1cTFw+S8TlWo=; b=kJjKJx7FKoQCSowozoD4aTN5WIUNliNjbIsesh4sfjWGQz7dtxQA9bK5lGGv8v6Uo4/SNCpa
- hninkPv3Njg+zMvr54W711KnVqudXMb07sxIlxWy9CbEkVgeFPQ0XohAm6fQbNnTptlFXv/y
- uS2UBeiBuUSdjO2cmo1Y6pP/Ogc=
-X-Mailgun-Sending-Ip: 159.135.228.6
-X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
-Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
- [67.205.190.89]) by smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 623cd55d07b42f471cbe2ac7 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Thu, 24 Mar 2022 20:32:29 GMT
-Sender: michael@michaelkloos.com
-Received: from [192.168.1.236] (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
-        by drop1.michaelkloos.com (Postfix) with ESMTPSA id 77136400B8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:32:29 +0000 (UTC)
-Message-ID: <6b5d05a9-52f5-2d3d-5890-b4c1e790dd76@michaelkloos.com>
-Date:   Thu, 24 Mar 2022 16:32:30 -0400
+        Thu, 24 Mar 2022 16:35:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EA97B55D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:34:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6082560F27
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E16C340EC;
+        Thu, 24 Mar 2022 20:34:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648154044;
+        bh=Hke9uijvJjLH+sMjuC7Gd22j8kyXtDr8eWCu19CgugQ=;
+        h=Date:From:Cc:Subject:From;
+        b=VMyQlL3kUfwrvYNxhv9HC9vK4q/qHFfqhHV03J9LyO/HnFe+yhOcaY3cYsTcFQ9z1
+         vix37R6s1N+ZqGgHNnASFY3ijUPWu2nG4JEUSaXY4P58yUhjlhrPCl4P0gaSVxzGtY
+         yvBG7OVp65+qxAKuXurUirPM4AW2BYadpHtfrYXF5CBB39qQhQgwfrG27d1FcPVzCQ
+         xMNi8NEHxyj8RR0hXJ2qY4YdnvCoW6RBEX2dSlK+1JozFaIcYCAS35Z9NZ4RE/yRK0
+         rZeD5oFFp1cZAB6oaSzXpk08t5p9dR+C57K3AoXm7XEV+TCiReo/0Gl7QoB7Ra9LP0
+         dFNTMeviU/0nA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id CC50840407; Thu, 24 Mar 2022 17:33:59 -0300 (-03)
+Date:   Thu, 24 Mar 2022 17:33:59 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/1] tools arch x86: Sync the msr-index.h copy with the
+ kernel sources
+Message-ID: <YjzVt8CjAORAsTCo@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: LKML Spam Question: Fwd: My name is Lisa Williams
-References: <CAKSk573stpac9ndu6JmMt34tsOTd=tas4pz9mrHHY8e4fMKe2w@mail.gmail.com>
-Content-Language: en-US
-From:   "Michael T. Kloos" <michael@michaelkloos.com>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-In-Reply-To: <CAKSk573stpac9ndu6JmMt34tsOTd=tas4pz9mrHHY8e4fMKe2w@mail.gmail.com>
-X-Forwarded-Message-Id: <CAKSk573stpac9ndu6JmMt34tsOTd=tas4pz9mrHHY8e4fMKe2w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Is the "X-Spam-Status" header supposed to include "autolearn=ham".
-This looks like incorrect training data to me but I'm not an expert
-in the list's spam prevention systems.
+Just FYI, I'm carrying this on the perf tools tree:
 
-	Michael
+---------
 
--------- Forwarded Message --------
+To pick up the changes from these csets:
 
+  7b8f40b3de75c971 ("x86/cpu: Add definitions for the Intel Hardware Feedback Interface")
+
+That cause no changes to tooling:
+
+  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > before
+  $ cp arch/x86/include/asm/msr-index.h tools/arch/x86/include/asm/msr-index.h
+  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > after
+  $ diff -u before after
+  $
+
+Just silences this perf build warning:
+
+  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/msr-index.h' differs from latest version at 'arch/x86/include/asm/msr-index.h'
+  diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-index.h
+
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/x86/include/asm/msr-index.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
+index a4a39c3e0f196747..0e7f303542bf35d6 100644
+--- a/tools/arch/x86/include/asm/msr-index.h
++++ b/tools/arch/x86/include/asm/msr-index.h
+@@ -705,12 +705,14 @@
+ 
+ #define PACKAGE_THERM_STATUS_PROCHOT		(1 << 0)
+ #define PACKAGE_THERM_STATUS_POWER_LIMIT	(1 << 10)
++#define PACKAGE_THERM_STATUS_HFI_UPDATED	(1 << 26)
+ 
+ #define MSR_IA32_PACKAGE_THERM_INTERRUPT	0x000001b2
+ 
+ #define PACKAGE_THERM_INT_HIGH_ENABLE		(1 << 0)
+ #define PACKAGE_THERM_INT_LOW_ENABLE		(1 << 1)
+ #define PACKAGE_THERM_INT_PLN_ENABLE		(1 << 24)
++#define PACKAGE_THERM_INT_HFI_ENABLE		(1 << 25)
+ 
+ /* Thermal Thresholds Support */
+ #define THERM_INT_THRESHOLD0_ENABLE    (1 << 15)
+@@ -959,4 +961,8 @@
+ #define MSR_VM_IGNNE                    0xc0010115
+ #define MSR_VM_HSAVE_PA                 0xc0010117
+ 
++/* Hardware Feedback Interface */
++#define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
++#define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
++
+ #endif /* _ASM_X86_MSR_INDEX_H */
 -- 
-Hi Dear,
-
-My name is Lisa  Williams, I am from the United States of America, Its
-my pleasure to contact you for new and special friendship, I will be
-glad to see your reply for us to know each other better.
-
-Yours
-Lisa
+2.35.1
 

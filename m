@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAD84E6877
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14A44E6879
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352560AbiCXSPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S1352552AbiCXSQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352552AbiCXSPb (ORCPT
+        with ESMTP id S1350302AbiCXSQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:15:31 -0400
+        Thu, 24 Mar 2022 14:16:08 -0400
 Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9666D4DA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:13:59 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id e5so5592498pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:13:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D174A889E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:14:36 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id k6so5568738plg.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:14:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DqE74bYvnQjtQl1h8zT8Qxi0bYFi9X6KwVw8BvoUs9k=;
-        b=iqvGHLpjcwYMzNRonyEnyQfKAXmVSknoFJsSf8mHI6KfwPUUubkVp6+0N3uICMLNn+
-         XJnADWqioKWUsis+Apv5BoLNBqh0Bz+q5LBYru9hEvx+XbYZIMxOPmjiBh7QuJkCEXYu
-         rgutDgqGlwMxI/K5n3MOLZxT0Cg0ulMtf9tCI=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kaWyOFUTIvk7Jf/C253NUkUi7ERn3SB2Cf+AuYAeK5I=;
+        b=amB2XOhqEhJQzky4D/NKJxmo5mgT7AHDpjkIdKEpr/M9SRrGbDmIJKdhcVytEu/4L7
+         htCJrv4/j43jObsH4ywenMqqmYlNVK2yBCj1vogP6lnGaC6BYwUqy3WjRNyDaf6oxCs4
+         YtrFZe7aMzI6EIIofn54JjExiJCeOH6Tzu2gdqZFfsGcv4eBvohezzn09Klr62eKVFO7
+         lOMbXNKsUH+Kb85LmSYR0M9ScZo+E6NvpWc9mgVCz5JWAXAU4WwZzLb4xrelrBDc6DF8
+         Si4h3M2gz4kl/bm1RGkobe1CLqnqaqhouujzDaaokzWGJfrXIXRk4KDudjWy6g1pn5Vm
+         QLcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DqE74bYvnQjtQl1h8zT8Qxi0bYFi9X6KwVw8BvoUs9k=;
-        b=JhlgkxfoG2mU8D5WgwGwUthaYospvmxbE8bbHdP3kKqFpEaW/bqMehJ8JIn9rc3TWH
-         5n514caXkYPR99JRoYDZrv53uy/iVlVOAQJsHUrfxpKeKGgbiX523Ukd+qhYlzr7rDBx
-         ALLVI2KSKi3JGN9yBSjvFHEiID9mejJuY+T6/5Xbdn5D1cxyqO4Y64X4Dsbl4ETGs+ge
-         3rN+JMaspwLnJ9sq98LM3UEwG4EgC3CaGmPnKgAxQhEk1UoqowwMg+OkXsxNC6sohp2l
-         R5th+Xxk05h7xFJx+7ePPIlzNk4b1oB3Rbvx8B8DZg3/UWtEa44USihifKYgUC7cwzoa
-         sIvQ==
-X-Gm-Message-State: AOAM531w/ETu00bLt8+h3Cgdo3/OZldDrzoT2s4goj6WtMXwl3lueA07
-        OeGQ75/s1a7nKSQgRmXsVjSDUA==
-X-Google-Smtp-Source: ABdhPJwl+9iizA/7VS4py19ZQQL8nOVQwIVPAuANK2tocHeAj34TUxxoGKjGWlVQY/2sXBkUbWacjw==
-X-Received: by 2002:a17:902:7204:b0:153:bffb:f348 with SMTP id ba4-20020a170902720400b00153bffbf348mr7156564plb.147.1648145639356;
-        Thu, 24 Mar 2022 11:13:59 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:690f:642:3ebe:c89d])
-        by smtp.gmail.com with UTF8SMTPSA id z12-20020a17090a398c00b001c5f926f293sm3698261pjb.3.2022.03.24.11.13.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 11:13:59 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH 2/2] drm/panel-edp: Add AUO B133UAN01
-Date:   Thu, 24 Mar 2022 11:13:52 -0700
-Message-Id: <20220324111335.2.I816014b6c62da5a33af5021f3cc35cea66552c00@changeid>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-In-Reply-To: <20220324111335.1.I1131d63cbefbfa9ff107a284e2e51f880c5bf7c8@changeid>
-References: <20220324111335.1.I1131d63cbefbfa9ff107a284e2e51f880c5bf7c8@changeid>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kaWyOFUTIvk7Jf/C253NUkUi7ERn3SB2Cf+AuYAeK5I=;
+        b=qWU58dByH6dwnZXOY9QyFWaE/LmnHMemYBu3mvPmqHGUraLlo+8iqP78vJFMaP/QUX
+         VyGaYVMLjc0lMC2KnoQrw3t+qqGpoQeC1P7PzDPB9XoRV03YgBraZLnqegZjJjoMixI8
+         wzJytiAgbwo4bB5XvhncXEcAOBPT6/qR8fVl1PG/kPbW6WyqLctYmYxWClX08qDTSeXA
+         esFzUyS7fLsYOiEgyzy1xMhO2C3YzsSu+WuNLrmIF6BP4yTZnmGA5RO+sS3Nj2vLmXNa
+         /fKhC+EgtJ5i20PyRhbMGsQ2dz3Z3jyYoq6Cnnmvz5aGVmafFsZKuknTfyPf/pchBAp8
+         cEqQ==
+X-Gm-Message-State: AOAM532S9txpI0zKke1hiULFyp9QLsAmnF1Sld5Mv8Wr+bFCX0ESZpMo
+        im3Z2qKrWa/KOQKcD2Pqy4ZQ
+X-Google-Smtp-Source: ABdhPJwua8sOXe+hMuGfnKTODS9uECovRKgCETxT8KTPmXOFY4YzITVwYpfUP+ddtha72kZJ5pnBSA==
+X-Received: by 2002:a17:902:c401:b0:154:1398:a16b with SMTP id k1-20020a170902c40100b001541398a16bmr7152359plk.67.1648145675984;
+        Thu, 24 Mar 2022 11:14:35 -0700 (PDT)
+Received: from thinkpad ([27.111.75.218])
+        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm4622229pfj.152.2022.03.24.11.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 11:14:35 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 23:44:29 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 14/25] dmaengine: dw-edma: Add dw_edma prefix to the
+ DebugFS nodes descriptor
+Message-ID: <20220324181429.GW2854@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-15-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324014836.19149-15-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,94 +83,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the AUO B133UAN01 13.3" WUXGA panel.
+On Thu, Mar 24, 2022 at 04:48:25AM +0300, Serge Semin wrote:
+> The rest of the locally defined and used methods and structures have
+> dw_edma prefix in their names. It's right in accordance with the kernel
+> coding style to follow the locally defined rule of naming. Let's add that
+> prefix to the debugfs_entries structure too especially seeing it's name
+> may be confusing as if that structure belongs to the global DebugFS space.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
-output of edid-decode:
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-  Block 0, Base EDID:
-    EDID Structure Version & Revision: 1.4
-    Vendor & Product Identification:
-      Manufacturer: AUO
-      Model: 34196
-      Made in: 2020
-    Basic Display Parameters & Features:
-      Digital display
-      Bits per primary color channel: 8
-      DisplayPort interface
-      Maximum image size: 29 cm x 18 cm
-      Gamma: 2.20
-      Supported color formats: RGB 4:4:4
-      First detailed timing includes the native pixel format and preferred refresh rate
-    Color Characteristics:
-      Red  : 0.6513, 0.3271
-      Green: 0.2900, 0.6279
-      Blue : 0.1503, 0.0517
-      White: 0.3134, 0.3291
-    Established Timings I & II: none
-    Standard Timings: none
-    Detailed Timing Descriptors:
-      DTD 1:  1920x1200   60.026 Hz   8:5    74.192 kHz 156.100 MHz (286 mm x 178 mm)
-                   Hfront   16 Hsync  16 Hback 152 Hpol N
-                   Vfront    3 Vsync  14 Vback  19 Vpol N
-      Manufacturer-Specified Display Descriptor (0x0f): 00 0f 00 00 00 00 00 00 00 00 00 00 00 00 00 20 '............... '
-      Alphanumeric Data String: 'AUO'
-      Alphanumeric Data String: 'B133UAN01.0 '
+Thanks,
+Man
 
- drivers/gpu/drm/panel/panel-edp.c | 32 +++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index e15e62f235d8..2e71dcb734aa 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -1043,6 +1043,35 @@ static const struct panel_desc auo_b133htn01 = {
- 	},
- };
- 
-+static const struct drm_display_mode auo_b133uan01_mode = {
-+	.clock = 156100,
-+	.hdisplay = 1920,
-+	.hsync_start = 1920 + 16,
-+	.hsync_end = 1920 + 16 + 16,
-+	.htotal = 1920 + 16 + 16 + 152,
-+	.vdisplay = 1200,
-+	.vsync_start = 1200 + 3,
-+	.vsync_end = 1200 + 3 + 14,
-+	.vtotal = 1200 + 3 + 14 + 19,
-+	.flags = DISPLAY_FLAGS_VSYNC_LOW | DISPLAY_FLAGS_HSYNC_LOW,
-+};
-+
-+static const struct panel_desc auo_b133uan01 = {
-+	.modes = &auo_b133uan01_mode,
-+	.num_modes = 1,
-+	.bpc = 8,
-+	.size = {
-+		.width = 291,
-+		.height = 195,
-+	},
-+
-+	.delay = {
-+		.hpd_reliable = 200,
-+		.enable = 50,
-+		.unprepare = 500,
-+	},
-+};
-+
- static const struct drm_display_mode auo_b133xtn01_mode = {
- 	.clock = 69500,
- 	.hdisplay = 1366,
-@@ -1720,6 +1749,9 @@ static const struct of_device_id platform_of_match[] = {
- 	}, {
- 		.compatible = "auo,b133htn01",
- 		.data = &auo_b133htn01,
-+	}, {
-+		.compatible = "auo,b133uan01",
-+		.data = &auo_b133uan01,
- 	}, {
- 		.compatible = "auo,b133xtn01",
- 		.data = &auo_b133xtn01,
--- 
-2.35.1.1021.g381101b075-goog
-
+> ---
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> index 808eed212be8..afd519d9568b 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> @@ -46,7 +46,7 @@ static struct {
+>  	void					__iomem *end;
+>  } lim[2][EDMA_V0_MAX_NR_CH];
+>  
+> -struct debugfs_entries {
+> +struct dw_edma_debugfs_entry {
+>  	const char				*name;
+>  	void __iomem				*reg;
+>  };
+> @@ -94,7 +94,7 @@ static int dw_edma_debugfs_u32_get(void *data, u64 *val)
+>  }
+>  DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_edma_debugfs_u32_get, NULL, "0x%08llx\n");
+>  
+> -static void dw_edma_debugfs_create_x32(const struct debugfs_entries entries[],
+> +static void dw_edma_debugfs_create_x32(const struct dw_edma_debugfs_entry entries[],
+>  				       int nr_entries, struct dentry *dir)
+>  {
+>  	int i;
+> @@ -108,8 +108,7 @@ static void dw_edma_debugfs_create_x32(const struct debugfs_entries entries[],
+>  static void dw_edma_debugfs_regs_ch(struct dw_edma_v0_ch_regs __iomem *regs,
+>  				    struct dentry *dir)
+>  {
+> -	int nr_entries;
+> -	const struct debugfs_entries debugfs_regs[] = {
+> +	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+>  		REGISTER(ch_control1),
+>  		REGISTER(ch_control2),
+>  		REGISTER(transfer_size),
+> @@ -120,6 +119,7 @@ static void dw_edma_debugfs_regs_ch(struct dw_edma_v0_ch_regs __iomem *regs,
+>  		REGISTER(llp.lsb),
+>  		REGISTER(llp.msb),
+>  	};
+> +	int nr_entries;
+>  
+>  	nr_entries = ARRAY_SIZE(debugfs_regs);
+>  	dw_edma_debugfs_create_x32(debugfs_regs, nr_entries, dir);
+> @@ -127,7 +127,7 @@ static void dw_edma_debugfs_regs_ch(struct dw_edma_v0_ch_regs __iomem *regs,
+>  
+>  static void dw_edma_debugfs_regs_wr(struct dentry *dir)
+>  {
+> -	const struct debugfs_entries debugfs_regs[] = {
+> +	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+>  		/* eDMA global registers */
+>  		WR_REGISTER(engine_en),
+>  		WR_REGISTER(doorbell),
+> @@ -148,7 +148,7 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dir)
+>  		WR_REGISTER(ch67_imwr_data),
+>  		WR_REGISTER(linked_list_err_en),
+>  	};
+> -	const struct debugfs_entries debugfs_unroll_regs[] = {
+> +	const struct dw_edma_debugfs_entry debugfs_unroll_regs[] = {
+>  		/* eDMA channel context grouping */
+>  		WR_REGISTER_UNROLL(engine_chgroup),
+>  		WR_REGISTER_UNROLL(engine_hshake_cnt.lsb),
+> @@ -191,7 +191,7 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dir)
+>  
+>  static void dw_edma_debugfs_regs_rd(struct dentry *dir)
+>  {
+> -	const struct debugfs_entries debugfs_regs[] = {
+> +	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+>  		/* eDMA global registers */
+>  		RD_REGISTER(engine_en),
+>  		RD_REGISTER(doorbell),
+> @@ -213,7 +213,7 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dir)
+>  		RD_REGISTER(ch45_imwr_data),
+>  		RD_REGISTER(ch67_imwr_data),
+>  	};
+> -	const struct debugfs_entries debugfs_unroll_regs[] = {
+> +	const struct dw_edma_debugfs_entry debugfs_unroll_regs[] = {
+>  		/* eDMA channel context grouping */
+>  		RD_REGISTER_UNROLL(engine_chgroup),
+>  		RD_REGISTER_UNROLL(engine_hshake_cnt.lsb),
+> @@ -256,7 +256,7 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dir)
+>  
+>  static void dw_edma_debugfs_regs(void)
+>  {
+> -	const struct debugfs_entries debugfs_regs[] = {
+> +	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+>  		REGISTER(ctrl_data_arb_prior),
+>  		REGISTER(ctrl),
+>  	};
+> -- 
+> 2.35.1
+> 

@@ -2,119 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEDD4E5D43
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00534E5D4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346844AbiCXCkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 22:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S1347852AbiCXCqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 22:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiCXCki (ORCPT
+        with ESMTP id S1347840AbiCXCqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 22:40:38 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D092B3C722
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:39:07 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id b8so3518653pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lLmU9eaNbQZtuAnKmKQfSZbES2JI+sc9+LEMrBqU4oU=;
-        b=dnVbf83bqgCMp5cYxA71grdC1mbKtFSVFvEj+qoYy6rhknJ4YfdZNDk7jhGPnziFVN
-         FUQlh1n+Ey9VUcqr304xQkZ4p+aAsR8YYceECVxQvDI3XpWNTHKkxN85CY4XWBWetREa
-         v6DOVnDwfFYkqNd8UlACDQJ9Q4WJ8AUaq8VGoQPpfD4lPdjMllnDS/ppUA7hBQG4SJPX
-         Yc4TTr2Pb3zrQdWzhEmJPJtCMDi/oAU23S0qX1VWoAQZACK8LSETLXFPf0pkRKcoP5Ip
-         9Y39LBqKNMa6oHUITZMLdtae8wjuXW8f7useNMMYPwx86U2CirMQhvdD/xsLwC7z5d4O
-         0WDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lLmU9eaNbQZtuAnKmKQfSZbES2JI+sc9+LEMrBqU4oU=;
-        b=C4KHpDzCWvd6gsf8YXJscO2QGTBBuXI6pSZVrXLAI+yvPbBRI4FTF71Yp5wswtDzb7
-         rVAaCdwEGUgleJZIqH8DFSNj94gpntm98oSdz3ouKX2D88ko43EhVGW7xeoEh2iKI8ef
-         37cK0WRJPlDpWCtZHiyIgFKyaUfIeBk6koDc0Jvg7BdcPmm28UCGi7oSL2JlShtfi/Ff
-         CMwCwyx+Uyu9EzPLxrL/9PWE0Oh7MSA8vcMH6gmXLoNv2YxsI35ol0AbpdO5EM4FL2TO
-         sA8XqxmpD97JHmehJ5zQAZ6Pmdg2DZMNIxPx1hdBy68OcNOpGGFxway9GAAN2LhweO1F
-         EBaQ==
-X-Gm-Message-State: AOAM533tk4ucqePZXU2q6ZI/pa0F5d3Du4Pe2/xsFxw8/Ex8U1FWbNC1
-        FGc+Tircle7zgi/6Q5z+brUP/9oI2bQ+6g==
-X-Google-Smtp-Source: ABdhPJyB4BzVu6jeixu1gk0n4B4VYDuwYKx1dB0266XakOvXJ0YNren71lhLRwBZGZOhpl9m1LLSLw==
-X-Received: by 2002:a17:902:8497:b0:154:9282:bc01 with SMTP id c23-20020a170902849700b001549282bc01mr3418482plo.33.1648089547345;
-        Wed, 23 Mar 2022 19:39:07 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id oo16-20020a17090b1c9000b001b89e05e2b2sm1001104pjb.34.2022.03.23.19.39.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 19:39:05 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 08:09:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Cc:     Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ARM: dts: spear13xx: Update SPI dma properties
-Message-ID: <20220324023904.h2qfxzxlznggbsyr@vireshk-i7>
-References: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
+        Wed, 23 Mar 2022 22:46:06 -0400
+X-Greylist: delayed 314 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Mar 2022 19:44:33 PDT
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 458705D5D5;
+        Wed, 23 Mar 2022 19:44:32 -0700 (PDT)
+Received: from localhost.localdomain (unknown [222.205.7.202])
+        by mail-app4 (Coremail) with SMTP id cS_KCgD3eRDJ2TtieeI_AA--.6621S4;
+        Thu, 24 Mar 2022 10:39:05 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     jk@codeconstruct.com.au, matt@codeconstruct.com.au,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v0] mctp: fix netdev reference bug
+Date:   Thu, 24 Mar 2022 10:39:04 +0800
+Message-Id: <20220324023904.7173-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cS_KCgD3eRDJ2TtieeI_AA--.6621S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFWxuw1xurW5JrW5JFWkWFg_yoW3tFX_W3
+        9xCryDWrs8Gr18ua1jkanaqr1rtw1avr18Gr4SgFs8J3yUZ3Wqqr18AF9xWryfC3y5Xa4U
+        AF1qvry3A3WI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l
+        42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+        ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUO_
+        MaUUUUU
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-03-22, 23:29, Kuldeep Singh wrote:
-> Reorder dmas and dma-names property for spi controller node to make it
-> compliant with bindings.
-> 
-> Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
-> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> ---
-> v2:
-> - Add fixes tag
-> - Remove 1/2 patch from series as it's not required
-> - v1 discussion link:
->   https://lore.kernel.org/linux-devicetree/20220312180615.68929-2-singh.kuldeep87k@gmail.com/
-> 
->  arch/arm/boot/dts/spear13xx.dtsi | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/spear13xx.dtsi b/arch/arm/boot/dts/spear13xx.dtsi
-> index c87b881b2c8b..45f0b2a33e02 100644
-> --- a/arch/arm/boot/dts/spear13xx.dtsi
-> +++ b/arch/arm/boot/dts/spear13xx.dtsi
-> @@ -284,9 +284,8 @@ spi0: spi@e0100000 {
->  				#size-cells = <0>;
->  				interrupts = <0 31 0x4>;
->  				status = "disabled";
-> -				dmas = <&dwdma0 4 0 0>,
-> -					<&dwdma0 5 0 0>;
-> -				dma-names = "tx", "rx";
-> +				dmas = <&dwdma0 5 0 0>, <&dwdma0 4 0 0>;
-> +				dma-names = "rx", "tx";
->  			};
->  
->  			rtc@e0580000 {
+In extended addressing mode, function mctp_local_output() fetch netdev
+through dev_get_by_index_rcu, which won't increase netdev's reference
+counter. Hence, the reference may underflow when mctp_local_output calls
+dev_put(), results in possible use after free.
 
-Rob,
+This patch adds dev_hold() to fix the reference bug.
 
-I tried to ask this at V1 as well [1]. Why do we need a patch like
-this ? Isn't this a DT tooling issue, where it is asking for a fixed
-order of values ?
+Fixes: 99ce45d5e7db ("mctp: Implement extended addressing")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ net/mctp/route.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/net/mctp/route.c b/net/mctp/route.c
+index e52cef750500..a9e5d6c40c65 100644
+--- a/net/mctp/route.c
++++ b/net/mctp/route.c
+@@ -817,6 +817,7 @@ int mctp_local_output(struct sock *sk, struct mctp_route *rt,
+ 			return rc;
+ 		}
+ 
++		dev_hold(dev);
+ 		rt->dev = __mctp_dev_get(dev);
+ 		rcu_read_unlock();
+ 
 -- 
-viresh
+2.35.1
 
-[1] https://lore.kernel.org/all/20220312180615.68929-2-singh.kuldeep87k@gmail.com/

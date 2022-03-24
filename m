@@ -2,161 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41F54E663B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEF84E6635
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351363AbiCXPoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S1351336AbiCXPn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351343AbiCXPoL (ORCPT
+        with ESMTP id S242256AbiCXPn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:44:11 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48238A1447
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:42:39 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id p15so9967067ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :references:in-reply-to:content-transfer-encoding;
-        bh=kZCJsDwuqFmPdGnVK+OvD0sFJ1NQAHf3rkQ/uko1Ypo=;
-        b=TLgs+/f1fDU/asNFSeTTbfgjarvjKtaY7VH4v6LErCV5kTHXrowQmCYq+4ZwYBZ1k5
-         L7DtOzlE30HO8bY0DShfaoOTFaobumChKR+E5mRqWzSrjrJQsNG4bJLwRQqSwxejBLfA
-         R8B1oNJ32Xs4hsmgRL7crsc7hH5IIa+gMaTKeUYSZq++tzRI3Dxk5PxyHA9bE7bNBWuQ
-         AdtT4WVvDon+nZLvjLoviTiD/LznDmH+itMDO73OCUUCXwZTN3ndBHAztu2kArqId9cj
-         YSMP98LdTwuy1WuvppskGjKRUl9O9vDXstuP3g0sW8QSUmHz3pQKJhoLe1fcOzQdAVnP
-         vpYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:references:in-reply-to:content-transfer-encoding;
-        bh=kZCJsDwuqFmPdGnVK+OvD0sFJ1NQAHf3rkQ/uko1Ypo=;
-        b=nLOFVQVZnDP7Da+z386NE9SzRBO6fRBLdff3zFAZU8WiSnqlQQip2mSFySxvDOH1bC
-         2YaNv3Kzi/YkAm5cboKANcrtcdRs9i0eGKkOeF5FFUbFvujPDGRMkJdlQB8FLkkHdZzA
-         Nh38K09Jvs6ZyZ6H8d1Ya8ewzS3/L6xcjAZNvbE1B6ai/eq8PfcgS9rebfvGFkHSQdsy
-         5G8tKt0U6LrMQnu0H6VlSfXmmrHX5iqvOCt+pNqz95pZBsEYnT3+7QBa25TQOz3mcMXs
-         ZgDJIqAtP1+rR918Uz5RUd80dYSOPHLLwJjhSNjn8ouRs/mMut6Md3MsrWhrjwbNNCHU
-         WUvw==
-X-Gm-Message-State: AOAM532a2twpO7tuj7MFxyMYZi+ZEaVNt+eYvy3e/il+Vofb8u77ojPH
-        Xk2HDJ2brrGOy94PEjvK8SM=
-X-Google-Smtp-Source: ABdhPJzdC5QIuMVd73kQ1G9mQxF9Fvzi6kbhcWRNuv85/Ql+uKrgaDzkXDmNWSYf205OJ0D5ZZ1zEw==
-X-Received: by 2002:a17:906:58cb:b0:6df:f696:9b32 with SMTP id e11-20020a17090658cb00b006dff6969b32mr6597382ejs.384.1648136557640;
-        Thu, 24 Mar 2022 08:42:37 -0700 (PDT)
-Received: from [109.186.89.7] (109-186-89-7.bb.netvision.net.il. [109.186.89.7])
-        by smtp.gmail.com with ESMTPSA id u4-20020aa7db84000000b004136c2c357csm1549665edt.70.2022.03.24.08.42.35
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Thu, 24 Mar 2022 08:42:37 -0700 (PDT)
-Message-ID: <623C9137.3000803@gmail.com>
-Date:   Thu, 24 Mar 2022 17:41:43 +0200
-From:   Eli Billauer <eli.billauer@gmail.com>
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
+        Thu, 24 Mar 2022 11:43:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6703EBE2C;
+        Thu, 24 Mar 2022 08:41:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F213661834;
+        Thu, 24 Mar 2022 15:41:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5703C340EC;
+        Thu, 24 Mar 2022 15:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648136515;
+        bh=doZwDOyg5aAln9B5DrZ3TY24Ms37FN+svJ7hBf9kLOA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D2es6RjpWpnvAYmQBArcDtITQiqCqQkxdHOTn+VLib8RpjRqoz7Bk42YaQeIkW4B+
+         YV4riix7mFJO6aTCfBltJ+fHD9NcvbmSVUgVRccYTsAThnjUvTUElpQVWLkEmXn3XP
+         0KARQD6J5sux0XLqkyQczgxTdKj6a0blrlIj64sjOTOnkhpG5IQOzN1na+sGcth01V
+         BHerFSDNphjfIgtjIwzEyNtiuKx5MEFUnf8zYDfP5QxivQK6NnsEXMMHf83nTw7iCV
+         0JmhQp4Rh9K55bYoS3LHd/KRXZDaoGGhW53QMIr6NdwapjmHHWkxiYfwY5Yfp7IlAG
+         xZBPVqEuXQxJA==
+Date:   Thu, 24 Mar 2022 21:11:50 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: Re: [REPOST PATCH v4 07/13] drm/msm/disp/dpu1: Add support for DSC
+ in encoder
+Message-ID: <YjyRPhdoiLw4gOtD@matsya>
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-8-vkoul@kernel.org>
+ <20220217223239.2i256klkbjkogovz@SoMainline.org>
+ <YjsxaJrvxgtO5ecC@matsya>
 MIME-Version: 1.0
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH] char: xillybus: replace usage of found with dedicated
- list iterator variable
-References: <20220324070939.59297-1-jakobkoschel@gmail.com>
-In-Reply-To: <20220324070939.59297-1-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjsxaJrvxgtO5ecC@matsya>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks.
+On 23-03-22, 20:10, Vinod Koul wrote:
+> On 17-02-22, 23:32, Marijn Suijten wrote:
+> > On 2022-02-10 16:04:17, Vinod Koul wrote:
 
-Acked-by: Eli Billauer <eli.billauer@gmail.com>
+> > > +
+> > > +	slice_count = dsc->drm->slice_count;
+> > > +	slice_per_intf = DIV_ROUND_UP(width, dsc->drm->slice_width);
+> > > +
+> > > +	/*
+> > > +	 * If slice_count is greater than slice_per_intf then default to 1.
+> > > +	 * This can happen during partial update.
+> > > +	 */
+> > > +	if (slice_count > slice_per_intf)
+> > > +		slice_count = 1;
+> > > +
+> > > +	bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
+> > > +				      dsc->drm->bits_per_pixel, 8);
+> > > +	total_bytes_per_intf = bytes_in_slice * slice_per_intf;
+> > > +
+> > > +	dsc->eol_byte_num = total_bytes_per_intf % 3;
+> > > +	dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
+> > > +	dsc->bytes_in_slice = bytes_in_slice;
+> > > +	dsc->bytes_per_pkt = bytes_in_slice * slice_count;
+> > > +	dsc->pkt_per_line = slice_per_intf / slice_count;
+> > > +}
+> > 
+> > I've seen the same calculations duplicated twice in dsi code.  Since the
+> > msm_display_dsc_config struct is available in a header, perhaps a single
+> > - easily reviewable and maintainable - calculation function should be
+> > available there too?
+> 
+> Let me try check if we can make it common..
 
-On 24/03/22 09:09, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
->
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
->
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
->
-> Link:https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel<jakobkoschel@gmail.com>
-> ---
->   drivers/char/xillybus/xillybus_class.c | 26 ++++++++++++--------------
->   1 file changed, 12 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/char/xillybus/xillybus_class.c b/drivers/char/xillybus/xillybus_class.c
-> index 5046486011c8..0f238648dcfe 100644
-> --- a/drivers/char/xillybus/xillybus_class.c
-> +++ b/drivers/char/xillybus/xillybus_class.c
-> @@ -174,18 +174,17 @@ void xillybus_cleanup_chrdev(void *private_data,
->   			     struct device *dev)
->   {
->   	int minor;
-> -	struct xilly_unit *unit;
-> -	bool found = false;
-> +	struct xilly_unit *unit = NULL, *iter;
->
->   	mutex_lock(&unit_mutex);
->
-> -	list_for_each_entry(unit,&unit_list, list_entry)
-> -		if (unit->private_data == private_data) {
-> -			found = true;
-> +	list_for_each_entry(iter,&unit_list, list_entry)
-> +		if (iter->private_data == private_data) {
-> +			unit = iter;
->   			break;
->   		}
->
-> -	if (!found) {
-> +	if (!unit) {
->   		dev_err(dev, "Weird bug: Failed to find unit\n");
->   		mutex_unlock(&unit_mutex);
->   		return;
-> @@ -216,22 +215,21 @@ int xillybus_find_inode(struct inode *inode,
->   {
->   	int minor = iminor(inode);
->   	int major = imajor(inode);
-> -	struct xilly_unit *unit;
-> -	bool found = false;
-> +	struct xilly_unit *unit = NULL, *iter;
->
->   	mutex_lock(&unit_mutex);
->
-> -	list_for_each_entry(unit,&unit_list, list_entry)
-> -		if (unit->major == major&&
-> -		    minor>= unit->lowest_minor&&
-> -		    minor<  (unit->lowest_minor + unit->num_nodes)) {
-> -			found = true;
-> +	list_for_each_entry(iter,&unit_list, list_entry)
-> +		if (iter->major == major&&
-> +		    minor>= iter->lowest_minor&&
-> +		    minor<  (iter->lowest_minor + iter->num_nodes)) {
-> +			unit = iter;
->   			break;
->   		}
->
->   	mutex_unlock(&unit_mutex);
->
-> -	if (!found)
-> +	if (!unit)
->   		return -ENODEV;
->
->   	*private_data = unit->private_data;
->
-> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
->    
+I rechecked and we can actually remove this as we do this caln in timing
+and update the dsc structure there. So this fn is dropped now
 
+-- 
+~Vinod

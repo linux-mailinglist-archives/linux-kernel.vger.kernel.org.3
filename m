@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029854E628A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA6D4E6291
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349699AbiCXLhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
+        id S1346278AbiCXLkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238827AbiCXLht (ORCPT
+        with ESMTP id S231537AbiCXLkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:37:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 792388FE57
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648121777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OgS0CoRQX4W3qoOKvr8rsBTjL3Hbns4Zu8C+9fnUPkk=;
-        b=DT9JWwdKj6SzpocYEG0MPYx5OLp+QFeQ4oJ0Mn7YyQgstqo39vKoL3ay9DoIqwiDDPuItm
-        WvTX6+dUtv2bsET9yhhnpSY9pu/9qxTa/r9cmW3uVoQjRyBbfydSUvSoAdP4eEgoeYFfvI
-        jHT9Acz879U9wCCMolVhf0HaTgH04u4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-2UwoFoe2NPOGJa7Mer6T_A-1; Thu, 24 Mar 2022 07:36:14 -0400
-X-MC-Unique: 2UwoFoe2NPOGJa7Mer6T_A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8B1985A5A8;
-        Thu, 24 Mar 2022 11:36:13 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BAF792166B2D;
-        Thu, 24 Mar 2022 11:36:11 +0000 (UTC)
-Message-ID: <0ef090101aefbc3bb05bbfae5e7177c8a4cf5122.camel@redhat.com>
-Subject: Re: [RFCv2 PATCH 05/12] KVM: SVM: Update avic_kick_target_vcpus to
- support 32-bit APIC ID
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Mar 2022 13:36:10 +0200
-In-Reply-To: <20220308163926.563994-6-suravee.suthikulpanit@amd.com>
-References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
-         <20220308163926.563994-6-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Mar 2022 07:40:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E8950E1B;
+        Thu, 24 Mar 2022 04:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648121931; x=1679657931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3tsCmgC6U00CO6K3RhtJOUWh8jRiqevIzhkyWbUV+Po=;
+  b=Iq4EqoTdcfznxYQziJL9j8T77wZRQyDp295S+4wt4xxPTPY25oOgF5+p
+   c3GPeLryvmpfxULCZfeSRHImz2UZI8U2qq2r80IjeB0suLjBRCFNsmevp
+   Z/tOPZb5v7ed83pjKcSr3iBFB20YFBJ+IYZ2j0jVI2Ky69rr799jkOwKE
+   MHFWyHFy6qlWYARGXXm1cGBtTFald8lh+ZdD3rgsUrx6lwhalcVejLbOl
+   Hhuwq8GqAMHPnJ5pM4udzHHweG93Afgr1WaijGWHsR4w8+txKtWJY9ar+
+   Zfv8oo+87/THZrwcweuufidKL9pXzLcWq9X/mx3VUjeO5rhRBkQLmU3Mm
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="258541675"
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="258541675"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 04:38:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="544607394"
+Received: from xpf.sh.intel.com ([10.239.182.112])
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2022 04:38:48 -0700
+Date:   Thu, 24 Mar 2022 19:37:13 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Heng Su <heng.su@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v8 1/1] selftests/x86/xstate: Add xstate test cases for
+ XSAVE feature
+Message-ID: <YjxX6dnTTQD+Rq9C@xpf.sh.intel.com>
+References: <cover.1646999762.git.pengfei.xu@intel.com>
+ <4268a0203fd6e42a31bde3254ee50dd93fd233ea.1646999762.git.pengfei.xu@intel.com>
+ <eb0c4940-569b-656f-424c-4248929cc74c@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eb0c4940-569b-656f-424c-4248929cc74c@intel.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
-> In x2APIC mode, ICRH contains 32-bit destination APIC ID.
-> So, update the avic_kick_target_vcpus() accordingly.
+On 2022-03-24 at 03:06:50 -0700, Chang S. Bae wrote:
+> On 3/16/2022 5:40 AM, Pengfei Xu wrote:
+> > 
+> > +static inline void check_cpuid_xsave_availability(void)
+> > +{
+> > +	uint32_t eax, ebx, ecx, edx;
+> > +
+> > +	/*
+> > +	 * CPUID.1:ECX.XSAVE[bit 26] enumerates general
+> > +	 * support for the XSAVE feature set, including
+> > +	 * XGETBV.
+> > +	 */
+> > +	__cpuid_count(1, 0, eax, ebx, ecx, edx);
+> > +	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
+> > +		fatal_error("cpuid: no CPU xsave support");
+> > +	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
+> > +		fatal_error("cpuid: no OS xsave support");
 > 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> We need to skip the test when XSAVE is not available. See the point here:
+> https://lore.kernel.org/lkml/8735j8aa9g.ffs@tglx/
 > 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index f128b0189d4a..5329b93dc4cd 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -307,9 +307,15 @@ static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
->  	 * since entered the guest will have processed pending IRQs at VMRUN.
->  	 */
->  	kvm_for_each_vcpu(i, vcpu, kvm) {
-> +		u32 dest;
-> +
-> +		if (apic_x2apic_mode(vcpu->arch.apic))
-> +			dest = icrh;
-> +		else
-> +			dest = GET_XAPIC_DEST_FIELD(icrh);
-> +
->  		if (kvm_apic_match_dest(vcpu, source, icrl & APIC_SHORT_MASK,
-> -					GET_XAPIC_DEST_FIELD(icrh),
-> -					icrl & APIC_DEST_MASK)) {
-> +					dest, icrl & APIC_DEST_MASK)) {
->  			vcpu->arch.apic->irr_pending = true;
->  			svm_complete_interrupt_delivery(vcpu,
->  							icrl & APIC_MODE_MASK,
+  Yes, it's better, will skip and exit if CPU doesn't support XSAVE or OS
+  XSAVE.
+  Thanks for suggestion!
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+  BR.
+  -- Pengfei
 
-Best regards,
-	Maxim Levitsky
-
+> Thanks,
+> Chang
+> 
+> 

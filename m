@@ -2,187 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806334E66E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192A14E66F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351632AbiCXQYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        id S1351667AbiCXQZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235893AbiCXQYo (ORCPT
+        with ESMTP id S1351666AbiCXQZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:24:44 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1DF1EAF6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:23:11 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id e5so5241139pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jN0efcoohqKl1PIpdMiTp80DLtECdVuZLnKEeBNGgVg=;
-        b=ZW86nxdZcCjZpI1mIYCcyifjWGAFZD70ZLNCch9jH9xEBkIFeX4juAT04Q84jf/2Se
-         Y0aFQHp1ve+Di+Y4IAD0tKvXlZLJnImBXFlk/VujOyTQCLmH9+lA6d2NtJrRFQz7txm3
-         zZVGSQ/dYIdvrul1xg2ReGtce20c2+UJ/8cP8MGlhuz8+7ggf+c5Gtk83nzVkPiM3o3N
-         oNslPCBp0dh0Xb2tj5QBS//7fY73aXB+PVE3jiIygjEXhVzErvtCBMmViSrkFdud3fvr
-         7d687YmlDV0sOpQTzYKPHFwAEMafzLzDlCS+CnSn7O+ZlDY0PKjmCEwJbYFRA+BaXCEB
-         Xsqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jN0efcoohqKl1PIpdMiTp80DLtECdVuZLnKEeBNGgVg=;
-        b=rdXexZXHqB9KmAf/FiBlGNYdnbL8NHbczG+6wTZ2Bv94zVz7eUcvw8Xh5DTbL3cXfn
-         WiXb0rTiKHNnHFK3Lgad/LXkVXiI+dVyidyj3oMvh2C4SHQ484uwR1fNhVQsvKKnSZwb
-         ZpWUEzKVIgURZH7fO3hycmhzl2EivO+Coi5IHtdXCW+vFzMpIMu6xM2YL2p40MrKaGnX
-         htrVKtnTzMSfedhrV1jEM9PIiOYoNZILlsiUtsZQgUzBS27nKtM6Lgy7C+F7U05svbaz
-         wyHHHbOBHnS4QMvlYkXIcpsRALgX0O2WOHO3r/BCjRnf9hTgsJ80iE6ttQgjg2b9U3oo
-         id/Q==
-X-Gm-Message-State: AOAM531UkWV+X1dJA8Y7mWgNUjKRtdtccTmBiwIt1I1ZBznxZseb0vPa
-        yJ6sDIBsxpr5wEJOPlgcUGHo
-X-Google-Smtp-Source: ABdhPJyCpECIXEL11rXKn1XKFCDSnPX48KjkZQCzRcWGR9PQbrX7SJNHzhSoBkkkppG59q6FnXKHRg==
-X-Received: by 2002:a17:902:d504:b0:154:172:3677 with SMTP id b4-20020a170902d50400b0015401723677mr6800285plg.147.1648138990872;
-        Thu, 24 Mar 2022 09:23:10 -0700 (PDT)
-Received: from thinkpad ([27.111.75.5])
-        by smtp.gmail.com with ESMTPSA id g12-20020a63b14c000000b00384332d9026sm2983645pgp.23.2022.03.24.09.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 09:23:10 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 21:53:04 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/25] dmaengine: dw-edma: Convert ll/dt phys-address to
- PCIe bus/DMA address
-Message-ID: <20220324162304.GO2854@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-6-Sergey.Semin@baikalelectronics.ru>
+        Thu, 24 Mar 2022 12:25:45 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705D03D4A8;
+        Thu, 24 Mar 2022 09:24:12 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22OEsKmn012509;
+        Thu, 24 Mar 2022 17:23:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=kKmBnOfc0CnmBG1n6w5J+DiHVP5s4O6THfvfi6fXr88=;
+ b=XfGDv01oQ5a/zhM/o8KrNMMA7+CxC5ls5fTRREjjtSpFOdKcycgv+7IBF722KycCyNii
+ p6TfdFlZojfKDk8uPpngdyBvLyYUs71AD0jGDQa/C/eIpu7SfD2p6Qx4RQnDo5fzvqeI
+ dagA+/eNHVuG+pTAFphrqjgV734j3bPXjVI/tpC3ejz8AsOMwOoi0zOQc9cMeSRXzFzZ
+ 1rKXPPyYeuea9UOr6J8gTyxE6FY7PHDUBTj+gNulAFC+frBEDzyYvizHUjfeZMmKIX0g
+ QagrQJzCwa0Xz4c0Pcwb8foOPHLXWuKUi+6KqD6nkbws1ALXEfVsWTGENUS/mcsJnDxv pA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ew6xkuewr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Mar 2022 17:23:52 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DE7FC10002A;
+        Thu, 24 Mar 2022 17:23:49 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D428723713E;
+        Thu, 24 Mar 2022 17:23:49 +0100 (CET)
+Received: from [10.211.7.7] (10.75.127.48) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 24 Mar
+ 2022 17:23:49 +0100
+Message-ID: <668661ca-271b-9a4f-6482-62f1b0190bb2@foss.st.com>
+Date:   Thu, 24 Mar 2022 17:23:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324014836.19149-6-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] mmc: mmci: stm32: use a buffer for unaligned DMA
+ requests
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Christophe Kerello <christophe.kerello@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-mmc@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220317111944.116148-1-yann.gautier@foss.st.com>
+ <20220317111944.116148-3-yann.gautier@foss.st.com>
+ <CAPDyKFqzzKgLHWiy26QW0hvM9kZEATS_c2mXkTuGiFpPaW8YKw@mail.gmail.com>
+From:   Yann Gautier <yann.gautier@foss.st.com>
+In-Reply-To: <CAPDyKFqzzKgLHWiy26QW0hvM9kZEATS_c2mXkTuGiFpPaW8YKw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-24_04,2022-03-24_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:48:16AM +0300, Serge Semin wrote:
-> In accordance with the dw_edma_region.paddr field semantics it is supposed
-> to be initialized with a memory base address visible by the DW eDMA
-> controller. If the DMA engine is embedded into the DW PCIe Host/EP
-> controller, then the address should belong to the Local CPU/Application
-> memory. If eDMA is remotely accessible across the PCIe bus via the PCIe
-> memory IOs, then the address needs to be a part of the PCIe bus memory
-> space. The later case hasn't been well covered in the corresponding
-> glue-driver. Since in general the PCIe memory space doesn't have to match
-> the CPU memory space and the pci_dev.resource[] arrays contain the
-> resources defined in the CPU memory space, a proper conversion needs to be
-> performed, otherwise either the driver won't properly work or much worse
-> the memory corruption will happen. The conversion can be done by means of
-> the pci_bus_address() method. Let's use it to retrieve the LL, DT and CSRs
-> PCIe memory ranges.
+On 3/24/22 12:55, Ulf Hansson wrote:
+> On Thu, 17 Mar 2022 at 12:19, Yann Gautier <yann.gautier@foss.st.com> wrote:
+>>
+>> In SDIO mode, the sg list for requests can be unaligned with what the
+>> STM32 SDMMC internal DMA can support. In that case, instead of failing,
+>> use a temporary bounce buffer to copy from/to the sg list.
+>> This buffer is limited to 1MB. But for that we need to also limit
+>> max_req_size to 1MB. It has not shown any throughput penalties for
+>> SD-cards or eMMC.
+>>
+>> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+>> ---
+>>   drivers/mmc/host/mmci_stm32_sdmmc.c | 80 +++++++++++++++++++++++------
+>>   1 file changed, 63 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
+>> index 4566d7fc9055..a4414e32800f 100644
+>> --- a/drivers/mmc/host/mmci_stm32_sdmmc.c
+>> +++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
+>> @@ -43,6 +43,9 @@ struct sdmmc_lli_desc {
+>>   struct sdmmc_idma {
+>>          dma_addr_t sg_dma;
+>>          void *sg_cpu;
+>> +       dma_addr_t bounce_dma_addr;
+>> +       void *bounce_buf;
+>> +       bool use_bounce_buffer;
+>>   };
+>>
+>>   struct sdmmc_dlyb {
+>> @@ -54,6 +57,7 @@ struct sdmmc_dlyb {
+>>   static int sdmmc_idma_validate_data(struct mmci_host *host,
+>>                                      struct mmc_data *data)
+>>   {
+>> +       struct sdmmc_idma *idma = host->dma_priv;
+>>          struct scatterlist *sg;
+>>          int i;
+>>
+>> @@ -61,21 +65,23 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
+>>           * idma has constraints on idmabase & idmasize for each element
+>>           * excepted the last element which has no constraint on idmasize
+>>           */
+>> +       idma->use_bounce_buffer = false;
+>>          for_each_sg(data->sg, sg, data->sg_len - 1, i) {
+>>                  if (!IS_ALIGNED(sg->offset, sizeof(u32)) ||
+>>                      !IS_ALIGNED(sg->length, SDMMC_IDMA_BURST)) {
+>> -                       dev_err(mmc_dev(host->mmc),
+>> +                       dev_dbg(mmc_dev(host->mmc),
+>>                                  "unaligned scatterlist: ofst:%x length:%d\n",
+>>                                  data->sg->offset, data->sg->length);
+>> -                       return -EINVAL;
+>> +                       idma->use_bounce_buffer = true;
+>> +                       return 0;
+>>                  }
+>>          }
+>>
+>>          if (!IS_ALIGNED(sg->offset, sizeof(u32))) {
+>> -               dev_err(mmc_dev(host->mmc),
+>> +               dev_dbg(mmc_dev(host->mmc),
+>>                          "unaligned last scatterlist: ofst:%x length:%d\n",
+>>                          data->sg->offset, data->sg->length);
+>> -               return -EINVAL;
+>> +               idma->use_bounce_buffer = true;
+>>          }
+>>
+>>          return 0;
+>> @@ -84,18 +90,29 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
+>>   static int _sdmmc_idma_prep_data(struct mmci_host *host,
+>>                                   struct mmc_data *data)
+>>   {
+>> -       int n_elem;
+>> +       struct sdmmc_idma *idma = host->dma_priv;
+>>
+>> -       n_elem = dma_map_sg(mmc_dev(host->mmc),
+>> -                           data->sg,
+>> -                           data->sg_len,
+>> -                           mmc_get_dma_dir(data));
+>> +       if (idma->use_bounce_buffer) {
+>> +               if (data->flags & MMC_DATA_WRITE) {
+>> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
+>>
+>> -       if (!n_elem) {
+>> -               dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
+>> -               return -EINVAL;
+>> -       }
+>> +                       sg_copy_to_buffer(data->sg, data->sg_len,
+>> +                                         idma->bounce_buf, xfer_bytes);
+>> +                       dma_wmb();
+>> +               }
+>> +       } else {
+>> +               int n_elem;
+>> +
+>> +               n_elem = dma_map_sg(mmc_dev(host->mmc),
+>> +                                   data->sg,
+>> +                                   data->sg_len,
+>> +                                   mmc_get_dma_dir(data));
+>>
+>> +               if (!n_elem) {
+>> +                       dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
+>> +                       return -EINVAL;
+>> +               }
+>> +       }
+>>          return 0;
+>>   }
+>>
+>> @@ -112,8 +129,19 @@ static int sdmmc_idma_prep_data(struct mmci_host *host,
+>>   static void sdmmc_idma_unprep_data(struct mmci_host *host,
+>>                                     struct mmc_data *data, int err)
+>>   {
+>> -       dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
+>> -                    mmc_get_dma_dir(data));
+>> +       struct sdmmc_idma *idma = host->dma_priv;
+>> +
+>> +       if (idma->use_bounce_buffer) {
+>> +               if (data->flags & MMC_DATA_READ) {
+>> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
+>> +
+>> +                       sg_copy_from_buffer(data->sg, data->sg_len,
+>> +                                           idma->bounce_buf, xfer_bytes);
+>> +               }
+>> +       } else {
+>> +               dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
+>> +                            mmc_get_dma_dir(data));
+>> +       }
+>>   }
+>>
+>>   static int sdmmc_idma_setup(struct mmci_host *host)
+>> @@ -137,6 +165,16 @@ static int sdmmc_idma_setup(struct mmci_host *host)
+>>                  host->mmc->max_segs = SDMMC_LLI_BUF_LEN /
+>>                          sizeof(struct sdmmc_lli_desc);
+>>                  host->mmc->max_seg_size = host->variant->stm32_idmabsize_mask;
+>> +
+>> +               host->mmc->max_req_size = SZ_1M;
+>> +               idma->bounce_buf = dmam_alloc_coherent(dev,
+>> +                                                      host->mmc->max_req_size,
+>> +                                                      &idma->bounce_dma_addr,
+>> +                                                      GFP_KERNEL);
+>> +               if (!idma->bounce_buf) {
+>> +                       dev_err(dev, "Unable to map allocate DMA bounce buffer.\n");
+>> +                       return -ENOMEM;
 > 
-> Note in addition to that we need to extend the dw_edma_region.paddr field
-> size. The field normally contains a memory range base address to be set in
-> the DW eDMA Linked-List pointer register or as a base address of the
-> Linked-List data buffer. In accordance with [1] the LL range is supposed
-> to be created in the Local CPU/Application memory, but depending on the DW
-> eDMA utilization the memory can be created as a part of the PCIe bus
-> address space (as in the case of the DW PCIe EP prototype kit). Thus in
-> the former case the dw_edma_region.paddr field should have the dma_addr_t
-> type, while in the later one - pci_bus_addr_t. Seeing the corresponding
-> CSRs are always 64-bits wide let's convert the dw_edma_region.paddr field
-> type to be u64 and let the client code logic to make sure it has a valid
-> address visible by the DW eDMA controller. For instance the DW eDMA PCIe
-> glue-driver initializes the field with the addresses from the PCIe bus
-> memory space.
-> 
-> [1] DesignWare Cores PCI Express Controller Databook - DWC PCIe Root Port,
->     v.5.40a, March 2019, p.1103
-> 
-> Fixes: 41aaff2a2ac0 ("dmaengine: Add Synopsys eDMA IP PCIe glue-logic")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Hi Ulf,
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
-
-> ---
->  drivers/dma/dw-edma/dw-edma-pcie.c | 8 ++++----
->  include/linux/dma/edma.h           | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> If we fail to allocate the 1M bounce buffer, then we end up always
+> using a PIO based mode, right?
 > 
-> diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
-> index d6b5e2463884..04c95cba1244 100644
-> --- a/drivers/dma/dw-edma/dw-edma-pcie.c
-> +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
-> @@ -231,7 +231,7 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
->  			return -ENOMEM;
->  
->  		ll_region->vaddr += ll_block->off;
-> -		ll_region->paddr = pdev->resource[ll_block->bar].start;
-> +		ll_region->paddr = pci_bus_address(pdev, ll_block->bar);
->  		ll_region->paddr += ll_block->off;
->  		ll_region->sz = ll_block->sz;
->  
-> @@ -240,7 +240,7 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
->  			return -ENOMEM;
->  
->  		dt_region->vaddr += dt_block->off;
-> -		dt_region->paddr = pdev->resource[dt_block->bar].start;
-> +		dt_region->paddr = pci_bus_address(pdev, dt_block->bar);
->  		dt_region->paddr += dt_block->off;
->  		dt_region->sz = dt_block->sz;
->  	}
-> @@ -256,7 +256,7 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
->  			return -ENOMEM;
->  
->  		ll_region->vaddr += ll_block->off;
-> -		ll_region->paddr = pdev->resource[ll_block->bar].start;
-> +		ll_region->paddr = pci_bus_address(pdev, ll_block->bar);
->  		ll_region->paddr += ll_block->off;
->  		ll_region->sz = ll_block->sz;
->  
-> @@ -265,7 +265,7 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
->  			return -ENOMEM;
->  
->  		dt_region->vaddr += dt_block->off;
-> -		dt_region->paddr = pdev->resource[dt_block->bar].start;
-> +		dt_region->paddr = pci_bus_address(pdev, dt_block->bar);
->  		dt_region->paddr += dt_block->off;
->  		dt_region->sz = dt_block->sz;
->  	}
-> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-> index 8897f8a79b52..5abac9640a4e 100644
-> --- a/include/linux/dma/edma.h
-> +++ b/include/linux/dma/edma.h
-> @@ -18,7 +18,7 @@
->  struct dw_edma;
->  
->  struct dw_edma_region {
-> -	phys_addr_t	paddr;
-> +	u64		paddr;
->  	void __iomem	*vaddr;
->  	size_t		sz;
->  };
-> -- 
-> 2.35.1
+> Perhaps we can allow the above allocation to fail, but then limit us
+> to use DMA only when the buffers are properly aligned? Would that
+> work?
 > 
+We have never supported PIO mode with STM32 variant.
+We only support DMA single buffer or DMA LLI.
+As we cannot have DMA LLI for unaligned access, we'll default to single 
+mode.
+If allocation fails, it then won't work.
+Maybe we shouldn't fail here, and just check idma->bounce_buf in 
+validate data function. If buffer is not allocated, we just return 
+-EINVAL as it was done before.
+
+Best regards,
+Yann
+
+>> +               }
+>>          } else {
+>>                  host->mmc->max_segs = 1;
+>>                  host->mmc->max_seg_size = host->mmc->max_req_size;
+>> @@ -154,8 +192,16 @@ static int sdmmc_idma_start(struct mmci_host *host, unsigned int *datactrl)
+>>          struct scatterlist *sg;
+>>          int i;
+>>
+>> -       if (!host->variant->dma_lli || data->sg_len == 1) {
+>> -               writel_relaxed(sg_dma_address(data->sg),
+>> +       if (!host->variant->dma_lli || data->sg_len == 1 ||
+>> +           idma->use_bounce_buffer) {
+>> +               u32 dma_addr;
+>> +
+>> +               if (idma->use_bounce_buffer)
+>> +                       dma_addr = idma->bounce_dma_addr;
+>> +               else
+>> +                       dma_addr = sg_dma_address(data->sg);
+>> +
+>> +               writel_relaxed(dma_addr,
+>>                                 host->base + MMCI_STM32_IDMABASE0R);
+>>                  writel_relaxed(MMCI_STM32_IDMAEN,
+>>                                 host->base + MMCI_STM32_IDMACTRLR);
+> 
+> Kind regards
+> Uffe
+

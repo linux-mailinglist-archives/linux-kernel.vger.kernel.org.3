@@ -2,172 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CE14E5D41
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEDD4E5D43
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347797AbiCXCj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 22:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
+        id S1346844AbiCXCkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 22:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiCXCj2 (ORCPT
+        with ESMTP id S229436AbiCXCki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 22:39:28 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032FB939BC;
-        Wed, 23 Mar 2022 19:37:57 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id o8so2717142pgf.9;
-        Wed, 23 Mar 2022 19:37:56 -0700 (PDT)
+        Wed, 23 Mar 2022 22:40:38 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D092B3C722
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:39:07 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id b8so3518653pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:39:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Wp5DLQb+USFm7mzuZJGSy8PNZhZNB0xhhfYgseM1XQI=;
-        b=Iq9F7pdpJIivW9VGFcKIthMtHJeIrqCuPiUZWwhUpeM3nDHIzJsZ8KXXHmATPyZ8IT
-         MB081rIQWQlxRhCAs6oQBD7HPibkl4Tmbn8T8FCTlf6+qIwJwYbaPZGne14wl5lOrKeH
-         2HBef0bFJkBph0ruNxz/CEj6dEaz95PuOnL13IiUVtQ3WX/7WzriWsp5SVNLngf9OG7x
-         MTr7dsggYzGzkRfDc9+Z0bV+1k+5DxgUBadV5QdccnJI4GMpfANzJ8HKPi0R2jZSdDUV
-         MPkTgRXVD1/bEkvolILD8S8k47hy+YBhB6RF/oftMNaRHFMpDI5Q9lcjDzdT/7065OqP
-         NoBw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lLmU9eaNbQZtuAnKmKQfSZbES2JI+sc9+LEMrBqU4oU=;
+        b=dnVbf83bqgCMp5cYxA71grdC1mbKtFSVFvEj+qoYy6rhknJ4YfdZNDk7jhGPnziFVN
+         FUQlh1n+Ey9VUcqr304xQkZ4p+aAsR8YYceECVxQvDI3XpWNTHKkxN85CY4XWBWetREa
+         v6DOVnDwfFYkqNd8UlACDQJ9Q4WJ8AUaq8VGoQPpfD4lPdjMllnDS/ppUA7hBQG4SJPX
+         Yc4TTr2Pb3zrQdWzhEmJPJtCMDi/oAU23S0qX1VWoAQZACK8LSETLXFPf0pkRKcoP5Ip
+         9Y39LBqKNMa6oHUITZMLdtae8wjuXW8f7useNMMYPwx86U2CirMQhvdD/xsLwC7z5d4O
+         0WDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=Wp5DLQb+USFm7mzuZJGSy8PNZhZNB0xhhfYgseM1XQI=;
-        b=1Xp+F10aezKc2pcZGI5+wzODzdiTsj/5wV14bHlyfQlGsyQuYL5re46PzaXTwJd4PR
-         xHti/5yhxMzKDSv/rT2KQz2tl8+huKqorTqkl/kaTz3t1ewbEYzYyfitb0CPvbJ2Q9RA
-         /T7UojCRQt+T35GXTDE67fdDWiMOYEwYgwTtHNpRdEkdK9lIKRaXVW8S7ijAD+/pc9C9
-         3sS+0V3u9y0PzfbPUEi/ldlx+lDysYMVPfmlcMm/AnE8ees5k09nkOGnKTTrPBQgO4xh
-         oHwt6JOVZNOIGvgXp3CNYtyHHeY7UB5wwHwiKmT/0ZsebpuqNLN8kcztJMo5GzMm47vX
-         THbA==
-X-Gm-Message-State: AOAM530CxTFJsmwYBJmqANCUa+TtDbOf79vu5di1/eA8Ppn0wYUXE3Sl
-        lTlYi/Gqjh9e44IGQwChuVU=
-X-Google-Smtp-Source: ABdhPJyjo7cx/EkAukEQF0sa32DBVqkH9XFVWcb81TCaJxBAyWXF3vM7ONa0LG9uJNUZxW6A3shpuQ==
-X-Received: by 2002:a05:6a00:238f:b0:4f7:78b1:2f6b with SMTP id f15-20020a056a00238f00b004f778b12f6bmr2659743pfc.17.1648089476382;
-        Wed, 23 Mar 2022 19:37:56 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm1156587pfc.78.2022.03.23.19.37.52
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lLmU9eaNbQZtuAnKmKQfSZbES2JI+sc9+LEMrBqU4oU=;
+        b=C4KHpDzCWvd6gsf8YXJscO2QGTBBuXI6pSZVrXLAI+yvPbBRI4FTF71Yp5wswtDzb7
+         rVAaCdwEGUgleJZIqH8DFSNj94gpntm98oSdz3ouKX2D88ko43EhVGW7xeoEh2iKI8ef
+         37cK0WRJPlDpWCtZHiyIgFKyaUfIeBk6koDc0Jvg7BdcPmm28UCGi7oSL2JlShtfi/Ff
+         CMwCwyx+Uyu9EzPLxrL/9PWE0Oh7MSA8vcMH6gmXLoNv2YxsI35ol0AbpdO5EM4FL2TO
+         sA8XqxmpD97JHmehJ5zQAZ6Pmdg2DZMNIxPx1hdBy68OcNOpGGFxway9GAAN2LhweO1F
+         EBaQ==
+X-Gm-Message-State: AOAM533tk4ucqePZXU2q6ZI/pa0F5d3Du4Pe2/xsFxw8/Ex8U1FWbNC1
+        FGc+Tircle7zgi/6Q5z+brUP/9oI2bQ+6g==
+X-Google-Smtp-Source: ABdhPJyB4BzVu6jeixu1gk0n4B4VYDuwYKx1dB0266XakOvXJ0YNren71lhLRwBZGZOhpl9m1LLSLw==
+X-Received: by 2002:a17:902:8497:b0:154:9282:bc01 with SMTP id c23-20020a170902849700b001549282bc01mr3418482plo.33.1648089547345;
+        Wed, 23 Mar 2022 19:39:07 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id oo16-20020a17090b1c9000b001b89e05e2b2sm1001104pjb.34.2022.03.23.19.39.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 19:37:55 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     linux-kernel@vger.kernel.org, adobriyan@gmail.com,
-        jpoimboe@redhat.com, linux-sparse@vger.kernel.org,
-        llvm@lists.linux.dev, luc.vanoostenryck@gmail.com,
-        nathan@kernel.org, peterz@infradead.org,
-        Sasha Levin <sashal@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Charlemagne Lasse <charlemagnelasse@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v3] x86/bug: __WARN_FLAGS: prevent shadowing by renaming local variable f to __flags
-Date:   Thu, 24 Mar 2022 11:37:42 +0900
-Message-Id: <20220324023742.106546-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220303110755.24147-1-mailhol.vincent@wanadoo.fr>
-References: <20220303110755.24147-1-mailhol.vincent@wanadoo.fr>
+        Wed, 23 Mar 2022 19:39:05 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 08:09:04 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ARM: dts: spear13xx: Update SPI dma properties
+Message-ID: <20220324023904.h2qfxzxlznggbsyr@vireshk-i7>
+References: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The macro __WARN_FLAGS() uses a local variable named "f". This being a
-common name, there is a risk of shadowing other variables.
+On 23-03-22, 23:29, Kuldeep Singh wrote:
+> Reorder dmas and dma-names property for spi controller node to make it
+> compliant with bindings.
+> 
+> Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
+> v2:
+> - Add fixes tag
+> - Remove 1/2 patch from series as it's not required
+> - v1 discussion link:
+>   https://lore.kernel.org/linux-devicetree/20220312180615.68929-2-singh.kuldeep87k@gmail.com/
+> 
+>  arch/arm/boot/dts/spear13xx.dtsi | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/spear13xx.dtsi b/arch/arm/boot/dts/spear13xx.dtsi
+> index c87b881b2c8b..45f0b2a33e02 100644
+> --- a/arch/arm/boot/dts/spear13xx.dtsi
+> +++ b/arch/arm/boot/dts/spear13xx.dtsi
+> @@ -284,9 +284,8 @@ spi0: spi@e0100000 {
+>  				#size-cells = <0>;
+>  				interrupts = <0 31 0x4>;
+>  				status = "disabled";
+> -				dmas = <&dwdma0 4 0 0>,
+> -					<&dwdma0 5 0 0>;
+> -				dma-names = "tx", "rx";
+> +				dmas = <&dwdma0 5 0 0>, <&dwdma0 4 0 0>;
+> +				dma-names = "rx", "tx";
+>  			};
+>  
+>  			rtc@e0580000 {
 
-For example, GCC would yield:
+Rob,
 
-| In file included from ./include/linux/bug.h:5,
-|                  from ./include/linux/cpumask.h:14,
-|                  from ./arch/x86/include/asm/cpumask.h:5,
-|                  from ./arch/x86/include/asm/msr.h:11,
-|                  from ./arch/x86/include/asm/processor.h:22,
-|                  from ./arch/x86/include/asm/timex.h:5,
-|                  from ./include/linux/timex.h:65,
-|                  from ./include/linux/time32.h:13,
-|                  from ./include/linux/time.h:60,
-|                  from ./include/linux/stat.h:19,
-|                  from ./include/linux/module.h:13,
-|                  from virt/lib/irqbypass.mod.c:1:
-| ./include/linux/rcupdate.h: In function 'rcu_head_after_call_rcu':
-| ./arch/x86/include/asm/bug.h:80:21: warning: declaration of 'f' shadows a parameter [-Wshadow]
-|    80 |         __auto_type f = BUGFLAG_WARNING|(flags);                \
-|       |                     ^
-| ./include/asm-generic/bug.h:106:17: note: in expansion of macro '__WARN_FLAGS'
-|   106 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
-|       |                 ^~~~~~~~~~~~
-| ./include/linux/rcupdate.h:1007:9: note: in expansion of macro 'WARN_ON_ONCE'
-|  1007 |         WARN_ON_ONCE(func != (rcu_callback_t)~0L);
-|       |         ^~~~~~~~~~~~
-| In file included from ./include/linux/rbtree.h:24,
-|                  from ./include/linux/mm_types.h:11,
-|                  from ./include/linux/buildid.h:5,
-|                  from ./include/linux/module.h:14,
-|                  from virt/lib/irqbypass.mod.c:1:
-| ./include/linux/rcupdate.h:1001:62: note: shadowed declaration is here
-|  1001 | rcu_head_after_call_rcu(struct rcu_head *rhp, rcu_callback_t f)
-|       |                                               ~~~~~~~~~~~~~~~^
+I tried to ask this at V1 as well [1]. Why do we need a patch like
+this ? Isn't this a DT tooling issue, where it is asking for a fixed
+order of values ?
 
-For reference, sparse also warns about it, c.f. [1].
-
-This patch renames the variable from f to __flags (with two underscore
-prefixes as suggested in the Linux kernel coding style [2]) in order
-to prevent collisions.
-
-[1] https://lore.kernel.org/all/CAFGhKbyifH1a+nAMCvWM88TK6fpNPdzFtUXPmRGnnQeePV+1sw@mail.gmail.com/
-
-[2] Linux kernel coding style, section 12) Macros, Enums and RTL,
-paragraph 5) namespace collisions when defining local variables in
-macros resembling functions
-https://www.kernel.org/doc/html/latest/process/coding-style.html#macros-enums-and-rtl
-
-CC: Charlemagne Lasse <charlemagnelasse@gmail.com>
-Fixes: bfb1a7c91fb7 ("x86/bug: Merge annotate_reachable() into_BUG_FLAGS() asm")
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-Changelog:
-
-v2 -> v3:
-
-  * add a mention that sparse is warning about this too.
-  c.f. https://lore.kernel.org/all/CAKwvOdmSV3Nse+tGMBXvN=QvnOs6-ODZRJB0OF5Pd6BVb-scFw@mail.gmail.com/
-
-v1 -> v2:
-
-   * Update the reference link to the kernel documentation to latest version.
-   * Do not break the Fixes: tag to a new line.
-   * Added the Acked-by and Reviewed-by tags.
----
- arch/x86/include/asm/bug.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-index bab883c0b6fe..66570e95af39 100644
---- a/arch/x86/include/asm/bug.h
-+++ b/arch/x86/include/asm/bug.h
-@@ -77,9 +77,9 @@ do {								\
-  */
- #define __WARN_FLAGS(flags)					\
- do {								\
--	__auto_type f = BUGFLAG_WARNING|(flags);		\
-+	__auto_type __flags = BUGFLAG_WARNING|(flags);		\
- 	instrumentation_begin();				\
--	_BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);			\
-+	_BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);		\
- 	instrumentation_end();					\
- } while (0)
- 
 -- 
-2.34.1
+viresh
 
+[1] https://lore.kernel.org/all/20220312180615.68929-2-singh.kuldeep87k@gmail.com/

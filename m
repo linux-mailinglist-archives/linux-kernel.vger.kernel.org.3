@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23F24E61CB
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0984E61CA
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349527AbiCXKdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
+        id S1346589AbiCXKdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349629AbiCXKdH (ORCPT
+        with ESMTP id S229541AbiCXKdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:33:07 -0400
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B2FA0BEE
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:31:32 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KPM2p55BhzMqNND;
-        Thu, 24 Mar 2022 11:31:30 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KPM2m27YJzljsTY;
-        Thu, 24 Mar 2022 11:31:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1648117890;
-        bh=07InghFBQQsMZIwhzNxbiMPO0RvgGZQgEQaSuD90ZRQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=wLPLtVakEdY3ntCVFa9PR0CP5WrSV7xM8w1zvacrOnr9A2aY8r+oZton40dAdqJjg
-         ZSEJFmOmQTFYG9qt6Eg4a0KEcBChePGf7b0iCeCkzVrkLSpwSfCz7k0h/zYT5BHrBn
-         stZ01j3MOm4b19vDHne2l6nYVK085p2lLPCxdBmA=
-Message-ID: <f8f5ef29-4446-8f19-08a3-b9e080855405@digikod.net>
-Date:   Thu, 24 Mar 2022 11:31:32 +0100
+        Thu, 24 Mar 2022 06:33:45 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83D39E9CC;
+        Thu, 24 Mar 2022 03:32:13 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 17so5519175ljw.8;
+        Thu, 24 Mar 2022 03:32:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=yIGBhHdGmmA6wfhq/C+I/3lptUPuCRf9dLkGG/+jm/0=;
+        b=UECv386z8DX2m17XrbzsWDtNOzryfJvtsSbyNTgODZ/baOrSAi26WyQodjOx/EVuTN
+         i9gdHVYgFlKbM9Q1+/08aVpUWHklq+lG/ToDHtsZwCGIbpPEHAkKJwagSfcUXchYQejK
+         CEImEFdTQxPQ1Jk2Gq5CPAcOGTEVQlzJT13oM8IuTCrtBQ5xUp1CLp/Ot0YOfOGJ578W
+         Vjnyi9PMvGfFyTaOCvwUxNTPFE3UMKE8WF+xWZCJf92txuRqerdZCpuWlHA0tiW9mYZr
+         cqBHnDx2AnoP/LKtZ6tYr5mbrEwS85AKdUkKcKL+QNtDieFCglv+4bovA/N8I6rA8S9r
+         /6ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=yIGBhHdGmmA6wfhq/C+I/3lptUPuCRf9dLkGG/+jm/0=;
+        b=0VFXeEwBL8RdeAvHfUDf7U/S4V6iP0ouyFiAv+ng+sgHZuYi0V9nwXb4Xy7vBe/qYB
+         2vNVaPEAkkz9XpC3WgfppQaboDufeuVDG4xtA4f+juC08PTXQ95pIk321r/5g76oIxkX
+         xmlHKhQUIUMJlEk4gqovgBZxFMYGIaIH4XBA89E8FKf3jzvudIzInJxbxHwlGZKBzR+f
+         hC25gdnqw+WDKPS3DzCnEKgavQZdSy/phMhPquy8Odc1vK1gi2/gD1XGEiLlsovT147b
+         WLoFuSztjhtWoQKQQsR67iqYXYACZ2JqJnZlIWuXJ7cAeCKuCiDjoG2Sie054LLTnHH9
+         UqcQ==
+X-Gm-Message-State: AOAM533Eup4wSGamh/0yasGXQ4Qk2b7zopa+qd+kipwO7/3xi8iVnX/r
+        FQJTnbpiyU4HUsTbIZ1f77gmcmAMpl2HiWf2
+X-Google-Smtp-Source: ABdhPJzCULThTsLuOBtIbhx5MseJh312jiRpFnwVxEIh8muMTtUjy8iMJZWGuKG5tjrjFK2IU8HUuA==
+X-Received: by 2002:a2e:9904:0:b0:247:ec95:fdee with SMTP id v4-20020a2e9904000000b00247ec95fdeemr3684456lji.291.1648117931993;
+        Thu, 24 Mar 2022 03:32:11 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id g27-20020a2eb5db000000b002498222c8dasm286633ljn.65.2022.03.24.03.32.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 03:32:11 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
+ offloading of fdb locked flag
+In-Reply-To: <20220323144304.4uqst3hapvzg3ej6@skbuf>
+References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
+ <20220317093902.1305816-3-schultz.hans+netdev@gmail.com>
+ <86o81whmwv.fsf@gmail.com> <20220323123534.i2whyau3doq2xdxg@skbuf>
+ <86wngkbzqb.fsf@gmail.com> <20220323144304.4uqst3hapvzg3ej6@skbuf>
+Date:   Thu, 24 Mar 2022 11:32:08 +0100
+Message-ID: <86lewzej4n.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v1 06/11] landlock: Add support for file reparenting with
- LANDLOCK_ACCESS_FS_REFER
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20220221212522.320243-1-mic@digikod.net>
- <20220221212522.320243-7-mic@digikod.net>
- <CAHC9VhSFXN39EuVG5aVK0jtgCOmzM2FSCoVa2Xrs=oJQ4AkWMQ@mail.gmail.com>
- <588e0fec-6a45-db81-e411-ae488b29e533@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <588e0fec-6a45-db81-e411-ae488b29e533@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On ons, mar 23, 2022 at 16:43, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Wed, Mar 23, 2022 at 01:49:32PM +0100, Hans Schultz wrote:
+>> >> Does someone have an idea why there at this point is no option to add a
+>> >> dynamic fdb entry?
+>> >> 
+>> >> The fdb added entries here do not age out, while the ATU entries do
+>> >> (after 5 min), resulting in unsynced ATU vs fdb.
+>> >
+>> > I think the expectation is to use br_fdb_external_learn_del() if the
+>> > externally learned entry expires. The bridge should not age by itself
+>> > FDB entries learned externally.
+>> >
+>> 
+>> It seems to me that something is missing then?
+>> My tests using trafgen that I gave a report on to Lunn generated massive
+>> amounts of fdb entries, but after a while the ATU was clean and the fdb
+>> was still full of random entries...
+>
+> I'm no longer sure where you are, sorry..
+> I think we discussed that you need to enable ATU age interrupts in order
+> to keep the ATU in sync with the bridge FDB? Which means either to
+> delete the locked FDB entries from the bridge when they age out in the
+> ATU, or to keep refreshing locked ATU entries.
+> So it seems that you're doing neither of those 2 things if you end up
+> with bridge FDB entries which are no longer in the ATU.
 
-On 17/03/2022 13:04, Mickaël Salaün wrote:
-> 
-> On 17/03/2022 02:26, Paul Moore wrote:
-
-[...]
-
->>> @@ -269,16 +270,188 @@ static inline bool is_nouser_or_private(const 
->>> struct dentry *dentry)
->>>                           
->>> unlikely(IS_PRIVATE(d_backing_inode(dentry))));
->>>   }
->>>
->>> -static int check_access_path(const struct landlock_ruleset *const 
->>> domain,
->>> -               const struct path *const path,
->>> +static inline access_mask_t get_handled_accesses(
->>> +               const struct landlock_ruleset *const domain)
->>> +{
->>> +       access_mask_t access_dom = 0;
->>> +       unsigned long access_bit;
->>
->> Would it be better to declare @access_bit as an access_mask_t type?
->> You're not using any macros like for_each_set_bit() in this function
->> so I believe it should be safe.
-> 
-> Right, I'll change that.
-
-Well, thinking about it again, access_bit is not an access mask but an 
-index in such mask. access_mask_t gives enough space for such index but 
-it is definitely not the right semantic. The best type should be size_t, 
-but I prefer to stick to unsigned long (used for size_t anyway) for 
-consistency with the other access_bit variable types. There is no need 
-to use for_each_set_bit() here now but that could change, and I prefer 
-to do my best to prevent future issues. ;)
-Anyway, I guess the compiler can optimize such code.
+Any idea why G2 offset 5 ATUAgeIntEn (bit 10) is set? There is no define
+for it, so I assume it is something default?

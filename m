@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3F24E630E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9484E6311
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347310AbiCXMT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
+        id S1350053AbiCXMUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346416AbiCXMTq (ORCPT
+        with ESMTP id S1350027AbiCXMTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:19:46 -0400
+        Thu, 24 Mar 2022 08:19:49 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43792CC80;
-        Thu, 24 Mar 2022 05:18:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CF23298F;
+        Thu, 24 Mar 2022 05:18:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648124294; x=1679660294;
+  t=1648124297; x=1679660297;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=TrOebLAqyT9HE+wBykQ5A6GHPyKNRIX32XnDb3uzGkY=;
-  b=GLJWOnJqcE9lOrnRzxvebCZaqtGMoTglKPWiOyZYaYTQA2ddJtJQ/n82
-   cpiIA2caFBJTyIhye5Ud9u8sTDiBpW1hG1n1qfK6BrJAR5ix0T2nURF+e
-   xRSQsRcv1C6yknCQ1c3udQytfxuXt7JXpaSZ2Qv53oZp/PFRoeBYCkNSr
-   0=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 24 Mar 2022 05:18:13 -0700
+  bh=LLlTRO+icln0nNCeI1AD7N0Bt4DREqFC3bYNXbePsbQ=;
+  b=hr7DT7p6flC+zEoxU6HxkYxVO/zUPMBV4up+BujnYPXr0HrYSOAYSiYI
+   Dak4Kxzg9Mzdhz1viY8nqLNpC2uVtVkHMn1N7aabJMKqEjhJYK5vwGMFq
+   kyH8rUIO99LJbEZqbzIDFWmyeXDMjns4eThyF0iQnvMfc5qRbcd0bEyEC
+   U=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 24 Mar 2022 05:18:16 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:18:12 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:18:16 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 24 Mar 2022 05:18:12 -0700
+ 15.2.986.22; Thu, 24 Mar 2022 05:18:15 -0700
 Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 24 Mar 2022 05:18:08 -0700
+ 15.2.986.22; Thu, 24 Mar 2022 05:18:12 -0700
 From:   Mao Jinlong <quic_jinlmao@quicinc.com>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -55,9 +55,9 @@ CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Hao Zhang <quic_hazha@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v4 02/10] Coresight: Add coresight TPDM source driver
-Date:   Thu, 24 Mar 2022 20:17:26 +0800
-Message-ID: <20220324121734.21531-3-quic_jinlmao@quicinc.com>
+Subject: [PATCH v4 03/10] dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+Date:   Thu, 24 Mar 2022 20:17:27 +0800
+Message-ID: <20220324121734.21531-4-quic_jinlmao@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
 References: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
@@ -76,275 +76,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver to support Coresight device TPDM (Trace, Profiling and
-Diagnostics Monitor). TPDM is a monitor to collect data from
-different datasets. This change is to add probe/enable/disable
-functions for tpdm source.
+Adds new coresight-tpdm.yaml file describing the bindings required
+to define tpdm in the device trees.
 
 Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
 Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 ---
- drivers/hwtracing/coresight/Kconfig          |  13 ++
- drivers/hwtracing/coresight/Makefile         |   1 +
- drivers/hwtracing/coresight/coresight-core.c |   4 +-
- drivers/hwtracing/coresight/coresight-tpdm.c | 145 +++++++++++++++++++
- drivers/hwtracing/coresight/coresight-tpdm.h |  27 ++++
- include/linux/coresight.h                    |   1 +
- 6 files changed, 190 insertions(+), 1 deletion(-)
- create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
- create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+ .../bindings/arm/coresight-tpdm.yaml          | 99 +++++++++++++++++++
+ .../devicetree/bindings/arm/coresight.txt     |  7 ++
+ MAINTAINERS                                   |  1 +
+ 3 files changed, 107 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
 
-diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
-index 514a9b8086e3..5c506a1cd08f 100644
---- a/drivers/hwtracing/coresight/Kconfig
-+++ b/drivers/hwtracing/coresight/Kconfig
-@@ -201,4 +201,17 @@ config CORESIGHT_TRBE
- 
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called coresight-trbe.
-+
-+config CORESIGHT_TPDM
-+	tristate "CoreSight Trace, Profiling & Diagnostics Monitor driver"
-+	select CORESIGHT_LINKS_AND_SINKS
-+	help
-+	  This driver provides support for configuring monitor. Monitors are
-+	  primarily responsible for data set collection and support the
-+	  ability to collect any permutation of data set types. Monitors are
-+	  also responsible for interaction with system cross triggering.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called coresight-tpdm.
-+
- endif
-diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-index 329a0c704b87..6bb9b1746bc7 100644
---- a/drivers/hwtracing/coresight/Makefile
-+++ b/drivers/hwtracing/coresight/Makefile
-@@ -25,5 +25,6 @@ obj-$(CONFIG_CORESIGHT_CPU_DEBUG) += coresight-cpu-debug.o
- obj-$(CONFIG_CORESIGHT_CATU) += coresight-catu.o
- obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
- obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
-+obj-$(CONFIG_CORESIGHT_TPDM) += coresight-tpdm.o
- coresight-cti-y := coresight-cti-core.o	coresight-cti-platform.o \
- 		   coresight-cti-sysfs.o
-diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-index 8ff94d020893..d80d01f4237b 100644
---- a/drivers/hwtracing/coresight/coresight-core.c
-+++ b/drivers/hwtracing/coresight/coresight-core.c
-@@ -398,6 +398,7 @@ static void coresight_disable_link(struct coresight_device *csdev,
- static int coresight_enable_source(struct coresight_device *csdev, u32 mode)
- {
- 	int ret;
-+	u32 subtype;
- 
- 	if (!csdev->enable) {
- 		if (source_ops(csdev)->enable) {
-@@ -1040,7 +1041,8 @@ static int coresight_validate_source(struct coresight_device *csdev,
- 	}
- 
- 	if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
--	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE) {
-+	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
-+	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY) {
- 		dev_err(&csdev->dev, "wrong device subtype in %s\n", function);
- 		return -EINVAL;
- 	}
-diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+diff --git a/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml b/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
 new file mode 100644
-index 000000000000..3900ae50670a
+index 000000000000..05210e0fc262
 --- /dev/null
-+++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-@@ -0,0 +1,145 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
++++ b/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+@@ -0,0 +1,99 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/coresight-tpdm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#include <linux/amba/bus.h>
-+#include <linux/bitmap.h>
-+#include <linux/coresight.h>
-+#include <linux/coresight-pmu.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/fs.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
++title: Trace, Profiling and Diagnostics Monitor - TPDM
 +
-+#include "coresight-priv.h"
-+#include "coresight-tpdm.h"
++description: |
++  The TPDM or Monitor serves as data collection component for various dataset
++  types specified in the QPMDA spec. It covers Implementation defined ((ImplDef),
++  Basic Counts (BC), Tenure Counts (TC), Continuous Multi-Bit (CMB), and Discrete
++  Single Bit (DSB). It performs data collection in the data producing clock
++  domain and transfers it to the data collection time domain, generally ATB
++  clock domain.
 +
-+DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
++  The primary use case of the TPDM is to collect data from different data
++  sources and send it to a TPDA for packetization, timestamping, and funneling.
 +
-+/* TPDM enable operations */
-+static int tpdm_enable(struct coresight_device *csdev,
-+		       struct perf_event *event, u32 mode)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
++maintainers:
++  - Suzuki K Poulose <suzuki.poulose@arm.com>
++  - Mathieu Poirier <mathieu.poirier@linaro.org>
 +
-+	mutex_lock(&drvdata->lock);
-+	if (drvdata->enable) {
-+		mutex_unlock(&drvdata->lock);
-+		return -EBUSY;
-+	}
++properties:
++  $nodename:
++    pattern: "^tpdm(@[0-9a-f]+)$"
++  compatible:
++    items:
++      - const: qcom,coresight-tpdm
++      - const: arm,primecell
 +
-+	drvdata->enable = true;
-+	mutex_unlock(&drvdata->lock);
++  reg:
++    maxItems: 1
 +
-+	dev_info(drvdata->dev, "TPDM tracing enabled\n");
-+	return 0;
-+}
++  clocks:
++    maxItems: 1
 +
-+/* TPDM disable operations */
-+static void tpdm_disable(struct coresight_device *csdev,
-+			 struct perf_event *event)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
++  clock-names:
++   items:
++     - const: apb_pclk
 +
-+	mutex_lock(&drvdata->lock);
-+	if (!drvdata->enable) {
-+		mutex_unlock(&drvdata->lock);
-+		return;
-+	}
++  out-ports:
++    description: |
++      Output connections from the TPDM to coresight funnle/tpda.
++    $ref: /schemas/graph.yaml#/properties/ports
++    properties:
++      port:
++        description: Output connection from the TPDM to coresight
++            funnel/tpda.
++        $ref: /schemas/graph.yaml#/properties/port
 +
-+	drvdata->enable = false;
-+	mutex_unlock(&drvdata->lock);
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
 +
-+	dev_info(drvdata->dev, "TPDM tracing disabled\n");
-+}
++additionalProperties: false
 +
-+static const struct coresight_ops_source tpdm_source_ops = {
-+	.enable		= tpdm_enable,
-+	.disable	= tpdm_disable,
-+};
++examples:
++  # minimum TPDM definition. TPDM connect to coresight funnel.
++  - |
++    tpdm@6980000 {
++      compatible = "qcom,coresight-tpdm", "arm,primecell";
++      reg = <0x6980000 0x1000>;
 +
-+static const struct coresight_ops tpdm_cs_ops = {
-+	.source_ops	= &tpdm_source_ops,
-+};
++      clocks = <&aoss_qmp>;
++      clock-names = "apb_pclk";
 +
-+static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
-+{
-+	struct device *dev = &adev->dev;
-+	struct coresight_platform_data *pdata;
-+	struct tpdm_drvdata *drvdata;
-+	struct coresight_desc desc = { 0 };
++      out-ports {
++        port {
++          tpdm_turing_out_funnel_turing: endpoint {
++            remote-endpoint =
++              <&funnel_turing_in_tpdm_turing>;
++          };
++        };
++      };
++    };
++  # minimum TPDM definition. TPDM connect to coresight TPDA.
++  - |
++    tpdm@684c000 {
++      compatible = "qcom,coresight-tpdm", "arm,primecell";
++      reg = <0x684c000 0x1000>;
 +
-+	pdata = coresight_get_platform_data(dev);
-+	if (IS_ERR(pdata))
-+		return PTR_ERR(pdata);
-+	adev->dev.platform_data = pdata;
++      clocks = <&aoss_qmp>;
++      clock-names = "apb_pclk";
 +
-+	/* driver data*/
-+	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-+	if (!drvdata)
-+		return -ENOMEM;
-+	drvdata->dev = &adev->dev;
-+	dev_set_drvdata(dev, drvdata);
++      out-ports {
++        port {
++          tpdm_prng_out_tpda_qdss: endpoint {
++            remote-endpoint =
++              <&tpda_qdss_in_tpdm_prng>;
++          };
++        };
++      };
++    };
 +
-+	drvdata->base = devm_ioremap_resource(dev, &adev->res);
-+	if (!drvdata->base)
-+		return -ENOMEM;
-+
-+	mutex_init(&drvdata->lock);
-+
-+	/* Set up coresight component description */
-+	desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
-+	if (!desc.name)
-+		return -ENOMEM;
-+	desc.type = CORESIGHT_DEV_TYPE_SOURCE;
-+	desc.subtype.source_subtype = CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY;
-+	desc.ops = &tpdm_cs_ops;
-+	desc.pdata = adev->dev.platform_data;
-+	desc.dev = &adev->dev;
-+	drvdata->csdev = coresight_register(&desc);
-+	if (IS_ERR(drvdata->csdev))
-+		return PTR_ERR(drvdata->csdev);
-+
-+	/* Decrease pm refcount when probe is done.*/
-+	pm_runtime_put(&adev->dev);
-+
-+	return 0;
-+}
-+
-+static void __exit tpdm_remove(struct amba_device *adev)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
-+
-+	coresight_unregister(drvdata->csdev);
-+}
-+
-+/*
-+ * Different TPDM has different periph id.
-+ * The difference is 0-7 bits' value. So ignore 0-7 bits.
-+ */
-+static struct amba_id tpdm_ids[] = {
-+	{
-+		.id = 0x000f0e00,
-+		.mask = 0x000fff00,
-+	},
-+	{ 0, 0},
-+};
-+
-+static struct amba_driver tpdm_driver = {
-+	.drv = {
-+		.name   = "coresight-tpdm",
-+		.owner	= THIS_MODULE,
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe          = tpdm_probe,
-+	.id_table	= tpdm_ids,
-+};
-+
-+module_amba_driver(tpdm_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
-diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-new file mode 100644
-index 000000000000..3429fca9f2d7
---- /dev/null
-+++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef _CORESIGHT_CORESIGHT_TPDM_H
-+#define _CORESIGHT_CORESIGHT_TPDM_H
-+
-+/**
-+ * struct tpdm_drvdata - specifics associated to an TPDM component
-+ * @base:       memory mapped base address for this component.
-+ * @dev:        The device entity associated to this component.
-+ * @csdev:      component vitals needed by the framework.
-+ * @lock:       lock for the enable value.
-+ * @enable:     enable status of the component.
-+ * @traceid:    value of the current ID for this component.
-+ */
-+
-+struct tpdm_drvdata {
-+	void __iomem		*base;
-+	struct device		*dev;
-+	struct coresight_device	*csdev;
-+	struct mutex		lock;
-+	bool			enable;
-+};
-+
-+#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
-diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-index 0154b057b965..7614275162f6 100644
---- a/include/linux/coresight.h
-+++ b/include/linux/coresight.h
-@@ -65,6 +65,7 @@ enum coresight_dev_subtype_source {
- 	CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
- 	CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
- 	CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
-+	CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY,
- };
++...
+diff --git a/Documentation/devicetree/bindings/arm/coresight.txt b/Documentation/devicetree/bindings/arm/coresight.txt
+index c68d93a35b6c..f7ce8af48574 100644
+--- a/Documentation/devicetree/bindings/arm/coresight.txt
++++ b/Documentation/devicetree/bindings/arm/coresight.txt
+@@ -52,6 +52,10 @@ its hardware characteristcs.
+ 			"arm,coresight-cti", "arm,primecell";
+ 			See coresight-cti.yaml for full CTI definitions.
  
- enum coresight_dev_subtype_helper {
++		- Trace, Profiling and Diagnostics Monitor (TPDM):
++			"qcom,coresight-tpdm", "arm,primecell";
++			See coresight-tpdm.yaml for full TPDM definitions.
++
+ 	* reg: physical base address and length of the register
+ 	  set(s) of the component.
+ 
+@@ -82,6 +86,9 @@ its hardware characteristcs.
+ * Required properties for Coresight Cross Trigger Interface (CTI)
+ 	See coresight-cti.yaml for full CTI definitions.
+ 
++* Required properties for Trace, Profiling and Diagnostics Monitor (TPDM)
++	See coresight-tpdm.yaml for full TPDM definitions.
++
+ * Required properties for devices that don't show up on the AMBA bus, such as
+   non-configurable replicators and non-configurable funnels:
+ 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c10fbd13080a..7aff7564b8a7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1911,6 +1911,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
+ F:	Documentation/ABI/testing/sysfs-bus-coresight-devices-*
+ F:	Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
+ F:	Documentation/devicetree/bindings/arm/coresight-cti.yaml
++F:	Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+ F:	Documentation/devicetree/bindings/arm/coresight.txt
+ F:	Documentation/devicetree/bindings/arm/ete.yaml
+ F:	Documentation/devicetree/bindings/arm/trbe.yaml
 -- 
 2.17.1
 

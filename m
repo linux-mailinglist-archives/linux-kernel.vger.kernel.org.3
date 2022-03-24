@@ -2,140 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48E24E66EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDA54E66EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351650AbiCXQZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S1351663AbiCXQZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351639AbiCXQZT (ORCPT
+        with ESMTP id S1351651AbiCXQZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:25:19 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1D63D4A8;
-        Thu, 24 Mar 2022 09:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Mpi6o7xeN/Ty9X1JVI6zzFbTtsWQQmcFLPuvEEzpv28=; b=5MDxCKDl5ahia3QE0xFnOqhof3
-        xWkDmQm1KTUQo3bK/ac0g4lDScq9s+idUmSQyKHIM0TbXzSt+q3yQp+atePfuO8JVAIbmGgRzBpSp
-        ayUMw3/ehGCG82LzA1108dkosaZh7gJgc65WHvjUgR2n7qk5g8uKtnOnQq1+wG7kXbow=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nXQFL-00CTiC-TQ; Thu, 24 Mar 2022 17:23:35 +0100
-Date:   Thu, 24 Mar 2022 17:23:35 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
-Message-ID: <YjybB/fseibDU4dT@lunn.ch>
-References: <20220323183419.2278676-1-michael@walle.cc>
- <20220323183419.2278676-5-michael@walle.cc>
- <Yjt99k57mM5PQ8bT@lunn.ch>
- <8304fb3578ee38525a158af768691e75@walle.cc>
- <Yju+SGuZ9aB52ARi@lunn.ch>
- <30012bd8256be3be9977bd15d1486c84@walle.cc>
+        Thu, 24 Mar 2022 12:25:22 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483E03D4A8;
+        Thu, 24 Mar 2022 09:23:49 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1648139027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jlU6JpVYC93QtZ6D2/Ze8QjTZ71IF09IQ/nMKJqg8hc=;
+        b=Dz+/nGu1/jm2+vB4zQIBb+nXE2hZlNTrO17gf+Lf9ZPWIfmxoX4vihNvVMbGxXdtPDE4E7
+        lYaSsRYI4FwNYMrnKL0Q9AnJhmAisTnqXmAn/ACjniKDXU20eF4DP71R5eHHuWmzE924jp
+        4njvGX3E9hG2vnT2mEOR5vDAcrZBfhU=
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30012bd8256be3be9977bd15d1486c84@walle.cc>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH] cgroup: introduce proportional protection on memcg
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+In-Reply-To: <Yjx/3yi7BfH7wLPz@chrisdown.name>
+Date:   Thu, 24 Mar 2022 09:23:44 -0700
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        ke wang <ke.wang@unisoc.com>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Message-Id: <FE4CCCF9-CF08-424B-85D0-B5C1BA63329D@linux.dev>
+References: <Yjx/3yi7BfH7wLPz@chrisdown.name>
+To:     Chris Down <chris@chrisdown.name>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > To some extent, we need to separate finding the device on the bus to
-> > actually using the device. The device might respond to C22, give us
-> > its ID, get the correct driver loaded based on that ID, and the driver
-> > then uses the C45 address space to actually configure the PHY.
-> > 
-> > Then there is the Marvel 10G PHY. It responds to C22, but returns 0
-> > for the ID! There is a special case for this in the code, it then
-> > looks in the C45 space and uses the ID from there, if it finds
-> > something useful.
-> > 
-> > So as i said in my reply to the cover letter, we have two different
-> > state variables:
-> > 
-> > 1) The PHY has the C45 register space.
-> > 
-> > 2) We need to either use C45 transfers, or C45 over C22 transfers to
-> >    access the C45 register space.
-> > 
-> > And we potentially have a chicken/egg problem. The PHY driver knows
-> > 1), but in order to know what driver to load we need the ID registers
-> > from the PHY, or some external hint like DT. We are also currently
-> > only probing C22, or C45, but not C45 over C22. And i'm not sure we
-> > actually can probe C45 over C22 because there are C22 only PHYs which
-> > use those two register for other things. So we are back to the driver
-> > again which does know if C45 over C22 will work.
-> 
-> Isn't it safe to assume that if a PHY implements the indirect
-> registers for c45 in its c22 space that it will also have a valid
-> PHY ID and then the it's driver will be probed?
+It seems like what=E2=80=99s being proposed is an ability to express the pro=
+tection in % of the current usage rather than an absolute number.
+It=E2=80=99s an equivalent for something like a memory (reclaim) priority: e=
+.g. a cgroup with 80% protection is _always_ reclaimed less aggressively tha=
+n one with a 20% protection.
 
-See: https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy_device.c#L895
+That said, I=E2=80=99m not a fan of this idea.
+It might make sense in some reasonable range of usages, but if your workload=
+ is simply leaking memory and growing indefinitely, protecting it seems like=
+ a bad idea. And the first part can be easily achieved using an userspace to=
+ol.
 
-No valid ID in C22 space.
+Thanks!
 
-> So if a PHY is
-> probed as c22 its driver might tell us "wait, it's actually a c45
-> phy and hey for your convenience it also have the indirect registers
-> in c22". We can then set has_c45 and maybe c45_over_c22 (also depending
-> on the bus capabilities).
-
-In general, if the core can do something, it is better than the driver
-doing it. If the core cannot reliably figure it out, then we have to
-leave it to the drivers. It could well be we need the drivers to set
-has_c45. I would prefer that drivers don't touch c45_over_c22 because
-they don't have the knowledge of what the bus is capable of doing. The
-only valid case i can think of is for a very oddball PHY which has C45
-register space, but cannot actually do C45 transfers, and so C45 over
-C22 is the only option.
-
-> > So phydev->has_c45 we can provisionally set if we probed the PHY by
-> > C45. But the driver should also set it if it knows better, or even the
-> > core can set it the first time the driver uses an _mmd API call.
-> 
-> I'm not sure about the _mmd calls, there are PHYs which have MMDs
-> (I guess EEE is an example?) but are not capable of C45 accesses.
-
-Ah, yes, i forgot about EEE. That was a bad idea.
-
-> > phydev->c45_over_c22 we are currently in a bad shape for. We cannot
-> > reliably say the bus master supports C45. If the bus capabilities say
-> > C22 only, we can set phydev->c45_over_c22. If the bus capabilities
-> > list C45, we can set it false. But that only covers a few busses, most
-> > don't have any capabilities set. We can try a C45 access and see if we
-> > get an -EOPNOTSUPP, in which case we can set phydev->c45_over_c22. But
-> > the bus driver could also do the wrong thing, issue a C22 transfer and
-> > give us back rubbish.
-> 
-> First question, what do you think about keeping the is_c45 property but
-> with a different meaning and add use_c45_over_c22. That way it will be
-> less code churn:
-> 
->  * @is_c45:  Set to true if this PHY has clause 45 address space.
->  * @use_c45_over_c22:  Set to true if c45-over-c22 addressing is used.
-
-I prefer to change is_c45. We then get the compiler to help us with
-code review. The build bots will tell us about any code we fail to
-check and change. It will also help anybody with out of tree code
-making use of is_c45.
-
-       Andrew
+> On Mar 24, 2022, at 7:33 AM, Chris Down <chris@chrisdown.name> wrote:
+>=20
+> =EF=BB=BFI'm confused by the aims of this patch. We already have proportio=
+nal reclaim for memory.min and memory.low, and memory.high is already "propo=
+rtional" by its nature to drive memory back down behind the configured thres=
+hold.
+>=20
+> Could you please be more clear about what you're trying to achieve and in w=
+hat way the existing proportional reclaim mechanisms are insufficient for yo=
+u?
+>=20

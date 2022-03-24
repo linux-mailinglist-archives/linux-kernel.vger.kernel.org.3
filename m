@@ -2,218 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4205A4E61ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455324E61EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349577AbiCXKr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S1349571AbiCXKrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346320AbiCXKr2 (ORCPT
+        with ESMTP id S232195AbiCXKrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:47:28 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3B19E9FD;
-        Thu, 24 Mar 2022 03:45:56 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22O8jmR4018508;
-        Thu, 24 Mar 2022 10:45:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=lwM3JRLAyOXwJtXxc4l1HgCABPhoLC8S95YtJ9eOcFg=;
- b=tYmDmZ4LYvJLU0z+4uI93Xrgs9PQDQGtfIWHtjPExD2tgHqjWC4tuEPd0gXfCHbHtcvK
- R046WcOV5c04tokT3XBt2Xz/7gAlryfS9mt3wogT+H3n9LYVT/coL/rfocrbVewZcdzy
- Z2Kc9dhO3yFTMK2gwuFaS1eT7grztfqjweYqKDMKFhKfl5oDvdiUIS3cTnKDpFZVfREz
- QQKrPyxSwECV7Brq8JQuF0ewHey64KtBoS+eO2EYZ872TT0am9qcAtz3XpXaVp6G+foJ
- VTnTl5OBls/995yfPdfPR51IBsBzZ9DDVoc1xx7tPEQmNo1gGa+mvVz+DjigViyJ7GXX CA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ew6ssc1a1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Mar 2022 10:45:50 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22OAeVU4189460;
-        Thu, 24 Mar 2022 10:45:49 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
-        by aserp3020.oracle.com with ESMTP id 3ew701r610-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Mar 2022 10:45:49 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=biVFWASuw2J/VLgi52iLfG7CeXX4XQ4bsaWzZHmPXx8LrfOC8onBRIj9NAqo1YECYopadcrgeWNsb/F824XsT4p9FcFGN9b3i0y3WZejdNfBPMwoK0wN1ZQyO38LYdLDkg+ryQ5hF8At/a47bAKC6YW3wj4npO5vAz3gyNXvRGU6zacHRKgOSZl5s1YUOWCKO+DSK2gwsqqzVT7cSmzO6imgdJHQV0LrrM7Sa0Fdw/6gcEqE0+3snQYIw0O6NOq9wt4jSH4zJNmuN1LV9eC8TQhcQ3HuEHyONvGjkcWDkegBGKWyG1C2ug4b2hAA1goatkt88IhS14Lo7dNC57VnSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lwM3JRLAyOXwJtXxc4l1HgCABPhoLC8S95YtJ9eOcFg=;
- b=L+7GK7E4StaJgHaffCho/0G4yp7H+CS9hhehv8z8mAczDLM2HLu5SEw1dEj7FC/zLF2i0brb+s0yCMex56h7KlLkaGq0IzeG4QZMou8pRRSVf+3fGYyHjawZbNH0JQf9yJxgJXepEMF2H1M3Nlx3tlgoA/T87ozZGQjbdu2T3NxWw4wFumI7jnFTbyx9LcuaqBs9Eq0hrAcK8KAwxR7VPbNOX36p+oZuDqbpqMFQEzQbjGhwAlMYO7Eyeu9HPep6dxHHpbikeNl93HjpTQnHn19E+lpDEC+r+vN5gJ1d6AF2HQfbd4R++PfmECNWnL5217iZjhCcAh7l39NGX8NhlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 24 Mar 2022 06:47:00 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1A02183F;
+        Thu, 24 Mar 2022 03:45:28 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z92so5092232ede.13;
+        Thu, 24 Mar 2022 03:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lwM3JRLAyOXwJtXxc4l1HgCABPhoLC8S95YtJ9eOcFg=;
- b=I/N47g+kU/E7ALxBpv16ilnbJc31CLZZ32DQAlAfqmmPCXOE3BnOqb0chsG63guFwzfAIV5xSl+DB3w8ZKXo/xjIiQ8gG32gplzobdKP8X4EHledGo3AqjyAnQNtO+QLy9bSkur2QYPJQ73Bttz3Xoou0QOWK2mAmtPgJjtksyo=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CH2PR10MB3782.namprd10.prod.outlook.com
- (2603:10b6:610:10::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Thu, 24 Mar
- 2022 10:45:47 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::d4e7:ee60:f060:e20c]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::d4e7:ee60:f060:e20c%7]) with mapi id 15.20.5081.023; Thu, 24 Mar 2022
- 10:45:46 +0000
-Date:   Thu, 24 Mar 2022 13:45:22 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-kernel@vger.kernel.org, xfs <linux-xfs@vger.kernel.org>
-Subject: Re: [kbuild] [djwong-xfs:djwong-wtf 349/351]
- fs/xfs/xfs_bmap_util.c:1372 xfs_map_free_extent() warn: missing error code
- 'error'
-Message-ID: <20220324104521.GF12805@kadam>
-References: <202203190831.AYu7l0vX-lkp@intel.com>
- <20220321215908.GL8241@magnolia>
- <20220322054726.GR336@kadam>
- <20220322163827.GQ8241@magnolia>
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=biC8XxjFBFJRBfbkCPR5EBa1a0P/0ynYveve2Ep0qV0=;
+        b=BKGYyvWHbcDloPXiM3TtjomUTbLfpzjijDz1CUSMhMaYPyoP3DDsynib8PvwvPKHyt
+         UNTv8XB05nqKaIIDHAerB8rsXwEmvE45ceAmjFYSCPNMnbHpaO48y5GDYPMePNhwX7lI
+         o5i9CI9lzs9jgCla3yX2ocXiX3gd7WuwDyWckIcQvoyHdydpOnKFjBshnTUd99XAJDyf
+         Wc5uHrsmTJrU95KUMR8lNley0KngxodcMNKaFD1LVESWQ3WOBRNG5O9XlgkU86e+//wk
+         PWN0ceFjeybY9GZkCcozPZa/5tp33JxdM7twsyvYqQHqKVAbeyCMUSIC27iR3Rf5LmzZ
+         YCcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=biC8XxjFBFJRBfbkCPR5EBa1a0P/0ynYveve2Ep0qV0=;
+        b=NP1XewJMMgrqIkWRIgbPkkDCxkxQqJXAxaS8c0+OuoFJM3PLOqak/6iQIUDgv6xbJx
+         juKLLbS92qH6MsSrb2ZFlra06NLt7ZdOMwNL2/0LJIZgJUGJL8GJinSTlSH1ZDGsNnYI
+         3J7YTG3E5lJH3QQf6olKrk2Lb7c9B6hRLwctpbHczsplgyOL7vGp7uoAxDMjEgQDkDq9
+         Eehhf6nFqsaHWlrdRHuZSFAmj9LaVYLp3Ve5+83z7vbegryxxKYdnL9n4R/+d6QW/S2D
+         UD5me58NyRXI5FHq9ADavUGwPR5GvrQFrep23+X8OhlozD0m1CHWvSF9V6hVRZj7cN8R
+         Su1g==
+X-Gm-Message-State: AOAM530ghnJ3td4EXCKT+yjSYBqNZmyyW4IiAymkLwGrq/5w3gr5ObyG
+        GQvZoY6UuyEbgBlwvHN3Fa0=
+X-Google-Smtp-Source: ABdhPJxFxnDREh0n5f0+pNhgYiDN9+Ajv4H6dyWMHZPH1qTkzrd6lQMnJ1PAQ0M8xc8YrN7oALPptg==
+X-Received: by 2002:a50:c099:0:b0:415:f5c7:700e with SMTP id k25-20020a50c099000000b00415f5c7700emr5791631edf.205.1648118726677;
+        Thu, 24 Mar 2022 03:45:26 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id 22-20020a17090600d600b006dfbc46efabsm981075eji.126.2022.03.24.03.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 03:45:25 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 12:45:24 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [net-next PATCH 1/4] drivers: net: dsa: qca8k: drop MTU tracking
+ from qca8k_priv
+Message-ID: <20220324104524.ou7jyqcbfj3fhpvo@skbuf>
+References: <20220322014506.27872-1-ansuelsmth@gmail.com>
+ <20220322014506.27872-2-ansuelsmth@gmail.com>
+ <20220322115812.mwue2iu2xxrmknxg@skbuf>
+ <YjnRQNg/Do0SwNq/@Ansuel-xps.localdomain>
+ <20220322135535.au5d2n7hcu4mfdxr@skbuf>
+ <YjnXOF2TZ7o8Zy2P@Ansuel-xps.localdomain>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220322163827.GQ8241@magnolia>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNXP275CA0048.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::36)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 87b7ae28-22ec-4c4b-5b4e-08da0d8373e0
-X-MS-TrafficTypeDiagnostic: CH2PR10MB3782:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR10MB3782B1A2C6CE551878C0DF4C8E199@CH2PR10MB3782.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IOEGckaDRj5saa4pxqRx6P3lyYcm101eVBhG9GMH2bK63JsoVgqOlUGn+F45PBktyorqMXO4IgqPi1u8P+Ucf4Gdi3RNC+2mNyC2fD21QiHDKQbpsgCEuTeqet1BH10ycL6+AnZ9IDxURi87i52DKK9l7WVEj+JDHvCIvLnVtOHswiBohC97zPtnKLGSUmqjZVN/dhw5LmnrPi/vE4V2VRmFviqEAQFcsNb/NCSsQAkJunsNoMbCWOdffY5Vq5n287cOkT0Zt+RqBoI1POZGikR5Yfs7Gv7g9Br9vw6vX4qyqkNzsEYJetiXSmnKAgcznCb/JMZXDebKGAzynSWxrgcXy85SvFmeva9y1bGu+CGDpJjJsv+/xEopLOtvRqs1SrrJgj4e5R88stGfUY9U3yiL4TyHqqg24n77lF8gqhw+s9zVd8Ic8UNUGBO/YPflFfmNJ6ZudgUPjuSPtfEYjKwN6qZnIcvJBdG2skYIiFlWUqDDPJPp+ZtqqKYOWJVbBf+VUmRk2Cl3bp+3n0+xVmuBvYsh5Ot80Ah5Pbo2WQtHiB3XG5lUXiqnt80WRWcYb2h/9mMehmN2+97fo56R4gALde1dgZCEnh49ScOAo2IN6Nzg2swYPxu180lHUIYqX+JmOxtYFAUrLB6E/wydvx2nzI/iOJtOZ8b689cG/HGPy7ypfyCMJ+0kd1+DNPJeo829oyiF2MYT+AOj9ZTBQg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(38100700002)(44832011)(33716001)(8936002)(38350700002)(6916009)(5660300002)(83380400001)(54906003)(33656002)(508600001)(6486002)(2906002)(6512007)(6666004)(86362001)(6506007)(9686003)(186003)(1076003)(26005)(316002)(66556008)(66946007)(8676002)(4326008)(66476007)(52116002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7SJ9S3PWYvwAsy5cgrwHXBsKLPm3h6XkwbtAAxt/MYH2WjgH95tt9+dP8d5p?=
- =?us-ascii?Q?xXBLLNiyPG1lGfDingcUxALfu49dfL7ac7eetGZc+zxJ1JuPaYmgYyzbzzJC?=
- =?us-ascii?Q?PDqVHUJi/J7BcVVUUPGXaEgvsVIKWck67oZ4Uio8TC3GblrWULuzWWJB7pDM?=
- =?us-ascii?Q?Gimqv+wqkbKY4pZtt2lRjEGSyY9NsldVjlfeq81Z08+j7YxMAgkHRBFAIxqT?=
- =?us-ascii?Q?XoCQmEARchNATJ5ilh9Y0FY7U2Z/hxKX3NzN5sg08LdWsBEHa+7yR1j+uke+?=
- =?us-ascii?Q?PcR/NssO9OaG443ySrSLxuND2g9xaCQu12nYbLpAD41Gd9fIlYqch5RwtWze?=
- =?us-ascii?Q?X41RKxklMoso6lcrfhQlFAjC1ZXsZlUXauFpsnZjYIpiTeNKkoo63ZyWOCZ6?=
- =?us-ascii?Q?VE2Xk9JwfI7RjdsO/TenblctJ+S0RKZncoMCPrcaIHAX0ljfoV5jt+DSfAkF?=
- =?us-ascii?Q?uZTkUfxuvIeuIRK1T2ijxs0iQdj8T+Nkz6GPlu6yOnqqnZfQZXp9JaKo0HlC?=
- =?us-ascii?Q?biF/SPAQYDq6HkybvlEmUtC8violtHF4hmLEsplzwN7nFsYOE9h62hXxQcrw?=
- =?us-ascii?Q?tdTcyp1N36ipDLt7MvcPPqNNAsnrLXJUSzk8LDaZwshBpEcWZNTg/pDu9zlw?=
- =?us-ascii?Q?rBpuDld6EMTsH7/jULO7SMdW7fdoIVTwsKZrEcCPdllR2h/cumNRWA9o+GmZ?=
- =?us-ascii?Q?oxI9qIDWD34/V+PnoxaZMcbHp1kj2ftc2ZyiVj9XaD3tI0RW3LBqsZ/Rj18Z?=
- =?us-ascii?Q?MwnaZ1Gbok2iNzVCe+aF88i8Yz4mp9vGKd7nqGBgHA37vMwxY85bYVdqxI1Q?=
- =?us-ascii?Q?4Oaxx98BEHwgv9CGeyPnPil8CSRQbdYGACOLskuuAcsBR3IRpLdX03GWjkJQ?=
- =?us-ascii?Q?pXrLtdbeFua9Cu9P9bmvoxqTuTcZsW2ZMpRUh4kAtQwxJ8i8zgoLeyOfPs3t?=
- =?us-ascii?Q?g3HDQptR5K7Lcu760+zBPVQ9YVJc/4gFReaBnMIwNvGe7EOEvrgWZshJTur1?=
- =?us-ascii?Q?a0mrgDBpcl2KhY8Pva4LgDGkkvKRETqrz33DFKTuYEv0N54oXAnB0lYbnEHk?=
- =?us-ascii?Q?deeWiNVKjUFgNR+O4H4W14ox6be+UCjp2lSudfqPM05jDcn0abWYyERT46hQ?=
- =?us-ascii?Q?gW8AXk0VQMOoMI8D8UF3Db00KInkUP6cLd7dmjbJc8Y7HG4xSSQ27B0zUZv2?=
- =?us-ascii?Q?PKyOzo0RHaaaanuh69XdIcLABBkJImDwtZcoUl4d8joYGror4vdVY7eW6gjo?=
- =?us-ascii?Q?oQQmTTQkyzo4RsxZtI3QuuEE+CdOLovIwQbBNPMFpSd/IhVZGeq03WowT+Rq?=
- =?us-ascii?Q?MBYAGYXfA8llhH9XMaZ3/VGdak2b55Hrrf4z16yPohfJaPL+dLT+M0cD7tXc?=
- =?us-ascii?Q?ZUT1c4JrWM74WRG4YYAuY5LIYMIodwh6gIbxe4o8ktMQlm+LZ8MJHQVWjeo7?=
- =?us-ascii?Q?3azL7Fq90NlDnk1JCv4lYG4YMrAUWDjuSD7DWMSDJCeY2OGvLXiqkw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87b7ae28-22ec-4c4b-5b4e-08da0d8373e0
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2022 10:45:46.4493
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MmRT2rTvikxIb06zD7Pd5Lt4ZoltuHr0VVjfgMwHGof9OCCGCM2kLsLUrWtGgm5bSFgIkmpK5ezFzNyJGFPuCJVXLufF2KWuIcxDhwljjVY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB3782
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10295 signatures=694973
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=857 bulkscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203240062
-X-Proofpoint-ORIG-GUID: 9085oreK4-7RJnSWNk0sPP8ZZP21HJPE
-X-Proofpoint-GUID: 9085oreK4-7RJnSWNk0sPP8ZZP21HJPE
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YjnXOF2TZ7o8Zy2P@Ansuel-xps.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 09:38:27AM -0700, Darrick J. Wong wrote:
-> On Tue, Mar 22, 2022 at 08:47:26AM +0300, Dan Carpenter wrote:
-> > On Mon, Mar 21, 2022 at 02:59:08PM -0700, Darrick J. Wong wrote:
-> > > On Mon, Mar 21, 2022 at 10:33:02AM +0300, Dan Carpenter wrote:
-> > > > b82670045aab66 Darrick J. Wong 2022-01-06  1365  
-> > > > b82670045aab66 Darrick J. Wong 2022-01-06  1366  	error = xfs_alloc_find_freesp(tp, pag, cursor, end_agbno, &len);
-> > > > b82670045aab66 Darrick J. Wong 2022-01-06  1367  	if (error)
-> > > > b82670045aab66 Darrick J. Wong 2022-01-06  1368  		goto out_cancel;
-> > > > b82670045aab66 Darrick J. Wong 2022-01-06  1369  
-> > > > b82670045aab66 Darrick J. Wong 2022-01-06  1370  	/* Bail out if the cursor is beyond what we asked for. */
-> > > > b82670045aab66 Darrick J. Wong 2022-01-06  1371  	if (*cursor >= end_agbno)
-> > > > b82670045aab66 Darrick J. Wong 2022-01-06 @1372  		goto out_cancel;
+On Tue, Mar 22, 2022 at 03:03:36PM +0100, Ansuel Smith wrote:
+> On Tue, Mar 22, 2022 at 03:55:35PM +0200, Vladimir Oltean wrote:
+> > On Tue, Mar 22, 2022 at 02:38:08PM +0100, Ansuel Smith wrote:
+> > > On Tue, Mar 22, 2022 at 01:58:12PM +0200, Vladimir Oltean wrote:
+> > > > On Tue, Mar 22, 2022 at 02:45:03AM +0100, Ansuel Smith wrote:
+> > > > > Drop the MTU array from qca8k_priv and use slave net dev to get the max
+> > > > > MTU across all user port. CPU port can be skipped as DSA already make
+> > > > > sure CPU port are set to the max MTU across all ports.
+> > > > > 
+> > > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > > > ---
 > > > > 
-> > > > This looks like it should have an error = -EINVAL;
+> > > > I hardly find this to be an improvement and I would rather not see such
+> > > > unjustified complexity in a device driver. What are the concrete
+> > > > benefits, size wise?
+> > > >
 > > > 
-> > > Nope.  If xfs_alloc_find_freesp moves @cursor goes beyond end_agbno, we
-> > > want to exit early so that the xfs_map_free_extent caller will return to
-> > > userspace.
-> > > 
-> > > --D
+> > > The main idea here is, if the value is already present and accessible,
+> > > why should we duplicate it? Tracking the MTU in this custom way already
+> > > caused some bugs (check the comment i'm removing). We both use standard
+> > > way to track ports MTU and we save some additional space. At the cost of
+> > > 2 additional checks are are not that much of a problem.
 > > 
-> > I'm generally pretty happy with this static checker rule.  Returning
-> > success on a failure path almost always results if something bad like a
-> > NULL deref or a use after free.  But false positives are a real risk
-> > because it's tempting to add an error code to this and introduce a bug.
+> > Where is the bug?
+> 
+> There was a bug where we tracked the MTU with the FCS and L2 added and
+> then in the change_mtu code we added another time the FCS and L2 header
+> just because we used this custom way and nobody notice that we were adding
+> 2 times the same headers. (it's now fixed but still it's a reason why
+> using standard way to track MTU would have prevented that)
+
+No, I'm sorry, this is completely unjustified complexity - not to
+mention it's buggy, too. Does qca8k support cascaded setups? Because if
+it does:
+
+	/* We have only have a general MTU setting. So check
+	 * every port and set the max across all port.
+	 */
+	list_for_each_entry(dp, &ds->dst->ports, list) {
+		/* We can ignore cpu port, DSA will itself chose
+		 * the max MTU across all port
+		 */
+		if (!dsa_port_is_user(dp))
+			continue;
+
+		if (dp->index == port)	// <- this will exclude from the max MTU calculation the ports in other switches that are numerically equal to @port.
+			continue;
+
+		/* Address init phase where not every port have
+		 * a slave device
+		 */
+		if (!dp->slave)
+			continue;
+
+		if (mtu < dp->slave->mtu)
+			mtu = dp->slave->mtu;
+	}
+
+Not to mention it's missing the blatantly obvious. DSA calls
+->port_change_mtu() on the CPU port with the max MTU, every time that
+changes.
+
+You need the max MTU.
+
+Why calculate it again? Why don't you do what mt7530 does, which has a
+similar restriction, and just program the hardware when the CPU port MTU
+is updated?
+
+You may think - does this work with multiple CPU ports? Well, yes it
+does, since DSA calculates the largest MTU across the entire tree, and
+not just across the user ports affine to a certain CPU port.
+
+If it wasn't for this possibility, I would have been in favor of
+introducing a dsa_tree_largest_mtu(dst) helper in the DSA core, but I
+can't find it justifiable.
+
+> > > Also from this I discovered that (at least on ipq806x that use stmmac)
+> > > when master needs to change MTU, stmmac complains that the interface is
+> > > up and it must be put down. Wonder if that's common across other drivers
+> > > or it's only specific to stmmac.
 > > 
-> > Smatch will not print the warning if error is set within 4 lines of the
-> > goto.
-> > 	error = 0;
-> > 	if (*cursor >= end_agbno)
-> > 		goto out_cancel;
+> > I never had the pleasure of dealing with such DSA masters. I wonder why
+> > can't stmmac_change_mtu() check if netif_running(), call dev_close and
+> > set a bool, and at the end, if the bool was set, call dev_open back?
 > 
-> The trouble is, if I do that:
+> Oh ok so it's not standard that stmmac_change_mtu() just refuse to
+> change the MTU instead of put the interface down, change MTU and reopen
+> it... Fun stuff...
 > 
-> 	error = xfs_alloc_find_freesp(...);
-> 	if (error)
-> 		goto out_cancel;
+> From system side to change MTU to a new value (so lower MTU on any port
+> or set MTU to a higher value for one pot) I have to:
+> 1. ifconfig eth0 down
+> 2. ifconfig lan1 mtu 1600 up
+> 3. ifconfig eth up
 > 
-> 	error = 0;
-> 	if (*cursor >= end_agbno)
-> 		goto out_cancel;
-> 
-> then I'll get patch reviewers and/or tools complaining about setting
-> error to zero unnecessarily.
+> If I just ifconfig lan1 mtu 1600 up it's just rejected with stmmac
+> complaining.
 
-Currently nothing would complain.  What causes complaints if the
-assignments are not used.  Places where we assign a value and then
-immediately re-assign over it.
+Not sure if there is any hard line on this. But I made a poll, and the
+crushing majority of drivers in drivers/net/ethernet/ do not require
+!netif_running() in ndo_change_mtu. The ones that do are:
 
-It would only take a few minutes to write a checker rule which would
-complain about assigning "ret = 0;" if we already know that foo was
-zero, but hopefully no one will write it.
+nixge
+macb
+altera tse
+axienet
+renesas sh
+ksz884x
+bcm63xx_enet
+sundance
+stmmac
 
-The closest is that Christophe JAILLET has a script to remove
-duplicative memset()s to zero.
+(compared to more than 100 that don't, and even have a dedicated code
+path for live changes)
 
-> Either way we end up with a lot of code
-> golf for something the compiler will probably remove for us.
-> 
-> Question: Can sparse detect that the if() test involves a comparison
-> between a non-pointer function argument and a dereferenced pointer
-> argument?  Would that be sufficient to detect functions that advance a
-> cursor passed in by the caller and return early when the cursor moves
-> outside of a range also specified by the caller?
+By the way, an an interesting aside - I've found the xgene, atl1c and
+xgmac drivers to be obviously odd (meaning that more drivers might be
+odd in the same way, but in more subtle ways I haven't noticed):
+when netif_running() is false, they simply return 0, but they don't
+change dev->mtu either, they just ignore the request.
 
-This is a Smatch test (not Sparse).  Smatch doesn't have code to
-detect/describe that right now...  I'm not sure if the heuristic is very
-useful.  I will look at future false positives and see if it applies.
-
-regards,
-dan carpenter
+So on one hand you have drivers that _want_ to be down to change the
+MTU, and on the other you have drivers that silently ignore MTU changes
+when they're down. Hard for DSA to do something reasonable to handle
+both cases...

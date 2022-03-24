@@ -2,135 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBEF4E679E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 996F94E6785
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352205AbiCXRTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S1352140AbiCXROc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350786AbiCXRTq (ORCPT
+        with ESMTP id S239179AbiCXROb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:19:46 -0400
-X-Greylist: delayed 585 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 10:18:14 PDT
-Received: from 1.mo576.mail-out.ovh.net (1.mo576.mail-out.ovh.net [178.33.251.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0F5DF2D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:18:12 -0700 (PDT)
-Received: from player728.ha.ovh.net (unknown [10.111.172.229])
-        by mo576.mail-out.ovh.net (Postfix) with ESMTP id C46432501C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:12:15 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player728.ha.ovh.net (Postfix) with ESMTPSA id 4F1F928AEF1BE;
-        Thu, 24 Mar 2022 17:12:11 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-102R00476d4bff7-adb1-4465-b39a-27e7b6ccfe9d,
-                    78FFD8E4238D9337B8F0C8EEA79873C5FE5514E5) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Corey Minyard <minyard@acm.org>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] ipmi: use simple i2c probe function
-Date:   Thu, 24 Mar 2022 18:11:59 +0100
-Message-Id: <20220324171159.544565-1-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
+        Thu, 24 Mar 2022 13:14:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A03CB1889;
+        Thu, 24 Mar 2022 10:12:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3545E6198C;
+        Thu, 24 Mar 2022 17:12:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30762C340EC;
+        Thu, 24 Mar 2022 17:12:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648141978;
+        bh=tjBA4TpVMWUci3qwG39vCc+WacEs0bnKcqEXkAKHzvg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=EwfSKjQRK47UJiLv8QWb6GjAWCsRGsYLeL5M655cgAm3vkBH4Q+okaFDI03fCwFzI
+         qvUS0GdrTISyj7HZdptQOc3tKnMeaDbph7+CHOF7Sdgr4d23x3rjir5qwSAb6xlO2x
+         kvBLneIFcZMZD/MSpLD5ZqaMxPjMYys2Jntp+/xvNQRji6RrYSZGzwI1EAhWEW4NQ+
+         Uq31ABBc92Wzbrqx7xLRVaRgNJG5fQNeTxntYlIl2o/Rq3z8ffbgDE+33TxtUeg9PG
+         cYWUQ0B5pz2A6KwJ2DlTL5XnJtv4cQAIcVzmUM62YHVvZm8F4f9pImo8r/vmUwB3nO
+         Ys5uxfgHfu30A==
+Date:   Thu, 24 Mar 2022 12:12:56 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] PCI: mvebu: Slot support
+Message-ID: <20220324171256.GA1459996@bhelgaas>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 11992804335307884166
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudegledgleegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejvdekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220321182908.3q4s2ramvhfdpgab@pali>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2c probe functions here don't use the id information provided in
-their second argument, so the single-parameter i2c probe function
-("probe_new") can be used instead.
+On Mon, Mar 21, 2022 at 07:29:08PM +0100, Pali Rohár wrote:
+> PING?
 
-This avoids scanning the identifier tables during probes.
+Sorry, my fault.  I reviewed v1 of this patch, so obviously Lorenzo
+would wait for me to chime in here.
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- drivers/char/ipmi/ipmb_dev_int.c | 5 ++---
- drivers/char/ipmi/ipmi_ipmb.c    | 5 ++---
- drivers/char/ipmi/ipmi_ssif.c    | 4 ++--
- 3 files changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/char/ipmi/ipmb_dev_int.c b/drivers/char/ipmi/ipmb_dev_int.c
-index 49b8f22fdcf0..db40037eb347 100644
---- a/drivers/char/ipmi/ipmb_dev_int.c
-+++ b/drivers/char/ipmi/ipmb_dev_int.c
-@@ -299,8 +299,7 @@ static int ipmb_slave_cb(struct i2c_client *client,
- 	return 0;
- }
- 
--static int ipmb_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int ipmb_probe(struct i2c_client *client)
- {
- 	struct ipmb_dev *ipmb_dev;
- 	int ret;
-@@ -369,7 +368,7 @@ static struct i2c_driver ipmb_driver = {
- 		.name = "ipmb-dev",
- 		.acpi_match_table = ACPI_PTR(acpi_ipmb_id),
- 	},
--	.probe = ipmb_probe,
-+	.probe_new = ipmb_probe,
- 	.remove = ipmb_remove,
- 	.id_table = ipmb_id,
- };
-diff --git a/drivers/char/ipmi/ipmi_ipmb.c b/drivers/char/ipmi/ipmi_ipmb.c
-index ba0c2d2c6bbe..845387d17efb 100644
---- a/drivers/char/ipmi/ipmi_ipmb.c
-+++ b/drivers/char/ipmi/ipmi_ipmb.c
-@@ -436,8 +436,7 @@ static int ipmi_ipmb_remove(struct i2c_client *client)
- 	return 0;
- }
- 
--static int ipmi_ipmb_probe(struct i2c_client *client,
--			   const struct i2c_device_id *id)
-+static int ipmi_ipmb_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct ipmi_ipmb_dev *iidev;
-@@ -528,7 +527,7 @@ static struct i2c_driver ipmi_ipmb_driver = {
- 		.name = DEVICE_NAME,
- 		.of_match_table = of_ipmi_ipmb_match,
- 	},
--	.probe		= ipmi_ipmb_probe,
-+	.probe_new	= ipmi_ipmb_probe,
- 	.remove		= ipmi_ipmb_remove,
- 	.id_table	= ipmi_ipmb_id,
- };
-diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
-index 48aab77abebf..9fa8755bbb6a 100644
---- a/drivers/char/ipmi/ipmi_ssif.c
-+++ b/drivers/char/ipmi/ipmi_ssif.c
-@@ -1619,7 +1619,7 @@ static int ssif_check_and_remove(struct i2c_client *client,
- 	return 0;
- }
- 
--static int ssif_probe(struct i2c_client *client, const struct i2c_device_id *id)
-+static int ssif_probe(struct i2c_client *client)
- {
- 	unsigned char     msg[3];
- 	unsigned char     *resp;
-@@ -2037,7 +2037,7 @@ static struct i2c_driver ssif_i2c_driver = {
- 	.driver		= {
- 		.name			= DEVICE_NAME
- 	},
--	.probe		= ssif_probe,
-+	.probe_new	= ssif_probe,
- 	.remove		= ssif_remove,
- 	.alert		= ssif_alert,
- 	.id_table	= ssif_id,
--- 
-2.27.0
-
+> On Tuesday 08 March 2022 12:38:31 Pali Rohár wrote:
+> > Hello Bjorn! Could you look if v2 changes are now fine?
+> > 
+> > On Wednesday 02 March 2022 15:57:29 Pali Rohár wrote:
+> > > This patch series add slot support to pci-mvebu.c driver.
+> > > 
+> > > It is based on branch pci/mvebu of git repository:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
+> > > 
+> > > Changes in v2:
+> > > * Dropped patch with PCI_EXP_SLTCAP_*_SHIFT macros as it is not needed anymore
+> > > * Dropped patch "ARM: dts: turris-omnia: Set PCIe slot-power-limit-milliwatt properties" which was applied
+> > > * Added support for PCIe 6.0 slot power limit encodings
+> > > * Round down slot power limit value
+> > > * Fix handling of slot power limit with scale x1.0 (0x00 value)
+> > > * Use FIELD_PREP instead of _SHIFT macros
+> > > * Changed commit message to Bjorn's suggestion
+> > > * Changed comments in the code to match PCIe spec
+> > > * Preserve user settings of PCI_EXP_SLTCTL_ASPL_DISABLE bit
+> > > 
+> > > Pali Rohár (4):
+> > >   PCI: Add PCI_EXP_SLTCTL_ASPL_DISABLE macro
+> > >   dt-bindings: Add 'slot-power-limit-milliwatt' PCIe port property
+> > >   PCI: Add function for parsing 'slot-power-limit-milliwatt' DT property
+> > >   PCI: mvebu: Add support for sending Set_Slot_Power_Limit message
+> > > 
+> > >  Documentation/devicetree/bindings/pci/pci.txt |  6 ++
+> > >  drivers/pci/controller/pci-mvebu.c            | 96 ++++++++++++++++++-
+> > >  drivers/pci/of.c                              | 64 +++++++++++++
+> > >  drivers/pci/pci.h                             | 15 +++
+> > >  include/uapi/linux/pci_regs.h                 |  1 +
+> > >  5 files changed, 177 insertions(+), 5 deletions(-)
+> > > 
+> > > -- 
+> > > 2.20.1
+> > > 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

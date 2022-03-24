@@ -2,126 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7F24E6212
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8DC4E6217
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349647AbiCXLGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S1349642AbiCXLHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242588AbiCXLGs (ORCPT
+        with ESMTP id S1347198AbiCXLHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:06:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B0615BD0E;
-        Thu, 24 Mar 2022 04:05:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3FD11515;
-        Thu, 24 Mar 2022 04:05:16 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E8DC3F73D;
-        Thu, 24 Mar 2022 04:05:13 -0700 (PDT)
-Message-ID: <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com>
-Date:   Thu, 24 Mar 2022 11:05:08 +0000
+        Thu, 24 Mar 2022 07:07:43 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B989A9BA
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:06:11 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id s8so3703077pfk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :in-reply-to;
+        bh=nfj33Z1hktxCveFcrncNdeDrZFsHaZSKxlrG2enCzhs=;
+        b=mFOzrh1axEwQuzE2GV7dILxkSQgWZSfAQT60rT8MNVqC0HoIz7RpNrzcm0OnMeZhF6
+         o2lvwUA+E6XQP2dyHjMAD5QvtNwm4zvXSRlI5aHTwMigKPWyh/FlTIg0T/Ux2FZnrF40
+         YO5xCSrfV9X3fWvWcHw7v72sWd3wBcvpXO7hyx9wK6u1x5hcOdGQ1QW100p/7zFUtvcm
+         PvMF1Rwjf9iPdfFqq5KpXOQk4hxU4NKAIA+7WrBpqfasIhkbegC4v3+MhcyVuHHW7I+E
+         qF1C/fYhPGp0gZepDLQgiaT+pxg/XYBmTELmqRusvkOr9Wt2I7K29Ke90I7jLDD87HLr
+         QKGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=nfj33Z1hktxCveFcrncNdeDrZFsHaZSKxlrG2enCzhs=;
+        b=5bQBEB4frs7G9Upq7CXUTXHCfRr2qHiqA4S1O8OgjlxwasKuA8ksiGZdmJKvNksf9x
+         59mGKzhmTzJ+OPB7Ib/mZlLuzb4tuTEuta+lM1hEyhAX2PrcSvgGstILhl5tbSVYV6tP
+         7WBxP0/7TpSzNF1hzo/KMZFhZGiZ+D3ExjqAVvLcD3obz6gvX/ls3GIG/WHT40pSDBm7
+         9opceB8T/RcaqvwP0RAKOC5aXLC5h+pL23XpAraZiJmDMX5+2j0DSPTdiPzgxe/3PITn
+         bIOV6MAXBLwqzEzw0Y9oGIMLwLnvCKfUMYwxs9O3/xullMTlZg2+SyvrVPspJpeDeMCk
+         vO+g==
+X-Gm-Message-State: AOAM532RgdO2R7p10EUqJnMugOJ7btoPTcIoC+OYhdnppLjGRDYgSq7O
+        PqquxdMlr7bhF2SoKEmhF2BTIb0Grmo=
+X-Google-Smtp-Source: ABdhPJwXczoeV5tsZAaiZHkZgYJgmG+n/zkaAI/QS5VhUeAxcUXHTDna6Qh9Qah8aQuS7w+duKJLLg==
+X-Received: by 2002:a05:6a00:2485:b0:4f7:37cd:d040 with SMTP id c5-20020a056a00248500b004f737cdd040mr4751618pfv.55.1648119971193;
+        Thu, 24 Mar 2022 04:06:11 -0700 (PDT)
+Received: from odroid ([114.29.23.97])
+        by smtp.gmail.com with ESMTPSA id u126-20020a637984000000b0038147b4f53esm2294799pgc.93.2022.03.24.04.06.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 04:06:10 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 11:06:03 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 01/15] mm/slab: cleanup slab_alloc() and
+ slab_alloc_node()
+Message-ID: <20220324110603.GA2112827@odroid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-Content-Language: en-GB
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-References: <1812355.tdWV9SEqCh@natalenko.name>
- <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <4386660.LvFx2qVVIh@natalenko.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5833607a-4444-206d-db4f-9f958653c5b0@suse.cz>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-24 10:25, Oleksandr Natalenko wrote:
-> Hello.
-> 
-> On čtvrtek 24. března 2022 6:57:32 CET Christoph Hellwig wrote:
->> On Wed, Mar 23, 2022 at 08:54:08PM +0000, Robin Murphy wrote:
->>> I'll admit I still never quite grasped the reason for also adding the
->>> override to swiotlb_sync_single_for_device() in aa6f8dcbab47, but I think
->>> by that point we were increasingly tired and confused and starting to
->>> second-guess ourselves (well, I was, at least). I don't think it's wrong
->>> per se, but as I said I do think it can bite anyone who's been doing
->>> dma_sync_*() wrong but getting away with it until now. If ddbd89deb7d3
->>> alone turns out to work OK then I'd be inclined to try a partial revert of
->>> just that one hunk.
->>
->> Agreed.  Let's try that first.
->>
->> Oleksandr, can you try the patch below:
->>
->>
->> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
->> index 6db1c475ec827..6c350555e5a1c 100644
->> --- a/kernel/dma/swiotlb.c
->> +++ b/kernel/dma/swiotlb.c
->> @@ -701,13 +701,10 @@ void swiotlb_tbl_unmap_single(struct device *dev, phys_addr_t tlb_addr,
->>   void swiotlb_sync_single_for_device(struct device *dev, phys_addr_t tlb_addr,
->>   		size_t size, enum dma_data_direction dir)
->>   {
->> -	/*
->> -	 * Unconditional bounce is necessary to avoid corruption on
->> -	 * sync_*_for_cpu or dma_ummap_* when the device didn't overwrite
->> -	 * the whole lengt of the bounce buffer.
->> -	 */
->> -	swiotlb_bounce(dev, tlb_addr, size, DMA_TO_DEVICE);
->> -	BUG_ON(!valid_dma_direction(dir));
->> +	if (dir == DMA_TO_DEVICE || dir == DMA_BIDIRECTIONAL)
->> +		swiotlb_bounce(dev, tlb_addr, size, DMA_TO_DEVICE);
->> +	else
->> +		BUG_ON(dir != DMA_FROM_DEVICE);
->>   }
->>   
->>   void swiotlb_sync_single_for_cpu(struct device *dev, phys_addr_t tlb_addr,
->>
-> 
-> With this patch the AP works for me.
+Vlastimil wrote:
+> On 3/8/22 12:41, Hyeonggon Yoo wrote:
+> > +
+> >  static __always_inline void *
+> > -slab_alloc(struct kmem_cache *cachep, gfp_t flags, size_t orig_size, unsigned long caller)
+> > +slab_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid, size_t orig_size,
+> > +		   unsigned long caller)
+> >  {
+> >  	unsigned long save_flags;
+> > -	void *objp;
+> > +	void *ptr;
+> > +	int slab_node = numa_mem_id();
+> >  	struct obj_cgroup *objcg = NULL;
+> >  	bool init = false;
+> >
+> > @@ -3299,21 +3255,49 @@ slab_alloc(struct kmem_cache *cachep, gfp_t flags, size_t orig_size, unsigned lo
+> >  	if (unlikely(!cachep))
+> >  		return NULL;
+> >
+> > -	objp = kfence_alloc(cachep, orig_size, flags);
+> > -	if (unlikely(objp))
+> > -		goto out;
+> > +	ptr = kfence_alloc(cachep, orig_size, flags);
+> > +	if (unlikely(ptr))
+> > +		goto out_hooks;
+> >
+> >  	cache_alloc_debugcheck_before(cachep, flags);
+> >  	local_irq_save(save_flags);
+> > -	objp = __do_cache_alloc(cachep, flags);
+>
+> Looks like after this patch, slab_alloc() (without a node specified)
+> will not end up in __do_cache_alloc() anymore, so there's no more
+> possibility of alternate_node_alloc(), which looks like a functional
+> regression?
+>
 
-Cool, thanks for confirming. So I think ath9k probably is doing 
-something dodgy with dma_sync_*(), but if Linus prefers to make the 
-above change rather than wait for that to get figured out, I believe 
-that should be fine.
+Ah, that was not intended. Thank you for catching this!
+Will fix in v2.
 
-The crucial part of the "rework" patch is that we'll unconditionally 
-initialise the SWIOTLB bounce slot as it's allocated in 
-swiotlb_tbl_map_single(), regardless of DMA_ATTR_SKIP_CPU_SYNC. As long 
-as that happens, we're safe in terms of leaking data from previous 
-mappings, and any possibility for incorrect sync usage to lose 
-newly-written DMA data is at least no worse than it always has been. The 
-most confusion was around how the proposed DMA_ATTR_OVERWRITE attribute 
-would need to interact with DMA_ATTR_SKIP_CPU_SYNC to remain safe but 
-still have any useful advantage, so unless and until anyone wants to 
-revisit that, this should remain comparatively simple to reason about.
+Thank you so much.
 
-Cheers,
-Robin.
+> > +
+> > +	if (node_match(nodeid, slab_node)) {
+> > +		/*
+> > +		 * Use the locally cached objects if possible.
+> > +		 * However ____cache_alloc does not allow fallback
+> > +		 * to other nodes. It may fail while we still have
+> > +		 * objects on other nodes available.
+> > +		 */
+> > +		ptr = ____cache_alloc(cachep, flags);
+> > +		if (ptr)
+> > +			goto out;
+> > +	}
+> > +#ifdef CONFIG_NUMA
+> > +	else if (unlikely(!get_node(cachep, nodeid))) {
+> > +		/* Node not bootstrapped yet */
+> > +		ptr = fallback_alloc(cachep, flags);
+> > +		goto out;
+> > +	}
+> > +
+> > +	/* ___cache_alloc_node can fall back to other nodes */
+> > +	ptr = ____cache_alloc_node(cachep, flags, nodeid);
+> > +#endif
+> > +out:
+> >  	local_irq_restore(save_flags);
+> > -	objp = cache_alloc_debugcheck_after(cachep, flags, objp, caller);
+> > -	prefetchw(objp);
+> > +	ptr = cache_alloc_debugcheck_after(cachep, flags, ptr, caller);
+> > +	prefetchw(ptr);
+> >  	init = slab_want_init_on_alloc(flags, cachep);
+> >
+> > -out:
+> > -	slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init);
+> > -	return objp;
+> > +out_hooks:
+> > +	slab_post_alloc_hook(cachep, objcg, flags, 1, &ptr, init);
+> > +	return ptr;
+> > +}
+> > +
+> > +static __always_inline void *
+> > +slab_alloc(struct kmem_cache *cachep, gfp_t flags, size_t orig_size, unsigned long caller)
+> > +{
+> > +	return slab_alloc_node(cachep, flags, NUMA_NO_NODE, orig_size, caller);
+> >  }
+> >
+> >  /*
+
+--
+Thank you, You are awesome!
+Hyeonggon :-)

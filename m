@@ -2,130 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052D54E5C74
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 01:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E77A4E5C79
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 01:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346894AbiCXAyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 20:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S1346929AbiCXAz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 20:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346883AbiCXAxx (ORCPT
+        with ESMTP id S1346920AbiCXAzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 20:53:53 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE6090FDF;
-        Wed, 23 Mar 2022 17:52:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KP6BT5RN5z4xn3;
-        Thu, 24 Mar 2022 11:52:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648083139;
-        bh=gwwRG04wYByykVxvO7c+65Q9ZZ2jrq3N3cl8WkxKtwU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hOCv32yngct3v8H7zb7LGyEK5YISv5LUoN0fV5CqaDgh3cZ4r2dZMXDgRklBTO1zn
-         03FnJKio0u7SQMTHJnmGSM0iNGaR88vVkMq7zHaujW9ZOnKNNtWFYqPR3w7zRSWMRI
-         VgXhcAh/hOgrKcIwwwd7uxPEKV89MnF+xC82+GvC0qNd6NN04WLyLB7a63mJRitM4O
-         7S286Sra80Xb/hQ8+FqyL9By26b9jWyTStzmIJS7rYK7sJcN0fre09qiohg9pBOOBy
-         V52F7QoTGvE/31rzjDB0uozKZo0RVaFCc3EaUNE71vHo5X7fiwddbG3g35BKNAJ3iI
-         eqZEkqhfOITHA==
-Date:   Thu, 24 Mar 2022 11:52:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>
-Cc:     broonie@kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: Re: linux-next: manual merge of the folio tree with the drm-intel
- tree
-Message-ID: <20220324115217.21e58afe@canb.auug.org.au>
-In-Reply-To: <20220222004147.3360596-1-broonie@kernel.org>
-References: <20220222004147.3360596-1-broonie@kernel.org>
+        Wed, 23 Mar 2022 20:55:23 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3693659B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 17:53:53 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id b15so2754081pfm.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 17:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=piJRl+6ho54xwmr7pghjDhTXicnYnpxRZsVKlizVP2w=;
+        b=ncbD6aUUYjopy6AUFwQmMJZaAS/Ak50tCwzvAEHKQDJ95bHstm8IcBwG/iFpqZ2I8k
+         LJUqBujXQ/n42gzMRD9L1ixtxppDwm4oj3j3Q8FjAeRfHlmypm8Hp4pWm9bZU9z8Ylf+
+         BooCoRZUFuCba9TOOiHjCFU96riHpf/g5U8TurQh/YJs0vaMXV2A+splVllIRrrzRzLa
+         j+LULl3Ovs2gT62HcbcDwKzsf3XBFSvQJvSbOLIl+Z2jiUDGLpPNZNpVX1/5I8yNP0Of
+         CyzYWcWuQBYpUSUASoOW1IibSyVPxKGtW/ZCOe5Q2jriz+L7hGi5eA3lmVQgaKXtlZVZ
+         Dt2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=piJRl+6ho54xwmr7pghjDhTXicnYnpxRZsVKlizVP2w=;
+        b=MybojoWXrE0N6/gU1skkysT/N4HOEZxga/6bKuQqndhmji2qFrLqBZ822j3hhcjncE
+         D3MZAU4CixPw1w8S224HIrN71cOHGitc/FoKuIdQ7UbRTgNDMW5pwrb/bQQaQ9sNj346
+         lYUpBGzecS4O2XAayLmfw0u/BLgudHP2MIqHd/buid4ZAGEyfHBeOqbD2wuLxdVM4jr8
+         qVJLf93jE9Qf15oiE+pbAka7E2GiBr7ZvaaRrqUObsB7vis/sccoXuDw/3co3DvbfIwp
+         dQIaw+MnW+Hkd6iXzFLhUROBRmaLeIx4XbBOhs4gOiohu4h1Lrxqb5aZOo45nO/4xkJ7
+         /lUQ==
+X-Gm-Message-State: AOAM531LOadovyDXlcPEYe8NXeeDCqUdm/q47qQDWTbZTZn6MNyjV7G/
+        obFiyzRSF+i+P40ekeL+UpRG2Fm51ozrZgooJxs/4U+e4o8=
+X-Google-Smtp-Source: ABdhPJxHN2wGkD2Tc/WqYsncT+yBTS4vCZ9XwGQvUgkbmHypLKbrccnEjmzxfzKvoZ0ITBzS/OdSkRLQ3MP8RVxzqA4=
+X-Received: by 2002:aa7:86c6:0:b0:4fa:46d:6005 with SMTP id
+ h6-20020aa786c6000000b004fa046d6005mr2684054pfo.86.1648083232815; Wed, 23 Mar
+ 2022 17:53:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/k35jsNPZoGhmICH0bXEzu3u";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220321220408.2381974-1-trix@redhat.com>
+In-Reply-To: <20220321220408.2381974-1-trix@redhat.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 23 Mar 2022 17:53:45 -0700
+Message-ID: <CAPcyv4jBh6v_=hBimbU=-dqV2GTEnuqxB26i5QTu4jBETpcRXQ@mail.gmail.com>
+Subject: Re: [PATCH] nvdimm/blk: Fix title level
+To:     Tom Rix <trix@redhat.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/k35jsNPZoGhmICH0bXEzu3u
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Mon, Mar 21, 2022 at 3:04 PM <trix@redhat.com> wrote:
+>
+> From: Tom Rix <trix@redhat.com>
+>
+> make htmldocs fails with
+> Sphinx parallel build error:
+> docutils.utils.SystemMessage: ...nvdimm.rst:146:
+>   (SEVERE/4) Title level inconsistent:
+>
+> PMEM-REGIONs, Atomic Sectors, and DAX
+> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> The PMEM vs BLK section was removed without changing
+> the PMEM-REGIONS... title line.  Replace '^' with '_'.
+>
+> Fixes: f8669f1d6a86 ("nvdimm/blk: Delete the block-aperture window driver")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
 
-Hi all,
+Looks good, thanks for the fix!
 
-On Tue, 22 Feb 2022 00:41:47 +0000 broonie@kernel.org wrote:
->=20
-> Today's linux-next merge of the folio tree got a conflict in:
->=20
->   drivers/gpu/drm/drm_cache.c
->=20
-> between commit:
->=20
->   7938f4218168a ("dma-buf-map: Rename to iosys-map")
->=20
-> from the drm-intel tree and commit:
->=20
->   96160c2f78bd1 ("mm: don't include <linux/memremap.h> in <linux/mm.h>")
->=20
-> from the folio tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc drivers/gpu/drm/drm_cache.c
-> index 4b0da6baff78e,50b8a088f763a..0000000000000
-> --- a/drivers/gpu/drm/drm_cache.c
-> +++ b/drivers/gpu/drm/drm_cache.c
-> @@@ -27,11 -27,11 +27,11 @@@
->   /*
->    * Authors: Thomas Hellstr=C3=B6m <thomas-at-tungstengraphics-dot-com>
->    */
-> -=20
->  -#include <linux/dma-buf-map.h>
->  +#include <linux/cc_platform.h>
->   #include <linux/export.h>
->   #include <linux/highmem.h>
->  -#include <linux/cc_platform.h>
-> + #include <linux/ioport.h>
->  +#include <linux/iosys-map.h>
->   #include <xen/xen.h>
->  =20
->   #include <drm/drm_cache.h>
-
-This is now a conflict between the drm tree and Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/k35jsNPZoGhmICH0bXEzu3u
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI7wMEACgkQAVBC80lX
-0Gxa/Qf/VnXsZKvgl/bI1rEvPZt+BreSKMmiOT/+UmTQFGSgNc2m3y7qCnSzzhHr
-REw4CamkUm8XwNeCPFMp1xrnxl51o48L5sod56c513ObW4LwY0qypxPuR/fO1bKm
-Cw3sJkbVXZ3QKYRP8iodp36KV/BOyp29UaXcn9i63rzq4zNeGZ8w3GUHgs6zNs0J
-TOvXJ1cMqS9vS3uLBftlDEALcX+x1MhNh44qbrWizhusL45aW1CQR78G6hjiyT3I
-Yk7UAhzAiy/P84ZluaCWqp2mT9R993QOu/TrnA09TTkSSBKfu7eg60/u29Dr2sFe
-4+qzGCMhJmMwQDwJOQos/y3ZVF4JQg==
-=0ADK
------END PGP SIGNATURE-----
-
---Sig_/k35jsNPZoGhmICH0bXEzu3u--
+Jon, I'll take this through the nvdimm tree.

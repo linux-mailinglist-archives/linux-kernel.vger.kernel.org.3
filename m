@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFC24E6682
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAF84E667C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351536AbiCXQAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S1351534AbiCXP7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351472AbiCXP66 (ORCPT
+        with ESMTP id S1346038AbiCXP7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:58:58 -0400
+        Thu, 24 Mar 2022 11:59:06 -0400
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EACAC910;
-        Thu, 24 Mar 2022 08:57:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B72AD109;
+        Thu, 24 Mar 2022 08:57:34 -0700 (PDT)
 Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MQuoF-1nkOEz2Jfj-00NzkD;
- Thu, 24 Mar 2022 16:57:11 +0100
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MC3TF-1nLdCe1hpl-00CR0B;
+ Thu, 24 Mar 2022 16:57:13 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
@@ -33,29 +33,29 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 04/10] arm64: dts: imx8mm-verdin: only dashes in node names
-Date:   Thu, 24 Mar 2022 16:56:43 +0100
-Message-Id: <20220324155649.285924-5-marcel@ziswiler.com>
+Subject: [PATCH v1 05/10] arm64: dts: imx8mm-verdin: comment about i2c level shifter
+Date:   Thu, 24 Mar 2022 16:56:44 +0100
+Message-Id: <20220324155649.285924-6-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220324155649.285924-1-marcel@ziswiler.com>
 References: <20220324155649.285924-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:RbidkmHjssLyiM/TmEFPTSPIEZ5Q27hipqEGEfiEfERcgejaXyl
- 0Jig1ilNC0XalGChofdhOBcm3yW3wc5MTrGgXj2Ow/49Ab0+VTxtkRaEybSgiMlYEAJncEQ
- ub0kQylDPH9s6+uM/iwOW6TaOLxxvoHiqgUVEuWKZngwuWZcboeGvfmUrvMr6Krmvwvtngn
- NghxGt+ebXD/Mma/EOQnw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6UleY+X6sik=:rXdLEn43KdRa3YoPVR8rqr
- bk7Jfffue9WFIGFC5dJWd6GXJzlVYW12aSyqNBab9Q23hu95ipLqCBcPVCEv1Q1tTcpm5m2lj
- G7jeTWTlO4RXP/ZeBmLXHiExNArJpPCUzTHTuzWIP9lT698KBYp2grAqJ3I1AJvwl+xCv5wd7
- G6CVuDNIYMbhpzVvg1/OAcVruANMX7tX7p0LZWCp3voZ/BVcXJgF5ioCdjq7gE21aJi0jEWqi
- MZv1li367rR/+ra55ZQyS74GyiF6L3Z9ifMhQt9Jofe6CTwS9hcweMdwR8K9s1h1s1WG8ruSO
- PUfJCxRIkmk+9qKKLpsybLk1HCKKlPP5i6jgH87KngGv/J87JRWUdqIneAyTNQoVCM7sTy5xN
- XaId7GtvbrWkZOnyo3FC8D4rID2wMIWWYA8Cyt8WxpzJYlHzad72ueYaMWVpewDg4QTF1FD9F
- fsrBGnYJiZucb9GPvobVJ+nVW2mynTDfVqRo/9wujjpIECSzNVXv5GKwGJ10b/b/KgIMitvEe
- 3iptiUft/4X3+4W2iEk6F3Qa8BqT8foLRyToX0EavwSIwTBJrejv7yiAfmy+uJsqHJk7M9pnV
- XrI5QjSg6K7agVROSOq39gPbRErC2qmM0ngObg/zozpjig6LdKJ75B/9ZX2OlnTO56NSRzKrd
- vLNNg7WlTG2Pg5PW8nHMb/UnO1TS/ApVuEcIp/Ha+EMF4lXV4OBptUzZwVFIfq3NNMOU=
+X-Provags-ID: V03:K1:ic0yijoEF/TdmUsbIqazQ69rCiZtacpW24i1q9eIrnz6wILkbns
+ 1cLk0o/dtya9DBhWNi+7Cs8NvB5u18YUhybAaEJ8oZUg2LVYLUNqYRWCJTOFOpcMDN9RKc9
+ ZSdYdRhrWmzuyv9P7PgsiO0ris3dYUO0CS+EXe+SHYaZWjZxGCLFciH9CFAIssL/sXeLCsI
+ gS3qLHE6BbkM7bvyWk1ZA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Cxp9rczoV5k=:Dg5O1Kr23Tkyqe1Z2JO9qF
+ /Z9zuk8BpMWupywfJUP4cUHgT+tJ6DWqVpSAfn5Kl0Dol9HWhSI4TvaWr0VEXg8AeXxpyl96r
+ YfS4GNhG9N8KrQ8xl+no8Vk6ynJ9EMCZ+bDwBw8nhDwWa6FOK1Z7FsZwUE7aMJ3VixtreYUpM
+ y4UdvhCYATC3kfsu/Iey1pPLtyJE6rRgZGrCO4bp+Rlug0LZzoB2O7XEQoDKTx/Cw8GEZaj6L
+ GgMJyVPp9olq3fUuYqrsQxX5NC4HTvNwKmi4A5L4Hi/LmnQ8bLSxMf2O4jLymp5nXpZafaQEV
+ qqtJni2pFYUh5/GQjSMGQmJHgOs+0TAhFvV5TAob1/AfJ5+VpQEtGW0eHzb10VVHRGzkiza4c
+ Ddw0MEiB7j0p8IF8GcGnFx17GyFtejoZ4ehvmP4P0Zpof3o/l2/27ppvssGVfoLmMznLZLv4Y
+ f90EYOI9sCpyV7R6ryoWi+tsZLKf4TI9XmuRzG9dLfqe86nxP3rkhOdCuYjmSzMaeQLuWHKAt
+ hqQODw193ky+FMtkvJUdoEDSvqBmb7di57MtkTpIZ9PyTb+A8/RtnMmH2+FxWf8waFYKSHuck
+ WJkqqtQzgVZwD1YODbHEE3FzwL5RMr8dH27Mnfe+flMycUjK3BUN/MW44/n9SHCQIS1GOUFl6
+ 4kSA7lX/qjIRaLAcw8uSyWsEIqPwC8VELj69SnQ4nZR2PBSXTFR63BAyx5gCadVXzXbA=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -67,28 +67,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Make sure we only have dashes rather than underscores in node names by
-renaming ctrl_sleep_moci-hog to ctrl-sleep-moci-hog.
+Add a note about the bootloader being expected to switch on the I2C
+level shifter for the TLA2024 ADC behind this PMIC.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-index de811be435d0..599b620ae04d 100644
+index 599b620ae04d..4542c99ce906 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-@@ -306,7 +306,7 @@ &gpio5 {
- 			  "SODIMM_151",
- 			  "SODIMM_153";
+@@ -337,6 +337,11 @@ pca9450: pmic@25 {
+ 		reg = <0x25>;
+ 		sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
  
--	ctrl_sleep_moci-hog {
-+	ctrl-sleep-moci-hog {
- 		gpio-hog;
- 		/* Verdin CTRL_SLEEP_MOCI# (SODIMM 256) */
- 		gpios = <1 GPIO_ACTIVE_HIGH>;
++		/*
++		 * The bootloader is expected to switch on the I2C level shifter for the TLA2024 ADC
++		 * behind this PMIC.
++		 */
++
+ 		regulators {
+ 			reg_vdd_soc: BUCK1 {
+ 				nxp,dvs-run-voltage = <850000>;
 -- 
 2.34.1
 

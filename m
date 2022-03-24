@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58E34E6320
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D4E4E6322
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350071AbiCXMU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
+        id S1350107AbiCXMUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350094AbiCXMUU (ORCPT
+        with ESMTP id S1350060AbiCXMUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:20:20 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8938536337;
-        Thu, 24 Mar 2022 05:18:36 -0700 (PDT)
+        Thu, 24 Mar 2022 08:20:22 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F6735AAD;
+        Thu, 24 Mar 2022 05:18:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648124317; x=1679660317;
+  t=1648124320; x=1679660320;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=LIx4K9AnoQVwj9XOioMv8ecFZ11kuYcUHe/1mB92phM=;
-  b=jryQmZVvdXKMZdK+u8GcHHrG5KCR+2fZex/Tb+x1wHu2bvN+CmmsCQb7
-   TBUMoygSSeN1XACGSw0eQ5dyi7wGA26wOEMo0gbtxMtKU6r56qfTX+PJ2
-   YSsD+jtcthy2p4fWjI1cy+a9DZ+cKNPUwkpOzUm0f9iFirNr5xh0gl06B
-   Y=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 24 Mar 2022 05:18:36 -0700
+  bh=gIBIYVC/mRSo3VTJOEQ5o3wCzTT9sZBEsTmCgMcrqNE=;
+  b=eee6IgXYzz/Ct8+bKN3VvYm9J9/BJ2H0GpussXomwnVioyot6wKe9m1x
+   bcA9GCOiGAC60KQtPAKPRqOL2gnjVlIdP1orLfkyv2SoBge6BUyg22i2x
+   +hIJmwQKrZHutviKs8QdOFXme+4WXimwWMZoUXAG45j3iEW2Y7l0xH88a
+   0=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 24 Mar 2022 05:18:40 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:18:36 -0700
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:18:39 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 24 Mar 2022 05:18:35 -0700
+ 15.2.986.22; Thu, 24 Mar 2022 05:18:39 -0700
 Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 24 Mar 2022 05:18:31 -0700
+ 15.2.986.22; Thu, 24 Mar 2022 05:18:35 -0700
 From:   Mao Jinlong <quic_jinlmao@quicinc.com>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -55,9 +55,9 @@ CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Hao Zhang <quic_hazha@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v4 08/10] dt-bindings: arm: Adds CoreSight TPDA hardware definitions
-Date:   Thu, 24 Mar 2022 20:17:32 +0800
-Message-ID: <20220324121734.21531-9-quic_jinlmao@quicinc.com>
+Subject: [PATCH v4 09/10] ARM: dts: msm: Add coresight components for SM8250
+Date:   Thu, 24 Mar 2022 20:17:33 +0800
+Message-ID: <20220324121734.21531-10-quic_jinlmao@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
 References: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
@@ -76,141 +76,558 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds new coresight-tpda.yaml file describing the bindings required
-to define tpda in the device trees.
+Add coresight device tree for sm8250. STM/ETM are added.
 
 Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
 Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 ---
- .../bindings/arm/coresight-tpda.yaml          | 119 ++++++++++++++++++
- 1 file changed, 119 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+ .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 526 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +
+ 2 files changed, 528 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
 
-diff --git a/Documentation/devicetree/bindings/arm/coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi b/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
 new file mode 100644
-index 000000000000..2c79de0a7928
+index 000000000000..1de42fd39248
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
-@@ -0,0 +1,119 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/coresight-tpda.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+@@ -0,0 +1,526 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
 +
-+title: Trace, Profiling and Diagnostics Aggregator - TPDA
++&soc {
 +
-+description: |
-+  TPDAs are responsible for packetization and timestamping of data sets
-+  utilizing the MIPI STPv2 packet protocol. Pulling data sets from one or
-+  more attached TPDM and pushing the resultant (packetized) data out a
-+  master ATB interface. Performing an arbitrated ATB interleaving (funneling)
-+  task for free-flowing data from TPDM (i.e. CMB and DSB data set flows).
++	stm@6002000 {
++		compatible = "arm,coresight-stm", "arm,primecell";
++		reg = <0 0x06002000 0 0x1000>,
++		      <0 0x16280000 0 0x180000>;
++		reg-names = "stm-base", "stm-stimulus-base";
 +
-+maintainers:
-+  - Suzuki K Poulose <suzuki.poulose@arm.com>
-+  - Mathieu Poirier <mathieu.poirier@linaro.org>
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
 +
-+properties:
-+  $nodename:
-+    pattern: "^tpda(@[0-9a-f]+)$"
-+  compatible:
-+    items:
-+      - const: qcom,coresight-tpda
-+      - const: arm,primecell
++		out-ports {
++			port {
++				stm_out: endpoint {
++					remote-endpoint =
++					  <&funnel0_in7>;
++				};
++			};
++		};
++	};
 +
-+  reg:
-+    maxItems: 1
++	funnel@6041000 {
++		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++		reg = <0 0x06041000 0 0x1000>;
 +
-+  clocks:
-+    maxItems: 1
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
 +
-+  clock-names:
-+    items:
-+      - const: apb_pclk
++		out-ports {
++			port {
++				funnel0_out: endpoint {
++					remote-endpoint =
++					  <&merge_funnel_in0>;
++				};
++			};
++		};
 +
-+  in-ports:
-+    type: object
-+    description: |
-+      Input connections from TPDM to TPDA
-+    $ref: /schemas/graph.yaml#/properties/ports
++		in-ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
 +
-+    properties:
-+      '#address-cells':
-+        const: 1
++			port@7 {
++				reg = <7>;
++				funnel0_in7: endpoint {
++					remote-endpoint = <&stm_out>;
++				};
++			};
++		};
++	};
 +
-+      '#size-cells':
-+        const: 0
++	funnel@6042000 {
++		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++		reg = <0 0x06042000 0 0x1000>;
 +
-+    patternProperties:
-+      "^port@[0-9a-f]+$":
-+        type: object
-+        required:
-+          - reg
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
 +
-+    required:
-+      - '#size-cells'
-+      - '#address-cells'
++		out-ports {
++			port {
++				funnel2_out: endpoint {
++					remote-endpoint =
++					  <&merge_funnel_in2>;
++				};
++			};
++		};
 +
-+  out-ports:
-+    type: object
-+    description: |
-+      Output connections from the TPDA to legacy CoreSight trace bus.
-+    $ref: /schemas/graph.yaml#/properties/ports
++		in-ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
 +
-+    properties:
-+     port:
-+       description:
-+         Output connection from the TPDA to legacy CoreSight Trace bus.
-+       $ref: /schemas/graph.yaml#/properties/port
++			port@2 {
++				reg = <4>;
++				funnel2_in5: endpoint {
++					remote-endpoint =
++					  <&apss_merge_funnel_out>;
++				};
++			};
++		};
++	};
 +
-+required:
-+    - compatible
-+    - reg
-+    - clocks
-+    - clock-names
-+    - in-ports
-+    - out-ports
++	funnel@6b04000 {
++		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++		arm,primecell-periphid = <0x000bb908>;
 +
-+additionalProperties: false
++		reg = <0 0x6b04000 0 0x1000>;
++		reg-names = "funnel-base";
 +
-+examples:
-+  # minimum tpda definition.
-+  - |
-+    tpda@6004000 {
-+       compatible = "qcom,coresight-tpda", "arm,primecell";
-+       reg = <0x6004000 0x1000>;
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
 +
-+       qcom,tpda-atid = <65>;
++		out-ports {
++			port {
++				merge_funnel_out: endpoint {
++					remote-endpoint =
++						<&etf_in>;
++				};
++			};
++		};
 +
-+       clocks = <&aoss_qmp>;
-+       clock-names = "apb_pclk";
++		in-ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
 +
-+       in-ports {
-+         #address-cells = <1>;
-+         #size-cells = <0>;
++			port@7 {
++				reg = <7>;
++				funnel_swao_in_funnel_merg: endpoint {
++					remote-endpoint=
++						<&funnel_merg_out_funnel_swao>;
++				};
++			};
++		};
 +
-+        port@0 {
-+          reg = <0>;
-+          tpda_qdss_0_in_tpdm_dcc: endpoint {
-+            remote-endpoint =
-+              <&tpdm_dcc_out_tpda_qdss_0>;
-+            };
-+        };
-+      };
++	};
 +
-+       out-ports {
-+         port {
-+                 tpda_qdss_out_funnel_in0: endpoint {
-+                    remote-endpoint =
-+                    <&funnel_in0_in_tpda_qdss>;
-+                  };
-+          };
-+       };
-+    };
++	funnel@6045000 {
++		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++		reg = <0 0x06045000 0 0x1000>;
 +
-+...
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++
++		out-ports {
++			port {
++				funnel_merg_out_funnel_swao: endpoint {
++					remote-endpoint = <&funnel_swao_in_funnel_merg>;
++				};
++			};
++		};
++
++		in-ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@1 {
++				reg = <0>;
++				merge_funnel_in0: endpoint {
++					remote-endpoint =
++					  <&funnel0_out>;
++				};
++			};
++
++			port@2 {
++				reg = <1>;
++				merge_funnel_in2: endpoint {
++					remote-endpoint =
++					  <&funnel2_out>;
++				};
++			};
++		};
++	};
++
++	replicator@6046000 {
++		compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
++		reg = <0 0x06046000 0 0x1000>;
++
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++
++		out-ports {
++			port {
++				replicator_out: endpoint {
++					remote-endpoint = <&etr_in>;
++				};
++			};
++		};
++
++		in-ports {
++			port {
++				replicator_cx_in_swao_out: endpoint {
++					remote-endpoint = <&replicator_swao_out_cx_in>;
++				};
++			};
++		};
++	};
++
++	replicator@6b06000 {
++		compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
++		reg = <0 0x06b06000 0 0x1000>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++
++		out-ports {
++			port {
++				replicator_swao_out_cx_in: endpoint {
++					remote-endpoint = <&replicator_cx_in_swao_out>;
++				};
++			};
++		};
++
++		in-ports {
++			port {
++				replicator_in: endpoint {
++					remote-endpoint = <&etf_out>;
++				};
++			};
++		};
++	};
++
++	etf@6b05000 {
++		compatible = "arm,coresight-tmc", "arm,primecell";
++		reg = <0 0x6b05000 0 0x1000>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++
++		out-ports {
++			port {
++				etf_out: endpoint {
++					remote-endpoint =
++					  <&replicator_in>;
++				};
++			};
++		};
++
++		in-ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@1 {
++				reg = <0>;
++				etf_in: endpoint {
++					remote-endpoint =
++					  <&merge_funnel_out>;
++				};
++			};
++		};
++	};
++
++	etr@6048000 {
++		compatible = "arm,coresight-tmc", "arm,primecell";
++		reg = <0 0x06048000 0 0x1000>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,scatter-gather;
++
++		in-ports {
++			port {
++				etr_in: endpoint {
++					remote-endpoint =
++					  <&replicator_out>;
++				};
++			};
++		};
++	};
++
++	etm@7040000 {
++		compatible = "arm,coresight-etm4x", "arm,primecell";
++		reg = <0 0x07040000 0 0x1000>;
++
++		cpu = <&CPU0>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,coresight-loses-context-with-cpu;
++
++		out-ports {
++			port {
++				etm0_out: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_in0>;
++				};
++			};
++		};
++	};
++
++	etm@7140000 {
++		compatible = "arm,coresight-etm4x", "arm,primecell";
++		reg = <0 0x07140000 0 0x1000>;
++
++		cpu = <&CPU1>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,coresight-loses-context-with-cpu;
++
++		out-ports {
++			port {
++				etm1_out: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_in1>;
++				};
++			};
++		};
++	};
++
++	etm@7240000 {
++		compatible = "arm,coresight-etm4x", "arm,primecell";
++		reg = <0 0x07240000 0 0x1000>;
++
++		cpu = <&CPU2>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,coresight-loses-context-with-cpu;
++
++		out-ports {
++			port {
++				etm2_out: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_in2>;
++				};
++			};
++		};
++	};
++
++	etm@7340000 {
++		compatible = "arm,coresight-etm4x", "arm,primecell";
++		reg = <0 0x07340000 0 0x1000>;
++
++		cpu = <&CPU3>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,coresight-loses-context-with-cpu;
++
++		out-ports {
++			port {
++				etm3_out: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_in3>;
++				};
++			};
++		};
++	};
++
++	etm@7440000 {
++		compatible = "arm,coresight-etm4x", "arm,primecell";
++		reg = <0 0x07440000 0 0x1000>;
++
++		cpu = <&CPU4>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,coresight-loses-context-with-cpu;
++
++		out-ports {
++			port {
++				etm4_out: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_in4>;
++				};
++			};
++		};
++	};
++
++	etm@7540000 {
++		compatible = "arm,coresight-etm4x", "arm,primecell";
++		reg = <0 0x07540000 0 0x1000>;
++
++		cpu = <&CPU5>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,coresight-loses-context-with-cpu;
++
++		out-ports {
++			port {
++				etm5_out: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_in5>;
++				};
++			};
++		};
++	};
++
++	etm@7640000 {
++		compatible = "arm,coresight-etm4x", "arm,primecell";
++		reg = <0 0x07640000 0 0x1000>;
++
++		cpu = <&CPU6>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,coresight-loses-context-with-cpu;
++
++		out-ports {
++			port {
++				etm6_out: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_in6>;
++				};
++			};
++		};
++	};
++
++	etm@7740000 {
++		compatible = "arm,coresight-etm4x", "arm,primecell";
++		reg = <0 0x07740000 0 0x1000>;
++
++		cpu = <&CPU7>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++		arm,coresight-loses-context-with-cpu;
++
++		out-ports {
++			port {
++				etm7_out: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_in7>;
++				};
++			};
++		};
++	};
++
++	funnel@7800000 {
++		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++		reg = <0 0x07800000 0 0x1000>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++
++		out-ports {
++			port {
++				apss_funnel_out: endpoint {
++					remote-endpoint =
++					  <&apss_merge_funnel_in>;
++				};
++			};
++		};
++
++		in-ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				apss_funnel_in0: endpoint {
++					remote-endpoint =
++					  <&etm0_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++				apss_funnel_in1: endpoint {
++					remote-endpoint =
++					  <&etm1_out>;
++				};
++			};
++
++			port@2 {
++				reg = <2>;
++				apss_funnel_in2: endpoint {
++					remote-endpoint =
++					  <&etm2_out>;
++				};
++			};
++
++			port@3 {
++				reg = <3>;
++				apss_funnel_in3: endpoint {
++					remote-endpoint =
++					  <&etm3_out>;
++				};
++			};
++
++			port@4 {
++				reg = <4>;
++				apss_funnel_in4: endpoint {
++					remote-endpoint =
++					  <&etm4_out>;
++				};
++			};
++
++			port@5 {
++				reg = <5>;
++				apss_funnel_in5: endpoint {
++					remote-endpoint =
++					  <&etm5_out>;
++				};
++			};
++
++			port@6 {
++				reg = <6>;
++				apss_funnel_in6: endpoint {
++					remote-endpoint =
++					  <&etm6_out>;
++				};
++			};
++
++			port@7 {
++				reg = <7>;
++				apss_funnel_in7: endpoint {
++					remote-endpoint =
++					  <&etm7_out>;
++				};
++			};
++		};
++	};
++
++	funnel@7810000 {
++		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++		reg = <0 0x07810000 0 0x1000>;
++
++		clocks = <&aoss_qmp>;
++		clock-names = "apb_pclk";
++
++		out-ports {
++			port {
++				apss_merge_funnel_out: endpoint {
++					remote-endpoint =
++					  <&funnel2_in5>;
++				};
++			};
++		};
++
++		in-ports {
++			port@1 {
++				reg = <0>;
++				apss_merge_funnel_in: endpoint {
++					remote-endpoint =
++					  <&apss_funnel_out>;
++				};
++			};
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 5617a46e5ccd..d1837e3df30a 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -5323,3 +5323,5 @@
+ 		};
+ 	};
+ };
++
++#include "sm8250-coresight.dtsi"
 -- 
 2.17.1
 

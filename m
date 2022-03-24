@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9152C4E6205
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6764E6207
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349619AbiCXLBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S1349626AbiCXLCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240825AbiCXLBk (ORCPT
+        with ESMTP id S1344477AbiCXLCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:01:40 -0400
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C2E85BC7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648119601;
-        bh=MiK7sEzGBHCdbf5gWTcvE8l+cSUdFAE938ETs/tbpfg=;
-        h=From:To:Cc:Subject:Date;
-        b=mjfoAi4UL19Pd+YTBM8ygiYiy0C8+5VciCNN+RXKaGbV+J0imRFjJJ1fRPvvQUePl
-         ZdxbjgQo+QSN0y47V5hswtjFXvs5ruFus/19fqIcbO/+zbW3MQ6dbVQ4q7xM9nnNLa
-         NkNBSElrbJbD3f90dvu3fEVd4VYqLGtEFP1YCHmg=
-Received: from localhost.localdomain ([43.227.138.48])
-        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
-        id EAF35228; Thu, 24 Mar 2022 18:58:47 +0800
-X-QQ-mid: xmsmtpt1648119527t812l750o
-Message-ID: <tencent_E01412E12D4A66FFB02064CC9CB9141CDE08@qq.com>
-X-QQ-XMAILINFO: M7dxyDFn9MPmPxEIf5rL3xQJmuzpC42ZBVPiLrqnw6oyG9TiSExtqoS7YccQ3A
-         Lv7wv+VILkMCbjfrV788WJs/9vbr+/0zYxuplSuXeceGKI5IO1AQVPbzQEAMgYZ+t0Pyp0KtZSDW
-         CVPkINWkLS6GI8NQqk3rm1nuFV6H8NSFFLF8yiBb4FJwMs5vdz/s8UEUsz9truS+SsEDpsTlEmBs
-         NyYHqLxe89RuI2O+hF5d2C54TCTqWUpp5La1BgMB58ZM/CZY4nJcvbXBAQ7DmO7+HP5ZgffLkzeN
-         Mv7FTzNmzOHEcNasq0fTIsxPm84s/iTYUjxCR2ubVRoxFhlb4M/E923aF4eM6yYo8ZAGlTHRVLCB
-         hkKgY18m9Evy5IgjZOAnlwxGlyLfIA1AA0hBhEfBFeL+0or+c2JQNg9/f3O/mQygUG+ZzYHgYpus
-         C+RkuH+cL7pUhtEuJhbEeOr15J+CM00Aw7LjkuhHXNbLhcv7tiymjVb2Z6P/ehy+Lwgn94fEPNCj
-         pnTkmrBZxBtiTbT5LkrIY3c6tN3AkjKpg+11a8C+z4+yuq/dbKP8hH3fI61hdFj6nZhwCwWmQ3ap
-         jTQD2uvIxoyVLiB7dM7Upx3otN/f1/mPxt9qoDLlzK07EpLPsMcUR+W19qzMzDPhoYsA6RZNrrln
-         NA3qREI6nckAZ7+rx6fIai+J9XXwIFqryb0ziejKdGyN3H7msidcVAX2DgMAvtGPiL683Fr3/pID
-         3mc70c5n6ZVC+hciZ9YgdmFRFSIFtXce3bq+vNCavgszvlUyVEIoKEWBGhrcWENjSeaCTVHYKyPe
-         fHn4IkCE32/998gu1o3Uco3BL54VFX9s9NbuWcQzhfXgsaN2WGstodSZCGlh56lUv6EUpO0zBOjr
-         uXmAgbYty6ph3UgWGP9BMFdwTydSrhfN0APs+vSdKGcF0TE0Xn2gtjp5lFLUoJDaxlbQsTaVxlr1
-         zQ1FtSp4g=
-From:   xkernel.wang@foxmail.com
-To:     tomba@kernel.org, airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] drm/omapdrm: check the return value of kzalloc()
-Date:   Thu, 24 Mar 2022 18:58:04 +0800
-X-OQ-MSGID: <20220324105804.3088-1-xkernel.wang@foxmail.com>
+        Thu, 24 Mar 2022 07:02:43 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AF49286F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:01:12 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id e6-20020a17090a77c600b001c795ee41e9so4179476pjs.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TgxDvrGaoMcFgStBxDsJOk2r+RouA2NL1p9DYfmaMws=;
+        b=dl3kUSUKr6hRrdJIc2h86tl6HHGvyog2XfukxAIGMMQBC4lsYPXJ404lp5Fm56hBgt
+         juKH2zHD+Ma/ZSZYMI5w3ChJsT+ZaA3YcWyYNOXgl+yrf4XXUrPxU8CElLn4q/NB3b0x
+         EZ5K2YdEj4we4YyKg7/vkDCA1Fkne5pdLbT/Uf6ibsV6C9PJOOejFHReVnm0NInquWB4
+         4Lr6wx8TFnkXh+2RlArZKstGwCNrp5Hh+uyp9E+suexcGmEftGFsvMcB66WY7KqMuw8R
+         2xSknYUMcQbnDozIKc0X7AbVPfVScJeQRCPw/YKf3xVQADR7QFY8GpJaCl7KGt9guJRF
+         Pb5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TgxDvrGaoMcFgStBxDsJOk2r+RouA2NL1p9DYfmaMws=;
+        b=v0rXX6rt4yxrFOSxYsq9Q+g4ZoaFvYg28qHwUVAIyqTp0zWOfJ1FAmE3A01WDYFYbG
+         2EoC9p5da4E+qdE2dahZzXPRkUwlAD+7uK2Wq0GNGOYaIO9zgvJc7jJDmtozkimqo93W
+         fyzRhTLQgdLGWOD+z/00m43Dxp3go0/FNcWrUMnBp5ezt7nKGHzjNjYMnnJwzpshXulw
+         jQwycIe6/qUTTUuBBY+YuHpZocPaJDgWLHsvdmPTYMJ/fzY3nTOoJyGXjTRoQZ4sW6/e
+         YV6MOk/FMGc4cFZPs/Pa5YK8zpWIQsIdKeGBAEZ220i8ItSJ8Ml/rGFYoFWlF7H1p8uv
+         g6xQ==
+X-Gm-Message-State: AOAM533An443447yfeu9PO+vUDWBawbZyN1lzA+o9rDiNv7Z3BxJHaV0
+        DZ7Lt4f23F+CPSiTc9ZAMCZwaA==
+X-Google-Smtp-Source: ABdhPJyn/dodVmHBih3bECPHt+1UUA3UbDcrcUkYbhDx74DUGpzeJn7hv2UTAgKdnJd8CFFz6OJZow==
+X-Received: by 2002:a17:902:cf0f:b0:154:70ca:11d0 with SMTP id i15-20020a170902cf0f00b0015470ca11d0mr5211055plg.28.1648119671399;
+        Thu, 24 Mar 2022 04:01:11 -0700 (PDT)
+Received: from sunil-laptop ([49.206.7.17])
+        by smtp.gmail.com with ESMTPSA id d11-20020a056a00198b00b004fa7da68465sm3172992pfl.60.2022.03.24.04.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 04:01:11 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 16:31:01 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     ardb@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, heinrich.schuchardt@canonical.com,
+        Atish Patra <atishp@rivosinc.com>, apatel@ventanamicro.com,
+        abner.chang@hpe.com, jrtc27@jrtc27.com, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [RFC PATCH V2 1/1] riscv/efi_stub: Add support for
+ RISCV_EFI_BOOT_PROTOCOL
+Message-ID: <20220324110101.GA36244@sunil-laptop>
+References: <20220303145944.307321-2-sunilvl@ventanamicro.com>
+ <mhng-8685b269-d3cf-4dbb-b2d2-bd79266ac477@palmer-ri-x1c9>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <mhng-8685b269-d3cf-4dbb-b2d2-bd79266ac477@palmer-ri-x1c9>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,54 +75,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Tue, Mar 22, 2022 at 06:32:20PM -0700, Palmer Dabbelt wrote:
+> On Thu, 03 Mar 2022 06:59:44 PST (-0800), sunilvl@ventanamicro.com wrote:
+> > This patch adds the support for getting the boot hart ID in
+> > Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL. This protocol
+> > is preferred method over existing DT based solution since it
+> > works irrespective of DT or ACPI.
+> > 
+> > The specification of the protocol is hosted at:
+> > https://github.com/riscv-non-isa/riscv-uefi
+> > 
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > ---
+> >  drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
+> >  drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
+> >  include/linux/efi.h                       |  1 +
+> >  3 files changed, 32 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+> > index edb77b0621ea..aced62a0907e 100644
+> > --- a/drivers/firmware/efi/libstub/efistub.h
+> > +++ b/drivers/firmware/efi/libstub/efistub.h
+> > @@ -720,6 +720,13 @@ union efi_tcg2_protocol {
+> >  	} mixed_mode;
+> >  };
+> > 
+> > +struct riscv_efi_boot_protocol {
+> > +	u64 revision;
+> > +
+> > +	efi_status_t (__efiapi * get_boot_hartid)(struct riscv_efi_boot_protocol *this,
+> > +						  size_t *boot_hartid);
+> > +};
+> > +
+> >  typedef union efi_load_file_protocol efi_load_file_protocol_t;
+> >  typedef union efi_load_file_protocol efi_load_file2_protocol_t;
+> > 
+> > diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
+> > index 9c460843442f..915ad209d004 100644
+> > --- a/drivers/firmware/efi/libstub/riscv-stub.c
+> > +++ b/drivers/firmware/efi/libstub/riscv-stub.c
+> > @@ -23,7 +23,7 @@
+> > 
+> >  typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
+> > 
+> > -static u32 hartid;
+> > +static size_t hartid;
+> > 
+> >  static int get_boot_hartid_from_fdt(void)
+> >  {
+> > @@ -47,14 +47,33 @@ static int get_boot_hartid_from_fdt(void)
+> >  	return 0;
+> >  }
+> > 
+> > +static efi_status_t get_boot_hartid_from_efi(void)
+> > +{
+> > +	efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
+> > +	efi_status_t status;
+> > +	struct riscv_efi_boot_protocol *boot_protocol;
+> > +
+> > +	status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
+> > +			     (void **)&boot_protocol);
+> > +	if (status == EFI_SUCCESS) {
+> > +		status = efi_call_proto(boot_protocol,
+> > +					get_boot_hartid, &hartid);
+> > +	}
+> > +	return status;
+> > +}
+> > +
+> >  efi_status_t check_platform_features(void)
+> >  {
+> >  	int ret;
+> > +	efi_status_t status;
+> > 
+> > -	ret = get_boot_hartid_from_fdt();
+> > -	if (ret) {
+> > -		efi_err("/chosen/boot-hartid missing or invalid!\n");
+> > -		return EFI_UNSUPPORTED;
+> > +	status = get_boot_hartid_from_efi();
+> > +	if (status != EFI_SUCCESS) {
+> > +		ret = get_boot_hartid_from_fdt();
+> > +		if (ret) {
+> > +			efi_err("/chosen/boot-hartid missing or invalid!\n");
+> 
+> Is that the right error message?  IIUC it doesn't really make sense in an
+> ACPI context, that's a DT-ism.
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check it.
-Besides, to properly handle the error, another check is added for the
-return of omap_irq_wait_init().
+Sure. Will update this message in next version.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/gpu/drm/omapdrm/omap_crtc.c | 12 ++++++++----
- drivers/gpu/drm/omapdrm/omap_irq.c  |  3 +++
- 2 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/omapdrm/omap_crtc.c b/drivers/gpu/drm/omapdrm/omap_crtc.c
-index 06a719c..12c0008 100644
---- a/drivers/gpu/drm/omapdrm/omap_crtc.c
-+++ b/drivers/gpu/drm/omapdrm/omap_crtc.c
-@@ -166,10 +166,14 @@ void omap_crtc_set_enabled(struct drm_crtc *crtc, bool enable)
- 	dispc_mgr_enable(priv->dispc, channel, enable);
- 	omap_crtc->enabled = enable;
- 
--	ret = omap_irq_wait(dev, wait, msecs_to_jiffies(100));
--	if (ret) {
--		dev_err(dev->dev, "%s: timeout waiting for %s\n",
--				omap_crtc->name, enable ? "enable" : "disable");
-+	if (!wait) {
-+		dev_err(dev->dev, "%s: out of memory\n", omap_crtc->name);
-+	} else {
-+		ret = omap_irq_wait(dev, wait, msecs_to_jiffies(100));
-+		if (ret) {
-+			dev_err(dev->dev, "%s: timeout waiting for %s\n",
-+					omap_crtc->name, enable ? "enable" : "disable");
-+		}
- 	}
- 
- 	if (omap_crtc->channel == OMAP_DSS_CHANNEL_DIGIT) {
-diff --git a/drivers/gpu/drm/omapdrm/omap_irq.c b/drivers/gpu/drm/omapdrm/omap_irq.c
-index 4aca14d..a234462 100644
---- a/drivers/gpu/drm/omapdrm/omap_irq.c
-+++ b/drivers/gpu/drm/omapdrm/omap_irq.c
-@@ -45,6 +45,9 @@ struct omap_irq_wait * omap_irq_wait_init(struct drm_device *dev,
- 	struct omap_irq_wait *wait = kzalloc(sizeof(*wait), GFP_KERNEL);
- 	unsigned long flags;
- 
-+	if (!wait)
-+		return NULL;
-+
- 	init_waitqueue_head(&wait->wq);
- 	wait->irqmask = irqmask;
- 	wait->count = count;
--- 
+Thanks
+Sunil
+> 
+> > +			return EFI_UNSUPPORTED;
+> > +		}
+> >  	}
+> >  	return EFI_SUCCESS;
+> >  }
+> > diff --git a/include/linux/efi.h b/include/linux/efi.h
+> > index ccd4d3f91c98..9822c730207c 100644
+> > --- a/include/linux/efi.h
+> > +++ b/include/linux/efi.h
+> > @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
+> >  #define EFI_CONSOLE_OUT_DEVICE_GUID		EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
+> >  #define APPLE_PROPERTIES_PROTOCOL_GUID		EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
+> >  #define EFI_TCG2_PROTOCOL_GUID			EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
+> > +#define RISCV_EFI_BOOT_PROTOCOL_GUID		EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
+> >  #define EFI_LOAD_FILE_PROTOCOL_GUID		EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
+> >  #define EFI_LOAD_FILE2_PROTOCOL_GUID		EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
+> >  #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)

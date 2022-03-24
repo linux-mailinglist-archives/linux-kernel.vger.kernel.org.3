@@ -2,83 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8814E6A07
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B52744E6A0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354095AbiCXUy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 16:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S1349175AbiCXUzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 16:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355935AbiCXUxt (ORCPT
+        with ESMTP id S1354112AbiCXUzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 16:53:49 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20903DA7E;
-        Thu, 24 Mar 2022 13:52:17 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso4144040otf.12;
-        Thu, 24 Mar 2022 13:52:17 -0700 (PDT)
+        Thu, 24 Mar 2022 16:55:05 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AAB25EBC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:53:31 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x34so7010969ede.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aFSr1woZwQXcWxiIeXMBTdkSmylSGPSvw4l7QhCcJdk=;
+        b=UWOwijb6tG4M9q5CzVe8FLlKtNmcdWmo3x+k5WAD0Lt4E7cx8AILpBG8mEMI+DnmqR
+         WL38ld57I7KlKmg/69QrQdqARexREhJnmXWz1eZsisBYV0TJxrVX+c7li7f8/tBXOD7O
+         y54nz6+M26mmk6N5pwX7PTdnHSVcUN2rsLmQE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/QLDLUATu/B8KBKI55+l5jEhcVbVbLC4t+4Lo997I00=;
-        b=MlBBMOHIwE5WwdmDBTna/Fq8uas9VzSGTHwBF1Op95D5rNgmRHR27Na3ak/JBmBbGQ
-         vr7RzXgy49lBs5KWLqmS8TtUQ2mRHVZJ5oaQWNnswyA5AQGqX9yA616OvCfk4gQ7yJ8/
-         Xj/4Kb6hPXBy28ge0LmCc5V50Q8IifesHjrjMU4DogKBmo/r5B/jFscBepSjYC6YNeIB
-         LkqqVXqmXKLXYIq4MffW5xrKRXgeTLLOOIQx7hAZDneGBj9JEhMnfJQ9/BgHN5S+Dfgz
-         PDc6g5906uipRBC79KLufVqTyto7aHUlbrqYqrQZK2ADmgbZPnR1QUfxqLMkUsuDxkb5
-         ow+w==
-X-Gm-Message-State: AOAM530kuK8ZkNCoPTj528mI7f67kDTEgqGSgDmsFxXjGqfM96a+IWoL
-        obCodq90BC9nLecaBrNgWI0I/3PIvQ==
-X-Google-Smtp-Source: ABdhPJyFYhwTUm0TKaf6Pqx5DO+afqZXoNMWQT+r4f5yxTAUoTRetq4GNXbRCl2dY1di+ow83NKRAA==
-X-Received: by 2002:a9d:7f95:0:b0:5cd:b19f:2c3a with SMTP id t21-20020a9d7f95000000b005cdb19f2c3amr2403965otp.272.1648155136961;
-        Thu, 24 Mar 2022 13:52:16 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g105-20020a9d12f2000000b005c961f9e119sm1793184otg.35.2022.03.24.13.52.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 13:52:16 -0700 (PDT)
-Received: (nullmailer pid 2553596 invoked by uid 1000);
-        Thu, 24 Mar 2022 20:52:15 -0000
-Date:   Thu, 24 Mar 2022 15:52:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, bhupesh.linux@gmail.com,
-        lorenzo.pieralisi@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, svarbanov@mm-sol.com,
-        bhelgaas@google.com, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v3 5/7] PCI: qcom: Add SM8150 SoC support
-Message-ID: <YjzZ/zfhSDlFzP7G@robh.at.kernel.org>
-References: <20220302203045.184500-1-bhupesh.sharma@linaro.org>
- <20220302203045.184500-6-bhupesh.sharma@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aFSr1woZwQXcWxiIeXMBTdkSmylSGPSvw4l7QhCcJdk=;
+        b=ZWr1vORr+vWhPqTZrSMQFBEvPwvRDjADdJn75EyZqj6KSRZPIm8An0ihjbSmb3zLmn
+         0190K5XIhg0kHoaO+sDGN8kMm6cjGdCu3Z16RdEbGzVt8DGWKcDnhQbpSA7AZQ7zwP6e
+         +g6u9kPqopi58mvp5ePTpiWH79wPHaAgmfHmEnfIsCCc7L60VeSRC14d1qGLubBMJqVg
+         WI6vCWoE5IanAa6NZJxdDYUcPfaUvisip2rncS9I6uP0Am69bgT3PHuetBo2wCgVUjol
+         5WzGt06zq3C2tABZ9L0we+RcY/KAsVXICIokG48fV1++/SJWn1sRWm/BAsU36S6IkYSC
+         IevQ==
+X-Gm-Message-State: AOAM5328XsHdWGJ7wQCEoeglMdmemedfk68robxIwiAIVZ3xuUuTb/lE
+        e/jhJJ8oJ4d+F+heOM1H+eD02X3eoC2kGMWq
+X-Google-Smtp-Source: ABdhPJzFIWzmJ3a2EAikSOkaWI4rggIJUnzgCcvRuqjF4MgiqXoCXSrn+ltFbFtbx3lw+HGf8mDUOg==
+X-Received: by 2002:a05:6402:51c6:b0:419:8269:f33d with SMTP id r6-20020a05640251c600b004198269f33dmr8853271edd.264.1648155210093;
+        Thu, 24 Mar 2022 13:53:30 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id d1-20020a50fe81000000b004197f2ecdc2sm1875670edt.89.2022.03.24.13.53.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 13:53:28 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so3309619wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:53:28 -0700 (PDT)
+X-Received: by 2002:a1c:7518:0:b0:37c:7eb:f255 with SMTP id
+ o24-20020a1c7518000000b0037c07ebf255mr15649886wmc.29.1648155208026; Thu, 24
+ Mar 2022 13:53:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302203045.184500-6-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220324111335.1.I1131d63cbefbfa9ff107a284e2e51f880c5bf7c8@changeid>
+In-Reply-To: <20220324111335.1.I1131d63cbefbfa9ff107a284e2e51f880c5bf7c8@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 24 Mar 2022 13:53:16 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XG-JqqjcoAUoLWHjOyOSQMxD2vyXi9WVJNSaUawtvthg@mail.gmail.com>
+Message-ID: <CAD=FV=XG-JqqjcoAUoLWHjOyOSQMxD2vyXi9WVJNSaUawtvthg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: display: simple: Add AUO B133UAN01 panel
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 02:00:43AM +0530, Bhupesh Sharma wrote:
-> The PCIe IP (rev 1.5.0) on SM8150 SoC is similar to the one used on
-> SM8250. Hence the support is added reusing the members of ops_1_9_0.
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+Hi,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Thu, Mar 24, 2022 at 11:14 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> Add binding for the AUO B133UAN01 panel. It is 13.3" TFT LCD panel
+> with WUXGA (1920x1200) resolution.
+>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+>
+>  .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+> index 1eb9dd4f8f58..e5cd45c81d02 100644
+> --- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+> @@ -49,6 +49,8 @@ properties:
+>        - auo,b133han05
+>          # AU Optronics Corporation 13.3" FHD (1920x1080) color TFT-LCD panel
+>        - auo,b133htn01
+> +        # AU Optronics Corporation 13.3" WUXGA (1920x1200) color TFT-LCD panel
+> +      - auo,b133uan01
+
+Breadcrumbs to save Rob Herring from responding is that we're moving
+to do this using the eDP autodetect feature instead of adding a new
+compatible. v2 is at:
+
+https://lore.kernel.org/r/20220324134819.v2.1.I816014b6c62da5a33af5021f3cc35cea66552c00@changeid/
+
+-Doug

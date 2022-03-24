@@ -2,181 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229244E67EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453884E67A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346473AbiCXRjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S1352173AbiCXRVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243769AbiCXRjr (ORCPT
+        with ESMTP id S1352115AbiCXRVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:39:47 -0400
-X-Greylist: delayed 1793 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 10:38:14 PDT
-Received: from 2.mo561.mail-out.ovh.net (2.mo561.mail-out.ovh.net [46.105.75.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102496EB29
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:38:12 -0700 (PDT)
-Received: from player158.ha.ovh.net (unknown [10.108.20.52])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 81A6F245BB
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:59:13 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player158.ha.ovh.net (Postfix) with ESMTPSA id 027C128BA44A3;
-        Thu, 24 Mar 2022 16:59:07 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G003bf81b195-8d89-4a74-bcfe-1482886f0cef,
-                    78FFD8E4238D9337B8F0C8EEA79873C5FE5514E5) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] clk: use i2c_match_id and simple i2c probe
-Date:   Thu, 24 Mar 2022 17:59:04 +0100
-Message-Id: <20220324165904.538861-1-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
+        Thu, 24 Mar 2022 13:21:33 -0400
+X-Greylist: delayed 905 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 10:20:01 PDT
+Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F5632077
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:20:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1648141473; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=FW8MWCkOHrg9ThG91vgrGNzOB1erkBBBCrys60yv57C9YddH0CH8HvnFk9myGmnH3B5Nq+I13Q7IvozMXmQNalKVRJW30o6f0dFxA7nhXm74E6hxm/E3AhXG/g1S8sFhAcOiFYaTnkjH+BI8u0wjyfaYzaRJMkXZaKc9R8szTlc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1648141473; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=7HXVL4Pb13sd77J4IwrIZ4dtqYkJhhp1qvhSJ9pgPBw=; 
+        b=OOnHTegAEGLq8zBrfkpDbRPjBV4wYYeoE9UJON79fb2cAjRzzGBt4JkXexDlhfI4jptBOCiEiwby329qNbmXzVEHbw3sNlXhwnHVtEd907Pm5MsEICmfrgXXXZ4r4Qd4pj2VF2SLuuQnB5VxpiOub2SLm4yn9CWhat0+gFAlv6I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
+        with SMTPS id 1648141468242978.5467378280339; Thu, 24 Mar 2022 10:04:28 -0700 (PDT)
+Message-ID: <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
+        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org
+In-Reply-To: <YJNKs8bUMGOzFre+@kernel.org>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
+         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
+         <YJNKs8bUMGOzFre+@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Thu, 24 Mar 2022 18:04:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 11772690904623974022
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudegledgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhduheekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.2 
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of the ongoing i2c transition to the simple probe
-("probe_new"), this patch uses i2c_match_id to retrieve the
-driver_data for the probed device. The id parameter is thus no longer
-necessary and the simple probe can be used instead.
+Hi guys,
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- drivers/clk/clk-cdce925.c | 8 +++++---
- drivers/clk/clk-si5351.c  | 8 +++++---
- drivers/clk/clk-si544.c   | 8 +++++---
- drivers/clk/clk-si570.c   | 8 +++++---
- 4 files changed, 20 insertions(+), 12 deletions(-)
+On Thu, 2021-05-06 at 04:47 +0300, Jarkko Sakkinen wrote:
+> On Wed, May 05, 2021 at 01:15:29AM +0200, Lino Sanfilippo wrote:
+> > Hi,
+> > 
+> > On 03.05.21 at 17:50, Jarkko Sakkinen wrote:
+> > > What the heck is "simplification" and what that has to do with fixing
+> > > anything? I don't understand your terminology.
+> > 
+> > 
+> > The intention for this patch is not to fix anything. Please read the cover
+> > letter and the commit message.
+> > This patch is about making the locality handling easier by not
+> > claiming/releasing
+> > it multiple times over the driver life time, but claiming it once at driver
+> > startup and only releasing it at driver shutdown.
+> > 
+> > Right now we have locality request/release combos in
+> > 
+> > - probe_itpm()
+> > - tpm_tis_gen_interrupt()
+> > - tpm_tis_core_init()
+> > - tpm_chip_start()
+> > 
+> > and there is still one combo missing for
+> > 
+> > - tpm2_get_timeouts()
+> > 
+> > which is the reason why we get the "TPM returned invalid status" bug in case
+> > of TPM2 (and this is the bug which is _incidentally_ fixed by this patch,
+> > see
+> > below).
+> > 
+> > And if we are going to enable interrupts, we have to introduce yet another
+> > combo,
+> > for accessing the status register in the interrupt handler, since TPM 2.0
+> > requires holding the locality for writing to the status register. That makes
+> > 6 different code places in which we take and release the locality.
+> > 
+> > With this patch applied we only take the locality at one place. Furthermore
+> > with interrupts enabled we dont have to claim the locality for each handler
+> > execution, saving us countless claim/release combinations at runtime.
+> > 
+> > Hence the term "simplification" which is perfectly justified IMO.
+> > 
+> > So again, this patch is "only" in preparation for the next patch when
+> > interrupts
+> > are actually enabled and we would have to take the locality in the interrupt
+> > handler without this patch.
+> 
+> So: what problem this patch does solve?
+> 
+> /Jarkko
+> 
 
-diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
-index 308b353815e1..b5495ff3a950 100644
---- a/drivers/clk/clk-cdce925.c
-+++ b/drivers/clk/clk-cdce925.c
-@@ -634,11 +634,13 @@ static struct regmap_bus regmap_cdce925_bus = {
- 	.read = cdce925_regmap_i2c_read,
- };
- 
--static int cdce925_probe(struct i2c_client *client,
--		const struct i2c_device_id *id)
-+static const struct i2c_device_id cdce925_id[];
-+
-+static int cdce925_probe(struct i2c_client *client)
- {
- 	struct clk_cdce925_chip *data;
- 	struct device_node *node = client->dev.of_node;
-+	const struct i2c_device_id *id = i2c_match_id(cdce925_id, client);
- 	const char *parent_name;
- 	const char *pll_clk_name[MAX_NUMBER_OF_PLLS] = {NULL,};
- 	struct clk_init_data init;
-@@ -837,7 +839,7 @@ static struct i2c_driver cdce925_driver = {
- 		.name = "cdce925",
- 		.of_match_table = of_match_ptr(clk_cdce925_of_match),
- 	},
--	.probe		= cdce925_probe,
-+	.probe_new	= cdce925_probe,
- 	.id_table	= cdce925_id,
- };
- module_i2c_driver(cdce925_driver);
-diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
-index 93fa8c9e11be..3db5e97c62c0 100644
---- a/drivers/clk/clk-si5351.c
-+++ b/drivers/clk/clk-si5351.c
-@@ -1367,9 +1367,11 @@ si53351_of_clk_get(struct of_phandle_args *clkspec, void *data)
- }
- #endif /* CONFIG_OF */
- 
--static int si5351_i2c_probe(struct i2c_client *client,
--			    const struct i2c_device_id *id)
-+static const struct i2c_device_id si5351_i2c_ids[];
-+
-+static int si5351_i2c_probe(struct i2c_client *client)
- {
-+	const struct i2c_device_id *id = i2c_match_id(si5351_i2c_ids, client);
- 	enum si5351_variant variant = (enum si5351_variant)id->driver_data;
- 	struct si5351_platform_data *pdata;
- 	struct si5351_driver_data *drvdata;
-@@ -1663,7 +1665,7 @@ static struct i2c_driver si5351_driver = {
- 		.name = "si5351",
- 		.of_match_table = of_match_ptr(si5351_dt_ids),
- 	},
--	.probe = si5351_i2c_probe,
-+	.probe_new = si5351_i2c_probe,
- 	.remove = si5351_i2c_remove,
- 	.id_table = si5351_i2c_ids,
- };
-diff --git a/drivers/clk/clk-si544.c b/drivers/clk/clk-si544.c
-index d9ec9086184d..7a0c28b71b7b 100644
---- a/drivers/clk/clk-si544.c
-+++ b/drivers/clk/clk-si544.c
-@@ -451,11 +451,13 @@ static const struct regmap_config si544_regmap_config = {
- 	.volatile_reg = si544_regmap_is_volatile,
- };
- 
--static int si544_probe(struct i2c_client *client,
--		const struct i2c_device_id *id)
-+static const struct i2c_device_id si544_id[];
-+
-+static int si544_probe(struct i2c_client *client)
- {
- 	struct clk_si544 *data;
- 	struct clk_init_data init;
-+	const struct i2c_device_id *id = i2c_match_id(si544_id, client);
- 	int err;
- 
- 	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-@@ -520,7 +522,7 @@ static struct i2c_driver si544_driver = {
- 		.name = "si544",
- 		.of_match_table = clk_si544_of_match,
- 	},
--	.probe		= si544_probe,
-+	.probe_new	= si544_probe,
- 	.id_table	= si544_id,
- };
- module_i2c_driver(si544_driver);
-diff --git a/drivers/clk/clk-si570.c b/drivers/clk/clk-si570.c
-index eea50121718a..779fe72054fd 100644
---- a/drivers/clk/clk-si570.c
-+++ b/drivers/clk/clk-si570.c
-@@ -398,11 +398,13 @@ static const struct regmap_config si570_regmap_config = {
- 	.volatile_reg = si570_regmap_is_volatile,
- };
- 
--static int si570_probe(struct i2c_client *client,
--		const struct i2c_device_id *id)
-+static const struct i2c_device_id si570_id[];
-+
-+static int si570_probe(struct i2c_client *client)
- {
- 	struct clk_si570 *data;
- 	struct clk_init_data init;
-+	const struct i2c_device_id *id = i2c_match_id(si570_id, client);
- 	u32 initial_fout, factory_fout, stability;
- 	bool skip_recall;
- 	int err;
-@@ -518,7 +520,7 @@ static struct i2c_driver si570_driver = {
- 		.name = "si570",
- 		.of_match_table = clk_si570_of_match,
- 	},
--	.probe		= si570_probe,
-+	.probe_new	= si570_probe,
- 	.remove		= si570_remove,
- 	.id_table	= si570_id,
- };
--- 
-2.27.0
+first, thank you very much, Lino, for working on this! I've been debugging
+issues with the tis driver in the last days and was about to start with the same
+approach as yours when I luckily discovered your patch!
+
+Jarkko, while I agree, that the commit message is not optimal, Lino tried hard
+to explain what the problems with the current code are and how they are / can be
+fixed. Further, I too don't see why simplification / optimization is such a bad
+thing. This driver is actually a very good example. I had a hard time, too,
+figuring out what's going on there. A clean rewrite is a very valid approach
+here IMO. It's not "polishing for nothing", as you described it, but actually
+solving problems.
+
+Interrupt detection is broken for years now and finally a volunteer worked on a
+solution. Don't you think this should be valued? Let's get this problem sorted
+out :-)
+
+Lino, I'd be happy to test the patches, when you have time and interest to work
+on this again!
+
+Thanks, Michael
+
 

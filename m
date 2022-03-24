@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A7A4E9B61
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19084E9BAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238162AbiC1PqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S239446AbiC1PtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238595AbiC1Ppy (ORCPT
+        with ESMTP id S239096AbiC1PqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:45:54 -0400
+        Mon, 28 Mar 2022 11:46:10 -0400
 Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 056224A3E1;
-        Mon, 28 Mar 2022 08:44:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDCF64B1E9;
+        Mon, 28 Mar 2022 08:44:19 -0700 (PDT)
 Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 384E51E28DE;
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id D96631E28DF;
         Thu, 24 Mar 2022 03:16:45 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 384E51E28DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru D96631E28DF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baikalelectronics.ru; s=mail; t=1648081005;
-        bh=KrUo+i/9CiTNQNY1Lv9K7N6HJQQfuan8/c6RBDZemY0=;
+        bh=s8/hjJ3Mxs6TNNKBuPTlAebuny86Ylaq+Kt1EqWatAk=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=JjA8l0IF0wENkQ35sS+hjd0o1EeJ75KbTFWy9fieqH2F/B3VSZY3cZeDt66QOozNi
-         XWk7EyGnV/9VUaWAWrlz609mh+tPIP0OocNAfKCjQi/r/4SPR3lJVCBieHXMBv9oUU
-         G5DTGAdWg+RaLRBapM/C06ayl/5+Nx5AerjanBlc=
+        b=K1uYWeC2FnUOs850BMTzhqOyMJPSXexWjTMqTdoqm2Dq1csKayY5b7MAz8CDRfNVo
+         0atB27pqp4fzZ0F5cBAjmzk+ZCefLtwB7I1rmAh1EUMaXB4K0WazGir93MQwMs6LQs
+         WXLeXy8fX3hoZemkoaHDN7/++2wVZk6di1sngrxM=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 24 Mar 2022 03:16:44 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 24 Mar 2022 03:16:45 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Jens Axboe <axboe@kernel.dk>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
+        Serge Semin <fancer.lancer@gmail.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH 18/21] dt-bindings: ata: ahci: Add Baikal-T1 AHCI SATA controller DT schema
-Date:   Thu, 24 Mar 2022 03:16:25 +0300
-Message-ID: <20220324001628.13028-19-Sergey.Semin@baikalelectronics.ru>
+        Rob Herring <robh+dt@kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH 19/21] ata: ahci-dwc: Add platform-specific quirks support
+Date:   Thu, 24 Mar 2022 03:16:26 +0300
+Message-ID: <20220324001628.13028-20-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -57,158 +56,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baikal-T1 AHCI controller is based on the DWC AHCI SATA IP-core v4.10a
-with the next specific settings: two SATA ports, cascaded CSR access based
-on two clock domains (APB and AXI), selectable source of the reference
-clock (though stable work is currently available from the external source
-only), two reset lanes for the application and SATA ports domains. Other
-than that the device is fully compatible with the generic DWC AHCI SATA
-bindings.
+Some DWC AHCI SATA IP-core derivatives require to perform small platform
+or IP-core specific setups. They are too small to be placed in a dedicated
+driver. It's just much easier to have a set of quirks for them right in
+the DWC AHCI driver code. Since we are about to add such platform support,
+as a pre-requisite we introduce a platform-data based DWC AHCI quirks API.
+The platform data can be used to define the flags passed to the
+ahci_platform_get_resources() method, additional AHCI host-flags and a set
+of callbacks to initialize, re-initialize and clear the platform settings.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- .../bindings/ata/baikal,bt1-ahci.yaml         | 132 ++++++++++++++++++
- 1 file changed, 132 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
+ drivers/ata/ahci_dwc.c | 52 ++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 48 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml b/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-new file mode 100644
-index 000000000000..960d88d97926
---- /dev/null
-+++ b/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-@@ -0,0 +1,132 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/ata/baikal,bt1-ahci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
+index c51e2251994e..9e294f994ed3 100644
+--- a/drivers/ata/ahci_dwc.c
++++ b/drivers/ata/ahci_dwc.c
+@@ -90,7 +90,16 @@
+ #define DWC_AHCI_PORT_PHYCR		0x74
+ #define DWC_AHCI_PORT_PHYSR		0x78
+ 
++struct dwc_ahci_plat_data {
++	unsigned int pflags;
++	unsigned int hflags;
++	int (*init)(struct ahci_host_priv *hpriv);
++	int (*reinit)(struct ahci_host_priv *hpriv);
++	void (*clear)(struct ahci_host_priv *hpriv);
++};
 +
-+title: Baikal-T1 SoC AHCI SATA controller
+ struct dwc_ahci_host_priv {
++	const struct dwc_ahci_plat_data *pdata;
+ 	struct platform_device *pdev;
+ 
+ 	u32 timv;
+@@ -107,11 +116,15 @@ static struct ahci_host_priv *dwc_ahci_get_resources(struct platform_device *pde
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	dpriv->pdev = pdev;
++	dpriv->pdata = device_get_match_data(&pdev->dev);
++	if (!dpriv->pdata)
++		return ERR_PTR(-EINVAL);
+ 
+-	hpriv = ahci_platform_get_resources(pdev, AHCI_PLATFORM_GET_RESETS);
++	hpriv = ahci_platform_get_resources(pdev, dpriv->pdata->pflags);
+ 	if (IS_ERR(hpriv))
+ 		return hpriv;
+ 
++	hpriv->flags |= dpriv->pdata->hflags;
+ 	hpriv->plat_data = (void *)dpriv;
+ 
+ 	return hpriv;
+@@ -242,22 +255,33 @@ static int dwc_ahci_init_dmacr(struct ahci_host_priv *hpriv)
+ 
+ static int dwc_ahci_init_host(struct ahci_host_priv *hpriv)
+ {
++	struct dwc_ahci_host_priv *dpriv = hpriv->plat_data;
+ 	int rc;
+ 
+ 	rc = ahci_platform_enable_resources(hpriv);
+ 	if (rc)
+ 		return rc;
+ 
++	if (dpriv->pdata->init) {
++		rc = dpriv->pdata->init(hpriv);
++		if (rc)
++			goto err_disable_resources;
++	}
 +
-+maintainers:
-+  - Serge Semin <fancer.lancer@gmail.com>
+ 	dwc_ahci_check_cap(hpriv);
+ 
+ 	dwc_ahci_init_timer(hpriv);
+ 
+ 	rc = dwc_ahci_init_dmacr(hpriv);
+ 	if (rc)
+-		goto err_disable_resources;
++		goto err_clear_platform;
+ 
+ 	return 0;
+ 
++err_clear_platform:
++	if (dpriv->pdata->clear)
++		dpriv->pdata->clear(hpriv);
 +
-+description: |
-+  AHCI SATA controller embedded into the Baikal-T1 SoC is based on the
-+  DWC AHCI SATA v4.10a IP-core.
+ err_disable_resources:
+ 	ahci_platform_disable_resources(hpriv);
+ 
+@@ -275,6 +299,12 @@ static int dwc_ahci_reinit_host(struct ahci_host_priv *hpriv)
+ 	if (rc)
+ 		return rc;
+ 
++	if (dpriv->pdata->reinit) {
++		rc = dpriv->pdata->reinit(hpriv);
++		if (rc)
++			goto err_disable_resources;
++	}
 +
-+allOf:
-+  - $ref: snps,dwc-ahci.yaml#
+ 	writel(dpriv->timv, hpriv->mmio + DWC_AHCI_HOST_TIMER1MS);
+ 
+ 	for_each_set_bit(i, &port_map, AHCI_MAX_PORTS) {
+@@ -283,10 +313,20 @@ static int dwc_ahci_reinit_host(struct ahci_host_priv *hpriv)
+ 	}
+ 
+ 	return 0;
 +
-+properties:
-+  compatible:
-+    contains:
-+      const: baikal,bt1-ahci
++err_disable_resources:
++	ahci_platform_disable_resources(hpriv);
 +
-+  clocks:
-+    items:
-+      - description: Peripheral APB bus clock source
-+      - description: Application AXI BIU clock
-+      - description: Internal SATA Ports reference clock
-+      - description: External SATA Ports reference clock
++	return rc;
+ }
+ 
+ static void dwc_ahci_clear_host(struct ahci_host_priv *hpriv)
+ {
++	struct dwc_ahci_host_priv *dpriv = hpriv->plat_data;
 +
-+  clock-names:
-+    items:
-+      - const: pclk
-+      - const: aclk
-+      - const: ref_int
-+      - const: ref_ext
++	if (dpriv->pdata->clear)
++		dpriv->pdata->clear(hpriv);
 +
-+  resets:
-+    items:
-+      - description: Application AXI BIU domain reset
-+      - description: SATA Ports clock domain reset
+ 	ahci_platform_disable_resources(hpriv);
+ }
+ 
+@@ -371,9 +411,13 @@ static int dwc_ahci_resume(struct device *dev)
+ 
+ static SIMPLE_DEV_PM_OPS(dwc_ahci_pm_ops, dwc_ahci_suspend, dwc_ahci_resume);
+ 
++struct dwc_ahci_plat_data dwc_ahci_plat = {
++	.pflags = AHCI_PLATFORM_GET_RESETS,
++};
 +
-+  reset-names:
-+    items:
-+      - const: arst
-+      - const: ref
-+
-+  syscon:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle reference to the CCU system controller. It is required to
-+      switch between internal and external SATA reference clock sources.
-+
-+  ports-implemented:
-+    maximum: 0x3
-+
-+patternProperties:
-+  "^sata-port@[0-9a-e]$":
-+    type: object
-+
-+    properties:
-+      reg:
-+        minimum: 0
-+        maximum: 1
-+
-+      snps,tx-ts-max:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description:
-+          Due to having AXI3 bus interface utilized the maximum Tx DMA
-+          transaction size can't exceed 16 beats (AxLEN[3:0]).
-+        minimum: 1
-+        maximum: 16
-+
-+      snps,rx-ts-max:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description:
-+          Due to having AXI3 bus interface utilized the maximum Rx DMA
-+          transaction size can't exceed 16 beats (AxLEN[3:0]).
-+        minimum: 1
-+        maximum: 16
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+  - syscon
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/mips-gic.h>
-+    #include <dt-bindings/clock/bt1-ccu.h>
-+    #include <dt-bindings/reset/bt1-ccu.h>
-+
-+    sata@1f050000 {
-+      compatible = "baikal,bt1-ahci", "snps,dwc-ahci";
-+      reg = <0x1f050000 0x2000>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      interrupts = <GIC_SHARED 64 IRQ_TYPE_LEVEL_HIGH>;
-+
-+      clocks = <&ccu_sys CCU_SYS_APB_CLK>, <&ccu_axi CCU_AXI_SATA_CLK>,
-+               <&ccu_sys CCU_SYS_SATA_REF_CLK>, <&clk_sata>;
-+      clock-names = "pclk", "aclk", "ref_int", "ref_ext";
-+
-+      resets = <&ccu_axi CCU_AXI_SATA_RST>, <&ccu_sys CCU_SYS_SATA_REF_RST>;
-+      reset-names = "arst", "ref";
-+
-+      syscon = <&syscon>;
-+
-+      ports-implemented = <0x3>;
-+
-+      sata-port@0 {
-+        reg = <0>;
-+
-+        snps,tx-ts-max = <4>;
-+        snps,rx-ts-max = <4>;
-+      };
-+
-+      sata-port@1 {
-+        reg = <1>;
-+
-+        snps,tx-ts-max = <4>;
-+        snps,rx-ts-max = <4>;
-+      };
-+    };
-+...
+ static const struct of_device_id dwc_ahci_of_match[] = {
+-	{ .compatible = "snps,dwc-ahci", },
+-	{ .compatible = "snps,spear-ahci", },
++	{ .compatible = "snps,dwc-ahci", &dwc_ahci_plat },
++	{ .compatible = "snps,spear-ahci", &dwc_ahci_plat },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, dwc_ahci_of_match);
 -- 
 2.35.1
 

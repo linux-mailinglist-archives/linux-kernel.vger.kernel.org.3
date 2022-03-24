@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3A14E610C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6914E610F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349207AbiCXJZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 05:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S1349209AbiCXJ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 05:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbiCXJZx (ORCPT
+        with ESMTP id S232772AbiCXJ0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 05:25:53 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049DE6A077
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:24:08 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 22O9MgKw031135
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Thu, 24 Mar 2022 17:22:43 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 24 Mar 2022 17:22:43 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        ke wang <ke.wang@unisoc.com>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>
-Subject: [RFC PATCH] cgroup: introduce proportional protection on memcg
-Date:   Thu, 24 Mar 2022 17:22:23 +0800
-Message-ID: <1648113743-32622-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Thu, 24 Mar 2022 05:26:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BC76D4FD;
+        Thu, 24 Mar 2022 02:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648113904; x=1679649904;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6xswe2NDduqgra8KW8XqaVdTAYDUAbdLTGvm1CKnFGw=;
+  b=GIhyhnXecC2QrlDWTI89tbKgRE5XjigDmn2mSs6SS6AeODGk3agRRVRl
+   AuMHlkQNrdWd097EZsb0FR5zuWPYE5ZgtOZJCImYn3dDLBEr+OnS3cokd
+   BXA2j6FZsJkf46QiJjlydNiFGHHWPowW5hSoBNiQikXWBcr4PHCwqjZeq
+   CJHH8gAzUK+7vApsHUHHk9VXe6SjArCdzjxtsQXwJHfCYSiwc/og1iSoh
+   51zD7M0iUnIJ90Wp8YDb8UZs4zlz6zFPe2cEdYiXc0rJWPKdxqAolYLl+
+   12b/eQrl/OjTRURnbMrSr7/ljoqwUF5I9NjybPL1m4jPKgCromkQaS7KW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="283185382"
+X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
+   d="scan'208";a="283185382"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 02:25:04 -0700
+X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
+   d="scan'208";a="519709826"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 02:25:02 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nXJhi-005imM-Q3;
+        Thu, 24 Mar 2022 11:24:26 +0200
+Date:   Thu, 24 Mar 2022 11:24:26 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] spidev: Do not use atomic bit operations when
+ allocating minor
+Message-ID: <Yjw4yjgordnSo+7M@smile.fi.intel.com>
+References: <20220323140215.2568-1-andriy.shevchenko@linux.intel.com>
+ <YjtNJe4Pgp3WIwOa@sirena.org.uk>
+ <YjtXbDyCWZxKnf4Y@smile.fi.intel.com>
+ <YjtvsYs+x3LRaLVP@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 22O9MgKw031135
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjtvsYs+x3LRaLVP@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Wed, Mar 23, 2022 at 07:06:25PM +0000, Mark Brown wrote:
+> On Wed, Mar 23, 2022 at 07:22:52PM +0200, Andy Shevchenko wrote:
+> > On Wed, Mar 23, 2022 at 04:39:01PM +0000, Mark Brown wrote:
+> 
+> > > There's no *need* but the __ looks suspicious...  what's the upside
+> > > here?
+> 
+> > It's exactly what is written in the commit message
+> 
+> > __*_bit() are non-atomic
+> > *_bit() are atomic
+> 
+> > Since they are wrapped by mutex, the atomic ones are not needed.
+> 
+> Yes, it's not needed but what meaningful harm does it do?
 
-current memcg protection via min,low,high asks for an evaluation of
-protected entity, which could be hard for some system. Furthermore, the usage
-could also be various under different scenarios(imagin keep protecting 50M when
-usage change from 100M to 300M), which make the protection less meaning.
-So we introduce the proportional protection over memcg's ever highest
-usage(watermark) to overcome above constraints.
+There are basically two points:
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- include/linux/page_counter.h |  3 +++
- mm/memcontrol.c              | 17 +++++++++++++----
- 2 files changed, 16 insertions(+), 4 deletions(-)
+1) in one driver the additional lock may not be influential, but
+   if many drivers will do the same, it will block CPUs for no
+   purpose;
 
-diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
-index 6795913..7762629 100644
---- a/include/linux/page_counter.h
-+++ b/include/linux/page_counter.h
-@@ -27,6 +27,9 @@ struct page_counter {
- 	unsigned long watermark;
- 	unsigned long failcnt;
- 
-+	/* proportional protection */
-+	unsigned long min_prop;
-+	unsigned long low_prop;
- 	/*
- 	 * 'parent' is placed here to be far from 'usage' to reduce
- 	 * cache false sharing, as 'usage' is written mostly while
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 508bcea..937c6ce 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -6616,6 +6616,7 @@ void mem_cgroup_calculate_protection(struct mem_cgroup *root,
- {
- 	unsigned long usage, parent_usage;
- 	struct mem_cgroup *parent;
-+	unsigned long memcg_emin, memcg_elow, parent_emin, parent_elow;
- 
- 	if (mem_cgroup_disabled())
- 		return;
-@@ -6650,14 +6651,22 @@ void mem_cgroup_calculate_protection(struct mem_cgroup *root,
- 
- 	parent_usage = page_counter_read(&parent->memory);
- 
-+	/* use proportional protect first and take 1024 as 100% */
-+	memcg_emin = READ_ONCE(memcg->memory.min_prop) ?
-+		READ_ONCE(memcg->memory.min_prop) * READ_ONCE(memcg->memory.watermark) / 1024 : READ_ONCE(memcg->memory.min);
-+	memcg_elow = READ_ONCE(memcg->memory.low_prop) ?
-+		READ_ONCE(memcg->memory.low_prop) * READ_ONCE(memcg->memory.watermark) / 1024 : READ_ONCE(memcg->memory.low);
-+	parent_emin = READ_ONCE(parent->memory.min_prop) ?
-+		READ_ONCE(parent->memory.min_prop) * READ_ONCE(parent->memory.watermark) / 1024 : READ_ONCE(parent->memory.emin);
-+	parent_elow = READ_ONCE(parent->memory.low_prop) ?
-+		READ_ONCE(parent->memory.low_prop) * READ_ONCE(parent->memory.watermark) / 1024 : READ_ONCE(parent->memory.elow);
-+
- 	WRITE_ONCE(memcg->memory.emin, effective_protection(usage, parent_usage,
--			READ_ONCE(memcg->memory.min),
--			READ_ONCE(parent->memory.emin),
-+			memcg_emin, parent_emin,
- 			atomic_long_read(&parent->memory.children_min_usage)));
- 
- 	WRITE_ONCE(memcg->memory.elow, effective_protection(usage, parent_usage,
--			READ_ONCE(memcg->memory.low),
--			READ_ONCE(parent->memory.elow),
-+			memcg_elow, parent_elow,
- 			atomic_long_read(&parent->memory.children_low_usage)));
- }
- 
+2) derived from the above, if one copies'n'pastes the code, esp.
+   using spin locks, it may become an unneeded code and performance
+   degradation.
+
+
+
 -- 
-1.9.1
+With Best Regards,
+Andy Shevchenko
+
 

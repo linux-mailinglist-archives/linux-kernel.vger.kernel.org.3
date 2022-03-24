@@ -2,108 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982AC4E6482
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B50C24E648B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350562AbiCXN6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
+        id S1350703AbiCXN7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350718AbiCXN6A (ORCPT
+        with ESMTP id S231871AbiCXN73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:58:00 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EF24C427;
-        Thu, 24 Mar 2022 06:56:28 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id x8-20020a9d6288000000b005b22c373759so3333349otk.8;
-        Thu, 24 Mar 2022 06:56:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3hu2/w4zk2LRja1m6kxbb1AV3tlPT/cRATwQnTQCk3g=;
-        b=gHnJR37/4miZFfBAQ2uQcuryPumOTXNoLULL4lqvQ/9O4aeDa7ABKWco3EPxs0x3hi
-         McBGxEFlI5l+jG5L2O1XjjcDV+hILQ+tBAAt+6+NWKa1SGwLwlzBzkhF7RbsxOPO+I0w
-         5d0SmDUqpCIJaY9Gmuu0st8SCKXrIpBOfPuUBKeR493KNWRVJQx0dRZlksM708ts1q65
-         5VZCWMSBC5XfCn9zw3nzI7psyIPqDwMC6YKbIae8uKorjPMC2Yr/87GgXvHgBt/2+lBD
-         IbLEbBQ0BiS7vKaqNORNXcx55TBbI77lCth4HXHPXbAoqUI6QJpw9ASqlT5JEAje8IqV
-         bzfA==
-X-Gm-Message-State: AOAM530Qe5wrnmbhutW/wZxUPzFDoAH85FLYs/guQljFr6Qm9KPhbOjw
-        BzpezIz+hJ87AGtgq8yxMw==
-X-Google-Smtp-Source: ABdhPJzA6saZCLeJ/O7iPhpz9VqLML3Yhcc/Zlf/qqvBPu2YEFRUzp5i2fzD5+VZxAbgM6rJADtQoA==
-X-Received: by 2002:a9d:5a07:0:b0:5cd:afdb:b0da with SMTP id v7-20020a9d5a07000000b005cdafdbb0damr2127434oth.188.1648130187606;
-        Thu, 24 Mar 2022 06:56:27 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j145-20020acaeb97000000b002d9f37166c1sm1409446oih.17.2022.03.24.06.56.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 06:56:26 -0700 (PDT)
-Received: (nullmailer pid 1960215 invoked by uid 1000);
-        Thu, 24 Mar 2022 13:56:25 -0000
-Date:   Thu, 24 Mar 2022 08:56:25 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Qing Zhang <zhangqing@loongson.cn>,
-        David Airlie <airlied@linux.ie>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        kernel test robot <lkp@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        devicetree@vger.kernel.org, suijingfeng <suijingfeng@loongson.cn>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <Yjx4iSkddTNo7q7K@robh.at.kernel.org>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-8-15330273260@189.cn>
- <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
- <2aa26f44-38aa-4b3c-ccc3-0956a2ab5d77@189.cn>
+        Thu, 24 Mar 2022 09:59:29 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78044C427;
+        Thu, 24 Mar 2022 06:57:57 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id BD17E1F45386
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648130276;
+        bh=pN1jpxdf4LxqwDnLQ6UhkLVGWH/ctyBoW4i84SPXeMA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LG/O86QDXq0SgsEO7Pa0W0HufhfQSIhOe0IVzNpYwjc1m5/B2GAxWiXJSqWRfTqzZ
+         FyLHZy7Eqxma6zRMLOx36OGjqClNiIRA21Fo95pC+biCGT8WwT97yGxjbSM+uT1Y/z
+         2AMT/H89sNaJEMSB/dl+kiRWJjrnXvx5rEukPBHwPiA1Ax5czAiSjQRMJikaKbDOtP
+         xiV835X0ZE+KDqnzg45WYO8L4jBiKDO4HSsve7j4+lSRVczDZXlyaNpKQUHuwDaeKP
+         Eff4EkTIO1FyU/zFkNl5SEsl2MC220wsOq6pPpB88Yy/uSEAbEKMRgjOYPLC++pVPo
+         nRUaMQMSNYHmg==
+Date:   Thu, 24 Mar 2022 09:57:50 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v4 08/22] arm64: dts: mt8192: Add infracfg_rst node
+Message-ID: <20220324135750.652j2qwjz5lkwejs@notapiano>
+References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
+ <20220318144534.17996-9-allen-kh.cheng@mediatek.com>
+ <20220322215754.j2hzutm775hvr25n@notapiano>
+ <17bc30c64db3f3280993669a39edf3a11f76fb68.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <2aa26f44-38aa-4b3c-ccc3-0956a2ab5d77@189.cn>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <17bc30c64db3f3280993669a39edf3a11f76fb68.camel@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 03:32:01PM +0800, Sui Jingfeng wrote:
+On Wed, Mar 23, 2022 at 02:27:00PM +0800, allen-kh.cheng wrote:
+> Hi Nícolas,
 > 
-> On 2022/3/23 04:49, Rob Herring wrote:
-> > > +	}
+> On Tue, 2022-03-22 at 17:57 -0400, Nícolas F. R. A. Prado wrote:
+> > Hi Allen,
+> > 
+> > please see my comment below.
+> > 
+> > On Fri, Mar 18, 2022 at 10:45:20PM +0800, Allen-KH Cheng wrote:
+> > > Add infracfg_rst node for mt8192 SoC.
+> > >  - Add simple-mfd to allow probing the ti,syscon-reset node.
+> > > 
+> > > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> > > Reviewed-by: AngeloGioacchino Del Regno <
+> > > angelogioacchino.delregno@collabora.com>
+> > > ---
+> > >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 18 ++++++++++++++++--
+> > >  1 file changed, 16 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > index 40cf6dacca3e..82de1af3f6aa 100644
+> > > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > @@ -12,6 +12,7 @@
+> > >  #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
+> > >  #include <dt-bindings/phy/phy.h>
+> > >  #include <dt-bindings/power/mt8192-power.h>
+> > > +#include <dt-bindings/reset/ti-syscon.h>
+> > >  
+> > >  / {
+> > >  	compatible = "mediatek,mt8192";
+> > > @@ -267,10 +268,23 @@
+> > >  			#clock-cells = <1>;
+> > >  		};
+> > >  
+> > > -		infracfg: syscon@10001000 {
+> > > -			compatible = "mediatek,mt8192-infracfg",
+> > > "syscon";
+> > > +		infracfg: infracfg@10001000 {
+> > > +			compatible = "mediatek,mt8192-infracfg",
+> > > "syscon", "simple-mfd";
+> > >  			reg = <0 0x10001000 0 0x1000>;
+> > >  			#clock-cells = <1>;
 > > > +
-> > > +	spin_lock_init(&li2c->reglock);
+> > > +			infracfg_rst: reset-controller {
+> > > +				compatible = "ti,syscon-reset";
+> > > +				#reset-cells = <1>;
 > > > +
-> > > +	snprintf(compat, sizeof(compat), "lsdc,i2c-gpio-%d", index);
-> > compatible values shouldn't have an index and you shouldn't need a
-> > index in DT. You need to iterate over child nodes with matching
-> > compatible.
+> > > +				ti,reset-bits = <
+> > > +					0x120 0 0x124 0 0 0	(ASSERT_SET
+> > > | DEASSERT_SET | STATUS_NONE) /* 0: lvts_ap */
+> > > +					0x730 12 0x734 12 0 0	(AS
+> > > SERT_SET | DEASSERT_SET | STATUS_NONE) /* 1: lvts_mcu */
+> > > +					0x140 15 0x144 15 0 0	(AS
+> > > SERT_SET | DEASSERT_SET | STATUS_NONE) /* 2: pcie phy */
+> > > +					0x730 1 0x734 1 0 0	(ASSERT_SET
+> > > | DEASSERT_SET | STATUS_NONE) /* 3: pcie top */
+> > > +					0x150 5 0x154 5 0 0	(ASSERT_SET
+> > > | DEASSERT_SET | STATUS_NONE) /* 4: svs */
+> > > +				>;
+> > 
+> > If you see [1], Rob has previously said that there shouldn't be new
+> > users of the
+> > ti,reset-bits property. I suggest doing like proposed on [2]: moving
+> > these bit
+> > definitions to the reset-ti-syscon driver, and have them selected
+> > through the
+> > compatible. You'd need to add a mt8192 specific compatible here too
+> > for that.
+> > 
+> > [1] 
+> > https://urldefense.com/v3/__https://lore.kernel.org/all/CAL_JsqJq6gqoXtvG1U7UDsOQpz7oMLMunZHq2njN6nvPr8PZMA@mail.gmail.com/__;!!CTRNKA9wMg0ARbw!1wQAhHnu8bAxe2O51XZ61oWVQU7EFEZcgluzwgP4x4VHRxtb6kAySvsKCGzv8cs8IzVjanDNzBQvOa_Y4OABdRVOzg$
+> >  
+> > [2] 
+> > https://urldefense.com/v3/__https://lore.kernel.org/all/CAATdQgA5pKhjOf5gxo*h7cs7kCts3DeKGU5axeX2t*OaJFHyBg@mail.gmail.com/__;Kys!!CTRNKA9wMg0ARbw!1wQAhHnu8bAxe2O51XZ61oWVQU7EFEZcgluzwgP4x4VHRxtb6kAySvsKCGzv8cs8IzVjanDNzBQvOa_Y4OBLvOYlyQ$
+> >  
+> > 
+> > Thanks,
+> > Nícolas
+> > 
 > 
-> Why compatible values shouldn't have an index, does devicetree
-> specification prohibit this? [1]
+> Thanks for your comment.
+> 
+> For nfracfg_rst node, I prefer remove it from this series and
+> send another patch series(dts and driver).
 
-Probably not explicitly, but that's fundamentally not how compatible 
-works. 'compatible' defines WHAT the device is, not WHICH device and 
-that is used for matching devices to drivers. Drivers work on multiple 
-instances.
-
-> The recommended format is "manufacturer,model", where manufacturer is a string describing the name
-> of the manufacturer (such as a stock ticker symbol), and model specifies the model number. [1]
-
-I don't see anything saying to put the instance in there, do you?
+Yes, that sounds the best approach to me as well.
 
 > 
-> [1] https://www.devicetree.org/specifications/
+> Based on [2], is it ok that we can add mt8192 compatible in reset-ti
+> syscon driver? (even if mt8192 is a mediatek platform)
+
+Actually, I think there's an even better way of handling this. Instead of using
+the TI syscon reset controller, you could give reset controller capabilities to
+the infracfg node directly. This means adding reset controller support to the
+common mtk clock driver (clk-mtk.c) and registering the reset controller on
+clk-mt8192.c for infracfg. By making this common code you'll also be able to
+reuse it for mt8195 as well. And there would no longer be a infracfg_rst node.
+
+Thanks,
+Nícolas
+
+> 
+> best regards,
+> Allen
+> 
+> > > +			};
+> > >  		};
+> > >  
+> > >  		pericfg: syscon@10003000 {
+> > > -- 
+> > > 2.18.0
+> > > 
+> > > 
 > 

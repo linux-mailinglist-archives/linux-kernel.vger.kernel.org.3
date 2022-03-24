@@ -2,232 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E064F4E6173
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFE84E6176
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349389AbiCXKGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S1349393AbiCXKHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349384AbiCXKGP (ORCPT
+        with ESMTP id S245479AbiCXKHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:06:15 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4CB9F6CB;
-        Thu, 24 Mar 2022 03:04:40 -0700 (PDT)
+        Thu, 24 Mar 2022 06:07:24 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FB29F6CB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:05:52 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2e5757b57caso45360877b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:05:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1648116282; x=1679652282;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R5km6m5qxMi3kYpL1LtzFCVr9pY6aeOZnR3nPxQD+cg=;
-  b=KT6JwhFT+NhhZgNLEfDZBRmfbCQeJgORG5iA9ckmDCsWwRzBr0tlre0N
-   YdahXRW3ysnSGN2vboKDiweOHxt02prASfxyKFqykPT38uNNZyb4U5jg/
-   cbuBxijPdxWE4xO9wsvuMBQSo8oHximDH0N0JoOaeeG+xLdJ/g+L7shT1
-   BsBA4Ceq+xMrqBJoN9lggtZnqXdQ+qh3QrdkwJsTtW4D19cSSdmMa+QDg
-   dpIKmr3NC4zYbkcqZWnjoZcOz9TWMchvkES6F8DbFotbVdHy0d3orAFhp
-   WYoEH6ivmd3avWd8PKAGeXZoys28aExctUWL5Nr6KM3gCnAl1SKVasdzQ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,207,1643670000"; 
-   d="scan'208";a="22868150"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 24 Mar 2022 11:04:38 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 24 Mar 2022 11:04:38 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 24 Mar 2022 11:04:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1648116278; x=1679652278;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R5km6m5qxMi3kYpL1LtzFCVr9pY6aeOZnR3nPxQD+cg=;
-  b=W7dPd/dlg79l/gk40VZZGpnKiAL7mp7PguVh6vZf+490e6CNhZV1iltX
-   0Ko9TsPQeBJvPvJ4oUk0kDr48IXEEOFRFSx0hGiAvtvJl95lGRaDSwLyC
-   r2JOv2CT70/qFC8s6hMLbc+H7ybu6hZJqBFcPQ0Zhuqb2h9ZCBmd+UYrc
-   5iuISbm9q4qZa6fc69PsgY4gtdyeaXfQOZlZd2ZGDKMa2Gc/Nml2+fo9p
-   GpQ6jE0e57+0dIwjfxvp1/OHseVPzCDMOOa6Q094sFMX2QI2tdN/YXdTG
-   AT0oB5wfkHGwK/+8wM/RGo0spi6TpnY2Ha3rEJRQodIwn4Y1dsfdLdUSK
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,207,1643670000"; 
-   d="scan'208";a="22868149"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 24 Mar 2022 11:04:38 +0100
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 0242D280065;
-        Thu, 24 Mar 2022 11:04:37 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, vkoul@kernel.org,
-        Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
-Subject: Re: (EXT) [PATCH v2 6/7] arm64: dts: imx8mp-evk: Add PCIe support
-Date:   Thu, 24 Mar 2022 11:04:35 +0100
-Message-ID: <2236205.ElGaqSPkdT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <1646644054-24421-7-git-send-email-hongxing.zhu@nxp.com>
-References: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com> <1646644054-24421-7-git-send-email-hongxing.zhu@nxp.com>
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6bv5JJorVRmW6dCmxnx8S5NTjYP3/PgiSEly+T//n5I=;
+        b=PETwV25Y0Zjl0fzvfBVhFmYZhz86bj+JjkCdM6nwdhPHtZxOfBJvM5FgoGKm+8Iey5
+         B1lC7TdYxhe+tXa6SAk4+oxpw2PaBw5rniAwdx7sqP+KdYJMI3brvXmnntobIDlvRk98
+         td5Qtw+qcZbT/fsL1amHR9cYXKyZ6n123Eo6dn+gjbLY1J+e4uBTM28G8HSoNLjjwkjZ
+         Q0XzttG9Ck5mnHF/+SKqq9NjkIxVY6vwUyeSvonUlWeI/JX2q1Yn7oxL3pQlPxQT9Q4q
+         SJsHCoW2WxnQSB7QVWMyGXzV3AUwiznSMOV5IQ3Lm+JjxgNQaKHkETXsu16t9UImjD5D
+         zwKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6bv5JJorVRmW6dCmxnx8S5NTjYP3/PgiSEly+T//n5I=;
+        b=lc2Mag4m51sYx4XL71n6qzGCNORwMV1DqutT8WChMj0DO3izgP/GkiQxX4FWg6gpnW
+         csBF/l2cjS81AAh8jqzGJEennTHV0kmpBddDcsaqg9IyQRuZs9F0erTqFv0AJ3OzQQIX
+         qTZ6bm+VLu+b0ebfHLx+r9Qt9+7M10C9Kx9COChDso/UKks2vwwM7sKIJ9RcTjEgzlEl
+         V7hGA/v3ySJdET/E94+lSy33qQGEVZp37EusV6N+7ZjkOPAMDrmdL+YbOlL3Ubcc6lcI
+         6lQX/6wxjWAiIuSvr75Uiao0oAvIjI7sHZLasqkmHm+yFYSbkCPy+wIMShV53FlBzgr3
+         s8bA==
+X-Gm-Message-State: AOAM530WkwpDh3AT6+ZIPwng/5eRZtGN0EHLln6y14afj3wH6JNQBKjF
+        BbfBG7HC5iOxVR62iBPOIo3IwnJaKIadGgyHdio7CQ==
+X-Google-Smtp-Source: ABdhPJzuzNNBFuEu6Lvk2gVmyx0qgGn0g1wagWz2hVnsvNpcbTCPj7RAzR96bGe8pUt1QfEyqmy7w7jieldQx6vmQKw=
+X-Received: by 2002:a0d:ccca:0:b0:2e6:2b53:3f16 with SMTP id
+ o193-20020a0dccca000000b002e62b533f16mr3916253ywd.35.1648116352160; Thu, 24
+ Mar 2022 03:05:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220323125523.79254-2-songmuchun@bytedance.com>
+ <202203240546.MHJzsBaO-lkp@intel.com> <20220323151311.289dd405440932e1d6d80f30@linux-foundation.org>
+ <7872f093-e26d-3403-d6cf-c6c1a782242b@intel.com>
+In-Reply-To: <7872f093-e26d-3403-d6cf-c6c1a782242b@intel.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 24 Mar 2022 18:05:15 +0800
+Message-ID: <CAMZfGtWcTrK_=953jy-3mrpG+U5-ZySoKiyox+-p4u1cK17nyw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
+To:     "Chen, Rong A" <rong.a.chen@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kernel test robot <lkp@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>, kbuild-all@lists.01.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Richard,
+On Thu, Mar 24, 2022 at 5:40 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
+>
+>
+>
+> On 3/24/2022 6:13 AM, Andrew Morton wrote:
+> > On Thu, 24 Mar 2022 06:06:41 +0800 kernel test robot <lkp@intel.com> wrote:
+> >
+> >> Hi Muchun,
+> >>
+> >> Thank you for the patch! Yet something to improve:
+> >>
+> >> [auto build test ERROR on hnaz-mm/master]
+> >> [also build test ERROR on linus/master next-20220323]
+> >> [cannot apply to mcgrof/sysctl-next v5.17]
+> >> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> >> And when submitting patch, we suggest to use '--base' as documented in
+> >> https://git-scm.com/docs/git-format-patch]
+> >>
+> >> url:    https://github.com/0day-ci/linux/commits/Muchun-Song/add-hugetlb_free_vmemmap-sysctl/20220323-205902
+> >> base:   https://github.com/hnaz/linux-mm master
+> >> config: arc-randconfig-r043-20220323 (https://download.01.org/0day-ci/archive/20220324/202203240546.MHJzsBaO-lkp@intel.com/config)
+> >> compiler: arc-elf-gcc (GCC) 11.2.0
+> >> reproduce (this is a W=1 build):
+> >>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >>          chmod +x ~/bin/make.cross
+> >>          # https://github.com/0day-ci/linux/commit/64211be650af117819368a26d7b86c33df5deea4
+> >>          git remote add linux-review https://github.com/0day-ci/linux
+> >>          git fetch --no-tags linux-review Muchun-Song/add-hugetlb_free_vmemmap-sysctl/20220323-205902
+> >>          git checkout 64211be650af117819368a26d7b86c33df5deea4
+> >>          # save the config file to linux build tree
+> >>          mkdir build_dir
+> >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc prepare
+> >>
+> >> If you fix the issue, kindly add following tag as appropriate
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >>
+> >> All errors (new ones prefixed by >>):
+> >>
+> >>>> cc1: fatal error: cannot open 'kernel/bounds.s' for writing: No such file or directory
+> >
+> > It would take a lot of talent for Munchun to have caused this!
+> >
+> > Methinks you just ran out of disk space?
+>
+> Hi Andrew,
+>
+> Thanks for the reply, I tried to apply this patch to the head of
+> mainline and I still can reproduce the error in my local machine:
+>
+> $ wget -q -O -
+> https://lore.kernel.org/lkml/20220323125523.79254-2-songmuchun@bytedance.com/raw
+> | git apply -v
+> $ mkdir build_dir && wget
+> https://download.01.org/0day-ci/archive/20220324/202203240546.MHJzsBaO-lkp@intel.com/config
+> -O build_dir/.config
+> $ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross
+> O=build_dir ARCH=arc olddefconfig prepare
+> make --keep-going CONFIG_OF_ALL_DTBS=y CONFIG_DTC=y
+> CROSS_COMPILE=/home/nfs/0day/gcc-11.2.0-nolibc/arc-elf/bin/arc-elf-
+> --jobs=72 O=build_dir ARCH=arc olddefconfig prepare
+> ...
+> cc1: fatal error: cannot open 'kernel/bounds.s' for writing: No such
+> file or directory
+> compilation terminated.
+> make[3]: *** [../scripts/Makefile.build:121: kernel/bounds.s] Error 1
+> make[3]: Target '__build' not remade because of errors.
+> make[2]: *** [../Makefile:1191: prepare0] Error 2
+> make[2]: Target 'prepare' not remade because of errors.
+>
 
-thanks for providing PCIe support for iMX8MP.
-
-Am Montag, 7. M=E4rz 2022, 10:07:33 CET schrieb Richard Zhu:
-> Add PCIe support on i.MX8MP EVK board.
->=20
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 55 ++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts index
-> 2eb943210678..ed77455a3f73 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> @@ -5,6 +5,7 @@
->=20
->  /dts-v1/;
->=20
-> +#include <dt-bindings/phy/phy-imx8-pcie.h>
->  #include "imx8mp.dtsi"
->=20
->  / {
-> @@ -33,6 +34,12 @@ memory@40000000 {
->  		      <0x1 0x00000000 0 0xc0000000>;
->  	};
->=20
-> +	pcie0_refclk: pcie0-refclk {
-> +		compatible =3D "fixed-clock";
-> +			#clock-cells =3D <0>;
-> +			clock-frequency =3D <100000000>;
-> +	};
-> +
->  	reg_can1_stby: regulator-can1-stby {
->  		compatible =3D "regulator-fixed";
->  		regulator-name =3D "can1-stby";
-> @@ -55,6 +62,17 @@ reg_can2_stby: regulator-can2-stby {
->  		enable-active-high;
->  	};
->=20
-> +	reg_pcie0: regulator-pcie {
-> +		compatible =3D "regulator-fixed";
-> +		pinctrl-names =3D "default";
-> +		pinctrl-0 =3D <&pinctrl_pcie0_reg>;
-> +		regulator-name =3D "MPCIE_3V3";
-> +		regulator-min-microvolt =3D <3300000>;
-> +		regulator-max-microvolt =3D <3300000>;
-> +		gpio =3D <&gpio2 6 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
->  	reg_usdhc2_vmmc: regulator-usdhc2 {
->  		compatible =3D "regulator-fixed";
->  		pinctrl-names =3D "default";
-> @@ -297,6 +315,30 @@ pca6416: gpio@20 {
->  	};
->  };
->=20
-> +&pcie_phy {
-> +	fsl,refclk-pad-mode =3D <IMX8_PCIE_REFCLK_PAD_INPUT>;
-> +	clocks =3D <&pcie0_refclk>;
-> +	clock-names =3D "ref";
-> +	status =3D "okay";
-> +};
-> +
-> +&pcie{
-> +	pinctrl-names =3D "default";
-> +	pinctrl-0 =3D <&pinctrl_pcie0>;
-> +	reset-gpio =3D <&gpio2 7 GPIO_ACTIVE_LOW>;
-> +	clocks =3D <&clk IMX8MP_CLK_HSIO_ROOT>,
-> +		 <&clk IMX8MP_CLK_PCIE_ROOT>,
-> +		 <&clk IMX8MP_CLK_HSIO_AXI>;
-> +	clock-names =3D "pcie", "pcie_aux", "pcie_bus";
-
-This causes the following warnings in dtbs_check (paths stripped):
-imx8mp-evk.dtb: pcie@33800000: clock-names:1: 'pcie_bus' was expected
-        From schema: Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.y=
-aml
-imx8mp-evk.dtb: pcie@33800000: clock-names:2: 'pcie_phy' was expected
-        From schema: Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.y=
-aml
-
-The bindings want 4 clocks for imx8mq (and imx8mp which seems similar):
-* pcie
-* pcie_bus
-* pcie_phy
-* pcie_aux
-
-Ignoring the order there is no pcie_phy clock anymore, it was removed in=20
-commit 1840518ae7de ("clk: imx8mp: Remove the none exist pcie clocks"). I w=
-as=20
-wondering why, because the PCIE_PHY_CLK_ROOT at register 0xa380 inside CCM =
-is=20
-listed in RM.
-So there is a clock missing for 'pcie_phy' or the binding needs some update=
-=20
-for imx8mp, no?
-
-Regards,
-Alexander
-
-> +	assigned-clocks =3D <&clk IMX8MP_CLK_HSIO_AXI>,
-> +			  <&clk IMX8MP_CLK_PCIE_AUX>;
-> +	assigned-clock-rates =3D <500000000>, <10000000>;
-> +	assigned-clock-parents =3D <&clk IMX8MP_SYS_PLL2_500M>,
-> +				 <&clk IMX8MP_SYS_PLL2_50M>;
-> +	vpcie-supply =3D <&reg_pcie0>;
-> +	status =3D "okay";
-> +};
-> +
->  &snvs_pwrkey {
->  	status =3D "okay";
->  };
-> @@ -442,6 +484,19 @@ MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA		0x400001c3
->=20
->  		>;
->=20
->  	};
->=20
-> +	pinctrl_pcie0: pcie0grp {
-> +		fsl,pins =3D <
-> +			MX8MP_IOMUXC_I2C4_SCL__PCIE_CLKREQ_B=09
-0x61 /* open drain, pull up */
-> +			MX8MP_IOMUXC_SD1_DATA5__GPIO2_IO07=09
-0x41
-> +		>;
-> +	};
-> +
-> +	pinctrl_pcie0_reg: pcie0reggrp {
-> +		fsl,pins =3D <
-> +			MX8MP_IOMUXC_SD1_DATA4__GPIO2_IO06=09
-0x41
-> +		>;
-> +	};
-> +
->  	pinctrl_pmic: pmicgrp {
->  		fsl,pins =3D <
->  			MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03=09
-0x000001c0
-
-
-
-
+I'll look at this, thanks for your report.

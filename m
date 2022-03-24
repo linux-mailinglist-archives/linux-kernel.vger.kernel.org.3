@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F944E6456
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BECA4E645B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350613AbiCXNs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
+        id S1350615AbiCXNtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350576AbiCXNsp (ORCPT
+        with ESMTP id S1350577AbiCXNsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:48:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73A18F9A9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:47:12 -0700 (PDT)
-Message-ID: <20220324134623.519411939@linutronix.de>
+        Thu, 24 Mar 2022 09:48:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E18FA94D5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:47:13 -0700 (PDT)
+Message-ID: <20220324134623.573656209@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648129631;
+        s=2020; t=1648129632;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=mkdnb+b1Zmv6jwoILxAAtMLYCIJRUKxiXjyexb3mvlA=;
-        b=Mu+EzWTBgKIHpxaq1AnEAX1K+gbnmR0RU9b3Ffo+n1SdY6JvSJQgPBP8rWccsOQuy8mPgX
-        g0FO+UT1RksBZfZisj3fKshuJ9U20clfDMDjHpumeHKWyhrWVy+MVFMS5fnEQEjeV3Xs6e
-        0fv5gBOywntqh5edJowL8NgGnuiBqFUSwV0FhmzopZnLF29QpwsX0eaayjp4+5Nw+5pRLR
-        I/mZrwwznKTHmjGGwmQwtIQ3ZP3K+84/5PI40YRQACLhJRTw+PUtjkodBjiFAsGLxo49ai
-        0nPe8ytoY5aJ+I/h3cgjPA0g4hBjui9x+Dn29oBM6Z/kJRI6dkR4GLUtnq0J/A==
+         references:references; bh=FlS4rDJenRO6wkC0JNfcNEGDOUzk/9jo8hCEAjDstZo=;
+        b=rmrVo/s1ODwYu0HnOGUT7eAg3WFoEuXeL0tUpdCsaePLqweClDRipWWresthvglwM0urGQ
+        /XKN4m+KzDB1EnqlLc87acckS53pqVCciAf+lErK81GHY3SeSqdWyes5ffv2GFBi86279b
+        9hM3Sf2Gu1dp/fcXiugSNg0bvoIXRndxR61vHP/O5Zo9klpwG7rWOVazif3B4pg/WMleuy
+        DEJK9hWDpSDWX9mNnqYvaZHZXFDbBedl9Z68POjrA+Bb7Wa4Do0z/NNXguMKyB0KR75Rso
+        devgcxiixtZMR/bPJ8ozGoDJHAU+h8Aw8MZE91fONbKXu3X3rDWCifJ7b1KwvA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648129631;
+        s=2020e; t=1648129632;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=mkdnb+b1Zmv6jwoILxAAtMLYCIJRUKxiXjyexb3mvlA=;
-        b=uuDif5DOITAoan4/wx31IbVAYrNBc+4hI0H66CtiwKIL6dfp4uCJYb94WVpud9cvrkTTFx
-        8ExKi3x+XLs877AA==
+         references:references; bh=FlS4rDJenRO6wkC0JNfcNEGDOUzk/9jo8hCEAjDstZo=;
+        b=FAG7FSdVTHDktEb/RD0aHM9TV4wUNhx3uIeUaskfpWIEO9Dr1kmMt8K0RehEkkOzmV3Mp3
+        HFWbAl4VLHX4DnAA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, "Chang S. Bae" <chang.seok.bae@intel.com>
-Subject: [patch 3/7] x86/fpu/xsave: Initialize offset/size cache early
+Subject: [patch 4/7] x86/fpu: Cache xfeature flags from CPUID
 References: <20220324134548.432837672@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 24 Mar 2022 14:47:11 +0100 (CET)
+Date:   Thu, 24 Mar 2022 14:47:12 +0100 (CET)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -51,47 +51,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reading XSTATE feature information from CPUID over and over does not make
-sense. The information has to be cached anyway, so it can be done early.
+In preparation for runtime calculation of XSAVE offsets cache the feature
+flags for each XSTATE component during feature enumeration via CPUID(0xD).
 
-This prepares for runtime calculation of XSTATE offsets and allows
-consolidation of the size calculation functions in a later step.
+EDX has two relevant bits:
+    0	Supervisor component
+    1	Feature storage must be 64 byte aligned
 
-Rename the function while at it as it does not setup any features.
+These bits are currently only evaluated during init, but the alignment bit
+must be cached to make runtime calculation of XSAVE offsets efficient.
+
+Cache the full EDX content and use it for the existing alignment and
+supervisor checks.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/kernel/fpu/xstate.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/x86/kernel/fpu/xstate.c |   49 +++++++++++--------------------------------
+ 1 file changed, 13 insertions(+), 36 deletions(-)
 
 --- a/arch/x86/kernel/fpu/xstate.c
 +++ b/arch/x86/kernel/fpu/xstate.c
-@@ -180,7 +180,7 @@ static bool xfeature_enabled(enum xfeatu
-  * Record the offsets and sizes of various xstates contained
-  * in the XSAVE state memory layout.
-  */
--static void __init setup_xstate_features(void)
-+static void __init setup_xstate_cache(void)
+@@ -83,6 +83,10 @@ static unsigned int xstate_sizes[XFEATUR
+ 	{ [ 0 ... XFEATURE_MAX - 1] = -1};
+ static unsigned int xstate_comp_offsets[XFEATURE_MAX] __ro_after_init =
+ 	{ [ 0 ... XFEATURE_MAX - 1] = -1};
++static unsigned int xstate_flags[XFEATURE_MAX] __ro_after_init;
++
++#define XSTATE_FLAG_SUPERVISOR	BIT(0)
++#define XSTATE_FLAG_ALIGNED64	BIT(1)
+ 
+ /*
+  * Return whether the system supports a given xfeature.
+@@ -122,17 +126,14 @@ int cpu_has_xfeatures(u64 xfeatures_need
+ }
+ EXPORT_SYMBOL_GPL(cpu_has_xfeatures);
+ 
+-static bool xfeature_is_supervisor(int xfeature_nr)
++static bool xfeature_is_aligned64(int xfeature_nr)
  {
- 	u32 eax, ebx, ecx, edx, i;
- 	/* start at the beginning of the "extended state" */
-@@ -390,7 +390,6 @@ static void __init setup_init_fpu_buf(vo
- 	if (!boot_cpu_has(X86_FEATURE_XSAVE))
- 		return;
+-	/*
+-	 * Extended State Enumeration Sub-leaves (EAX = 0DH, ECX = n, n > 1)
+-	 * returns ECX[0] set to (1) for a supervisor state, and cleared (0)
+-	 * for a user state.
+-	 */
+-	u32 eax, ebx, ecx, edx;
++	return xstate_flags[xfeature_nr] & XSTATE_FLAG_ALIGNED64;
++}
  
--	setup_xstate_features();
- 	print_xstate_features();
+-	cpuid_count(XSTATE_CPUID, xfeature_nr, &eax, &ebx, &ecx, &edx);
+-	return ecx & 1;
++static bool xfeature_is_supervisor(int xfeature_nr)
++{
++	return xstate_flags[xfeature_nr] & XSTATE_FLAG_SUPERVISOR;
+ }
  
- 	xstate_init_xcomp_bv(&init_fpstate.regs.xsave, fpu_kernel_cfg.max_features);
-@@ -906,6 +905,10 @@ void __init fpu__init_system_xstate(unsi
+ /*
+@@ -203,6 +204,7 @@ static void __init setup_xstate_cache(vo
+ 		cpuid_count(XSTATE_CPUID, i, &eax, &ebx, &ecx, &edx);
  
- 	/* Enable xstate instructions to be able to continue with initialization: */
- 	fpu__init_cpu_xstate();
-+
-+	/* Cache size, offset and flags for initialization */
-+	setup_xstate_cache();
-+
- 	err = init_xstate_size();
- 	if (err)
- 		goto out_disable;
+ 		xstate_sizes[i] = eax;
++		xstate_flags[i] = ecx;
+ 
+ 		/*
+ 		 * If an xfeature is supervisor state, the offset in EBX is
+@@ -262,31 +264,6 @@ static void __init print_xstate_features
+ } while (0)
+ 
+ /*
+- * We could cache this like xstate_size[], but we only use
+- * it here, so it would be a waste of space.
+- */
+-static int xfeature_is_aligned(int xfeature_nr)
+-{
+-	u32 eax, ebx, ecx, edx;
+-
+-	CHECK_XFEATURE(xfeature_nr);
+-
+-	if (!xfeature_enabled(xfeature_nr)) {
+-		WARN_ONCE(1, "Checking alignment of disabled xfeature %d\n",
+-			  xfeature_nr);
+-		return 0;
+-	}
+-
+-	cpuid_count(XSTATE_CPUID, xfeature_nr, &eax, &ebx, &ecx, &edx);
+-	/*
+-	 * The value returned by ECX[1] indicates the alignment
+-	 * of state component 'i' when the compacted format
+-	 * of the extended region of an XSAVE area is used:
+-	 */
+-	return !!(ecx & 2);
+-}
+-
+-/*
+  * This function sets up offsets and sizes of all extended states in
+  * xsave area. This supports both standard format and compacted format
+  * of the xsave area.
+@@ -314,7 +291,7 @@ static void __init setup_xstate_comp_off
+ 	next_offset = FXSAVE_SIZE + XSAVE_HDR_SIZE;
+ 
+ 	for_each_extended_xfeature(i, fpu_kernel_cfg.max_features) {
+-		if (xfeature_is_aligned(i))
++		if (xfeature_is_aligned64(i))
+ 			next_offset = ALIGN(next_offset, 64);
+ 
+ 		xstate_comp_offsets[i] = next_offset;
+@@ -619,7 +596,7 @@ static unsigned int xstate_calculate_siz
+ 
+ 	for_each_extended_xfeature(i, xfeatures) {
+ 		/* Align from the end of the previous feature */
+-		if (xfeature_is_aligned(i))
++		if (xfeature_is_aligned64(i))
+ 			size = ALIGN(size, 64);
+ 		/*
+ 		 * In compacted format the enabled features are packed,
 

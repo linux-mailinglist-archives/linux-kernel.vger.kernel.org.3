@@ -2,208 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EAD4E6749
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A88E4E6759
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351899AbiCXQxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
+        id S1351971AbiCXQ4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352077AbiCXQw6 (ORCPT
+        with ESMTP id S1352043AbiCXQzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:52:58 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211C8B2466
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:50:53 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id y142so9454758ybe.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GyEZyeXnbD1SpUVUdTOvI3aFbLpGuqC2Ad/hEjpjtOk=;
-        b=s4w3SCbClDQbqQHEkH3T8tXGxP3WgwjpCNDoghGLeBaVPXupD6hoyj7i8LyTU+FpdN
-         h8HWzRxuYvFDHORu/PPctH2oCH6EIo1upJk3Z1z4LBBkbXH6umej4Dpq18R3RLTXHy2i
-         q79HAiDV+/HMUKnj+bkuAccvYjWUGHi89qJ6iFz6ubn/DmD0cDwgVEG/Edvy0ow4jJkT
-         pHpb8QInNmTKy/A3QRn2T7PS0zltPEFqn09HXsXg/95KdZ3QjTeSs35pIIL6sANsgIvc
-         jLcIW0t194pfKIpIVYUYhQAjHEV/2h1uZWcRV9lVc+4pWh1RXpUt5uaIO83EtJE5y3LC
-         eL4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GyEZyeXnbD1SpUVUdTOvI3aFbLpGuqC2Ad/hEjpjtOk=;
-        b=gMfMjEiNfVzLCvUxvjXxtpr3X+vcvp8bHXRYmNKaI3NQKVhYTSj6PEBNo2xjT86z5S
-         d+m0/KPKbfZe31nppWMAMpDoEtZiNHrT2l+X+SXkW6Pmv6yi0E0yjRkgN+3EqSLPEfnA
-         HI+l7asotXiT/mplr2FlxGHQc3PlHAGDl/yKKTKUpcIBTmrd1eQGN+LGXxGrmMcbgKrO
-         CF/8FJb7lgAyV5av9KULWQO8WcsL+o0DmiXcSv3jCkpnaCL4sbODuTjviPgr/MOERMIQ
-         fwDofyCA6DzAGAa4pT379cfxf3ByuLNXXtzQ/X9dyACfz4bkiYPbGz+XC7R5DMLWKxPg
-         IBGQ==
-X-Gm-Message-State: AOAM531x/I6gu5pRIEYLbXLLK2lp5rRBPiF3CRluJXH9tCz9InncLPbG
-        8CX0KdBnrE+49thsTNI6YoYXf3mamApSuHaA8xXbdQ==
-X-Google-Smtp-Source: ABdhPJyxW67Ff2D/09dcNpTUEyXuZtRmI1PtchCyeKUQRXxQdOh/GgzMauPBjn98vqo4IgG2nGvgGJL05ruEvKM5AME=
-X-Received: by 2002:a25:780a:0:b0:633:ccea:3430 with SMTP id
- t10-20020a25780a000000b00633ccea3430mr5404425ybc.26.1648140652154; Thu, 24
- Mar 2022 09:50:52 -0700 (PDT)
+        Thu, 24 Mar 2022 12:55:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAB55B7156;
+        Thu, 24 Mar 2022 09:52:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39B06D6E;
+        Thu, 24 Mar 2022 09:52:38 -0700 (PDT)
+Received: from [10.57.41.19] (unknown [10.57.41.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D3993F73B;
+        Thu, 24 Mar 2022 09:52:35 -0700 (PDT)
+Message-ID: <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
+Date:   Thu, 24 Mar 2022 16:52:31 +0000
 MIME-Version: 1.0
-References: <20220323184915.1335049-1-mizhang@google.com> <20220323184915.1335049-6-mizhang@google.com>
-In-Reply-To: <20220323184915.1335049-6-mizhang@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Thu, 24 Mar 2022 09:50:41 -0700
-Message-ID: <CANgfPd9MpnSonBzTF8EivXY_vazXFFAA83DPLoiZSgf=7vSrpw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] selftests: KVM: use dirty logging to check if page
- stats work correctly
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+Content-Language: en-GB
+To:     Christoph Hellwig <hch@lst.de>, Maxime Bizon <mbizon@freebox.fr>
+Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+References: <1812355.tdWV9SEqCh@natalenko.name>
+ <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
+ <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
+ <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
+ <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
+ <20220324163132.GB26098@lst.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220324163132.GB26098@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 11:49 AM Mingwei Zhang <mizhang@google.com> wrote:
->
-> When dirty logging is enabled, KVM will remap all accessed pages in
-> NPT/EPT at 4K. This property could be used to check if
-> the page stats metrics work properly in KVM mmu. At the same time, this
-> logic might be used the other way around: using page stats to verify if
-> dirty logging really splits all huge pages. Moreover, when dirty logging is
-> disabled, KVM zaps corresponding SPTEs and we could check whether the large
-> pages come back when guest touches the pages again.
->
-> So add page stats checking in dirty logging performance selftest. In
-> particular, add checks in three locations:
->  - just after vm is created;
->  - after populating memory into vm but before enabling dirty logging;
->  - finish dirty logging but before disabling it;
->  - behind the final iteration after disabling dirty logging.
->
-> Tested using commands:
->  - ./dirty_log_perf_test -s anonymous_hugetlb_1gb
->  - ./dirty_log_perf_test -s anonymous_hugetlb_2mb
->  - ./dirty_log_perf_test -s anonymous_thp
->
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: David Matlack <dmatlack@google.com>
-> Cc: Jing Zhang <jingzhangos@google.com>
-> Cc: Peter Xu <peterx@redhat.com>
->
-> Suggested-by: Ben Gardon <bgardon@google.com>
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+On 2022-03-24 16:31, Christoph Hellwig wrote:
+> On Thu, Mar 24, 2022 at 05:29:12PM +0100, Maxime Bizon wrote:
+>>> I'm looking into this; but in the interest of a speedy resolution of
+>>> the regression I would be in favour of merging that partial revert
+>>> and reinstating it if/when we identify (and fix) any bugs in ath9k :)
+>>
+>> This looks fishy:
+>>
+>> ath9k/recv.c
+>>
+>>                  /* We will now give hardware our shiny new allocated skb */
+>>                  new_buf_addr = dma_map_single(sc->dev, requeue_skb->data,
+>>                                                common->rx_bufsize, dma_type);
+>>                  if (unlikely(dma_mapping_error(sc->dev, new_buf_addr))) {
+>>                          dev_kfree_skb_any(requeue_skb);
+>>                          goto requeue_drop_frag;
+>>                  }
+>>
+>>                  /* Unmap the frame */
+>>                  dma_unmap_single(sc->dev, bf->bf_buf_addr,
+>>                                   common->rx_bufsize, dma_type);
+>>
+>>                  bf->bf_mpdu = requeue_skb;
+>>                  bf->bf_buf_addr = new_buf_addr;
+> 
+> Creating a new mapping for the same buffer before unmapping the
+> previous one does looks rather bogus.  But it does not fit the
+> pattern where revering the sync_single changes make the driver
+> work again.
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
+OK, you made me look :)
 
-> ---
->  .../selftests/kvm/dirty_log_perf_test.c       | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> index 1954b964d1cf..21431b0f5547 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> @@ -19,6 +19,10 @@
->  #include "perf_test_util.h"
->  #include "guest_modes.h"
->
-> +#ifdef __x86_64__
-> +#include "processor.h"
-> +#endif
-> +
->  /* How many host loops to run by default (one KVM_GET_DIRTY_LOG for each loop)*/
->  #define TEST_HOST_LOOP_N               2UL
->
-> @@ -185,6 +189,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->                                  p->slots, p->backing_src,
->                                  p->partition_vcpu_memory_access);
->
-> +#ifdef __x86_64__
-> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") == 0,
-> +                   "4K page is non zero");
-> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
-> +                   "2M page is non zero");
-> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
-> +                   "1G page is non zero");
-> +#endif
->         perf_test_set_wr_fract(vm, p->wr_fract);
->
->         guest_num_pages = (nr_vcpus * guest_percpu_mem_size) >> vm_get_page_shift(vm);
-> @@ -222,6 +234,17 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->         pr_info("Populate memory time: %ld.%.9lds\n",
->                 ts_diff.tv_sec, ts_diff.tv_nsec);
->
-> +#ifdef __x86_64__
-> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
-> +                   "4K page is zero");
-> +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP ||
-> +           p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB)
-> +               TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
-> +                           "2M page is zero");
-> +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
-> +               TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
-> +                           "1G page is zero");
-> +#endif
->         /* Enable dirty logging */
->         clock_gettime(CLOCK_MONOTONIC, &start);
->         enable_dirty_logging(vm, p->slots);
-> @@ -267,6 +290,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->                                 iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
->                 }
->         }
-> +#ifdef __x86_64__
-> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
-> +                   "4K page is zero after dirty logging");
-> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
-> +                   "2M page is non-zero after dirty logging");
-> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
-> +                   "1G page is non-zero after dirty logging");
-> +#endif
->
->         /* Disable dirty logging */
->         clock_gettime(CLOCK_MONOTONIC, &start);
-> @@ -275,6 +306,28 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->         pr_info("Disabling dirty logging time: %ld.%.9lds\n",
->                 ts_diff.tv_sec, ts_diff.tv_nsec);
->
-> +       /*
-> +        * Increment iteration to run the vcpus again to ensure all pages come
-> +        * back.
-> +        */
-> +       iteration++;
-> +       pr_info("Starting the final iteration to get all pages back.\n");
-> +       for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
-> +               while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
-> +                      != iteration)
-> +                       ;
-> +       }
-> +
-> +#ifdef __x86_64__
-> +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP ||
-> +           p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB)
-> +               TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
-> +                           "2M page is zero");
-> +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
-> +               TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
-> +                           "1G page is zero");
-> +#endif
-> +
->         /* Tell the vcpu thread to quit */
->         host_quit = true;
->         perf_test_join_vcpu_threads(nr_vcpus);
-> --
-> 2.35.1.1021.g381101b075-goog
->
+Now that it's obvious what to look for, I can only conclude that during 
+the stanza in ath_edma_get_buffers(), the device is still writing to the 
+buffer while ownership has been transferred to the CPU, and whatever got 
+written while ath9k_hw_process_rxdesc_edma() was running then gets wiped 
+out by the subsequent sync_for_device, which currently resets the 
+SWIOTLB slot to the state that sync_for_cpu copied out. By the letter of 
+the DMA API that's not allowed, but on the other hand I'm not sure if we 
+even have a good idiom for "I can't tell if the device has finished with 
+this buffer or not unless I look at it" :/
+
+Robin.

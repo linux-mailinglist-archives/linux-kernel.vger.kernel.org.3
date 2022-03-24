@@ -2,188 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB50E4E68F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229244E67EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352776AbiCXS74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S1346473AbiCXRjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243939AbiCXS7w (ORCPT
+        with ESMTP id S243769AbiCXRjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:59:52 -0400
-X-Greylist: delayed 4195 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 11:58:17 PDT
-Received: from 4.mo576.mail-out.ovh.net (4.mo576.mail-out.ovh.net [46.105.42.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F770220F7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:58:15 -0700 (PDT)
-Received: from player779.ha.ovh.net (unknown [10.111.208.135])
-        by mo576.mail-out.ovh.net (Postfix) with ESMTP id 4F31C246A4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:29:19 +0000 (UTC)
+        Thu, 24 Mar 2022 13:39:47 -0400
+X-Greylist: delayed 1793 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 10:38:14 PDT
+Received: from 2.mo561.mail-out.ovh.net (2.mo561.mail-out.ovh.net [46.105.75.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102496EB29
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:38:12 -0700 (PDT)
+Received: from player158.ha.ovh.net (unknown [10.108.20.52])
+        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 81A6F245BB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:59:13 +0000 (UTC)
 Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
         (Authenticated sender: steve@sk2.org)
-        by player779.ha.ovh.net (Postfix) with ESMTPSA id E876028AC2CB3;
-        Thu, 24 Mar 2022 16:29:11 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G003cab070b8-3fe0-45c6-ae9b-e73783c827e2,
+        by player158.ha.ovh.net (Postfix) with ESMTPSA id 027C128BA44A3;
+        Thu, 24 Mar 2022 16:59:07 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-99G003bf81b195-8d89-4a74-bcfe-1482886f0cef,
                     78FFD8E4238D9337B8F0C8EEA79873C5FE5514E5) smtp.auth=steve@sk2.org
 X-OVh-ClientIp: 82.65.25.201
 From:   Stephen Kitt <steve@sk2.org>
-To:     Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         Wolfram Sang <wsa@kernel.org>, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] clk: use simple i2c probe function
-Date:   Thu, 24 Mar 2022 17:29:04 +0100
-Message-Id: <20220324162904.530140-1-steve@sk2.org>
+Subject: [PATCH] clk: use i2c_match_id and simple i2c probe
+Date:   Thu, 24 Mar 2022 17:59:04 +0100
+Message-Id: <20220324165904.538861-1-steve@sk2.org>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 11267724796347713158
+X-Ovh-Tracer-Id: 11772690904623974022
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudegledgkeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejjeelrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudegledgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhduheekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2c probe functions here don't use the id information provided in
-their second argument, so the single-parameter i2c probe function
-("probe_new") can be used instead.
-
-This avoids scanning the identifier tables during probes.
+As part of the ongoing i2c transition to the simple probe
+("probe_new"), this patch uses i2c_match_id to retrieve the
+driver_data for the probed device. The id parameter is thus no longer
+necessary and the simple probe can be used instead.
 
 Signed-off-by: Stephen Kitt <steve@sk2.org>
 ---
- drivers/clk/clk-cdce706.c   | 5 ++---
- drivers/clk/clk-cs2000-cp.c | 5 ++---
- drivers/clk/clk-max9485.c   | 5 ++---
- drivers/clk/clk-si514.c     | 5 ++---
- drivers/clk/clk-si5341.c    | 5 ++---
- 5 files changed, 10 insertions(+), 15 deletions(-)
+ drivers/clk/clk-cdce925.c | 8 +++++---
+ drivers/clk/clk-si5351.c  | 8 +++++---
+ drivers/clk/clk-si544.c   | 8 +++++---
+ drivers/clk/clk-si570.c   | 8 +++++---
+ 4 files changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/clk/clk-cdce706.c b/drivers/clk/clk-cdce706.c
-index c91e9096b070..5467d941ddfd 100644
---- a/drivers/clk/clk-cdce706.c
-+++ b/drivers/clk/clk-cdce706.c
-@@ -627,8 +627,7 @@ of_clk_cdce_get(struct of_phandle_args *clkspec, void *data)
- 	return &cdce->clkout[idx].hw;
- }
- 
--static int cdce706_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static int cdce706_probe(struct i2c_client *client)
- {
- 	struct i2c_adapter *adapter = client->adapter;
- 	struct cdce706_dev_data *cdce;
-@@ -692,7 +691,7 @@ static struct i2c_driver cdce706_i2c_driver = {
- 		.name	= "cdce706",
- 		.of_match_table = of_match_ptr(cdce706_dt_match),
- 	},
--	.probe		= cdce706_probe,
-+	.probe_new	= cdce706_probe,
- 	.remove		= cdce706_remove,
- 	.id_table	= cdce706_id,
- };
-diff --git a/drivers/clk/clk-cs2000-cp.c b/drivers/clk/clk-cs2000-cp.c
-index 92bc4aca0f95..db9746a604ad 100644
---- a/drivers/clk/clk-cs2000-cp.c
-+++ b/drivers/clk/clk-cs2000-cp.c
-@@ -504,8 +504,7 @@ static int cs2000_remove(struct i2c_client *client)
- 	return 0;
- }
- 
--static int cs2000_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int cs2000_probe(struct i2c_client *client)
- {
- 	struct cs2000_priv *priv;
- 	struct device *dev = &client->dev;
-@@ -555,7 +554,7 @@ static struct i2c_driver cs2000_driver = {
- 		.pm	= &cs2000_pm_ops,
- 		.of_match_table = cs2000_of_match,
- 	},
--	.probe		= cs2000_probe,
-+	.probe_new	= cs2000_probe,
- 	.remove		= cs2000_remove,
- 	.id_table	= cs2000_id,
- };
-diff --git a/drivers/clk/clk-max9485.c b/drivers/clk/clk-max9485.c
-index 5e80f3d090f3..5f85b0a32872 100644
---- a/drivers/clk/clk-max9485.c
-+++ b/drivers/clk/clk-max9485.c
-@@ -254,8 +254,7 @@ max9485_of_clk_get(struct of_phandle_args *clkspec, void *data)
- 	return &drvdata->hw[idx].hw;
- }
- 
--static int max9485_i2c_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static int max9485_i2c_probe(struct i2c_client *client)
- {
- 	struct max9485_driver_data *drvdata;
- 	struct device *dev = &client->dev;
-@@ -377,7 +376,7 @@ static struct i2c_driver max9485_driver = {
- 		.pm		= &max9485_pm_ops,
- 		.of_match_table	= max9485_dt_ids,
- 	},
--	.probe = max9485_i2c_probe,
-+	.probe_new = max9485_i2c_probe,
- 	.id_table = max9485_i2c_ids,
- };
- module_i2c_driver(max9485_driver);
-diff --git a/drivers/clk/clk-si514.c b/drivers/clk/clk-si514.c
-index 364b62b9928d..4481c4303534 100644
---- a/drivers/clk/clk-si514.c
-+++ b/drivers/clk/clk-si514.c
-@@ -327,8 +327,7 @@ static const struct regmap_config si514_regmap_config = {
- 	.volatile_reg = si514_regmap_is_volatile,
+diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
+index 308b353815e1..b5495ff3a950 100644
+--- a/drivers/clk/clk-cdce925.c
++++ b/drivers/clk/clk-cdce925.c
+@@ -634,11 +634,13 @@ static struct regmap_bus regmap_cdce925_bus = {
+ 	.read = cdce925_regmap_i2c_read,
  };
  
--static int si514_probe(struct i2c_client *client,
+-static int cdce925_probe(struct i2c_client *client,
 -		const struct i2c_device_id *id)
-+static int si514_probe(struct i2c_client *client)
++static const struct i2c_device_id cdce925_id[];
++
++static int cdce925_probe(struct i2c_client *client)
  {
- 	struct clk_si514 *data;
+ 	struct clk_cdce925_chip *data;
+ 	struct device_node *node = client->dev.of_node;
++	const struct i2c_device_id *id = i2c_match_id(cdce925_id, client);
+ 	const char *parent_name;
+ 	const char *pll_clk_name[MAX_NUMBER_OF_PLLS] = {NULL,};
  	struct clk_init_data init;
-@@ -394,7 +393,7 @@ static struct i2c_driver si514_driver = {
- 		.name = "si514",
- 		.of_match_table = clk_si514_of_match,
+@@ -837,7 +839,7 @@ static struct i2c_driver cdce925_driver = {
+ 		.name = "cdce925",
+ 		.of_match_table = of_match_ptr(clk_cdce925_of_match),
  	},
--	.probe		= si514_probe,
-+	.probe_new	= si514_probe,
- 	.remove		= si514_remove,
- 	.id_table	= si514_id,
+-	.probe		= cdce925_probe,
++	.probe_new	= cdce925_probe,
+ 	.id_table	= cdce925_id,
  };
-diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
-index f7b41366666e..55b0fa6b9c1d 100644
---- a/drivers/clk/clk-si5341.c
-+++ b/drivers/clk/clk-si5341.c
-@@ -1545,8 +1545,7 @@ static const struct attribute *si5341_attributes[] = {
- 	NULL
+ module_i2c_driver(cdce925_driver);
+diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
+index 93fa8c9e11be..3db5e97c62c0 100644
+--- a/drivers/clk/clk-si5351.c
++++ b/drivers/clk/clk-si5351.c
+@@ -1367,9 +1367,11 @@ si53351_of_clk_get(struct of_phandle_args *clkspec, void *data)
+ }
+ #endif /* CONFIG_OF */
+ 
+-static int si5351_i2c_probe(struct i2c_client *client,
+-			    const struct i2c_device_id *id)
++static const struct i2c_device_id si5351_i2c_ids[];
++
++static int si5351_i2c_probe(struct i2c_client *client)
+ {
++	const struct i2c_device_id *id = i2c_match_id(si5351_i2c_ids, client);
+ 	enum si5351_variant variant = (enum si5351_variant)id->driver_data;
+ 	struct si5351_platform_data *pdata;
+ 	struct si5351_driver_data *drvdata;
+@@ -1663,7 +1665,7 @@ static struct i2c_driver si5351_driver = {
+ 		.name = "si5351",
+ 		.of_match_table = of_match_ptr(si5351_dt_ids),
+ 	},
+-	.probe = si5351_i2c_probe,
++	.probe_new = si5351_i2c_probe,
+ 	.remove = si5351_i2c_remove,
+ 	.id_table = si5351_i2c_ids,
+ };
+diff --git a/drivers/clk/clk-si544.c b/drivers/clk/clk-si544.c
+index d9ec9086184d..7a0c28b71b7b 100644
+--- a/drivers/clk/clk-si544.c
++++ b/drivers/clk/clk-si544.c
+@@ -451,11 +451,13 @@ static const struct regmap_config si544_regmap_config = {
+ 	.volatile_reg = si544_regmap_is_volatile,
  };
  
--static int si5341_probe(struct i2c_client *client,
+-static int si544_probe(struct i2c_client *client,
 -		const struct i2c_device_id *id)
-+static int si5341_probe(struct i2c_client *client)
++static const struct i2c_device_id si544_id[];
++
++static int si544_probe(struct i2c_client *client)
  {
- 	struct clk_si5341 *data;
+ 	struct clk_si544 *data;
  	struct clk_init_data init;
-@@ -1835,7 +1834,7 @@ static struct i2c_driver si5341_driver = {
- 		.name = "si5341",
- 		.of_match_table = clk_si5341_of_match,
++	const struct i2c_device_id *id = i2c_match_id(si544_id, client);
+ 	int err;
+ 
+ 	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+@@ -520,7 +522,7 @@ static struct i2c_driver si544_driver = {
+ 		.name = "si544",
+ 		.of_match_table = clk_si544_of_match,
  	},
--	.probe		= si5341_probe,
-+	.probe_new	= si5341_probe,
- 	.remove		= si5341_remove,
- 	.id_table	= si5341_id,
+-	.probe		= si544_probe,
++	.probe_new	= si544_probe,
+ 	.id_table	= si544_id,
  };
-
-base-commit: b47d5a4f6b8d42f8a8fbe891b36215e4fddc53be
+ module_i2c_driver(si544_driver);
+diff --git a/drivers/clk/clk-si570.c b/drivers/clk/clk-si570.c
+index eea50121718a..779fe72054fd 100644
+--- a/drivers/clk/clk-si570.c
++++ b/drivers/clk/clk-si570.c
+@@ -398,11 +398,13 @@ static const struct regmap_config si570_regmap_config = {
+ 	.volatile_reg = si570_regmap_is_volatile,
+ };
+ 
+-static int si570_probe(struct i2c_client *client,
+-		const struct i2c_device_id *id)
++static const struct i2c_device_id si570_id[];
++
++static int si570_probe(struct i2c_client *client)
+ {
+ 	struct clk_si570 *data;
+ 	struct clk_init_data init;
++	const struct i2c_device_id *id = i2c_match_id(si570_id, client);
+ 	u32 initial_fout, factory_fout, stability;
+ 	bool skip_recall;
+ 	int err;
+@@ -518,7 +520,7 @@ static struct i2c_driver si570_driver = {
+ 		.name = "si570",
+ 		.of_match_table = clk_si570_of_match,
+ 	},
+-	.probe		= si570_probe,
++	.probe_new	= si570_probe,
+ 	.remove		= si570_remove,
+ 	.id_table	= si570_id,
+ };
 -- 
 2.27.0
 

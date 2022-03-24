@@ -2,173 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8DE4E6355
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39394E635F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350158AbiCXM33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
+        id S1350180AbiCXM3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243526AbiCXM32 (ORCPT
+        with ESMTP id S1350182AbiCXM3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:29:28 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8660A8CCE9;
-        Thu, 24 Mar 2022 05:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648124876; x=1679660876;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SO2KgsH5pZ6TNFP9PmhWj87X8+YVC544qe3E7ItN9k0=;
-  b=O9u8oUY83+xYaxXF2sKoUCzKi4sYPmH47LvmhwWBjgxCwmq4iTcEqll6
-   Xoh+m/mEIhSwNtdKZYSgs5syY1Yw0tj944KJTDnD+FNq3Jh+pK2rM1irn
-   +aMxCNLYyIGTRDaYHY3PabJvbqPkrbnoWukZPxhSXjml2fe/yalzSyIhe
-   aqzFdm1E2qs9URLe4oy4pa8OBEKhwPh8fITWdnXlOvikouVztx3zkahBM
-   xes+dn32NNfeUJwz7IZ30T4a5Osp6i3+K3KZw+2SpIqvg9b3JVspu+AiB
-   O8sR4UlFPCjlvhYl4D/ROAHVHhHbA4BSzvbQ74C6EqXSVWAbrZOmHllGe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="238306118"
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="238306118"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:27:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="693306912"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Mar 2022 05:27:51 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 24 Mar 2022 14:27:50 +0200
-Date:   Thu, 24 Mar 2022 14:27:50 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
+        Thu, 24 Mar 2022 08:29:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AB78CDB3;
+        Thu, 24 Mar 2022 05:28:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CD64B82258;
+        Thu, 24 Mar 2022 12:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E1DC340EC;
+        Thu, 24 Mar 2022 12:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648124886;
+        bh=qI9DesCsTcwrl5fOtbMdwn017GMdhabG8W/nlYEYXAY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MiT/e+4tWu6f4jK9qQRj7nFOr2Qs18gtTdhvB2GjnJOGMc5WhoI0eQyYL2DWIe/XD
+         LJioGh7hr7OQwDWfdXa6qu8r1oi+7MWhbGaRGa+BP3GV1aK0UhzKWJuW5wYshn3z/2
+         RyoMaefSCT5zjPlfudmwKKF3xsJ6+6CAGc6G2PiU=
+Date:   Thu, 24 Mar 2022 13:28:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 05/10] coresight-tpdm: Add integration test support
+Message-ID: <Yjxj02nl+hwoYb9C@kroah.com>
+References: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
+ <20220324121734.21531-6-quic_jinlmao@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220324121734.21531-6-quic_jinlmao@quicinc.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
-> Currently the phy init is done from dwc3 and also xhci which makes the
-> runtime_usage value 2 for the phy which causes issue during runtime
-> suspend. When we run the below command the runtime_status still shows
-> active.
-> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
+On Thu, Mar 24, 2022 at 08:17:29PM +0800, Mao Jinlong wrote:
+> Integration test for tpdm can help to generate the data for
+> verification of the topology during TPDM software bring up.
 > 
-> dwc3 manages PHY by own DRD driver, so skip the management by
-> HCD core by setting this quirk.
+> Sample:
+> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+> echo 1 > /sys/bus/coresight/devices/tpdm1/enable_source
+> echo 1 > /sys/bus/coresight/devices/tpdm1/integration_test
+> echo 2 > /sys/bus/coresight/devices/tpdm1/integration_test
+> cat /dev/tmc_etf0 > /data/etf-tpdm1.bin
 > 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 > ---
->  drivers/usb/dwc3/host.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>  drivers/hwtracing/coresight/Kconfig          |  9 ++++
+>  drivers/hwtracing/coresight/coresight-tpdm.c | 56 +++++++++++++++++++-
+>  drivers/hwtracing/coresight/coresight-tpdm.h |  8 +++
+>  3 files changed, 72 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index eda8719..d4fcf06 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -13,6 +13,12 @@
->  #include <linux/platform_device.h>
+> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
+> index 5c506a1cd08f..60248fef4089 100644
+> --- a/drivers/hwtracing/coresight/Kconfig
+> +++ b/drivers/hwtracing/coresight/Kconfig
+> @@ -214,4 +214,13 @@ config CORESIGHT_TPDM
+>  	  To compile this driver as a module, choose M here: the module will be
+>  	  called coresight-tpdm.
 >  
->  #include "core.h"
-> +#include <linux/usb/xhci-plat.h>
-> +#include <linux/usb/xhci-quirks.h>
-> +
-> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> +	.quirks = XHCI_SKIP_PHY_INIT,
-> +};
->  
->  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->  					int irq, char *name)
-> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->  		}
+> +config CORESIGHT_TPDM_INTEGRATION_TEST
+> +	bool "Enable CoreSight Integration Test For TPDM"
+> +	depends on CORESIGHT_TPDM
+> +	help
+> +	  This option adds support for the CoreSight integration test on this
+> +	  devie. Coresight architecture provides integration control modes of
+> +	  operation to facilitate integration testing and software bringup
+> +	  and/or to instrument topology discovery. The TPDM utilizes integration
+> +	  mode to accomplish integration testing and software bringup.
+
+Why is this a Kconfig option?  Why would you never not want this?
+
+>  endif
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index a8d257a591f3..cddd398be0cd 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -124,7 +124,60 @@ static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+>  			__set_bit(i, drvdata->datasets);
 >  	}
->  
-> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
-> +			sizeof(xhci_plat_dwc3_xhci));
-> +	if (ret) {
-> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
-> +		goto err;
-> +	}
+>  	CS_LOCK(drvdata->base);
+> - }
+> +}
 > +
->  	ret = platform_device_add(xhci);
->  	if (ret) {
->  		dev_err(dwc->dev, "failed to register xHCI device\n");
+> +#ifdef CONFIG_CORESIGHT_TPDM_INTEGRATION_TEST
 
-I think you should just use device property:
+Try to keep #ifdefs out of .c files please.
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index eda871973d6cc..dbff7b8ed6d5e 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -67,7 +67,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
- 
- int dwc3_host_init(struct dwc3 *dwc)
- {
--       struct property_entry   props[4];
-+       struct property_entry   props[5];
-        struct platform_device  *xhci;
-        int                     ret, irq;
-        int                     prop_idx = 0;
-@@ -114,12 +114,12 @@ int dwc3_host_init(struct dwc3 *dwc)
-        if (DWC3_VER_IS_WITHIN(DWC3, ANY, 300A))
-                props[prop_idx++] = PROPERTY_ENTRY_BOOL("quirk-broken-port-ped");
- 
--       if (prop_idx) {
--               ret = device_create_managed_software_node(&xhci->dev, props, NULL);
--               if (ret) {
--                       dev_err(dwc->dev, "failed to add properties to xHCI\n");
--                       goto err;
--               }
-+       props[prop_idx++] = PROPERTY_ENTRY_BOOL("skip-phy-init");
-+
-+       ret = device_create_managed_software_node(&xhci->dev, props, NULL);
-+       if (ret) {
-+               dev_err(dwc->dev, "failed to add properties to xHCI\n");
-+               goto err;
-        }
- 
-        ret = platform_device_add(xhci);
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 649ffd861b44e..31ed39d06e29b 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -307,6 +307,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
- 
-                device_property_read_u32(tmpdev, "imod-interval-ns",
-                                         &xhci->imod_interval);
-+
-+               if (device_property_read_bool(tmpdev, "skip-phy-init"))
-+                       hcd->skip_phy_initialization = 1;
-        }
- 
-        hcd->usb_phy = devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
+> +static ssize_t integration_test_store(struct device *dev,
+> +					  struct device_attribute *attr,
+> +					  const char *buf,
+> +					  size_t size)
+> +{
+> +	int i, ret = 0;
+> +	unsigned long val;
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	ret = kstrtoul(buf, 10, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (val != 1 && val != 2)
+> +		return -EINVAL;
+> +
+> +	if (!drvdata->enable)
+> +		return -EINVAL;
+> +
+> +	if (val == 1)
+> +		val = ATBCNTRL_VAL_64;
+> +	else
+> +		val = ATBCNTRL_VAL_32;
+> +	CS_UNLOCK(drvdata->base);
+> +	writel_relaxed(0x1, drvdata->base + TPDM_ITCNTRL);
+> +
+> +	for (i = 1; i < 5; i++)
+> +		writel_relaxed(val, drvdata->base + TPDM_ITATBCNTRL);
+> +
+> +	writel_relaxed(0, drvdata->base + TPDM_ITCNTRL);
+> +	CS_LOCK(drvdata->base);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_WO(integration_test);
+> +#endif /* CORESIGHT_TPDM_INTEGRATION_TEST */
+> +
+> +static struct attribute *tpdm_attrs[] = {
+> +#ifdef CONFIG_CORESIGHT_TPDM_INTEGRATION_TEST
+> +	&dev_attr_integration_test.attr,
+> +#endif /* CORESIGHT_TPDM_INTEGRATION_TEST */
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group tpdm_attr_grp = {
+> +	.attrs = tpdm_attrs,
+> +};
+> +
+> +static const struct attribute_group *tpdm_attr_grps[] = {
+> +	&tpdm_attr_grp,
+> +	NULL,
+> +};
 
--- 
-heikki
+ATTRIBUTE_GROUPS()?
+
+thanks,
+
+greg k-h

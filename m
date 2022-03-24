@@ -2,247 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1014E62A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782B34E62AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349831AbiCXLtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S1346869AbiCXLup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235457AbiCXLtT (ORCPT
+        with ESMTP id S232989AbiCXLum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:49:19 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F86EA1461;
-        Thu, 24 Mar 2022 04:47:47 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id b24so5282620edu.10;
-        Thu, 24 Mar 2022 04:47:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dFOPtoWPcTnsyVvvROBn8Be2+egyjb08ekt/mEU0j1k=;
-        b=yBGTo3sSTgM4+UOOwcC6sPgGrb+GIP4XioqqEFeZG+gfjvVdykUHj/rBrbucmo09DJ
-         cihpinNMLTbB2Jxs6ImVaJU/AWsllN1Ju/uFCjkaPipp6fiW5TKMTlzty0zcVQhwqyc7
-         keRglxHEoUbE3iUxHnkoqxzLdo4xqjdw/H1E2x4D9N73pOVXZGV7Jvc8VW9E1A6sIBRY
-         UQGROssQauENPTai0qqltimtzA7MDKTR4uZgfOfI3RJdXOTqHtuOlPWPZPIOvgUJEqpe
-         05JjSppW9QE9sl32h9Q8q8KboD2qv+jVqHEQc241XG99aMJqwkpw7l8TqKObPWejdQuW
-         vrKg==
-X-Gm-Message-State: AOAM532qwuxNVtUHXO8zOQH2X3MRuuEId/sWTK6pgAbMo9mtfxB99z29
-        45GPS7PhhNO485q+UYYRkG4=
-X-Google-Smtp-Source: ABdhPJypl5ghtQpKOlZZNUXQUQvR9b2GpZ9XFdEpskJFtEHsYMH2vGZZV+HFKZbc/sfsgk0GAEBomA==
-X-Received: by 2002:aa7:c348:0:b0:418:e515:69e with SMTP id j8-20020aa7c348000000b00418e515069emr6143338edr.393.1648122466050;
-        Thu, 24 Mar 2022 04:47:46 -0700 (PDT)
-Received: from [192.168.0.156] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm1031073ejc.25.2022.03.24.04.47.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 04:47:45 -0700 (PDT)
-Message-ID: <c96f889e-cbd0-4221-fcff-ef0cf93236d2@kernel.org>
-Date:   Thu, 24 Mar 2022 12:47:43 +0100
+        Thu, 24 Mar 2022 07:50:42 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7237CB16
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:49:10 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nXLxk-0000eg-7s; Thu, 24 Mar 2022 12:49:08 +0100
+Message-ID: <536eca11-b4b9-c1a8-6e6b-fcd0c339a3ec@leemhuis.info>
+Date:   Thu, 24 Mar 2022 12:49:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 7/7] ARM: dts: s5pv210: Add charger support in Aries
+Subject: Re: PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" starting from 5.17 on
+ dual socket Intel Xeon Gold servers
 Content-Language: en-US
-To:     Jonathan Bakker <xc-racer2@live.ca>, alim.akhtar@samsung.com
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
- <20220323150311.26699-1-xc-racer2@live.ca>
- <CY4PR04MB05671BD0A7FF349E8B04EE84CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
- <2eee2611-d618-3fe2-4315-c57a26de6b21@kernel.org>
- <CY4PR04MB0567BD17C2EED0CAFA044020CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <CY4PR04MB0567BD17C2EED0CAFA044020CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
+To:     linux-kernel <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev
+References: <CAE4VaGDZr_4wzRn2___eDYRtmdPaGGJdzu_LCSkJYuY9BEO3cw@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAE4VaGDZr_4wzRn2___eDYRtmdPaGGJdzu_LCSkJYuY9BEO3cw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648122550;a0876fee;
+X-HE-SMSGID: 1nXLxk-0000eg-7s
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2022 18:20, Jonathan Bakker wrote:
-> 
-> 
-> On 2022-03-23 8:31 a.m., krzk@kernel.org wrote:
->> On 23/03/2022 16:03, Jonathan Bakker wrote:
->>> Add charger-manager support to Aries boards to allow safe
->>> charging of the battery without the need for userspace control.
->>>
->>> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
->>> ---
->>>  arch/arm/boot/dts/s5pv210-fascinate4g.dts | 162 ++++++++++++++++++++++
->>>  arch/arm/boot/dts/s5pv210-galaxys.dts     | 144 +++++++++++++++++++
->>>  2 files changed, 306 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/s5pv210-fascinate4g.dts b/arch/arm/boot/dts/s5pv210-fascinate4g.dts
->>> index 7427c84f1126..9530231b7a70 100644
->>> --- a/arch/arm/boot/dts/s5pv210-fascinate4g.dts
->>> +++ b/arch/arm/boot/dts/s5pv210-fascinate4g.dts
->>> @@ -57,6 +57,168 @@
->>>  		pinctrl-0 = <&main_micbias_ena>;
->>>  	};
->>>  
->>> +	thermal-zones {
->>> +		batt_thermal: batt-thermal {
->>> +			polling-delay-passive = <60000>; /* 60 seconds */
->>
->> There is no passive cooling device, so why do you need it?
->>
-> 
-> The charger manager code needs a passive cooling device, so that's
-> why this is present here.
-> 
->>> +			polling-delay = <600000>; /* 600 seconds */
->>> +
->>> +			thermal-sensors = <&batt_thermistor>;
->>> +		};
->>> +	};
->>> +
->>> +	batt_thermistor: thermal-sensor-0 {
->>> +		compatible = "generic-adc-thermal";
->>> +		#thermal-sensor-cells = <0>;
->>> +		io-channels = <&adc 6>;
->>> +		io-channel-names = "sensor-channel";
->>> +
->>> +		temperature-lookup-table = <
->>> +			(-20000) 1859
->>> +			(-19000) 1846
->>> +			(-18000) 1832
->>> +			(-17000) 1818
->>> +			(-16000) 1804
->>> +			(-15000) 1790
->>> +			(-14000) 1773
->>> +			(-13000) 1756
->>> +			(-12000) 1739
->>> +			(-11000) 1722
->>> +			(-10000) 1705
->>> +			(-9000) 1691
->>> +			(-8000) 1677
->>> +			(-7000) 1663
->>> +			(-6000) 1649
->>> +			(-5000) 1635
->>> +			(-4000) 1550
->>> +			(-3000) 1510
->>> +			(-2000) 1500
->>> +			(-1000) 1490
->>> +			0 1480
->>> +			1000 1470
->>> +			2000 1460
->>> +			3000 1450
->>> +			4000 1430
->>> +			5000 1420
->>> +			6000 1406
->>> +			7000 1386
->>> +			8000 1366
->>> +			9000 1346
->>> +			10000 1326
->>> +			11000 1302
->>> +			12000 1278
->>> +			13000 1254
->>> +			14000 1230
->>> +			15000 1206
->>> +			16000 1182
->>> +			17000 1158
->>> +			18000 1134
->>> +			19000 1110
->>> +			20000 1086
->>> +			21000 1059
->>> +			22000 1035
->>> +			23000 1011
->>> +			24000 987
->>> +			25000 963
->>> +			26000 937
->>> +			27000 913
->>> +			28000 889
->>> +			29000 865
->>> +			30000 841
->>> +			31000 816
->>> +			32000 794
->>> +			33000 772
->>> +			34000 750
->>> +			35000 728
->>> +			36000 708
->>> +			37000 690
->>> +			38000 672
->>> +			39000 654
->>> +			40000 636
->>> +			41000 616
->>> +			42000 599
->>> +			43000 580
->>> +			44000 565
->>> +			45000 548
->>> +			46000 529
->>> +			47000 512
->>> +			48000 495
->>> +			49000 478
->>> +			50000 461
->>> +			51000 440
->>> +			52000 431
->>> +			53000 416
->>> +			54000 405
->>> +			55000 396
->>> +			56000 375
->>> +			57000 360
->>> +			58000 347
->>> +			59000 334
->>> +			60000 325
->>> +			61000 311
->>> +			62000 303
->>> +			63000 296
->>> +			64000 290
->>> +			65000 279
->>> +			66000 265
->>> +			67000 254
->>> +			68000 240
->>> +			69000 220
->>> +			70000 206>;
->>> +	};
->>> +
->>> +	charger_manager: charger-manager-0 {
->>> +		compatible = "charger-manager";
->>
->> Sorry, this is not a hardware. It's a hack to configure kernel charging
->> driver via DT which was made deprecated.
-> 
-> Thanks, I missed the deprecation notice in the binding file.
-> 
-> What would be the better way of creating a functional charging system?
-> A new device-specific driver?
+[TLDR: I'm adding the regression report below to regzbot, the Linux
+kernel regression tracking bot; all text you find below is compiled from
+a few templates paragraphs you might have encountered already already
+from similar mails.]
 
-I am not sure, but maybe you could use charger-manager, just configure
-it from user-space (or add such features). Better ask power supply
-maintainer. But anyway charger-manager is mostly abandoned. I don't
-think anyone develops it.
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easily accessible to everyone.
 
->  Userspace monitoring of temperature/connected
-> device and extensions to the max8998 driver for enabling/disabling/configuring
-> charging via the power supply subsystem instead of the regulator subsystem?
-> Something else?
+To be sure below issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
 
-Enabling charging via regulators was done only for some drivers, I think
-for charger-manager. I don't think it is the recommended way now.
+#regzbot ^introduced v5.16..v5.17
+#regzbot ignore-activity
 
-Everything should be controlled rather via power supply from user-space.
+If it turns out this isn't a regression, free free to remove it from the
+tracking by sending a reply to this thread containing a paragraph like
+"#regzbot invalid: reason why this is invalid" (without the quotes).
 
-How postmarketos or lineageos are doing it?
+Reminder for developers: when fixing the issue, please add a 'Link:'
+tags pointing to the report (the mail quoted above) using
+lore.kernel.org/r/, as explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'. Regzbot needs them to
+automatically connect reports with fixes, but they are useful in
+general, too.
 
+I'm sending this to everyone that got the initial report, to make
+everyone aware of the tracking. I also hope that messages like this
+motivate people to directly get at least the regression mailing list and
+ideally even regzbot involved when dealing with regressions, as messages
+like this wouldn't be needed then. And don't worry, if I need to send
+other mails regarding this regression only relevant for regzbot I'll
+send them to the regressions lists only (with a tag in the subject so
+people can filter them away). With a bit of luck no such messages will
+be needed anyway.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+
+On 22.03.22 00:29, Jirka Hladky wrote:
+> Starting from kernel 5.17 (tested with rc2, rc4, rc7, rc8) we
+> experience kernel oops on Intel Xeon Gold dual-socket servers (2x Xeon
+> Gold 6126 CPU)
 > 
-> The way I understand the charging system, there is
+> Bellow is a backtrace and the dmesg log.
 > 
-> - The fuelgauge (max17042)
-> - The max8998 charger portion, including the ability to vary the current
-> - The thermistor for checking battery temperature
-> - The FSA9480 to determine what sort of cable is connected
+> I have trouble creating a simple reproducer - it happens at random
+> places when preparing the NAS benchmark to be run. The script creates
+> a bunch of directories, compiles the benchmark a start trial runs.
+> 
+> Could you please help to narrow down the problem?
+> 
+> Reports bellow were created with kernel 5.17 rc8 and with
+> echo 1 > /proc/sys/kernel/panic_on_oops
+> setting.
+> 
+> crash> sys
+>       KERNEL: /usr/lib/debug/lib/modules/5.17.0-0.rc8.123.fc37.x86_64/vmlinux
+>     DUMPFILE: vmcore  [PARTIAL DUMP]
+>         CPUS: 48
+>         DATE: Thu Mar 17 02:49:40 CET 2022
+>       UPTIME: 00:02:50
+> LOAD AVERAGE: 0.32, 0.10, 0.03
+>        TASKS: 608
+>     NODENAME: gold-2s-c
+>      RELEASE: 5.17.0-0.rc8.123.fc37.x86_64
+>      VERSION: #1 SMP PREEMPT Mon Mar 14 18:11:49 UTC 2022
+>      MACHINE: x86_64  (2600 Mhz)
+>       MEMORY: 94.7 GB
+>        PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" (check log for details)
+> 
+> 
+> crash> bt
+> PID: 2480   TASK: ffff9e8f76cb8000  CPU: 26  COMMAND: "umount"
+> #0 [ffffae00cacbfbb8] machine_kexec at ffffffffbb068980
+> #1 [ffffae00cacbfc08] __crash_kexec at ffffffffbb1a300a
+> #2 [ffffae00cacbfcc8] crash_kexec at ffffffffbb1a4045
+> #3 [ffffae00cacbfcd0] oops_end at ffffffffbb02c410
+> #4 [ffffae00cacbfcf0] page_fault_oops at ffffffffbb076a38
+> #5 [ffffae00cacbfd68] exc_page_fault at ffffffffbbd0b7c1
+> #6 [ffffae00cacbfd90] asm_exc_page_fault at ffffffffbbe00ace
+>    [exception RIP: kernfs_remove+7]
+>    RIP: ffffffffbb421f67  RSP: ffffae00cacbfe48  RFLAGS: 00010246
+>    RAX: 0000000000000001  RBX: ffffffffbce31e58  RCX: 0000000080200018
+>    RDX: 0000000080200019  RSI: ffffdfbd44161640  RDI: 0000000000000000
+>    RBP: ffffffffbce31e58   R8: 0000000000000000   R9: 0000000080200018
+>    R10: ffff9e8f05859e80  R11: ffff9e9443b1bd98  R12: ffff9ea057f1d000
+>    R13: ffffffffbce31e60  R14: dead000000000122  R15: dead000000000100
+>    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+> #7 [ffffae00cacbfe58] rdt_kill_sb at ffffffffbb05074b
+> #8 [ffffae00cacbfea8] deactivate_locked_super at ffffffffbb36ce1f
+> #9 [ffffae00cacbfec0] cleanup_mnt at ffffffffbb39176e
+> #10 [ffffae00cacbfee8] task_work_run at ffffffffbb10703c
+> #11 [ffffae00cacbff08] exit_to_user_mode_prepare at ffffffffbb17a399
+> #12 [ffffae00cacbff28] syscall_exit_to_user_mode at ffffffffbbd0bde8
+> #13 [ffffae00cacbff38] do_syscall_64 at ffffffffbbd071a6
+> #14 [ffffae00cacbff50] entry_SYSCALL_64_after_hwframe at ffffffffbbe0007c
+>    RIP: 00007f442c75126b  RSP: 00007ffc82d66fe8  RFLAGS: 00000202
+>    RAX: 0000000000000000  RBX: 000055bd4cc37090  RCX: 00007f442c75126b
+>    RDX: 0000000000000001  RSI: 0000000000000001  RDI: 000055bd4cc3b950
+>    RBP: 000055bd4cc371a8   R8: 0000000000000000   R9: 0000000000000073
+>    R10: 0000000000000000  R11: 0000000000000202  R12: 0000000000000001
+>    R13: 000055bd4cc3b950  R14: 000055bd4cc372c0  R15: 000055bd4cc37090
+>    ORIG_RAX: 00000000000000a6  CS: 0033  SS: 002b
+> 
+> [2] dmesg
+> [  172.776553] BUG: kernel NULL pointer dereference, address: 0000000000000008
+> [  172.783513] #PF: supervisor read access in kernel mode
+> [  172.788652] #PF: error_code(0x0000) - not-present page
+> [  172.793793] PGD 0 P4D 0
+> [  172.796330] Oops: 0000 [#1] PREEMPT SMP PTI
+> [  172.800519] CPU: 26 PID: 2480 Comm: umount Kdump: loaded Not
+> tainted 5.17.0-0.rc8.123.fc37.x86_64 #1
+> [  172.809645] Hardware name: Supermicro Super Server/X11DDW-L, BIOS
+> 2.0b 03/07/2018
+> [  172.817123] RIP: 0010:kernfs_remove+0x7/0x50
+> [  172.821397] Code: e8 be e7 2c 00 48 89 df e8 b6 8c f0 ff 48 c7 c3
+> f4 ff ff ff 48 89 d8 5b 5d 41 5c 41 5d 41 5e c3 cc 66 90 0f 1f 44 00
+> 00 55 53 <48> 8b 47 08 48 89 fb 48 85 c0 48 0f 44 c7 48 8b 68 50 48 83
+> c5 60
+> [  172.840141] RSP: 0018:ffffae00cacbfe48 EFLAGS: 00010246
+> [  172.845367] RAX: 0000000000000001 RBX: ffffffffbce31e58 RCX: 0000000080200018
+> [  172.852501] RDX: 0000000080200019 RSI: ffffdfbd44161640 RDI: 0000000000000000
+> [  172.859632] RBP: ffffffffbce31e58 R08: 0000000000000000 R09: 0000000080200018
+> [  172.866764] R10: ffff9e8f05859e80 R11: ffff9e9443b1bd98 R12: ffff9ea057f1d000
+> [  172.873899] R13: ffffffffbce31e60 R14: dead000000000122 R15: dead000000000100
+> [  172.881033] FS:  00007f442c53c800(0000) GS:ffff9e9429000000(0000)
+> knlGS:0000000000000000
+> [  172.889117] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  172.894861] CR2: 0000000000000008 CR3: 000000010ba96006 CR4: 00000000007706e0
+> [  172.901997] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  172.909127] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  172.916261] PKRU: 55555554
+> [  172.918974] Call Trace:
+> [  172.921427]  <TASK>
+> [  172.923533]  rdt_kill_sb+0x29b/0x350
+> [  172.927112]  deactivate_locked_super+0x2f/0xa0
+> [  172.931559]  cleanup_mnt+0xee/0x180
+> [  172.935051]  task_work_run+0x5c/0x90
+> [  172.938629]  exit_to_user_mode_prepare+0x229/0x230
+> [  172.943424]  syscall_exit_to_user_mode+0x18/0x40
+> [  172.948043]  do_syscall_64+0x46/0x80
+> [  172.951623]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  172.956675] RIP: 0033:0x7f442c75126b
+> [  172.960271] Code: cb 1b 0e 00 f7 d8 64 89 01 48 83 c8 ff c3 90 f3
+> 0f 1e fa 31 f6 e9 05 00 00 00 0f 1f 44 00 00 f3 0f 1e fa b8 a6 00 00
+> 00 0f 05 <48> 3d 00 f0 ff ff 77 05 c3 0f 1f 40 00 48 8b 15 91 1b 0e 00
+> f7 d8
+> [  172.979017] RSP: 002b:00007ffc82d66fe8 EFLAGS: 00000202 ORIG_RAX:
+> 00000000000000a6
+> [  172.986584] RAX: 0000000000000000 RBX: 000055bd4cc37090 RCX: 00007f442c75126b
+> [  172.993715] RDX: 0000000000000001 RSI: 0000000000000001 RDI: 000055bd4cc3b950
+> [  173.000849] RBP: 000055bd4cc371a8 R08: 0000000000000000 R09: 0000000000000073
+> [  173.007980] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000001
+> [  173.015115] R13: 000055bd4cc3b950 R14: 000055bd4cc372c0 R15: 000055bd4cc37090
+> [  173.022249]  </TASK>
+> [  173.024440] Modules linked in: rfkill intel_rapl_msr
+> intel_rapl_common isst_if_common irdma skx_edac nfit libnvdimm ice
+> x86_pkg_temp_thermal intel_powerclamp coretemp ib_uverbs iTCO_wdt
+> intel_pmc_bxt ib_core iTCO_vendor_support kvm_
+> intel ipmi_ssif kvm irqbypass rapl acpi_ipmi intel_cstate i40e joydev
+> mei_me ioatdma i2c_i801 intel_uncore lpc_ich i2c_smbus mei
+> intel_pch_thermal dca ipmi_si ipmi_devintf ipmi_msghandler acpi_pad
+> acpi_power_meter fuse zram xfs crct10d
+> if_pclmul ast crc32_pclmul crc32c_intel drm_vram_helper drm_ttm_helper
+> ttm wmi ghash_clmulni_intel
+> [  173.073900] CR2: 0000000000000008
 > 
 
-Best regards,
-Krzysztof
+-- 
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

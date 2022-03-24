@@ -2,188 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7CD4E637A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E144E637B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350230AbiCXMl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
+        id S1350234AbiCXMmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344638AbiCXMlz (ORCPT
+        with ESMTP id S1350089AbiCXMmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:41:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B0F31506;
-        Thu, 24 Mar 2022 05:40:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4790F1F745;
-        Thu, 24 Mar 2022 12:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648125622; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qDsOr8gX6EHN1Nd1eU2WHHdDrdoOYMkulYetFKIueLs=;
-        b=pxsvihb9de9b5sHIHKI7fPyyRStLC9RYdvp2UQ/QFN2ProYk7+TPEzQWwCl0ahisn3Su4v
-        x0xLNT3elQ42FKA0H7RMjrWGWe98QGuq4bVEkt+418yQAdvOLp8wo4jjLM2asr1fXh7FlA
-        0rvi+Mf5M/4efAPR4nQV5DdGFcYKKfw=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id EAC5CA3B93;
-        Thu, 24 Mar 2022 12:40:21 +0000 (UTC)
-Date:   Thu, 24 Mar 2022 13:40:13 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-kernel@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-mips@vger.kernel.org
-Subject: Re: undefined reference to `node_data'
-Message-ID: <YjxmrTKxRpTFeHnE@dhcp22.suse.cz>
-References: <202203232042.AS9SV1zv-lkp@intel.com>
- <Yjs0ausRy6/mLUFD@dhcp22.suse.cz>
- <YjtPAwl/lhh+n3c2@dhcp22.suse.cz>
- <20220324090443.GA5375@alpha.franken.de>
+        Thu, 24 Mar 2022 08:42:08 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BDB36683
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:40:34 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nXMlM-00053h-81; Thu, 24 Mar 2022 13:40:24 +0100
+Message-ID: <f4f17203-df77-bf51-d761-3db63075d5a6@leemhuis.info>
+Date:   Thu, 24 Mar 2022 13:40:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324090443.GA5375@alpha.franken.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eduard-Gabriel Munteanu <maxdamage@aladin.ro>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        regressions@lists.linux.dev
+References: <20210508032239.2177-1-thunder.leizhen@huawei.com>
+ <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [PATCH 1/1] um: fix error return code in winch_tramp()
+In-Reply-To: <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648125634;3bb610c7;
+X-HE-SMSGID: 1nXMlM-00053h-81
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 24-03-22 10:04:43, Thomas Bogendoerfer wrote:
-> On Wed, Mar 23, 2022 at 05:46:59PM +0100, Michal Hocko wrote:
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > 
-> > > > All errors (new ones prefixed by >>):
-> > > > 
-> > > >    mips64-linux-ld: mm/page_alloc.o: in function `free_area_init':
-> > > > >> (.init.text+0x1680): undefined reference to `node_data'
-> > > >    mips64-linux-ld: (.init.text+0x1690): undefined reference to `node_data'
-> > > 
-> > > OK, I can see what is going here. The page allocator normally
-> > > uses NODE_DATA but arch_refresh_nodedata refers to node_data directly.
-> > > This is a problem with
-> > > arch/mips/include/asm/mach-loongson64/mmzone.h:
-> > > extern struct pglist_data *__node_data[];
-> > > 
-> > > #define NODE_DATA(n)            (__node_data[n])
-> > > 
-> > > Unfortunately we cannot use NODE_DATA there because of header inclusion
-> > > ordering. I will think about a solution.
-> > 
-> > Is there any reason why (some?) MIPS arches use __node_data rather than
-> > node_data as most other architectures? Would it be acceptable to do the
-> > renaming? It would help to cover the above compilation problem because
-> > arch_refresh_nodedata could keep using node_data directly.
-> 
-> I've just checked history and I don't see a reason for __node_data.
-> So I'm fine with changing it to node_data.
+[TLDR: I'm adding the regression report below to regzbot, the Linux
+kernel regression tracking bot; all text you find below is compiled from
+a few templates paragraphs you might have encountered already already
+from similar mails.]
 
-Thanks a lot for double checking Thomas! This is a dump&simple sed over
-mips file. 0-day guys, could you give it a try please?
---- 
-diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
-index 08c36e50a860..a798ad379da1 100644
---- a/arch/mips/include/asm/mach-ip27/mmzone.h
-+++ b/arch/mips/include/asm/mach-ip27/mmzone.h
-@@ -20,9 +20,9 @@ struct node_data {
- 	struct hub_data hub;
- };
- 
--extern struct node_data *__node_data[];
-+extern struct node_data *node_data[];
- 
--#define NODE_DATA(n)		(&__node_data[(n)]->pglist)
--#define hub_data(n)		(&__node_data[(n)]->hub)
-+#define NODE_DATA(n)		(&node_data[(n)]->pglist)
-+#define hub_data(n)		(&node_data[(n)]->hub)
- 
- #endif /* _ASM_MACH_MMZONE_H */
-diff --git a/arch/mips/include/asm/mach-loongson64/mmzone.h b/arch/mips/include/asm/mach-loongson64/mmzone.h
-index ebb1deaa77b9..14e2b860ad65 100644
---- a/arch/mips/include/asm/mach-loongson64/mmzone.h
-+++ b/arch/mips/include/asm/mach-loongson64/mmzone.h
-@@ -14,9 +14,9 @@
- #define pa_to_nid(addr)  (((addr) & 0xf00000000000) >> NODE_ADDRSPACE_SHIFT)
- #define nid_to_addrbase(nid) ((unsigned long)(nid) << NODE_ADDRSPACE_SHIFT)
- 
--extern struct pglist_data *__node_data[];
-+extern struct pglist_data *node_data[];
- 
--#define NODE_DATA(n)		(__node_data[n])
-+#define NODE_DATA(n)		(node_data[n])
- 
- extern void setup_zero_pages(void);
- extern void __init prom_init_numa_memory(void);
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index e8e3e48c5333..abbbc70ce980 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -29,8 +29,8 @@
- 
- unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
- EXPORT_SYMBOL(__node_distances);
--struct pglist_data *__node_data[MAX_NUMNODES];
--EXPORT_SYMBOL(__node_data);
-+struct pglist_data *node_data[MAX_NUMNODES];
-+EXPORT_SYMBOL(node_data);
- 
- cpumask_t __node_cpumask[MAX_NUMNODES];
- EXPORT_SYMBOL(__node_cpumask);
-@@ -107,7 +107,7 @@ static void __init node_mem_init(unsigned int node)
- 	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
- 	if (tnid != node)
- 		pr_info("NODE_DATA(%d) on node %d\n", node, tnid);
--	__node_data[node] = nd;
-+	node_data[node] = nd;
- 	NODE_DATA(node)->node_start_pfn = start_pfn;
- 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
- 
-diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-index adc2faeecf7c..1c3a0b92d134 100644
---- a/arch/mips/sgi-ip27/ip27-memory.c
-+++ b/arch/mips/sgi-ip27/ip27-memory.c
-@@ -33,9 +33,9 @@
- #define SLOT_PFNSHIFT		(SLOT_SHIFT - PAGE_SHIFT)
- #define PFN_NASIDSHFT		(NASID_SHFT - PAGE_SHIFT)
- 
--struct node_data *__node_data[MAX_NUMNODES];
-+struct node_data *node_data[MAX_NUMNODES];
- 
--EXPORT_SYMBOL(__node_data);
-+EXPORT_SYMBOL(node_data);
- 
- static u64 gen_region_mask(void)
- {
-@@ -358,8 +358,8 @@ static void __init node_mem_init(nasid_t node)
- 	/*
- 	 * Allocate the node data structures on the node first.
- 	 */
--	__node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
--	memset(__node_data[node], 0, PAGE_SIZE);
-+	node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
-+	memset(node_data[node], 0, PAGE_SIZE);
- 
- 	NODE_DATA(node)->node_start_pfn = start_pfn;
- 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
-@@ -401,7 +401,7 @@ void __init prom_meminit(void)
- 			node_mem_init(node);
- 			continue;
- 		}
--		__node_data[node] = &null_node;
-+		node_data[node] = &null_node;
- 	}
- }
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easily accessible to everyone.
+
+Thanks for the report.
+
+To be sure below issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
+
+#regzbot ^introduced ccf1236ecac4
+#regzbot title uml: UML fails to exit cleanly when it is called from
+within in a shell script
+#regzbot ignore-activity
+
+If it turns out this isn't a regression, free free to remove it from the
+tracking by sending a reply to this thread containing a paragraph like
+"#regzbot invalid: reason why this is invalid" (without the quotes).
+
+Reminder for developers: when fixing the issue, please add a 'Link:'
+tags pointing to the report (the mail) using lore.kernel.org/r/, as
+explained in 'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'. Regzbot needs them to
+automatically connect reports with fixes, but they are useful in
+general, too.
+
+I'm sending this to everyone that got the initial report, to make
+everyone aware of the tracking. I also hope that messages like this
+motivate people to directly get at least the regression mailing list and
+ideally even regzbot involved when dealing with regressions, as messages
+like this wouldn't be needed then. And don't worry, if I need to send
+other mails regarding this regression only relevant for regzbot I'll
+send them to the regressions lists only (with a tag in the subject so
+people can filter them away). With a bit of luck no such messages will
+be needed anyway.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+
+On 23.03.22 20:41, Nathan Chancellor wrote:
+> Hello,
+> 
+> On Sat, May 08, 2021 at 11:22:39AM +0800, Zhen Lei wrote:
+>> Fix to return a negative error code from the error handling case instead
+>> of 0, as done elsewhere in this function.
+>>
+>> Fixes: 89df6bfc0405 ("uml: DEBUG_SHIRQ fixes")
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  arch/um/drivers/chan_user.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/um/drivers/chan_user.c b/arch/um/drivers/chan_user.c
+>> index d8845d4aac6a..6040817c036f 100644
+>> --- a/arch/um/drivers/chan_user.c
+>> +++ b/arch/um/drivers/chan_user.c
+>> @@ -256,7 +256,8 @@ static int winch_tramp(int fd, struct tty_port *port, int *fd_out,
+>>  		goto out_close;
+>>  	}
+>>  
+>> -	if (os_set_fd_block(*fd_out, 0)) {
+>> +	err = os_set_fd_block(*fd_out, 0);
+>> +	if (err) {
+>>  		printk(UM_KERN_ERR "winch_tramp: failed to set thread_fd "
+>>  		       "non-blocking.\n");
+>>  		goto out_close;
+>> -- 
+>> 2.25.1
+>>
+>>
+>>
+> 
+> Sorry for the necro bump but this patch as commit ccf1236ecac4 ("um: fix
+> error return code in winch_tramp()") prevents UML from exiting cleanly
+> when it is called from within in a shell script. It is still
+> reproducible at next-20220323. I did see a patch from Richard that
+> touches this area but that patch does not make a difference:
+> 
+> https://lore.kernel.org/r/20220101215810.13260-3-richard@nod.at/
+> 
+> My bisect log:
+> 
+> # bad: [7d2a07b769330c34b4deabeed939325c77a7ec2f] Linux 5.14
+> # good: [62fb9874f5da54fdb243003b386128037319b219] Linux 5.13
+> git bisect start 'v5.14' 'v5.13'
+> # good: [406254918b232db198ed60f5bf1f8b84d96bca00] Merge tag 'perf-tools-for-v5.14-2021-07-01' of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux
+> git bisect good 406254918b232db198ed60f5bf1f8b84d96bca00
+> # good: [4ea90317956718e0648e1f87e56530db809a5a04] Merge tag 'for-linus-5.14-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip
+> git bisect good 4ea90317956718e0648e1f87e56530db809a5a04
+> # bad: [65ca89c2b12cca0d473f3dd54267568ad3af55cc] ASoC: intel: atom: Fix breakage for PCM buffer address setup
+> git bisect bad 65ca89c2b12cca0d473f3dd54267568ad3af55cc
+> # bad: [6e207b882159ed3e35a4cd4ff0fc155cce5e3cbc] Merge tag 'arm-soc-5.14' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+> git bisect bad 6e207b882159ed3e35a4cd4ff0fc155cce5e3cbc
+> # good: [f55966571d5eb2876a11e48e798b4592fa1ffbb7] Merge tag 'drm-next-2021-07-08-1' of git://anongit.freedesktop.org/drm/drm
+> git bisect good f55966571d5eb2876a11e48e798b4592fa1ffbb7
+> # bad: [1459718d7d79013a4814275c466e0b32da6a26bc] Merge tag 'powerpc-5.14-2' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
+> git bisect bad 1459718d7d79013a4814275c466e0b32da6a26bc
+> # good: [227c4d507c71acb7bece298a98d83e5b44433f62] Merge tag 'f2fs-for-5.14-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs
+> git bisect good 227c4d507c71acb7bece298a98d83e5b44433f62
+> # good: [96890bc2eaa1f6bfc1b194e0f0815a10824352a4] Merge tag 'nfs-for-5.14-1' of git://git.linux-nfs.org/projects/trondmy/linux-nfs
+> git bisect good 96890bc2eaa1f6bfc1b194e0f0815a10824352a4
+> # good: [e49d68ce7cc5a865ce14c1e57938438ab01c3ce3] Merge tag 'ext4_for_linus_stable' of git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4
+> git bisect good e49d68ce7cc5a865ce14c1e57938438ab01c3ce3
+> # bad: [ccf1236ecac476d9d2704866d9a476c86e387971] um: fix error return code in winch_tramp()
+> git bisect bad ccf1236ecac476d9d2704866d9a476c86e387971
+> # good: [68f5d3f3b6543266b29e047cfaf9842333019b4c] um: add PCI over virtio emulation driver
+> git bisect good 68f5d3f3b6543266b29e047cfaf9842333019b4c
+> # good: [c0ecca6604b80e438b032578634c6e133c7028f6] um: enable the use of optimized xor routines in UML
+> git bisect good c0ecca6604b80e438b032578634c6e133c7028f6
+> # good: [80f849bf541ef9b633a9c08ac208f9c9afd14eb9] um: implement flush_cache_vmap/flush_cache_vunmap
+> git bisect good 80f849bf541ef9b633a9c08ac208f9c9afd14eb9
+> # good: [b77e81fbe5f5fb4ad9a61ec80f6d1e30b6da093a] um: fix error return code in slip_open()
+> git bisect good b77e81fbe5f5fb4ad9a61ec80f6d1e30b6da093a
+> # first bad commit: [ccf1236ecac476d9d2704866d9a476c86e387971] um: fix error return code in winch_tramp()
+> 
+> $ make -skj"$(nproc)" ARCH=um mrproper defconfig all
+> 
+> $ ./linux ubd0=...
+> ...
+> Run /sbin/init as init process
+> EXT4-fs (ubda): re-mounted. Quota mode: none.
+> Starting syslogd: OK
+> Starting klogd: OK
+> Running sysctl: OK
+> Initializing random number generator: OK
+> Saving random seed: OK
+> Starting network: OK
+> Linux version 5.17.0-next-20220323 (nathan@dev-arch.thelio-3990X) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38) #1 Wed Mar 23 12:05:22 MST 2022
+> Stopping network: OK
+> Saving random seed: OK
+> Stopping klogd: OK
+> Stopping syslogd: OK
+> EXT4-fs (ubda): re-mounted. Quota mode: none.
+> The system is going down NOW!
+> Sent SIGTERM to all processes
+> Sent SIGKILL to all processes
+> Requesting system poweroff
+> reboot: System halted
+> 
+> $ echo $?
+> 0
+> 
+> $ cat test.sh
+> #!/usr/bin/env bash
+> 
+> ./linux ubd0=...
+> 
+> $ ./test.sh
+> ...
+> Run /sbin/init as init process
+> EXT4-fs (ubda): re-mounted. Quota mode: none.
+> Starting syslogd: OK
+> Starting klogd: OK
+> Running sysctl: OK
+> Initializing random number generator: OK
+> Saving random seed: OK
+> Starting network: OK
+> Linux version 5.17.0-next-20220323 (nathan@dev-arch.thelio-3990X) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38) #1 Wed Mar 23 12:10:31 MST 2022
+> Stopping network: OK
+> Saving random seed: OK
+> Stopping klogd: OK
+> Stopping syslogd: OK
+> EXT4-fs (ubda): re-mounted. Quota mode: none.
+> The system is going down NOW!
+> Sent SIGTERM to all processes
+> Sent SIGKILL to all processes
+> Requesting system poweroff
+> reboot: System halted
+> ./test.sh: line 5: 970978 Killed                  ./linux ubd0=...
+> 
+> $ echo $?
+> 137
+> 
+> The rootfs is a simple Buildroot image, which just prints the version
+> string then runs "poweroff". It is available at:
+> 
+> https://github.com/nathanchance/boot-utils/raw/bd4b962ee12e00f666eef12e3413a79d334a0685/images/x86_64/rootfs.ext4.zst
+> 
+> in case it helps. I am happy to provide more information or test patches
+> as necessary.
+> 
+> Cheers,
+> Nathan
+> 
+> 
 -- 
-Michal Hocko
-SUSE Labs
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

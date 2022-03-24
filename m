@@ -2,45 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F197D4E5C36
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 01:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2839C4E5C3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 01:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346741AbiCXANi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 20:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S1346762AbiCXAPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 20:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiCXANh (ORCPT
+        with ESMTP id S229569AbiCXAPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 20:13:37 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DC4E73
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 17:12:04 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nXB0v-00055s-0z; Thu, 24 Mar 2022 01:07:41 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
-        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
-        hch@lst.de, arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
-        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu, Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v8 14/14] riscv: add memory-type errata for T-Head
-Date:   Thu, 24 Mar 2022 01:07:10 +0100
-Message-Id: <20220324000710.575331-15-heiko@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220324000710.575331-1-heiko@sntech.de>
-References: <20220324000710.575331-1-heiko@sntech.de>
+        Wed, 23 Mar 2022 20:15:08 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D9F1400E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 17:13:37 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id h14-20020a05660208ce00b00645c339411bso2070913ioz.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 17:13:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=V+6A96zcUHBo/1Vd9cbgrqSOLXByL/HQVaxu+/o75IY=;
+        b=nqvejMnk1HnszZWAt5HS1+WkyrKgroP6Yw8JGLQehuGsXEGd4abFzHPaCeLP0j3iiw
+         2KAvSGMFabxz3eRDDwbzGqDHC0ceV6IexBJf6bq+DB7u6flC9eaqebtW6vVUcNKRDod6
+         d1XUhHX108QA+AMH8CM3MX6J2cRdSrwoXtLQ44voFsg15hkkv/s7l4xKq1FtZNIoQxTw
+         JDkBwh3475bktpwdioWs2JqxE/UDOGVMS2VLgxp68Hhe1rfk6YOupZ8hC5epOFn76H7R
+         +4wav1+Rz5MOBuK8YhKa/oNn9IJfRvYJm+cygZi3UP3o4x5WcRKSJYr6PB8lzaRdx6R9
+         iZ4A==
+X-Gm-Message-State: AOAM530C5VwHeveZzenXcdx6jyfAKnjuSJOog1I7aDF77s7NWzGLiCtw
+        g7ndgF3OObf9gdAuYoj0GxWiYcF1rq2Rg/q5p5rfxXBV/EDi
+X-Google-Smtp-Source: ABdhPJwhGqpJ45ABs6FnJ2w8RR9JPgROyxztusezrFVT7uaQWYKGlAH76DqYNK3/06j6SIAWT26iBIMGqNSJD5FDoOmpcIvLXPsd
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+X-Received: by 2002:a5d:848a:0:b0:648:b2f4:d5cd with SMTP id
+ t10-20020a5d848a000000b00648b2f4d5cdmr1347523iom.53.1648080817286; Wed, 23
+ Mar 2022 17:13:37 -0700 (PDT)
+Date:   Wed, 23 Mar 2022 17:13:37 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000acf1e405daebb7c7@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in __tcp_transmit_skb
+From:   syzbot <syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,424 +58,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some current cpus based on T-Head cores implement memory-types
-way different than described in the svpbmt spec even going
-so far as using PTE bits marked as reserved.
+Hello,
 
-Add the T-Head vendor-id and necessary errata code to
-replace the affected instructions.
+syzbot found the following issue on:
 
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Tested-by: Samuel Holland <samuel@sholland.org>
+HEAD commit:    36c2e31ad25b net: geneve: add missing netlink policy and s..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17c308a5700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4a15e2288cf165c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=090d23ddbd5cd185c2e0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171eadbd700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12cacda3700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+090d23ddbd5cd185c2e0@syzkaller.appspotmail.com
+
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 13fd5067 P4D 13fd5067 PUD 77ebc067 PMD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 7423 Comm: syz-executor720 Not tainted 5.17.0-rc8-syzkaller-02803-g36c2e31ad25b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc900001d0a60 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff88801e00cd10 RCX: 0000000000000100
+RDX: 1ffff11003c019a3 RSI: ffff8880155c5c80 RDI: ffff888014bac800
+RBP: ffff888014bac800 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff87bccdc7 R11: 0000000000000000 R12: ffff8880155c5c80
+R13: 0000000000000000 R14: ffff888014bacf60 R15: ffff88807527012c
+FS:  000055555733b3c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 00000000757b0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ __tcp_transmit_skb+0x1098/0x38b0 net/ipv4/tcp_output.c:1371
+ tcp_transmit_skb net/ipv4/tcp_output.c:1420 [inline]
+ tcp_xmit_probe_skb+0x28c/0x320 net/ipv4/tcp_output.c:4006
+ tcp_write_wakeup+0x1bd/0x610 net/ipv4/tcp_output.c:4059
+ tcp_send_probe0+0x44/0x560 net/ipv4/tcp_output.c:4074
+ tcp_probe_timer net/ipv4/tcp_timer.c:398 [inline]
+ tcp_write_timer_handler+0x9ed/0xbc0 net/ipv4/tcp_timer.c:626
+ tcp_write_timer+0xa2/0x2b0 net/ipv4/tcp_timer.c:642
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+ expire_timers kernel/time/timer.c:1466 [inline]
+ __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
+ __run_timers kernel/time/timer.c:1715 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ invoke_softirq kernel/softirq.c:432 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
+RIP: 0010:lock_acquire+0x1ef/0x510 kernel/locking/lockdep.c:5607
+Code: e4 a4 7e 83 f8 01 0f 85 b4 02 00 00 9c 58 f6 c4 02 0f 85 9f 02 00 00 48 83 7c 24 08 00 74 01 fb 48 b8 00 00 00 00 00 fc ff df <48> 01 c3 48 c7 03 00 00 00 00 48 c7 43 08 00 00 00 00 48 8b 84 24
+RSP: 0018:ffffc90002eaf888 EFLAGS: 00000206
+RAX: dffffc0000000000 RBX: 1ffff920005d5f13 RCX: 5ad5b746ce328923
+RDX: 1ffff1100e5374eb RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8fe0c947
+R10: fffffbfff1fc1928 R11: 0000000000000001 R12: 0000000000000002
+R13: 0000000000000000 R14: ffffffff8bb84ca0 R15: 0000000000000000
+ rcu_lock_acquire include/linux/rcupdate.h:268 [inline]
+ rcu_read_lock include/linux/rcupdate.h:694 [inline]
+ fib_lookup.constprop.0+0x8f/0x460 include/net/ip_fib.h:377
+ ip_route_output_key_hash_rcu+0xf54/0x2c80 net/ipv4/route.c:2737
+ ip_route_output_key_hash+0x183/0x2f0 net/ipv4/route.c:2627
+ __ip_route_output_key include/net/route.h:127 [inline]
+ ip_route_output_flow+0x23/0x150 net/ipv4/route.c:2857
+ ip_route_newports include/net/route.h:343 [inline]
+ tcp_v4_connect+0x12a5/0x1d00 net/ipv4/tcp_ipv4.c:283
+ __inet_stream_connect+0x8cf/0xed0 net/ipv4/af_inet.c:660
+ inet_stream_connect+0x53/0xa0 net/ipv4/af_inet.c:724
+ smc_connect+0x230/0x450 net/smc/af_smc.c:1522
+ __sys_connect_file+0x155/0x1a0 net/socket.c:1900
+ __sys_connect+0x161/0x190 net/socket.c:1917
+ __do_sys_connect net/socket.c:1927 [inline]
+ __se_sys_connect net/socket.c:1924 [inline]
+ __x64_sys_connect+0x6f/0xb0 net/socket.c:1924
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f23b4ec0889
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffce8f74658 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+RAX: ffffffffffffffda RBX: 00007ffce8f746b0 RCX: 00007f23b4ec0889
+RDX: 0000000000000010 RSI: 00000000200001c0 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 000000000000cf1c R09: 000000000000cf1c
+R10: 0000000000000004 R11: 0000000000000246 R12: 00007ffce8f746a0
+R13: 000000000000cf1c R14: 00007ffce8f7469c R15: 431bde82d7b634db
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc900001d0a60 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff88801e00cd10 RCX: 0000000000000100
+RDX: 1ffff11003c019a3 RSI: ffff8880155c5c80 RDI: ffff888014bac800
+RBP: ffff888014bac800 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff87bccdc7 R11: 0000000000000000 R12: ffff8880155c5c80
+R13: 0000000000000000 R14: ffff888014bacf60 R15: ffff88807527012c
+FS:  000055555733b3c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 00000000757b0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	e4 a4                	in     $0xa4,%al
+   2:	7e 83                	jle    0xffffff87
+   4:	f8                   	clc
+   5:	01 0f                	add    %ecx,(%rdi)
+   7:	85 b4 02 00 00 9c 58 	test   %esi,0x589c0000(%rdx,%rax,1)
+   e:	f6 c4 02             	test   $0x2,%ah
+  11:	0f 85 9f 02 00 00    	jne    0x2b6
+  17:	48 83 7c 24 08 00    	cmpq   $0x0,0x8(%rsp)
+  1d:	74 01                	je     0x20
+  1f:	fb                   	sti
+  20:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  27:	fc ff df
+* 2a:	48 01 c3             	add    %rax,%rbx <-- trapping instruction
+  2d:	48 c7 03 00 00 00 00 	movq   $0x0,(%rbx)
+  34:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
+  3b:	00
+  3c:	48                   	rex.W
+  3d:	8b                   	.byte 0x8b
+  3e:	84                   	.byte 0x84
+  3f:	24                   	.byte 0x24
+
+
 ---
- arch/riscv/Kconfig.erratas             | 19 ++++++
- arch/riscv/errata/Makefile             |  1 +
- arch/riscv/errata/sifive/errata.c      |  7 ++-
- arch/riscv/errata/thead/Makefile       |  1 +
- arch/riscv/errata/thead/errata.c       | 82 ++++++++++++++++++++++++++
- arch/riscv/include/asm/alternative.h   |  5 ++
- arch/riscv/include/asm/errata_list.h   | 47 +++++++++++++--
- arch/riscv/include/asm/pgtable-64.h    | 18 +++++-
- arch/riscv/include/asm/pgtable.h       | 18 +++++-
- arch/riscv/include/asm/vendorid_list.h |  1 +
- arch/riscv/kernel/alternative.c        | 12 ++++
- arch/riscv/kernel/cpufeature.c         |  7 ++-
- arch/riscv/mm/init.c                   |  1 +
- 13 files changed, 209 insertions(+), 10 deletions(-)
- create mode 100644 arch/riscv/errata/thead/Makefile
- create mode 100644 arch/riscv/errata/thead/errata.c
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-index 15cdeeb4151f..8221c5df8da8 100644
---- a/arch/riscv/Kconfig.erratas
-+++ b/arch/riscv/Kconfig.erratas
-@@ -32,4 +32,23 @@ config ERRATA_SIFIVE_CIP_1200
- 
- 	  If you don't know what to do here, say "Y".
- 
-+config ERRATA_THEAD
-+	bool "T-HEAD errata"
-+	help
-+	  All T-HEAD errata Kconfig depend on this Kconfig. Disabling
-+	  this Kconfig will disable all T-HEAD errata. Please say "Y"
-+	  here if your platform uses T-HEAD CPU cores.
-+
-+	  Otherwise, please say "N" here to avoid unnecessary overhead.
-+
-+config ERRATA_THEAD_PBMT
-+	bool "Apply T-Head memory type errata"
-+	depends on ERRATA_THEAD && 64BIT
-+	default y
-+	help
-+	  This will apply the memory type errata to handle the non-standard
-+	  memory type bits in page-table-entries on T-Head SoCs.
-+
-+	  If you don't know what to do here, say "Y".
-+
- endmenu
-diff --git a/arch/riscv/errata/Makefile b/arch/riscv/errata/Makefile
-index 0ca1c5281a2d..a1055965fbee 100644
---- a/arch/riscv/errata/Makefile
-+++ b/arch/riscv/errata/Makefile
-@@ -1 +1,2 @@
- obj-$(CONFIG_ERRATA_SIFIVE) += sifive/
-+obj-$(CONFIG_ERRATA_THEAD) += thead/
-diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
-index 42457efcaaa3..0b14d5475573 100644
---- a/arch/riscv/errata/sifive/errata.c
-+++ b/arch/riscv/errata/sifive/errata.c
-@@ -85,10 +85,15 @@ void __init_or_module sifive_errata_patch_func(struct alt_entry *begin, struct a
- 				     unsigned int stage)
- {
- 	struct alt_entry *alt;
--	u32 cpu_req_errata = sifive_errata_probe(archid, impid);
-+	u32 cpu_req_errata;
- 	u32 cpu_apply_errata = 0;
- 	u32 tmp;
- 
-+	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-+		return;
-+
-+	cpu_req_errata = sifive_errata_probe(archid, impid);
-+
- 	for (alt = begin; alt < end; alt++) {
- 		if (alt->vendor_id != SIFIVE_VENDOR_ID)
- 			continue;
-diff --git a/arch/riscv/errata/thead/Makefile b/arch/riscv/errata/thead/Makefile
-new file mode 100644
-index 000000000000..2d644e19caef
---- /dev/null
-+++ b/arch/riscv/errata/thead/Makefile
-@@ -0,0 +1 @@
-+obj-y += errata.o
-diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-new file mode 100644
-index 000000000000..e5d75270b99c
---- /dev/null
-+++ b/arch/riscv/errata/thead/errata.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021 Heiko Stuebner <heiko@sntech.de>
-+ */
-+
-+#include <linux/bug.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/string.h>
-+#include <linux/uaccess.h>
-+#include <asm/alternative.h>
-+#include <asm/cacheflush.h>
-+#include <asm/errata_list.h>
-+#include <asm/patch.h>
-+#include <asm/vendorid_list.h>
-+
-+struct errata_info {
-+	char name[ERRATA_STRING_LENGTH_MAX];
-+	bool (*check_func)(unsigned long arch_id, unsigned long impid);
-+	unsigned int stage;
-+};
-+
-+static bool errata_mt_check_func(unsigned long  arch_id, unsigned long impid)
-+{
-+	if (arch_id != 0 || impid != 0)
-+		return false;
-+	return true;
-+}
-+
-+static const struct errata_info errata_list[ERRATA_THEAD_NUMBER] = {
-+	{
-+		.name = "memory-types",
-+		.stage = RISCV_ALTERNATIVES_EARLY_BOOT,
-+		.check_func = errata_mt_check_func
-+	},
-+};
-+
-+static u32 thead_errata_probe(unsigned int stage, unsigned long archid, unsigned long impid)
-+{
-+	const struct errata_info *info;
-+	u32 cpu_req_errata = 0;
-+	int idx;
-+
-+	for (idx = 0; idx < ERRATA_THEAD_NUMBER; idx++) {
-+		info = &errata_list[idx];
-+
-+		if ((stage == RISCV_ALTERNATIVES_MODULE ||
-+		     info->stage == stage) && info->check_func(archid, impid))
-+			cpu_req_errata |= (1U << idx);
-+	}
-+
-+	return cpu_req_errata;
-+}
-+
-+void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
-+					      unsigned long archid, unsigned long impid,
-+					      unsigned int stage)
-+{
-+	struct alt_entry *alt;
-+	u32 cpu_req_errata = thead_errata_probe(stage, archid, impid);
-+	u32 tmp;
-+
-+	for (alt = begin; alt < end; alt++) {
-+		if (alt->vendor_id != THEAD_VENDOR_ID)
-+			continue;
-+		if (alt->errata_id >= ERRATA_THEAD_NUMBER)
-+			continue;
-+
-+		tmp = (1U << alt->errata_id);
-+		if (cpu_req_errata & tmp) {
-+			/* On vm-alternatives, the mmu isn't running yet */
-+			if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-+				memcpy((void *)__pa_symbol(alt->old_ptr),
-+				       (void *)__pa_symbol(alt->alt_ptr), alt->alt_len);
-+			else
-+				patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-+		}
-+	}
-+
-+	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-+		local_flush_icache_all();
-+}
-diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-index cf3b22173834..d1154c91ab03 100644
---- a/arch/riscv/include/asm/alternative.h
-+++ b/arch/riscv/include/asm/alternative.h
-@@ -19,8 +19,10 @@
- 
- #define RISCV_ALTERNATIVES_BOOT		0 /* alternatives applied during regular boot */
- #define RISCV_ALTERNATIVES_MODULE	1 /* alternatives applied during module-init */
-+#define RISCV_ALTERNATIVES_EARLY_BOOT	2 /* alternatives applied before mmu start */
- 
- void __init apply_boot_alternatives(void);
-+void __init apply_early_boot_alternatives(void);
- void apply_module_alternatives(void *start, size_t length);
- 
- struct alt_entry {
-@@ -39,6 +41,9 @@ struct errata_checkfunc_id {
- void sifive_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
- 			      unsigned long archid, unsigned long impid,
- 			      unsigned int stage);
-+void thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
-+			     unsigned long archid, unsigned long impid,
-+			     unsigned int stage);
- 
- void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
- 				 unsigned int stage);
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index a4a9b0842922..4fac46b82c16 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -14,6 +14,11 @@
- #define	ERRATA_SIFIVE_NUMBER 2
- #endif
- 
-+#ifdef CONFIG_ERRATA_THEAD
-+#define	ERRATA_THEAD_PBMT 0
-+#define	ERRATA_THEAD_NUMBER 1
-+#endif
-+
- #define	CPUFEATURE_SVPBMT 0
- #define	CPUFEATURE_NUMBER 1
- 
-@@ -42,10 +47,44 @@ asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,	\
-  * in the default case.
-  */
- #define ALT_SVPBMT_SHIFT 61
--#define ALT_SVPBMT(_val, prot)						\
--asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,	\
--		CPUFEATURE_SVPBMT, CONFIG_64BIT)			\
--		: "=r"(_val) : "I"(prot##_SVPBMT >> ALT_SVPBMT_SHIFT), "I"(ALT_SVPBMT_SHIFT))
-+#define ALT_THEAD_PBMT_SHIFT 59
-+#define ALT_SVPBMT(_val, prot)								\
-+asm(ALTERNATIVE_2("li %0, 0\t\nnop",							\
-+		  "li %0, %1\t\nslli %0,%0,%3", 0, CPUFEATURE_SVPBMT, CONFIG_64BIT,	\
-+		  "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID, ERRATA_THEAD_PBMT,	\
-+						CONFIG_ERRATA_THEAD_PBMT)		\
-+		: "=r"(_val) : "I"(prot##_SVPBMT >> ALT_SVPBMT_SHIFT),			\
-+			       "I"(prot##_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
-+			       "I"(ALT_SVPBMT_SHIFT), "I"(ALT_THEAD_PBMT_SHIFT))
-+
-+#ifdef CONFIG_ERRATA_THEAD_PBMT
-+/*
-+ * IO/NOCACHE memory types are handled together with svpbmt,
-+ * so on T-Head chips, check if no other memory type is set,
-+ * and set the non-0 PMA type if applicable.
-+ */
-+#define ALT_THEAD_PMA(_val)								\
-+asm volatile(ALTERNATIVE(								\
-+	"nop\n\t"									\
-+	"nop\n\t"									\
-+	"nop\n\t"									\
-+	"nop\n\t"									\
-+	"nop\n\t"									\
-+	"nop\n\t"									\
-+	"nop",										\
-+	"li      t3, %2\n\t"								\
-+	"slli    t3, t3, %4\n\t"							\
-+	"and     t3, %0, t3\n\t"							\
-+	"bne     t3, zero, 2f\n\t"							\
-+	"li      t3, %3\n\t"								\
-+	"slli    t3, t3, %4\n\t"							\
-+	"or      %0, %0, t3\n\t"							\
-+	"2:",  THEAD_VENDOR_ID, ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)		\
-+	: "+r"(_val) : "0"(_val), "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),	\
-+		       "I"(_PAGE_PMA_THEAD >> ALT_THEAD_PBMT_SHIFT),  "I"(ALT_THEAD_PBMT_SHIFT))
-+#else
-+#define ALT_THEAD_PMA(_val)
-+#endif
- 
- #endif /* __ASSEMBLY__ */
- 
-diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-index 07ba3416cb19..6d59e4695200 100644
---- a/arch/riscv/include/asm/pgtable-64.h
-+++ b/arch/riscv/include/asm/pgtable-64.h
-@@ -69,6 +69,18 @@ typedef struct {
- #define _PAGE_IO_SVPBMT		(1UL << 62)
- #define _PAGE_MTMASK_SVPBMT	(_PAGE_NOCACHE_SVPBMT | _PAGE_IO_SVPBMT)
- 
-+/*
-+ * [63:59] T-Head Memory Type definitions:
-+ *
-+ * 00000 - NC   Weakly-ordered, Non-cacheable, Non-bufferable, Non-shareable, Non-trustable
-+ * 01110 - PMA  Weakly-ordered, Cacheable, Bufferable, Shareable, Non-trustable
-+ * 10000 - IO   Strongly-ordered, Non-cacheable, Non-bufferable, Non-shareable, Non-trustable
-+ */
-+#define _PAGE_PMA_THEAD		((1UL << 62) | (1UL << 61) | (1UL << 60))
-+#define _PAGE_NOCACHE_THEAD	0UL
-+#define _PAGE_IO_THEAD		(1UL << 63)
-+#define _PAGE_MTMASK_THEAD	(_PAGE_PMA_THEAD | _PAGE_IO_THEAD | (1UL << 59))
-+
- static inline u64 riscv_page_mtmask(void)
- {
- 	u64 val;
-@@ -167,7 +179,11 @@ static inline bool mm_pud_folded(struct mm_struct *mm)
- 
- static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
- {
--	return __pmd((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
-+	unsigned long prot_val = pgprot_val(prot);
-+
-+	ALT_THEAD_PMA(prot_val);
-+
-+	return __pmd((pfn << _PAGE_PFN_SHIFT) | prot_val);
- }
- 
- static inline unsigned long _pmd_pfn(pmd_t pmd)
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 009a17f94b86..e2658a25f06d 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -246,7 +246,11 @@ static inline void pmd_clear(pmd_t *pmdp)
- 
- static inline pgd_t pfn_pgd(unsigned long pfn, pgprot_t prot)
- {
--	return __pgd((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
-+	unsigned long prot_val = pgprot_val(prot);
-+
-+	ALT_THEAD_PMA(prot_val);
-+
-+	return __pgd((pfn << _PAGE_PFN_SHIFT) | prot_val);
- }
- 
- static inline unsigned long _pgd_pfn(pgd_t pgd)
-@@ -285,7 +289,11 @@ static inline unsigned long pte_pfn(pte_t pte)
- /* Constructs a page table entry */
- static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
- {
--	return __pte((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
-+	unsigned long prot_val = pgprot_val(prot);
-+
-+	ALT_THEAD_PMA(prot_val);
-+
-+	return __pte((pfn << _PAGE_PFN_SHIFT) | prot_val);
- }
- 
- #define mk_pte(page, prot)       pfn_pte(page_to_pfn(page), prot)
-@@ -394,7 +402,11 @@ static inline int pmd_protnone(pmd_t pmd)
- /* Modify page protection bits */
- static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
- {
--	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
-+	unsigned long newprot_val = pgprot_val(newprot);
-+
-+	ALT_THEAD_PMA(newprot_val);
-+
-+	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | newprot_val);
- }
- 
- #define pgd_ERROR(e) \
-diff --git a/arch/riscv/include/asm/vendorid_list.h b/arch/riscv/include/asm/vendorid_list.h
-index 9d934215b3c8..cb89af3f0704 100644
---- a/arch/riscv/include/asm/vendorid_list.h
-+++ b/arch/riscv/include/asm/vendorid_list.h
-@@ -6,5 +6,6 @@
- #define ASM_VENDOR_LIST_H
- 
- #define SIFIVE_VENDOR_ID	0x489
-+#define THEAD_VENDOR_ID		0x5b7
- 
- #endif
-diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-index 27f722ae452b..e7980bf17e8b 100644
---- a/arch/riscv/kernel/alternative.c
-+++ b/arch/riscv/kernel/alternative.c
-@@ -42,6 +42,11 @@ static void __init_or_module riscv_fill_cpu_mfr_info(struct cpu_manufacturer_inf
- 	case SIFIVE_VENDOR_ID:
- 		cpu_mfr_info->vendor_patch_func = sifive_errata_patch_func;
- 		break;
-+#endif
-+#ifdef CONFIG_ERRATA_THEAD
-+	case THEAD_VENDOR_ID:
-+		cpu_mfr_info->vendor_patch_func = thead_errata_patch_func;
-+		break;
- #endif
- 	default:
- 		cpu_mfr_info->vendor_patch_func = NULL;
-@@ -82,6 +87,13 @@ void __init apply_boot_alternatives(void)
- 			    RISCV_ALTERNATIVES_BOOT);
- }
- 
-+void __init apply_early_boot_alternatives(void)
-+{
-+	_apply_alternatives((struct alt_entry *)__alt_start,
-+			    (struct alt_entry *)__alt_end,
-+			    RISCV_ALTERNATIVES_EARLY_BOOT);
-+}
-+
- #ifdef CONFIG_MODULES
- void apply_module_alternatives(void *start, size_t length)
- {
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index fab9c5367949..564c1917c8aa 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -254,7 +254,12 @@ static bool __init_or_module cpufeature_svpbmt_check_func(unsigned int stage)
- 	bool ret = false;
- 
- #if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
--	return riscv_isa_extension_available(NULL, SVPBMT);
-+	switch (stage) {
-+	case RISCV_ALTERNATIVES_EARLY_BOOT:
-+		return false;
-+	default:
-+		return riscv_isa_extension_available(NULL, SVPBMT);
-+	}
- #endif
- 
- 	return ret;
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 0d588032d6e6..245d54a3616c 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -821,6 +821,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
- #endif
- 
-+	apply_early_boot_alternatives();
- 	pt_ops_set_early();
- 
- 	/* Setup early PGD for fixmap */
--- 
-2.35.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

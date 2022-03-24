@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160A64E65ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2A54E65F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351242AbiCXPVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S1347796AbiCXPZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233752AbiCXPVl (ORCPT
+        with ESMTP id S233148AbiCXPZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:21:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFB794E38D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648135207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G2o3gAHoYUZWdzPuaqszpGnV2w4I+J5CWL2jDynP5vs=;
-        b=aeJLE9zAC5deMHJ6MBxD7JZYs13dtlP+tV4ahV1l1hmvB21N/LYIVghaJToi9AVw+VHk/R
-        OHtcFcXpKBgfJWgwpFoevO0U2389mRhFCm1RLQjTSLoFt3kr6Z9R9dRof8UrCb2uSpX5uk
-        HHrNL2knH5i8/yibuNCR4csit8S6y9w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-34-MrmLxTShM8a7PapBdMNDPg-1; Thu, 24 Mar 2022 11:20:05 -0400
-X-MC-Unique: MrmLxTShM8a7PapBdMNDPg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D72108AE9AB;
-        Thu, 24 Mar 2022 15:19:35 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C40FD417E36;
-        Thu, 24 Mar 2022 15:19:33 +0000 (UTC)
-Message-ID: <426b70a407b774627187e64b011a64bfb7214b36.camel@redhat.com>
-Subject: Re: [RFCv2 PATCH 08/12] KVM: SVM: Adding support for configuring
- x2APIC MSRs interception
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Mar 2022 17:19:32 +0200
-In-Reply-To: <20220308163926.563994-9-suravee.suthikulpanit@amd.com>
-References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
-         <20220308163926.563994-9-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Mar 2022 11:25:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A4B1DA4D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:24:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648135442; x=1679671442;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EAhU5polx5xf++8y43PT5whnDwNUuBK5LppJqvSn29o=;
+  b=h1BZgxmOyAHCt+hfNJglBjnWAcIGmiy2dL6pj68zvzmj0Pzl+5S3qnU2
+   qRvlV3FH8rOE5w2hBOoXaKgXmkJ3hcJ8K50UfqF2uOEe960ovyExdYYYn
+   vyhHbcbR1zKTPRthBIIxoxUEd+kLfFsIMEcMj1rqM5n9urYuToCznqHlP
+   Rfi9A5xmROqqKoV+EOTheex7kSGGRhsgdjiEjL4NcYwbuVMZUU8FYCmRu
+   9g7PewbB+8aVk5RZIMjjCpLSzN2g42bwEzaVtIvPzAHp1wsffG0kUFIHX
+   ZDCW7v7s6Bmj4Wpj+XXUXJXBDxB0GGU6pBcr9jAYhTiJjZ1+o9u+wZqlC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="283264867"
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="283264867"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 08:24:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="584116165"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 24 Mar 2022 08:23:55 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 09F9D1D9; Thu, 24 Mar 2022 17:24:15 +0200 (EET)
+Date:   Thu, 24 Mar 2022 18:24:15 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCHv7 21/30] x86/acpi, x86/boot: Add multiprocessor wake-up
+ support
+Message-ID: <20220324152415.grt6xvhblmd4uccu@black.fi.intel.com>
+References: <20220318153048.51177-1-kirill.shutemov@linux.intel.com>
+ <20220318153048.51177-22-kirill.shutemov@linux.intel.com>
+ <2847763c-6202-9e2a-54c5-44c761b59a63@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2847763c-6202-9e2a-54c5-44c761b59a63@intel.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,215 +75,279 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
-> When enabling x2APIC virtualization (x2AVIC), the interception of
-> x2APIC MSRs must be disabled to let the hardware virtualize guest
-> MSR accesses.
+On Fri, Mar 18, 2022 at 11:23:59AM -0700, Dave Hansen wrote:
+> On 3/18/22 08:30, Kirill A. Shutemov wrote:
+> > +	/*
+> > +	 * After writing the wakeup command, wait for maximum timeout of 0xFF
+> > +	 * for firmware to reset the command address back zero to indicate
+> > +	 * the successful reception of command.
+> > +	 * NOTE: 0xFF as timeout value is decided based on our experiments.
+> > +	 *
+> > +	 * XXX: Change the timeout once ACPI specification comes up with
+> > +	 *      standard maximum timeout value.
+> > +	 */
+> > +	timeout = 0xFF;
+> > +	while (READ_ONCE(acpi_mp_wake_mailbox->command) && --timeout)
+> > +		cpu_relax();
 > 
-> Current implementation keeps track of MSR interception state
-> for generic MSRs in the svm_direct_access_msrs array.
-> For x2APIC MSRs, introduce direct_access_x2apic_msrs array.
+> I don't feel like this was ever actually resolved.  This timeout
+> basically boiled down to "this value seems to work for us".  There are
+> also *SURELY* timeouts that are going to happen here.
+
+It makes me think if it can be an attack vector: once kernel initiated
+wake up of a secondary vCPU it has no control on how long it takes.
+
+I worry that malicious VMM can induce timeout intentionally, but then wake
+up the secondary CPU when kernel doesn't expect it. After quick look I was
+not able to convince myself that kernel can deal with this without a
+problem.
+
+Is it legitimate concern?
+
+Patch below drops timeout handling completely. Any opinions?
+
+Other option would be to check in the trampoline code that initiated wake
+up is legitimate. But it should only be untrue if VMM acting weird (or
+virtual BIOS is buggy). I don't think it's right side to deal with the
+problem.
+
+> >         /*
+> >          * If the CPU wakeup process is successful, store the
+> >          * status in apic_id_wakemap to prevent re-wakeup
+> >          * requests.
+> >          */
+> >         physid_set(apicid, apic_id_wakemap);
+> > 
+> >         return 0;
+> > }
 > 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 67 +++++++++++++++++++++++++++++++-----------
->  arch/x86/kvm/svm/svm.h |  7 +++++
->  2 files changed, 57 insertions(+), 17 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 3048f4b758d6..ce3c68a785cf 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -89,7 +89,7 @@ static uint64_t osvw_len = 4, osvw_status;
->  static DEFINE_PER_CPU(u64, current_tsc_ratio);
->  #define TSC_RATIO_DEFAULT	0x0100000000ULL
->  
-> -static const struct svm_direct_access_msrs {
-> +static struct svm_direct_access_msrs {
->  	u32 index;   /* Index of the MSR */
->  	bool always; /* True if intercept is initially cleared */
->  } direct_access_msrs[MAX_DIRECT_ACCESS_MSRS] = {
-> @@ -117,6 +117,9 @@ static const struct svm_direct_access_msrs {
->  	{ .index = MSR_INVALID,				.always = false },
->  };
->  
-> +static struct svm_direct_access_msrs
-> +direct_access_x2apic_msrs[NUM_DIRECT_ACCESS_X2APIC_MSRS + 1];
-> +
->  /*
->   * These 2 parameters are used to config the controls for Pause-Loop Exiting:
->   * pause_filter_count: On processors that support Pause filtering(indicated
-> @@ -609,41 +612,42 @@ static int svm_cpu_init(int cpu)
->  
->  }
->  
-> -static int direct_access_msr_slot(u32 msr)
-> +static int direct_access_msr_slot(u32 msr, struct svm_direct_access_msrs *msrs)
->  {
->  	u32 i;
->  
-> -	for (i = 0; direct_access_msrs[i].index != MSR_INVALID; i++)
-> -		if (direct_access_msrs[i].index == msr)
-> +	for (i = 0; msrs[i].index != MSR_INVALID; i++)
-> +		if (msrs[i].index == msr)
->  			return i;
->  
->  	return -ENOENT;
->  }
->  
-> -static void set_shadow_msr_intercept(struct kvm_vcpu *vcpu, u32 msr, int read,
-> -				     int write)
-> +static void set_shadow_msr_intercept(struct kvm_vcpu *vcpu,
-> +				     struct svm_direct_access_msrs *msrs, u32 msr,
-> +				     int read, void *read_bits,
-> +				     int write, void *write_bits)
->  {
-> -	struct vcpu_svm *svm = to_svm(vcpu);
-> -	int slot = direct_access_msr_slot(msr);direct_access_msrs
-> +	int slot = direct_access_msr_slot(msr, msrs);
->  
->  	if (slot == -ENOENT)
->  		return;
->  
->  	/* Set the shadow bitmaps to the desired intercept states */
->  	if (read)
-> -		set_bit(slot, svm->shadow_msr_intercept.read);
-> +		set_bit(slot, read_bits);
->  	else
-> -		clear_bit(slot, svm->shadow_msr_intercept.read);
-> +		clear_bit(slot, read_bits);
->  
->  	if (write)
-> -		set_bit(slot, svm->shadow_msr_intercept.write);
-> +		set_bit(slot, write_bits);
->  	else
-> -		clear_bit(slot, svm->shadow_msr_intercept.write);
-> +		clear_bit(slot, write_bits);
->  }
->  
-> -static bool valid_msr_intercept(u32 index)
-> +static bool valid_msr_intercept(u32 index, struct svm_direct_access_msrs *msrs)
->  {
-> -	return direct_access_msr_slot(index) != -ENOENT;
-> +	return direct_access_msr_slot(index, msrs) != -ENOENT;
->  }
->  
->  static bool msr_write_intercepted(struct kvm_vcpu *vcpu, u32 msr)
-> @@ -674,9 +678,12 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
->  
->  	/*
->  	 * If this warning triggers extend the direct_access_msrs list at the
-> -	 * beginning of the file
-> +	 * beginning of the file. The direct_access_x2apic_msrs is only for
-> +	 * x2apic MSRs.
->  	 */
-> -	WARN_ON(!valid_msr_intercept(msr));
-> +	WARN_ON(!valid_msr_intercept(msr, direct_access_msrs) &&
-> +		(boot_cpu_has(X86_FEATURE_X2AVIC) &&
-> +		 !valid_msr_intercept(msr, direct_access_x2apic_msrs)));
->  
->  	/* Enforce non allowed MSRs to trap */
->  	if (read && !kvm_msr_allowed(vcpu, msr, KVM_MSR_FILTER_READ))
-> @@ -704,7 +711,16 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
->  void set_msr_interception(struct kvm_vcpu *vcpu, u32 *msrpm, u32 msr,
->  			  int read, int write)
->  {
-> -	set_shadow_msr_intercept(vcpu, msr, read, write);
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +
-> +	if (msr < 0x800 || msr > 0x8ff)
-> +		set_shadow_msr_intercept(vcpu, direct_access_msrs, msr,
-> +					 read, svm->shadow_msr_intercept.read,
-> +					 write, svm->shadow_msr_intercept.write);
-> +	else
-> +		set_shadow_msr_intercept(vcpu, direct_access_x2apic_msrs, msr,
-> +					 read, svm->shadow_x2apic_msr_intercept.read,
-> +					 write, svm->shadow_x2apic_msr_intercept.write);
->  	set_msr_interception_bitmap(vcpu, msrpm, msr, read, write);
->  }
->  
-> @@ -786,6 +802,22 @@ static void add_msr_offset(u32 offset)
->  	BUG();
->  }
->  
-> +static void init_direct_access_x2apic_msrs(void)
-> +{
-> +	int i;
-> +
-> +	/* Initialize x2APIC direct_access_x2apic_msrs entries */
-> +	for (i = 0; i < NUM_DIRECT_ACCESS_X2APIC_MSRS; i++) {
-> +		direct_access_x2apic_msrs[i].index = boot_cpu_has(X86_FEATURE_X2AVIC) ?
-> +						  (0x800 + i) : MSR_INVALID;
-> +		direct_access_x2apic_msrs[i].always = false;
-> +	}
-> +
-> +	/* Initialize last entry */
-> +	direct_access_x2apic_msrs[i].index = MSR_INVALID;
-> +	direct_access_x2apic_msrs[i].always = false;
-> +}
-> +
->  static void init_msrpm_offsets(void)
->  {
->  	int i;
-> @@ -4750,6 +4782,7 @@ static __init int svm_hardware_setup(void)
->  	memset(iopm_va, 0xff, PAGE_SIZE * (1 << order));
->  	iopm_base = page_to_pfn(iopm_pages) << PAGE_SHIFT;
->  
-> +	init_direct_access_x2apic_msrs();
->  	init_msrpm_offsets();
->  
->  	supported_xcr0 &= ~(XFEATURE_MASK_BNDREGS | XFEATURE_MASK_BNDCSR);
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index b53c83a44ec2..19ad40b8383b 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -29,6 +29,8 @@
->  
->  #define MAX_DIRECT_ACCESS_MSRS	20
->  #define MSRPM_OFFSETS	16
-> +#define NUM_DIRECT_ACCESS_X2APIC_MSRS	0x100
-> +
->  extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
->  extern bool npt_enabled;
->  extern bool intercept_smi;
-> @@ -241,6 +243,11 @@ struct vcpu_svm {
->  		DECLARE_BITMAP(write, MAX_DIRECT_ACCESS_MSRS);
->  	} shadow_msr_intercept;
->  
-> +	struct {
-> +		DECLARE_BITMAP(read, NUM_DIRECT_ACCESS_X2APIC_MSRS);
-> +		DECLARE_BITMAP(write, NUM_DIRECT_ACCESS_X2APIC_MSRS);
-> +	} shadow_x2apic_msr_intercept;
-> +
->  	struct vcpu_sev_es_state sev_es;
->  
->  	bool guest_state_loaded;
+> If this goes wrong, won't the new wakeup just timeout?  Do we really
+> need a dedicated mechanism to stop re-wakeups?  How much of a problem is
+> this going to be?
 
+Well, it can provide a proper diagnostics and a distinct error code. If
+you think it is unneeded we can drop it.
 
-I did some homework on this, and it looks mostly correct.
+From bae59d6e8873a90db5041b6e08e1725d16b57132 Mon Sep 17 00:00:00 2001
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Date: Thu, 15 Apr 2021 10:31:38 -0700
+Subject: [PATCH] x86/acpi, x86/boot: Add multiprocessor wake-up support
 
-However I do wonder if we need that separation of svm_direct_access_msrs and 
-direct_access_x2apic_msrs. I understand the peformance wise, the  
-direct_access_msrs will get longer otherwise (but we don't have to allow
-all x2apic msr range, but only known x2apic registers which aren't that many).
+Secondary CPU startup is currently performed with something called
+the "INIT/SIPI protocol".  This protocol requires assistance from
+VMMs to boot guests.  As should be a familiar story by now, that
+support can not be provded to TDX guests because TDX VMMs are
+not trusted by guests.
 
-One of the things that I see that *is* broken (at least in theory) is nesting.
+To remedy this situation a new[1] "Multiprocessor Wakeup Structure"
+has been added to to an existing ACPI table (MADT).  This structure
+provides the physical address of a "mailbox".  A write to the mailbox
+then steers the secondary CPU to the boot code.
 
-init_msrpm_offsets goes over direct_access_msrs and puts the offsets of corresponding
-bits in the hardware msr bitmap into the 'msrpm_offsets'
+Add ACPI MADT wake structure parsing support and wake support.  Use
+this support to wake CPUs whenever it is present instead of INIT/SIPI.
 
-Then on nested VM entry the nested_svm_vmrun_msrpm uses this list to merge the nested
-and host MSR bitmaps.
-Without x2apic msrs, this means that if L1 chooses to allow L2 to access its x2apic msrs
-it won't work. It is not something that L1 would do often but still allowed to overall.
+While this structure can theoretically be used on 32-bit kernels,
+there are no 32-bit TDX guest kernels.  It has not been tested and
+can not practically *be* tested on 32-bit.  Make it 64-bit only.
 
-Honestly we need to write track the nested MSR bitmap to avoid updating it on each VM entry,
-then with this hot path eliminated, I don't think there are other places which update
-the msr interception often, and thus we could just put the x2apic msrs into the 
-direct_access_msrs.
+1. Details about the new structure can be found in ACPI v6.4, in the
+   "Multiprocessor Wakeup Structure" section.
 
-Best regards,
-	Maxim Levitsky
+Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+ arch/x86/include/asm/apic.h |   5 ++
+ arch/x86/kernel/acpi/boot.c | 114 +++++++++++++++++++++++++++++++++++-
+ arch/x86/kernel/apic/apic.c |  10 ++++
+ 3 files changed, 128 insertions(+), 1 deletion(-)
 
-
-
+diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+index 35006e151774..bd8ae0a7010a 100644
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -490,6 +490,11 @@ static inline unsigned int read_apic_id(void)
+ 	return apic->get_apic_id(reg);
+ }
+ 
++#ifdef CONFIG_X86_64
++typedef int (*wakeup_cpu_handler)(int apicid, unsigned long start_eip);
++extern void acpi_wake_cpu_handler_update(wakeup_cpu_handler handler);
++#endif
++
+ extern int default_apic_id_valid(u32 apicid);
+ extern int default_acpi_madt_oem_check(char *, char *);
+ extern void default_setup_apic_routing(void);
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 5b6d1a95776f..7ec04234dc74 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -65,6 +65,13 @@ static u64 acpi_lapic_addr __initdata = APIC_DEFAULT_PHYS_BASE;
+ static bool acpi_support_online_capable;
+ #endif
+ 
++#ifdef CONFIG_X86_64
++/* Physical address of the Multiprocessor Wakeup Structure mailbox */
++static u64 acpi_mp_wake_mailbox_paddr;
++/* Virtual address of the Multiprocessor Wakeup Structure mailbox */
++static struct acpi_madt_multiproc_wakeup_mailbox *acpi_mp_wake_mailbox;
++#endif
++
+ #ifdef CONFIG_X86_IO_APIC
+ /*
+  * Locks related to IOAPIC hotplug
+@@ -336,7 +343,81 @@ acpi_parse_lapic_nmi(union acpi_subtable_headers * header, const unsigned long e
+ 	return 0;
+ }
+ 
+-#endif				/*CONFIG_X86_LOCAL_APIC */
++#ifdef CONFIG_X86_64
++static int acpi_wakeup_cpu(int apicid, unsigned long start_ip)
++{
++	static physid_mask_t apic_id_wakemap = PHYSID_MASK_NONE;
++
++	/*
++	 * Remap mailbox memory only for the first call to acpi_wakeup_cpu().
++	 *
++	 * Wakeup of secondary CPUs is fully serialized in the core code.
++	 * No need to protect acpi_mp_wake_mailbox from concurrent accesses.
++	 */
++	if (!acpi_mp_wake_mailbox) {
++		acpi_mp_wake_mailbox = memremap(acpi_mp_wake_mailbox_paddr,
++						sizeof(*acpi_mp_wake_mailbox),
++						MEMREMAP_WB);
++	}
++
++	/*
++	 * According to the ACPI specification r6.4, section titled
++	 * "Multiprocessor Wakeup Structure" the mailbox-based wakeup
++	 * mechanism cannot be used more than once for the same CPU.
++	 * Skip wakeups if they are attempted more than once.
++	 */
++	if (physid_isset(apicid, apic_id_wakemap)) {
++		pr_err("CPU already awake (APIC ID %x), skipping wakeup\n",
++		       apicid);
++		return -EINVAL;
++	}
++
++	/*
++	 * Mailbox memory is shared between the firmware and OS. Firmware will
++	 * listen on mailbox command address, and once it receives the wakeup
++	 * command, the CPU associated with the given apicid will be booted.
++	 *
++	 * The value of 'apic_id' and 'wakeup_vector' must be visible to the
++	 * firmware before the wakeup command is visible.  smp_store_release()
++	 * ensures ordering and visibility.
++	 */
++	acpi_mp_wake_mailbox->apic_id	    = apicid;
++	acpi_mp_wake_mailbox->wakeup_vector = start_ip;
++	smp_store_release(&acpi_mp_wake_mailbox->command,
++			  ACPI_MP_WAKE_COMMAND_WAKEUP);
++
++	/*
++	 * Wait for the CPU to wake up.
++	 *
++	 * The CPU being woken up is essentially in a spin loop waiting to be
++	 * woken up. It should not take long for it wake up and acknowledge by
++	 * zeroing out ->command.
++	 *
++	 * ACPI specification doesn't provide any guidance on how long kernel
++	 * has to wait for a wake up acknowledgement. It also doesn't provide
++	 * a way to cancel a wake up request if it takes too long.
++	 *
++	 * In TDX environment, the VMM has control over how long it takes to
++	 * wake up secondary. It can postpone scheduling secondary vCPU
++	 * indefinitely. Giving up on wake up request and reporting error opens
++	 * possible attack vector for VMM: it can wake up a secondary CPU when
++	 * kernel doesn't expect it. Wait until positive result of the wake up
++	 * request.
++	 */
++	while (READ_ONCE(acpi_mp_wake_mailbox->command))
++		cpu_relax();
++
++	/*
++	 * If the CPU wakeup process is successful, store the
++	 * status in apic_id_wakemap to prevent re-wakeup
++	 * requests.
++	 */
++	physid_set(apicid, apic_id_wakemap);
++
++	return 0;
++}
++#endif /* CONFIG_X86_64 */
++#endif /* CONFIG_X86_LOCAL_APIC */
+ 
+ #ifdef CONFIG_X86_IO_APIC
+ #define MP_ISA_BUS		0
+@@ -1083,6 +1164,29 @@ static int __init acpi_parse_madt_lapic_entries(void)
+ 	}
+ 	return 0;
+ }
++
++#ifdef CONFIG_X86_64
++static int __init acpi_parse_mp_wake(union acpi_subtable_headers *header,
++				     const unsigned long end)
++{
++	struct acpi_madt_multiproc_wakeup *mp_wake;
++
++	if (!IS_ENABLED(CONFIG_SMP))
++		return -ENODEV;
++
++	mp_wake = (struct acpi_madt_multiproc_wakeup *)header;
++	if (BAD_MADT_ENTRY(mp_wake, end))
++		return -EINVAL;
++
++	acpi_table_print_madt_entry(&header->common);
++
++	acpi_mp_wake_mailbox_paddr = mp_wake->base_address;
++
++	acpi_wake_cpu_handler_update(acpi_wakeup_cpu);
++
++	return 0;
++}
++#endif				/* CONFIG_X86_64 */
+ #endif				/* CONFIG_X86_LOCAL_APIC */
+ 
+ #ifdef	CONFIG_X86_IO_APIC
+@@ -1278,6 +1382,14 @@ static void __init acpi_process_madt(void)
+ 
+ 				smp_found_config = 1;
+ 			}
++
++#ifdef CONFIG_X86_64
++			/*
++			 * Parse MADT MP Wake entry.
++			 */
++			acpi_table_parse_madt(ACPI_MADT_TYPE_MULTIPROC_WAKEUP,
++					      acpi_parse_mp_wake, 1);
++#endif
+ 		}
+ 		if (error == -EINVAL) {
+ 			/*
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index b70344bf6600..3c8f2c797a98 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -2551,6 +2551,16 @@ u32 x86_msi_msg_get_destid(struct msi_msg *msg, bool extid)
+ }
+ EXPORT_SYMBOL_GPL(x86_msi_msg_get_destid);
+ 
++#ifdef CONFIG_X86_64
++void __init acpi_wake_cpu_handler_update(wakeup_cpu_handler handler)
++{
++	struct apic **drv;
++
++	for (drv = __apicdrivers; drv < __apicdrivers_end; drv++)
++		(*drv)->wakeup_secondary_cpu_64 = handler;
++}
++#endif
++
+ /*
+  * Override the generic EOI implementation with an optimized version.
+  * Only called during early boot when only one CPU is active and with
+-- 
+ Kirill A. Shutemov

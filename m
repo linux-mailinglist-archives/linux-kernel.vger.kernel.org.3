@@ -2,161 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEADF4E626B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E834E626D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344996AbiCXLYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
+        id S1347336AbiCXLZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242783AbiCXLYq (ORCPT
+        with ESMTP id S236913AbiCXLZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:24:46 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66AB646B;
-        Thu, 24 Mar 2022 04:23:14 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id pv16so8561140ejb.0;
-        Thu, 24 Mar 2022 04:23:14 -0700 (PDT)
+        Thu, 24 Mar 2022 07:25:17 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141173ED1E;
+        Thu, 24 Mar 2022 04:23:45 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id h11so5711030ljb.2;
+        Thu, 24 Mar 2022 04:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=zbdwVgmEzDHA4WNpeMf8bwrU5wjzXUixO+mPzgyLSZI=;
+        b=UpFKoE+XZn1XgesQCFLWG+c4rStcpUK9jHmSYwU5uRzUVpZXQnBJDo+rMH+3h7n/12
+         72ptiKgHeuDJZPiu6fwyPB26xc0C2Vs/ZeE3hjWjx4SM3AC7FhLRs2j+5pwfeHhuSiaA
+         KBG2+6ngx4lRKZLxTRkgJG5JrySYO5rMXWM1nCC+hXprBjkk7l144WjsfcQaZ/bwMyPv
+         BDpy0tIM0YCzILV5Nlnces8sVUAIrtdezsexH7cu9PR2YPfcRRdpb3gYTOlzxC7FohSq
+         6dOVBzI0kiyYFTd5biaLHNaRmOLpy1HsIg2L13+u6BaSTot8UcrGL0UCPAbu2iZOn01X
+         Q9SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dlOlXPMPAGBLtab/eN9h0+VSJ5BfGK0qXZEyv3ue3cI=;
-        b=DT9P+bvrSekj0ia3VIUkDEhkSd9lm1ATnuYTLEeuuA5Q2hpRKsLKYQMFn/9c4yAA8s
-         G//WnzU0YGZ1Z7pmftCvFUfxzYFk+I5AHHYWJKF8ZmtRoCSfXwkS/AD4WapH7NQ5moCF
-         3IMpfrlzzBY8sbklVDm7qNJ1TetYz+MqpjuXhKiW2TcRAYcGA3DSvb20hlq4ZMw2T+Hm
-         lw/ldF48TqB5xZZO/aKPkcZKBtw8hzR7Hfyi51smUuDT9+0P3h+QpDizU2wPNb2w6teF
-         dSMsZHT99D/vJLHKSf4OfSHhmrc0oyqeIybJDJ4520r4Dl6fJfhUyC2vIghHqhNqnJSf
-         TZ6w==
-X-Gm-Message-State: AOAM530TSMMX4Y10ydB6ulh8sCYupgWqBYGI/WqjCpNEDMZKfzQpFW9N
-        Hcyntwihhn80EQOs4cnIcfE=
-X-Google-Smtp-Source: ABdhPJzf906OKCiFQZCKLtfoiz1tqDlEhYuYUaG0vtkJRHvVym5g1zhC+z6+nftcldpHaKSlGdYirQ==
-X-Received: by 2002:a17:906:99c2:b0:6df:8834:4f4c with SMTP id s2-20020a17090699c200b006df88344f4cmr5194204ejn.496.1648120993119;
-        Thu, 24 Mar 2022 04:23:13 -0700 (PDT)
-Received: from [192.168.0.156] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id c5-20020a170906d18500b006ce371f09d4sm996565ejz.57.2022.03.24.04.23.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 04:23:12 -0700 (PDT)
-Message-ID: <377e97c2-03e4-bc74-595d-2f4dba7e142f@kernel.org>
-Date:   Thu, 24 Mar 2022 12:23:11 +0100
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=zbdwVgmEzDHA4WNpeMf8bwrU5wjzXUixO+mPzgyLSZI=;
+        b=0zNy0KM9qMggpMH1SmCXfAK3mvNw+mF0BP7x0bwYgUWp2YzQXaab5tZfgFHEzZj3lD
+         xoFuUAUugceJ9DdZLOnsIRn8lLbTr+i3bRW+6Km6T6HC5IR3EOdBWUMkDIRQm9I7js3f
+         9dUC4qesLdVkVX9o+29kE/691BjCpw55aUYody6gBPKS9vtbbj028A1JmPM6mmKFWFz1
+         aDPQWyF//EGllCSqNwEZGjByMjxQLk9HCKYZiETSq3i9fLYKHy9D335wyWEQyjXo+2mN
+         R238jnAowPHRYiDJSiPD+nR85fG9D+gXeTb4tmh1+g96Yt1IuKyVGLCPzLEcxO3JJWYE
+         8evw==
+X-Gm-Message-State: AOAM532FSH1qnruBjeLWHt7bUUkWbpDKfiOPoL20LkibB+v4vsaSzV1M
+        +ZzvUzBl8yQ4qY4y4tuaFa6BVSHCHZDIAgET
+X-Google-Smtp-Source: ABdhPJzUbdvFK0PzuPbcYo1YnvFUJKYjAXVakppqx3v8jhG8emZHBuIPJU6uBBIjOEdMZeQZ+8rh0w==
+X-Received: by 2002:a2e:8547:0:b0:248:b0a:bc45 with SMTP id u7-20020a2e8547000000b002480b0abc45mr3774397ljj.271.1648121023224;
+        Thu, 24 Mar 2022 04:23:43 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id i6-20020a2ea366000000b00248073ae9a2sm311183ljn.84.2022.03.24.04.23.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 04:23:42 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
+ offloading of fdb locked flag
+In-Reply-To: <20220324110959.t4hqale35qbrakdu@skbuf>
+References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
+ <20220317093902.1305816-3-schultz.hans+netdev@gmail.com>
+ <86o81whmwv.fsf@gmail.com> <20220323123534.i2whyau3doq2xdxg@skbuf>
+ <86wngkbzqb.fsf@gmail.com> <20220323144304.4uqst3hapvzg3ej6@skbuf>
+ <86lewzej4n.fsf@gmail.com> <20220324110959.t4hqale35qbrakdu@skbuf>
+Date:   Thu, 24 Mar 2022 12:23:39 +0100
+Message-ID: <86v8w3vbk4.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/7] ARM: dts: s5pv210: Split memory nodes to match spec
-Content-Language: en-US
-To:     Jonathan Bakker <xc-racer2@live.ca>, alim.akhtar@samsung.com
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220322201144.20320-1-xc-racer2@live.ca>
- <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
- <51007577-52a2-60a5-0720-7b2c7f78ae3e@kernel.org>
- <CY4PR04MB0567A424CBEFF7F3338EF320CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
- <f716c6fd-66c6-4dd9-cedb-6024f415ddc7@kernel.org>
- <CY4PR04MB05671F31023376B0B7050C68CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <CY4PR04MB05671F31023376B0B7050C68CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2022 18:05, Jonathan Bakker wrote:
-> 
-> 
-> On 2022-03-23 8:06 a.m., Krzysztof Kozlowski wrote:
->> On 23/03/2022 15:59, Jonathan Bakker wrote:
->>> Hi Krzysztof,
->>>
->>> On 2022-03-23 3:54 a.m., Krzysztof Kozlowski wrote:
->>>> On 22/03/2022 21:11, Jonathan Bakker wrote:
->>>>> Memory nodes should only have a singular reg property in them, so
->>>>> split the memory nodes such that there is only per node.
->>>>>
->>>>> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
->>>>> ---
->>>>>  arch/arm/boot/dts/s5pv210-aquila.dts |  8 ++++++--
->>>>>  arch/arm/boot/dts/s5pv210-aries.dtsi | 14 +++++++++++---
->>>>>  arch/arm/boot/dts/s5pv210-goni.dts   | 14 +++++++++++---
->>>>>  3 files changed, 28 insertions(+), 8 deletions(-)
->>>>>
->>>>> diff --git a/arch/arm/boot/dts/s5pv210-aquila.dts b/arch/arm/boot/dts/s5pv210-aquila.dts
->>>>> index 6423348034b6..6984479ddba3 100644
->>>>> --- a/arch/arm/boot/dts/s5pv210-aquila.dts
->>>>> +++ b/arch/arm/boot/dts/s5pv210-aquila.dts
->>>>> @@ -29,8 +29,12 @@
->>>>>  
->>>>>  	memory@30000000 {
->>>>>  		device_type = "memory";
->>>>> -		reg = <0x30000000 0x05000000
->>>>> -			0x40000000 0x18000000>;
->>>>> +		reg = <0x30000000 0x05000000>;
->>>>> +	};
->>>>> +
->>>>> +	memory@40000000 {
->>>>> +		device_type = "memory";
->>>>> +		reg = <0x40000000 0x18000000>;
->>>>>  	};
->>>>>  
->>>>>  	pmic_ap_clk: clock-0 {
->>>>> diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
->>>>> index 160f8cd9a68d..70ff56daf4cb 100644
->>>>> --- a/arch/arm/boot/dts/s5pv210-aries.dtsi
->>>>> +++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
->>>>> @@ -24,9 +24,17 @@
->>>>>  
->>>>>  	memory@30000000 {
->>>>>  		device_type = "memory";
->>>>> -		reg = <0x30000000 0x05000000
->>>>> -			0x40000000 0x10000000
->>>>> -			0x50000000 0x08000000>;
->>>>
->>>> 0x40000000 to 0x58000000 is continues, so I wonder why it is split? Look
->>>> at Aquila DTS.
->>>>
->>>>
->>>
->>> Yes, it was split in the vendor kernel as well [1], and that's been continued along
->>> here.  I personally don't see a reason to keep it split, but there might be something
->>> I'm not aware of.
->>>
->>
->> I guess they wanted maybe to express the physical banks. Fine with me.
->> Just your explanation is not entirely correct:
->>> Memory nodes should only have a singular reg property in them,
->> one reg but it can have multiple items. Why do think multiple reg items
->> is not allowed?
->>
-> 
-> I was basing it off of this warning when running make dtbs_check
-> 
-> rch/arm/boot/dts/s5pv210-aquila.dt.yaml: /: memory@30000000:reg:0: [805306368, 83886080, 1073741824, 402653184] is too long
-> 	From schema: /home/jon/.local/lib/python3.7/site-packages/dtschema/schemas/reg.yaml
-> 
-> and this solved the warning, booted, and I still had the correct
-> amount of memory.
-> 
-> Would
-> 
-> 	memory@30000000 {
-> 		device_type = "memory";
-> 		reg = <0x30000000 0x05000000>,
-> 			<0x40000000 0x18000000>;
-> 	};
-> 
-> be equally correct?  (untested).
+On tor, mar 24, 2022 at 13:09, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Thu, Mar 24, 2022 at 11:32:08AM +0100, Hans Schultz wrote:
+>> On ons, mar 23, 2022 at 16:43, Vladimir Oltean <olteanv@gmail.com> wrote:
+>> > On Wed, Mar 23, 2022 at 01:49:32PM +0100, Hans Schultz wrote:
+>> >> >> Does someone have an idea why there at this point is no option to add a
+>> >> >> dynamic fdb entry?
+>> >> >> 
+>> >> >> The fdb added entries here do not age out, while the ATU entries do
+>> >> >> (after 5 min), resulting in unsynced ATU vs fdb.
+>> >> >
+>> >> > I think the expectation is to use br_fdb_external_learn_del() if the
+>> >> > externally learned entry expires. The bridge should not age by itself
+>> >> > FDB entries learned externally.
+>> >> >
+>> >> 
+>> >> It seems to me that something is missing then?
+>> >> My tests using trafgen that I gave a report on to Lunn generated massive
+>> >> amounts of fdb entries, but after a while the ATU was clean and the fdb
+>> >> was still full of random entries...
+>> >
+>> > I'm no longer sure where you are, sorry..
+>> > I think we discussed that you need to enable ATU age interrupts in order
+>> > to keep the ATU in sync with the bridge FDB? Which means either to
+>> > delete the locked FDB entries from the bridge when they age out in the
+>> > ATU, or to keep refreshing locked ATU entries.
+>> > So it seems that you're doing neither of those 2 things if you end up
+>> > with bridge FDB entries which are no longer in the ATU.
+>> 
+>> Any idea why G2 offset 5 ATUAgeIntEn (bit 10) is set? There is no define
+>> for it, so I assume it is something default?
+>
+> No idea, but I can confirm that the out-of-reset value I see for
+> MV88E6XXX_G2_SWITCH_MGMT on 6190 and 6390 is 0x400. It's best not to
+> rely on any reset defaults though.
 
-Yes, this one should be correct.
+I see no age out interrupts, even though the ports Age Out Int is on
+(PAV bit 14) on the locked port, and the ATU entries do age out (HoldAt1
+is off). Any idea why that can be?
 
-
-Best regards,
-Krzysztof
+I combination with this I think it would be nice to have an ability to
+set the AgeOut time even though it is not per port but global.

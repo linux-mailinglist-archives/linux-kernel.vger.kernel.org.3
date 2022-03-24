@@ -2,147 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED224E6041
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214D74E6045
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348892AbiCXIWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
+        id S242486AbiCXIZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240325AbiCXIWV (ORCPT
+        with ESMTP id S232726AbiCXIZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:22:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 514F09284B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648110049;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WqYtQSBegGxeYkN/lgul0x/vukAzbn7E8fW29poebx4=;
-        b=PguHiOGvxWhcuQjup2jN0A2xmzWb3mTXV4zlW/VpGD8RLwe7ECoraSDos/gnEzOV67CB3r
-        a0r10xHXq3+bOUIoPP8Gv1MG9mCkg7BVXrCeXKi/x+RKGj2t2DBzuqsWAe/nvVrth7QRSZ
-        I0EsdS9feZNzV3Mo9C4xgT5QXJwRnoI=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-jSCATG8cPkWXfhy8-bBTCg-1; Thu, 24 Mar 2022 04:20:48 -0400
-X-MC-Unique: jSCATG8cPkWXfhy8-bBTCg-1
-Received: by mail-lf1-f72.google.com with SMTP id bt40-20020a056512262800b004481fbe2d29so1473882lfb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:20:47 -0700 (PDT)
+        Thu, 24 Mar 2022 04:25:38 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68341AF2B;
+        Thu, 24 Mar 2022 01:24:06 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b24so4679850edu.10;
+        Thu, 24 Mar 2022 01:24:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=VjoE8BZJVN1iwPK7whmEd/UzvSJx78EIFvypyOblvMU=;
+        b=iD1t79TR8oKBahp+V8Sy2/3GsPNaxDcNogaMNOUWGUjPVuM4ZB7mBrxURI8PjSfQ5s
+         1k++OsLCCjbhgMUff4fCxXY0Ow82HGJpwowEukJAWstzEG8H1R3lye60SGC4NDUcrWFF
+         UmmIfvk06isHhveJsA6fIEIgfORjJtV4R2jovSTf7SU176Sm9agB3G7zrpVAgPcRLF3G
+         WIG0E6n8ASnfLXXTPoa9wZPVXT3Jii/L2UNMoMYRMNhZeY3BRgvNHbQN/bpIdTNgV3uX
+         1/okEsHox2/jVsuDSOBQeQduF5wZIJdoMFmC2ymCZwA1+Ep/SSD04i4d93FBELXZF5IC
+         T2vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WqYtQSBegGxeYkN/lgul0x/vukAzbn7E8fW29poebx4=;
-        b=SOHBk5iNpB2yx8MfTvgf0K7EGHf9rXViQPJPwZgwHP1ZgMoIqtHUTM39XV1gIykSOt
-         +UYn0lxQhkGgxQaUZrSA+zlnLIsjhCbk0+UPVXOrGA5hyf9w/kXIIAuYf8PH9NvbataV
-         jQWIz4w1WpONMSq0ULaApzkqhNkyRrc8wM1gjr2jsJxqZ9lgG8ol0hD9+2sntyUzvo/7
-         dERBnCW409G+Qr83bdllRPHI+sbZ8Mq1U6MLA9N+gOISV23HNiGYtUL3grbzfVISA4q8
-         CJU9IptplaD08nw9a6ORmBCszd54Wu5GDXyOTl6xBxPkoo2wk1hQPbQ+OtEV6BioTmek
-         vXJA==
-X-Gm-Message-State: AOAM533u1pWO5x7MDKPUehAtoUW4mm2nqjw8nBmiJlNabrqTlRDGp2c2
-        oiWD5XABiLaIbBImRGqXoONC4yG3wK9DFpd2DDMfLwwEk6taeL/h/wN9RH3thJ8Apbj6ahPTH+Q
-        8F+ildIDvhaMLRb5Ul39TzxV4z0bY/nCXerTXB9Uv
-X-Received: by 2002:a05:6512:108a:b0:448:756a:f5fb with SMTP id j10-20020a056512108a00b00448756af5fbmr3005740lfg.587.1648110046271;
-        Thu, 24 Mar 2022 01:20:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyfT0Xe23zFs2/wV2CRifK0H0/uU7lnCg6gAd91jtsZiI045kyG5D8Pur9xXbLwQeiPG1qsVOPoSkmKIloAQqY=
-X-Received: by 2002:a05:6512:108a:b0:448:756a:f5fb with SMTP id
- j10-20020a056512108a00b00448756af5fbmr3005727lfg.587.1648110046028; Thu, 24
- Mar 2022 01:20:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220321060429.10457-1-jasowang@redhat.com> <20220321085317.3148-1-hdanton@sina.com>
- <CACGkMEvF80FuU0uD+RZMOrySQ0K2RZVh7Pmn4UhNtz_Exs3c2w@mail.gmail.com>
- <CACGkMEvLqox3QZxpxeQdrjBnM6zRr_wGfddoN45RUSsZEOe=bQ@mail.gmail.com>
- <20220321123420.3207-1-hdanton@sina.com> <CACGkMEt-PRCsBQ+EJVGeWGikJfLk-0M1dRPMqnp9YC5R4HYAjQ@mail.gmail.com>
- <20220324005345.3623-1-hdanton@sina.com> <20220324060419.3682-1-hdanton@sina.com>
- <20220324021428-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220324021428-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 24 Mar 2022 16:20:34 +0800
-Message-ID: <CACGkMEuD-9cHmZotAwdLSecmBtWhBS0qxhSKfZ84e9_wS4E4EQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] vdpa: mlx5: prevent cvq work from hogging CPU
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Hillf Danton <hdanton@sina.com>, Eli Cohen <elic@nvidia.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=VjoE8BZJVN1iwPK7whmEd/UzvSJx78EIFvypyOblvMU=;
+        b=KOc6UpOGSVjTK8LnB0XbjXa4MDb2iORK8e/KjHhZWeweGUZf51LazabunHPqb9d3M8
+         4MTBgAKBrl2oNgmguuk5v8xV4MYVSu22Ycfk0EWWasieCC8pnD5WcrIK9zwdJCHeTp03
+         9sb7+4ZynkF6WaClfzwSOnAEnCcvLftF0+KyT21v1hgcKCF+SvYECb7palGehAMYc+Re
+         2jwvWLQRzN8iPPIIhuTGU0GFQX+3c4/9cbxUPoRduTpghB7rPVjBIu0ZlO5zXORi4Eze
+         1NYHG9+hdwrp0+eD5AB6q48F0lK/FzXVD84uOdOOCkURRiaMItufU1BsOUpGGOTtkWno
+         amZg==
+X-Gm-Message-State: AOAM531hffsQz6NZKIC50Bsuh8aikHmlDxTegW58uS6CcP7aPqYGZ2Mn
+        CdAV5902uMaT3VdoPx/mV28=
+X-Google-Smtp-Source: ABdhPJw37yFct1HhmaDA4lugphic2JUaHogmb/7qUOhL1UjkHPzH0J4ikR8vtnKQQYUbNgwxFWnAIw==
+X-Received: by 2002:a05:6402:84f:b0:419:638f:2bd5 with SMTP id b15-20020a056402084f00b00419638f2bd5mr5154017edz.283.1648110245364;
+        Thu, 24 Mar 2022 01:24:05 -0700 (PDT)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id l9-20020a1709060cc900b006ce04bb8668sm820866ejh.184.2022.03.24.01.24.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 24 Mar 2022 01:24:04 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] IB/SA: replace usage of found with dedicated list
+ iterator variable
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <a06fef85-7b5c-b2ef-7965-2387cbc8f724@nvidia.com>
+Date:   Thu, 24 Mar 2022 09:24:01 +0100
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        =?utf-8?Q?H=C3=A5kon_Bugge?= <haakon.bugge@oracle.com>,
+        Mark Bloch <mbloch@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <FA1E832C-2030-4344-97EA-E0E219DDDF6C@gmail.com>
+References: <20220324071124.59849-1-jakobkoschel@gmail.com>
+ <a06fef85-7b5c-b2ef-7965-2387cbc8f724@nvidia.com>
+To:     Mark Zhang <markzhang@nvidia.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 2:17 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Thu, Mar 24, 2022 at 02:04:19PM +0800, Hillf Danton wrote:
-> > On Thu, 24 Mar 2022 10:34:09 +0800 Jason Wang wrote:
-> > > On Thu, Mar 24, 2022 at 8:54 AM Hillf Danton <hdanton@sina.com> wrote:
-> > > >
-> > > > On Tue, 22 Mar 2022 09:59:14 +0800 Jason Wang wrote:
-> > > > >
-> > > > > Yes, there will be no "infinite" loop, but since the loop is triggered
-> > > > > by userspace. It looks to me it will delay the flush/drain of the
-> > > > > workqueue forever which is still suboptimal.
-> > > >
-> > > > Usually it is barely possible to shoot two birds using a stone.
-> > > >
-> > > > Given the "forever", I am inclined to not running faster, hehe, though
-> > > > another cobble is to add another line in the loop checking if mvdev is
-> > > > unregistered, and for example make mvdev->cvq unready before destroying
-> > > > workqueue.
-> > > >
-> > > > static void mlx5_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev, struct vdpa_device *dev)
-> > > > {
-> > > >         struct mlx5_vdpa_mgmtdev *mgtdev = container_of(v_mdev, struct mlx5_vdpa_mgmtdev, mgtdev);
-> > > >         struct mlx5_vdpa_dev *mvdev = to_mvdev(dev);
-> > > >         struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
-> > > >
-> > > >         mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
-> > > >         destroy_workqueue(mvdev->wq);
-> > > >         _vdpa_unregister_device(dev);
-> > > >         mgtdev->ndev = NULL;
-> > > > }
-> > > >
-> > >
-> > > Yes, so we had
-> > >
-> > > 1) using a quota for re-requeue
-> > > 2) using something like
-> > >
-> > > while (READ_ONCE(cvq->ready)) {
-> > >         ...
-> > >         cond_resched();
-> > > }
-> > >
-> > > There should not be too much difference except we need to use
-> > > cancel_work_sync() instead of flush_work for 1).
-> > >
-> > > I would keep the code as is but if you stick I can change.
-> >
-> > No Sir I would not - I am simply not a fan of work requeue.
-> >
-> > Hillf
->
-> I think I agree - requeue adds latency spikes under heavy load -
-> unfortunately, not measured by netperf but still important
-> for latency sensitive workloads. Checking a flag is cheaper.
 
-Just spot another possible issue.
 
-The workqueue will be used by another work to update the carrier
-(event_handler()). Using cond_resched() may still have unfair issue
-which blocks the carrier update for infinite time,
+> On 24. Mar 2022, at 08:53, Mark Zhang <markzhang@nvidia.com> wrote:
+>=20
+> On 3/24/2022 3:11 PM, Jakob Koschel wrote:
+>> External email: Use caution opening links or attachments
+>> To move the list iterator variable into the list_for_each_entry_*()
+>> macro in the future it should be avoided to use the list iterator
+>> variable after the loop body.
+>> To *never* use the list iterator variable after the loop it was
+>> concluded to use a separate iterator variable instead of a
+>> found boolean [1].
+>> This removes the need to use a found variable and simply checking if
+>> the variable was set, can determine if the break/goto was hit.
+>> Link: =
+https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5SqXPwr9Y7k9=
+sA6cWXJ6w@mail.gmail.com/
+>> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+>> ---
+>> drivers/infiniband/core/sa_query.c | 15 +++++++--------
+>> 1 file changed, 7 insertions(+), 8 deletions(-)
+>> diff --git a/drivers/infiniband/core/sa_query.c =
+b/drivers/infiniband/core/sa_query.c
+>> index 74ecd7456a11..74cd84045e5b 100644
+>> --- a/drivers/infiniband/core/sa_query.c
+>> +++ b/drivers/infiniband/core/sa_query.c
+>> @@ -1035,10 +1035,9 @@ int ib_nl_handle_resolve_resp(struct sk_buff =
+*skb,
+>> struct netlink_ext_ack *extack)
+>> {
+>> unsigned long flags;
+>> - struct ib_sa_query *query;
+>> + struct ib_sa_query *query =3D NULL, *iter;
+>> struct ib_mad_send_buf *send_buf;
+>> struct ib_mad_send_wc mad_send_wc;
+>> - int found =3D 0;
+>> int ret;
+>> if ((nlh->nlmsg_flags & NLM_F_REQUEST) ||
+>> @@ -1046,20 +1045,20 @@ int ib_nl_handle_resolve_resp(struct sk_buff =
+*skb,
+>> return -EPERM;
+>> spin_lock_irqsave(&ib_nl_request_lock, flags);
+>> - list_for_each_entry(query, &ib_nl_request_list, list) {
+>> + list_for_each_entry(iter, &ib_nl_request_list, list) {
+>> /*
+>> * If the query is cancelled, let the timeout routine
+>> * take care of it.
+>> */
+>> - if (nlh->nlmsg_seq =3D=3D query->seq) {
+>> - found =3D !ib_sa_query_cancelled(query);
+>> - if (found)
+>> - list_del(&query->list);
+>> + if (nlh->nlmsg_seq =3D=3D iter->seq) {
+>> + if (!ib_sa_query_cancelled(iter))
+>> + list_del(&iter->list);
+>> + query =3D iter;
+>> break;
+>=20
+> Should it be:
+>=20
+> if (nlh->nlmsg_seq =3D=3D iter->seq) {
+> 	if (!ib_sa_query_cancelled(iter)) {
+> 		list_del(&iter->list);
+> 		query =3D iter;
+> 	}
+> 	break;
 
-Thanks
+yes you are right. Sorry about that, I'll send a fixed version with v2.
 
->
-> --
-> MST
->
+>=20
+>> }
+>> }
+>> - if (!found) {
+>> + if (!query) {
+>> spin_unlock_irqrestore(&ib_nl_request_lock, flags);
+>> goto resp_out;
+>> }
+>> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+>> --
+>> 2.25.1
 

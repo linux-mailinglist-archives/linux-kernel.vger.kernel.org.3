@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F094E6745
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16934E6746
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351812AbiCXQtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
+        id S1351824AbiCXQth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351795AbiCXQtV (ORCPT
+        with ESMTP id S1351807AbiCXQtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:49:21 -0400
+        Thu, 24 Mar 2022 12:49:24 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF7A0ADD70
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:47:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B474ADD60
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:47:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648140468;
+        s=mimecast20190719; t=1648140470;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XlnvIl9jA2QQKrCnsdch9ZXCYegwpwfAzUxubyxp7TA=;
-        b=gyjxs/EC6YV/52Qii3M0V5VlxTJd2Y7cSJr6JtLm7h7E7PdT+vzLZW1FYH+P3NU8jLBPlm
-        I9Af/0PaCRVGqf61WJ02jTAG0LFN0C2eMFkTgYW5m49DiioYOpbjx19pN5wGs3xQzep7dM
-        IeX+hj4m4Y6n8PgmbLCtZ8t7Kn2TW2E=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=o3yznAVa11IPBnnYwZf5Cua2JEMNbm4oYIGv6D2ELLY=;
+        b=fxnsm17YIBhzyQhG5y1d1ZBG4aeraxGnhOItBOZO8h4eGY9qz/NHYfh630qanpemdd9mTF
+        bQUMtzNtzNZL3kbJgQ1S9/OKlDUviQptGogP44mzfYPijCE7hmqv8c/PKSGSoMHSyeIgaz
+        nOO0FhgXlGXH6vku8dr2eUvuBPBQx8Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-296-uTQaEyQQME-cXH23bm0lcQ-1; Thu, 24 Mar 2022 12:47:45 -0400
-X-MC-Unique: uTQaEyQQME-cXH23bm0lcQ-1
+ us-mta-594-IOys9a3oPNWp4-Zu6myxvg-1; Thu, 24 Mar 2022 12:47:47 -0400
+X-MC-Unique: IOys9a3oPNWp4-Zu6myxvg-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5D5E1C05AE6;
-        Thu, 24 Mar 2022 16:47:44 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88142185A7A4;
+        Thu, 24 Mar 2022 16:47:46 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.132])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 641DF40146E;
-        Thu, 24 Mar 2022 16:47:43 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 169F3417E32;
+        Thu, 24 Mar 2022 16:47:44 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH 3/4] Documentation/ABI: sysfs-class-firmware-attributes: Misc. cleanups
-Date:   Thu, 24 Mar 2022 17:47:36 +0100
-Message-Id: <20220324164737.21765-4-hdegoede@redhat.com>
+Subject: [PATCH 4/4] Documentation/ABI: sysfs-class-power: Fix Sphinx error
+Date:   Thu, 24 Mar 2022 17:47:37 +0100
+Message-Id: <20220324164737.21765-5-hdegoede@redhat.com>
 In-Reply-To: <20220324164737.21765-1-hdegoede@redhat.com>
 References: <20220324164737.21765-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -67,44 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cleanup / fix some minor issues.
+Fix the following error from "make htmldocs":
+
+Documentation/ABI/testing/sysfs-class-power:459: ERROR:
+No bottom table border found.
+
+================ ====================================
+auto:            Charge normally, respect thresholds
+inhibit-charge:  Do not charge while AC is attached
+force-discharge: Force discharge while AC is attached
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- Documentation/ABI/testing/sysfs-class-firmware-attributes | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Documentation/ABI/testing/sysfs-class-power | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attributes b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-index 5356ff2ed6c8..4cdba3477176 100644
---- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
-+++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-@@ -116,7 +116,7 @@ Description:
- 					    <value>[ForceIf:<attribute>=<value>]
- 					    <value>[ForceIfNot:<attribute>=<value>]
+diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+index fde21d900420..859501366777 100644
+--- a/Documentation/ABI/testing/sysfs-class-power
++++ b/Documentation/ABI/testing/sysfs-class-power
+@@ -468,6 +468,7 @@ Description:
+ 			auto:            Charge normally, respect thresholds
+ 			inhibit-charge:  Do not charge while AC is attached
+ 			force-discharge: Force discharge while AC is attached
++			================ ====================================
  
--					For example:
-+					For example::
- 
- 					    LegacyOrom/dell_value_modifier has value:
- 						    Disabled[ForceIf:SecureBoot=Enabled]
-@@ -212,7 +212,7 @@ Description:
- 		the next boot.
- 
- 		Lenovo specific class extensions
--		------------------------------
-+		--------------------------------
- 
- 		On Lenovo systems the following additional settings are available:
- 
-@@ -349,7 +349,7 @@ Description:
- 
- 		    # echo "factory" > /sys/class/firmware-attributes/*/device/attributes/reset_bios
- 		    # cat /sys/class/firmware-attributes/*/device/attributes/reset_bios
--		    # builtinsafe lastknowngood [factory] custom
-+		    builtinsafe lastknowngood [factory] custom
- 
- 		Note that any changes to this attribute requires a reboot
- 		for changes to take effect.
+ What:		/sys/class/power_supply/<supply_name>/technology
+ Date:		May 2007
 -- 
 2.35.1
 

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34E84E5FEF
+	by mail.lfdr.de (Postfix) with ESMTP id 29D654E5FED
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348820AbiCXIJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S1348818AbiCXIJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348792AbiCXIJB (ORCPT
+        with ESMTP id S1348816AbiCXIJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:09:01 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09739A9A6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:07:30 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 08:07:24 +0000
+        Thu, 24 Mar 2022 04:09:11 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F899AE63
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:07:39 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 08:07:30 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1648109247;
-        bh=IwmYMVqeQSJTelQ71b3k0r9jC+rrpKjwIIRKPp2xmJE=;
+        s=protonmail2; t=1648109256;
+        bh=Aof6LmdJY1v75LpCNBvCRmk7t2mbNOHkydhSgp6jXZs=;
         h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
          References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID;
-        b=o9CLaglO3fAcHqtDJLEref4o7uuHxTugXa+B6fMVdt9Xy2h0MBcOMcoJzrTDvNoBU
-         AIiLHT8u0+du93GINYfBaDlVNw0gIJyPc5wXVeOflt+OazYKhlk2wCX0XhUifeR1il
-         5j1X2mCbOFAfim462VIpywfPbm3nymAEa8qZJhl8dnmWHtCExSSByLXkYR6bwVExeT
-         Y9N4MCl0tZ06eohI+syhpwtxfBS+zZCnjAhVExZNYfQGB3GykGweQ31QX/OP9bHwD2
-         1YFlkg0gIVEtWeQHS/LuBobZ6ErM16mfAhMAtEhZuitqVVcP0EoZqAsCkrP19S49cO
-         HIOiGkXogSw4A==
+        b=dR5r52xBsQx1fRlPZHdnKj31hFLvyhRwJpIPl/wcfRZVqBgpripdgWf36XcmU1gXL
+         IXi7qEsqCQOsYRKdgONgX4sXuLo5p9HwSWFO89IwlNrv+mS4pEzTtIpAYMWFidwjUA
+         V0A2Nk1DMe7ERWs9TT0r95VK5T4Pvsn5xeJpFwwphx8/Y+f9V+tQNSQ3uJhSBN0Anq
+         9Ki3ARkDez9KX1Fm5SEyYqypQLR2eypsaia0M8897To2d2laxx00dlwzFtDhDA7r16
+         cAWG6aGIOQsf3HeZwCy3u6wPsRykn7TSk8/UnBZSdEIEvjZjheBmQNV2LvfUPDrsgv
+         4nKwbGAn+lkTg==
 To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
 From:   David Cohen <dacohen@pm.me>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         David Cohen <dacohen@pm.me>
 Reply-To: David Cohen <dacohen@pm.me>
-Subject: [PATCH v3 1/2] PM: narrow down -DDEBUG on kernel/power/ files
-Message-ID: <20220324080653.454333-2-dacohen@pm.me>
+Subject: [PATCH v3 2/2] PM: enable dynamic debug support within pm_pr_dbg()
+Message-ID: <20220324080653.454333-3-dacohen@pm.me>
 In-Reply-To: <20220324080653.454333-1-dacohen@pm.me>
 References: <20220324080653.454333-1-dacohen@pm.me>
 MIME-Version: 1.0
@@ -42,67 +42,142 @@ Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The macro -DDEBUG is broadly enabled on kernel/power/ directory if
-CONFIG_DYNAMIC_DEBUG is enabled. As side effect all debug messages using
-pr_debug() and dev_dbg() are enabled by default on dynamic debug.
-We're reworking pm_pr_dbg() to support dynamic debug, where pm_pr_dbg()
-will print message if either pm_debug_messages_on flag is set or if it's
-explicitly enabled on dynamic debug's control. That means if we let
--DDEBUG broadly set, the pm_debug_messages_on flag will be bypassed by
-default on pm_pr_dbg() if dynamic debug is also enabled.
+Currently pm_pr_dbg() is used to filter kernel pm debug messages based
+on pm_debug_messages_on flag. The problem is if we enable/disable this
+flag it will affect all pm_pr_dbg() calls at once, so we can't
+individually control them.
 
-The files that directly use pr_debug() and dev_dbg() on kernel/power/ are:
- - swap.c
- - snapshot.c
- - energy_model.c
-
-And those files do not use pm_pr_dbg(). So if we limit -DDEBUG to them,
-we keep the same functional behavior while allowing the pm_pr_dbg()
-refactor.
+This patch changes pm_pr_dbg() implementation as such:
+ - If pm_debug_messages_on is enabled, print the message.
+ - If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is
+   enabled, only print the messages explicitly enabled on
+   /sys/kernel/debug/dynamic_debug/control.
+ - If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is
+   disabled, don't print the message.
 
 Signed-off-by: David Cohen <dacohen@pm.me>
 ---
- kernel/power/Makefile  | 6 +++++-
- kernel/power/process.c | 3 ---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ include/linux/suspend.h | 44 ++++++++++++++++++++++++++++++++++++-----
+ kernel/power/main.c     | 29 ---------------------------
+ 2 files changed, 39 insertions(+), 34 deletions(-)
 
-diff --git a/kernel/power/Makefile b/kernel/power/Makefile
-index 5899260a8bef..874ad834dc8d 100644
---- a/kernel/power/Makefile
-+++ b/kernel/power/Makefile
-@@ -1,6 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index 300273ff40cc..70f2921e2e70 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -542,22 +542,56 @@ static inline void unlock_system_sleep(void) {}
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+ extern bool pm_print_times_enabled;
+ extern bool pm_debug_messages_on;
+-extern __printf(2, 3) void __pm_pr_dbg(bool defer, const char *fmt, ...);
++static inline int pm_dyn_debug_messages_on(void)
++{
++#ifdef CONFIG_DYNAMIC_DEBUG
++=09return 1;
++#else
++=09return 0;
++#endif
++}
++#ifndef pr_fmt
++#define pr_fmt(fmt) "PM: " fmt
++#endif
++#define __pm_pr_dbg(fmt, ...)=09=09=09=09=09\
++=09do {=09=09=09=09=09=09=09\
++=09=09if (pm_debug_messages_on)=09=09=09\
++=09=09=09printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);=09\
++=09=09else if (pm_dyn_debug_messages_on())=09=09\
++=09=09=09pr_debug(fmt, ##__VA_ARGS__);=09\
++=09} while (0)
++#define __pm_deferred_pr_dbg(fmt, ...)=09=09=09=09\
++=09do {=09=09=09=09=09=09=09\
++=09=09if (pm_debug_messages_on)=09=09=09\
++=09=09=09printk_deferred(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);=09\
++=09} while (0)
+ #else
+ #define pm_print_times_enabled=09(false)
+ #define pm_debug_messages_on=09(false)
 
--ccflags-$(CONFIG_PM_DEBUG)=09:=3D -DDEBUG
-+ifeq ($(CONFIG_DYNAMIC_DEBUG), y)
-+CFLAGS_swap.o                   :=3D -DDEBUG
-+CFLAGS_snapshot.o               :=3D -DDEBUG
-+CFLAGS_energy_model.o           :=3D -DDEBUG
-+endif
+ #include <linux/printk.h>
 
- KASAN_SANITIZE_snapshot.o=09:=3D n
+-#define __pm_pr_dbg(defer, fmt, ...) \
+-=09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
++#define __pm_pr_dbg(fmt, ...) \
++=09no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
++#define __pm_deferred_pr_dbg(fmt, ...) \
++=09no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+ #endif
 
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index 11b570fcf049..3068601e585a 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -6,9 +6,6 @@
-  * Originally from swsusp.
-  */
++/**
++ * pm_pr_dbg - print pm sleep debug messages
++ *
++ * If pm_debug_messages_on is enabled, print message.
++ * If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is enabled=
+,
++ *=09print message only from instances explicitly enabled on dynamic debug=
+'s
++ *=09control.
++ * If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is disable=
+d,
++ *=09don't print message.
++ */
+ #define pm_pr_dbg(fmt, ...) \
+-=09__pm_pr_dbg(false, fmt, ##__VA_ARGS__)
++=09__pm_pr_dbg(fmt, ##__VA_ARGS__)
 
+ #define pm_deferred_pr_dbg(fmt, ...) \
+-=09__pm_pr_dbg(true, fmt, ##__VA_ARGS__)
++=09__pm_deferred_pr_dbg(fmt, ##__VA_ARGS__)
+
+ #ifdef CONFIG_PM_AUTOSLEEP
+
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 7e646079fbeb..5242bf2ee469 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -545,35 +545,6 @@ static int __init pm_debug_messages_setup(char *str)
+ }
+ __setup("pm_debug_messages", pm_debug_messages_setup);
+
+-/**
+- * __pm_pr_dbg - Print a suspend debug message to the kernel log.
+- * @defer: Whether or not to use printk_deferred() to print the message.
+- * @fmt: Message format.
+- *
+- * The message will be emitted if enabled through the pm_debug_messages
+- * sysfs attribute.
+- */
+-void __pm_pr_dbg(bool defer, const char *fmt, ...)
+-{
+-=09struct va_format vaf;
+-=09va_list args;
 -
--#undef DEBUG
+-=09if (!pm_debug_messages_on)
+-=09=09return;
 -
- #include <linux/interrupt.h>
- #include <linux/oom.h>
- #include <linux/suspend.h>
+-=09va_start(args, fmt);
+-
+-=09vaf.fmt =3D fmt;
+-=09vaf.va =3D &args;
+-
+-=09if (defer)
+-=09=09printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
+-=09else
+-=09=09printk(KERN_DEBUG "PM: %pV", &vaf);
+-
+-=09va_end(args);
+-}
+-
+ #else /* !CONFIG_PM_SLEEP_DEBUG */
+ static inline void pm_print_times_init(void) {}
+ #endif /* CONFIG_PM_SLEEP_DEBUG */
 --
 2.35.1
 

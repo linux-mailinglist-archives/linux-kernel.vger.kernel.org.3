@@ -2,113 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C769C4E62F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630474E62FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349944AbiCXMMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S1349968AbiCXMOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiCXML6 (ORCPT
+        with ESMTP id S232151AbiCXMON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:11:58 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676FBA8884;
-        Thu, 24 Mar 2022 05:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1648123824; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ncLgYxkYoQriXSXIVKrIBujezisB1bmyL200+xh6duc=;
-        b=M8gBb5/GBMzGIK98oxRzs+ggFRKhZy5iFMXJNqb01wjMke/kBfvB6s2NaeqElnLVIU+3+k
-        RuHKHlDrprC+JXj0gZgoAKmalC4SAAmQZa+uPUIcT8z+zOaAaLncdk30eHwLZpnACbA8nx
-        nkrVoBu8uFd89iGgbMNv5GXI8tnZVu8=
-Date:   Thu, 24 Mar 2022 12:10:15 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] pinctrl: Ingenic: Add missing UART2 group C for X1000/E
-To:     Yunian Yang <reimu@sudomaker.com>
-Cc:     linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <3H099R.GNKMFWXCJG5U1@crapouillou.net>
-In-Reply-To: <ea710c27-00e9-065c-77a3-78e3c5f73ed3@sudomaker.com>
-References: <ea710c27-00e9-065c-77a3-78e3c5f73ed3@sudomaker.com>
+        Thu, 24 Mar 2022 08:14:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C4DA8891
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648123961; x=1679659961;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o5DZSEcXBSfapZPtuJt3osrQmUSj5SHfQHgFF2l7BN8=;
+  b=BoDO1mKLYJ7BpMRX1Wtf+bTTY86H36K50BWNvG4RmfZk57pOP7sOIj1z
+   Zx/IPBYBlqWa4QPPBU68pJDoUWIYddp2vwv4D1ocEAGfqbn4QQ0SKfRP8
+   dhet9cfJYNqUIdXk7ocRoJKbSQMYRjqS1QvvV1bo96K+EYpn21bWhws0g
+   zA950rDhoaYICs42NjKMGIKbF7GimT3a+MFjUZDf6MGxOMCKtoHRgnFwJ
+   uWqO2XelybVvwjWS6EV/QRI3wQKvuN67OkWYGmB2o+D7N/igtYp89g/zy
+   m/nyR665aBJ1lHuQRM5b6z+knxWcn0wJ3krwEBx60BzVITo7bzc3QhPxS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="238966840"
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="238966840"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:11:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="516147844"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 24 Mar 2022 05:11:23 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXMJG-000L3r-SE; Thu, 24 Mar 2022 12:11:22 +0000
+Date:   Thu, 24 Mar 2022 20:10:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [bvanassche:ufs-for-next 324/324] drivers/scsi/ufs-core/ufshcd.c:
+ scsi/ufs_quirks.h is included more than once.
+Message-ID: <202203242041.o36vA24L-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yunian,
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   b93e987f91a0c037fc4357107f5144110cd84d08
+commit: b93e987f91a0c037fc4357107f5144110cd84d08 [324/324] scsi: ufs: Split the drivers/scsi/ufs directory
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
 
-Le jeu., mars 24 2022 at 20:04:41 +0800, Yunian Yang=20
-<reimu@sudomaker.com> a =E9crit :
-> X1000/E has a third UART2 pin group selection, which uses the TDI(G2)=20
-> as RX
-> and TDO(G1) as TX. This configuration is becoming increasingly=20
-> popular in
-> newer core boards, such as the Halley2 v4.1. This is done by enabling
-> function 1 of a "virtual pin" PC31. See section 19.3.3 of the X1000
-> Programming Manual for details.
->=20
-> Signed-off-by: Yunian Yang <reimu@sudomaker.com>
-> ---
->  drivers/pinctrl/pinctrl-ingenic.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 2712f51eb238..29709059d62b 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -1982,6 +1982,7 @@ static int x1000_uart1_data_a_pins[] =3D { 0x04,=20
-> 0x05, };
->  static int x1000_uart1_data_d_pins[] =3D { 0x62, 0x63, };
->  static int x1000_uart1_hwflow_pins[] =3D { 0x64, 0x65, };
->  static int x1000_uart2_data_a_pins[] =3D { 0x02, 0x03, };
-> +static int x1000_uart2_data_c_pins[] =3D { 0x5f, 0x5f, };
-
-One should be enough.
-
-Looks fine otherwise.
-
-Cheers,
--Paul
-
->  static int x1000_uart2_data_d_pins[] =3D { 0x65, 0x64, };
->  static int x1000_sfc_data_pins[] =3D { 0x1d, 0x1c, 0x1e, 0x1f, };
->  static int x1000_sfc_clk_pins[] =3D { 0x1a, };
-> @@ -2058,6 +2059,7 @@ static const struct group_desc x1000_groups[] =3D=20
-> {
->         INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d, 1),
->         INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow, 1),
->         INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a, 2),
-> +       INGENIC_PIN_GROUP("uart2-data-c", x1000_uart2_data_c, 1),
->         INGENIC_PIN_GROUP("uart2-data-d", x1000_uart2_data_d, 0),
->         INGENIC_PIN_GROUP("sfc-data", x1000_sfc_data, 1),
->         INGENIC_PIN_GROUP("sfc-clk", x1000_sfc_clk, 1),
-> @@ -2115,7 +2117,7 @@ static const char *x1000_uart0_groups[] =3D {=20
-> "uart0-data", "uart0-hwflow", };
->  static const char *x1000_uart1_groups[] =3D {
->         "uart1-data-a", "uart1-data-d", "uart1-hwflow",
->  };
-> -static const char *x1000_uart2_groups[] =3D { "uart2-data-a",=20
-> "uart2-data-d", };
-> +static const char *x1000_uart2_groups[] =3D { "uart2-data-a",=20
-> "uart2-data-c", "uart2-data-d", };
->  static const char *x1000_sfc_groups[] =3D { "sfc-data", "sfc-clk",=20
-> "sfc-ce", };
->  static const char *x1000_ssi_groups[] =3D {
->         "ssi-dt-a-22", "ssi-dt-a-29", "ssi-dt-d",
-> --
-> 2.30.2
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+includecheck warnings: (new ones prefixed by >>)
+>> drivers/scsi/ufs-core/ufshcd.c: scsi/ufs_quirks.h is included more than once.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

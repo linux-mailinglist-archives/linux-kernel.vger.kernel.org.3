@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE324E65D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488464E65D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351220AbiCXPLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 11:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S1351224AbiCXPNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 11:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242453AbiCXPLj (ORCPT
+        with ESMTP id S243416AbiCXPNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:11:39 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A2654BD1;
-        Thu, 24 Mar 2022 08:10:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=f5oOspRh6b6xUiXhiR6MzWaDr0tDAiwTUoZFSaMVZnY=; b=w9CvSAtf/kpb9Pu/HHyjEICpxE
-        zVRVDCUr6YzuaxbNZb8ZQHcu8506AHjM308BqLbF9cwK/DQUwZCBZ0kFJzRgllhp/EgNnZCdnQ5O+
-        ZzwLn9txDJrX36POo7o0qNVThGdM86xfaz051rfUqAY2W1kO0SxR18w81tsgCbSrPOIw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nXP5v-00CSpN-2B; Thu, 24 Mar 2022 16:09:47 +0100
-Date:   Thu, 24 Mar 2022 16:09:47 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 2/5] net: phy: support indirect c45 access
- in get_phy_c45_ids()
-Message-ID: <YjyJu6AlC/0fRIGE@lunn.ch>
-References: <20220323183419.2278676-1-michael@walle.cc>
- <20220323183419.2278676-3-michael@walle.cc>
- <Yjt3hHWt0mW6er8/@lunn.ch>
- <7503a496e1456fa65e4317bbe7590d9d@walle.cc>
+        Thu, 24 Mar 2022 11:13:08 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570F5A94F2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:11:36 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id y10so858032pfa.7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 08:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8rZfGXhxPnCPDkK85iJOEuPuLqVvxqMTkD5qg+n6vFE=;
+        b=pkEOCiut+ZAQ5lJHTD6mEO3U8qX21+b0ADJvqP9I8NdNzs+hijc/igpJyUHZvQNz33
+         Dd3LYuhKBfR2uGsCEHbMLPF5Eeb95XBStH/BXNMSWWbeHmhdJLV8eh+8tVxC0an1O3aR
+         MpH2dlXc+nxiOGxB6JQyVs4LdjUeuT1Q1QdNFfg0ZCM4q+xox1t/Q5oPuxpg9cR1mlvx
+         Et21nx3xZpw9WO8OSYUNsgUlZgRcG5ZwyCx4rSTHEWPCLM4w6cRJuhBl1Aq29rFmKKLF
+         Y3RPyifxi6LksLivRdY9VHzVKWDge2mGn+mZgyPPRAFmzU9O8rnfgarGbu8DvrT9zKjH
+         UWdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8rZfGXhxPnCPDkK85iJOEuPuLqVvxqMTkD5qg+n6vFE=;
+        b=OoYh7/eWq5pwRSST1znEhql6TqtTq9/Nuky1E9QpFAXm0AhAVSHr/5a+CBmKi7zYp+
+         jDhYkf3/0WOtkP/UfoPGuF74/m5osm30jgcG+sSmdrfdapyoSZePallJ3RSnG0Z8I2Pz
+         /VVp0IZFKgWxqBrM5AGzScUuxi2ErGntc0YQQxQ+ZsRKrbVL//OMm/im8C9Xp+044R/B
+         FSwyiT/MMKl4O19UU4e3tOEBVBZsW+s8SNTwCNaLXQ/SKyInq7TSPJ5Mj7a+1aGwmuWX
+         2wLKJTjURCevOSB74ha+32Ae149fJd2wki3Dh0OQ0Dvj2cSgl8DkByeCZyBGGcNx0OJS
+         N2uA==
+X-Gm-Message-State: AOAM530Ku+kfSR4bjStkp5dwT1uLxC5FV6pQ9LCIv8aP0vy72pWtj2px
+        Pdr2HjI9MWZOgXz1WHRrsP0zYg==
+X-Google-Smtp-Source: ABdhPJz8fH+V3mM/o8K64N2LM9Q+QkXZ5GKXul5fdPvPPlho9Q/gScHtkAfHqSoFrBcHb+V7ldDtkg==
+X-Received: by 2002:a05:6a02:10d:b0:381:f4c8:ad26 with SMTP id bg13-20020a056a02010d00b00381f4c8ad26mr4335657pgb.135.1648134695746;
+        Thu, 24 Mar 2022 08:11:35 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id x2-20020a63aa42000000b0038265eb2495sm2943406pgo.88.2022.03.24.08.11.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 08:11:34 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 09:11:32 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V2] remoteproc: imx_rproc: Ignore create mem entry for
+ resource table
+Message-ID: <20220324151132.GA3514576@p14s>
+References: <20220308065754.3355-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7503a496e1456fa65e4317bbe7590d9d@walle.cc>
+In-Reply-To: <20220308065754.3355-1-peng.fan@oss.nxp.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 03:28:43PM +0100, Michael Walle wrote:
-> Am 2022-03-23 20:39, schrieb Andrew Lunn:
-> > > +static int mdiobus_probe_mmd_read(struct mii_bus *bus, int prtad,
-> > > int devad,
-> > > +				  u16 regnum)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	/* For backwards compatibility, treat MDIOBUS_NO_CAP as c45
-> > > capable */
-> > > +	if (bus->probe_capabilities == MDIOBUS_NO_CAP ||
-> > > +	    bus->probe_capabilities >= MDIOBUS_C45)
-> > 
-> > Maybe we should do the work and mark up those that are C45 capable. At
-> > a quick count, see 16 of them.
+On Tue, Mar 08, 2022 at 02:57:54PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> I guess you grepped for MII_ADDR_C45 and had a look who
-> actually handled it correctly. Correct?
+> Resource table will not be used for memory allocation, no need to create
+> rproc mem entry.
+> 
+> Fixes: b29b4249f8f0c ("remoteproc: imx_rproc: add i.MX specific parse fw hook")
 
-Yes.
 
-> Let's say we mark these as either MDIOBUS_C45 or MDIOBUS_C45_C22,
-> can we then drop MDIOBUS_NO_CAP and make MDIOBUS_C22 the default
-> value (i.e. value 0) or do we have to go through all the mdio drivers
-> and add bus->probe_capabilities = MDIOBUS_C22 ? Grepping for
-> {of_,}mdiobus_register lists quite a few of them.
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst
 
-The minimum is marking those that support C45 with MDIOBUS_C45 or
-MDIOBUS_C45_C22. We can then really trust it does C45. Those that
-don't set probe_capabilities we assume are C22 only. That should be
-enough for this problem.
 
-FYI: Yesterday i started actually adding probe_capabilities values to
-drivers. I did everything in driver/net/mdio. I will work on the rest
-over the next few days and then post an RFC patchset.
-
-     Andrew
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+> V2:
+>  Add Fixes tag
+>  Separate the patch from https://patchwork.kernel.org/project/linux-remoteproc/patch/20220111033333.403448-7-peng.fan@oss.nxp.com/
+>  Address typo
+> 
+>  drivers/remoteproc/imx_rproc.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index 7a096f1891e6..f2bfc9077c19 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -423,6 +423,9 @@ static int imx_rproc_prepare(struct rproc *rproc)
+>  		if (!strcmp(it.node->name, "vdev0buffer"))
+>  			continue;
+>  
+> +		if (!strncmp(it.node->name, "rsc-table", strlen("rsc-table")))
+> +			continue;
+> +
+>  		rmem = of_reserved_mem_lookup(it.node);
+>  		if (!rmem) {
+>  			dev_err(priv->dev, "unable to acquire memory-region\n");
+> -- 
+> 2.30.0
+> 

@@ -2,78 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071CD4E61AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AC94E61AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349478AbiCXKY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
+        id S1349485AbiCXK0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243273AbiCXKYy (ORCPT
+        with ESMTP id S232377AbiCXK0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:24:54 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E10225C40
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:23:22 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id mp6-20020a17090b190600b001c6841b8a52so9033639pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6hR2jbQSg4CSVD3f4OWHAyVNhhJ8Mh8GIYUAWVOX8mI=;
-        b=lDRfzFWKN+5QH11AqFkY+X0pvWQbEiGu6cKjWqwqTw1H/Ust18pn80OYh+WDRmxqiU
-         oOkEV1BTuW9pjT9LGHs6Z7H6LCFIuGQ2PqHzLqmOIrQKVI/8Ir1D6J0s2dntoNargGnd
-         IaD1eOS/3kr5X44JQDlm4bMfFE/QvjHEexKs8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6hR2jbQSg4CSVD3f4OWHAyVNhhJ8Mh8GIYUAWVOX8mI=;
-        b=rnXo/qndmpIi0UlXZHCgyCSradiJdLDhcwtc/NI3FtcBIHmR4Z8pCETFvq8QX0eQ1E
-         7MHBt0SWdGRgkLl9fLDJC0OIBZfqW4rLbAOpINlCd59awtaUvheYnMmLPBywYb8mzeiR
-         mBO+UxcfUN1MkFslWA/DO9Cvs86YIHw+AT7Nz+DYX5cOGSIaovKcw6KnvQItksBkKDA1
-         qLOPThsJgFXiLp/0VwiSTYCsesfGavTk9M9XycF0h/V9n5FpqOJwWugx0hGKsmvvnD4z
-         OVoUKIz81Df47nm9/PNL/Gj6vIA6JoD2WIjGCalKoJT/hw185hMQ15iOVMuqxhhIGU4f
-         x4Lw==
-X-Gm-Message-State: AOAM531JHXY67FSPo/aX5oyK5KIB5j4m7Z5DTRB2alqrerUM7tHc7fp8
-        Ivyt+MySPjMCwiNX6PuUSSyQtA==
-X-Google-Smtp-Source: ABdhPJxq+/6bheF0HDrYCcPoo4W5reCHHq/NFJ/3QA9yOmyTPlanPgLY0yPNXRyzPODHB0KRBx8MhQ==
-X-Received: by 2002:a17:902:c652:b0:154:2920:df6d with SMTP id s18-20020a170902c65200b001542920df6dmr4906472pls.146.1648117401888;
-        Thu, 24 Mar 2022 03:23:21 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:f22a:8f8e:aca1:9b8c])
-        by smtp.gmail.com with ESMTPSA id rm5-20020a17090b3ec500b001c7559762e9sm9066552pjb.20.2022.03.24.03.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 03:23:21 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 19:23:16 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     mchehab@kernel.org, senozhatsky@chromium.org, caihuoqing@baidu.com,
-        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: dvb_vb2: fix possible out of bound access
-Message-ID: <YjxGlIyYiULyAXy6@google.com>
-References: <20220324080119.40133-1-hbh25y@gmail.com>
+        Thu, 24 Mar 2022 06:26:50 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873AD45798
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:25:15 -0700 (PDT)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 46336E4A5DD;
+        Thu, 24 Mar 2022 11:25:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1648117508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0kZDRe244Ho+56p1lKIcy0+GT4xOH+L25rK8rNrmj5M=;
+        b=xTLCXRCNMwAKN6C6abDkvpf8K2mg/Sm4GaWSCsryLwp5Fq4HqX8lUoEohqBSWrzOqMIaix
+        kRFT7EmZ97tKbHZfyY4//hxr65jVGb/7gVgp7+S6tP4fJ8p1HUuP7h1jt5+OqhjIlCJgG2
+        yc1FDX9OJ6CAbtcVZklteEyyfX7d5Cw=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Robin Murphy <robin.murphy@arm.com>, Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Toke =?ISO-8859-1?Q?H=F8iland=2DJ=F8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break ath9k-based AP
+Date:   Thu, 24 Mar 2022 11:25:06 +0100
+Message-ID: <4386660.LvFx2qVVIh@natalenko.name>
+In-Reply-To: <20220324055732.GB12078@lst.de>
+References: <1812355.tdWV9SEqCh@natalenko.name> <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com> <20220324055732.GB12078@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324080119.40133-1-hbh25y@gmail.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/03/24 16:01), Hangyu Hua wrote:
-> vb2_core_qbuf and vb2_core_querybuf don't check the range of b->index
-> controlled by the user.
-> 
-> Fix this by adding range checking code before using them.
-> 
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Hello.
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+On =C4=8Dtvrtek 24. b=C5=99ezna 2022 6:57:32 CET Christoph Hellwig wrote:
+> On Wed, Mar 23, 2022 at 08:54:08PM +0000, Robin Murphy wrote:
+> > I'll admit I still never quite grasped the reason for also adding the=20
+> > override to swiotlb_sync_single_for_device() in aa6f8dcbab47, but I thi=
+nk=20
+> > by that point we were increasingly tired and confused and starting to=20
+> > second-guess ourselves (well, I was, at least). I don't think it's wron=
+g=20
+> > per se, but as I said I do think it can bite anyone who's been doing=20
+> > dma_sync_*() wrong but getting away with it until now. If ddbd89deb7d3=
+=20
+> > alone turns out to work OK then I'd be inclined to try a partial revert=
+ of=20
+> > just that one hunk.
+>=20
+> Agreed.  Let's try that first.
+>=20
+> Oleksandr, can you try the patch below:
+>=20
+>=20
+> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> index 6db1c475ec827..6c350555e5a1c 100644
+> --- a/kernel/dma/swiotlb.c
+> +++ b/kernel/dma/swiotlb.c
+> @@ -701,13 +701,10 @@ void swiotlb_tbl_unmap_single(struct device *dev, p=
+hys_addr_t tlb_addr,
+>  void swiotlb_sync_single_for_device(struct device *dev, phys_addr_t tlb_=
+addr,
+>  		size_t size, enum dma_data_direction dir)
+>  {
+> -	/*
+> -	 * Unconditional bounce is necessary to avoid corruption on
+> -	 * sync_*_for_cpu or dma_ummap_* when the device didn't overwrite
+> -	 * the whole lengt of the bounce buffer.
+> -	 */
+> -	swiotlb_bounce(dev, tlb_addr, size, DMA_TO_DEVICE);
+> -	BUG_ON(!valid_dma_direction(dir));
+> +	if (dir =3D=3D DMA_TO_DEVICE || dir =3D=3D DMA_BIDIRECTIONAL)
+> +		swiotlb_bounce(dev, tlb_addr, size, DMA_TO_DEVICE);
+> +	else
+> +		BUG_ON(dir !=3D DMA_FROM_DEVICE);
+>  }
+> =20
+>  void swiotlb_sync_single_for_cpu(struct device *dev, phys_addr_t tlb_add=
+r,
+>=20
+
+With this patch the AP works for me.
+
+Thanks.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
+

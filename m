@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFCA4E6479
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982AC4E6482
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350662AbiCXN4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
+        id S1350562AbiCXN6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350682AbiCXNzy (ORCPT
+        with ESMTP id S1350718AbiCXN6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:55:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9B23AA51;
-        Thu, 24 Mar 2022 06:54:22 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648130061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bo4oh0xgueLYq/ZucSpzqDXmdQwXHyaJwvL+CGmcSVg=;
-        b=n2mkfR5ErnTI17aWRsmxHA4JLR70o7LNo8nMWo2Hywde6OoRxPhE7FuBCehyVUYtmN1G3g
-        LR69WNhbDCcQwHUYLpAxW19+Yc/BnbOU/OsuSluiKrwmemkwt6mR+R2itDPNa0/SXryA+B
-        kCuS8YmjEQrNRnveOh/6t0UHL91YvI35yh2Pu6lqcJO8BJsbIOsDDUXFO2khgvrNNM0+9w
-        jliDisJJX7RvpVHMGLBZEW83gKb8a7IiUz9oIeVSVCMotpU9dVh6fBO4kvchAtuQaFb7LW
-        bG0sUHiw20ALTFPSI6hAg2iGJsbHDgHEWqn2n0kpsbXQygbXETVImIoVuGE4MA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648130061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bo4oh0xgueLYq/ZucSpzqDXmdQwXHyaJwvL+CGmcSVg=;
-        b=PgKBGTgT2lglTNsJjTiAMUa7pDuUgUiyaQyd3SQh17Ir3RDl04oCLL//HuioEWtDSfDyJ5
-        vBr0yD/TANvOkDCA==
-To:     Artem Savkov <asavkov@redhat.com>, jpoimboe@redhat.com,
-        netdev@vger.kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>
-Subject: Re: [PATCH 1/2] timer: introduce upper bound timers
-In-Reply-To: <87tubn8rgk.ffs@tglx>
-References: <20220323111642.2517885-1-asavkov@redhat.com>
- <20220323111642.2517885-2-asavkov@redhat.com> <87tubn8rgk.ffs@tglx>
-Date:   Thu, 24 Mar 2022 14:54:21 +0100
-Message-ID: <87h77ncv76.ffs@tglx>
+        Thu, 24 Mar 2022 09:58:00 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EF24C427;
+        Thu, 24 Mar 2022 06:56:28 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id x8-20020a9d6288000000b005b22c373759so3333349otk.8;
+        Thu, 24 Mar 2022 06:56:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3hu2/w4zk2LRja1m6kxbb1AV3tlPT/cRATwQnTQCk3g=;
+        b=gHnJR37/4miZFfBAQ2uQcuryPumOTXNoLULL4lqvQ/9O4aeDa7ABKWco3EPxs0x3hi
+         McBGxEFlI5l+jG5L2O1XjjcDV+hILQ+tBAAt+6+NWKa1SGwLwlzBzkhF7RbsxOPO+I0w
+         5d0SmDUqpCIJaY9Gmuu0st8SCKXrIpBOfPuUBKeR493KNWRVJQx0dRZlksM708ts1q65
+         5VZCWMSBC5XfCn9zw3nzI7psyIPqDwMC6YKbIae8uKorjPMC2Yr/87GgXvHgBt/2+lBD
+         IbLEbBQ0BiS7vKaqNORNXcx55TBbI77lCth4HXHPXbAoqUI6QJpw9ASqlT5JEAje8IqV
+         bzfA==
+X-Gm-Message-State: AOAM530Qe5wrnmbhutW/wZxUPzFDoAH85FLYs/guQljFr6Qm9KPhbOjw
+        BzpezIz+hJ87AGtgq8yxMw==
+X-Google-Smtp-Source: ABdhPJzA6saZCLeJ/O7iPhpz9VqLML3Yhcc/Zlf/qqvBPu2YEFRUzp5i2fzD5+VZxAbgM6rJADtQoA==
+X-Received: by 2002:a9d:5a07:0:b0:5cd:afdb:b0da with SMTP id v7-20020a9d5a07000000b005cdafdbb0damr2127434oth.188.1648130187606;
+        Thu, 24 Mar 2022 06:56:27 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j145-20020acaeb97000000b002d9f37166c1sm1409446oih.17.2022.03.24.06.56.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 06:56:26 -0700 (PDT)
+Received: (nullmailer pid 1960215 invoked by uid 1000);
+        Thu, 24 Mar 2022 13:56:25 -0000
+Date:   Thu, 24 Mar 2022 08:56:25 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Qing Zhang <zhangqing@loongson.cn>,
+        David Airlie <airlied@linux.ie>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        kernel test robot <lkp@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        devicetree@vger.kernel.org, suijingfeng <suijingfeng@loongson.cn>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
+ controller
+Message-ID: <Yjx4iSkddTNo7q7K@robh.at.kernel.org>
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-8-15330273260@189.cn>
+ <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
+ <2aa26f44-38aa-4b3c-ccc3-0956a2ab5d77@189.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2aa26f44-38aa-4b3c-ccc3-0956a2ab5d77@189.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24 2022 at 13:28, Thomas Gleixner wrote:
-> On Wed, Mar 23 2022 at 12:16, Artem Savkov wrote:
->> Add TIMER_UPPER_BOUND flag which allows creation of timers that would
->> expire at most at specified time or earlier.
->>
->> This was previously discussed here:
->> https://lore.kernel.org/all/20210302001054.4qgrvnkltvkgikzr@treble/T/#u
->
-> please add the context to the changelog. A link is only supplemental
-> information and does not replace content.
->
->>  static inline unsigned calc_index(unsigned long expires, unsigned lvl,
->> -				  unsigned long *bucket_expiry)
->> +				  unsigned long *bucket_expiry, bool upper_bound)
->>  {
->>  
->>  	/*
->> @@ -501,34 +501,39 @@ static inline unsigned calc_index(unsigned long expires, unsigned lvl,
->>  	 * - Truncation of the expiry time in the outer wheel levels
->>  	 *
->>  	 * Round up with level granularity to prevent this.
->> +	 * Do not perform round up in case of upper bound timer.
->>  	 */
->> -	expires = (expires + LVL_GRAN(lvl)) >> LVL_SHIFT(lvl);
->> +	if (upper_bound)
->> +		expires = expires >> LVL_SHIFT(lvl);
->> +	else
->> +		expires = (expires + LVL_GRAN(lvl)) >> LVL_SHIFT(lvl);
->
-> While this "works", I fundamentally hate this because it adds an extra
-> conditional into the common case. That affects every user of the timer
-> wheel. We went great length to optimize that code and I'm not really enthused
-> to sacrifice that just because of _one_ use case.
+On Thu, Mar 24, 2022 at 03:32:01PM +0800, Sui Jingfeng wrote:
+> 
+> On 2022/3/23 04:49, Rob Herring wrote:
+> > > +	}
+> > > +
+> > > +	spin_lock_init(&li2c->reglock);
+> > > +
+> > > +	snprintf(compat, sizeof(compat), "lsdc,i2c-gpio-%d", index);
+> > compatible values shouldn't have an index and you shouldn't need a
+> > index in DT. You need to iterate over child nodes with matching
+> > compatible.
+> 
+> Why compatible values shouldn't have an index, does devicetree
+> specification prohibit this? [1]
 
-Aside of that this is not mathematically correct. Why?
+Probably not explicitly, but that's fundamentally not how compatible 
+works. 'compatible' defines WHAT the device is, not WHICH device and 
+that is used for matching devices to drivers. Drivers work on multiple 
+instances.
 
-The level selection makes the cutoff at: LEVEL_MAX(lvl) - 1. E.g. 62
-instead of 63 for the first level.
+> The recommended format is "manufacturer,model", where manufacturer is a string describing the name
+> of the manufacturer (such as a stock ticker symbol), and model specifies the model number. [1]
 
-The reason is that this accomodates for the + LVL_GRAN(lvl). Now with
-surpressing the roundup this creates a gap. Not a horrible problem, but
-not correct either.
+I don't see anything saying to put the instance in there, do you?
 
-Thanks,
-
-        tglx
+> 
+> [1] https://www.devicetree.org/specifications/
+> 

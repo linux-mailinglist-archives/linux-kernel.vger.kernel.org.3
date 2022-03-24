@@ -2,137 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453364E6096
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB394E6097
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346368AbiCXIq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S1347928AbiCXIqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244644AbiCXIqZ (ORCPT
+        with ESMTP id S1344839AbiCXIqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:46:25 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4576E9BBB5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:44:51 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id p15so7666933ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:44:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=++pYMAFi8siFITGTtI8OJ/ZLZmlTf/qSvmoDsoiudic=;
-        b=bLvvkukA8BB7oL86pGuChsm+aSNaBbNixr+1oNjsVP/ANz9qs22bL+0co9+LxeTzLr
-         p3/WfqNXLKRw5+YHpINrfHfutnGeCd8YeacpkAp7M5/e+ZXmlEcFJraf7HOoRtUvvuzU
-         pRsj5BGCkDl5Z0LzlawnSEndD3gSIn0EoXRDs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=++pYMAFi8siFITGTtI8OJ/ZLZmlTf/qSvmoDsoiudic=;
-        b=cnrMvXaL+06rfBAbf4yeGj6RTLcrbbNpR5vlc0J+Hrn88e+0ShZjdzj2dOdbBfSpZy
-         LJVoKvGeYgML4eiHoZe8GPX0j4MnAu1EceHZBMlDxWZireC98dZPhxh4kiz96C4ihtsn
-         CqBxXUTv8PEclDYofPsSogoAGCQK2gxAViHO2BCG0IlBJf39Hu6/Xx/bs59iGBxGx+an
-         p0IuALqYcJlkZk95+dwPn8AhXbf4x9exObhAUS5csy9xlap4yyjeIoUvOKqMXrzPj85j
-         JXeuACQYH1ClCkiRnmMaOhrmJHHFfcjRsYm1bbt4pzPR9lQYUnmerUzLl8acz8QslrAn
-         2fTg==
-X-Gm-Message-State: AOAM5327mHk52aDf6IPjDcBQCgMMZxTMiwL8LuU1I2Rgb1zICfjQTmQ/
-        zJaBntiChADql31KmVY/eFpIZOUk4GgzV0QDnUggbA==
-X-Google-Smtp-Source: ABdhPJySkj3ocM+OfhTMngFbezUNAcO5OUVM0gUJl6sz5vW4FyHPd7j4grGLKSZMO+nJda8YLjoLclQNUxq16JpPat4=
-X-Received: by 2002:a17:906:2991:b0:6cf:6b24:e92f with SMTP id
- x17-20020a170906299100b006cf6b24e92fmr4461589eje.748.1648111489773; Thu, 24
- Mar 2022 01:44:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220322192712.709170-1-mszeredi@redhat.com> <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
- <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com> <YjudB7XARLlRtBiR@mit.edu>
-In-Reply-To: <YjudB7XARLlRtBiR@mit.edu>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Thu, 24 Mar 2022 09:44:38 +0100
-Message-ID: <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 04:46:47 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB9549BBB1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=hbQtGcGdsRfjLfzJe0
+        nhtrj0QFYvT56HXlrOmgtNRjs=; b=ORcHIqPGOBG4ypZP9M/QfR7HkDbPho5X5C
+        U9Bi5mgegbXckI+hqAFbxm7eE+clrZi+Y0vXGRpCCe94vMNvNwWpQoAhOruN6acL
+        SyJVe7/UQeJ7hy9znZ0Lq0aoTW7tyhNiqi9UwvqEgLA6nDzvQnrGGBX/+kwG+fbe
+        FejKdSh10=
+Received: from localhost (unknown [159.226.95.33])
+        by smtp8 (Coremail) with SMTP id DMCowAC3jK2ULzxizxz+Bg--.28201S2;
+        Thu, 24 Mar 2022 16:45:08 +0800 (CST)
+From:   QintaoShen <unSimple1993@163.com>
+To:     jckuo@nvidia.com
+Cc:     linux-kernel@vger.kernel.org, QintaoShen <unSimple1993@163.com>
+Subject: [PATCH v1] phy: tegra: xusb: Check for NULL return of devm_kzalloc()
+Date:   Thu, 24 Mar 2022 16:45:05 +0800
+Message-Id: <1648111505-5806-1-git-send-email-unSimple1993@163.com>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: DMCowAC3jK2ULzxizxz+Bg--.28201S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Xr18Cw17tF1ktF4kGr45KFg_yoWfGwb_uw
+        s5Zr97XrWqgr17Cw1jyw43ZrySya1IgFn7ZFsYqa43A3yjvr4Fy3yUZrZxu3yxC3Z5WFZr
+        J34DZF1fZr17KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUb6wZ5UUUUU==
+X-Originating-IP: [159.226.95.33]
+X-CM-SenderInfo: 5xqvxz5sohimizt6il2tof0z/xtbCbhTNH2BbCZuMRwAAsK
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 at 23:20, Theodore Ts'o <tytso@mit.edu> wrote:
->
-> On Wed, Mar 23, 2022 at 02:24:40PM +0100, Miklos Szeredi wrote:
-> > The reason I stated thinking about this is that Amir wanted a per-sb
-> > iostat interface and dumped it into /proc/PID/mountstats.  And that is
-> > definitely not the right way to go about this.
-> >
-> > So we could add a statfsx() and start filling in new stuff, and that's
-> > what Linus suggested.  But then we might need to add stuff that is not
-> > representable in a flat structure (like for example the stuff that
-> > nfs_show_stats does) and that again needs new infrastructure.
-> >
-> > Another example is task info in /proc.  Utilities are doing a crazy
-> > number of syscalls to get trivial information.  Why don't we have a
-> > procx(2) syscall?  I guess because lots of that is difficult to
-> > represent in a flat structure.  Just take the lsof example: tt's doing
-> > hundreds of thousands of syscalls on a desktop computer with just a
-> > few hundred processes.
->
-> I'm still a bit puzzled about the reason for getvalues(2) beyond,
-> "reduce the number of system calls".  Is this a performance argument?
+The allocation of devm_kzalloc() may return a NULL pointer, can cause
+a NULL-pointer dereference in the follow lines of code.
 
-One argument that can't be worked around without batchingis atomicity.
-Not sure how important that is, but IIRC it was one of the
-requirements relating to the proposed fsinfo syscall, which this API
-is meant to supersede.   Performance was also oft repeated regarding
-the fsinfo API, but I'm less bought into that.
+To avoid this, it is better to check the return value of devm_kzalloc().
 
-> If so, have you benchmarked lsof using this new interface?
+Signed-off-by: QintaoShen <unSimple1993@163.com>
+---
+ drivers/phy/tegra/xusb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Not yet.  Looked yesterday at both lsof and procps source code, and
-both are pretty complex and not easy to plug in a new interface.   But
-I've not yet given up...
+diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+index aa5237e..f32b3cf 100644
+--- a/drivers/phy/tegra/xusb.c
++++ b/drivers/phy/tegra/xusb.c
+@@ -668,6 +668,9 @@ static int tegra_xusb_setup_usb_role_switch(struct tegra_xusb_port *port)
+ 	port->dev.driver = devm_kzalloc(&port->dev,
+ 					sizeof(struct device_driver),
+ 					GFP_KERNEL);
++	if (!port->dev.driver)
++		return -ENOMEM;
++
+ 	port->dev.driver->owner	 = THIS_MODULE;
+ 
+ 	port->usb_role_sw = usb_role_switch_register(&port->dev,
+-- 
+2.7.4
 
-> I did a quickie run on my laptop, which currently had 444 process.
-> "lsof /home/tytso > /tmp/foo" didn't take long:
->
-> % time lsof /home/tytso >& /tmp/foo
-> real    0m0.144s
-> user    0m0.039s
-> sys     0m0.087s
->
-> And an strace of that same lsof command indicated had 67,889 lines.
-> So yeah, lots of system calls.  But is this new system call really
-> going to speed up things by all that much?
-
-$ ps uax | wc -l
-335
-$ time lsof > /dev/null
-
-real 0m3.011s
-user 0m1.257s
-sys 0m1.249s
-$ strace -o /tmp/strace lsof > /dev/null
-$ wc -l /tmp/strace
-638523 /tmp/strace
-
-That's an order of magnitude higher than in your case; don't know what
-could cause this.
-
-Thanks,
-Millos

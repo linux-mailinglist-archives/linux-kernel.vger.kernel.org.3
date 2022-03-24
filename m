@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D694E64C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447004E64DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350743AbiCXON0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 10:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S1350905AbiCXOQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 10:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345387AbiCXONZ (ORCPT
+        with ESMTP id S245094AbiCXOQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 10:13:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3529F7CB02
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:11:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1E06615B4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB90EC340EC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:11:52 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Mpm6rTOw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1648131110;
+        Thu, 24 Mar 2022 10:16:20 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8EB23BC0;
+        Thu, 24 Mar 2022 07:14:29 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B51E76000D;
+        Thu, 24 Mar 2022 14:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1648131267;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jpvlvyj9ao+OhMQB6o8LnQdN+MDbR6s7x0e59J7p0ZY=;
-        b=Mpm6rTOwHuGlKLWnUUL81ofDk1JhSMKKir9gkyRQ6OfPDnbNocZwkaJ0mOLZG7/0W9Fyuc
-        hIeSUMlIex9yBYBviuXcKSZMWvWOGMPpBcrUNWrQhlSRKXXfBugqRc6HV5OZ8/Rj6LGnsk
-        3ifI6g5URM8jAoRazH0Rl5TPdAz9yOE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ba0ff622 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Thu, 24 Mar 2022 14:11:50 +0000 (UTC)
-Received: by mail-yb1-f169.google.com with SMTP id u103so8636358ybi.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:11:50 -0700 (PDT)
-X-Gm-Message-State: AOAM532a6kHu7uD/iCXkaNaAR6OKu7/yw3l+An77xAKk9n8+Ku1FEM3y
-        T/s2mybPXZgHBotHPw+EBBmbpfLktkjLYFBfbWU=
-X-Google-Smtp-Source: ABdhPJxDbDInYKblQShnqKX+H9+RZtESX+eqUXrspeN3TYWTxW+KNmnQt73LTBJo0jrJ3hK3an7ncp+B71xhJYgJbrA=
-X-Received: by 2002:a25:b854:0:b0:633:8a00:707a with SMTP id
- b20-20020a25b854000000b006338a00707amr4723427ybm.637.1648131109009; Thu, 24
- Mar 2022 07:11:49 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Apb2CpKn69J/+/Fz8GwEO96e94X6qhRbKP77Fofh3Fc=;
+        b=nMVNKOujS787Xgm2AbQvqwOlFpgsTKM6mRrHJCLuBynJTcSHu0PPm+L06IZobev8mDWT7J
+        KqwHYixOvD8kVHutp/+WeAQm8UfGj44GHgrFiqsvB+ebK6t6GW/18qfrRrt4roUBtlFOgU
+        /EPBQPLj3OkbGNLCNlw3xeWfZL9G0bZ4t/VqFWefVKT7TLIO3XYSPRyIdLgGW1xK61Qlrl
+        WJC1tzyrcCE3zk8t9ErvU1wfpcQEYf4Tqx9CO9DOnNFI+mOyhXN4JD3eFYwT9KcPWr7y01
+        ZhVDID4llGv8gUy0PTcJ/bwBSlfQ8nHuWt5g8f8uI16HS2f9Cl/AelaJnM/vHQ==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [PATCH v2 0/3] add fwnode support to reset subsystem
+Date:   Thu, 24 Mar 2022 15:12:34 +0100
+Message-Id: <20220324141237.297207-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CAHmME9q55ifnzxE9zLuLT=Hgjv=qcvjU-O-c8G=_o_V_O+p44Q@mail.gmail.com>
- <CACXcFmnb87qqzVkw9GfojPNh5sDkYGsqq9TYxUXBvrC1R+Lr3w@mail.gmail.com> <CACXcFmnhHpGQdU7ZcYNqjSss8VHMOtTvmJRETn18p0AY3AsEuQ@mail.gmail.com>
-In-Reply-To: <CACXcFmnhHpGQdU7ZcYNqjSss8VHMOtTvmJRETn18p0AY3AsEuQ@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 24 Mar 2022 08:11:38 -0600
-X-Gmail-Original-Message-ID: <CAHmME9rWxkjgmXet=gQFWvhB6xvPgvAwkadZHRwdWrNGO6LZ0Q@mail.gmail.com>
-Message-ID: <CAHmME9rWxkjgmXet=gQFWvhB6xvPgvAwkadZHRwdWrNGO6LZ0Q@mail.gmail.com>
-Subject: Re: Large post detailing recent Linux RNG improvements
-To:     Sandy Harris <sandyinchina@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 4:29 AM Sandy Harris <sandyinchina@gmail.com> wrote:
-> > > Thought I should mention here that I've written up the various RNG
-> > > things I've been working on for 5.17 & 5.18 here:
-> > > https://www.zx2c4.com/projects/linux-rng-5.17-5.18/ .
-> > >
-> > > Feel free to discuss on list here if you'd like, or if you see
-> > > something you don't like, I'll happily review patches!
-> >
-> > Your code includes:
-> >
-> > enum {
-> >     POOL_BITS = BLAKE2S_HASH_SIZE * 8,
-> >     POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
-> > };
-> >
-> > static struct {
-> >     struct blake2s_state hash;
-> >     spinlock_t lock;
-> >     unsigned int entropy_count;
-> > } input_pool = {
-> >     .hash.h = { BLAKE2S_IV0 ^ (0x01010000 | BLAKE2S_HASH_SIZE),
-> >             BLAKE2S_IV1, BLAKE2S_IV2, BLAKE2S_IV3, BLAKE2S_IV4,
-> >             BLAKE2S_IV5, BLAKE2S_IV6, BLAKE2S_IV7 },
-> >     .hash.outlen = BLAKE2S_HASH_SIZE,
-> >     .lock = __SPIN_LOCK_UNLOCKED(input_pool.lock),
-> > };
-> >
-> > As far as I can tell, you have eliminated the 4K-bit input pool
-> > that this driver has always used & are just using the hash
-> > context as the input pool. To me, this looks like an error.
-> >
-> > A side effect of that is losing the latent-entropy attribute
-> > on input_pool[] so we no longer get initialisation from
-> > the plugin. Another error.
->
-> I could see reasonable arguments for reducing the size of
-> the input pool since that would save both kernel memory
-> and time used by the hash. Personally, though, I would
-> not consider anything < 2Kbits without seeing strong
-> arguments to justify it.
->
-> You seem to have gone to 512 bits without showing
-> any analysis to justify it. Have I just missed them?
+This series is part of a larger series which aims at adding fwnode
+support in multiple subsystems [1]. The goal of this series was to
+add support for software node in various subsystem but in a first
+time only the fwnode support had gained consensus and will be added
+to multiple subsystems.
 
-Explanation in <https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=6e8ec2552c7d>.
-There's also a link to a paper in there.
+For the moment ACPI node support is excluded from the fwnode support
+to avoid creating an unspecified ACPI reset device description. With
+these modifications, both driver that uses the fwnode_ API or the of_
+API to register the reset controller will be usable by consumer
+whatever the type of node that is used.
 
-Jason
+One question raised by this series is that I'm not sure if all reset
+drivers should be modified to use the new fwnode support or keep the
+existing device-tree support. Maintainer advice on that particular
+question will be welcome.
+
+This series was tested on a sparx5 board (pcb134).
+
+[1] https://lore.kernel.org/netdev/YhPSkz8+BIcdb72R@smile.fi.intel.com/T/
+
+---
+
+Changes in V2:
+- Updated comment specifying that either one of fwnode_xlate or of_xlate
+  should provided and add check to return EINVAL if both are set
+- Use only fwnode node name in rcdev_name() which also works for of_node
+- Remove of_node handling case in __reset_control_get()
+- Handle new error values -EOVERFLOW and -ENOMEM (returned by swnode
+  implementation) for fwnode_property_match_string()
+- Add sparx5 driver fwnode conversion
+
+Clément Léger (3):
+  of: add function to convert fwnode_reference_args to of_phandle_args
+  reset: add support for fwnode
+  reset: mchp: sparx5: set fwnode field of reset controller
+
+ drivers/reset/core.c                   | 100 ++++++++++++++++++-------
+ drivers/reset/reset-microchip-sparx5.c |   3 +-
+ include/linux/of.h                     |  18 +++++
+ include/linux/reset-controller.h       |  20 ++++-
+ include/linux/reset.h                  |  14 ++++
+ 5 files changed, 123 insertions(+), 32 deletions(-)
+
+-- 
+2.34.1
+

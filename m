@@ -2,198 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517004E641B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EACE4E641F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350454AbiCXNbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S1350456AbiCXNeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243053AbiCXNbo (ORCPT
+        with ESMTP id S243053AbiCXNeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:31:44 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D14F66614
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:30:12 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id w8so4687041pll.10
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:30:12 -0700 (PDT)
+        Thu, 24 Mar 2022 09:34:09 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D8A673E8;
+        Thu, 24 Mar 2022 06:32:37 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id y10so5632825edv.7;
+        Thu, 24 Mar 2022 06:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Pg5zMHUoMOtfnb1TjqGEq+NoQ1459IJ3m+O0DUiruc0=;
-        b=omvcrbN7lriPpSW5JaDifABkKoRy+47eDe5UOjgYcZYvGQlbPu6UX9LSEe8FXyZJsa
-         iA4E7Y1dEpDv1TBqcgYb0x+NLebJXtHBP1M1Pcwa8JX29WOxvSReHn8/l0PVwcnvF430
-         59aicx9zgfahnRG9MD556r2AI1GFa1lRuBvga4UxFpm3SaxZJ6ERW+ZXis8i/PwMdIbb
-         02CFAatVGbDSo2MjvyGdNcdvX7Zu/dcFEHnuZJyddYEShRstLEZm6jwWWEi6M+VaOx3D
-         2UW+1n54RTfwPrZEn29ASdd7e8IPfJBCHfwiJBaSJz5tNddYOfSfiVtIOtS1CxFICfb2
-         InGg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kUVvYnYs4g2TTfOXTOoNhPTZFus1FHIFlYQM09GP0Vk=;
+        b=Q8035X5zS23vYfXMn75+bVrxoYlc/oa9RWON9lVbkl1KBuSsYR2Y5iGqOTiwemLcAd
+         DFCZ0VFdAofKru5LChgYARUyGn0H6Vovf7xmfOsHUfqU3/AsvBqISW16bHTmVrtB7V4Q
+         OvcTra3rKbvwC9HzEjPCQcl4Nwn7Da+XFkKmJGFurbYzxct507mmnxbIFOdQoQlbh0E3
+         gJckgjjxM5DUe7zlfS7DjhAN369LWzpcLCtX//2fnrQrdQiDQnakPkoXjzFKPsLeZu1I
+         051XpIpdcyZu/YDzZVzCtq7T7DfHtjRMf5JCrgy7Qg7psg9fEXS8Tr11/dKCF0gWFPy1
+         Ci/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Pg5zMHUoMOtfnb1TjqGEq+NoQ1459IJ3m+O0DUiruc0=;
-        b=7u2b01r8rjqSW76ytBTjMjTIAjJhr6AAWqYj/dhbfHkg0ErxqJFX3sJK8wMAz1OpgK
-         zC0WU7tMcInmFY0r6s8TqhfP4DYSDsCtoZMV0e1wspf8uUxHop3Nv9XmcK0mH9HVx5HP
-         /iN1ou4pFcEdvjyP42Rg2+sV8LA5Vq75+UBpmIfsyU+N6rM53AVwN5WMCq5hb0h+S2a3
-         ZzEXfQ+umVuiO18nazsXapj8OYrrSH1P6YcPlULPyObikjIpudVmO2OGJ/+DDoF0IgQg
-         5YiGCOVzDQpyUIS5gBfxxIO9pEdVc7VNOEObpxf9XDxRMf8ryEjm2SG3IhrLEx0jPpTM
-         avyw==
-X-Gm-Message-State: AOAM530ZnEP+R91MFMAjmfEsZxF/vYXJ6L5ZFZiJn4cdbmgxRs3yVi63
-        YosiuuEhHOJHaQRTSk4fayFO
-X-Google-Smtp-Source: ABdhPJxo834+q44cy6Y/VdrbWR6viwcZl217ze+h8Xiz6Pw+AFEkkQShW97freIJEBaF33PZjpG9Xw==
-X-Received: by 2002:a17:902:8506:b0:154:8692:a7ac with SMTP id bj6-20020a170902850600b001548692a7acmr5896100plb.10.1648128611696;
-        Thu, 24 Mar 2022 06:30:11 -0700 (PDT)
-Received: from thinkpad ([220.158.158.107])
-        by smtp.gmail.com with ESMTPSA id oa16-20020a17090b1bd000b001c72b632222sm10085543pjb.32.2022.03.24.06.30.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kUVvYnYs4g2TTfOXTOoNhPTZFus1FHIFlYQM09GP0Vk=;
+        b=jKTBpiD4sLND4HtTzZnH3vdApS4Pxupl45zBqnB1QY/wRtG2WJhxzQ7hlTvSe9btMc
+         b1pFrKidhq+u14jYjftHdCG8SSWVO/UEXi7h8DLA8WBcmXXXlmCd/aM0cnnViGnr6JmA
+         BAQBhLVEpPBUoC6I4rKxZQDBmx9OU7Rh0vgO5x+hU7il7dHEOzLNxYHYOR823UtbtLhF
+         /gAVQS7Sr4QeAALZVWNX7087Zld6+nQ6X5ZwAE++Mg2F7nUuBhr99sDN5ij/vNHPMajq
+         jOoS+d9T/MPm6LAVf/6IZF1g/7EP1yWLKNx0p3ZjumX/eQdfovXnLfjcoK9kbsIGpBnL
+         k7hg==
+X-Gm-Message-State: AOAM533lJY+LmA4STsCa+PyBIDEz5smqq8YJq5nKesSyu7P1d+bjtI3r
+        +cqTDlCQaIL3s0R+pzosmiFHa2/Gb28=
+X-Google-Smtp-Source: ABdhPJwpYrQv1JTNbSVl+ILm6u1YPNfOOvT6AddOYMuAqF2bXalSsHTwkuk6zOWeUfzN99+SZG72bA==
+X-Received: by 2002:a05:6402:1388:b0:419:3d1a:9844 with SMTP id b8-20020a056402138800b004193d1a9844mr6762385edv.256.1648128756186;
+        Thu, 24 Mar 2022 06:32:36 -0700 (PDT)
+Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id g11-20020a170906538b00b006ae38eb0561sm1145586ejo.195.2022.03.24.06.32.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 06:30:11 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 19:00:04 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/25] dmaengine: dw-edma: Drop
- dma_slave_config.direction field usage
-Message-ID: <20220324133004.GM2854@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-2-Sergey.Semin@baikalelectronics.ru>
+        Thu, 24 Mar 2022 06:32:35 -0700 (PDT)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] dt-bindings: clock: convert rockchip,rk3188-cru.txt to YAML
+Date:   Thu, 24 Mar 2022 14:32:29 +0100
+Message-Id: <20220324133229.24035-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324014836.19149-2-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:48:12AM +0300, Serge Semin wrote:
-> The dma_slave_config.direction field usage in the DW eDMA driver has been
-> introduced in the commit bd96f1b2f43a ("dmaengine: dw-edma: support local
-> dma device transfer semantics"). Mainly the change introduced there was
-> correct (indeed DEV_TO_MEM means using RD-channel and MEM_TO_DEV -
-> WR-channel for the case of having eDMA accessed locally from
-> CPU/Application side), but providing an additional
-> MEM_TO_MEM/DEV_TO_DEV-based semantics was quite redundant if not to say
-> potentially harmful (when it comes to removing the denoted field). First
-> of all since the dma_slave_config.direction field has been marked as
-> obsolete (see [1] and the structure dc [2]) and will be discarded in
-> future, using it especially in a non-standard way is discouraged. Secondly
-> in accordance with the commit denoted above the default
-> dw_edma_device_transfer() semantics has been changed despite what it's
-> message said. So claiming that the method was left backward compatible was
-> wrong.
-> 
-> Anyway let's fix the problems denoted above and simplify the
-> dw_edma_device_transfer() method by dropping the parsing of the
-> DMA-channel direction field. Instead of having that implicit
-> dma_slave_config.direction field semantic we can use the recently added
-> DW_EDMA_CHIP_LOCAL flag to distinguish between the local and remote DW
-> eDMA setups thus preserving both cases support. In addition to that an
-> ASCII-figure has been added to clarify the complication out.
-> 
-> [1] Documentation/driver-api/dmaengine/provider.rst
-> [2] include/linux/dmaengine.h: dma_slave_config.direction
-> 
-> Co-developed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> In accordance with agreement with Frank and Manivannan this patch is
-> supposed to be moved to the series:
-> Link: https://lore.kernel.org/dmaengine/20220310192457.3090-1-Frank.Li@nxp.com/
-> in place of the patch:
-> [PATCH v5 6/9] dmaengine: dw-edma: Don't rely on the deprecated "direction" member
-> Link: https://lore.kernel.org/dmaengine/20220310192457.3090-7-Frank.Li@nxp.com/
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 49 +++++++++++++++++++++---------
->  1 file changed, 34 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index 5be8a5944714..e9e32ed74aa9 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -339,21 +339,40 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
->  	if (!chan->configured)
->  		return NULL;
->  
-> -	switch (chan->config.direction) {
-> -	case DMA_DEV_TO_MEM: /* local DMA */
-> -		if (dir == DMA_DEV_TO_MEM && chan->dir == EDMA_DIR_READ)
-> -			break;
-> -		return NULL;
-> -	case DMA_MEM_TO_DEV: /* local DMA */
-> -		if (dir == DMA_MEM_TO_DEV && chan->dir == EDMA_DIR_WRITE)
-> -			break;
-> -		return NULL;
-> -	default: /* remote DMA */
-> -		if (dir == DMA_MEM_TO_DEV && chan->dir == EDMA_DIR_READ)
-> -			break;
-> -		if (dir == DMA_DEV_TO_MEM && chan->dir == EDMA_DIR_WRITE)
-> -			break;
-> -		return NULL;
-> +	/*
-> +	 * Local Root Port/End-point              Remote End-point
-> +	 * +-----------------------+ PCIe bus +----------------------+
-> +	 * |                       |    +-+   |                      |
-> +	 * |    DEV_TO_MEM   Rx Ch <----+ +---+ Tx Ch  DEV_TO_MEM    |
-> +	 * |                       |    | |   |                      |
-> +	 * |    MEM_TO_DEV   Tx Ch +----+ +---> Rx Ch  MEM_TO_DEV    |
-> +	 * |                       |    +-+   |                      |
-> +	 * +-----------------------+          +----------------------+
-> +	 *
-> +	 * 1. Normal logic:
-> +	 * If eDMA is embedded into the DW PCIe RP/EP and controlled from the
-> +	 * CPU/Application side, the Rx channel (EDMA_DIR_READ) will be used
-> +	 * for the device read operations (DEV_TO_MEM) and the Tx channel
-> +	 * (EDMA_DIR_WRITE) - for the write operations (MEM_TO_DEV).
-> +	 *
-> +	 * 2. Inverted logic:
-> +	 * If eDMA is embedded into a Remote PCIe EP and is controlled by the
-> +	 * MWr/MRd TLPs sent from the CPU's PCIe host controller, the Tx
-> +	 * channel (EDMA_DIR_WRITE) will be used for the device read operations
-> +	 * (DEV_TO_MEM) and the Rx channel (EDMA_DIR_READ) - for the write
-> +	 * operations (MEM_TO_DEV).
-> +	 *
-> +	 * It is the client driver responsibility to choose a proper channel
-> +	 * for the DMA transfers.
-> +	 */
+Current dts files with RK3188/RK3066 'cru' nodes are manually verified.
+In order to automate this process rockchip,rk3188-cru.txt has to be
+converted to YAML.
 
-I think it'd be good to document this using some form in "enum dw_edma_dir"
-declaration.
+Changed:
+  Add properties to fix notifications by clocks.yaml for example:
+    clocks
+    assigned-clock-rates
+    assigned-clocks
 
-Thanks,
-Mani
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ .../bindings/clock/rockchip,rk3188-cru.txt    | 61 --------------
+ .../bindings/clock/rockchip,rk3188-cru.yaml   | 81 +++++++++++++++++++
+ 2 files changed, 81 insertions(+), 61 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
 
-> +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
-> +		if ((chan->dir == EDMA_DIR_READ && dir != DMA_DEV_TO_MEM) ||
-> +		    (chan->dir == EDMA_DIR_WRITE && dir != DMA_MEM_TO_DEV))
-> +			return NULL;
-> +	} else {
-> +		if ((chan->dir == EDMA_DIR_WRITE && dir != DMA_DEV_TO_MEM) ||
-> +		    (chan->dir == EDMA_DIR_READ && dir != DMA_MEM_TO_DEV))
-> +			return NULL;
->  	}
->  
->  	if (xfer->type == EDMA_XFER_CYCLIC) {
-> -- 
-> 2.35.1
-> 
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.txt
+deleted file mode 100644
+index 7f368530a..000000000
+--- a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.txt
++++ /dev/null
+@@ -1,61 +0,0 @@
+-* Rockchip RK3188/RK3066 Clock and Reset Unit
+-
+-The RK3188/RK3066 clock controller generates and supplies clock to various
+-controllers within the SoC and also implements a reset controller for SoC
+-peripherals.
+-
+-Required Properties:
+-
+-- compatible: should be "rockchip,rk3188-cru", "rockchip,rk3188a-cru" or
+-			"rockchip,rk3066a-cru"
+-- reg: physical base address of the controller and length of memory mapped
+-  region.
+-- #clock-cells: should be 1.
+-- #reset-cells: should be 1.
+-
+-Optional Properties:
+-
+-- rockchip,grf: phandle to the syscon managing the "general register files"
+-  If missing pll rates are not changeable, due to the missing pll lock status.
+-
+-Each clock is assigned an identifier and client nodes can use this identifier
+-to specify the clock which they consume. All available clocks are defined as
+-preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
+-dt-bindings/clock/rk3066-cru.h headers and can be used in device tree sources.
+-Similar macros exist for the reset sources in these files.
+-
+-External clocks:
+-
+-There are several clocks that are generated outside the SoC. It is expected
+-that they are defined using standard clock bindings with following
+-clock-output-names:
+- - "xin24m" - crystal input - required,
+- - "xin32k" - rtc clock - optional,
+- - "xin27m" - 27mhz crystal input on rk3066 - optional,
+- - "ext_hsadc" - external HSADC clock - optional,
+- - "ext_cif0" - external camera clock - optional,
+- - "ext_rmii" - external RMII clock - optional,
+- - "ext_jtag" - externalJTAG clock - optional
+-
+-Example: Clock controller node:
+-
+-	cru: cru@20000000 {
+-		compatible = "rockchip,rk3188-cru";
+-		reg = <0x20000000 0x1000>;
+-		rockchip,grf = <&grf>;
+-
+-		#clock-cells = <1>;
+-		#reset-cells = <1>;
+-	};
+-
+-Example: UART controller node that consumes the clock generated by the clock
+-  controller:
+-
+-	uart0: serial@10124000 {
+-		compatible = "snps,dw-apb-uart";
+-		reg = <0x10124000 0x400>;
+-		interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+-		reg-shift = <2>;
+-		reg-io-width = <1>;
+-		clocks = <&cru SCLK_UART0>;
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+new file mode 100644
+index 000000000..136a9771e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+@@ -0,0 +1,81 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/rockchip,rk3188-cru.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip RK3188/RK3066 Clock and Reset Unit (CRU)
++
++maintainers:
++  - Heiko Stuebner <heiko@sntech.de>
++
++description: |
++  The RK3188/RK3066 clock controller generates and supplies clocks to various
++  controllers within the SoC and also implements a reset controller for SoC
++  peripherals.
++  Each clock is assigned an identifier and client nodes can use this identifier
++  to specify the clock which they consume. All available clocks are defined as
++  preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
++  dt-bindings/clock/rk3066-cru.h headers and can be used in device tree sources.
++  Similar macros exist for the reset sources in these files.
++  There are several clocks that are generated outside the SoC. It is expected
++  that they are defined using standard clock bindings with following
++  clock-output-names:
++    - "xin24m"    - crystal input                 - required
++    - "xin32k"    - RTC clock                     - optional
++    - "xin27m"    - 27mhz crystal input on RK3066 - optional
++    - "ext_hsadc" - external HSADC clock          - optional
++    - "ext_cif0"  - external camera clock         - optional
++    - "ext_rmii"  - external RMII clock           - optional
++    - "ext_jtag"  - external JTAG clock           - optional
++
++properties:
++  compatible:
++    enum:
++      - rockchip,rk3066a-cru
++      - rockchip,rk3188-cru
++      - rockchip,rk3188a-cru
++
++  reg:
++    maxItems: 1
++
++  "#clock-cells":
++    const: 1
++
++  "#reset-cells":
++    const: 1
++
++  clocks:
++    minItems: 1
++
++  assigned-clock-rates:
++    minItems: 1
++    maxItems: 64
++
++  assigned-clocks:
++    minItems: 1
++    maxItems: 64
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to the syscon managing the "general register files" (GRF),
++      if missing pll rates are not changeable, due to the missing pll lock status.
++
++required:
++  - compatible
++  - reg
++  - "#clock-cells"
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    cru: cru@20000000 {
++      compatible = "rockchip,rk3188-cru";
++      reg = <0x20000000 0x1000>;
++      rockchip,grf = <&grf>;
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++    };
+-- 
+2.20.1
+

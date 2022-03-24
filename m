@@ -2,192 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138474E6B4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 00:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B274E6B4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 00:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356416AbiCXXoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 19:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S1356533AbiCXXqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 19:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356451AbiCXXnF (ORCPT
+        with ESMTP id S1356523AbiCXXqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 19:43:05 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF126BA318
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:41:32 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id k13-20020a25c60d000000b006339008b92fso4790802ybf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Fvc6J6M6wcnrLQYRH6BhKAfsqygwLe3UGholaX7FMA0=;
-        b=qwc6aIu5Ovc+0GN2azCLlUlH2jfPiydIUMXBP/9wtLJp8BKskc9/DY2+dCmr0NLdx5
-         CzW10s1Kb6fzMKDh7Sw3PF1JYO84FG1kyfULFPQI5D/xYr+frrv9ObUJ67LBoFWDI6hj
-         OOaMseMGnEg5OVT6ajCRQ4pY3FwwP5OblzYsfwrussZTcHfXPzKZ+KLs613k8ud5i3EG
-         o1OK7th6NWrLoDhkua8yon0Y9Ew/cesv62AkwEHWcxBHjIeQ87zgwRjEHpOScmRzwHkt
-         pDaC+xoAmSjXzeS8gBkEHSz7yuLJ9VN5/7ufq6373j64IHyxT0KWeSAaZROGMnAIY5K/
-         JMGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Fvc6J6M6wcnrLQYRH6BhKAfsqygwLe3UGholaX7FMA0=;
-        b=odRDRecHUuVOv3xcQb2sSwD3bgTu5bLmpJKfDhJKluTuFIq8CFGzRpyjAG2HBjU7TH
-         hjNkaK8VQviKJiq1y+dsLmitEr37uB34lIIY4N5DrqiFiR3VIqDNR6wQkpTBqpMR+TsL
-         ph/0OzXL72VmJxAhloVpZCohC2g8WKD3iEP9waklnjQc4S4ZtCTJU81ogNCADqxR0wKr
-         wyKCgOYAX/4Nbs/XBmgBxkH7yFiW0Jmk0DHL753dJyjHwa5CN+si7yC5H7kONSzO90yi
-         0b+90ss3iyx6JfCCscevoMoUOkBBDZbJMV+GzvYQbPyJVvHuMDVaMTbu0jTW2j8VveqT
-         7V/A==
-X-Gm-Message-State: AOAM532Cxjc0PxBA9cePSroEinyCC3I4uycpe5dwXBr+UCAW08mrDDIP
-        CymYGs8R43S6COFj+NMHHvRmg2CkXeE=
-X-Google-Smtp-Source: ABdhPJzbLWng5ePUh2h4yTHDw5MikqqEhBkzdNWfUsNQmPt0KjRTRPPBspbB/2lcY6syjTsOHEFYmJog1Ew=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f3eb:bf7b:2da4:12c9])
- (user=haoluo job=sendgmr) by 2002:a81:5545:0:b0:2e5:a302:4739 with SMTP id
- j66-20020a815545000000b002e5a3024739mr7412732ywb.348.1648165292087; Thu, 24
- Mar 2022 16:41:32 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 16:41:23 -0700
-In-Reply-To: <20220324234123.1608337-1-haoluo@google.com>
-Message-Id: <20220324234123.1608337-3-haoluo@google.com>
-Mime-Version: 1.0
-References: <20220324234123.1608337-1-haoluo@google.com>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH RFC bpf-next 2/2] selftests/bpf: Test mmapable task local storage.
-From:   Hao Luo <haoluo@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     yhs@fb.com, KP Singh <kpsingh@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 19:46:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443AE5D18D;
+        Thu, 24 Mar 2022 16:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648165487; x=1679701487;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KBpnlCVZ8nRN+ALtwdZ8Rbm5u3lomhYmGYs2GDkyH+E=;
+  b=lSYDkl9/hZbXFG0BLHnmUGtHlY/++2IG+Z3xHcUxFvtQ32O0WNnPDc7G
+   RiEwjDhByAJzx2WNcY3bPzpPU93MNzkdy5dhJD4EudPwAIFIJnoL/X6Vg
+   8ud4ro0wWXsjO1aWfH90yC4yrN/0X5ysNGahfAt3AOBAu9WsXccO7NqKz
+   2KfbBNrUUOZWnBoeCXWQ4MaxvE70eYlnzYx6rZMSivkrxVy3JBrjYj1V+
+   Yvr5dMa0+eZjqToDgT4JyLKciYSaUvnxndN2hap3sHCZsjZGYiLP/Vi+o
+   B7epwrYXxreKDJX/yquis17czhs502NKVqUz8cwSaj6A1i+QaqJGkBKgB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="239119914"
+X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
+   d="scan'208";a="239119914"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 16:44:33 -0700
+X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
+   d="scan'208";a="786348143"
+Received: from padillaa-mobl.amr.corp.intel.com (HELO localhost) ([10.212.46.66])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 16:44:33 -0700
+Date:   Thu, 24 Mar 2022 16:44:33 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 04/10] PCI/DOE: Introduce pci_doe_create_doe_devices
+Message-ID: <Yj0CYdSrVMxlmXyJ@iweiny-desk3>
+References: <20220201071952.900068-5-ira.weiny@intel.com>
+ <20220203224437.GA120552@bhelgaas>
+ <Yju6quQsBDSMaNC2@iweiny-desk3>
+ <20220324140539.00004be8@Huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324140539.00004be8@Huawei.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests mmapable task local storage.
+On Thu, Mar 24, 2022 at 02:05:39PM +0000, Jonathan Cameron wrote:
+> Hi Ira,
+> 
+> > Here is the code to be more clear...
+> > 
+> > 
+> > drivers/cxl/pci.c:
+> > 
+> > int cxl_pci_create_doe_devices(struct pci_dev *pdev)
+> > {               
+> >         struct device *dev = &pdev->dev;
+> >         bool use_irq = true;
+> >         int irqs = 0;
+> >         u16 off = 0;         
+> >         int rc;
+> >         
+> >         pci_doe_for_each_off(pdev, off)
+> >                 irqs++;
+> >         pci_info(pdev, "Found %d DOE mailbox's\n", irqs);
+> >         
+> >         /*                         
+> >          * Allocate enough vectors for the DOE's
+> >          */     
+> >         rc = pci_alloc_irq_vectors(pdev, irqs, irqs, PCI_IRQ_MSI |
+> >                                                      PCI_IRQ_MSIX);
+> >         if (rc != irqs) {
+> >                 pci_err(pdev, "Not enough interrupts for all the DOEs; use polling\n");
+> >                 use_irq = false;
+> >                 /* Some got allocated; clean them up */
+> >                 if (rc > 0)
+> >                         cxl_pci_free_irq_vectors(pdev); 
+> >         } else {
+> >                 /*
+> >                  * Enabling bus mastering is require for MSI/MSIx.  It could be
+> >                  * done later within the DOE initialization, but as it
+> >                  * potentially has other impacts keep it here when setting up
+> >                  * the IRQ's.
+> >                  */
+> >                 pci_set_master(pdev);
+> >                 rc = devm_add_action_or_reset(dev,
+> >                                               cxl_pci_free_irq_vectors,
+> >                                               pdev);
+> >                 if (rc)
+> >                         return rc;
+> >         }
+> > 
+> >         pci_doe_for_each_off(pdev, off) {
+> > ...
+> > 		/* Create each auxiliary device which internally calls */
+> > 		pci_doe_create_mb(pdev, off, use_irq);
+> > ...
+> > 	}
+> > ...
+> > }
+> > 
+> > 
+> > drivers/pci/pci-doe.c:
+> > 
+> > static irqreturn_t pci_doe_irq_handler(int irq, void *data)
+> > {
+> > ...
+> > }
+> > 
+> > static int pci_doe_request_irq(struct pci_doe_mb *doe_mb)
+> > {
+> >         struct pci_dev *pdev = doe_mb->pdev;
+> >         int offset = doe_mb->cap_offset;
+> >         int doe_irq, rc;
+> >         u32 val;
+> > 
+> >         pci_read_config_dword(pdev, offset + PCI_DOE_CAP, &val);
+> > 
+> >         if (!FIELD_GET(PCI_DOE_CAP_INT, val))
+> >                 return -ENOTSUPP;
+> > 
+> >         doe_irq = FIELD_GET(PCI_DOE_CAP_IRQ, val);
+> >         rc = pci_request_irq(pdev, doe_irq, pci_doe_irq_handler,
+> >                              NULL, doe_mb,
+> >                              "DOE[%d:%s]", doe_irq, pci_name(pdev));
+> >         if (rc) 
+> >                 return rc;
+> > 
+> >         doe_mb->irq = doe_irq;
+> >         pci_write_config_dword(pdev, offset + PCI_DOE_CTRL,
+> >                                PCI_DOE_CTRL_INT_EN);
+> >         return 0;
+> > }
+> > 
+> > struct pci_doe_mb *pci_doe_create_mb(struct pci_dev *pdev, u16 cap_offset,
+> >                                      bool use_irq)
+> > {
+> > ...
+> >         if (use_irq) {
+> >                 rc = pci_doe_request_irq(doe_mb);
+> >                 if (rc) 
+> >                         pci_err(pdev, "DOE request irq failed for mailbox @ %u : %d\n",
+> >                                 cap_offset, rc);
+> >         }
+> > ...
+> > }
+> > 
+> > 
+> > Does this look reasonable?
+> 
+> I'm a little nervous about how we are going to make DOEs on switches work.
+> Guess I'll do an experiment once your next version is out and check we
+> can do that reasonably cleanly.  For switches we'll probably have to
+> check for DOEs on all such ports and end up with infrastructure to
+> map to all protocols we might see on a switch.
 
-Signed-off-by: Hao Luo <haoluo@google.com>
----
- .../bpf/prog_tests/task_local_storage.c       | 38 +++++++++++++++++++
- .../bpf/progs/task_local_storage_mmapable.c   | 38 +++++++++++++++++++
- 2 files changed, 76 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/task_local_storage_mmapable.c
+Are the switches not represented as PCI devices in linux?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-index 035c263aab1b..24e6edd32a78 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-@@ -6,8 +6,10 @@
- #include <sys/syscall.h>   /* For SYS_xxx definitions */
- #include <sys/types.h>
- #include <test_progs.h>
-+#include <sys/mman.h>
- #include "task_local_storage.skel.h"
- #include "task_local_storage_exit_creds.skel.h"
-+#include "task_local_storage_mmapable.skel.h"
- #include "task_ls_recursion.skel.h"
- 
- static void test_sys_enter_exit(void)
-@@ -81,6 +83,40 @@ static void test_recursion(void)
- 	task_ls_recursion__destroy(skel);
- }
- 
-+#define MAGIC_VALUE 0xabcd1234
-+
-+static void test_mmapable(void)
-+{
-+	struct task_local_storage_mmapable *skel;
-+	const long page_size = sysconf(_SC_PAGE_SIZE);
-+	int fd, err;
-+	void *ptr;
-+
-+	skel = task_local_storage_mmapable__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	fd = bpf_map__fd(skel->maps.mmapable_map);
-+	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (!ASSERT_NEQ(ptr, MAP_FAILED, "mmap"))
-+		goto out;
-+
-+	skel->bss->target_pid = syscall(SYS_gettid);
-+
-+	err = task_local_storage_mmapable__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto unmap;
-+
-+	syscall(SYS_gettid);
-+
-+	ASSERT_EQ(*(u64 *)ptr, MAGIC_VALUE, "value");
-+
-+unmap:
-+	munmap(ptr, page_size);
-+out:
-+	task_local_storage_mmapable__destroy(skel);
-+}
-+
- void test_task_local_storage(void)
- {
- 	if (test__start_subtest("sys_enter_exit"))
-@@ -89,4 +125,6 @@ void test_task_local_storage(void)
- 		test_exit_creds();
- 	if (test__start_subtest("recursion"))
- 		test_recursion();
-+	if (test__start_subtest("mmapable"))
-+		test_mmapable();
- }
-diff --git a/tools/testing/selftests/bpf/progs/task_local_storage_mmapable.c b/tools/testing/selftests/bpf/progs/task_local_storage_mmapable.c
-new file mode 100644
-index 000000000000..8cd82bb7336a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/task_local_storage_mmapable.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Google */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC | BPF_F_MMAPABLE);
-+	__type(key, int);
-+	__type(value, long);
-+} mmapable_map SEC(".maps");
-+
-+#define MAGIC_VALUE 0xabcd1234
-+
-+pid_t target_pid = 0;
-+
-+SEC("tp_btf/sys_enter")
-+int BPF_PROG(on_enter, struct pt_regs *regs, long id)
-+{
-+	struct task_struct *task;
-+	long *ptr;
-+
-+	task = bpf_get_current_task_btf();
-+	if (task->pid != target_pid)
-+		return 0;
-+
-+	ptr = bpf_task_storage_get(&mmapable_map, task, 0,
-+				   BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!ptr)
-+		return 0;
-+
-+	*ptr = MAGIC_VALUE;
-+	return 0;
-+}
--- 
-2.35.1.1021.g381101b075-goog
+If my vision of switches is correct I think that problem is independent of what
+I'm solving here.  In other words the relationship between a port on a switch
+and a DOE capability on that switch will have to be established somehow and
+nothing I'm doing precludes doing that, but at the same time nothing I'm doing
+helps that either.
 
+Ira
+
+> 
+> Jonathan
+> 
+> > 

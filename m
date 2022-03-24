@@ -2,259 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CF04E6170
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E064F4E6173
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349379AbiCXKGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S1349389AbiCXKGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346261AbiCXKF6 (ORCPT
+        with ESMTP id S1349384AbiCXKGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:05:58 -0400
-Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF4A9F6CB
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:04:25 -0700 (PDT)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id D7CB450C; Thu, 24 Mar 2022 11:04:22 +0100 (CET)
-Date:   Thu, 24 Mar 2022 11:04:20 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-Subject: [git pull] IOMMU Updates for Linux v5.18
-Message-ID: <YjxCJKNbtfcyV/6A@8bytes.org>
+        Thu, 24 Mar 2022 06:06:15 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4CB9F6CB;
+        Thu, 24 Mar 2022 03:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648116282; x=1679652282;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=R5km6m5qxMi3kYpL1LtzFCVr9pY6aeOZnR3nPxQD+cg=;
+  b=KT6JwhFT+NhhZgNLEfDZBRmfbCQeJgORG5iA9ckmDCsWwRzBr0tlre0N
+   YdahXRW3ysnSGN2vboKDiweOHxt02prASfxyKFqykPT38uNNZyb4U5jg/
+   cbuBxijPdxWE4xO9wsvuMBQSo8oHximDH0N0JoOaeeG+xLdJ/g+L7shT1
+   BsBA4Ceq+xMrqBJoN9lggtZnqXdQ+qh3QrdkwJsTtW4D19cSSdmMa+QDg
+   dpIKmr3NC4zYbkcqZWnjoZcOz9TWMchvkES6F8DbFotbVdHy0d3orAFhp
+   WYoEH6ivmd3avWd8PKAGeXZoys28aExctUWL5Nr6KM3gCnAl1SKVasdzQ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,207,1643670000"; 
+   d="scan'208";a="22868150"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 24 Mar 2022 11:04:38 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 24 Mar 2022 11:04:38 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 24 Mar 2022 11:04:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648116278; x=1679652278;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=R5km6m5qxMi3kYpL1LtzFCVr9pY6aeOZnR3nPxQD+cg=;
+  b=W7dPd/dlg79l/gk40VZZGpnKiAL7mp7PguVh6vZf+490e6CNhZV1iltX
+   0Ko9TsPQeBJvPvJ4oUk0kDr48IXEEOFRFSx0hGiAvtvJl95lGRaDSwLyC
+   r2JOv2CT70/qFC8s6hMLbc+H7ybu6hZJqBFcPQ0Zhuqb2h9ZCBmd+UYrc
+   5iuISbm9q4qZa6fc69PsgY4gtdyeaXfQOZlZd2ZGDKMa2Gc/Nml2+fo9p
+   GpQ6jE0e57+0dIwjfxvp1/OHseVPzCDMOOa6Q094sFMX2QI2tdN/YXdTG
+   AT0oB5wfkHGwK/+8wM/RGo0spi6TpnY2Ha3rEJRQodIwn4Y1dsfdLdUSK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,207,1643670000"; 
+   d="scan'208";a="22868149"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 24 Mar 2022 11:04:38 +0100
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 0242D280065;
+        Thu, 24 Mar 2022 11:04:37 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, vkoul@kernel.org,
+        Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
+Subject: Re: (EXT) [PATCH v2 6/7] arm64: dts: imx8mp-evk: Add PCIe support
+Date:   Thu, 24 Mar 2022 11:04:35 +0100
+Message-ID: <2236205.ElGaqSPkdT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <1646644054-24421-7-git-send-email-hongxing.zhu@nxp.com>
+References: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com> <1646644054-24421-7-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wf2zxYnOXxQkTonL"
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Richard,
 
---wf2zxYnOXxQkTonL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+thanks for providing PCIe support for iMX8MP.
 
-Hi Linus,
+Am Montag, 7. M=E4rz 2022, 10:07:33 CET schrieb Richard Zhu:
+> Add PCIe support on i.MX8MP EVK board.
+>=20
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 55 ++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>=20
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts index
+> 2eb943210678..ed77455a3f73 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> @@ -5,6 +5,7 @@
+>=20
+>  /dts-v1/;
+>=20
+> +#include <dt-bindings/phy/phy-imx8-pcie.h>
+>  #include "imx8mp.dtsi"
+>=20
+>  / {
+> @@ -33,6 +34,12 @@ memory@40000000 {
+>  		      <0x1 0x00000000 0 0xc0000000>;
+>  	};
+>=20
+> +	pcie0_refclk: pcie0-refclk {
+> +		compatible =3D "fixed-clock";
+> +			#clock-cells =3D <0>;
+> +			clock-frequency =3D <100000000>;
+> +	};
+> +
+>  	reg_can1_stby: regulator-can1-stby {
+>  		compatible =3D "regulator-fixed";
+>  		regulator-name =3D "can1-stby";
+> @@ -55,6 +62,17 @@ reg_can2_stby: regulator-can2-stby {
+>  		enable-active-high;
+>  	};
+>=20
+> +	reg_pcie0: regulator-pcie {
+> +		compatible =3D "regulator-fixed";
+> +		pinctrl-names =3D "default";
+> +		pinctrl-0 =3D <&pinctrl_pcie0_reg>;
+> +		regulator-name =3D "MPCIE_3V3";
+> +		regulator-min-microvolt =3D <3300000>;
+> +		regulator-max-microvolt =3D <3300000>;
+> +		gpio =3D <&gpio2 6 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
+>  	reg_usdhc2_vmmc: regulator-usdhc2 {
+>  		compatible =3D "regulator-fixed";
+>  		pinctrl-names =3D "default";
+> @@ -297,6 +315,30 @@ pca6416: gpio@20 {
+>  	};
+>  };
+>=20
+> +&pcie_phy {
+> +	fsl,refclk-pad-mode =3D <IMX8_PCIE_REFCLK_PAD_INPUT>;
+> +	clocks =3D <&pcie0_refclk>;
+> +	clock-names =3D "ref";
+> +	status =3D "okay";
+> +};
+> +
+> +&pcie{
+> +	pinctrl-names =3D "default";
+> +	pinctrl-0 =3D <&pinctrl_pcie0>;
+> +	reset-gpio =3D <&gpio2 7 GPIO_ACTIVE_LOW>;
+> +	clocks =3D <&clk IMX8MP_CLK_HSIO_ROOT>,
+> +		 <&clk IMX8MP_CLK_PCIE_ROOT>,
+> +		 <&clk IMX8MP_CLK_HSIO_AXI>;
+> +	clock-names =3D "pcie", "pcie_aux", "pcie_bus";
 
-there is a conflict this time when merging the IOMMU tree updates. It is
-in drivers/iommu/intel/iommu.c and comes from the fact that the tip-tree
-patched functions in that file which get removed with these updates. So
-the merge resolution is to use the changes from the IOMMU tree. With
-that in mind, here are the IOMMU changes for v5.18:
+This causes the following warnings in dtbs_check (paths stripped):
+imx8mp-evk.dtb: pcie@33800000: clock-names:1: 'pcie_bus' was expected
+        From schema: Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.y=
+aml
+imx8mp-evk.dtb: pcie@33800000: clock-names:2: 'pcie_phy' was expected
+        From schema: Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.y=
+aml
 
-The following changes since commit ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2:
+The bindings want 4 clocks for imx8mq (and imx8mp which seems similar):
+* pcie
+* pcie_bus
+* pcie_phy
+* pcie_aux
 
-  Linux 5.17-rc7 (2022-03-06 14:28:31 -0800)
+Ignoring the order there is no pcie_phy clock anymore, it was removed in=20
+commit 1840518ae7de ("clk: imx8mp: Remove the none exist pcie clocks"). I w=
+as=20
+wondering why, because the PCIE_PHY_CLK_ROOT at register 0xa380 inside CCM =
+is=20
+listed in RM.
+So there is a clock missing for 'pcie_phy' or the binding needs some update=
+=20
+for imx8mp, no?
 
-are available in the Git repository at:
+Regards,
+Alexander
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-updates-v5.18
+> +	assigned-clocks =3D <&clk IMX8MP_CLK_HSIO_AXI>,
+> +			  <&clk IMX8MP_CLK_PCIE_AUX>;
+> +	assigned-clock-rates =3D <500000000>, <10000000>;
+> +	assigned-clock-parents =3D <&clk IMX8MP_SYS_PLL2_500M>,
+> +				 <&clk IMX8MP_SYS_PLL2_50M>;
+> +	vpcie-supply =3D <&reg_pcie0>;
+> +	status =3D "okay";
+> +};
+> +
+>  &snvs_pwrkey {
+>  	status =3D "okay";
+>  };
+> @@ -442,6 +484,19 @@ MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA		0x400001c3
+>=20
+>  		>;
+>=20
+>  	};
+>=20
+> +	pinctrl_pcie0: pcie0grp {
+> +		fsl,pins =3D <
+> +			MX8MP_IOMUXC_I2C4_SCL__PCIE_CLKREQ_B=09
+0x61 /* open drain, pull up */
+> +			MX8MP_IOMUXC_SD1_DATA5__GPIO2_IO07=09
+0x41
+> +		>;
+> +	};
+> +
+> +	pinctrl_pcie0_reg: pcie0reggrp {
+> +		fsl,pins =3D <
+> +			MX8MP_IOMUXC_SD1_DATA4__GPIO2_IO06=09
+0x41
+> +		>;
+> +	};
+> +
+>  	pinctrl_pmic: pmicgrp {
+>  		fsl,pins =3D <
+>  			MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03=09
+0x000001c0
 
-for you to fetch changes up to e17c6debd4b2d2d474074f83946f8c6522587566:
 
-  Merge branches 'arm/mediatek', 'arm/msm', 'arm/renesas', 'arm/rockchip', 'arm/smmu', 'x86/vt-d' and 'x86/amd' into next (2022-03-08 12:21:31 +0100)
 
-----------------------------------------------------------------
-IOMMU Updates for Linux v5.18
 
-Including:
-
-	- IOMMU Core changes:
-	  - Removal of aux domain related code as it is basically dead
-	    and will be replaced by iommu-fd framework
-	  - Split of iommu_ops to carry domain-specific call-backs
-	    separatly
-	  - Cleanup to remove useless ops->capable implementations
-	  - Improve 32-bit free space estimate in iova allocator
-
-	- Intel VT-d updates:
-	  - Various cleanups of the driver
-	  - Support for ATS of SoC-integrated devices listed in
-	    ACPI/SATC table
-
-	- ARM SMMU updates:
-	  - Fix SMMUv3 soft lockup during continuous stream of events
-	  - Fix error path for Qualcomm SMMU probe()
-	  - Rework SMMU IRQ setup to prepare the ground for PMU support
-	  - Minor cleanups and refactoring
-
-	- AMD IOMMU driver:
-	  - Some minor cleanups and error-handling fixes
-
-	- Rockchip IOMMU driver:
-	  - Use standard driver registration
-
-	- MSM IOMMU driver:
-	  - Minor cleanup and change to standard driver registration
-
-	- Mediatek IOMMU driver:
-	  - Fixes for IOTLB flushing logic
-
-----------------------------------------------------------------
-Andy Shevchenko (2):
-      perf/smmuv3: Don't cast parameter in bit operations
-      iommu/vt-d: Move intel_iommu_ops to header file
-
-Christophe JAILLET (2):
-      iommu/arm-smmu-v3: Avoid open coded arithmetic in memory allocation
-      iommu/arm-smmu-v3: Simplify memory allocation
-
-David Heidelberg (1):
-      iommu/msm: Simplify with dev_err_probe()
-
-Jiasheng Jiang (1):
-      iommu/ipmmu-vmsa: Check for error num after setting mask
-
-Joerg Roedel (3):
-      Merge branch 'core' into x86/vt-d
-      Merge tag 'arm-smmu-updates' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux into arm/smmu
-      Merge branches 'arm/mediatek', 'arm/msm', 'arm/renesas', 'arm/rockchip', 'arm/smmu', 'x86/vt-d' and 'x86/amd' into next
-
-John Garry (1):
-      iommu/iova: Separate out rcache init
-
-Lu Baolu (17):
-      iommu/vt-d: Remove guest pasid related callbacks
-      iommu: Remove guest pasid related interfaces and definitions
-      iommu/vt-d: Remove aux-domain related callbacks
-      iommu: Remove aux-domain related interfaces and iommu_ops
-      iommu: Remove apply_resv_region
-      drm/nouveau/device: Get right pgsize_bitmap of iommu_domain
-      iommu: Use right way to retrieve iommu_ops
-      iommu: Remove unused argument in is_attach_deferred
-      iommu: Split struct iommu_ops
-      iommu/vt-d: Remove intel_iommu::domains
-      iommu/vt-d: Remove finding domain in dmar_insert_one_dev_info()
-      iommu/vt-d: Remove iova_cache_get/put()
-      iommu/vt-d: Remove domain and devinfo mempool
-      iommu/vt-d: Remove DEFER_DEVICE_DOMAIN_INFO
-      iommu/vt-d: Remove unnecessary includes
-      iommu/vt-d: Remove unnecessary prototypes
-      iommu/vt-d: Fix indentation of goto labels
-
-Marco Bonelli (1):
-      iommu/vt-d: Add missing "__init" for rmrr_sanity_check()
-
-Miaoqian Lin (1):
-      iommu/arm-smmu: Add missing pm_runtime_disable() in qcom_iommu_device_probe
-
-Rafael J. Wysocki (1):
-      iommu/vtd: Replace acpi_bus_get_device()
-
-Robin Murphy (5):
-      iommu: Remove trivial ops->capable implementations
-      iommu/rockchip: : Use standard driver registration
-      iommu/msm: Use standard driver registration
-      iommu/iova: Improve 32-bit free space estimate
-      iommu/arm-smmu: Account for PMU interrupts
-
-Sebastian Reichel (1):
-      iommu/mediatek: Always check runtime PM status in tlb flush range callback
-
-Suravee Suthikulpanit (2):
-      iommu/amd: Improve error handling for amd_iommu_init_pci
-      iommu/amd: Improve amd_iommu_v2_exit()
-
-Vasant Hegde (3):
-      iommu/amd: Call memunmap in error path
-      iommu/amd: Clean up function declarations
-      iommu/amd: Remove unused struct fault.devid
-
-Yian Chen (1):
-      iommu/vt-d: Enable ATS for the devices in SATC table
-
-Yong Wu (4):
-      iommu/mediatek: Remove for_each_m4u in tlb_sync_all
-      iommu/mediatek: Remove the power status checking in tlb flush all
-      iommu/mediatek: Add tlb_lock in tlb_flush_all
-      iommu/mediatek: Always tlb_flush_all when each PM resume
-
-Yoshihiro Shimoda (2):
-      dt-bindings: iommu: renesas,ipmmu-vmsa: add r8a779f0 support
-      iommu/ipmmu-vmsa: Add support for R-Car Gen4
-
-YueHaibing (1):
-      iommu/vt-d: Remove unused function intel_svm_capable()
-
-Zhou Guanghui (1):
-      iommu/arm-smmu-v3: fix event handling soft lockup
-
- .../bindings/iommu/renesas,ipmmu-vmsa.yaml         |   4 +
- drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c |   2 +-
- drivers/iommu/amd/amd_iommu.h                      |   4 +-
- drivers/iommu/amd/init.c                           |  18 +-
- drivers/iommu/amd/iommu.c                          |  23 +-
- drivers/iommu/amd/iommu_v2.c                       |  37 +-
- drivers/iommu/apple-dart.c                         |  20 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c        |  45 +-
- drivers/iommu/arm/arm-smmu/arm-smmu.c              | 113 ++-
- drivers/iommu/arm/arm-smmu/arm-smmu.h              |   5 +-
- drivers/iommu/arm/arm-smmu/qcom_iommu.c            |  28 +-
- drivers/iommu/dma-iommu.c                          |   4 +
- drivers/iommu/exynos-iommu.c                       |  14 +-
- drivers/iommu/fsl_pamu_domain.c                    |  10 +-
- drivers/iommu/intel/debugfs.c                      |   6 +-
- drivers/iommu/intel/dmar.c                         |   5 +-
- drivers/iommu/intel/iommu.c                        | 999 +++------------------
- drivers/iommu/intel/pasid.c                        | 173 +---
- drivers/iommu/intel/pasid.h                        |   4 -
- drivers/iommu/intel/svm.c                          | 220 +----
- drivers/iommu/iommu.c                              | 339 +------
- drivers/iommu/iova.c                               |  78 +-
- drivers/iommu/ipmmu-vmsa.c                         |  32 +-
- drivers/iommu/msm_iommu.c                          |  74 +-
- drivers/iommu/mtk_iommu.c                          |  62 +-
- drivers/iommu/mtk_iommu_v1.c                       |  14 +-
- drivers/iommu/omap-iommu.c                         |  14 +-
- drivers/iommu/rockchip-iommu.c                     |  21 +-
- drivers/iommu/s390-iommu.c                         |  14 +-
- drivers/iommu/sprd-iommu.c                         |  18 +-
- drivers/iommu/sun50i-iommu.c                       |  18 +-
- drivers/iommu/tegra-gart.c                         |  24 +-
- drivers/iommu/tegra-smmu.c                         |  20 +-
- drivers/iommu/virtio-iommu.c                       |  14 +-
- drivers/perf/arm_smmuv3_pmu.c                      |   4 +-
- drivers/vdpa/vdpa_user/iova_domain.c               |  11 +
- include/linux/intel-iommu.h                        |  33 +-
- include/linux/intel-svm.h                          |  12 -
- include/linux/iommu.h                              | 181 ++--
- include/linux/iova.h                               |  15 +-
- include/uapi/linux/iommu.h                         | 181 ----
- 41 files changed, 662 insertions(+), 2251 deletions(-)
-
-Please pull.
-
-Thanks,
-
-	Joerg
-
---wf2zxYnOXxQkTonL
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmI8QiAACgkQK/BELZcB
-GuMstBAA2gx8tQIji33zBo7JG6ws1Fr6Lno5nXQkONomfRFl1rdcS7fCyHgC/3l9
-Vk856uIGOdUBbv4zTtUUDSpftCx/aFkEDU8jfCLNVCZN163k2cLlfQNhqUdThGTg
-Hm/lxXaId38+lg/mfBuhEAYeYi2+7SeKlQgkIZc8JXUvu+9xTnxpy3bGpyatcwGF
-Wh8aZWVP0t9y9CJXxDaqF4SiIpq8Eu1CyWHy8FhHTVRDU6qTDAkCupxR9kPJ/HDg
-0nEjryneZdtXXaI7/Nj/m8JNuENLoFra9sQtV2d26d6foYg19L5C1vuoIBNEds/Z
-0odDSBBWv2gAHeoZMw5GiNOKYMbayECSQH7ip5BpLognxlGUS4/DTAw73jIuJdz3
-F0cKt+oynNZyTcOo/QOPtsrr+ILtAb8jFyI2hnrcs/D2zqRqBDsmlWTD7zugR4iE
-u9yDhHHsFJ5ZNrilBjDypyBVY2a8yxpxtOKc0Pk9IH1RDpegFq6Ha59CD9q4XFJ9
-eDDWso131drIJXSsXRTJ9WYdz5GrruD0nPjZV+cOoD+iVb/rotA3/1elhdgKXkL6
-fq3i2hiayRk1hjevuUeu1MQNxW0US/ZD44Lgltn4SDBXHrEVAtbyYHAgYVkfa9ZE
-hPP4citd3hDpdip6Ejw+dHzNlmDxue1cPoGcdSNd9PGKQDP2sKM=
-=cgDP
------END PGP SIGNATURE-----
-
---wf2zxYnOXxQkTonL--

@@ -2,151 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4C94E686F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4554E686A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352547AbiCXSOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
+        id S1352528AbiCXSOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352542AbiCXSOQ (ORCPT
+        with ESMTP id S1347805AbiCXSOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:14:16 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB52B7168
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:44 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id k21so9463614lfe.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:44 -0700 (PDT)
+        Thu, 24 Mar 2022 14:14:04 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB5DB6E5E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:31 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id y6so3047880plg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/LSEoPoVBVnfztCSkUFcbwBfE5ukisNTx0Z0bM1jWgk=;
-        b=fBZauSq0ACQcCD0aXGuuoIgacGzWbZWvHI/yboiImq3d2gbCBsK4u0P2R6I9rA5s+1
-         llLlGyVUkbHFxwANgyrhG7OcuWCL4PearUKXNl+3bWauMSB43nTGA6zaQsGMBIOxTMat
-         Y9LYQyxU0oUnKd77In8/8H15bD1XyIFNQEVc4=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eVas7rSAou2utAAYyG+KdmDyPsGts9SfpHbo6bgzccc=;
+        b=fg0CQFG+ey99c3Kw8AMhUXok74QqW5Uri8wM4K8vYFBngy7cnH2EGVVvS1MwVRJDh8
+         FJqDB/YbdfxfDGw1AU/fqYF19SMpg4wkOrlQtNpN6zeSBgOGX33dQxj/2Wtm9O/IdlNJ
+         cKgTDTSyusZTq6+NV5sLmiX7qRTEtP/2avXv2Pju+TbbT7Hr4QLKEWykL9GZ4KQ7AALp
+         D7VEDHxTqJT3v4rz99vpvkQz/dNYHCPZh3QZeqgjZ0GgFyGF7SHV7vNnPMkecFo8pN5L
+         lXSyUMHD7NWagG0/OpCAxofnnlP47gDraXCq5QpR8whR8xYz95E+8xNrRLpnGKRYSzck
+         rWyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/LSEoPoVBVnfztCSkUFcbwBfE5ukisNTx0Z0bM1jWgk=;
-        b=WDHBadPDRFzXW85OeY1DDEatY/o256RjHJwyYNtZ8yULIZLI5x2X0edB6yscm0pi8V
-         8z1NMaho1a1qIyIlRSuMcYwjHTuNFqXCJHzMppNJAmh+IHBhCS/8C3d2MoYzMV+qnKTs
-         b1iFkwyPkjPVzpU0INDww++J5el8Nt9Hwj389M89hc0gdi/mjaIQ8+/GyfEeaBeARQGt
-         jUfGPn3as8UxusDAM3cmyDTShVbQceDrq0o/SrVHxeGk+QPspiheM77AePeZM1h/R2S1
-         U47QMrgAXLElCpvqgDrQC5n2zd8SeJVV4j43BRzoe+OkN+Odh3j9VXxMgG2lpKCGgy9u
-         divQ==
-X-Gm-Message-State: AOAM532DGhkYOCo3zloG91CiZFzsKmG1ZqRTY+N7w0hKdMCqqnJUSu5A
-        etoehN7jl5VLXT3cO2df+OEtu/2L/lwa773d2pE=
-X-Google-Smtp-Source: ABdhPJx/I2pgdPPSU+M7Q+KHoS/WEyFjjXS582zYYOx173b3iyC9F388RkLXvmw+TUvL+8eGr31W7Q==
-X-Received: by 2002:a05:6512:2395:b0:44a:33d2:b9b5 with SMTP id c21-20020a056512239500b0044a33d2b9b5mr4743483lfv.514.1648145562200;
-        Thu, 24 Mar 2022 11:12:42 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id k9-20020a192d09000000b004487dfc9d9csm415417lfj.260.2022.03.24.11.12.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 11:12:38 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id 17so7270447ljw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:12:38 -0700 (PDT)
-X-Received: by 2002:a2e:a5c4:0:b0:249:9ec3:f2b with SMTP id
- n4-20020a2ea5c4000000b002499ec30f2bmr4898966ljp.358.1648145558024; Thu, 24
- Mar 2022 11:12:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eVas7rSAou2utAAYyG+KdmDyPsGts9SfpHbo6bgzccc=;
+        b=YsAW/s1S2Cx2UtZXedzzlpMVItpAcZCCPDa7xMzpF8enj8HKAMnLjCd3aE0t2hg2Ae
+         oyJMjpyP+pMDrbO6RoJi23mvXB8hO2HlpB+eo+pgNqYOnY8kcqunPGiS1zQ9o91LeX9D
+         atV08MJlaRSrkmjG1igm94Xo+6hREcRoi/ZPa45ip+kI2VdXh3ocv9W1KbprlGFqtBX5
+         2nPvJjotk8232VOibQAzCjMHQIxsIZ9ByGftgH3vtopukBKtzQVjxwohNdmVWNnBSf8H
+         7ZyvaqltcpQzwptqGEriUBJlfZNo+YRvyzWpZOZWC0ZJJyGbKNzCyoPqByLb3TAumxke
+         nZ+A==
+X-Gm-Message-State: AOAM533KKXBabUA62qwdg3cYNkojOQ6QJwq3QllxmeOOQJKfqllM6dyf
+        16cLCoPifTR/jvk34qD2s1sy
+X-Google-Smtp-Source: ABdhPJwZHFFgB0y5nweFFiqApmDXuKr5fZr1/oRbmXVFv0+V0BJHSHh3uwGMsw3KFY4ENUbmQbgzhg==
+X-Received: by 2002:a17:902:b68c:b0:153:bd06:85ad with SMTP id c12-20020a170902b68c00b00153bd0685admr7133646pls.99.1648145551272;
+        Thu, 24 Mar 2022 11:12:31 -0700 (PDT)
+Received: from localhost.localdomain ([27.111.75.218])
+        by smtp.gmail.com with ESMTPSA id j20-20020a62e914000000b004fa3bd9bef0sm3816013pfh.110.2022.03.24.11.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 11:12:30 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] remoteproc: Don't bother checking the return value of debugfs_create*
+Date:   Thu, 24 Mar 2022 23:42:24 +0530
+Message-Id: <20220324181224.21542-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1644862280.git.legion@kernel.org> <877d8kfmdp.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <877d8kfmdp.fsf@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 24 Mar 2022 11:12:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgBB8iPd0W=MQWnQJukMAPAqgsC0QX2wwiSvcct9zu_RA@mail.gmail.com>
-Message-ID: <CAHk-=wgBB8iPd0W=MQWnQJukMAPAqgsC0QX2wwiSvcct9zu_RA@mail.gmail.com>
-Subject: Re: [GIT PULL] ipc: Bind to the ipc namespace at open time.
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Daniel Walsh <dwalsh@redhat.com>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Manfred Spraul <manfred@colorfullife.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Vasily Averin <vvs@virtuozzo.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 1:24 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> Please pull the per-namespace-ipc-sysctls-for-v5.18 tag from the git tree:
+DebugFS APIs are designed to return only the error pointers and not NULL
+in the case of failure. So these return pointers are safe to be passed on
+to the successive debugfs_create* APIs.
 
-Ugh.
+Therefore, let's just get rid of the checks.
 
-I pulled this. Then I stared at it for a long time.
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/remoteproc/remoteproc_debugfs.c | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
 
-And then I decided that this is too ugly to live.
+diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+index b5a1e3b697d9..2e2c4a31c154 100644
+--- a/drivers/remoteproc/remoteproc_debugfs.c
++++ b/drivers/remoteproc/remoteproc_debugfs.c
+@@ -386,16 +386,8 @@ void rproc_remove_trace_file(struct dentry *tfile)
+ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
+ 				       struct rproc_debug_trace *trace)
+ {
+-	struct dentry *tfile;
+-
+-	tfile = debugfs_create_file(name, 0400, rproc->dbg_dir, trace,
++	return debugfs_create_file(name, 0400, rproc->dbg_dir, trace,
+ 				    &trace_rproc_ops);
+-	if (!tfile) {
+-		dev_err(&rproc->dev, "failed to create debugfs trace entry\n");
+-		return NULL;
+-	}
+-
+-	return tfile;
+ }
+ 
+ void rproc_delete_debug_dir(struct rproc *rproc)
+@@ -411,8 +403,6 @@ void rproc_create_debug_dir(struct rproc *rproc)
+ 		return;
+ 
+ 	rproc->dbg_dir = debugfs_create_dir(dev_name(dev), rproc_dbg);
+-	if (!rproc->dbg_dir)
+-		return;
+ 
+ 	debugfs_create_file("name", 0400, rproc->dbg_dir,
+ 			    rproc, &rproc_name_ops);
+@@ -430,11 +420,8 @@ void rproc_create_debug_dir(struct rproc *rproc)
+ 
+ void __init rproc_init_debugfs(void)
+ {
+-	if (debugfs_initialized()) {
++	if (debugfs_initialized())
+ 		rproc_dbg = debugfs_create_dir(KBUILD_MODNAME, NULL);
+-		if (!rproc_dbg)
+-			pr_err("can't create debugfs dir\n");
+-	}
+ }
+ 
+ void __exit rproc_exit_debugfs(void)
+-- 
+2.25.1
 
-I'm sorry. I think Alexey has probably spent a fair amount of time on
-it, but I really think the sysctl code needs to be cleaned up way more
-than this.
-
-The old code was horribly hacky too, but that setup_ipc_sysctls() (and
-setup_mq_sysctls()) thing that copies the whole sysctls table, and
-then walks it entry by entry to modify it, is just too ugly for words.
-
-And then it hides things in .extra1, and because it does that it can't
-use the normal "extra1 and extra2 contains the limits" so then at
-write() time it copies it into a local one AGAIN only to set the
-limits back so that it can call the normal routines again.
-
-Not ok.
-
-Yes, yes, the old code did some similar things - to set the 'data'
-pointer. That was disgusting too. Don't get me wrong - the existing
-code was nasty too. But this took nasty code, and doubled down on it.
-
-I really think this is a fundamental problem, and needs a more
-fundamental fix than adding more and more of these kinds of nasty
-hacks.
-
-And yes, that fundamental fix is almost certainly to pass in 'struct
-cred *' to all those sysctl helper functions.
-
-Then, when you do the actual 'sysctl()' system calls, you pass in
-'current_cred()".
-
-And the /proc users would pass in file->f_cred.
-
-And yes, that patch might be quite messy, because we have quite a lot
-of those random .proc_handler users.
-
-But *most* of them by far (at least in random code) use the standard
-proc_dointvec_minmax() and friends, and won't even notice.
-
-And then the ones that are about namespace issues will have to
-continue to do the nasty "make a copy and update the data pointer",
-but *MAYBE* we could also introduce the notion of an "offset" to those
-proc_dointvec_minmax() things to help them out (and at least avoid the
-"make a copy" thing).
-
-Anyway, I really think we must not make that sysctl code even uglier
-than it is today, and I think we need to move towards a model that
-actually makes sense. And that "pass in the right cred" is the only
-sensible model I can see.
-
-I haven't tried to create such a patch, and maybe Alexey already tried
-to do something like that and it turned out to be too ugly for words
-and that's why these nasty patches happened.
-
-But at least for now, I can't with a good conscience pull this.
-
-Sorry,
-                   Linus

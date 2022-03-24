@@ -2,123 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9014E5F4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03A44E5F20
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348520AbiCXH13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S1348404AbiCXHMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiCXH11 (ORCPT
+        with ESMTP id S1348396AbiCXHMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:27:27 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EFA986F4;
-        Thu, 24 Mar 2022 00:25:56 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r13so7327601ejd.5;
-        Thu, 24 Mar 2022 00:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XVilrVPHAzNXojXt+GjJOL6H62xOPCwBdLhdn2DWXIM=;
-        b=otovnpD5nrCVnZOsLSqe8I1OIJRwaeI6Wprpx5/aY+tLRP2xckrtLUD/siXLU0Txf3
-         21HyGWc+9cV2Rn0XxJyTxE6UL5SEDgTZw98y9gKL3wnDu0AEcS/eFNTmcJm4p2Y8Bfg9
-         QTEjKShf9Y8EAQ/C9rEPAfjempmv8JNNth7q8lGJ6Vr2y90i4WZVXozSuNiDgHBgcd7U
-         ZjfRmpiI6Ou7+clTpm9JLqeDfSaHFj4Eev5TNir7uoSlHyP0sxtAG35Kuy+WV0TsirBo
-         0XCSnJKarnaRYK/EGYD4aYAaWI1Hx+7q/SleHBCKJHXoL+NxnOez9BUQc2A4WYp4otFp
-         UM+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XVilrVPHAzNXojXt+GjJOL6H62xOPCwBdLhdn2DWXIM=;
-        b=jfzqnxW9w4TZhkya9vuopczhWxzMhx4XRtO7Cb7Gi/ZsDR5QWcRZbO+3XtPczBrqal
-         KJbw1kHdCQrtRgFD7qv8HdThMsYJkDMI1v45B+OmdvyKLButgG2CTw8FHBubRX3RQ1o4
-         WE2Dg0VAXT4HO37G1ASAvJVBBkN6Af7d2P91ttPTjK+Otu+NrPVmVOw1xWGU8rwbCPre
-         Ng6zWd5TyD5yhJrA8EdBDPs/AEeo0gyJ4hzrYqxiPrQYIkYhGux9BCf4RbALXWkiv6X9
-         vrH+cTe7u4klWYrw1XWEJAtHGtO8RsfmE8SPCIYI3vqcZbmsk73qWje0buwmDgqrZsJc
-         UVCQ==
-X-Gm-Message-State: AOAM531M3XDF/QkWmEeauynp2NfFLA1jjgaoyjgxr+DMWkvXLODsUX6s
-        EIeO1bVemxEFAjh4mpZZ0XA=
-X-Google-Smtp-Source: ABdhPJzRiymZM6GpooNPxU4tvHwmcChIBJjf+hQ5ofKWj78Tx4y6dAWhErrocnZuydc4KL0kfbKuNg==
-X-Received: by 2002:a17:907:8a25:b0:6d7:d59:6912 with SMTP id sc37-20020a1709078a2500b006d70d596912mr4275772ejc.259.1648106754763;
-        Thu, 24 Mar 2022 00:25:54 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id hg11-20020a1709072ccb00b006cee4fb36c7sm770476ejc.64.2022.03.24.00.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:25:54 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] spi: spidev: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:25:34 +0100
-Message-Id: <20220324072534.63420-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 24 Mar 2022 03:12:16 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6380E98586
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:10:44 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KPGYJ60bMzfZH9;
+        Thu, 24 Mar 2022 15:09:08 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 24 Mar
+ 2022 15:10:41 +0800
+From:   Zheng Bin <zhengbin13@huawei.com>
+To:     <emma@anholt.net>, <mripard@kernel.org>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <limingming.li@huawei.com>, <tangyizhou@huawei.com>
+Subject: [PATCH -next] drm/vc4: Fix build error when CONFIG_DRM_VC4=y && CONFIG_RASPBERRYPI_FIRMWARE=m
+Date:   Thu, 24 Mar 2022 15:25:42 +0800
+Message-ID: <20220324072542.1238122-1-zhengbin13@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+If CONFIG_DRM_VC4=y, CONFIG_RASPBERRYPI_FIRMWARE=m, CONFIG_COMPILE_TEST=n,
+bulding fails:
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+drivers/gpu/drm/vc4/vc4_drv.o: In function `vc4_drm_bind':
+vc4_drv.c:(.text+0x320): undefined reference to `rpi_firmware_get'
+vc4_drv.c:(.text+0x320): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `rpi_firmware_get'
+vc4_drv.c:(.text+0x34c): undefined reference to `rpi_firmware_property'
+vc4_drv.c:(.text+0x34c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `rpi_firmware_property'
+vc4_drv.c:(.text+0x354): undefined reference to `rpi_firmware_put'
+vc4_drv.c:(.text+0x354): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `rpi_firmware_put'
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+Make DRM_VC4 depends on RASPBERRYPI_FIRMWARE to fix this.
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Fixes: c406ad5e4a85 ("drm/vc4: Notify the firmware when DRM is in charge")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
 ---
- drivers/spi/spidev.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/vc4/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index a5cceca8b82b..2c5e685826ad 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -561,19 +561,20 @@ spidev_compat_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 
- static int spidev_open(struct inode *inode, struct file *filp)
- {
--	struct spidev_data	*spidev;
-+	struct spidev_data	*spidev = NULL, *iter;
- 	int			status = -ENXIO;
- 
- 	mutex_lock(&device_list_lock);
- 
--	list_for_each_entry(spidev, &device_list, device_entry) {
--		if (spidev->devt == inode->i_rdev) {
-+	list_for_each_entry(iter, &device_list, device_entry) {
-+		if (iter->devt == inode->i_rdev) {
- 			status = 0;
-+			spidev = iter;
- 			break;
- 		}
- 	}
- 
--	if (status) {
-+	if (!spidev) {
- 		pr_debug("spidev: nothing for minor %d\n", iminor(inode));
- 		goto err_find_dev;
- 	}
-
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
--- 
-2.25.1
+diff --git a/drivers/gpu/drm/vc4/Kconfig b/drivers/gpu/drm/vc4/Kconfig
+index de3424fed2fc..640907945b5b 100644
+--- a/drivers/gpu/drm/vc4/Kconfig
++++ b/drivers/gpu/drm/vc4/Kconfig
+@@ -1,7 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config DRM_VC4
+ 	tristate "Broadcom VC4 Graphics"
+-	depends on ARCH_BCM || ARCH_BCM2835 || COMPILE_TEST
++	depends on ((ARCH_BCM || ARCH_BCM2835) && \
++		    RASPBERRYPI_FIRMWARE) || COMPILE_TEST
+ 	depends on DRM
+ 	depends on SND && SND_SOC
+ 	depends on COMMON_CLK
+--
+2.31.1
 

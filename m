@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9621B4E657B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA804E6585
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 15:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243204AbiCXOmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 10:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S242275AbiCXOn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 10:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242275AbiCXOmX (ORCPT
+        with ESMTP id S1351220AbiCXOnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 10:42:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503D4AA029
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:40:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D03AF61725
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:40:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DC5EC340F2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 14:40:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648132851;
-        bh=mfKsxdtkIpZ9J3FZ0Q9caaL1BwUswSf9HAdn4/BSG1Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PJlndPChWSVjMT+05twdCE+dwAM+ZQXaLSP23KhAv3NtB2xNyRV7rSS7CkrpdvZr3
-         EUyC3TMQyw/LMJWW9r1lSlO/SZ6hXnlwI1YI8USiAXkNRLsy0ShiTb6AXTFILwzMtZ
-         3WATbKCfzNelgIfNNloixiGhJBDYoVoBnxG8k7Eb3N8vFYgFbx2e8dg1USZEKeDMuI
-         Dlw/xsAN5z9FQcQpvmh1DlU1UlvHHRwM1tq6zCGjU+ySO/LyHrPIbmcwQPDRlCo1O4
-         YyiwkEm4JhXD2Z1xwf5DmI84AZrRoNh/wvscxBa9K2LPa65dimij9PYIrFxAHPE5/7
-         W83VwhzpVGBpw==
-Received: by mail-yb1-f180.google.com with SMTP id g24so8765864ybj.13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:40:51 -0700 (PDT)
-X-Gm-Message-State: AOAM532qoDrswE9xRyfeRnAhlAjJlDjSKp1DEqyWoRN2A+vN0A9Fzt+0
-        CjGkHk9G/f/6cOj2bSisA1d5ZGtnQl1Nw1ChmrM=
-X-Google-Smtp-Source: ABdhPJzMDwPU76J+zFlMMPfmXcq9mBNB7As2MWYDWUrV5yygmlG5AQRwIHmkTi901CBjGTBHEkJx+ty4IzS0p2LWTm0=
-X-Received: by 2002:a25:d9c5:0:b0:633:8d44:ee75 with SMTP id
- q188-20020a25d9c5000000b006338d44ee75mr4609979ybg.403.1648132850293; Thu, 24
- Mar 2022 07:40:50 -0700 (PDT)
+        Thu, 24 Mar 2022 10:43:04 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8518CAA02A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:41:31 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id r7so5832023wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 07:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=Nkf6HJTCG+OAuqULdufe22oqKualm2SIRycYw6CQ/jg=;
+        b=rSw/ho8JqMrlsVZkqkd1VvZH49gGpEa3MnrBx3dKKndUub5bbC+zwNf14RXbfe39j0
+         Z+9oW8ewPDZGUbsrcTMcaZ5x7U2ftP+jlMTJ68T/b5PU9XCgAlnewPoWP019p6wX1O2B
+         LBSR3G7RI5BDdlrI/kyjCVE27Y9cXHazCsrxrQlkGDJjDvuehpdudVc+f4rxlk7jgNKK
+         BxhBO2x8643Y0b3gjTQczhHvrrym0SIxMQqq9yUc10hjJ6Yltmv75atixU3dsQ+8+6oo
+         s8Y45CE655Yblt0Zr+Ebg9Arhsxf2VMocFWBY0lilwQkjaKn+qkfVELKxszxUOaS3U7f
+         ghrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=Nkf6HJTCG+OAuqULdufe22oqKualm2SIRycYw6CQ/jg=;
+        b=uW/PqlpO76FilbPYO70R/KkQmf5v07as25/BP7HCGbhZFaHx7Mfr/07VvDPeAr1OqU
+         UKgezecAYKNixeic1F2oZL2DoBQZu0ugOWGp0iipVO65tnj//v+2YvB39mnqWzY3kmDt
+         xVlrY8SNH8ltj3sEuJuEGrFm33udOotLyUEOj4dssvIA1aUjuQ33a1C21pVALrLGYEol
+         Vp1oqg2YDZ5qKezBJYxwNWJlz6L28p274qcW2I2Z/i1TrFK25wRXdPxN6qdXWLpsHsUq
+         k3qu8fLIHo0VBnTHaeI3anDIxdJmK4cI0bmHMfMs45g4APm84wmuW4hiuGq+GDDgwDj5
+         Hayg==
+X-Gm-Message-State: AOAM531O7VQtaFVhKTsLhaXWNph0P4MAJX0yaotgq71kBxbt7CDPCe2z
+        GKKIaemz7+QbXw5cDyiteINndQ==
+X-Google-Smtp-Source: ABdhPJwwzqAXtbAruSTKmAhmyTNCHeMmcClYZAvh3ysqyqRhXGIuacRT4TVScrg9SJMum5mGtsc1oA==
+X-Received: by 2002:a05:6000:18a8:b0:203:eb58:9733 with SMTP id b8-20020a05600018a800b00203eb589733mr4936806wri.151.1648132890014;
+        Thu, 24 Mar 2022 07:41:30 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm2290487wmh.31.2022.03.24.07.41.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 07:41:29 -0700 (PDT)
+Message-ID: <8c1a9f2f-2000-c5be-0720-38fcea0394a3@linaro.org>
+Date:   Thu, 24 Mar 2022 14:41:28 +0000
 MIME-Version: 1.0
-References: <20220324071048.59659-1-jakobkoschel@gmail.com>
-In-Reply-To: <20220324071048.59659-1-jakobkoschel@gmail.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 24 Mar 2022 16:40:23 +0200
-X-Gmail-Original-Message-ID: <CAFCwf11bn0-vyLGnkm_5q729L1F_mNAfcA7VRDgSk7by-h1Kyw@mail.gmail.com>
-Message-ID: <CAFCwf11bn0-vyLGnkm_5q729L1F_mNAfcA7VRDgSk7by-h1Kyw@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: replace usage of found with dedicated list
- iterator variable
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ofir Bitton <obitton@habana.ai>,
-        Dani Liberman <dliberman@habana.ai>,
-        Ohad Sharabi <osharabi@habana.ai>,
-        farah kassabri <fkassabri@habana.ai>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3] wcn36xx: Implement tx_rate reporting
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Edmond Gagnon <egagnon@squareup.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Cc:     Benjamin Li <benl@squareup.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318195804.4169686-3-egagnon@squareup.com>
+ <20220323214533.1951791-1-egagnon@squareup.com>
+ <9c90300e-ac2d-be53-a7c9-7b00a059204e@nexus-software.ie>
+In-Reply-To: <9c90300e-ac2d-be53-a7c9-7b00a059204e@nexus-software.ie>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,66 +80,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 9:11 AM Jakob Koschel <jakobkoschel@gmail.com> wrote:
->
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
->
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
->
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
->
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  drivers/misc/habanalabs/common/command_submission.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
-> index 0a4ef13d9ac4..4927749e439c 100644
-> --- a/drivers/misc/habanalabs/common/command_submission.c
-> +++ b/drivers/misc/habanalabs/common/command_submission.c
-> @@ -405,8 +405,7 @@ static void staged_cs_put(struct hl_device *hdev, struct hl_cs *cs)
->
->  static void cs_handle_tdr(struct hl_device *hdev, struct hl_cs *cs)
->  {
-> -       bool next_entry_found = false;
-> -       struct hl_cs *next, *first_cs;
-> +       struct hl_cs *next = NULL, *iter, *first_cs;
->
->         if (!cs_needs_timeout(cs))
->                 return;
-> @@ -441,13 +440,13 @@ static void cs_handle_tdr(struct hl_device *hdev, struct hl_cs *cs)
->         spin_lock(&hdev->cs_mirror_lock);
->
->         /* queue TDR for next CS */
-> -       list_for_each_entry(next, &hdev->cs_mirror_list, mirror_node)
-> -               if (cs_needs_timeout(next)) {
-> -                       next_entry_found = true;
-> +       list_for_each_entry(iter, &hdev->cs_mirror_list, mirror_node)
-> +               if (cs_needs_timeout(iter)) {
-> +                       next = iter;
->                         break;
->                 }
->
-> -       if (next_entry_found && !next->tdr_active) {
-> +       if (next && !next->tdr_active) {
->                 next->tdr_active = true;
->                 schedule_delayed_work(&next->work_tdr, next->timeout_jiffies);
->         }
->
-> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
-> --
-> 2.25.1
->
-This patch is
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+On 24/03/2022 12:42, Bryan O'Donoghue wrote:
+> On 23/03/2022 21:45, Edmond Gagnon wrote:
+>> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
+>> rate:
+>>
+>> root@linaro-developer:~# iw wlan0 link
+>> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
+>>          SSID: SQ-DEVICETEST
+>>          freq: 5200
+>>          RX: 4141 bytes (32 packets)
+>>          TX: 2082 bytes (15 packets)
+>>          signal: -77 dBm
+>>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>>          tx bitrate: 6.0 MBit/s
+>>
+>>          bss flags:      short-slot-time
+>>          dtim period:    1
+>>          beacon int:     100
+>>
+>> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
+>> firmware message and reports it via ieee80211_ops::sta_statistics.
+>>
+>> root@linaro-developer:~# iw wlan0 link
+>> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
+>>          SSID: SQ-DEVICETEST
+>>          freq: 5700
+>>          RX: 26788094 bytes (19859 packets)
+>>          TX: 1101376 bytes (12119 packets)
+>>          signal: -75 dBm
+>>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>>          tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
+>>
+>>          bss flags:      short-slot-time
+>>          dtim period:    1
+>>          beacon int:     100
+>>
+>> Tested on MSM8939 with WCN3680B running firmware 
+>> CNSS-PR-2-0-1-2-c1-00083,
+>> and verified by sniffing frames over the air with Wireshark to ensure the
+>> MCS indices match.
+>>
+>> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
+>> Reviewed-by: Benjamin Li <benl@squareup.com>
+>> ---
+>>
+>> Changes in v3:
+>>   - Refactored to report tx_rate via ieee80211_ops::sta_statistics
+>>   - Dropped get_sta_index patch
+>>   - Addressed style comments
+>> Changes in v2:
+>>   - Refactored to use existing wcn36xx_hal_get_stats_{req,rsp}_msg 
+>> structs.
+>>   - Added more notes about testing.
+>>   - Reduced reporting interval to 3000msec.
+>>   - Assorted type and memory safety fixes.
+>>   - Make wcn36xx_smd_get_stats friendlier to future message implementors.
+>>
+>>   drivers/net/wireless/ath/wcn36xx/hal.h  |  7 +++-
+>>   drivers/net/wireless/ath/wcn36xx/main.c | 16 +++++++
+>>   drivers/net/wireless/ath/wcn36xx/smd.c  | 56 +++++++++++++++++++++++++
+>>   drivers/net/wireless/ath/wcn36xx/smd.h  |  2 +
+>>   drivers/net/wireless/ath/wcn36xx/txrx.c | 29 +++++++++++++
+>>   drivers/net/wireless/ath/wcn36xx/txrx.h |  1 +
+>>   6 files changed, 110 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/wireless/ath/wcn36xx/hal.h 
+>> b/drivers/net/wireless/ath/wcn36xx/hal.h
+>> index 2a1db9756fd5..46a49f0a51b3 100644
+>> --- a/drivers/net/wireless/ath/wcn36xx/hal.h
+>> +++ b/drivers/net/wireless/ath/wcn36xx/hal.h
+>> @@ -2626,7 +2626,12 @@ enum tx_rate_info {
+>>       HAL_TX_RATE_SGI = 0x8,
+>>       /* Rate with Long guard interval */
+>> -    HAL_TX_RATE_LGI = 0x10
+>> +    HAL_TX_RATE_LGI = 0x10,
+>> +
+>> +    /* VHT rates */
+>> +    HAL_TX_RATE_VHT20  = 0x20,
+>> +    HAL_TX_RATE_VHT40  = 0x40,
+>> +    HAL_TX_RATE_VHT80  = 0x80,
+>>   };
+>>   struct ani_global_class_a_stats_info {
+>> diff --git a/drivers/net/wireless/ath/wcn36xx/main.c 
+>> b/drivers/net/wireless/ath/wcn36xx/main.c
+>> index b545d4b2b8c4..fc76b090c39f 100644
+>> --- a/drivers/net/wireless/ath/wcn36xx/main.c
+>> +++ b/drivers/net/wireless/ath/wcn36xx/main.c
+>> @@ -1400,6 +1400,21 @@ static int wcn36xx_get_survey(struct 
+>> ieee80211_hw *hw, int idx,
+>>       return 0;
+>>   }
+>> +static void wcn36xx_sta_statistics(struct ieee80211_hw *hw, struct 
+>> ieee80211_vif *vif,
+>> +                   struct ieee80211_sta *sta, struct station_info 
+>> *sinfo)
+> 
+> 
+> Consider running this through checkpatch.pl and fixing most of the 
+> complaints, use your discretion.
+> 
+> scripts/checkpatch.pl --strict 
+> ~/Development/patches/linux/wifi/v3-wcn36xx-Implement-tx_rate-reporting.patch 
+> 
+> 
+> static void wcn36xx_sta_statistics(struct ieee80211_hw *hw,
+>                                     struct ieee80211_vif *vif,
+>                                     struct ieee80211_sta *sta,
+>                                     struct station_info *sinfo)
+> 
+>> +{
+>> +    struct wcn36xx *wcn;
+>> +    u8 sta_index;
+>> +    int status = 0;
+>> +
+>> +    wcn = hw->priv;
+>> +    sta_index = get_sta_index(vif, wcn36xx_sta_to_priv(sta));
+>> +    status = wcn36xx_smd_get_stats(wcn, sta_index, 
+>> HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
+> 
+> status = wcn36xx_smd_get_stats(wcn, sta_index,
+>                                 HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
+> 
+> 
+>> +
+>> +    if (status)
+>> +        wcn36xx_err("wcn36xx_smd_get_stats failed\n");
+>> +}
+>> +
+>>   static const struct ieee80211_ops wcn36xx_ops = {
+>>       .start            = wcn36xx_start,
+>>       .stop            = wcn36xx_stop,
+>> @@ -1423,6 +1438,7 @@ static const struct ieee80211_ops wcn36xx_ops = {
+>>       .set_rts_threshold    = wcn36xx_set_rts_threshold,
+>>       .sta_add        = wcn36xx_sta_add,
+>>       .sta_remove        = wcn36xx_sta_remove,
+>> +    .sta_statistics        = wcn36xx_sta_statistics,
+>>       .ampdu_action        = wcn36xx_ampdu_action,
+>>   #if IS_ENABLED(CONFIG_IPV6)
+>>       .ipv6_addr_change    = wcn36xx_ipv6_addr_change,
+>> diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c 
+>> b/drivers/net/wireless/ath/wcn36xx/smd.c
+>> index caeb68901326..8f9aa892e5ec 100644
+>> --- a/drivers/net/wireless/ath/wcn36xx/smd.c
+>> +++ b/drivers/net/wireless/ath/wcn36xx/smd.c
+>> @@ -2627,6 +2627,61 @@ int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 
+>> tid, u8 direction, u8 sta_index)
+>>       return ret;
+>>   }
+>> +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32 
+>> stats_mask,
+>> +              struct station_info *sinfo)
+>> +{
+>> +    struct wcn36xx_hal_stats_req_msg msg_body;
+>> +    struct wcn36xx_hal_stats_rsp_msg *rsp;
+>          struct ani_global_class_a_stats_info *stats_info;
+>> +    void *rsp_body;
+>> +    int ret = 0;
+>> +
+>> +    if (stats_mask & ~HAL_GLOBAL_CLASS_A_STATS_INFO) {
+>> +        wcn36xx_err("stats_mask 0x%x contains unimplemented types\n",
+>> +                stats_mask);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    mutex_lock(&wcn->hal_mutex);
+>> +    INIT_HAL_MSG(msg_body, WCN36XX_HAL_GET_STATS_REQ);
+>> +
+>> +    msg_body.sta_id = sta_index;
+>> +    msg_body.stats_mask = stats_mask;
+>> +
+>> +    PREPARE_HAL_BUF(wcn->hal_buf, msg_body);
+>> +
+>> +    ret = wcn36xx_smd_send_and_wait(wcn, msg_body.header.len);
+>> +    if (ret) {
+>> +        wcn36xx_err("sending hal_get_stats failed\n");
+>> +        goto out;
+>> +    }
+>> +
+>> +    ret = wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len);
+>> +    if (ret) {
+>> +        wcn36xx_err("hal_get_stats response failed err=%d\n", ret);
+>> +        goto out;
+>> +    }
+>> +
+>> +    rsp = (struct wcn36xx_hal_stats_rsp_msg *)wcn->hal_buf;
+>> +    rsp_body = (wcn->hal_buf + sizeof(struct 
+>> wcn36xx_hal_stats_rsp_msg));
+>> +
+>> +    if (rsp->stats_mask != stats_mask) {
+>> +        wcn36xx_err("stats_mask 0x%x differs from requested 0x%x\n",
+>> +                rsp->stats_mask, stats_mask);
+>> +        goto out;
+>> +    }
+>> +
+> If you take a pointer and cast it, then you won't have this very long 
+> line with the cast
+> 
+>          stats_info = (struct ani_global_class_a_stats_info *)rsp_body;
+>> +    if (rsp->stats_mask & HAL_GLOBAL_CLASS_A_STATS_INFO) {
+>> +        wcn36xx_process_tx_rate((struct ani_global_class_a_stats_info 
+>> *)rsp_body,
+>> +                    &sinfo->txrate);
+>                  wcn36xx_process_tx_rate(stats_info, &sinfo->txrate);
+> 
+> 
+> Other than that LGTM
+> 
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-Applied to -next.
-
-Thanks,
-Oded
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>

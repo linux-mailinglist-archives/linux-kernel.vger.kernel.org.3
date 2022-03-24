@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339904E5F2E
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3454E5F2F
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348381AbiCXHQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S1348441AbiCXHQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239174AbiCXHQJ (ORCPT
+        with ESMTP id S1348439AbiCXHQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:16:09 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CA6646D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:14:37 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bg10so7297484ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:14:37 -0700 (PDT)
+        Thu, 24 Mar 2022 03:16:44 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D464E186E3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:15:12 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id r13so7286534ejd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=J6lrvdSEUetE9f4aqDoqbIRlxE+np5nKDc0gW86buHs=;
-        b=BYGpdSnkIMbfhRc8kaBxXFHjlhAfWcFFWa0bEzhDAvoQIEkdpolJZtniqHq20pA/1W
-         PYwKJW+ClS/uZ2QpXbBUVNG0lFBbgQ27WqgI39Qxi46wmIPoQaYUTcd+ymAS//bEzLjP
-         6MwMRTWpeOG7gH+tiCKkHc9HdWZME1ucLvImxbEX5LRxBG+dj+mzDe4W3YoxcCtgXxmX
-         xPPoA96prsX7QP6eIdWQOC8EB4Hd+U2KjsOc3o4aRUC+y33O76E3Swy6+rRxNFrRXKkB
-         Qvq3W9PRagTiaXWVoguClH+503cZU2ExoGINvNtYWVTprKEn4ss2eVW7GS9Q7d8yKN9P
-         pwxA==
+        bh=zkIzcEi1qH2OtuZqABo8GJfJ+wmDwLruJeazIXQywV4=;
+        b=BlF5osJ2E5wrXcjQGPPI7WJs6Gd9NF1iKFe/7trbek8m6nCZtxzYSZRiXd9W79x4uS
+         FuLJZ1UUID8lSTNrv3IkiOjRQ0qmyMNljRDKZQ9ofEd2QF13DBAOhB8LuOWDi/QBAEAQ
+         5fsay7vUo23vFdnVW7+zDE+nk1yH5og4eRLjSEnEMG6crTFuGnxXWfOPQu4IOqj7wCwD
+         Sbz+Pk5QsfaEU8nkfqZ0VQNW//5LsSEdAg25K/fX+tZpVDTDAp2nyqaNZME8NTaUnp1Z
+         WMtWWBajPVJ+npThJvtc0qlzdJG5NcyrJNe9mZVgP9TpIs1Du5mHwUIbggA0igjEK78X
+         nRsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=J6lrvdSEUetE9f4aqDoqbIRlxE+np5nKDc0gW86buHs=;
-        b=a2ec9uzGPd4GFOVvZvInWcT35wjTfH7KqGK0uPSo+kK738yOEhhTSEOJ6qbwJuMoHS
-         YO5tHBG+tT3zvQS86HsJbooXcPJkyQSFcYBCae8cmGhIAlUq1hvhYvjmORM9RMlzbU4n
-         SnOrSWMXhaIN/fSosOnOMBabpDNbP3qtm1t9tt9EtRkM6BCQwx/NtXNLEUjClNkiVQ6R
-         t43y1UlcDmbHHM31Xs+UHVAobE7McvjqQyIvqIujIxeTawuKp/YFy13uI6ZjCK5hGC5V
-         edxGSZbaGZhOEVU8o5ed5p2jPoMvKoA/s32dy4NCpjXIT1VSz19yUx19eGGYigOZoKsx
-         bzmA==
-X-Gm-Message-State: AOAM530fLOZZzqYHmsVsPjUDj03MhnZm1FiQ3k+o/ry2rA37mQm9NrqN
-        Xb1px5CKdO+s8Fg3aU8Gie4=
-X-Google-Smtp-Source: ABdhPJwkVaX+0y4adZtVlgn7Oow0tRxugS2OUiLzMSpfOFq3bD6XvOPnJrVTskXGT7bNFbdLWNsunQ==
-X-Received: by 2002:a17:906:4fcb:b0:6e0:55b7:179 with SMTP id i11-20020a1709064fcb00b006e055b70179mr4381103ejw.159.1648106076148;
-        Thu, 24 Mar 2022 00:14:36 -0700 (PDT)
+        bh=zkIzcEi1qH2OtuZqABo8GJfJ+wmDwLruJeazIXQywV4=;
+        b=isLPUr2Y5s9Ojknwh8CBE85PzrOivrqgb2rP4fE7f1ajR4p8GI3GcaA3ZuSJbAQOs9
+         IHDH18kLI71gJhoQ1n/0Pj43JIqQAPBZ6UcopirOLxu4KNB68QzSkUQeAAbDgk7+75G9
+         s1taDsvcUFkPloBxA1xGH6h+TowEOBRwMVtUbtDRVYyRFatOG+PwYDlVBLHz5cSCJtzj
+         P3Y2W+ZJmNTYb8fz4wLk+TrDybSUq8EvAePQxe/i1pCggjGJUcxewfMZJ9Dbhmi6TZj+
+         IZXNTeKonp7DvkEstGlFn5Izc86wUol+rUJ58UCNPqI2qX5KJAVGV5m1Efh298oW0hgB
+         ir+Q==
+X-Gm-Message-State: AOAM530x48k89F7yxvP59vnOzJ5iUDEYs0cak5cbk9XX/l0H5NEmb515
+        z8rjkvi96RqrqmQgBXXCdlCaZjR7EPBmFg==
+X-Google-Smtp-Source: ABdhPJxEjkhMTB7hmnRB9K7JMKxwds5soeieMEZZQa4YKfW3GInbKmOUnLunsTdqIazTimUeXi0pUg==
+X-Received: by 2002:a17:906:64ca:b0:6e0:1648:571c with SMTP id p10-20020a17090664ca00b006e01648571cmr4068208ejn.477.1648106111323;
+        Thu, 24 Mar 2022 00:15:11 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id z13-20020a17090674cd00b006df78d85eabsm764705ejl.111.2022.03.24.00.14.35
+        by smtp.googlemail.com with ESMTPSA id hg11-20020a1709072ccb00b006cee4fb36c7sm760780ejc.64.2022.03.24.00.15.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:14:35 -0700 (PDT)
+        Thu, 24 Mar 2022 00:15:10 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] lib/logic_iomem: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:14:12 +0100
-Message-Id: <20220324071412.60437-1-jakobkoschel@gmail.com>
+Subject: [PATCH] mfd: dln2: replace usage of found with dedicated list iterator variable
+Date:   Thu, 24 Mar 2022 08:14:51 +0100
+Message-Id: <20220324071451.60616-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -86,49 +84,43 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- lib/logic_iomem.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/mfd/dln2.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/lib/logic_iomem.c b/lib/logic_iomem.c
-index 8c3365f26e51..62426a6f8103 100644
---- a/lib/logic_iomem.c
-+++ b/lib/logic_iomem.c
-@@ -86,20 +86,20 @@ static void real_iounmap(volatile void __iomem *addr)
- void __iomem *ioremap(phys_addr_t offset, size_t size)
+diff --git a/drivers/mfd/dln2.c b/drivers/mfd/dln2.c
+index 852129ea0766..741e8ae2d89d 100644
+--- a/drivers/mfd/dln2.c
++++ b/drivers/mfd/dln2.c
+@@ -163,23 +163,22 @@ EXPORT_SYMBOL(dln2_register_event_cb);
+ void dln2_unregister_event_cb(struct platform_device *pdev, u16 id)
  {
- 	void __iomem *ret = NULL;
--	struct logic_iomem_region *rreg, *found = NULL;
-+	struct logic_iomem_region *rreg = NULL, *iter;
- 	int i;
+ 	struct dln2_dev *dln2 = dev_get_drvdata(pdev->dev.parent);
+-	struct dln2_event_cb_entry *i;
++	struct dln2_event_cb_entry *i = NULL, *iter;
+ 	unsigned long flags;
+-	bool found = false;
  
- 	mutex_lock(&regions_mtx);
--	list_for_each_entry(rreg, &regions_list, list) {
--		if (rreg->res->start > offset)
-+	list_for_each_entry(iter, &regions_list, list) {
-+		if (iter->res->start > offset)
- 			continue;
--		if (rreg->res->end < offset + size - 1)
-+		if (iter->res->end < offset + size - 1)
- 			continue;
--		found = rreg;
-+		rreg = iter;
- 		break;
+ 	spin_lock_irqsave(&dln2->event_cb_lock, flags);
+ 
+-	list_for_each_entry(i, &dln2->event_cb_list, list) {
+-		if (i->id == id) {
+-			list_del_rcu(&i->list);
+-			found = true;
++	list_for_each_entry(iter, &dln2->event_cb_list, list) {
++		if (iter->id == id) {
++			list_del_rcu(&iter->list);
++			i = iter;
+ 			break;
+ 		}
  	}
  
--	if (!found)
-+	if (!rreg)
- 		goto out;
+ 	spin_unlock_irqrestore(&dln2->event_cb_lock, flags);
  
- 	for (i = 0; i < MAX_AREAS; i++) {
-@@ -108,7 +108,7 @@ void __iomem *ioremap(phys_addr_t offset, size_t size)
- 		if (mapped_areas[i].ops)
- 			continue;
- 
--		offs = rreg->ops->map(offset - found->res->start,
-+		offs = rreg->ops->map(offset - rreg->res->start,
- 				      size, &mapped_areas[i].ops,
- 				      &mapped_areas[i].priv);
- 		if (offs < 0) {
+-	if (found) {
++	if (i) {
+ 		synchronize_rcu();
+ 		kfree(i);
+ 	}
 
 base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 

@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2014E6B24
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 00:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 395CF4E6B30
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 00:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355725AbiCXXUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 19:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S1351313AbiCXXVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 19:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347655AbiCXXUp (ORCPT
+        with ESMTP id S1355752AbiCXXVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 19:20:45 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7658953A56
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id w21so5033452pgm.7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
+        Thu, 24 Mar 2022 19:21:33 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E16554B3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:20:01 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id v4so6024199pjh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=O+W+ADoWLoOEU6HBF2tydQ14SzjI5R4yTLibkuVNSzI=;
-        b=j81dgt71J0dbVcOzA5AbnzZ2giZC/bZ1k//nKXbyqwAoqAdx7xDLBPE08Y+w6zgljY
-         ht+5MxHamQSMEcHb+BnecXhzpA0uEAtXJG+6qN+P64TATCdQttlnTVttQeKgrcG2SxX0
-         ydlt4L8mOnm4EhQbR4vnVsmLeN52cxWdvZKt8=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tyTpYV+qLd3kiCOmwuwEqZzrCGB5RjcTEwNX2Jl7UEA=;
+        b=N36LSw7J4Ad6KB9y5Sj67YKYV6mXZvsH8bYHCiyCwTOj6H63DijLBlEMv450NCtV8u
+         kQHcDEkhXKCmkiSkTCUpis6/nucGUmAwtRR5L5bIrcD7hu1YE/8SEGjoqBSrLHqfHSsn
+         4WmIEKf0WmMgkWJviaxiy+MgajPclr9xWrNW5KYY9e1SAimz6Q0pB0h8NRm5AkJb8C5F
+         VJ1ilbu9bVqZJuT7x3W33NfbRrXUB3c19FITLo0XeVxms7QGftQC76GGU+4+Co8Pwdp2
+         g18Q8YZWb+NKtxiqD8wYZE0nSw/usHc4WTDa16QVgGC8BVewlqWd3hnziRHQMyrTJcei
+         Ankw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=O+W+ADoWLoOEU6HBF2tydQ14SzjI5R4yTLibkuVNSzI=;
-        b=tRajzhoOJLULp8OODuvTZpVYffpMTq2kqKJOcDVdcaGXjDSupC8CNHFali6quggrRL
-         QCO8io4VQV1iETnSiWBIG1eS5Pp+vwiM2rIAWTZRzml3ff6QqMxieJ8d8ZfrGhtlgwzw
-         JZPANrgUuwK5k92QZWh59+UOK3RcZ48Pdzwkfxe8fb6IkruMzk7u1aM1mcQQalq3JWDL
-         2XYwq6LXC/OuQuUGp/YT+E2C8ylQjKfBFbs+QImx4a1PrEbwWqUpX5FTGwkWMZbpygqQ
-         ERJu6rnaij6BRt4eXTyPSTx4COCVpk8oJh71QZj9XRoFFhpu5bFv0Dly+pGy+Nn1MUYd
-         5UOw==
-X-Gm-Message-State: AOAM530h3Bbi8WUwwCTsz0xw7ybaMY822rfwr0rsyof+Av9fhs8ad2ZP
-        LdH55otH0DV9Y9MSO88AwpHiMA==
-X-Google-Smtp-Source: ABdhPJwgn8KFoQhC6OlMAFWWee+pIw34BL/z1l6uAZT83dRmrhlsq00kPIDyo+QLfiGUltyKod5FbQ==
-X-Received: by 2002:a65:6753:0:b0:385:fa8a:188f with SMTP id c19-20020a656753000000b00385fa8a188fmr5725762pgu.499.1648163951829;
-        Thu, 24 Mar 2022 16:19:11 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm4445176pfh.83.2022.03.24.16.19.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tyTpYV+qLd3kiCOmwuwEqZzrCGB5RjcTEwNX2Jl7UEA=;
+        b=bIxXPhEDiE0+KuazzKJr5uUNpukufT3lRsw93bbonvQXTCFFcf6wxsV0KOV8nZq8vY
+         KuCh9f4bzdxF8GFxIljSY03R17eT96O8B5UMZWBYug+nEGrE7MshT5wHud5cFPYx4A4V
+         m1pps9hGCfbR8vNS6CM/c3SaRcDP6NmgQd5eNSf6Gf8of1Ec8OxgN15418u+NfsH8ahy
+         pUr8XoZRKTeZDZEyc11XCmQ9DIQkCAOEsBPPXxMDj4f0q2VEDzQZ+pp7kHVlrQ659Q5k
+         Gd0EY9YjJz28IfV9PXF2/Rtqt7F0EsLsDz9CDuWCZFpSw45TDmuyiYDHrLvhGsvIFbmf
+         m3Rg==
+X-Gm-Message-State: AOAM531L0UZHabO7L1/Ft7XpT0A5vYzFQ8rC3EvUBhOqzs3KkurdFzd/
+        pB8wegJbjNNwkQxltA1EM2ckiA==
+X-Google-Smtp-Source: ABdhPJwAgOGkPpuK+V2kEzPXMze0c/NG28V5NRgS2aL1z5C83rlqPXntNdJyV8xjYqDrNbN2xQO9uw==
+X-Received: by 2002:a17:90a:c595:b0:1c7:bb62:4487 with SMTP id l21-20020a17090ac59500b001c7bb624487mr6473841pjt.190.1648164000136;
+        Thu, 24 Mar 2022 16:20:00 -0700 (PDT)
+Received: from google.com ([2620:15c:211:202:7198:79bb:dcac:4972])
+        by smtp.gmail.com with ESMTPSA id t7-20020a056a0021c700b004f737480bb8sm4446746pfj.4.2022.03.24.16.19.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 16:19:11 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     shuah@kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH 2/2] selftests/harness: Pass variant to teardown
-Date:   Thu, 24 Mar 2022 16:19:07 -0700
-Message-Id: <20220324231907.1363887-3-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220324231907.1363887-1-keescook@chromium.org>
-References: <20220324231907.1363887-1-keescook@chromium.org>
+        Thu, 24 Mar 2022 16:19:58 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 16:19:49 -0700
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Sylvestre Ledru <sylvestre@mozilla.com>
+Subject: Re: [GIT PULL] locking changes for v5.18
+Message-ID: <Yjz8lQtnWimVeTp7@google.com>
+References: <YjhdcJB4FaLfsoyO@gmail.com>
+ <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
+ <CAHk-=whNBs07foho7=QxVbs_hnpDfPP3s2fwyXK-reNw67mU=g@mail.gmail.com>
+ <YjwueBQoung7rFD+@gmail.com>
+ <YjxFzlzfTF5Av3Zc@zn.tnic>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2243; i=keescook@chromium.org; h=from:subject; bh=s5I+YaMjoeoicBYfZgT6+xmRuT2Bm5TDH0htvPF34tc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiPPxreGpnoDVxBHq9oVJfM656X06ztHfoXOlmN4Yv QJnuxHqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYjz8awAKCRCJcvTf3G3AJnT3D/ 0XU6tnnx16d5AyjCasjLRVDC5yZ/UlbVu0DMwVB+G1AhW8inYAXpheEnmign/IoRe60RQy98YQ6nSb tEKU3X9OgUOyMGUcLNPbe7fCAhyCeqU55cmNOF8T/c0/JQhA1IrlPKTXasQzxr+zyp/lqlq5jC2HNs FqvAVNihqqr0lNTtL8M966mwZJDCPkbT1MzbYNlJ0Ey+oG1Mj5g/QirkhhbAqC/HtHAg9v8As4p/wX q/1dXZp+roY4rcnaT/DK2WarVWsLCqCN23tazgJtdH2xchB/1DWEPypWIe6kOs6PTEj4Z1hSCBUNb/ fuSSKd/GccSxWd7PwA4dO3RzuChOjq8wF7bdozfLbUh7Zqyg7ag7KPYA9hMpN4oeUu9zVRmKH7oA4S Z8bMs2yvv0Fv8B0p9s5h7azjbi281KnpzFjLyuVCPZzw8H7vp+K3IVn7GO1IiW5dB0Vjh3PGAdRc7t 2xVsDe3lgxkEYLqcXtLk/ofsRGhFVrgcrr4dpP4KiqP8k0P2O+wD8yHUjiJPrb7+IyJLEGn/cojpkh DnE5srpBV6ofaLA/BL0HJkIlI2B7ESgczPoo5r2rRtCEfksQYTBoOn6duKvHRTABV8ZFPJXoMfDdrr ez8x6D3Pbk4hJs+wSy/heSsojmeCuuXgNK7jY/XX+ffGM7m/x9GtJkPyD0Aw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjxFzlzfTF5Av3Zc@zn.tnic>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+On Thu, Mar 24, 2022 at 11:19:58AM +0100, Borislav Petkov wrote:
+> On Thu, Mar 24, 2022 at 09:40:24AM +0100, Ingo Molnar wrote:
+> > Only intermittently on my side - it only recently started working
+> > reliably & it doubles the not inconsiderable test time :-/
+> 
+> True dat - last time I measured, clang builds take roughly double the
+> time gcc builds with the same config do.
 
-FIXTURE_VARIANT data is passed to FIXTURE_SETUP and TEST_F as "variant".
+See also:
+https://lore.kernel.org/lkml/CAHk-=whs8QZf3YnifdLv57+FhBi5_WeNTG1B-suOES=RcUSmQg@mail.gmail.com/
 
-In some cases, the variant will change the setup, such that expectations
-also change on teardown. Also pass variant to FIXTURE_TEARDOWN.
+We do have to pay a penalty in that if these binaries can be built as
+shared objects, the MUST be. (Actually, IDK if Debian has the same
+policy as Fedora).
 
-The new FIXTURE_TEARDOWN logic is identical to that in FIXTURE_SETUP,
-right above.
+If you see libLLVM-*.so (and libclang-cpp.so) in your list of
+`ldd $(which clang)`, or see multiple symbols from the dynamic linker
+after running:
 
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20201210231010.420298-1-willemdebruijn.kernel@gmail.com
----
- tools/testing/selftests/kselftest_harness.h | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+$ perf record -e cycles:pp --call-graph lbr make LLVM=1
+$ perf report --no-children --sort=dso,cycles
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index bef08f824eb5..f5cb5fd1d974 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -291,7 +291,9 @@
- #define FIXTURE_TEARDOWN(fixture_name) \
- 	void fixture_name##_teardown( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
--		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self)
-+		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
-+		const FIXTURE_VARIANT(fixture_name) \
-+			__attribute__((unused)) *variant)
- 
- /**
-  * FIXTURE_VARIANT() - Optionally called once per fixture
-@@ -306,9 +308,9 @@
-  *       ...
-  *     };
-  *
-- * Defines type of constant parameters provided to FIXTURE_SETUP() and TEST_F()
-- * as *variant*. Variants allow the same tests to be run with different
-- * arguments.
-+ * Defines type of constant parameters provided to FIXTURE_SETUP(), TEST_F() and
-+ * FIXTURE_TEARDOWN as *variant*. Variants allow the same tests to be run with
-+ * different arguments.
-  */
- #define FIXTURE_VARIANT(fixture_name) struct _fixture_variant_##fixture_name
- 
-@@ -391,7 +393,7 @@
- 			fixture_name##_##test_name(_metadata, &self, variant->data); \
- 		} \
- 		if (_metadata->setup_completed) \
--			fixture_name##_teardown(_metadata, &self); \
-+			fixture_name##_teardown(_metadata, &self, variant->data); \
- 		__test_check_assert(_metadata); \
- 	} \
- 	static struct __test_metadata \
--- 
-2.32.0
+Then dynamic linking is the main source of performance difference
+between GCC and Clang on those distributions. So we're kind of fighting
+with one hand behind our backs.
 
+For Linux distros that have server costs, my guess is these policies
+allow them to minimize their costs of serving prebuilt binaries, since
+dynamic linking does allow for smaller binaries.
+
+For short lived processes like most of the toolchain (and parts that
+generally don't overlap, such as the serialization between compilation
+THEN linkages), dynamic linking provides a ridiculous startup cost. CoW
+gets us most of the benefits of dynamic linking in terms of shared
+memory between processes. (I don't think ASLR hurts CoW in that way?)
+
+On the flip side, I have been banging pots and pans around internally
+trying to raise awareness of the issue (I'm but a peasant though, Mr.
+bottom rung of the ladder); we do have budget finally allocated to focus
+on compiler performance. Getting the checks written involves more red
+tape and more effort than I expected.
+
+I might start ignoring compiler bugs for a while, go off into the
+wilderness, and not come back until I have statically linked images of
+clang available to host on kernel.org though. There's a lot we could be
+doing to hot rod the compiler to optimize for developer's (and CI's)
+time.

@@ -2,147 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71794E61F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C104E61F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243846AbiCXKtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S1349605AbiCXKt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242718AbiCXKtr (ORCPT
+        with ESMTP id S1349600AbiCXKtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:49:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25ACC2DFA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648118894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uWRMRQIguPn0xVAvBXNbH51X5fGoB4gdHQSpKWVAiFE=;
-        b=VOjidShX2oiW5ZrE/FhXK7+PFsgLwtaL8PQ/tnPjuntqLUBJHleCMr90YhoNp4ghEAt260
-        PWVplJu0Cdi9CNzSRCkWaC5YkyUkP01lRbDO2eQTQdQw8q/O+2EPor8BQYN9JwzKVOYYvZ
-        wauHas8Y2jca2CVmM9ikHwaj0G/YGPY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-OB8R4n9-NqyyGhlBaTWkIw-1; Thu, 24 Mar 2022 06:48:13 -0400
-X-MC-Unique: OB8R4n9-NqyyGhlBaTWkIw-1
-Received: by mail-wr1-f71.google.com with SMTP id s8-20020adfc548000000b00203eba1052eso1547943wrf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uWRMRQIguPn0xVAvBXNbH51X5fGoB4gdHQSpKWVAiFE=;
-        b=pqA9mTGrGSPRJ0vOh3m03G5JOmBgyqOUe4bTuUbC5UGalpLC/aU+GYT3I1GoxgzlDI
-         c6fBs4xWC+9oCuzuHXjvQOOX0cA3q5G2CWB9pakMXf04DsbPWmBCValhTm2lm64Peilm
-         LSQDyVxEreHo+K+jm8xRW+v2wBL8VLYzO3weaPVDcj6tXZEplwrkSsg1uxJrlK0WJqJ+
-         S+PnMqNtBYmozaDXWDUku1HHSPnC/GqM+UCS4wNZ8h66FEfL2LGhK6x/fWKUNVABtZIk
-         lM+gtf46DYhVWJe5qJOi7NBH8gbItx5OTQ/SPbSgLILDsQhzRMEz6leUwNTi0nzHk4ci
-         w09w==
-X-Gm-Message-State: AOAM531HBvKElTe7MEHaUyZMf21N/wswh+ILDWLJq+RIecj96eZ69+8d
-        0EK0yMe0JqNphpU4d1/c6VqMK2p6xPP5K/mRqkdNYswf7m6tdIZUhIuqIweAJQmbxIm4PJ+CDpu
-        Y4oOkYCRYh3+U8iua4a9jRv9h
-X-Received: by 2002:a1c:3587:0:b0:381:50ff:cbd with SMTP id c129-20020a1c3587000000b0038150ff0cbdmr13551079wma.140.1648118891812;
-        Thu, 24 Mar 2022 03:48:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzRxMJ+YXVZLvhuM9RI7+rgiWVlvl4AwKWXbx5vjGyiTWNJAssKyhMaSULkwjGGH8UgEVT4XA==
-X-Received: by 2002:a1c:3587:0:b0:381:50ff:cbd with SMTP id c129-20020a1c3587000000b0038150ff0cbdmr13551062wma.140.1648118891582;
-        Thu, 24 Mar 2022 03:48:11 -0700 (PDT)
-Received: from redhat.com ([2.55.151.118])
-        by smtp.gmail.com with ESMTPSA id e10-20020a056000178a00b0020414f27a58sm2419815wrg.35.2022.03.24.03.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 03:48:10 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 06:48:05 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, sgarzare@redhat.com, keirf@google.com
-Subject: Re: [PATCH 1/3] virtio: use virtio_device_ready() in
- virtio_device_restore()
-Message-ID: <20220324064205-mutt-send-email-mst@kernel.org>
-References: <20220324084004.14349-1-jasowang@redhat.com>
- <20220324084004.14349-2-jasowang@redhat.com>
+        Thu, 24 Mar 2022 06:49:53 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187C2167F5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648118902; x=1679654902;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u9F9D8i/tzjdTmLWMV559ebjc7u48vQi0qLmQzFbjMg=;
+  b=TjW6Fe0UPNsLhDHV1mYOMU+0klaWFbvRKZdb+KV4ojKtqftp4t2k4DON
+   c+BCg9N5JFaopSbm0vReP0anyI/vwGbOVcAC1n9pUxTA4/SWJDW4Z0iip
+   vXvY6B5wpzb6TM0hpxQPllxWa1KEHULXHRaRjs5d9vcEbk+EHdW6IOnPQ
+   LY7m8bSkL+lHDAJan3C4AmPuGvBWtrdLKOoU/JJicp5jS9nu+ym/zwzx5
+   ln5Olnv6tskS9rRfMJIGpZd7gjFNOVFX5uc08torRB45TJQSaa/mXsAHa
+   53DBJubgfEk8ihNS8D9EVs5HSuLxERcs4cmh0sMX1TeDolO/45P1dR/y+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="258532578"
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="258532578"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 03:48:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="544592982"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2022 03:48:20 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXL0t-000Kzc-IR; Thu, 24 Mar 2022 10:48:19 +0000
+Date:   Thu, 24 Mar 2022 18:48:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [bvanassche:ufs-for-next 324/324]
+ drivers/scsi/ufs-drivers/ufs-qcom-ice.c:156:9: error: implicit declaration
+ of function 'udelay'
+Message-ID: <202203241820.7HZPRpGx-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220324084004.14349-2-jasowang@redhat.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:40:02PM +0800, Jason Wang wrote:
-> From: Stefano Garzarella <sgarzare@redhat.com>
-> 
-> This avoids setting DRIVER_OK twice for those drivers that call
-> virtio_device_ready() in the .restore
+Hi Bart,
 
-Is this trying to say it's faster?
-If yes this one looks like a red herring. Yes we skip a write but we
-replace it with a read which is not better performance-wise.
-If we want to optimize this, it is better to just do that inside
-virtio_add_status:
+First bad commit (maybe != root cause):
+
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   b93e987f91a0c037fc4357107f5144110cd84d08
+commit: b93e987f91a0c037fc4357107f5144110cd84d08 [324/324] scsi: ufs: Split the drivers/scsi/ufs directory
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220324/202203241820.7HZPRpGx-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/b93e987f91a0c037fc4357107f5144110cd84d08
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche ufs-for-next
+        git checkout b93e987f91a0c037fc4357107f5144110cd84d08
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/ufs-drivers/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/scsi/ufs-drivers/ufs-qcom-ice.c: In function 'qcom_ice_optimization_enable':
+>> drivers/scsi/ufs-drivers/ufs-qcom-ice.c:156:9: error: implicit declaration of function 'udelay' [-Werror=implicit-function-declaration]
+     156 |         udelay(5);
+         |         ^~~~~~
+   drivers/scsi/ufs-drivers/ufs-qcom-ice.c: In function 'ufs_qcom_ice_program_key':
+>> drivers/scsi/ufs-drivers/ufs-qcom-ice.c:221:18: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     221 |         cap = hba->crypto_cap_array[cfg->crypto_cap_idx];
+         |                  ^~
+   cc1: some warnings being treated as errors
 
 
+vim +/udelay +156 drivers/scsi/ufs-drivers/ufs-qcom-ice.c
 
-diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-index 75c8d560bbd3..cd943c31bdbb 100644
---- a/drivers/virtio/virtio.c
-+++ b/drivers/virtio/virtio.c
-@@ -161,8 +161,14 @@ static void virtio_config_enable(struct virtio_device *dev)
- 
- void virtio_add_status(struct virtio_device *dev, unsigned int status)
- {
-+	unsigned int device_status;
-+
- 	might_sleep();
--	dev->config->set_status(dev, dev->config->get_status(dev) | status);
-+
-+	device_status = dev->config->get_status(dev);
-+
-+	if (status & ~device_status)
-+		dev->config->set_status(dev, device_status | status);
- }
- EXPORT_SYMBOL_GPL(virtio_add_status);
- 
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  147  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  148  static void qcom_ice_optimization_enable(struct ufs_qcom_host *host)
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  149  {
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  150  	u32 regval;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  151  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  152  	/* ICE Optimizations Enable Sequence */
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  153  	regval = qcom_ice_readl(host, QCOM_ICE_REG_ADVANCED_CONTROL);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  154  	regval |= 0xD807100;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  155  	/* ICE HPG requires delay before writing */
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10 @156  	udelay(5);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  157  	qcom_ice_writel(host, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  158  	udelay(5);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  159  }
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  160  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  161  int ufs_qcom_ice_enable(struct ufs_qcom_host *host)
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  162  {
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  163  	if (!(host->hba->caps & UFSHCD_CAP_CRYPTO))
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  164  		return 0;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  165  	qcom_ice_low_power_mode_enable(host);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  166  	qcom_ice_optimization_enable(host);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  167  	return ufs_qcom_ice_resume(host);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  168  }
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  169  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  170  /* Poll until all BIST bits are reset */
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  171  static int qcom_ice_wait_bist_status(struct ufs_qcom_host *host)
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  172  {
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  173  	int count;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  174  	u32 reg;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  175  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  176  	for (count = 0; count < 100; count++) {
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  177  		reg = qcom_ice_readl(host, QCOM_ICE_REG_BIST_STATUS);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  178  		if (!(reg & QCOM_ICE_BIST_STATUS_MASK))
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  179  			break;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  180  		udelay(50);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  181  	}
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  182  	if (reg)
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  183  		return -ETIMEDOUT;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  184  	return 0;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  185  }
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  186  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  187  int ufs_qcom_ice_resume(struct ufs_qcom_host *host)
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  188  {
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  189  	int err;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  190  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  191  	if (!(host->hba->caps & UFSHCD_CAP_CRYPTO))
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  192  		return 0;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  193  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  194  	err = qcom_ice_wait_bist_status(host);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  195  	if (err) {
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  196  		dev_err(host->hba->dev, "BIST status error (%d)\n", err);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  197  		return err;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  198  	}
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  199  	return 0;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  200  }
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  201  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  202  /*
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  203   * Program a key into a QC ICE keyslot, or evict a keyslot.  QC ICE requires
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  204   * vendor-specific SCM calls for this; it doesn't support the standard way.
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  205   */
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  206  int ufs_qcom_ice_program_key(struct ufs_hba *hba,
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  207  			     const union ufs_crypto_cfg_entry *cfg, int slot)
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  208  {
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  209  	union ufs_crypto_cap_entry cap;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  210  	union {
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  211  		u8 bytes[AES_256_XTS_KEY_SIZE];
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  212  		u32 words[AES_256_XTS_KEY_SIZE / sizeof(u32)];
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  213  	} key;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  214  	int i;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  215  	int err;
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  216  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  217  	if (!(cfg->config_enable & UFS_CRYPTO_CONFIGURATION_ENABLE))
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  218  		return qcom_scm_ice_invalidate_key(slot);
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  219  
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10  220  	/* Only AES-256-XTS has been tested so far. */
+df4ec2fa7a4dc2 drivers/scsi/ufs/ufs-qcom-ice.c Eric Biggers 2020-07-10 @221  	cap = hba->crypto_cap_array[cfg->crypto_cap_idx];
 
-> and it will allows us to do
-> extension on virtio_device_ready() without duplicating codes.
-> 
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
->  drivers/virtio/virtio.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> index 22f15f444f75..75c8d560bbd3 100644
-> --- a/drivers/virtio/virtio.c
-> +++ b/drivers/virtio/virtio.c
-> @@ -526,8 +526,9 @@ int virtio_device_restore(struct virtio_device *dev)
->  			goto err;
->  	}
->  
-> -	/* Finally, tell the device we're all set */
-> -	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER_OK);
-> +	/* If restore didn't do it, mark device DRIVER_OK ourselves. */
+:::::: The code at line 156 was first introduced by commit
+:::::: df4ec2fa7a4dc20bed62a407f77b5c57f1afbbc8 scsi: ufs-qcom: Add Inline Crypto Engine support
 
-I preferred the original comment, it said why we are doing this,
-new one repeats what code is doing.
+:::::: TO: Eric Biggers <ebiggers@google.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
 
-> +	if (!(dev->config->get_status(dev) & VIRTIO_CONFIG_S_DRIVER_OK))
-> +		virtio_device_ready(dev);
->  
->  	virtio_config_enable(dev);
->  
-> -- 
-> 2.25.1
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

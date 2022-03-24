@@ -2,72 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7104E669E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7F84E66A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346626AbiCXQH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        id S1351534AbiCXQIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243557AbiCXQHo (ORCPT
+        with ESMTP id S236762AbiCXQIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:07:44 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87391035
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:06:09 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id u10-20020a5ec00a000000b00648e5804d5bso3366794iol.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:06:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=FbzRbiu5vJCDRMtVtSTdRIE8gG5etNsd6nvcljrLMyY=;
-        b=QKcFHkyH6yt+2MAflFDip0qsfVSl4wR25li2Kcux98DQaaSvqetu8dPMo2o+WJtcGY
-         mEn2rs2IRWmSwC3DPQPzV4Jh1Vhn7AZAysAt6/Zh+s/axr0HPubFdDMKpbmuFxpWOzta
-         ypaQt6Ejbo1vlHuktLJJVPehcq88xGeZJb33UoNUVEZBmIcxQ0NlTnsjfcyUMpRMcha0
-         sY+xXdbA/MMZGdyogkSa25CDwcI/PydKpw3UPkagUGIL4N5CJfy3lYzxe5pZrpi2b1Bl
-         bXo0xJEhN++q8lWBGcRXDs3OvrUZeuZltLQ7CAPff1yJPTJweobM3MA2Xeu36DFwG2wz
-         rk4Q==
-X-Gm-Message-State: AOAM531pExU8s3zj0hwmM5giz9Z02SRpMYWU+kYbZiZbdot8qrQQjigt
-        9UDfDBuGzUaKzRsfV9fY1fwP2l6AvEENqXEJ0zb9LZZqS2Rk
-X-Google-Smtp-Source: ABdhPJxZkWsrdCGt6DrEiMHFZWjgkikINkI3G4vtYbV6h142DwTtAkEg7dOMGUx2joKmKnqq/26KBBrRRcz3b843x8qnBKCCPJWi
+        Thu, 24 Mar 2022 12:08:17 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55F050B15;
+        Thu, 24 Mar 2022 09:06:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=KCYZNR0DLQtC/d/G+7mDrCn/HPx7CoTGKtODd2xHtMg=; b=0sSxb6GH3H5fI0U9vqZvk6pxAy
+        5dQJNy9rKaMdjqAoQeB+oZ4VO/nKoP3cgf/oL0ig1zvhcy3zI2KDHU9Pat01r3Loh1vSKB8yUsYOT
+        HxZ3/lB72IYkSobOSvhBHb7J/BUrYD41YfabVp5vUGGXmjtMlGuNQVSNq2RVP0gvIeNs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nXPyt-00CTUk-Up; Thu, 24 Mar 2022 17:06:35 +0100
+Date:   Thu, 24 Mar 2022 17:06:35 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Arun.Ramadoss@microchip.com
+Cc:     linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        linux@armlinux.org.uk, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, davem@davemloft.net, hkallweit1@gmail.com
+Subject: Re: [RFC Patch net-next 3/3] net: phy: lan87xx: added ethtool SQI
+ support
+Message-ID: <YjyXCzPVl0ZlRUeE@lunn.ch>
+References: <20220321155337.16260-1-arun.ramadoss@microchip.com>
+ <20220321155337.16260-4-arun.ramadoss@microchip.com>
+ <YjjFtUEDm2Dta1ez@lunn.ch>
+ <ba1d251a9bd93cdf4c894313637dd9618cd8091c.camel@microchip.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2ac3:b0:649:1357:44b8 with SMTP id
- m3-20020a0566022ac300b00649135744b8mr3140855iov.159.1648137969221; Thu, 24
- Mar 2022 09:06:09 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 09:06:09 -0700
-In-Reply-To: <20220324133429.3841-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000032471505daf90696@google.com>
-Subject: Re: [syzbot] INFO: task can't die in vmci_qp_broker_detach
-From:   syzbot <syzbot+6e07eb10996f8ea7a825@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba1d251a9bd93cdf4c894313637dd9618cd8091c.camel@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Mar 24, 2022 at 03:48:57PM +0000, Arun.Ramadoss@microchip.com wrote:
+> Hi Andrew,
+> 
+> Thanks for the review.
+> 
+> On Mon, 2022-03-21 at 19:36 +0100, Andrew Lunn wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you
+> > know the content is safe
+> > 
+> > > +#define T1_DCQ_SQI_MSK                       GENMASK(3, 1)
+> > > +static int lan87xx_get_sqi(struct phy_device *phydev)
+> > > +{
+> > > +     u16 sqi_value[LAN87XX_SQI_ENTRY];
+> > > +     for (i = 0; i < LAN87XX_SQI_ENTRY; i++) {
+> > > +
+> > > +             sqi_value[i] = FIELD_GET(T1_DCQ_SQI_MSK, rc);
+> > > +
+> > > +     /* Sorting SQI values */
+> > > +     sort(sqi_value, LAN87XX_SQI_ENTRY, sizeof(u16),
+> > > lan87xx_sqi_cmp, NULL);
+> > 
+> > Sort is quite heavyweight. Your SQI values are in the range 0-7
+> > right?
+> > So rather than have an array of LAN87XX_SQI_ENTRY entries, why not
+> > create a histogram? You then just need to keep 8 uints. There is no
+> > need to perform a sort to discard the outliers, simply remove from
+> > the
+> > outer histogram buckets. And then you can calculate the average.
+> > 
+> > That should be faster and use less memory.
+> > 
+> >      Andrew
+> 
+> I could get the algorithm for replacing array of LAN87XX_SQI_ENTRY(200)
+> to array of 8 (sqi values 0 to 7) and increment the array[sqi_value]
+> for every reading. And calculate the Average = ( 1 * array[1] + 2 *
+> array[2] ... + 7 * array[7])/LAN87XX_SQI_ENTRY. By this way we get the
+> average for 200 entries.
+> But I couldn't get the algorithm on how to discard the outliers from
+> the buckets. our main aim is to average from array[40] to arrary[160]
+> value. Can you bit elaborate on how to remove the outer histogram
+> buckets.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+So your raw results look something like
 
-Reported-and-tested-by: syzbot+6e07eb10996f8ea7a825@syzkaller.appspotmail.com
+array[0] = 10
+array[1] = 10
+array[2] = 25
+array[3] = 100
+array[4] = 50
+array[5] = 1
+array[6] = 4
+array[7] = 0
 
-Tested on:
+To discard the lower outliers, take 40 away from the array[0],
+array[1], array[2], etc. To discard the upper outliers, take 40 away
+from array[7], array[6], array[5], etc. So you should end up with:
 
-commit:         6b1f86f8 Merge tag 'folio-5.18b' of git://git.infradea..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bc982714c733be2b
-dashboard link: https://syzkaller.appspot.com/bug?extid=6e07eb10996f8ea7a825
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15b451db700000
+array[0] = 0
+array[1] = 0
+array[2] = 5
+array[3] = 100
+array[4] = 15
+array[5] = 0
+array[6] = 0
+array[7] = 0
 
-Note: testing is done by a robot and is best-effort only.
+and then calculate the average: (2*5 + 3*100 + 4*15) / 120 = 3.
+
+    Andrew

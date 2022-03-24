@@ -2,66 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100164E5C1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 01:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F151F4E5C24
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 01:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346608AbiCXACT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 20:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
+        id S1346638AbiCXAJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 20:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240367AbiCXACS (ORCPT
+        with ESMTP id S241599AbiCXAJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 20:02:18 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E490C76282
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 17:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648080046; x=1679616046;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oMEJnPtZcH7pdTBWL2rAUzaHh70z6n+O5Q3opiboGBU=;
-  b=BdlMENf5dEV5dQzySZvR2aJyc7/9FF0wRdwgNm5jQ0DkZKPAYpAMP/GT
-   E9UTNCH8dVYCOL4JE2NTtQxR6ItSZ2VdCZA25MgaiyqKZ+W37DBftzjzk
-   PHvSCniGmJAyFkboFWjwlPf/uu36TDqKLlHyKaUfPpbe3lUcyg/pfSsqm
-   MEAMVoCdJw2+RO2j2oZJS+yYKsbgCy4LfzzXXYNPmeFUz80NxEO3DbAvF
-   eh7y8Rzs7ooEWBVvZc7zkL5AJF1YZb4sKkbRfJGyfnmaNb5KL92kYDz/g
-   tjAj/NJVf6k1hy/T9BN5PEm6JIFAzb5iUopVCE+AWz53LutozBhEmZI4I
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="258205575"
-X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
-   d="scan'208";a="258205575"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 17:00:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,205,1643702400"; 
-   d="scan'208";a="601494545"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Mar 2022 17:00:43 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXAuA-000KUZ-Uj; Thu, 24 Mar 2022 00:00:42 +0000
-Date:   Thu, 24 Mar 2022 07:59:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin Kaiser <martin@kaiser.cx>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: Re: [PATCH 1/7] staging: r8188eu: use ieee80211 define for version
- check
-Message-ID: <202203240701.1JNFezRj-lkp@intel.com>
-References: <20220323074859.177425-2-martin@kaiser.cx>
+        Wed, 23 Mar 2022 20:09:11 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C708CCD0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 17:07:38 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nXB0k-00055s-4Z; Thu, 24 Mar 2022 01:07:30 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
+        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
+        hch@lst.de, arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v8 00/14] riscv: support for Svpbmt and D1 memory types
+Date:   Thu, 24 Mar 2022 01:06:56 +0100
+Message-Id: <20220324000710.575331-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323074859.177425-2-martin@kaiser.cx>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,94 +46,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on staging/staging-testing]
-
-url:    https://github.com/0day-ci/linux/commits/Martin-Kaiser/staging-r8188eu-use-ieee80211-helpers-for-parsing/20220323-155119
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 41197a5f11a4b2d11ac19bc62552022153032811
-config: sh-randconfig-s031-20220323 (https://download.01.org/0day-ci/archive/20220324/202203240701.1JNFezRj-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/ab583161be478f342c621b22766fc7f233769bef
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Martin-Kaiser/staging-r8188eu-use-ieee80211-helpers-for-parsing/20220323-155119
-        git checkout ab583161be478f342c621b22766fc7f233769bef
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
+for things like non-cacheable pages or I/O memory pages.
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/staging/r8188eu/core/rtw_recv.c:1074:14: sparse: sparse: restricted __le16 degrades to integer
+So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
+types) using the alternatives framework.
 
-vim +1074 drivers/staging/r8188eu/core/rtw_recv.c
+This includes a number of changes to the alternatives mechanism itself.
+The biggest one being the move to a more central location, as I expect
+in the future, nearly every chip needing some sort of patching, be it
+either for erratas or for optional features (svpbmt or others).
 
-  1054	
-  1055	static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv_frame)
-  1056	{
-  1057		/* shall check frame subtype, to / from ds, da, bssid */
-  1058	
-  1059		/* then call check if rx seq/frag. duplicated. */
-  1060	
-  1061		int retval = _FAIL;
-  1062		u8 bDumpRxPkt;
-  1063		struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
-  1064		u8 *ptr = precv_frame->rx_data;
-  1065		__le16 fc = *(__le16 *)ptr;
-  1066		struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
-  1067	
-  1068		if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
-  1069			int ch_set_idx = rtw_ch_set_search_ch(pmlmeext->channel_set, rtw_get_oper_ch(adapter));
-  1070			if (ch_set_idx >= 0)
-  1071				pmlmeext->channel_set[ch_set_idx].rx_count++;
-  1072		}
-  1073	
-> 1074		if ((fc & IEEE80211_FCTL_VERS) != 0)
-  1075			return _FAIL;
-  1076	
-  1077		pattrib->to_fr_ds = get_tofr_ds(ptr);
-  1078	
-  1079		pattrib->frag_num = GetFragNum(ptr);
-  1080		pattrib->seq_num = GetSequence(ptr);
-  1081	
-  1082		pattrib->pw_save = GetPwrMgt(ptr);
-  1083		pattrib->mfrag = ieee80211_has_morefrags(fc);
-  1084		pattrib->mdata = ieee80211_has_moredata(fc);
-  1085		pattrib->privacy = ieee80211_has_protected(fc);
-  1086		pattrib->order = ieee80211_has_order(fc);
-  1087	
-  1088		/* Dump rx packets */
-  1089		GetHalDefVar8188EUsb(adapter, HAL_DEF_DBG_DUMP_RXPKT, &bDumpRxPkt);
-  1090	
-  1091		/* We return _SUCCESS only for data frames. */
-  1092		if (ieee80211_is_mgmt(fc))
-  1093			validate_recv_mgnt_frame(adapter, precv_frame);
-  1094		else if (ieee80211_is_ctl(fc))
-  1095			validate_recv_ctrl_frame(adapter, precv_frame);
-  1096		else if (ieee80211_is_data(fc)) {
-  1097			rtw_led_control(adapter, LED_CTL_RX);
-  1098			pattrib->qos = ieee80211_is_data_qos(fc);
-  1099			retval = validate_recv_data_frame(adapter, precv_frame);
-  1100			if (retval == _FAIL) {
-  1101				struct recv_priv *precvpriv = &adapter->recvpriv;
-  1102				precvpriv->rx_drop++;
-  1103			}
-  1104		}
-  1105	
-  1106		return retval;
-  1107	}
-  1108	
+Detection of the svpbmt functionality is done via Atish's isa extension
+handling series [0] and thus does not need any dt-parsing of its own
+anymore.
+
+The series also introduces support for the memory types of the D1
+which are implemented differently to svpbmt. But when patching anyway
+it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
+location.
+
+The only slightly bigger difference is that the "normal" type is not 0
+as with svpbmt, so kernel patches for this PMA type need to be applied
+even before the MMU is brought up, so the series introduces a separate
+stage for that.
+
+
+In theory this series is 3 parts:
+- sbi cache-flush / null-ptr
+- alternatives improvements
+- svpbmt+d1
+
+So expecially patches from the first 2 areas could be applied when
+deemed ready, I just thought to keep it together to show-case where
+the end-goal is and not requiring jumping between different series.
+
+
+I picked the recipient list from the previous versions, hopefully
+I didn't forget anybody.
+
+changes in v8:
+- rebase onto 5.17-final + isa extension series
+  We're halfway through the merge-window, so this series
+  should be merge after that
+- adapt to fix limiting alternatives to non-xip-kernels
+- add .norelax option for alternatives
+- fix unused cpu_apply_errata in thead errata
+- don't use static globals to store cpu-manufacturer data
+  as it makes machines hang if done too early
+
+changes in v7:
+- fix typo in patch1 (Atish)
+- moved to Atish's isa-extension framework
+- and therefore move regular boot-alternatives directly behind fill_hwcaps
+- change T-Head errata Kconfig text (Atish)
+
+changes in v6:
+- rebase onto 5.17-rc1
+- handle sbi null-ptr differently
+- improve commit messages
+- use riscv,mmu as property name
+
+changes in v5:
+- move to use alternatives for runtime-patching
+- add D1 variant
+
+
+[0] https://lore.kernel.org/r/20220222204811.2281949-2-atishp@rivosinc.com
+
+
+Heiko Stuebner (13):
+  riscv: prevent null-pointer dereference with sbi_remote_fence_i
+  riscv: integrate alternatives better into the main architecture
+  riscv: allow different stages with alternatives
+  riscv: implement module alternatives
+  riscv: implement ALTERNATIVE_2 macro
+  riscv: extend concatenated alternatives-lines to the same length
+  riscv: prevent compressed instructions in alternatives
+  riscv: move boot alternatives to after fill_hwcap
+  riscv: Fix accessing pfn bits in PTEs for non-32bit variants
+  riscv: add cpufeature handling via alternatives
+  riscv: remove FIXMAP_PAGE_IO and fall back to its default value
+  riscv: don't use global static vars to store alternative data
+  riscv: add memory-type errata for T-Head
+
+Wei Fu (1):
+  riscv: add RISC-V Svpbmt extension support
+
+ arch/riscv/Kconfig.erratas                  |  31 +++--
+ arch/riscv/Kconfig.socs                     |   1 -
+ arch/riscv/Makefile                         |   2 +-
+ arch/riscv/errata/Makefile                  |   2 +-
+ arch/riscv/errata/alternative.c             |  75 ------------
+ arch/riscv/errata/sifive/errata.c           |  17 ++-
+ arch/riscv/errata/thead/Makefile            |   1 +
+ arch/riscv/errata/thead/errata.c            |  82 +++++++++++++
+ arch/riscv/include/asm/alternative-macros.h | 121 ++++++++++++++------
+ arch/riscv/include/asm/alternative.h        |  16 ++-
+ arch/riscv/include/asm/errata_list.h        |  52 +++++++++
+ arch/riscv/include/asm/fixmap.h             |   2 -
+ arch/riscv/include/asm/hwcap.h              |   1 +
+ arch/riscv/include/asm/pgtable-32.h         |  17 +++
+ arch/riscv/include/asm/pgtable-64.h         |  79 ++++++++++++-
+ arch/riscv/include/asm/pgtable-bits.h       |  10 --
+ arch/riscv/include/asm/pgtable.h            |  53 +++++++--
+ arch/riscv/include/asm/vendorid_list.h      |   1 +
+ arch/riscv/kernel/Makefile                  |   1 +
+ arch/riscv/kernel/alternative.c             | 104 +++++++++++++++++
+ arch/riscv/kernel/cpu.c                     |   1 +
+ arch/riscv/kernel/cpufeature.c              |  80 ++++++++++++-
+ arch/riscv/kernel/module.c                  |  29 +++++
+ arch/riscv/kernel/sbi.c                     |  10 +-
+ arch/riscv/kernel/setup.c                   |   2 +
+ arch/riscv/kernel/smpboot.c                 |   4 -
+ arch/riscv/kernel/traps.c                   |   2 +-
+ arch/riscv/mm/init.c                        |   1 +
+ 28 files changed, 629 insertions(+), 168 deletions(-)
+ delete mode 100644 arch/riscv/errata/alternative.c
+ create mode 100644 arch/riscv/errata/thead/Makefile
+ create mode 100644 arch/riscv/errata/thead/errata.c
+ create mode 100644 arch/riscv/kernel/alternative.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

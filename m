@@ -2,98 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16934E6746
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EAD4E6749
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351824AbiCXQth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S1351899AbiCXQxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351807AbiCXQtY (ORCPT
+        with ESMTP id S1352077AbiCXQw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:49:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B474ADD60
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:47:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648140470;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o3yznAVa11IPBnnYwZf5Cua2JEMNbm4oYIGv6D2ELLY=;
-        b=fxnsm17YIBhzyQhG5y1d1ZBG4aeraxGnhOItBOZO8h4eGY9qz/NHYfh630qanpemdd9mTF
-        bQUMtzNtzNZL3kbJgQ1S9/OKlDUviQptGogP44mzfYPijCE7hmqv8c/PKSGSoMHSyeIgaz
-        nOO0FhgXlGXH6vku8dr2eUvuBPBQx8Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-IOys9a3oPNWp4-Zu6myxvg-1; Thu, 24 Mar 2022 12:47:47 -0400
-X-MC-Unique: IOys9a3oPNWp4-Zu6myxvg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88142185A7A4;
-        Thu, 24 Mar 2022 16:47:46 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.132])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 169F3417E32;
-        Thu, 24 Mar 2022 16:47:44 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Pearson <markpearson@lenovo.com>,
-        "David E . Box" <david.e.box@linux.intel.com>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 4/4] Documentation/ABI: sysfs-class-power: Fix Sphinx error
-Date:   Thu, 24 Mar 2022 17:47:37 +0100
-Message-Id: <20220324164737.21765-5-hdegoede@redhat.com>
-In-Reply-To: <20220324164737.21765-1-hdegoede@redhat.com>
-References: <20220324164737.21765-1-hdegoede@redhat.com>
+        Thu, 24 Mar 2022 12:52:58 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211C8B2466
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:50:53 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id y142so9454758ybe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 09:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GyEZyeXnbD1SpUVUdTOvI3aFbLpGuqC2Ad/hEjpjtOk=;
+        b=s4w3SCbClDQbqQHEkH3T8tXGxP3WgwjpCNDoghGLeBaVPXupD6hoyj7i8LyTU+FpdN
+         h8HWzRxuYvFDHORu/PPctH2oCH6EIo1upJk3Z1z4LBBkbXH6umej4Dpq18R3RLTXHy2i
+         q79HAiDV+/HMUKnj+bkuAccvYjWUGHi89qJ6iFz6ubn/DmD0cDwgVEG/Edvy0ow4jJkT
+         pHpb8QInNmTKy/A3QRn2T7PS0zltPEFqn09HXsXg/95KdZ3QjTeSs35pIIL6sANsgIvc
+         jLcIW0t194pfKIpIVYUYhQAjHEV/2h1uZWcRV9lVc+4pWh1RXpUt5uaIO83EtJE5y3LC
+         eL4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GyEZyeXnbD1SpUVUdTOvI3aFbLpGuqC2Ad/hEjpjtOk=;
+        b=gMfMjEiNfVzLCvUxvjXxtpr3X+vcvp8bHXRYmNKaI3NQKVhYTSj6PEBNo2xjT86z5S
+         d+m0/KPKbfZe31nppWMAMpDoEtZiNHrT2l+X+SXkW6Pmv6yi0E0yjRkgN+3EqSLPEfnA
+         HI+l7asotXiT/mplr2FlxGHQc3PlHAGDl/yKKTKUpcIBTmrd1eQGN+LGXxGrmMcbgKrO
+         CF/8FJb7lgAyV5av9KULWQO8WcsL+o0DmiXcSv3jCkpnaCL4sbODuTjviPgr/MOERMIQ
+         fwDofyCA6DzAGAa4pT379cfxf3ByuLNXXtzQ/X9dyACfz4bkiYPbGz+XC7R5DMLWKxPg
+         IBGQ==
+X-Gm-Message-State: AOAM531x/I6gu5pRIEYLbXLLK2lp5rRBPiF3CRluJXH9tCz9InncLPbG
+        8CX0KdBnrE+49thsTNI6YoYXf3mamApSuHaA8xXbdQ==
+X-Google-Smtp-Source: ABdhPJyxW67Ff2D/09dcNpTUEyXuZtRmI1PtchCyeKUQRXxQdOh/GgzMauPBjn98vqo4IgG2nGvgGJL05ruEvKM5AME=
+X-Received: by 2002:a25:780a:0:b0:633:ccea:3430 with SMTP id
+ t10-20020a25780a000000b00633ccea3430mr5404425ybc.26.1648140652154; Thu, 24
+ Mar 2022 09:50:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220323184915.1335049-1-mizhang@google.com> <20220323184915.1335049-6-mizhang@google.com>
+In-Reply-To: <20220323184915.1335049-6-mizhang@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 24 Mar 2022 09:50:41 -0700
+Message-ID: <CANgfPd9MpnSonBzTF8EivXY_vazXFFAA83DPLoiZSgf=7vSrpw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] selftests: KVM: use dirty logging to check if page
+ stats work correctly
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following error from "make htmldocs":
+On Wed, Mar 23, 2022 at 11:49 AM Mingwei Zhang <mizhang@google.com> wrote:
+>
+> When dirty logging is enabled, KVM will remap all accessed pages in
+> NPT/EPT at 4K. This property could be used to check if
+> the page stats metrics work properly in KVM mmu. At the same time, this
+> logic might be used the other way around: using page stats to verify if
+> dirty logging really splits all huge pages. Moreover, when dirty logging is
+> disabled, KVM zaps corresponding SPTEs and we could check whether the large
+> pages come back when guest touches the pages again.
+>
+> So add page stats checking in dirty logging performance selftest. In
+> particular, add checks in three locations:
+>  - just after vm is created;
+>  - after populating memory into vm but before enabling dirty logging;
+>  - finish dirty logging but before disabling it;
+>  - behind the final iteration after disabling dirty logging.
+>
+> Tested using commands:
+>  - ./dirty_log_perf_test -s anonymous_hugetlb_1gb
+>  - ./dirty_log_perf_test -s anonymous_hugetlb_2mb
+>  - ./dirty_log_perf_test -s anonymous_thp
+>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: David Matlack <dmatlack@google.com>
+> Cc: Jing Zhang <jingzhangos@google.com>
+> Cc: Peter Xu <peterx@redhat.com>
+>
+> Suggested-by: Ben Gardon <bgardon@google.com>
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
 
-Documentation/ABI/testing/sysfs-class-power:459: ERROR:
-No bottom table border found.
+Reviewed-by: Ben Gardon <bgardon@google.com>
 
-================ ====================================
-auto:            Charge normally, respect thresholds
-inhibit-charge:  Do not charge while AC is attached
-force-discharge: Force discharge while AC is attached
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- Documentation/ABI/testing/sysfs-class-power | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index fde21d900420..859501366777 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -468,6 +468,7 @@ Description:
- 			auto:            Charge normally, respect thresholds
- 			inhibit-charge:  Do not charge while AC is attached
- 			force-discharge: Force discharge while AC is attached
-+			================ ====================================
- 
- What:		/sys/class/power_supply/<supply_name>/technology
- Date:		May 2007
--- 
-2.35.1
-
+> ---
+>  .../selftests/kvm/dirty_log_perf_test.c       | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> index 1954b964d1cf..21431b0f5547 100644
+> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> @@ -19,6 +19,10 @@
+>  #include "perf_test_util.h"
+>  #include "guest_modes.h"
+>
+> +#ifdef __x86_64__
+> +#include "processor.h"
+> +#endif
+> +
+>  /* How many host loops to run by default (one KVM_GET_DIRTY_LOG for each loop)*/
+>  #define TEST_HOST_LOOP_N               2UL
+>
+> @@ -185,6 +189,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>                                  p->slots, p->backing_src,
+>                                  p->partition_vcpu_memory_access);
+>
+> +#ifdef __x86_64__
+> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") == 0,
+> +                   "4K page is non zero");
+> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
+> +                   "2M page is non zero");
+> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
+> +                   "1G page is non zero");
+> +#endif
+>         perf_test_set_wr_fract(vm, p->wr_fract);
+>
+>         guest_num_pages = (nr_vcpus * guest_percpu_mem_size) >> vm_get_page_shift(vm);
+> @@ -222,6 +234,17 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>         pr_info("Populate memory time: %ld.%.9lds\n",
+>                 ts_diff.tv_sec, ts_diff.tv_nsec);
+>
+> +#ifdef __x86_64__
+> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
+> +                   "4K page is zero");
+> +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP ||
+> +           p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB)
+> +               TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
+> +                           "2M page is zero");
+> +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
+> +               TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
+> +                           "1G page is zero");
+> +#endif
+>         /* Enable dirty logging */
+>         clock_gettime(CLOCK_MONOTONIC, &start);
+>         enable_dirty_logging(vm, p->slots);
+> @@ -267,6 +290,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>                                 iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+>                 }
+>         }
+> +#ifdef __x86_64__
+> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
+> +                   "4K page is zero after dirty logging");
+> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
+> +                   "2M page is non-zero after dirty logging");
+> +       TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
+> +                   "1G page is non-zero after dirty logging");
+> +#endif
+>
+>         /* Disable dirty logging */
+>         clock_gettime(CLOCK_MONOTONIC, &start);
+> @@ -275,6 +306,28 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>         pr_info("Disabling dirty logging time: %ld.%.9lds\n",
+>                 ts_diff.tv_sec, ts_diff.tv_nsec);
+>
+> +       /*
+> +        * Increment iteration to run the vcpus again to ensure all pages come
+> +        * back.
+> +        */
+> +       iteration++;
+> +       pr_info("Starting the final iteration to get all pages back.\n");
+> +       for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+> +               while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
+> +                      != iteration)
+> +                       ;
+> +       }
+> +
+> +#ifdef __x86_64__
+> +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP ||
+> +           p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB)
+> +               TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
+> +                           "2M page is zero");
+> +       if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
+> +               TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
+> +                           "1G page is zero");
+> +#endif
+> +
+>         /* Tell the vcpu thread to quit */
+>         host_quit = true;
+>         perf_test_join_vcpu_threads(nr_vcpus);
+> --
+> 2.35.1.1021.g381101b075-goog
+>

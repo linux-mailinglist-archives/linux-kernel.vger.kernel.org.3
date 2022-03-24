@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABEE4E69FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B294E6A03
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355324AbiCXUwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 16:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S1354082AbiCXUyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 16:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353691AbiCXUwE (ORCPT
+        with ESMTP id S1355534AbiCXUxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 16:52:04 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F103C36683;
-        Thu, 24 Mar 2022 13:50:30 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id o64so6144229oib.7;
-        Thu, 24 Mar 2022 13:50:30 -0700 (PDT)
+        Thu, 24 Mar 2022 16:53:09 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8E83E0CC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:51:37 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id k10so7033519edj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kWTv8rvzSud6vjQAPBruU1+NUsUkFIclJurG5+jMDKk=;
+        b=iD6u/kx7rEMaMiEJQLhlCNXkeSS/pc5DIS25/uS7QK+u4Vx0am6v8p8Vnj/csxW/Dh
+         Abo9xh6+gFlh1siWNxA6ksZo2zDZdU49sR4M0ZTN7yk44jPdjgQ+9PGdt5iLpcbAlJy5
+         u77KgsNMtUPNxLuFfnPcVYDKBLswUw6B7jPVQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=N7X1Jph+spbx81bExVVBZgrp6RsoYRF8yIwNInaVhtw=;
-        b=h2D/S/AKEQZEsiCsckqyEIwjZ9yYQwu30T8Iv8XvPaiNN6+vJ+ZEch/p2075ITJ+Eh
-         EBbqSpIjPp+55CZrF7bmVwN6V850HeHtd5NUpcdbrxMtQhanJHzmbQaq2tz4b7Lxzzvk
-         Cb2rvHPTDE/SDWaLnVMGnBIOMFInbHpWOO3r224nCIlRrr1rLe8TrqnqbPyh/ljOM+Ff
-         v09K8nvDoSKwVhBgaoVEqPY5HtYfoskBGc/vNiQky7566PXr2W3tOsEqNcmCRbgcfBrL
-         a74SeKRDG8+V9MEaho++SorbA4a8hpT0Y2oqpPJ81iBIMkNm0n+hDmX5SmNB8q3AJQ5R
-         K6rA==
-X-Gm-Message-State: AOAM531Pq20uGzFGMxhVgbDafrfduqZCfjoQxMH5gU0h/gAEqhrOdnfD
-        tRrdZw0Rh5fuA/r2bevTOw==
-X-Google-Smtp-Source: ABdhPJzkOrf3EbmXElP4l2eDGcS4BjQd5k4rYdMQJoqQaojX1X6UYuXfwsQHxSrooAqhCwpcNKSz8g==
-X-Received: by 2002:aca:1c0f:0:b0:2ed:22b4:9205 with SMTP id c15-20020aca1c0f000000b002ed22b49205mr3498488oic.118.1648155030333;
-        Thu, 24 Mar 2022 13:50:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m21-20020a056820035500b0032121ce8beesm1707401ooe.28.2022.03.24.13.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 13:50:29 -0700 (PDT)
-Received: (nullmailer pid 2551160 invoked by uid 1000);
-        Thu, 24 Mar 2022 20:50:28 -0000
-Date:   Thu, 24 Mar 2022 15:50:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] PCI: mvebu: Add support for sending
- Set_Slot_Power_Limit message
-Message-ID: <YjzZlPyaCtcQvIph@robh.at.kernel.org>
-References: <20220302145733.12606-1-pali@kernel.org>
- <20220302145733.12606-5-pali@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kWTv8rvzSud6vjQAPBruU1+NUsUkFIclJurG5+jMDKk=;
+        b=7UnwtBaRCctcNAcvlTsr8kP3LfwWiYvoIaFeAsRc55B3D+owEZs27FPxUYP67U/KQC
+         2oIGs2xjJ2NmHkWu9/RSlOQ5y8tRC/zdpEMxVSBTSdgoGsuRRMhkzVxf1uT8HLwQcvoS
+         06faPrGveUxuhM/FiJ5ktyZG7Wk2WvZPku0KH99yc6cGH2RRu+2xs/7OvL2SFdsFknw7
+         Kw/yQzimjHbUCtWkM3yKMagc7DqDOGTFWYasj+ilavn9/Moz/PcLX4TeEhLVsqjoG6Qd
+         PBjx3mCIilR06EwNQDQkcfL8+WBVDBbKJfBluZYaSwSg7tD6BN1KEWiuFTAIQ83szagU
+         MHtw==
+X-Gm-Message-State: AOAM533TrhD3qR6oIyqh9HQlK+A5ACsqW3t3ajZLgnxRolkkzu4T7/Dp
+        +EtJWpcgNNCdDhOqZxd4UInoDbsc+30nm56r
+X-Google-Smtp-Source: ABdhPJx9h1UpU8kVRbXSAlNw0+u3Ph4n1mfEWcjwCzeQS1YPxJU4Lkla1UzOGojJvC7lFUSPO401YA==
+X-Received: by 2002:a05:6402:198:b0:410:83e3:21d7 with SMTP id r24-20020a056402019800b0041083e321d7mr8934612edv.159.1648155095400;
+        Thu, 24 Mar 2022 13:51:35 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id 27-20020a17090600db00b006df6b34d9b8sm1546602eji.211.2022.03.24.13.51.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 13:51:34 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id b19so8243000wrh.11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:51:34 -0700 (PDT)
+X-Received: by 2002:a05:6000:1704:b0:203:d857:aa7a with SMTP id
+ n4-20020a056000170400b00203d857aa7amr5864281wrc.513.1648155093356; Thu, 24
+ Mar 2022 13:51:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220302145733.12606-5-pali@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220324134819.v2.1.I816014b6c62da5a33af5021f3cc35cea66552c00@changeid>
+In-Reply-To: <20220324134819.v2.1.I816014b6c62da5a33af5021f3cc35cea66552c00@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 24 Mar 2022 13:51:21 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UdRzeHio5Vo+zmXDt9a8oUwXiZyHvxkqjx4HVcrx7W-g@mail.gmail.com>
+Message-ID: <CAD=FV=UdRzeHio5Vo+zmXDt9a8oUwXiZyHvxkqjx4HVcrx7W-g@mail.gmail.com>
+Subject: Re: [PATCH v2] panel-edp: drm/panel-edp: Add AUO B133UAN01
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,22 +77,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 03:57:33PM +0100, Pali Rohár wrote:
-> If DT supplies the 'slot-power-limit-milliwatt' property, program
-> the value in the Slot Power Limit in the Slot Capabilities register
-> and program the Root Port to send a Set_Slot_Power_Limit Message
-> when the Link transitions to DL_Up.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
-> Changes in v2:
-> * Fix handling of slot power limit with scale x1.0 (0x00 value)
-> * Use FIELD_PREP instead of _SHIFT macros
-> * Changed commit message to Bjorn's suggestion
-> * Changed comments in the code to match PCIe spec
-> * Preserve user settings of PCI_EXP_SLTCTL_ASPL_DISABLE bit
-> ---
->  drivers/pci/controller/pci-mvebu.c | 96 ++++++++++++++++++++++++++++--
->  1 file changed, 91 insertions(+), 5 deletions(-)
+Hi,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Thu, Mar 24, 2022 at 1:48 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> Add support for the AUO B133UAN01 13.3" WUXGA panel.
+>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+>
+> Changes in v2:
+> - autodetect and configure the panel based on the EDID data instead of
+>   relying on a compatible string and hardcoded mode settings.
+>
+>  drivers/gpu/drm/panel/panel-edp.c | 1 +
+>  1 file changed, 1 insertion(+)
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+Given the trivial nature of this change, I'll plan to land it in a few
+days barring someone else yelling about it.
+
+-Doug

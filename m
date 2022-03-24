@@ -2,100 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B294E6A03
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8814E6A07
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354082AbiCXUyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 16:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
+        id S1354095AbiCXUy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 16:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355534AbiCXUxJ (ORCPT
+        with ESMTP id S1355935AbiCXUxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 16:53:09 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8E83E0CC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:51:37 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id k10so7033519edj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:51:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kWTv8rvzSud6vjQAPBruU1+NUsUkFIclJurG5+jMDKk=;
-        b=iD6u/kx7rEMaMiEJQLhlCNXkeSS/pc5DIS25/uS7QK+u4Vx0am6v8p8Vnj/csxW/Dh
-         Abo9xh6+gFlh1siWNxA6ksZo2zDZdU49sR4M0ZTN7yk44jPdjgQ+9PGdt5iLpcbAlJy5
-         u77KgsNMtUPNxLuFfnPcVYDKBLswUw6B7jPVQ=
+        Thu, 24 Mar 2022 16:53:49 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20903DA7E;
+        Thu, 24 Mar 2022 13:52:17 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso4144040otf.12;
+        Thu, 24 Mar 2022 13:52:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kWTv8rvzSud6vjQAPBruU1+NUsUkFIclJurG5+jMDKk=;
-        b=7UnwtBaRCctcNAcvlTsr8kP3LfwWiYvoIaFeAsRc55B3D+owEZs27FPxUYP67U/KQC
-         2oIGs2xjJ2NmHkWu9/RSlOQ5y8tRC/zdpEMxVSBTSdgoGsuRRMhkzVxf1uT8HLwQcvoS
-         06faPrGveUxuhM/FiJ5ktyZG7Wk2WvZPku0KH99yc6cGH2RRu+2xs/7OvL2SFdsFknw7
-         Kw/yQzimjHbUCtWkM3yKMagc7DqDOGTFWYasj+ilavn9/Moz/PcLX4TeEhLVsqjoG6Qd
-         PBjx3mCIilR06EwNQDQkcfL8+WBVDBbKJfBluZYaSwSg7tD6BN1KEWiuFTAIQ83szagU
-         MHtw==
-X-Gm-Message-State: AOAM533TrhD3qR6oIyqh9HQlK+A5ACsqW3t3ajZLgnxRolkkzu4T7/Dp
-        +EtJWpcgNNCdDhOqZxd4UInoDbsc+30nm56r
-X-Google-Smtp-Source: ABdhPJx9h1UpU8kVRbXSAlNw0+u3Ph4n1mfEWcjwCzeQS1YPxJU4Lkla1UzOGojJvC7lFUSPO401YA==
-X-Received: by 2002:a05:6402:198:b0:410:83e3:21d7 with SMTP id r24-20020a056402019800b0041083e321d7mr8934612edv.159.1648155095400;
-        Thu, 24 Mar 2022 13:51:35 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id 27-20020a17090600db00b006df6b34d9b8sm1546602eji.211.2022.03.24.13.51.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 13:51:34 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id b19so8243000wrh.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:51:34 -0700 (PDT)
-X-Received: by 2002:a05:6000:1704:b0:203:d857:aa7a with SMTP id
- n4-20020a056000170400b00203d857aa7amr5864281wrc.513.1648155093356; Thu, 24
- Mar 2022 13:51:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/QLDLUATu/B8KBKI55+l5jEhcVbVbLC4t+4Lo997I00=;
+        b=MlBBMOHIwE5WwdmDBTna/Fq8uas9VzSGTHwBF1Op95D5rNgmRHR27Na3ak/JBmBbGQ
+         vr7RzXgy49lBs5KWLqmS8TtUQ2mRHVZJ5oaQWNnswyA5AQGqX9yA616OvCfk4gQ7yJ8/
+         Xj/4Kb6hPXBy28ge0LmCc5V50Q8IifesHjrjMU4DogKBmo/r5B/jFscBepSjYC6YNeIB
+         LkqqVXqmXKLXYIq4MffW5xrKRXgeTLLOOIQx7hAZDneGBj9JEhMnfJQ9/BgHN5S+Dfgz
+         PDc6g5906uipRBC79KLufVqTyto7aHUlbrqYqrQZK2ADmgbZPnR1QUfxqLMkUsuDxkb5
+         ow+w==
+X-Gm-Message-State: AOAM530kuK8ZkNCoPTj528mI7f67kDTEgqGSgDmsFxXjGqfM96a+IWoL
+        obCodq90BC9nLecaBrNgWI0I/3PIvQ==
+X-Google-Smtp-Source: ABdhPJyFYhwTUm0TKaf6Pqx5DO+afqZXoNMWQT+r4f5yxTAUoTRetq4GNXbRCl2dY1di+ow83NKRAA==
+X-Received: by 2002:a9d:7f95:0:b0:5cd:b19f:2c3a with SMTP id t21-20020a9d7f95000000b005cdb19f2c3amr2403965otp.272.1648155136961;
+        Thu, 24 Mar 2022 13:52:16 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g105-20020a9d12f2000000b005c961f9e119sm1793184otg.35.2022.03.24.13.52.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 13:52:16 -0700 (PDT)
+Received: (nullmailer pid 2553596 invoked by uid 1000);
+        Thu, 24 Mar 2022 20:52:15 -0000
+Date:   Thu, 24 Mar 2022 15:52:15 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, bhupesh.linux@gmail.com,
+        lorenzo.pieralisi@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, svarbanov@mm-sol.com,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        sboyd@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v3 5/7] PCI: qcom: Add SM8150 SoC support
+Message-ID: <YjzZ/zfhSDlFzP7G@robh.at.kernel.org>
+References: <20220302203045.184500-1-bhupesh.sharma@linaro.org>
+ <20220302203045.184500-6-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-References: <20220324134819.v2.1.I816014b6c62da5a33af5021f3cc35cea66552c00@changeid>
-In-Reply-To: <20220324134819.v2.1.I816014b6c62da5a33af5021f3cc35cea66552c00@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 24 Mar 2022 13:51:21 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UdRzeHio5Vo+zmXDt9a8oUwXiZyHvxkqjx4HVcrx7W-g@mail.gmail.com>
-Message-ID: <CAD=FV=UdRzeHio5Vo+zmXDt9a8oUwXiZyHvxkqjx4HVcrx7W-g@mail.gmail.com>
-Subject: Re: [PATCH v2] panel-edp: drm/panel-edp: Add AUO B133UAN01
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302203045.184500-6-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Mar 24, 2022 at 1:48 PM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> Add support for the AUO B133UAN01 13.3" WUXGA panel.
->
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+On Thu, Mar 03, 2022 at 02:00:43AM +0530, Bhupesh Sharma wrote:
+> The PCIe IP (rev 1.5.0) on SM8150 SoC is similar to the one used on
+> SM8250. Hence the support is added reusing the members of ops_1_9_0.
+> 
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->
-> Changes in v2:
-> - autodetect and configure the panel based on the EDID data instead of
->   relying on a compatible string and hardcoded mode settings.
->
->  drivers/gpu/drm/panel/panel-edp.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
-Given the trivial nature of this change, I'll plan to land it in a few
-days barring someone else yelling about it.
-
--Doug
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,82 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8936F4E69A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDF94E69DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 21:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353226AbiCXUIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 16:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S1353423AbiCXUer convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Mar 2022 16:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241546AbiCXUIo (ORCPT
+        with ESMTP id S1345637AbiCXUeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 16:08:44 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F285B245C;
-        Thu, 24 Mar 2022 13:07:11 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 381DA14CD;
-        Thu, 24 Mar 2022 21:07:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1648152429;
-        bh=0eOQsHYDIIbVZCbf67FHyRGuPJuqHwQLe+/L63VKp0Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PtRlmWJgOon/0zxahejq/GCd1M8wZ9DD2K2XAn07nlV2JUnwbIiIDZMYSQu3QWbNs
-         +jlqXrgN1XWNC/ApUkTqz3aS8tzV70gR5n8wKxPy/C8h78S/dDAcanz3bziHWiUd1v
-         VnhMaUIoYhXL/4nPMjOvwempy9FkUlBmc9q4qkh0=
-Date:   Thu, 24 Mar 2022 22:07:07 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Hangyu Hua <hbh25y@gmail.com>, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: uvc_v4l2: fix possible memory leak in
- uvc_ioctl_ctrl_map
-Message-ID: <YjzPa0iJ4OuCZ8q0@pendragon.ideasonboard.com>
-References: <20220324081718.41091-1-hbh25y@gmail.com>
- <CANiDSCvqQqOZ=uigeSz7ihe-y5XDLCRYD9+ZRULDE21td5rvEQ@mail.gmail.com>
+        Thu, 24 Mar 2022 16:34:46 -0400
+X-Greylist: delayed 1232 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 13:33:13 PDT
+Received: from mail2.intersystems.com (mail2.intersystems.com [38.105.105.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8270FDF7F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 13:33:11 -0700 (PDT)
+X-InterSystems: Sent from InterSystems
+X-InterSystems: Sent from InterSystems
+X-InterSystems: Sent from InterSystems
+X-InterSystems: Sent from InterSystems
+From:   Ray Fucillo <Ray.Fucillo@intersystems.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: scalability regressions related to hugetlb_fault() changes
+Thread-Topic: scalability regressions related to hugetlb_fault() changes
+Thread-Index: AQHYP7uAL1vA/rQijE+hDIc6LhXGuA==
+Date:   Thu, 24 Mar 2022 20:12:35 +0000
+Message-ID: <D3204B1E-50A1-4261-8C75-3DF77A302502@intersystems.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.17.254.204]
+x-c2processedorg: 5d7e5ca7-6395-445f-80da-8568a4fc58e5
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <48F2A26C80B440459846FEED0F086F05@exchangemail.iscinternal.com>
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANiDSCvqQqOZ=uigeSz7ihe-y5XDLCRYD9+ZRULDE21td5rvEQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_20,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 06:17:18PM +0100, Ricardo Ribalda wrote:
-> Isnt it a dupe of:
-> https://patchwork.linuxtv.org/project/linux-media/patch/20211008120914.69175-1-ribalda@chromium.org/
-> ?
+In moving to newer versions of the kernel, our customers have experienced dramatic new scalability problems in our database application, InterSystems IRIS.  Our research has narrowed this down to new processes that attach to the database's shared memory segment taking very long delays (in some cases ~100ms!) acquiring the i_mmap_lock_read() in hugetlb_fault() as they fault in the huge page for the first time.  The addition of this lock in hugetlb_fault() matches the versions where we see this problem.  It's not just slowing the new process that incurs the delay, but backing up other processes if the page fault occurs inside a critical section within the database application.
 
-It is. I'll review that one.
+Is there something that can be improved here?  
 
-> On Thu, 24 Mar 2022 at 18:13, Hangyu Hua <hbh25y@gmail.com> wrote:
-> >
-> > map->name needs to be freed when uvc_ioctl_ctrl_map fails.
-> >
-> > Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> > ---
-> >  drivers/media/usb/uvc/uvc_v4l2.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> > index 711556d13d03..e46a2f3b06cb 100644
-> > --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> > @@ -93,6 +93,7 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
-> >
-> >         kfree(map->menu_info);
-> >  free_map:
-> > +       kfree(map->name);
-> >         kfree(map);
-> >
-> >         return ret;
+The read locks in hugetlb_fault() contend with write locks that seem to be taken in very common application code paths: shmat(), process exit, fork() (not vfork()), shmdt(), presumably others.  So hugetlb_fault() contending to read turns out to be common.  When the system is loaded, there will be many new processes faulting in pages that may blocks the write lock, which in turn blocks more readers in fault behind it, and so on...  I don't think there's any support for shared page tables in hugetlb to avoid the faults altogether.
 
--- 
-Regards,
+Switching to 1GB huge pages instead of 2MB is a good mitigation in reducing the frequency of fault, but not a complete solution.
 
-Laurent Pinchart
+Thanks for considering.
+
+Ray

@@ -2,75 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47444E6681
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 16:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1374E6692
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 17:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351554AbiCXQAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 12:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S1349927AbiCXQBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 12:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351640AbiCXQAW (ORCPT
+        with ESMTP id S243557AbiCXQBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 12:00:22 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6665BB0A4F;
-        Thu, 24 Mar 2022 08:58:25 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id q189so5288156oia.9;
-        Thu, 24 Mar 2022 08:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5/1n/yQL0PaM9gpjD8BL74vTTmyMhMnVzexUmrmhuJo=;
-        b=Xd02s76ifoRZYHgxVZVoGj7o32xaP8PYrWtiLUWFsLaid3Xe+Zg4MvqlbbeUF3XWJy
-         H1YsQvMOBj8Nqb1t0dXT4JKGp8mOaBbGUBbn1YBDIOaIQxb56dP1OCQvqz/Uj6VkdDIH
-         2uTUcFwYNXNlH1ggTs2KnooZD7ZK2k1TtK93J5u4zT2LWYdA+3eL9KCA4XYjf6JRS1BB
-         1kYs3JjyQu3kiibLECkxEGK/oTg/5uydV0Pd9EsUMj4NDr7S/Mi6Zrr04wEwL125Gfd8
-         3NERsTPTYs9Xl09XzBeDK3pLH8lZ/FQ/Zq/zAb7fq+otxeovbtX8wd5CPDBDWF3ozAhK
-         8fuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5/1n/yQL0PaM9gpjD8BL74vTTmyMhMnVzexUmrmhuJo=;
-        b=8GKLsREIorNVIWNebH0th747OL9TXgpOGXBIwy4CbKezwsIK5hts9R6cr1aeckKf9y
-         7QfXpGAcnNn2m0C+wvdqxqFoqNT0AZJuBm7uofk6v0mT6kI0waFWZkFd614KDeV9rFS/
-         MRz8UMMt9T37v7Vhy2alO3TxKpP4ktfQMyfEgdrymmJ8B7mkkshFAejl11ubrQlf/np1
-         wjS36aN3RfS6mQ11/r9WiW3Kl9AR166+dsUbgo2kJKqtKafPWqyfJgkbJnPwXIfBy+/6
-         Y1JD+2W4ecAv1SVmR6+2fLx2K4cQ+Wync0jON8aDepjGvULP/SA/eYCHr2fY4F5m6UD0
-         8AiA==
-X-Gm-Message-State: AOAM531hagjKdF7+9+8lnRTjnzDdBXhvgpzocJtW/JcrnHklcik5za61
-        dv5+gUPApCVHiUqCS8Lc5euXxAziktc=
-X-Google-Smtp-Source: ABdhPJx9Wki8uy2EDKrx8/rZ1eDeCsTF58VIL/O8LGICSDDrdUITcqbIF4jleblqxMIHXjrqPiNqYA==
-X-Received: by 2002:aca:e102:0:b0:2d9:bdc6:b2e7 with SMTP id y2-20020acae102000000b002d9bdc6b2e7mr3108149oig.128.1648137504681;
-        Thu, 24 Mar 2022 08:58:24 -0700 (PDT)
-Received: from ?IPV6:2603:8090:2005:39b3::1084? (2603-8090-2005-39b3-0000-0000-0000-1084.res6.spectrum.com. [2603:8090:2005:39b3::1084])
-        by smtp.gmail.com with ESMTPSA id m3-20020a4ae3c3000000b00320d7c78b01sm1403252oov.20.2022.03.24.08.58.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 08:58:23 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <d7e3752e-0aad-e247-3708-41f7aba8248c@lwfinger.net>
-Date:   Thu, 24 Mar 2022 10:58:22 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2] wireless: broadcom: b43legacy: Fix assigning negative
- value to unsigned variable
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>, kvalo@kernel.org
-Cc:     linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
+        Thu, 24 Mar 2022 12:01:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B922AEE;
+        Thu, 24 Mar 2022 09:00:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E1CDB8244B;
+        Thu, 24 Mar 2022 16:00:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E065C340EC;
+        Thu, 24 Mar 2022 16:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648137602;
+        bh=q79PIwzbW5QyaiQJBSuk3Pa/tpfdQBQe9SrvS827vms=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=k5Na4eSW+izeWfyLYrfuSc5u8bEfOXsp9mr+vV3qSgmWRiCPBwiXmxkg/2bmdzaiS
+         3NC/6ee9I+k8oy1xsC1EFNIWjakUKiQ2jUc5L3nMncOM1qNuzpSuI43Oj8n/wCbfCw
+         XXjy8MaVA9Hga2onOxhQzR2Uh1KDLht2iOaZd6CuEQy/1Sdtx1eFHZ2TZEx3wS6ENr
+         1hc/6l0Bmjvar4MK75StKp2fzJTO6CWhvxSXXL4b0Ift6SwLahCoIYkFI2/g/rijiw
+         RP40SpJdeoW841Hf7bwo8Pf2SVAlyhUA8hDCjgJu9sGcKXhrlul1PTLRvqz3ekMacH
+         a52HvOQylyBBA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 823E75C0192; Thu, 24 Mar 2022 09:00:01 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 09:00:01 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1648109173-28403-1-git-send-email-baihaowen@meizu.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <1648109173-28403-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Subject: Re: [PATCH] rcu: Check the validity of the boost_kthread_task pointer
+Message-ID: <20220324160001.GW4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220324111515.1810160-1-qiang1.zhang@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324111515.1810160-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,36 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/22 03:06, Haowen Bai wrote:
-> fix warning reported by smatch:
-> drivers/net/wireless/broadcom/b43legacy/phy.c:1181 b43legacy_phy_lo_b_measure()
-> warn: assigning (-772) to unsigned variable 'fval'
+On Thu, Mar 24, 2022 at 07:15:15PM +0800, Zqiang wrote:
+> The boost kthreads may spawn failed, although the probability of
+> creation failure is very low, in consideration of the robustness
+> of the code, add boost_kthread_task pointer detection.
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-This change makes no change to the executable code, but as long as it makes 
-smatch happy -
+Good catch!  As you say, rare, but definitely worth fixing.
 
-Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
+I could not resist a bit of wordsmithing.  Could you please check
+to see if I messed something up?
 
-Larry
+							Thanx, Paul
 
-> ---
-> V1->V2: modify title of this patch
->   drivers/net/wireless/broadcom/b43legacy/phy.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/broadcom/b43legacy/phy.c b/drivers/net/wireless/broadcom/b43legacy/phy.c
-> index 05404fb..c1395e6 100644
-> --- a/drivers/net/wireless/broadcom/b43legacy/phy.c
-> +++ b/drivers/net/wireless/broadcom/b43legacy/phy.c
-> @@ -1123,7 +1123,7 @@ void b43legacy_phy_lo_b_measure(struct b43legacy_wldev *dev)
->   	struct b43legacy_phy *phy = &dev->phy;
->   	u16 regstack[12] = { 0 };
->   	u16 mls;
-> -	u16 fval;
-> +	s16 fval;
->   	int i;
->   	int j;
->   
+------------------------------------------------------------------------
 
+commit ad3c438e248cbc41fe30a41287621c3dbfcdf51c
+Author: Zqiang <qiang1.zhang@intel.com>
+Date:   Thu Mar 24 19:15:15 2022 +0800
+
+    rcu: Check for successful spawn of ->boost_kthread_task
+    
+    For the spawning of the priority-boost kthreads can fail, improbable
+    though this might seem.  This commit therefore refrains from attemoting
+    to initiate RCU priority boosting when The ->boost_kthread_task pointer
+    is NULL.
+    
+    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index 6b9bcd45c7b2..d58f6d6073bf 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -1125,7 +1125,8 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
+ 	__releases(rnp->lock)
+ {
+ 	raw_lockdep_assert_held_rcu_node(rnp);
+-	if (!rcu_preempt_blocked_readers_cgp(rnp) && rnp->exp_tasks == NULL) {
++	if (!rnp->boost_kthread_task ||
++	    (!rcu_preempt_blocked_readers_cgp(rnp) && !rnp->exp_tasks)) {
+ 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 		return;
+ 	}

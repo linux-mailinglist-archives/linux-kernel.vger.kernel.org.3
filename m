@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FDB4E6114
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE2F4E6115
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 10:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349222AbiCXJ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 05:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S1349225AbiCXJ3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 05:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241571AbiCXJ2u (ORCPT
+        with ESMTP id S240807AbiCXJ3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 05:28:50 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74DF6FA23
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:27:17 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 24 Mar
- 2022 17:27:17 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 24 Mar
- 2022 17:27:15 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <harry.wentland@amd.com>, <sunpeng.li@amd.com>,
-        <Rodrigo.Siqueira@amd.com>, <alexander.deucher@amd.com>,
-        <christian.koenig@amd.com>, <Xinhui.Pan@amd.com>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <nicholas.kazlauskas@amd.com>, <lyude@redhat.com>,
-        <Jerry.Zuo@amd.com>
-CC:     <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH] drm/amd/display: Fix pointer dereferenced before checking
-Date:   Thu, 24 Mar 2022 17:27:14 +0800
-Message-ID: <1648114034-3802-1-git-send-email-baihaowen@meizu.com>
+        Thu, 24 Mar 2022 05:29:34 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B35645D19B
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 02:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=XWiAQ+Z5d0xuLBcjww
+        QPEKbQplidblsEpe/wGww446k=; b=BWCufjrBPVlhGS5mk3IwvgOK1Td0q6hxUi
+        jnLEM+Z+ZiaJ+1Ku36v+rlg9aicj+DvTUYXRScdDkakNnGdoWuLu3PI9Y5/Wo6DH
+        haRBevkUFsHnYfaIQgiigB8sDXrdsCpwSDrKurXijJQNJhwiRST9/JXk8CPeBl82
+        QfhgxNrUM=
+Received: from localhost (unknown [159.226.95.33])
+        by smtp9 (Coremail) with SMTP id DcCowACHeGSbOTxiqb57CQ--.3994S2;
+        Thu, 24 Mar 2022 17:27:55 +0800 (CST)
+From:   QintaoShen <unSimple1993@163.com>
+To:     colyli@suse.de
+Cc:     linux-bcache@vger.kernel.org, kent.overstreet@gmail.com,
+        linux-kernel@vger.kernel.org, QintaoShen <unSimple1993@163.com>
+Subject: [PATCH v1] bcache: Check for NULL return of kzalloc()
+Date:   Thu, 24 Mar 2022 17:27:54 +0800
+Message-Id: <1648114074-10045-1-git-send-email-unSimple1993@163.com>
 X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: DcCowACHeGSbOTxiqb57CQ--.3994S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtw4rury5Zw4fGr4DCw17Wrg_yoWfJrb_W3
+        WfZrn2grZ0kr1IgF42vr13XrWUta1DZF9YvFsxtr1Sqasxu3Z3Wr10vr45JayfGFWrZay7
+        Z34UJw1fuw1SkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUUPrc5UUUUU==
+X-Originating-IP: [159.226.95.33]
+X-CM-SenderInfo: 5xqvxz5sohimizt6il2tof0z/xtbBdRvNH1aEB0SbYgAAsU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer edid_buf is dereferencing pointer edid before edid is being
- null checked. Fix this by assigning edid->raw_edid to edid_buf only if 
-edid is not NULL, otherwise just NULL.
+kzalloc() is a memory allocation function which may return a NULL pointer.
+Therefore, it is better to check the return value of kzalloc() to avoid potential
+NULL-pointer dereference.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: QintaoShen <unSimple1993@163.com>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/bcache/request.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-index 29f07c2..360401d 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-@@ -89,7 +89,7 @@ enum dc_edid_status dm_helpers_parse_edid_caps(
- {
- 	struct amdgpu_dm_connector *aconnector = link->priv;
- 	struct drm_connector *connector = &aconnector->base;
--	struct edid *edid_buf = (struct edid *) edid->raw_edid;
-+	struct edid *edid_buf = edid ? (struct edid *) edid->raw_edid : NULL;
- 	struct cea_sad *sads;
- 	int sad_count = -1;
- 	int sadb_count = -1;
+diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
+index fdd0194..232ffe3 100644
+--- a/drivers/md/bcache/request.c
++++ b/drivers/md/bcache/request.c
+@@ -1105,6 +1105,9 @@ static void detached_dev_do_request(struct bcache_device *d, struct bio *bio,
+ 	 * which would call closure_get(&dc->disk.cl)
+ 	 */
+ 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
++	if (!ddpp)
++		return ;
++
+ 	ddip->d = d;
+ 	/* Count on the bcache device */
+ 	ddip->orig_bdev = orig_bdev;
 -- 
 2.7.4
 

@@ -2,189 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961BA4E61FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9152C4E6205
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349615AbiCXKzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S1349619AbiCXLBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243846AbiCXKzT (ORCPT
+        with ESMTP id S240825AbiCXLBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:55:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C425AFD06
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648119227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YL0ux8ZP7RRT+zZTE0y7IJkuSOvClsy9Ez3fBXBZARI=;
-        b=FoWy8qyMBH6HX7f6ZJyL1JAgSSa85haezCTqJ/ZbxXjXRLajs4qTsXZmoCDSq0mHf5lKPa
-        48QL5CTUaweBhoQSYz55M0nRk8gGEb2MDuMIvAV10t9dGv3F9kLxoW1wfwCU+GoGfT9OtE
-        +GwFonoxigozHZlCa888fm3DVX+rNbg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-384-ON-5c832NjyDq7O6SBEAZQ-1; Thu, 24 Mar 2022 06:53:41 -0400
-X-MC-Unique: ON-5c832NjyDq7O6SBEAZQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61A55296A60B;
-        Thu, 24 Mar 2022 10:53:41 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 01F1F9E60;
-        Thu, 24 Mar 2022 10:53:38 +0000 (UTC)
-Message-ID: <331ce3b91d8ac2033f23a77b17c86e687c2646ce.camel@redhat.com>
-Subject: Re: [RFCv2 PATCH 03/12] KVM: SVM: Detect X2APIC virtualization
- (x2AVIC) support
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Mar 2022 12:53:37 +0200
-In-Reply-To: <20220308163926.563994-4-suravee.suthikulpanit@amd.com>
-References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
-         <20220308163926.563994-4-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Mar 2022 07:01:40 -0400
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C2E85BC7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648119601;
+        bh=MiK7sEzGBHCdbf5gWTcvE8l+cSUdFAE938ETs/tbpfg=;
+        h=From:To:Cc:Subject:Date;
+        b=mjfoAi4UL19Pd+YTBM8ygiYiy0C8+5VciCNN+RXKaGbV+J0imRFjJJ1fRPvvQUePl
+         ZdxbjgQo+QSN0y47V5hswtjFXvs5ruFus/19fqIcbO/+zbW3MQ6dbVQ4q7xM9nnNLa
+         NkNBSElrbJbD3f90dvu3fEVd4VYqLGtEFP1YCHmg=
+Received: from localhost.localdomain ([43.227.138.48])
+        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
+        id EAF35228; Thu, 24 Mar 2022 18:58:47 +0800
+X-QQ-mid: xmsmtpt1648119527t812l750o
+Message-ID: <tencent_E01412E12D4A66FFB02064CC9CB9141CDE08@qq.com>
+X-QQ-XMAILINFO: M7dxyDFn9MPmPxEIf5rL3xQJmuzpC42ZBVPiLrqnw6oyG9TiSExtqoS7YccQ3A
+         Lv7wv+VILkMCbjfrV788WJs/9vbr+/0zYxuplSuXeceGKI5IO1AQVPbzQEAMgYZ+t0Pyp0KtZSDW
+         CVPkINWkLS6GI8NQqk3rm1nuFV6H8NSFFLF8yiBb4FJwMs5vdz/s8UEUsz9truS+SsEDpsTlEmBs
+         NyYHqLxe89RuI2O+hF5d2C54TCTqWUpp5La1BgMB58ZM/CZY4nJcvbXBAQ7DmO7+HP5ZgffLkzeN
+         Mv7FTzNmzOHEcNasq0fTIsxPm84s/iTYUjxCR2ubVRoxFhlb4M/E923aF4eM6yYo8ZAGlTHRVLCB
+         hkKgY18m9Evy5IgjZOAnlwxGlyLfIA1AA0hBhEfBFeL+0or+c2JQNg9/f3O/mQygUG+ZzYHgYpus
+         C+RkuH+cL7pUhtEuJhbEeOr15J+CM00Aw7LjkuhHXNbLhcv7tiymjVb2Z6P/ehy+Lwgn94fEPNCj
+         pnTkmrBZxBtiTbT5LkrIY3c6tN3AkjKpg+11a8C+z4+yuq/dbKP8hH3fI61hdFj6nZhwCwWmQ3ap
+         jTQD2uvIxoyVLiB7dM7Upx3otN/f1/mPxt9qoDLlzK07EpLPsMcUR+W19qzMzDPhoYsA6RZNrrln
+         NA3qREI6nckAZ7+rx6fIai+J9XXwIFqryb0ziejKdGyN3H7msidcVAX2DgMAvtGPiL683Fr3/pID
+         3mc70c5n6ZVC+hciZ9YgdmFRFSIFtXce3bq+vNCavgszvlUyVEIoKEWBGhrcWENjSeaCTVHYKyPe
+         fHn4IkCE32/998gu1o3Uco3BL54VFX9s9NbuWcQzhfXgsaN2WGstodSZCGlh56lUv6EUpO0zBOjr
+         uXmAgbYty6ph3UgWGP9BMFdwTydSrhfN0APs+vSdKGcF0TE0Xn2gtjp5lFLUoJDaxlbQsTaVxlr1
+         zQ1FtSp4g=
+From:   xkernel.wang@foxmail.com
+To:     tomba@kernel.org, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] drm/omapdrm: check the return value of kzalloc()
+Date:   Thu, 24 Mar 2022 18:58:04 +0800
+X-OQ-MSGID: <20220324105804.3088-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
-> Add CPUID check for the x2APIC virtualization (x2AVIC) feature.
-> If available, the SVM driver can support both AVIC and x2AVIC modes
-> when load the kvm_amd driver with avic=1. The operating mode will be
-> determined at runtime depending on the guest APIC mode.
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/include/asm/svm.h |  3 +++
->  arch/x86/kvm/svm/avic.c    | 34 ++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/svm/svm.c     |  8 ++------
->  arch/x86/kvm/svm/svm.h     |  1 +
->  4 files changed, 40 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index 7eb2df5417fb..7a7a2297165b 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -195,6 +195,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
->  #define AVIC_ENABLE_SHIFT 31
->  #define AVIC_ENABLE_MASK (1 << AVIC_ENABLE_SHIFT)
->  
-> +#define X2APIC_MODE_SHIFT 30
-> +#define X2APIC_MODE_MASK (1 << X2APIC_MODE_SHIFT)
-> +
->  #define LBR_CTL_ENABLE_MASK BIT_ULL(0)
->  #define VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK BIT_ULL(1)
->  
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 60cd346acd1c..49b185f0d42e 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -40,6 +40,12 @@
->  #define AVIC_GATAG_TO_VMID(x)		((x >> AVIC_VCPU_ID_BITS) & AVIC_VM_ID_MASK)
->  #define AVIC_GATAG_TO_VCPUID(x)		(x & AVIC_VCPU_ID_MASK)
->  
-> +enum avic_modes {
-> +	AVIC_MODE_NONE = 0,
-> +	AVIC_MODE_X1,
-> +	AVIC_MODE_X2,
-> +};
-> +
->  /* Note:
->   * This hash table is used to map VM_ID to a struct kvm_svm,
->   * when handling AMD IOMMU GALOG notification to schedule in
-> @@ -50,6 +56,7 @@ static DEFINE_HASHTABLE(svm_vm_data_hash, SVM_VM_DATA_HASH_BITS);
->  static u32 next_vm_id = 0;
->  static bool next_vm_id_wrapped = 0;
->  static DEFINE_SPINLOCK(svm_vm_data_hash_lock);
-> +static enum avic_modes avic_mode;
->  
->  /*
->   * This is a wrapper of struct amd_iommu_ir_data.
-> @@ -1014,3 +1021,30 @@ void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
->  
->  	put_cpu();
->  }
-> +
-> +/*
-> + * Note:
-> + * - The module param avic enable both xAPIC and x2APIC mode.
-> + * - Hypervisor can support both xAVIC and x2AVIC in the same guest.
-> + * - The mode can be switched at run-time.
-> + */
-> +bool avic_hardware_setup(struct kvm_x86_ops *x86_ops)
-> +{
-> +	if (!npt_enabled)
-> +		return false;
-> +
-> +	if (boot_cpu_has(X86_FEATURE_AVIC)) {
-> +		avic_mode = AVIC_MODE_X1;
-> +		pr_info("AVIC enabled\n");
-> +	}
-> +
-> +	if (boot_cpu_has(X86_FEATURE_X2AVIC)) {
-> +		avic_mode = AVIC_MODE_X2;
-> +		pr_info("x2AVIC enabled\n");
-> +	}
-> +
-> +	if (avic_mode != AVIC_MODE_NONE)
-> +		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
-> +
-> +	return !!avic_mode;
-> +}
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 821edf664e7a..3048f4b758d6 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4817,13 +4817,9 @@ static __init int svm_hardware_setup(void)
->  			nrips = false;
->  	}
->  
-> -	enable_apicv = avic = avic && npt_enabled && boot_cpu_has(X86_FEATURE_AVIC);
-> +	enable_apicv = avic = avic && avic_hardware_setup(&svm_x86_ops);
->  
-> -	if (enable_apicv) {
-> -		pr_info("AVIC enabled\n");
-> -
-> -		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
-> -	} else {
-> +	if (!enable_apicv) {
->  		svm_x86_ops.vcpu_blocking = NULL;
->  		svm_x86_ops.vcpu_unblocking = NULL;
->  	}
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index fa98d6844728..b53c83a44ec2 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -558,6 +558,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
->  
->  /* avic.c */
->  
-> +bool avic_hardware_setup(struct kvm_x86_ops *ops);
->  int avic_ga_log_notifier(u32 ga_tag);
->  void avic_vm_destroy(struct kvm *kvm);
->  int avic_vm_init(struct kvm *kvm);
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+kzalloc() is a memory allocation function which can return NULL when
+some internal memory errors happen. So it is better to check it.
+Besides, to properly handle the error, another check is added for the
+return of omap_irq_wait_init().
 
-Best regards,
-	Maxim Levitsky
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/gpu/drm/omapdrm/omap_crtc.c | 12 ++++++++----
+ drivers/gpu/drm/omapdrm/omap_irq.c  |  3 +++
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/gpu/drm/omapdrm/omap_crtc.c b/drivers/gpu/drm/omapdrm/omap_crtc.c
+index 06a719c..12c0008 100644
+--- a/drivers/gpu/drm/omapdrm/omap_crtc.c
++++ b/drivers/gpu/drm/omapdrm/omap_crtc.c
+@@ -166,10 +166,14 @@ void omap_crtc_set_enabled(struct drm_crtc *crtc, bool enable)
+ 	dispc_mgr_enable(priv->dispc, channel, enable);
+ 	omap_crtc->enabled = enable;
+ 
+-	ret = omap_irq_wait(dev, wait, msecs_to_jiffies(100));
+-	if (ret) {
+-		dev_err(dev->dev, "%s: timeout waiting for %s\n",
+-				omap_crtc->name, enable ? "enable" : "disable");
++	if (!wait) {
++		dev_err(dev->dev, "%s: out of memory\n", omap_crtc->name);
++	} else {
++		ret = omap_irq_wait(dev, wait, msecs_to_jiffies(100));
++		if (ret) {
++			dev_err(dev->dev, "%s: timeout waiting for %s\n",
++					omap_crtc->name, enable ? "enable" : "disable");
++		}
+ 	}
+ 
+ 	if (omap_crtc->channel == OMAP_DSS_CHANNEL_DIGIT) {
+diff --git a/drivers/gpu/drm/omapdrm/omap_irq.c b/drivers/gpu/drm/omapdrm/omap_irq.c
+index 4aca14d..a234462 100644
+--- a/drivers/gpu/drm/omapdrm/omap_irq.c
++++ b/drivers/gpu/drm/omapdrm/omap_irq.c
+@@ -45,6 +45,9 @@ struct omap_irq_wait * omap_irq_wait_init(struct drm_device *dev,
+ 	struct omap_irq_wait *wait = kzalloc(sizeof(*wait), GFP_KERNEL);
+ 	unsigned long flags;
+ 
++	if (!wait)
++		return NULL;
++
+ 	init_waitqueue_head(&wait->wq);
+ 	wait->irqmask = irqmask;
+ 	wait->count = count;
+-- 

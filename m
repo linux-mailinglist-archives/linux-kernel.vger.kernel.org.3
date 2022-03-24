@@ -2,276 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53984E637E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B64444E6380
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350236AbiCXMoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S1350240AbiCXMoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbiCXMoC (ORCPT
+        with ESMTP id S231998AbiCXMof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:44:02 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5846E9D07B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:42:26 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id m26-20020a05600c3b1a00b0038c8b999f58so7149227wms.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SRqP4OX0c96t915lu5xWOnRiTjEBkrJ/XwZE+rbqkCo=;
-        b=P/WngdM3nakUoDenPDReFSCTsDEinjVUvPHE055Ojs+n098elhPOwpfy2UEwNBh1qJ
-         tt3ufnp2NltgdfiCFwI2q4OueAnf0nZzzXhONkfOtLiprE7e+Fo7KsUJWM/ZqqV05FX0
-         PriasQnURxxEA7nJ27996IH1yN6gLmPTC0GQe5Ad39FUz83F68sQyIG3gYTCiXLk3xpT
-         FEQ1X3KCy3EBFkuOQH09DSDjWjJgKPbjzFc9uLqqYftyXfWAev7qmDlCUSVWBx6bIQpN
-         xggBjDP8ii7xLyWTjKMnACvK4eVIHwGhfUlUUBbYbSJtZffe5Ee3oh6PNX4FxZIBoE8W
-         gznQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SRqP4OX0c96t915lu5xWOnRiTjEBkrJ/XwZE+rbqkCo=;
-        b=xjhrJEynvmgKl3C9kaJB5uSc2w8/ktP95BD3oTj8ssm+HuEy/So96kwrxGeUbCo0YO
-         JubSBNCX5l3EYhM3Q2Fn3BeKTtgC2ItJ6D/I3L7s6Q9aGyCyONVH9AmlcsgpJafmDc4j
-         l9k3/02u5jkVFu/MDbxaL7tldMao27nrJBz3s2OyTywkBd+mUJVneivANClTHFAcu1OB
-         OSl5O2c+DiXHFMOI8zTYUChOoKB9+7nsFJriD4ODSrp+NwIjmLqu8dxgt+ZE8w8YKNlg
-         bBmAe/uTzALPLRWS0FSn53Xuiw4oHyw4aRgePyZ2AnsGXGeKD/7n4gcGflOqBZeT1I+Z
-         34zA==
-X-Gm-Message-State: AOAM532IAMVqr8sC8vxHTuycR7RL+OlI1u+21S1/fDDp/vkUcG8ehT7G
-        vsJFeTA+BbFP8VMvZ/5jJjA55A==
-X-Google-Smtp-Source: ABdhPJzVIx6jSXipIQV5bTb6qn4mBgup/uRtzIUMfD9quLWIlEB+tpRKiLSI/72mYWvvTWaMAhbzfQ==
-X-Received: by 2002:a05:600c:3b08:b0:38c:c8f1:16ca with SMTP id m8-20020a05600c3b0800b0038cc8f116camr4725686wms.192.1648125744801;
-        Thu, 24 Mar 2022 05:42:24 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id m3-20020a5d64a3000000b00203ed35b0aesm4175170wrp.108.2022.03.24.05.42.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 05:42:24 -0700 (PDT)
-Message-ID: <9c90300e-ac2d-be53-a7c9-7b00a059204e@nexus-software.ie>
-Date:   Thu, 24 Mar 2022 12:42:23 +0000
+        Thu, 24 Mar 2022 08:44:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BED1C4C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:43:03 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0970F1F745;
+        Thu, 24 Mar 2022 12:43:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648125782; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KtkJHll3BGHTPIchNMgaGNfzKDZMQ29t02N6cPbRei8=;
+        b=WmEIeEQumjQlWOh3pJEUKzE7T8O+U2xNXKX+KlcLt/ijrxWI05XaNwqkjRNdnoOmkICLWn
+        gM6tYrTi4FDvr2gWUm341gRjdASUkBoB313ZN0eUGPnUlRRQsbSDHtwaZc/U1aYzt/Ltcd
+        Hiezll6ttvEyIPTX+1v0xaYTZnI4iq0=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C8E96A3B93;
+        Thu, 24 Mar 2022 12:43:01 +0000 (UTC)
+Date:   Thu, 24 Mar 2022 13:42:56 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Juergen Gross <jgross@suse.com>, linux-mm@kvack.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        Jerome Glisse <jglisse@redhat.com>
+Subject: Re: blocking vs. non-blocking mmu notifiers
+Message-ID: <YjxnULAWb3PLvrky@dhcp22.suse.cz>
+References: <8e8ec786-74db-157b-a290-b1537941e91d@suse.com>
+ <YjrsOnxaPYc3rbdj@dhcp22.suse.cz>
+ <20220323163146.GI64706@ziepe.ca>
+ <YjtPpxlE/zWwnJ0W@dhcp22.suse.cz>
+ <20220323170404.GK64706@ziepe.ca>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3] wcn36xx: Implement tx_rate reporting
-Content-Language: en-US
-To:     Edmond Gagnon <egagnon@squareup.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-Cc:     Benjamin Li <benl@squareup.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318195804.4169686-3-egagnon@squareup.com>
- <20220323214533.1951791-1-egagnon@squareup.com>
-From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
-In-Reply-To: <20220323214533.1951791-1-egagnon@squareup.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220323170404.GK64706@ziepe.ca>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2022 21:45, Edmond Gagnon wrote:
-> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
-> rate:
+On Wed 23-03-22 14:04:04, Jason Gunthorpe wrote:
+> On Wed, Mar 23, 2022 at 05:49:43PM +0100, Michal Hocko wrote:
+> > > The bug here is that prior to commit a81461b0546c ("xen/gntdev: update
+> > > to new mmu_notifier semantic") wired the mn_invl_range_start() which
+> > > takes a mutex to invalidate_page, which is defined to run in an atomic
+> > > context.
+> > 
+> > Yeah, we have already identified that but quickly realized that the
+> > whole mmu notifier overhaul which this fix depends on would be no no for
+> > backporting to our older code base. So we are trying to find our way
+> > around that.
 > 
-> root@linaro-developer:~# iw wlan0 link
-> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
->          SSID: SQ-DEVICETEST
->          freq: 5200
->          RX: 4141 bytes (32 packets)
->          TX: 2082 bytes (15 packets)
->          signal: -77 dBm
->          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
->          tx bitrate: 6.0 MBit/s
+> IMHO you don't need everything, just commit 369ea8242c0f ("mm/rmap:
+> update to new mmu_notifier semantic v2") which adds the missing
+> start/end outside the lock for the page callbacks.
 > 
->          bss flags:      short-slot-time
->          dtim period:    1
->          beacon int:     100
-> 
-> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
-> firmware message and reports it via ieee80211_ops::sta_statistics.
-> 
-> root@linaro-developer:~# iw wlan0 link
-> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
->          SSID: SQ-DEVICETEST
->          freq: 5700
->          RX: 26788094 bytes (19859 packets)
->          TX: 1101376 bytes (12119 packets)
->          signal: -75 dBm
->          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
->          tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
-> 
->          bss flags:      short-slot-time
->          dtim period:    1
->          beacon int:     100
-> 
-> Tested on MSM8939 with WCN3680B running firmware CNSS-PR-2-0-1-2-c1-00083,
-> and verified by sniffing frames over the air with Wireshark to ensure the
-> MCS indices match.
-> 
-> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
-> Reviewed-by: Benjamin Li <benl@squareup.com>
-> ---
-> 
-> Changes in v3:
->   - Refactored to report tx_rate via ieee80211_ops::sta_statistics
->   - Dropped get_sta_index patch
->   - Addressed style comments
-> Changes in v2:
->   - Refactored to use existing wcn36xx_hal_get_stats_{req,rsp}_msg structs.
->   - Added more notes about testing.
->   - Reduced reporting interval to 3000msec.
->   - Assorted type and memory safety fixes.
->   - Make wcn36xx_smd_get_stats friendlier to future message implementors.
-> 
->   drivers/net/wireless/ath/wcn36xx/hal.h  |  7 +++-
->   drivers/net/wireless/ath/wcn36xx/main.c | 16 +++++++
->   drivers/net/wireless/ath/wcn36xx/smd.c  | 56 +++++++++++++++++++++++++
->   drivers/net/wireless/ath/wcn36xx/smd.h  |  2 +
->   drivers/net/wireless/ath/wcn36xx/txrx.c | 29 +++++++++++++
->   drivers/net/wireless/ath/wcn36xx/txrx.h |  1 +
->   6 files changed, 110 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/ath/wcn36xx/hal.h b/drivers/net/wireless/ath/wcn36xx/hal.h
-> index 2a1db9756fd5..46a49f0a51b3 100644
-> --- a/drivers/net/wireless/ath/wcn36xx/hal.h
-> +++ b/drivers/net/wireless/ath/wcn36xx/hal.h
-> @@ -2626,7 +2626,12 @@ enum tx_rate_info {
->   	HAL_TX_RATE_SGI = 0x8,
->   
->   	/* Rate with Long guard interval */
-> -	HAL_TX_RATE_LGI = 0x10
-> +	HAL_TX_RATE_LGI = 0x10,
-> +
-> +	/* VHT rates */
-> +	HAL_TX_RATE_VHT20  = 0x20,
-> +	HAL_TX_RATE_VHT40  = 0x40,
-> +	HAL_TX_RATE_VHT80  = 0x80,
->   };
->   
->   struct ani_global_class_a_stats_info {
-> diff --git a/drivers/net/wireless/ath/wcn36xx/main.c b/drivers/net/wireless/ath/wcn36xx/main.c
-> index b545d4b2b8c4..fc76b090c39f 100644
-> --- a/drivers/net/wireless/ath/wcn36xx/main.c
-> +++ b/drivers/net/wireless/ath/wcn36xx/main.c
-> @@ -1400,6 +1400,21 @@ static int wcn36xx_get_survey(struct ieee80211_hw *hw, int idx,
->   	return 0;
->   }
->   
-> +static void wcn36xx_sta_statistics(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
-> +				   struct ieee80211_sta *sta, struct station_info *sinfo)
+> Then you can take safely a8146 into gntdev.
 
+Thanks Jason!
 
-Consider running this through checkpatch.pl and fixing most of the 
-complaints, use your discretion.
-
-scripts/checkpatch.pl --strict 
-~/Development/patches/linux/wifi/v3-wcn36xx-Implement-tx_rate-reporting.patch
-
-static void wcn36xx_sta_statistics(struct ieee80211_hw *hw,
-                                    struct ieee80211_vif *vif,
-                                    struct ieee80211_sta *sta,
-                                    struct station_info *sinfo)
-
-> +{
-> +	struct wcn36xx *wcn;
-> +	u8 sta_index;
-> +	int status = 0;
-> +
-> +	wcn = hw->priv;
-> +	sta_index = get_sta_index(vif, wcn36xx_sta_to_priv(sta));
-> +	status = wcn36xx_smd_get_stats(wcn, sta_index, HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
-
-status = wcn36xx_smd_get_stats(wcn, sta_index,
-                                HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
-
-
-> +
-> +	if (status)
-> +		wcn36xx_err("wcn36xx_smd_get_stats failed\n");
-> +}
-> +
->   static const struct ieee80211_ops wcn36xx_ops = {
->   	.start			= wcn36xx_start,
->   	.stop			= wcn36xx_stop,
-> @@ -1423,6 +1438,7 @@ static const struct ieee80211_ops wcn36xx_ops = {
->   	.set_rts_threshold	= wcn36xx_set_rts_threshold,
->   	.sta_add		= wcn36xx_sta_add,
->   	.sta_remove		= wcn36xx_sta_remove,
-> +	.sta_statistics		= wcn36xx_sta_statistics,
->   	.ampdu_action		= wcn36xx_ampdu_action,
->   #if IS_ENABLED(CONFIG_IPV6)
->   	.ipv6_addr_change	= wcn36xx_ipv6_addr_change,
-> diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
-> index caeb68901326..8f9aa892e5ec 100644
-> --- a/drivers/net/wireless/ath/wcn36xx/smd.c
-> +++ b/drivers/net/wireless/ath/wcn36xx/smd.c
-> @@ -2627,6 +2627,61 @@ int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 tid, u8 direction, u8 sta_index)
->   	return ret;
->   }
->   
-> +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32 stats_mask,
-> +			  struct station_info *sinfo)
-> +{
-> +	struct wcn36xx_hal_stats_req_msg msg_body;
-> +	struct wcn36xx_hal_stats_rsp_msg *rsp;
-         struct ani_global_class_a_stats_info *stats_info;
-> +	void *rsp_body;
-> +	int ret = 0;
-> +
-> +	if (stats_mask & ~HAL_GLOBAL_CLASS_A_STATS_INFO) {
-> +		wcn36xx_err("stats_mask 0x%x contains unimplemented types\n",
-> +			    stats_mask);
-> +		return -EINVAL;
-> +	}
-> +
-> +	mutex_lock(&wcn->hal_mutex);
-> +	INIT_HAL_MSG(msg_body, WCN36XX_HAL_GET_STATS_REQ);
-> +
-> +	msg_body.sta_id = sta_index;
-> +	msg_body.stats_mask = stats_mask;
-> +
-> +	PREPARE_HAL_BUF(wcn->hal_buf, msg_body);
-> +
-> +	ret = wcn36xx_smd_send_and_wait(wcn, msg_body.header.len);
-> +	if (ret) {
-> +		wcn36xx_err("sending hal_get_stats failed\n");
-> +		goto out;
-> +	}
-> +
-> +	ret = wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len);
-> +	if (ret) {
-> +		wcn36xx_err("hal_get_stats response failed err=%d\n", ret);
-> +		goto out;
-> +	}
-> +
-> +	rsp = (struct wcn36xx_hal_stats_rsp_msg *)wcn->hal_buf;
-> +	rsp_body = (wcn->hal_buf + sizeof(struct wcn36xx_hal_stats_rsp_msg));
-> +
-> +	if (rsp->stats_mask != stats_mask) {
-> +		wcn36xx_err("stats_mask 0x%x differs from requested 0x%x\n",
-> +			    rsp->stats_mask, stats_mask);
-> +		goto out;
-> +	}
-> +
-If you take a pointer and cast it, then you won't have this very long 
-line with the cast
-
-         stats_info = (struct ani_global_class_a_stats_info *)rsp_body;
-> +	if (rsp->stats_mask & HAL_GLOBAL_CLASS_A_STATS_INFO) {
-> +		wcn36xx_process_tx_rate((struct ani_global_class_a_stats_info *)rsp_body,
-> +					&sinfo->txrate);
-                 wcn36xx_process_tx_rate(stats_info, &sinfo->txrate);
-
-
-Other than that LGTM
-
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+-- 
+Michal Hocko
+SUSE Labs

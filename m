@@ -2,114 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D28D4E68B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C24474E68BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352669AbiCXSeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 14:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S1352686AbiCXSfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238496AbiCXSeR (ORCPT
+        with ESMTP id S1345326AbiCXSfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 14:34:17 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3554B7151;
-        Thu, 24 Mar 2022 11:32:45 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22OGIMG7018966;
-        Thu, 24 Mar 2022 18:32:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=QPEoHxcEwKvYGqD5wCoP7vHQWU9iiR1gyHKaskx0ZaY=;
- b=YDBpcmCRe4ki6BgB0SzAPfHDpOgPtoKSUOAJ9H6C/9pX+LdL4n4BkLFoH63IckXnstJs
- NdRVabkXq6ZjY8MAGiNTH9gubWNuk5juaAZCsPKK/Fd0ld/mQxhtZziEWROez1mKQrxW
- bFZIf7hmf8bwtYZ4yZa/rpa82GBqUdi4rPE+KwqXoXYWmwipmv0u9lmQSSjiTPaYRdOI
- VcU/xsKboRIw0dBPQjCQ4PeM2FwRQU0a51BljHE/Ky1j0TqZMP6T9U148McERsplQV73
- 0EUyJAxe190C98PHRB8DTNBgKRUMBNt5wTQqschIecSpuDDeUYQsArLo1ob2wAeP6s6k Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f0kawf7yq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Mar 2022 18:32:24 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22OHq0IS007551;
-        Thu, 24 Mar 2022 18:32:23 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f0kawf7y4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Mar 2022 18:32:23 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22OIKRCQ015319;
-        Thu, 24 Mar 2022 18:32:21 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 3ew6t8sta4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Mar 2022 18:32:21 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22OIWJah41681174
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Mar 2022 18:32:19 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F2F6A405B;
-        Thu, 24 Mar 2022 18:32:19 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 35D4DA4054;
-        Thu, 24 Mar 2022 18:32:18 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.63.111])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Thu, 24 Mar 2022 18:32:18 +0000 (GMT)
-Date:   Thu, 24 Mar 2022 19:31:58 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Maxime Bizon <mbizon@freebox.fr>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@toke.dk>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-Message-ID: <20220324193158.5fcae106.pasic@linux.ibm.com>
-In-Reply-To: <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
-References: <1812355.tdWV9SEqCh@natalenko.name>
-        <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
-        <20220324055732.GB12078@lst.de>
-        <4386660.LvFx2qVVIh@natalenko.name>
-        <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com>
-        <878rsza0ih.fsf@toke.dk>
-        <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
-        <20220324163132.GB26098@lst.de>
-        <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Thu, 24 Mar 2022 14:35:21 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DAF32EC4;
+        Thu, 24 Mar 2022 11:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1648146830; x=1679682830;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=F4XLeJkRXeQm1oTsqoQy/DIHpkva71gmVFFW70rGJ50=;
+  b=bMnZ8ce6WSGYB1vhTR9BEnBH/5jLlsi8EfLZ+/8kn+yKsOVtRISJh4Et
+   ibZr87mHiojf5SD3oBMwwQDWDJowVtKdgWuh84+/V1yWCDT/1GdK3p+yy
+   26KbjzFG8LXBH1/4umvCQqO/IvZT3yEmquqOpaGfNvcxGAF4DwentMhuN
+   0=;
+X-IronPort-AV: E=Sophos;i="5.90,208,1643673600"; 
+   d="scan'208";a="205119688"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-b69ea591.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 24 Mar 2022 18:33:46 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-b69ea591.us-east-1.amazon.com (Postfix) with ESMTPS id 6522DC0944;
+        Thu, 24 Mar 2022 18:33:40 +0000 (UTC)
+Received: from EX13D02UWC001.ant.amazon.com (10.43.162.243) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Thu, 24 Mar 2022 18:33:39 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D02UWC001.ant.amazon.com (10.43.162.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Thu, 24 Mar 2022 18:33:39 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
+ Server id 15.0.1497.32 via Frontend Transport; Thu, 24 Mar 2022 18:33:39
+ +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id 08FDC2549; Thu, 24 Mar 2022 18:33:39 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <german.gomez@arm.com>,
+        <leo.yan@linaro.org>, <acme@kernel.org>
+CC:     <alisaidi@amazon.com>, <benh@kernel.crashing.org>,
+        <Nick.Forrington@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <andrew.kilroy@arm.com>, <james.clark@arm.com>,
+        <john.garry@huawei.com>, <jolsa@kernel.org>, <kjain@linux.ibm.com>,
+        <lihuafei1@huawei.com>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <mingo@redhat.com>,
+        <namhyung@kernel.org>, <peterz@infradead.org>, <will@kernel.org>
+Subject: [PATCH v4 0/4] perf: arm-spe: Decode SPE source and use for perf c2c
+Date:   Thu, 24 Mar 2022 18:33:19 +0000
+Message-ID: <20220324183323.31414-1-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: oKSb7ZJ3AqHPRcTREuBg4BsuIsetEW2S
-X-Proofpoint-GUID: DxCDOKV1iW1_bko4dmsq5AdF-oH4bAFl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-24_06,2022-03-24_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- mlxlogscore=999 priorityscore=1501 phishscore=0 lowpriorityscore=0
- impostorscore=0 clxscore=1011 spamscore=0 suspectscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203240101
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-15.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,44 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 16:52:31 +0000
-Robin Murphy <robin.murphy@arm.com> wrote:
+When synthesizing data from SPE, augment the type with source information
+for Arm Neoverse cores so we can detect situtions like cache line
+contention and transfers on Arm platforms. 
 
-> > Creating a new mapping for the same buffer before unmapping the
-> > previous one does looks rather bogus.  But it does not fit the
-> > pattern where revering the sync_single changes make the driver
-> > work again.  
-> 
-> OK, you made me look :)
-> 
-> Now that it's obvious what to look for, I can only conclude that during 
-> the stanza in ath_edma_get_buffers(), the device is still writing to the 
-> buffer while ownership has been transferred to the CPU, and whatever got 
-> written while ath9k_hw_process_rxdesc_edma() was running then gets wiped 
-> out by the subsequent sync_for_device, which currently resets the 
-> SWIOTLB slot to the state that sync_for_cpu copied out. By the letter of 
-> the DMA API that's not allowed, but on the other hand I'm not sure if we 
-> even have a good idiom for "I can't tell if the device has finished with 
-> this buffer or not unless I look at it" :/
+This changes enables the expected behavior of perf c2c on a system with
+SPE where lines that are shared among multiple cores show up in perf c2c
+output. 
 
-I agree with your analysis. Especially with the latter part (were you
-state that we don't have a good idiom for that use case). 
+These changes switch to use mem_lvl_num to encode the level information
+instead of mem_lvl which is being deprecated, but I haven't found other
+users of mem_lvl_num. 
 
-I believe, a stronger statement is also true: it is fundamentally
-impossible to accommodate use cases where the device and the cpu need
-concurrent access to a dma buffer, if the dma buffer isn't in dma
-coherent memory.
+Changes in v4:
+  * Bring-in the kernel's arch/arm64/include/asm/cputype.h into tools/ 
+  * Add neoverse-v1 to the neoverse cores list
 
-If the dma buffer is in dma coherent memory, and we don't need swiotlb,
-then we don't need the dma_sync functionality. 
+Ali Saidi (4):
+  tools: arm64: Import cputype.h
+  perf arm-spe: Use SPE data source for neoverse cores
+  perf mem: Support mem_lvl_num in c2c command
+  perf mem: Support HITM for when mem_lvl_num is any
 
-Specifically for swiotlb, if the swiotlb buffer is in dma coherent
-memory, the driver could peek the swiotlb buffer, but I have no idea if
-we can provide a remotely sane API for that. The point is the device
-would have peek not via a pointer to the original buffer, but get
-suitable pointer to the bounce buffer, which would be probably be
-considered valid, as long as the mapping is valid. Honestly IMHO quite
-ugly but I see no other way. 
+ tools/arch/arm64/include/asm/cputype.h        | 258 ++++++++++++++++++
+ .../util/arm-spe-decoder/arm-spe-decoder.c    |   1 +
+ .../util/arm-spe-decoder/arm-spe-decoder.h    |  12 +
+ tools/perf/util/arm-spe.c                     | 110 +++++++-
+ tools/perf/util/mem-events.c                  |  20 +-
+ 5 files changed, 383 insertions(+), 18 deletions(-)
+ create mode 100644 tools/arch/arm64/include/asm/cputype.h
 
-Regards,
-Halil
+-- 
+2.32.0
+

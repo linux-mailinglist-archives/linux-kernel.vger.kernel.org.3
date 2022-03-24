@@ -2,64 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F004E677A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 243B04E68AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 19:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352115AbiCXRJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S1352648AbiCXSaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 14:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242253AbiCXRJF (ORCPT
+        with ESMTP id S1344178AbiCXSaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:09:05 -0400
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DCDB18A8;
-        Thu, 24 Mar 2022 10:07:32 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1648141651; bh=fBBTep0fsFEy1SpGBxltwkhke+QjxK1XAYERNO2rihY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=bhFRZWBsXOArjlqHIuob1rAQIRclaUsGXtG0oYMnqwucW0eBkVtBa836EE26AgPkP
-         rDYnYVabCLw7xPJJZklieM6hKIXr4OOKDCxYIma89OF2kmdzdPfixk6LsMRH7/XpIt
-         XoLz6iqw/Nel9vizNBhxFPAcqltsDSYj+nLrKAqu4dwFqA81LfGt1aBWoedpWXOH6J
-         TNW9npCRFGqtmCp7jaAYTq7v1fDBmeIPIe6qntS+LTFQtOEYN7gPB7m6SWe7SuXTIy
-         3+tCgwzG5AXbPni5j6XNyuq6vjIpvATiyCHA5Fg0gRLyJzJnOq1dioEQtcZ4hmYBua
-         d42HhFVa3yW5w==
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Maxime Bizon <mbizon@freebox.fr>
-Cc:     Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-In-Reply-To: <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
-References: <1812355.tdWV9SEqCh@natalenko.name>
- <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
- <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
- <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
- <20220324163132.GB26098@lst.de>
- <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
-Date:   Thu, 24 Mar 2022 18:07:29 +0100
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <871qyr9t4e.fsf@toke.dk>
+        Thu, 24 Mar 2022 14:30:00 -0400
+X-Greylist: delayed 4197 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 11:28:23 PDT
+Received: from 17.mo584.mail-out.ovh.net (17.mo584.mail-out.ovh.net [46.105.41.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC2A1102
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:28:21 -0700 (PDT)
+Received: from player761.ha.ovh.net (unknown [10.108.4.98])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 129A124A92
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:09:51 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player761.ha.ovh.net (Postfix) with ESMTPSA id B45E328C421ED;
+        Thu, 24 Mar 2022 17:09:47 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-97G0025265364e-40e9-46d8-84d7-bc7edcd87a9c,
+                    78FFD8E4238D9337B8F0C8EEA79873C5FE5514E5) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] auxdisplay: lcd2s: use simple i2c probe function
+Date:   Thu, 24 Mar 2022 18:09:29 +0100
+Message-Id: <20220324170929.542348-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 11951990462367827590
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudegledgleegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejiedurdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,73 +49,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robin Murphy <robin.murphy@arm.com> writes:
+The i2c probe functions here don't use the id information provided in
+their second argument, so the single-parameter i2c probe function
+("probe_new") can be used instead.
 
-> On 2022-03-24 16:31, Christoph Hellwig wrote:
->> On Thu, Mar 24, 2022 at 05:29:12PM +0100, Maxime Bizon wrote:
->>>> I'm looking into this; but in the interest of a speedy resolution of
->>>> the regression I would be in favour of merging that partial revert
->>>> and reinstating it if/when we identify (and fix) any bugs in ath9k :)
->>>
->>> This looks fishy:
->>>
->>> ath9k/recv.c
->>>
->>>                  /* We will now give hardware our shiny new allocated skb */
->>>                  new_buf_addr = dma_map_single(sc->dev, requeue_skb->data,
->>>                                                common->rx_bufsize, dma_type);
->>>                  if (unlikely(dma_mapping_error(sc->dev, new_buf_addr))) {
->>>                          dev_kfree_skb_any(requeue_skb);
->>>                          goto requeue_drop_frag;
->>>                  }
->>>
->>>                  /* Unmap the frame */
->>>                  dma_unmap_single(sc->dev, bf->bf_buf_addr,
->>>                                   common->rx_bufsize, dma_type);
->>>
->>>                  bf->bf_mpdu = requeue_skb;
->>>                  bf->bf_buf_addr = new_buf_addr;
->> 
->> Creating a new mapping for the same buffer before unmapping the
->> previous one does looks rather bogus.  But it does not fit the
->> pattern where revering the sync_single changes make the driver
->> work again.
->
-> OK, you made me look :)
->
-> Now that it's obvious what to look for, I can only conclude that during 
-> the stanza in ath_edma_get_buffers(), the device is still writing to the 
-> buffer while ownership has been transferred to the CPU, and whatever got 
-> written while ath9k_hw_process_rxdesc_edma() was running then gets wiped 
-> out by the subsequent sync_for_device, which currently resets the 
-> SWIOTLB slot to the state that sync_for_cpu copied out. By the letter of 
-> the DMA API that's not allowed, but on the other hand I'm not sure if we 
-> even have a good idiom for "I can't tell if the device has finished with 
-> this buffer or not unless I look at it" :/
+This avoids scanning the identifier tables during probes.
 
-Right, but is that sync_for_device call really needed? AFAICT, that
-ath9k_hw_process_rxdesc_edma() invocation doesn't actually modify any of
-the data when it returns EINPROGRESS, so could we just skip it? Like
-the patch below? Or am I misunderstanding the semantics here?
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ drivers/auxdisplay/lcd2s.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
--Toke
-
-
-diff --git a/drivers/net/wireless/ath/ath9k/recv.c b/drivers/net/wireless/ath/ath9k/recv.c
-index 0c0624a3b40d..19244d4c0ada 100644
---- a/drivers/net/wireless/ath/ath9k/recv.c
-+++ b/drivers/net/wireless/ath/ath9k/recv.c
-@@ -647,12 +647,8 @@ static bool ath_edma_get_buffers(struct ath_softc *sc,
-                                common->rx_bufsize, DMA_FROM_DEVICE);
+diff --git a/drivers/auxdisplay/lcd2s.c b/drivers/auxdisplay/lcd2s.c
+index 2578b2d45439..0c64b46dbb71 100644
+--- a/drivers/auxdisplay/lcd2s.c
++++ b/drivers/auxdisplay/lcd2s.c
+@@ -286,8 +286,7 @@ static const struct charlcd_ops lcd2s_ops = {
+ 	.redefine_char	= lcd2s_redefine_char,
+ };
  
-        ret = ath9k_hw_process_rxdesc_edma(ah, rs, skb->data);
--       if (ret == -EINPROGRESS) {
--               /*let device gain the buffer again*/
--               dma_sync_single_for_device(sc->dev, bf->bf_buf_addr,
--                               common->rx_bufsize, DMA_FROM_DEVICE);
-+       if (ret == -EINPROGRESS)
-                return false;
--       }
- 
-        __skb_unlink(skb, &rx_edma->rx_fifo);
-        if (ret == -EINVAL) {
+-static int lcd2s_i2c_probe(struct i2c_client *i2c,
+-				const struct i2c_device_id *id)
++static int lcd2s_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct charlcd *lcd;
+ 	struct lcd2s_data *lcd2s;
+@@ -370,7 +369,7 @@ static struct i2c_driver lcd2s_i2c_driver = {
+ 		.of_match_table = of_match_ptr(lcd2s_of_table),
+ #endif
+ 	},
+-	.probe = lcd2s_i2c_probe,
++	.probe_new = lcd2s_i2c_probe,
+ 	.remove = lcd2s_i2c_remove,
+ 	.id_table = lcd2s_i2c_id,
+ };
+-- 
+2.27.0
+

@@ -2,170 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0932B4E5CF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3364E5CF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 02:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346548AbiCXBwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 21:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S1346591AbiCXBxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 21:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237924AbiCXBwn (ORCPT
+        with ESMTP id S237924AbiCXBxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 21:52:43 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Mar 2022 18:51:12 PDT
-Received: from emcscan.emc.com.tw (emcscan.emc.com.tw [192.72.220.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B7B98A321
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 18:51:11 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.56,253,1539619200"; 
-   d="scan'208";a="45166566"
-Received: from unknown (HELO webmail.emc.com.tw) ([192.168.10.1])
-  by emcscan.emc.com.tw with ESMTP; 24 Mar 2022 09:50:08 +0800
-Received: from 192.168.10.23
-        by webmail.emc.com.tw with MailAudit ESMTP Server V5.0(162304:0:AUTH_RELAY)
-        (envelope-from <josh.chen@emc.com.tw>); Thu, 24 Mar 2022 09:50:07 +0800 (CST)
-Received: from 192.168.33.25
-        by webmail.emc.com.tw with Mail2000 ESMTP Server V7.00(149257:1:AUTH_RELAY)
-        (envelope-from <josh.chen@emc.com.tw>); Thu, 24 Mar 2022 09:50:04 +0800 (CST)
-From:   "Josh.Chen" <josh.chen@emc.com.tw>
-To:     "'Jingle.Wu'" <jingle.wu@emc.com.tw>,
-        "'Dmitry Torokhov'" <dmitry.torokhov@gmail.com>,
-        "'Dave.Wang'" <dave.wang@emc.com.tw>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <phoenix@emc.com.tw>,
-        "'jingle.wu'" <jingle.wu@elan.corp-partner.google.com>
-References: <20200904024231.26812-1-jingle.wu@emc.com.tw> <YjtYgoBvytgQu/pn@google.com> <003801d83f1c$5485aaf0$fd9100d0$@emc.com.tw>
-In-Reply-To: <003801d83f1c$5485aaf0$fd9100d0$@emc.com.tw>
-Subject: RE: [PATCH] Input: trackpoint - Add Suspend mode for Elan TrackPoint
-Date:   Thu, 24 Mar 2022 09:50:04 +0800
-Message-ID: <004901d83f21$7b7f7190$727e54b0$@emc.com.tw>
+        Wed, 23 Mar 2022 21:53:37 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0F4D931B5;
+        Wed, 23 Mar 2022 18:52:03 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:41708.1247416142
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id CABED1002D0;
+        Thu, 24 Mar 2022 09:52:00 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 1e48b1cf371848ddae794e635af76691 for robh@kernel.org;
+        Thu, 24 Mar 2022 09:52:02 CST
+X-Transaction-ID: 1e48b1cf371848ddae794e635af76691
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <3e2ef814-3ced-5a46-6d47-dc2f40ebf990@189.cn>
+Date:   Thu, 24 Mar 2022 09:51:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 14.0
-Thread-Index: AQJfVPMV28kzFK9Xn/kbQgF+j86QZQIzXcXHAqWD5y+rmM4xQA==
-Content-Language: zh-tw
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v11 2/7] MIPS: Loongson64: dts: introduce ls3A4000
+ evaluation board
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-3-15330273260@189.cn>
+ <2644866a-8db2-923e-4227-2aa6d8e375fe@flygoat.com>
+ <2c671752-6684-f87b-7b2d-90568d36adde@189.cn>
+ <005099b5-33ed-4cb7-f8e4-10e1de780311@flygoat.com>
+ <abe784ce-eb9e-0143-dbc3-d415bbedbb81@189.cn>
+ <YjsYM0M24VhkCHwG@robh.at.kernel.org>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <YjsYM0M24VhkCHwG@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
 
-When the trackpoint device receives this command,
-
-it enters the power saving mode (power consumption <400uA),
-
-the trackpoint would be woken up after touching it.
-
-
-This patch was tested on 5.4, do we have to test it again on 5.10?
-
-Thanks,
-Josh
-
------Original Message-----
-From: Jingle.Wu [mailto:jingle.wu@emc.com.tw] 
-Sent: Thursday, March 24, 2022 9:13 AM
-To: 'Dmitry Torokhov'; 'Dave.Wang'; 'Josh.Chen'
-Cc: linux-kernel@vger.kernel.org; linux-input@vger.kernel.org;
-phoenix@emc.com.tw; 'jingle.wu'
-Subject: RE: [PATCH] Input: trackpoint - Add Suspend mode for Elan
-TrackPoint
-
-Loop Josh, Dave.
-
------Original Message-----
-From: Dmitry Torokhov [mailto:dmitry.torokhov@gmail.com]
-Sent: Thursday, March 24, 2022 1:28 AM
-To: jingle.wu <jingle.wu@emc.com.tw>
-Cc: linux-kernel@vger.kernel.org; linux-input@vger.kernel.org;
-phoenix@emc.com.tw; jingle.wu <jingle.wu@elan.corp-partner.google.com>
-Subject: Re: [PATCH] Input: trackpoint - Add Suspend mode for Elan
-TrackPoint
-
-Hi Jingle,
-
-On Fri, Sep 04, 2020 at 10:42:31AM +0800, jingle.wu wrote:
-> From: "jingle.wu" <jingle.wu@elan.corp-partner.google.com>
-> 
-> Add suspend command for elan trackpoint
-
-Could you please elaborate what this mode does to the trackpint?
-
-Also, your signed-off-by is missing.
-
-> ---
->  drivers/input/mouse/trackpoint.c | 16 ++++++++++++++++ 
-> drivers/input/mouse/trackpoint.h |  1 +
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/drivers/input/mouse/trackpoint.c
-> b/drivers/input/mouse/trackpoint.c
-> index 3eefee2ee2a1..b3cba973a4eb 100644
-> --- a/drivers/input/mouse/trackpoint.c
-> +++ b/drivers/input/mouse/trackpoint.c
-> @@ -389,6 +389,20 @@ static int trackpoint_reconnect(struct psmouse
-*psmouse)
->  	return 0;
->  }
->  
-> +static void trackpoint_cleanup(struct psmouse *psmouse) {
-> +	struct trackpoint_data *tp = psmouse->private;
-> +	u8 param[3] = { TP_TOGGLE, TP_TOGGLE_BURST, TP_TOGGLE_ELAN_SLEEP };
-> +
-> +	if (tp->variant_id == TP_VARIANT_ELAN) {
-> +		if (ps2_command(&psmouse->ps2dev, param,
-
-I'd combine the 2 "ifs".
-
-> +				MAKE_PS2_CMD(3, 0, TP_COMMAND))) {
-> +			psmouse_err(psmouse,
-
-psmouse_warn() since it is not a hard error.
-
-> +				    "failed to suspend trackpont.\n");
-
-I'd say "failed to suspend Elan trackpont\n".
-
-> +		}
-> +	}
-> +}
-> +
->  int trackpoint_detect(struct psmouse *psmouse, bool set_properties) {
->  	struct ps2dev *ps2dev = &psmouse->ps2dev; @@ -421,6 +435,8 @@ int 
-> trackpoint_detect(struct psmouse *psmouse, bool set_properties)
->  	psmouse->reconnect = trackpoint_reconnect;
->  	psmouse->disconnect = trackpoint_disconnect;
->  
-> +	psmouse->cleanup = trackpoint_cleanup;
-> +
->  	if (variant_id != TP_VARIANT_IBM) {
->  		/* Newer variants do not support extended button query. */
->  		button_info = 0x33;
-> diff --git a/drivers/input/mouse/trackpoint.h
-> b/drivers/input/mouse/trackpoint.h
-> index 5cb93ed26085..c7fa75452976 100644
-> --- a/drivers/input/mouse/trackpoint.h
-> +++ b/drivers/input/mouse/trackpoint.h
-> @@ -107,6 +107,7 @@
->  #define TP_TOGGLE_EXT_TAG	0x22	/* Bit 3 of the first packet coming
-from the
->  					   external device will be forced to
-1 */
->  #define TP_MASK_EXT_TAG			0x04
-> +#define TP_TOGGLE_ELAN_SLEEP	0x8
-
-It seems to me that TP_TOGGLE_ELAN_SLEEP is a bit in TP_TOGGLE_BURST
-subcommand, so it is better to move it next to TP_MASK_BURST and call it
-TP_MASK_ELAN_SLEEP to match the rest.
-
-Thanks.
-
---
-Dmitry
-
+On 2022/3/23 20:53, Rob Herring wrote:
+> On Wed, Mar 23, 2022 at 09:53:14AM +0800, Sui Jingfeng wrote:
+>> On 2022/3/23 00:06, Jiaxun Yang wrote:
+>>>
+>>> 在 2022/3/22 13:38, Sui Jingfeng 写道:
+>>>> On 2022/3/22 21:05, Jiaxun Yang wrote:
+>>>>>
+>>>>> 在 2022/3/21 16:29, Sui Jingfeng 写道:
+>>>>>> From: suijingfeng <suijingfeng@loongson.cn>
+>>>>>>
+>>>>>> The board name is LS3A4000_7A1000_EVB_BOARD_V1.4, it consist of 1.8Ghz
+>>>>>> mips64r5 4-core CPU and LS7A1000 bridge chip. It has PCIe
+>>>>>> GEN2 x8 slot,
+>>>>>> therefore can play with discrete graphics card.
+>>>>> Hi Jingfeng,
+>>>>>
+>>>>> As we've discussed before if you are going to introduce new dts
+>>>>> then you *MUST*
+>>>>> include it in makefile and wire it up in code.
+>>>>>
+>>>>> A dts file doing nothing lying in the tree is just suspicious.
+>>>>>
+>>>>> Thanks.
+>>>>> - Jiaxun
+>>>>>
+>>>> Hi, Jiaxun,
+>>>>
+>>>> I know what you means, but it is the kernel side developer's job.
+>>>> I am just a naive graphic driver developer,I can not care so much.
+>>>> Below is my private patch which can be used to built specific dts
+>>>> into the linux kernel, therefore make the verification easier.
+>>> Hi Jingfeng,
+>>>
+>>> In kernel world we take care all the stuff we touched ourself :-)
+>>>
+>>> If you are not confident with them please drop those DTS from the
+>>> patchset
+>>> besides the generic one. I can do the rest for you after getting this
+>>> set merged.
+>>>
+>>> Thanks.
+>>> - Jiaxun
+>>>
+>> Hi, Jiaxun
+>>
+>> Build all dts into vmlinuz will make the vmlinuz bigger and bigger.
+>> How does the kernel get the dtb is another big issue, either from built-in
+>> dtb or pass from the firmware(pmon and uefi etc). This should be
+>> solved with another patch carefully. Providing board specific dts
+>> helps to code review, it helps reviewers understand that there are
+>> variant boards and have to be express with different OF graph.
+> Built-in DTBs are for legacy bootloaders that don't understand DT. I
+> would not expect a new platform to need this.
+>
+>> Now, there are about 6 dts under arch/mips/boot/dts/loongson/,
+>> Suppose loongson have 1000+ different board, do you want built all
+>> of them into vmlinuz?
+> The point was to add the .dts to Makefile so it builds, not so it is
+> built-in. How are you testing those build with dtc and dtschema if not
+> added to kbuild?
+OK, i see the key point.
+> Rob

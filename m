@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5044E5FE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34E84E5FEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 09:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348805AbiCXIJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 04:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S1348820AbiCXIJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 04:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244942AbiCXIJA (ORCPT
+        with ESMTP id S1348792AbiCXIJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 04:09:00 -0400
+        Thu, 24 Mar 2022 04:09:01 -0400
 Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C414B9A9AD
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:07:29 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 08:07:18 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09739A9A6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 01:07:30 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 08:07:24 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1648109245;
-        bh=UNIlZtorBwDxmxW7dS0fY2nCfeZ/SRYko7r9l5a3fkc=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=Agy+j2pw3E1W0niYTL0ODqrCtAIxleKJxvowAEkv2bDfHSQ67MdHP9IQ7GAVGIUin
-         VesPVK7cE1WOKnO2pt5W/NyOUAOAfvAqdlVccATAFMr63g+iwS1YM8Q7oFk3wWgZg/
-         p1cbCVZz4YqWnmEZun11/vutRDBHafuaGha2cNCklzGG4/SILE+tFUDWnHbMANiPiR
-         1lOh8LHDETRq2KSgqO4FjE4L+d13NaN/00sYa6YtlD17xEN1C2H1SfA2aAGn5ErGr8
-         PcICyWP7BFK0Dkov8hLSbMDGI3mEMXA9+nRG/GeEb8rEYbr+w5WKyIcsMQiIu4u5UT
-         noaVKJ+6xKI4A==
+        s=protonmail2; t=1648109247;
+        bh=IwmYMVqeQSJTelQ71b3k0r9jC+rrpKjwIIRKPp2xmJE=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=o9CLaglO3fAcHqtDJLEref4o7uuHxTugXa+B6fMVdt9Xy2h0MBcOMcoJzrTDvNoBU
+         AIiLHT8u0+du93GINYfBaDlVNw0gIJyPc5wXVeOflt+OazYKhlk2wCX0XhUifeR1il
+         5j1X2mCbOFAfim462VIpywfPbm3nymAEa8qZJhl8dnmWHtCExSSByLXkYR6bwVExeT
+         Y9N4MCl0tZ06eohI+syhpwtxfBS+zZCnjAhVExZNYfQGB3GykGweQ31QX/OP9bHwD2
+         1YFlkg0gIVEtWeQHS/LuBobZ6ErM16mfAhMAtEhZuitqVVcP0EoZqAsCkrP19S49cO
+         HIOiGkXogSw4A==
 To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
 From:   David Cohen <dacohen@pm.me>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         David Cohen <dacohen@pm.me>
 Reply-To: David Cohen <dacohen@pm.me>
-Subject: [PATCH v3 0/2] PM: refactor pm_pr_dbg() to support dynamic debug
-Message-ID: <20220324080653.454333-1-dacohen@pm.me>
+Subject: [PATCH v3 1/2] PM: narrow down -DDEBUG on kernel/power/ files
+Message-ID: <20220324080653.454333-2-dacohen@pm.me>
+In-Reply-To: <20220324080653.454333-1-dacohen@pm.me>
+References: <20220324080653.454333-1-dacohen@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -46,34 +49,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The macro -DDEBUG is broadly enabled on kernel/power/ directory if
+CONFIG_DYNAMIC_DEBUG is enabled. As side effect all debug messages using
+pr_debug() and dev_dbg() are enabled by default on dynamic debug.
+We're reworking pm_pr_dbg() to support dynamic debug, where pm_pr_dbg()
+will print message if either pm_debug_messages_on flag is set or if it's
+explicitly enabled on dynamic debug's control. That means if we let
+-DDEBUG broadly set, the pm_debug_messages_on flag will be bypassed by
+default on pm_pr_dbg() if dynamic debug is also enabled.
 
-I am currently debugging an issue with s2idle on my laptop where in a
-rare occasion instead of sleeping, it gets stuck in an infinite loop.
-The pm_pr_dbg() is placed on very useful functions and it helps me to
-debug it, but the current all or nothing enabling mechanism with
-pm_debug_messages_on flag is causing the suspending mechanism to be
-disturbed with so many debug messages to the point it becomes extremely
-difficult to reproduce the issue I'm debugging. More granularity when
-enabling pm_pr_dbg() in this case is very welcome.
+The files that directly use pr_debug() and dev_dbg() on kernel/power/ are:
+ - swap.c
+ - snapshot.c
+ - energy_model.c
 
-These patches I'm sending introduce dynamic debug support to pm_pr_dbg()
-while still maintaining the pm_debug_messages_on flag behavior if
-dynamic debug is not used.
+And those files do not use pm_pr_dbg(). So if we limit -DDEBUG to them,
+we keep the same functional behavior while allowing the pm_pr_dbg()
+refactor.
 
-Regards, David
-
+Signed-off-by: David Cohen <dacohen@pm.me>
 ---
-David Cohen (2):
-  PM: narrow down -DDEBUG on kernel/power/ files
-  PM: enable dynamic debug support within pm_pr_dbg()
+ kernel/power/Makefile  | 6 +++++-
+ kernel/power/process.c | 3 ---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
- include/linux/suspend.h | 44 ++++++++++++++++++++++++++++++++++++-----
- kernel/power/Makefile   |  6 +++++-
- kernel/power/main.c     | 29 ---------------------------
- kernel/power/process.c  |  3 ---
- 4 files changed, 44 insertions(+), 38 deletions(-)
+diff --git a/kernel/power/Makefile b/kernel/power/Makefile
+index 5899260a8bef..874ad834dc8d 100644
+--- a/kernel/power/Makefile
++++ b/kernel/power/Makefile
+@@ -1,6 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
 
+-ccflags-$(CONFIG_PM_DEBUG)=09:=3D -DDEBUG
++ifeq ($(CONFIG_DYNAMIC_DEBUG), y)
++CFLAGS_swap.o                   :=3D -DDEBUG
++CFLAGS_snapshot.o               :=3D -DDEBUG
++CFLAGS_energy_model.o           :=3D -DDEBUG
++endif
+
+ KASAN_SANITIZE_snapshot.o=09:=3D n
+
+diff --git a/kernel/power/process.c b/kernel/power/process.c
+index 11b570fcf049..3068601e585a 100644
+--- a/kernel/power/process.c
++++ b/kernel/power/process.c
+@@ -6,9 +6,6 @@
+  * Originally from swsusp.
+  */
+
+-
+-#undef DEBUG
+-
+ #include <linux/interrupt.h>
+ #include <linux/oom.h>
+ #include <linux/suspend.h>
 --
 2.35.1
 

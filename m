@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8745A4E5F4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 441BE4E5F49
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348503AbiCXH0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
+        id S1348504AbiCXH02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiCXH0A (ORCPT
+        with ESMTP id S234921AbiCXH01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:26:00 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE7898F47;
-        Thu, 24 Mar 2022 00:24:29 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id r13so7321986ejd.5;
-        Thu, 24 Mar 2022 00:24:29 -0700 (PDT)
+        Thu, 24 Mar 2022 03:26:27 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D187A986F5;
+        Thu, 24 Mar 2022 00:24:55 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id t1so4550528edc.3;
+        Thu, 24 Mar 2022 00:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Hqm0NVjl1XXMxjBpBH/hdq5nmMPm2abv01ReA7/x/Wo=;
-        b=jc61vNvypG8xssQ5Sa5SGOiyHPYWy2w3vcRm9ikKtSb6mRZf8jwhTdjF7NAKDnNERt
-         aPqHgKARnxasEGnWCRl2wXm5C3tteWC9is+hlqrcfogEO8lVsXNIDbsqk9HcB6ATTQJk
-         cZBjKcTn9JumkLi0ujNcD7oEUThNc41DcOd1jx369nrySYCl5WRcwwP4hdo1CiEmZpWz
-         yavWs6Fu1aTDRw6ejoVaa/J9jyIy4fl58nAcMtCpJ3U38Xi5qQbSVq/OAOGkGECzcgVf
-         AT+u+vLuJu5A5Gj+cPj+YZsC5YJzOf+5wltt1XlO8fQdDNiRoVUeokLbVfQxYaQvzBZl
-         wS9Q==
+        bh=UusJwPTvawwqw4B13062bzCvDRIa/PfzdX6rZ/h/ofQ=;
+        b=BB/x7LbNUE8nHL64NA5MPWmuQTYC0FQt/zHFjd1px6EmZeQg9A8d9798/hSq21tR0h
+         nkXZuo1YJcGC0N7KHdSZ0rH5Av6kBrOL1EDEeQVTBIhOisgr80e83O7jx3wqJDg8j0SU
+         KautTEldNJTsFB/BzKiQW4Yx+WF3FypcXGApTqWh7JT6FCrRDin6k3ufHwa6U/Jxobsw
+         8RzBVUqbGcJeqXQOLh+SjRMQupj9Y2AwEmNisvQwStZ+kzCQ+PVYIPp9uAiRPX00QQ0Z
+         sY4Wbpf4tpCUBsaYF/sGB/xEBhBKE+1RmwTVwQeprQB0V69KvA4FXpc9Zg1kP3pQs7RT
+         oNWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Hqm0NVjl1XXMxjBpBH/hdq5nmMPm2abv01ReA7/x/Wo=;
-        b=W/bV6x+XqePycG1xHDwpvBSIpE2WZyOA+pM/t3GgD54aZQHJ9wfls5qC51d07aJwbk
-         hI5Egb2HsHCgMRoaZBwPs1zKlnI4hjECpEqBg61uwRKE+d1SwQ5ZVn8gwDQ8GFnZr+T8
-         uqnha/aMAraOdx6jrZ1sacsgk1BKM4Fz2Fm9XUOaSzDVR1ycGi+NqgdJRYtd4Mr0uQRS
-         LYxfsyXZ4BI0zg2Tkm57HRwsq3oz0uhCDgvGQkJ/9mYFH4hS/9vQYBUkGkt4ezKQD5ar
-         XS9qOL/G7KhbiBUIfoKddXc4BdTFSC+ZpubvgHVjvnVBbP+9LJDWTql9TKtRh6KHGW5S
-         pt/w==
-X-Gm-Message-State: AOAM532c18WxH2RTvsXrb6G8yP1vrJ0XIApP8KDfYx2M8C9GBlUKlFmm
-        hH3HPUlrUhTy8/c6ECDcw+o=
-X-Google-Smtp-Source: ABdhPJxbRkqVNvlTWR3sH2yUZCuNFBR0+azuzE6PIpMu3NWXAVIZpa6jCxvAy33KVcFsHAModpDgxQ==
-X-Received: by 2002:a17:906:c14b:b0:6da:b30d:76a0 with SMTP id dp11-20020a170906c14b00b006dab30d76a0mr4147482ejc.279.1648106667768;
-        Thu, 24 Mar 2022 00:24:27 -0700 (PDT)
+        bh=UusJwPTvawwqw4B13062bzCvDRIa/PfzdX6rZ/h/ofQ=;
+        b=XZz1owOAClExae8lG4LiOq6XL/7DDvbVrNpjWfpmDzsscSpa3yHq7B865922qraodw
+         ySxFRHmcUnblkkZFv71ESBglvAXFRbAtKPK5YT+obHbFbN7TkQkJobLZrFAEGxo2yPuJ
+         DkTJw6wUDf1bX2i4xhjtKsx9BEF9DqKaSUY+OMOqtFyWBVjhlLqVfW+sHk1RfXhg7Bb1
+         Q6No3NzGvQe50vycJiQvVvtn7m7moQqbjNEma2GVSXF0ysUY9Qql8ddKq/CToPUk+PDn
+         4CkQ1hQH2+Kc9qPxtYgoLB+OBBn5aRGD+2r8NFa6EqAaOaaGqbMei+gCO2L7kWvP3rho
+         sxAg==
+X-Gm-Message-State: AOAM531LN2mvmsPKtJV7AAOOlbJaT0rx0F3s78fohIpWU+AyhfadvlJ1
+        dm1Uzv3XprheCQKVt8vkN/o=
+X-Google-Smtp-Source: ABdhPJwtG3kiR6DehJZXY4TNL89bSww86qN8khEh2LznICWoqF4hkhvsQAkiKwIR1EqiDKaIKIxIsA==
+X-Received: by 2002:a50:cfc4:0:b0:413:b19d:d9c0 with SMTP id i4-20020a50cfc4000000b00413b19dd9c0mr5077856edk.384.1648106694346;
+        Thu, 24 Mar 2022 00:24:54 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id z22-20020a17090655d600b006d229436793sm766013ejp.223.2022.03.24.00.24.27
+        by smtp.googlemail.com with ESMTPSA id ep16-20020a1709069b5000b006daa26de2fbsm759578ejc.153.2022.03.24.00.24.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:24:27 -0700 (PDT)
+        Thu, 24 Mar 2022 00:24:54 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc:     Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+To:     Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] sh: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:24:09 +0100
-Message-Id: <20220324072409.62899-1-jakobkoschel@gmail.com>
+Subject: [PATCH] soc: qcom: pdr: replace usage of found with dedicated list iterator variable
+Date:   Thu, 24 Mar 2022 08:24:35 +0100
+Message-Id: <20220324072435.63070-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -85,62 +86,43 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- arch/sh/drivers/dma/dma-api.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/soc/qcom/pdr_interface.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/arch/sh/drivers/dma/dma-api.c b/arch/sh/drivers/dma/dma-api.c
-index ab9170494dcc..b1a54269b03c 100644
---- a/arch/sh/drivers/dma/dma-api.c
-+++ b/arch/sh/drivers/dma/dma-api.c
-@@ -127,20 +127,19 @@ static int search_cap(const char **haystack, const char *needle)
-  */
- int request_dma_bycap(const char **dmac, const char **caps, const char *dev_id)
- {
--	unsigned int found = 0;
--	struct dma_info *info;
-+	struct dma_info *info = NULL, *iter;
- 	const char **p;
- 	int i;
+diff --git a/drivers/soc/qcom/pdr_interface.c b/drivers/soc/qcom/pdr_interface.c
+index fc580a3c4336..0034af927b48 100644
+--- a/drivers/soc/qcom/pdr_interface.c
++++ b/drivers/soc/qcom/pdr_interface.c
+@@ -304,24 +304,23 @@ static void pdr_indication_cb(struct qmi_handle *qmi,
+ 					      notifier_hdl);
+ 	const struct servreg_state_updated_ind *ind_msg = data;
+ 	struct pdr_list_node *ind;
+-	struct pdr_service *pds;
+-	bool found = false;
++	struct pdr_service *pds = NULL, *iter;
  
- 	BUG_ON(!dmac || !caps);
+ 	if (!ind_msg || !ind_msg->service_path[0] ||
+ 	    strlen(ind_msg->service_path) > SERVREG_NAME_LENGTH)
+ 		return;
  
--	list_for_each_entry(info, &registered_dmac_list, list)
--		if (strcmp(*dmac, info->name) == 0) {
--			found = 1;
-+	list_for_each_entry(iter, &registered_dmac_list, list)
-+		if (strcmp(*dmac, iter->name) == 0) {
-+			info = iter;
- 			break;
- 		}
+ 	mutex_lock(&pdr->list_lock);
+-	list_for_each_entry(pds, &pdr->lookups, node) {
+-		if (strcmp(pds->service_path, ind_msg->service_path))
++	list_for_each_entry(iter, &pdr->lookups, node) {
++		if (strcmp(iter->service_path, ind_msg->service_path))
+ 			continue;
+ 
+-		found = true;
++		pds = iter;
+ 		break;
+ 	}
+ 	mutex_unlock(&pdr->list_lock);
  
 -	if (!found)
-+	if (!info)
- 		return -ENODEV;
++	if (!pds)
+ 		return;
  
- 	for (i = 0; i < info->nr_channels; i++) {
-@@ -242,17 +241,16 @@ EXPORT_SYMBOL(dma_wait_for_completion);
- 
- int register_chan_caps(const char *dmac, struct dma_chan_caps *caps)
- {
--	struct dma_info *info;
--	unsigned int found = 0;
-+	struct dma_info *info = NULL, *iter;
- 	int i;
- 
--	list_for_each_entry(info, &registered_dmac_list, list)
--		if (strcmp(dmac, info->name) == 0) {
--			found = 1;
-+	list_for_each_entry(iter, &registered_dmac_list, list)
-+		if (strcmp(dmac, iter->name) == 0) {
-+			info = iter;
- 			break;
- 		}
- 
--	if (unlikely(!found))
-+	if (unlikely(!info))
- 		return -ENODEV;
- 
- 	for (i = 0; i < info->nr_channels; i++, caps++) {
+ 	pr_info("PDR: Indication received from %s, state: 0x%x, trans-id: %d\n",
 
 base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 

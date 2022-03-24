@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E81C4E681E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6284E681F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347419AbiCXRzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S1352405AbiCXRzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234287AbiCXRz1 (ORCPT
+        with ESMTP id S1352390AbiCXRzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:55:27 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4416D849;
-        Thu, 24 Mar 2022 10:53:54 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id p189so3198600wmp.3;
-        Thu, 24 Mar 2022 10:53:54 -0700 (PDT)
+        Thu, 24 Mar 2022 13:55:53 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982AC6F488
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:54:21 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q19so4429473pgm.6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TfVnUyN/hXuaNJUfYCszqrcV/Y41SovVpMRK9OnsasU=;
-        b=IfV7WXPL3p6XHd58K5LzFWiySP6JIds58NsWE+OjifmBanhApG5VNoHIjRg3EiZ6oE
-         q55n0/UVLf6fVQSeRo+NALJSfJCMDDf2fJKooTmVEYiOwQZNVxNl7WiQhH2ehRTmniD2
-         KDb1fot0vbkdM/AH8tLvzyGI5hoGS2fOg9evQ3RbcQXRUdYog3vC88TdYOKRw1719H0A
-         qWBde+evig3AheBAc7oNnF833Cx6d98Zp+j73DzmdXgGooo2GMf9RUUDKznvIpB4uz+O
-         BsjLnIfjxhY71YXJYFtdGKhpXQu8k1oY7pIrHvs5zTPMrInUhcEveJLVOwSKQqm8qqO+
-         eVEw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VngdEZVbX9x4Xz2CBFnvT4wZYxRLd9SpJ73EFc0h42I=;
+        b=Vkn9nrGhs1QUBXV2u+qj6/J78fl0nDP1ptgRmJ6HD7JO1mRbsvNNzkxQJ2DF2smcW1
+         MhKeRSa/FWRFd+JMestXet6+s/iTeYPfXak7R/pEkl50XbgmhdEz48i1h+0A2o3SiYp7
+         AxPwZ0vE4DUueiYRFlE/Pu/5u0DdEyOMvi50VJgjiAMPN7UgHF+/rr50siBqUubT9Ejb
+         ytt+vg/V/pJmy8HLkM+cDt2GAq7jb/PZSY/QQZuwNZfa3kACE1bnrflWrpxHKdsBTt2u
+         PTDrMAyMlbf5KsDwEAQE0HYQGq+q1FuxtYGEnL/68lax3B1Z0/eN4+LQVre4luNrqX6j
+         Qp9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=TfVnUyN/hXuaNJUfYCszqrcV/Y41SovVpMRK9OnsasU=;
-        b=fnAkc+zXKaCy1vZ6WUDf5ImGDuZoznMrqAbdcyQeo/caNCe+nekJaCYUC5fLgqsDNg
-         a5fwEB57Yt07U1kGsnkPvw2PENMpM5ccLkB4+dQM5Ygyt5TImtWgGRM0k8sR16nzD/yl
-         7bCHMKZO5jyYDjKTlisU43zuS1c3FW5JRCT1kybFy/+GDD9Vsp9wxky2fEJs9ndguOVi
-         R/V1xtEMHDkpbIOL+tDwUAkFa8XvINTzGo1BgJE6czNfBnxy+v7KsdrxUsdv9lTv3wGF
-         i2wuulc9ZBf5zFU4Sj54Y1yrqjM8mcA2Ec2EGOzh2xFPPCT875Js8RRCANojOALRGmAy
-         bknA==
-X-Gm-Message-State: AOAM53324AThyK28QSAzn+NcInvPoId4a2P3bXDrKx4zBaFk3N4iMYHO
-        mvaimNltwu2x4EM4j8ttnNk=
-X-Google-Smtp-Source: ABdhPJzFPTRXE56MSVLFfNGawg1yKq8+gZO3tliSVtZMhxzNCWb901NYb1XcroBFlWZ8yFguR6GipQ==
-X-Received: by 2002:a05:600c:3b02:b0:38c:9148:70dc with SMTP id m2-20020a05600c3b0200b0038c914870dcmr5811612wms.104.1648144433529;
-        Thu, 24 Mar 2022 10:53:53 -0700 (PDT)
-Received: from [192.168.0.32] ([137.101.87.65])
-        by smtp.gmail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm6803998wmj.5.2022.03.24.10.53.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 10:53:53 -0700 (PDT)
-Message-ID: <90324c6f-e3ef-5b18-8779-8a11ca67039b@gmail.com>
-Date:   Thu, 24 Mar 2022 18:53:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 12/22] arm64: dts: mt8192: Add mmc device nodes
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        bh=VngdEZVbX9x4Xz2CBFnvT4wZYxRLd9SpJ73EFc0h42I=;
+        b=7Wqv/Dqhc43CXi9Q468wDlBhAHnnYA6ihukI41SPIZPVkuuKYwOySns+V5LbCa3uqV
+         KbnixAm4/dr02zTPeShrwz08LmplhyROmMMN31lvp4vBvU5v/9HVecRJlWdckDfd+4QC
+         ZSFsUYuAd3y2u3DiFff6/tt5U91qf8IbJiHi/RjdV4zWM4PoRj0zXydMCaW/6JXyqtrm
+         UsWeoxoFzIt4tAPmJmZbczVdM4//+NMEolSg6i+5R5JLA3DOEnTd+PuWQGgAoV6IHdeW
+         U77ELV/xP8HFK0vFIBpmTrhsCRKj68w8T1MqeGk1HXvtCRICG6IZJ66CJd25B/O/8Xzv
+         /e2g==
+X-Gm-Message-State: AOAM533qakEnLMa2rcKrAar64As+2zvgC17v5vbS77RHF2UKVDJrVygw
+        FFc2zb62c+vEh3wvxgzwEtY=
+X-Google-Smtp-Source: ABdhPJyDd4JetVqC+cU+GjYxKVBslAM112lCvo8/emIeP8YRVzncxMCjqeFuDrN3SCjrAtY1d5+fnQ==
+X-Received: by 2002:a05:6a00:1516:b0:4f7:d45:3769 with SMTP id q22-20020a056a00151600b004f70d453769mr6242093pfu.86.1648144461129;
+        Thu, 24 Mar 2022 10:54:21 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id f21-20020a056a00239500b004fb02a7a45bsm1003193pfc.214.2022.03.24.10.54.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 10:54:20 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-kernel@vger.kernel.org (open list),
+        linus.walleij@linaro.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-13-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220318144534.17996-13-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 0/2] ARM: MAX_DMA_ADDRESS fixes
+Date:   Thu, 24 Mar 2022 10:54:15 -0700
+Message-Id: <20220324175417.1014562-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,67 +75,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series clamps the MAX_DMA_ADDRESS to 32-bit in order to fit
+within a virtual address, and also fixes the off by one which was
+suggested by Geert.
 
+Florian Fainelli (2):
+  ARM: Fix off by one in checking DMA zone size
+  ARM: Clamp MAX_DMA_ADDRESS to 32-bit
 
-On 18/03/2022 15:45, Allen-KH Cheng wrote:
-> Add mmc nodes for mt8192 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 34 +++++++++++++++++++++---
->   1 file changed, 30 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 6220d6962f58..2648f2847993 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -1150,10 +1150,36 @@
->   			#clock-cells = <1>;
->   		};
->   
-> -		msdc: clock-controller@11f60000 {
-> -			compatible = "mediatek,mt8192-msdc";
-> -			reg = <0 0x11f60000 0 0x1000>;
-> -			#clock-cells = <1>;
+ arch/arm/include/asm/dma.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-We don't need the msdc_axi_wrap clock and that's why we delete the node, 
-correct? In that case we could only disable the node, as DTS should describe the 
-HW as it is. Please also add a line in the commit message explaining that.
+-- 
+2.25.1
 
-Regards,
-Matthias
-
-> +		mmc0: mmc@11f60000 {
-> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
-> +			reg = <0 0x11f60000 0 0x1000>, <0 0x11f50000 0 0x1000>;
-> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
-> +				 <&msdc_top CLK_MSDC_TOP_H_MST_0P>,
-> +				 <&msdc_top CLK_MSDC_TOP_SRC_0P>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>,
-> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
-> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>;
-> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
-> +				      "pclk_cg", "axi_cg", "ahb_cg";
-> +			status = "disabled";
-> +		};
-> +
-> +		mmc1: mmc@11f70000 {
-> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
-> +			reg = <0 0x11f70000 0 0x1000>, <0 0x11c70000 0 0x1000>;
-> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
-> +				 <&msdc_top CLK_MSDC_TOP_H_MST_1P>,
-> +				 <&msdc_top CLK_MSDC_TOP_SRC_1P>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC1>,
-> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
-> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>;
-> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
-> +				      "pclk_cg", "axi_cg", "ahb_cg";
-> +			status = "disabled";
->   		};
->   
->   		mfgcfg: clock-controller@13fbf000 {

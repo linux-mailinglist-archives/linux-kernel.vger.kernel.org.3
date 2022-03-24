@@ -2,276 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E144E637B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53984E637E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 13:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350234AbiCXMmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 08:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
+        id S1350236AbiCXMoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 08:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350089AbiCXMmI (ORCPT
+        with ESMTP id S231998AbiCXMoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 08:42:08 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BDB36683
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:40:34 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nXMlM-00053h-81; Thu, 24 Mar 2022 13:40:24 +0100
-Message-ID: <f4f17203-df77-bf51-d761-3db63075d5a6@leemhuis.info>
-Date:   Thu, 24 Mar 2022 13:40:23 +0100
+        Thu, 24 Mar 2022 08:44:02 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5846E9D07B
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:42:26 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id m26-20020a05600c3b1a00b0038c8b999f58so7149227wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 05:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SRqP4OX0c96t915lu5xWOnRiTjEBkrJ/XwZE+rbqkCo=;
+        b=P/WngdM3nakUoDenPDReFSCTsDEinjVUvPHE055Ojs+n098elhPOwpfy2UEwNBh1qJ
+         tt3ufnp2NltgdfiCFwI2q4OueAnf0nZzzXhONkfOtLiprE7e+Fo7KsUJWM/ZqqV05FX0
+         PriasQnURxxEA7nJ27996IH1yN6gLmPTC0GQe5Ad39FUz83F68sQyIG3gYTCiXLk3xpT
+         FEQ1X3KCy3EBFkuOQH09DSDjWjJgKPbjzFc9uLqqYftyXfWAev7qmDlCUSVWBx6bIQpN
+         xggBjDP8ii7xLyWTjKMnACvK4eVIHwGhfUlUUBbYbSJtZffe5Ee3oh6PNX4FxZIBoE8W
+         gznQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SRqP4OX0c96t915lu5xWOnRiTjEBkrJ/XwZE+rbqkCo=;
+        b=xjhrJEynvmgKl3C9kaJB5uSc2w8/ktP95BD3oTj8ssm+HuEy/So96kwrxGeUbCo0YO
+         JubSBNCX5l3EYhM3Q2Fn3BeKTtgC2ItJ6D/I3L7s6Q9aGyCyONVH9AmlcsgpJafmDc4j
+         l9k3/02u5jkVFu/MDbxaL7tldMao27nrJBz3s2OyTywkBd+mUJVneivANClTHFAcu1OB
+         OSl5O2c+DiXHFMOI8zTYUChOoKB9+7nsFJriD4ODSrp+NwIjmLqu8dxgt+ZE8w8YKNlg
+         bBmAe/uTzALPLRWS0FSn53Xuiw4oHyw4aRgePyZ2AnsGXGeKD/7n4gcGflOqBZeT1I+Z
+         34zA==
+X-Gm-Message-State: AOAM532IAMVqr8sC8vxHTuycR7RL+OlI1u+21S1/fDDp/vkUcG8ehT7G
+        vsJFeTA+BbFP8VMvZ/5jJjA55A==
+X-Google-Smtp-Source: ABdhPJzVIx6jSXipIQV5bTb6qn4mBgup/uRtzIUMfD9quLWIlEB+tpRKiLSI/72mYWvvTWaMAhbzfQ==
+X-Received: by 2002:a05:600c:3b08:b0:38c:c8f1:16ca with SMTP id m8-20020a05600c3b0800b0038cc8f116camr4725686wms.192.1648125744801;
+        Thu, 24 Mar 2022 05:42:24 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id m3-20020a5d64a3000000b00203ed35b0aesm4175170wrp.108.2022.03.24.05.42.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 05:42:24 -0700 (PDT)
+Message-ID: <9c90300e-ac2d-be53-a7c9-7b00a059204e@nexus-software.ie>
+Date:   Thu, 24 Mar 2022 12:42:23 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3] wcn36xx: Implement tx_rate reporting
 Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eduard-Gabriel Munteanu <maxdamage@aladin.ro>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        regressions@lists.linux.dev
-References: <20210508032239.2177-1-thunder.leizhen@huawei.com>
- <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [PATCH 1/1] um: fix error return code in winch_tramp()
-In-Reply-To: <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
+To:     Edmond Gagnon <egagnon@squareup.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Cc:     Benjamin Li <benl@squareup.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318195804.4169686-3-egagnon@squareup.com>
+ <20220323214533.1951791-1-egagnon@squareup.com>
+From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
+In-Reply-To: <20220323214533.1951791-1-egagnon@squareup.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648125634;3bb610c7;
-X-HE-SMSGID: 1nXMlM-00053h-81
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding the regression report below to regzbot, the Linux
-kernel regression tracking bot; all text you find below is compiled from
-a few templates paragraphs you might have encountered already already
-from similar mails.]
+On 23/03/2022 21:45, Edmond Gagnon wrote:
+> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
+> rate:
+> 
+> root@linaro-developer:~# iw wlan0 link
+> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
+>          SSID: SQ-DEVICETEST
+>          freq: 5200
+>          RX: 4141 bytes (32 packets)
+>          TX: 2082 bytes (15 packets)
+>          signal: -77 dBm
+>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>          tx bitrate: 6.0 MBit/s
+> 
+>          bss flags:      short-slot-time
+>          dtim period:    1
+>          beacon int:     100
+> 
+> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
+> firmware message and reports it via ieee80211_ops::sta_statistics.
+> 
+> root@linaro-developer:~# iw wlan0 link
+> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
+>          SSID: SQ-DEVICETEST
+>          freq: 5700
+>          RX: 26788094 bytes (19859 packets)
+>          TX: 1101376 bytes (12119 packets)
+>          signal: -75 dBm
+>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>          tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
+> 
+>          bss flags:      short-slot-time
+>          dtim period:    1
+>          beacon int:     100
+> 
+> Tested on MSM8939 with WCN3680B running firmware CNSS-PR-2-0-1-2-c1-00083,
+> and verified by sniffing frames over the air with Wireshark to ensure the
+> MCS indices match.
+> 
+> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
+> Reviewed-by: Benjamin Li <benl@squareup.com>
+> ---
+> 
+> Changes in v3:
+>   - Refactored to report tx_rate via ieee80211_ops::sta_statistics
+>   - Dropped get_sta_index patch
+>   - Addressed style comments
+> Changes in v2:
+>   - Refactored to use existing wcn36xx_hal_get_stats_{req,rsp}_msg structs.
+>   - Added more notes about testing.
+>   - Reduced reporting interval to 3000msec.
+>   - Assorted type and memory safety fixes.
+>   - Make wcn36xx_smd_get_stats friendlier to future message implementors.
+> 
+>   drivers/net/wireless/ath/wcn36xx/hal.h  |  7 +++-
+>   drivers/net/wireless/ath/wcn36xx/main.c | 16 +++++++
+>   drivers/net/wireless/ath/wcn36xx/smd.c  | 56 +++++++++++++++++++++++++
+>   drivers/net/wireless/ath/wcn36xx/smd.h  |  2 +
+>   drivers/net/wireless/ath/wcn36xx/txrx.c | 29 +++++++++++++
+>   drivers/net/wireless/ath/wcn36xx/txrx.h |  1 +
+>   6 files changed, 110 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/ath/wcn36xx/hal.h b/drivers/net/wireless/ath/wcn36xx/hal.h
+> index 2a1db9756fd5..46a49f0a51b3 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/hal.h
+> +++ b/drivers/net/wireless/ath/wcn36xx/hal.h
+> @@ -2626,7 +2626,12 @@ enum tx_rate_info {
+>   	HAL_TX_RATE_SGI = 0x8,
+>   
+>   	/* Rate with Long guard interval */
+> -	HAL_TX_RATE_LGI = 0x10
+> +	HAL_TX_RATE_LGI = 0x10,
+> +
+> +	/* VHT rates */
+> +	HAL_TX_RATE_VHT20  = 0x20,
+> +	HAL_TX_RATE_VHT40  = 0x40,
+> +	HAL_TX_RATE_VHT80  = 0x80,
+>   };
+>   
+>   struct ani_global_class_a_stats_info {
+> diff --git a/drivers/net/wireless/ath/wcn36xx/main.c b/drivers/net/wireless/ath/wcn36xx/main.c
+> index b545d4b2b8c4..fc76b090c39f 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/main.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/main.c
+> @@ -1400,6 +1400,21 @@ static int wcn36xx_get_survey(struct ieee80211_hw *hw, int idx,
+>   	return 0;
+>   }
+>   
+> +static void wcn36xx_sta_statistics(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+> +				   struct ieee80211_sta *sta, struct station_info *sinfo)
 
-Hi, this is your Linux kernel regression tracker. Top-posting for once,
-to make this easily accessible to everyone.
 
-Thanks for the report.
+Consider running this through checkpatch.pl and fixing most of the 
+complaints, use your discretion.
 
-To be sure below issue doesn't fall through the cracks unnoticed, I'm
-adding it to regzbot, my Linux kernel regression tracking bot:
+scripts/checkpatch.pl --strict 
+~/Development/patches/linux/wifi/v3-wcn36xx-Implement-tx_rate-reporting.patch
 
-#regzbot ^introduced ccf1236ecac4
-#regzbot title uml: UML fails to exit cleanly when it is called from
-within in a shell script
-#regzbot ignore-activity
+static void wcn36xx_sta_statistics(struct ieee80211_hw *hw,
+                                    struct ieee80211_vif *vif,
+                                    struct ieee80211_sta *sta,
+                                    struct station_info *sinfo)
 
-If it turns out this isn't a regression, free free to remove it from the
-tracking by sending a reply to this thread containing a paragraph like
-"#regzbot invalid: reason why this is invalid" (without the quotes).
+> +{
+> +	struct wcn36xx *wcn;
+> +	u8 sta_index;
+> +	int status = 0;
+> +
+> +	wcn = hw->priv;
+> +	sta_index = get_sta_index(vif, wcn36xx_sta_to_priv(sta));
+> +	status = wcn36xx_smd_get_stats(wcn, sta_index, HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
 
-Reminder for developers: when fixing the issue, please add a 'Link:'
-tags pointing to the report (the mail) using lore.kernel.org/r/, as
-explained in 'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'. Regzbot needs them to
-automatically connect reports with fixes, but they are useful in
-general, too.
-
-I'm sending this to everyone that got the initial report, to make
-everyone aware of the tracking. I also hope that messages like this
-motivate people to directly get at least the regression mailing list and
-ideally even regzbot involved when dealing with regressions, as messages
-like this wouldn't be needed then. And don't worry, if I need to send
-other mails regarding this regression only relevant for regzbot I'll
-send them to the regressions lists only (with a tag in the subject so
-people can filter them away). With a bit of luck no such messages will
-be needed anyway.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
+status = wcn36xx_smd_get_stats(wcn, sta_index,
+                                HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
 
 
-On 23.03.22 20:41, Nathan Chancellor wrote:
-> Hello,
-> 
-> On Sat, May 08, 2021 at 11:22:39AM +0800, Zhen Lei wrote:
->> Fix to return a negative error code from the error handling case instead
->> of 0, as done elsewhere in this function.
->>
->> Fixes: 89df6bfc0405 ("uml: DEBUG_SHIRQ fixes")
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  arch/um/drivers/chan_user.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/um/drivers/chan_user.c b/arch/um/drivers/chan_user.c
->> index d8845d4aac6a..6040817c036f 100644
->> --- a/arch/um/drivers/chan_user.c
->> +++ b/arch/um/drivers/chan_user.c
->> @@ -256,7 +256,8 @@ static int winch_tramp(int fd, struct tty_port *port, int *fd_out,
->>  		goto out_close;
->>  	}
->>  
->> -	if (os_set_fd_block(*fd_out, 0)) {
->> +	err = os_set_fd_block(*fd_out, 0);
->> +	if (err) {
->>  		printk(UM_KERN_ERR "winch_tramp: failed to set thread_fd "
->>  		       "non-blocking.\n");
->>  		goto out_close;
->> -- 
->> 2.25.1
->>
->>
->>
-> 
-> Sorry for the necro bump but this patch as commit ccf1236ecac4 ("um: fix
-> error return code in winch_tramp()") prevents UML from exiting cleanly
-> when it is called from within in a shell script. It is still
-> reproducible at next-20220323. I did see a patch from Richard that
-> touches this area but that patch does not make a difference:
-> 
-> https://lore.kernel.org/r/20220101215810.13260-3-richard@nod.at/
-> 
-> My bisect log:
-> 
-> # bad: [7d2a07b769330c34b4deabeed939325c77a7ec2f] Linux 5.14
-> # good: [62fb9874f5da54fdb243003b386128037319b219] Linux 5.13
-> git bisect start 'v5.14' 'v5.13'
-> # good: [406254918b232db198ed60f5bf1f8b84d96bca00] Merge tag 'perf-tools-for-v5.14-2021-07-01' of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux
-> git bisect good 406254918b232db198ed60f5bf1f8b84d96bca00
-> # good: [4ea90317956718e0648e1f87e56530db809a5a04] Merge tag 'for-linus-5.14-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip
-> git bisect good 4ea90317956718e0648e1f87e56530db809a5a04
-> # bad: [65ca89c2b12cca0d473f3dd54267568ad3af55cc] ASoC: intel: atom: Fix breakage for PCM buffer address setup
-> git bisect bad 65ca89c2b12cca0d473f3dd54267568ad3af55cc
-> # bad: [6e207b882159ed3e35a4cd4ff0fc155cce5e3cbc] Merge tag 'arm-soc-5.14' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect bad 6e207b882159ed3e35a4cd4ff0fc155cce5e3cbc
-> # good: [f55966571d5eb2876a11e48e798b4592fa1ffbb7] Merge tag 'drm-next-2021-07-08-1' of git://anongit.freedesktop.org/drm/drm
-> git bisect good f55966571d5eb2876a11e48e798b4592fa1ffbb7
-> # bad: [1459718d7d79013a4814275c466e0b32da6a26bc] Merge tag 'powerpc-5.14-2' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
-> git bisect bad 1459718d7d79013a4814275c466e0b32da6a26bc
-> # good: [227c4d507c71acb7bece298a98d83e5b44433f62] Merge tag 'f2fs-for-5.14-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs
-> git bisect good 227c4d507c71acb7bece298a98d83e5b44433f62
-> # good: [96890bc2eaa1f6bfc1b194e0f0815a10824352a4] Merge tag 'nfs-for-5.14-1' of git://git.linux-nfs.org/projects/trondmy/linux-nfs
-> git bisect good 96890bc2eaa1f6bfc1b194e0f0815a10824352a4
-> # good: [e49d68ce7cc5a865ce14c1e57938438ab01c3ce3] Merge tag 'ext4_for_linus_stable' of git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4
-> git bisect good e49d68ce7cc5a865ce14c1e57938438ab01c3ce3
-> # bad: [ccf1236ecac476d9d2704866d9a476c86e387971] um: fix error return code in winch_tramp()
-> git bisect bad ccf1236ecac476d9d2704866d9a476c86e387971
-> # good: [68f5d3f3b6543266b29e047cfaf9842333019b4c] um: add PCI over virtio emulation driver
-> git bisect good 68f5d3f3b6543266b29e047cfaf9842333019b4c
-> # good: [c0ecca6604b80e438b032578634c6e133c7028f6] um: enable the use of optimized xor routines in UML
-> git bisect good c0ecca6604b80e438b032578634c6e133c7028f6
-> # good: [80f849bf541ef9b633a9c08ac208f9c9afd14eb9] um: implement flush_cache_vmap/flush_cache_vunmap
-> git bisect good 80f849bf541ef9b633a9c08ac208f9c9afd14eb9
-> # good: [b77e81fbe5f5fb4ad9a61ec80f6d1e30b6da093a] um: fix error return code in slip_open()
-> git bisect good b77e81fbe5f5fb4ad9a61ec80f6d1e30b6da093a
-> # first bad commit: [ccf1236ecac476d9d2704866d9a476c86e387971] um: fix error return code in winch_tramp()
-> 
-> $ make -skj"$(nproc)" ARCH=um mrproper defconfig all
-> 
-> $ ./linux ubd0=...
-> ...
-> Run /sbin/init as init process
-> EXT4-fs (ubda): re-mounted. Quota mode: none.
-> Starting syslogd: OK
-> Starting klogd: OK
-> Running sysctl: OK
-> Initializing random number generator: OK
-> Saving random seed: OK
-> Starting network: OK
-> Linux version 5.17.0-next-20220323 (nathan@dev-arch.thelio-3990X) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38) #1 Wed Mar 23 12:05:22 MST 2022
-> Stopping network: OK
-> Saving random seed: OK
-> Stopping klogd: OK
-> Stopping syslogd: OK
-> EXT4-fs (ubda): re-mounted. Quota mode: none.
-> The system is going down NOW!
-> Sent SIGTERM to all processes
-> Sent SIGKILL to all processes
-> Requesting system poweroff
-> reboot: System halted
-> 
-> $ echo $?
-> 0
-> 
-> $ cat test.sh
-> #!/usr/bin/env bash
-> 
-> ./linux ubd0=...
-> 
-> $ ./test.sh
-> ...
-> Run /sbin/init as init process
-> EXT4-fs (ubda): re-mounted. Quota mode: none.
-> Starting syslogd: OK
-> Starting klogd: OK
-> Running sysctl: OK
-> Initializing random number generator: OK
-> Saving random seed: OK
-> Starting network: OK
-> Linux version 5.17.0-next-20220323 (nathan@dev-arch.thelio-3990X) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38) #1 Wed Mar 23 12:10:31 MST 2022
-> Stopping network: OK
-> Saving random seed: OK
-> Stopping klogd: OK
-> Stopping syslogd: OK
-> EXT4-fs (ubda): re-mounted. Quota mode: none.
-> The system is going down NOW!
-> Sent SIGTERM to all processes
-> Sent SIGKILL to all processes
-> Requesting system poweroff
-> reboot: System halted
-> ./test.sh: line 5: 970978 Killed                  ./linux ubd0=...
-> 
-> $ echo $?
-> 137
-> 
-> The rootfs is a simple Buildroot image, which just prints the version
-> string then runs "poweroff". It is available at:
-> 
-> https://github.com/nathanchance/boot-utils/raw/bd4b962ee12e00f666eef12e3413a79d334a0685/images/x86_64/rootfs.ext4.zst
-> 
-> in case it helps. I am happy to provide more information or test patches
-> as necessary.
-> 
-> Cheers,
-> Nathan
-> 
-> 
--- 
-Additional information about regzbot:
+> +
+> +	if (status)
+> +		wcn36xx_err("wcn36xx_smd_get_stats failed\n");
+> +}
+> +
+>   static const struct ieee80211_ops wcn36xx_ops = {
+>   	.start			= wcn36xx_start,
+>   	.stop			= wcn36xx_stop,
+> @@ -1423,6 +1438,7 @@ static const struct ieee80211_ops wcn36xx_ops = {
+>   	.set_rts_threshold	= wcn36xx_set_rts_threshold,
+>   	.sta_add		= wcn36xx_sta_add,
+>   	.sta_remove		= wcn36xx_sta_remove,
+> +	.sta_statistics		= wcn36xx_sta_statistics,
+>   	.ampdu_action		= wcn36xx_ampdu_action,
+>   #if IS_ENABLED(CONFIG_IPV6)
+>   	.ipv6_addr_change	= wcn36xx_ipv6_addr_change,
+> diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
+> index caeb68901326..8f9aa892e5ec 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/smd.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/smd.c
+> @@ -2627,6 +2627,61 @@ int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 tid, u8 direction, u8 sta_index)
+>   	return ret;
+>   }
+>   
+> +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32 stats_mask,
+> +			  struct station_info *sinfo)
+> +{
+> +	struct wcn36xx_hal_stats_req_msg msg_body;
+> +	struct wcn36xx_hal_stats_rsp_msg *rsp;
+         struct ani_global_class_a_stats_info *stats_info;
+> +	void *rsp_body;
+> +	int ret = 0;
+> +
+> +	if (stats_mask & ~HAL_GLOBAL_CLASS_A_STATS_INFO) {
+> +		wcn36xx_err("stats_mask 0x%x contains unimplemented types\n",
+> +			    stats_mask);
+> +		return -EINVAL;
+> +	}
+> +
+> +	mutex_lock(&wcn->hal_mutex);
+> +	INIT_HAL_MSG(msg_body, WCN36XX_HAL_GET_STATS_REQ);
+> +
+> +	msg_body.sta_id = sta_index;
+> +	msg_body.stats_mask = stats_mask;
+> +
+> +	PREPARE_HAL_BUF(wcn->hal_buf, msg_body);
+> +
+> +	ret = wcn36xx_smd_send_and_wait(wcn, msg_body.header.len);
+> +	if (ret) {
+> +		wcn36xx_err("sending hal_get_stats failed\n");
+> +		goto out;
+> +	}
+> +
+> +	ret = wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len);
+> +	if (ret) {
+> +		wcn36xx_err("hal_get_stats response failed err=%d\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	rsp = (struct wcn36xx_hal_stats_rsp_msg *)wcn->hal_buf;
+> +	rsp_body = (wcn->hal_buf + sizeof(struct wcn36xx_hal_stats_rsp_msg));
+> +
+> +	if (rsp->stats_mask != stats_mask) {
+> +		wcn36xx_err("stats_mask 0x%x differs from requested 0x%x\n",
+> +			    rsp->stats_mask, stats_mask);
+> +		goto out;
+> +	}
+> +
+If you take a pointer and cast it, then you won't have this very long 
+line with the cast
 
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
+         stats_info = (struct ani_global_class_a_stats_info *)rsp_body;
+> +	if (rsp->stats_mask & HAL_GLOBAL_CLASS_A_STATS_INFO) {
+> +		wcn36xx_process_tx_rate((struct ani_global_class_a_stats_info *)rsp_body,
+> +					&sinfo->txrate);
+                 wcn36xx_process_tx_rate(stats_info, &sinfo->txrate);
 
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
 
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
+Other than that LGTM
 
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>

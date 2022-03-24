@@ -2,139 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122604E62B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1F34E62B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349846AbiCXLwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S232088AbiCXLw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbiCXLwn (ORCPT
+        with ESMTP id S1349873AbiCXLw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:52:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D53E97BA4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648122671; x=1679658671;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MkKgLOGm8fzuqIUVMGedup+WyqyCao28NBMcOzgaAJM=;
-  b=aTTQwlRv1TRUHYtPU6cZ+/MNjADUF+gAAXK0F97NDetW7q2ve3fEPKpY
-   EumkgIOUbprlWnnVl/olq06aGDnlnJlPB/fHcFaNmKdqsFoXwrY0wwimk
-   fM91TsxUODfG0E59bkKH0RMXg/QLapXqYIEYW2551flgSUZPSRkmkEuvf
-   G50evg9Qc/XUyMa7jNWec3xVugYoM2ohvf8lli3N1DJfXzWjyGQMJjzjk
-   BQtHiPG2H87vB/BWFvW1iQPEZJTzwZGCMb1t6yc/SChKlN4XuyUyIaIco
-   XTZMUp1p4eM4sghSQzFjUYCTQ0St4JJnAHseO+RAMeMvgr2DIN5P0QwtN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="283214930"
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="283214930"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 04:51:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="649824816"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2022 04:51:09 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXLzg-000L2i-JY; Thu, 24 Mar 2022 11:51:08 +0000
-Date:   Thu, 24 Mar 2022 19:50:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Henningsson <coding@diwic.se>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Jaroslav Kysela <perex@perex.cz>
-Subject: sound/core/rawmidi.c:991:6: warning: variable 'dest_frames' set but
- not used
-Message-ID: <202203241949.AXselCHw-lkp@intel.com>
+        Thu, 24 Mar 2022 07:52:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D87CA7741;
+        Thu, 24 Mar 2022 04:51:24 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A465E1F745;
+        Thu, 24 Mar 2022 11:51:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648122683; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4wdLN7onAzHERay3+YLdl5/6sPiB+EjawqgU4IGxYk8=;
+        b=yXk+RFJCMfNvv6qTAQyx+gErs3SW2hhSKgcvXQieMHZGmUZnO3MJj7ZLvSbw/KkhNjiWTt
+        aZvb2H5FZ0mFcq9XgZcWoliEay1pzcAHVyunZPKU4P4KVBgS4EH5/NANmWWVWiIQfgkITf
+        hWhXvEyAksiUqS51F9Bg7DQ9mcW+DoE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648122683;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4wdLN7onAzHERay3+YLdl5/6sPiB+EjawqgU4IGxYk8=;
+        b=kAx4+2B8KDZaUtpg3UZWaLCA7ccaP/tSaCgCNoAap+YwZj02ib8UqXEYRskqP7QdNyoqbY
+        TNrmGjzIjRGy/+AQ==
+Received: from quack3.suse.cz (unknown [10.100.200.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 57828A3B82;
+        Thu, 24 Mar 2022 11:51:23 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 708C8A0610; Thu, 24 Mar 2022 12:51:20 +0100 (CET)
+Date:   Thu, 24 Mar 2022 12:51:20 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, lczerner@redhat.com
+Subject: Re: [PATCH -next v2] ext4: fix use-after-free in ext4_search_dir
+Message-ID: <20220324115120.p6uaoofizgwjazbl@quack3.lan>
+References: <20220324064816.1209985-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220324064816.1209985-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ed4643521e6af8ab8ed1e467630a85884d2696cf
-commit: 08fdced60ca08e34e316a3ab945636fcdfcbc973 ALSA: rawmidi: Add framing mode
-date:   10 months ago
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20220324/202203241949.AXselCHw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=08fdced60ca08e34e316a3ab945636fcdfcbc973
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 08fdced60ca08e34e316a3ab945636fcdfcbc973
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/core/
+On Thu 24-03-22 14:48:16, Ye Bin wrote:
+> We got issue as follows:
+> EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+> ==================================================================
+> BUG: KASAN: use-after-free in ext4_search_dir fs/ext4/namei.c:1394 [inline]
+> BUG: KASAN: use-after-free in search_dirblock fs/ext4/namei.c:1199 [inline]
+> BUG: KASAN: use-after-free in __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
+> Read of size 1 at addr ffff8881317c3005 by task syz-executor117/2331
+> 
+> CPU: 1 PID: 2331 Comm: syz-executor117 Not tainted 5.10.0+ #1
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:83 [inline]
+>  dump_stack+0x144/0x187 lib/dump_stack.c:124
+>  print_address_description+0x7d/0x630 mm/kasan/report.c:387
+>  __kasan_report+0x132/0x190 mm/kasan/report.c:547
+>  kasan_report+0x47/0x60 mm/kasan/report.c:564
+>  ext4_search_dir fs/ext4/namei.c:1394 [inline]
+>  search_dirblock fs/ext4/namei.c:1199 [inline]
+>  __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
+>  ext4_lookup_entry fs/ext4/namei.c:1622 [inline]
+>  ext4_lookup+0xb8/0x3a0 fs/ext4/namei.c:1690
+>  __lookup_hash+0xc5/0x190 fs/namei.c:1451
+>  do_rmdir+0x19e/0x310 fs/namei.c:3760
+>  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x445e59
+> Code: 4d c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 1b c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+> RSP: 002b:00007fff2277fac8 EFLAGS: 00000246 ORIG_RAX: 0000000000000054
+> RAX: ffffffffffffffda RBX: 0000000000400280 RCX: 0000000000445e59
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200000c0
+> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000002
+> R10: 00007fff2277f990 R11: 0000000000000246 R12: 0000000000000000
+> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+> 
+> The buggy address belongs to the page:
+> page:0000000048cd3304 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1317c3
+> flags: 0x200000000000000()
+> raw: 0200000000000000 ffffea0004526588 ffffea0004528088 0000000000000000
+> raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> 
+> Memory state around the buggy address:
+>  ffff8881317c2f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>  ffff8881317c2f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> >ffff8881317c3000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>                    ^
+>  ffff8881317c3080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  ffff8881317c3100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> ==================================================================
+> 
+> ext4_search_dir:
+>   ...
+>   de = (struct ext4_dir_entry_2 *)search_buf;
+>   dlimit = search_buf + buf_size;
+>   while ((char *) de < dlimit) {
+>   ...
+>     if ((char *) de + de->name_len <= dlimit &&
+> 	 ext4_match(dir, fname, de)) {
+> 	    ...
+>     }
+>   ...
+>     de_len = ext4_rec_len_from_disk(de->rec_len, dir->i_sb->s_blocksize);
+>     if (de_len <= 0)
+>       return -1;
+>     offset += de_len;
+>     de = (struct ext4_dir_entry_2 *) ((char *) de + de_len);
+>   }
+> 
+> Assume:
+> de=0xffff8881317c2fff
+> dlimit=0x0xffff8881317c3000
+> 
+> If read 'de->name_len' which address is 0xffff8881317c3005, obviously is
+> out of range, then will trigger use-after-free.
+> To solve this issue, 'dlimit' must reserve 8 bytes, as we will read
+> 'de->name_len' to judge if '(char *) de + de->name_len' out of range.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Looks good. Thanks. Feel free to add:
 
-All warnings (new ones prefixed by >>):
+Reviewed-by: Jan Kara <jack@suse.cz>
 
->> sound/core/rawmidi.c:991:6: warning: variable 'dest_frames' set but not used [-Wunused-but-set-variable]
-           int dest_frames = 0;
-               ^
-   1 warning generated.
+								Honza
 
 
-vim +/dest_frames +991 sound/core/rawmidi.c
-
-   984	
-   985	static int receive_with_tstamp_framing(struct snd_rawmidi_substream *substream,
-   986				const unsigned char *buffer, int src_count, const struct timespec64 *tstamp)
-   987	{
-   988		struct snd_rawmidi_runtime *runtime = substream->runtime;
-   989		struct snd_rawmidi_framing_tstamp *dest_ptr;
-   990		struct snd_rawmidi_framing_tstamp frame = { .tv_sec = tstamp->tv_sec, .tv_nsec = tstamp->tv_nsec };
- > 991		int dest_frames = 0;
-   992		int orig_count = src_count;
-   993		int frame_size = sizeof(struct snd_rawmidi_framing_tstamp);
-   994	
-   995		BUILD_BUG_ON(frame_size != 0x20);
-   996		if (snd_BUG_ON((runtime->hw_ptr & 0x1f) != 0))
-   997			return -EINVAL;
-   998	
-   999		while (src_count > 0) {
-  1000			if ((int)(runtime->buffer_size - runtime->avail) < frame_size) {
-  1001				runtime->xruns += src_count;
-  1002				break;
-  1003			}
-  1004			if (src_count >= SNDRV_RAWMIDI_FRAMING_DATA_LENGTH)
-  1005				frame.length = SNDRV_RAWMIDI_FRAMING_DATA_LENGTH;
-  1006			else {
-  1007				frame.length = src_count;
-  1008				memset(frame.data, 0, SNDRV_RAWMIDI_FRAMING_DATA_LENGTH);
-  1009			}
-  1010			memcpy(frame.data, buffer, frame.length);
-  1011			buffer += frame.length;
-  1012			src_count -= frame.length;
-  1013			dest_ptr = (struct snd_rawmidi_framing_tstamp *) (runtime->buffer + runtime->hw_ptr);
-  1014			*dest_ptr = frame;
-  1015			runtime->avail += frame_size;
-  1016			runtime->hw_ptr += frame_size;
-  1017			runtime->hw_ptr %= runtime->buffer_size;
-  1018			dest_frames++;
-  1019		}
-  1020		return orig_count - src_count;
-  1021	}
-  1022	
-
+> ---
+>  fs/ext4/ext4.h  | 4 ++++
+>  fs/ext4/namei.c | 4 ++--
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 3f87cca49f0c..ea49cf5d70a9 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -2273,6 +2273,10 @@ static inline int ext4_forced_shutdown(struct ext4_sb_info *sbi)
+>   * Structure of a directory entry
+>   */
+>  #define EXT4_NAME_LEN 255
+> +/*
+> + * Base length of ext4_dir_entry_2 and ext4_dir_entry exclude name
+> + */
+> +#define EXT4_BASE_DIR_LEN (sizeof(struct ext4_dir_entry_2) - EXT4_NAME_LEN)
+>  
+>  struct ext4_dir_entry {
+>  	__le32	inode;			/* Inode number */
+> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> index e37da8d5cd0c..767b4bfe39c3 100644
+> --- a/fs/ext4/namei.c
+> +++ b/fs/ext4/namei.c
+> @@ -1466,10 +1466,10 @@ int ext4_search_dir(struct buffer_head *bh, char *search_buf, int buf_size,
+>  
+>  	de = (struct ext4_dir_entry_2 *)search_buf;
+>  	dlimit = search_buf + buf_size;
+> -	while ((char *) de < dlimit) {
+> +	while ((char *) de < dlimit - EXT4_BASE_DIR_LEN) {
+>  		/* this code is executed quadratically often */
+>  		/* do minimal checking `by hand' */
+> -		if ((char *) de + de->name_len <= dlimit &&
+> +		if (de->name + de->name_len <= dlimit &&
+>  		    ext4_match(dir, fname, de)) {
+>  			/* found a match - just to be sure, do
+>  			 * a full check */
+> -- 
+> 2.31.1
+> 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

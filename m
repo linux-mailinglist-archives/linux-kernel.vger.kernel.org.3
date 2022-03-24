@@ -2,113 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70234E6414
+	by mail.lfdr.de (Postfix) with ESMTP id F1DDC4E6415
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350437AbiCXN3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S1350446AbiCXN31 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Mar 2022 09:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236979AbiCXN3Y (ORCPT
+        with ESMTP id S236979AbiCXN3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:29:24 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877B0A7752
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:27:52 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso9525577pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=35DPDgwgR7o28S5QkagymkokXPJZP06Ii37nZqLEji8=;
-        b=TVmJKgB/OzleOMpj1pIVXCTYSugZonqt1iUBoppqzRKjaqxEB1Z4oZpJ1y3TllNPxL
-         ZlpC4VhRzwN6c44GQ/VJ0PJWp0h8KnNkDtiLIkrO5nK6qC09V7qpMKQo70feblyeZO/B
-         kQt3XHgxv80rA6j4naLrW7VHjmAO/FUbWfNTHF46w+WzVx8y7mkh9LnnXpfwVdEj6k7r
-         8bFQqq2wXr9+Z7t3qcQSw+WEJve5WbedHcwQeMbztO0em9qplQPr4vZUTb8Tv0qSvDdT
-         gT7NZwSf/C8KzyY64NkxnzHIydjlC0EsTyMo1gs1PgqLY3NJkSEzr/DAmz8BQIgk5Gop
-         DU1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=35DPDgwgR7o28S5QkagymkokXPJZP06Ii37nZqLEji8=;
-        b=fVlTuk8Qni2ZgU8tRQySnK/yCxuX1MFF30Dtxh54knutB4DDa035wVcs5J6iSOkLln
-         LMYtlNjYO0Rk+v+Xk30C3EkoOSMolxSMh34anaiz8323kY+e9wbVZyhjTWDSrKX3smNr
-         F+MsAyuBYq9z6rTrlg3ri6cEFD4SUQUUkKut6TYGL6WcM+37dbnAfBwyCYbAsIt6rmNf
-         XgymAgKRPzBSyKtxKXXFFrLdmrDbx7e+x989OjIJuP+krIjDaEuKqrDxIwwo2XRuOPq8
-         4DBXO244mhpmUglPvV14wAXeC82l6VlnAerZIdPSivSqeKIkzyd55kXxHDJ4HyTX9feZ
-         hvWg==
-X-Gm-Message-State: AOAM530EO36lgk0HsqFPCNHSzYnQHh1cnu1oAxYlkR/fCJolrDWmYVg+
-        nwv135DKWBFHftO+qFhuX70kDW31xKfReIflvTA=
-X-Google-Smtp-Source: ABdhPJxeqBu7n+Zf/rPdKKKFm/6W80UtX3/8NZoJ6RYIq0AE4XmWppWuTad4TO8fH+1z2oKV+zytXS6quAtYCAL+X68=
-X-Received: by 2002:a17:902:70c1:b0:154:667f:e361 with SMTP id
- l1-20020a17090270c100b00154667fe361mr6041346plt.148.1648128471988; Thu, 24
- Mar 2022 06:27:51 -0700 (PDT)
+        Thu, 24 Mar 2022 09:29:25 -0400
+Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122F5A7752;
+        Thu, 24 Mar 2022 06:27:53 -0700 (PDT)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 4D158463187;
+        Thu, 24 Mar 2022 14:27:52 +0100 (CET)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 39E494616CC;
+        Thu, 24 Mar 2022 14:27:52 +0100 (CET)
+X-TM-AS-ERS: 10.149.2.84-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
+        by mail3.swissbit.com (Postfix) with ESMTPS;
+        Thu, 24 Mar 2022 14:27:52 +0100 (CET)
+Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
+ (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
+ 2022 14:27:51 +0100
+Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
+ sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
+ 15.02.0986.022; Thu, 24 Mar 2022 14:27:51 +0100
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+Subject: [PATCHv4] mmc: block: Check for errors after write on SPI
+Thread-Topic: [PATCHv4] mmc: block: Check for errors after write on SPI
+Thread-Index: AQHYP4LoJDVQhv4pEEGn8CEDydpuCg==
+Date:   Thu, 24 Mar 2022 13:27:51 +0000
+Message-ID: <8052f30adc3747e2beab0e52db26837d@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.154.1.4]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <1648112848-29052-1-git-send-email-baihaowen@meizu.com>
-In-Reply-To: <1648112848-29052-1-git-send-email-baihaowen@meizu.com>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Thu, 24 Mar 2022 14:27:40 +0100
-Message-ID: <CAMeQTsZ3bxs=3o0-WvXa8RYY83BVn9X-m9TSkqmxTpHxpYS1_g@mail.gmail.com>
-Subject: Re: [PATCH] drm: gma500: clean up some style problems reported by checkpatch.pl
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-8.6.1018-26790.007
+X-TMASE-Result: 10--2.484200-10.000000
+X-TMASE-MatchedRID: LVkZzMT5mEprFdvBEmTnvLZ0InVwVLVTn5nfR7I2dFOxPXYIh1l6dlg7
+        cH4SOkOpdWqA+wY3gFZusJxXwmCOnpDH5Y6LoY7BRZfQN+FVqbA1kR+05VC1hsiCh8yBqE+tbiP
+        oclJOCy0MV38Bdz1rogpwpdIIi4oJCtNdSL7NMxRO5y1KmK5bJRSLgSFq3Tnj31GU/N5W5BDfal
+        dUczBqFzyK8WRp1qJNDyVcDYF9X2gcQvLacRAgcPCW/PNRRp/ZeLLCA0PD7aiOS54Qk4fByRJd3
+        nIYBNFRvAQxPUzd//aAUraeY8ICeWgwIvLATTKBC24oEZ6SpSkj80Za3RRg8AGbCVwhBdklXd/S
+        v5c5PCnllp9J9eYRW2D45hQmnPpeEze1V/T0TyU=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: c9886a10-9435-4c3c-a01a-f170bc255192-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 10:16 AM Haowen Bai <baihaowen@meizu.com> wrote:
->
-> WARNING: Statements should start on a tabstop
->
-> WARNING: Missing a blank line after declarations
->
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Introduce a SEND_STATUS check for writes through SPI to not mark
+an unsuccessful write as successful.
 
-Hi, thanks for the patch.
+Since SPI SD/MMC does not have states, after a write, the card will
+just hold the line LOW until it is ready again. The driver marks the
+write therefore as completed as soon as it reads something other than
+all zeroes.
+The driver does not distinguish from a card no longer signalling busy
+and it being disconnected (and the line being pulled-up by the host).
+This lead to writes being marked as successful when disconnecting
+a busy card.
+Now the card is ensured to be still connected by an additional CMD13,
+just like non-SPI is ensured to go back to TRAN state.
 
-> ---
->  drivers/gpu/drm/gma500/mid_bios.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/gma500/mid_bios.c b/drivers/gpu/drm/gma500/mid_bios.c
-> index 7e76790..71942c2 100644
-> --- a/drivers/gpu/drm/gma500/mid_bios.c
-> +++ b/drivers/gpu/drm/gma500/mid_bios.c
-> @@ -50,8 +50,8 @@ static void mid_get_fuse_settings(struct drm_device *dev)
->         DRM_INFO("internal display is %s\n",
->                  dev_priv->iLVDS_enable ? "LVDS display" : "MIPI display");
->
-> -        /* Prevent runtime suspend at start*/
-> -        if (dev_priv->iLVDS_enable) {
-> +       /* Prevent runtime suspend at start*/
+While at it and since we already poll for the post-write status anyway,
+we might as well check for SPIs error bits (any of them).
 
-There should also be a space between "start" and "*/" at the end of the line
+The disconnecting card problem is reproducable for me after continuous
+write activity and randomly disconnecting, around every 20-50 tries
+on SPI DS for some card.
 
--Patrik
+Fixes: 7213d175e3b6f ("MMC/SD card driver learns SPI")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+v2:
+  - Reorder err and status check for err to take precedence and look cleaner
+v3:
+  - Move the logic into its own function
+v4:
+  - Move block layer handling out of the spi-specific function
 
-> +       if (dev_priv->iLVDS_enable) {
->                 dev_priv->is_lvds_on = true;
->                 dev_priv->is_mipi_on = false;
->         } else {
-> @@ -325,6 +325,7 @@ static void mid_get_vbt_data(struct drm_psb_private *dev_priv)
->  int mid_chip_setup(struct drm_device *dev)
->  {
->         struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
-> +
->         mid_get_fuse_settings(dev);
->         mid_get_vbt_data(dev_priv);
->         mid_get_pci_revID(dev_priv);
-> --
-> 2.7.4
->
+ drivers/mmc/core/block.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 4e67c1403cc9..7272db0042fd 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1880,6 +1880,32 @@ static inline bool mmc_blk_rq_error(struct mmc_blk_request *brq)
+ 	       brq->data.error || brq->cmd.resp[0] & CMD_ERRORS;
+ }
+ 
++static int mmc_spi_err_check(struct mmc_card *card)
++{
++	u32 status = 0;
++	int err;
++
++	/*
++	 * SPI does not have a TRAN state we have to wait on, instead the
++	 * card is ready again when it no longer holds the line LOW.
++	 * We still have to ensure two things here before we know the write
++	 * was successful:
++	 * 1. The card has not disconnected during busy and we actually read our
++	 * own pull-up, thinking it was still connected, so ensure it
++	 * still responds.
++	 * 2. Check for any error bits, in particular R1_SPI_IDLE to catch a
++	 * just reconnected card after being disconnected during busy.
++	 */
++	err = __mmc_send_status(card, &status, 0);
++	/* All R1 and R2 bits of SPI are errors in our case */
++	if (err || status) {
++		if (err)
++			return err;
++		return -EIO;
++	}
++	return 0;
++}
++
+ static int mmc_blk_busy_cb(void *cb_data, bool *busy)
+ {
+ 	struct mmc_blk_busy_data *data = cb_data;
+@@ -1903,9 +1929,16 @@ static int mmc_blk_card_busy(struct mmc_card *card, struct request *req)
+ 	struct mmc_blk_busy_data cb_data;
+ 	int err;
+ 
+-	if (mmc_host_is_spi(card->host) || rq_data_dir(req) == READ)
++	if (rq_data_dir(req) == READ)
+ 		return 0;
+ 
++	if (mmc_host_is_spi(card->host)) {
++		err = mmc_spi_err_check(card);
++		if (err)
++			mqrq->brq.data.bytes_xfered = 0;
++		return err;
++	}
++
+ 	cb_data.card = card;
+ 	cb_data.status = 0;
+ 	err = __mmc_poll_for_busy(card->host, 0, MMC_BLK_TIMEOUT_MS,
+-- 
+2.34.1
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+

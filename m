@@ -2,159 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117244E63DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD474E63E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350354AbiCXNGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 09:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S243005AbiCXNMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240451AbiCXNGG (ORCPT
+        with ESMTP id S232255AbiCXNMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:06:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A16B1D309
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648127074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HxPrUhuzt19uTx9FtmZNdKy0YYbrN6xElRt7MFKc2u4=;
-        b=Nqw3xoA3psjJiO2P18tnC+utADuQlBd+IYxD88Q4vValvgmZwoIpLgeZ4scqQTpcWyOG/w
-        i7YGKZxhm0TFHRhxG42VgKsiNtUS677t7tUNdrG8QRVzIQ9K+X6zM0edfuKbHiIWI1wV5s
-        y52yWf5gHwMreCHJPRWQhkurXS0+hk8=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-179-TYDmLKfdO1embMwKYyN9uQ-1; Thu, 24 Mar 2022 09:04:31 -0400
-X-MC-Unique: TYDmLKfdO1embMwKYyN9uQ-1
-Received: by mail-ed1-f72.google.com with SMTP id v15-20020a50f08f000000b0041902200ab4so2968563edl.22
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:04:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=HxPrUhuzt19uTx9FtmZNdKy0YYbrN6xElRt7MFKc2u4=;
-        b=g71En2oqttMiF3Ra3fsaslZ3S6wdAqN/y8XZfem5uvC1sxozwN7GUP1EIzhK6lY9jf
-         1zmrV22f/0LeRauqoWupcuCnFPIzTEvYENJlDbbFX4SDyJ2Qh+5Yo3A3aWGJfGWCb5FO
-         wvvGRlmDuKqVv6G4hKLMou2llS+DZs2NuP3OPI4ACyKRDiewQlUOFPot+Cv73pHqxHJo
-         5Z24F/0fersJpvQEgPgFTpHSsapfKxhU8jO5meyHr6PgXmWyxPkgM4bB9HIUll0bBRjU
-         BybK5lQo6yIlqsHTEtNCJ8/EyA6oWLsxMqwB3ERjHJG6m4iDRB42EzW8HywCnp+MbCIX
-         kK6A==
-X-Gm-Message-State: AOAM531qxs7mI81ps3y56YsyLCCbaIPtQCCNlivx+g8FVv4f7YBB92DU
-        Zc/BG3dkfSCUcyNtLQDD8QWwCjD37bDtrtz3Ym28z0AyK4Je2LzauJecgLEclIkXw4m7K3zMgKs
-        9PErRA73XAfXA0UVtiBID1bNE
-X-Received: by 2002:a17:907:70cc:b0:6e0:1646:9123 with SMTP id yk12-20020a17090770cc00b006e016469123mr5537116ejb.329.1648127069877;
-        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy9mG1YV/Nxxur9iUPNhDYJQF2OMH9BNi3DfisIXyy0UXTE7U0Ir9X/t/kvNHmwS8S9IG4keg==
-X-Received: by 2002:a17:907:70cc:b0:6e0:1646:9123 with SMTP id yk12-20020a17090770cc00b006e016469123mr5537098ejb.329.1648127069696;
-        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906059100b006cee1bceddasm1107911ejn.130.2022.03.24.06.04.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
-Message-ID: <d1399c72-d729-58f8-ac63-1966f18c028d@redhat.com>
-Date:   Thu, 24 Mar 2022 14:04:28 +0100
+        Thu, 24 Mar 2022 09:12:22 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3A6A774D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:10:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1648127449; x=1679663449;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=AJ4z9771lC03AT4ol+j4MJ3/Iwb6+ApMU5BnuJsmO3g=;
+  b=bqJkbvm42AA8OYH+mI5nPN/LcKaWE3d2DLt3/ANR+OJaLr31zcllHMnM
+   57EC+Y3nRPEL7asSR9zgilsbKoOQuzd9eJGEN+qgYOqplXTvpuRESiuBQ
+   WteszoOpaWCLYmh0cKv/rsKd6BhOmPzam5ciDSLrprNKV0uIom+C+beGp
+   XW+UHcrmZeHZaTZ6QkaqACSrgvKAEciDXtgAPCkaPvbX9ZcUIJE4TdbfP
+   K4VM9M8BD89eC7XAnxPftKqhOcPlySktDPFf2W04h0FGOeh0N4MWS6swf
+   EkzpdO0m8ZgfFxbVWxsCFAzD5UuLuflGJS+VMN9Fk7bbMBEr9Iu3DuH1m
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,207,1643698800"; 
+   d="scan'208";a="166977136"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Mar 2022 06:10:48 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 24 Mar 2022 06:10:47 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 24 Mar 2022 06:10:45 -0700
+From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+To:     <alexandre.belloni@bootlin.com>, <linux@armlinux.org.uk>,
+        <linus.walleij@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
+        <michael@walle.cc>, <Manohar.Puri@microchip.com>,
+        <Kavyasree.Kotagiri@microchip.com>
+Subject: [PATCH v2] ARM: at91: debug: add lan966 support
+Date:   Thu, 24 Mar 2022 18:40:31 +0530
+Message-ID: <20220324131031.32430-1-kavyasree.kotagiri@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Gross <markgross@kernel.org>,
-        "David E. Box" <david.e.box@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20220301201659.45ac94cd@canb.auug.org.au>
- <20220324183329.22c97ea1@canb.auug.org.au>
- <2f33bdce-a002-708a-dd65-7bfb6ebc4cd9@redhat.com>
- <20220324222241.42896e9e@canb.auug.org.au>
-Content-Language: en-US
-In-Reply-To: <20220324222241.42896e9e@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-<fat fingered send, sending an incomplete email, this is attempt 2>
+Add support for low-level debugging on FLEXCOM3 USART of
+LAN966 SoC.
 
-Hi Stephen,
+Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+---
+v1 -> v2:
+- Corrected flexcom3 base address - 0xe0064200.
 
-On 3/24/22 12:22, Stephen Rothwell wrote:
-> Hi Hans,
-> 
-> On Thu, 24 Mar 2022 08:39:19 +0100 Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> I replied to your original report on March 1st, but I never got a reply
->> to my reply:
->>
->> """
->> Thank you for the report.
->>
->> So I just did:
->>
->> touch Documentation/ABI/testing/sysfs-driver-intel_sdsi
->> make htmldocs &> log
->>
->> In a repo with drivers-x86/for-next checked out and checked the generated log files.
->> But I'm not seeing these WARNINGs.
->>
->> Also 'find Documentation/output/ -name "*sdsi*"' does not output anything,
->> is there anything special (maybe some extra utilities?) which I need to also enable
->> building of htmldocs for the files in Documentation/ABI ?
->> """
->>
->> If someone can let me know how to reproduce these warnings I would be happy
->> to fix them.
-> 
-> Sorry about that.  I am just doing what you are doing but with the
-> whole of linux-next (which I don't think would make a difference).  One
-> possibility is that we are using different versions of the doco
-> software.
-> 
-> I am using Sphinx version 4.3.2 (using Python 3).
+ arch/arm/Kconfig.debug | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-[hans@shalem ~]$ rpm -qf /usr/bin/sphinx-apidoc
-python3-sphinx-4.4.0-1.fc36.noarch
-
-I doubt this makes a difference though.
-
-So I did some digging and the trick for reproducing any ABI
-related warnings is to touch the .rst file which has the
-"kernel-abi" reST directive (1) for the ABI subdir you want
-to regenerate the ABI docs for.
-
-So in this case I did:
-
-touch Documentation/admin-guide/abi-testing.rst
-make htmldocs &> log
-
-And now I can see the warnings. I'll prepare a fix for this.
-
-Looking at Documentation/Makefile I also learned that you
-can also do this:
-
-scripts/get_abi.pl validate --dir Documentation/ABI
-
-Which results in a different set of warnings...
-
-Regards,
-
-Hans
-
-
-1) Implemented in Documentation/sphinx/kernel_abi.py
+diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+index 0c9497d549e3..04501ddc7ab4 100644
+--- a/arch/arm/Kconfig.debug
++++ b/arch/arm/Kconfig.debug
+@@ -210,6 +210,14 @@ choice
+ 		  Say Y here if you want kernel low-level debugging support
+ 		  on the FLEXCOM3 port of SAMA7G5.
+ 
++        config DEBUG_AT91_LAN966_FLEXCOM3
++                bool "Kernel low-level debugging on LAN966 FLEXCOM3 USART"
++                select DEBUG_AT91_UART
++                depends on SOC_LAN966
++                help
++                  Say Y here if you want kernel low-level debugging support
++                  on the FLEXCOM3 port of LAN966.
++
+ 	config DEBUG_BCM2835
+ 		bool "Kernel low-level debugging on BCM2835 PL011 UART"
+ 		depends on ARCH_BCM2835 && ARCH_MULTI_V6
+@@ -1685,6 +1693,7 @@ config DEBUG_UART_PHYS
+ 	default 0xd4017000 if DEBUG_MMP_UART2
+ 	default 0xd4018000 if DEBUG_MMP_UART3
+ 	default 0xe0000000 if DEBUG_SPEAR13XX
++	default 0xe0064200 if DEBUG_AT91_LAN966_FLEXCOM3
+ 	default 0xe1824200 if DEBUG_AT91_SAMA7G5_FLEXCOM3
+ 	default 0xe4007000 if DEBUG_HIP04_UART
+ 	default 0xe6c40000 if DEBUG_RMOBILE_SCIFA0
+@@ -1805,6 +1814,7 @@ config DEBUG_UART_VIRT
+ 	default 0xfb10c000 if DEBUG_REALVIEW_PB1176_PORT
+ 	default 0xfcfe8600 if DEBUG_BCM63XX_UART
+ 	default 0xfd000000 if DEBUG_SPEAR3XX || DEBUG_SPEAR13XX
++	default 0xfd064200 if DEBUG_AT91_LAN966_FLEXCOM3
+ 	default 0xfd531000 if DEBUG_STIH41X_SBC_ASC1
+ 	default 0xfd883000 if DEBUG_ALPINE_UART0
+ 	default 0xfdd32000 if DEBUG_STIH41X_ASC2
+-- 
+2.17.1
 

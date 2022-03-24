@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DCC4E6B19
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 00:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C4D4E6B21
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 00:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355703AbiCXXQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 19:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S1355698AbiCXXUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 19:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239206AbiCXXQt (ORCPT
+        with ESMTP id S235762AbiCXXUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 19:16:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3C4BB83;
-        Thu, 24 Mar 2022 16:15:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8C95B826B8;
-        Thu, 24 Mar 2022 23:15:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 909DFC340F7;
-        Thu, 24 Mar 2022 23:15:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648163712;
-        bh=ckTJEKigpY+eu0JTgwgWvS6wzON59bVuE9V7034OPdc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b2XuZIe/a7pkKo2m+S29hZV+mEMNnVMglfj8CohTXB7NdepAd6uCaQwNsmjsem/Ne
-         w5BaQiCLegtVH718uJlq9GuTGm+xmBzzmqmsfirxB7biHkKOKjNaZVf09f6R9/kmOm
-         f6cMxJHiWquSWGkdUr3ICuiNo8he20Rxuqvmma7bjIRSUC+4wGYwiyf1rvSi2vxm59
-         cSNq0B3dmOafbK3E5CRV0v53gyfH6EXbjc2Lj71mM3JQwT/MUNxBupulqjlGwQa6gQ
-         DniBZ9TE2zMU1Kw+IqjAWNV8kHahrrBkR8xixHJiwCt+yXyxEMR0vqahg6jtjE44N2
-         v9l9bURsbN5IA==
-Received: by mail-ej1-f43.google.com with SMTP id o10so12182164ejd.1;
-        Thu, 24 Mar 2022 16:15:12 -0700 (PDT)
-X-Gm-Message-State: AOAM531O/MwH5TNtc/O48penXo7S7w7DhmS9zXi4lDBtTJE60w+U6xUQ
-        hDyjUjR86e3C21QosUjXB03ec7t81fRssvsZ3w==
-X-Google-Smtp-Source: ABdhPJxKQ+GUAfTSv+v5vd5biUuYyT7Mv4BjtPfnSH6OwMAmzTlhN+xxIVyrfZcLJWvLxwYIfCrkIEk+jiczQbjvm1Q=
-X-Received: by 2002:a17:906:a20c:b0:6ce:a87e:5013 with SMTP id
- r12-20020a170906a20c00b006cea87e5013mr8101087ejy.379.1648163710672; Thu, 24
- Mar 2022 16:15:10 -0700 (PDT)
+        Thu, 24 Mar 2022 19:20:20 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDB950474
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:18:46 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id x34so7341914ede.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:18:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=phJ29Q0oulgzNrgAvihLKJetqMSFkbRI+rXLgF7X63I=;
+        b=n/KJIFD1TlTOr/ubtWBTuWeulAPYxgaayq8TjqsdWISywCjK0dKJb9y2q1winHNuKE
+         bfS9tdeUu5BAxqElAthBLgO2OMmhSHkLtYqzqQRC+drblnmOwRqDooshVgDBhG/wl2EV
+         9VzjecApbwudJorSvB87tsHR/F9XwQJNLTEU0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=phJ29Q0oulgzNrgAvihLKJetqMSFkbRI+rXLgF7X63I=;
+        b=WwgXbaNJOzQUU7hO3NGsVdUsvfft8mLCugH+waI0s6eTHh7lP1+ywGPVrL679GVqvu
+         BOgLgGJTt+rRRqPBXC1IBB9JF41DWWluWXU9E55iJ5yJqEnHm3OjXxaOmOCv4GDyTpym
+         toM5APzGOe6rhrRONPp/r2z0I7soWhi6iIp2xOMooVTiycYd8LCeYli6Ia5HxvWXYSyv
+         go1fTLAu6LDgo1+/XqSl/LrAvGd18fs7hsiuQvm8nnBdsBs8kEnutO6+uLtjyjzsqQj1
+         xDUCpnqBb7HdJTjOo5kysyPxwzM9JLKC00xy3R1QqoF0D2FoODieKctwMxYeRb/785D+
+         XZQQ==
+X-Gm-Message-State: AOAM531nY7oSU5kkfT2KyVsPU8cwtZQ3NviLg0ZHwEoamZIzZCfWjVGb
+        jlPRlX2aAtGqdwxewunsdl5AEtmO5zkRbXSq
+X-Google-Smtp-Source: ABdhPJxktr6gzAjwaccF59nB6AXP02ZqlFBQEiqKxYMptiQCyViPrlNCvr3lLvHa6iwUNamZ0DO7lQ==
+X-Received: by 2002:aa7:c755:0:b0:419:2f66:e22c with SMTP id c21-20020aa7c755000000b004192f66e22cmr9280940eds.381.1648163924557;
+        Thu, 24 Mar 2022 16:18:44 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id p14-20020aa7cc8e000000b0040f13865fa9sm2031743edt.3.2022.03.24.16.18.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 16:18:43 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id r13so8616800wrr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 16:18:43 -0700 (PDT)
+X-Received: by 2002:a05:6000:1704:b0:203:d857:aa7a with SMTP id
+ n4-20020a056000170400b00203d857aa7amr6224813wrc.513.1648163922979; Thu, 24
+ Mar 2022 16:18:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220324152658.1132110-1-clabbe@baylibre.com>
-In-Reply-To: <20220324152658.1132110-1-clabbe@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Fri, 25 Mar 2022 07:15:18 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_9iXe5s7+1UmWjz7Q+DwCUTY1OEE3CUhFXj3GtHvA+T1A@mail.gmail.com>
-Message-ID: <CAAOTY_9iXe5s7+1UmWjz7Q+DwCUTY1OEE3CUhFXj3GtHvA+T1A@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: display: mediatek: Add includes on examples
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     David Airlie <airlied@linux.ie>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>, krzk+dt@kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+References: <20220324160222.v2.1.Iebdb5af0db7d3d6364cb229a27cd7c668f1063ae@changeid>
+In-Reply-To: <20220324160222.v2.1.Iebdb5af0db7d3d6364cb229a27cd7c668f1063ae@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 24 Mar 2022 16:18:30 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Ui=+uN+rpjmArbH_7a==Bt2Z2b-NYodSB9sJKWuS2jdA@mail.gmail.com>
+Message-ID: <CAD=FV=Ui=+uN+rpjmArbH_7a==Bt2Z2b-NYodSB9sJKWuS2jdA@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Add device tree for
+ herobrine villager
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,332 +80,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Corentin:
+Hi,
 
-I've applied Jason's series [1] to my tree [2], does that series fix
-your problem?
-
-[1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=3D6218=
-99
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-fixes
-
-Regards,
-Chun-Kuang.
-
-Corentin Labbe <clabbe@baylibre.com> =E6=96=BC 2022=E5=B9=B43=E6=9C=8824=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:27=E5=AF=AB=E9=81=93=EF=BC=
-=9A
+On Thu, Mar 24, 2022 at 4:02 PM Matthias Kaehlcke <mka@chromium.org> wrote:
 >
-> make dt_binding_check fail on lot of mediatek bindings due to missing
-> includes.
+> Add a basic device tree for the herobrine villager board.
 >
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
-> 2 files remains to be fixed, but their examples use some variable undefin=
-ed, so I cannot do anything:
-> - display/mediatek/mediatek,ethdr.yaml
-> - display/mediatek/mediatek,merge.yaml
+> This patch depends on "arm64: dts: qcom: sc7280: herobrine: disable some
+> regulators by default" [1].
 >
->  .../display/mediatek/mediatek,aal.yaml        |   4 +
->  .../display/mediatek/mediatek,ccorr.yaml      |   4 +
->  .../display/mediatek/mediatek,color.yaml      |   4 +
->  .../display/mediatek/mediatek,dither.yaml     |   4 +
->  .../display/mediatek/mediatek,dsc.yaml        |   4 +
->  .../display/mediatek/mediatek,gamma.yaml      |   4 +
->  .../display/mediatek/mediatek,mutex.yaml      |   4 +
->  .../display/mediatek/mediatek,od.yaml         |   1 +
->  .../display/mediatek/mediatek,ovl-2l.yaml     |   5 +
->  .../display/mediatek/mediatek,ovl.yaml        |   5 +
->  .../display/mediatek/mediatek,postmask.yaml   |   4 +
->  .../display/mediatek/mediatek,rdma.yaml       |   5 +
->  .../display/mediatek/mediatek,split.yaml      |   3 +
->  .../display/mediatek/mediatek,ufoe.yaml       |   3 +
->  .../display/mediatek/mediatek,wdma.yaml       |   5 +
->  17 files changed, 59 insertions(+), 257 deletions(-)
+> [1] https://patchwork.kernel.org/project/linux-arm-msm/patch/20220316172814.v1.3.Iad21bd53f3ac14956b8dbbf3825fc7ab29abdf97@changeid/
 >
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-aal.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.=
-yaml
-> index 225f9dd726d2..63755d4d21d7 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam=
-l
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam=
-l
-> @@ -66,6 +66,10 @@ additionalProperties: false
+> Changes in v2:
+> - enable the regulator 'pp3300_codec', which is by default disabled
+>   with by the patch "arm64: dts: qcom: sc7280: herobrine: disable some
+>   regulators by default"
 >
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/gce/mt8173-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      aal@14015000 {
->          compatible =3D "mediatek,mt8173-disp-aal";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-ccorr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,cc=
-orr.yaml
-> index 6894b6999412..b32355b32dfa 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y=
-aml
-> @@ -65,6 +65,10 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8183-clk.h>
-> +    #include <dt-bindings/gce/mt8183-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8183-power.h>
->
->      ccorr0: ccorr@1400f000 {
->          compatible =3D "mediatek,mt8183-disp-ccorr";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-color.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,co=
-lor.yaml
-> index bc83155b3b4c..ffdef0b30de8 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y=
-aml
-> @@ -75,6 +75,10 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/gce/mt8173-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      color0: color@14013000 {
->          compatible =3D "mediatek,mt8173-disp-color";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-dither.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,d=
-ither.yaml
-> index 9d89297f5f1d..7ac58022a2ed 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.=
-yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.=
-yaml
-> @@ -65,6 +65,10 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8183-clk.h>
-> +    #include <dt-bindings/gce/mt8183-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8183-power.h>
->
->      dither0: dither@14012000 {
->          compatible =3D "mediatek,mt8183-disp-dither";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-dsc.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsc.=
-yaml
-> index 1ec083eff824..1ab30b0efffe 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsc.yam=
-l
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsc.yam=
-l
-> @@ -60,6 +60,10 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/gce/mt8195-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8195-power.h>
->
->      dsc0: disp_dsc_wrap@1c009000 {
->          compatible =3D "mediatek,mt8195-disp-dsc";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-gamma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ga=
-mma.yaml
-> index 247baad147b3..4f8ba492dc0a 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y=
-aml
-> @@ -66,6 +66,10 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/gce/mt8173-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      gamma@14016000 {
->          compatible =3D "mediatek,mt8173-disp-gamma";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-mutex.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mu=
-tex.yaml
-> index 6eca525eced0..ad3a69d1254c 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.y=
-aml
-> @@ -71,6 +71,10 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/gce/mt8173-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      mutex: mutex@14020000 {
->          compatible =3D "mediatek,mt8173-disp-mutex";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-od.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,od.ya=
-ml
-> index 7519db315217..1f92566ff5ed 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,od.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,od.yaml
-> @@ -45,6 +45,7 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
->
->      od@14023000 {
->          compatible =3D "mediatek,mt8173-disp-od";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-ovl-2l.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,o=
-vl-2l.yaml
-> index e3cef99d0f98..e810e152404a 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-2l.=
-yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-2l.=
-yaml
-> @@ -66,6 +66,11 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8183-clk.h>
-> +    #include <dt-bindings/gce/mt8183-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8183-larb-port.h>
-> +    #include <dt-bindings/power/mt8183-power.h>
->
->      ovl_2l0: ovl@14009000 {
->          compatible =3D "mediatek,mt8183-disp-ovl-2l";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-ovl.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.=
-yaml
-> index 93d5c68a2dbd..14673f979edc 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam=
-l
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam=
-l
-> @@ -81,6 +81,11 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/gce/mt8173-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8173-larb-port.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      ovl0: ovl@1400c000 {
->          compatible =3D "mediatek,mt8173-disp-ovl";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-postmask.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek=
-,postmask.yaml
-> index 6ac1da2e8871..d0d45d1e4f15 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,postmas=
-k.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,postmas=
-k.yaml
-> @@ -58,6 +58,10 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8192-clk.h>
-> +    #include <dt-bindings/gce/mt8192-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8192-power.h>
->
->      postmask0: postmask@1400d000 {
->          compatible =3D "mediatek,mt8192-disp-postmask";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-rdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdm=
-a.yaml
-> index b56e22fbcd52..2265fef6a795 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya=
-ml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya=
-ml
-> @@ -94,6 +94,11 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/gce/mt8173-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8173-larb-port.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      rdma0: rdma@1400e000 {
->          compatible =3D "mediatek,mt8173-disp-rdma";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-split.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,sp=
-lit.yaml
-> index 4f08e89c1067..83e6cb40ba7c 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,split.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,split.y=
-aml
-> @@ -49,6 +49,9 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      split0: split@14018000 {
->          compatible =3D "mediatek,mt8173-disp-split";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-ufoe.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ufo=
-e.yaml
-> index 6e8748529e73..69cddc2ee531 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ufoe.ya=
-ml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ufoe.ya=
-ml
-> @@ -51,6 +51,9 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      ufoe@1401a000 {
->          compatible =3D "mediatek,mt8173-disp-ufoe";
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-wdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,wdm=
-a.yaml
-> index f9f00a518edf..60e9f890ebf1 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.ya=
-ml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.ya=
-ml
-> @@ -64,6 +64,11 @@ additionalProperties: false
->
->  examples:
->    - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/gce/mt8173-gce.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8173-larb-port.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->
->      wdma0: wdma@14011000 {
->          compatible =3D "mediatek,mt8173-disp-wdma";
-> --
-> 2.34.1
->
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../dts/qcom/sc7280-herobrine-villager-r0.dts | 284 ++++++++++++++++++
+>  2 files changed, 285 insertions(+)
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

@@ -2,205 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F65F4E62A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1014E62A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 12:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349861AbiCXLrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 07:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S1349831AbiCXLtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 07:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239148AbiCXLrs (ORCPT
+        with ESMTP id S235457AbiCXLtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:47:48 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28101A76EB
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:46:16 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4B6663F1A7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 11:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1648122374;
-        bh=5o2Wrz52BFS+sHKlhOBzNp+TO7Z2H2kPAxclwT0DlNs=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=nlaokuM5R7KBQ1FrF/S/YHJ1nQ/0JeFUSV3eqcsCUgM6ADYckZYXK2E4j6afPuMOq
-         EfCIRHUKXtmKbRmTNOtn7JIXtFL8RmHqaYI/u6fwASvdSULZD+OMNPF4u9/laG8KeP
-         jkvHxcm9EkFIB0vb5NaMyvPmLTCdyGeFiMv/vQhlKrWVhSh3KN19tPgFzpJUjXP9TV
-         plhGjGuxoitFmGQOwXDulY1v5m1hXZEWJdrwcxMn3LbT5Rzm3Tk4bfxJQfx8slNgEm
-         ML+jIZqQlBq8MkL4G4TJ4CNQf1QQuFFgp6ClE22xfaHaqtfJ5c+uDUB2ehDvh7Y+Vs
-         KP+0LPo2CNc4g==
-Received: by mail-ed1-f70.google.com with SMTP id x5-20020a50ba85000000b00418e8ce90ffso2858669ede.14
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 04:46:14 -0700 (PDT)
+        Thu, 24 Mar 2022 07:49:19 -0400
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F86EA1461;
+        Thu, 24 Mar 2022 04:47:47 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id b24so5282620edu.10;
+        Thu, 24 Mar 2022 04:47:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=5o2Wrz52BFS+sHKlhOBzNp+TO7Z2H2kPAxclwT0DlNs=;
-        b=FHgzTMm2ZyakyN88Xl2AmodRV5knf66UDS6RZHz6JSZj2ScY+qc6m1bK/o6kzc1TXi
-         zMhjdyFS5qBLdj66o/5YWFA93q3jZgMkOzxa+LrQoQdMH7n5Crt4K4tIUzYyQot1PKWe
-         h0o5IQAZai7LUKNpcwCbLd9AiyenyPOx5NKKjzZpwaAcLwzxLUZSmJz9xfqOQyuvyIJe
-         q8BGxWELxOveCa30zMSBhtIX9r1OGOB0NAVvFPeDOuWux7qOOH1YmF2CmnhDYgGhvaQI
-         tY6y7KOV92/znO20PX1Wr10bIHRs6ri15sRvsZN0oZk8jyAimZbB65FPf29J7n04s7B0
-         msPQ==
-X-Gm-Message-State: AOAM532qw8L/ZNMNBH0nqH659ycPXpizewhBifpGgK2yu6ZEnyO6KDQt
-        pX6LEie9s33Y78kuj7G835ARam+q50Kz1bN7XYrCuB/vdAccyqi99fljYBHr2C2L3rZ7S5a/lvL
-        B692P1YourOPrWOL0ULf0ey9d/Dd26TkdbWZt8+PAxg==
-X-Received: by 2002:a05:6402:42c6:b0:419:276c:4a64 with SMTP id i6-20020a05640242c600b00419276c4a64mr6192834edc.119.1648122374011;
-        Thu, 24 Mar 2022 04:46:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyAJl37gIxQer/kIdtYQq2sgJrHG4K/gYURQV6bVjRyGvag5Ey+tedIIX1T3ZH/Jjoo4nJdPQ==
-X-Received: by 2002:a05:6402:42c6:b0:419:276c:4a64 with SMTP id i6-20020a05640242c600b00419276c4a64mr6192805edc.119.1648122373772;
-        Thu, 24 Mar 2022 04:46:13 -0700 (PDT)
-Received: from [192.168.123.67] (ip-088-152-144-107.um26.pools.vodafone-ip.de. [88.152.144.107])
-        by smtp.gmail.com with ESMTPSA id g13-20020a50bf4d000000b00410d407da2esm1350630edk.13.2022.03.24.04.46.12
+        bh=dFOPtoWPcTnsyVvvROBn8Be2+egyjb08ekt/mEU0j1k=;
+        b=yBGTo3sSTgM4+UOOwcC6sPgGrb+GIP4XioqqEFeZG+gfjvVdykUHj/rBrbucmo09DJ
+         cihpinNMLTbB2Jxs6ImVaJU/AWsllN1Ju/uFCjkaPipp6fiW5TKMTlzty0zcVQhwqyc7
+         keRglxHEoUbE3iUxHnkoqxzLdo4xqjdw/H1E2x4D9N73pOVXZGV7Jvc8VW9E1A6sIBRY
+         UQGROssQauENPTai0qqltimtzA7MDKTR4uZgfOfI3RJdXOTqHtuOlPWPZPIOvgUJEqpe
+         05JjSppW9QE9sl32h9Q8q8KboD2qv+jVqHEQc241XG99aMJqwkpw7l8TqKObPWejdQuW
+         vrKg==
+X-Gm-Message-State: AOAM532qwuxNVtUHXO8zOQH2X3MRuuEId/sWTK6pgAbMo9mtfxB99z29
+        45GPS7PhhNO485q+UYYRkG4=
+X-Google-Smtp-Source: ABdhPJypl5ghtQpKOlZZNUXQUQvR9b2GpZ9XFdEpskJFtEHsYMH2vGZZV+HFKZbc/sfsgk0GAEBomA==
+X-Received: by 2002:aa7:c348:0:b0:418:e515:69e with SMTP id j8-20020aa7c348000000b00418e515069emr6143338edr.393.1648122466050;
+        Thu, 24 Mar 2022 04:47:46 -0700 (PDT)
+Received: from [192.168.0.156] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm1031073ejc.25.2022.03.24.04.47.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 04:46:13 -0700 (PDT)
-Message-ID: <14f87d29-ebc9-51a3-020c-353878bcb1ba@canonical.com>
-Date:   Thu, 24 Mar 2022 12:46:12 +0100
+        Thu, 24 Mar 2022 04:47:45 -0700 (PDT)
+Message-ID: <c96f889e-cbd0-4221-fcff-ef0cf93236d2@kernel.org>
+Date:   Thu, 24 Mar 2022 12:47:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/1] riscv/efi_stub: Add support for
- RISCV_EFI_BOOT_PROTOCOL
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 7/7] ARM: dts: s5pv210: Add charger support in Aries
 Content-Language: en-US
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Abner Chang <abner.chang@hpe.com>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <20220324112534.209959-1-sunilvl@ventanamicro.com>
- <20220324112534.209959-2-sunilvl@ventanamicro.com>
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <20220324112534.209959-2-sunilvl@ventanamicro.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jonathan Bakker <xc-racer2@live.ca>, alim.akhtar@samsung.com
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CY4PR04MB0567E33A07D8761C2D485327CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
+ <20220323150311.26699-1-xc-racer2@live.ca>
+ <CY4PR04MB05671BD0A7FF349E8B04EE84CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
+ <2eee2611-d618-3fe2-4315-c57a26de6b21@kernel.org>
+ <CY4PR04MB0567BD17C2EED0CAFA044020CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <CY4PR04MB0567BD17C2EED0CAFA044020CB189@CY4PR04MB0567.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/22 12:25, Sunil V L wrote:
-> This patch adds the support for getting the boot hart ID in
-> Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL. This protocol
-> is preferred method over existing DT based solution since it
-> works irrespective of DT or ACPI.
+On 23/03/2022 18:20, Jonathan Bakker wrote:
 > 
-> The specification of the protocol is hosted at:
-> https://github.com/riscv-non-isa/riscv-uefi
 > 
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-
-This seems to be v3 of the patch. v2 is available in
-https://lore.kernel.org/all/20220303145944.307321-2-sunilvl@ventanamicro.com/
-
-v3 replaces a message in efi_status_t check_platform_features():
-
-<+   efi_err("/chosen/boot-hartid missing or invalid!\n");
- >+   efi_err("Failed to get boot hartid!\n");
-
-Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-
-> ---
->   drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
->   drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
->   include/linux/efi.h                       |  1 +
->   3 files changed, 32 insertions(+), 5 deletions(-)
+> On 2022-03-23 8:31 a.m., krzk@kernel.org wrote:
+>> On 23/03/2022 16:03, Jonathan Bakker wrote:
+>>> Add charger-manager support to Aries boards to allow safe
+>>> charging of the battery without the need for userspace control.
+>>>
+>>> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+>>> ---
+>>>  arch/arm/boot/dts/s5pv210-fascinate4g.dts | 162 ++++++++++++++++++++++
+>>>  arch/arm/boot/dts/s5pv210-galaxys.dts     | 144 +++++++++++++++++++
+>>>  2 files changed, 306 insertions(+)
+>>>
+>>> diff --git a/arch/arm/boot/dts/s5pv210-fascinate4g.dts b/arch/arm/boot/dts/s5pv210-fascinate4g.dts
+>>> index 7427c84f1126..9530231b7a70 100644
+>>> --- a/arch/arm/boot/dts/s5pv210-fascinate4g.dts
+>>> +++ b/arch/arm/boot/dts/s5pv210-fascinate4g.dts
+>>> @@ -57,6 +57,168 @@
+>>>  		pinctrl-0 = <&main_micbias_ena>;
+>>>  	};
+>>>  
+>>> +	thermal-zones {
+>>> +		batt_thermal: batt-thermal {
+>>> +			polling-delay-passive = <60000>; /* 60 seconds */
+>>
+>> There is no passive cooling device, so why do you need it?
+>>
 > 
-> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> index edb77b0621ea..aced62a0907e 100644
-> --- a/drivers/firmware/efi/libstub/efistub.h
-> +++ b/drivers/firmware/efi/libstub/efistub.h
-> @@ -720,6 +720,13 @@ union efi_tcg2_protocol {
->   	} mixed_mode;
->   };
->   
-> +struct riscv_efi_boot_protocol {
-> +	u64 revision;
-> +
-> +	efi_status_t (__efiapi * get_boot_hartid)(struct riscv_efi_boot_protocol *this,
-> +						  size_t *boot_hartid);
-> +};
-> +
->   typedef union efi_load_file_protocol efi_load_file_protocol_t;
->   typedef union efi_load_file_protocol efi_load_file2_protocol_t;
->   
-> diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-> index 9c460843442f..012504f6f9a4 100644
-> --- a/drivers/firmware/efi/libstub/riscv-stub.c
-> +++ b/drivers/firmware/efi/libstub/riscv-stub.c
-> @@ -23,7 +23,7 @@
->   
->   typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
->   
-> -static u32 hartid;
-> +static size_t hartid;
->   
->   static int get_boot_hartid_from_fdt(void)
->   {
-> @@ -47,14 +47,33 @@ static int get_boot_hartid_from_fdt(void)
->   	return 0;
->   }
->   
-> +static efi_status_t get_boot_hartid_from_efi(void)
-> +{
-> +	efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
-> +	efi_status_t status;
-> +	struct riscv_efi_boot_protocol *boot_protocol;
-> +
-> +	status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
-> +			     (void **)&boot_protocol);
-> +	if (status == EFI_SUCCESS) {
-> +		status = efi_call_proto(boot_protocol,
-> +					get_boot_hartid, &hartid);
-> +	}
-> +	return status;
-> +}
-> +
->   efi_status_t check_platform_features(void)
->   {
->   	int ret;
-> +	efi_status_t status;
->   
-> -	ret = get_boot_hartid_from_fdt();
-> -	if (ret) {
-> -		efi_err("/chosen/boot-hartid missing or invalid!\n");
-> -		return EFI_UNSUPPORTED;
-> +	status = get_boot_hartid_from_efi();
-> +	if (status != EFI_SUCCESS) {
-> +		ret = get_boot_hartid_from_fdt();
-> +		if (ret) {
-> +			efi_err("Failed to get boot hartid!\n");
-> +			return EFI_UNSUPPORTED;
-> +		}
->   	}
->   	return EFI_SUCCESS;
->   }
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index ccd4d3f91c98..9822c730207c 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
->   #define EFI_CONSOLE_OUT_DEVICE_GUID		EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
->   #define APPLE_PROPERTIES_PROTOCOL_GUID		EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
->   #define EFI_TCG2_PROTOCOL_GUID			EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
-> +#define RISCV_EFI_BOOT_PROTOCOL_GUID		EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
->   #define EFI_LOAD_FILE_PROTOCOL_GUID		EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
->   #define EFI_LOAD_FILE2_PROTOCOL_GUID		EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
->   #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
+> The charger manager code needs a passive cooling device, so that's
+> why this is present here.
+> 
+>>> +			polling-delay = <600000>; /* 600 seconds */
+>>> +
+>>> +			thermal-sensors = <&batt_thermistor>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	batt_thermistor: thermal-sensor-0 {
+>>> +		compatible = "generic-adc-thermal";
+>>> +		#thermal-sensor-cells = <0>;
+>>> +		io-channels = <&adc 6>;
+>>> +		io-channel-names = "sensor-channel";
+>>> +
+>>> +		temperature-lookup-table = <
+>>> +			(-20000) 1859
+>>> +			(-19000) 1846
+>>> +			(-18000) 1832
+>>> +			(-17000) 1818
+>>> +			(-16000) 1804
+>>> +			(-15000) 1790
+>>> +			(-14000) 1773
+>>> +			(-13000) 1756
+>>> +			(-12000) 1739
+>>> +			(-11000) 1722
+>>> +			(-10000) 1705
+>>> +			(-9000) 1691
+>>> +			(-8000) 1677
+>>> +			(-7000) 1663
+>>> +			(-6000) 1649
+>>> +			(-5000) 1635
+>>> +			(-4000) 1550
+>>> +			(-3000) 1510
+>>> +			(-2000) 1500
+>>> +			(-1000) 1490
+>>> +			0 1480
+>>> +			1000 1470
+>>> +			2000 1460
+>>> +			3000 1450
+>>> +			4000 1430
+>>> +			5000 1420
+>>> +			6000 1406
+>>> +			7000 1386
+>>> +			8000 1366
+>>> +			9000 1346
+>>> +			10000 1326
+>>> +			11000 1302
+>>> +			12000 1278
+>>> +			13000 1254
+>>> +			14000 1230
+>>> +			15000 1206
+>>> +			16000 1182
+>>> +			17000 1158
+>>> +			18000 1134
+>>> +			19000 1110
+>>> +			20000 1086
+>>> +			21000 1059
+>>> +			22000 1035
+>>> +			23000 1011
+>>> +			24000 987
+>>> +			25000 963
+>>> +			26000 937
+>>> +			27000 913
+>>> +			28000 889
+>>> +			29000 865
+>>> +			30000 841
+>>> +			31000 816
+>>> +			32000 794
+>>> +			33000 772
+>>> +			34000 750
+>>> +			35000 728
+>>> +			36000 708
+>>> +			37000 690
+>>> +			38000 672
+>>> +			39000 654
+>>> +			40000 636
+>>> +			41000 616
+>>> +			42000 599
+>>> +			43000 580
+>>> +			44000 565
+>>> +			45000 548
+>>> +			46000 529
+>>> +			47000 512
+>>> +			48000 495
+>>> +			49000 478
+>>> +			50000 461
+>>> +			51000 440
+>>> +			52000 431
+>>> +			53000 416
+>>> +			54000 405
+>>> +			55000 396
+>>> +			56000 375
+>>> +			57000 360
+>>> +			58000 347
+>>> +			59000 334
+>>> +			60000 325
+>>> +			61000 311
+>>> +			62000 303
+>>> +			63000 296
+>>> +			64000 290
+>>> +			65000 279
+>>> +			66000 265
+>>> +			67000 254
+>>> +			68000 240
+>>> +			69000 220
+>>> +			70000 206>;
+>>> +	};
+>>> +
+>>> +	charger_manager: charger-manager-0 {
+>>> +		compatible = "charger-manager";
+>>
+>> Sorry, this is not a hardware. It's a hack to configure kernel charging
+>> driver via DT which was made deprecated.
+> 
+> Thanks, I missed the deprecation notice in the binding file.
+> 
+> What would be the better way of creating a functional charging system?
+> A new device-specific driver?
 
+I am not sure, but maybe you could use charger-manager, just configure
+it from user-space (or add such features). Better ask power supply
+maintainer. But anyway charger-manager is mostly abandoned. I don't
+think anyone develops it.
+
+>  Userspace monitoring of temperature/connected
+> device and extensions to the max8998 driver for enabling/disabling/configuring
+> charging via the power supply subsystem instead of the regulator subsystem?
+> Something else?
+
+Enabling charging via regulators was done only for some drivers, I think
+for charger-manager. I don't think it is the recommended way now.
+
+Everything should be controlled rather via power supply from user-space.
+
+How postmarketos or lineageos are doing it?
+
+> 
+> The way I understand the charging system, there is
+> 
+> - The fuelgauge (max17042)
+> - The max8998 charger portion, including the ability to vary the current
+> - The thermistor for checking battery temperature
+> - The FSA9480 to determine what sort of cable is connected
+> 
+
+Best regards,
+Krzysztof

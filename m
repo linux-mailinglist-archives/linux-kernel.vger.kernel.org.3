@@ -2,172 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DDC4E6415
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517004E641B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 14:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350446AbiCXN31 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Mar 2022 09:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S1350454AbiCXNbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 09:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236979AbiCXN3Z (ORCPT
+        with ESMTP id S243053AbiCXNbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 09:29:25 -0400
-Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122F5A7752;
-        Thu, 24 Mar 2022 06:27:53 -0700 (PDT)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 4D158463187;
-        Thu, 24 Mar 2022 14:27:52 +0100 (CET)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 39E494616CC;
-        Thu, 24 Mar 2022 14:27:52 +0100 (CET)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail3.swissbit.com (Postfix) with ESMTPS;
-        Thu, 24 Mar 2022 14:27:52 +0100 (CET)
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
- 2022 14:27:51 +0100
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.0986.022; Thu, 24 Mar 2022 14:27:51 +0100
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-Subject: [PATCHv4] mmc: block: Check for errors after write on SPI
-Thread-Topic: [PATCHv4] mmc: block: Check for errors after write on SPI
-Thread-Index: AQHYP4LoJDVQhv4pEEGn8CEDydpuCg==
-Date:   Thu, 24 Mar 2022 13:27:51 +0000
-Message-ID: <8052f30adc3747e2beab0e52db26837d@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.154.1.4]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Thu, 24 Mar 2022 09:31:44 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D14F66614
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:30:12 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id w8so4687041pll.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 06:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Pg5zMHUoMOtfnb1TjqGEq+NoQ1459IJ3m+O0DUiruc0=;
+        b=omvcrbN7lriPpSW5JaDifABkKoRy+47eDe5UOjgYcZYvGQlbPu6UX9LSEe8FXyZJsa
+         iA4E7Y1dEpDv1TBqcgYb0x+NLebJXtHBP1M1Pcwa8JX29WOxvSReHn8/l0PVwcnvF430
+         59aicx9zgfahnRG9MD556r2AI1GFa1lRuBvga4UxFpm3SaxZJ6ERW+ZXis8i/PwMdIbb
+         02CFAatVGbDSo2MjvyGdNcdvX7Zu/dcFEHnuZJyddYEShRstLEZm6jwWWEi6M+VaOx3D
+         2UW+1n54RTfwPrZEn29ASdd7e8IPfJBCHfwiJBaSJz5tNddYOfSfiVtIOtS1CxFICfb2
+         InGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Pg5zMHUoMOtfnb1TjqGEq+NoQ1459IJ3m+O0DUiruc0=;
+        b=7u2b01r8rjqSW76ytBTjMjTIAjJhr6AAWqYj/dhbfHkg0ErxqJFX3sJK8wMAz1OpgK
+         zC0WU7tMcInmFY0r6s8TqhfP4DYSDsCtoZMV0e1wspf8uUxHop3Nv9XmcK0mH9HVx5HP
+         /iN1ou4pFcEdvjyP42Rg2+sV8LA5Vq75+UBpmIfsyU+N6rM53AVwN5WMCq5hb0h+S2a3
+         ZzEXfQ+umVuiO18nazsXapj8OYrrSH1P6YcPlULPyObikjIpudVmO2OGJ/+DDoF0IgQg
+         5YiGCOVzDQpyUIS5gBfxxIO9pEdVc7VNOEObpxf9XDxRMf8ryEjm2SG3IhrLEx0jPpTM
+         avyw==
+X-Gm-Message-State: AOAM530ZnEP+R91MFMAjmfEsZxF/vYXJ6L5ZFZiJn4cdbmgxRs3yVi63
+        YosiuuEhHOJHaQRTSk4fayFO
+X-Google-Smtp-Source: ABdhPJxo834+q44cy6Y/VdrbWR6viwcZl217ze+h8Xiz6Pw+AFEkkQShW97freIJEBaF33PZjpG9Xw==
+X-Received: by 2002:a17:902:8506:b0:154:8692:a7ac with SMTP id bj6-20020a170902850600b001548692a7acmr5896100plb.10.1648128611696;
+        Thu, 24 Mar 2022 06:30:11 -0700 (PDT)
+Received: from thinkpad ([220.158.158.107])
+        by smtp.gmail.com with ESMTPSA id oa16-20020a17090b1bd000b001c72b632222sm10085543pjb.32.2022.03.24.06.30.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 06:30:11 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 19:00:04 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/25] dmaengine: dw-edma: Drop
+ dma_slave_config.direction field usage
+Message-ID: <20220324133004.GM2854@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-8.6.1018-26790.007
-X-TMASE-Result: 10--2.484200-10.000000
-X-TMASE-MatchedRID: LVkZzMT5mEprFdvBEmTnvLZ0InVwVLVTn5nfR7I2dFOxPXYIh1l6dlg7
-        cH4SOkOpdWqA+wY3gFZusJxXwmCOnpDH5Y6LoY7BRZfQN+FVqbA1kR+05VC1hsiCh8yBqE+tbiP
-        oclJOCy0MV38Bdz1rogpwpdIIi4oJCtNdSL7NMxRO5y1KmK5bJRSLgSFq3Tnj31GU/N5W5BDfal
-        dUczBqFzyK8WRp1qJNDyVcDYF9X2gcQvLacRAgcPCW/PNRRp/ZeLLCA0PD7aiOS54Qk4fByRJd3
-        nIYBNFRvAQxPUzd//aAUraeY8ICeWgwIvLATTKBC24oEZ6SpSkj80Za3RRg8AGbCVwhBdklXd/S
-        v5c5PCnllp9J9eYRW2D45hQmnPpeEze1V/T0TyU=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: c9886a10-9435-4c3c-a01a-f170bc255192-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324014836.19149-2-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a SEND_STATUS check for writes through SPI to not mark
-an unsuccessful write as successful.
+On Thu, Mar 24, 2022 at 04:48:12AM +0300, Serge Semin wrote:
+> The dma_slave_config.direction field usage in the DW eDMA driver has been
+> introduced in the commit bd96f1b2f43a ("dmaengine: dw-edma: support local
+> dma device transfer semantics"). Mainly the change introduced there was
+> correct (indeed DEV_TO_MEM means using RD-channel and MEM_TO_DEV -
+> WR-channel for the case of having eDMA accessed locally from
+> CPU/Application side), but providing an additional
+> MEM_TO_MEM/DEV_TO_DEV-based semantics was quite redundant if not to say
+> potentially harmful (when it comes to removing the denoted field). First
+> of all since the dma_slave_config.direction field has been marked as
+> obsolete (see [1] and the structure dc [2]) and will be discarded in
+> future, using it especially in a non-standard way is discouraged. Secondly
+> in accordance with the commit denoted above the default
+> dw_edma_device_transfer() semantics has been changed despite what it's
+> message said. So claiming that the method was left backward compatible was
+> wrong.
+> 
+> Anyway let's fix the problems denoted above and simplify the
+> dw_edma_device_transfer() method by dropping the parsing of the
+> DMA-channel direction field. Instead of having that implicit
+> dma_slave_config.direction field semantic we can use the recently added
+> DW_EDMA_CHIP_LOCAL flag to distinguish between the local and remote DW
+> eDMA setups thus preserving both cases support. In addition to that an
+> ASCII-figure has been added to clarify the complication out.
+> 
+> [1] Documentation/driver-api/dmaengine/provider.rst
+> [2] include/linux/dmaengine.h: dma_slave_config.direction
+> 
+> Co-developed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> In accordance with agreement with Frank and Manivannan this patch is
+> supposed to be moved to the series:
+> Link: https://lore.kernel.org/dmaengine/20220310192457.3090-1-Frank.Li@nxp.com/
+> in place of the patch:
+> [PATCH v5 6/9] dmaengine: dw-edma: Don't rely on the deprecated "direction" member
+> Link: https://lore.kernel.org/dmaengine/20220310192457.3090-7-Frank.Li@nxp.com/
+> ---
+>  drivers/dma/dw-edma/dw-edma-core.c | 49 +++++++++++++++++++++---------
+>  1 file changed, 34 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index 5be8a5944714..e9e32ed74aa9 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -339,21 +339,40 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
+>  	if (!chan->configured)
+>  		return NULL;
+>  
+> -	switch (chan->config.direction) {
+> -	case DMA_DEV_TO_MEM: /* local DMA */
+> -		if (dir == DMA_DEV_TO_MEM && chan->dir == EDMA_DIR_READ)
+> -			break;
+> -		return NULL;
+> -	case DMA_MEM_TO_DEV: /* local DMA */
+> -		if (dir == DMA_MEM_TO_DEV && chan->dir == EDMA_DIR_WRITE)
+> -			break;
+> -		return NULL;
+> -	default: /* remote DMA */
+> -		if (dir == DMA_MEM_TO_DEV && chan->dir == EDMA_DIR_READ)
+> -			break;
+> -		if (dir == DMA_DEV_TO_MEM && chan->dir == EDMA_DIR_WRITE)
+> -			break;
+> -		return NULL;
+> +	/*
+> +	 * Local Root Port/End-point              Remote End-point
+> +	 * +-----------------------+ PCIe bus +----------------------+
+> +	 * |                       |    +-+   |                      |
+> +	 * |    DEV_TO_MEM   Rx Ch <----+ +---+ Tx Ch  DEV_TO_MEM    |
+> +	 * |                       |    | |   |                      |
+> +	 * |    MEM_TO_DEV   Tx Ch +----+ +---> Rx Ch  MEM_TO_DEV    |
+> +	 * |                       |    +-+   |                      |
+> +	 * +-----------------------+          +----------------------+
+> +	 *
+> +	 * 1. Normal logic:
+> +	 * If eDMA is embedded into the DW PCIe RP/EP and controlled from the
+> +	 * CPU/Application side, the Rx channel (EDMA_DIR_READ) will be used
+> +	 * for the device read operations (DEV_TO_MEM) and the Tx channel
+> +	 * (EDMA_DIR_WRITE) - for the write operations (MEM_TO_DEV).
+> +	 *
+> +	 * 2. Inverted logic:
+> +	 * If eDMA is embedded into a Remote PCIe EP and is controlled by the
+> +	 * MWr/MRd TLPs sent from the CPU's PCIe host controller, the Tx
+> +	 * channel (EDMA_DIR_WRITE) will be used for the device read operations
+> +	 * (DEV_TO_MEM) and the Rx channel (EDMA_DIR_READ) - for the write
+> +	 * operations (MEM_TO_DEV).
+> +	 *
+> +	 * It is the client driver responsibility to choose a proper channel
+> +	 * for the DMA transfers.
+> +	 */
 
-Since SPI SD/MMC does not have states, after a write, the card will
-just hold the line LOW until it is ready again. The driver marks the
-write therefore as completed as soon as it reads something other than
-all zeroes.
-The driver does not distinguish from a card no longer signalling busy
-and it being disconnected (and the line being pulled-up by the host).
-This lead to writes being marked as successful when disconnecting
-a busy card.
-Now the card is ensured to be still connected by an additional CMD13,
-just like non-SPI is ensured to go back to TRAN state.
+I think it'd be good to document this using some form in "enum dw_edma_dir"
+declaration.
 
-While at it and since we already poll for the post-write status anyway,
-we might as well check for SPIs error bits (any of them).
+Thanks,
+Mani
 
-The disconnecting card problem is reproducable for me after continuous
-write activity and randomly disconnecting, around every 20-50 tries
-on SPI DS for some card.
-
-Fixes: 7213d175e3b6f ("MMC/SD card driver learns SPI")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
-v2:
-  - Reorder err and status check for err to take precedence and look cleaner
-v3:
-  - Move the logic into its own function
-v4:
-  - Move block layer handling out of the spi-specific function
-
- drivers/mmc/core/block.c | 35 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 4e67c1403cc9..7272db0042fd 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -1880,6 +1880,32 @@ static inline bool mmc_blk_rq_error(struct mmc_blk_request *brq)
- 	       brq->data.error || brq->cmd.resp[0] & CMD_ERRORS;
- }
- 
-+static int mmc_spi_err_check(struct mmc_card *card)
-+{
-+	u32 status = 0;
-+	int err;
-+
-+	/*
-+	 * SPI does not have a TRAN state we have to wait on, instead the
-+	 * card is ready again when it no longer holds the line LOW.
-+	 * We still have to ensure two things here before we know the write
-+	 * was successful:
-+	 * 1. The card has not disconnected during busy and we actually read our
-+	 * own pull-up, thinking it was still connected, so ensure it
-+	 * still responds.
-+	 * 2. Check for any error bits, in particular R1_SPI_IDLE to catch a
-+	 * just reconnected card after being disconnected during busy.
-+	 */
-+	err = __mmc_send_status(card, &status, 0);
-+	/* All R1 and R2 bits of SPI are errors in our case */
-+	if (err || status) {
-+		if (err)
-+			return err;
-+		return -EIO;
-+	}
-+	return 0;
-+}
-+
- static int mmc_blk_busy_cb(void *cb_data, bool *busy)
- {
- 	struct mmc_blk_busy_data *data = cb_data;
-@@ -1903,9 +1929,16 @@ static int mmc_blk_card_busy(struct mmc_card *card, struct request *req)
- 	struct mmc_blk_busy_data cb_data;
- 	int err;
- 
--	if (mmc_host_is_spi(card->host) || rq_data_dir(req) == READ)
-+	if (rq_data_dir(req) == READ)
- 		return 0;
- 
-+	if (mmc_host_is_spi(card->host)) {
-+		err = mmc_spi_err_check(card);
-+		if (err)
-+			mqrq->brq.data.bytes_xfered = 0;
-+		return err;
-+	}
-+
- 	cb_data.card = card;
- 	cb_data.status = 0;
- 	err = __mmc_poll_for_busy(card->host, 0, MMC_BLK_TIMEOUT_MS,
--- 
-2.34.1
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
-
+> +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> +		if ((chan->dir == EDMA_DIR_READ && dir != DMA_DEV_TO_MEM) ||
+> +		    (chan->dir == EDMA_DIR_WRITE && dir != DMA_MEM_TO_DEV))
+> +			return NULL;
+> +	} else {
+> +		if ((chan->dir == EDMA_DIR_WRITE && dir != DMA_DEV_TO_MEM) ||
+> +		    (chan->dir == EDMA_DIR_READ && dir != DMA_MEM_TO_DEV))
+> +			return NULL;
+>  	}
+>  
+>  	if (xfer->type == EDMA_XFER_CYCLIC) {
+> -- 
+> 2.35.1
+> 

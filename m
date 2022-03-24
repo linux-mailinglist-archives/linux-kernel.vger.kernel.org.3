@@ -2,115 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D244E61B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29C74E61BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 11:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349495AbiCXKbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 06:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        id S1349508AbiCXKbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 06:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242686AbiCXKbO (ORCPT
+        with ESMTP id S1349459AbiCXKbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 06:31:14 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAEA55219
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:29:42 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bt26so7259392lfb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:29:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VhnV11ZIB9XQsFrR+7RyjEctj8mwdwZ8rAPFLvRFWjI=;
-        b=UTkdRKxy/4KFYFJbrY18/+BI7r3nUnt/znELOVsFGL9K9mYyozmSoj7RiJT6at0E60
-         P4GkOL4NqOo5n5zT908BnYQ49z5vlQqrKAU8G2gVOWYKhPbRJKjn07P5Y99A0kqxCtlE
-         sTJsUJdf+WlJTPvZOcwUOG09FtDdGpcCzNtjjpY+7L+cE4UhfGTjORRkATSey2cfzCqY
-         LqrvRVIuOMGON12SrhlMVmRd7jkDXxqAFLs8We1jOBNiHIqv2ttkXNQ3YVoxN75m3D3X
-         Za0uArP8lrGptCh/KTpLeVI/DqQM9ph4YXWMtWUS8Vzi7QliWlUTpEzEydbZ824lGZIN
-         Uo6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VhnV11ZIB9XQsFrR+7RyjEctj8mwdwZ8rAPFLvRFWjI=;
-        b=bZJwgylP7I09nu6/oV6eZIlfaaJzQjcU6TYPw/zkPUZEORFJLUKRO3RrUEhYix26d7
-         ft272lxvoH0Wzm9dbs+Vxnu98rndNKfAiheOvZtGqAovobxE6V//1YZmJVzUc3HLLFeW
-         PolmkaeO0b4v8noVozdeF/J0zFULjWisd4H1IelXAdr5K3wiCcqGA9b19sIcbj/cpxK8
-         xOzsmMo3z6nEIljcAn8y5nAYG6QPx1f9U8Ahzrwvwe5IRIKr2jMeeNvR+NP0FSEkfCSB
-         xzl/Eq5xzQHyNnAhyxgVSl80RVSAZlS8BAXFDF6OjpvgREjc3Yu/+LGKYfCEgR8Dkx6L
-         JtbA==
-X-Gm-Message-State: AOAM531imblNkFfBUl0MK+jgEhgg8bEsfSPKjFqLSkTb3Mx0i6xUAFkE
-        o/PAHbOM7vbLG8R7pwVbTUVMGEUhhTP+cAAcgG8=
-X-Google-Smtp-Source: ABdhPJximP+pKDfVRtUrc7EWkUuUx+ODJxHOlUoYNyclqp8nzGphnUgTl6TKfn9FLnPjsX7V55sbW836zvFk7m0NEVQ=
-X-Received: by 2002:a05:6512:1294:b0:44a:35a2:a282 with SMTP id
- u20-20020a056512129400b0044a35a2a282mr3174229lfs.269.1648117781114; Thu, 24
- Mar 2022 03:29:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHmME9q55ifnzxE9zLuLT=Hgjv=qcvjU-O-c8G=_o_V_O+p44Q@mail.gmail.com>
- <CACXcFmnb87qqzVkw9GfojPNh5sDkYGsqq9TYxUXBvrC1R+Lr3w@mail.gmail.com>
-In-Reply-To: <CACXcFmnb87qqzVkw9GfojPNh5sDkYGsqq9TYxUXBvrC1R+Lr3w@mail.gmail.com>
-From:   Sandy Harris <sandyinchina@gmail.com>
-Date:   Thu, 24 Mar 2022 18:29:28 +0800
-Message-ID: <CACXcFmnhHpGQdU7ZcYNqjSss8VHMOtTvmJRETn18p0AY3AsEuQ@mail.gmail.com>
-Subject: Re: Large post detailing recent Linux RNG improvements
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        "Theodore Ts'o" <tytso@mit.edu>
+        Thu, 24 Mar 2022 06:31:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50E6F5521F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 03:30:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648117810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=juZ6zFT70XMLDT3hqkTSkkxIYqEGcZZ3ok6VMb0BqDg=;
+        b=K/+GtBdudkh+rZYI+YsJG3/3+DEWBPf5EksEdqlUOjCklH6zutlVWtLuCHpHIj90GPOxcw
+        XoN6uqxeWjghppDAsql35/bA4bapCmGpYMqukwcSA8/A43YwAS1b9NNQvHcrne20Mcm2qI
+        NuQMhEwDw2Od/KEmY1xo/e8P7ptXOq8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-394-ck4odP71M7awFTYn8hwHvw-1; Thu, 24 Mar 2022 06:30:07 -0400
+X-MC-Unique: ck4odP71M7awFTYn8hwHvw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2C073802ACE;
+        Thu, 24 Mar 2022 10:30:06 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A7F6AC07F4B;
+        Thu, 24 Mar 2022 10:30:04 +0000 (UTC)
+Message-ID: <0f12fa4d8aa43e6f346c1f2d73bb0b67e19bd494.camel@redhat.com>
+Subject: Re: [RFCv2 PATCH 02/12] KVM: x86: lapic: Rename
+ [GET/SET]_APIC_DEST_FIELD to [GET/SET]_XAPIC_DEST_FIELD
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 24 Mar 2022 12:30:03 +0200
+In-Reply-To: <20220308163926.563994-3-suravee.suthikulpanit@amd.com>
+References: <20220308163926.563994-1-suravee.suthikulpanit@amd.com>
+         <20220308163926.563994-3-suravee.suthikulpanit@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sandy Harris <sandyinchina@gmail.com> wrote:
+On Tue, 2022-03-08 at 10:39 -0600, Suravee Suthikulpanit wrote:
+> To signify that the macros only support 8-bit xAPIC destination ID.
+> 
+> Suggested-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/hyperv/hv_apic.c      | 2 +-
+>  arch/x86/include/asm/apicdef.h | 4 ++--
+>  arch/x86/kernel/apic/apic.c    | 2 +-
+>  arch/x86/kernel/apic/ipi.c     | 2 +-
+>  arch/x86/kvm/lapic.c           | 2 +-
+>  arch/x86/kvm/svm/avic.c        | 2 +-
+>  6 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/hyperv/hv_apic.c b/arch/x86/hyperv/hv_apic.c
+> index db2d92fb44da..fb8b2c088681 100644
+> --- a/arch/x86/hyperv/hv_apic.c
+> +++ b/arch/x86/hyperv/hv_apic.c
+> @@ -46,7 +46,7 @@ static void hv_apic_icr_write(u32 low, u32 id)
+>  {
+>  	u64 reg_val;
+>  
+> -	reg_val = SET_APIC_DEST_FIELD(id);
+> +	reg_val = SET_XAPIC_DEST_FIELD(id);
+>  	reg_val = reg_val << 32;
+>  	reg_val |= low;
+>  
+> diff --git a/arch/x86/include/asm/apicdef.h b/arch/x86/include/asm/apicdef.h
+> index 5716f22f81ac..863c2cad5872 100644
+> --- a/arch/x86/include/asm/apicdef.h
+> +++ b/arch/x86/include/asm/apicdef.h
+> @@ -89,8 +89,8 @@
+>  #define		APIC_DM_EXTINT		0x00700
+>  #define		APIC_VECTOR_MASK	0x000FF
+>  #define	APIC_ICR2	0x310
+> -#define		GET_APIC_DEST_FIELD(x)	(((x) >> 24) & 0xFF)
+> -#define		SET_APIC_DEST_FIELD(x)	((x) << 24)
+> +#define		GET_XAPIC_DEST_FIELD(x)	(((x) >> 24) & 0xFF)
+> +#define		SET_XAPIC_DEST_FIELD(x)	((x) << 24)
+>  #define	APIC_LVTT	0x320
+>  #define	APIC_LVTTHMR	0x330
+>  #define	APIC_LVTPC	0x340
+> diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+> index b70344bf6600..e6b754e43ed7 100644
+> --- a/arch/x86/kernel/apic/apic.c
+> +++ b/arch/x86/kernel/apic/apic.c
+> @@ -275,7 +275,7 @@ void native_apic_icr_write(u32 low, u32 id)
+>  	unsigned long flags;
+>  
+>  	local_irq_save(flags);
+> -	apic_write(APIC_ICR2, SET_APIC_DEST_FIELD(id));
+> +	apic_write(APIC_ICR2, SET_XAPIC_DEST_FIELD(id));
+>  	apic_write(APIC_ICR, low);
+>  	local_irq_restore(flags);
+>  }
+> diff --git a/arch/x86/kernel/apic/ipi.c b/arch/x86/kernel/apic/ipi.c
+> index d1fb874fbe64..2a6509e8c840 100644
+> --- a/arch/x86/kernel/apic/ipi.c
+> +++ b/arch/x86/kernel/apic/ipi.c
+> @@ -99,7 +99,7 @@ void native_send_call_func_ipi(const struct cpumask *mask)
+>  
+>  static inline int __prepare_ICR2(unsigned int mask)
+>  {
+> -	return SET_APIC_DEST_FIELD(mask);
+> +	return SET_XAPIC_DEST_FIELD(mask);
+>  }
+>  
+>  static inline void __xapic_wait_icr_idle(void)
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 9322e6340a74..03d1b6325eb8 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1286,7 +1286,7 @@ void kvm_apic_send_ipi(struct kvm_lapic *apic, u32 icr_low, u32 icr_high)
+>  	if (apic_x2apic_mode(apic))
+>  		irq.dest_id = icr_high;
+>  	else
+> -		irq.dest_id = GET_APIC_DEST_FIELD(icr_high);
+> +		irq.dest_id = GET_XAPIC_DEST_FIELD(icr_high);
+>  
+>  	trace_kvm_apic_ipi(icr_low, irq.dest_id);
+>  
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index f07956f15d3b..60cd346acd1c 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -299,7 +299,7 @@ static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
+>  	 */
+>  	kvm_for_each_vcpu(i, vcpu, kvm) {
+>  		if (kvm_apic_match_dest(vcpu, source, icrl & APIC_SHORT_MASK,
+> -					GET_APIC_DEST_FIELD(icrh),
+> +					GET_XAPIC_DEST_FIELD(icrh),
+>  					icrl & APIC_DEST_MASK)) {
+>  			vcpu->arch.apic->irr_pending = true;
+>  			svm_complete_interrupt_delivery(vcpu,
 
-> Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> > Thought I should mention here that I've written up the various RNG
-> > things I've been working on for 5.17 & 5.18 here:
-> > https://www.zx2c4.com/projects/linux-rng-5.17-5.18/ .
-> >
-> > Feel free to discuss on list here if you'd like, or if you see
-> > something you don't like, I'll happily review patches!
->
-> Your code includes:
->
-> enum {
->     POOL_BITS = BLAKE2S_HASH_SIZE * 8,
->     POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
-> };
->
-> static struct {
->     struct blake2s_state hash;
->     spinlock_t lock;
->     unsigned int entropy_count;
-> } input_pool = {
->     .hash.h = { BLAKE2S_IV0 ^ (0x01010000 | BLAKE2S_HASH_SIZE),
->             BLAKE2S_IV1, BLAKE2S_IV2, BLAKE2S_IV3, BLAKE2S_IV4,
->             BLAKE2S_IV5, BLAKE2S_IV6, BLAKE2S_IV7 },
->     .hash.outlen = BLAKE2S_HASH_SIZE,
->     .lock = __SPIN_LOCK_UNLOCKED(input_pool.lock),
-> };
->
-> As far as I can tell, you have eliminated the 4K-bit input pool
-> that this driver has always used & are just using the hash
-> context as the input pool. To me, this looks like an error.
->
-> A side effect of that is losing the latent-entropy attribute
-> on input_pool[] so we no longer get initialisation from
-> the plugin. Another error.
 
-I could see reasonable arguments for reducing the size of
-the input pool since that would save both kernel memory
-and time used by the hash. Personally, though, I would
-not consider anything < 2Kbits without seeing strong
-arguments to justify it.
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-You seem to have gone to 512 bits without showing
-any analysis to justify it. Have I just missed them?
+Best regards,
+	Maxim Levitsky
+

@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AAC04E5F00
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 07:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 028E54E5F0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348289AbiCXG6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 02:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S243967AbiCXHCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiCXG6H (ORCPT
+        with ESMTP id S1348262AbiCXHCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 02:58:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD74797284;
-        Wed, 23 Mar 2022 23:56:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68C91B81DDE;
-        Thu, 24 Mar 2022 06:56:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57068C340F0;
-        Thu, 24 Mar 2022 06:56:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648104993;
-        bh=t7ZJC+nb03OJhruyjJMshPqBsDPc27EJQOvu6/pKRwY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p+2mxlDm/Y1xr/p0OUWJrcZ66gIMW04Vgb7md5J0s7MAJoIPQB+VZsH+halolMzp/
-         hnhPaJffyBkZusGuTOcc0JXhpOCDyIJaQlwNDwN7Vl5iTULbpmBqY0GMwdb4iZKEXA
-         fNXyI8STxgYWAMryldGFDv9mv/5p8eJasA19T3IM=
-Date:   Thu, 24 Mar 2022 07:56:30 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Message-ID: <YjwWHk9YYGrb6i07@kroah.com>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
- <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
- <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
- <Yjsiv2XesJRzoeTW@kroah.com>
- <CAJfpegsBmed6dchjgVeQ-OPGYBiU+2GPgsoJegjuPTrcLs6-8g@mail.gmail.com>
+        Thu, 24 Mar 2022 03:02:05 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAE26D972
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:00:15 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id e5so3807103pls.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:00:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nathanrossi.com; s=google;
+        h=date:message-id:from:to:cc:subject:content-transfer-encoding
+         :mime-version;
+        bh=9KqvrxLo1G07hfDRYkFXfXDwuhue1HJtF4AZIGRJRfs=;
+        b=kLesff5qCI0HzQizbChuJhKB9KB6Ky0V6lmu/+gXYSvvOjWNH6fW+tCao9aVwQVGPp
+         WNWNy43eY7wjfprkeSVyP2P+AZv1XbGCFbl/BhGhbdeCp9mb0p90vKpRqHX2aZKO235U
+         glPY1lbb/tB1DA5W3pTZa9t/PA+6mB2BYBhYn5GZq96Vwt6KBZEwHz496pYJmfFSo6mR
+         iZG1KlatiLX1HDV2FL6I7eYbZ5FBKic32DV/GPgTaHli0w0i7o7FOaSFVUmiNdOic4Rs
+         PM8bUMh4FVxHstu1z9ZIgLQJkfGQoJsXzN5o3ov0nE9vjhIOxprCKkKezEtfkH0eN3Hj
+         vMwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject
+         :content-transfer-encoding:mime-version;
+        bh=9KqvrxLo1G07hfDRYkFXfXDwuhue1HJtF4AZIGRJRfs=;
+        b=FwcUIkh8rkYdM9ThunZiLWg3XVu/86TIV1LGafkaZVdE0VsCJspgc4MEaZjJUHLqSJ
+         uFUQ0sX9pnQDwgaQOzZEJVgG73g2uRC56s9Smuvg9mIhNzfcXXWRY3zdq6nFwA+Gsf9y
+         7sQgt76NAft/MBs4QVTZAwTBs59ApG8STxVIG3+aDCVT6eGKtpD1s7lhobNRMcAuiuC9
+         PqBAAOSuzsqH8ImDMO79QKwSx3CqaasIFlR2+lYN6PPykUH8wuDraAlZReZOMcQ/k7xf
+         yIGOgxVFZa17bhbnCJN50Y/RKheiP5sxTC7trUWOO1pTuj4hnI5bp3jhjMwuwxRgp7aq
+         MmyA==
+X-Gm-Message-State: AOAM531Y//YkdEkid47t6h/qbsByiJk6BfyOSLCOBnBAJWtELSDDc6Ok
+        15cGCB8Lhp7qCYgrbbqg8T5W5g==
+X-Google-Smtp-Source: ABdhPJxvpPy6O6jHCvjqweYTUKvXaA/YkxiVZaAc9Z2fv7eYKK7HxH2YvrO8WjRr34htasGBvtgllQ==
+X-Received: by 2002:a17:90a:289:b0:1c6:584c:acc6 with SMTP id w9-20020a17090a028900b001c6584cacc6mr4397492pja.124.1648105215194;
+        Thu, 24 Mar 2022 00:00:15 -0700 (PDT)
+Received: from [127.0.1.1] (117-20-68-98.751444.bne.nbn.aussiebb.net. [117.20.68.98])
+        by smtp.gmail.com with UTF8SMTPSA id q2-20020a056a00084200b004f761a7287dsm2136914pfk.131.2022.03.24.00.00.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 00:00:14 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 07:00:04 +0000
+Message-Id: <20220324070004.225738-1-nathan@nathanrossi.com>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Nathan Rossi <nathan@nathanrossi.com>,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: [PATCH] mtd: spi-nor: core: Fix 16bit write sr_and_check status check
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfpegsBmed6dchjgVeQ-OPGYBiU+2GPgsoJegjuPTrcLs6-8g@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,43 +73,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 04:23:34PM +0100, Miklos Szeredi wrote:
-> On Wed, 23 Mar 2022 at 14:38, Greg KH <gregkh@linuxfoundation.org> wrote:
-> 
-> > This has been proposed in the past a few times.  Most recently by the
-> > KVM developers, which tried to create a "generic" api, but ended up just
-> > making something to work for KVM as they got tired of people ignoring
-> > their more intrusive patch sets.  See virt/kvm/binary_stats.c for what
-> > they ended up with, and perhaps you can just use that same type of
-> > interface here as well?
-> 
-> So this looks like a fixed set of statistics where each one has a
-> descriptor (a name, size, offset, flags, ...) that tells about the
-> piece of data to be exported.  The stats are kept up to date in kernel
-> memory and copied to userspace on read.  The copy can be selective,
-> since the read can specify the offset and size of data it would like
-> to retrieve.
-> 
-> The interface is self descriptive and selective, but its structure is
-> fixed for a specific object type, there's no way this could be
-> extended to look up things like extended attributes.  Maybe that's not
-> a problem, but the lack of a hierarchical namespace could turn out to
-> be a major drawback.
-> 
-> I think people underestimate the usefulness of hierarchical
-> namespaces, even though we use them extensively in lots of well
-> established interfaces.
+From: Nathan Rossi <nathan.rossi@digi.com>
 
-I like the namespaces, they work well.  If you want self-describing
-interfaces (which I think your patch does), then why not just use the
-varlink protocol?  It's been implemented for the kernel already many
-years ago:
-	https://github.com/varlink
-and specifically:
-	https://github.com/varlink/linux-varlink
+The spi_nor_write_16bit_sr_and_check function description describes that
+the function compares the value of the status and config registers after
+the write. However the function does not implement the status register
+compare only the config register check.
 
-It doesn't need a new syscall.
+This causes the function to differ in behaviour to the equivalent
+spi_nor_write_sr1_and_check for non-16bit writes to the status register.
+This is important as other functions rely on the return code of
+spi_nor_write_sr_and_check. For example spi_nor_sr_unlock returns the
+result directly, which is returned to userspace such that failing to
+unlock the spi-nor device was resulting in a return code of 0 instead of
+the expected non-zero indicating the failure.
 
-thanks,
+Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+---
+ drivers/mtd/spi-nor/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-greg k-h
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 04ea180118..d75d4f8a45 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -1007,6 +1007,15 @@ static int spi_nor_write_16bit_sr_and_check(struct spi_nor *nor, u8 sr1)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = spi_nor_read_sr(nor, sr_cr);
++	if (ret)
++		return ret;
++
++	if (sr1 != sr_cr[0]) {
++		dev_dbg(nor->dev, "SR: read back test failed\n");
++		return -EIO;
++	}
++
+ 	if (nor->flags & SNOR_F_NO_READ_CR)
+ 		return 0;
+ 
+---
+2.35.1

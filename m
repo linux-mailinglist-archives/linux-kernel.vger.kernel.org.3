@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB674E5D1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7F24E5D20
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 03:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346971AbiCXCUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 22:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
+        id S1347697AbiCXCVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 22:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348107AbiCXCSr (ORCPT
+        with ESMTP id S241810AbiCXCVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 22:18:47 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A1D93988
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1648088238; x=1679624238;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=C8ZC1JfJidJGGKJTTvn2HdT8RQJSx0oDAfiC+lrKKkQ=;
-  b=l1RMvyKgiZ6mOntXpAZNYuLT5TTjXXVx2N9fLCQe1IoKQH0aIOqLDhHs
-   D6YdzS9Gjox94+QDTXjtZhc34DwbLPCLilNKVtvmhUe1L0E+O6XRtpuST
-   S+BzgqAUsboBoISfJniS/QOCQaQSd8KTFDFyoccK2t6QJ2ndx+d+G/J08
-   I/Rdue0XSepwApEfPNut1+iSkmbCovcHhVHE3B56wYhCAWB/zfsmhDvAM
-   qcMMZuo+1rKjsbkzBkorSHx5qKJT+3fcp7yJtCX8qq5F32r6S3jjMw2yh
-   QSVL/iTaRibpdnMp7bbqeSbldmfhVGYTtqggWgiEvcvpvu6qZN59/gURs
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,206,1643644800"; 
-   d="scan'208";a="197043557"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 24 Mar 2022 10:17:16 +0800
-IronPort-SDR: 9UB5IXLCGoDcPKqZatyl12uMQ8YdaSZm+uqotimokvUWohZNlyRgVz5rXcusqQ+udxAZJOCXzD
- fuDt+CJJy3/i1tOOfmHNrm6GPs3iylVtvBUvc/KLFtFaF1+sIAK1OTHKa7DlhisiBYZTvbfwdw
- 9woaPktZHYK66qMYHDV5xZ1aH56jXP/YSCkEie7sf04F6UkVXxMR99yvB5JFh+y11ui9IpPekv
- 6zb0bl+rScHkOPK5nzW2D8R+SUHTETqpr/I8nLZ+Xs4D/LELPWSqKjnAdcmig24WIoWkwe80V7
- cmc7bDXrG7nsdPVccfqxVWP4
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 18:48:13 -0700
-IronPort-SDR: VOjFIZaFtDjqwR/BCaakogQ+t7cVE+y0fvScaG+iASC9zoSi/GnvbtWpIoE44WlY/VPEN2GAAQ
- PtG/zrs/+lSax/kGe/8wqPbi/J/m2SLbTcMhS+94hFs9ifofNB9h52vALnwJrbtABPiO2gzo1Y
- P081KgwhyIlUaCNQbwSCXAp+sjG2I2gAyGaLFIbopPLtCmxV9usl5ckj83moW4gSSmqxcqIrXm
- GGj/mzavYXqH7gfEFd/CcgZj91HP96Jir3mVDBvvsPwKsSepl8oWpnJJ5aqqkU0RbzyW/JyOII
- gtI=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 19:17:16 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KP84W4DVwz1SVp1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:17:15 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1648088235; x=1650680236; bh=C8ZC1JfJidJGGKJTTvn2HdT8RQJSx0oDAfi
-        C+lrKKkQ=; b=FOT3gXpA129jN1eIYX1gm4o4xXeh6hGGrS9RAlqa9cBRLQpamPj
-        cNozjURXZZw2im8fsdHtruWvNVtspQQseIg/1biNx6MMYTU4eNmVIG0GyUSigCDC
-        qvgeoslr9zwLma/RngLlX1RTMT3XIoY8MC65m6gn4etU7zUvno/pHhicGbzdUNcN
-        MJZheP9x46R38zMhdAFsaRnBkPcZy88q2jjm+p6VmziWuvT+wIoBN8NjSvxXlSJ3
-        HXoSykoyTDBvftfMyHoP5JTtIrjInxqSufRtd5QcCVUJGBnFAyWy1qG9IBitildH
-        EWPwkyg1Ceg1Sk8YlxUjdm65Kgbzmlas+gQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id HGjgv5azRxLY for <linux-kernel@vger.kernel.org>;
-        Wed, 23 Mar 2022 19:17:15 -0700 (PDT)
-Received: from [10.225.163.114] (unknown [10.225.163.114])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KP84T2DKKz1Rvlx;
-        Wed, 23 Mar 2022 19:17:13 -0700 (PDT)
-Message-ID: <eb79ee49-53aa-57eb-94af-90997aa6cbed@opensource.wdc.com>
-Date:   Thu, 24 Mar 2022 11:17:12 +0900
+        Wed, 23 Mar 2022 22:21:05 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785D093990
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:19:34 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2e592e700acso37410167b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 19:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IwQumeVhitVTx1gzhu5Yibhw++mrfhREWTZTV9Nodsg=;
+        b=ZPif13Uq9RKZbjZ4VM4PpzdmB9hHh2C4RXgHMIiiqDJH5eRg8DG3jYVz2lOygH/Qz4
+         OaUfBGP8ZFuq1XLo9c9w4gcQ8n5hpMHvhfFKz9bB9/TSLyAuqiPsVLAbECiN4sLUrcmK
+         +4J+hEi5KM8JmBDbPXDqj26CXkCeqIKv3aAzkEF0WlZwH4G6O3J8S45wh+xUx6rx2WCz
+         qbW4cjzuY+PHqv2TVOq8+Jnftmk5VdjWo+BULIq5Z31C/C1K/MgMkMNQc5u8Pq+hJd1A
+         EdllO3ZOLVD48b5782osvvbyLzVIIH+XGD97ZBr2TiGLHS9JGQXXG/BVxPEA/H0oCDn6
+         9eDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IwQumeVhitVTx1gzhu5Yibhw++mrfhREWTZTV9Nodsg=;
+        b=FOcogoCSuBpPbv+vjLtxDYKR5KG2n9EfZX8TU1tzj3Mbumkk5ajbZwJfUTiPEoUCik
+         HUbFzsrm+kDPke6h7O172STr9NVvoxvZ5Ad8kBGxKtFO3qsBQvanLWMNjkVmBxiSTEK9
+         rhmnjYworiXmUJzcTYoMDL2oJQ3+Xg18rdqKELYKobdq0dRjYjZvX+xe2Zi4sL0uLwpH
+         mW6piDlRseBVJ3+Z+g4Prp5lGdhhyhvYGRBwRRC3yHWCYBtu/sHeImMG3vFGzCnJfYxM
+         UPRQYwHmLuEMCl7L0bcvx0SYhM0oZAwJi8tZcVnJXCwp1C8lKKzvsVZ2I6THyTiBbDKs
+         FfOA==
+X-Gm-Message-State: AOAM531zAWFh+jiL8w4dSOvmjn4qOFJz0CiKcg3WsEeo+xScnL+pZKqL
+        OX0FYlGs3sW5RWu0NJhkmANonVxJM164nE/vAlX6yQ==
+X-Google-Smtp-Source: ABdhPJy2h0jw3pY7I5dYmkisgdyu5xSuI4s3EEkqY4Cry3maUl3/XXFbGdG0GhbgeCG8JhFRa9/qcP+PnUAzUu9/Mz4=
+X-Received: by 2002:a0d:f685:0:b0:2e2:22e6:52d7 with SMTP id
+ g127-20020a0df685000000b002e222e652d7mr2931553ywf.418.1648088373753; Wed, 23
+ Mar 2022 19:19:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 21/21] MAINTAINERS: Add maintainers for DWC AHCI SATA
- driver
-Content-Language: en-US
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
- <20220324001628.13028-22-Sergey.Semin@baikalelectronics.ru>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220324001628.13028-22-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <000000000000cabcb505dae9e577@google.com> <CAHk-=wjLL3OB8PvFGBLgUs=zip-Q2m1P=UwG+Pw_E8nYDs+MUw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjLL3OB8PvFGBLgUs=zip-Q2m1P=UwG+Pw_E8nYDs+MUw@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 24 Mar 2022 10:18:57 +0800
+Message-ID: <CAMZfGtW0tN+xYSGGVmxjosTuoRR-mETaNTFNFZu7WuPW2JL9JA@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in list_lru_add
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     syzbot <syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/22 09:16, Serge Semin wrote:
-> Add myself as a maintainer of the new DWC AHCI SATA driver and
-> its DT-bindings schema.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  MAINTAINERS | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cd0f68d4a34a..19c9ea0758cc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10919,6 +10919,15 @@ F:	drivers/ata/ahci_platform.c
->  F:	drivers/ata/libahci_platform.c
->  F:	include/linux/ahci_platform.h
->  
-> +LIBATA SATA AHCI SYNOPSYS DWC CONTROLLER DRIVER
-> +M:	Serge Semin <fancer.lancer@gmail.com>
-> +L:	linux-ide@vger.kernel.org
-> +S:	Maintained
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+On Thu, Mar 24, 2022 at 7:11 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Muchun,
+>  mind taking a look at this asap? This seems like a pretty core thing,
+> and the fact that it oopses on that
 
-Wrong tree. This should be libata tree.
+Sorry for this. I am looking at this now.
 
-> +F:	Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> +F:	Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> +F:	drivers/ata/ahci_dwc.c
-> +
->  LIBATA SATA PROMISE TX2/TX4 CONTROLLER DRIVER
->  M:	Mikael Pettersson <mikpelinux@gmail.com>
->  L:	linux-ide@vger.kernel.org
+>
+> > RIP: 0010:list_add_tail include/linux/list.h:102 [inline]
+> > RIP: 0010:list_lru_add+0x277/0x510 mm/list_lru.c:129
+> >  d_lru_add fs/dcache.c:431 [inline]
+> >  retain_dentry fs/dcache.c:685 [inline]
+> >  dput+0x7a7/0xdb0 fs/dcache.c:908
+>
+> just worries me a lot.
+>
+> The dentry lru list rules are odd but not outrageously so. The main
+> oddity is that the DCACHE_LRU_LIST bit in the dentry flags indicate
+> whether the dentry is on a LRU list or not.
+>
+> And it's not one single list - it can be *either* the usual
+> sb->lists_dentry_lru list, or the special "shrink list".
+>
+> But this oops is for the regular d_lru_add() path that adds the dentry
+> to the sb->s_dentry_lru list as the dentry count goes down to zero
+> (and it's not one of the dentries that get insta-free'd).
 
+After this commit, the rules of dentry allocations changed.
+The dentry should be allocated by kmem_cache_alloc_lru()
+to set up the dentry reclaim context correctly (e.g. allocating
+its list_lru_one). This issue seems that list_lru_one wasn't
+allocated, then NULL pointer reference.
 
--- 
-Damien Le Moal
-Western Digital Research
+I'm trying to reproduce this and looking for the root cause.
+
+Thanks.

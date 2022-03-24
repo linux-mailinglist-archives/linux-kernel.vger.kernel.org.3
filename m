@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599074E6823
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF5C4E682C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 18:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352430AbiCXR4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 13:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
+        id S1352412AbiCXR56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 13:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352410AbiCXRz4 (ORCPT
+        with ESMTP id S231939AbiCXR54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 13:55:56 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AEE3968C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:54:24 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id jx9so5339896pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 10:54:24 -0700 (PDT)
+        Thu, 24 Mar 2022 13:57:56 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D50959A5C;
+        Thu, 24 Mar 2022 10:56:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jKyYn/8x1r3aq5yDhbWNBcNW8nQVJUhymtL9BdNTCak=;
-        b=JHR9OsnDe32cYkFuQG30yVf4IIy04Gd4f4cS9Jfup69kp9HQcphhKnJ9CHj6uixQ13
-         hCGK9/5Ttevrc7XvcWHiC0scEoQDhXQFSSWqeiGoC3MDEtSyHwBjQ1Sb2oneayNShOY0
-         1dsdJa33UfBu/6nqLkKH7N0K6bW6A5fnAMOTQNg7U0558UBoJBGEAt2NBevAbQFrR/2I
-         6WJX36SjgAEDj/5ePihT4GV2pu7uEYxt6RCvYXTL31WL67j0yui7njsX0CXRYq25H7N2
-         dONEMRWxZZvqSN77t3l/MSkpJgdMDpZfAHF+CshzVekdT+0U49za42nq71qdUaOaXcYB
-         sm2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jKyYn/8x1r3aq5yDhbWNBcNW8nQVJUhymtL9BdNTCak=;
-        b=ykIrb2qZghZtSdn3fEDEtOe/ogchjWKL/y6kHJYSu2aURV9AJvduggqrJGr/WKTgaT
-         tmRWVt1evRKzWim8GMNIt3pDDUKuYfAWggi5KtbZQoPzZqZJyZwZ2Z2H3SZJGx/b36YP
-         3IHANcgnrAdoiRubOjtLHREEkxTOJ3ldtjlERCkQjsOGJJpQyYu3YxkmGBk9pvYMLZVb
-         iArv2KmdswALCBRVbtwqzUUp9szGGYMJGMZdNGJQFI2Edy9ZDGy3fpQIP6WkpwlzOh4N
-         uuxtgT34f3unVQ3Y+Uj3E2YKecf7RNCChlm7gYlK2u5mJK4A2jsMwlL0q9W5JEqwnF2g
-         MUtw==
-X-Gm-Message-State: AOAM531DHCY2aeLfgImItFUu0N/tAPvty7szOLypYv6cdp4Arof5UeyQ
-        3/NCd8fPjbCL2KQPwbwAJaM=
-X-Google-Smtp-Source: ABdhPJzXDtBnQmmfVzd/7DM+GwJdkOhngZyeyhrF6BjpSvFW2oCpd/etdNVcxpTwK7WvQFb2wzWrsw==
-X-Received: by 2002:a17:902:f60f:b0:151:4f66:55b4 with SMTP id n15-20020a170902f60f00b001514f6655b4mr7048785plg.127.1648144464284;
-        Thu, 24 Mar 2022 10:54:24 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id f21-20020a056a00239500b004fb02a7a45bsm1003193pfc.214.2022.03.24.10.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 10:54:23 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linus.walleij@linaro.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 2/2] ARM: Clamp MAX_DMA_ADDRESS to 32-bit
-Date:   Thu, 24 Mar 2022 10:54:17 -0700
-Message-Id: <20220324175417.1014562-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220324175417.1014562-1-f.fainelli@gmail.com>
-References: <20220324175417.1014562-1-f.fainelli@gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648144584; x=1679680584;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3WjmSUx8RaM4/QVWsCIY83coBlhfFkLNK0Bb6r9AgAQ=;
+  b=T/kbSGfdzOl10jQLAB3g5Pqe4qnCzpNgoj44vJOKFxAPCSm0woF+MAlQ
+   FXeXbhxBZnwkKYJiA1JRSgcAIf/1XcW7NivgkvzKb//M4ZRgMVsoRKHeX
+   wUCmZXdk4BTuuXjyyCV5dDj8lO9iuzweaL7v3QBhAx+0hDYxPGsCugUS6
+   8=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 24 Mar 2022 10:56:24 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 10:56:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 24 Mar 2022 10:56:23 -0700
+Received: from [10.110.52.81] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 24 Mar
+ 2022 10:56:22 -0700
+Message-ID: <0f017516-58f4-f26e-d598-4be9311e2e27@quicinc.com>
+Date:   Thu, 24 Mar 2022 10:56:22 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/disp: check the return value of kzalloc()
+Content-Language: en-US
+To:     <xkernel.wang@foxmail.com>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+References: <tencent_B3E19486FF39415098B572B7397C2936C309@qq.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <tencent_B3E19486FF39415098B572B7397C2936C309@qq.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MAX_DMA_ADDRESS is a virtual address, therefore it needs to fit within a
-32-bit unsigned quantity. Platforms defining a DMA zone size in
-their machine descriptor can easily overflow this quantity depending on
-the DMA zone size and/or the PAGE_OFFSET setting.
 
-In most cases this is harmless, however in the case of a
-CONFIG_DEBUG_VIRTUAL enabled, __virt_addr_valid() will be unable to
-return that MAX_DMA_ADDRESS is valid because the value passed to that
-function is an unsigned long which has already overflowed.
 
-Fixes: e377cd8221eb ("ARM: 8640/1: Add support for CONFIG_DEBUG_VIRTUAL")
-Fixes: 2fb3ec5c9503 ("ARM: Replace platform definition of ISA_DMA_THRESHOLD/MAX_DMA_ADDRESS")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- arch/arm/include/asm/dma.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm/include/asm/dma.h b/arch/arm/include/asm/dma.h
-index f244ee68e814..ea47420babd4 100644
---- a/arch/arm/include/asm/dma.h
-+++ b/arch/arm/include/asm/dma.h
-@@ -8,10 +8,12 @@
- #ifndef CONFIG_ZONE_DMA
- #define MAX_DMA_ADDRESS	0xffffffffUL
- #else
-+#include <linux/minmax.h>
- #define MAX_DMA_ADDRESS	({ \
- 	extern phys_addr_t arm_dma_zone_size; \
- 	arm_dma_zone_size && arm_dma_zone_size < (0x10000000 - PAGE_OFFSET) ? \
--		(PAGE_OFFSET + arm_dma_zone_size - 1) : 0xffffffffUL; })
-+		min_t(phys_addr_t, (PAGE_OFFSET + arm_dma_zone_size - 1), 0xffffffffUL) : \
-+		0xffffffffUL; })
- #endif
- 
- #ifdef CONFIG_ISA_DMA_API
--- 
-2.25.1
-
+On 3/24/2022 2:15 AM, xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+> 
+> kzalloc() is a memory allocation function which can return NULL when
+> some internal memory errors happen. So it is better to check it to
+> prevent potential wrong memory access.
+> 
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c b/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
+> index cabe151..369e57f 100644
+> --- a/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
+> +++ b/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
+> @@ -169,6 +169,8 @@ void msm_disp_snapshot_add_block(struct msm_disp_state *disp_state, u32 len,
+>   	va_list va;
+>   
+>   	new_blk = kzalloc(sizeof(struct msm_disp_state_block), GFP_KERNEL);
+> +	if (!new_blk)
+> +		return;
+>   
+>   	va_start(va, fmt);
+>   

@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F231F4E5F7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E53434E5F82
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 08:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242400AbiCXHdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 03:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        id S1348622AbiCXHdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 03:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348757AbiCXHc5 (ORCPT
+        with ESMTP id S1348769AbiCXHdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 03:32:57 -0400
+        Thu, 24 Mar 2022 03:33:00 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB9898F7C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:31:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBA799686
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 00:31:29 -0700 (PDT)
 Received: from integral2.. (unknown [182.2.71.236])
-        by gnuweeb.org (Postfix) with ESMTPSA id 085E67E713;
-        Thu, 24 Mar 2022 07:31:22 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 7BFB97E714;
+        Thu, 24 Mar 2022 07:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648107085;
-        bh=v3/gvQsbdB6gVOFXY4Hp+dHuM9qN2h7z2eGiF+eRI6k=;
+        s=default; t=1648107089;
+        bh=PD8pLr7A85iII21QaBO68Pb6e6bGmBeN0QNU1aruB6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BC/nROz59xu6KERhODQ7gvkBIhQ8sVd/U06p7f859dOyJZcUhxER7YARMCf9eEfuL
-         K8zQulNlAZW8XelSktxdeZBteYY/GZeghtq+C1yDTIErF/VcVQDAfo7WDV+I/IrmPC
-         1bGLVnfXfJOwQvRAUUaXANooMEbQ4BtCgbOhq3Lfu65pHuVRbqfroerO2bzzovbwVg
-         oKX34wzFrFYxbQBLb2EjgGe2HNoYlpRBGXsdx0rYgrZLy7u8CrEu8ygBn305arJ2JE
-         MntlKJUNfuxG50JAUBH2zebFd3tDsbLmZZn7zG+dhj3uQ/SLbbLOAND0CFaLet8F0L
-         BoIdRkfZmcncQ==
+        b=R72WQfG/Ih8sBMAoKTsXCsRP8bJGHyRhUkTzyT1ugZuOw4ifSlrpseddB1nSYVjYw
+         /jNHSFe2sj+fRex7kgMO0K7WTxXZOz7raFjEDIO8KaAUoBPotx2gli11oz3eFUXnWi
+         Yv71wv5hanE9vJtENPVziJEEYmicGQdc5gGCHegy0vx2CPIYSGtB9SOGMT0Fn4Cs+Z
+         SLy9iAN4U5//GFQvSAvIorqjq3bJwaPbh7F/hLSt40oHWZy/UqhJc9MX0MkL1h0rSz
+         nZJx4kXlSh/f9/WQZvwfwnLoGfVIqF/up1wEuElVRJzn0BhEiyIcRBebiheC8PXfTH
+         I4bEg95n+Qf+w==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
@@ -36,9 +36,9 @@ Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH v1 10/11] tools/nolibc/string: Implement `strnlen()`
-Date:   Thu, 24 Mar 2022 14:30:38 +0700
-Message-Id: <20220324073039.140946-11-ammarfaizi2@gnuweeb.org>
+Subject: [PATCH v1 11/11] tools/include/string: Implement `strdup()` and `strndup()`
+Date:   Thu, 24 Mar 2022 14:30:39 +0700
+Message-Id: <20220324073039.140946-12-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220324073039.140946-1-ammarfaizi2@gnuweeb.org>
 References: <20220324073039.140946-1-ammarfaizi2@gnuweeb.org>
@@ -53,45 +53,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  size_t strnlen(const char *str, size_t maxlen);
+These functions are currently only available on architectures that have
+my_syscall6() macro implemented. Since these functions use malloc(),
+malloc() uses mmap(), mmap() depends on my_syscall6() macro.
 
-The strnlen() function returns the number of bytes in the string
-pointed to by sstr, excluding the terminating null byte ('\0'), but at
-most maxlen. In doing this, strnlen() looks only at the first maxlen
-characters in the string pointed to by str and never beyond str[maxlen-1].
+On architectures that don't support my_syscall6(), these function will
+always return NULL with errno set to ENOSYS.
 
-The first use case of this function is for determining the memory
-allocation size in the strndup() function.
-
-Link: https://lore.kernel.org/lkml/CAOG64qMpEMh+EkOfjNdAoueC+uQyT2Uv3689_sOr37-JxdJf4g@mail.gmail.com
-Suggested-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
 
 @@ Changelog:
 
-   Link v2: https://lore.kernel.org/lkml/20220322102115.186179-8-ammarfaizi2@gnuweeb.org/
+   Link RFC v2: https://lore.kernel.org/lkml/20220322102115.186179-9-ammarfaizi2@gnuweeb.org/
    RFC v2 -> v1:
     * No changes *
+
+   Link RFC v1: https://lore.kernel.org/lkml/20220320093750.159991-7-ammarfaizi2@gnuweeb.org/
+   RFC v1 -> RFC v2:
+    - Update strdup and strndup implementation, use strlen and strnlen to get
+      the string length first (comment from Willy and Alviro).
+    - Fix the subject line prefix, it was "tools/include/string: ", it should be
+      "tools/nolibc/string: ".
+    - Update the commit message.
 ---
- tools/include/nolibc/string.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/include/nolibc/string.h | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index 75a453870498..f43d52a44d09 100644
+index f43d52a44d09..bef35bee9c44 100644
 --- a/tools/include/nolibc/string.h
 +++ b/tools/include/nolibc/string.h
-@@ -147,6 +147,15 @@ size_t nolibc_strlen(const char *str)
- #define strlen(str) nolibc_strlen((str))
- #endif
+@@ -9,6 +9,8 @@
+ 
+ #include "std.h"
+ 
++static void *malloc(size_t len);
++
+ /*
+  * As much as possible, please keep functions alphabetically sorted.
+  */
+@@ -156,6 +158,36 @@ size_t strnlen(const char *str, size_t maxlen)
+ 	return len;
+ }
  
 +static __attribute__((unused))
-+size_t strnlen(const char *str, size_t maxlen)
++char *strdup(const char *str)
 +{
 +	size_t len;
++	char *ret;
 +
-+	for (len = 0; (len < maxlen) && str[len]; len++);
-+	return len;
++	len = strlen(str);
++	ret = malloc(len + 1);
++	if (__builtin_expect(ret != NULL, 1))
++		memcpy(ret, str, len + 1);
++
++	return ret;
++}
++
++static __attribute__((unused))
++char *strndup(const char *str, size_t maxlen)
++{
++	size_t len;
++	char *ret;
++
++	len = strnlen(str, maxlen);
++	ret = malloc(len + 1);
++	if (__builtin_expect(ret != NULL, 1)) {
++		memcpy(ret, str, len);
++		ret[len] = '\0';
++	}
++
++	return ret;
 +}
 +
  static __attribute__((unused))

@@ -2,194 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D40A4E6925
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 20:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD264E692A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Mar 2022 20:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352880AbiCXTOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 15:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        id S1352890AbiCXTQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 15:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiCXTOe (ORCPT
+        with ESMTP id S1352823AbiCXTQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 15:14:34 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD9A10D;
-        Thu, 24 Mar 2022 12:13:00 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2723D1EC064C;
-        Thu, 24 Mar 2022 20:12:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1648149175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=C1OkYvs9cReO/b4n86DotV7napDICScYJeQn5JQy0cw=;
-        b=XoiTeeUUxyO8kMPIsm9HNc/LrQ/O77aPApgys5fvyH+idB/sz8mneCuYiQ8SwU1wFL34MC
-        mOnRIWQG4xzBL8Qq2VQ6ZLkoipHxv/wyTujtXlcYQBD7y+z5cVSpq0nMfklrCcJ6KwN3T9
-        LoPiaWN9ufcr52goNDTCiSTSLcrIuy8=
-Date:   Thu, 24 Mar 2022 20:10:41 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
-        yazen.ghannam@amd.com, Muralidhara M K <muralimk@amd.com>,
-        David Airlie <airlied@linux.ie>
-Subject: Re: [PATCH v2] x86/amd_nb: unexport amd_cache_northbridges()
-Message-ID: <YjzCMYxgraTI7wrY@zn.tnic>
-References: <20220324122729.221765-1-nchatrad@amd.com>
+        Thu, 24 Mar 2022 15:16:44 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE48B6D24
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 12:15:11 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id o5so10198988ybe.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 12:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Z0LeIn5cVeaYNuaJmEd4BGZ3EQ0592UmRlXh68ATPqU=;
+        b=rgReT6OdFEsgGhaCRPpaJAOxQ6k+YnrdAp94eYBCESWg/9udF4117hEuJlxSJPOC3n
+         vN5LWCw2vn6aYdBkD6+NczFFu1EH+tpfc1VIZnqq7r8Er81CQcQEKZDO/pUYZV+qFaaV
+         TY4nHOcLifwed6u6PhfLO2dV4lW7CUX3RTW5DNRCY95siXGUUqLzLnpxS+Sr1LEhLlPC
+         Tf7Nzx/aZikfnSscPzmqdA/ATlpTur9R3tnaKf2P67Zg3CQ7YwVbccbdJeFGgsVQq7Ni
+         p0faoI9Ud6zQVy0UztMQzsFFc1RrVzsxx7JXChrdZtkJIV2n1zEsGmgHN4FADvMVWoKc
+         Qigw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Z0LeIn5cVeaYNuaJmEd4BGZ3EQ0592UmRlXh68ATPqU=;
+        b=immPdEg5HZgZoRiR91ouENgtxm7MP39F8G0Efq27p3lGwFmJd1twnDDpK+j9lXD1z6
+         xDdOvWcgq7oA0G4G/x7HXcwoZNb7L2/6VVfvySBYjCDEYcEVVAU3PvV/vlc2eL5Sl/zM
+         CrHmErC8Wks44Z0mYJKDqOiP5gOVWjU+AYlDzUq47n50VsF0Oux0UIIkKqvrbi2r7GrY
+         jmVGUUS4lXgdT7hKqd5uLvaiI+gIKwfSeXcmqlD0TNCVDDaX9bSseN8Nk74tqx1J/xQz
+         wXWWIZiNc25UH2dNtIBafy5qBk3v+c2UoZyhQh1oOrVnRjXz50DKCgjbp3rSqqsSpZPI
+         jEEQ==
+X-Gm-Message-State: AOAM5320zQr4fpVBsvKRVXw+wQ3Dy2PqxfA8bfnV2VJ3AHUfxVgW7gZL
+        jFrJSl55kPpcPN9gRQV4Ot+LHbkcM7S7KaqmEZZaLw==
+X-Google-Smtp-Source: ABdhPJz8H7eFv8w9/IGF1if3KqlcAAovm/FyVXAWyxcW0GbUNS5f/71mzOOXdpyo5cA271dh+/Kp0QW7hLfVJCLDuus=
+X-Received: by 2002:a25:d088:0:b0:633:b902:2d29 with SMTP id
+ h130-20020a25d088000000b00633b9022d29mr6003839ybg.626.1648149310377; Thu, 24
+ Mar 2022 12:15:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220324122729.221765-1-nchatrad@amd.com>
+References: <20220310140542.7483-1-arinc.unal@arinc9.com>
+In-Reply-To: <20220310140542.7483-1-arinc.unal@arinc9.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 24 Mar 2022 20:14:58 +0100
+Message-ID: <CACRpkda1dpxzUuExEHeJn4i=Vcfiunj4Fmup+0y5un8peBUPCw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: rt2880: add missing pin groups and functions
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, erkin.bozoglu@xeront.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 05:57:29PM +0530, Naveen Krishna Chatradhi wrote:
-> From: Muralidhara M K <muralimk@amd.com>
-> 
-> amd_cache_northbridges() is exported by amd_nb.c and is used by
-> amd64-agp.c and amd64_edac.c modules.
-> 
-> init_amd_nbs() already calls amd_cache_northbridges() unconditionally,
-> during fs_initcall() phase, which happens before the device_initcall().
+On Thu, Mar 10, 2022 at 3:06 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
+9.com> wrote:
+>
+> Add the missing pin groups:
+> jtag, wdt
+>
+> Add the missing functions:
+> i2s, jtag, pcie refclk, pcie rst, pcm, spdif2, spdif3, wdt refclk, wdt rs=
+t
+>
+> Sort pin groups and functions in alphabetical order. Fix a typo.
+>
+> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 
-No, that's not even trying. I went and did your work for you. Please
-try harder in the future to really really explain why you're doing what
-you're doing so that a reader of your commit message can easily follow
-your logic and not have to do research just to figure out why your
-change is ok.
+Patch applied.
 
----
-From f5e82ad4c749afb63cdebba6729452e516bc1fa9 Mon Sep 17 00:00:00 2001
-From: Muralidhara M K <muralimk@amd.com>
-Date: Thu, 24 Mar 2022 17:57:29 +0530
-Subject: [PATCH] x86/amd_nb: Unexport amd_cache_northbridges()
-
-amd_cache_northbridges() is exported by amd_nb.c and is called by
-amd64-agp.c and amd64_edac.c modules at module_init() time so that NB
-descriptors are properly cached before those drivers can use them.
-
-However, the init_amd_nbs() initcall already does call
-amd_cache_northbridges() unconditionally and thus makes sure the NB
-descriptors are enumerated.
-
-That initcall is a fs_initcall type which is on the 5th group (starting
-from 0) of initcalls that gets run in increasing numerical order by the
-init code.
-
-The module_init() call is turned into an __initcall() in the MODULE=n
-case and those are device-level initcalls, i.e., group 6.
-
-Therefore, the northbridges caching is already finished by the time
-module initialization starts and thus the correct initialization order
-is retained.
-
-Unexport amd_cache_northbridges(), update dependent modules to
-call amd_nb_num() instead. While at it, simplify the checks in
-amd_cache_northbridges().
-
-  [ bp: Heavily massage and *actually* explain why the change is ok. ]
-
-Signed-off-by: Muralidhara M K <muralimk@amd.com>
-Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220324122729.221765-1-nchatrad@amd.com
----
- arch/x86/include/asm/amd_nb.h | 1 -
- arch/x86/kernel/amd_nb.c      | 7 +++----
- drivers/char/agp/amd64-agp.c  | 2 +-
- drivers/edac/amd64_edac.c     | 2 +-
- 4 files changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
-index 00d1a400b7a1..ed0eaf65c437 100644
---- a/arch/x86/include/asm/amd_nb.h
-+++ b/arch/x86/include/asm/amd_nb.h
-@@ -16,7 +16,6 @@ extern const struct amd_nb_bus_dev_range amd_nb_bus_dev_ranges[];
- 
- extern bool early_is_amd_nb(u32 value);
- extern struct resource *amd_get_mmconfig_range(struct resource *res);
--extern int amd_cache_northbridges(void);
- extern void amd_flush_garts(void);
- extern int amd_numa_init(void);
- extern int amd_get_subcaches(int);
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 020c906f7934..190e0f763375 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -188,7 +188,7 @@ int amd_smn_write(u16 node, u32 address, u32 value)
- EXPORT_SYMBOL_GPL(amd_smn_write);
- 
- 
--int amd_cache_northbridges(void)
-+static int amd_cache_northbridges(void)
- {
- 	const struct pci_device_id *misc_ids = amd_nb_misc_ids;
- 	const struct pci_device_id *link_ids = amd_nb_link_ids;
-@@ -210,14 +210,14 @@ int amd_cache_northbridges(void)
- 	}
- 
- 	misc = NULL;
--	while ((misc = next_northbridge(misc, misc_ids)) != NULL)
-+	while ((misc = next_northbridge(misc, misc_ids)))
- 		misc_count++;
- 
- 	if (!misc_count)
- 		return -ENODEV;
- 
- 	root = NULL;
--	while ((root = next_northbridge(root, root_ids)) != NULL)
-+	while ((root = next_northbridge(root, root_ids)))
- 		root_count++;
- 
- 	if (root_count) {
-@@ -290,7 +290,6 @@ int amd_cache_northbridges(void)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(amd_cache_northbridges);
- 
- /*
-  * Ignores subdevice/subvendor but as far as I can figure out
-diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
-index dc78a4fb879e..84a4aa9312cf 100644
---- a/drivers/char/agp/amd64-agp.c
-+++ b/drivers/char/agp/amd64-agp.c
-@@ -327,7 +327,7 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
- {
- 	int i;
- 
--	if (amd_cache_northbridges() < 0)
-+	if (!amd_nb_num())
- 		return -ENODEV;
- 
- 	if (!amd_nb_has_feature(AMD_NB_GART))
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index fba609ada0e6..af2c578f8ab3 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -4269,7 +4269,7 @@ static int __init amd64_edac_init(void)
- 	if (!x86_match_cpu(amd64_cpuids))
- 		return -ENODEV;
- 
--	if (amd_cache_northbridges() < 0)
-+	if (!amd_nb_num())
- 		return -ENODEV;
- 
- 	opstate_init();
--- 
-2.35.1
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Yours,
+Linus Walleij

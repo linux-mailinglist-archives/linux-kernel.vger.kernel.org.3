@@ -2,190 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919D24E7229
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DB74E722C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356003AbiCYL3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S1356184AbiCYL3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238578AbiCYL3X (ORCPT
+        with ESMTP id S1355971AbiCYL3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:29:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64335A5EBC;
-        Fri, 25 Mar 2022 04:27:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1EEFB12FC;
-        Fri, 25 Mar 2022 04:27:48 -0700 (PDT)
-Received: from [10.57.41.19] (unknown [10.57.41.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B7E03F73B;
-        Fri, 25 Mar 2022 04:27:45 -0700 (PDT)
-Message-ID: <cce202fb-5185-aa3e-9e9b-11626192cb49@arm.com>
-Date:   Fri, 25 Mar 2022 11:27:41 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-Content-Language: en-GB
-To:     mbizon@freebox.fr, Linus Torvalds <torvalds@linux-foundation.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>
-Cc:     Netdev <netdev@vger.kernel.org>, Kalle Valo <kvalo@kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        stable <stable@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        Fri, 25 Mar 2022 07:29:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E514813FA7;
+        Fri, 25 Mar 2022 04:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648207689; x=1679743689;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dMgYIsDhZfpaODwuMAjjtTf/jqUDjedYJhO0eLc8fsM=;
+  b=OIlQpdikF/FDLepEpsHKHI0e8B5f6UzLRZYoard5YsMRLvN1eIOcqTyr
+   UBIA6Z0FE5H4o2SznNovocZ/ajHdJd3pVO2k3mjIj6ospGp8ezTt8Ec2O
+   ty5SCmOotnuDqWVUK8DsZB99CBKxaW7Womf/DoAb1tZ/tvFdLibFNrwVk
+   dnHdKSiob485U2qmL4kett/pqEzJxeQYNpXtWQ/uPifstQaUhc28SnR6v
+   SwaqKL0UZQYrXhXW8+3myoZr2MsYSjLZx4TM/r0lnRFTMFFamjxP86AaJ
+   qTIRrW8HdLHUKGdn7+O2903SpO3Z4Ur6FkRZ3GO8n2oXh3S5Olr0Tv79+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238555581"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="238555581"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 04:28:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="693652087"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 25 Mar 2022 04:27:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 25 Mar 2022 13:27:57 +0200
+Date:   Fri, 25 Mar 2022 13:27:57 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1812355.tdWV9SEqCh@natalenko.name>
- <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
- <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
- <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
- <20220324163132.GB26098@lst.de>
- <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com> <871qyr9t4e.fsf@toke.dk>
- <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
- <31434708dcad126a8334c99ee056dcce93e507f1.camel@freebox.fr>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <31434708dcad126a8334c99ee056dcce93e507f1.camel@freebox.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
+ XHCI_SKIP_PHY_INIT
+Message-ID: <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
+References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
+ <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
+ <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-25 10:25, Maxime Bizon wrote:
+On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
+> On 24.3.2022 14.27, Heikki Krogerus wrote:
+> > On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
+> >> Currently the phy init is done from dwc3 and also xhci which makes the
+> >> runtime_usage value 2 for the phy which causes issue during runtime
+> >> suspend. When we run the below command the runtime_status still shows
+> >> active.
+> >> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
+> >>
+> >> dwc3 manages PHY by own DRD driver, so skip the management by
+> >> HCD core by setting this quirk.
+> >>
+> >> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> >> ---
+> >>  drivers/usb/dwc3/host.c | 13 +++++++++++++
+> >>  1 file changed, 13 insertions(+)
+> >>
+> >> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> >> index eda8719..d4fcf06 100644
+> >> --- a/drivers/usb/dwc3/host.c
+> >> +++ b/drivers/usb/dwc3/host.c
+> >> @@ -13,6 +13,12 @@
+> >>  #include <linux/platform_device.h>
+> >>  
+> >>  #include "core.h"
+> >> +#include <linux/usb/xhci-plat.h>
+> >> +#include <linux/usb/xhci-quirks.h>
+> >> +
+> >> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
+> >> +	.quirks = XHCI_SKIP_PHY_INIT,
+> >> +};
+> >>  
+> >>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> >>  					int irq, char *name)
+> >> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+> >>  		}
+> >>  	}
+> >>  
+> >> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+> >> +			sizeof(xhci_plat_dwc3_xhci));
+> >> +	if (ret) {
+> >> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
+> >> +		goto err;
+> >> +	}
+> >> +
+> >>  	ret = platform_device_add(xhci);
+> >>  	if (ret) {
+> >>  		dev_err(dwc->dev, "failed to register xHCI device\n");
+> > 
+> > I think you should just use device property:
+> > 
 > 
-> On Thu, 2022-03-24 at 12:26 -0700, Linus Torvalds wrote:
+> This was suggested in an earlier series, but was rejected as it also added
+> the property as a device tree parameter.
 > 
->>
->> It's actually very natural in that situation to flush the caches from
->> the CPU side again. And so dma_sync_single_for_device() is a fairly
->> reasonable thing to do in that situation.
->>
+> I think adding more device properties can be messy in the long run, especially if we
+> need to add them for many of the existing xhci quirks.
+> We also end up with a mix where some device properties are listed as device tree
+> parameters, and some not.
 > 
-> In the non-cache-coherent scenario, and assuming dma_map() did an
-> initial cache invalidation, you can write this:
+> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
+> allow those drivers to easily set any existing xhci quirk, or other possible optional
+> callbacks.
 > 
-> rx_buffer_complete_1(buf)
-> {
-> 	invalidate_cache(buf, size)
-> 	if (!is_ready(buf))
-> 		return;
-> 	<proceed with receive>
-> }
+> cdns3 driver is already doing this, but it includes the full xhci.h header.
+> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
+> platform data structure.
 > 
-> or
-> 
-> rx_buffer_complete_2(buf)
-> {
-> 	if (!is_ready(buf)) {
-> 		invalidate_cache(buf, size)
-> 		return;
-> 	}
-> 	<proceed with receive>
-> }
-> 
-> The latter is preferred for performance because dma_map() did the
-> initial invalidate.
-> 
-> Of course you could write:
-> 
-> rx_buffer_complete_3(buf)
-> {
-> 	invalidate_cache(buf, size)
-> 	if
-> (!is_ready(buf)) {
-> 		invalidate_cache(buf, size)
-> 		return;
-> 	}
-> 	
-> <proceed with receive>
-> }
-> 
-> 
-> but it's a waste of CPU cycles
-> 
-> So I'd be very cautious assuming sync_for_cpu() and sync_for_device()
-> are both doing invalidation in existing implementation of arch DMA ops,
-> implementers may have taken some liberty around DMA-API to avoid
-> unnecessary cache operation (not to blame them).
+> On the downside we add a couple xhci related header files to include/linux/usb/
+> Let me know if you see any other issues I missed with this approach.
 
-Right, if you have speculatively-prefetching caches, you have to 
-invalidate DMA_FROM_DEVICE in unmap/sync_for_cpu, since a cache may have 
-pulled in a snapshot of partly-written data at any point beforehand. But 
-if you don't, then you can simply invalidate up-front in 
-map/sync_for_device to tie in with the other directions, and trust that 
-it stays that way for the duration.
+The problem here is that these drivers are now coupled together, and
+that should not be taken lightly. We have a dependency hell in our
+hands with a lot of drivers, and the culprit is always platform data.
 
-What muddies the waters a bit is that the opposite combination 
-sync_for_cpu(DMA_TO_DEVICE) really *should* always be a no-op, and I for 
-one have already made the case for eliding that in code elsewhere, but 
-it doesn't necessarily hold for the inverse here, hence why I'm not sure 
-there even is a robust common solution for peeking at a live 
-DMA_FROM_DEVICE buffer.
+Build-in device properties may be messy, but I would still say they
+are less messy than those quirk flags - you got to admit, they are a
+mess. The benefit from build-in properties is in any case the fact
+that they remove the need to couple these drivers together.
 
-Robin.
+You can also use something like naming convention if you are worried
+about confusion between devicetree properties and build-in only
+properties ("build-in:skip-phy-init" or whatever), and of course
+require that each of the build-in only property is documented clearly
+in drivers/usb/host/xhci-plat.c. But this in any case really can not
+be justification for a platform data blob just so you can avoid using
+the properties - honestly, it really should to be the other way
+around.
 
-> For example looking at arch/arm/mm/dma-mapping.c, for DMA_FROM_DEVICE
-> 
-> sync_single_for_device()
->    => __dma_page_cpu_to_dev()
->      => dma_cache_maint_page(op=dmac_map_area)
->        => cpu_cache.dma_map_area()
-> 
-> sync_single_for_cpu()
->    => __dma_page_dev_to_cpu()
->      =>
-> __dma_page_cpu_to_dev(op=dmac_unmap_area)
->        =>
-> cpu_cache.dma_unmap_area()
-> 
-> dma_map_area() always does cache invalidate.
-> 
-> But for a couple of CPU variant, dma_unmap_area() is a noop, so
-> sync_for_cpu() does nothing.
-> 
-> Toke's patch will break ath9k on those platforms (mostly silent
-> breakage, rx corruption leading to bad performance)
-> 
-> 
->> There's a fair number of those dma_sync_single_for_device() things
->> all over. Could we find mis-uses and warn about them some way? It
->> seems to be a very natural thing to do in this context, but bounce
->> buffering does make them very fragile.
-> 
-> At least in network drivers, there are at least two patterns:
-> 
-> 1) The issue at hand, hardware mixing rx_status and data inside the
-> same area. Usually very old hardware, very quick grep in network
-> drivers only revealed slicoss.c. Probably would have gone unnoticed if
-> ath9k hardware wasn't so common.
-> 
-> 
-> 2) The very common "copy break" pattern. If a received packet is
-> smaller than a certain threshold, the driver rx path is changed to do:
-> 
->   sync_for_cpu()
->   alloc_small_skb()
->   memcpy(small_skb, rx_buffer_data)
->   sync_for_device()
-> 
-> Original skb is left in the hardware, this reduces memory wasted.
-> 
-> This pattern is completely valid wrt DMA-API, the buffer is always
-> either owned by CPU or device.
-> 
-> 
+Platform data is in practice always problematic. On top of the driver
+coupling, it creates maintenance burden, code duplication, etc. Please
+don't just accept it lightly. I'm telling you, for hacks like this, the
+build-in device properties is a much much safer bet.
+
+thanks,
+
+-- 
+heikki

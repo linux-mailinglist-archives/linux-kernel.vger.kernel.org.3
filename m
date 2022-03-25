@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D42D4E7D18
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40774E7B9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiCYWXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 18:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S233802AbiCYWal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 18:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233799AbiCYWXU (ORCPT
+        with ESMTP id S233713AbiCYWaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 18:23:20 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568241A7738
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 15:21:45 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id t4so4448999pgc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 15:21:45 -0700 (PDT)
+        Fri, 25 Mar 2022 18:30:39 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612E8197
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 15:29:03 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id bx5so8751937pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 15:29:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=v91blLz8wNwh0dLvtLpa8fJvSTejqJw9Y0LtRUMFiP8=;
-        b=m7ImBBTPlMOEmnAIbp1aHzsL6z987ZMQXMfwRqwyhiCOh3sw0FwnLiCrCf4fCY2Ed7
-         2796sPOaghgEfwmq38VI00BNOSrsMlky4yCGJmOtYTG6KK04oGuSSIUbJTPtKvm3M9hq
-         vrovnQwisek0WNHgVKPUdzhMI44PPDyW2ZS63aAt0fZDbTF1IkMJecntL1OHPQxK2U2Y
-         8/QXE1H8a47ldbU0GA16XanUNlSdhNjdtFexmOuKQhqv78PcJvWZEpojBZS8qRgKkFcd
-         F2XfpLTuD64szeqRvRxyj5xqN1Gfq0dDOaRgcNU6Z4WhIyVOARG2WmDSkfqU+sXFKMD+
-         U4bA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=HiTDgMnXLNm+wa6aVm1WbatEUs7lymZcW/6uyKoS38g=;
+        b=LZmmCOYQ3Cj3SABlu/kZ6RaqovKgmOzax+yNsn6pqzI4fYsxULdbv4n0bqoHanfJNV
+         O3bCCDDYfltWu0OQnPSF4dZichdNB+PTktF0x7j/DOYpt+brOhgLKJuPGw8hQ9ti/M7p
+         sIk4Jts2/QFmmrBObNMZPnS8+ta68zBHv5yd4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v91blLz8wNwh0dLvtLpa8fJvSTejqJw9Y0LtRUMFiP8=;
-        b=e5vQp50L7duRRnOctyWgB/bI6CiHWGt6rvsK2uzKaT+n8FZMiijWhVxhTfo812Sckq
-         p9lwWlsSkaze4NsjaGpKyEheyaDUTXLrDZl9yP6bGgGB2sYTsWXpbJLADYpZDQAC9Ie2
-         2S76rMGHkhhoOA3etYnWLi199P474gar2vcT4TCq/CTtC5qrqJInuvDZyvoT7hKWGI+F
-         1zwpTOYNGT6M870b1YKNSX+69Qypg2OgVfu4qC9fkUKDHf/Y6fEzP/klstKrJ7zxVK7x
-         wtn5R2Bh37xGx4dBwhyqMtyk9+E4lIdgLzXmt13esRjLTS/kAm/KQvVRqmD9G4s3yr/V
-         q9Mw==
-X-Gm-Message-State: AOAM533NN4znXXt7zakdWxQBoSzhjWAfBV5w4OqTdCrnSvSy0qwUOjoZ
-        OuzeBDPVhW5JDoOE/v8txWgNHQ==
-X-Google-Smtp-Source: ABdhPJy1DOkN3z3dEZ5hdjHML6seq7I5W6l0sQPXsizRWJsO4ml9TQYjzZ+NkQkLOpI4lfXWXi6hVA==
-X-Received: by 2002:a62:6403:0:b0:4fa:c74c:83c5 with SMTP id y3-20020a626403000000b004fac74c83c5mr12089783pfb.30.1648246904786;
-        Fri, 25 Mar 2022 15:21:44 -0700 (PDT)
-Received: from localhost.localdomain ([223.233.78.42])
-        by smtp.gmail.com with ESMTPSA id x16-20020a637c10000000b00380b351aaacsm6006490pgc.16.2022.03.25.15.21.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=HiTDgMnXLNm+wa6aVm1WbatEUs7lymZcW/6uyKoS38g=;
+        b=ekrnKhuQ6RGSk2g3N6Ko+dO26bO2dkXSk79/EoW51fNmuJNvegfofw2ukMH/P4bXvL
+         aTf9LIzLIUHpTq4SYIkDFnO9+TSfArkHGKFzrRXSq5Fn9LpDx3aMJWhKWiKrVUlL6ayx
+         cq+ecRqnxba6SOSrqAQEMvaGAD3wnlAyVJzbxtdc5EeeWyEhuLPRqso2qU+sEfNJ9iif
+         puZr9SvoyvGqlbFnB5gd9G/3VV021qHk7dLhwXbeBdvGFfOrCwTUINo3Y7lqICMOs9N0
+         7AX7WBkmk9voCzyzYFXR4yGk8jtA8ynh8gBfFdQtj2C9zpraPDeGWqnVLixb6ZKj8Sfv
+         /Bmg==
+X-Gm-Message-State: AOAM530cMygDM5i9kubiFu3b99XEwmWOkZtGgHV8T6GOH3kVej1Jqnm5
+        3sXiiegbFNnPb0IyURDfR35GSamhCSUkYg==
+X-Google-Smtp-Source: ABdhPJyvPb+7hYespPatUYa7oqa4mkQ+ksPB+KW80CHaPKDl4fqCgd4Qmwy2USSOyTce1jqwIU3VEw==
+X-Received: by 2002:a17:902:d5c3:b0:154:c472:de80 with SMTP id g3-20020a170902d5c300b00154c472de80mr12236634plh.87.1648247342758;
+        Fri, 25 Mar 2022 15:29:02 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x38-20020a056a0018a600b004fafd05ac3fsm5269993pfh.37.2022.03.25.15.29.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 15:21:44 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-phy@lists.infradead.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vkoul@kernel.org, bjorn.andersson@linaro.org
-Subject: [PATCH v4 2/2] phy: qcom-qmp: Add SM8150 PCIe QMP PHYs
-Date:   Sat, 26 Mar 2022 03:51:30 +0530
-Message-Id: <20220325222130.1783242-3-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325222130.1783242-1-bhupesh.sharma@linaro.org>
-References: <20220325222130.1783242-1-bhupesh.sharma@linaro.org>
+        Fri, 25 Mar 2022 15:29:02 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 15:29:01 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [GIT PULL] array-bounds updates for v5.18-rc1
+Message-ID: <202203251511.4F76EAB@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,134 +68,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM8150 has multiple (different) PHY versions:
-QMP GEN3x1 PHY - 1 lane
-QMP GEN3x2 PHY - 2 lanes
+Hi Linus,
 
-Add support for these with relevant init sequence.
+Please pull these array-bounds updates for v5.18-rc1. Like the
+FORTIFY_SOURCE tree, I was waiting for all the various other trees with
+fixes to get merged. It looks like scsi was the last major tree I was
+waiting on. This enables -Warray-bounds and -Wzero-length-bounds, now
+that the many bug fixes have landed all over the place in the kernel,
+and in GCC itself[1].
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp.c | 90 +++++++++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+Earlier build testing of this series merged against your tree didn't show
+any new warnings, but as this option has been a bit of a whack-a-mole
+over the last development cycle in -next, it's possible new cases
+have appeared. We will remain vigilant. :) A couple fixes[2] for known
+corner-case issues currently live in my "pending-fixes" tree which I'm
+expecting to send next week if other maintainers still haven't picked
+them up.
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index b144ae1f729a..8e928b9619b6 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -3294,6 +3294,11 @@ static const char * const sdm845_pciephy_clk_l[] = {
- 	"aux", "cfg_ahb", "ref", "refgen",
- };
- 
-+/* the pcie phy on sm8150 doesn't have a ref clock */
-+static const char * const sm8150_pciephy_clk_l[] = {
-+	"aux", "cfg_ahb", "refgen",
-+};
-+
- static const char * const qmp_v4_phy_clk_l[] = {
- 	"aux", "ref_clk_src", "ref", "com_aux",
- };
-@@ -3583,6 +3588,85 @@ static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
- 	.pwrdn_delay_max	= 1005,		/* us */
- };
- 
-+static const struct qmp_phy_cfg sm8150_qmp_gen3x1_pciephy_cfg = {
-+	.type = PHY_TYPE_PCIE,
-+	.nlanes = 1,
-+
-+	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
-+	.serdes_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_serdes_tbl),
-+	.serdes_tbl_sec		= sm8250_qmp_gen3x1_pcie_serdes_tbl,
-+	.serdes_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_serdes_tbl),
-+	.tx_tbl			= sm8250_qmp_pcie_tx_tbl,
-+	.tx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_tx_tbl),
-+	.rx_tbl			= sm8250_qmp_pcie_rx_tbl,
-+	.rx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_rx_tbl),
-+	.rx_tbl_sec		= sm8250_qmp_gen3x1_pcie_rx_tbl,
-+	.rx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_rx_tbl),
-+	.pcs_tbl		= sm8250_qmp_pcie_pcs_tbl,
-+	.pcs_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_pcs_tbl),
-+	.pcs_tbl_sec		= sm8250_qmp_gen3x1_pcie_pcs_tbl,
-+	.pcs_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_pcs_tbl),
-+	.pcs_misc_tbl		= sm8250_qmp_pcie_pcs_misc_tbl,
-+	.pcs_misc_tbl_num	= ARRAY_SIZE(sm8250_qmp_pcie_pcs_misc_tbl),
-+	.pcs_misc_tbl_sec		= sm8250_qmp_gen3x1_pcie_pcs_misc_tbl,
-+	.pcs_misc_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_pcs_misc_tbl),
-+	.clk_list		= sm8150_pciephy_clk_l,
-+	.num_clks		= ARRAY_SIZE(sm8150_pciephy_clk_l),
-+	.reset_list		= sdm845_pciephy_reset_l,
-+	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= sm8250_pcie_regs_layout,
-+
-+	.start_ctrl		= PCS_START | SERDES_START,
-+	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-+	.phy_status		= PHYSTATUS,
-+
-+	.has_pwrdn_delay	= true,
-+	.pwrdn_delay_min	= 995,		/* us */
-+	.pwrdn_delay_max	= 1005,		/* us */
-+};
-+
-+static const struct qmp_phy_cfg sm8150_qmp_gen3x2_pciephy_cfg = {
-+	.type = PHY_TYPE_PCIE,
-+	.nlanes = 2,
-+
-+	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
-+	.serdes_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_serdes_tbl),
-+	.tx_tbl			= sm8250_qmp_pcie_tx_tbl,
-+	.tx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_tx_tbl),
-+	.tx_tbl_sec		= sm8250_qmp_gen3x2_pcie_tx_tbl,
-+	.tx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_tx_tbl),
-+	.rx_tbl			= sm8250_qmp_pcie_rx_tbl,
-+	.rx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_rx_tbl),
-+	.rx_tbl_sec		= sm8250_qmp_gen3x2_pcie_rx_tbl,
-+	.rx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_rx_tbl),
-+	.pcs_tbl		= sm8250_qmp_pcie_pcs_tbl,
-+	.pcs_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_pcs_tbl),
-+	.pcs_tbl_sec		= sm8250_qmp_gen3x2_pcie_pcs_tbl,
-+	.pcs_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_pcs_tbl),
-+	.pcs_misc_tbl		= sm8250_qmp_pcie_pcs_misc_tbl,
-+	.pcs_misc_tbl_num	= ARRAY_SIZE(sm8250_qmp_pcie_pcs_misc_tbl),
-+	.pcs_misc_tbl_sec		= sm8250_qmp_gen3x2_pcie_pcs_misc_tbl,
-+	.pcs_misc_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_pcs_misc_tbl),
-+	.clk_list		= sm8150_pciephy_clk_l,
-+	.num_clks		= ARRAY_SIZE(sm8150_pciephy_clk_l),
-+	.reset_list		= sdm845_pciephy_reset_l,
-+	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= sm8250_pcie_regs_layout,
-+
-+	.start_ctrl		= PCS_START | SERDES_START,
-+	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-+	.phy_status		= PHYSTATUS,
-+
-+	.is_dual_lane_phy	= true,
-+	.has_pwrdn_delay	= true,
-+	.pwrdn_delay_min	= 995,		/* us */
-+	.pwrdn_delay_max	= 1005,		/* us */
-+};
-+
- static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
- 	.type = PHY_TYPE_PCIE,
- 	.nlanes = 1,
-@@ -6007,6 +6091,12 @@ static const struct of_device_id qcom_qmp_phy_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,sm6115-qmp-ufs-phy",
- 		.data = &sm6115_ufsphy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8150-qmp-gen3x1-pcie-phy",
-+		.data = &sm8150_qmp_gen3x1_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8150-qmp-gen3x2-pcie-phy",
-+		.data = &sm8150_qmp_gen3x2_pciephy_cfg,
- 	}, {
- 		.compatible = "qcom,sm8150-qmp-ufs-phy",
- 		.data = &sm8150_ufsphy_cfg,
+I'm also expecting we can enable -Wstringop-overflow next cycle, as
+there are only a few stragglers[3], but it might even be possible for
+this release.
+
+Thanks!
+
+-Kees
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/pending-fixes&id=2d253138910eec553fc706379914243d71de9b85
+[3] https://github.com/KSPP/linux/issues/181
+
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/array-bounds-v5.18-rc1
+
+for you to fetch changes up to 00a4f836eb369723b148e3f250c850a028778832:
+
+  Makefile: Enable -Wzero-length-bounds (2022-02-13 16:49:40 -0800)
+
+----------------------------------------------------------------
+array-bounds updates for v5.18-rc1
+
+- Enable -Warray-bounds globally
+
+- Enable -Wzero-length-bounds globally
+
+----------------------------------------------------------------
+Kees Cook (2):
+      Makefile: Enable -Warray-bounds
+      Makefile: Enable -Wzero-length-bounds
+
+ Makefile | 2 --
+ 1 file changed, 2 deletions(-)
+
 -- 
-2.35.1
-
+Kees Cook

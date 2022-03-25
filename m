@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EB04E6BF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 02:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 665A34E6BF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 02:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357260AbiCYBYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 21:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S1357265AbiCYB2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 21:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiCYBYG (ORCPT
+        with ESMTP id S229578AbiCYB2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 21:24:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3190DBD8A5;
-        Thu, 24 Mar 2022 18:22:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5724B82726;
-        Fri, 25 Mar 2022 01:22:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 899FBC340EC;
-        Fri, 25 Mar 2022 01:22:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648171351;
-        bh=wsbD88OkQk6RA2UPPUVYj29mlvHLRNYOv+tOFG2E2wc=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=aXsjkxgAT9q8AR32d84qZxnvZOw6VPTp+57E0WruO1F8ae/1dPJQtfOiMY0KsvHd4
-         RGRTOfxVGRvPNBevAMYGT/UgHx5Chj0HtXil0Kt2MDlhwgrpXPwr+48bqmQEPEghDp
-         TLok6ARWoss753YbyWeIyjkyXVe5VDTXz2ykOOg1QoQR+8FLVn2fMxMxFmcyWuI6QP
-         RmAiB7/HNSWDWUexZAJcrph6jaeeWbhf+4gULwTXWjhz+5h4QtYc+/QKjZ4/J1j9U3
-         EnizVD5Prha2R5AL97ItmsjDnLhF2t1H+OT6rEGFAb8qmORbJZe45ZoEdz974cT73s
-         hi+PImrYOzTfQ==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <Yj0XTYgoMScoiUHP@Ansuel-xps.localdomain>
-References: <20220321231548.14276-1-ansuelsmth@gmail.com> <20220321231548.14276-4-ansuelsmth@gmail.com> <20220325011037.03173C340EC@smtp.kernel.org> <Yj0XTYgoMScoiUHP@Ansuel-xps.localdomain>
-Subject: Re: [PATCH v6 03/18] clk: qcom: gcc-ipq806x: add PXO_SRC in clk table
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Date:   Thu, 24 Mar 2022 18:22:29 -0700
-User-Agent: alot/0.10
-Message-Id: <20220325012231.899FBC340EC@smtp.kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 21:28:02 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7B338B5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 18:26:29 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso6842053pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 18:26:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=kDqEP6aDD5Du5ulkc6a/EOpkikoDcUeEzxuVegbRcCk=;
+        b=QprjuaUFa5wDLToDY98ugPszdIAFMohzq9ShkuRFlIu/NHlmG3ykb/5ZrfInVVboqv
+         UO6a9yDnyCN1q0V8N18QkINnKC6LYaycevHjY32d6jWY0rQNVfGs4OnIakKIHS7pwvKU
+         h5UnOfvt5FVDBqEmLb1Fz5FBQPYd0Bijm5LJfMA5ZmGAutZrTCyV9I6oiPDuHVgBPJYO
+         6wT0VXghRFSoAUAbxAKRN/OLATyhml+becMUssY9fsvRHyX62FkM9eCCEP+JbeQ7EF5E
+         zbpAd/qNRudrDmrP/uuI5YetXGjLjNDmTLXQ6TPulyCs03N+5PnVN3/XefryoY8V0MOj
+         /eew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kDqEP6aDD5Du5ulkc6a/EOpkikoDcUeEzxuVegbRcCk=;
+        b=NFZP4YduLVll/hR2nf5FibC+qVw/VycZKxsMZyP9beZINzewtK5bTFJi8nr04JdC+W
+         PBkdOV6O9zIavZ81iEEL08QfYes2zJfW4AAswQHGBqjxuNbqzpQibL0XFRUhJkPCHVNt
+         EaLQmUfqLZpT0e+P0QUhXb0x2pz7cJlUPcTXOKfMWnHYvRs4RxQ00bYvL6SvVkr4k21i
+         f9ABEx161tm/lOd5dElTuUkyKkEftY9A9w9YGcS3CKKOS8+JP6gKS/fQdgyd6pUgwzQT
+         e1TCYn4mt72CPQM6wIECz6WjQEWE39xE+fHoPn/dW+g/+fh+AOXRWTP6sX5dnQEp3mWP
+         HrsQ==
+X-Gm-Message-State: AOAM530adwdJz5OZ/4bRpgkwRaY9fbgrtDUjFl+U9WwnXlwKIhCWwa5c
+        9m5CtadyAYqp6sGysRHQ4aE=
+X-Google-Smtp-Source: ABdhPJwJLaq8/68FSVdqmJO7a0AlbtMyAZLZYwIaDMGIeklUM4fs5J/4FsXM7DGaENKF0r1QQlXDrA==
+X-Received: by 2002:a17:902:9008:b0:14f:b1f9:5271 with SMTP id a8-20020a170902900800b0014fb1f95271mr8768102plp.86.1648171589319;
+        Thu, 24 Mar 2022 18:26:29 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:56a:d674:140:d261:4ff3:2835])
+        by smtp.gmail.com with ESMTPSA id oj16-20020a17090b4d9000b001c709bca712sm11729204pjb.29.2022.03.24.18.26.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 24 Mar 2022 18:26:28 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, lucas_tsai@richtek.com,
+        linux-kernel@vger.kernel.org, ChiYuan Huang <cy_huang@richtek.com>
+Subject: [PATCH 0/2] Fix rt4831 regulator active_discharge and bypass
+Date:   Fri, 25 Mar 2022 09:26:15 +0800
+Message-Id: <1648171577-9663-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ansuel Smith (2022-03-24 18:13:49)
-> On Thu, Mar 24, 2022 at 06:10:35PM -0700, Stephen Boyd wrote:
-> > Quoting Ansuel Smith (2022-03-21 16:15:33)
-> > > PXO_SRC is currently defined in the gcc include and referenced in the
-> > > ipq8064 DTSI. Correctly provide a clk after gcc probe to fix kernel
-> > > panic if a driver starts to actually use it.
-> > >=20
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > ---
-> >=20
-> > What is this patch about? clk providers shouldn't be calling clk_get().
-> >
->=20
-> If pxo is passed as a clock in dts and defined as a fixed clock, what
-> should be used?=20
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-clk_parent_data
+This patch series is to fix rt4831 regulator set/get active_discharge and bypass
+
+ChiYuan Huang (2):
+  regulator: rt4831: Add bypass mask to fix set_bypass API work
+  regulator: rt4831: Add active_discharge_on to fix discharge API
+
+ drivers/regulator/rt4831-regulator.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+-- 
+2.7.4
+

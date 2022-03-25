@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3564E7625
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE984E76BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359761AbiCYPLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S1376382AbiCYPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359585AbiCYPHN (ORCPT
+        with ESMTP id S1376720AbiCYPNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:07:13 -0400
+        Fri, 25 Mar 2022 11:13:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85B9D9E9D;
-        Fri, 25 Mar 2022 08:05:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DADD76D0;
+        Fri, 25 Mar 2022 08:10:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6463861BFA;
-        Fri, 25 Mar 2022 15:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FFABC340F1;
-        Fri, 25 Mar 2022 15:05:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DC261BE9;
+        Fri, 25 Mar 2022 15:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EB1C340E9;
+        Fri, 25 Mar 2022 15:10:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220736;
-        bh=0t6rOqqnZ4dHupbcVnNiXxZOIEusOi5qLvPWJONBqH8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V8p+VYpnpS1sBTStAhcyr05bzqJhLUvRw1p64WHygUdjbt9ZMRWEnNI1VlMVBhdbi
-         mmZ/jUxvboIvVn3d+UtsK7Oj8pdgHYFWitABE9x/6GOuRDZEegQ+5Gyzt6jJprxf+V
-         Vc0aPZy+QhCIhMmhDqJbrotib7futl5CGYzxF9PA=
+        s=korg; t=1648221010;
+        bh=NQympMoho1wP3hwFPYJCoWWlIMiOKDZjgGCRxLmA26U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Za3yOaubE4ZRUScwvNIgaQHZYxNDCqlinjkvu3eNUCbeCwWs0XPhNcZf4NtCMJ1Aq
+         3ZV3nbhL48X6IBd+XY6MNd+Q58K3VoTDE+nflEc9O2vCQVjOrG4LG7CsiTEjTaW0mE
+         jqvqbt09/zuZ0bME8nxjXYAnEMK6RbIk5bsAzD7s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 10/17] ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.10 00/38] 5.10.109-rc1 review
 Date:   Fri, 25 Mar 2022 16:04:44 +0100
-Message-Id: <20220325150417.063328337@linuxfoundation.org>
+Message-Id: <20220325150419.757836392@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
-References: <20220325150416.756136126@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.109-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.10.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.10.109-rc1
+X-KernelTest-Deadline: 2022-03-27T15:04+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,56 +63,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
+This is the start of the stable review cycle for the 5.10.109 release.
+There are 38 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit 17aaf0193392cb3451bf0ac75ba396ec4cbded6e upstream.
+Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+Anything received after that time might be too late.
 
-Tests 72 and 78 for ALSA in kselftest fail due to reading
-inconsistent values from some devices on a VirtualBox
-Virtual Machine using the snd_intel8x0 driver for the AC'97
-Audio Controller device.
-Taking for example test number 72, this is what the test reports:
-"Surround Playback Volume.0 expected 1 but read 0, is_volatile 0"
-"Surround Playback Volume.1 expected 0 but read 1, is_volatile 0"
-These errors repeat for each value from 0 to 31.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.109-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+and the diffstat can be found below.
 
-Taking a look at these error messages it is possible to notice
-that the written values are read back swapped.
-When the write is performed, these values are initially stored in
-an array used to sanity-check them and write them in the pcmreg
-array. To write them, the two one-byte values are packed together
-in a two-byte variable through bitwise operations: the first
-value is shifted left by one byte and the second value is stored in the
-right byte through a bitwise OR. When reading the values back,
-right shifts are performed to retrieve the previously stored
-bytes. These shifts are executed in the wrong order, thus
-reporting the values swapped as shown above.
+thanks,
 
-This patch fixes this mistake by reversing the read
-operations' order.
+greg k-h
 
-Signed-off-by: Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220322200653.15862-1-guiduzzi.giacomo@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- sound/pci/ac97/ac97_codec.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-------------
+Pseudo-Shortlog of commits:
 
---- a/sound/pci/ac97/ac97_codec.c
-+++ b/sound/pci/ac97/ac97_codec.c
-@@ -958,8 +958,8 @@ static int snd_ac97_ad18xx_pcm_get_volum
- 	int codec = kcontrol->private_value & 3;
- 	
- 	mutex_lock(&ac97->page_mutex);
--	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
--	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
-+	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
-+	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
- 	mutex_unlock(&ac97->page_mutex);
- 	return 0;
- }
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.10.109-rc1
+
+Arnd Bergmann <arnd@arndb.de>
+    nds32: fix access_ok() checks in get/put_user
+
+Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+    wcn36xx: Differentiate wcn3660 from wcn3620
+
+James Bottomley <James.Bottomley@HansenPartnership.com>
+    tpm: use try_get_ops() in tpm-space.c
+
+Linus Lüssing <ll@simonwunderlich.de>
+    mac80211: fix potential double free on mesh join
+
+Paul E. McKenney <paulmck@kernel.org>
+    rcu: Don't deboost before reporting expedited quiescent state
+
+Brian Norris <briannorris@chromium.org>
+    Revert "ath: add support for special 0x0 regulatory domain"
+
+Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+    crypto: qat - disable registration of algorithms
+
+Werner Sembach <wse@tuxedocomputers.com>
+    ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
+
+Maximilian Luz <luzmaximilian@gmail.com>
+    ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
+
+Mark Cilissen <mark@yotsuba.nl>
+    ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nf_tables: initialize registers in nft_do_chain()
+
+Stephane Graber <stgraber@ubuntu.com>
+    drivers: net: xgene: Fix regression in CRC stripping
+
+Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
+    ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
+
+Jonathan Teh <jonathan.teh@outlook.com>
+    ALSA: cmipci: Restore aux vol on suspend/resume
+
+Lars-Peter Clausen <lars@metafoo.de>
+    ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Add stream lock during PCM reset ioctl operations
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent prealloc proc writes
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent read/write and buffer changes
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent hw_params and hw_free calls
+
+Jason Zheng <jasonzheng2004@gmail.com>
+    ALSA: hda/realtek: Add quirk for ASUS GA402
+
+huangwenhui <huangwenhuia@uniontech.com>
+    ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+
+Tim Crawford <tcrawford@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo NP50PNJ
+
+Tim Crawford <tcrawford@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo NP70PNJ
+
+Reza Jahanbakhshi <reza.jahanbakhshi@gmail.com>
+    ALSA: usb-audio: add mapping for new Corsair Virtuoso SE
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: oss: Fix PCM OSS buffer allocation overflow
+
+Takashi Iwai <tiwai@suse.de>
+    ASoC: sti: Fix deadlock via snd_pcm_stop_xrun() call
+
+Halil Pasic <pasic@linux.ibm.com>
+    swiotlb: rework "fix info leak with DMA_FROM_DEVICE"
+
+Halil Pasic <pasic@linux.ibm.com>
+    swiotlb: fix info leak with DMA_FROM_DEVICE
+
+Eric Dumazet <edumazet@google.com>
+    llc: fix netdevice reference leaks in llc_ui_bind()
+
+Oliver Graute <oliver.graute@kococonnector.com>
+    staging: fbtft: fb_st7789v: reset display before initialization
+
+Tadeusz Struk <tstruk@gmail.com>
+    tpm: Fix error handling in async work
+
+Michal Koutný <mkoutny@suse.com>
+    cgroup-v1: Correct privileges check in release_agent writes
+
+Tejun Heo <tj@kernel.org>
+    cgroup: Use open-time cgroup namespace for process migration perm checks
+
+Tejun Heo <tj@kernel.org>
+    cgroup: Allocate cgroup_file_ctx for kernfs_open_file->priv
+
+Chen Li <chenli@uniontech.com>
+    exfat: avoid incorrectly releasing for root inode
+
+Tadeusz Struk <tadeusz.struk@linaro.org>
+    net: ipv6: fix skb_over_panic in __ip6_append_data
+
+Jordy Zomer <jordy@pwning.systems>
+    nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                         |  4 +-
+ arch/nds32/include/asm/uaccess.h                 | 22 ++++--
+ arch/x86/kernel/acpi/boot.c                      | 24 ++++++
+ drivers/acpi/battery.c                           | 12 +++
+ drivers/acpi/video_detect.c                      | 75 ++++++++++++++++++
+ drivers/char/tpm/tpm-dev-common.c                |  8 +-
+ drivers/char/tpm/tpm2-space.c                    |  8 +-
+ drivers/crypto/qat/qat_common/qat_crypto.c       |  8 ++
+ drivers/net/ethernet/apm/xgene/xgene_enet_main.c | 12 +--
+ drivers/net/wireless/ath/regd.c                  | 10 +--
+ drivers/net/wireless/ath/wcn36xx/main.c          |  3 +
+ drivers/net/wireless/ath/wcn36xx/wcn36xx.h       |  1 +
+ drivers/nfc/st21nfca/se.c                        | 10 +++
+ drivers/staging/fbtft/fb_st7789v.c               |  2 +
+ fs/exfat/super.c                                 |  2 +-
+ include/sound/pcm.h                              |  1 +
+ kernel/cgroup/cgroup-internal.h                  | 19 +++++
+ kernel/cgroup/cgroup-v1.c                        | 32 ++++----
+ kernel/cgroup/cgroup.c                           | 84 +++++++++++++-------
+ kernel/dma/swiotlb.c                             | 24 ++++--
+ kernel/rcu/tree_plugin.h                         |  9 ++-
+ net/ipv6/ip6_output.c                            |  4 +-
+ net/llc/af_llc.c                                 |  8 ++
+ net/mac80211/cfg.c                               |  3 -
+ net/netfilter/nf_tables_core.c                   |  2 +-
+ sound/core/oss/pcm_oss.c                         | 12 ++-
+ sound/core/oss/pcm_plugin.c                      |  5 +-
+ sound/core/pcm.c                                 |  2 +
+ sound/core/pcm_lib.c                             |  4 +
+ sound/core/pcm_memory.c                          | 11 ++-
+ sound/core/pcm_native.c                          | 97 +++++++++++++++---------
+ sound/pci/ac97/ac97_codec.c                      |  4 +-
+ sound/pci/cmipci.c                               |  3 +-
+ sound/pci/hda/patch_realtek.c                    |  4 +
+ sound/soc/sti/uniperif_player.c                  |  6 +-
+ sound/soc/sti/uniperif_reader.c                  |  2 +-
+ sound/usb/mixer_maps.c                           | 10 +++
+ sound/usb/mixer_quirks.c                         |  7 +-
+ 38 files changed, 414 insertions(+), 140 deletions(-)
 
 

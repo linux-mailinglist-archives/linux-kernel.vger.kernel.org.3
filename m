@@ -2,211 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E984E73A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C983A4E73AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354117AbiCYMma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S1359160AbiCYMpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243507AbiCYMm2 (ORCPT
+        with ESMTP id S243507AbiCYMo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:42:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D1E3616A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:40:54 -0700 (PDT)
+        Fri, 25 Mar 2022 08:44:58 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552AA4ECF1;
+        Fri, 25 Mar 2022 05:43:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648212054; x=1679748054;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o2LFS03sDofrW+G9hmi3C61RnQvETQcPgiy633mrl5Y=;
-  b=XBP0VhFIhISsXV/4eF8KVaL26sErm4em/h0TZQk3vvewU1e0lut5r6br
-   dip6QeOvrpxJGNPlyoshQxWpit4QQXb0isBixPuXCLIeA5Z86Jx+LFhWf
-   GXRVc16Xftadscwp0yf+ukT5JbZKePrlcwtn1YZAZDWzYfos5MQgUqdvH
-   WL14IbTFZCkpgCWAKVPqo6EWcpVWF8MncKYradAy3qkmifVibSBXQbrAk
-   OPkj1fDI0zab0gPwEP7829GrKR9o4gmhnF/36MByb6X3628/tvBlx7QJG
-   x7fnbOhi9rkVVwOLoIECfda4+do4VIGH3e0H89ghSxaHC4saK4w+AnIkT
+  t=1648212203; x=1679748203;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=VaeaGhex6shcMYfaLH/E7RKSbb3O3jheJPitTeTJ9iE=;
+  b=XMpddZ8GW4kVapx/a64twviRsgoYIa4m7B0JGFLPxmZ311MByKYr5rkB
+   fIttvGr/fh9RJUy+IqfmN0yDoZbYqb54plD+79LNqBOYZQb8GuCQdwxo7
+   DMWtBTHdsGYcTIusAAZw42c3tEQa/t8U3DTDrDJpFPo7uWh9hy/Rzjfwj
+   6Mla00bbkNJJHOga9j1aeiWiury5egOkiGkmnhbzgkLL7JaClXcJGya5M
+   IWwcj9Bi2sRR4vhoSKtPl4KXMpwPqDvhpMSNlMfc/dGFrslf92bmwjNfU
+   KMmfKQUdWyBlUf+b42neVJCTGSpe+5ujUEbS8pSTp0hCIxxk2obMWfNWs
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="283494969"
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238565533"
 X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="283494969"
+   d="scan'208";a="238565533"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 05:40:53 -0700
-X-ExtLoop1: 1
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 05:43:09 -0700
 X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="718197765"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 25 Mar 2022 05:40:51 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXjFK-000MBc-Rk; Fri, 25 Mar 2022 12:40:50 +0000
-Date:   Fri, 25 Mar 2022 20:40:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: arch/mips/crypto/crc32-mips.c:40:1: error: expected identifier or '('
-Message-ID: <202203252015.7q4sT1o2-lkp@intel.com>
+   d="scan'208";a="718198523"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 05:43:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nXjGy-006OiI-8k;
+        Fri, 25 Mar 2022 14:42:32 +0200
+Date:   Fri, 25 Mar 2022 14:42:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Christian =?iso-8859-1?Q?L=F6hle?= <CLoehle@hyperstone.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCHv5] mmc: block: Check for errors after write on SPI
+Message-ID: <Yj24uOLsosD8evp3@smile.fi.intel.com>
+References: <76f6f5d2b35543bab3dfe438f268609c@hyperstone.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <76f6f5d2b35543bab3dfe438f268609c@hyperstone.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Thu, Mar 24, 2022 at 02:18:41PM +0000, Christian Löhle wrote:
+> Introduce a SEND_STATUS check for writes through SPI to not mark
+> an unsuccessful write as successful.
+> 
+> Since SPI SD/MMC does not have states, after a write, the card will
+> just hold the line LOW until it is ready again. The driver marks the
+> write therefore as completed as soon as it reads something other than
+> all zeroes.
+> The driver does not distinguish from a card no longer signalling busy
+> and it being disconnected (and the line being pulled-up by the host).
+> This lead to writes being marked as successful when disconnecting
+> a busy card.
+> Now the card is ensured to be still connected by an additional CMD13,
+> just like non-SPI is ensured to go back to TRAN state.
+> 
+> While at it and since we already poll for the post-write status anyway,
+> we might as well check for SPIs error bits (any of them).
+> 
+> The disconnecting card problem is reproducable for me after continuous
+> write activity and randomly disconnecting, around every 20-50 tries
+> on SPI DS for some card.
 
-FYI, the error/warning still remains.
+LGTM, FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   34af78c4e616c359ed428d79fe4758a35d2c5473
-commit: 67512a8cf5a730938fdb1e48de33edfef6015e03 MIPS: Avoid macro redefinitions
-date:   6 months ago
-config: mips-randconfig-r001-20220324 (https://download.01.org/0day-ci/archive/20220325/202203252015.7q4sT1o2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=67512a8cf5a730938fdb1e48de33edfef6015e03
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 67512a8cf5a730938fdb1e48de33edfef6015e03
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/mips/crypto/crc32-mips.c:40:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32b,  0, 0);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:41:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32h,  1, 0);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:42:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32w,  2, 0);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:43:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32d,  3, 0);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:44:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32cb, 0, 1);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:45:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32ch, 1, 1);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:46:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32cw, 2, 1);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   arch/mips/crypto/crc32-mips.c:47:1: error: expected identifier or '('
-   _ASM_MACRO_CRC32(crc32cd, 3, 1);
-   ^
-   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
-   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
-                                                                             ^
-   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
-   _ASM_MACRO_3R'
-                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
-                   ^
-   8 errors generated.
-
-
-vim +40 arch/mips/crypto/crc32-mips.c
-
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  29  
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  30  #ifndef TOOLCHAIN_SUPPORTS_CRC
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  31  #define _ASM_MACRO_CRC32(OP, SZ, TYPE)					  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  32  _ASM_MACRO_3R(OP, rt, rs, rt2,						  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  33  	".ifnc	\\rt, \\rt2\n\t"					  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  34  	".error	\"invalid operands \\\"" #OP " \\rt,\\rs,\\rt2\\\"\"\n\t" \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  35  	".endif\n\t"							  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  36  	_ASM_INSN_IF_MIPS(0x7c00000f | (__rt << 16) | (__rs << 21) |	  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  37  			  ((SZ) <<  6) | ((TYPE) << 8))			  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  38  	_ASM_INSN32_IF_MM(0x00000030 | (__rs << 16) | (__rt << 21) |	  \
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  39  			  ((SZ) << 14) | ((TYPE) << 3)))
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09 @40  _ASM_MACRO_CRC32(crc32b,  0, 0);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  41  _ASM_MACRO_CRC32(crc32h,  1, 0);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  42  _ASM_MACRO_CRC32(crc32w,  2, 0);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  43  _ASM_MACRO_CRC32(crc32d,  3, 0);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  44  _ASM_MACRO_CRC32(crc32cb, 0, 1);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  45  _ASM_MACRO_CRC32(crc32ch, 1, 1);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  46  _ASM_MACRO_CRC32(crc32cw, 2, 1);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  47  _ASM_MACRO_CRC32(crc32cd, 3, 1);
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  48  #define _ASM_SET_CRC ""
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  49  #else /* !TOOLCHAIN_SUPPORTS_CRC */
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  50  #define _ASM_SET_CRC ".set\tcrc\n\t"
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  51  #endif
-4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  52  
-
-:::::: The code at line 40 was first introduced by commit
-:::::: 4a5dc51e93e80463010ab4d8d00fc9cb6bc936fa MIPS: crypto: Add crc32 and crc32c hw accelerated module
-
-:::::: TO: Marcin Nowakowski <marcin.nowakowski@mips.com>
-:::::: CC: James Hogan <jhogan@kernel.org>
+> Fixes: 7213d175e3b6f ("MMC/SD card driver learns SPI")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> ---
+> v2:
+>   - Reorder err and status check for err to take precedence and look cleaner
+> v3:
+>   - Move the logic into its own function
+> v4:
+>   - Move block layer handling out of the spi-specific function
+> v5:
+>   - reorder err and status check
+> 
+>  drivers/mmc/core/block.c | 34 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 33 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index 4e67c1403cc9..be2078684417 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -1880,6 +1880,31 @@ static inline bool mmc_blk_rq_error(struct mmc_blk_request *brq)
+>  	       brq->data.error || brq->cmd.resp[0] & CMD_ERRORS;
+>  }
+> 
+> +static int mmc_spi_err_check(struct mmc_card *card)
+> +{
+> +	u32 status = 0;
+> +	int err;
+> +
+> +	/*
+> +	 * SPI does not have a TRAN state we have to wait on, instead the
+> +	 * card is ready again when it no longer holds the line LOW.
+> +	 * We still have to ensure two things here before we know the write
+> +	 * was successful:
+> +	 * 1. The card has not disconnected during busy and we actually read our
+> +	 * own pull-up, thinking it was still connected, so ensure it
+> +	 * still responds.
+> +	 * 2. Check for any error bits, in particular R1_SPI_IDLE to catch a
+> +	 * just reconnected card after being disconnected during busy.
+> +	 */
+> +	err = __mmc_send_status(card, &status, 0);
+> +	if (err)
+> +		return err;
+> +	/* All R1 and R2 bits of SPI are errors in our case */
+> +	if (status)
+> +		return -EIO;
+> +	return 0;
+> +}
+> +
+>  static int mmc_blk_busy_cb(void *cb_data, bool *busy)
+>  {
+>  	struct mmc_blk_busy_data *data = cb_data;
+> @@ -1903,9 +1928,16 @@ static int mmc_blk_card_busy(struct mmc_card *card, struct request *req)
+>  	struct mmc_blk_busy_data cb_data;
+>  	int err;
+> 
+> -	if (mmc_host_is_spi(card->host) || rq_data_dir(req) == READ)
+> +	if (rq_data_dir(req) == READ)
+>  		return 0;
+> 
+> +	if (mmc_host_is_spi(card->host)) {
+> +		err = mmc_spi_err_check(card);
+> +		if (err)
+> +			mqrq->brq.data.bytes_xfered = 0;
+> +		return err;
+> +	}
+> +
+>  	cb_data.card = card;
+>  	cb_data.status = 0;
+>  	err = __mmc_poll_for_busy(card->host, 0, MMC_BLK_TIMEOUT_MS,
+> --
+> 2.34.1
+> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+> Managing Director: Dr. Jan Peter Berns.
+> Commercial register of local courts: Freiburg HRB381782
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With Best Regards,
+Andy Shevchenko
+
+

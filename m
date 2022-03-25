@@ -2,126 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DBE4E76CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C01264E76EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356358AbiCYPTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S244330AbiCYPVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377495AbiCYPOq (ORCPT
+        with ESMTP id S1376518AbiCYPTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:14:46 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526B8E21
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 08:13:05 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id w4so8301575ply.13
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 08:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F5PY9X/jp0F4AgxSPkBkfgIyJrI2tyNfex9j4AupEbk=;
-        b=HmQuyS8md0PfvL+aGN85J4Lkm/vGXCQvpc/ISSNkxX1kjJOFD2GzH4dbWHzLnxrcZn
-         yejEeN+M5vd+milk5coOyyjZ68MwLLgzzJKbhoaom7SDa5J4ghXvBrZYlhJA4C12gSS3
-         ombiTcVWYo3Pt9IyuBui81rxtprixViYxTsGjgaESz+SsRhYdhL6s1vSo1o05VNBo9xH
-         Y0Irgux8iAjuKv5u6ZhQUD5AjEou4BHpcxIuyEsGFeRvFhsyOgcAKp6Qfan50PKOmkQP
-         +rEY9ZuRtlqIAfRSSXUuMQvagsHqrnMclgtwjm7W+27EwS8StEzUUZqy/U3xN4iVKkvd
-         68dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F5PY9X/jp0F4AgxSPkBkfgIyJrI2tyNfex9j4AupEbk=;
-        b=AvU3rpuINd0FhmWq050GAOj6ZV+edMSnJf/AfW3Cgq6bao1HERe3IDRCx018tIQnqG
-         J7JRydZNuti+2SGXQuDu95FLHlqHf04KhCaUtUSRea81rQroDRlGlHRIvJAF46hKIDod
-         +b1vMtMfevFMxyyG7P5u8a2CkEI0xy1cm19OCcRJQW/YeMKx1GGi9lRtKLkqWaUlZnAX
-         Mlhd7gx8izQD5Qxjuk7TprQkgXKatkV94Sd6bAUlHRrmr16YcSZAwRhNaVMz6nKBMwoe
-         QKCXdRg1y/AlTJMCQVVowDdjs4ufRHD9wKZS0VB8vK768dRjDe98+dfCzS+eypNAirBN
-         Hgog==
-X-Gm-Message-State: AOAM533tIipz24SJnDggvx4E20DiobZCB2NyS43rLZ3sRpS8CnPfq5SA
-        tfeC7Qw7nhU8QvpPDiy/Iji7/S3B9CUmVA==
-X-Google-Smtp-Source: ABdhPJwc/sVCV5MbQy209QJPcZg2mXqaNy4LQDF1x6hrbgePnG/Gd8+vwGXUaI/HJC0PUMslKFcNPg==
-X-Received: by 2002:a17:903:1205:b0:151:8ae9:93ea with SMTP id l5-20020a170903120500b001518ae993eamr12288183plh.37.1648221184638;
-        Fri, 25 Mar 2022 08:13:04 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id r1-20020a63b101000000b00380989bcb1bsm5682437pgf.5.2022.03.25.08.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 08:13:03 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 15:13:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v4 18/30] KVM: x86/mmu: Zap only TDP MMU leafs in
- kvm_zap_gfn_range()
-Message-ID: <Yj3b/IhXU9eutjoS@google.com>
-References: <20220303193842.370645-1-pbonzini@redhat.com>
- <20220303193842.370645-19-pbonzini@redhat.com>
- <CAL715WJc3QdFe4gkbefW5zHPaYZfErG9vQmOLsbXz=kbaB-6uw@mail.gmail.com>
+        Fri, 25 Mar 2022 11:19:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFE2DF4A2;
+        Fri, 25 Mar 2022 08:15:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D2A7618F2;
+        Fri, 25 Mar 2022 15:14:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B71C340F4;
+        Fri, 25 Mar 2022 15:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648221284;
+        bh=N55awgTJ/oXHfQdCl+2Ibp0LggQcczplugqVYTM5ago=;
+        h=From:To:Cc:Subject:Date:From;
+        b=026dbLHJnte5fJNDsjiYqsO8y9IE6ESnHpR9Ktf4SrJTP9tnZPmJX06GCrW7PXiZU
+         NoYRYVNIGOBXvdbf1R265iL/PAfpBV/Vgz4c4ctf0/QtXg/1g7Qgfv/YQ/0pek4z/H
+         6/YwBAfFa0J3KiI2CMEqlx2XzSAldsgY0uJlbtjU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.15 00/37] 5.15.32-rc1 review
+Date:   Fri, 25 Mar 2022 16:14:01 +0100
+Message-Id: <20220325150419.931802116@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL715WJc3QdFe4gkbefW5zHPaYZfErG9vQmOLsbXz=kbaB-6uw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.32-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.15.32-rc1
+X-KernelTest-Deadline: 2022-03-27T15:04+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022, Mingwei Zhang wrote:
-> On Thu, Mar 3, 2022 at 11:39 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> > @@ -898,13 +879,13 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
-> >   * SPTEs have been cleared and a TLB flush is needed before releasing the
-> >   * MMU lock.
-> >   */
-> > -bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
-> > -                                gfn_t end, bool can_yield, bool flush)
-> > +bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
-> > +                          bool can_yield, bool flush)
-> >  {
-> >         struct kvm_mmu_page *root;
-> >
-> >         for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
-> > -               flush = zap_gfn_range(kvm, root, start, end, can_yield, flush);
-> > +               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, false);
-> 
-> hmm, I think we might have to be very careful here. If we only zap
-> leafs, then there could be side effects. For instance, the code in
-> disallowed_hugepage_adjust() may not work as intended. If you check
-> the following condition in arch/x86/kvm/mmu/mmu.c:2918
-> 
-> if (cur_level > PG_LEVEL_4K &&
->     cur_level == fault->goal_level &&
->     is_shadow_present_pte(spte) &&
->     !is_large_pte(spte)) {
-> 
-> If we previously use 4K mappings in this range due to various reasons
-> (dirty logging etc), then afterwards, we zap the range. Then the guest
-> touches a 4K and now we should map the range with whatever the maximum
-> level we can for the guest.
-> 
-> However, if we just zap only the leafs, then when the code comes to
-> the above location, is_shadow_present_pte(spte) will return true,
-> since the spte is a non-leaf (say a regular PMD entry). The whole if
-> statement will be true, then we never allow remapping guest memory
-> with huge pages.
+This is the start of the stable review cycle for the 5.15.32 release.
+There are 37 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-But that's at worst a performance issue, and arguably working as intended.  The
-zap in this case is never due to the _guest_ unmapping the pfn, so odds are good
-the guest will want to map back in the same pfns with the same permissions.
-Zapping shadow pages so that the guest can maybe create a hugepage may end up
-being a lot of extra work for no benefit.  Or it may be a net positive.  Either
-way, it's not a functional issue.
+Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+Anything received after that time might be too late.
+
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.32-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.15.32-rc1
+
+Arnd Bergmann <arnd@arndb.de>
+    nds32: fix access_ok() checks in get/put_user
+
+Arnd Bergmann <arnd@arndb.de>
+    m68k: fix access_ok for coldfire
+
+Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+    wcn36xx: Differentiate wcn3660 from wcn3620
+
+James Bottomley <James.Bottomley@HansenPartnership.com>
+    tpm: use try_get_ops() in tpm-space.c
+
+Linus Lüssing <ll@simonwunderlich.de>
+    mac80211: fix potential double free on mesh join
+
+Arnd Bergmann <arnd@arndb.de>
+    uaccess: fix integer overflow on access_ok()
+
+Paul E. McKenney <paulmck@kernel.org>
+    rcu: Don't deboost before reporting expedited quiescent state
+
+Roberto Sassu <roberto.sassu@huawei.com>
+    drm/virtio: Ensure that objs is not NULL in virtio_gpu_array_put_free()
+
+Brian Norris <briannorris@chromium.org>
+    Revert "ath: add support for special 0x0 regulatory domain"
+
+Larry Finger <Larry.Finger@lwfinger.net>
+    Bluetooth: btusb: Add one more Bluetooth part for the Realtek RTL8852AE
+
+Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+    crypto: qat - disable registration of algorithms
+
+Werner Sembach <wse@tuxedocomputers.com>
+    ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
+
+Maximilian Luz <luzmaximilian@gmail.com>
+    ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
+
+Mark Cilissen <mark@yotsuba.nl>
+    ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nf_tables: validate registers coming from userspace.
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nf_tables: initialize registers in nft_do_chain()
+
+Stephane Graber <stgraber@ubuntu.com>
+    drivers: net: xgene: Fix regression in CRC stripping
+
+Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
+    ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
+
+Jonathan Teh <jonathan.teh@outlook.com>
+    ALSA: cmipci: Restore aux vol on suspend/resume
+
+Lars-Peter Clausen <lars@metafoo.de>
+    ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Add stream lock during PCM reset ioctl operations
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent prealloc proc writes
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent read/write and buffer changes
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent hw_params and hw_free calls
+
+Jason Zheng <jasonzheng2004@gmail.com>
+    ALSA: hda/realtek: Add quirk for ASUS GA402
+
+huangwenhui <huangwenhuia@uniontech.com>
+    ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+
+Tim Crawford <tcrawford@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo NP50PNJ
+
+Tim Crawford <tcrawford@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo NP70PNJ
+
+Reza Jahanbakhshi <reza.jahanbakhshi@gmail.com>
+    ALSA: usb-audio: add mapping for new Corsair Virtuoso SE
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: oss: Fix PCM OSS buffer allocation overflow
+
+Takashi Iwai <tiwai@suse.de>
+    ASoC: sti: Fix deadlock via snd_pcm_stop_xrun() call
+
+Eric Dumazet <edumazet@google.com>
+    llc: fix netdevice reference leaks in llc_ui_bind()
+
+Helmut Grohne <helmut@subdivi.de>
+    Bluetooth: btusb: Add another Realtek 8761BU
+
+Tadeusz Struk <tstruk@gmail.com>
+    tpm: Fix error handling in async work
+
+Tadeusz Struk <tadeusz.struk@linaro.org>
+    net: ipv6: fix skb_over_panic in __ip6_append_data
+
+Jordy Zomer <jordy@pwning.systems>
+    nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                         |  4 +-
+ arch/csky/include/asm/uaccess.h                  |  7 +-
+ arch/hexagon/include/asm/uaccess.h               | 18 ++---
+ arch/m68k/include/asm/uaccess.h                  | 15 ++--
+ arch/microblaze/include/asm/uaccess.h            | 19 +----
+ arch/nds32/include/asm/uaccess.h                 | 22 ++++--
+ arch/x86/kernel/acpi/boot.c                      | 24 ++++++
+ drivers/acpi/battery.c                           | 12 +++
+ drivers/acpi/video_detect.c                      | 75 ++++++++++++++++++
+ drivers/bluetooth/btusb.c                        |  4 +
+ drivers/char/tpm/tpm-dev-common.c                |  8 +-
+ drivers/char/tpm/tpm2-space.c                    |  8 +-
+ drivers/crypto/qat/qat_4xxx/adf_drv.c            |  7 ++
+ drivers/crypto/qat/qat_common/qat_crypto.c       |  7 ++
+ drivers/gpu/drm/virtio/virtgpu_gem.c             |  3 +
+ drivers/net/ethernet/apm/xgene/xgene_enet_main.c | 12 +--
+ drivers/net/wireless/ath/regd.c                  | 10 +--
+ drivers/net/wireless/ath/wcn36xx/main.c          |  3 +
+ drivers/net/wireless/ath/wcn36xx/wcn36xx.h       |  1 +
+ drivers/nfc/st21nfca/se.c                        | 10 +++
+ include/sound/pcm.h                              |  1 +
+ kernel/rcu/tree_plugin.h                         |  8 +-
+ net/ipv6/ip6_output.c                            |  4 +-
+ net/llc/af_llc.c                                 |  8 ++
+ net/mac80211/cfg.c                               |  3 -
+ net/netfilter/nf_tables_api.c                    | 22 ++++--
+ net/netfilter/nf_tables_core.c                   |  2 +-
+ sound/core/oss/pcm_oss.c                         | 12 ++-
+ sound/core/oss/pcm_plugin.c                      |  5 +-
+ sound/core/pcm.c                                 |  2 +
+ sound/core/pcm_lib.c                             |  4 +
+ sound/core/pcm_memory.c                          | 11 ++-
+ sound/core/pcm_native.c                          | 97 +++++++++++++++---------
+ sound/pci/ac97/ac97_codec.c                      |  4 +-
+ sound/pci/cmipci.c                               |  3 +-
+ sound/pci/hda/patch_realtek.c                    |  4 +
+ sound/soc/sti/uniperif_player.c                  |  6 +-
+ sound/soc/sti/uniperif_reader.c                  |  2 +-
+ sound/usb/mixer_maps.c                           | 10 +++
+ sound/usb/mixer_quirks.c                         |  7 +-
+ 40 files changed, 357 insertions(+), 127 deletions(-)
+
+

@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2284E7CA6
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906914E7BE6
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiCYVOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 17:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
+        id S233513AbiCYVSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 17:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbiCYVOv (ORCPT
+        with ESMTP id S233572AbiCYVSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 17:14:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99A432EEB
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 14:13:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 573CFB828FB
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 21:13:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF56C340ED;
-        Fri, 25 Mar 2022 21:13:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1648242794;
-        bh=4/qvwLbF144DV002vGnw2JVaZn3rO4oCb6NnlPXDKRM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N2MCE449O+Nqn5lrRgfBrtwaW18IZdu4ofPJ+Ae7OGHw+5/7RLV2pABU2kEMc0NMI
-         cYGtEESnzFEJnPq68PCsLwUntvzuQVaziKubf7t4L8OZSmDPnXKWkgWE2VfuLF24Zd
-         iYBR77U7KSbMUnhWZ7KkGeaQXm2sNhgZdMAwIuwY=
-Date:   Fri, 25 Mar 2022 14:13:12 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, andrey.konovalov@linux.dev,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH v6 27/39] kasan, mm: only define
- ___GFP_SKIP_KASAN_POISON with HW_TAGS
-Message-Id: <20220325141312.b71069800f279445749e79f5@linux-foundation.org>
-In-Reply-To: <CA+fCnZeG5DbxcnER1yWkJ50605_4E1xPtgeTEsSEc89qUg4w6g@mail.gmail.com>
-References: <cover.1643047180.git.andreyknvl@google.com>
-        <44e5738a584c11801b2b8f1231898918efc8634a.1643047180.git.andreyknvl@google.com>
-        <63704e10-18cf-9a82-cffb-052c6046ba7d@suse.cz>
-        <YjsaaQo5pqmGdBaY@linutronix.de>
-        <CA+fCnZeG5DbxcnER1yWkJ50605_4E1xPtgeTEsSEc89qUg4w6g@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Fri, 25 Mar 2022 17:18:20 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D4841F90
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 14:16:43 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id y6so6938902plg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 14:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qd2A4gk9xK3tLH00ck1BN3xfWfC5TA/QpCG6NwPucEQ=;
+        b=O1s8d3XHPhekNzgBEmXvGepqjFetseGB144M4AgcKgcYAUGRE7zBo9ixCKqDgedRwg
+         3rkrFv2MDg/7DN9lljYdn5rCElSaNoI+7Ig4AZnC12vkQdVqBEPgBiGlOwiw/pnPntnS
+         0+Sb+PLTOltwq483DCIFmP3MN3N7byMEyE7f8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qd2A4gk9xK3tLH00ck1BN3xfWfC5TA/QpCG6NwPucEQ=;
+        b=gc2U8mDrmBAeB4A7/T8Can32kqEnjKLL2RgodIRFZkxZLLl29+IfJ02+ATLDvw0ISb
+         JnenozVfU4L/6NnRsCbjoe0spP/8oiUatLowMbGSnpuz3sQBskEWv8zuUrRvgRobgXVx
+         YlXa66MO2MzrLh1c9XVI8WYGHfmONExr04/jPk/7yoEwPUHRitKB9qIdgZaeDLrP6yaX
+         gWid5XN6s18v7nBq7Wa5J9DgWq3VIad3GMup274e6HBNpzb/iuPgnqn+dcrHapsd4RYU
+         Dx0APg7nqfBA1nQcx7dNHes0uknUd4KLKMWtXZM0po2PFHKr48r3tTJxAWRPcHKDdNky
+         2TXw==
+X-Gm-Message-State: AOAM532XmDnBqbgfePdNjSZVQUplra42DzhbVkLwZ3TeZ8kt1PhXkCxm
+        INDKB0m2ofUUGmVCqfRQvjvfIQ==
+X-Google-Smtp-Source: ABdhPJxp+Q2lEHiTSqcfeG0Ag2zKcaferXjcM8frFkQ1yQYCEQMyY1+Bhg5/6mkZV22bXypAf/2eqQ==
+X-Received: by 2002:a17:902:a585:b0:14d:58ef:65 with SMTP id az5-20020a170902a58500b0014d58ef0065mr13660731plb.139.1648243002382;
+        Fri, 25 Mar 2022 14:16:42 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:5662:afcf:5e0a:c3a5])
+        by smtp.gmail.com with ESMTPSA id l27-20020a63701b000000b0038233e59422sm6043022pgc.84.2022.03.25.14.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 14:16:41 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH] arm64: dts: qcom: sc7180-trogdor: Simply SAR sensor enabling
+Date:   Fri, 25 Mar 2022 14:16:40 -0700
+Message-Id: <20220325211640.54228-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,16 +66,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 14:36:29 +0100 Andrey Konovalov <andreyknvl@gmail.com> wrote:
+The SAR node, ap_sar_sensor, needs to be enabled in addition to the i2c
+bus it resides on. Let's simplify this by leaving the sensor node
+enabled by default while leaving the i2c bus disabled by default. On
+boards that use the sensor, we already enable the i2c bus so we can
+simply remove the extra bit that enables the sar sensor node. This saves
+some lines but is otherwise a non-functional change.
 
-> If my suggestion sounds good, Andrew, could you directly apply the
-> changes? They are needed for these 3 patches:
-> 
-> kasan, page_alloc: allow skipping memory init for HW_TAGS
-> kasan, page_alloc: allow skipping unpoisoning for HW_TAGS
-> kasan, mm: only define ___GFP_SKIP_KASAN_POISON with HW_TAGS
-> 
-> As these depend on each other, I can't send separate patches that can
-> be folded for all 3.
+Cc: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dts | 4 ----
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts | 4 ----
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts | 4 ----
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi             | 1 -
+ 4 files changed, 13 deletions(-)
 
-It's all upstream now, so please send along a fixup patch.
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dts
+index e16ba7b01f25..eb20157f6af9 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dts
+@@ -13,10 +13,6 @@ / {
+ 	compatible = "google,lazor-rev1-sku0", "google,lazor-rev2-sku0", "qcom,sc7180";
+ };
+ 
+-&ap_sar_sensor {
+-	status = "okay";
+-};
+-
+ &ap_sar_sensor_i2c {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts
+index c5c9feff41b8..8913592b2d82 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts
+@@ -20,10 +20,6 @@ / {
+ 		"qcom,sc7180";
+ };
+ 
+-&ap_sar_sensor {
+-	status = "okay";
+-};
+-
+ &ap_sar_sensor_i2c {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts
+index 344b57c035d0..8107f3d932eb 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts
+@@ -17,10 +17,6 @@ / {
+ 	compatible = "google,lazor-sku0", "qcom,sc7180";
+ };
+ 
+-&ap_sar_sensor {
+-	status = "okay";
+-};
+-
+ &ap_sar_sensor_i2c {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index 732e1181af48..b0efb354458c 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -722,7 +722,6 @@ ap_sar_sensor: proximity@28 {
+ 		vdd-supply = <&pp3300_a>;
+ 		svdd-supply = <&pp1800_prox>;
+ 
+-		status = "disabled";
+ 		label = "proximity-wifi";
+ 	};
+ };
+
+base-commit: 52deda9551a01879b3562e7b41748e85c591f14c
+-- 
+https://chromeos.dev
+

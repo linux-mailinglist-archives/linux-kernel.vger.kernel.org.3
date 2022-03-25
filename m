@@ -2,112 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9DF4E6E62
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB27D4E6E70
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354087AbiCYGzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 02:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
+        id S1356193AbiCYHAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 03:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234014AbiCYGz3 (ORCPT
+        with ESMTP id S1354451AbiCYHAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 02:55:29 -0400
-Received: from out203-205-221-245.mail.qq.com (out203-205-221-245.mail.qq.com [203.205.221.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D02C6EEA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648191229;
-        bh=KyfDYuZlOud34xC5PeB1bPk8SOiyjLWVQ6XNyU6zcuM=;
-        h=From:To:Cc:Subject:Date;
-        b=u2IwAWStUWigIzz0gn1mNXM9ykZFDtmsYQztn+Re02iNh2nYEeubFtJwssaMD0c12
-         kjYXlgbGqo+1X+nvAalsXtO213e3n6queZvUoZdzuI1F2OXYEgymGykxvszZGd9B9U
-         0slWyPwaS4ZGyOmu9sPKFLLMpabcdnP4iLkXNSCI=
-Received: from localhost.localdomain ([43.227.138.48])
-        by newxmesmtplogicsvrszc7.qq.com (NewEsmtp) with SMTP
-        id D6D89CBC; Fri, 25 Mar 2022 14:53:45 +0800
-X-QQ-mid: xmsmtpt1648191225ts6uid6wf
-Message-ID: <tencent_B489FA9F0FC49CF92A77916394E225DC4705@qq.com>
-X-QQ-XMAILINFO: OAowhIcaKHQtPXWdO4wkBCJvekfxca3W1oG0B9TDCCyoO+bNkGXvDFOiHR8+tZ
-         S9AksxOhlHow5bc8oKJmfY3EzGiGhp1bML+x+oWcHgb9BdPmlT4234XRgmAKNJqXjSUMkxlXnqtj
-         vucucTuNuPiDPwXdgwWHnX/CXltenSkFRMwlqaUiPUAYMbVxRyjdBB7EOzAuOj7LHQq4DF3bpulK
-         SGkSFzUHjj5KEF8QBs3oayzbG1OLEjQCF97AHQhRDrv9Bjco7yp3HRepuaEP1083BYdLzqjRhLsc
-         4w24qHqeQoduzE5ocEcU20UhDD9v8Bbfmq5t5gTDpAKabMSKgBdQDrNw4F84mglFroBvNJZQtVoq
-         J7YTy0uzirdp449ecmgMsU04Uq7WzhZqwaMr0J/wV0+eiCZI1uoNjXBjVUM7sBEC2G5XsKZeC/D2
-         pylw8w2QvYtQYajMhk6vU3eEWx8Du+OwyCiNkB1P0hAVZvYtxKkFWezxOGHHqj6U9NrJbxZVOds8
-         Tqmqmb6D0KX83OXI4qwkDF9dAIWHbIWppaPvd8hD2MtdekllcGHKGbhVVv6KnAj7uo9UYSK/Uklq
-         1FA+u9eX2hIPvpJcQC8s7Rse44plvqdqGneTuCy9acA1O2g2ujwD3pMV7a7AmyBZxW0JPBR8hlUh
-         LEJ67NMmPNsvrKiZBL/1IEL5at2zgbx3LrVgl79IYd1i7umAZXLWnqGwKdP13bD1vwNSpfsWdmm2
-         z6wYgpsfmOwKhhPYcPbyjYChHYmGjmBHTXbiVzXrflLrk8dwPNLYvw22yeMWo9/IvbFF8jtyM/3R
-         3t5vSoCjWIiZr2KcVzcCNT3dcDO0sn2aaIQBL+wylMH0Vsh5R4UoYQvS4vvyGl5dH7efV2gioN1Y
-         +L3LTRYYOibYSsSgZBh8t/oduIl8n8dqbVjkggvNUaxfAhEiZdiVPlkn9i5Js8Zuq/bpBofb/U
-From:   xkernel.wang@foxmail.com
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] staging: r8188eu: check the return value of kzalloc()
-Date:   Fri, 25 Mar 2022 14:53:30 +0800
-X-OQ-MSGID: <20220325065330.3852-1-xkernel.wang@foxmail.com>
+        Fri, 25 Mar 2022 03:00:01 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D7135DF7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:58:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H/S3LMHUas/Fj19fS93S+zCD9p5/glHVyP08YCJlhGvSODTntPXQcNBXpGm1LqoVSBRP7qZVOndyDIp/doQIibFbBmeVijTev+6vHhlOrppq7pvzAd63I+rJiw3aNa05j30u+M44pxSTluMXiRXMtDQh84dq4tnOSHcjgH3asTlKjdQBke4pBzJrEkr2fmleWmXdolEAUkO/A8B+P4zDldH8poK8tjP7oTCcoSrdYQ2ulVxG54jOkewqZPaZjUxQr/vtezXszK7S5rrecES9DJOpp097hh4/lxC6T6AuSYLnDI2zM+/GDx83Mh9+oB7o6HMpz7JpdzTMhZhzwRfrMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JCGYO3Bura0e2tky5kDzaxkj+p0yfec8xezurPKAmTs=;
+ b=TuI1Eqr8E1UQMv2DEWuBd/33ulaqLfxKhbZzSIrsDcc3qqe64xz8FLFI6tiIdZVrcS6MEpR+jFHAp53eP2qyQQacaZPDmmOULvOg6P+uB+wISBoIk6KSSJTt0KvC5QG+eqHH24L3k/aEJ8hhvnmKwREif6pCnyd9noRzmjux+lhWQj99FxS+/Dnjww+0wmul/OJaW3uJh0KUsBq80Lfe8OI3EnjAkiuwbSYLD2fOQvaVkuM4p3z7H5hR4C1Cr/0IzOsI0JgeBfBPirDclHv01f016cU+1FgXVzpZnCNL0j10/tYEdvFW6SJd8DiVHMkhjdenIUs521xA8jkB/FEIgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JCGYO3Bura0e2tky5kDzaxkj+p0yfec8xezurPKAmTs=;
+ b=A8FrB4dd+lfs7wfWcyRVLAgq4JSbOyzs3jggKffznBhbaz/T6H4yeu5z1Rk94WLmKPz/bnx/1YVMoKsyQd2A8B4un7lDjRhb/Ysjd0ZMq4vCzfd8ILvgIX9uGSc+Zvew+DazT7cbTYYF+6GEE5zdJpIMilbAjlhmikCpBXzXdvo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BY5PR12MB3794.namprd12.prod.outlook.com (2603:10b6:a03:1aa::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Fri, 25 Mar
+ 2022 06:58:21 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185%6]) with mapi id 15.20.5102.017; Fri, 25 Mar 2022
+ 06:58:20 +0000
+Message-ID: <2125c5b2-b377-076a-4177-d5ef482eb657@amd.com>
+Date:   Fri, 25 Mar 2022 07:58:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/25] drm/amdgpu: Disable ABM when AC mode
+Content-Language: en-US
+To:     Ryan Lin <tsung-hua.lin@amd.com>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, alexander.deucher@amd.com, David1.Zhou@amd.com,
+        airlied@linux.ie, daniel@ffwll.ch, seanpaul@chromium.org,
+        bas@basnieuwenhuizen.nl, nicholas.kazlauskas@amd.com,
+        sashal@kernel.org, markyacoub@google.com,
+        victorchengchi.lu@amd.com,
+        ching-shih.li@amd.corp-partner.google.com,
+        Rodrigo.Siqueira@amd.com, ddavenport@chromium.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, leon.li@amd.com
+References: <20220325040515.4073706-1-tsung-hua.lin@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220325040515.4073706-1-tsung-hua.lin@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM7PR02CA0012.eurprd02.prod.outlook.com
+ (2603:10a6:20b:100::22) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c920c1f7-0b35-411d-9e0b-08da0e2cd8ce
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3794:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB3794291FF3BA333ED109C251831A9@BY5PR12MB3794.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iJHd6nJaYBlxT9O7rm8CS/CFOs8XyPns1mdgOJz0VdxHF2DhyaHJWuJdwH3JPdF8ABM+oKoindWQQKjcgoGaaYpvddjGby07QjzPWcLy3qpeABjKw2TbOkkfqRqXPa9Q6Q1283xOlXSsOp80Oa1xo2c+qV0KO/PcBcBFwIWRCQupHWJpduLw41t2kKqD/wx0KChHAODJvbvSK/pBRfa2nTzC5nVHDSC6rFGmNrSOIrZEleD93fWYLr9jVyIvkNzuc3L8eKwrJ2nFm/gPYJ8W4MIOao6eVwHsu28PVo9D1htuyFSlKODrn3ynj5ZlLn5qsIXEz/AqFRmp86OmIqy9BUmUEc/SHzH4+eP1SF5cKBwd2i/CLs8zkbY4lP1Ej170czsq8e0yJklqmCGHeR1Ppq7HtIzquS/+E4lyyIOysvhI8g9RJXE5bJ0rAmt51T+F4rnNWQSqo2XlGrT1eZHnr68If5BolqZhtIxLUivw4e3OKKRZUlVFl4c9EO6fVXTP5Mp3cdaRPasS3wqyWTaAMZNfcZ5ZOoucnlqHlFU++4Qbzs+MyqhCAuPAHMO3SyltStg7V7J9HxYZW4WAVVTBsPYMe4ACY4CsQqYN1bJHX3KXRhZ+2qYbU/ZOQBE+CaDdDKighKwAlwy/Y10yUBJzfvT2pLYxNl10GGlSTvZEbn9+2EiTVjaz17WrD3vTO2yf2xtUpQMkQJ7xF4IGJ6+KESY90nLVEi2t2cDw3BH3QShU4vn6uvHauu5NgTKPnDwr+BW8FWPLH8gdZdngZbP65w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(66946007)(8676002)(66556008)(31686004)(6512007)(31696002)(66476007)(2906002)(5660300002)(26005)(316002)(7416002)(6486002)(186003)(36756003)(508600001)(83380400001)(921005)(6636002)(38100700002)(6666004)(2616005)(6506007)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVU3aWgxOW1ONU5yVWRSY3hrQ1JtM2phb04yWnhmd0ZUeFlGK3hSQ2VscFhN?=
+ =?utf-8?B?SlR6T2ZLSGlkcldROURSdFZMcEEyalZsV3RaUTBwczM0NzdpdkZyOWlHU0Uz?=
+ =?utf-8?B?czVKajNHZDhhZ3RRL3pXcFNHOHFZd0c3YUVCaXRoWlNrdzdhb0M2WGdFWXZP?=
+ =?utf-8?B?dVVwN0I5cmxpWUZxaHhScTRISzdCd21ENk1RVkpQYW9BSU1QNCtEU05EajFr?=
+ =?utf-8?B?bG9BMmVMNFlpejhCeUM4U2kvdmlIMDBaMUduZlMxODlsS1lZRlpLdUFwRG9I?=
+ =?utf-8?B?U3BRblRmRDVhemhwNmtZcG5BUFV0ZytOTGlJUmgwSUd2ZDMzaHJDWm85Y203?=
+ =?utf-8?B?UVMrdkV2RHc3Nm5kcWQ2TmNUVm1TVEw0ZTVBSVh6U3dldVFpMDY5NzNEVXFL?=
+ =?utf-8?B?S2ZpZ0dhNjVWcXRqMkZ0TVo2cmt5cW5iQkRLY0VKUHZhbDBWV1MrVHdJNTZP?=
+ =?utf-8?B?cjdEcjAzQTFpOFVMaTMxQnBDTGcyQkUvS3NLODlGbHZML1NNbEdRLzBVVGw1?=
+ =?utf-8?B?SXZnckUzVXhsNmtVQnUvNU9VbTJabUpJK3ZMd1pWZnpINjFqMkM0dnVKWHdF?=
+ =?utf-8?B?RDB4REU0U05menYwbGx5Z3RPcnA3VWY0M0dzWFhHQkoyemQ1VmRIaERlTVFI?=
+ =?utf-8?B?NE02Uk1xU1ZNaTFKTWw1b21GS0pyZjhURWh4RUtONUNSamgyUENoMmFJL2Nw?=
+ =?utf-8?B?VGY4M1d0OXhRSko2dHFhNWM4bE9BcitLVCtUQ1RkWWhxamxtY1FOcG1pQjY4?=
+ =?utf-8?B?WWlkRzdJODFnQWFvcXBsL1BXTWswWmp0YVFxQ1A1aU1SZzVSSUgrUEREck1E?=
+ =?utf-8?B?d00veEd2dWZzS1hLYkFzeW9pTVN4VEhQRFF4VmNBVEw1ZGxoamYwTEx5b25N?=
+ =?utf-8?B?NHhjRkV4NHJHRDJEbllSbUxUV1ZEK0NyeVFXR3Y4blFKT3U1K2VKU0JjRE5m?=
+ =?utf-8?B?T3BZQjYyTnN5UVg3YWFFdXJHWUZPR2c5Y1ZCcWhJNnZiTUlpQW1YOUNGZ1dx?=
+ =?utf-8?B?NzlPMjZUQTZXbnNPRU1nTlF0UHFnMjJjV2RsY2RWbG4vMWNtK0piNEY5cXJV?=
+ =?utf-8?B?NTQ2eHZOaFcrUm9GSDdQaitLSm80eUhIa0o4YzU1NnVWeUI5OEpHWEhxenBy?=
+ =?utf-8?B?MXZlbXV5NE5VQlFmZC9vVjMyRHN2SFFpdUhyL3NEYlFSMFJueU5RdVVDZytq?=
+ =?utf-8?B?TGFKN2I1d2E1bkJnZkVYZ0Q0YW9nOHpuTTZmZWFuSzM0NzRxOGNtRjhXdFNZ?=
+ =?utf-8?B?VmxWdGdLaWpvVXBFOTRPbkRXR2FSeFJndTRVVndEdnU5Tk5tNTEvV052QzJG?=
+ =?utf-8?B?SE84b3loejFsMnhHWStObUVJRVhURlFLb1p1QmgxcHEyZ3dhY3dzN2tZUVdP?=
+ =?utf-8?B?NHZXOHR1b29iWDhyMkNFMERGK2x4VXkwemR2bnBNV3l1T00rRzc0bGs3VDVm?=
+ =?utf-8?B?ZU9yellGcFh2ZUh0TjBLeTZnQlpDSWFpcWxSb0g1cTVOMlVCM0MxcEJOeWhX?=
+ =?utf-8?B?QzdoalNNUFJIYmRIREFMeEFRa2ErRk5VVWtzcERYeW9WdDdRTm9Qck5JS1ky?=
+ =?utf-8?B?QUJNYnN5UlMxdHk5bFBSZlpvcThCemFFTkhTeVF5a2NoS2hDYzRwU09KOHlu?=
+ =?utf-8?B?cEN1SFZKbjVOZStNb2Q0MDgxUnhqcjgvZ2xDb29RNWtEMkM5eE0yVjNocm5E?=
+ =?utf-8?B?TmFFRHhja0c0dS9TM0tlUlliTjMvWHlCVEx5TGdZdFlPU1dnQk1rRHZjc2sr?=
+ =?utf-8?B?YWIrclFlSXhBYnBkMUxkZU1PdFVIS0QvekNGV1JnbFNNT0R6VGdONWNCVmlM?=
+ =?utf-8?B?aUxQTVR2cVZxTlJ5Y0FDNTNDQkk2SlJnT3ZzRHBGRUNsb1hFWThGQmV1N2dp?=
+ =?utf-8?B?NFVRbkE0LzllKzdRdzhKSS9KZmJHWVVEcm9kOTVGWUFHL2phVTMrTVpFOGZk?=
+ =?utf-8?B?NHRlQ1A4MmJxSEF3TDFEZ3FGZEwwRFJWSVNSV2FEQy8wZHR5Tk5Zd09ZNk9y?=
+ =?utf-8?B?MU84TDNTenBob1RxWDdtVXpvNXZjZTB5cFBIVlBhRUZRa3Nid0tkZ1dlcTFh?=
+ =?utf-8?B?eW9BbUdTYk1XU3pJWHRqWHlWaDNYVER0SnNLTjVnNGY4YjZ3SUgxMGJQOHNQ?=
+ =?utf-8?B?Zlg5emVYc2VvOTVmdE4wc0hoU1RPL3VrQ3BKc29vb1pwMERTME1FSFJOUlVq?=
+ =?utf-8?B?ZS9SMThrNnJJZm9Pbk0zNS93TGZIcktJak0rdUdNdXVrMVlUV21tb1FlS0hj?=
+ =?utf-8?B?eWlvMElJOEtPZmFBMXJwUGM1UG9YeFNnV2ZnblNqdGVQUGt6bHNwVk5lS3Yv?=
+ =?utf-8?B?NXhrUzNYWUVvSm43RURqaU9DSWlPVnBOcStIbjlDeTk4UjBacVNjdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c920c1f7-0b35-411d-9e0b-08da0e2cd8ce
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2022 06:58:20.7147
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9i7SkFahVMssI8iobMqNUchJpVpGBx5WXrTMvIuzk7ixdnZ1xiv4fkkWvzMq+3me
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3794
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Am 25.03.22 um 05:05 schrieb Ryan Lin:
+> Disable ABM feature when the system is running on AC mode to get
+> the more perfect contrast of the display.
+>
+> Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
+>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c      |  4 ++
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |  1 +
+>   drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c | 58 ++++++++++++-------
+>   drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h       |  1 +
+>   4 files changed, 42 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> index c560c1ab62ecb..bc8bb9aad2e36 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> @@ -822,6 +822,10 @@ static int amdgpu_acpi_event(struct notifier_block *nb,
+>   	struct amdgpu_device *adev = container_of(nb, struct amdgpu_device, acpi_nb);
+>   	struct acpi_bus_event *entry = (struct acpi_bus_event *)data;
+>   
+> +	if (strcmp(entry->device_class, "battery") == 0) {
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check the return
-of it to prevent potential wrong memory access.
+String comparison in a hot path is not something we usually like to see 
+in the kernel.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/r8188eu/core/rtw_p2p.c  | 2 ++
- drivers/staging/r8188eu/core/rtw_xmit.c | 6 ++++++
- 2 files changed, 8 insertions(+)
+Isn't there any other way to detect that? Like a flag or similar?
 
-diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
-index e2b6cf2..503c4a5 100644
---- a/drivers/staging/r8188eu/core/rtw_p2p.c
-+++ b/drivers/staging/r8188eu/core/rtw_p2p.c
-@@ -35,6 +35,8 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
- 	DBG_88E("%s\n", __func__);
- 
- 	pdata_attr = kzalloc(MAX_P2P_IE_LEN, GFP_KERNEL);
-+	if (!pdata_attr)
-+		return 0;
- 
- 	pstart = pdata_attr;
- 	pcur = pdata_attr;
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 46fe62c..1696272 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -180,6 +180,10 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
- 
- 	rtw_alloc_hwxmits(padapter);
-+	if (!pxmitpriv->hwxmits) {
-+		res = _FAIL;
-+		goto exit;
-+	}
- 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
- 
- 	for (i = 0; i < 4; i++)
-@@ -1524,6 +1528,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
- 	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
- 
- 	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
-+	if (!pxmitpriv->hwxmits)
-+		return;
- 
- 	hwxmits = pxmitpriv->hwxmits;
- 
--- 
+Regards,
+Christian.
+
+> +		adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> +	}
+> +
+>   	if (strcmp(entry->device_class, ACPI_AC_CLASS) == 0) {
+>   		if (power_supply_is_system_supplied() > 0)
+>   			DRM_DEBUG_DRIVER("pm: AC\n");
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> index abfcc1304ba0c..3a0afe7602727 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -3454,6 +3454,7 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+>   
+>   	adev->gfx.gfx_off_req_count = 1;
+>   	adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> +	adev->pm.old_ac_power = true;
+>   
+>   	atomic_set(&adev->throttling_logging_enabled, 1);
+>   	/*
+> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> index 54a1408c8015c..478a734b66926 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> @@ -23,6 +23,8 @@
+>    *
+>    */
+>   
+> +#include <linux/power_supply.h>
+> +#include "amdgpu.h"
+>   #include "dmub_abm.h"
+>   #include "dce_abm.h"
+>   #include "dc.h"
+> @@ -51,6 +53,7 @@
+>   #define DISABLE_ABM_IMMEDIATELY 255
+>   
+>   
+> +extern uint amdgpu_dm_abm_level;
+>   
+>   static void dmub_abm_enable_fractional_pwm(struct dc_context *dc)
+>   {
+> @@ -117,28 +120,6 @@ static void dmub_abm_init(struct abm *abm, uint32_t backlight)
+>   	dmub_abm_enable_fractional_pwm(abm->ctx);
+>   }
+>   
+> -static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
+> -{
+> -	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> -	unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
+> -
+> -	/* return backlight in hardware format which is unsigned 17 bits, with
+> -	 * 1 bit integer and 16 bit fractional
+> -	 */
+> -	return backlight;
+> -}
+> -
+> -static unsigned int dmub_abm_get_target_backlight(struct abm *abm)
+> -{
+> -	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> -	unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
+> -
+> -	/* return backlight in hardware format which is unsigned 17 bits, with
+> -	 * 1 bit integer and 16 bit fractional
+> -	 */
+> -	return backlight;
+> -}
+> -
+>   static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+>   {
+>   	union dmub_rb_cmd cmd;
+> @@ -148,6 +129,9 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+>   	int edp_num;
+>   	uint8_t panel_mask = 0;
+>   
+> +	if (power_supply_is_system_supplied() > 0)
+> +		level = 0;
+> +
+>   	get_edp_links(dc->dc, edp_links, &edp_num);
+>   
+>   	for (i = 0; i < edp_num; i++) {
+> @@ -170,6 +154,36 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+>   	return true;
+>   }
+>   
+> +static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
+> +{
+> +	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> +	unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
+> +	struct dc_context *dc = abm->ctx;
+> +	struct amdgpu_device *adev = dc->driver_context;
+> +
+> +	if (adev->pm.ac_power != adev->pm.old_ac_power) {
+> +		dmub_abm_set_level(abm, amdgpu_dm_abm_level);
+> +		adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> +		adev->pm.old_ac_power = adev->pm.ac_power;
+> +	}
+> +
+> +	/* return backlight in hardware format which is unsigned 17 bits, with
+> +	 * 1 bit integer and 16 bit fractional
+> +	 */
+> +	return backlight;
+> +}
+> +
+> +static unsigned int dmub_abm_get_target_backlight(struct abm *abm)
+> +{
+> +	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> +	unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
+> +
+> +	/* return backlight in hardware format which is unsigned 17 bits, with
+> +	 * 1 bit integer and 16 bit fractional
+> +	 */
+> +	return backlight;
+> +}
+> +
+>   static bool dmub_abm_init_config(struct abm *abm,
+>   	const char *src,
+>   	unsigned int bytes,
+> diff --git a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> index f6e0e7d8a0077..de459411a0e83 100644
+> --- a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> +++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> @@ -445,6 +445,7 @@ struct amdgpu_pm {
+>   	uint32_t                smu_prv_buffer_size;
+>   	struct amdgpu_bo        *smu_prv_buffer;
+>   	bool ac_power;
+> +	bool old_ac_power;
+>   	/* powerplay feature */
+>   	uint32_t pp_feature;
+>   
+

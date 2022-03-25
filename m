@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B4E4E77DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 496194E77D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377604AbiCYPdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S1377304AbiCYPdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377119AbiCYPXs (ORCPT
+        with ESMTP id S1376701AbiCYPXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:23:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD1EE5428;
-        Fri, 25 Mar 2022 08:17:25 -0700 (PDT)
+        Fri, 25 Mar 2022 11:23:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00E7E43A5;
+        Fri, 25 Mar 2022 08:16:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C229260EFF;
-        Fri, 25 Mar 2022 15:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3C5C340E9;
-        Fri, 25 Mar 2022 15:17:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FA9A60C86;
+        Fri, 25 Mar 2022 15:16:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD24C340E9;
+        Fri, 25 Mar 2022 15:16:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221444;
-        bh=zqWpNrrPY0nsyl7sPfMigEYjaB0XH7axnEL01bL8SVc=;
+        s=korg; t=1648221369;
+        bh=yuUSz68aOhzq2mnbWXAa7CBZWDwyxRgOvpg4peMbCJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dMwz5sdbxLQhIL54J3NOMokF5/DD1BKWBZRjDmRz24dt0GBnXEKzHhx/KcqqO4TmP
-         6IIRAju5oZcdNeK9xOahcb+WvYQuJQLuD3Wths/hgJUQcZn6emRFA7RAxKaxm2I8CZ
-         Vxhc1euJE9Xy82DSHgMddTqyrLdc4P6BS3i0KKRw=
+        b=eEofc9IzIPE0SBC8KCN4ChpWnXb1eWlchseL5yrxPoK20ltfCwcQUuHxORakHEG+U
+         RQnwmGOQKqNC83oRJdMxOcji58QdR8TkUSiRMFiRnlJubHRAqHt+5iZoTZ8AKN21UU
+         Yzeom1D8dv7WqmR9um6yp6itVVmaMQEOv9m1s9tw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Werner Sembach <wse@tuxedocomputers.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.16 26/37] ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Kalle Valo <quic_kvalo@quicinc.com>
+Subject: [PATCH 5.15 35/37] wcn36xx: Differentiate wcn3660 from wcn3620
 Date:   Fri, 25 Mar 2022 16:14:36 +0100
-Message-Id: <20220325150420.792474878@linuxfoundation.org>
+Message-Id: <20220325150420.936637650@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
-References: <20220325150420.046488912@linuxfoundation.org>
+In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
+References: <20220325150419.931802116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,110 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Werner Sembach <wse@tuxedocomputers.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-commit c844d22fe0c0b37dc809adbdde6ceb6462c43acf upstream.
+commit 98d504a82cc75840bec8e3c6ae0e4f411921962b upstream.
 
-Clevo NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2 have both a working
-native and video interface. However the default detection mechanism first
-registers the video interface before unregistering it again and switching
-to the native interface during boot. This results in a dangling SBIOS
-request for backlight change for some reason, causing the backlight to
-switch to ~2% once per boot on the first power cord connect or disconnect
-event. Setting the native interface explicitly circumvents this buggy
-behaviour by avoiding the unregistering process.
+The spread of capability between the three WiFi silicon parts wcn36xx
+supports is:
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+wcn3620 - 802.11 a/b/g
+wcn3660 - 802.11 a/b/g/n
+wcn3680 - 802.11 a/b/g/n/ac
+
+We currently treat wcn3660 as wcn3620 thus limiting it to 2GHz channels.
+Fix this regression by ensuring we differentiate between all three parts.
+
+Fixes: 8490987bdb9a ("wcn36xx: Hook and identify RF_IRIS_WCN3680")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220125004046.4058284-1-bryan.odonoghue@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/video_detect.c |   75 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ drivers/net/wireless/ath/wcn36xx/main.c    |    3 +++
+ drivers/net/wireless/ath/wcn36xx/wcn36xx.h |    1 +
+ 2 files changed, 4 insertions(+)
 
---- a/drivers/acpi/video_detect.c
-+++ b/drivers/acpi/video_detect.c
-@@ -417,6 +417,81 @@ static const struct dmi_system_id video_
- 		DMI_MATCH(DMI_PRODUCT_NAME, "GA503"),
- 		},
- 	},
-+	/*
-+	 * Clevo NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2 have both a
-+	 * working native and video interface. However the default detection
-+	 * mechanism first registers the video interface before unregistering
-+	 * it again and switching to the native interface during boot. This
-+	 * results in a dangling SBIOS request for backlight change for some
-+	 * reason, causing the backlight to switch to ~2% once per boot on the
-+	 * first power cord connect or disconnect event. Setting the native
-+	 * interface explicitly circumvents this buggy behaviour, by avoiding
-+	 * the unregistering process.
-+	 */
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "AURA1501"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "EDUBOOK1502"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
+--- a/drivers/net/wireless/ath/wcn36xx/main.c
++++ b/drivers/net/wireless/ath/wcn36xx/main.c
+@@ -1474,6 +1474,9 @@ static int wcn36xx_platform_get_resource
+ 	if (iris_node) {
+ 		if (of_device_is_compatible(iris_node, "qcom,wcn3620"))
+ 			wcn->rf_id = RF_IRIS_WCN3620;
++		if (of_device_is_compatible(iris_node, "qcom,wcn3660") ||
++		    of_device_is_compatible(iris_node, "qcom,wcn3660b"))
++			wcn->rf_id = RF_IRIS_WCN3660;
+ 		if (of_device_is_compatible(iris_node, "qcom,wcn3680"))
+ 			wcn->rf_id = RF_IRIS_WCN3680;
+ 		of_node_put(iris_node);
+--- a/drivers/net/wireless/ath/wcn36xx/wcn36xx.h
++++ b/drivers/net/wireless/ath/wcn36xx/wcn36xx.h
+@@ -97,6 +97,7 @@ enum wcn36xx_ampdu_state {
  
- 	/*
- 	 * Desktops which falsely report a backlight and which our heuristics
+ #define RF_UNKNOWN	0x0000
+ #define RF_IRIS_WCN3620	0x3620
++#define RF_IRIS_WCN3660	0x3660
+ #define RF_IRIS_WCN3680	0x3680
+ 
+ static inline void buff_to_be(u32 *buf, size_t len)
 
 

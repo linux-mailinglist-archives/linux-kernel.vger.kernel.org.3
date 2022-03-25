@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363854E773C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255EE4E77B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345009AbiCYP1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        id S1376888AbiCYPby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376819AbiCYPX0 (ORCPT
+        with ESMTP id S1378148AbiCYPZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:23:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E6D7B57E;
-        Fri, 25 Mar 2022 08:16:49 -0700 (PDT)
+        Fri, 25 Mar 2022 11:25:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EED8ECB13;
+        Fri, 25 Mar 2022 08:19:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCD1AB828FA;
-        Fri, 25 Mar 2022 15:16:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0F8C340E9;
-        Fri, 25 Mar 2022 15:16:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A429560A1B;
+        Fri, 25 Mar 2022 15:19:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE6F5C340E9;
+        Fri, 25 Mar 2022 15:19:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221406;
-        bh=gp++YkMIsw/KZrl9yQMpWARrfRqXAx+5PgIOyaJUvSQ=;
+        s=korg; t=1648221595;
+        bh=H7JG29gboP5vjJRGQ9yVqBJpdSPhN7xRZlTO8hrBvJ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lApX5J3SXHsGZKVJyfj0hnQp6Y3K9qPmvjqFg3hgIvpllOf4I+avb13XxoTtjM4K4
-         gtmiq9s5nJX9mTY90iHnCPQZ4pqLTDECYfy8nL0IV/Y6xfuuA/C+IjNTKFzA8GIqek
-         whEPKjGLWhwGUK+0ZchgRD4q2S16m5TyIB69+SpQ=
+        b=zcHirIOij30oWQdquainKagcINtxM8Zw2ecYlu+a5hkGH0P4kD/H0SpbYGoHq1wrG
+         s8PupbmWtnl8CRaM0fnfu2kv9RBtcmhknOOBmplUPMKX3HLIqq2tjyOamTE8jKiuTG
+         HYy2x94+5ShWNP0KrD/TROqAvLUuMehtlV0NkgNc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 13/37] net: ipv6: fix skb_over_panic in __ip6_append_data
-Date:   Fri, 25 Mar 2022 16:14:23 +0100
-Message-Id: <20220325150420.426763970@linuxfoundation.org>
+        stable@vger.kernel.org, huangwenhui <huangwenhuia@uniontech.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.17 09/39] ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+Date:   Fri, 25 Mar 2022 16:14:24 +0100
+Message-Id: <20220325150420.512447845@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
-References: <20220325150420.046488912@linuxfoundation.org>
+In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
+References: <20220325150420.245733653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
+From: huangwenhui <huangwenhuia@uniontech.com>
 
-commit 5e34af4142ffe68f01c8a9acae83300f8911e20c upstream.
+commit 882bd07f564f97fca6e42ce6ce627ce24ce1ef5a upstream.
 
-Syzbot found a kernel bug in the ipv6 stack:
-LINK: https://syzkaller.appspot.com/bug?id=205d6f11d72329ab8d62a610c44c5e7e25415580
-The reproducer triggers it by sending a crafted message via sendmmsg()
-call, which triggers skb_over_panic, and crashes the kernel:
+On a HP 288 Pro G8, the front mic could not be detected.In order to
+get it working, the pin configuration needs to be set correctly, and
+the ALC671_FIXUP_HP_HEADSET_MIC2 fixup needs to be applied.
 
-skbuff: skb_over_panic: text:ffffffff84647fb4 len:65575 put:65575
-head:ffff888109ff0000 data:ffff888109ff0088 tail:0x100af end:0xfec0
-dev:<NULL>
-
-Update the check that prevents an invalid packet with MTU equal
-to the fregment header size to eat up all the space for payload.
-
-The reproducer can be found here:
-LINK: https://syzkaller.appspot.com/text?tag=ReproC&x=1648c83fb00000
-
-Reported-by: syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Acked-by: Willem de Bruijn <willemb@google.com>
-Link: https://lore.kernel.org/r/20220310232538.1044947-1-tadeusz.struk@linaro.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220311093836.20754-1-huangwenhuia@uniontech.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/ip6_output.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1476,8 +1476,8 @@ static int __ip6_append_data(struct sock
- 		      sizeof(struct frag_hdr) : 0) +
- 		     rt->rt6i_nfheader_len;
- 
--	if (mtu < fragheaderlen ||
--	    ((mtu - fragheaderlen) & ~7) + fragheaderlen < sizeof(struct frag_hdr))
-+	if (mtu <= fragheaderlen ||
-+	    ((mtu - fragheaderlen) & ~7) + fragheaderlen <= sizeof(struct frag_hdr))
- 		goto emsgsize;
- 
- 	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -11069,6 +11069,7 @@ static const struct snd_pci_quirk alc662
+ 	SND_PCI_QUIRK(0x1028, 0x069f, "Dell", ALC668_FIXUP_DELL_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x103c, 0x1632, "HP RP5800", ALC662_FIXUP_HP_RP5800),
+ 	SND_PCI_QUIRK(0x103c, 0x873e, "HP", ALC671_FIXUP_HP_HEADSET_MIC2),
++	SND_PCI_QUIRK(0x103c, 0x885f, "HP 288 Pro G8", ALC671_FIXUP_HP_HEADSET_MIC2),
+ 	SND_PCI_QUIRK(0x1043, 0x1080, "Asus UX501VW", ALC668_FIXUP_HEADSET_MODE),
+ 	SND_PCI_QUIRK(0x1043, 0x11cd, "Asus N550", ALC662_FIXUP_ASUS_Nx50),
+ 	SND_PCI_QUIRK(0x1043, 0x129d, "Asus N750", ALC662_FIXUP_ASUS_Nx50),
 
 

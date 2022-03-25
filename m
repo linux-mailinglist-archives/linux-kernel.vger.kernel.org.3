@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E969E4E7DA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A07C4E7C6E
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234086AbiCYW7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 18:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S234094AbiCYXEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 19:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiCYW7M (ORCPT
+        with ESMTP id S234070AbiCYXEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 18:59:12 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A097338DBD;
-        Fri, 25 Mar 2022 15:57:36 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so9764558pjf.1;
-        Fri, 25 Mar 2022 15:57:36 -0700 (PDT)
+        Fri, 25 Mar 2022 19:04:14 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8371A527EF
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:02:39 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id g3so9713330plo.6
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=T/H9zB8PAl0HAulWpdroY7dfqIUxKQJYXCSXrYVzijc=;
-        b=Ra6jAb6UlR4nOFojKTm+HdHRLBKlIcHxv9mW7jPrtW4RU1ITyM4c6J57tjyNJLQVz+
-         gHvLlBHx4o/i/K4uNHIkTOgpA3gJ7H2FyMrPL5i3jysrzN36use1/cF3ofm/MHA9p/kM
-         0Il0J6nrjKjh59ihDt9s9As8n3cWx1ZJ6zdBC1EyOOmtTf260tZ1RcVKCME3qHjvKtvn
-         OqjfYT5i+ErOORmuitt4yuhJpJVDHJ7JlvNjeXggN8uktCigys3gOnVtNiGDKn61bdJI
-         O6R4jimGIO8xy3adOoAE8hlEF5uYiYv6X/JYyycigNuvfoy65juhIPCMBQFXnvTWQz5g
-         jB5Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RDTJ2bGKsyg8KfpwWQiMrlouH1KCGMV8rUa8lEFeJps=;
+        b=aYOIVYtu80RxHpdFnwvgx3yyi0P7hN/OMzb9J5wSiiz5f7pX3vdtpLyEAxevtyKn//
+         xeVFmsc4y9tOPUNRtNE5cCfdXy9Cot2H0/mUElJMCy32P4tQ1dts2wgsV8qcJg7h0QZ7
+         qub9UEznnxnJJzO+tSatq2BvxNKTWUvofLatMBHCBpAtyB+jM6RzVDOLE7vfjLvmzHkb
+         e1B8CInnGUTymswRzzVS+TUbSQH9e8ywFlz/UzPxzvlvcj7x0U7VB4em6qGIeltd/PI5
+         6ExzVd2aHnbOTjM61USlbbi4c+rlOtN6ImElf9CxdR2m+eINJW5fh7Kkx7RUMM45UQUv
+         NGRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T/H9zB8PAl0HAulWpdroY7dfqIUxKQJYXCSXrYVzijc=;
-        b=CPYR2z8YdSNhC1Mh+M+6ko0XFD6NzsQtCn4gIBJycR7lZ84+f1DydL1vKMYZQ3W+D/
-         fb5dfF0Shvd5PGbY6bRpFqflighqt88gLvodt+GBSCDtjM+KHQtUy+KjBcQNZEsjKqGA
-         cD322d3aUI18c4DIzDgMSnaLuM6KbLYs+q+rXBXYHpx230NY9BJSMRgJ7DMcxyOmdGhC
-         r5e7qC5QxV+4GOV44kiOmrmO5cx01IbIW4R795b6pHjiAUJeoH74YaHAwq1tQVc+oiXe
-         P2lUushKo9Mkxc8h96WYm96GAJIcHuypQ0gMqq4Jzfqe8LfmFWCQHbsqrmkM74eAjyNq
-         h9Mw==
-X-Gm-Message-State: AOAM533ALQpH1lCggoX7CN3nGvxLQC8X6cnfQoJhIpQesZVwBZtYNSNg
-        9zNKvAdApjs17iLbNAWPtyw=
-X-Google-Smtp-Source: ABdhPJz42bbf3ert1/RONH+7Y75irVdGlCG2UGTTUprJ9ZEIDixv14y45n086LTqjjLjhFgCWR4Y/A==
-X-Received: by 2002:a17:902:d88f:b0:155:e660:b769 with SMTP id b15-20020a170902d88f00b00155e660b769mr2400112plz.36.1648249056103;
-        Fri, 25 Mar 2022 15:57:36 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id on12-20020a17090b1d0c00b001c7a548e4efsm7925361pjb.54.2022.03.25.15.57.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 15:57:35 -0700 (PDT)
-Message-ID: <b23ed7f1-007d-47e2-df33-b82cf6e2e700@gmail.com>
-Date:   Fri, 25 Mar 2022 15:57:01 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RDTJ2bGKsyg8KfpwWQiMrlouH1KCGMV8rUa8lEFeJps=;
+        b=CBXE0qgz+w6Yes5C+eAGov139VHJCvTirZCywdEtArVRmJXCM+WqgR1Lf2FGBAQPjD
+         epFoPijaSxtj4TREVm0xFjcu/DNf/PvBoWDZDv0ww2oU1dc1PVFCCbtTTwQQ90hA/qvR
+         VMzXO4sByc8pOINtlYtVV5AdnySlyXNUHb0z8cko8kntMIHQ5boQVUOtYLKQQ6Wg5Ajq
+         0k2KHqN47K+tpsPUx4EV48/Q5UuUue4ud4PGwwwNRQT+4d0XZsopbIfZPujvP0IB8fvD
+         1A7EPccpP+ZRizVBmK/o2h+/DJhEJFxy/flTo5aNy4M7tncGQUYo8QyYqTDfuFk2+MwM
+         tRlA==
+X-Gm-Message-State: AOAM531xOEhvb6cVl+Hogem8RIMNvaUR37TEq3yWF89oIyvLzRkLdAHo
+        VWq2UV5W+3KUUY6lA2Opq4jiZA==
+X-Google-Smtp-Source: ABdhPJxmNHF3zDTC1ndQwKMHNRa2JwCcCjESyisIvqbKDWHfpEBodDTpGP7VSexHnij3Pa5djLC5yw==
+X-Received: by 2002:a17:902:ce8b:b0:154:42e2:924e with SMTP id f11-20020a170902ce8b00b0015442e2924emr14096487plg.138.1648249358691;
+        Fri, 25 Mar 2022 16:02:38 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id o24-20020a17090a5b1800b001c6aaafa5fbsm7030187pji.24.2022.03.25.16.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 16:02:38 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 23:02:34 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Subject: Re: [PATCH 00/21] KVM: x86: Event/exception fixes and cleanups
+Message-ID: <Yj5KCqtu7KZiGtgN@google.com>
+References: <20220311032801.3467418-1-seanjc@google.com>
+ <08548cb00c4b20426e5ee9ae2432744d6fa44fe8.camel@redhat.com>
+ <YjzjIhyw6aqsSI7Q@google.com>
+ <e64d9972-339c-c661-afbd-38f1f2ea476a@maciej.szmigiero.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.10 00/38] 5.10.109-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220325150419.757836392@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e64d9972-339c-c661-afbd-38f1f2ea476a@maciej.szmigiero.name>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 08:04, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.109 release.
-> There are 38 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.109-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Fri, Mar 25, 2022, Maciej S. Szmigiero wrote:
+> So, what's the plan here: is your patch set Sean considered to supersede
+> Maxim's earlier proposed changes or will you post an updated patch set
+> incorporating at least some of them?
 
-On ARCH_BRCMSTB, using 32-bit and 64-bit ARM kernels:
+Next step is to reach a consensus on how we want to solve the problem (or if we
+can't reach consensus, until Paolo uses his special powers).  I definitely won't
+post anything new until there's more conversation.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> I am asking because I have a series that touches the same general area
+> of KVM [1] and would preferably have it based on the final form of the
+> event injection code to avoid unforeseen negative interactions between
+> these changes.
+
+I don't think you need to do anything, at a glance your changes are orthogonal
+even though they have similar themes.  Any conflicts should be minor.

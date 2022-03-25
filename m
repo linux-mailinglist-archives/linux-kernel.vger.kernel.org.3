@@ -2,169 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820F64E6C27
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 02:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 317F24E6BFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 02:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357600AbiCYBm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 21:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
+        id S1357309AbiCYBbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 21:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357626AbiCYBkr (ORCPT
+        with ESMTP id S243739AbiCYBbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 21:40:47 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B62F186F1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 18:38:09 -0700 (PDT)
-Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220325013805epoutp01682c680b3821a8c0809fc764208eb935~fe-X9LKbA2166121661epoutp01Y
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:38:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220325013805epoutp01682c680b3821a8c0809fc764208eb935~fe-X9LKbA2166121661epoutp01Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648172285;
-        bh=910WxcN8pBjdeRXjmpQWK3JOe9qPQxcY642mK+q7DDg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=I9y88AxHcgOhguIXPk/sjuuE8ESJryzRvLJ2doMA0xuSZJsIhNLGSOPhH5F0z1dI7
-         I85+C3vbjsotP6OdcQK+lvanqiFNNnOPY8JVvEJM42m28GJu6s4kS4zWLWOXTGtWHM
-         JpRgZyz1njIWZekTCc80b+TyPhkQAtTIFmwGnToU=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas3p3.samsung.com (KnoxPortal) with ESMTP id
-        20220325013804epcas3p3a71753f89954a903d90d78546b6f1b3e~fe-XX2n8p2534725347epcas3p3J;
-        Fri, 25 Mar 2022 01:38:04 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp2.localdomain
-        (Postfix) with ESMTP id 4KPl8r2zRwz4x9QK; Fri, 25 Mar 2022 01:38:04 +0000
-        (GMT)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220325012959epcas2p45d91d20dff6adc0f17dc4305d9e14130~fe4UH5A4L0307203072epcas2p4s;
-        Fri, 25 Mar 2022 01:29:59 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220325012959epsmtrp28f6457e9afc0f6d15fc66bf7f2aa3684~fe4UG4etZ0434104341epsmtrp23;
-        Fri, 25 Mar 2022 01:29:59 +0000 (GMT)
-X-AuditID: b6c32a29-41fff700000074af-d7-623d1b1709f0
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A4.BA.29871.71B1D326; Fri, 25 Mar 2022 10:29:59 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220325012959epsmtip144d1117d67e9abd83c5da9cceb5cf0b5~fe4T41NUs0578005780epsmtip1o;
-        Fri, 25 Mar 2022 01:29:59 +0000 (GMT)
-Date:   Fri, 25 Mar 2022 10:28:36 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>,
-        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
-        cpgs@samsung.com, cpgsproxy5@samsung.com
-Subject: Re: [PATCH v1 1/4] usb: host: export symbols for xhci hooks usage
-Message-ID: <1295226194.41648172284403.JavaMail.epsvc@epcpadp4>
+        Thu, 24 Mar 2022 21:31:04 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E06722535;
+        Thu, 24 Mar 2022 18:29:31 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id w8so6568322pll.10;
+        Thu, 24 Mar 2022 18:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=0Qs2noJ7T/SsB6vM+NPxtq+5bcl036xXLJJQ7i88WI8=;
+        b=KKWmr8keBLvOKi9KLDjOqjRVtFZn9YsFwQqdXXewbMlQrKldc3R8S2nGfLASTUDBq+
+         2vyuhM/+LZQyiolqZr05OnrFueB+EQUz4+hFj2pFJQHij9b6bjbRrnhGqlGUMzBGsmtW
+         Rh80fb+GTI9uhjE2+F1ecP/x2ypqWfW+Ed3Xd+9RzD5UCxrmPSZsBABM5U3Qnh5AI/yA
+         xCte7PUP3tc+Bavte/Bwh1EAEfmm1Hlr0Abs84JyBY0ZQ5vxC3SDLHnPK2NWbsK0OLxU
+         JeZkwJXw2S6mv0m1KQbNVL8E3q9H9rKmQ39C2ctg5PVDgMr+uCMfwv2yIe3P5Sgu6REo
+         TI5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=0Qs2noJ7T/SsB6vM+NPxtq+5bcl036xXLJJQ7i88WI8=;
+        b=0H/NN0DzubM8LXVF3WkHHv0uPQmt6u5zgQ7aswkOsTnq8VwtiSNB3/m7+7eOQYU6ns
+         frOqjsEt2JFn9N8UDWp90oGxmnA0j2hv5SrfoMWbnuV4LgKKOr4wY6CE1baGFGbc7b3j
+         GDqGj+2SfbQQn27No1/P+AtVzQYQMBTfCZ5Yxq7c7reZjzE69UjaTPtbI2sen+agRbHa
+         0irRJZ/2UNWASPj7CaaEfUnqH1n6Gxx5+Ygwe5EySlKsygUtuxjD+vVkYts4VkIGknsu
+         lOACwh5yj5bme+LIm/er0UOiH00gMinmLra87TyjUyIRWsWUIkXdFlsRftW/et3BAQCV
+         l4zQ==
+X-Gm-Message-State: AOAM531FJi8o1dRvwB1u/9LU9dli6iOZpf/oJdl5S6mh4Ic57Lg7pQlG
+        vnpxjETkiM+kci+IfVMSHaA=
+X-Google-Smtp-Source: ABdhPJwYuYVo6hbvAkvcKzYkFdmwGxdsNpu3uD2mFwRTXQIu2k7LLwf1cSBNW30tgyqDy59Ol37vFg==
+X-Received: by 2002:a17:90b:1c01:b0:1c6:dc49:d146 with SMTP id oc1-20020a17090b1c0100b001c6dc49d146mr21276361pjb.29.1648171770603;
+        Thu, 24 Mar 2022 18:29:30 -0700 (PDT)
+Received: from hermes ([2604:3d09:e80:800::72d9])
+        by smtp.gmail.com with ESMTPSA id z2-20020aa79902000000b004fb05c04b53sm965484pff.103.2022.03.24.18.29.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 18:29:30 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 19:29:28 -0600
+From:   Manuel =?iso-8859-1?Q?Sch=F6nlaub?= <manuel.schoenlaub@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] HID: logitech-hidpp: support Color LED feature (8071).
+Message-ID: <Yj0a+OwfSqDVMyTK@hermes>
+References: <Yifr4etBFPu1a2Ct@hermes>
+ <275245e8048fa124055d9ff3d10ce6562294483a.camel@riseup.net>
+ <Yjvm1F3ZrJnyAOE6@hermes>
+ <CAO-hwJLW=UT6APsKKZaRHBvKn5GOe5xg+bLQH7TGy-PH8N4yUQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <105eaeec-d77e-b0eb-86ad-a88c7446ca98@kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgkeLIzCtJLcpLzFFi42LZdlhJTldc2jbJ4MVzA4sVh+cxWrw8pGmx
-        +eEVNosnRxaxWzQvXs9mcf3Pe0aL9ucX2CzOn9/AbnF51xw2i0XLWpktmjdNYbWYuVbZouvu
-        DUYHXo/Lfb1MHgs2lXos3vOSyWPTqk42j/1z17B7tJzcz+LRt2UVo8fnTXIBHFFcNimpOZll
-        qUX6dglcGae2PWMsuM9TseneKbYGxu+cXYycHBICJhJXey+wdDFycQgJ7GaUaHtwjgUiISmx
-        dO4NdghbWOJ+yxFWiKJHjBLXNk5iAkmwCKhK9Cz7xwxiswloSdz7cQLMFhHQlLj+9ztYA7PA
-        fmaJ7/vPgiWEBbwkfj77xgpi8wI1nF92iBFi6hsmid8tx1kgEoISJ2c+AbOZgYpu/HsJtI0D
-        yJaWWP6PAyTMKWAnsbljE1hYVEBF4tXB+gmMgrOQNM9C0jwLoXkBI/MqRsnUguLc9NxiwwLD
-        vNRyveLE3OLSvHS95PzcTYzgyNLS3MG4fdUHvUOMTByMhxglOJiVRHjvX7ZOEuJNSaysSi3K
-        jy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyWiYNTqoFp2sacAL1lJQ2BZownvp4M
-        vxcYVdb1tHIDv/LGuO17+gqtbmVpGTGYSKr6qDvNEL/VVbU6bepe/WulL9TWeS/6qsjSFdYY
-        kphxvV9D1C/Jv2XG2QtZFhuPy2lssms5IfV327SD3TeVDubon7mgLnaG5eBRx/PHdl1z6Pl3
-        Rjbm/euqCdEZNRdc136Ti/Fi124ODfNbZnFCrUH4BafJGsH19fN1TvzoW2thEeE1+Yrqx0Mf
-        Mj1vMUz9Ebvz4Z3M5Ap7qVy3WVEfJz2a/WW2mI1E/1qjT5fji/MWpP5d3pdxbmXw09UL3k/i
-        t6/7YdXHpW24yN1faEd5ihqf1cvf2TVmz7f8aM2oD0vRNF73JlKJpTgj0VCLuag4EQBxtVcf
-        GwMAAA==
-X-CMS-MailID: 20220325012959epcas2p45d91d20dff6adc0f17dc4305d9e14130
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----FxW1adctUC2Ba58hBscSmKlxeMgdXQkzmfCwtO.kn3Xz82SJ=_5685_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20220304062617epcas2p2084161966aaa66d07f4c25720ec18088
-References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220304062617epcas2p2084161966aaa66d07f4c25720ec18088@epcas2p2.samsung.com>
-        <252651381.41646375583002.JavaMail.epsvc@epcpadp4>
-        <b33d8497-d6d5-18e2-93a9-e0564a84c1c5@kernel.org>
-        <1983025922.01648006681661.JavaMail.epsvc@epcpadp4>
-        <105eaeec-d77e-b0eb-86ad-a88c7446ca98@kernel.org>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAO-hwJLW=UT6APsKKZaRHBvKn5GOe5xg+bLQH7TGy-PH8N4yUQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------FxW1adctUC2Ba58hBscSmKlxeMgdXQkzmfCwtO.kn3Xz82SJ=_5685_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-
-On Wed, Mar 23, 2022 at 10:41:23AM +0100, Krzysztof Kozlowski wrote:
-> On 23/03/2022 03:58, Jung Daehwan wrote:
-> > On Mon, Mar 07, 2022 at 10:59:06AM +0100, Krzysztof Kozlowski wrote:
-> >> On 04/03/2022 07:23, Daehwan Jung wrote:
-> >>> Export symbols for xhci hooks usage:
-> >>> 	xhci_ring_free
-> >>> 	- Allow xhci hook to free xhci_ring.
-> >>
-> >> Instead of copying-pasting the name of function, please explain why do
-> >> you need these symbols exported.
-> >>
-> >> The "Why" is actually one of most important questions, because "what is
-> >> this patch doing" we can easily see...
-> >>
-> >>>
-> >>> 	xhci_get_slot_ctx
-> >>> 	- Allow xhci hook to get slot_ctx from the xhci_container_ctx
-> >>> 	  for getting the slot_ctx information to know which slot is
-> >>> 	  offloading and compare the context in remote subsystem memory
-> >>> 	  if needed.
-> >>>
-> >>
-> >>
-> >> Best regards,
-> >> Krzysztof
-> >>
-> > 
-> > Hi Krzysztof
-> > 
-> > xhci_ring_free has been removed from v3..
-> > The reason why I want to export is for managing vendor specific ring.
-> > I want to alloc and free vendor specific ring on specific address.
-> > It's done with xhci hooks.
+On Thu, Mar 24, 2022 at 08:54:29PM +0100, Benjamin Tissoires wrote:
+> On Thu, Mar 24, 2022 at 4:34 AM Manuel Schönlaub
+> <manuel.schoenlaub@gmail.com> wrote:
+> >
+> > On Wed, Mar 23, 2022 at 09:22:49PM +0000, Filipe Laíns wrote:
+> > > On Tue, 2022-03-08 at 16:50 -0700, Manuel Schönlaub wrote:
+> > > > The HID++ protocol allows to set multicolor (RGB) to a static color.
+> > > > Multiple of such LED zones per device are supported.
+> > > > This patch exports said LEDs so that they can be set from userspace.
+> > > >
+> > > > Signed-off-by: Manuel Schönlaub <manuel.schoenlaub@gmail.com>
+> > > > ---
+> > > >  drivers/hid/hid-logitech-hidpp.c | 188 +++++++++++++++++++++++++++++++
+> > > >  1 file changed, 188 insertions(+)
+> > >
+> > > *snip*
+> > >
+> > > Hi Manuel,
+> > >
+> > > Thanks for putting this forward, although I am not sure if this is the best way
+> > > to handle this.
+> > >
+> > > Before anything, could you elaborate a bit on what lead to you wanting this?
+> > >
+> > > There are a couple of reasons why merging this in the kernel might be
+> > > problematic.
+> > >
+> > > 1) I don't think we will ever support the full capabilities of the devices, so
+> > > configuration via userspace apps will always be required, and here we are
+> > > introducing a weird line between the two.
+> > >
+> > > 2) There is already an ecosystem of userspace configuration apps, with which
+> > > this would conflict. They might not be in the best maintenance state due to lack
+> > > of time from the maintainers, but moving this functionality to the kernel, which
+> > > is harder change, and harder to ship to users, will only make that worse.
+> > >
+> > > Cheers,
+> > > Filipe Laíns
+> >
+> > Hi Filipe,
+> >
+> > sure.
+> >
+> > While I realize that there is e.g. ratbagd which supports a great deal of the
+> > HIDPP features and should allow you to control LEDs, unfortunately for my G305
+> > it does not support the LED (and as far as I remember my G403 does not
+> > work at all with it).
+> >
+> > Then I figured that actually having the LEDs in kernel would allow led triggers
+> > to work with them, so you could do fancy stuff like showing disk or CPU activity
+> > or free physical memory... and here we are now.
 > 
-> It's better, but still does not explain why these have to be exported.
-> Please mention where are these hooks going to be. Where are they
-> implemented. I actually expect all of these exports to be used in your
-> patchset.
+> The one thing that concerns me with those gaming LEDs, is that there
+> is much more than just color/intensity.
+> Those LEDs have effects that you can enable (breathing, pulse, color
+> changing, etc...) and I am not sure how much you are going to be able
+> to sync with the simple LED class.
 > 
-> Best regards,
-> Krzysztof
+Sure. 
+I actually had thought a bit about that and would say that the concept
+of breathing, pulse etc.. can be modeled quite well with hardware patterns. 
+
+> > As for supporting the full capabilities of these devices: The patch just adds
+> > RGB leds, which is something already quite standardized in the linux kernel for
+> > a variety of devices.
+> > Some roccat mice even have support for changing the actual DPI in their kernel
+> > driver, which arguably is a whole different story though and not scope of this patch.
+> > There are also other features (like on-board profiles) which I would definitely
+> > see being better off in user space, especially as long as there is no additional
+> > benefit in having them in the kernel.
+> >
+> > Regarding the conflict in userspace: ratbagd currently seems to always write
+> > LED state in RAM and the on-board profiles at the same time, so I would
+> > argue that the use case here is different: The user space tools want to
+> > set the LED color in a persistent way, while here we want to have interaction with
+> > LED triggers and a more transient way. E.g. the driver would overwrite
+> > only the transient LED color, not the onboard-profiles.
+> >
+> > If that is already too much, what about a module option that allows a user to
+> > deactivate the feature?
 > 
+> Please no. I am tired of having way too many options that nobody uses
+> except for a couple of people and we can not remove/change them
+> because of those 2 persons.
 
-OK. How about adding call stack like below?
+That's true. I would certainly hate that too.
 
-xhci_free_endpoint_ring -> xhci_vendor_free_transfer_ring(xhck hooks
-ops) -> xhci_ring_free
+> 
+> Either you manage to sync the LED class state somehow (in a sensible
+> manner), or I don't think having such LEDs in the kernel is a good
+> thing because we are going to fight against userspace.
 
-Best Regards,
-Jung Daehwan
+I'd like to give it a shot and come up with a follow-up patch series
+implementing e.g. breathing. Let's see how that turns out.
 
-------FxW1adctUC2Ba58hBscSmKlxeMgdXQkzmfCwtO.kn3Xz82SJ=_5685_
-Content-Type: text/plain; charset="utf-8"
-
-
-------FxW1adctUC2Ba58hBscSmKlxeMgdXQkzmfCwtO.kn3Xz82SJ=_5685_--
-
+> Cheers,
+> Benjamin
+> 
+> >
+> > Best Regards,
+> >
+> > Manuel
+> >
+> 

@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FA34E7CA0
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C684E7D94
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbiCYUls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
+        id S232320AbiCYUl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiCYUlp (ORCPT
+        with ESMTP id S232277AbiCYUlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:41:45 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43014171EF9;
-        Fri, 25 Mar 2022 13:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648240810; x=1679776810;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/khNg5Ei108i3fhOUlj+7F6wA9Py3hXoiSYOmw59AqM=;
-  b=FNec5TaO6SLl4eVHNIIwfTx+JfcfkR1TIn/dHohym0NYHZvnHLtBl3R6
-   zoNfQgaRgnBPQkZhuE/KMR+aMEC/zvPGZKSZTjAvEMqwF+sHSvDD4YbWm
-   a84V9tFmJaqJNE5+XwUUiiBavD986gufGGWpYH7ysObQ8Ax8MsLE1sDdN
-   Y=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Mar 2022 13:40:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:40:09 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 25 Mar 2022 13:40:09 -0700
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 25 Mar 2022 13:40:08 -0700
-Date:   Fri, 25 Mar 2022 13:39:59 -0700
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>, <kyletso@google.com>,
-        <andy.shevchenko@gmail.com>, <unixbhaskar@gmail.com>,
-        <subbaram@codeaurora.org>, <mrana@codeaurora.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
- ucsi_handle_connector_change()
-Message-ID: <20220325203959.GA19752@jackp-linux.qualcomm.com>
-References: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
- <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
+        Fri, 25 Mar 2022 16:41:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1288174BA5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:40:19 -0700 (PDT)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 89AA81F38D;
+        Fri, 25 Mar 2022 20:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648240818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k9M7QZdRGdE3YhShW86pT5r5ZtL5gB0GDJS64qnrEpE=;
+        b=vJAmFgPtWS50PZHhxtvZdmj6RtHoiDKqEab6QuQ9Vc1Zp49IAuWFPe363NH7XHnlNnfsWk
+        jFeYkPayJo0cuLJcbIv4jw0KZZldnosVu9hieoVAx65JtNCTq+ybhpKdpJeco+B1rTr4rG
+        mA3sbCiT9kovlU42xDGeXONef+DToDU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648240818;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k9M7QZdRGdE3YhShW86pT5r5ZtL5gB0GDJS64qnrEpE=;
+        b=h3rXLjyaC/ZqwcpGYJjD7wri1DbiBkxRd2ZnL4tMGL11NPgiNEoHE8l1rOnN3KSDfTlzZ+
+        CnESB79E8EPNF5Bw==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 7AF1213873;
+        Fri, 25 Mar 2022 20:40:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id nTn6HbIoPmIHDAAAGKfGzw
+        (envelope-from <bp@suse.de>); Fri, 25 Mar 2022 20:40:18 +0000
+Date:   Fri, 25 Mar 2022 21:40:13 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] RAS updates for 5.18
+Message-ID: <Yj4orVIbqcyTQcY7@zn.tnic>
+References: <YjtZAvQnshp1pZIh@zn.tnic>
+ <CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+In-Reply-To: <CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -71,116 +72,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
+On Fri, Mar 25, 2022 at 01:01:15PM -0700, Linus Torvalds wrote:
+> [ I've written this kind of reply multiple times before and I
+> _thought_ we had something in the docs about this, but I can't find
+> them, so here goes again ]
 
-On Wed, Feb 09, 2022 at 04:30:31PM +0200, Heikki Krogerus wrote:
-> On Wed, Feb 09, 2022 at 11:50:57AM +0800, Jia-Ju Bai wrote:
-> > Hello,
-> > 
-> > My static analysis tool reports a possible deadlock in the ucsi driver in
-> > Linux 5.16:
-> > 
-> > ucsi_pr_swap()
-> >   mutex_lock(&con->lock); --> Line 962 (Lock A)
-> >   wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
-> > 
-> > ucsi_handle_connector_change()
-> >   mutex_lock(&con->lock); --> Line 763 (Lock A)
-> >   complete(&con->complete); --> Line 782 (Wake X)
-> >   complete(&con->complete); --> Line 807 (Wake X)
-> > 
-> > When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock A".
-> > If ucsi_handle_connector_change() is executed at this time, "Wake X" cannot
-> > be performed to wake up "Wait X" in ucsi_handle_connector_change(), because
-> > "Lock A" has been already held by ucsi_handle_connector_change(), causing a
-> > possible deadlock.
-> > I find that "Wait X" is performed with a timeout, to relieve the possible
-> > deadlock; but I think this timeout can cause inefficient execution.
-> > 
-> > I am not quite sure whether this possible problem is real.
-> > Any feedback would be appreciated, thanks :)
+Thanks!
+
+I had a faint notion that I had read you telling people that their
+diffstat was bogus but I couldn't find anything relevant for the short
+time I was searching.
+
+How about I start a maintainers-specific documentation in
+Documentation/process/ - we already have maintainer handbooks there -
+and put that there?
+
+I'm sure it'll come up again and it'll be easier to point to it next
+time...
+
+> On Wed, Mar 23, 2022 at 10:29 AM Borislav Petkov <bp@suse.de> wrote:
+
+<snip detailed explanation - thanks for taking the time!>
+
+> But that fundamentally means that when you have multiple different
+> merge bases, and you ask "what changed since the beginning and the
+> current state", your question is fundamentally ambiguous. There is not
+> a "the beginning". There are *multiple* beginnings.
+
+Aaaha, there it is. I suspected it was something fundamental...
+
+> So what git will do it to pick _one_ beginning, and just use that.
 > 
-> This is probable a regression from commit ad74b8649bea ("usb: typec:
-> ucsi: Preliminary support for alternate modes"). Can you test does
-> this patch fix the issue (attached)?
+> And that means that yes, the diff will show the changes since that
+> beginning, but since the end result depends on the _other_ beginning
+> too, it will show the changes that came from that other beginning as
+> well.
 
-We encountered a slightly different twist to this bug.  Instead of
-deadlocking, we see that the dr_swap() / pr_swap() operations actually
-jump out of the wait_for_completion_timeout() immediately, even before
-any partner change occurs.  This is because the con->complete may
-already have its done flag set to true from the first time
-ucsi_handle_connector_change() runs, and is never reset after that.
+Right.
 
-In addition to the unlocking below, I think we need to also add
-reinit_completion() calls at the start of ucsi_{pr,dr}_swap().
+...
 
-Thanks,
-Jack
+> No. There is no such thing as a *correct* merge base. You had two, and
+> git picked one of them. In the general case there just isn't a correct
+> answer.
+>
+> Now, it turns out that you shouldn't have done a merge at all. I'm not
+> sure why that commit c0f6799de2a0 ("Merge tip:locking/core into
+> tip:ras/core") even exists, because it could have been done as a
+> fast-forward. Did you use "--no-ff" to explicitly not do that?
 
-> From 2ad06425a3df7be656f8a5b3c202aab45554fd17 Mon Sep 17 00:00:00 2001
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Date: Wed, 9 Feb 2022 17:27:19 +0300
-> Subject: [PATCH] usb: typec: ucsi: Test fix
+Well, let me recreate the situation:
+
+$ git checkout -b ras/core v5.17-rc4 
+Switched to a new branch 'ras/core'
+
+$ git merge tip/locking/core
+Auto-merging MAINTAINERS
+Merge made by the 'ort' strategy.
+ MAINTAINERS                                          |  1 +
+ arch/x86/include/asm/cpumask.h                       | 10 ++++++++++
+ arch/x86/include/asm/ptrace.h                        |  2 +-
+ include/asm-generic/bitops/instrumented-atomic.h     | 12 ++++++------
+ include/asm-generic/bitops/instrumented-non-atomic.h | 16 ++++++++--------
+ include/linux/atomic/atomic-arch-fallback.h          | 38 +++++++++++++++++++++++++++++++++-----
+ include/linux/cpumask.h                              | 18 +++++++++---------
+ include/linux/jump_label.h                           | 13 ++++---------
+ include/linux/local_lock_internal.h                  |  6 +++---
+ init/Kconfig                                         |  1 +
+ kernel/locking/lockdep.c                             | 43 +++++++++++++++++++++++++------------------
+ kernel/locking/lockdep_internals.h                   |  6 ++++--
+ kernel/locking/lockdep_proc.c                        | 51 +++++++++++++++++++++++++++++++++++++++++++--------
+ kernel/locking/percpu-rwsem.c                        |  5 +++--
+ kernel/locking/rwsem.c                               |  2 +-
+ scripts/atomic/fallbacks/read_acquire                | 11 ++++++++++-
+ scripts/atomic/fallbacks/set_release                 |  7 ++++++-
+ 17 files changed, 168 insertions(+), 74 deletions(-)
+
+so that tip/locking/core branch is based on v5.17-rc1 and has locking,
+etc stuff which I needed in ras/core. Thus the merge. And git does a
+merge commit.
+
+If I try to make it do a --ff, it still does a merge commit:
+
+$ git merge --ff tip/locking/core
+Auto-merging MAINTAINERS
+Merge made by the 'ort' strategy.
+ MAINTAINERS                                          |  1 +
+ arch/x86/include/asm/cpumask.h                       | 10 ++++++++++
+ arch/x86/include/asm/ptrace.h                        |  2 +-
+ include/asm-generic/bitops/instrumented-atomic.h     | 12 ++++++------
+ include/asm-generic/bitops/instrumented-non-atomic.h | 16 ++++++++--------
+ include/linux/atomic/atomic-arch-fallback.h          | 38 +++++++++++++++++++++++++++++++++-----
+ include/linux/cpumask.h                              | 18 +++++++++---------
+ include/linux/jump_label.h                           | 13 ++++---------
+ include/linux/local_lock_internal.h                  |  6 +++---
+ init/Kconfig                                         |  1 +
+ kernel/locking/lockdep.c                             | 43 +++++++++++++++++++++++++------------------
+ kernel/locking/lockdep_internals.h                   |  6 ++++--
+ kernel/locking/lockdep_proc.c                        | 51 +++++++++++++++++++++++++++++++++++++++++++--------
+ kernel/locking/percpu-rwsem.c                        |  5 +++--
+ kernel/locking/rwsem.c                               |  2 +-
+ scripts/atomic/fallbacks/read_acquire                | 11 ++++++++++-
+ scripts/atomic/fallbacks/set_release                 |  7 ++++++-
+ 17 files changed, 168 insertions(+), 74 deletions(-)
+
+so I don't see how to do a fast-forward thing here.
+
+> So *because* you have that pointless merge that could just have been a
+> fast-forward, you think that "hey, if it had just picked the other
+> merge base it would all have been fine". But in a normal merge
+> situation, the two merge bases would both have had some work that
+> wasn't in the other side, so that's just because you did something
+> odd.
+
+Right.
+
+I guess my strategy for the future should be: either make sure branches
+have a common merge base or generate a "fake" diffstat.
+
+> So in the general case, you aren't doing anything wrong: if you merge
+> multiple real branches, it's just that "git diff" cannot find a single
+> unique point to use as the base, and you'll get some odd random diff.
+
+Right.
+ 
+> But if you are a developer who merges multiple real branches, you
+> obviously know how to merge things, and one way to sort it out is to
+> basically do a test-merge just for yourself:
 > 
-> Interim.
+>     # WWLS? ("What would Linus See?")
+>     git branch -b test-merge linus
+>     git merge my-branch
+>     git diff -C --stat --summary ORIG_HEAD..
+>     .. save that away ..
 > 
-> Not-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+>     # go back to your real work, and remove that test-merge
+>     git checkout <normal-branch>
+>     git branch -D test-merge
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index f0c2fa19f3e0f..225104beda8be 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -956,14 +956,18 @@ static int ucsi_dr_swap(struct typec_port *port, enum typec_data_role role)
->  	if (ret < 0)
->  		goto out_unlock;
->  
-> +	mutex_unlock(&con->lock);
-> +
->  	if (!wait_for_completion_timeout(&con->complete,
->  					msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-> -		ret = -ETIMEDOUT;
-> +		return -ETIMEDOUT;
-> +
-> +	return 0;
->  
->  out_unlock:
->  	mutex_unlock(&con->lock);
->  
-> -	return ret < 0 ? ret : 0;
-> +	return ret;
->  }
->  
->  static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
-> @@ -992,11 +996,13 @@ static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
->  	if (ret < 0)
->  		goto out_unlock;
->  
-> +	mutex_unlock(&con->lock);
-> +
->  	if (!wait_for_completion_timeout(&con->complete,
-> -				msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS))) {
-> -		ret = -ETIMEDOUT;
-> -		goto out_unlock;
-> -	}
-> +				msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-> +		return -ETIMEDOUT;
-> +
-> +	mutex_lock(&con->lock);
->  
->  	/* Something has gone wrong while swapping the role */
->  	if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) !=
-> @@ -1372,6 +1378,7 @@ void ucsi_unregister(struct ucsi *ucsi)
->  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
->  
->  	for (i = 0; i < ucsi->cap.num_connectors; i++) {
-> +		complete(&ucsi->connector[i].complete);
->  		cancel_work_sync(&ucsi->connector[i].work);
->  		ucsi_unregister_partner(&ucsi->connector[i]);
->  		ucsi_unregister_altmodes(&ucsi->connector[i],
-> -- 
-> 2.34.1
-> 
+> will generate a diffstat of what a merge (which fundamentally knows
+> how to resolve multiple merge bases) would generate.
 
+Yes, as a matter of fact I did that before sending you this email and
+the diffstat it issued when doing the "git merge my-branch" into your
+tree was the one I was expecting. I guess yeah, that's the way I should
+be creating the diffstat when I have this situation in the future. Thx!
+
+> The other alternative is to just send me the bogus diffstat - I'm
+> sadly quite used to it, since a number of people just do "git
+> request-pull", see that it's odd, don't understand why, and just let
+> me sort it out.
+
+Yeah, unlikely. I wanted to know what is going on so you got this email
+with a question instead. :-)
+
+> Now the good news is that people who are afraid of merges and the
+> above kind of complexity will never actually see this situation. You
+> can't get multiple merge bases if you don't do any merges yourself.
+> 
+> So this kind of git complexity only happens to people who are supposed
+> to be able to handle it. You clearly figured out what was going on,
+> you didn't perhaps just realize the full story.
+
+Thanks for taking the time and explaining - it was very helpful!
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG NÃ¼rnberg

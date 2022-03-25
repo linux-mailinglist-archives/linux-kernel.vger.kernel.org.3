@@ -2,125 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19F34E7C53
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202894E7C25
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbiCYXce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 19:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S234232AbiCYXdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 19:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiCYXcc (ORCPT
+        with ESMTP id S234217AbiCYXdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 19:32:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A41B864;
-        Fri, 25 Mar 2022 16:30:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5526EB82A33;
-        Fri, 25 Mar 2022 23:30:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3DDEC2BBE4;
-        Fri, 25 Mar 2022 23:30:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648251055;
-        bh=OH+mVAFkcKa9HVSf2zoUkEM/gONJr7udXBOVy2JElJ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FB6fxz+2X35s/ByuDfwm+v6X+mHQaWKQultjwxpw9ND0636dzUgPqJS/NOi4qdMf0
-         JYx+cAhOtn0Wdp+iGMCHsqH0ESw+hzDcRUNDZAJB2Gdfjsw1qPP36XQWkYSya3Qsry
-         MgKe8ePNakUuk3k+R1y2OCqB1oEZnAo+WuDFDaLH1qhZAOz15shLjuh5I66xrQ3Ldr
-         FOgVRxo6llCzAYawiG/L7qzpddh0yQvcvBnoD8o/pbSWieY1Rg0vvVUE/L6QNkzY3X
-         fol2431Whi+BpDrT69UJjoIhJirrX4tKsmiSNC+xd6v4IxjwZhuxuVPsW53vwfzQoN
-         io4hsdmGH2Z/A==
-Date:   Sat, 26 Mar 2022 00:30:50 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] scripts/get_feat.pl: allow output the parsed
- file names
-Message-ID: <20220326003050.50750c75@coco.lan>
-In-Reply-To: <20220326002109.2cda0402@coco.lan>
-References: <cover.1648216561.git.mchehab@kernel.org>
-        <a924b46a80d750d808c28a27adffaa5d5a983e5c.1648216561.git.mchehab@kernel.org>
-        <874k3lg7r3.fsf@meer.lwn.net>
-        <20220326002109.2cda0402@coco.lan>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 25 Mar 2022 19:33:12 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766A75BE70
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:31:37 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id k71-20020a636f4a000000b00382a7c27856so4522234pgc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=tufvfSWY9raGchFT5U16B+276W1zCmg9SmAHZU5wbiw=;
+        b=N/UpJetG7UvnLv5mjrU30pNxid1gU4YuB1Gc/dgyjrWfdK0yd1BMJz/6dNfGVOesfZ
+         1CB+MkpgDFZRHv30a+hEaOoHzmwezOAhvIErUbvqAL2PT3yYt9a+Yk/6wnyFkNPD2lN1
+         +cLq7WQWOcRDryxlcJCl+c74a5sV6/ROhZMxC95olnAYgIJgUD3KgHT9FnRExzv86bw/
+         CUJAyATvgsAuKfb4Lo+CwHo5jAS34ai2puFi4uhueHAiNZ5UlWeuB4Al3yjhloqvATzE
+         n1W+FfXl21UU89mpQN9C+jat86toWKW4CnnPNDCrf94Dl2QfjwgwL2pwEtXHyUW/MoCW
+         FRYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=tufvfSWY9raGchFT5U16B+276W1zCmg9SmAHZU5wbiw=;
+        b=3aHQVvSWt3DBLw0nTn4TPt+GGY11jZB8X0WiYqyfCrUlO4UtchhzTbjizCENbGGOwy
+         VQiQ/lYf+gaT1Z54ou57Hr/I/SI65JIt5Nf3ZbNYR2n+Bqs3BQb+bkJtc8sDH4n43qeA
+         TTdiNwe17ekEHT220Nk5K0CmJRSOC4XQj6/Lli6wjBT6pji/12s7W6ZUIyKghxuoAikx
+         mAC/szppEyE63FzyHjLUCBurJzAgeqRAFLAe6z4HIGPXeMNEP8MBIcV6+zd5QHm/4YEz
+         D3KtUxB7kORaFFTBQ+BTa8vaslxt2WR1nNEEb3APcMne9i/pA0qdoZpBbGBxVUv40kF4
+         4wgA==
+X-Gm-Message-State: AOAM531Q5T5QSu2jTAg5tepPYQ15yRYkggnXgfEmH95HNxSu6O2kfE/o
+        c9QfBxoKIJX3zQe02Mg97AbLEQ5JUs0G
+X-Google-Smtp-Source: ABdhPJwE4ynaVAE6qX71B3LxHXvN/vp8KeBJUKGFzeitehZG7IowP2jsXS2GcxnMV5DTIgVTQRRwAYi96BoV
+X-Received: from vipinsh.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:36b0])
+ (user=vipinsh job=sendgmr) by 2002:a05:6a00:1a89:b0:4fa:b21d:2cd with SMTP id
+ e9-20020a056a001a8900b004fab21d02cdmr12363942pfv.62.1648251096929; Fri, 25
+ Mar 2022 16:31:36 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 23:31:25 +0000
+Message-Id: <20220325233125.413634-1-vipinsh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [PATCH] KVM: x86/mmu: Speed up slot_rmap_walk_next for sparsely
+ populated rmaps
+From:   Vipin Sharma <vipinsh@google.com>
+To:     pbonzini@redhat.com
+Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, 26 Mar 2022 00:21:09 +0100
-Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
+Avoid calling handlers on empty rmap entries and skip to the next non
+empty rmap entry.
 
-> Em Fri, 25 Mar 2022 13:19:28 -0600
-> Jonathan Corbet <corbet@lwn.net> escreveu:
-> 
-> > Mauro Carvalho Chehab <mchehab@kernel.org> writes:
-> >   
-> > > Such output could be helpful while debugging it, but its main
-> > > goal is to tell kernel_feat.py about what files were used
-> > > by the script. Thie way, kernel_feat.py can add those as
-> > > documentation dependencies.
-> > >
-> > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>    
-> > 
-> > So I think these are worth getting into 5.18,   
-> 
-> Yeah, agreed.
-> 
-> > but I do have one question:
-> >   
-> > > @@ -95,6 +97,10 @@ sub parse_feat {
-> > >  	return if ($file =~ m,($prefix)/arch-support.txt,);
-> > >  	return if (!($file =~ m,arch-support.txt$,));
-> > >  
-> > > +	if ($enable_fname) {
-> > > +		printf "#define FILE %s\n", abs_path($file);
-> > > +	}
-> > > +    
-> > 
-> > Why do you output the file names in this format?  This isn't input to
-> > the C preprocessor, so the #define just seems strange.  What am I
-> > missing here?  
-> 
-> Well, I didn't think much about that... I just ended using a way that is
-> already used on get_abi.pl, and was originally imported from kernel-doc :-)
-> 
-> It could be using whatever other tag, but I would keep those three scripts 
-> using a similar markup string for file names and line numbers:
-> 
-> scripts/get_abi.pl:
->     printf "#define LINENO %s%s#%s\n\n", $prefix, $file[0], $data{$what}->{line_no};
-> 
-> scripts/kernel-doc:
->     print "#define LINENO " . $lineno . "\n";
+Empty rmap entries are noop in handlers.
 
-Btw, maybe we could replace them tree with a Sphinx comment, like:
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Change-Id: I8abf0f4d82a2aae4c5d58b80bcc17ffc30785ffc
+---
+ arch/x86/kvm/mmu/mmu.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-get_feat.pl:
-	.. FILE <file_name>
-kernel-doc:
-	.. LINE <line_number>
-get_abi.pl:
-	.. FILE_LINE <file_name>:<line_number>
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 51671cb34fb6..f296340803ba 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -1499,11 +1499,14 @@ static bool slot_rmap_walk_okay(struct slot_rmap_walk_iterator *iterator)
+ 	return !!iterator->rmap;
+ }
+ 
+-static void slot_rmap_walk_next(struct slot_rmap_walk_iterator *iterator)
++static noinline void
++slot_rmap_walk_next(struct slot_rmap_walk_iterator *iterator)
+ {
+-	if (++iterator->rmap <= iterator->end_rmap) {
++	while (++iterator->rmap <= iterator->end_rmap) {
+ 		iterator->gfn += (1UL << KVM_HPAGE_GFN_SHIFT(iterator->level));
+-		return;
++
++		if (iterator->rmap->val)
++			return;
+ 	}
+ 
+ 	if (++iterator->level > iterator->end_level) {
 
-(or something similar)
+base-commit: c9b8fecddb5bb4b67e351bbaeaa648a6f7456912
+-- 
+2.35.1.1021.g381101b075-goog
 
-Just let me know what you prefer and I can take care of the needed
-changes on this patch and, if it is the case, writing the extra patches
-in order to use the same model on kernel-doc and get_abi.pl.
-
-Thanks,
-Mauro

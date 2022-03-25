@@ -2,164 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DEE4E7896
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8A14E789B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376735AbiCYQDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S1359796AbiCYQFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376725AbiCYQDs (ORCPT
+        with ESMTP id S236383AbiCYQFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:03:48 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7E5A0BE0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:02:13 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id qx21so16219827ejb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dt8vhtKiPbsbCcDg8xMi/AmQ4OjbxYDQR91N6G2Nv8U=;
-        b=eP8Y1tjZ6Fdx7y7CstaqPOR2P+1OEINFk5F6Bwa9lUeoWBBkhaHuJtY6k8zbPtWyCg
-         f7XoErNmsZauAx5rC9HMwlTYgDfa3BqTJA0Cv1TAsGrAi8mQsFjLR08Enal2k/SCXm5B
-         aUCn20OP1arKyyd9nvLs9BSAsuWvEvzBmoP06jeVWquGZvlVHOfV2RjVYj2xx8jyp/JN
-         3Unv+3DTQsp3tzz0yV2O26ZTcjFz1Q5zv0HXS3E2N071d3WYozi3OD12Dobq3GBagrAH
-         JlDoZBVgf8+uvzc8H5aGLis/dw8UzksD2rlTlEq19nCuo+U20FfMPH6sO+7D7qq2QMqy
-         incw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dt8vhtKiPbsbCcDg8xMi/AmQ4OjbxYDQR91N6G2Nv8U=;
-        b=nQZuAW7Z+k9ORlk6twVmbxJFzJeGRcO3QqBIK5OirZvxFxo0NJRReDPEa3waNY+wA6
-         OoC0ho50C4l0+8fU5WgskH0l9B2jrit68Mqf88qP54QCQtzZzW8CtbAuiTuo22jeSVus
-         QkhDUDCYjdSzYnSGeajLfphWaQ/BJpa9HwkNG2NIRqzA8746A3D5o/jHn/wMqxg006jh
-         WwqXvmhl63mNMQ58Kj12dTMKsPaw44JnVeqe2QpG7ty/HDh/OT4ehsebRzIOF934j6P8
-         P422Pw3UNtGxFHcqXVtSRwFYfp4dhOeZ/dFivKL6YdWhQzuoQErkG9Emy3yeJvy4y9Yu
-         U9pg==
-X-Gm-Message-State: AOAM532gACZzFUY/SbjS4Ose+16vqkjQwnbLhViUisLA2f08O0oh4JQl
-        LiNxQ+EzqSm5uVYPoE4fZxJMjUh8xTqTmlEu2bwAIw==
-X-Google-Smtp-Source: ABdhPJzmBi+FlxvitVY57HS8NQh5UNF9rAYcKlF0M2lOGrob4PNv04aYCTE6rtAPsF1CNE1q/tI+Z+043IpaLxVk+7U=
-X-Received: by 2002:a17:906:7307:b0:6da:92db:c78f with SMTP id
- di7-20020a170906730700b006da92dbc78fmr12327012ejc.35.1648224132413; Fri, 25
- Mar 2022 09:02:12 -0700 (PDT)
+        Fri, 25 Mar 2022 12:05:52 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3BDA76E1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:04:18 -0700 (PDT)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A74291F7AC;
+        Fri, 25 Mar 2022 16:04:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648224256;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ai5cculYaBCNGgkNRTrUS8pZjDUPLZBEnhlK8ay5zH4=;
+        b=XkAcMTAQrWZS6pKxT4yxgBKsP1lWNb8/BjqiHUZIvMe/LrfG4liVmm1/Ez2ES/8C6Cyraq
+        PHoS+LYh9WKPFGEYqw+nQRv5wU5CiTXrkwBHOw26xu6pB6/syYfSYJjoJUA6Og6IreoNub
+        Ta60PqnofHCaHB+urQfxh4gJR3DTciM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648224256;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ai5cculYaBCNGgkNRTrUS8pZjDUPLZBEnhlK8ay5zH4=;
+        b=6LQc1v/PdRk3Gnnxf6oLcDFDPyoG88ZdvGtMv8bXKyXzx8gT9KWTfb2zIsxowYoF2DqrmH
+        aKsFMt6j2hLFhFAg==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 5762B1339C;
+        Fri, 25 Mar 2022 16:04:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id gIdWEgDoPWLLLQAAGKfGzw
+        (envelope-from <pvorel@suse.cz>); Fri, 25 Mar 2022 16:04:16 +0000
+Date:   Fri, 25 Mar 2022 17:04:13 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        Alexey Gladkov <legion@kernel.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 1/1] ns: Move MAX_PID_NS_LEVEL to ns_common.h, reuse it
+Message-ID: <Yj3n/XdMvufIw0uZ@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20220325112127.18026-1-pvorel@suse.cz>
+ <87o81u88ju.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-References: <20220308065754.3355-1-peng.fan@oss.nxp.com> <20220324151132.GA3514576@p14s>
- <DU0PR04MB9417991BDB9564321FC30EE7881A9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-In-Reply-To: <DU0PR04MB9417991BDB9564321FC30EE7881A9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 25 Mar 2022 10:02:00 -0600
-Message-ID: <CANLsYkyLyROGsUuzaxA7Kx2ouj48NHM1t84DeyOiJmDiDMTgHA@mail.gmail.com>
-Subject: Re: [PATCH V2] remoteproc: imx_rproc: Ignore create mem entry for
- resource table
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o81u88ju.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 at 20:02, Peng Fan <peng.fan@nxp.com> wrote:
->
-> Hi Mathieu,
->
-> > Subject: Re: [PATCH V2] remoteproc: imx_rproc: Ignore create mem entry for
-> > resource table
-> >
-> > On Tue, Mar 08, 2022 at 02:57:54PM +0800, Peng Fan (OSS) wrote:
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > Resource table will not be used for memory allocation, no need to
-> > > create rproc mem entry.
-> > >
-> > > Fixes: b29b4249f8f0c ("remoteproc: imx_rproc: add i.MX specific parse
-> > > fw hook")
-> >
-> >
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.b
-> > ootlin.com%2Flinux%2Fv5.17%2Fsource%2FDocumentation%2Fprocess%2Fsu
-> > bmitting-patches.rst&amp;data=04%7C01%7Cpeng.fan%40nxp.com%7Cae62
-> > e633010048f972db08da0da89836%7C686ea1d3bc2b4c6fa92cd99c5c301635
-> > %7C0%7C1%7C637837315009092474%7CUnknown%7CTWFpbGZsb3d8eyJW
-> > IjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C
-> > 3000&amp;sdata=Xod3YxSRW8h2WXdnpu1WX4DzRpCTnYE9gVlt9HXMlnU%3
-> > D&amp;reserved=0
->
-> Sorry, I could not get your point of which part conflicts with the patch rules.
-> Please clarify and I'll improve.
+> Petr Vorel <pvorel@suse.cz> writes:
 
-The commitID in the "Fixes" tag should be 12 characters rather than 13
-as you have above.
+> > Move MAX_PID_NS_LEVEL to ns_common.h and reuse it in check in
+> > user_namespace.c.
 
->
-> Thanks,
-> Peng.
->
->
-> >
-> >
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > ---
-> > >
-> > > V2:
-> > >  Add Fixes tag
-> > >  Separate the patch from
-> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatc
-> > >
-> > hwork.kernel.org%2Fproject%2Flinux-remoteproc%2Fpatch%2F20220111033
-> > 333
-> > > .403448-7-peng.fan%40oss.nxp.com%2F&amp;data=04%7C01%7Cpeng.fan
-> > %40nxp.
-> > >
-> > com%7Cae62e633010048f972db08da0da89836%7C686ea1d3bc2b4c6fa92cd
-> > 99c5c301
-> > >
-> > 635%7C0%7C1%7C637837315009092474%7CUnknown%7CTWFpbGZsb3d8e
-> > yJWIjoiMC4wL
-> > >
-> > jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&am
-> > p;sdata
-> > >
-> > =CYL9grwXHpUud4qpzFAEijOWv%2BehvefwyZ4aU02wJnw%3D&amp;reserv
-> > ed=0
-> > >  Address typo
-> > >
-> > >  drivers/remoteproc/imx_rproc.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/drivers/remoteproc/imx_rproc.c
-> > > b/drivers/remoteproc/imx_rproc.c index 7a096f1891e6..f2bfc9077c19
-> > > 100644
-> > > --- a/drivers/remoteproc/imx_rproc.c
-> > > +++ b/drivers/remoteproc/imx_rproc.c
-> > > @@ -423,6 +423,9 @@ static int imx_rproc_prepare(struct rproc *rproc)
-> > >             if (!strcmp(it.node->name, "vdev0buffer"))
-> > >                     continue;
-> > >
-> > > +           if (!strncmp(it.node->name, "rsc-table", strlen("rsc-table")))
-> > > +                   continue;
-> > > +
-> > >             rmem = of_reserved_mem_lookup(it.node);
-> > >             if (!rmem) {
-> > >                     dev_err(priv->dev, "unable to acquire memory-region\n");
-> > > --
-> > > 2.30.0
-> > >
+> What is the motivation for this change?
+
+> Is it just that there is a bare number in create_user_ns and that is a
+> little ugly?  Or is there something more motivating this?
+
+Well, nothing more than to have constant which gives some description.
+
+Kind regards,
+Petr
+
+> Eric
+
+
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > ---
+> > Hi Christian, all,
+
+> > I don't see putting MAX_PID_NS_LEVEL into ns_common.h as an elegant
+> > solution but IMHO better than use a hardwired number or redefinition in
+> > user_namespace.h.
+
+> > Kind regards,
+> > Petr
+
+> >  include/linux/ns_common.h     | 3 +++
+> >  include/linux/pid_namespace.h | 3 ---
+> >  kernel/user_namespace.c       | 2 +-
+> >  3 files changed, 4 insertions(+), 4 deletions(-)
+
+> > diff --git a/include/linux/ns_common.h b/include/linux/ns_common.h
+> > index 0f1d024bd958..173fab9dadf7 100644
+> > --- a/include/linux/ns_common.h
+> > +++ b/include/linux/ns_common.h
+> > @@ -4,6 +4,9 @@
+
+> >  #include <linux/refcount.h>
+
+> > +/* MAX_PID_NS_LEVEL is needed for limiting size of 'struct pid' */
+> > +#define MAX_PID_NS_LEVEL 32
+> > +
+> >  struct proc_ns_operations;
+
+> >  struct ns_common {
+> > diff --git a/include/linux/pid_namespace.h b/include/linux/pid_namespace.h
+> > index 07481bb87d4e..f814068012d0 100644
+> > --- a/include/linux/pid_namespace.h
+> > +++ b/include/linux/pid_namespace.h
+> > @@ -11,9 +11,6 @@
+> >  #include <linux/ns_common.h>
+> >  #include <linux/idr.h>
+
+> > -/* MAX_PID_NS_LEVEL is needed for limiting size of 'struct pid' */
+> > -#define MAX_PID_NS_LEVEL 32
+> > -
+> >  struct fs_pin;
+
+> >  struct pid_namespace {
+> > diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+> > index 5481ba44a8d6..6ea6e263403d 100644
+> > --- a/kernel/user_namespace.c
+> > +++ b/kernel/user_namespace.c
+> > @@ -87,7 +87,7 @@ int create_user_ns(struct cred *new)
+> >  	int ret, i;
+
+> >  	ret = -ENOSPC;
+> > -	if (parent_ns->level > 32)
+> > +	if (parent_ns->level > MAX_PID_NS_LEVEL)
+> >  		goto fail;
+
+> >  	ucounts = inc_user_namespaces(parent_ns, owner);

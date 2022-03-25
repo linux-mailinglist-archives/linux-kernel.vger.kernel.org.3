@@ -2,98 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892ED4E6E28
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD13B4E6E2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358443AbiCYGUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 02:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
+        id S1358440AbiCYG2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 02:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356147AbiCYGUf (ORCPT
+        with ESMTP id S237515AbiCYG2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 02:20:35 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F0453E13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:19:00 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2db2add4516so73166237b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:19:00 -0700 (PDT)
+        Fri, 25 Mar 2022 02:28:50 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E3C4E3E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:27:16 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id b13so3830305pfv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:27:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OHcnohF6goVq7JBxRHCvRlkPux4XGzCni0uGSevDn8c=;
-        b=YHAaIesEtaUsqmDpxvbXXRBUIee2FtJzmyPY4rn9EDAOQXNjMsmJ6PxCN+/qNnhbL2
-         cTbHG9CmcM8Cb14+C02T7Btyb9ee+JNRck8cU6Q65IZikCfUvPFNPpEMjmYWicElfxbc
-         DxtFtwLZJJ68JCDrjTTgTdnoPhRHtkdedeZ3VlZJbS0FNehLYoQk0hRMHDvyxWQhiZYn
-         Fs6tgqw6hys0TuVRQ4Q3eorl08MthYi1Of4dLtJBddZELVQXshNeNzAiNYN76dXh8S0C
-         mDpWwBTfoFx29JbWYkR7wx9K1VeS1SZs3phaLl25x+2i3SnHLh38WmorIPrv8dbQa4h1
-         yW9g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lCFLvUtOob48lWnfNGsaL3Qq4wYPmGrhLvwUAcO16N0=;
+        b=BMKhi0tOJpf/MFL0mRolgA7GIq0imJvzKjNCFx6bXC60M0LKTypB1DsjTZVvss/9X2
+         Ch+AOsAzkjFK13blAAHzi3ZCmnoVef3rZc+r1T2u3OakqeEEK7UHVCM0ZPz7ueVrIk0v
+         dunjFYW/WpHlA/Io4oBRFZqEhqPVI3XBG9Uvdx4RlvlyeV6p96G2jThNs2OD5FhBLTCg
+         bH/hLFRFlyZ6XBmbLwdjiuVyfecfUVWP2waeOscBEIi1kEj7dZAJUfnowZOnVuQl50Cd
+         bXbWPTND1kJiy/8hr3AGT5bktzqAYjjQvhgUH6v6XfPNS2rKA58IyoxxhAEzR7e0PAUw
+         XGBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OHcnohF6goVq7JBxRHCvRlkPux4XGzCni0uGSevDn8c=;
-        b=QX/n9zlT1WSaDTqWISTXty7hXBPISTuMv3Qu5Wi6l5uXbJC8HLnExmDeBVYmnLJAJ9
-         RkYuTCq8kxomHel5XyuD3PbWWGIIpdcN8ZbMG6G7DgwhVNqSICNimt55JxargYeErIzA
-         RrnkG29LMIFN9+puazpyfigPlbxFhfAGPfrfoBsY26i6Ua4Nctp8kfqBJGYSFBDbPG/v
-         XAmp351YRNFIjlQwAubAilS7PsEWiieNk9/rl5ONA02+wzF22z8Y47evZm6+d4AzUzH3
-         At9zQ0wqtVWyZ/mB5MHO7/QX0fxQcPzghmGEhRh3/0tRzWuZdbT6uWlh05UXMqMWYMmd
-         Bgng==
-X-Gm-Message-State: AOAM530iwXFABq6bGOf0YCxa/tm89mm1TfHlSwUjTOPKKzzYc9LEgwa1
-        OhZLafURJPn1OHMvlRxzHuSRKINUEA7N/ABFOZnzSg==
-X-Google-Smtp-Source: ABdhPJz4fwI6TdbfnTLMNK7QswYiU2nkRDpz3k8FqPiSSRMbDz/RmtbjNZsxFf/zePPXhQHOCM9n7IYp9FPmFhCUOUo=
-X-Received: by 2002:a81:18c3:0:b0:2e5:da72:2383 with SMTP id
- 186-20020a8118c3000000b002e5da722383mr8960656ywy.338.1648189139773; Thu, 24
- Mar 2022 23:18:59 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lCFLvUtOob48lWnfNGsaL3Qq4wYPmGrhLvwUAcO16N0=;
+        b=MMPhKUdowPXN6Rtq1vDHgWD0gbPiwmp46Ayrm9TMfOyt5jbOwG9zPu2UIrMpa7MxVb
+         zDVJ6sXGJgwTIuWPuMZ5VKHwQy3/gOduK+We1e8Pf+EU7Zm76zBfVRyuw1sF74NwT57h
+         aRtgCKPakBVBqOM2fFYy4Awz5R6jTg0LhsMhC5ehWW4fny+4AiZIVb5oPp7qT0pvFB88
+         JNEeO4DFK5awZUYL8Mee3sNvsquwhauAXcpGzfn3TFyWvfNk3rGXqCXk06NKZBKPiTas
+         s/RGjXvrAVDYroD4hu4HIyBMwg8vz9fRad1oBZzp6arxf1T6RjKq60SfP2q7Xp77E8Je
+         7dIw==
+X-Gm-Message-State: AOAM533IlNtoTUVXeEYY8txfKWiBnaxzsg9uq5IA00jOavjFfU519I5h
+        RnsWsfn7lGz4hKwplO13cevH
+X-Google-Smtp-Source: ABdhPJxsDWPPMnot3dpoxh8fu/VrVpTD0+EeldC2mr4xTMW7o6kkvWmKzsrnueDhfKriCLR43ycOpA==
+X-Received: by 2002:a62:5fc4:0:b0:4fa:7a4b:3853 with SMTP id t187-20020a625fc4000000b004fa7a4b3853mr8908688pfb.77.1648189635878;
+        Thu, 24 Mar 2022 23:27:15 -0700 (PDT)
+Received: from thinkpad ([27.111.75.218])
+        by smtp.gmail.com with ESMTPSA id 16-20020a17090a199000b001bf4b1b268bsm4555296pji.44.2022.03.24.23.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 23:27:15 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 11:57:08 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/25] dmaengine: dw-edma: Simplify the DebugFS context
+ CSRs init procedure
+Message-ID: <20220325062708.GB4675@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-17-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <00000000000079c56a05ba1c18c3@google.com> <000000000000b8cdba05dae41558@google.com>
-In-Reply-To: <000000000000b8cdba05dae41558@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 25 Mar 2022 07:18:48 +0100
-Message-ID: <CACT4Y+bWiUfw4YEx7x9rCb80SwbQPfFfSWP6-7cYxOSs5vw39A@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in ext4_xattr_set_entry (4)
-To:     syzbot <syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, cmaiolino@redhat.com,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sjc@chobot.com,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu, wanjiabing@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324014836.19149-17-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 at 16:07, syzbot
-<syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 6e47a3cc68fc525428297a00524833361ebbb0e9
-> Author: Lukas Czerner <lczerner@redhat.com>
-> Date:   Wed Oct 27 14:18:52 2021 +0000
->
->     ext4: get rid of super block and sbi from handle_mount_ops()
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=100bc10b700000
-> start commit:   f8ad8187c3b5 fs/pipe: allow sendfile() to pipe again
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=96b123631a6700e9
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4cb1e27475bf90a9b926
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11131f94d00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c3761b500000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+On Thu, Mar 24, 2022 at 04:48:27AM +0300, Serge Semin wrote:
+> DW eDMA v4.70a and older have the read and write channels context CSRs
+> indirectly accessible. It means the CSRs like Channel Control, Xfer size,
+> SAR, DAR and LLP address are accessed over at a fixed MMIO address, but
+> their reference to the corresponding channel is determined by the Viewport
+> CSR. In order to have a coherent access to these registers the CSR IOs are
+> supposed to be protected with a spin-lock. DW eDMA v4.80a and newer
+> normally have unrolled Read/Write channel context registers. That is all
+> CSRs denoted before are directly mapped in the controller MMIO space.
+> 
+> Since both normal and viewport-based registers are exposed via the DebugFS
+> nodes, the original code author decided to implement an algorithm based on
+> the unrolled CSRs mapping with the viewport addresses recalculation if
+> it's required. The problem is that such implementation turned to be first
+> unscalable (supports a platform with only single eDMA available since a
+> base address statically preserved) and second needlessly overcomplicated
+> (it loops over all Rd/Wr context addresses and re-calculates the viewport
+> base address on each DebugFS node access). The algorithm can be greatly
+> simplified just by adding the channel ID and it's direction fields in the
+> eDMA DebugFS node descriptor. These new parameters can be used to find a
+> CSR offset within the corresponding channel registers space. The DW eDMA
+> DebugFS node getter afterwards will also use them in order to activate the
+> respective context CSRs viewport before reading data from the specified
+> register. In case of the unrolled version of the CSRs mapping there won't
+> be any spin-lock taken/released, no viewport activation as before this
+> modification.
+> 
+> Note this modification fixes the REGISTER() macros using an externally
+> defined local variable. The same problem with the rest of the macro will
+> be fixed in the next commit.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 84 +++++++++++-------------
+>  1 file changed, 38 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> index 7eb0147912fa..b34a68964232 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> @@ -15,9 +15,27 @@
+>  
+>  #define REGS_ADDR(name) \
+>  	((void __iomem *)&regs->name)
+> +
+> +#define REGS_CH_ADDR(name, _dir, _ch)						\
+> +	({									\
+> +		struct dw_edma_v0_ch_regs __iomem *__ch_regs;			\
+> +										\
+> +		if ((dw)->chip->mf == EDMA_MF_EDMA_LEGACY)			\
+> +			__ch_regs = &regs->type.legacy.ch;			\
+> +		else if (_dir == EDMA_DIR_READ)					\
+> +			__ch_regs = &regs->type.unroll.ch[_ch].rd;		\
+> +		else								\
+> +			__ch_regs = &regs->type.unroll.ch[_ch].wr;		\
+> +										\
+> +		(void __iomem *)&__ch_regs->name;				\
+> +	})
+> +
+>  #define REGISTER(name) \
+>  	{ #name, REGS_ADDR(name) }
+>  
+> +#define CTX_REGISTER(name, dir, ch) \
+> +	{ #name, REGS_CH_ADDR(name, dir, ch), dir, ch }
 
-Looks reasonable:
+What is the need of "dir, ch" at the end?
 
-#syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
+> +
+>  #define WR_REGISTER(name) \
+>  	{ #name, REGS_ADDR(wr_##name) }
+>  #define RD_REGISTER(name) \
+> @@ -41,14 +59,11 @@
+>  static struct dw_edma				*dw;
+>  static struct dw_edma_v0_regs			__iomem *regs;
+>  
+> -static struct {
+> -	void					__iomem *start;
+> -	void					__iomem *end;
+> -} lim[2][EDMA_V0_MAX_NR_CH];
+> -
+>  struct dw_edma_debugfs_entry {
+>  	const char				*name;
+>  	void __iomem				*reg;
+> +	enum dw_edma_dir			dir;
+> +	u16					ch;
+>  };
+>  
+>  static int dw_edma_debugfs_u32_get(void *data, u64 *val)
+> @@ -58,33 +73,16 @@ static int dw_edma_debugfs_u32_get(void *data, u64 *val)
+>  
+>  	if (dw->chip->mf == EDMA_MF_EDMA_LEGACY &&
+>  	    reg >= (void __iomem *)&regs->type.legacy.ch) {
+> -		void __iomem *ptr = &regs->type.legacy.ch;
+> -		u32 viewport_sel = 0;
+>  		unsigned long flags;
+> -		u16 ch;
+> -
+> -		for (ch = 0; ch < dw->wr_ch_cnt; ch++)
+> -			if (lim[0][ch].start >= reg && reg < lim[0][ch].end) {
+> -				ptr += (reg - lim[0][ch].start);
+> -				goto legacy_sel_wr;
+> -			}
+> -
+> -		for (ch = 0; ch < dw->rd_ch_cnt; ch++)
+> -			if (lim[1][ch].start >= reg && reg < lim[1][ch].end) {
+> -				ptr += (reg - lim[1][ch].start);
+> -				goto legacy_sel_rd;
+> -			}
+> -
+> -		return 0;
+> -legacy_sel_rd:
+> -		viewport_sel = BIT(31);
+> -legacy_sel_wr:
+> -		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
+> +		u32 viewport_sel;
+> +
+> +		viewport_sel = entry->dir == EDMA_DIR_READ ? BIT(31) : 0;
+> +		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, entry->ch);
+>  
+>  		raw_spin_lock_irqsave(&dw->lock, flags);
+>  
+>  		writel(viewport_sel, &regs->type.legacy.viewport_sel);
+> -		*val = readl(ptr);
+> +		*val = readl(reg);
+>  
+>  		raw_spin_unlock_irqrestore(&dw->lock, flags);
+>  	} else {
+> @@ -114,19 +112,19 @@ static void dw_edma_debugfs_create_x32(const struct dw_edma_debugfs_entry ini[],
+>  	}
+>  }
+>  
+> -static void dw_edma_debugfs_regs_ch(struct dw_edma_v0_ch_regs __iomem *regs,
+> +static void dw_edma_debugfs_regs_ch(enum dw_edma_dir edma_dir, u16 ch,
+>  				    struct dentry *dir)
+
+Using "dir" for directory would be confusing since it could also refer
+direction. I'd suggest to use "dentry".
+
+Thanks,
+Mani
+
+>  {
+> -	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+> -		REGISTER(ch_control1),
+> -		REGISTER(ch_control2),
+> -		REGISTER(transfer_size),
+> -		REGISTER(sar.lsb),
+> -		REGISTER(sar.msb),
+> -		REGISTER(dar.lsb),
+> -		REGISTER(dar.msb),
+> -		REGISTER(llp.lsb),
+> -		REGISTER(llp.msb),
+> +	struct dw_edma_debugfs_entry debugfs_regs[] = {
+> +		CTX_REGISTER(ch_control1, edma_dir, ch),
+> +		CTX_REGISTER(ch_control2, edma_dir, ch),
+> +		CTX_REGISTER(transfer_size, edma_dir, ch),
+> +		CTX_REGISTER(sar.lsb, edma_dir, ch),
+> +		CTX_REGISTER(sar.msb, edma_dir, ch),
+> +		CTX_REGISTER(dar.lsb, edma_dir, ch),
+> +		CTX_REGISTER(dar.msb, edma_dir, ch),
+> +		CTX_REGISTER(llp.lsb, edma_dir, ch),
+> +		CTX_REGISTER(llp.msb, edma_dir, ch),
+>  	};
+>  	int nr_entries;
+>  
+> @@ -191,10 +189,7 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dir)
+>  
+>  		ch_dir = debugfs_create_dir(name, regs_dir);
+>  
+> -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].wr, ch_dir);
+> -
+> -		lim[0][i].start = &regs->type.unroll.ch[i].wr;
+> -		lim[0][i].end = &regs->type.unroll.ch[i].padding_1[0];
+> +		dw_edma_debugfs_regs_ch(EDMA_DIR_WRITE, i, ch_dir);
+>  	}
+>  }
+>  
+> @@ -256,10 +251,7 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dir)
+>  
+>  		ch_dir = debugfs_create_dir(name, regs_dir);
+>  
+> -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].rd, ch_dir);
+> -
+> -		lim[1][i].start = &regs->type.unroll.ch[i].rd;
+> -		lim[1][i].end = &regs->type.unroll.ch[i].padding_2[0];
+> +		dw_edma_debugfs_regs_ch(EDMA_DIR_READ, i, ch_dir);
+>  	}
+>  }
+>  
+> -- 
+> 2.35.1
+> 

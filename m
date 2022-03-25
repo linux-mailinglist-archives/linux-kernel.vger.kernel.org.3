@@ -2,218 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAF94E6E99
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C03C4E6EAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354556AbiCYHPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 03:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S1358514AbiCYHRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 03:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiCYHPh (ORCPT
+        with ESMTP id S1354764AbiCYHRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 03:15:37 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2116.outbound.protection.outlook.com [40.107.223.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C29B715D;
-        Fri, 25 Mar 2022 00:14:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PcRireziNS3gclKefjPGdFSF45gZqP5xGIXTIHCSPM3c29CVAjqA2L32oZlD5exe+XLd84a95CRH4XFnVngDtXqld+lOqnEQA92Vqa02oAjCBySUjc0iLruITnFCu/M0j2UTf3E1+DCxz7V7mNCUZ2B2mYYQ12a8s+g7mOwwWPmleRxSAnCZjR0L7xcfuaZO5pdxTZ3a96ghMs2cU6gqdv8g9P3jJMdmmCZryIge7XLxp48QNPSrZ7PvRX2zydrxJgb+L36MzR9iMdymkLYBCOVftBs4AkaYgvZeF3vE2V5+8aEF8U52d4MaXz1EkIFCNkxcUKucvtT2f+kGKxFKug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/+rHPSWDbxtPst8YSxjh0RxwE13AyBRS+LbQSI1YrTk=;
- b=Yuh/uQOB7dLCuUMCivn4sfygMW+Rms1RKtCcY6usPXKiPPpkKvUMGCmAuqz6FVw2d7YDGJ6CCMtXzlQ2QdeAaVWu0pd8mdSChZ/brEGNsJLP/dilaGAe7qUC838MLA6+DDdyyYDg5fw6cyMhj3g/GZwXuDQf6sIZB6XNlb3vKhCLbeZ1pmGZ32jTNOLubArKdxeuneW5vsU3a0oWVp7KXSreGFlif7MeL5PIBS1cnb0VoR1z4E+i1Sk0afy5caTDBSW4/H9hlmfoN8dmCO8ftYSb2Vk0HAGdmUIZS78BxSR2OwRr2ElonzEtdhJrCv1QeLhTqBVC0PbpQ1iUyR0PQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/+rHPSWDbxtPst8YSxjh0RxwE13AyBRS+LbQSI1YrTk=;
- b=moaYhi3g7P35Npmw+FrlFrKPC/hqQM7/AEvIojfsLM+nFQvYQIyEe5lMZP/R3q3wvRptN2UjFOlqoE0mj/ab6amez17WMqn1z3tZNdddUrQWnTZO2o+hMDKQRc8VANfiFhSnwnlGeJKBtZ7Afk8PXZqi0RJUMPryXn1Js9fPVrY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- BYAPR01MB4086.prod.exchangelabs.com (2603:10b6:a03:56::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5081.17; Fri, 25 Mar 2022 07:14:01 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::cd24:39ed:7042:46d6]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::cd24:39ed:7042:46d6%7]) with mapi id 15.20.5102.019; Fri, 25 Mar 2022
- 07:14:01 +0000
-Message-ID: <449ef91b-42b1-804e-bc52-a85249b9da77@os.amperecomputing.com>
-Date:   Fri, 25 Mar 2022 14:13:45 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH v7 7/9] dt-bindings: mfd: Add bindings for Ampere Altra
- SMPro MFD driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thu Nguyen <thu@os.amperecomputing.com>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        Fri, 25 Mar 2022 03:17:09 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6937FC74B4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 00:15:29 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220325071527epoutp04387e0f5e09567db49ae8e04a0d5d0b1f~fjl771h-O2447424474epoutp04Z
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 07:15:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220325071527epoutp04387e0f5e09567db49ae8e04a0d5d0b1f~fjl771h-O2447424474epoutp04Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648192527;
+        bh=0RB2zY4IjwuD60lmM1qt63nYEmpNNTM6ztbApUsUjYk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mniL/gjDFGTxbsAqMOV91tnZbFYm5Fy3/V4u8Yxp2PAQdThxOV54DhxquKzww2BG+
+         XzI8DRYfFymaQr4T0M65R3ao6OpDc1LtAhyC4khC2/LfWqSrJS/kjuA/n4P/a+wwKn
+         2aK34cfwMV3YMg6XyUMFPk2CrboqojW343mMbdFc=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220325071526epcas2p161d9add0712ccdcaeb1d9f2de7e3c891~fjl7HO8aN2157021570epcas2p1j;
+        Fri, 25 Mar 2022 07:15:26 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KPtf15w8Xz4x9QF; Fri, 25 Mar
+        2022 07:15:21 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        97.C8.25540.60C6D326; Fri, 25 Mar 2022 16:15:18 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220325071517epcas2p141a5b9d75af93ec8a60f82f98063ffa4~fjlzUD8kE1679216792epcas2p1u;
+        Fri, 25 Mar 2022 07:15:17 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220325071517epsmtrp214d453bfb84edc8f8eb637dceaa36696~fjlzTY8Z02572025720epsmtrp2M;
+        Fri, 25 Mar 2022 07:15:17 +0000 (GMT)
+X-AuditID: b6c32a47-02a68a80000063c4-c7-623d6c06a769
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C5.AD.29871.50C6D326; Fri, 25 Mar 2022 16:15:17 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220325071517epsmtip1f16522e58427f2ac8894fb9b5745a271~fjlzG7WWp3092930929epsmtip1N;
+        Fri, 25 Mar 2022 07:15:17 +0000 (GMT)
+Date:   Fri, 25 Mar 2022 16:13:57 +0900
+From:   Oh Eomji <eomji.oh@samsung.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         open list <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20220321081355.6802-1-quan@os.amperecomputing.com>
- <20220321081355.6802-8-quan@os.amperecomputing.com>
- <766931c9-6647-19c5-24d8-9b8fb3ab58d6@kernel.org>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <766931c9-6647-19c5-24d8-9b8fb3ab58d6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2P153CA0033.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:190::21) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        alsa-devel@alsa-project.org, Leon Romanovsky <leon@kernel.org>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Subject: Re: [PATCH v1 2/3] sound: usb: Calling vendor's call-back function
+ within usb audio operation.
+Message-ID: <20220325071357.GB123495@ubuntu>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cc01ccf1-ee1b-45dd-a16a-08da0e2f0917
-X-MS-TrafficTypeDiagnostic: BYAPR01MB4086:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR01MB40867984BF603875945DFBAFF21A9@BYAPR01MB4086.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kSgnyV24Ww5K1JmLvmrCL9Cjv4OmmNeR/bLhs9rQ2B077DmgPzhSQJV4CS2D9vSNI5LPugf0FgdUiByJ7EGbq9NfxGZDY+b5aH8IXkWgm4QNWuV8tblr4xGHc5Tw1i3LbHSlQjyHz2gpZwKI3E+TV84pQQ0gXb2ISYm5nJ9S65OhmKTkFYqV2wioI6F8J8yuXzgfVf9OKKU8ixkdygrlbLu8ij2rAO+EfCZ8FAWrG1DbjSuRi8JAQjLoYqG3kqmOSpATmZhoh2s8hUUDicqPgzyV+hwJ7KOyIoUXmCHHYMDHprYcQfcMIRtgygNxWk4Gj1hM/E0l0O9ieQtQs/1CaF8Mg/o7jW1eJKazIqdkxuQsd/IiaiPpwa0U4gfK5/BslWBGPQ0aS+AHOX7TkcEna4pSTdTKG3TDN3jbZ9GRwjGqP+aYPwforz5vd5nt5NpUZhtapXa/bVtUD2Fd5NuTPZ37ZsHdgOiazBdulPfkA/AZw2DrSpLovV4EzzIMjDT3sNDgVvFAlsuMqGpMdJUeh1pG5L5epOHbBOxeg0dXwOhgBJbMBlj/iea96WXPpg/O7CmhDRoFFm8FRQpeiHYM0fbc775vFcv02VL/MgP54mMwH/YOVMJoIgoHZLH8PxinFv5zobpEQLlnZZLcWz33LI4sp/ewbBwjfPMJHAmunOXV3SZvIn4TOcFAZSqaK6V7w6iABNepQ+8iMAJfvP/97Weg7wGZf0aXI8NHrLM3ub28iV/EvHh2xUzBJliAt5TDTHsq5GxDZNM3RPDoJLvjfe3lFdCl+ZOS1f/5GDjvtc/dWKA6Pp1wVlHT1dAn59Dq00rm+//NDbN/+zFABkDy3PtgLfuaTdGH21CBpAp8hROzulOF5Bd6QZQhMZwqjXO/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(8936002)(186003)(316002)(54906003)(2616005)(5660300002)(4326008)(7416002)(110136005)(38100700002)(38350700002)(31696002)(31686004)(66946007)(52116002)(53546011)(6486002)(107886003)(6512007)(66476007)(8676002)(66556008)(83380400001)(86362001)(966005)(921005)(2906002)(6666004)(508600001)(6506007)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0t5dS81K0FITWtZK0xMbXlza2FtRnNPdDQwZlNCQWx6ZHE5SUR0M0lKQTB6?=
- =?utf-8?B?c3FlaTFubVF5bm1DS2Y3R0ZIVC8yYlduUllYVW9zVUFHSmF3T3JOSDk2Q1A4?=
- =?utf-8?B?U2VJK2NNWTdUY0oxZFZlelRQSWk5RmYwRHFUWm5nTXpGSURSYjF1UGRLUndo?=
- =?utf-8?B?U21pZ1BwTnVWZkhxUDcycGJVUHIrRE9UUnE2N3ArdythMTFXbmNlTjFwQU9G?=
- =?utf-8?B?V3JBdDVWMEN4VHE3MStLd1pYaXVJTlhUUWhqaVFuNTF6UDM0ZmtRNlJkYXRn?=
- =?utf-8?B?QlF1dHJlcG9wUUJWamYrVzZLWXhBU0hHeitERXVlNDUwNmd5VEJ3c2VFWkgx?=
- =?utf-8?B?Zm5LLzVGWE9PRzRxWStocUdwS2Q2eUdhZnJUdTBTSjRQbk5FSGpDaEdCOWE3?=
- =?utf-8?B?VU02V3ppZk1obndjYTVRZk5TdnZaNE53bStPVEpkYU81dlZIeVVQMldBUzd6?=
- =?utf-8?B?ZjNqTXZEczVKSlFQVXZCanQ5RlEwK1g5d2M1TXF1NDlrNE9VRWxkcVk3RitZ?=
- =?utf-8?B?UEFZK2c3QU9pd0pKTmpyYjB6MXVGWUl2dEx5VHphWHhuOTZVc2NPSFcrSHFV?=
- =?utf-8?B?TTZadVNjY2ZJbG1IaFJGYWZKQ0RzY0hCRUpnVXN4ZkZPU3BsK0xzWThHRi9L?=
- =?utf-8?B?WU9ZQURucEtEbUxPeCtnRjZoRWwrVmxVOTdMOE1IdWVqRmZLOU9Ca3JRdFR1?=
- =?utf-8?B?SG5GdFIyd09LNU10SDRob3BnRXVwdkNHUlBTaldWR1EzOWFIMEQyNnNyamh3?=
- =?utf-8?B?bDBvUTg3QW9TcDhlNU5CKy9VN09laVZXajMwU0J2U0o1UGhnanFSOE8yRVFl?=
- =?utf-8?B?V015L3Nmckt0K21BUjhHbExFMjd0aUh6cktXK0ZDa05ranVCaUJlRUtCYUx3?=
- =?utf-8?B?ZC9CWU5LSjUyT05SOVBJa2kvNkVJVWVpU0VJckdKMDRQVHNLOWQyWEFsL2hz?=
- =?utf-8?B?Z0xCWGlOSlRPM2g4c3ZvVVo2d1JoWml0NTFFTi9NTjV4MmxUTm9OWlI5UHJP?=
- =?utf-8?B?REgyZ1UyOTFWQTZPeVUzM281c2ZoRGgvdU12KzdVaHN5RTZDd1FhREd4WS9t?=
- =?utf-8?B?VTdTTFYxWUg1SmovcCtJVXp1aGExY2RQblN4M0N2T2ROcXVxcGFBT3pqR2Zv?=
- =?utf-8?B?M2Vra05vWHF6WGVVazYxc2VITmxVUHI3Q3B5ck9iV0JLVE8rV1E5endQLzJH?=
- =?utf-8?B?dGZYMThmMHJrL3YyWmF0cDk0Y1F3ekZHRjlhK2J5NmRTOWI1OGRTSnVza1l2?=
- =?utf-8?B?V3JSM053TjJNZTllYXpZbDBlUzM4NDFYSDZvQ1hYZHEwMExjbmpXdnRINHhC?=
- =?utf-8?B?ZCtKMmFXRHgva0ZEdHl0djR1bjhEUWEvTWZ0THdobTRsckNRNnhIUHp5MjZI?=
- =?utf-8?B?M1NBbU1sZWI1eW1rSXFQbkpuYUMxZnJER3VlSmU1SnZiQlVRRHZ3eCtNYlJV?=
- =?utf-8?B?NEJEZ0xvWGhobGh0dXdNVitSbEU5NEp6dDNnWG1ScndTeTdtVlc0bUpkRkZT?=
- =?utf-8?B?ei9mZytzdmFpdG9TN1U2Tk01S24yUUhNSEZWU0VaSnE2SWFxV2MyMk1KSko1?=
- =?utf-8?B?dGY1bDlwR2djSnkzY3pxVGF2RWo4RWVJWWJXSUhRZUVkVi9FL2huUmo2cU5a?=
- =?utf-8?B?bzlIVktJSTFRYzdJNTNFSkg2MythU3NBdFJuOTNpaWN0MU81QUg0SEREWUtI?=
- =?utf-8?B?UC91VFJEbis4eCsxd1FYdU9LcFRwcGxrSzlpVWl1QmhqNVFQOWk4bW1SYlNR?=
- =?utf-8?B?NXgvbXJXWGlTRTNCV3d1dUJ5M2VBM3hxcnBSQ2xET2xUcC9ISWVQS0JvVHJY?=
- =?utf-8?B?bklNK082WkVxS3BBSWk5WjRTdUlvNmRNdnBkMktmV3ZYTElxKzVBMXR5ZWps?=
- =?utf-8?B?UHNWL0J5U0ZsSyt6aVREU1U5U3oyZFB3UVU2SGJneFBGRmxLRjZORzRPMWxL?=
- =?utf-8?B?ekd6c3RNdi9Hd1d4NUw4c25lQUhsTEpsTmFJdWYrbVdrRStqOUpxL2FieHJI?=
- =?utf-8?Q?go0oiFKO578pSBPTvn2oaW2s1opYtI=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc01ccf1-ee1b-45dd-a16a-08da0e2f0917
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2022 07:14:01.3748
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hoDioqU6lvEyc5KBK+BlXwF0gkK/Lb2VjDF7gLMjsv3m3I1tD7VEQPOkMyeFDxEmsQ0AOrASl0BOfvoo0TT1OJbt7RyI52UYJOlgploZEHE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB4086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YjwtDo7b/RMHr45e@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsWy7bCmuS5bjm2SwZ+14hZXLh5ismhevJ7N
+        YsqvpcwWl3fNYbM48Gcxm0Xnrn5Wiw3f1zI6sHts+NzE5rFz1l12j02rOtk89s9dw+6x7+0y
+        No/1W66yeHzeJBfAHpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr
+        5OIToOuWmQN0kJJCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10v
+        L7XEytDAwMgUqDAhO2PtotWMBQvVK9Zf3sfSwLhEvouRk0NCwETi0IEe5i5GLg4hgR2MEu9X
+        TmIFSQgJfGKUOLk9DCLxjVHi0tbdbDAd726uZ4FI7GWUuPj1JwtExxNGiQWrSkBsFgFVicaF
+        h8DibED29GXbGUFsEQFjif6zs9hBmpkFbjBK7Pv0DqxIWCBTorl3GtgGXgEdiV+Nf6BsQYmT
+        M5+A1XAKaEo8+XsDqJmDQ1RAReLVwXqQORICnRwSjw+9Yoe4zkViyt4zLBC2sMSr41ug4lIS
+        n9/thfqgWOLggudQdo3E24OtUDXGErOetYMdyiyQLnH1Qh8byC4JAWWJI7dYIMJ8Eh2H/7JD
+        hHklOtqEIDqVJCY1dTJB2BISKz43QdkeEpf+72GChNUXRom+6edYJjDKz0Ly2Swk2yBsHYkF
+        uz8B2RxAtrTE8n8cEKamxPpd+gsYWVcxiqUWFOempxYbFRjD4zo5P3cTIziparnvYJzx9oPe
+        IUYmDsZDjBIczEoivPcvWycJ8aYkVlalFuXHF5XmpBYfYjQFxtNEZinR5HxgWs8riTc0sTQw
+        MTMzNDcyNTBXEuf1StmQKCSQnliSmp2aWpBaBNPHxMEp1cBkuN2O8XqLyYLNG05tvcLxIvjp
+        28UimnFH5wa65wnZtIVJvq7fbD2D672Ap4bUQbM9Wi/e7rfeHbXP9okio8gvv88GPq4HJT39
+        GJd9nyrdcb5IcP+PtMUtenZvJX2eTVE/Ufe27cCqk1smfDbi2+j2uNjr7Z6QP31JBTe+vpdw
+        elRWXiVvLFC3hbVT5u/k63wRV300vx9NT63/7nX+/Z1H7/8rBSmvsnn5gtd0+wbhS0X/JlVM
+        /S/XlpPlWaN+5OPK6oVTHm8ztrG8mrrqr5Dbgj385RNPa2+JcJ/BanDHP1z2/slj5fvmsk5P
+        l+5NFtlpWL8+x0BDnielSsb1a9b2vn13CpR2vlY5EGhy5ASvEktxRqKhFnNRcSIA7fhlWzME
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBLMWRmVeSWpSXmKPExsWy7bCSnC5rjm2SwdZbJhZXLh5ismhevJ7N
+        YsqvpcwWl3fNYbM48Gcxm0Xnrn5Wiw3f1zI6sHts+NzE5rFz1l12j02rOtk89s9dw+6x7+0y
+        No/1W66yeHzeJBfAHsVlk5Kak1mWWqRvl8CVsez+ddaCJyoVLcv2sjQwNsh2MXJySAiYSLy7
+        uZ6li5GLQ0hgN6PElNmHmCASEhILul4zQ9jCEvdbjrBCFD1ilGh61gWWYBFQlWhceIgFxGYD
+        sqcv284IYosIGEv0n53FDtLALHCLUWJtz1ywhLBApkRz7zQ2EJtXQEfiV+MfNoipXxgldh85
+        wgiREJQ4OfMJ2FRmAS2JG/9eAp3EAWRLSyz/xwES5hTQlHjy9wY7SFhUQEXi1cH6CYyCs5A0
+        z0LSPAuheQEj8ypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjODI0NLcwbh91Qe9Q4xM
+        HIyHGCU4mJVEeO9ftk4S4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8kEB6YklqdmpqQWoR
+        TJaJg1OqgemAQtDu3S71Ilfb2c9pzlIV2q2y561iutY06dN2lawXA/LjV26p7d9aN2+WIX/D
+        NMNwJ5tAV3ePmXZMdz+qrjI9+e7N49tVOvpsxhH2ubo1Fz679zVYx3/iPsl26xyHYbD6iQ2X
+        e+R+hKTVZyjuzqtYun+rlr7oY8Zdq2IEPrz5eDH74vqnWw9OaTx/JER46UJ582/L3mzNaQ2e
+        JrtnyZ2PX3sX8v9ruf3rt/P73J6GCSe6TzMUHnov+UyiXu9F/LaOhQVdr1nfRCuxx+2ad/H8
+        3ReCTs0Ss5dUcCbmd6in5Yl05p7eobQ9ooj9d+qbiu5TBZdlZQVv8/4KTdWdsuqOr9I0fflA
+        5svSaZ1uwUosxRmJhlrMRcWJAJEAHb/7AgAA
+X-CMS-MailID: 20220325071517epcas2p141a5b9d75af93ec8a60f82f98063ffa4
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----Hit0D2w6tI2G2F3pksn2lDL9DCLqPArtVXtx_.FrHH4Lj9aG=_9486_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220324081348epcas2p48d3a24dfdfd8d01e9bf350571b18ffff
+References: <1648109444-196321-1-git-send-email-eomji.oh@samsung.com>
+        <CGME20220324081348epcas2p48d3a24dfdfd8d01e9bf350571b18ffff@epcas2p4.samsung.com>
+        <1648109444-196321-3-git-send-email-eomji.oh@samsung.com>
+        <YjwtDo7b/RMHr45e@kroah.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+------Hit0D2w6tI2G2F3pksn2lDL9DCLqPArtVXtx_.FrHH4Lj9aG=_9486_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-
-On 21/03/2022 17:08, Krzysztof Kozlowski wrote:
-> On 21/03/2022 09:13, Quan Nguyen wrote:
->> Adds device tree bindings for SMPro MFD driver found on the Mt.Jade
->> hardware reference platform with Ampere's Altra Processor family.
->>
->> The SMpro co-processor on Ampere Altra processor family is to monitor
->> and report various data included hwmon-related info, RAS errors, and
->> other miscellaneous information.
->>
->> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> ---
->> Changes in v7:
->>    + None
->>
->> Changes in v6:
->>    + None
->>
->>   .../devicetree/bindings/mfd/ampere,smpro.yaml | 48 +++++++++++++++++++
->>   1 file changed, 48 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
->> new file mode 100644
->> index 000000000000..c29d975c1bc3
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
->> @@ -0,0 +1,48 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mfd/ampere,smpro.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Ampere Altra SMPro firmware driver
->> +
->> +maintainers:
->> +  - Quan Nguyen <quan@os.amperecomputing.com>
->> +
->> +description: |
->> +  Ampere Altra SMPro firmware may contain different blocks like hardware
->> +  monitoring, error monitoring and other miscellaneous features.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ampere,smpro
->> +
->> +  reg:
->> +    description:
->> +      I2C device address.
->> +    maxItems: 1
->> +
->> +  "#address-cells":
->> +    const: 1
->> +
->> +  "#size-cells":
->> +    const: 0
+On Thu, Mar 24, 2022 at 09:34:22AM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Mar 24, 2022 at 05:10:43PM +0900, Oh Eomji wrote:
+> > When a new interface is connected or removed, the call-back functions
+> > are called to transmit a command to the hardware.
+> > 
+> > Signed-off-by: Oh Eomji <eomji.oh@samsung.com>
+> > ---
+> >  sound/usb/pcm.c    | 37 +++++++++++++++++++++++++++++++++++++
+> >  sound/usb/stream.c |  2 ++
+> >  2 files changed, 39 insertions(+)
+> > 
+> > diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
+> > index cec6e91a..4bae4ba 100644
+> > --- a/sound/usb/pcm.c
+> > +++ b/sound/usb/pcm.c
+> > @@ -144,6 +144,8 @@ find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
+> >  			found = fp;
+> >  			cur_attr = attr;
+> >  		}
+> > +
+> > +		snd_vendor_set_pcm_binterval(fp, found, &cur_attr, &attr);
+> >  	}
+> >  	return found;
+> >  }
+> > @@ -434,6 +436,7 @@ static int configure_endpoints(struct snd_usb_audio *chip,
+> >  			       struct snd_usb_substream *subs)
+> >  {
+> >  	int err;
+> > +	struct usb_interface *iface;
+> >  
+> >  	if (subs->data_endpoint->need_setup) {
+> >  		/* stop any running stream beforehand */
+> > @@ -442,6 +445,13 @@ static int configure_endpoints(struct snd_usb_audio *chip,
+> >  		err = snd_usb_endpoint_configure(chip, subs->data_endpoint);
+> >  		if (err < 0)
+> >  			return err;
+> > +
+> > +		iface = usb_ifnum_to_if(chip->dev, subs->data_endpoint->iface);
+> > +		err = snd_vendor_set_pcm_intf(iface, subs->data_endpoint->iface,
+> > +				subs->data_endpoint->altsetting, subs->direction);
+> > +		if (err < 0)
+> > +			return err;
+> > +
+> >  		snd_usb_set_format_quirk(subs, subs->cur_audiofmt);
+> >  	}
+> >  
+> > @@ -616,8 +626,18 @@ static int snd_usb_pcm_prepare(struct snd_pcm_substream *substream)
+> >  	struct snd_pcm_runtime *runtime = substream->runtime;
+> >  	struct snd_usb_substream *subs = runtime->private_data;
+> >  	struct snd_usb_audio *chip = subs->stream->chip;
+> > +	struct snd_usb_endpoint *ep = subs->data_endpoint;
+> >  	int ret;
+> >  
+> > +	ret = snd_vendor_set_pcm_buf(subs->dev, subs->cur_audiofmt->iface);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (!subs->cur_audiofmt) {
+> > +		dev_err(&subs->dev->dev, "no format is specified\n");
+> > +		return -ENXIO;
+> > +	}
+> > +
+> >  	ret = snd_usb_lock_shutdown(chip);
+> >  	if (ret < 0)
+> >  		return ret;
+> > @@ -630,6 +650,13 @@ static int snd_usb_pcm_prepare(struct snd_pcm_substream *substream)
+> >  	if (ret < 0)
+> >  		goto unlock;
+> >  
+> > +	if (snd_vendor_get_ops()) {
+> > +		ret = snd_vendor_set_rate(ep->cur_audiofmt->iface,
+> > +				ep->cur_rate, ep->cur_audiofmt->altsetting);
+> > +		if (!ret)
+> > +			goto unlock;
+> > +	}
+> > +
+> >  	/* reset the pointer */
+> >  	subs->buffer_bytes = frames_to_bytes(runtime, runtime->buffer_size);
+> >  	subs->inflight_bytes = 0;
+> > @@ -1104,6 +1131,11 @@ static int snd_usb_pcm_open(struct snd_pcm_substream *substream)
+> >  	struct snd_usb_substream *subs = &as->substream[direction];
+> >  	int ret;
+> >  
+> > +	ret = snd_vendor_set_pcm_connection(subs->dev, SOUND_PCM_OPEN,
+> > +					    direction);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  	runtime->hw = snd_usb_hardware;
+> >  	/* need an explicit sync to catch applptr update in low-latency mode */
+> >  	if (direction == SNDRV_PCM_STREAM_PLAYBACK &&
+> > @@ -1137,6 +1169,11 @@ static int snd_usb_pcm_close(struct snd_pcm_substream *substream)
+> >  	struct snd_usb_substream *subs = &as->substream[direction];
+> >  	int ret;
+> >  
+> > +	ret = snd_vendor_set_pcm_connection(subs->dev, SOUND_PCM_CLOSE,
+> > +					    direction);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  	snd_media_stop_pipeline(subs);
+> >  
+> >  	if (!snd_usb_lock_shutdown(subs->stream->chip)) {
+> > diff --git a/sound/usb/stream.c b/sound/usb/stream.c
+> > index ceb93d7..26ca696 100644
+> > --- a/sound/usb/stream.c
+> > +++ b/sound/usb/stream.c
+> > @@ -1227,6 +1227,8 @@ static int __snd_usb_parse_audio_interface(struct snd_usb_audio *chip,
+> >  		snd_usb_init_pitch(chip, fp);
+> >  		snd_usb_init_sample_rate(chip, fp, fp->rate_max);
+> >  		usb_set_interface(chip->dev, iface_no, altno);
+> > +		if (protocol > UAC_VERSION_1)
 > 
-> Why do you need address/size cells? Is the binding not complete? The
-> commit description does not mention such case.
+> Why the protocol check?  That's not documented in your changelog
+> anywhere :(
 > 
+>
+Hi,
 
-Thanks Krzysztof for the comment.
-The address/size cells are indeed not used. The child drivers are 
-instantiated by the parent MFD and there is no child nodes in DT. This 
-part will be removed in my next version.
+In kernel 5.10, set_interface is performed when the protocol is more
+than UAC_VERSION_1 in the snd_usb_init_sample_rate function.
+There was an issue here, so there is a history of adding to perform
+snd_vendor_set_interface when the protocol is more than UAC_VERSION_1.
+But I don't think I need this in kerenel 5.15, so I'll delete it.
 
-- Quan
+Thanks,
+Eomji Oh
+
+------Hit0D2w6tI2G2F3pksn2lDL9DCLqPArtVXtx_.FrHH4Lj9aG=_9486_
+Content-Type: text/plain; charset="utf-8"
+
+
+------Hit0D2w6tI2G2F3pksn2lDL9DCLqPArtVXtx_.FrHH4Lj9aG=_9486_--

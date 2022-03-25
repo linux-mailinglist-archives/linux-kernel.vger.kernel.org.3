@@ -2,146 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436694E6DCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 06:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E825B4E6E2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345599AbiCYFif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 01:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S1356534AbiCYG3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 02:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243776AbiCYFiM (ORCPT
+        with ESMTP id S1358452AbiCYG3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 01:38:12 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D1C55B0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 22:36:24 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220325053620epoutp041226c3a0ffc310cacb10dd72d0c45af5~fiPZZ5ga22694026940epoutp04N
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:36:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220325053620epoutp041226c3a0ffc310cacb10dd72d0c45af5~fiPZZ5ga22694026940epoutp04N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648186580;
-        bh=j86NhfyZGha+ZaYqUAO9Gq8O6Uiv9YJI8CD01My/dgY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NIUgoXyeISYddQGwAyM8si1dX5+f8aGYrrFANaSCU5Pi4wAooBMvKJOcgdrWLdbZk
-         q/1MtlukNbqZqqTDLFXk+LTWzGEc5ya5uYqWbCTmWrmNjJhdLfZjyRNNrPsPUgRtkM
-         kCekdXg39thNDQxd+w+xM+IzQ8YLrR4u41QPXC8k=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220325053619epcas2p396e719e6bd90aeb455f50da3109e02f8~fiPYjOGKz2426124261epcas2p3X;
-        Fri, 25 Mar 2022 05:36:19 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KPrRj6lwzz4x9QX; Fri, 25 Mar
-        2022 05:36:17 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6A.97.25540.FC45D326; Fri, 25 Mar 2022 14:36:15 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220325053615epcas2p25b140872340b4711d4fef4c5a4cb45f4~fiPUnUeFb0320803208epcas2p2S;
-        Fri, 25 Mar 2022 05:36:15 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220325053615epsmtrp217bc8ac652a7e1b0e4928c9416c61407~fiPUmamsy2929029290epsmtrp2Z;
-        Fri, 25 Mar 2022 05:36:15 +0000 (GMT)
-X-AuditID: b6c32a47-831ff700000063c4-5d-623d54cf7292
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        93.F8.03370.FC45D326; Fri, 25 Mar 2022 14:36:15 +0900 (KST)
-Received: from rack03.dsn.sec.samsung.com (unknown [12.36.155.109]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220325053614epsmtip21bda836a5f42cc8becf61a0f3cbed5f8~fiPUaS7Ie2101121011epsmtip2N;
-        Fri, 25 Mar 2022 05:36:14 +0000 (GMT)
-From:   SEO HOYOUNG <hy50.seo@samsung.com>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
-        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
-Cc:     SEO HOYOUNG <hy50.seo@samsung.com>
-Subject: [PATCH v1] scsi: ufs: unipro: add to define HS-Gear5 mode
-Date:   Fri, 25 Mar 2022 02:21:13 +0900
-Message-Id: <20220324172113.192370-1-hy50.seo@samsung.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <sc.suh@samsung.com;>
+        Fri, 25 Mar 2022 02:29:07 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2048.outbound.protection.outlook.com [40.107.223.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335BAC5580
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:27:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P0V3mHpxr8x85hygBpBWf9aXcEDUxaPfAeYA+f1FO3RJRV5RrQ+4ywKzvTFWaMKm+Fsef60pzxRiyFb6s4bWIvMlOcjzo82FgUeCBrbJoM9fZ4JyzPr7adWJSN0GEBkI0jMdoV/ZNufSsK6oZumsGV5fQ00R1gi33SLLg3MpVlWNQr6E9CmXoyPyXFxBNrwX0CIX9OyLkO7QFpL7a3r8SBAHIhIYm/uf8cBl4vVDyYUJZBV7FakoLHPJqQEjqNRbKWrgtkTkDvr8dwr8C9JSTZN0Imgt1pZuR5T2NjlbhwtOBqvRNs7+sJHiX165IH7Q5QLes3JDzqSk+Zebwt46dA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eyQOGLgepnaC6Wx17sov6ex6cMuY/2hjrz5+CfLEDIk=;
+ b=PWjq2KApf1vVg9yAlRhRjnY+uXoTEcOkCUs6QWfk70KR+bbB82mHp2WaB1dsuV5ufFAkZwkFn9pd4WPTkNnkxfU9A8kyfyRSFg1hRVEswRV1lGuJhYhWgijhPebMVbLEsto7lOF1eYNlHTgXzeLdzXgmrW8F/PjLhx853FtiC4JRD75bIwk7N/XxF5bbgcZDQ3UgGHs7UwSovPAGC8zIUTAINurr3Yug/LzWOht6qTYpEAah3OsIORAjGQchBxV+bYsmIMYEKtNPG1eeuwNT3jub+8KYxaK5THFqpMgJtEG31hKXHewDf/1h9qvE30xCySnz6/sRZxftLMVOeEZvFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eyQOGLgepnaC6Wx17sov6ex6cMuY/2hjrz5+CfLEDIk=;
+ b=WgyaK8LnncJthiWOnfcr23q3O6Zodw1+NKTndbTHn2ySShTXWwMVsxsZZ+RV68lEEDIBrTRq8hE6BPj6708bOcb30bKkS/TLkYBXTnhtXgeSKYdkqV9cMteGc6L3yWqJyokGuuMQgYTEJm/fRa9yGyBwBbIG5DrkpcFWe0MbCbY=
+Received: from MW4PR04CA0309.namprd04.prod.outlook.com (2603:10b6:303:82::14)
+ by CH2PR12MB4087.namprd12.prod.outlook.com (2603:10b6:610:7f::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.18; Fri, 25 Mar
+ 2022 06:27:31 +0000
+Received: from CO1NAM11FT005.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::cd) by MW4PR04CA0309.outlook.office365.com
+ (2603:10b6:303:82::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.18 via Frontend
+ Transport; Fri, 25 Mar 2022 06:27:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT005.mail.protection.outlook.com (10.13.174.147) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5102.18 via Frontend Transport; Fri, 25 Mar 2022 06:27:30 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 25 Mar
+ 2022 01:27:29 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 25 Mar
+ 2022 01:27:28 -0500
+Received: from Ryan-AMD.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Fri, 25 Mar 2022 01:27:23 -0500
+From:   Ryan Lin <tsung-hua.lin@amd.com>
+To:     <harry.wentland@amd.com>, <sunpeng.li@amd.com>,
+        <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
+        <David1.Zhou@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <seanpaul@chromium.org>, <bas@basnieuwenhuizen.nl>,
+        <nicholas.kazlauskas@amd.com>, <sashal@kernel.org>,
+        <markyacoub@google.com>, <victorchengchi.lu@amd.com>,
+        <ching-shih.li@amd.corp-partner.google.com>,
+        <Rodrigo.Siqueira@amd.com>, <ddavenport@chromium.org>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <leon.li@amd.com>
+CC:     Ryan Lin <tsung-hua.lin@amd.com>
+Subject: [PATCH v2 3/25] drm/amdgpu: Disable ABM when AC mode
+Date:   Fri, 25 Mar 2022 12:05:16 +0800
+Message-ID: <20220325040515.4073706-1-tsung-hua.lin@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGJsWRmVeSWpSXmKPExsWy7bCmhe75ENskgy33dSwezNvGZrG37QS7
-        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8ZqsXrxAxaLRTe2MVnc3HKUxeLyrjlsFt3Xd7BZ
-        LD/+j8mB1+PyFW+Py329TB4TFh1g9Pi+voPN4+PTWywefVtWMXp83iTn0X6gmymAIyrbJiM1
-        MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoZCWFssScUqBQ
-        QGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsahpZNZ
-        C3azVjQuUWhg3MHSxcjJISFgIvHr0Vogm4tDSGAHo8Th3Z1sEM4nRonTc9sZIZzPjBK33vxn
-        g2npe7gHKrGLUaJzwXV2COcHo0RLyz+wwWwCGhJrjh1iAkmICKxgkujZ9IkJJMEsoCbx+e4y
-        sCJhASeJxzfaWUFsFgFViY7/DYwgNq+AlcTpiUuhLpSXWNTwG6yXU0BJ4v2pt8wQNYISJ2c+
-        YYGYKS/RvHU2M8gyCYGlHBKvW+4yQTS7SHz+vgnKFpZ4dXwLO4QtJfH53V6of4olfrxZzQTR
-        3MAosbT9GDNEwlhi1jNQCHAAbdCUWL9LH8SUEFCWOHILai+fRMfhv+wQYV6JjjYhiEYliTNz
-        b0OFJSQOzs6BCHtIbL3zixUkLCRQKrH5edUERoVZSH6ZheSXWQhbFzAyr2IUSy0ozk1PLTYq
-        MIbHb3J+7iZGcALWct/BOOPtB71DjEwcjIcYJTiYlUR471+2ThLiTUmsrEotyo8vKs1JLT7E
-        aAoM6YnMUqLJ+cAckFcSb2hiaWBiZmZobmRqYK4kzuuVsiFRSCA9sSQ1OzW1ILUIpo+Jg1Oq
-        gWnVVtkG6c/3VRcyzbxsa670JqbzZ/6T5avyS3l+TPqvtnfj1czDTk+Dy/QlMraL7e7oSbju
-        4/Ljv13oyvisgj+yd/yeKb6QOrR/0v7w9bO0TvGc+ZW7Y/WUkBnOQRd8qrk9Mrj/+E2eFZXU
-        dbG5uzThzSHrlk8fU/7U6FXVbHBpFwyav1Iiuftg8SrLBfdP5UVcUyovyws58s/6DauMy9wd
-        ybUBDFn/3Lf7LhVNm3l5Ous/t7s7RbVWzUjnvVclc1902+rl02ML+ZgYOtOaToqE9L7W9OG6
-        Z2Fask5v2+H21otMam/W5avFmFt++O+QvUbwmFumzrRnW+4tvPv4nY2G61eBQFYp9XrVl7Nn
-        ayqxFGckGmoxFxUnAgAHsPCuSQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrELMWRmVeSWpSXmKPExsWy7bCSvO75ENskg6efWSwezNvGZrG37QS7
-        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8ZqsXrxAxaLRTe2MVnc3HKUxeLyrjlsFt3Xd7BZ
-        LD/+j8mB1+PyFW+Py329TB4TFh1g9Pi+voPN4+PTWywefVtWMXp83iTn0X6gmymAI4rLJiU1
-        J7MstUjfLoEr49DSyawFu1krGpcoNDDuYOli5OSQEDCR6Hu4hxHEFhLYwSjR9q4cIi4h8X9x
-        ExOELSxxv+UIaxcjF1DNN0aJhV8/sIEk2AQ0JNYcO8QEkhAR2MYkcffDSbAEs4CaxOe7y8A2
-        CAs4STy+0c4KYrMIqEp0/G8A28YrYCVxeuJSqCvkJRY1/AbbximgJPH+1FtmiIsUJb6tXccE
-        US8ocXLmExaI+fISzVtnM09gFJiFJDULSWoBI9MqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS9
-        5PzcTYzgaNHS2sG4Z9UHvUOMTByMhxglOJiVRHjvX7ZOEuJNSaysSi3Kjy8qzUktPsQozcGi
-        JM57oetkvJBAemJJanZqakFqEUyWiYNTqoGJzUyPgb/WS5d9ibfdnt7Ve9JrOxufZ8fWefC/
-        ai1/8ubrt8yHTx3+KCkYcGXp9d3+5MSWI6gWNn0zx8pjJ4LE/q6MdT8x/Zbd1qd77ott9fri
-        aC9cKX5+a83Jk8EcwhN+eClaOtzYeDpt0Y96gQwRXVPBdMnWB+1LzgXOCPix8+MmbdfaBCGh
-        zzsCbfxES+bfqcvs2pTv6OuzwNE18LRt5fKfGyTL3wZu+f7K4PDJ2I3q5x5e1ffSl05eXn3s
-        cabaqs85a3M2Gd6dvJ5LoizYv8UwKeymvdkZJl5Dp7hX//Muv+w/2cV9oOZP/qoZrq8d3guu
-        sGZ5yxsYe6xu850Hrxddfeqy3HBjnazTwtNKLMUZiYZazEXFiQCIbrVKBQMAAA==
-X-CMS-MailID: 20220325053615epcas2p25b140872340b4711d4fef4c5a4cb45f4
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220325053615epcas2p25b140872340b4711d4fef4c5a4cb45f4
-References: <sc.suh@samsung.com;>
-        <CGME20220325053615epcas2p25b140872340b4711d4fef4c5a4cb45f4@epcas2p2.samsung.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b077b04d-6a1d-4903-b34a-08da0e288a0c
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4087:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB4087F67C9E53D6225E77921CB21A9@CH2PR12MB4087.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PUiKtScg4J+LY78NuAqka3AmZ0LAPjArddhdMnk8mBTJkyQk7pGX3f8WH3GHTgWDXKjQVilR92zC46GF3q5T7lfYgzt4yUx5Dt38YNxNoT53ZsPP+HzFmoqPZh2ij7f0aW22i4gSgxpdrFEfzHdDUk5af+p3I8OP8rKOMCrvuKTYs4qDMuEUt+1+LS8gq30EVkzH9AnU2+O2AnJero2kS0geux9rsX1ztswnFiq6uS2nRIpBoIRVKBeFQG9+cE3S528vWzXaqdhWztn9Tn7vfBVCfOY8SbZaXOsGzIlihOiBh6rxjF5sywFFoAApJ5XNmWAuRWMR0pvXB1v71UgVldOQTVuXU4yq+55No4tTBG2qamYo7MLpkYmFNNeSlobHeDuex/MPIJNV/6cI9vu7BhosH2QPBaEhbNG2ziXEgzMvtI4jcOBJ7ORI/Hfe33jmoVqGr1ayDeV0US9hWVpmKLwFl3X0Wb0aKukKoh404nOszyQPml5ONKc+jFHX7aJVaC3L5v1Ggtmc20vZciTJUeBFbaO0SAEYf3PUHjSF/4rMAs3Zvw/DsSr0dVHhkz7HWmlhgQlmt+JpdXzRX71V2ABlV/sWboKCMhANE/6Ae7IdPR4DX6rHLyUiN4HTu4l0sWPzZLE/70+MVDyBOP+IZeaPoIqsDuD6x1450JrynwNYBKYHrMeoMPDxgOiURht19pcOya1YcI6A0pEFKma42z1vopRkJeQi1a/8dSc3P/HEdbSwO0MU+NNuL79mScvwBbdj6s+FrJLQ4soPsmfDoA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(316002)(1076003)(921005)(82310400004)(7416002)(2616005)(356005)(81166007)(5660300002)(40460700003)(508600001)(86362001)(7696005)(110136005)(6666004)(6636002)(2906002)(26005)(36860700001)(8676002)(186003)(426003)(8936002)(36756003)(336012)(70586007)(83380400001)(70206006)(4326008)(47076005)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2022 06:27:30.2040
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b077b04d-6a1d-4903-b34a-08da0e288a0c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4087
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UFS devices support HS-Gear5 mode with UFS4.0 spec.
-However there is no definition of HS-Gear5.
-So added it in unipro header
+Disable ABM feature when the system is running on AC mode to get
+the more perfect contrast of the display.
 
-Change-Id: Id5475005000fe66b432ab76fa3364a8c12296f7c
-Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
+
 ---
- drivers/scsi/ufs/unipro.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c      |  4 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |  1 +
+ drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c | 58 ++++++++++++-------
+ drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h       |  1 +
+ 4 files changed, 42 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/scsi/ufs/unipro.h b/drivers/scsi/ufs/unipro.h
-index 8e9e486a4f7b..0d2131e1f027 100644
---- a/drivers/scsi/ufs/unipro.h
-+++ b/drivers/scsi/ufs/unipro.h
-@@ -231,6 +231,7 @@ enum ufs_hs_gear_tag {
- 	UFS_HS_G2,		/* HS Gear 2 */
- 	UFS_HS_G3,		/* HS Gear 3 */
- 	UFS_HS_G4,		/* HS Gear 4 */
-+	UFS_HS_G5,		/* HS Gear 5 */
- };
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+index c560c1ab62ecb..bc8bb9aad2e36 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+@@ -822,6 +822,10 @@ static int amdgpu_acpi_event(struct notifier_block *nb,
+ 	struct amdgpu_device *adev = container_of(nb, struct amdgpu_device, acpi_nb);
+ 	struct acpi_bus_event *entry = (struct acpi_bus_event *)data;
  
- enum ufs_unipro_ver {
++	if (strcmp(entry->device_class, "battery") == 0) {
++		adev->pm.ac_power = power_supply_is_system_supplied() > 0;
++	}
++
+ 	if (strcmp(entry->device_class, ACPI_AC_CLASS) == 0) {
+ 		if (power_supply_is_system_supplied() > 0)
+ 			DRM_DEBUG_DRIVER("pm: AC\n");
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index abfcc1304ba0c..3a0afe7602727 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -3454,6 +3454,7 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+ 
+ 	adev->gfx.gfx_off_req_count = 1;
+ 	adev->pm.ac_power = power_supply_is_system_supplied() > 0;
++	adev->pm.old_ac_power = true;
+ 
+ 	atomic_set(&adev->throttling_logging_enabled, 1);
+ 	/*
+diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+index 54a1408c8015c..478a734b66926 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
++++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+@@ -23,6 +23,8 @@
+  *
+  */
+ 
++#include <linux/power_supply.h>
++#include "amdgpu.h"
+ #include "dmub_abm.h"
+ #include "dce_abm.h"
+ #include "dc.h"
+@@ -51,6 +53,7 @@
+ #define DISABLE_ABM_IMMEDIATELY 255
+ 
+ 
++extern uint amdgpu_dm_abm_level;
+ 
+ static void dmub_abm_enable_fractional_pwm(struct dc_context *dc)
+ {
+@@ -117,28 +120,6 @@ static void dmub_abm_init(struct abm *abm, uint32_t backlight)
+ 	dmub_abm_enable_fractional_pwm(abm->ctx);
+ }
+ 
+-static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
+-{
+-	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+-	unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
+-
+-	/* return backlight in hardware format which is unsigned 17 bits, with
+-	 * 1 bit integer and 16 bit fractional
+-	 */
+-	return backlight;
+-}
+-
+-static unsigned int dmub_abm_get_target_backlight(struct abm *abm)
+-{
+-	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+-	unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
+-
+-	/* return backlight in hardware format which is unsigned 17 bits, with
+-	 * 1 bit integer and 16 bit fractional
+-	 */
+-	return backlight;
+-}
+-
+ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+ {
+ 	union dmub_rb_cmd cmd;
+@@ -148,6 +129,9 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+ 	int edp_num;
+ 	uint8_t panel_mask = 0;
+ 
++	if (power_supply_is_system_supplied() > 0)
++		level = 0;
++
+ 	get_edp_links(dc->dc, edp_links, &edp_num);
+ 
+ 	for (i = 0; i < edp_num; i++) {
+@@ -170,6 +154,36 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+ 	return true;
+ }
+ 
++static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
++{
++	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
++	unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
++	struct dc_context *dc = abm->ctx;
++	struct amdgpu_device *adev = dc->driver_context;
++
++	if (adev->pm.ac_power != adev->pm.old_ac_power) {
++		dmub_abm_set_level(abm, amdgpu_dm_abm_level);
++		adev->pm.ac_power = power_supply_is_system_supplied() > 0;
++		adev->pm.old_ac_power = adev->pm.ac_power;
++	}
++
++	/* return backlight in hardware format which is unsigned 17 bits, with
++	 * 1 bit integer and 16 bit fractional
++	 */
++	return backlight;
++}
++
++static unsigned int dmub_abm_get_target_backlight(struct abm *abm)
++{
++	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
++	unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
++
++	/* return backlight in hardware format which is unsigned 17 bits, with
++	 * 1 bit integer and 16 bit fractional
++	 */
++	return backlight;
++}
++
+ static bool dmub_abm_init_config(struct abm *abm,
+ 	const char *src,
+ 	unsigned int bytes,
+diff --git a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+index f6e0e7d8a0077..de459411a0e83 100644
+--- a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
++++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+@@ -445,6 +445,7 @@ struct amdgpu_pm {
+ 	uint32_t                smu_prv_buffer_size;
+ 	struct amdgpu_bo        *smu_prv_buffer;
+ 	bool ac_power;
++	bool old_ac_power;
+ 	/* powerplay feature */
+ 	uint32_t pp_feature;
+ 
 -- 
-2.26.0
+2.25.1
 

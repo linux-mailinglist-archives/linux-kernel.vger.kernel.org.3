@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896CA4E725B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15F44E7262
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349385AbiCYLiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S1354573AbiCYLmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356931AbiCYLh6 (ORCPT
+        with ESMTP id S1345552AbiCYLmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:37:58 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E96BD7DA;
-        Fri, 25 Mar 2022 04:36:23 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id w21so5923656wra.2;
-        Fri, 25 Mar 2022 04:36:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5/xCx5Y2e0Klyd/HbXihrZqcDQDT2V+46V0GBs4k8mk=;
-        b=rDQf89hUvx34pCOLWGZCNqei98dKC/P/8jK/LzBHGAaTQCvQxDa5DYlBDA8c9UwBor
-         K2HRPVMKPcbQZuY8tkPp8l/tCrRoAwD63D6eFW/cp60wr7Z8NcuEzLQMAE6mNxKNgxyx
-         7FhncPHm6rxzVVrIViIX60t6Yc/v0OQAxe43ZzMyuTASK8ym+kSXQnCBRBGviQfkhKzw
-         WWtU2MaeHnS/jATfhtdrVtX8noVCfCpRArgUVoKPgyphgpUAeTR1p0gB/SaCksL5nZWS
-         oraJdsp9jU8my/VCQUoaylZWzSfpOyfExoGnVKGibEeuDUWmaY8MjM+C/TEWH5BrU0ih
-         jyig==
-X-Gm-Message-State: AOAM530VIQxPY2F6xiWrghMPfFp6B2vC8rR+f0EkC5GXEMNvcooT5eJi
-        bIekemMyGbDbJmpnsJqwFcc=
-X-Google-Smtp-Source: ABdhPJxJjF28B2+aRUQOSmKVj4QHce1eDHa+AlOHnwTrZyL7xExfzeVoAfSxs7+n8uRRi+3rbh3eiw==
-X-Received: by 2002:adf:d1c2:0:b0:205:7f2f:5043 with SMTP id b2-20020adfd1c2000000b002057f2f5043mr8882517wrd.238.1648208181638;
-        Fri, 25 Mar 2022 04:36:21 -0700 (PDT)
-Received: from [192.168.0.159] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id g1-20020a1c4e01000000b003899c8053e1sm5565941wmh.41.2022.03.25.04.36.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 04:36:21 -0700 (PDT)
-Message-ID: <382c4fae-95c5-af26-5d54-fa7ae7422b37@kernel.org>
-Date:   Fri, 25 Mar 2022 12:36:20 +0100
+        Fri, 25 Mar 2022 07:42:19 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7D0C559C;
+        Fri, 25 Mar 2022 04:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6Fw+DBOwDSEC8gESfzuRrIW++n1v7Mx6XYIG14G7w/c=; b=tb1PqS+no+XrmjP72Uq03DEj0k
+        u4jpt3oHrj7FIguSxsToaTybpGwFxXxt04e9svRfpzYWiDJ5j/UZ4UN+++gcpWvuLVyG+laUV7/hN
+        ZB25AZzJpP2KUdnpV+xgH6bthMjp1PYiDv5PUwXZOTuTfrAQd44+VCoWaM37lKQo5J+B2Ox7YzOnk
+        CqkYKzE58leAwSA2bh9EoQgsUXBJ7SAzPdLBuG6D3SlvFbNS9iVelorJAf3xjx7Oz8W2ANbm/2Lvw
+        Kt/7lBfskERWcWpimL1wZwPsV6cUdr/ZzlfbIDoq2DNaaDnG952KbxZnVebf7fPhPxnwdPx6MK/DT
+        iRr+8JfA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nXiIh-00EK3j-Ja; Fri, 25 Mar 2022 11:40:15 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 13504987D26; Fri, 25 Mar 2022 12:40:13 +0100 (CET)
+Date:   Fri, 25 Mar 2022 12:40:12 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 3/2] x86,rethook: Fix arch_rethook_trampoline() to
+ generate a complete pt_regs
+Message-ID: <20220325114012.GO8939@worktop.programming.kicks-ass.net>
+References: <164818251899.2252200.7306353689206167903.stgit@devnote2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 1/4] usb: host: export symbols for xhci hooks usage
-Content-Language: en-US
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>,
-        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
-        cpgs@samsung.com, cpgsproxy5@samsung.com
-References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220304062617epcas2p2084161966aaa66d07f4c25720ec18088@epcas2p2.samsung.com>
- <252651381.41646375583002.JavaMail.epsvc@epcpadp4>
- <b33d8497-d6d5-18e2-93a9-e0564a84c1c5@kernel.org>
- <1983025922.01648006681661.JavaMail.epsvc@epcpadp4>
- <105eaeec-d77e-b0eb-86ad-a88c7446ca98@kernel.org>
- <1295226194.41648172284403.JavaMail.epsvc@epcpadp4>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <1295226194.41648172284403.JavaMail.epsvc@epcpadp4>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164818251899.2252200.7306353689206167903.stgit@devnote2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,62 +61,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/2022 02:28, Jung Daehwan wrote:
-> On Wed, Mar 23, 2022 at 10:41:23AM +0100, Krzysztof Kozlowski wrote:
->> On 23/03/2022 03:58, Jung Daehwan wrote:
->>> On Mon, Mar 07, 2022 at 10:59:06AM +0100, Krzysztof Kozlowski wrote:
->>>> On 04/03/2022 07:23, Daehwan Jung wrote:
->>>>> Export symbols for xhci hooks usage:
->>>>> 	xhci_ring_free
->>>>> 	- Allow xhci hook to free xhci_ring.
->>>>
->>>> Instead of copying-pasting the name of function, please explain why do
->>>> you need these symbols exported.
->>>>
->>>> The "Why" is actually one of most important questions, because "what is
->>>> this patch doing" we can easily see...
->>>>
->>>>>
->>>>> 	xhci_get_slot_ctx
->>>>> 	- Allow xhci hook to get slot_ctx from the xhci_container_ctx
->>>>> 	  for getting the slot_ctx information to know which slot is
->>>>> 	  offloading and compare the context in remote subsystem memory
->>>>> 	  if needed.
->>>>>
->>>>
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>>
->>>
->>> Hi Krzysztof
->>>
->>> xhci_ring_free has been removed from v3..
->>> The reason why I want to export is for managing vendor specific ring.
->>> I want to alloc and free vendor specific ring on specific address.
->>> It's done with xhci hooks.
->>
->> It's better, but still does not explain why these have to be exported.
->> Please mention where are these hooks going to be. Where are they
->> implemented. I actually expect all of these exports to be used in your
->> patchset.
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> OK. How about adding call stack like below?
-> 
-> xhci_free_endpoint_ring -> xhci_vendor_free_transfer_ring(xhck hooks
-> ops) -> xhci_ring_free
 
-What I would like to see is high level explanation, why do you need
-these functions exported. Such call trace does not answer this, because
-you do not need to export functions just to call the. You need to export
-them for modules, so this means that some modules (which - need names)
-will be using these functions. Three or four sentences are usually
-enough to explain it.
+You lost the regs->ss bit again..
 
+Boot tested on tigerlake with IBT enabled -- passed the boot time
+kretprobe selftests.
 
-Best regards,
-Krzysztof
+---
+
+Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Fri Mar 25 10:25:56 CET 2022
+
+Currently arch_rethook_trampoline() generates an almost complete
+pt_regs on-stack, everything except regs->ss that is, that currently
+points to the fake return address, which is not a valid segment
+descriptor.
+
+Since interpretation of regs->[sb]p should be done in the context of
+regs->ss, and we have code actually doing that (see
+arch/x86/lib/insn-eval.c for instance), complete the job by also
+pushing ss.
+
+This ensures that anybody who does do look at regs->ss doesn't
+mysteriously malfunction, avoiding much future pain.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/kernel/rethook.c |   24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+--- a/arch/x86/kernel/rethook.c
++++ b/arch/x86/kernel/rethook.c
+@@ -25,29 +25,31 @@ asm(
+ 	/* Push a fake return address to tell the unwinder it's a kretprobe. */
+ 	"	pushq $arch_rethook_trampoline\n"
+ 	UNWIND_HINT_FUNC
+-	/* Save the 'sp - 8', this will be fixed later. */
++	"       pushq $" __stringify(__KERNEL_DS) "\n"
++	/* Save the 'sp - 16', this will be fixed later. */
+ 	"	pushq %rsp\n"
+ 	"	pushfq\n"
+ 	SAVE_REGS_STRING
+ 	"	movq %rsp, %rdi\n"
+ 	"	call arch_rethook_trampoline_callback\n"
+ 	RESTORE_REGS_STRING
+-	/* In the callback function, 'regs->flags' is copied to 'regs->sp'. */
+-	"	addq $8, %rsp\n"
++	/* In the callback function, 'regs->flags' is copied to 'regs->ss'. */
++	"	addq $16, %rsp\n"
+ 	"	popfq\n"
+ #else
+ 	/* Push a fake return address to tell the unwinder it's a kretprobe. */
+ 	"	pushl $arch_rethook_trampoline\n"
+ 	UNWIND_HINT_FUNC
+-	/* Save the 'sp - 4', this will be fixed later. */
++	"	pushl %ss\n"
++	/* Save the 'sp - 8', this will be fixed later. */
+ 	"	pushl %esp\n"
+ 	"	pushfl\n"
+ 	SAVE_REGS_STRING
+ 	"	movl %esp, %eax\n"
+ 	"	call arch_rethook_trampoline_callback\n"
+ 	RESTORE_REGS_STRING
+-	/* In the callback function, 'regs->flags' is copied to 'regs->sp'. */
+-	"	addl $4, %esp\n"
++	/* In the callback function, 'regs->flags' is copied to 'regs->ss'. */
++	"	addl $8, %esp\n"
+ 	"	popfl\n"
+ #endif
+ 	ASM_RET
+@@ -69,8 +71,8 @@ __used __visible void arch_rethook_tramp
+ #endif
+ 	regs->ip = (unsigned long)&arch_rethook_trampoline;
+ 	regs->orig_ax = ~0UL;
+-	regs->sp += sizeof(long);
+-	frame_pointer = &regs->sp + 1;
++	regs->sp += 2*sizeof(long);
++	frame_pointer = (long *)(regs + 1);
+ 
+ 	/*
+ 	 * The return address at 'frame_pointer' is recovered by the
+@@ -80,10 +82,10 @@ __used __visible void arch_rethook_tramp
+ 	rethook_trampoline_handler(regs, (unsigned long)frame_pointer);
+ 
+ 	/*
+-	 * Copy FLAGS to 'pt_regs::sp' so that arch_rethook_trapmoline()
++	 * Copy FLAGS to 'pt_regs::ss' so that arch_rethook_trapmoline()
+ 	 * can do RET right after POPF.
+ 	 */
+-	regs->sp = regs->flags;
++	*(unsigned long *)&regs->ss = regs->flags;
+ }
+ NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+ 
+@@ -101,7 +103,7 @@ STACK_FRAME_NON_STANDARD_FP(arch_rethook
+ void arch_rethook_fixup_return(struct pt_regs *regs,
+ 			       unsigned long correct_ret_addr)
+ {
+-	unsigned long *frame_pointer = &regs->sp + 1;
++	unsigned long *frame_pointer = (void *)(regs + 1);
+ 
+ 	/* Replace fake return address with real one. */
+ 	*frame_pointer = correct_ret_addr;

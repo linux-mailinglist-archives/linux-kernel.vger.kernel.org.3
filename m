@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C45F4E763C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE334E75EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359764AbiCYPL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S1354373AbiCYPJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376257AbiCYPIO (ORCPT
+        with ESMTP id S1359676AbiCYPHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:08:14 -0400
+        Fri, 25 Mar 2022 11:07:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8246A774E;
-        Fri, 25 Mar 2022 08:06:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C03DA6D2;
+        Fri, 25 Mar 2022 08:05:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6DA861C11;
-        Fri, 25 Mar 2022 15:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF40C340EE;
-        Fri, 25 Mar 2022 15:06:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FD2061BAD;
+        Fri, 25 Mar 2022 15:05:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65710C340EE;
+        Fri, 25 Mar 2022 15:05:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220798;
-        bh=nlE5/yk8Wh13HMpIBgKjw5YvNTdmuJ9LRCKl5GPXncI=;
+        s=korg; t=1648220757;
+        bh=f4H2JhhW9Loa7LpqKv/YREuv+jY8WMt0ZAla2LtzshI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VQa9u5m/McqvzyQi0dKeTRLlkE75Uk1cfTuqVCdswtM0/ucGTwZOxb9YPq7v77GZH
-         ChHo3Hj928H2rN5RGcrYalVeTQkqAVXbpKdjPUGxniRPdkgRR/BA2b1L3UjaJzeV/o
-         7yICQC21RlsIG2hICoaf1N2jQor3sfGrxHSNo5v0=
+        b=FYGrP3lfLuF5cfm55AGZoUhEsWTH/Rggu94Pb2kb8+4433Kl+6MvY5kbaDtmBWuM1
+         +rRttlGT4mHuJ/7ymTqxJQvWVKwRE4u7QhVnGQ5kZ5qvQBMCXdtSa6tj1h+AaM3Z7a
+         DC0TP2wLPOpzOhNUMwKvqFQg8qv/M5BD6DO/swwI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephane Graber <stgraber@ubuntu.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 13/20] drivers: net: xgene: Fix regression in CRC stripping
+        stable@vger.kernel.org,
+        Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>,
+        =?UTF-8?q?Linus=20L=C3=BCssing?= <ll@simonwunderlich.de>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 4.14 17/17] mac80211: fix potential double free on mesh join
 Date:   Fri, 25 Mar 2022 16:04:51 +0100
-Message-Id: <20220325150417.394482706@linuxfoundation.org>
+Message-Id: <20220325150417.262035632@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
-References: <20220325150417.010265747@linuxfoundation.org>
+In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
+References: <20220325150416.756136126@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,57 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephane Graber <stgraber@ubuntu.com>
+From: Linus Lüssing <ll@simonwunderlich.de>
 
-commit e9e6faeafaa00da1851bcf47912b0f1acae666b4 upstream.
+commit 4a2d4496e15ea5bb5c8e83b94ca8ca7fb045e7d3 upstream.
 
-All packets on ingress (except for jumbo) are terminated with a 4-bytes
-CRC checksum. It's the responsability of the driver to strip those 4
-bytes. Unfortunately a change dating back to March 2017 re-shuffled some
-code and made the CRC stripping code effectively dead.
+While commit 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving
+mesh") fixed a memory leak on mesh leave / teardown it introduced a
+potential memory corruption caused by a double free when rejoining the
+mesh:
 
-This change re-orders that part a bit such that the datalen is
-immediately altered if needed.
+  ieee80211_leave_mesh()
+  -> kfree(sdata->u.mesh.ie);
+  ...
+  ieee80211_join_mesh()
+  -> copy_mesh_setup()
+     -> old_ie = ifmsh->ie;
+     -> kfree(old_ie);
 
-Fixes: 4902a92270fb ("drivers: net: xgene: Add workaround for errata 10GE_8/ENET_11")
+This double free / kernel panics can be reproduced by using wpa_supplicant
+with an encrypted mesh (if set up without encryption via "iw" then
+ifmsh->ie is always NULL, which avoids this issue). And then calling:
+
+  $ iw dev mesh0 mesh leave
+  $ iw dev mesh0 mesh join my-mesh
+
+Note that typically these commands are not used / working when using
+wpa_supplicant. And it seems that wpa_supplicant or wpa_cli are going
+through a NETDEV_DOWN/NETDEV_UP cycle between a mesh leave and mesh join
+where the NETDEV_UP resets the mesh.ie to NULL via a memcpy of
+default_mesh_setup in cfg80211_netdev_notifier_call, which then avoids
+the memory corruption, too.
+
+The issue was first observed in an application which was not using
+wpa_supplicant but "Senf" instead, which implements its own calls to
+nl80211.
+
+Fixing the issue by removing the kfree()'ing of the mesh IE in the mesh
+join function and leaving it solely up to the mesh leave to free the
+mesh IE.
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Stephane Graber <stgraber@ubuntu.com>
-Tested-by: Stephane Graber <stgraber@ubuntu.com>
-Link: https://lore.kernel.org/r/20220322224205.752795-1-stgraber@ubuntu.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving mesh")
+Reported-by: Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
+Signed-off-by: Linus Lüssing <ll@simonwunderlich.de>
+Tested-by: Mathias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
+Link: https://lore.kernel.org/r/20220310183513.28589-1-linus.luessing@c0d3.blue
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/apm/xgene/xgene_enet_main.c |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ net/mac80211/cfg.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
-+++ b/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
-@@ -707,6 +707,12 @@ static int xgene_enet_rx_frame(struct xg
- 	buf_pool->rx_skb[skb_index] = NULL;
+--- a/net/mac80211/cfg.c
++++ b/net/mac80211/cfg.c
+@@ -1811,13 +1811,11 @@ static int copy_mesh_setup(struct ieee80
+ 		const struct mesh_setup *setup)
+ {
+ 	u8 *new_ie;
+-	const u8 *old_ie;
+ 	struct ieee80211_sub_if_data *sdata = container_of(ifmsh,
+ 					struct ieee80211_sub_if_data, u.mesh);
  
- 	datalen = xgene_enet_get_data_len(le64_to_cpu(raw_desc->m1));
-+
-+	/* strip off CRC as HW isn't doing this */
-+	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
-+	if (!nv)
-+		datalen -= 4;
-+
- 	skb_put(skb, datalen);
- 	prefetch(skb->data - NET_IP_ALIGN);
- 	skb->protocol = eth_type_trans(skb, ndev);
-@@ -728,12 +734,8 @@ static int xgene_enet_rx_frame(struct xg
- 		}
+ 	/* allocate information elements */
+ 	new_ie = NULL;
+-	old_ie = ifmsh->ie;
+ 
+ 	if (setup->ie_len) {
+ 		new_ie = kmemdup(setup->ie, setup->ie_len,
+@@ -1827,7 +1825,6 @@ static int copy_mesh_setup(struct ieee80
  	}
+ 	ifmsh->ie_len = setup->ie_len;
+ 	ifmsh->ie = new_ie;
+-	kfree(old_ie);
  
--	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
--	if (!nv) {
--		/* strip off CRC as HW isn't doing this */
--		datalen -= 4;
-+	if (!nv)
- 		goto skip_jumbo;
--	}
- 
- 	slots = page_pool->slots - 1;
- 	head = page_pool->head;
+ 	/* now copy the rest of the setup parameters */
+ 	ifmsh->mesh_id_len = setup->mesh_id_len;
 
 

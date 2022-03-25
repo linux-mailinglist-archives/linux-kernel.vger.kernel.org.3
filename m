@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD9D4E75C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EB14E7620
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359666AbiCYPHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S1353146AbiCYPKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359527AbiCYPGr (ORCPT
+        with ESMTP id S1359640AbiCYPI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:06:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCE0A8EE2;
-        Fri, 25 Mar 2022 08:05:08 -0700 (PDT)
+        Fri, 25 Mar 2022 11:08:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DDCDA08C;
+        Fri, 25 Mar 2022 08:07:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A38D1B828FA;
-        Fri, 25 Mar 2022 15:05:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B6DC340EE;
-        Fri, 25 Mar 2022 15:05:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56947B82833;
+        Fri, 25 Mar 2022 15:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C3B1C340EE;
+        Fri, 25 Mar 2022 15:07:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220705;
-        bh=hQlE9m5Ez8HCizzJQlCFIZFMMxTeaZoGlnKTQ+Vv0pY=;
+        s=korg; t=1648220827;
+        bh=LXjInEuRHsdH1yksMxpJd/ijOUbhpkKPDjHBTsBJpEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TrTUxCbxD2Hq3kGu/Eiza7MBLgxi2ha89oT6TvI3+ZTioNWrWkO9BeE3Nsgkhc0X2
-         qMHTbbDvtrHaXVXLcjQtJf5ISDrFT6XW+uLawexgO4SJ+8AJGIrEiEVVmzw8f1Ni7K
-         NTh527GamaDx+b0HUzokrg5JFMi/p4RB1lrVjQlM=
+        b=QY2xfuPGudYenp+0BuH1w1vRBUSbG625vfMsCqrDRMDFo6v86wfXNNIxKKpLxyA1R
+         wZOeZShTKgV09qPsufzpZ+bglSns6qtbGz++p/dlSN1YvMKW7jNcJKvtVBO7x3Hkqx
+         YCOl25ntbsViZk32p+VdF6pIhAmrcw34BclGIbO8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>,
-        =?UTF-8?q?Linus=20L=C3=BCssing?= <ll@simonwunderlich.de>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 4.9 14/14] mac80211: fix potential double free on mesh join
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4.19 04/20] staging: fbtft: fb_st7789v: reset display before initialization
 Date:   Fri, 25 Mar 2022 16:04:42 +0100
-Message-Id: <20220325150416.113064132@linuxfoundation.org>
+Message-Id: <20220325150417.138090246@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150415.694544076@linuxfoundation.org>
-References: <20220325150415.694544076@linuxfoundation.org>
+In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
+References: <20220325150417.010265747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Lüssing <ll@simonwunderlich.de>
+From: Oliver Graute <oliver.graute@kococonnector.com>
 
-commit 4a2d4496e15ea5bb5c8e83b94ca8ca7fb045e7d3 upstream.
+commit b6821b0d9b56386d2bf14806f90ec401468c799f upstream.
 
-While commit 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving
-mesh") fixed a memory leak on mesh leave / teardown it introduced a
-potential memory corruption caused by a double free when rejoining the
-mesh:
+In rare cases the display is flipped or mirrored. This was observed more
+often in a low temperature environment. A clean reset on init_display()
+should help to get registers in a sane state.
 
-  ieee80211_leave_mesh()
-  -> kfree(sdata->u.mesh.ie);
-  ...
-  ieee80211_join_mesh()
-  -> copy_mesh_setup()
-     -> old_ie = ifmsh->ie;
-     -> kfree(old_ie);
-
-This double free / kernel panics can be reproduced by using wpa_supplicant
-with an encrypted mesh (if set up without encryption via "iw" then
-ifmsh->ie is always NULL, which avoids this issue). And then calling:
-
-  $ iw dev mesh0 mesh leave
-  $ iw dev mesh0 mesh join my-mesh
-
-Note that typically these commands are not used / working when using
-wpa_supplicant. And it seems that wpa_supplicant or wpa_cli are going
-through a NETDEV_DOWN/NETDEV_UP cycle between a mesh leave and mesh join
-where the NETDEV_UP resets the mesh.ie to NULL via a memcpy of
-default_mesh_setup in cfg80211_netdev_notifier_call, which then avoids
-the memory corruption, too.
-
-The issue was first observed in an application which was not using
-wpa_supplicant but "Senf" instead, which implements its own calls to
-nl80211.
-
-Fixing the issue by removing the kfree()'ing of the mesh IE in the mesh
-join function and leaving it solely up to the mesh leave to free the
-mesh IE.
-
+Fixes: ef8f317795da (staging: fbtft: use init function instead of init sequence)
 Cc: stable@vger.kernel.org
-Fixes: 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving mesh")
-Reported-by: Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
-Signed-off-by: Linus Lüssing <ll@simonwunderlich.de>
-Tested-by: Mathias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
-Link: https://lore.kernel.org/r/20220310183513.28589-1-linus.luessing@c0d3.blue
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Oliver Graute <oliver.graute@kococonnector.com>
+Link: https://lore.kernel.org/r/20220210085322.15676-1-oliver.graute@kococonnector.com
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/cfg.c |    3 ---
- 1 file changed, 3 deletions(-)
+ drivers/staging/fbtft/fb_st7789v.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/net/mac80211/cfg.c
-+++ b/net/mac80211/cfg.c
-@@ -1776,13 +1776,11 @@ static int copy_mesh_setup(struct ieee80
- 		const struct mesh_setup *setup)
+--- a/drivers/staging/fbtft/fb_st7789v.c
++++ b/drivers/staging/fbtft/fb_st7789v.c
+@@ -76,6 +76,8 @@ enum st7789v_command {
+  */
+ static int init_display(struct fbtft_par *par)
  {
- 	u8 *new_ie;
--	const u8 *old_ie;
- 	struct ieee80211_sub_if_data *sdata = container_of(ifmsh,
- 					struct ieee80211_sub_if_data, u.mesh);
- 
- 	/* allocate information elements */
- 	new_ie = NULL;
--	old_ie = ifmsh->ie;
- 
- 	if (setup->ie_len) {
- 		new_ie = kmemdup(setup->ie, setup->ie_len,
-@@ -1792,7 +1790,6 @@ static int copy_mesh_setup(struct ieee80
- 	}
- 	ifmsh->ie_len = setup->ie_len;
- 	ifmsh->ie = new_ie;
--	kfree(old_ie);
- 
- 	/* now copy the rest of the setup parameters */
- 	ifmsh->mesh_id_len = setup->mesh_id_len;
++	par->fbtftops.reset(par);
++
+ 	/* turn off sleep mode */
+ 	write_reg(par, MIPI_DCS_EXIT_SLEEP_MODE);
+ 	mdelay(120);
 
 

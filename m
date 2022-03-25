@@ -2,54 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05D44E73FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC224E73FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245078AbiCYNMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 09:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S1345340AbiCYNNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 09:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238273AbiCYNMC (ORCPT
+        with ESMTP id S1354117AbiCYNNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:12:02 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D753917D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:10:28 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id g2-20020a056e02130200b002c837b25e60so4550911ilr.20
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:10:28 -0700 (PDT)
+        Fri, 25 Mar 2022 09:13:05 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F8FCD306
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:11:31 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id h4so1422176edr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=39vGWICtE1D8WySZuhFVZlySZosFxjBXRPANWqdHqJI=;
+        b=NTx2AJfNxhtsruI+24G5OYmC4RHPpFcxU392t4ad1qdWs3PL+wH61IGlUhqrZF/kj/
+         Y6u7so5LGZyjeNOaBNTyKVcVtcDy/DVeIH+UyQpE6gVpe/2Xh5kY+q3AEJxudzf4uv/d
+         SZdJHdcKlZojzwZs3vMPUoHiUOKKsoWVcj8y0UT9IhyIxtMF0KqTh+xag8oz+vRPGfdU
+         IC/EBlaXJHbP8ia07dtrBi/LGajTT6INsCG6oOEWPyR9Ro5yRTXCBrD8Dhdpg50WerI4
+         M8rrBkhR3hcsn3s1Jbi6LN5KZ38YGPOdjtiX7FDUzl32H1EjVIoJpuTLnuaw1vKNbuZ1
+         lZJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=KosOGWYuEGV0sf8h8ACjx6c7aC3WaEJkx0os9Bmapfg=;
-        b=uOwS18i8lfJmrsHIZYimHrzjIijYS0C3DG/+lGDZc/1EmSPemlhcwDprmZnHDp0+nN
-         XLUtTN7t+64RlEClzWLivO31Oph0xyY7Lg95cUvxpt6v7p/alSu2dY36HUoIeeXGUTzs
-         dp9mH9R8nJ9VFhXD2rGorcaVTqzqCo+x8j6ZLI4/vk1+ZJG9z9pC2pE8UjV83gSAop9t
-         +8IpNQJkmfNRYaQvuFauqR4gLKdFDpNP+/nqxGk3Kotnqz6/j6FgEBsxJMf6o0nmkYXn
-         LX+34hrUaff6yThSyUWUwvxNFORu04QGiaFUjIjGOrQzXaXvG/boze4MhpvE4Vfs1fvz
-         FMDg==
-X-Gm-Message-State: AOAM530zS0LqP0KNEB3t/RBUhZNZzMf4u9ec6UGVq1Z0hNhPj8WdcoI2
-        dQM+TJwDW5kbqc31xQQOfrAEoeHa7A9nprLrzkLZHPjF0T9G
-X-Google-Smtp-Source: ABdhPJwQ5X+MQfNKFOQwNMsTy53/dAX5YJcxGhWsealzYCzZuW09tAa4Gyb2Ir1wBVWtVU+IN/lteS+zQndAqYqLWUhRAerS7rBA
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=39vGWICtE1D8WySZuhFVZlySZosFxjBXRPANWqdHqJI=;
+        b=pZMTTxuGF1MpwChS1qDF3zURWO/sFJ9kRHN+3216r4QUIOeqjsnifQ8s/2fXnbDPiR
+         DFglDIpmjj5Q/IHL01t0OjjLrHlkCJGkZFG+9MPI77SXGYZIU7t/ATMFNwWtCmNRJFAX
+         teJrD+BAARCapknHaGzZSdUUbpnDqKGDKeqRISTSzbr8fBMF9KghKKztf+iCrTPu5VLi
+         OzIBkqAy2oD/vODYF3JJTmPVNujlmWcKA3XfnsNihj1Py41gA8tuQF4d+sthH68XW120
+         AgiVn25O4Xzv97G6Uc8WSw4lyTKv3oWNTQoC2uBYbhCLQu/DeRPnInlQSxrM95q0ujGx
+         rSOw==
+X-Gm-Message-State: AOAM533HeRIWIKZPsc6DWybptDUqXnfkWyxxX/jfrc/URt6BJfjRZzU9
+        qqwDoee97rn3EkvAeCg2fHeoElgBcfoRvMqp9yVc+w==
+X-Google-Smtp-Source: ABdhPJyY9ujjG8SdRD4j0AKKCRXtfcW1P0TEC08sIy7OcwjNsgCf8+3eqAIPJgf4CNG0xp7IsqUiUeoJWYb80ZrGmbc=
+X-Received: by 2002:a05:6402:1e92:b0:419:76:21a6 with SMTP id
+ f18-20020a0564021e9200b00419007621a6mr12936544edf.128.1648213889593; Fri, 25
+ Mar 2022 06:11:29 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1389:b0:323:1301:7d2e with SMTP id
- w9-20020a056638138900b0032313017d2emr3393615jad.87.1648213826586; Fri, 25 Mar
- 2022 06:10:26 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 06:10:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a5cb1305db0aaf48@google.com>
-Subject: [syzbot] general protection fault in kvm_mmu_uninit_tdp_mmu
-From:   syzbot <syzbot+717ed82268812a643b28@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+References: <20220322132329.6527-1-dmitry.osipenko@collabora.com>
+ <a7c858461b99de2d4afad22d888acc3a74850240.camel@ndufresne.ca>
+ <9ec970d6-ea09-802c-419b-b2ef26800990@collabora.com> <5be83f0b343c04d877a2c2d805fb5f71ca9973b1.camel@ndufresne.ca>
+ <fe24d151-6097-aa8e-7691-5e4d81fa42c6@collabora.com> <f80128c50d3dacff0af70bd88521abae42476f85.camel@ndufresne.ca>
+In-Reply-To: <f80128c50d3dacff0af70bd88521abae42476f85.camel@ndufresne.ca>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Fri, 25 Mar 2022 13:11:13 +0000
+Message-ID: <CAPY8ntBQBrWytYRbv50F-4TZJdCaSQs86r3vY6kJdp+oc6SxEQ@mail.gmail.com>
+Subject: Re: [PATCH v1] media: videobuf2: Allow applications customize data
+ offsets of capture buffers
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Boris Brezillon <bbrezillon@collabora.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Laura Nao <laura.nao@collabora.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,106 +84,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Nicolas & Dmitry
 
-syzbot found the following issue on:
+On Fri, 25 Mar 2022 at 12:32, Nicolas Dufresne <nicolas@ndufresne.ca> wrote=
+:
+>
+> Le jeudi 24 mars 2022 =C3=A0 21:20 +0300, Dmitry Osipenko a =C3=A9crit :
+> > The root of the problem is that DRM UAPI is more flexible and allows to
+> > customize offsets for both S/MPLANEs, while V4L doesn't allow to do it
+> > at all. I'm exploring all the potential options, so far neither of the
+> > proposed variants is ideal.
+>
+> In GStreamer kmssink, the way DRM is used, is that if you have 2 planes i=
+n your
+> pixel format, but only received 1 DMABuf, we will pass this DMABuf twice =
+(well
+> GEM handles, but twice), with appropriate offset.
+>
+> With this in mind, the idea for V4L2 could be to always resort to MPLANE =
+for
+> this purpose. The tricky part for userland is that it needs to know the d=
+ual
+> pixel format and map that accordingly. That is a bit difficult and this i=
+s
+> something Helen was trying to address with the v4l2_buffer_ext (that and
+> allowing space to store DRM Modifiers in the future).
+>
+> The second challenge is the overhead. In DRM, as we "prime" the DMABuf in=
+to
+> handles, this gives a kernel object to store any relevant information abo=
+ut the
+> buffer. So having it duplicate can be done at no cost. In V4L2, the drive=
+r would
+> need to handle that more often. Specially that despite the recommendation
+> (except for primary buffer decoder, were this is mandatory), we don't for=
+ce a
+> strict DMABuf / Buffer IDX  mapping.
 
-HEAD commit:    f9006d9269ea Add linux-next specific files for 20220321
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=101191bd700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c1619ffa2b0259a1
-dashboard link: https://syzkaller.appspot.com/bug?extid=717ed82268812a643b28
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e8f5d700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1666180b700000
+To throw another use case of data offsets into the mix, I'm keeping a
+watching eye on implementing stereoscopic capture into libcamera where
+we want to present the same buffer to the ISP twice (once for each
+eye) with either a vertical or horizontal offset between the two
+passes.
+Adding a data_offset of either a half line or half the frame is the
+easiest way around that one, although it could potentially be
+accommodated through the selection API setting a compose region
+instead.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000038: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000001c0-0x00000000000001c7]
-CPU: 0 PID: 3614 Comm: syz-executor358 Tainted: G        W         5.17.0-next-20220321-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:flush_workqueue+0xf8/0x1440 kernel/workqueue.c:2828
-Code: ff 89 de e8 ea 02 2c 00 84 db 0f 84 28 0f 00 00 e8 fd fe 2b 00 48 8b 85 e8 fe ff ff 48 8d b8 c0 01 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 20 84 c0 74 08 3c 03 0f 8e f9 12 00 00 48 8b 85 e8 fe
-RSP: 0018:ffffc90003affba8 EFLAGS: 00010202
-RAX: 0000000000000038 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff8880184b57c0 RSI: ffffffff814caa33 RDI: 00000000000001c0
-RBP: ffffc90003affd18 R08: 0000000000000002 R09: 0000000000000001
-R10: ffffffff814caa26 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffffc90003affd70 R14: ffffc90003b29000 R15: ffffc90003b2a240
-FS:  00007f26eaecd700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020404030 CR3: 00000000246a9000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kvm_mmu_uninit_tdp_mmu+0x7f/0x170 arch/x86/kvm/mmu/tdp_mmu.c:51
- kvm_arch_destroy_vm+0x350/0x470 arch/x86/kvm/x86.c:11799
- kvm_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1144 [inline]
- kvm_dev_ioctl_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:4736 [inline]
- kvm_dev_ioctl+0x104d/0x1c00 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4791
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f26eaf5dac9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f26eaecd308 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f26eafe5448 RCX: 00007f26eaf5dac9
-RDX: 0000000000000000 RSI: 000000000000ae01 RDI: 0000000000000005
-RBP: 00007f26eafe5440 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f26eafe544c
-R13: 00007f26eafb3074 R14: 6d766b2f7665642f R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:flush_workqueue+0xf8/0x1440 kernel/workqueue.c:2828
-Code: ff 89 de e8 ea 02 2c 00 84 db 0f 84 28 0f 00 00 e8 fd fe 2b 00 48 8b 85 e8 fe ff ff 48 8d b8 c0 01 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 20 84 c0 74 08 3c 03 0f 8e f9 12 00 00 48 8b 85 e8 fe
-RSP: 0018:ffffc90003affba8 EFLAGS: 00010202
-
-RAX: 0000000000000038 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff8880184b57c0 RSI: ffffffff814caa33 RDI: 00000000000001c0
-RBP: ffffc90003affd18 R08: 0000000000000002 R09: 0000000000000001
-R10: ffffffff814caa26 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffffc90003affd70 R14: ffffc90003b29000 R15: ffffc90003b2a240
-FS:  00007f26eaecd700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020404030 CR3: 00000000246a9000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	ff 89 de e8 ea 02    	decl   0x2eae8de(%rcx)
-   6:	2c 00                	sub    $0x0,%al
-   8:	84 db                	test   %bl,%bl
-   a:	0f 84 28 0f 00 00    	je     0xf38
-  10:	e8 fd fe 2b 00       	callq  0x2bff12
-  15:	48 8b 85 e8 fe ff ff 	mov    -0x118(%rbp),%rax
-  1c:	48 8d b8 c0 01 00 00 	lea    0x1c0(%rax),%rdi
-  23:	48 89 f8             	mov    %rdi,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 0f b6 04 20       	movzbl (%rax,%r12,1),%eax <-- trapping instruction
-  2f:	84 c0                	test   %al,%al
-  31:	74 08                	je     0x3b
-  33:	3c 03                	cmp    $0x3,%al
-  35:	0f 8e f9 12 00 00    	jle    0x1334
-  3b:	48                   	rex.W
-  3c:	8b                   	.byte 0x8b
-  3d:	85 e8                	test   %ebp,%eax
-  3f:	fe                   	.byte 0xfe
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+  Dave

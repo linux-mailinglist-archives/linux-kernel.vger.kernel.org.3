@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2A84E7808
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 940604E780A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378124AbiCYPeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S1377845AbiCYPeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377717AbiCYPYb (ORCPT
+        with ESMTP id S1377481AbiCYPYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:24:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBEAE997B;
-        Fri, 25 Mar 2022 08:18:40 -0700 (PDT)
+        Fri, 25 Mar 2022 11:24:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C3627B08;
+        Fri, 25 Mar 2022 08:18:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43CBDB827E0;
-        Fri, 25 Mar 2022 15:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9FB3C340E9;
-        Fri, 25 Mar 2022 15:18:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFE1D60A1B;
+        Fri, 25 Mar 2022 15:18:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2B1C340E9;
+        Fri, 25 Mar 2022 15:18:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221518;
-        bh=5rCFA85s5S+qiRWrhD5HCF9nWwgiP1x6tSx3WyKd6t0=;
+        s=korg; t=1648221484;
+        bh=JCOVLHohscIa00QIH1ZFiQHu3Zt5Fac47pp88wkyeaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pf5ynpztNPajD5NCLBcpO3hsCwpQQnU3KodKwghorRDqsGIY8JCKhtPkhCP7cLhfe
-         sJbLAfk2hNjpCngogW779r3N6Z08izbiWwLcTrOYywFb7viTFOg20pUqtsFDsXSrYA
-         yxMt/8/vTH/wvK5ZfyjZrldCYP3qthcyU9By6/eA=
+        b=Wzuzrd1mMtm6ShMlINRBcSejd/ky1INO+WpnL597n+3Aq8vqPwGy8k1qoRH37Z/jo
+         FGwL+YE0ZbPfKX04Yvpjn6tGgcogSsYuR4OESVchG6gwF2fmviLViBr0hSLRC+q3vy
+         rWgiwDltRZrVFnBJFgjyoE4HdpxfW3qWjr+gBoyM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        stable@vger.kernel.org,
+        Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.17 14/39] ALSA: pcm: Fix races among concurrent prealloc proc writes
-Date:   Fri, 25 Mar 2022 16:14:29 +0100
-Message-Id: <20220325150420.652238669@linuxfoundation.org>
+Subject: [PATCH 5.16 20/37] ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
+Date:   Fri, 25 Mar 2022 16:14:30 +0100
+Message-Id: <20220325150420.623331887@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
-References: <20220325150420.245733653@linuxfoundation.org>
+In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
+References: <20220325150420.046488912@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
 
-commit 69534c48ba8ce552ce383b3dfdb271ffe51820c3 upstream.
+commit 17aaf0193392cb3451bf0ac75ba396ec4cbded6e upstream.
 
-We have no protection against concurrent PCM buffer preallocation
-changes via proc files, and it may potentially lead to UAF or some
-weird problem.  This patch applies the PCM open_mutex to the proc
-write operation for avoiding the racy proc writes and the PCM stream
-open (and further operations).
+Tests 72 and 78 for ALSA in kselftest fail due to reading
+inconsistent values from some devices on a VirtualBox
+Virtual Machine using the snd_intel8x0 driver for the AC'97
+Audio Controller device.
+Taking for example test number 72, this is what the test reports:
+"Surround Playback Volume.0 expected 1 but read 0, is_volatile 0"
+"Surround Playback Volume.1 expected 0 but read 1, is_volatile 0"
+These errors repeat for each value from 0 to 31.
 
+Taking a look at these error messages it is possible to notice
+that the written values are read back swapped.
+When the write is performed, these values are initially stored in
+an array used to sanity-check them and write them in the pcmreg
+array. To write them, the two one-byte values are packed together
+in a two-byte variable through bitwise operations: the first
+value is shifted left by one byte and the second value is stored in the
+right byte through a bitwise OR. When reading the values back,
+right shifts are performed to retrieve the previously stored
+bytes. These shifts are executed in the wrong order, thus
+reporting the values swapped as shown above.
+
+This patch fixes this mistake by reversing the read
+operations' order.
+
+Signed-off-by: Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
+Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
 Cc: <stable@vger.kernel.org>
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Link: https://lore.kernel.org/r/20220322170720.3529-5-tiwai@suse.de
+Link: https://lore.kernel.org/r/20220322200653.15862-1-guiduzzi.giacomo@gmail.com
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/pcm_memory.c |   11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ sound/pci/ac97/ac97_codec.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/core/pcm_memory.c
-+++ b/sound/core/pcm_memory.c
-@@ -163,19 +163,20 @@ static void snd_pcm_lib_preallocate_proc
- 	size_t size;
- 	struct snd_dma_buffer new_dmab;
- 
-+	mutex_lock(&substream->pcm->open_mutex);
- 	if (substream->runtime) {
- 		buffer->error = -EBUSY;
--		return;
-+		goto unlock;
- 	}
- 	if (!snd_info_get_line(buffer, line, sizeof(line))) {
- 		snd_info_get_str(str, line, sizeof(str));
- 		size = simple_strtoul(str, NULL, 10) * 1024;
- 		if ((size != 0 && size < 8192) || size > substream->dma_max) {
- 			buffer->error = -EINVAL;
--			return;
-+			goto unlock;
- 		}
- 		if (substream->dma_buffer.bytes == size)
--			return;
-+			goto unlock;
- 		memset(&new_dmab, 0, sizeof(new_dmab));
- 		new_dmab.dev = substream->dma_buffer.dev;
- 		if (size > 0) {
-@@ -189,7 +190,7 @@ static void snd_pcm_lib_preallocate_proc
- 					 substream->pcm->card->number, substream->pcm->device,
- 					 substream->stream ? 'c' : 'p', substream->number,
- 					 substream->pcm->name, size);
--				return;
-+				goto unlock;
- 			}
- 			substream->buffer_bytes_max = size;
- 		} else {
-@@ -201,6 +202,8 @@ static void snd_pcm_lib_preallocate_proc
- 	} else {
- 		buffer->error = -EINVAL;
- 	}
-+ unlock:
-+	mutex_unlock(&substream->pcm->open_mutex);
+--- a/sound/pci/ac97/ac97_codec.c
++++ b/sound/pci/ac97/ac97_codec.c
+@@ -938,8 +938,8 @@ static int snd_ac97_ad18xx_pcm_get_volum
+ 	int codec = kcontrol->private_value & 3;
+ 	
+ 	mutex_lock(&ac97->page_mutex);
+-	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
+-	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
++	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
++	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
+ 	mutex_unlock(&ac97->page_mutex);
+ 	return 0;
  }
- 
- static inline void preallocate_info_init(struct snd_pcm_substream *substream)
 
 

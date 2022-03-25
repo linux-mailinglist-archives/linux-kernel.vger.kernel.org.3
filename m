@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAD94E7640
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297154E7605
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359815AbiCYPM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S1359708AbiCYPJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359673AbiCYPJ4 (ORCPT
+        with ESMTP id S1376270AbiCYPIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:09:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03D2DB483;
-        Fri, 25 Mar 2022 08:07:38 -0700 (PDT)
+        Fri, 25 Mar 2022 11:08:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1CFA7741;
+        Fri, 25 Mar 2022 08:06:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 799CAB828FF;
-        Fri, 25 Mar 2022 15:07:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6159C340F1;
-        Fri, 25 Mar 2022 15:07:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 529E7B828F8;
+        Fri, 25 Mar 2022 15:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 955D9C340E9;
+        Fri, 25 Mar 2022 15:06:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220856;
-        bh=rJ0Sf1ZTcFbgQs/i1OJwm6UcbDOkwSYw86FsByXeSiw=;
+        s=korg; t=1648220801;
+        bh=d4Tm298RJ4O4oXlY7hd8g2pFIpL83/OfvMHDCe05O0g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eTV+3rNsWS7dOmtOitT5+AMwu35pkXA71XqGLUU3AwB1Dc1e7Izc1GjkVLAJ/CFmf
-         vtEgh8z/Tiec1UNotaYO6LDB6zZWFEFfc6pEFyYLRkgj8ivutzhqHmLJi6IzZDnHkM
-         ZoHo4SqaqgaOP1y0eFBFO2ZmJkynQzmlnVLItgBc=
+        b=WW0NN/8F9J/8BVnHXs/yieWpQuI6wkV9yudEH9CiBwX3thH2PHU5/RgqZkl3Gkp2n
+         K2sSQYnXE/NDP8qpjH9MLhNc3V949UlR7JHqUv2OBkOUvBdhF3prECPx8ulNQ+GvXO
+         /zlasJRptmMM298xemWVomu6GPyWoUvoS0BJrILU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 12/29] ALSA: pcm: Add stream lock during PCM reset ioctl operations
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 4.19 14/20] netfilter: nf_tables: initialize registers in nft_do_chain()
 Date:   Fri, 25 Mar 2022 16:04:52 +0100
-Message-Id: <20220325150418.940775820@linuxfoundation.org>
+Message-Id: <20220325150417.423549616@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
+References: <20220325150417.010265747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 1f68915b2efd0d6bfd6e124aa63c94b3c69f127c upstream.
+commit 4c905f6740a365464e91467aa50916555b28213d upstream.
 
-snd_pcm_reset() is a non-atomic operation, and it's allowed to run
-during the PCM stream running.  It implies that the manipulation of
-hw_ptr and other parameters might be racy.
+Initialize registers to avoid stack leak into userspace.
 
-This patch adds the PCM stream lock at appropriate places in
-snd_pcm_*_reset() actions for covering that.
-
-Cc: <stable@vger.kernel.org>
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Link: https://lore.kernel.org/r/20220322171325.4355-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 96518518cc41 ("netfilter: add nftables")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/pcm_native.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ net/netfilter/nf_tables_core.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/core/pcm_native.c
-+++ b/sound/core/pcm_native.c
-@@ -1656,21 +1656,25 @@ static int snd_pcm_do_reset(struct snd_p
- 	int err = substream->ops->ioctl(substream, SNDRV_PCM_IOCTL1_RESET, NULL);
- 	if (err < 0)
- 		return err;
-+	snd_pcm_stream_lock_irq(substream);
- 	runtime->hw_ptr_base = 0;
- 	runtime->hw_ptr_interrupt = runtime->status->hw_ptr -
- 		runtime->status->hw_ptr % runtime->period_size;
- 	runtime->silence_start = runtime->status->hw_ptr;
- 	runtime->silence_filled = 0;
-+	snd_pcm_stream_unlock_irq(substream);
- 	return 0;
- }
- 
- static void snd_pcm_post_reset(struct snd_pcm_substream *substream, int state)
- {
- 	struct snd_pcm_runtime *runtime = substream->runtime;
-+	snd_pcm_stream_lock_irq(substream);
- 	runtime->control->appl_ptr = runtime->status->hw_ptr;
- 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
- 	    runtime->silence_size > 0)
- 		snd_pcm_playback_silence(substream, ULONG_MAX);
-+	snd_pcm_stream_unlock_irq(substream);
- }
- 
- static const struct action_ops snd_pcm_action_reset = {
+--- a/net/netfilter/nf_tables_core.c
++++ b/net/netfilter/nf_tables_core.c
+@@ -144,7 +144,7 @@ nft_do_chain(struct nft_pktinfo *pkt, vo
+ 	struct nft_rule *const *rules;
+ 	const struct nft_rule *rule;
+ 	const struct nft_expr *expr, *last;
+-	struct nft_regs regs;
++	struct nft_regs regs = {};
+ 	unsigned int stackptr = 0;
+ 	struct nft_jumpstack jumpstack[NFT_JUMP_STACK_SIZE];
+ 	bool genbit = READ_ONCE(net->nft.gencursor);
 
 

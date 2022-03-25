@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CD64E6FC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E7B4E6FBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356205AbiCYJFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 05:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
+        id S1356160AbiCYJES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 05:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiCYJFK (ORCPT
+        with ESMTP id S229940AbiCYJER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 05:05:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98A45D662;
-        Fri, 25 Mar 2022 02:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648199016; x=1679735016;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WbskBVThk2A3f0bek82d4zhtf8YdkGCFyymR0cmcN2k=;
-  b=Vsdm8eyG+X53V/UjHR5T1cGPPppcCPo0sQXnFChlbxotjBQz6PF4+vi3
-   sT8C3R57Vb+XZBrPkv4g/ut6QPLL0IHX1Ivj+QThs3/sB2tL6riNcaS0w
-   9dZNE0HohFNi5EsOl2wJyvbnitnrAxS3JYCluhD/rntNisc3uzZ5T2Cg3
-   I/6k3Q1K6ycAGGChsduAzGCs4wGo/aHo90FD5xZb7AFHKek+vAnbQb23G
-   BvTrxqk43RFV1fN+/56oWYUMRJw4IBUdGvrRfoo4KwQI232YzKAr2VADu
-   /7+64ebhJT1AIzPdgDdleCeeY9vL+ydWG3gyCSPiu9QNjeBmExk2pnLJ2
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="246068158"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="246068158"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 02:03:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="825977531"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2022 02:03:18 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXfqo-000Lyi-70; Fri, 25 Mar 2022 09:03:18 +0000
-Date:   Fri, 25 Mar 2022 17:02:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Howard Chiu <howard_chiu@aspeedtech.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Troy Lee <troy_lee@aspeedtech.com>
-Subject: Re: [PATCH v2] ARM: dts: aspeed: ast2600-evb: Support KVM
-Message-ID: <202203251620.taj6u6mo-lkp@intel.com>
-References: <HK0PR06MB2307383743B9AE1D714A899BE61A9@HK0PR06MB2307.apcprd06.prod.outlook.com>
+        Fri, 25 Mar 2022 05:04:17 -0400
+Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DD8CD339
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 02:02:32 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru D590C20A83DE
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v1] soc: bcm: Check for NULL return of devm_kzalloc()
+To:     QintaoShen <unSimple1993@163.com>, <f.fainelli@gmail.com>
+CC:     <bcm-kernel-feedback-list@broadcom.com>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <0f5e77e9-3c2c-396d-636b-1b7153007fe5@omp.ru>
+Date:   Fri, 25 Mar 2022 12:02:28 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <HK0PR06MB2307383743B9AE1D714A899BE61A9@HK0PR06MB2307.apcprd06.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Howard,
+Hello!
 
-Thank you for the patch! Yet something to improve:
+   s/return/result/ in the subject.
 
-[auto build test ERROR on v5.17]
-[cannot apply to joel-aspeed/for-next next-20220324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On 3/24/22 11:35 AM, QintaoShen wrote:
 
-url:    https://github.com/0day-ci/linux/commits/Howard-Chiu/ARM-dts-aspeed-ast2600-evb-Support-KVM/20220325-103839
-base:    f443e374ae131c168a065ea1748feac6b2e76613
-config: arm-aspeed_g4_defconfig (https://download.01.org/0day-ci/archive/20220325/202203251620.taj6u6mo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/9037b86779cd7616b378b3bafd1f32b4c862f0bd
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Howard-Chiu/ARM-dts-aspeed-ast2600-evb-Support-KVM/20220325-103839
-        git checkout 9037b86779cd7616b378b3bafd1f32b4c862f0bd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> As the potential failuer of allocation, devm_kzalloc() may return NULL.
+> Then the 'pd->pmb' and the follow lines of code may bring null pointer dereference.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+   Following.
 
-All errors (new ones prefixed by >>):
+> Therefore, it is better to check the return value of devm_kzalloc() to avoid this confusion.
+> 
+> Signed-off-by: QintaoShen <unSimple1993@163.com>
+> ---
+>  drivers/soc/bcm/bcm63xx/bcm-pmb.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+> index 7bbe46e..55bf389 100644
+> --- a/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+> +++ b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+> @@ -311,6 +311,8 @@ static int bcm_pmb_probe(struct platform_device *pdev)
+>  
+>  	for (e = table; e->name; e++) {
+>  		struct bcm_pmb_pm_domain *pd = devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
 
->> Error: arch/arm/boot/dts/aspeed-ast2600-evb.dts:322.1-7 Label or path video not found
->> FATAL ERROR: Syntax error parsing input tree
+   Please keep an empty line after declaration.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +		if (!pd)
+> +			return -ENOMEM;
+>  
+>  		pd->pmb = pmb;
+>  		pd->data = e;
+
+MBR, Sergey

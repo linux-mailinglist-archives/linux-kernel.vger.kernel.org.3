@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B884E7621
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C354E75E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359827AbiCYPLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
+        id S1359609AbiCYPIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359742AbiCYPJ0 (ORCPT
+        with ESMTP id S1359608AbiCYPH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:09:26 -0400
+        Fri, 25 Mar 2022 11:07:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7886DDA6E0;
-        Fri, 25 Mar 2022 08:07:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0310DA08E;
+        Fri, 25 Mar 2022 08:05:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4BE161C14;
-        Fri, 25 Mar 2022 15:07:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C62C340E9;
-        Fri, 25 Mar 2022 15:07:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B0CF61BF7;
+        Fri, 25 Mar 2022 15:05:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A4CFC340EE;
+        Fri, 25 Mar 2022 15:05:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220839;
-        bh=qewUrMqWkmRRIRadnW13+t9nVrfxgZxO+OT6rf8Gnis=;
+        s=korg; t=1648220742;
+        bh=Ma/8tTyYHRbZXunujThW1LGLHLX30DJaaghwjpgcMHk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XAYh0xznX4cEc+VlA+zoQKbq5AThOkGT446pn4xnSkf/6iZ57tDV1rWGqwJWeGZEk
-         ANl7Km1j3GWk4D/VuFbffmDniaJ5Nadt3V8xdpoDOVC35cfAaa+mB8qCpJiCfQNEkk
-         Bex1Ruyx/vCLXYP3NVdVzODLWSRXF5RH9BhPwxz8=
+        b=vRvZCuPPuA3ai1uVoep1s9vNo804hDnAuUJDMwOw/Eua9ueYyQ4qVgkt1Yd+M5pSQ
+         +cPmGGSq5I7nUTP00xIEERYlzgTqJ+bNX0lWUFHEbtro64pB3DgQYyOp5uziSwRyaj
+         FSzZ+w4K85wnuLAnjkM2pDg9mi9Y18/Nxva3VN6w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+72732c532ac1454eeee9@syzkaller.appspotmail.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 08/20] ALSA: oss: Fix PCM OSS buffer allocation overflow
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 4.14 12/17] netfilter: nf_tables: initialize registers in nft_do_chain()
 Date:   Fri, 25 Mar 2022 16:04:46 +0100
-Message-Id: <20220325150417.251274796@linuxfoundation.org>
+Message-Id: <20220325150417.120190348@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
-References: <20220325150417.010265747@linuxfoundation.org>
+In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
+References: <20220325150416.756136126@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,83 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit efb6402c3c4a7c26d97c92d70186424097b6e366 upstream.
+commit 4c905f6740a365464e91467aa50916555b28213d upstream.
 
-We've got syzbot reports hitting INT_MAX overflow at vmalloc()
-allocation that is called from snd_pcm_plug_alloc().  Although we
-apply the restrictions to input parameters, it's based only on the
-hw_params of the underlying PCM device.  Since the PCM OSS layer
-allocates a temporary buffer for the data conversion, the size may
-become unexpectedly large when more channels or higher rates is given;
-in the reported case, it went over INT_MAX, hence it hits WARN_ON().
+Initialize registers to avoid stack leak into userspace.
 
-This patch is an attempt to avoid such an overflow and an allocation
-for too large buffers.  First off, it adds the limit of 1MB as the
-upper bound for period bytes.  This must be large enough for all use
-cases, and we really don't want to handle a larger temporary buffer
-than this size.  The size check is performed at two places, where the
-original period bytes is calculated and where the plugin buffer size
-is calculated.
-
-In addition, the driver uses array_size() and array3_size() for
-multiplications to catch overflows for the converted period size and
-buffer bytes.
-
-Reported-by: syzbot+72732c532ac1454eeee9@syzkaller.appspotmail.com
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/00000000000085b1b305da5a66f3@google.com
-Link: https://lore.kernel.org/r/20220318082036.29699-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 96518518cc41 ("netfilter: add nftables")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/oss/pcm_oss.c    |   12 ++++++++----
- sound/core/oss/pcm_plugin.c |    5 ++++-
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ net/netfilter/nf_tables_core.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/core/oss/pcm_oss.c
-+++ b/sound/core/oss/pcm_oss.c
-@@ -789,6 +789,11 @@ static int snd_pcm_oss_period_size(struc
- 
- 	if (oss_period_size < 16)
- 		return -EINVAL;
-+
-+	/* don't allocate too large period; 1MB period must be enough */
-+	if (oss_period_size > 1024 * 1024)
-+		return -ENOMEM;
-+
- 	runtime->oss.period_bytes = oss_period_size;
- 	runtime->oss.period_frames = 1;
- 	runtime->oss.periods = oss_periods;
-@@ -1060,10 +1065,9 @@ static int snd_pcm_oss_change_params_loc
- 			goto failure;
- 	}
- #endif
--	oss_period_size *= oss_frame_size;
--
--	oss_buffer_size = oss_period_size * runtime->oss.periods;
--	if (oss_buffer_size < 0) {
-+	oss_period_size = array_size(oss_period_size, oss_frame_size);
-+	oss_buffer_size = array_size(oss_period_size, runtime->oss.periods);
-+	if (oss_buffer_size <= 0) {
- 		err = -EINVAL;
- 		goto failure;
- 	}
---- a/sound/core/oss/pcm_plugin.c
-+++ b/sound/core/oss/pcm_plugin.c
-@@ -61,7 +61,10 @@ static int snd_pcm_plugin_alloc(struct s
- 	}
- 	if ((width = snd_pcm_format_physical_width(format->format)) < 0)
- 		return width;
--	size = frames * format->channels * width;
-+	size = array3_size(frames, format->channels, width);
-+	/* check for too large period size once again */
-+	if (size > 1024 * 1024)
-+		return -ENOMEM;
- 	if (snd_BUG_ON(size % 8))
- 		return -ENXIO;
- 	size /= 8;
+--- a/net/netfilter/nf_tables_core.c
++++ b/net/netfilter/nf_tables_core.c
+@@ -150,7 +150,7 @@ nft_do_chain(struct nft_pktinfo *pkt, vo
+ 	const struct net *net = nft_net(pkt);
+ 	const struct nft_rule *rule;
+ 	const struct nft_expr *expr, *last;
+-	struct nft_regs regs;
++	struct nft_regs regs = {};
+ 	unsigned int stackptr = 0;
+ 	struct nft_jumpstack jumpstack[NFT_JUMP_STACK_SIZE];
+ 	int rulenum;
 
 

@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2171B4E6F13
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E454E6F17
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354587AbiCYHmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 03:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
+        id S1355277AbiCYHnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 03:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354427AbiCYHmJ (ORCPT
+        with ESMTP id S1355284AbiCYHnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 03:42:09 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D71CA0CF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 00:40:34 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id d134so1771360ybc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 00:40:34 -0700 (PDT)
+        Fri, 25 Mar 2022 03:43:08 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D873CC74BA
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 00:41:34 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id h19so4827796pfv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 00:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=wlrec6Y+LyRBdGVxeVK4iHp5+fm9Y0IJxLyRmKge+xA=;
-        b=h/+3jokb0P4AYkdzHUOOtZcj8eFwEU103K8GOY4KMELzx3erofGSdigB5qSclXsMF6
-         nXS/Oe1MDUaPQny+pMrBkvuCpDuLh6R+Qwgtbvvg8vrjV03rvpF7v44iAC0R5E+uyVel
-         cxBIMvN5C4DGedCad/EjsbSHB1OlR5nMW6VfcC30aPTJkm02XIF3TWjOq5AAyCrcTJ68
-         aODITlpfzPQKnPYJUihVFoY4joQIqSjd07JaImEv2jqnTjgu/YfJQ3ZFYpI/XW4zYMhx
-         YVcHp49t1wWeHckI47QpfbEOYgtzdXxBxalXYZz/lpxkxHJi7BDR/c0bX6ES4XQ3fX2m
-         Pq4w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z6svh2R4vFwE8Zw/glJswc4sMNhq4MHc9rrhwP+u20A=;
+        b=HamqelnytmFJzve82M+8uzqIZAM8/ypZ/hSqWrJM2D3H8gYeDJdy8z5rQjruVmCkg4
+         o35a4qpR1MvMCJ7dund2tOT5luyG5Bv7oJNntU19A3Z9rXyO0ByTLG8rEdWZXt0ID8s0
+         7S+VeDNZwR/Mjudz2xb2EdKfEtM10RWevSf6J1q8xUWm3Af4zGrMPuOuCHG8aVTpKyC1
+         /DS7d5Z2zFT4fFxsgASZj9S0Lak4YC9rzbtLad4oBGmqNodJbxSGhg4bR1fWOFGOP5XC
+         FiuMMTMu2NcDuTzHxK2SG7vqRKAGIMddPJP6s8hMQlDDKfhbWchzoCVfzMlLtVk4xrjb
+         PN3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=wlrec6Y+LyRBdGVxeVK4iHp5+fm9Y0IJxLyRmKge+xA=;
-        b=bdf+RJjwkcvDlTpM4acyWYjRRJJCdcgQvhWRhwgDxjcU6aU2kT/y5xP9Gudi+c8VC0
-         9jsUb//jsGiMI8J6cItQGlq754hFVZBZGOMXJ/hQdSqlFek7LL20dDHyU55GvZLWBK1b
-         yEpsLNDn7wSiMf56JIf0F8vkDRHz3xhveBz4Fxd5XBzxMWAxumrmfY79GWZIA+5NNf+7
-         8oKn5FdsV0YR1EgFeC2dB74pcfPRqSRn4x54726OmwJoyTvi5JEO9MOfoTq9Xlv5gD7p
-         kYFExWfTX/gTqJO4hEoiiWeXuWjpFADbrG2AKLPc0PxGKDTQXXKK2QoFUtN2ZMrFekc9
-         EKmw==
-X-Gm-Message-State: AOAM533gQ+Rh1L4pQS//gbL/IttPW++l+EbAsaoXxzrO4n0L0D2oYSk8
-        yf+hhAQE7xizkPYUrYmrQ2MmpnS5/V1oCMUld4L9bw==
-X-Google-Smtp-Source: ABdhPJyfvYJFDjUOYwwacT/jY+etlozfKr130Ts6uO4Uvp9gtSLhWQ2kvSZVLktH7T9+5J/pvTrFUOx0DmzpQF3xQTc=
-X-Received: by 2002:a5b:892:0:b0:633:ba98:d566 with SMTP id
- e18-20020a5b0892000000b00633ba98d566mr8430115ybq.128.1648194033598; Fri, 25
- Mar 2022 00:40:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z6svh2R4vFwE8Zw/glJswc4sMNhq4MHc9rrhwP+u20A=;
+        b=GIp6kDJhRrOYSNf9pFxaqwRkmEEOdaZJc4gTNtBzVDXzo6HNXTxtYc6lHZLfjJULnB
+         rIShM9to1yoAbMQepCFRKQrxrLMU1B4wb4H7d5T3leL+XuAFN7z9oLkCuiuVqxVxqGil
+         J1aM3bwaNITP4sFpuktiCiqHjYBYZ/M+kQNO3Ld4LyuGcX9BLWm433qmBrLdxiponfKP
+         wElm+VYJnnWlEeZsezWLc/DYoOgVyvJk3c3VBpMDs/BuI74ZwyAAlKp00hKMsDi14byY
+         86eyDWxYctnDuVE0leQEu9BITlkPyFBKBo3fI9HYZw8GxX2LIecdc+yp4cRuBDnXp5rA
+         JrhA==
+X-Gm-Message-State: AOAM5332cgWwiAoxXlBLlai+KzVFCB+m76KvQ4GwiSoOVVDX2MpWDfL/
+        0gT9tz2vHkQu8iRY7CbuXw2T
+X-Google-Smtp-Source: ABdhPJzvYGPL98D0FkGBYcmVjS9mreEr/lPGokYsim9pd8Gtt78QQ3171eeifStmY6CKvGw1/vymyw==
+X-Received: by 2002:a63:801:0:b0:382:a089:59d3 with SMTP id 1-20020a630801000000b00382a08959d3mr6990246pgi.350.1648194094355;
+        Fri, 25 Mar 2022 00:41:34 -0700 (PDT)
+Received: from thinkpad ([27.111.75.218])
+        by smtp.gmail.com with ESMTPSA id b1-20020a17090aa58100b001bcb7bad374sm11585015pjq.17.2022.03.25.00.41.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 00:41:34 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 13:11:26 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/25] dmaengine: dw-edma: Use DMA-engine device DebugFS
+ subdirectory
+Message-ID: <20220325074126.GG4675@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-20-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 25 Mar 2022 13:10:22 +0530
-Message-ID: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
-Subject: kselftest: net: tls: hangs
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324014836.19149-20-Sergey.Semin@baikalelectronics.ru>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,125 +83,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While running kselftest net tls test case on Linux next and mainline kernels
-the test case fails at following sub test cases and hangs every time.
-Please investigate this hang issue.
+On Thu, Mar 24, 2022 at 04:48:30AM +0300, Serge Semin wrote:
+> Since all DW eDMA read and write channels are now installed in a framework
+> of a single DMA-engine device, we can freely move all the DW eDMA-specific
+> DebugFS nodes into a ready-to-use DMA-engine DebugFS subdirectory. It's
+> created during the DMA-device registration and can be found in the
+> dma_device.dbg_dev_root field.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-kconfigs are generated from kselftest-merge config.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: b61581ae229d8eb9f21f8753be3f4011f7692384
-  git_describe: next-20220323
-  kernel_version: 5.17.0
-  kernel-config: https://builds.tuxbuild.com/26mKij4yB5Q6WUpOyHHEoHLstVJ/config
+Thanks,
+Mani
 
-Test log link,
---------------
-# selftests: net: tls
-# TAP version 13
-# 1..502
-# # Starting 502 tests from 14 test cases.
-# #  RUN           global.non_established ...
-# #            OK  global.non_established
-# ok 1 global.non_established
-# #  RUN           global.keysizes ...
-# #            OK  global.keysizes
-<trim>
-
-# #  RUN           tls.12_aes_gcm.splice_cmsg_to_pipe ...
-# # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-p[1], NULL, send_len, 0) (10) == -1 (-1)
-# # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-# # splice_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.12_aes_gcm.splice_cmsg_to_pipe
-# not ok 21 tls.12_aes_gcm.splice_cmsg_to_pipe
-# #  RUN           tls.12_aes_gcm.splice_dec_cmsg_to_pipe ...
-# # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-send_len, 0) (10) == -1 (-1)
-# # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-# # splice_dec_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.12_aes_gcm.splice_dec_cmsg_to_pipe
-# not ok 22 tls.12_aes_gcm.splice_dec_cmsg_to_pipe
-# #  RUN           tls.12_aes_gcm.recv_and_splice ...
-# #            OK  tls.12_aes_gcm.recv_and_splice
-
-<trim>
-
-# #  RUN           tls.13_aes_gcm.splice_cmsg_to_pipe ...
-# # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-p[1], NULL, send_len, 0) (10) == -1 (-1)
-# # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-# # splice_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.13_aes_gcm.splice_cmsg_to_pipe
-# not ok 70 tls.13_aes_gcm.splice_cmsg_to_pipe
-# #  RUN           tls.13_aes_gcm.splice_dec_cmsg_to_pipe ...
-# # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-send_len, 0) (10) == -1 (-1)
-# # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-# # splice_dec_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.13_aes_gcm.splice_dec_cmsg_to_pipe
-# not ok 71 tls.13_aes_gcm.splice_dec_cmsg_to_pipe
-
-
-<trim>
-
-# #  RUN           tls.12_chacha.splice_cmsg_to_pipe ...
-# # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-p[1], NULL, send_len, 0) (10) == -1 (-1)
-# # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-# # splice_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.12_chacha.splice_cmsg_to_pipe
-# not ok 119 tls.12_chacha.splice_cmsg_to_pipe
-# #  RUN           tls.12_chacha.splice_dec_cmsg_to_pipe ...
-# # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-send_len, 0) (10) == -1 (-1)
-# # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-# # splice_dec_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.12_chacha.splice_dec_cmsg_to_pipe
-# not ok 120 tls.12_chacha.splice_dec_cmsg_to_pipe
-
-<trim>
-
-# #  RUN           tls.13_chacha.splice_cmsg_to_pipe ...
-# # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-p[1], NULL, send_len, 0) (10) == -1 (-1)
-# # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-# # splice_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.13_chacha.splice_cmsg_to_pipe
-# not ok 168 tls.13_chacha.splice_cmsg_to_pipe
-# #  RUN           tls.13_chacha.splice_dec_cmsg_to_pipe ...
-# # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-send_len, 0) (10) == -1 (-1)
-# # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-# # splice_dec_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.13_chacha.splice_dec_cmsg_to_pipe
-# not ok 169 tls.13_chacha.splice_dec_cmsg_to_pipe
-
-<trim>
-
-# #  RUN           tls.13_sm4_gcm.splice_cmsg_to_pipe ...
-# # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-p[1], NULL, send_len, 0) (10) == -1 (-1)
-# # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-# # splice_cmsg_to_pipe: Test terminated by timeout
-# #          FAIL  tls.13_sm4_gcm.splice_cmsg_to_pipe
-# not ok 217 tls.13_sm4_gcm.splice_cmsg_to_pipe
-# #  RUN           tls.13_sm4_gcm.splice_dec_cmsg_to_pipe ...
-# # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-send_len, 0) (10) == -1 (-1)
-# # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-[  661.901558] kworker/dying (49) used greatest stack depth: 10576 bytes left
-
-Test case HANG here.
-
-Full test log links [1] including boot log and test run log.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
-https://lkft.validation.linaro.org/scheduler/job/4770773#L2700
+> ---
+>  drivers/dma/dw-edma/dw-edma-core.c       |  3 ---
+>  drivers/dma/dw-edma/dw-edma-core.h       |  3 ---
+>  drivers/dma/dw-edma/dw-edma-v0-core.c    |  5 -----
+>  drivers/dma/dw-edma/dw-edma-v0-core.h    |  1 -
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 18 ++++--------------
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.h |  5 -----
+>  6 files changed, 4 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index a391e44da039..bc530f0a2468 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -1045,9 +1045,6 @@ int dw_edma_remove(struct dw_edma_chip *chip)
+>  		list_del(&chan->vc.chan.device_node);
+>  	}
+>  
+> -	/* Turn debugfs off */
+> -	dw_edma_v0_core_debugfs_off(chip);
+> -
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(dw_edma_remove);
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.h b/drivers/dma/dw-edma/dw-edma-core.h
+> index ec9f84a857d1..980adb079182 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.h
+> +++ b/drivers/dma/dw-edma/dw-edma-core.h
+> @@ -110,9 +110,6 @@ struct dw_edma {
+>  	raw_spinlock_t			lock;		/* Only for legacy */
+>  
+>  	struct dw_edma_chip             *chip;
+> -#ifdef CONFIG_DEBUG_FS
+> -	struct dentry			*debugfs;
+> -#endif /* CONFIG_DEBUG_FS */
+>  };
+>  
+>  struct dw_edma_sg {
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
+> index 013d9a9cb991..6b303d5a6b2a 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
+> @@ -511,8 +511,3 @@ void dw_edma_v0_core_debugfs_on(struct dw_edma_chip *chip)
+>  {
+>  	dw_edma_v0_debugfs_on(chip);
+>  }
+> -
+> -void dw_edma_v0_core_debugfs_off(struct dw_edma_chip *chip)
+> -{
+> -	dw_edma_v0_debugfs_off(chip);
+> -}
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.h b/drivers/dma/dw-edma/dw-edma-v0-core.h
+> index 2afa626b8300..43e01844375a 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-core.h
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-core.h
+> @@ -23,6 +23,5 @@ void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first);
+>  int dw_edma_v0_core_device_config(struct dw_edma_chan *chan);
+>  /* eDMA debug fs callbacks */
+>  void dw_edma_v0_core_debugfs_on(struct dw_edma_chip *chip);
+> -void dw_edma_v0_core_debugfs_off(struct dw_edma_chip *chip);
+>  
+>  #endif /* _DW_EDMA_V0_CORE_H */
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> index 353269a3680b..319a3c790dc4 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> @@ -268,7 +268,7 @@ static void dw_edma_debugfs_regs(struct dw_edma *dw)
+>  	struct dentry *regs_dir;
+>  	int nr_entries;
+>  
+> -	regs_dir = debugfs_create_dir(REGISTERS_STR, dw->debugfs);
+> +	regs_dir = debugfs_create_dir(REGISTERS_STR, dw->dma.dbg_dev_root);
+>  
+>  	nr_entries = ARRAY_SIZE(debugfs_regs);
+>  	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, regs_dir);
+> @@ -284,19 +284,9 @@ void dw_edma_v0_debugfs_on(struct dw_edma_chip *chip)
+>  	if (!debugfs_initialized())
+>  		return;
+>  
+> -	dw->debugfs = debugfs_create_dir(dw->name, NULL);
+> -
+> -	debugfs_create_u32("mf", 0444, dw->debugfs, &dw->chip->mf);
+> -	debugfs_create_u16("wr_ch_cnt", 0444, dw->debugfs, &dw->wr_ch_cnt);
+> -	debugfs_create_u16("rd_ch_cnt", 0444, dw->debugfs, &dw->rd_ch_cnt);
+> +	debugfs_create_u32("mf", 0444, dw->dma.dbg_dev_root, &dw->chip->mf);
+> +	debugfs_create_u16("wr_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->wr_ch_cnt);
+> +	debugfs_create_u16("rd_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->rd_ch_cnt);
+>  
+>  	dw_edma_debugfs_regs(dw);
+>  }
+> -
+> -void dw_edma_v0_debugfs_off(struct dw_edma_chip *chip)
+> -{
+> -	struct dw_edma *dw = chip->dw;
+> -
+> -	debugfs_remove_recursive(dw->debugfs);
+> -	dw->debugfs = NULL;
+> -}
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.h b/drivers/dma/dw-edma/dw-edma-v0-debugfs.h
+> index d0ff25a9ea5c..eb11802c2b76 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.h
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.h
+> @@ -13,15 +13,10 @@
+>  
+>  #ifdef CONFIG_DEBUG_FS
+>  void dw_edma_v0_debugfs_on(struct dw_edma_chip *chip);
+> -void dw_edma_v0_debugfs_off(struct dw_edma_chip *chip);
+>  #else
+>  static inline void dw_edma_v0_debugfs_on(struct dw_edma_chip *chip)
+>  {
+>  }
+> -
+> -static inline void dw_edma_v0_debugfs_off(struct dw_edma_chip *chip)
+> -{
+> -}
+>  #endif /* CONFIG_DEBUG_FS */
+>  
+>  #endif /* _DW_EDMA_V0_DEBUG_FS_H */
+> -- 
+> 2.35.1
+> 

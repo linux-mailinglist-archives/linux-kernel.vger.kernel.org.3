@@ -2,144 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8CF4E6EE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99D64E6EEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353021AbiCYHcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 03:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S1353378AbiCYHdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 03:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350106AbiCYHcJ (ORCPT
+        with ESMTP id S1353861AbiCYHdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 03:32:09 -0400
-Received: from out28-197.mail.aliyun.com (out28-197.mail.aliyun.com [115.124.28.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F228C748A;
-        Fri, 25 Mar 2022 00:30:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07642309|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00954498-0.000797976-0.989657;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047192;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.NCDOraZ_1648193429;
-Received: from sunxibot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NCDOraZ_1648193429)
-          by smtp.aliyun-inc.com(33.37.73.205);
-          Fri, 25 Mar 2022 15:30:30 +0800
-From:   Kant Fan <kant@allwinnertech.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        ionela.voinescu@arm.com
-Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com,
-        Kant Fan <kant@allwinnertech.com>, stable@vger.kernel.org
-Subject: [PATCH v2] thermal: devfreq_cooling: use local ops instead of global ops
-Date:   Fri, 25 Mar 2022 15:30:30 +0800
-Message-Id: <20220325073030.91919-1-kant@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Fri, 25 Mar 2022 03:33:02 -0400
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87C7C4E16;
+        Fri, 25 Mar 2022 00:31:28 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so8466990wmb.4;
+        Fri, 25 Mar 2022 00:31:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GuILc5kRDriiMUiIXV7yGyzOLFCBv5MwLQdIg/dr7Gg=;
+        b=2MwnyaHIDCeOMjlyuMw16yPfLLAiMAkijo9erxkIgOLDmoQso8QIpt4W29MN6HH4aN
+         HHwAZYkbNQVVYhjAbnWIDfRTjr4Nj3ZBLbgdHwVLmOveclYAVgj5xYaOoCUtEK2xwqtj
+         LknRocmXioSGWxQuMUZ0VjF4IRW8e+LzwDtLiBvLOPAXLpApjFRto4LsUc9ydN7wDue2
+         R+cwCdTW6plVHnr3SGvyWtqkvZnyEfNTish0zHeDZSxJ/t2BuGssK4DTBrgDPVrcSAbX
+         m4yhNEC7jUNIOCUawlP0tPBICJmFTh3l8/DXSAs7uvAYpedvst0fZRcptIbauwuBUtLE
+         +HRg==
+X-Gm-Message-State: AOAM533+xmho4XDp4AnucDNHcUIm7vwMomv1SSvv3izFohKuKZbJHJ+e
+        rtgPfayOGg1r/uuxkIygesw=
+X-Google-Smtp-Source: ABdhPJxX9+mei/tkczYkXDnJ8Ea8iol1WorIaCdEFNkBNxZcDCKU/ZfZR2wP0DOrgOPfGrPat8W3eA==
+X-Received: by 2002:a05:600c:3b86:b0:38c:afdf:66cd with SMTP id n6-20020a05600c3b8600b0038cafdf66cdmr17701222wms.198.1648193487331;
+        Fri, 25 Mar 2022 00:31:27 -0700 (PDT)
+Received: from [192.168.0.158] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id u7-20020a5d6da7000000b00203d9d1875bsm5199505wrs.73.2022.03.25.00.31.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 00:31:26 -0700 (PDT)
+Message-ID: <bf438af8-5969-73e4-009d-cb7d93095a5e@kernel.org>
+Date:   Fri, 25 Mar 2022 08:31:25 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1] dt-bindings: clock: convert rockchip,rk3188-cru.txt to
+ YAML
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>, Johan Jonker <jbx6244@gmail.com>,
+        heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220324133229.24035-1-jbx6244@gmail.com>
+ <f7493d93-6c8a-efa9-1f2c-a0003a6d43b2@kernel.org>
+ <bf62ad40-6bcf-62ae-f56a-cdc8d17456ec@gmail.com>
+ <20220325005130.C45A3C340EC@smtp.kernel.org>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220325005130.C45A3C340EC@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix access illegal address problem in following condition:
-There are muti devfreq cooling devices in system, some of them has
-em model but other does not, energy model ops such as state2power will
-append to global devfreq_cooling_ops when the cooling device with
-em model register. It makes the cooling device without em model
-also use devfreq_cooling_ops after appending when register later by
-of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+On 25/03/2022 01:51, Stephen Boyd wrote:
+> Quoting Johan Jonker (2022-03-24 12:51:36)
+>> Hi Heiko, Krzysztof,
+>>
+>> Question for the Rockchip clock maintainer:
+>> What clock should be used here and other SoCs with several clock parents
+>> in the tree?
+>>
+>> The clock.yaml produces a lot off notifications like:
+>>
+>> /arch/arm/boot/dts/rk3036-evb.dtb: clock-controller@20000000: 'clocks'
+>> is a dependency of 'assigned-clocks'
+> 
+> 'clocks' is not a dependency of 'assigned-clocks'. The dt-schema should
+> be fixed to remove that requirement.
 
-IPA governor regards the cooling devices without em model as a power actor
-because they also have energy model ops, and will access illegal address
-at dfc->em_pd when execute cdev->ops->get_requested_power,
-cdev->ops->state2power or cdev->ops->power2state.
+If the driver does not have any clock inputs ("clocks" property), why
+does it care about some clock frequencies and parents?
 
-Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model and use EM")
-Cc: stable@vger.kernel.org # 5.13+
-Signed-off-by: Kant Fan <kant@allwinnertech.com>
----
- drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+The clocks is the logical dependency of assigned-clocks, because
+otherwise hardware description is not complete.
 
-diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-index 4310cb342a9f..d38a80adec73 100644
---- a/drivers/thermal/devfreq_cooling.c
-+++ b/drivers/thermal/devfreq_cooling.c
-@@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
- 	struct thermal_cooling_device *cdev;
- 	struct device *dev = df->dev.parent;
- 	struct devfreq_cooling_device *dfc;
-+	struct thermal_cooling_device_ops *ops;
- 	char *name;
- 	int err, num_opps;
- 
--	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
--	if (!dfc)
-+	ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
-+	if (!ops)
- 		return ERR_PTR(-ENOMEM);
- 
-+	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
-+	if (!dfc) {
-+		err = -ENOMEM;
-+		goto free_ops;
-+	}
-+
- 	dfc->devfreq = df;
- 
- 	dfc->em_pd = em_pd_get(dev);
- 	if (dfc->em_pd) {
--		devfreq_cooling_ops.get_requested_power =
-+		ops->get_requested_power =
- 			devfreq_cooling_get_requested_power;
--		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
--		devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
-+		ops->state2power = devfreq_cooling_state2power;
-+		ops->power2state = devfreq_cooling_power2state;
- 
- 		dfc->power_ops = dfc_power;
- 
-@@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
- 	if (!name)
- 		goto remove_qos_req;
- 
--	cdev = thermal_of_cooling_device_register(np, name, dfc,
--						  &devfreq_cooling_ops);
-+	cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
- 	kfree(name);
- 
- 	if (IS_ERR(cdev)) {
-@@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
- 	kfree(dfc->freq_table);
- free_dfc:
- 	kfree(dfc);
-+free_ops:
-+	kfree(ops);
- 
- 	return ERR_PTR(err);
- }
-@@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
- void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
- {
- 	struct devfreq_cooling_device *dfc;
-+	const struct thermal_cooling_device_ops *ops;
- 	struct device *dev;
- 
- 	if (IS_ERR_OR_NULL(cdev))
- 		return;
- 
-+	ops = cdev->ops;
- 	dfc = cdev->devdata;
- 	dev = dfc->devfreq->dev.parent;
- 
-@@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 
- 	kfree(dfc->freq_table);
- 	kfree(dfc);
-+	kfree(ops);
- }
- EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
--- 
-2.29.0
+What should be here for Rockhip? We had similar cases like this for many
+drivers, I was fixing some of Exynos as well. In my case usually the
+root/external clock was missing, so I supplied is as input clock to the
+clock controller.
 
+
+Best regards,
+Krzysztof

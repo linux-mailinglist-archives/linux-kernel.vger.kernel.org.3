@@ -2,73 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF8D4E737C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F0E4E7381
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348310AbiCYMcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
+        id S1352787AbiCYMdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244732AbiCYMc3 (ORCPT
+        with ESMTP id S1355069AbiCYMcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:32:29 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765E3D0817;
-        Fri, 25 Mar 2022 05:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YcSVVivNSS6HKwFtzFw9OEfDniOM+I9GJAUb7FZ1W4A=; b=fxduNBYyWHO7Q1Uha+uM3IlStL
-        lTG/7c1EFPnG0OYn5uQ6TJEuaizhCeLP5adQrm26TsmRP7uZPScATVueABjnfn2sg0ocQO1wkR6IA
-        e9YxSGZrMvzUu4XZCoJPfekTLsjnlLYiivJD6F9XYR4NEWARiqVKLGG3DBf8CuV+wj6CoDVrdiuo8
-        LoqIB+iwnrCoERz0M9v0HOK9Zl0kfsMHIEdoqT3GKx8NBFheOqDyqR5G1ZF//Aekrl0P/sjJD0FYv
-        vPprZhs55FC4NtDE+I6pHZQT4wKMkIFjjDNeio2ub3qLZFqIvqLMIzD2iXlBDAK5qFxnqBAWcwO77
-        F6rD3BUg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nXj5c-00EM6s-F7; Fri, 25 Mar 2022 12:30:48 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 13483987D26; Fri, 25 Mar 2022 13:30:48 +0100 (CET)
-Date:   Fri, 25 Mar 2022 13:30:47 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        ebiggers@google.com, herbert@gondor.apana.org.au, Jason@zx2c4.com,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: [PATCH 5/2] x86/sm3: Fixup SLS
-Message-ID: <20220325123047.GR8939@worktop.programming.kicks-ass.net>
-References: <20220322114809.381992456@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322114809.381992456@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 25 Mar 2022 08:32:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0953CD080C;
+        Fri, 25 Mar 2022 05:31:17 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22PAS6J6013215;
+        Fri, 25 Mar 2022 12:31:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=goJB0SCqo5d39ZSNDAI7BU78CtP+9thRdvFF6R5J+wc=;
+ b=A+wnsv4VInGsI6YKMTOyxSPCHej84JaylddJWXa6MNlPUx0Wutle5qE/uTtPREa9YZb9
+ u/Os8thesgO5U5ciDqL1QqPsk/qbbGBXBPWfsIgC7puN8G/ICeJo1fCGPxZ3t4Gck6KM
+ E3tzjsYeHV9uhBxcqJPmJeCtMCvBOKp7Z33Wv6eDrUfNN4Y4l/Vr3WasrdwaRhpr/Rgt
+ Pcexh1lNbtQOdnVLOtayrI52YF5sVkF4uUTXKktRkYur9y4qX2RGBaFlPDPf1XMyxPHs
+ XTXWGAhyC5y3Ca2WycRvnzusp3PHRnJ3eQoHHrzE+iSE2XY0kj3N71Q3U5AiojyGWeeY qA== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0t26y2pj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Mar 2022 12:31:14 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22PCD6SS026663;
+        Fri, 25 Mar 2022 12:31:12 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3ew6ej3aqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Mar 2022 12:31:12 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22PCVA9N54985002
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Mar 2022 12:31:10 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4583C11C04A;
+        Fri, 25 Mar 2022 12:31:10 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A8E011C04C;
+        Fri, 25 Mar 2022 12:31:09 +0000 (GMT)
+Received: from sig-9-65-72-52.ibm.com (unknown [9.65.72.52])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 25 Mar 2022 12:31:09 +0000 (GMT)
+Message-ID: <9bda9c8a9f161763f420bf8e7bd639fe0d7e1691.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 4/5] ima: support fs-verity file digest based version
+ 3 signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 25 Mar 2022 08:31:08 -0400
+In-Reply-To: <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
+References: <20220318182151.100847-1-zohar@linux.ibm.com>
+         <20220318182151.100847-5-zohar@linux.ibm.com>
+         <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6RIghj8AlccUgY2wbnH3it5WzrtsKJa8
+X-Proofpoint-GUID: 6RIghj8AlccUgY2wbnH3it5WzrtsKJa8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-25_02,2022-03-24_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 suspectscore=0 phishscore=0 clxscore=1015 impostorscore=0
+ malwarescore=0 spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203250070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-03-21 at 09:10 -0400, Stefan Berger wrote:
+> 
+> On 3/18/22 14:21, Mimi Zohar wrote:
+> > IMA may verify a file's integrity against a "good" value stored in the
+> > 'security.ima' xattr or as an appended signature, based on policy.  When
+> > the "good value" is stored in the xattr, the xattr may contain a file
+> > hash or signature.  In either case, the "good" value is preceded by a
+> > header.  The first byte of the xattr header indicates the type of data
+> > - hash, signature - stored in the xattr.  To support storing fs-verity
+> > signatures in the 'security.ima' xattr requires further differentiating
+> > the fs-verity signature from the existing IMA signature.
+> > 
+> > In addition the signatures stored in 'security.ima' xattr, need to be
+> > disambiguated.  Instead of directly signing the fs-verity digest, a new
+> > signature version 3 is defined as the hash of the ima_file_id structure,
+> > which identifies the type of signature and the digest.
+> 
+> Would it not be enough to just differentiat by the type of signature 
+> rather than also bumping the version? It's still signature_v2_hdr but a 
+> new type IMA_VERITY_DIGSIG is introduced there that shoud be sufficient 
+> to indicate that a different method for calculating the hash is to be 
+> used than for anything that existed before? sigv3 would then become the 
+> more obvious veriftysig... ?
 
-This missed the big asm update due to being merged through the crypto
-tree.
+One of Eric's concerns was that, "an attacker (who controls the file's
+contents and IMA xattr) [could] replace the file with one with a
+differrent content and still be able to pass the IMA check."  His
+solution was to only allow one signature version on a running system.  
+For the complete description of the attack, refer to Eric's comments on
+v3.
 
-Fixes: f94909ceb1ed ("x86: Prepare asm files for straight-line-speculation")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/crypto/sm3-avx-asm_64.S |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Instead of only allowing one signature version on a running system,
+subsequent versions of this patch set addressed his concern, by
+limiting the signature version based on policy.
 
---- a/arch/x86/crypto/sm3-avx-asm_64.S
-+++ b/arch/x86/crypto/sm3-avx-asm_64.S
-@@ -513,5 +513,5 @@ SYM_FUNC_START(sm3_transform_avx)
- 
- 	movq %rbp, %rsp;
- 	popq %rbp;
--	ret;
-+	RET;
- SYM_FUNC_END(sm3_transform_avx)
+-- 
+thanks,
+
+Mimi
+

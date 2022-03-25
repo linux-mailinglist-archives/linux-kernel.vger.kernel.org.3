@@ -2,183 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B744E74ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66604E74F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359339AbiCYOVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S244990AbiCYOYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348556AbiCYOVk (ORCPT
+        with ESMTP id S239999AbiCYOYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:21:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255502D1F1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 07:20:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 25 Mar 2022 10:24:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F671009;
+        Fri, 25 Mar 2022 07:23:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BC06721110;
-        Fri, 25 Mar 2022 14:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648218004; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wwwyt1xK0HmXO1qRV3kfkubpFO7mwn/CtU9TCGfV+j0=;
-        b=PaPT8GekWg7B8tp64vOUqB7V3ysZ3fzCtptcXK5/u/61zcFo9wBl058YL6CPvQom00Eroj
-        3r0AP0nMj3iKhXN/U6bkubJY8ibdyLuACqUF//b2/+QknKPVDcZdCj4x2kTJKYjcDK+h6h
-        hnDpz4dK6YeHEJc2EC0LTQPiTf3TQCo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6575B132E9;
-        Fri, 25 Mar 2022 14:20:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Dy1/F5TPPWL6EQAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 25 Mar 2022 14:20:04 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86123B8288C;
+        Fri, 25 Mar 2022 14:23:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB2FC340E9;
+        Fri, 25 Mar 2022 14:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648218179;
+        bh=DltTo5IPp+afM/kBYNU4tPTueYUlNlIcT8OkeI7iSc4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mVs6t1TTgTES6UGTw6RJ8sDXSHojLSRLLWiNxhLt8we3mDe1b7WuYekeoJ83/sWl1
+         2GJcqoQhSxFRPTM9r/L76MpjtXHYjdDCW3bIV7B9UszcKTvyd5hiJnXmakk8RcFiD+
+         Cm7wV2QsaaE5W4c0Q2+wXO5ApBQQNxyk8kYA2xyatCIrW/HmpkqlzJdULF60g+frPV
+         UvBAZ6J24a7QScYWI3uXkoZYoSg4Hd+LihWsqYrRLlOuoUreUHVziDf7VCZykzbK+w
+         UttGpR9+Jy+LHbV1zVcITs5dmQldYAtm31KXosleoX9QDbRQk6VC+e6Htv/L4svaDd
+         qXXObgd8ONnsQ==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: [PATCH v2] xen: fix is_xen_pmu()
-Date:   Fri, 25 Mar 2022 15:20:02 +0100
-Message-Id: <20220325142002.31789-1-jgross@suse.com>
-X-Mailer: git-send-email 2.34.1
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/4] kprobes: rethook: x86: Replace kretprobe trampoline with rethook
+Date:   Fri, 25 Mar 2022 23:22:53 +0900
+Message-Id: <164821817332.2373735.12048266953420821089.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-is_xen_pmu() is taking the cpu number as parameter, but it is not using
-it. Instead it just tests whether the Xen PMU initialization on the
-current cpu did succeed. As this test is done by checking a percpu
-pointer, preemption needs to be disabled in order to avoid switching
-the cpu while doing the test. While resuming from suspend() this seems
-not to be the case:
+Hi,
 
-[   88.082751] ACPI: PM: Low-level resume complete
-[   88.087933] ACPI: EC: EC started
-[   88.091464] ACPI: PM: Restoring platform NVS memory
-[   88.097166] xen_acpi_processor: Uploading Xen processor PM info
-[   88.103850] Enabling non-boot CPUs ...
-[   88.108128] installing Xen timer for CPU 1
-[   88.112763] BUG: using smp_processor_id() in preemptible [00000000] code: systemd-sleep/7138
-[   88.122256] caller is is_xen_pmu+0x12/0x30
-[   88.126937] CPU: 0 PID: 7138 Comm: systemd-sleep Tainted: G        W         5.16.13-2.fc32.qubes.x86_64 #1
-[   88.137939] Hardware name: Star Labs StarBook/StarBook, BIOS 7.97 03/21/2022
-[   88.145930] Call Trace:
-[   88.148757]  <TASK>
-[   88.151193]  dump_stack_lvl+0x48/0x5e
-[   88.155381]  check_preemption_disabled+0xde/0xe0
-[   88.160641]  is_xen_pmu+0x12/0x30
-[   88.164441]  xen_smp_intr_init_pv+0x75/0x100
+Here are the 2nd version for generic kretprobe and kretprobe on x86 for
+replacing the kretprobe trampoline with rethook. The previous version
+is here[1]
 
-Fix that by replacing is_xen_pmu() by a simple boolean variable which
-reflects the Xen PMU initialization state on cpu 0.
+[1] https://lore.kernel.org/all/164818251899.2252200.7306353689206167903.stgit@devnote2/T/#u
 
-Modify xen_pmu_init() to return early in case it is being called for a
-cpu other than cpu 0 and the boolean variable not being set.
+In this version I added completing pt_regs by saving regs->ss register
+for rethook (from Peter) and optprobe.
 
-Fixes: bf6dfb154d93 ("xen/PMU: PMU emulation code")
-Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Background:
+
+This rethook came from Jiri's request of multiple kprobe for bpf[1].
+He tried to solve an issue that starting bpf with multiple kprobe will
+take a long time because bpf-kprobe will wait for RCU grace period for
+sync rcu events.
+
+Jiri wanted to attach a single bpf handler to multiple kprobes and
+he tried to introduce multiple-probe interface to kprobe. So I asked
+him to use ftrace and kretprobe-like hook if it is only for the
+function entry and exit, instead of adding ad-hoc interface
+to kprobes.
+For this purpose, I introduced the fprobe (kprobe like interface for
+ftrace) with the rethook (this is a generic return hook feature for
+fprobe exit handler)[2].
+
+[1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+[2] https://lore.kernel.org/all/164191321766.806991.7930388561276940676.stgit@devnote2/T/#u
+
+The rethook is basically same as the kretprobe trampoline. I just made
+it decoupled from kprobes. Eventually, the all arch dependent kretprobe
+trampolines will be replaced with the rethook trampoline instead of
+cloning and set HAVE_RETHOOK=y.
+When I port the rethook for all arch which supports kretprobe, the
+legacy kretprobe specific code (which is for CONFIG_KRETPROBE_ON_RETHOOK=n)
+will be removed eventually.
+
+Worktree notice:
+
+BTW, this patch can be applied to next-20220324, not the bpf-next tree
+directly, because this depends on ANNOTATE_NOENDBR macro. However, since
+the fprobe is merged in the bpf-next, I marked this for bpf-next.
+So until merging the both of fprobes and ENDBR series, to compile this
+you need below 2 lines in arch/x86/kernel/rethook.c.
+
+#ifndef ANNOTATE_NOENDBR
+#define ANNOTATE_NOENDBR
+
+But after those are merged, these lines will be unneeded. How should I
+handle this issue? (Just remove ANNOTATE_NOENDBR line in bpf-next?)
+
+
+Thank you,
+
 ---
-V2:
-- don't reset is_xen_pmu when suspending (Boris Ostrovsky)
----
- arch/x86/xen/pmu.c    | 10 ++++------
- arch/x86/xen/pmu.h    |  3 ++-
- arch/x86/xen/smp_pv.c |  2 +-
- 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
-index 89dd6b1708b0..21ecbe754cb2 100644
---- a/arch/x86/xen/pmu.c
-+++ b/arch/x86/xen/pmu.c
-@@ -506,10 +506,7 @@ irqreturn_t xen_pmu_irq_handler(int irq, void *dev_id)
- 	return ret;
- }
- 
--bool is_xen_pmu(int cpu)
--{
--	return (get_xenpmu_data() != NULL);
--}
-+bool is_xen_pmu;
- 
- void xen_pmu_init(int cpu)
- {
-@@ -520,7 +517,7 @@ void xen_pmu_init(int cpu)
- 
- 	BUILD_BUG_ON(sizeof(struct xen_pmu_data) > PAGE_SIZE);
- 
--	if (xen_hvm_domain())
-+	if (xen_hvm_domain() || (cpu != 0 && !is_xen_pmu))
- 		return;
- 
- 	xenpmu_data = (struct xen_pmu_data *)get_zeroed_page(GFP_KERNEL);
-@@ -541,7 +538,8 @@ void xen_pmu_init(int cpu)
- 	per_cpu(xenpmu_shared, cpu).xenpmu_data = xenpmu_data;
- 	per_cpu(xenpmu_shared, cpu).flags = 0;
- 
--	if (cpu == 0) {
-+	if (!is_xen_pmu) {
-+		is_xen_pmu = true;
- 		perf_register_guest_info_callbacks(&xen_guest_cbs);
- 		xen_pmu_arch_init();
- 	}
-diff --git a/arch/x86/xen/pmu.h b/arch/x86/xen/pmu.h
-index 0e83a160589b..65c58894fc79 100644
---- a/arch/x86/xen/pmu.h
-+++ b/arch/x86/xen/pmu.h
-@@ -4,6 +4,8 @@
- 
- #include <xen/interface/xenpmu.h>
- 
-+extern bool is_xen_pmu;
-+
- irqreturn_t xen_pmu_irq_handler(int irq, void *dev_id);
- #ifdef CONFIG_XEN_HAVE_VPMU
- void xen_pmu_init(int cpu);
-@@ -12,7 +14,6 @@ void xen_pmu_finish(int cpu);
- static inline void xen_pmu_init(int cpu) {}
- static inline void xen_pmu_finish(int cpu) {}
- #endif
--bool is_xen_pmu(int cpu);
- bool pmu_msr_read(unsigned int msr, uint64_t *val, int *err);
- bool pmu_msr_write(unsigned int msr, uint32_t low, uint32_t high, int *err);
- int pmu_apic_update(uint32_t reg);
-diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
-index 4a6019238ee7..688aa8b6ae29 100644
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -129,7 +129,7 @@ int xen_smp_intr_init_pv(unsigned int cpu)
- 	per_cpu(xen_irq_work, cpu).irq = rc;
- 	per_cpu(xen_irq_work, cpu).name = callfunc_name;
- 
--	if (is_xen_pmu(cpu)) {
-+	if (is_xen_pmu) {
- 		pmu_name = kasprintf(GFP_KERNEL, "pmu%d", cpu);
- 		rc = bind_virq_to_irqhandler(VIRQ_XENPMU, cpu,
- 					     xen_pmu_irq_handler,
--- 
-2.34.1
+Masami Hiramatsu (3):
+      kprobes: Use rethook for kretprobe if possible
+      rethook: kprobes: x86: Replace kretprobe with rethook on x86
+      x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
 
+Peter Zijlstra (1):
+      Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
+
+
+ arch/Kconfig                     |    7 ++
+ arch/x86/Kconfig                 |    1 
+ arch/x86/include/asm/unwind.h    |   23 +++----
+ arch/x86/kernel/Makefile         |    1 
+ arch/x86/kernel/kprobes/common.h |    1 
+ arch/x86/kernel/kprobes/core.c   |  107 ---------------------------------
+ arch/x86/kernel/kprobes/opt.c    |   25 +++++---
+ arch/x86/kernel/rethook.c        |  123 ++++++++++++++++++++++++++++++++++++++
+ arch/x86/kernel/unwind_orc.c     |   10 ++-
+ include/linux/kprobes.h          |   51 +++++++++++++++-
+ kernel/kprobes.c                 |  124 ++++++++++++++++++++++++++++++++------
+ kernel/trace/trace_kprobe.c      |    4 +
+ 12 files changed, 319 insertions(+), 158 deletions(-)
+ create mode 100644 arch/x86/kernel/rethook.c
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

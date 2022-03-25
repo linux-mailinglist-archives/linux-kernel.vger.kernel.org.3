@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4894E7A06
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 18:20:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 792E14E7A03
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 18:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234716AbiCYRTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 13:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
+        id S239351AbiCYRUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 13:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358591AbiCYRTl (ORCPT
+        with ESMTP id S234622AbiCYRUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 13:19:41 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD1CECC5E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:17:58 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id r64so4820442wmr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:17:58 -0700 (PDT)
+        Fri, 25 Mar 2022 13:20:48 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DC4ECC73
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:19:07 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id i67-20020a1c3b46000000b0038ce25c870dso1296565wma.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:19:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7cdghCtZILOuy6wyiUAMSm10nHZvUCEwy3CxnJnpQ3E=;
-        b=Ekml532Q4VM1H61d92wIWfxKoSe5qC68hUPuRiJ3utWbOHHL5xxnrBy7NlgYLLrxXF
-         NTu3kCRSo859RS36c8hHfLfzjM0xwpTLhkPCnp58ejKXGViwoaxLpTlORp9RmiUAifXW
-         OwZRIkinfqA7QR0sTfS5bnOASfOR8QYtWpOkcbfZ1+9sJKESfv4H5HAe3tiQjVmoDouF
-         y4KTvE10pO1b1l1AhbRfA29ayxjlNJgR1gWpgJR2b5g0lUazF4lpIfMOVUOew1v2xhAD
-         SzmwIQUFGVVbFSDYENnz6Thfe+BR9R/UmkE3pNJDxt90WUP63GrBqY8PbscluUB9Gn86
-         wAvw==
+        bh=FaQcjw0Oe/ViCTTuFvcZ5DbpUtBdonZ5NoR4+x/b/mM=;
+        b=q02Yc/wGGHipHe+rqcIDczhkFTYBkCXNRcjEaizSrgSJSQk0FcBIVTvhOBAQ+15RPF
+         15EnZCNGxO/rh/t5Bptvfr1UKzXfH3o68t/uFyTZbvYxkGCMctksAnUHZdxSj6Ssx5sb
+         ZsWpd8V9SvZbYNVChxVyeCUJ1TvEnvNTUnKALgOwqoqKibmVvTN23VqehQN+Rnws1taU
+         e6bjFfjYSBVPOjRfsB/M7W8aQ1HW6ebobxCF4cGm+oqbJb7cgl9u0ZJRn9I4Hx3sQou+
+         pxi5mHjGkSf3wzIrzRLNklRbUzIyhq4YyxCGLnejv93i9TXyu3b5oP/AMswNQWByss5V
+         sCOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7cdghCtZILOuy6wyiUAMSm10nHZvUCEwy3CxnJnpQ3E=;
-        b=28WvJEak5KQfQ4pei1I/n6r2dSuAra5CaKzSXpOSwCHQfvveo84zB1LoPpU5Fwlds7
-         cnMpC0rfaMnKP5fD7T3Byim8hr2TM1cPeq/CXCUfmvbd2Ahl7+YEvu7sWuW53uRDupC6
-         xF6PIDeMyS097xgZEAD1Jh9kvPoAtQKqzLgkjxFoK8HiYMGATrM7M4i5f8zraAmL+dx8
-         SrSc5LYBAzN9KnK25EnG+1i//Pjqj3Nn/bXV1SqwWwX59KfQu+vPIcGSgUhB2zdzg08R
-         hhtBga/lsOyqVLEY9REQaC9a8vv6S0gPwzlpOeaVY7XI0Gv6PtqIYZgCBwoL8GADy5PG
-         DHzA==
-X-Gm-Message-State: AOAM531U49muYTZpStifVf3iZSe9YIDDDckkLKbyIpgktVaLcakEuXrT
-        xBdM020PcesbMQE3GbPnn4N//w==
-X-Google-Smtp-Source: ABdhPJygjHdeyF3kmbF552zf4Ig1oFkDJy8o4evJu6in/pkAYt6kS4J5LF/XYpeLn+lvNZV9cbY90Q==
-X-Received: by 2002:a1c:cc11:0:b0:389:e8aa:ad4b with SMTP id h17-20020a1ccc11000000b00389e8aaad4bmr10622380wmb.79.1648228628310;
-        Fri, 25 Mar 2022 10:17:08 -0700 (PDT)
+        bh=FaQcjw0Oe/ViCTTuFvcZ5DbpUtBdonZ5NoR4+x/b/mM=;
+        b=ylJFYZ1rILshXkmGrqP3dLA5UDhR6Ne06MSPO6wytJZaQHRrGo6GEpG/AZ14l60mVp
+         P3qpbZkm5aiDnF1nOmrd0y8Dq3gNWAbIHLhjGZDB/9qwyZKS7OXY7+xDuS/+FkpYEJwo
+         ANEdr7OqyAKMn+sZBn/ZyTbQz0FjVhTVHEc7ezq9W7lC63+/JnsEM/iI8rpuVcc8Jn7m
+         4jUMnDjNXuIH2SlAmsG/jlFkY+eL6L1UWi3z4SRQyouiexxHFVkO2XTM6UPWQ+gDYTKR
+         2XZupa8x0p2h9Icbqez4vih5n8eiFLl5i/VEYeMz8PhBqbjTiRPRFeeGuw3WdJZ4kUIJ
+         Ikvg==
+X-Gm-Message-State: AOAM531q7aqbmsmARLTcYd94ARTIuGczSqDGLuEbyva6qFtm8JX/zE88
+        fvveAAdQ9qKkpKzIUb3WMbSipg==
+X-Google-Smtp-Source: ABdhPJwePYYbDEL3jskId8G6Vh/wDKonckD8/zRMt2PuaJN41Er7Io1HePBcu1Tfj+Zb+ttXKPbZcw==
+X-Received: by 2002:a05:600c:3ac7:b0:38b:f9c6:27b8 with SMTP id d7-20020a05600c3ac700b0038bf9c627b8mr10822009wms.75.1648228630495;
+        Fri, 25 Mar 2022 10:17:10 -0700 (PDT)
 Received: from localhost.localdomain (2a02-8440-6240-cc41-3074-96af-9642-0003.rev.sfr.net. [2a02:8440:6240:cc41:3074:96af:9642:3])
-        by smtp.gmail.com with ESMTPSA id p16-20020a5d6390000000b00203ffebddf3sm7547464wru.99.2022.03.25.10.17.06
+        by smtp.gmail.com with ESMTPSA id p16-20020a5d6390000000b00203ffebddf3sm7547464wru.99.2022.03.25.10.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 10:17:07 -0700 (PDT)
+        Fri, 25 Mar 2022 10:17:10 -0700 (PDT)
 From:   Guillaume Ranquet <granquet@baylibre.com>
 To:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
         daniel@ffwll.ch, robh+dt@kernel.org,
@@ -61,9 +61,9 @@ Cc:     dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
         markyacoub@google.com
-Subject: [PATCH 12/22] drm/mediatek: dpi: move swap_shift to SoC config
-Date:   Fri, 25 Mar 2022 18:15:01 +0100
-Message-Id: <20220325171511.23493-13-granquet@baylibre.com>
+Subject: [PATCH 13/22] drm/mediatek: dpi: move the yuv422_en_bit to SoC config
+Date:   Fri, 25 Mar 2022 18:15:02 +0100
+Message-Id: <20220325171511.23493-14-granquet@baylibre.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220325171511.23493-1-granquet@baylibre.com>
 References: <20220325171511.23493-1-granquet@baylibre.com>
@@ -79,64 +79,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add flexibility by moving the swap shift value to SoC specific config
+Add flexibility by moving the yuv422 en bit to SoC specific config
 
 Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
  drivers/gpu/drm/mediatek/mtk_dpi.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 6eeda222a973..6d4d8c6ec47d 100644
+index 6d4d8c6ec47d..40254cd9d168 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -131,6 +131,7 @@ struct mtk_dpi_conf {
- 	u32 dimension_mask;
+@@ -132,6 +132,7 @@ struct mtk_dpi_conf {
  	/* HSIZE and VSIZE mask (no shift) */
  	u32 hvsize_mask;
-+	u32 channel_swap_shift;
+ 	u32 channel_swap_shift;
++	u32 yuv422_en_bit;
  	const struct mtk_dpi_yc_limit *limit;
  };
  
-@@ -349,7 +350,8 @@ static void mtk_dpi_config_channel_swap(struct mtk_dpi *dpi,
- 		break;
- 	}
- 
--	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << CH_SWAP, CH_SWAP_MASK);
-+	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << dpi->conf->channel_swap_shift,
-+		     CH_SWAP_MASK);
- }
+@@ -356,7 +357,8 @@ static void mtk_dpi_config_channel_swap(struct mtk_dpi *dpi,
  
  static void mtk_dpi_config_yuv422_enable(struct mtk_dpi *dpi, bool enable)
-@@ -821,6 +823,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
- 	.swap_input_support = true,
+ {
+-	mtk_dpi_mask(dpi, DPI_CON, enable ? YUV422_EN : 0, YUV422_EN);
++	mtk_dpi_mask(dpi, DPI_CON, enable ? dpi->conf->yuv422_en_bit : 0,
++		     dpi->conf->yuv422_en_bit);
+ }
+ 
+ static void mtk_dpi_config_csc_enable(struct mtk_dpi *dpi, bool enable)
+@@ -824,6 +826,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
  	.dimension_mask = HPW_MASK,
  	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
+ 	.channel_swap_shift = CH_SWAP,
++	.yuv422_en_bit = YUV422_EN,
  	.limit = &mtk_dpi_limit,
  };
  
-@@ -835,6 +838,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
- 	.swap_input_support = true,
+@@ -839,6 +842,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
  	.dimension_mask = HPW_MASK,
  	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
+ 	.channel_swap_shift = CH_SWAP,
++	.yuv422_en_bit = YUV422_EN,
  	.limit = &mtk_dpi_limit,
  };
  
-@@ -848,6 +852,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
- 	.swap_input_support = true,
+@@ -853,6 +857,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
  	.dimension_mask = HPW_MASK,
  	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
+ 	.channel_swap_shift = CH_SWAP,
++	.yuv422_en_bit = YUV422_EN,
  	.limit = &mtk_dpi_limit,
  };
  
-@@ -861,6 +866,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
- 	.swap_input_support = true,
+@@ -867,6 +872,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
  	.dimension_mask = HPW_MASK,
  	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
+ 	.channel_swap_shift = CH_SWAP,
++	.yuv422_en_bit = YUV422_EN,
  	.limit = &mtk_dpi_limit,
  };
  

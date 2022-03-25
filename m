@@ -2,126 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2153C4E7D15
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 269394E7D6E
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbiCYVmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 17:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S233533AbiCYVsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 17:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbiCYVmE (ORCPT
+        with ESMTP id S233526AbiCYVru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 17:42:04 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 957636E34C
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 14:40:25 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-198-v6S2T8p_MaetwOyqgJM0fQ-1; Fri, 25 Mar 2022 21:40:22 +0000
-X-MC-Unique: v6S2T8p_MaetwOyqgJM0fQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 25 Mar 2022 21:40:20 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 25 Mar 2022 21:40:20 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Johannes Berg' <johannes@sipsolutions.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Maxime Bizon <mbizon@freebox.fr>,
-        =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        "Marek Szyprowski" <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-Subject: RE: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-Thread-Topic: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-Thread-Index: AQHYQI1aK/9JYQDqEEKfLChLw6SC36zQnHkQ
-Date:   Fri, 25 Mar 2022 21:40:20 +0000
-Message-ID: <19b4ad5f9909446ea0eca93f9b5b4c40@AcuMS.aculab.com>
-References: <1812355.tdWV9SEqCh@natalenko.name>
-         <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
-         <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
-         <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com>
- <878rsza0ih.fsf@toke.dk>
-         <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
-         <20220324163132.GB26098@lst.de>
-         <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
- <871qyr9t4e.fsf@toke.dk>
-         <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
-         <31434708dcad126a8334c99ee056dcce93e507f1.camel@freebox.fr>
-         <CAHk-=wippum+MksdY7ixMfa3i1sZ+nxYPWLLpVMNyXCgmiHbBQ@mail.gmail.com>
-         <298f4f9ccad7c3308d3a1fd8b4b4740571305204.camel@sipsolutions.net>
-         <CAHk-=whXAan2ExANMryPSFaBWeyzikPi+fPUseMoVhQAxR7cEA@mail.gmail.com>
- <e42e4c8bf35b62c671ec20ec6c21a43216e7daa6.camel@sipsolutions.net>
-In-Reply-To: <e42e4c8bf35b62c671ec20ec6c21a43216e7daa6.camel@sipsolutions.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 25 Mar 2022 17:47:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE78E26D128
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 14:46:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5618E6104B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 21:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CF7EC2BBE4;
+        Fri, 25 Mar 2022 21:46:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648244772;
+        bh=h1ODuaZR6lqIhjCO5G+BxG/QKwpoe+nyYQtSLeprXKg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CeAe1c7j0tvw5ZNCuZqo237aQsUfB6h7HJHcTbXSDMiU4a7aT7W0LT4WYby3MRfyT
+         1NXVaLO0q2I4Vg6Mi5gBj2OXm6LLGW5w/Qx3XPIZbKRw6aEMS584UWrTom6pd9zp6G
+         qVSaVHSvLy9TN5fAiMBYUB5oriXqongqICE9gKd9pqJDxskHTjk1em2yl3qhApeeT5
+         CEvLCB7wv8mSxwzZWX05N4orwV1J7jTidLBlK0woQcPTmiv/spLGie8y01ZRbmSsa3
+         QWODpDoImyHP2BNH3To9O67DW1aruiNDxbAVZc6OjBefuTP6mS5Db0a+0j9GjAJeje
+         m6S54nidF31rw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 80B2C40407; Fri, 25 Mar 2022 18:46:08 -0300 (-03)
+Date:   Fri, 25 Mar 2022 18:46:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Stephane Eranian <eranian@google.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
+        songliubraving@fb.com, rafael@kernel.org, ravi.bangoria@amd.com,
+        sandipan.das@amd.com
+Subject: Re: [PATCH v7 11/13] perf tools: Improve IBS error handling
+Message-ID: <Yj44ICldLB6h0Mcu@kernel.org>
+References: <20220322221517.2510440-1-eranian@google.com>
+ <20220322221517.2510440-12-eranian@google.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322221517.2510440-12-eranian@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SSd2ZSBiZWVuIHRoaW5raW5nIG9mIHRoZSBjYXNlIHdoZXJlIGEgZGVzY3JpcHRvciByaW5nIGhh
-cw0KdG8gYmUgaW4gbm9uLWNvaGVyZW50IG1lbW9yeSAoZWcgYmVjYXVzZSB0aGF0IGlzIGFsbCB0
-aGVyZSBpcykuDQoNClRoZSByZWNlaXZlIHJpbmcgcHJvY2Vzc2luZyBpc24ndCBhY3R1YWxseSB0
-aGF0IGRpZmZpY3VsdC4NCg0KVGhlIGRyaXZlciBoYXMgdG8gZmlsbCBhIGNhY2hlIGxpbmUgZnVs
-bCBvZiBuZXcgYnVmZmVyDQpkZXNjcmlwdG9ycyBpbiBtZW1vcnkgYnV0IHdpdGhvdXQgYXNzaWdu
-aW5nIHRoZSBmaXJzdA0KYnVmZmVyIHRvIHRoZSBoYXJkd2FyZS4NClRoZW4gaXQgaGFzIHRvIGRv
-IGEgY2FjaGUgbGluZSB3cml0ZSBvZiBqdXN0IHRoYXQgbGluZS4NClRoZW4gaXQgY2FuIGFzc2ln
-biBvd25lcnNoaXAgb2YgdGhlIGZpcnN0IGJ1ZmZlciBhbmQNCmZpbmFsbHkgZG8gYSBzZWNvbmQg
-Y2FjaGUgbGluZSB3cml0ZS4NCihUaGUgZmlyc3QgZXhwbGljaXQgd3JpdGUgY2FuIGJlIHNraXBw
-ZWQgaWYgdGhlIGNhY2hlDQp3cml0ZXMgYXJlIGtub3duIHRvIGJlIGF0b21pYy4pDQpJdCB0aGVu
-IG11c3Qgbm90IGRpcnR5IHRoYXQgY2FjaGUgbGluZS4NCg0KVG8gY2hlY2sgZm9yIG5ldyBmcmFt
-ZXMgaXQgbXVzdCBpbnZhbGlkYXRlIHRoZSBjYWNoZQ0KbGluZSB0aGF0IGNvbnRhaW5zIHRoZSAn
-bmV4dCB0byBiZSBmaWxsZWQnIGRlc2NyaXB0b3INCmFuZCB0aGVuIHJlYWQgdGhhdCBjYWNoZSBs
-aW5lLg0KVGhpcyB3aWxsIGNvbnRhaW4gaW5mbyBhYm91dCBvbmUgb3IgbW9yZSByZWNlaXZlIGZy
-YW1lcy4NCkJ1dCB0aGUgaGFyZHdhcmUgaXMgc3RpbGwgZG9pbmcgdXBkYXRlcy4NCg0KQnV0IGJv
-dGggdGhlc2Ugb3BlcmF0aW9ucyBjYW4gYmUgaGFwcGVuaW5nIGF0IHRoZSBzYW1lDQp0aW1lIG9u
-IGRpZmZlcmVudCBwYXJ0cyBvZiB0aGUgYnVmZmVyLg0KDQpTbyB5b3UgbmVlZCB0byBrbm93IGEg
-J2NhY2hlIGxpbmUgc2l6ZScgZm9yIHRoZSBtYXBwaW5nDQphbmQgYmUgYWJsZSB0byBkbyB3cml0
-ZWJhY2tzIGFuZCBpbnZhbGlkYXRlcyBmb3IgcGFydHMNCm9mIHRoZSBidWZmZXIsIG5vdCBqdXN0
-IGFsbCBvZiBpdC4NCg0KVGhlIHRyYW5zbWl0IHNpZGUgaXMgaGFyZGVyLg0KSXQgZWl0aGVyIHJl
-cXVpcmVzIHdhaXRpbmcgZm9yIGFsbCBwZW5kaW5nIHRyYW5zbWl0cyB0bw0KZmluaXNoIG9yIHNw
-bGl0dGluZyBhIHNpbmdsZSB0cmFuc21pdCBpbnRvIGVub3VnaCBmcmFnbWVudHMNCnRoYXQgaXRz
-IGRlc2NyaXB0b3JzIGVuZCBvbiBhIGNhY2hlIGxpbmUgYm91bmRhcnkuDQpCdXQgYWdhaW4sIGFu
-ZCBpZiB0aGUgaW50ZXJmYWNlIGlzIGJ1c3ksIHlvdSB3YW50IHRoZSBjcHUNCnRvIGJlIGFibGUg
-dG8gdXBkYXRlIG9uZSBjYWNoZSBsaW5lIG9mIHRyYW5zbWl0IGRlc2NyaXB0b3JzDQp3aGlsZSB0
-aGUgZGV2aWNlIGlzIHdyaXRpbmcgdHJhbnNtaXQgY29tcGxldGlvbiBzdGF0dXMNCnRvIHRoZSBw
-cmV2aW91cyBjYWNoZSBsaW5lLg0KDQpJIGRvbid0IHRoaW5rIHRoYXQgaXMgbWF0ZXJpYWxseSBk
-aWZmZXJlbnQgZm9yIG5vbi1jb2hlcmVudA0KbWVtb3J5IG9yIGJvdW5jZSBidWZmZXJzLg0KQnV0
-IHBhcnRpYWwgZmx1c2gvaW52YWxpZGF0ZSBpcyBuZWVkZWQuDQoNCglEYXZpZA0KDQotDQpSZWdp
-c3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9u
-IEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+Em Tue, Mar 22, 2022 at 03:15:15PM -0700, Stephane Eranian escreveu:
+> From: Kim Phillips <kim.phillips@amd.com>
+> 
+> improve the error message returned on failed perf_event_open() on AMD when
+> using IBS.
+> 
+> Output of executing 'perf record -e ibs_op// true' BEFORE this patch:
+> 
+> The sys_perf_event_open() syscall returned with 22 (Invalid argument)for event (ibs_op//u).
+> /bin/dmesg | grep -i perf may provide additional information.
+> 
+> Output after:
+> 
+> AMD IBS cannot exclude kernel events.  Try running at a higher privilege level.
 
+So the error message don't match up the BEFORE part, that didn't have a
+"u" at the end, and with this patch in:
+
+  $ git log --oneline -1
+  ca585f91ce13df4c (HEAD -> perf/core) perf evsel: Improve AMD IBS (Instruction-Based Sampling) error handling messages
+  # perf -v
+  perf version 5.17.gca585f91ce13
+  #
+  
+On a:
+
+  # grep -m1 "model name" /proc/cpuinfo
+  model name	: AMD Ryzen 9 5950X 16-Core Processor
+  #
+
+If I try:
+
+  # perf record -e ibs_op//u true
+  Error:
+  Invalid event (ibs_op//u) in per-thread mode, enable system wide with '-a'.
+  # 
+
+So now if I try:
+
+  # perf record -a -e ibs_op//u true
+  Error:
+  AMD IBS can't exclude kernel events.  Try running at a higher privilege level.
+  #
+
+So the problem is with the patch description, I'm fixing it.
+
+> Output of executing 'sudo perf record -e ibs_op// true' BEFORE this patch:
+> 
+> Error:
+> The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (ibs_op//).
+> /bin/dmesg | grep -i perf may provide additional information.
+> 
+> Output after:
+> 
+> Error:
+> AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity
+
+But this one is never reached:
+
+[root@five ~]# perf record -e ibs_op// true
+Error:
+Invalid event (ibs_op//) in per-thread mode, enable system wide with '-a'
+
+> +                             if (!evsel->core.system_wide)
+> +                                     return scnprintf(msg, size,
+> +     "AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity");
+
+
+I'm applying this to make progress, the message now provides more clues.
+
+- Arnaldo
+
+ 
+> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Joao Martins <joao.m.martins@oracle.com>
+> Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Michael Petlan <mpetlan@redhat.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Robert Richter <robert.richter@amd.com>
+> Cc: Stephane Eranian <eranian@google.com>
+> ---
+>  tools/perf/util/evsel.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 14b0e7ffa2c7..e8ff7a4bd490 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -2847,9 +2847,23 @@ static bool find_process(const char *name)
+>  	return ret ? false : true;
+>  }
+>  
+> +static bool is_amd(const char *arch, const char *cpuid)
+> +{
+> +	return arch && !strcmp("x86", arch) && cpuid && strstarts(cpuid, "AuthenticAMD");
+> +}
+> +
+> +static bool is_amd_ibs(struct evsel *evsel)
+> +{
+> +	return evsel->core.attr.precise_ip
+> +	    || (evsel->pmu_name && !strncmp(evsel->pmu_name, "ibs", 3));
+> +}
+> +
+>  int evsel__open_strerror(struct evsel *evsel, struct target *target,
+>  			 int err, char *msg, size_t size)
+>  {
+> +	struct perf_env *env = evsel__env(evsel);
+> +	const char *arch = perf_env__arch(env);
+> +	const char *cpuid = perf_env__cpuid(env);
+>  	char sbuf[STRERR_BUFSIZE];
+>  	int printed = 0, enforced = 0;
+>  
+> @@ -2949,6 +2963,17 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
+>  			return scnprintf(msg, size,
+>  	"Invalid event (%s) in per-thread mode, enable system wide with '-a'.",
+>  					evsel__name(evsel));
+> +		if (is_amd(arch, cpuid)) {
+> +			if (is_amd_ibs(evsel)) {
+> +				if (evsel->core.attr.exclude_kernel)
+> +					return scnprintf(msg, size,
+> +	"AMD IBS can't exclude kernel events.  Try running at a higher privilege level.");
+> +				if (!evsel->core.system_wide)
+> +					return scnprintf(msg, size,
+> +	"AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity");
+> +			}
+> +		}
+> +
+>  		break;
+>  	case ENODATA:
+>  		return scnprintf(msg, size, "Cannot collect data source with the load latency event alone. "
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
+
+-- 
+
+- Arnaldo

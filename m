@@ -2,115 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A514E6C64
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 03:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DD54E6C6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 03:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357780AbiCYCMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 22:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        id S1354529AbiCYCPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 22:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357753AbiCYCMO (ORCPT
+        with ESMTP id S1346712AbiCYCPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 22:12:14 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AB9A147B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 19:10:25 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id x20so11544151ybi.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 19:10:25 -0700 (PDT)
+        Thu, 24 Mar 2022 22:15:06 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FB94CD5D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 19:13:33 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id a17so7668603edm.9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 19:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IKwNBEs3tASJWL7vN74tIrUm9dV+sBlNlNaJ5KwKgTs=;
-        b=cbc3BGe5+zL07UFEV9pbFjATQyTFfHkL8NRVARYGOxWmh0lxE1dNlskSSeW2JkMs2k
-         sFZgeI9XI06R2An17rGJRCrVBd+4KlMmefFE0nM82JlLERTRrgyL+1O3jRbO/hSqr9ZS
-         Pvf+cXGQaP182cb0VU8dTVUGy9z7Ic0Nmx+vQ=
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=x/SKwnS2wQi9dJJ6CWGROEW1ewpvhEn8StiIdhWUEWI=;
+        b=iDMYY7FwsUa++dMovFKpAJmACqJEFzXM6eEjeuDTd0+cClHJfPUKyh7ELo3liADDQ0
+         /NBQ9+Cu+un/PYWM8BKpXk7Kq/DoKsnMSDekvfwW9Yqu4XEfEAM0r6Ga8Qp0fauo5zq4
+         3ZtUSOqkOR5ovCNp4c1IE55cdeco21MLx9T1SKyW8RqP9FzjiAEFlNRYMz5rEj94b0o+
+         6M1sLAGijkffXKrDHia5CctnMQlNPjA1HT8ZMZEMpFO3n74T8TBzvbw1zeUQHupzneRD
+         0CysiYfcjx9NUGxEV1mIZJ63WEan1TDEEzitAKRafWOve4KAvJIwNfJQ7JITKVEmL16W
+         caQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IKwNBEs3tASJWL7vN74tIrUm9dV+sBlNlNaJ5KwKgTs=;
-        b=LvDWwcR1aUyVmJid6wKJyqEl7Z50dxnvQWWb4iBQiY+0hE4hzXN/NRF0+rO1xL21y5
-         //rP+h45TnJBcCkXSNx4mqvYF3Q29F6Z4Hp1yybGwaxEOJxN7seRC37YNE3LxE+cFsX2
-         ScUgO0dex0PZ5xqTV82Jv2bkadvtHTzI7dJ8Zk/TrhUcTF7JZH1dOxpFAzYvx6enodmz
-         nTNn6mYTJnD0nRhoZpNQ+LJ2YCNy5EDeUxPdy68YgdSBhTPbc7ZFSoAq5CNUkZ+9fUs0
-         9YzvLYkJtGI7HbhKVEYVaAPjGAZUVUy5VfG3Do6amyQEm0YZLMraaAsUQhQ3FruRiozo
-         LiSw==
-X-Gm-Message-State: AOAM530LWdmWjaJjuNLA3OcdDnYbdxxKHu2tKLDH9Uc9DYEjNVy85v/r
-        K7e7i9aA+NyW04DE3QqXUGw4ImCrW27kfUp/9yOnAw==
-X-Google-Smtp-Source: ABdhPJz3y4TlNL1JF4KJF+1yuPmc8LbezhlJz2o/4Jb79VASFUj+QoEgLFnQxvm0LwiSP+zSpCA553HDqMC/wZi0OFI=
-X-Received: by 2002:a25:3f43:0:b0:633:bdd8:4ae6 with SMTP id
- m64-20020a253f43000000b00633bdd84ae6mr7423462yba.134.1648174224922; Thu, 24
- Mar 2022 19:10:24 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=x/SKwnS2wQi9dJJ6CWGROEW1ewpvhEn8StiIdhWUEWI=;
+        b=YpnVp711H/Ay89QXZNkFxZV2wE2/nAg84V2ukuh6GHTzrFZJECOn1h7nAOCx4DV8Lj
+         z6oAJFl/TB9V/wKWQiMD6TPdmw+HLd0e15fl1J59kDY4GJOozNcKqAC123FZbswClaT8
+         TsAGH9NO0klLxkci+eKUAFxN95Tqa1ZPIkY7yTY/4I8eTi5MfAu3mGjAyePTvpaJxzMc
+         EzVHNPYslM8qckmTp4vPookVRBOtEh6jCCI1/7zvIryZBQPbugYhjsLLd5FkLzgR1x1g
+         DRbo55YWty6DiZjrn44pWNC0SrWRum9nTqJl12GQBar+PxBDOkFD6f1218ieXftzIoNt
+         ac8Q==
+X-Gm-Message-State: AOAM533OCj75GjMIlCHRIOlzEryPMXcj5te+aNVX8FOiwQRnXhgnjEog
+        5+P5OG4Kvw06OwxP5PFzwMoP1qrZfLWWchi8nzIgYuWOlFc=
+X-Google-Smtp-Source: ABdhPJyOinrH+nfJItL/ZWM2gMcQcwufOzrDZXE42o6EdU71rXSuPvg6bKQEeYRFLPshtt3PqR1zwwOFW1hzs85F9tA=
+X-Received: by 2002:a05:6402:354b:b0:419:4af8:c5c9 with SMTP id
+ f11-20020a056402354b00b004194af8c5c9mr10326050edd.91.1648174411417; Thu, 24
+ Mar 2022 19:13:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <CABWYdi2a=Tc3dRfQ+037PG0GHKvZd5SEXJxBBbNspsrHK1zNpQ@mail.gmail.com>
- <CABWYdi1PeNbgnM4qE001+_BzHJxQcaaY9sLOK=Y7gjqfXZO0=g@mail.gmail.com>
- <YjA439FwajtHsahr@google.com> <YjEOiZCLBMgbw8oc@google.com>
- <CABWYdi0jd_pG_qqAnnGK6otNNXeNoiAWtmC14Jv+tiSadJPw0w@mail.gmail.com>
- <CABWYdi2gOzAK60gLYKx9gSoSfJRZaAjyAWm+55gLgcSKrDrP9Q@mail.gmail.com>
- <YjTCF37cUNz9FwGi@google.com> <YjTVVxIAsnKAXjTd@google.com>
-In-Reply-To: <YjTVVxIAsnKAXjTd@google.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Thu, 24 Mar 2022 19:10:14 -0700
-Message-ID: <CABWYdi0tgau=trCiGWULY88Wu1-=13ck8NikV0KxfDQHFCCiMA@mail.gmail.com>
-Subject: Re: zram corruption due to uninitialized do_swap_page fault
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 25 Mar 2022 12:13:20 +1000
+Message-ID: <CAPM=9ty8CYpuQ05BjgB9_CBRUjiL5PMTF-irHRXKOWtOrgxxZA@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.18-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:54 AM Minchan Kim <minchan@kernel.org> wrote:
->
-> On Fri, Mar 18, 2022 at 10:32:07AM -0700, Minchan Kim wrote:
-> > On Fri, Mar 18, 2022 at 09:30:09AM -0700, Ivan Babrou wrote:
-> > > On Wed, Mar 16, 2022 at 11:26 AM Ivan Babrou <ivan@cloudflare.com> wrote:
-> > > > I'm making an internal build and will push it to some location to see
-> > > > how it behaves, but it might take a few days to get any sort of
-> > > > confidence in the results (unless it breaks immediately).
-> > > >
-> > > > I've also pushed my patch that disables SWP_SYNCHRONOUS_IO to a few
-> > > > locations yesterday to see how it fares.
-> > >
-> > > I have some updates before the weekend. There are two experimental groups:
-> > >
-> > > * My patch that removes the SWP_SYNCHRONOUS_IO flag. There are 704
-> > > machines in this group across 5 datacenters with cumulative uptime of
-> > > 916 days.
-> > > * Minchan's patch to remove swap_slot_free_notify. There are 376
-> > > machines in this group across 3 datacenters with cumulative uptime of
-> > > 240 days.
-> > >
-> > > Our machines take a couple of hours to start swapping anything after
-> > > boot, and I discounted these two hours from the cumulative uptime.
-> > >
-> > > Neither of these two groups experienced unexpected coredumps or
-> > > rocksdb corruptions.
-> > >
-> > > I think at this point it's reasonable to proceed with Minchan's patch
-> > > (including a backport).
-> >
-> > Let me cook the patch and then will post it.
-> >
-> > Thanks for the testing as well as reporting, Ivan!
->
-> From 1ede54d46f0b1958bfc624f17fe709637ef8f12a Mon Sep 17 00:00:00 2001
-> From: Minchan Kim <minchan@kernel.org>
-> Date: Tue, 15 Mar 2022 14:14:23 -0700
-> Subject: [PATCH] mm: fix unexpected zeroed page mapping with zram swap
+Hi Linus,
 
-Is there any action needed from me to make sure that this lands into
-the mm tree and eventually into stable releases?
+Some fixes were queued up in and in light of the fbdev regressions,
+I've pulled those in as well,
+I think the mediatek one is going to be a bit more painful, since now
+you have a merge and I need to have the mediatek stuff get rebased and
+retested onto that merge point, but I'll make sure they get to you
+ASAP.
+
+Thomas, cc'ed, I pulled your fbdev fixes from patchwork, since they
+were a clear regression fix, don't bother queueing them up in our
+trees now.
+
+Dave.
+
+drm-next-2022-03-25:
+drm fixes for 5.18-rc1
+
+core:
+- Make audio and color plane support checking only happen
+  when a CEA extension block is found.
+- Small selftest fix.
+
+fbdev:
+- two regressions fixes from speedup patches.
+
+ttm:
+- Fix a small regression from ttm_resource_fini()
+
+i915:
+- Reject unsupported TMDS rates on ICL+
+- Treat SAGV block time 0 as SAGV disabled
+- Fix PSF GV point mask when SAGV is not possible
+- Fix renamed INTEL_INFO->media.arch/ver field
+The following changes since commit c6e90a1c660874736bd09c1fec6312b4b4c2ff7b=
+:
+
+  Merge tag 'amd-drm-next-5.18-2022-03-18' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-next (2022-03-21
+13:48:20 +1000)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-03-25
+
+for you to fetch changes up to 2a81dba4b577099717cea86d429f053e85e74d96:
+
+  fbdev: Fix cfb_imageblit() for arbitrary image widths (2022-03-25
+09:55:54 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.18-rc1
+
+core:
+- Make audio and color plane support checking only happen
+  when a CEA extension block is found.
+- Small selftest fix.
+
+fbdev:
+- two regressions fixes from speedup patches.
+
+ttm:
+- Fix a small regression from ttm_resource_fini()
+
+i915:
+- Reject unsupported TMDS rates on ICL+
+- Treat SAGV block time 0 as SAGV disabled
+- Fix PSF GV point mask when SAGV is not possible
+- Fix renamed INTEL_INFO->media.arch/ver field
+
+----------------------------------------------------------------
+Cooper Chiou (1):
+      drm/edid: check basic audio support on CEA extension block
+
+Dave Airlie (2):
+      Merge tag 'drm-intel-next-fixes-2022-03-24' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-next
+      Merge tag 'drm-misc-next-fixes-2022-03-24-1' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-next
+
+Jani Nikula (1):
+      drm/edid: fix CEA extension byte #3 parsing
+
+Lucas De Marchi (1):
+      drm/i915: Fix renamed struct field
+
+Nathan Chancellor (1):
+      drm/selftest: plane_helper: Put test structures in static storage
+
+Thomas Zimmermann (2):
+      fbdev: Fix sys_imageblit() for arbitrary image widths
+      fbdev: Fix cfb_imageblit() for arbitrary image widths
+
+Ville Syrj=C3=A4l=C3=A4 (3):
+      drm/i915: Reject unsupported TMDS rates on ICL+
+      drm/i915: Treat SAGV block time 0 as SAGV disabled
+      drm/i915: Fix PSF GV point mask when SAGV is not possible
+
+Zack Rusin (1):
+      drm/ttm: Fix a kernel oops due to an invalid read
+
+ drivers/gpu/drm/drm_edid.c                        | 15 ++++++++----
+ drivers/gpu/drm/i915/display/intel_bw.c           |  3 ++-
+ drivers/gpu/drm/i915/display/intel_hdmi.c         |  9 +++++++
+ drivers/gpu/drm/i915/i915_drv.h                   |  2 +-
+ drivers/gpu/drm/i915/intel_pm.c                   | 10 ++++----
+ drivers/gpu/drm/selftests/test-drm_plane_helper.c |  8 +++----
+ drivers/gpu/drm/ttm/ttm_range_manager.c           |  2 +-
+ drivers/video/fbdev/core/cfbimgblt.c              | 28 ++++++++++++++++++-=
+---
+ drivers/video/fbdev/core/sysimgblt.c              | 29 +++++++++++++++++++=
+----
+ 9 files changed, 82 insertions(+), 24 deletions(-)

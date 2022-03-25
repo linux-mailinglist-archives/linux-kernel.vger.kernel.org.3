@@ -2,108 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777844E7BF1
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B99C34E7B61
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiCYTdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S230305AbiCYTge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiCYTdU (ORCPT
+        with ESMTP id S230231AbiCYTgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:33:20 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E64D1E1128;
-        Fri, 25 Mar 2022 12:25:27 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id j18so12124947wrd.6;
-        Fri, 25 Mar 2022 12:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Sgbjug1G1pDZEKRwaUL1TQtnWkwNkNtU3IYL1gdFP3w=;
-        b=Db2kfa5wv+R/GAy5yAWKd3ZJyWZ//HsIphCEG1Q7xsFw3DOwgACCMqx5rQ/wCZ8P/n
-         FU+pqDPCyWVFe1SO55l1OqkO2H7mILfusI0LlqczO6QF0rF+dcG6yYlZWT9YI9iN2xvb
-         SrZylMvQ8AUbFU8VR96Ho09orEblh53iE4zIY8WQhhDcek3MxJrA4+WlGlTIgJ2Ox1fo
-         24yoso/arzV8rjED72V8UCmkbyr7W5S5+tkH+SutSt7RLoGdbhbyeGCpLh3nxHneaiwE
-         DEWYg2L997w7XbinNL1PC8av4ZOXpVWGWwTGKolwEB23+ukFj9OvHe+sMoXs8RNfy7Y/
-         28/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Sgbjug1G1pDZEKRwaUL1TQtnWkwNkNtU3IYL1gdFP3w=;
-        b=dJLj7qsmlF239rgeZb2SP5If9T2D4KPo5jefpQjkk+iCerOHd1gClyIhlbtOpT66lr
-         VIojccLseaMdA0xXpTXxgQ83FzyhzjRaUQgtRwDwY8Xkst9dX3couemWmbbCa7kkGhZQ
-         ZbrIeaARsQ8+CYywJPt1lSYsH5Z+9SDe8jlPnNMo8Srdz+1lqiOdvl7es8hnWVwVSaWV
-         g8EWwIOcRaFYTiedVOyZZfKMb7voRWSTNxEQh/GSj/dscpFBL5t3Cn+xtHoUD/4YDbJY
-         N27x5nwj/QvNzHgIIAVZFKHQV3hGpKaXpsbizLmXiQ0tVnWiA6xb9jAGUvyuTG3sedza
-         Ak0g==
-X-Gm-Message-State: AOAM532MzbFkHFd7n6+Ri9mUriXxYFfZKg4r/Feh2F0OJKaUl6vXo01l
-        oNg/wovzbg8sS+n6RU9e1rqr9J2/B7c=
-X-Google-Smtp-Source: ABdhPJxcbxuTUqUJfWLwLUZezMhXUEn9uZCde44uBGEI83pW9cWU8hxCLi2F4ZA8o+fg61a9Y+FAdQ==
-X-Received: by 2002:ac2:4e71:0:b0:448:2f38:72ac with SMTP id y17-20020ac24e71000000b004482f3872acmr8810153lfs.594.1648231866812;
-        Fri, 25 Mar 2022 11:11:06 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.225.225])
-        by smtp.gmail.com with ESMTPSA id d13-20020a19384d000000b0044a20646b2bsm780687lfj.205.2022.03.25.11.11.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 11:11:06 -0700 (PDT)
-Message-ID: <e0e127c8-1515-2ebf-f473-acc38d60a122@gmail.com>
-Date:   Fri, 25 Mar 2022 21:11:03 +0300
+        Fri, 25 Mar 2022 15:36:19 -0400
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462102E5188;
+        Fri, 25 Mar 2022 12:09:37 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1648232029; bh=2/6Vw2ASBAiN11k5yojKv5+vCVhPImMu3UVtt56378s=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=u6q8TNoDqnTn5TUskazRYnwgeG+FCVCycn+e4KdE8c61ipZ71vDDXvjHlHXaTSufc
+         /7zUjA3cna3B1x8HpC7xOnRsqbkf3oxSIjhlvc2TBhwwVaooYqMMVK90FuenhMHD/2
+         QS79/isfJKz7ViC1uu+Wdx+J3znSWRwUjvnqrUahIJiVwHX51aJj1/gj9kScR5ZAJe
+         SUnOve0P5jpqAuBha431w1dhO5VMokHhVBKZvf300guwM7zTQJRRqrDCikWFvCLTNy
+         weUjZRns/h9tE3SQyZ1YXoNzvSRKC+ij1BEfuTN4pybtBu+xQp3jtpNx0kJHo92MC0
+         9CDkrzVDsS39Q==
+To:     Robin Murphy <robin.murphy@arm.com>, mbizon@freebox.fr,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+In-Reply-To: <f4224721-4578-61d3-69a7-9a3a76c50529@arm.com>
+References: <1812355.tdWV9SEqCh@natalenko.name>
+ <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
+ <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
+ <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
+ <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
+ <20220324163132.GB26098@lst.de>
+ <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com> <871qyr9t4e.fsf@toke.dk>
+ <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
+ <31434708dcad126a8334c99ee056dcce93e507f1.camel@freebox.fr>
+ <87a6de80em.fsf@toke.dk> <f4224721-4578-61d3-69a7-9a3a76c50529@arm.com>
+Date:   Fri, 25 Mar 2022 19:13:49 +0100
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <871qyp99ya.fsf@toke.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RFC PATCH] KVM: x86/mmu: fix general protection fault in
- kvm_mmu_uninit_tdp_mmu
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
-References: <20220325163815.3514-1-paskripkin@gmail.com>
- <53cc074f-350f-5fa8-1ee4-c33921f17cb1@redhat.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <53cc074f-350f-5fa8-1ee4-c33921f17cb1@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
+Robin Murphy <robin.murphy@arm.com> writes:
 
-On 3/25/22 19:50, Paolo Bonzini wrote:
-> On 3/25/22 17:38, Pavel Skripkin wrote:
->> Syzbot reported GPF in kvm_mmu_uninit_tdp_mmu(), which is caused by
->> passing NULL pointer to flush_workqueue().
->> 
->> tdp_mmu_zap_wq is allocated via alloc_workqueue() which may fail. There
->> is no error hanling and kvm_mmu_uninit_tdp_mmu() return value is simply
->> ignored. Even all kvm_*_init_vm() functions are void, so the easiest
->> solution is to check that tdp_mmu_zap_wq is valid pointer before passing
->> it somewhere.
-> 
-> Thanks for the analysis, but not scheduling the work item in
-> tdp_mmu_schedule_zap_root is broken; you can't just let the roots
-> survive (KVM uses its own workqueue because it needs to work item to
-> complete has to flush it before kvm_mmu_zap_all_fast returns).
-> 
+> On 2022-03-25 16:25, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Maxime Bizon <mbizon@freebox.fr> writes:
+>>=20
+>>> On Thu, 2022-03-24 at 12:26 -0700, Linus Torvalds wrote:
+>>>
+>>>>
+>>>> It's actually very natural in that situation to flush the caches from
+>>>> the CPU side again. And so dma_sync_single_for_device() is a fairly
+>>>> reasonable thing to do in that situation.
+>>>>
+>>>
+>>> In the non-cache-coherent scenario, and assuming dma_map() did an
+>>> initial cache invalidation, you can write this:
+>>>
+>>> rx_buffer_complete_1(buf)
+>>> {
+>>> 	invalidate_cache(buf, size)
+>>> 	if (!is_ready(buf))
+>>> 		return;
+>>> 	<proceed with receive>
+>>> }
+>>>
+>>> or
+>>>
+>>> rx_buffer_complete_2(buf)
+>>> {
+>>> 	if (!is_ready(buf)) {
+>>> 		invalidate_cache(buf, size)
+>>> 		return;
+>>> 	}
+>>> 	<proceed with receive>
+>>> }
+>>>
+>>> The latter is preferred for performance because dma_map() did the
+>>> initial invalidate.
+>>>
+>>> Of course you could write:
+>>>
+>>> rx_buffer_complete_3(buf)
+>>> {
+>>> 	invalidate_cache(buf, size)
+>>> 	if
+>>> (!is_ready(buf)) {
+>>> 		invalidate_cache(buf, size)
+>>> 		return;
+>>> 	}
+>>>=20=09
+>>> <proceed with receive>
+>>> }
+>>>
+>>>
+>>> but it's a waste of CPU cycles
+>>>
+>>> So I'd be very cautious assuming sync_for_cpu() and sync_for_device()
+>>> are both doing invalidation in existing implementation of arch DMA ops,
+>>> implementers may have taken some liberty around DMA-API to avoid
+>>> unnecessary cache operation (not to blame them).
+>>=20
+>> I sense an implicit "and the driver can't (or shouldn't) influence
+>> this" here, right?
+>
+> Right, drivers don't get a choice of how a given DMA API implementation=20
+> works.
+>
+>>> For example looking at arch/arm/mm/dma-mapping.c, for DMA_FROM_DEVICE
+>>>
+>>> sync_single_for_device()
+>>>    =3D> __dma_page_cpu_to_dev()
+>>>      =3D> dma_cache_maint_page(op=3Ddmac_map_area)
+>>>        =3D> cpu_cache.dma_map_area()
+>>>
+>>> sync_single_for_cpu()
+>>>    =3D> __dma_page_dev_to_cpu()
+>>>      =3D>
+>>> __dma_page_cpu_to_dev(op=3Ddmac_unmap_area)
+>>>        =3D>
+>>> cpu_cache.dma_unmap_area()
+>>>
+>>> dma_map_area() always does cache invalidate.
+>>>
+>>> But for a couple of CPU variant, dma_unmap_area() is a noop, so
+>>> sync_for_cpu() does nothing.
+>>>
+>>> Toke's patch will break ath9k on those platforms (mostly silent
+>>> breakage, rx corruption leading to bad performance)
+>>=20
+>> Okay, so that would be bad obviously. So if I'm reading you correctly
+>> (cf my question above), we can't fix this properly from the driver side,
+>> and we should go with the partial SWIOTLB revert instead?
+>
+> Do you have any other way of telling if DMA is idle, or temporarily
+> pausing it before the sync_for_cpu, such that you could honour the
+> notion of ownership transfer properly?
 
-Ah, I see, thanks for explanation.
+I'll go check with someone who has a better grasp of how the hardware
+works, but I don't think so...
 
-I thought about propagating an error up to callers, but 
-kvm_mmu_uninit_tdp_mmu() returns false with config disabled, so I 
-decided to implement easiest fix w/o digging into details
+> As mentioned elsewhere I suspect the only "real" fix if you really do
+> need to allow concurrent access is to use the coherent DMA API for
+> buffers rather than streaming mappings, but that's obviously some far
+> more significant surgery.
 
-sorry about that
+That would imply copying the packet data out of that (persistent)
+coherent mapping each time we do a recv operation, though, right? That
+would be quite a performance hit...
 
+If all we need is a way to make dma_sync_single_for_cpu() guarantee a
+cache invalidation, why can't we just add a separate version that does
+that (dma_sync_single_for_cpu_peek() or something)? Using that with the
+patch I posted earlier should be enough to resolve the issue, AFAICT?
 
-With regards,
-Pavel Skripkin
+-Toke

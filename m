@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762B64E6D3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 05:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B80F4E6D36
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 05:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356931AbiCYEbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 00:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
+        id S1345682AbiCYEaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 00:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356765AbiCYEbE (ORCPT
+        with ESMTP id S1353658AbiCYEaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 00:31:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADA9A147D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 21:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648182570; x=1679718570;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Vz2sASJO+qCZDekvkLGguImZppYnyBsLDN4sX2+KMAI=;
-  b=oEmF0c9L/WiLRQyhfV2pIYa44/MiC5v0OcDuyGScI0u6eBQAaZZ3cQdj
-   G9NuKKZjqmnF+LZYPa5KiGVkPs2WLDWuzAou0EAL/eG0Gh5Ar9ofd3osd
-   WgHaSIxm4ILUCG9iLNvyTCLO4i/L+klre2LJGqTnxdVPJBjqjFpRSck3X
-   Fb7k4eCcXzLofvjihVX3JaIFDf3pRXr6rKCylHhAVWGKjV8E7RKUK5REK
-   NImN4Aq4MbBRCrmrpCtVp0rhsAI7IH1Y8GrruAU8Ey+tWGZi/MXvxvpSi
-   q5Ip+IAo/C2fsoTwG0lKxpMxmoI4bBuZ5dKUybP2331bgrwMYIU7ElkdO
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="344988907"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="344988907"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 21:29:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="520066486"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 24 Mar 2022 21:29:29 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXbZo-000LnH-Fk; Fri, 25 Mar 2022 04:29:28 +0000
-Date:   Fri, 25 Mar 2022 12:28:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [agd5f:amd-staging-drm-next 1307/1318]
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c:628: warning: expecting prototype
- for amdgpu_vm_free_table(). Prototype was for amdgpu_vm_pt_free() instead
-Message-ID: <202203251221.2xwHTw12-lkp@intel.com>
+        Fri, 25 Mar 2022 00:30:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423A1C680B;
+        Thu, 24 Mar 2022 21:28:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEDB5619D2;
+        Fri, 25 Mar 2022 04:28:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766E4C340E9;
+        Fri, 25 Mar 2022 04:28:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648182536;
+        bh=nUY05pK65gv7YynBy69L6DI+o3Uu996Vli2qilfaxLc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uBZunZQokw+Gyk51/jLJLpLF/ewAIjbKMeMVcWTIiUdtODHBPTAWbrk+UGfZ8nB1R
+         HCz2LKa3sR5hLbfjlhtmI/jx7hjGd0z0L7FUR/pKXTqNTc7EiTSUpIIEKYPMO5UetQ
+         lv3dwjAt5dvTuomByqEZqwcwKEVvjfkIRLrC8ApSy1eyPb6bXD/Szd8PuYxEPI++rN
+         PgCkDaUji3T7w8KOvlbe2b/Yl/jeZ6IVuR43H8y+wjvsUMBPgu+37W486s0a9pfmUP
+         d9Tcq2ZTIdxCOc9jjtSbodFiDhyPHYSnCqyi8vBUM2VoQap8vmmFDeInrj29+1+/SH
+         7mmoysPvski5A==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] kprobes: Use rethook for kretprobe if possible
+Date:   Fri, 25 Mar 2022 13:28:50 +0900
+Message-Id: <164818253060.2252200.5974202447477063948.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <164818251899.2252200.7306353689206167903.stgit@devnote2>
+References: <164818251899.2252200.7306353689206167903.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,51 +65,373 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next
-head:   97c2bccc87d3d7bc08400c3d3773c327492a0f3d
-commit: 59f2ef3cadef58fdee8d794bf28fc31b9613dc47 [1307/1318] drm/amdgpu: separate VM PT handling into amdgpu_vm_pt.c
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220325/202203251221.2xwHTw12-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f amd-staging-drm-next
-        git checkout 59f2ef3cadef58fdee8d794bf28fc31b9613dc47
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+Use rethook for kretprobe function return hooking if the arch sets
+CONFIG_HAVE_RETHOOK=y. In this case, CONFIG_KRETPROBE_ON_RETHOOK is
+set to 'y' automatically, and the kretprobe internal data fields
+switches to use rethook. If not, it continues to use kretprobe
+specific function return hooks.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ arch/Kconfig                |    7 ++
+ include/linux/kprobes.h     |   51 +++++++++++++++++-
+ kernel/kprobes.c            |  124 ++++++++++++++++++++++++++++++++++++-------
+ kernel/trace/trace_kprobe.c |    4 +
+ 4 files changed, 161 insertions(+), 25 deletions(-)
 
-All warnings (new ones prefixed by >>):
+diff --git a/arch/Kconfig b/arch/Kconfig
+index e12a4268c01d..9570854c4683 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -164,7 +164,12 @@ config ARCH_USE_BUILTIN_BSWAP
+ 
+ config KRETPROBES
+ 	def_bool y
+-	depends on KPROBES && HAVE_KRETPROBES
++	depends on KPROBES && (HAVE_KRETPROBES || HAVE_RETHOOK)
++
++config KRETPROBE_ON_RETHOOK
++	def_bool y
++	depends on HAVE_RETHOOK
++	select RETHOOK
+ 
+ config USER_RETURN_NOTIFIER
+ 	bool
+diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+index 312ff997c743..157168769fc2 100644
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -28,6 +28,7 @@
+ #include <linux/ftrace.h>
+ #include <linux/refcount.h>
+ #include <linux/freelist.h>
++#include <linux/rethook.h>
+ #include <asm/kprobes.h>
+ 
+ #ifdef CONFIG_KPROBES
+@@ -149,13 +150,20 @@ struct kretprobe {
+ 	int maxactive;
+ 	int nmissed;
+ 	size_t data_size;
++#ifdef CONFIG_KRETPROBE_ON_RETHOOK
++	struct rethook *rh;
++#else
+ 	struct freelist_head freelist;
+ 	struct kretprobe_holder *rph;
++#endif
+ };
+ 
+ #define KRETPROBE_MAX_DATA_SIZE	4096
+ 
+ struct kretprobe_instance {
++#ifdef CONFIG_KRETPROBE_ON_RETHOOK
++	struct rethook_node node;
++#else
+ 	union {
+ 		struct freelist_node freelist;
+ 		struct rcu_head rcu;
+@@ -164,6 +172,7 @@ struct kretprobe_instance {
+ 	struct kretprobe_holder *rph;
+ 	kprobe_opcode_t *ret_addr;
+ 	void *fp;
++#endif
+ 	char data[];
+ };
+ 
+@@ -186,10 +195,24 @@ extern void kprobe_busy_begin(void);
+ extern void kprobe_busy_end(void);
+ 
+ #ifdef CONFIG_KRETPROBES
+-extern void arch_prepare_kretprobe(struct kretprobe_instance *ri,
+-				   struct pt_regs *regs);
++/* Check whether @p is used for implementing a trampoline. */
+ extern int arch_trampoline_kprobe(struct kprobe *p);
+ 
++#ifdef CONFIG_KRETPROBE_ON_RETHOOK
++static nokprobe_inline struct kretprobe *get_kretprobe(struct kretprobe_instance *ri)
++{
++	RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),
++		"Kretprobe is accessed from instance under preemptive context");
++
++	return (struct kretprobe *)READ_ONCE(ri->node.rethook->data);
++}
++static nokprobe_inline unsigned long get_kretprobe_retaddr(struct kretprobe_instance *ri)
++{
++	return ri->node.ret_addr;
++}
++#else
++extern void arch_prepare_kretprobe(struct kretprobe_instance *ri,
++				   struct pt_regs *regs);
+ void arch_kretprobe_fixup_return(struct pt_regs *regs,
+ 				 kprobe_opcode_t *correct_ret_addr);
+ 
+@@ -232,6 +255,12 @@ static nokprobe_inline struct kretprobe *get_kretprobe(struct kretprobe_instance
+ 	return READ_ONCE(ri->rph->rp);
+ }
+ 
++static nokprobe_inline unsigned long get_kretprobe_retaddr(struct kretprobe_instance *ri)
++{
++	return (unsigned long)ri->ret_addr;
++}
++#endif /* CONFIG_KRETPROBE_ON_RETHOOK */
++
+ #else /* !CONFIG_KRETPROBES */
+ static inline void arch_prepare_kretprobe(struct kretprobe *rp,
+ 					struct pt_regs *regs)
+@@ -395,7 +424,11 @@ void unregister_kretprobe(struct kretprobe *rp);
+ int register_kretprobes(struct kretprobe **rps, int num);
+ void unregister_kretprobes(struct kretprobe **rps, int num);
+ 
++#ifdef CONFIG_KRETPROBE_ON_RETHOOK
++#define kprobe_flush_task(tk)	do {} while (0)
++#else
+ void kprobe_flush_task(struct task_struct *tk);
++#endif
+ 
+ void kprobe_free_init_mem(void);
+ 
+@@ -509,6 +542,19 @@ static inline bool is_kprobe_optinsn_slot(unsigned long addr)
+ #endif /* !CONFIG_OPTPROBES */
+ 
+ #ifdef CONFIG_KRETPROBES
++#ifdef CONFIG_KRETPROBE_ON_RETHOOK
++static nokprobe_inline bool is_kretprobe_trampoline(unsigned long addr)
++{
++	return is_rethook_trampoline(addr);
++}
++
++static nokprobe_inline
++unsigned long kretprobe_find_ret_addr(struct task_struct *tsk, void *fp,
++				      struct llist_node **cur)
++{
++	return rethook_find_ret_addr(tsk, (unsigned long)fp, cur);
++}
++#else
+ static nokprobe_inline bool is_kretprobe_trampoline(unsigned long addr)
+ {
+ 	return (void *)addr == kretprobe_trampoline_addr();
+@@ -516,6 +562,7 @@ static nokprobe_inline bool is_kretprobe_trampoline(unsigned long addr)
+ 
+ unsigned long kretprobe_find_ret_addr(struct task_struct *tsk, void *fp,
+ 				      struct llist_node **cur);
++#endif
+ #else
+ static nokprobe_inline bool is_kretprobe_trampoline(unsigned long addr)
+ {
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 185badc780b7..dbe57df2e199 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1237,6 +1237,27 @@ void kprobes_inc_nmissed_count(struct kprobe *p)
+ }
+ NOKPROBE_SYMBOL(kprobes_inc_nmissed_count);
+ 
++static struct kprobe kprobe_busy = {
++	.addr = (void *) get_kprobe,
++};
++
++void kprobe_busy_begin(void)
++{
++	struct kprobe_ctlblk *kcb;
++
++	preempt_disable();
++	__this_cpu_write(current_kprobe, &kprobe_busy);
++	kcb = get_kprobe_ctlblk();
++	kcb->kprobe_status = KPROBE_HIT_ACTIVE;
++}
++
++void kprobe_busy_end(void)
++{
++	__this_cpu_write(current_kprobe, NULL);
++	preempt_enable();
++}
++
++#if !defined(CONFIG_KRETPROBE_ON_RETHOOK)
+ static void free_rp_inst_rcu(struct rcu_head *head)
+ {
+ 	struct kretprobe_instance *ri = container_of(head, struct kretprobe_instance, rcu);
+@@ -1258,26 +1279,6 @@ static void recycle_rp_inst(struct kretprobe_instance *ri)
+ }
+ NOKPROBE_SYMBOL(recycle_rp_inst);
+ 
+-static struct kprobe kprobe_busy = {
+-	.addr = (void *) get_kprobe,
+-};
+-
+-void kprobe_busy_begin(void)
+-{
+-	struct kprobe_ctlblk *kcb;
+-
+-	preempt_disable();
+-	__this_cpu_write(current_kprobe, &kprobe_busy);
+-	kcb = get_kprobe_ctlblk();
+-	kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+-}
+-
+-void kprobe_busy_end(void)
+-{
+-	__this_cpu_write(current_kprobe, NULL);
+-	preempt_enable();
+-}
+-
+ /*
+  * This function is called from delayed_put_task_struct() when a task is
+  * dead and cleaned up to recycle any kretprobe instances associated with
+@@ -1327,6 +1328,7 @@ static inline void free_rp_inst(struct kretprobe *rp)
+ 		rp->rph = NULL;
+ 	}
+ }
++#endif	/* !CONFIG_KRETPROBE_ON_RETHOOK */
+ 
+ /* Add the new probe to 'ap->list'. */
+ static int add_new_kprobe(struct kprobe *ap, struct kprobe *p)
+@@ -1925,6 +1927,7 @@ static struct notifier_block kprobe_exceptions_nb = {
+ 
+ #ifdef CONFIG_KRETPROBES
+ 
++#if !defined(CONFIG_KRETPROBE_ON_RETHOOK)
+ /* This assumes the 'tsk' is the current task or the is not running. */
+ static kprobe_opcode_t *__kretprobe_find_ret_addr(struct task_struct *tsk,
+ 						  struct llist_node **cur)
+@@ -2087,6 +2090,57 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
+ 	return 0;
+ }
+ NOKPROBE_SYMBOL(pre_handler_kretprobe);
++#else /* CONFIG_KRETPROBE_ON_RETHOOK */
++/*
++ * This kprobe pre_handler is registered with every kretprobe. When probe
++ * hits it will set up the return probe.
++ */
++static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
++{
++	struct kretprobe *rp = container_of(p, struct kretprobe, kp);
++	struct kretprobe_instance *ri;
++	struct rethook_node *rhn;
++
++	rhn = rethook_try_get(rp->rh);
++	if (!rhn) {
++		rp->nmissed++;
++		return 0;
++	}
++
++	ri = container_of(rhn, struct kretprobe_instance, node);
++
++	if (rp->entry_handler && rp->entry_handler(ri, regs))
++		rethook_recycle(rhn);
++	else
++		rethook_hook(rhn, regs, kprobe_ftrace(p));
++
++	return 0;
++}
++NOKPROBE_SYMBOL(pre_handler_kretprobe);
++
++static void kretprobe_rethook_handler(struct rethook_node *rh, void *data,
++				      struct pt_regs *regs)
++{
++	struct kretprobe *rp = (struct kretprobe *)data;
++	struct kretprobe_instance *ri;
++	struct kprobe_ctlblk *kcb;
++
++	/* The data must NOT be null. This means rethook data structure is broken. */
++	if (WARN_ON_ONCE(!data))
++		return;
++
++	__this_cpu_write(current_kprobe, &rp->kp);
++	kcb = get_kprobe_ctlblk();
++	kcb->kprobe_status = KPROBE_HIT_ACTIVE;
++
++	ri = container_of(rh, struct kretprobe_instance, node);
++	rp->handler(ri, regs);
++
++	__this_cpu_write(current_kprobe, NULL);
++}
++NOKPROBE_SYMBOL(kretprobe_rethook_handler);
++
++#endif /* !CONFIG_KRETPROBE_ON_RETHOOK */
+ 
+ /**
+  * kprobe_on_func_entry() -- check whether given address is function entry
+@@ -2155,6 +2209,29 @@ int register_kretprobe(struct kretprobe *rp)
+ 		rp->maxactive = num_possible_cpus();
+ #endif
+ 	}
++#ifdef CONFIG_KRETPROBE_ON_RETHOOK
++	rp->rh = rethook_alloc((void *)rp, kretprobe_rethook_handler);
++	if (!rp->rh)
++		return -ENOMEM;
++
++	for (i = 0; i < rp->maxactive; i++) {
++		inst = kzalloc(sizeof(struct kretprobe_instance) +
++			       rp->data_size, GFP_KERNEL);
++		if (inst == NULL) {
++			rethook_free(rp->rh);
++			rp->rh = NULL;
++			return -ENOMEM;
++		}
++		rethook_add_node(rp->rh, &inst->node);
++	}
++	rp->nmissed = 0;
++	/* Establish function entry probe point */
++	ret = register_kprobe(&rp->kp);
++	if (ret != 0) {
++		rethook_free(rp->rh);
++		rp->rh = NULL;
++	}
++#else	/* !CONFIG_KRETPROBE_ON_RETHOOK */
+ 	rp->freelist.head = NULL;
+ 	rp->rph = kzalloc(sizeof(struct kretprobe_holder), GFP_KERNEL);
+ 	if (!rp->rph)
+@@ -2179,6 +2256,7 @@ int register_kretprobe(struct kretprobe *rp)
+ 	ret = register_kprobe(&rp->kp);
+ 	if (ret != 0)
+ 		free_rp_inst(rp);
++#endif
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(register_kretprobe);
+@@ -2217,7 +2295,11 @@ void unregister_kretprobes(struct kretprobe **rps, int num)
+ 	for (i = 0; i < num; i++) {
+ 		if (__unregister_kprobe_top(&rps[i]->kp) < 0)
+ 			rps[i]->kp.addr = NULL;
++#ifdef CONFIG_KRETPROBE_ON_RETHOOK
++		rethook_free(rps[i]->rh);
++#else
+ 		rps[i]->rph->rp = NULL;
++#endif
+ 	}
+ 	mutex_unlock(&kprobe_mutex);
+ 
+@@ -2225,7 +2307,9 @@ void unregister_kretprobes(struct kretprobe **rps, int num)
+ 	for (i = 0; i < num; i++) {
+ 		if (rps[i]->kp.addr) {
+ 			__unregister_kprobe_bottom(&rps[i]->kp);
++#ifndef CONFIG_KRETPROBE_ON_RETHOOK
+ 			free_rp_inst(rps[i]);
++#endif
+ 		}
+ 	}
+ }
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index b62fd785b599..47cebef78532 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -1433,7 +1433,7 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
+ 	fbuffer.regs = regs;
+ 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+ 	entry->func = (unsigned long)tk->rp.kp.addr;
+-	entry->ret_ip = (unsigned long)ri->ret_addr;
++	entry->ret_ip = get_kretprobe_retaddr(ri);
+ 	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
+ 
+ 	trace_event_buffer_commit(&fbuffer);
+@@ -1628,7 +1628,7 @@ kretprobe_perf_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
+ 		return;
+ 
+ 	entry->func = (unsigned long)tk->rp.kp.addr;
+-	entry->ret_ip = (unsigned long)ri->ret_addr;
++	entry->ret_ip = get_kretprobe_retaddr(ri);
+ 	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
+ 	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
+ 			      head, NULL);
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c:628: warning: expecting prototype for amdgpu_vm_free_table(). Prototype was for amdgpu_vm_pt_free() instead
-
-
-vim +628 drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
-
-   621	
-   622	/**
-   623	 * amdgpu_vm_free_table - fre one PD/PT
-   624	 *
-   625	 * @entry: PDE to free
-   626	 */
-   627	static void amdgpu_vm_pt_free(struct amdgpu_vm_bo_base *entry)
- > 628	{
-   629		struct amdgpu_bo *shadow;
-   630	
-   631		if (!entry->bo)
-   632			return;
-   633		shadow = amdgpu_bo_shadowed(entry->bo);
-   634		entry->bo->vm_bo = NULL;
-   635		list_del(&entry->vm_status);
-   636		amdgpu_bo_unref(&shadow);
-   637		amdgpu_bo_unref(&entry->bo);
-   638	}
-   639	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

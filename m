@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86CF4E78CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86124E798D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359595AbiCYQUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
+        id S1355331AbiCYRAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 13:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238937AbiCYQUn (ORCPT
+        with ESMTP id S231269AbiCYRAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:20:43 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCED953E17
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:19:08 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id u25-20020a5d8199000000b006421bd641bbso5383789ion.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:19:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=GxV6gxAbi2eDOFbiR9qq2NG0AMftdnkrkWT4qJHnhIE=;
-        b=2pknTPJOC6dKWKEyMlDuoLrgws3J/axqTnejcobvZ8imfx7zkDklCnkC1N4dUlI8Hd
-         6ABa5OZ+yg52QHk+qpMTy0kVK+jwhNdNdHzGg/OVCPR9rvs0871zcV3/v1z/FC/MUwDy
-         TwytDcEslhgjqpSUhpszFSDqHom7nSiLVjbMU2j1nOp+ZJlwej9sBbur6IubPoVZlkt5
-         p5cXI6cEmXWM5LuVNLnoLf1W8yJL9v8UhcshS9csdtG9jFGjo+vmEYFwDpnPHKUPhjA1
-         /4W/0PN0LTps6CAANWYW/1z5qGZqp+smYCcQU0QI9fv7WILGTQkw0xNCx+c9ntK3wCBa
-         rDnA==
-X-Gm-Message-State: AOAM531Gsd4wjrbWLK3wDlpTOl7o0cHA0fe4P59hOGHnr7KMPbo7pPaO
-        o7qqf8YQ6GMUQ1Hk6PyhcQ0/c4OWpkRY+CaqUPkhJETS8PkY
-X-Google-Smtp-Source: ABdhPJxBMAHIFNV7YXMLKKn5iAiZY6oMA8roTPkqQAKbI1CrGRtgW3QwNtDtuGQt2PrbItX43elXSJJFkzclXevkmRnHcXONR8H8
+        Fri, 25 Mar 2022 13:00:40 -0400
+X-Greylist: delayed 1197 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 09:59:05 PDT
+Received: from 4.mo550.mail-out.ovh.net (4.mo550.mail-out.ovh.net [46.105.76.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E55C4AE18
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:59:05 -0700 (PDT)
+Received: from player695.ha.ovh.net (unknown [10.110.171.117])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 3689621A0B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:19:27 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player695.ha.ovh.net (Postfix) with ESMTPSA id C9F4628AAD10E;
+        Fri, 25 Mar 2022 16:19:23 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-102R004ceb7d065-e90c-401e-ab9e-18557b73c586,
+                    1702D5D0C6B5DF16716081994498F990499A02DA) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] docs: i2c: reference simple probes
+Date:   Fri, 25 Mar 2022 17:19:10 +0100
+Message-Id: <20220325161910.1202539-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1585:b0:2c2:5b2c:e3e5 with SMTP id
- m5-20020a056e02158500b002c25b2ce3e5mr5776617ilu.76.1648225148131; Fri, 25 Mar
- 2022 09:19:08 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 09:19:08 -0700
-In-Reply-To: <1a1172db-12f6-1173-b526-89e4da00e96a@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000076e11c05db0d525d@google.com>
-Subject: Re: [syzbot] general protection fault in kvm_mmu_uninit_tdp_mmu
-From:   syzbot <syzbot+717ed82268812a643b28@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        paskripkin@gmail.com, pbonzini@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 16973785521511499398
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudehuddgkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheileehrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Instead of documenting old-style probes, reference "simple probes" and
+document the i2c_match_id function. This might help reduce the use of
+two-argument probes in new code.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ Documentation/i2c/writing-clients.rst | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Reported-and-tested-by: syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
+diff --git a/Documentation/i2c/writing-clients.rst b/Documentation/i2c/writing-clients.rst
+index 978cc8210bf3..e3b126cf4a3b 100644
+--- a/Documentation/i2c/writing-clients.rst
++++ b/Documentation/i2c/writing-clients.rst
+@@ -46,7 +46,7 @@ driver model device node, and its I2C address.
+ 	},
+ 
+ 	.id_table	= foo_idtable,
+-	.probe		= foo_probe,
++	.probe_new	= foo_probe,
+ 	.remove		= foo_remove,
+ 	/* if device autodetection is needed: */
+ 	.class		= I2C_CLASS_SOMETHING,
+@@ -155,8 +155,7 @@ those devices, and a remove() method to unbind.
+ 
+ ::
+ 
+-	static int foo_probe(struct i2c_client *client,
+-			     const struct i2c_device_id *id);
++	static int foo_probe(struct i2c_client *client);
+ 	static int foo_remove(struct i2c_client *client);
+ 
+ Remember that the i2c_driver does not create those client handles.  The
+@@ -165,8 +164,12 @@ handle may be used during foo_probe().  If foo_probe() reports success
+ foo_remove() returns.  That binding model is used by most Linux drivers.
+ 
+ The probe function is called when an entry in the id_table name field
+-matches the device's name. It is passed the entry that was matched so
+-the driver knows which one in the table matched.
++matches the device's name. If the probe function needs that entry, it
++can retrieve it using
++
++::
++
++	const struct i2c_device_id *id = i2c_match_id(foo_idtable, client);
+ 
+ 
+ Device Creation
+-- 
+2.27.0
 
-Tested on:
-
-commit:         fd4fbb99 Add linux-next specific files for 20220325
-git tree:       linux-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=88d1370cc1f241e6
-dashboard link: https://syzkaller.appspot.com/bug?extid=717ed82268812a643b28
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14f79871700000
-
-Note: testing is done by a robot and is best-effort only.

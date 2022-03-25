@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078AB4E7D73
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B580F4E7D8B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiCYTzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S231698AbiCYT4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiCYTzd (ORCPT
+        with ESMTP id S231332AbiCYT4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:55:33 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2093180070;
-        Fri, 25 Mar 2022 12:42:15 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-d6ca46da48so9065983fac.12;
-        Fri, 25 Mar 2022 12:42:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=39uH3YQKGGZBLgUBUd+I6NQzRCiICBllLB8z6fgI41s=;
-        b=S8BeI4+ESZosInf/EdrgGB47gKWC1CywpxqUkWVbE4pT8zg1hMflExcf/L0+sikqMi
-         lTzPUomK+0qRxXgOvOd26PCR0wqKB4DI+/blh3DGYNI6ScZFtvQaWfUXuw27KduFsEQw
-         lW8yy+ntYbYyvbeai+BOjA07fBokHUcjY27Dsd/be1bOa0bSUPSPYcJt48H9T+FaKsBE
-         rKr09MNdaRgSah0G+gMWdvM68sGWqE1iAn6fTc19sqsSl8VRafJuT3DA472JO/r23pr1
-         z48jGJIs/lmkKp//ryeXI956F7agitJJW9Q1sZ43ibfwkKjBUw29dGmwciOg5/L/YZDi
-         ugfA==
-X-Gm-Message-State: AOAM532LJz/Kx8yrf1fzYhh9/oui6/q8gMDXODakO2ZTfyeq2/XmMtwN
-        Gl7URZvzJ0GTCiPVJKFtJpTSOMPI2w==
-X-Google-Smtp-Source: ABdhPJzPJFxECJjjfdSMQ4DswXIqKqYxHnVtUvxc97pQEDJj3mfgHirhsL2vS/JmJi8uyarDbtNOvQ==
-X-Received: by 2002:a05:6870:a99a:b0:ce:c0c9:64f with SMTP id ep26-20020a056870a99a00b000cec0c9064fmr9633791oab.161.1648237255377;
-        Fri, 25 Mar 2022 12:40:55 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s125-20020acaa983000000b002ecdbaf98fesm3205283oie.34.2022.03.25.12.40.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 12:40:54 -0700 (PDT)
-Received: (nullmailer pid 315917 invoked by uid 1000);
-        Fri, 25 Mar 2022 19:40:53 -0000
-Date:   Fri, 25 Mar 2022 14:40:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     linux-mtd@lists.infradead.org, vigneshr@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzk@kernel.org, robh+dt@kernel.org, nm@ti.com, richard@nod.at,
-        kishon@ti.com, miquel.raynal@bootlin.com
-Subject: Re: [PATCH v2 1/3] dt-bindings: mtd: ti,elm: Convert to yaml
-Message-ID: <Yj4axbrQE0vEYDP1@robh.at.kernel.org>
-References: <20220325123707.22020-1-rogerq@kernel.org>
- <20220325123707.22020-2-rogerq@kernel.org>
+        Fri, 25 Mar 2022 15:56:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB21B36879A;
+        Fri, 25 Mar 2022 12:44:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D07E161C12;
+        Fri, 25 Mar 2022 19:42:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014B9C004DD;
+        Fri, 25 Mar 2022 19:42:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648237356;
+        bh=7HqmVJ6NVxap9GlAmX1TBvBJ1P7rz3epiq/FKTPm9zY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=erf2kR3CM7QGTFQYsxs+kHRxt/FOSBfXnOcDqCMfrhmw89mlBvV+TR2jYpbtFDqvV
+         H60OPAhRA4aHGRY+VqIJzHnEMH/v3m/yweWiD/JnLHFUBblx/IcSdaHY0KAFecTo1H
+         wl1XbYZjnnz2KTbrgaBOsa/peQiCFwBbK1S/pTofSRsGTZLYYDlOVRSwKGnMjtybHG
+         6aelfqcl3/nvTV6VrEAxc0SHNMNbkjo0awwrXCVFAZwSxvn5PfDL5TH20OuAP5HIeh
+         o4R2zGc7LREcCzlzjCqYAZolxblHW0HOyKOXCW2qXoMeNTlfngPTjk4OlUloakvyG2
+         dM2zA/0DG6J9w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id ABF8D40407; Fri, 25 Mar 2022 16:42:32 -0300 (-03)
+Date:   Fri, 25 Mar 2022 16:42:32 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ali Saidi <alisaidi@amazon.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        leo.yan@linaro.org, benh@kernel.crashing.org,
+        Nick.Forrington@arm.com, alexander.shishkin@linux.intel.com,
+        andrew.kilroy@arm.com, james.clark@arm.com, john.garry@huawei.com,
+        jolsa@kernel.org, kjain@linux.ibm.com, lihuafei1@huawei.com,
+        mark.rutland@arm.com, mathieu.poirier@linaro.org, mingo@redhat.com,
+        namhyung@kernel.org, peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v4 1/4] tools: arm64: Import cputype.h
+Message-ID: <Yj4bKHrmKhujZdpj@kernel.org>
+References: <20220324183323.31414-1-alisaidi@amazon.com>
+ <20220324183323.31414-2-alisaidi@amazon.com>
+ <Yj4McMHsxtJ3PfKk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325123707.22020-2-rogerq@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <Yj4McMHsxtJ3PfKk@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,19 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 14:37:05 +0200, Roger Quadros wrote:
-> Convert elm.txt to ti,elm.yaml.
-> 
-> hwmod framework use is deprecated for new platforms
-> so mark it so.
-> 
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
->  Documentation/devicetree/bindings/mtd/elm.txt | 16 -------
->  .../devicetree/bindings/mtd/ti,elm.yaml       | 47 +++++++++++++++++++
->  2 files changed, 47 insertions(+), 16 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mtd/elm.txt
->  create mode 100644 Documentation/devicetree/bindings/mtd/ti,elm.yaml
-> 
+Em Fri, Mar 25, 2022 at 03:39:44PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, Mar 24, 2022 at 06:33:20PM +0000, Ali Saidi escreveu:
+> > Bring-in the kernel's arch/arm64/include/asm/cputype.h into tools/
+> > for arm64 to make use of all the core-type definitions in perf.
 
-Acked-by: Rob Herring <robh@kernel.org>
+> > Replace sysreg.h with the version already imported into tools/.
+ 
+> You forgot to add it to tools/perf/check-headers.sh so that we get
+> notificed when the original file in the kernel sources gets updated, so
+> that we can check if this needs any tooling adjustments.
+ 
+> I'll add the entry together with the waiver for this specific
+> difference.
+
+This:
+
+diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
+index 30ecf3a0f68b6830..6ee44b18c6b57cf1 100755
+--- a/tools/perf/check-headers.sh
++++ b/tools/perf/check-headers.sh
+@@ -146,6 +146,7 @@ done
+ check arch/x86/lib/memcpy_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memcpy_\(erms\|orig\))"'
+ check arch/x86/lib/memset_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memset_\(erms\|orig\))"'
+ check arch/x86/include/asm/amd-ibs.h  '-I "^#include [<\"]\(asm/\)*msr-index.h"'
++check arch/arm64/include/asm/cputype.h '-I "^#include [<\"]\(asm/\)*sysreg.h"'
+ check include/uapi/asm-generic/mman.h '-I "^#include <\(uapi/\)*asm-generic/mman-common\(-tools\)*.h>"'
+ check include/uapi/linux/mman.h       '-I "^#include <\(uapi/\)*asm/mman.h>"'
+ check include/linux/build_bug.h       '-I "^#\(ifndef\|endif\)\( \/\/\)* static_assert$"'
+
+
+Cheers,
+
+- Arnaldo

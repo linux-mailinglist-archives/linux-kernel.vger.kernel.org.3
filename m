@@ -2,171 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA914E75A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097454E75AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359466AbiCYPE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S1359488AbiCYPGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbiCYPEv (ORCPT
+        with ESMTP id S1359475AbiCYPG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:04:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8822BE03
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 08:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648220593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p+rP9gOSBTxLRSnxe4t4T/FVsOhdBct7MjxHdJUH/ew=;
-        b=YgbVu++o7tl8kx6yVrS0SZmK/iMLoruFNZrrSU26TfP1vp7WsG72c7Gl2Zm6GAGt5rDVc7
-        HHcA4h4hrv9YhTmOMIs8Z9/f+2YXTEfyW1djs71qzPBJlXusURydHmm2Lg+5pGHFemYxhy
-        wAFekw65JicZRXzDW8Y2DujanGVrqu4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-538-Jg31CXQ0PD6nkCL3PwKZLw-1; Fri, 25 Mar 2022 11:03:12 -0400
-X-MC-Unique: Jg31CXQ0PD6nkCL3PwKZLw-1
-Received: by mail-wr1-f70.google.com with SMTP id 15-20020adf808f000000b00203e488fa4eso2797039wrl.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 08:03:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=p+rP9gOSBTxLRSnxe4t4T/FVsOhdBct7MjxHdJUH/ew=;
-        b=WsNeMtuidYskgsQHmfabvro1zBQ7TyrZXCybm9oWZRnyt680YMvwt8U/95+9hXdxdQ
-         v0OQQ/G03FYvu+5DwCyxM8N4f1M55mw81V9GOJDFuBtbHDblMn7Xu3lpr9CXpKNp7zYg
-         waE5y0taYNalGpqmz6a+N23BunOqXu/I5TTDBgBzwhpK9CL4rg17GYhKQcr2DTX/ZdGv
-         tjC01XBdjj74OA+F1MJyqynxxwO7/W0WNvDMzm9erZjHwRMIo/wYGhY5xETMjG/FfjR4
-         J4fas8YKzhP5MANe6WoCh0oCVp4YgVfIK7XMW3FfRQZwJuiM22mKbngPE9wO2vw9ivHf
-         x3Sw==
-X-Gm-Message-State: AOAM533WyIaiWdC8cV9KfQxqkyJarih/UgnfX5fT7xuuUwBJwjqcK3Es
-        L3D/lh5mdjCfqIy3sbtJFZhp052RsqXvOuaueXkvT8q3pBWv1fKKPzFgWmkC7XfjB2a28AH60J6
-        umllv9rTBoxHkpSjbO/EIiVCY
-X-Received: by 2002:a5d:64af:0:b0:205:8246:8316 with SMTP id m15-20020a5d64af000000b0020582468316mr9822851wrp.624.1648220589502;
-        Fri, 25 Mar 2022 08:03:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwqOZTSSevUNj57oorGfuqPziU84TMmmNL5hG6gbqHrYulEEbIgY/ihiHd+9r7R8oqM5cjtBg==
-X-Received: by 2002:a5d:64af:0:b0:205:8246:8316 with SMTP id m15-20020a5d64af000000b0020582468316mr9822682wrp.624.1648220587795;
-        Fri, 25 Mar 2022 08:03:07 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id m2-20020a056000024200b00205718e3a3csm5193603wrz.2.2022.03.25.08.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 08:03:07 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [FYI PATCH] Revert "KVM: x86/mmu: Zap only TDP MMU leafs in
- kvm_zap_gfn_range()"
-In-Reply-To: <Yj0FYSC2sT4k/ELl@google.com>
-References: <20220318164833.2745138-1-pbonzini@redhat.com>
- <d6367754-7782-7c29-e756-ac02dbd4520b@redhat.com>
- <Yj0FYSC2sT4k/ELl@google.com>
-Date:   Fri, 25 Mar 2022 16:03:06 +0100
-Message-ID: <87r16qnkgl.fsf@redhat.com>
+        Fri, 25 Mar 2022 11:06:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA70A7741;
+        Fri, 25 Mar 2022 08:04:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6B480CE2919;
+        Fri, 25 Mar 2022 15:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47FCEC340E9;
+        Fri, 25 Mar 2022 15:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648220688;
+        bh=inbiJnHdTP1l8w2eBYNh0/i8dd7OG8ajYQYmBVShu8A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CU9pRBExhv8FmRJOwKLAhvt6VKfw+R1pKYMcZPqsavgVP+XO8vkq9uzBFvJiFfH4y
+         cJe1IDAH8/P0VmjRj/svprsx0ta58kitWlktEDeIt4gOp2X/43iYiEy2Ee06KV3mKz
+         VFaJHQMRMrQdCbnbbbWiPzc2B5xHYQTNJVMZrTpQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.9 00/14] 4.9.309-rc1 review
+Date:   Fri, 25 Mar 2022 16:04:28 +0100
+Message-Id: <20220325150415.694544076@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.309-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.9.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.9.309-rc1
+X-KernelTest-Deadline: 2022-03-27T15:04+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+This is the start of the stable review cycle for the 4.9.309 release.
+There are 14 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-...
+Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+Anything received after that time might be too late.
 
-So I went back to "KVM: x86/mmu: Zap only TDP MMU leafs in
-kvm_zap_gfn_range()" and confirmed that with the patch in place Hyper-V
-always crashes, sooner or later. With the patch reverted (as well as
-with current 'kvm/queue') it boots.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.309-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+and the diffstat can be found below.
 
->
-> Actually, since this is apparently specific to kvm_zap_gfn_range(), can you add
-> printk "tracing" in update_mtrr(), kvm_post_set_cr0(), and __kvm_request_apicv_update()
-> to see what is actually triggering zaps?  Capturing the start and end GFNs would be very
-> helpful for the MTRR case.
->
-> The APICv update seems unlikely to affect only Hyper-V guests, though there is the auto
-> EOI crud.  And the other two only come into play with non-coherent DMA.  In other words,
-> figuring out exactly what sequence leads to failure should be straightforward.
+thanks,
 
-The tricky part here is that Hyper-V doesn't crash immediately, the
-crash is always different (if you look at the BSOD) and happens at
-different times. Crashes mention various stuff like trying to execute
-non-executable memory, ...
+greg k-h
 
-I've added tracing you've suggested:
-- __kvm_request_apicv_update() happens only once in the very beginning.
+-------------
+Pseudo-Shortlog of commits:
 
-- update_mtrr() never actually reaches kvm_zap_gfn_range()
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.9.309-rc1
 
-- kvm_post_set_cr0() happen in early boot but the crash happen much much
-  later. E.g.:
-...
- qemu-system-x86-117525  [019] .....  4738.682954: kvm_post_set_cr0: vCPU 12 10 11
- qemu-system-x86-117525  [019] .....  4738.682997: kvm_post_set_cr0: vCPU 12 11 80000011
- qemu-system-x86-117525  [019] .....  4738.683053: kvm_post_set_cr0: vCPU 12 80000011 c0000011
- qemu-system-x86-117525  [019] .....  4738.683059: kvm_post_set_cr0: vCPU 12 c0000011 80010031
- qemu-system-x86-117526  [005] .....  4738.812107: kvm_post_set_cr0: vCPU 13 10 11
- qemu-system-x86-117526  [005] .....  4738.812148: kvm_post_set_cr0: vCPU 13 11 80000011
- qemu-system-x86-117526  [005] .....  4738.812198: kvm_post_set_cr0: vCPU 13 80000011 c0000011
- qemu-system-x86-117526  [005] .....  4738.812205: kvm_post_set_cr0: vCPU 13 c0000011 80010031
- qemu-system-x86-117527  [003] .....  4738.941004: kvm_post_set_cr0: vCPU 14 10 11
- qemu-system-x86-117527  [003] .....  4738.941107: kvm_post_set_cr0: vCPU 14 11 80000011
- qemu-system-x86-117527  [003] .....  4738.941218: kvm_post_set_cr0: vCPU 14 80000011 c0000011
- qemu-system-x86-117527  [003] .....  4738.941235: kvm_post_set_cr0: vCPU 14 c0000011 80010031
- qemu-system-x86-117528  [035] .....  4739.070338: kvm_post_set_cr0: vCPU 15 10 11
- qemu-system-x86-117528  [035] .....  4739.070428: kvm_post_set_cr0: vCPU 15 11 80000011
- qemu-system-x86-117528  [035] .....  4739.070539: kvm_post_set_cr0: vCPU 15 80000011 c0000011
- qemu-system-x86-117528  [035] .....  4739.070557: kvm_post_set_cr0: vCPU 15 c0000011 80010031
-##### CPU 8 buffer started ####
- qemu-system-x86-117528  [008] .....  4760.099532: kvm_hv_set_msr_pw: 15
+Linus Lüssing <ll@simonwunderlich.de>
+    mac80211: fix potential double free on mesh join
 
-The debug patch for kvm_post_set_cr0() is:
+Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+    crypto: qat - disable registration of algorithms
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4fa4d8269e5b..db7c5a05e574 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -870,6 +870,8 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
- 
- void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
- {
-+       trace_printk("vCPU %d %lx %lx\n", vcpu->vcpu_id, old_cr0, cr0);
-+
-        if ((cr0 ^ old_cr0) & X86_CR0_PG) {
-                kvm_clear_async_pf_completion_queue(vcpu);
-                kvm_async_pf_hash_reset(vcpu);
+Werner Sembach <wse@tuxedocomputers.com>
+    ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
 
-kvm_hv_set_msr_pw() call is when Hyper-V writes to HV_X64_MSR_CRASH_CTL
-('hv-crash' QEMU flag is needed to enable the feature). The debug patch
-is:
+Maximilian Luz <luzmaximilian@gmail.com>
+    ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index a32f54ab84a2..59a72f6ced99 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1391,6 +1391,7 @@ static int kvm_hv_set_msr_pw(struct kvm_vcpu *vcpu, u32 msr, u64 data,
- 
-                        /* Send notification about crash to user space */
-                        kvm_make_request(KVM_REQ_HV_CRASH, vcpu);
-+                       trace_printk("%d\n", vcpu->vcpu_id);
-                }
-                break;
-        case HV_X64_MSR_RESET:
+Mark Cilissen <mark@yotsuba.nl>
+    ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
 
-So it's 20 seconds (!) between the last kvm_post_set_cr0() call and the
-crash. My (disappointing) conclusion is: the problem can be anywhere and
-Hyper-V detects it much much later.
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nf_tables: initialize registers in nft_do_chain()
 
--- 
-Vitaly
+Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
+    ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
+
+Jonathan Teh <jonathan.teh@outlook.com>
+    ALSA: cmipci: Restore aux vol on suspend/resume
+
+Lars-Peter Clausen <lars@metafoo.de>
+    ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Add stream lock during PCM reset ioctl operations
+
+Eric Dumazet <edumazet@google.com>
+    llc: fix netdevice reference leaks in llc_ui_bind()
+
+Oliver Graute <oliver.graute@kococonnector.com>
+    staging: fbtft: fb_st7789v: reset display before initialization
+
+Tadeusz Struk <tadeusz.struk@linaro.org>
+    net: ipv6: fix skb_over_panic in __ip6_append_data
+
+Jordy Zomer <jordy@pwning.systems>
+    nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                   |  4 +-
+ arch/x86/kernel/acpi/boot.c                | 24 ++++++++++
+ drivers/acpi/battery.c                     | 12 +++++
+ drivers/acpi/video_detect.c                | 75 ++++++++++++++++++++++++++++++
+ drivers/crypto/qat/qat_common/qat_crypto.c |  8 ++++
+ drivers/nfc/st21nfca/se.c                  | 10 ++++
+ drivers/staging/fbtft/fb_st7789v.c         |  2 +
+ net/ipv6/ip6_output.c                      |  4 +-
+ net/llc/af_llc.c                           |  8 ++++
+ net/mac80211/cfg.c                         |  3 --
+ net/netfilter/nf_tables_core.c             |  2 +-
+ sound/core/pcm_native.c                    |  4 ++
+ sound/pci/ac97/ac97_codec.c                |  4 +-
+ sound/pci/cmipci.c                         |  3 +-
+ sound/usb/mixer_quirks.c                   |  7 +--
+ 15 files changed, 155 insertions(+), 15 deletions(-)
+
 

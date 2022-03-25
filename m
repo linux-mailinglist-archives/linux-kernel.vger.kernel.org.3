@@ -2,180 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2444E79A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 18:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD914E79A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 18:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377166AbiCYRHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 13:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S237719AbiCYRIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 13:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376341AbiCYRHb (ORCPT
+        with ESMTP id S1377278AbiCYRIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 13:07:31 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFC6E6158;
-        Fri, 25 Mar 2022 10:05:53 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id d134so4273221ybc.13;
-        Fri, 25 Mar 2022 10:05:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s2ABLv19JiS78ES/UtJ3BIWAYEAvBaUS9WokW8BL62Y=;
-        b=tKjVL39UVLMprkB1IDvY9gtsfJ0Kvh8yuMMXE2MZD2smPYH4fZnQQVmICeem7UnjEi
-         mpFjlYg/hpef10guHCT1bx6yHNZksocINCjzRpoqOA3eo+w6qlIGXXt54Qw97PdoC6PM
-         paSZUYg4t5P9cmB7dEFNT/MrThWPHtB9G/UKKrfhwhwrXSlQ8rbf1gyY96y2qOPUedqP
-         pJR+o+dcU0wSLdBjbuATAqvUGRnJlUMkav1/sivdWwOot2xUWoMdqpsgkc3paTGG2OPv
-         lpgL0mLSrImUyGLabPNsor1DUzSRmxiJj8CPpXL5/JF8LU6/OjkQ7Ku328vHEOt4+aW2
-         VAbA==
-X-Gm-Message-State: AOAM530MOdCyOjahoDPO9ugN7DgrA4DxVuWgVyMybE3yR4hENOtxELQQ
-        UaXmJN6hKxvKtBZ2roq44QCIccJaAgj15K4nZ2o=
-X-Google-Smtp-Source: ABdhPJxLJBlfF/OPan4uA6gXvJFdWQWEnbXPDjSmWmoWLdS88OS8oS7k4+T+GD4+8dPzQyZ5ZwXAyYAO83o1MNBll2g=
-X-Received: by 2002:a25:6d05:0:b0:633:b0f5:6c1e with SMTP id
- i5-20020a256d05000000b00633b0f56c1emr11078175ybc.137.1648227952925; Fri, 25
- Mar 2022 10:05:52 -0700 (PDT)
+        Fri, 25 Mar 2022 13:08:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A736E6156;
+        Fri, 25 Mar 2022 10:06:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F37EB82929;
+        Fri, 25 Mar 2022 17:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CDE1C2BBE4;
+        Fri, 25 Mar 2022 17:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648227997;
+        bh=K+daBZbkRbuBy3w3JC2sCKDcY5E1te35mjRdAZhUHK8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=CPVpPumid3Gdl7SdVD+WIoxFjBd420teMzU1V7BNJumlelHc6V04uoKeavh4E1jux
+         TJwYPTZNZQpk6DvSdHyZf/8/quJHuPHN9xxi5Q+zguHYGZM9obFYtBHLDdJu8g6FdR
+         z7b+5YumNhW4MbrnargLqZ3OFKo2AcWvZWvFIscbNp3kfKcmBZW42HFOaGwjln9CfT
+         xfnCrZtTlXd4p0ANPIa/cisPUw59RsOa+/M4hHIYs/PHJJGnspvyvpIsOh/qDPdCRz
+         1IcUUU0Mf4xRB1nX02m1blYDsv+jcqGzRE6x7Xr3Tswb6bE2YLi8PR6khZ1sumeK5D
+         QIdaH/MQzpQvg==
+Message-ID: <e81281e69aa29cc10241bbff60283ca7baed87ea.camel@kernel.org>
+Subject: Re: [PATCH] ceph: support legacy v1 encryption policy keysetup
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 25 Mar 2022 13:06:35 -0400
+In-Reply-To: <20220325164947.22062-1-lhenriques@suse.de>
+References: <20220325164947.22062-1-lhenriques@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-References: <20220324070441.56591-1-jakobkoschel@gmail.com>
-In-Reply-To: <20220324070441.56591-1-jakobkoschel@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Mar 2022 18:05:41 +0100
-Message-ID: <CAJZ5v0h4xdKoH+Q7-J9d8KR1HZD1AaOgcZ4pUdXRsYGiC4HdUg@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: ipmi: replace usage of found with dedicated list
- iterator variable
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 8:04 AM Jakob Koschel <jakobkoschel@gmail.com> wrote:
->
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
->
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
->
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
->
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+On Fri, 2022-03-25 at 16:49 +0000, Luís Henriques wrote:
+> fstests make use of legacy keysetup where the key description uses a
+> filesystem-specific prefix.  Add this ceph-specific prefix to the
+> fscrypt_operations data structure.
+> 
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
 > ---
->  drivers/acpi/acpi_ipmi.c | 39 ++++++++++++++++++---------------------
->  1 file changed, 18 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/acpi/acpi_ipmi.c b/drivers/acpi/acpi_ipmi.c
-> index a5fe2926bf50..0555f68c2dfd 100644
-> --- a/drivers/acpi/acpi_ipmi.c
-> +++ b/drivers/acpi/acpi_ipmi.c
-> @@ -353,29 +353,27 @@ static void ipmi_flush_tx_msg(struct acpi_ipmi_device *ipmi)
->  static void ipmi_cancel_tx_msg(struct acpi_ipmi_device *ipmi,
->                                struct acpi_ipmi_msg *msg)
->  {
-> -       struct acpi_ipmi_msg *tx_msg, *temp;
-> -       bool msg_found = false;
-> +       struct acpi_ipmi_msg *tx_msg = NULL, *iter, *temp;
->         unsigned long flags;
->
->         spin_lock_irqsave(&ipmi->tx_msg_lock, flags);
-> -       list_for_each_entry_safe(tx_msg, temp, &ipmi->tx_msg_list, head) {
-> -               if (msg == tx_msg) {
-> -                       msg_found = true;
-> -                       list_del(&tx_msg->head);
-> +       list_for_each_entry_safe(iter, temp, &ipmi->tx_msg_list, head) {
-> +               if (msg == iter) {
-> +                       tx_msg = iter;
-> +                       list_del(&iter->head);
->                         break;
->                 }
->         }
->         spin_unlock_irqrestore(&ipmi->tx_msg_lock, flags);
->
-> -       if (msg_found)
-> +       if (tx_msg)
->                 acpi_ipmi_msg_put(tx_msg);
+>  fs/ceph/crypto.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
+> index c2e28ae54323..2a8f95885e7d 100644
+> --- a/fs/ceph/crypto.c
+> +++ b/fs/ceph/crypto.c
+> @@ -77,6 +77,7 @@ static const union fscrypt_policy *ceph_get_dummy_policy(struct super_block *sb)
 >  }
->
->  static void ipmi_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
->  {
->         struct acpi_ipmi_device *ipmi_device = user_msg_data;
-> -       bool msg_found = false;
-> -       struct acpi_ipmi_msg *tx_msg, *temp;
-> +       struct acpi_ipmi_msg *tx_msg = NULL, *iter, *temp;
->         struct device *dev = ipmi_device->dev;
->         unsigned long flags;
->
-> @@ -387,16 +385,16 @@ static void ipmi_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
->         }
->
->         spin_lock_irqsave(&ipmi_device->tx_msg_lock, flags);
-> -       list_for_each_entry_safe(tx_msg, temp, &ipmi_device->tx_msg_list, head) {
-> -               if (msg->msgid == tx_msg->tx_msgid) {
-> -                       msg_found = true;
-> -                       list_del(&tx_msg->head);
-> +       list_for_each_entry_safe(iter, temp, &ipmi_device->tx_msg_list, head) {
-> +               if (msg->msgid == iter->tx_msgid) {
-> +                       tx_msg = iter;
-> +                       list_del(&iter->head);
->                         break;
->                 }
->         }
->         spin_unlock_irqrestore(&ipmi_device->tx_msg_lock, flags);
->
-> -       if (!msg_found) {
-> +       if (!tx_msg) {
->                 dev_warn(dev,
->                          "Unexpected response (msg id %ld) is returned.\n",
->                          msg->msgid);
-> @@ -482,15 +480,14 @@ static void ipmi_register_bmc(int iface, struct device *dev)
->
->  static void ipmi_bmc_gone(int iface)
->  {
-> -       struct acpi_ipmi_device *ipmi_device, *temp;
-> -       bool dev_found = false;
-> +       struct acpi_ipmi_device *ipmi_device = NULL, *iter, *temp;
->
->         mutex_lock(&driver_data.ipmi_lock);
-> -       list_for_each_entry_safe(ipmi_device, temp,
-> +       list_for_each_entry_safe(iter, temp,
->                                  &driver_data.ipmi_devices, head) {
-> -               if (ipmi_device->ipmi_ifnum != iface) {
-> -                       dev_found = true;
-> -                       __ipmi_dev_kill(ipmi_device);
-> +               if (iter->ipmi_ifnum != iface) {
-> +                       ipmi_device = iter;
-> +                       __ipmi_dev_kill(iter);
->                         break;
->                 }
->         }
-> @@ -500,7 +497,7 @@ static void ipmi_bmc_gone(int iface)
->                                         struct acpi_ipmi_device, head);
->         mutex_unlock(&driver_data.ipmi_lock);
->
-> -       if (dev_found) {
-> +       if (ipmi_device) {
->                 ipmi_flush_tx_msg(ipmi_device);
->                 acpi_ipmi_dev_put(ipmi_device);
->         }
->
-> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
-> --
+>  
+>  static struct fscrypt_operations ceph_fscrypt_ops = {
+> +	.key_prefix		= "ceph:",
+>  	.get_context		= ceph_crypt_get_context,
+>  	.set_context		= ceph_crypt_set_context,
+>  	.get_dummy_policy	= ceph_get_dummy_policy,
 
-Applied as 5.18-rc material, thanks!
+
+Good catch, thanks! Merged into wip-fscrypt.
+-- 
+Jeff Layton <jlayton@kernel.org>

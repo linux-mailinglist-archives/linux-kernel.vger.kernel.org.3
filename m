@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13554E7402
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F954E7407
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346253AbiCYNPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 09:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S1349554AbiCYNRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 09:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346155AbiCYNP3 (ORCPT
+        with ESMTP id S1346490AbiCYNR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:15:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A53238BEB;
-        Fri, 25 Mar 2022 06:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648214035; x=1679750035;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dRmFfYYTeIjxBBGGtHWDoBRdcjE/yT3gWJgXD5nNxYo=;
-  b=GuIvC4yE8sQ9raQOkyeDwBgWogOYC+IVe5iCM/pDMllXYMFiK2lp6LPw
-   KL0ucMq66297u1XqwFcT/ALRa0DzSFjhexryk/fpaol5uR0XfMJw6qR5r
-   OiBmwqNBeDBVI2DrJqAoj6ykqzMtl4u0xTOuja0aLGpb5dDBSkZREp51i
-   xi+mmOL9fZFC6yz83wQMmvD8n+6zoDylqjogTbFSUi2EDQSX682O/H1xE
-   lrCxiTw9p35/2kTO4zjySqkkybYKyBd8036sHo9MErnqRIQc+OhCrdakd
-   cNklUB3soY2HYOzmBF9mf1AFrCw48ii8GxeJffid1WF9k5jKTwWPtg9LK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="239233554"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="239233554"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 06:13:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="602048561"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Mar 2022 06:13:38 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id DE05A11E; Fri, 25 Mar 2022 15:13:58 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v1 1/1] Makefile.extrawarn: Turn off -Werror when extra warnings are enabled
-Date:   Fri, 25 Mar 2022 15:13:48 +0200
-Message-Id: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 25 Mar 2022 09:17:29 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0E3BD2FA
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:15:51 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id t11so13994366ybi.6
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UVtmrpcYjsoxSNLprgvqR2q01AjSQZrSDBr9I2ujCrQ=;
+        b=QunYh1X/vTWnm4E2/+QnA1pxI/i0Uo9LkqQfRz546sb9EOHXd8Vt+ShyU5kgd8ShBt
+         peD0c61RkIzaxF0G9jkb/arKNspB0OeVJLspXCh/mJFP/m5gcxMksfvptI8eN7Jf4C4R
+         1TQqwv9UubymjB2lHqOrLGPPBPluo2Ey1TYWiXGKeayHXMgiLpaxS7w2nY9AnyhGLRKi
+         Gql3YU231CDmpycokTqC7ylPkkLOBeZz9uBhRfndabW/olS8mFGJzcH78T6CmCTAEo/5
+         9lNcyGHWMvRMA69qw2qeBbMJ+zdBwV6V8e9Be99rMPwACAm6BLQYemx1tZNY6AN99z5+
+         h8xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UVtmrpcYjsoxSNLprgvqR2q01AjSQZrSDBr9I2ujCrQ=;
+        b=NReKJIp7ukJD4g2zjp0I9qPwWl1J3vtHpzVlbySK56zzV+a9pBPL3Ddyw+61ol3SBw
+         gL9817qNzzlDJBeu1TyIP0bSRO/dL7oFXSIiT3P9dibDZFlkoSQL+QZ/nFNrtrQcgiRU
+         MPtlksNa3E0o8VoywMVj11xI+iWYQN7Tk98ZJEPKMYBW/ehEm4kywggmXy2IOLTPhfzZ
+         fSj5KHAihbsQBlh2mV6r237FPTH25uJM/C4Dz9sMWFAG5XtDjhmw/skNc6TCo5TZzXFG
+         Tm2EsJl+LlrzgEneyGrkuKMhvBFWko8nWQB1ox0gmV35Wtqiu+FShH9kOzUqvNub+K37
+         ytQA==
+X-Gm-Message-State: AOAM532n0RdCMs87YZEdmczNWL9Lie4WAcvcyH/5Q+HkdO/HerEzWu6E
+        AM9EoGb/JKQFSjTiGGvzhFLnY3vnS4uZlw38Z7WzkA==
+X-Google-Smtp-Source: ABdhPJw8jLmmkYMWCtGyb9SAEyWAmdLtUxmnI6j62OH72T/JezNOHDJSuka8BG+J+OQWwYh7kxgvHCtXaMopGrq5oY0=
+X-Received: by 2002:a25:3750:0:b0:634:6b89:ca9f with SMTP id
+ e77-20020a253750000000b006346b89ca9fmr9903674yba.363.1648214150074; Fri, 25
+ Mar 2022 06:15:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-17-glider@google.com>
+ <82de6739-a070-695b-bbc8-dfa931aa5e00@suse.cz>
+In-Reply-To: <82de6739-a070-695b-bbc8-dfa931aa5e00@suse.cz>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 25 Mar 2022 14:15:13 +0100
+Message-ID: <CAG_fn=UpzHLvmdsfTTet=j54N=HwYNn_z-n4GdqgBGhYb8eNEQ@mail.gmail.com>
+Subject: Re: [PATCH 16/43] kmsan: mm: call KMSAN hooks from SLUB code
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When `make W=1 ...` is executed the level 1 warnings become errors,
-due to recent change in some of the defconfigs, and fail the build.
-Since there are a lot of warnings on the level 1 are still present
-in the defconfigs at least for x86, let disable -Werror in such case.
+> >  static inline void *get_freepointer(struct kmem_cache *s, void *object)
+> >  {
+> >       object = kasan_reset_tag(object);
+> > -     return freelist_dereference(s, object + s->offset);
+> > +     return kmsan_init(freelist_dereference(s, object + s->offset));
+>
+> ... but I don't see why it applies to get_freepointer() too? What am I missing?
 
-Fixes: b9080ba4a6ec ("x86/defconfig: Enable WERROR")
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- scripts/Makefile.extrawarn | 7 +++++++
- 1 file changed, 7 insertions(+)
+Agreed, kmsan_init() is not needed here.
 
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 650d0b8ceec3..c81d74ef6c90 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -94,3 +94,10 @@ KBUILD_CFLAGS += $(call cc-option, -Wpacked-bitfield-compat)
- KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN3
- 
- endif
-+
-+#
-+# Turn off -Werror when extra warnings are enabled
-+#
-+ifneq ($(KBUILD_EXTRA_WARN),)
-+	KBUILD_CFLAGS += -Wno-error
-+endif
--- 
-2.35.1
+> >  }
+> >
+> >  static void prefetch_freepointer(const struct kmem_cache *s, void *object)
+> > @@ -357,18 +361,28 @@ static void prefetch_freepointer(const struct kmem_cache *s, void *object)
+> >       prefetchw(object + s->offset);
+> >  }
+> >
+> > +/*
+> > + * When running under KMSAN, get_freepointer_safe() may return an uninitialized
+> > + * pointer value in the case the current thread loses the race for the next
+> > + * memory chunk in the freelist. In that case this_cpu_cmpxchg_double() in
+> > + * slab_alloc_node() will fail, so the uninitialized value won't be used, but
+> > + * KMSAN will still check all arguments of cmpxchg because of imperfect
+> > + * handling of inline assembly.
+> > + * To work around this problem, use kmsan_init() to force initialize the
+> > + * return value of get_freepointer_safe().
+> > + */
+> >  static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
+> >  {
+> >       unsigned long freepointer_addr;
+> >       void *p;
+> >
+> >       if (!debug_pagealloc_enabled_static())
+> > -             return get_freepointer(s, object);
+> > +             return kmsan_init(get_freepointer(s, object));
+>
+> So here kmsan_init() is done twice?
 
+Yeah, removing it from get_freepointer() does not introduce new
+errors. I'll fix this in v2.

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E418B4E77E3
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2AB4E77E1
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376851AbiCYPcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S1377964AbiCYPeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377775AbiCYPYe (ORCPT
+        with ESMTP id S1377585AbiCYPYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:24:34 -0400
+        Fri, 25 Mar 2022 11:24:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93D5EA345;
-        Fri, 25 Mar 2022 08:18:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7F3DFF8A;
+        Fri, 25 Mar 2022 08:18:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 382D46120F;
-        Fri, 25 Mar 2022 15:18:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46ED0C340F4;
-        Fri, 25 Mar 2022 15:18:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0CC360ABA;
+        Fri, 25 Mar 2022 15:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DE1C340E9;
+        Fri, 25 Mar 2022 15:18:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221537;
-        bh=PTLwgRVoX7LFx/af87eu6iYF3/F/FoghDkUX2TJuteM=;
+        s=korg; t=1648221498;
+        bh=yQdpvEhL5AoioDf0png7mIvxiUMoS5mudv/r7pfJOUc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dm7Gax3OYsop7vmuOXDrfPzwAxOAlEOGTRSRwhUCd7Sw/xvpDwUaADnJ1ccvIj/d/
-         HQAp4+b41FGtllhqQBAsjZJo2da51t9qCvl+rtXT4e7x7QwcxLMiiGTOc3T3Zwcz6T
-         SjpdufuZHRvTH5uwAQ7QV8uUHCL/yg68iHkOqs9c=
+        b=vjESTfk+NUpuWF4/Y8wq6uJQLbupcswoi9S/uX4u5sxXAAf62MrnI9a7VSHA66k2A
+         wRYSswCqkLuKxWPl9Mm1hWNs7Hbnqc7R5mw4+cLq4lSWsqGl3KUQFwa9QxruFsSZXa
+         jtOvHQnQD+yqOLIjSxJa5xtxaI0ztzQum5g1rvfE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.17 20/39] netfilter: nf_tables: initialize registers in nft_do_chain()
+        stable@vger.kernel.org, Maximilian Luz <luzmaximilian@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.16 25/37] ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
 Date:   Fri, 25 Mar 2022 16:14:35 +0100
-Message-Id: <20220325150420.822067034@linuxfoundation.org>
+Message-Id: <20220325150420.764126922@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
-References: <20220325150420.245733653@linuxfoundation.org>
+In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
+References: <20220325150420.046488912@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,29 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Maximilian Luz <luzmaximilian@gmail.com>
 
-commit 4c905f6740a365464e91467aa50916555b28213d upstream.
+commit 7dacee0b9efc8bd061f097b1a8d4daa6591af0c6 upstream.
 
-Initialize registers to avoid stack leak into userspace.
+For some reason, the Microsoft Surface Go 3 uses the standard ACPI
+interface for battery information, but does not use the standard PNP0C0A
+HID. Instead it uses MSHW0146 as identifier. Add that ID to the driver
+as this seems to work well.
 
-Fixes: 96518518cc41 ("netfilter: add nftables")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Additionally, the power state is not updated immediately after the AC
+has been (un-)plugged, so add the respective quirk for that.
+
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+Cc: All applicable <stable@vger.kernel.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_core.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/battery.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/net/netfilter/nf_tables_core.c
-+++ b/net/netfilter/nf_tables_core.c
-@@ -201,7 +201,7 @@ nft_do_chain(struct nft_pktinfo *pkt, vo
- 	const struct nft_rule_dp *rule, *last_rule;
- 	const struct net *net = nft_net(pkt);
- 	const struct nft_expr *expr, *last;
--	struct nft_regs regs;
-+	struct nft_regs regs = {};
- 	unsigned int stackptr = 0;
- 	struct nft_jumpstack jumpstack[NFT_JUMP_STACK_SIZE];
- 	bool genbit = READ_ONCE(net->nft.gencursor);
+--- a/drivers/acpi/battery.c
++++ b/drivers/acpi/battery.c
+@@ -60,6 +60,10 @@ MODULE_PARM_DESC(cache_time, "cache time
+ 
+ static const struct acpi_device_id battery_device_ids[] = {
+ 	{"PNP0C0A", 0},
++
++	/* Microsoft Surface Go 3 */
++	{"MSHW0146", 0},
++
+ 	{"", 0},
+ };
+ 
+@@ -1177,6 +1181,14 @@ static const struct dmi_system_id bat_dm
+ 			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad"),
+ 		},
+ 	},
++	{
++		/* Microsoft Surface Go 3 */
++		.callback = battery_notification_delay_quirk,
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Go 3"),
++		},
++	},
+ 	{},
+ };
+ 
 
 

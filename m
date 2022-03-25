@@ -2,102 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2BF4E7954
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6364E7959
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355088AbiCYQxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S1377026AbiCYQyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241225AbiCYQxf (ORCPT
+        with ESMTP id S241225AbiCYQyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:53:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77709C12C2;
-        Fri, 25 Mar 2022 09:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cPXI5QeuTULG9j4cx1a19QqWrwb7jb28krf+MnTbuWc=; b=a7zRRuEeeYE6dBkAWaXIuqwuds
-        U62BNMi+T60gNXHOFW8sWRHaYet9RyMVTwcd1nc/iMUu7jFROexr5T6IquNr3YVoDEnK/r+ZeVFjh
-        os7xKznL35YjNBZwVbkl7mVjtexSluDgO52MrTmk1q7D6njtsSK1VBixCcoQ25Y7VJ7fjUx0SE94p
-        juEctRAcGAaLGVPytek1ib2OU1RYKKr2SR0/XXH5hc57LuYefu3bSAUyft7JHAHXqD6V3ThT4+QvL
-        C76m07bJvIQ9sLKA/N0DiOvtDZjw/ne3vUks1sb20PdKeWKFFFY88VeTAOIWBv6oeZSqhFj4k2MIb
-        we8cTiVA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nXn9l-004S23-Iu; Fri, 25 Mar 2022 16:51:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3A8863002BF;
-        Fri, 25 Mar 2022 17:51:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 21A932057F80B; Fri, 25 Mar 2022 17:51:19 +0100 (CET)
-Date:   Fri, 25 Mar 2022 17:51:19 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel-janitors@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/4] kprobes: rethook: x86: Replace kretprobe
- trampoline with rethook
-Message-ID: <Yj3zB2n7Hy0DhkU+@hirez.programming.kicks-ass.net>
-References: <164821817332.2373735.12048266953420821089.stgit@devnote2>
- <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
+        Fri, 25 Mar 2022 12:54:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3212E5400;
+        Fri, 25 Mar 2022 09:52:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77C43618CA;
+        Fri, 25 Mar 2022 16:52:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A6DC2BBE4;
+        Fri, 25 Mar 2022 16:52:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648227160;
+        bh=Ra8ieuBzaiUMPlsrjMnh2eiTTbFJ7RF3zaiOYqpcWRY=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Yc5KjUsXj0C3ePGmhyRuZJgrCSRp4+HyI1a7yErLlR/GcQnY5tNLV1BmC+enHzLg7
+         VkPDqNzov93jRYdDqfRphGZaqNe/6MrJKtu0chA542UYeMVcO+026KPHUvImpJHRy2
+         SSD8o8rU0W/9ZVKZ5jWypI28tPMm5CFeJHLQj6GiDSEMXIwcm1fA5Ibf42imrE9nnZ
+         uC1wRNKl95f+lsEt7efD2foDSsaT82ItZjSJdVJt0btni/gsKvvntazhgnpTDA3D9d
+         ljIaXMIYw1l6gpYSSETL24GOW5zcqJ+uT5dWsIDJpz4+X5/ekL/ToquYczoXPsnd+s
+         CQYhh6dO5mFPA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Yj1x5hJEKVL71JZ1@Red>
+References: <20220321200739.3572792-1-clabbe@baylibre.com> <20220321200739.3572792-18-clabbe@baylibre.com> <20220325004125.C80FDC340EC@smtp.kernel.org> <Yj1x5hJEKVL71JZ1@Red>
+Subject: Re: [PATCH v3 17/26] clk: rk3399: use proper crypto0 name
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, krzk+dt@kernel.org,
+        mturquette@baylibre.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+To:     LABBE Corentin <clabbe@baylibre.com>
+Date:   Fri, 25 Mar 2022 09:52:38 -0700
+User-Agent: alot/0.10
+Message-Id: <20220325165240.C9A6DC2BBE4@smtp.kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 03:43:15PM +0100, Peter Zijlstra wrote:
-> On Fri, Mar 25, 2022 at 11:22:53PM +0900, Masami Hiramatsu wrote:
-> 
-> > Masami Hiramatsu (3):
-> >       kprobes: Use rethook for kretprobe if possible
-> >       rethook: kprobes: x86: Replace kretprobe with rethook on x86
-> >       x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
-> > 
-> > Peter Zijlstra (1):
-> >       Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
-> 
-> You fat-fingered the subject there ^
-> 
-> Other than that:
-> 
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> 
-> Hopefully the ftrace return trampoline can also be switched over..
+Quoting LABBE Corentin (2022-03-25 00:40:22)
+> Le Thu, Mar 24, 2022 at 05:41:23PM -0700, Stephen Boyd a =C3=A9crit :
+> > Quoting Corentin Labbe (2022-03-21 13:07:30)
+> >=20
+> > $ git grep SRST_CRYPTO
+> > Documentation/devicetree/bindings/crypto/rockchip-crypto.txt:          =
+ resets =3D <&cru SRST_CRYPTO>;
+> > arch/arm/boot/dts/rk3288.dtsi:          resets =3D <&cru SRST_CRYPTO>;
+> >=20
+> > Uh oh. Just don't change it and think about something else when it
+> > starts to feel inconsistent.
+>=20
+> This is on rk3288, so not related to rk3399.
+> Even on the RK3399 TRM, all crypto clocks are called either crypto0 or cr=
+ypto1 (neither just crypto)
+>=20
 
-Urgh, allnoconfig doesn't build because..
-
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 56f4ee97f328..471d71935e90 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -108,6 +108,7 @@ obj-$(CONFIG_TRACING) += trace/
- obj-$(CONFIG_TRACE_CLOCK) += trace/
- obj-$(CONFIG_RING_BUFFER) += trace/
- obj-$(CONFIG_TRACEPOINTS) += trace/
-+obj-$(CONFIG_RETHOOK) += trace/
- obj-$(CONFIG_IRQ_WORK) += irq_work.o
- obj-$(CONFIG_CPU_PM) += cpu_pm.o
- obj-$(CONFIG_BPF) += bpf/
+Ok. Please add a note in the commit text why it's OK to change the
+define names.

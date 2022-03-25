@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86AC4E76C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A2A4E76DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376385AbiCYPT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S1359737AbiCYPU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359757AbiCYPL7 (ORCPT
+        with ESMTP id S1376435AbiCYPM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:11:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C71F6213C;
-        Fri, 25 Mar 2022 08:08:58 -0700 (PDT)
+        Fri, 25 Mar 2022 11:12:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286D2652FC;
+        Fri, 25 Mar 2022 08:09:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4C15B828F8;
-        Fri, 25 Mar 2022 15:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46899C340EE;
-        Fri, 25 Mar 2022 15:08:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA1DF61C11;
+        Fri, 25 Mar 2022 15:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0274C340E9;
+        Fri, 25 Mar 2022 15:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220923;
-        bh=SVs/MDBEHmX4AFKO+lofJLERkRv8iBI4VzwShn13ZOA=;
+        s=korg; t=1648220980;
+        bh=PqcOjKsdakPKA5/vVG+F6cn+MgRgtv9RKNhlRz2Ugow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M2W83UIIoCGiDdW6RyeScDH8jGmESkoiKYv5e+nA5KFC+fzy3ukriXlyWQVaAqgGX
-         nulpCFclXTiqdOclkpqzVwWqGFiZMJzs7EMQFYrBCmMXk0t4WEZ5D3XRm8d4Mc9tJs
-         c/x5bkK/iaEFINE/cJJgsdVz1Re1/Dyq7n4w1tx0=
+        b=YPgxUwN/mRB8PddjZTmG3122vGVSD6wnQCb9XmDEMGl6G8sPqVne9pbnMVZiEgDiS
+         Gn6suU9WvDMeZtNnb2fmAaiVYK6AWy2S+HlUqyiOhsaO4GSXVkv2SDl9SSaFK+kQO0
+         DyhIEFUetuv7GPTPo4WV/ohkgks23wkI+rnlNO70=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>,
-        =?UTF-8?q?Linus=20L=C3=BCssing?= <ll@simonwunderlich.de>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.4 27/29] mac80211: fix potential double free on mesh join
-Date:   Fri, 25 Mar 2022 16:05:07 +0100
-Message-Id: <20220325150419.366701718@linuxfoundation.org>
+        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 24/38] ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
+Date:   Fri, 25 Mar 2022 16:05:08 +0100
+Message-Id: <20220325150420.446579289@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
+References: <20220325150419.757836392@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Lüssing <ll@simonwunderlich.de>
+From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit 4a2d4496e15ea5bb5c8e83b94ca8ca7fb045e7d3 upstream.
+commit 0f306cca42fe879694fb5e2382748c43dc9e0196 upstream.
 
-While commit 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving
-mesh") fixed a memory leak on mesh leave / teardown it introduced a
-potential memory corruption caused by a double free when rejoining the
-mesh:
+For the RODE NT-USB the lowest Playback mixer volume setting mutes the
+audio output. But it is not reported as such causing e.g. PulseAudio to
+accidentally mute the device when selecting a low volume.
 
-  ieee80211_leave_mesh()
-  -> kfree(sdata->u.mesh.ie);
-  ...
-  ieee80211_join_mesh()
-  -> copy_mesh_setup()
-     -> old_ie = ifmsh->ie;
-     -> kfree(old_ie);
+Fix this by applying the existing quirk for this kind of issue when the
+device is detected.
 
-This double free / kernel panics can be reproduced by using wpa_supplicant
-with an encrypted mesh (if set up without encryption via "iw" then
-ifmsh->ie is always NULL, which avoids this issue). And then calling:
-
-  $ iw dev mesh0 mesh leave
-  $ iw dev mesh0 mesh join my-mesh
-
-Note that typically these commands are not used / working when using
-wpa_supplicant. And it seems that wpa_supplicant or wpa_cli are going
-through a NETDEV_DOWN/NETDEV_UP cycle between a mesh leave and mesh join
-where the NETDEV_UP resets the mesh.ie to NULL via a memcpy of
-default_mesh_setup in cfg80211_netdev_notifier_call, which then avoids
-the memory corruption, too.
-
-The issue was first observed in an application which was not using
-wpa_supplicant but "Senf" instead, which implements its own calls to
-nl80211.
-
-Fixing the issue by removing the kfree()'ing of the mesh IE in the mesh
-join function and leaving it solely up to the mesh leave to free the
-mesh IE.
-
-Cc: stable@vger.kernel.org
-Fixes: 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving mesh")
-Reported-by: Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
-Signed-off-by: Linus Lüssing <ll@simonwunderlich.de>
-Tested-by: Mathias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
-Link: https://lore.kernel.org/r/20220310183513.28589-1-linus.luessing@c0d3.blue
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220311201400.235892-1-lars@metafoo.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/cfg.c |    3 ---
- 1 file changed, 3 deletions(-)
+ sound/usb/mixer_quirks.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/net/mac80211/cfg.c
-+++ b/net/mac80211/cfg.c
-@@ -1949,13 +1949,11 @@ static int copy_mesh_setup(struct ieee80
- 		const struct mesh_setup *setup)
- {
- 	u8 *new_ie;
--	const u8 *old_ie;
- 	struct ieee80211_sub_if_data *sdata = container_of(ifmsh,
- 					struct ieee80211_sub_if_data, u.mesh);
- 
- 	/* allocate information elements */
- 	new_ie = NULL;
--	old_ie = ifmsh->ie;
- 
- 	if (setup->ie_len) {
- 		new_ie = kmemdup(setup->ie, setup->ie_len,
-@@ -1965,7 +1963,6 @@ static int copy_mesh_setup(struct ieee80
- 	}
- 	ifmsh->ie_len = setup->ie_len;
- 	ifmsh->ie = new_ie;
--	kfree(old_ie);
- 
- 	/* now copy the rest of the setup parameters */
- 	ifmsh->mesh_id_len = setup->mesh_id_len;
+--- a/sound/usb/mixer_quirks.c
++++ b/sound/usb/mixer_quirks.c
+@@ -3135,9 +3135,10 @@ void snd_usb_mixer_fu_apply_quirk(struct
+ 		if (unitid == 7 && cval->control == UAC_FU_VOLUME)
+ 			snd_dragonfly_quirk_db_scale(mixer, cval, kctl);
+ 		break;
+-	/* lowest playback value is muted on C-Media devices */
+-	case USB_ID(0x0d8c, 0x000c):
+-	case USB_ID(0x0d8c, 0x0014):
++	/* lowest playback value is muted on some devices */
++	case USB_ID(0x0d8c, 0x000c): /* C-Media */
++	case USB_ID(0x0d8c, 0x0014): /* C-Media */
++	case USB_ID(0x19f7, 0x0003): /* RODE NT-USB */
+ 		if (strstr(kctl->id.name, "Playback"))
+ 			cval->min_mute = 1;
+ 		break;
 
 

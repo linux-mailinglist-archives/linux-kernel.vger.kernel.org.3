@@ -2,99 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F5B4E6B75
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 01:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A114E6B79
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 01:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240084AbiCYAJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 20:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S1357030AbiCYAK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 20:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356823AbiCYAJb (ORCPT
+        with ESMTP id S1357050AbiCYAKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 20:09:31 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B96BBE02
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:07:57 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0D5682C0A90;
-        Fri, 25 Mar 2022 00:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1648166874;
-        bh=aYjeFGv6acnlGqYDx9smCRVPVxIhi92QWCR4UE4tuMs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=smdjxlwI8752LX6sLQi1zIRo5tZcmkNybwWGJzHl5Br688TmMAtt3noYpCJ3Q0G6n
-         BYsnSruBqzuUHz/nOtD+NmiO7FsqN+E0or9pJnrpjDAlNNsvVCUOcMUQsWPLKqeGfB
-         ul7Dxqukx5Tg01YKdSF0d4x2Gka53Nr2g6MVnt/oB8CHwBSbDT5SSEwZmmWf67bO+e
-         zBgrEbLhM6U6WzNbG94hJ1ujmks4wBhFd5H6JCn42PIuudgoRZRPFYMYnlxX01VnuC
-         jXnRtEVfKdi0+jZc8YZNTXJnWjMnjngrX3Zw2cZoEFJ1DaURDrVEhPbluOd8mGCD9m
-         2wFXIGIZ5rhTg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B623d07d90002>; Fri, 25 Mar 2022 13:07:53 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 9FB9E13EE9C;
-        Fri, 25 Mar 2022 13:07:53 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 96AB92A2679; Fri, 25 Mar 2022 13:07:49 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     ulf.hansson@linaro.org, robh+dt@kernel.org, huziji@marvell.com,
-        andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v3 3/3] dt-bindings: mmc: xenon: add marvell,sdhci-xenon compatible
-Date:   Fri, 25 Mar 2022 13:07:45 +1300
-Message-Id: <20220325000745.1708610-4-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325000745.1708610-1-chris.packham@alliedtelesis.co.nz>
-References: <20220325000745.1708610-1-chris.packham@alliedtelesis.co.nz>
+        Thu, 24 Mar 2022 20:10:20 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6541EAD9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:08:46 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id pv16so12396147ejb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:08:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y7wMnxNk+tFQvni2rBWt4t7AH2KkYUciRkPUXBc+4o4=;
+        b=f9A+eMl7EIu4/AUZVRTIHt1/Jclk2w65EZD4M1fVInUFYkMY62B9XCbYLOQ9lelSOq
+         WX6/E9XvZjmW9v+So29/74XblXh0K+g9/0bgaA3jGgXqvFZPmi+MZR6QFoUSR0cpuIOH
+         YCpEtVljNca9GODUpUNJpxT8LtBZOXCG716+ML1A+1gHLTC/otq8ajFrX9uAaUD1dPBK
+         gzlULoVQgRZ1IEHRJ+vihgFeKF4meKGqHI3L1JlDijLbOlo5E3ecMydLHUGbBIYKXzXH
+         kbqZq7c/SwJr0HudXd/ooG8Prjs8LX0IXbAXTLZ7K3iKxIh4jpOmx23DM6ZnnHdr6J1a
+         FMSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y7wMnxNk+tFQvni2rBWt4t7AH2KkYUciRkPUXBc+4o4=;
+        b=Ifca3UrRTAh20zSedefAJCTN2194nGD4mFyXtIE0uLyuVZcybhyJggaDMUNbpgX+18
+         Xn+shCflirE14hdlKL9N+RGiDxu1Q4QGl7CoP8ROD8YPElm34vXQWCNUZ+pL5chOkx7K
+         WosgbvnU+5WLfS/lhXl97ZwP2xCghuKM7mm+dEGEQXEIqlMjqCNVVS5dP0T9ZEb4/EV5
+         NnTboqxxDUaybagzGA6P/r+BcpXILC6cJuGTVVpiqAhPocowT1U1JXkDXbeMyCkmwyHG
+         aDPvTzezYUi3/xWygm3ertBqVaFewSpOu7rnzemYTOP2J2AsWhPzjmdyrF9EUX553Tuc
+         gU1A==
+X-Gm-Message-State: AOAM533frihmJmJqL8EUs3pA2bVg5Na1yR+vTSUrFAadlRgCFtObEefQ
+        SlOeKNNWDXYQe91g/UgKg4Dxnn3887uSqdQwEPVgjg==
+X-Google-Smtp-Source: ABdhPJwOqL0/px4nT//CIWu4d9IwswpkLRJw00d9Z2tKOIp2ubo1jTlzaXKnFSAQBUGcr6u2xzSDR/uocFsYUrUSOJw=
+X-Received: by 2002:a17:906:c282:b0:6ce:369d:3d5 with SMTP id
+ r2-20020a170906c28200b006ce369d03d5mr8781565ejz.425.1648166924426; Thu, 24
+ Mar 2022 17:08:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=khTjyptZaKf2Ay8TfSgA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220316024432.1454366-1-dlatypov@google.com> <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
+ <CAGS_qxpCoyr0_xpRVpjMwAALn49iShGAs-MuBrYHwrEJhKcZUA@mail.gmail.com> <CAFd5g46N6kbcknJxAug3nkEqe5Q+UuqYAfh8AhPkfPzeQFX8PA@mail.gmail.com>
+In-Reply-To: <CAFd5g46N6kbcknJxAug3nkEqe5Q+UuqYAfh8AhPkfPzeQFX8PA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 24 Mar 2022 19:08:33 -0500
+Message-ID: <CAGS_qxrHQvYfe0qimYxrqmbszWASwHVokDTS3+4X6Ehqpa1Nhg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: split resource API from test.h into new resource.h
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The armada-37xx SoC dtsi includes this as a compatible string. Add it to
-the dt-binding.
+On Wed, Mar 23, 2022 at 6:51 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
+<snip>
 
-Notes:
-    Changes in v3:
-    - new
+>
+> Another alternative workaround is to split even more stuff out into
+> other header files.
+>
+> Personally I would prefer not to wrap the lock/unlock functions; I
+> like seeing the kind of locking that's happening. Plus, such a helper
+> would be pretty gross:
+>
+> void kunit_lock(struct kunit *test, unsigned long* flags) {...}
 
- .../devicetree/bindings/mmc/marvell,xenon-sdhci.yaml          | 4 ++++
- 1 file changed, 4 insertions(+)
+That's exactly why I didn't bother to try and wrap it, yeah.
 
-diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.ya=
-ml b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-index 326ac3fa36b5..776bed5046fa 100644
---- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-+++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-@@ -31,6 +31,10 @@ properties:
-           - const: marvell,armada-ap807-sdhci
-           - const: marvell,armada-ap806-sdhci
-=20
-+      - items:
-+          - const: marvell,armada-3700-sdhci
-+          - const: marvell,sdhci-xenon
-+
-   reg:
-     minItems: 1
-     maxItems: 2
---=20
-2.35.1
+>
+> It wouldn't actually clean up the call site, just facilitate breaking
+> out code into a header.
+>
+> > > making users include this separately is probably the right thing to
+> > > do, as nesting the headers like this is a bit ugly, but I won't lose
+> > > sleep over leaving it till later.
+> >
+> > Ack, I can add a TODO to indicate we want to clean this up?
+>
+> I am fine with this.
 
+To clarify, are you saying you're fine w/ the nested header as-is, or
+fine with it + a TODO?
+
+>
+> > It's a bit annoying right now, but it'll only get more annoying in the future.
+> >
+> > >
+> > > >
+> > > > Now the first big comment in test.h is about kunit_case, which is a lot
+> > > > more relevant to what a new user wants to know.
+> > > >
+> > > > A side effect of this is git blame won't properly track history by
+> > > > default, users need to run
+> > > > $ git blame -L ,1 -C17 include/kunit/resource.h
+> > >
+> > > This is a pain, but is probably worth it. Thanks for including the
+> > > command in the commit message, which should mitigate it slightly.
+> > >
+> > > >
+> > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > > ---
+> > >
+> > > This was starting to annoy me, too, as it was a pain to read through
+> > > everything in test.h. It'll be a bit of short-term pain,
+> > > merge-conflict wise if we have other changes to the resource system
+> > > (which I fear is likely), but is worth it.
+> > >
+> > > Reviewed-by: David Gow <davidgow@google.com>
+> > >
+> > > -- David
+> > >
+> > > >
+> > > > NOTE: this file doesn't split out code from test.c to a new resource.c
+> > > > file.
+> > > > I'm primarily concerned with users trying to read the headers, so I
+> > > > didn't think messing up git blame (w/ default settings) was worth it.
+> > > > But I can make that change if it feels appropriate (it might also be
+> > > > messier).
+> > >
+> > > Personally, I think it's probably worth splitting this out as well.
+> > > And the sooner we do it, the less history we'll obscure. :-)
+> >
+> > Yeah, that was my thought.
+> > But if you think this would help users, then I think we have a case to
+> > make this change.
+> >
+> > Should I send a v2 with resource.c split out?
+> > Brendan (and any others who have an opinion), what's your preference?
+>
+> I personally don't think test.c is so huge that it is a problem to
+> understand, but I can see it getting there.
+>
+> If it's going to happen, sooner is probably better.
+
+Ack.
+I can work on adding a second patch on to this series that splits out
+resource.c?
+
+That causes more churn for the other in-flight patches, but we already
+have some since David has some changes in test.h.

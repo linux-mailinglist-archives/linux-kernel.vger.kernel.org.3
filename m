@@ -2,113 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65544E6E1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E554E6E1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358417AbiCYGNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 02:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
+        id S1358425AbiCYGOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 02:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234571AbiCYGNK (ORCPT
+        with ESMTP id S1358296AbiCYGOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 02:13:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93618B8216
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:11:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648188696;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wuTRsT/Tz6ofz67ssIJ6RwjRRnXFcLV1cw3Q00t4VHc=;
-        b=UmF0es09wHszL1zoLFWytDwFpRGyYm8j1oIVn+IaMQR5EPMJ2rbpayzDEApnQWHG7c5oan
-        26bsnvclkC7hL8qqILEgN/OmFoFXn6kjqfVcLFWsmV0hTxDYqsn7sbtIRQzxEC4pZq5wcE
-        FOU+DXFWnB43GALjdG/x/pO6uQySwE0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-116-LzbVV2nSPrSAJp3HCQboTA-1; Fri, 25 Mar 2022 02:11:33 -0400
-X-MC-Unique: LzbVV2nSPrSAJp3HCQboTA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C4883801E67;
-        Fri, 25 Mar 2022 06:11:22 +0000 (UTC)
-Received: from [10.72.12.33] (ovpn-12-33.pek2.redhat.com [10.72.12.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B6273401053;
-        Fri, 25 Mar 2022 06:11:14 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v5 03/22] KVM: arm64: Support SDEI_VERSION hypercall
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-References: <20220322080710.51727-1-gshan@redhat.com>
- <20220322080710.51727-4-gshan@redhat.com> <YjoPxLAMIPobBzS0@google.com>
- <d8e151e5-080b-dc87-b7e0-9031a7928853@redhat.com>
- <YjtLVqBbL0jyFFZy@google.com>
- <6f217836-45fb-8833-7bb1-5dc822826f56@redhat.com>
- <YjwiQ10CE5AtoM4Y@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <09814baf-3107-5fa9-f92c-cc271f384c4a@redhat.com>
-Date:   Fri, 25 Mar 2022 14:11:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Fri, 25 Mar 2022 02:14:02 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C83C682E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648188747; x=1679724747;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=98w6sMdP+2FfIe4ozGHLqlTOCPvrVJV1bokWt1E65vc=;
+  b=HeahNQAahmB62B0z0xLEcTpHKyoVv2+hyYffcR1jKAKPCfiPS5VGBNNR
+   +zF5LcJcrEp0EvAEJmcvnEPoBOIV6rRQmTxDqittP60BUSpQV/6g4LZ9I
+   uNF5V5BY5+SHZwegMWNc7DUxfqXIXtcG8hk+zsXPLyM+qz8G9HR0oeZTa
+   vPz74ni1RgvLqnyp+uqd4ibliNFfX1qwpXhvkCXzfOAgVzJd9b0kjgBNF
+   ljqxMhC3cymd9OMcxV66SedNTP/QHukEMLpuIVK2mn+B1PUGa+f2IZebK
+   dgf4lYX3B7wQplHwIji968dIGcklUgfnNXclGFkeNttAqEVTDFEECmgXa
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238504717"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="238504717"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 23:12:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="544958397"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2022 23:12:11 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXdBD-000LsK-1a; Fri, 25 Mar 2022 06:12:11 +0000
+Date:   Fri, 25 Mar 2022 14:11:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [broonie-misc:for-kernelci 6/7] sound/soc/codecs/wm8731.c:394:31:
+ warning: format specifies type 'int' but the argument has type 'unsigned
+ long'
+Message-ID: <202203251449.v2pavIsV-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YjwiQ10CE5AtoM4Y@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git for-kernelci
+head:   0265b10883453897a0ddcdbc21af5031ad5b4a7e
+commit: 94c6c005fd4c9113c44acb727292f0acd1434a11 [6/7] TEST - MCLK SETTING
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220325/202203251449.v2pavIsV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=94c6c005fd4c9113c44acb727292f0acd1434a11
+        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
+        git fetch --no-tags broonie-misc for-kernelci
+        git checkout 94c6c005fd4c9113c44acb727292f0acd1434a11
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/codecs/
 
-On 3/24/22 3:48 PM, Oliver Upton wrote:
-> On Thu, Mar 24, 2022 at 12:07:34PM +0800, Gavin Shan wrote:
-> 
-> [...]
-> 
->>>> Yeah, I was sticky to the pattern of "KVM". However, I think it's good
->>>> to reuse the existing one. Lets use ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2
->>>> if you agree. Its first two characters are "VM" at least.
->>>
->>> Sounds fine to me. The only other nit I'd say is we should define a
->>> macro for it too, something like:
->>>
->>>     #define KVM_SDEI_VENDOR	ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2
->>>
->>
->> Agreed, and the macro will be put into arch/arm64/include/asm/kvm_sdei.h.
->> arch/arm64/include/uapi/asm/kvm_sdei_state.h isn't the right place because
->> the dependent macro ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2 isn't exposed by
->> ABI.
-> 
-> The argument could definitely be made that our vendor ID should be
-> promoted to UAPI. Even though linux is the only known user of our
-> vendor-specific hypercalls, nothing is stopping other software from
-> using them. Beyond that, these values should really never change anyway.
-> 
-> It isn't a big deal if you add it to internal headers, either, as the
-> only known consumer will be the kernel.
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sure. Lets add it into include/asm/kvm_sdei.h in next respin. We can
-expose it when it is needed. For now, I do think Linux is the only
-user.
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Gavin
+>> sound/soc/codecs/wm8731.c:394:31: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                           pr_crit("SET SYSCLK %d\n", clk_get_rate(wm8731->mclk));
+                                               ~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               %lu
+   include/linux/printk.h:479:34: note: expanded from macro 'pr_crit'
+           printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   sound/soc/codecs/wm8731.c:751:34: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                   pr_crit("WM8731 MCLK IS %d\n", clk_get_rate(wm8731->mclk));
+                                           ~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                           %lu
+   include/linux/printk.h:479:34: note: expanded from macro 'pr_crit'
+           printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   2 warnings generated.
 
+
+vim +394 sound/soc/codecs/wm8731.c
+
+   380	
+   381	static int wm8731_set_dai_sysclk(struct snd_soc_dai *codec_dai,
+   382			int clk_id, unsigned int freq, int dir)
+   383	{
+   384		struct snd_soc_component *component = codec_dai->component;
+   385		struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
+   386		struct wm8731_priv *wm8731 = snd_soc_component_get_drvdata(component);
+   387	
+   388		switch (clk_id) {
+   389		case WM8731_SYSCLK_XTAL:
+   390		case WM8731_SYSCLK_MCLK:
+   391			if (wm8731->mclk && clk_set_rate(wm8731->mclk, freq))
+   392				return -EINVAL;
+   393			if (wm8731->mclk)
+ > 394				pr_crit("SET SYSCLK %d\n", clk_get_rate(wm8731->mclk));
+   395			wm8731->sysclk_type = clk_id;
+   396			break;
+   397		default:
+   398			return -EINVAL;
+   399		}
+   400	
+   401		switch (freq) {
+   402		case 0:
+   403			wm8731->constraints = NULL;
+   404			break;
+   405		case 12000000:
+   406			wm8731->constraints = &wm8731_constraints_12000000;
+   407			break;
+   408		case 12288000:
+   409		case 18432000:
+   410			wm8731->constraints = &wm8731_constraints_12288000_18432000;
+   411			break;
+   412		case 16934400:
+   413		case 11289600:
+   414			wm8731->constraints = &wm8731_constraints_11289600_16934400;
+   415			break;
+   416		default:
+   417			return -EINVAL;
+   418		}
+   419	
+   420		wm8731->sysclk = freq;
+   421	
+   422		snd_soc_dapm_sync(dapm);
+   423	
+   424		return 0;
+   425	}
+   426	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

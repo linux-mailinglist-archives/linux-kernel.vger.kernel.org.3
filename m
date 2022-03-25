@@ -2,139 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2430A4E6DE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 06:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F8C4E6DD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 06:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355999AbiCYFxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 01:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
+        id S1358360AbiCYFmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 01:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiCYFxd (ORCPT
+        with ESMTP id S231767AbiCYFmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 01:53:33 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5EBB82F2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 22:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648187518; x=1679723518;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GHFkE2ucb0MgAoFKijKOuZGvLHNY3B+2ApxwjopL5JE=;
-  b=d7XP9TvfJNTsffLsPOaKZW9jNhMtsI43woSh05Hwbqv1fU+JI9D7mZfz
-   lT6ppPR918B9nxZrR66mwpwc59QOYslvT4jfKh2/KGIJEjQOuqbqohYVQ
-   KxejMDvOBfwmTiYlu+5J4VL/IPfepE/tXcPPeIWa2jV8/toq+iLJelNEG
-   QkQ0wBJk8Un5zCS0Li2Ds5p/4mwPGImwKCUlyUpr0KRRMns8KagRWLxn4
-   QU908hQp15iG2ygZ+xh5xXvYy49I54JES4ZvpD1vKTPNeMVAq153OvaY0
-   bTNwPMm6lxo+zE6WntmWWsHCBbKdgzNp4sNjLzLnmEsLCqs7IKXFcma8+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="239164674"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="239164674"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 22:51:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="544952158"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2022 22:51:56 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXcrc-000LqI-7e; Fri, 25 Mar 2022 05:51:56 +0000
-Date:   Fri, 25 Mar 2022 13:50:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [broonie-misc:at91sam9g20ek 10/12]
- sound/soc/codecs/wm8731-spi.c:28:48: error: invalid application of 'sizeof'
- to incomplete type 'struct wm8731_priv'
-Message-ID: <202203251303.ROlxE3s7-lkp@intel.com>
+        Fri, 25 Mar 2022 01:42:16 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB2A1EEDE
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 22:40:41 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KPrXX3mNMz1GD3Q;
+        Fri, 25 Mar 2022 13:40:28 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 25 Mar 2022 13:40:39 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 25 Mar 2022 13:40:38 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Vijay Balakrishna <vijayb@linux.microsoft.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>
+Subject: [PATCH 1/2] arm64: mm: Do not defer reserve_crashkernel() if only ZONE_DMA32
+Date:   Fri, 25 Mar 2022 13:53:14 +0800
+Message-ID: <20220325055315.25671-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git at91sam9g20ek
-head:   3924683a22e84ba06478ea4aaa775319ba02f42c
-commit: 5b7214a7b726cbf25aaebfc8a05ede8c53d04d26 [10/12] ASoC: wm8731: Factor out the I2C and SPI bus code into separate modules
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220325/202203251303.ROlxE3s7-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=5b7214a7b726cbf25aaebfc8a05ede8c53d04d26
-        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
-        git fetch --no-tags broonie-misc at91sam9g20ek
-        git checkout 5b7214a7b726cbf25aaebfc8a05ede8c53d04d26
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash sound/soc/codecs/
+The kernel could be benifit due to BLOCK_MAPPINGS, see commit
+031495635b46 ("arm64: Do not defer reserve_crashkernel() for
+platforms with no DMA memory zones"), if there is only with
+ZONE_DMA32, we could set arm64_dma_phys_limit to max_zone_phys(32)
+earlier in arm64_memblock_init(), then we will benifit too.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Cc: Vijay Balakrishna <vijayb@linux.microsoft.com>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Will Deacon <will@kernel.org>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ arch/arm64/mm/init.c | 18 ++++++++++--------
+ arch/arm64/mm/mmu.c  |  6 ++----
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   sound/soc/codecs/wm8731-spi.c: In function 'wm8731_spi_probe':
->> sound/soc/codecs/wm8731-spi.c:28:48: error: invalid application of 'sizeof' to incomplete type 'struct wm8731_priv'
-      28 |         wm8731 = devm_kzalloc(&spi->dev, sizeof(*wm8731), GFP_KERNEL);
-         |                                                ^
->> sound/soc/codecs/wm8731-spi.c:34:15: error: invalid use of undefined type 'struct wm8731_priv'
-      34 |         wm8731->regmap = devm_regmap_init_spi(spi, &wm8731_regmap);
-         |               ^~
->> sound/soc/codecs/wm8731-spi.c:34:26: error: implicit declaration of function 'devm_regmap_init_spi' [-Werror=implicit-function-declaration]
-      34 |         wm8731->regmap = devm_regmap_init_spi(spi, &wm8731_regmap);
-         |                          ^~~~~~~~~~~~~~~~~~~~
->> sound/soc/codecs/wm8731-spi.c:34:53: error: 'wm8731_regmap' undeclared (first use in this function)
-      34 |         wm8731->regmap = devm_regmap_init_spi(spi, &wm8731_regmap);
-         |                                                     ^~~~~~~~~~~~~
-   sound/soc/codecs/wm8731-spi.c:34:53: note: each undeclared identifier is reported only once for each function it appears in
-   sound/soc/codecs/wm8731-spi.c:35:26: error: invalid use of undefined type 'struct wm8731_priv'
-      35 |         if (IS_ERR(wm8731->regmap)) {
-         |                          ^~
-   sound/soc/codecs/wm8731-spi.c:36:37: error: invalid use of undefined type 'struct wm8731_priv'
-      36 |                 ret = PTR_ERR(wm8731->regmap);
-         |                                     ^~
->> sound/soc/codecs/wm8731-spi.c:42:16: error: implicit declaration of function 'wm8731_init' [-Werror=implicit-function-declaration]
-      42 |         return wm8731_init(&spi->dev, wm8731);
-         |                ^~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +28 sound/soc/codecs/wm8731-spi.c
-
-    22	
-    23	static int wm8731_spi_probe(struct spi_device *spi)
-    24	{
-    25		struct wm8731_priv *wm8731;
-    26		int ret;
-    27	
-  > 28		wm8731 = devm_kzalloc(&spi->dev, sizeof(*wm8731), GFP_KERNEL);
-    29		if (wm8731 == NULL)
-    30			return -ENOMEM;
-    31	
-    32		spi_set_drvdata(spi, wm8731);
-    33	
-  > 34		wm8731->regmap = devm_regmap_init_spi(spi, &wm8731_regmap);
-    35		if (IS_ERR(wm8731->regmap)) {
-    36			ret = PTR_ERR(wm8731->regmap);
-    37			dev_err(&spi->dev, "Failed to allocate register map: %d\n",
-    38				ret);
-    39			return ret;
-    40		}
-    41	
-  > 42		return wm8731_init(&spi->dev, wm8731);
-    43	}
-    44	
-
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 8ac25f19084e..9dded8779d72 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -157,14 +157,14 @@ static phys_addr_t __init max_zone_phys(unsigned int zone_bits)
+ 	return min(zone_mask, memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
++phys_addr_t __ro_after_init dma32_phys_limit;
+ static void __init zone_sizes_init(unsigned long min, unsigned long max)
+ {
+ 	unsigned long max_zone_pfns[MAX_NR_ZONES]  = {0};
+-	unsigned int __maybe_unused acpi_zone_dma_bits;
+-	unsigned int __maybe_unused dt_zone_dma_bits;
+-	phys_addr_t __maybe_unused dma32_phys_limit = max_zone_phys(32);
+-
+ #ifdef CONFIG_ZONE_DMA
++	unsigned int acpi_zone_dma_bits;
++	unsigned int dt_zone_dma_bits;
++
+ 	acpi_zone_dma_bits = fls64(acpi_iort_dma_get_max_cpu_address());
+ 	dt_zone_dma_bits = fls64(of_dma_get_max_cpu_address(NULL));
+ 	zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits);
+@@ -173,8 +173,6 @@ static void __init zone_sizes_init(unsigned long min, unsigned long max)
+ #endif
+ #ifdef CONFIG_ZONE_DMA32
+ 	max_zone_pfns[ZONE_DMA32] = PFN_DOWN(dma32_phys_limit);
+-	if (!arm64_dma_phys_limit)
+-		arm64_dma_phys_limit = dma32_phys_limit;
+ #endif
+ 	max_zone_pfns[ZONE_NORMAL] = max;
+ 
+@@ -336,8 +334,12 @@ void __init arm64_memblock_init(void)
+ 
+ 	early_init_fdt_scan_reserved_mem();
+ 
+-	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
++	dma32_phys_limit = max_zone_phys(32);
++	if (!IS_ENABLED(CONFIG_ZONE_DMA)) {
++		if (IS_ENABLED(CONFIG_ZONE_DMA32))
++			arm64_dma_phys_limit = dma32_phys_limit;
+ 		reserve_crashkernel();
++	}
+ 
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+@@ -385,7 +387,7 @@ void __init bootmem_init(void)
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
+ 	 */
+-	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
++	if (IS_ENABLED(CONFIG_ZONE_DMA))
+ 		reserve_crashkernel();
+ 
+ 	memblock_dump_all();
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 626ec32873c6..23734481318a 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -529,8 +529,7 @@ static void __init map_mem(pgd_t *pgdp)
+ 
+ #ifdef CONFIG_KEXEC_CORE
+ 	if (crash_mem_map) {
+-		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+-		    IS_ENABLED(CONFIG_ZONE_DMA32))
++		if (IS_ENABLED(CONFIG_ZONE_DMA))
+ 			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+ 		else if (crashk_res.end)
+ 			memblock_mark_nomap(crashk_res.start,
+@@ -571,8 +570,7 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 * through /sys/kernel/kexec_crash_size interface.
+ 	 */
+ #ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map &&
+-	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
++	if (crash_mem_map && !IS_ENABLED(CONFIG_ZONE_DMA)) {
+ 		if (crashk_res.end) {
+ 			__map_memblock(pgdp, crashk_res.start,
+ 				       crashk_res.end + 1,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.26.2
+

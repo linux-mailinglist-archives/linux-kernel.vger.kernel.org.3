@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64FA4E7944
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471854E794C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377000AbiCYQvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S1376592AbiCYQwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356491AbiCYQvd (ORCPT
+        with ESMTP id S1377002AbiCYQwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:51:33 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF7BC12CF;
-        Fri, 25 Mar 2022 09:49:59 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id p8so6879533pfh.8;
-        Fri, 25 Mar 2022 09:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0kOdsZwrQL1XfPdlkXlj/9Xa+AzVdDQNepJd8esNMSA=;
-        b=RH/4wmzM1N3goA6fDZmEOIqtcFbnwVj6hl5sryG3LVcXbBaAg9OcTs0/mLXdIkBzIN
-         KoStwbD4ZY9nNn9EgZkemVf1m6GGtdopt2bFVM4viCuyBJRomC+f7npkNtNB0fCB/KB4
-         gvoZNLNQUKQI2VLfiNYQ7/C4/QdOLqYznSm6nM2jR3aMfDDTntAeCmuvwIezXqUbDHfy
-         pBQad0mQ0n3cJseK4nbrh610UoIoqXdFPu9AwgRu5nm7mLEzdEkSzIUUkM81ksnI6MLx
-         +vsIvtoxlIWvxM8xyEhQmDGBITfT4k6qkRN7BRv0aH/wP+jQLLWc17mqgQCJzVz+mHc9
-         55PQ==
+        Fri, 25 Mar 2022 12:52:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF51DC12D9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:50:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648227025;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tEjq/KiPSXWL3MlMEJXSJIy04cv7r0dUWkKt5cvZ2AM=;
+        b=Q0WcPgGtVyIb26freMtM8HpSfPBhxea9YZiWrOSUUtEMaLAIx5k+UAjsw4uZG/PIXNkDGe
+        trC8kj/4+J0TO85wjiFj2DzC6TdnuAdmcLOF6c8uhbgLJ0Snx+1o5zM+HV7dgZFSlaincC
+        nQphILrC1ULFsf8z88fYO2vF5R25vuw=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-Fcw94tinPSiUbTqCFHsBTw-1; Fri, 25 Mar 2022 12:50:18 -0400
+X-MC-Unique: Fcw94tinPSiUbTqCFHsBTw-1
+Received: by mail-ed1-f69.google.com with SMTP id u13-20020a50a40d000000b00419028f7f96so5244392edb.21
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:50:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0kOdsZwrQL1XfPdlkXlj/9Xa+AzVdDQNepJd8esNMSA=;
-        b=YRXWdSBiWJT2UGH0wzFFudCzNVApWWKeLF5vXeNRlyv0IVmrd2cOUhyLNeiN8nrhSS
-         IKpaYOlCSgN2BZKhvnqhyK6FoSE23FW3/IUi2CKJ3C/G17fzyfuArcyxMNPQ/aQu7HG5
-         1UP8gZptuaegkpbFDcvcA5LxSkAn5eLYglDCCMIT8adIk4QVisA2y9ErFxrexy0asgZF
-         i4/IvyviY8+4bBvX6CkIzmM2tBxEEOTf3+WDjX4A325AOp0Q6uBAIOqx3M6p/dZU3rY3
-         kjkOKpMKf4DoXDunzhZxoDNM2FMCRVevw/zRpaHmBX02oSEaNmw9ZdH2SBIk6OlgnorB
-         Wb7Q==
-X-Gm-Message-State: AOAM531rRkfbZBsz0l46Lub7HFPl2A3jdewE9x/W+aQJGrV7g6gAZBn0
-        KFgeTgsdC/0KYA7qHgr+oKeb2hUbnX7GOkfRTWU=
-X-Google-Smtp-Source: ABdhPJyfhFBRXE5h3qte2x1DrZmNxncfozsOwJFINaTypXcQNRxAhkfoT3oCXvO/uJG6iEaiY9FupxTkU1CGWVRTEBo=
-X-Received: by 2002:a63:c00c:0:b0:37c:942e:6c3c with SMTP id
- h12-20020a63c00c000000b0037c942e6c3cmr398099pgg.336.1648226998607; Fri, 25
- Mar 2022 09:49:58 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tEjq/KiPSXWL3MlMEJXSJIy04cv7r0dUWkKt5cvZ2AM=;
+        b=RImQ5tA3hHNgL/u2m/XbUDbpYaA+54wrq5GFcqYGYqfMzSXyA0+uFnumAflEd04+Xr
+         EI/Q9KLeIc/CFrWg9INYVj618GCXSv6b/1TxaR+FDyMgq1JGWMWSYYjuJbR+sG+hS+VX
+         Yr2Q5cwBifDH2kxIvtWq9+57nTB61a4cdg+VH40cMlVDkcLr05dgiJcxcOVO3nHnY+q4
+         DH2Xd4ia4XGtZYGYHq3J+tBpzviCJ7pq7H/J/d427dDiV08DAUB8WVrrzQelS7qi/ILR
+         b3ZNF8lMOnwAgVD5KsUPRgmB5gOzWtO0YZUjkQ1RQnQGlX0OwWLF+8AM5s7KUCT1ojNK
+         MNLQ==
+X-Gm-Message-State: AOAM531C3cLhaoJQkBatt8h13xS6hLG6xvTMszWUeInqCOpvdrC5Canf
+        b9PY3lVJ1i5BVO5DOW78goxBf5TAWUzG/eRobyzxJ8AKmYXIcMkuwusER3rqEJwwa5YC0guGt9v
+        RFgr8GZ0io16eGYIQZ+uh4cdS
+X-Received: by 2002:aa7:cc96:0:b0:410:b9ac:241 with SMTP id p22-20020aa7cc96000000b00410b9ac0241mr14368991edt.246.1648227017509;
+        Fri, 25 Mar 2022 09:50:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxtI7/PWnIA3ZNXxg4nfFvrZQa1n7rQsKtbxPki/ewcdN3qvWtTFHO7bqVxVhCh9We4XHqzJw==
+X-Received: by 2002:aa7:cc96:0:b0:410:b9ac:241 with SMTP id p22-20020aa7cc96000000b00410b9ac0241mr14368975edt.246.1648227017312;
+        Fri, 25 Mar 2022 09:50:17 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id hs12-20020a1709073e8c00b006dfd8074d27sm2501958ejc.79.2022.03.25.09.50.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 09:50:16 -0700 (PDT)
+Message-ID: <53cc074f-350f-5fa8-1ee4-c33921f17cb1@redhat.com>
+Date:   Fri, 25 Mar 2022 17:50:14 +0100
 MIME-Version: 1.0
-References: <164821817332.2373735.12048266953420821089.stgit@devnote2> <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 25 Mar 2022 09:49:47 -0700
-Message-ID: <CAADnVQLg0h7aJBPSfmQdL_M=S9QHWe+xLXZPL4gzMYejz=Mf0Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/4] kprobes: rethook: x86: Replace kretprobe
- trampoline with rethook
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        X86 ML <x86@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel-janitors@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH] KVM: x86/mmu: fix general protection fault in
+ kvm_mmu_uninit_tdp_mmu
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
+References: <20220325163815.3514-1-paskripkin@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220325163815.3514-1-paskripkin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 7:43 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Mar 25, 2022 at 11:22:53PM +0900, Masami Hiramatsu wrote:
->
-> > Masami Hiramatsu (3):
-> >       kprobes: Use rethook for kretprobe if possible
-> >       rethook: kprobes: x86: Replace kretprobe with rethook on x86
-> >       x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
-> >
-> > Peter Zijlstra (1):
-> >       Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
->
-> You fat-fingered the subject there ^
->
-> Other than that:
->
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->
-> Hopefully the ftrace return trampoline can also be switched over..
+On 3/25/22 17:38, Pavel Skripkin wrote:
+> Syzbot reported GPF in kvm_mmu_uninit_tdp_mmu(), which is caused by
+> passing NULL pointer to flush_workqueue().
+> 
+> tdp_mmu_zap_wq is allocated via alloc_workqueue() which may fail. There
+> is no error hanling and kvm_mmu_uninit_tdp_mmu() return value is simply
+> ignored. Even all kvm_*_init_vm() functions are void, so the easiest
+> solution is to check that tdp_mmu_zap_wq is valid pointer before passing
+> it somewhere.
 
-Thanks Peter. What's an ETA on landing endbr set?
-Did I miss a pull req?
-I see an odd error in linux-next with bpf selftests
-which may or may not be related. Planning to debug it
-when everything settles in Linus's tree.
+Thanks for the analysis, but not scheduling the work item in 
+tdp_mmu_schedule_zap_root is broken; you can't just let the roots 
+survive (KVM uses its own workqueue because it needs to work item to 
+complete has to flush it before kvm_mmu_zap_all_fast returns).
 
-Masami, could you do another respin?
+I'll fix it properly by propagating the error up to kvm_mmu_init_vm and 
+kvm_arch_init_vm,
 
-Also do you mind squashing patches 2,3,4 ?
-It's odd to have the same lines of code patched up 3 times.
-Just do it right once.
+Thanks,
+
+Paolo
+

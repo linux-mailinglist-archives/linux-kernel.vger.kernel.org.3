@@ -2,125 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A94C4E7894
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DEE4E7896
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376710AbiCYQDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S1376735AbiCYQDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiCYQDp (ORCPT
+        with ESMTP id S1376725AbiCYQDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:03:45 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360C19F38E;
-        Fri, 25 Mar 2022 09:02:10 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id s25so10906107lji.5;
-        Fri, 25 Mar 2022 09:02:10 -0700 (PDT)
+        Fri, 25 Mar 2022 12:03:48 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7E5A0BE0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:02:13 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id qx21so16219827ejb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:02:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=+OD60eQPT0VQTzE/zXfu180JDdeuowENv4FkX1dVZFE=;
-        b=I8MvfJJg21hFIKhtqvvBctr1gAN5m6sffrS0rOoehEmmIPayRpaTUaRe/GPXScZ/SH
-         2azU1M4fHHMRKTdXW6AxUyl/Slloo0KWbjmm4M6AA2COT0ckYY06spj7vr4L/0t+aHuP
-         49Dw0R1j2j1bA4IMtVa6mKBme6bH63fkqKJwWv9OP7F3lxP+P4hUmeF5xx+NKJnFMIFr
-         3QQetM/VX8SOp7DeM8FnVuM01Q37nBCTnGwbiujgazzVfNlfdxp70Wqa+R8ryl0ACD52
-         kBx2038L1+1KxinXX1O1I2hOFRB3gq89vkJrGAO+noJWzqsKm7N7ZEokizNpdn9IS/Ys
-         TMow==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dt8vhtKiPbsbCcDg8xMi/AmQ4OjbxYDQR91N6G2Nv8U=;
+        b=eP8Y1tjZ6Fdx7y7CstaqPOR2P+1OEINFk5F6Bwa9lUeoWBBkhaHuJtY6k8zbPtWyCg
+         f7XoErNmsZauAx5rC9HMwlTYgDfa3BqTJA0Cv1TAsGrAi8mQsFjLR08Enal2k/SCXm5B
+         aUCn20OP1arKyyd9nvLs9BSAsuWvEvzBmoP06jeVWquGZvlVHOfV2RjVYj2xx8jyp/JN
+         3Unv+3DTQsp3tzz0yV2O26ZTcjFz1Q5zv0HXS3E2N071d3WYozi3OD12Dobq3GBagrAH
+         JlDoZBVgf8+uvzc8H5aGLis/dw8UzksD2rlTlEq19nCuo+U20FfMPH6sO+7D7qq2QMqy
+         incw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=+OD60eQPT0VQTzE/zXfu180JDdeuowENv4FkX1dVZFE=;
-        b=Y0lQvnkgwzpLZpRALFTDji3IqRAImXsj4GerD+lFueVTwrWj7wZIvhoKHDvzat+Wr/
-         2ELo5fs/WQDhdV8xg9/v/4mBF4l5hQEqGpMQPn2aOFLtI1JF9CJYb3tK2TQv9OovUkXA
-         sYRkTc8wlcfGKxZPSEfX4t4qEB/KxWn+zyvrJhsSWYvIeLpOo4YOuyI4AfmhFHXBugve
-         cCia46/7CIEHWdeHyCT2XCZ6KikllvlGXBZ7MRS4J53QPhcRKH+GZLoP4ZNtTVBJ20p2
-         G64kagx/r48yUWGxAmO0F7J0ejbevahHXhnDriGVwznKYtMDUD2Kbb4+JSFskWtjNs7q
-         XpZg==
-X-Gm-Message-State: AOAM5303TAy/d2S/OAOvsY5glHLgRHpWgZvNX6r5czxDMJ+Sz2pMa8YI
-        V9/yiGb73pxviOo9aRo5KrIMR0CBEZJQug==
-X-Google-Smtp-Source: ABdhPJy6jB+HkWeuu+mr4Nf5L0XiH1JsJt71ZKa7Kvg7YTo3UzTPXUwRdrvEMV0xlzbN7/m6plkcTA==
-X-Received: by 2002:a05:651c:198b:b0:249:8bf4:498b with SMTP id bx11-20020a05651c198b00b002498bf4498bmr8914549ljb.441.1648224128413;
-        Fri, 25 Mar 2022 09:02:08 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id i24-20020a2e8658000000b0024806af7079sm744149ljj.43.2022.03.25.09.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 09:02:07 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
- offloading of fdb locked flag
-In-Reply-To: <20220325140003.a4w4hysqbzmrcxbq@skbuf>
-References: <20220323123534.i2whyau3doq2xdxg@skbuf>
- <86wngkbzqb.fsf@gmail.com> <20220323144304.4uqst3hapvzg3ej6@skbuf>
- <86lewzej4n.fsf@gmail.com> <20220324110959.t4hqale35qbrakdu@skbuf>
- <86v8w3vbk4.fsf@gmail.com> <20220324142749.la5til4ys6zva4uf@skbuf>
- <86czia1ned.fsf@gmail.com> <20220325132102.bss26plrk4sifby2@skbuf>
- <86fsn6uoqz.fsf@gmail.com> <20220325140003.a4w4hysqbzmrcxbq@skbuf>
-Date:   Fri, 25 Mar 2022 17:01:59 +0100
-Message-ID: <86tubmt408.fsf@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dt8vhtKiPbsbCcDg8xMi/AmQ4OjbxYDQR91N6G2Nv8U=;
+        b=nQZuAW7Z+k9ORlk6twVmbxJFzJeGRcO3QqBIK5OirZvxFxo0NJRReDPEa3waNY+wA6
+         OoC0ho50C4l0+8fU5WgskH0l9B2jrit68Mqf88qP54QCQtzZzW8CtbAuiTuo22jeSVus
+         QkhDUDCYjdSzYnSGeajLfphWaQ/BJpa9HwkNG2NIRqzA8746A3D5o/jHn/wMqxg006jh
+         WwqXvmhl63mNMQ58Kj12dTMKsPaw44JnVeqe2QpG7ty/HDh/OT4ehsebRzIOF934j6P8
+         P422Pw3UNtGxFHcqXVtSRwFYfp4dhOeZ/dFivKL6YdWhQzuoQErkG9Emy3yeJvy4y9Yu
+         U9pg==
+X-Gm-Message-State: AOAM532gACZzFUY/SbjS4Ose+16vqkjQwnbLhViUisLA2f08O0oh4JQl
+        LiNxQ+EzqSm5uVYPoE4fZxJMjUh8xTqTmlEu2bwAIw==
+X-Google-Smtp-Source: ABdhPJzmBi+FlxvitVY57HS8NQh5UNF9rAYcKlF0M2lOGrob4PNv04aYCTE6rtAPsF1CNE1q/tI+Z+043IpaLxVk+7U=
+X-Received: by 2002:a17:906:7307:b0:6da:92db:c78f with SMTP id
+ di7-20020a170906730700b006da92dbc78fmr12327012ejc.35.1648224132413; Fri, 25
+ Mar 2022 09:02:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220308065754.3355-1-peng.fan@oss.nxp.com> <20220324151132.GA3514576@p14s>
+ <DU0PR04MB9417991BDB9564321FC30EE7881A9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB9417991BDB9564321FC30EE7881A9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Fri, 25 Mar 2022 10:02:00 -0600
+Message-ID: <CANLsYkyLyROGsUuzaxA7Kx2ouj48NHM1t84DeyOiJmDiDMTgHA@mail.gmail.com>
+Subject: Re: [PATCH V2] remoteproc: imx_rproc: Ignore create mem entry for
+ resource table
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On fre, mar 25, 2022 at 16:00, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Fri, Mar 25, 2022 at 02:48:36PM +0100, Hans Schultz wrote:
->> > If you'd cache the locked ATU entry in the mv88e6xxx driver, and you'd
->> > notify switchdev only if the entry is new to the cache, then you'd
->> > actually still achieve something major. Yes, the bridge FDB will contain
->> > locked FDB entries that aren't in the ATU. But that's because your
->> > printer has been silent for X seconds. The policy for the printer still
->> > hasn't changed, as far as the mv88e6xxx, or bridge, software drivers are
->> > concerned. If the unauthorized printer says something again after the
->> > locked ATU entry expires, the mv88e6xxx driver will find its MAC SA
->> > in the cache of denied addresses, and reload the ATU. What this
->> > achieves
->> 
->> The driver will in this case just trigger a new miss violation and add
->> the entry again I think.
->> The problem with all this is that a malicious attack that spams the
->> switch with random mac addresses will be able to DOS the device as any
->> handling of the fdb will be too resource demanding. That is why it is
->> needed to remove those fdb entries after a time out, which dynamic
->> entries would serve.
+On Thu, 24 Mar 2022 at 20:02, Peng Fan <peng.fan@nxp.com> wrote:
 >
-> An attacker sweeping through the 2^47 source MAC address range is a
-> problem regardless of the implementations proposed so far, no?
+> Hi Mathieu,
+>
+> > Subject: Re: [PATCH V2] remoteproc: imx_rproc: Ignore create mem entry for
+> > resource table
+> >
+> > On Tue, Mar 08, 2022 at 02:57:54PM +0800, Peng Fan (OSS) wrote:
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > Resource table will not be used for memory allocation, no need to
+> > > create rproc mem entry.
+> > >
+> > > Fixes: b29b4249f8f0c ("remoteproc: imx_rproc: add i.MX specific parse
+> > > fw hook")
+> >
+> >
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.b
+> > ootlin.com%2Flinux%2Fv5.17%2Fsource%2FDocumentation%2Fprocess%2Fsu
+> > bmitting-patches.rst&amp;data=04%7C01%7Cpeng.fan%40nxp.com%7Cae62
+> > e633010048f972db08da0da89836%7C686ea1d3bc2b4c6fa92cd99c5c301635
+> > %7C0%7C1%7C637837315009092474%7CUnknown%7CTWFpbGZsb3d8eyJW
+> > IjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C
+> > 3000&amp;sdata=Xod3YxSRW8h2WXdnpu1WX4DzRpCTnYE9gVlt9HXMlnU%3
+> > D&amp;reserved=0
+>
+> Sorry, I could not get your point of which part conflicts with the patch rules.
+> Please clarify and I'll improve.
 
-The idea is to have a count on the number of locked entries in both the
-ATU and the FDB, so that a limit on entries can be enforced.
+The commitID in the "Fixes" tag should be 12 characters rather than 13
+as you have above.
 
-> If unlimited growth of the mv88e6xxx locked ATU entry cache is a
-> concern (which it is), we could limit its size, and when we purge a
-> cached entry in software is also when we could emit a
-> SWITCHDEV_FDB_DEL_TO_BRIDGE for it, right?
-
-I think the best would be dynamic entries in both the ATU and the FDB
-for locked entries. How the two are kept in sync is another question,
-but if there is a switchcore, it will be the 'master', so I don't think
-the bridge module will need to tell the switchcore to remove entries in
-that case. Or?
+>
+> Thanks,
+> Peng.
+>
+>
+> >
+> >
+> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > ---
+> > >
+> > > V2:
+> > >  Add Fixes tag
+> > >  Separate the patch from
+> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatc
+> > >
+> > hwork.kernel.org%2Fproject%2Flinux-remoteproc%2Fpatch%2F20220111033
+> > 333
+> > > .403448-7-peng.fan%40oss.nxp.com%2F&amp;data=04%7C01%7Cpeng.fan
+> > %40nxp.
+> > >
+> > com%7Cae62e633010048f972db08da0da89836%7C686ea1d3bc2b4c6fa92cd
+> > 99c5c301
+> > >
+> > 635%7C0%7C1%7C637837315009092474%7CUnknown%7CTWFpbGZsb3d8e
+> > yJWIjoiMC4wL
+> > >
+> > jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&am
+> > p;sdata
+> > >
+> > =CYL9grwXHpUud4qpzFAEijOWv%2BehvefwyZ4aU02wJnw%3D&amp;reserv
+> > ed=0
+> > >  Address typo
+> > >
+> > >  drivers/remoteproc/imx_rproc.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/drivers/remoteproc/imx_rproc.c
+> > > b/drivers/remoteproc/imx_rproc.c index 7a096f1891e6..f2bfc9077c19
+> > > 100644
+> > > --- a/drivers/remoteproc/imx_rproc.c
+> > > +++ b/drivers/remoteproc/imx_rproc.c
+> > > @@ -423,6 +423,9 @@ static int imx_rproc_prepare(struct rproc *rproc)
+> > >             if (!strcmp(it.node->name, "vdev0buffer"))
+> > >                     continue;
+> > >
+> > > +           if (!strncmp(it.node->name, "rsc-table", strlen("rsc-table")))
+> > > +                   continue;
+> > > +
+> > >             rmem = of_reserved_mem_lookup(it.node);
+> > >             if (!rmem) {
+> > >                     dev_err(priv->dev, "unable to acquire memory-region\n");
+> > > --
+> > > 2.30.0
+> > >

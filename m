@@ -2,96 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375054E6FF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795D64E6FFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356924AbiCYJ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 05:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S1356970AbiCYJ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 05:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243091AbiCYJ0b (ORCPT
+        with ESMTP id S1356945AbiCYJ1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 05:26:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA8ECF4B1;
-        Fri, 25 Mar 2022 02:24:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 250B01F745;
-        Fri, 25 Mar 2022 09:24:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648200296; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 25 Mar 2022 05:27:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78114CF4B3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 02:26:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648200366;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=dvN7myr0MDfmtMFkdZ1k/72coAzlBsKoPtLN6KtQ1CQ=;
-        b=v7ByO0o1ZIbFE5mwJyFIHpW2wINXiMWRB8n9NTThT5QJklwm6VB3tMgmaRuw+BNeQ0mIaN
-        Jra5pct2F+ssPqGHTFKPmuvlUlbIXuuHfP7ZhD13c++eR5WgQH6r+oHxYAsW3qQmYfS9EK
-        fRwHZZabz/9vqllHvpg8l/abeRokoCA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648200296;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dvN7myr0MDfmtMFkdZ1k/72coAzlBsKoPtLN6KtQ1CQ=;
-        b=QRumQzO+afwTgRwYz9SpOF+rQLK40HkIs3BRJSzs/Q2UZ3AYLDcTAHwYgb+zNjJPFOPBGT
-        mt53x2Wzp/5juLAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=Ct4y/2vagTEoL5DgWAoLz+jJ6PVTSzZLkKcuQNOy3tk=;
+        b=iX/gIIBgBAFJFmYsc7SumuAnIH3k3a1b552wh37n3XyDp0uf+pfx6Tc0TCY5It8QNsU8Yf
+        iHr8ghARlPxUogyf9nEe6Lkmbr3nPRhZE3Umx7do+GyQlzXBeM8ylGKpCiKcYBX4t/ovFH
+        39ty/CtsB/UTPZgS1h46wGnEp/4WWHc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-404-2Br8BHt3OfiW6g1sQx0YHQ-1; Fri, 25 Mar 2022 05:26:01 -0400
+X-MC-Unique: 2Br8BHt3OfiW6g1sQx0YHQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 12EAE132E9;
-        Fri, 25 Mar 2022 09:24:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TmabBGiKPWIRfwAAMHmgww
-        (envelope-from <bp@suse.de>); Fri, 25 Mar 2022 09:24:56 +0000
-Date:   Fri, 25 Mar 2022 10:24:50 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v12 40/46] x86/sev: add sev=debug cmdline option to dump
- SNP CPUID table
-Message-ID: <Yj2KYsdvz7NOtF7w@zn.tnic>
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-41-brijesh.singh@amd.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 976D41044560;
+        Fri, 25 Mar 2022 09:26:00 +0000 (UTC)
+Received: from ws.net.home (unknown [10.36.112.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A2A12166B2D;
+        Fri, 25 Mar 2022 09:25:55 +0000 (UTC)
+Date:   Fri, 25 Mar 2022 10:25:53 +0100
+From:   Karel Zak <kzak@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, Theodore Ts'o <tytso@mit.edu>,
+        Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+Message-ID: <20220325092553.rncxqrjslv6e4c7v@ws.net.home>
+References: <20220322192712.709170-1-mszeredi@redhat.com>
+ <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+ <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
+ <YjudB7XARLlRtBiR@mit.edu>
+ <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
+ <20220325084646.7g6oto2ce3vou54x@ws.net.home>
+ <Yj2DPRusMAzV/N5U@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220307213356.2797205-41-brijesh.singh@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <Yj2DPRusMAzV/N5U@kroah.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,159 +79,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 03:33:50PM -0600, Brijesh Singh wrote:
-> From: Michael Roth <michael.roth@amd.com>
+On Fri, Mar 25, 2022 at 09:54:21AM +0100, Greg KH wrote:
+> On Fri, Mar 25, 2022 at 09:46:46AM +0100, Karel Zak wrote:
+> > On Thu, Mar 24, 2022 at 09:44:38AM +0100, Miklos Szeredi wrote:
+> > > > If so, have you benchmarked lsof using this new interface?
+> > > 
+> > > Not yet.  Looked yesterday at both lsof and procps source code, and
+> > > both are pretty complex and not easy to plug in a new interface.   But
+> > > I've not yet given up...
+> > 
+> > I can imagine something like getvalues(2) in lsblk (based on /sys) or
+> > in lsfd (based on /proc; lsof replacement). The tools have defined set
+> > of information to read from kernel, so gather all the requests to the
+> > one syscall for each process or block device makes sense and it will
+> > dramatically reduce number of open+read+close syscalls.
 > 
-> For debugging purposes it is very useful to have a way to see the full
-> contents of the SNP CPUID table provided to a guest. Add an sev=debug
-> kernel command-line option to do so.
+> And do those open+read+close syscalls actually show up in measurements?
 > 
-> Also introduce some infrastructure so that additional options can be
-> specified via sev=option1[,option2] over time in a consistent manner.
-> 
-> Suggested-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  .../admin-guide/kernel-parameters.txt         |  2 +
->  Documentation/x86/x86_64/boot-options.rst     | 14 +++++
->  arch/x86/kernel/sev.c                         | 58 +++++++++++++++++++
->  3 files changed, 74 insertions(+)
+> Again, I tried to find a real-world application that turning those 3
+> into 1 would matter, and I couldn't.  procps had no decreased system
+> load that I could notice.  I'll mess with lsof but that's really just a
+> stress-test, not anything that is run all the time, right?
 
-I simplified the string parsing:
 
----
-From: Michael Roth <michael.roth@amd.com>
-Date: Mon, 7 Mar 2022 15:33:50 -0600
-Subject: [PATCH] x86/sev: Add a sev= cmdline option
+Right, the speed of ps(1) or lsof(1) is not important. IMHO the current
+discussion about getvalues() goes in wrong direction :-)  
 
-For debugging purposes it is very useful to have a way to see the full
-contents of the SNP CPUID table provided to a guest. Add an sev=debug
-kernel command-line option to do so.
+I guess the primary motivation is not to replace open+read+close, but
+provide to userspace something usable to get information from mount
+table, because the current /proc/#/mountinfo and notification by
+poll() is horrible.
 
-Also introduce some infrastructure so that additional options can be
-specified via sev=option1[,option2] over time in a consistent manner.
+Don't forget that the previous attempt was fsinfo() from David Howells
+(unfortunately, it was too complex and rejected by Linus).
 
-  [ bp: Massage, simplify string parsing. ]
+> And as others have said, using io_uring() would also solve the 3 syscall
+> issue, but no one seems to want to convert these tools to use that,
+> which implies that it's not really an issue for anyone :)
 
-Suggested-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Michael Roth <michael.roth@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220307213356.2797205-41-brijesh.singh@amd.com
----
- .../admin-guide/kernel-parameters.txt         |  2 +
- Documentation/x86/x86_64/boot-options.rst     | 14 ++++++
- arch/x86/kernel/sev.c                         | 44 +++++++++++++++++++
- 3 files changed, 60 insertions(+)
+OK, I'll think about it :-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 7123524a86b8..5f7fa7c141dc 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5229,6 +5229,8 @@
- 
- 	serialnumber	[BUGS=X86-32]
- 
-+	sev=option[,option...] [X86-64] See Documentation/x86/x86_64/boot-options.rst
-+
- 	shapers=	[NET]
- 			Maximal number of shapers.
- 
-diff --git a/Documentation/x86/x86_64/boot-options.rst b/Documentation/x86/x86_64/boot-options.rst
-index ccb7e86bf8d9..eaecb5d89167 100644
---- a/Documentation/x86/x86_64/boot-options.rst
-+++ b/Documentation/x86/x86_64/boot-options.rst
-@@ -317,3 +317,17 @@ Miscellaneous
-     Do not use GB pages for kernel direct mappings.
-   gbpages
-     Use GB pages for kernel direct mappings.
-+
-+
-+AMD SEV (Secure Encrypted Virtualization)
-+=========================================
-+Options relating to AMD SEV, specified via the following format:
-+
-+::
-+
-+   sev=option1[,option2]
-+
-+The available options are:
-+
-+   debug
-+     Enable debug messages.
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index c8733725d8bf..70ecc6e2f251 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -112,6 +112,13 @@ DEFINE_STATIC_KEY_FALSE(sev_es_enable_key);
- 
- static DEFINE_PER_CPU(struct sev_es_save_area *, sev_vmsa);
- 
-+struct sev_config {
-+	__u64 debug		: 1,
-+	      __reserved	: 63;
-+};
-+
-+static struct sev_config sev_cfg __read_mostly;
-+
- static __always_inline bool on_vc_stack(struct pt_regs *regs)
- {
- 	unsigned long sp = regs->sp;
-@@ -2042,6 +2049,23 @@ void __init snp_abort(void)
- 	sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
- }
- 
-+static void dump_cpuid_table(void)
-+{
-+	const struct snp_cpuid_table *cpuid_table = snp_cpuid_get_table();
-+	int i = 0;
-+
-+	pr_info("count=%d reserved=0x%x reserved2=0x%llx\n",
-+		cpuid_table->count, cpuid_table->__reserved1, cpuid_table->__reserved2);
-+
-+	for (i = 0; i < SNP_CPUID_COUNT_MAX; i++) {
-+		const struct snp_cpuid_fn *fn = &cpuid_table->fn[i];
-+
-+		pr_info("index=%3d fn=0x%08x subfn=0x%08x: eax=0x%08x ebx=0x%08x ecx=0x%08x edx=0x%08x xcr0_in=0x%016llx xss_in=0x%016llx reserved=0x%016llx\n",
-+			i, fn->eax_in, fn->ecx_in, fn->eax, fn->ebx, fn->ecx,
-+			fn->edx, fn->xcr0_in, fn->xss_in, fn->__reserved);
-+	}
-+}
-+
- /*
-  * It is useful from an auditing/testing perspective to provide an easy way
-  * for the guest owner to know that the CPUID table has been initialized as
-@@ -2059,6 +2083,26 @@ static int __init report_cpuid_table(void)
- 	pr_info("Using SNP CPUID table, %d entries present.\n",
- 		cpuid_table->count);
- 
-+	if (sev_cfg.debug)
-+		dump_cpuid_table();
-+
- 	return 0;
- }
- arch_initcall(report_cpuid_table);
-+
-+static int __init init_sev_config(char *str)
-+{
-+	char *s;
-+
-+	while ((s = strsep(&str, ","))) {
-+		if (!strcmp(s, "debug")) {
-+			sev_cfg.debug = true;
-+			continue;
-+		}
-+
-+		pr_info("SEV command-line option '%s' was not recognized\n", s);
-+	}
-+
-+	return 1;
-+}
-+__setup("sev=", init_sev_config);
--- 
-2.35.1
+    Karel
 
 -- 
-Regards/Gruss,
-    Boris.
+ Karel Zak  <kzak@redhat.com>
+ http://karelzak.blogspot.com
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

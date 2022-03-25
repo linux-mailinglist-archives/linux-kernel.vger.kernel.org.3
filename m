@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C624E6FD3
+	by mail.lfdr.de (Postfix) with ESMTP id C05C74E6FD4
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243290AbiCYJMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 05:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S1356435AbiCYJNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 05:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiCYJMc (ORCPT
+        with ESMTP id S245149AbiCYJNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 05:12:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB1BCCF486
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 02:10:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648199458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QMxMPmZqVhEjq+z25uJtmZ8oxGgfdMtdpHWVpm7w/Uk=;
-        b=WaUy2THuFWrMT/njrmlI7YM47hkMnMHVM8nd8EnyUQNVnMBB3A4wwWVp8y8ELfyUEhOQOS
-        h7OdHpsPg06z1xHdxWXN9a5yOSD5Y8pAd2UHGJ5lH0LEccAU6vl9H7CIZfsknZ768aQIow
-        PQ8Dk8M/rn4pbiU+KRMGEc2P53zNgPg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-thh7RGY_OnqkbS7LlDlomg-1; Fri, 25 Mar 2022 05:10:54 -0400
-X-MC-Unique: thh7RGY_OnqkbS7LlDlomg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD6E71C06923;
-        Fri, 25 Mar 2022 09:10:53 +0000 (UTC)
-Received: from ws.net.home (unknown [10.36.112.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B905E141DED5;
-        Fri, 25 Mar 2022 09:10:51 +0000 (UTC)
-Date:   Fri, 25 Mar 2022 10:10:49 +0100
-From:   Karel Zak <kzak@redhat.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Message-ID: <20220325091049.b5vcfahti56hopy2@ws.net.home>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
- <20220323225843.GI1609613@dread.disaster.area>
- <CAJfpegv6PmZ_RXipBs9UEjv_WfEUtTDE1uNZq+9fBkCzWPvXkw@mail.gmail.com>
- <20220324203116.GJ1609613@dread.disaster.area>
+        Fri, 25 Mar 2022 05:13:33 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E02ACF483;
+        Fri, 25 Mar 2022 02:11:59 -0700 (PDT)
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M597q-1nWZWT3NFU-0019g0; Fri, 25 Mar 2022 10:11:57 +0100
+Received: by mail-wr1-f53.google.com with SMTP id r7so8851426wrc.0;
+        Fri, 25 Mar 2022 02:11:57 -0700 (PDT)
+X-Gm-Message-State: AOAM5330E7tVEe7klAHzU35seyNOgkR7kSSWIO9CjV5Wsd5lZF0lu/HA
+        R2j0qLyrt7/v+jWkunZ8i083AyX0gprN4czaYNg=
+X-Google-Smtp-Source: ABdhPJzlSwDWgsgZpeRugVuvy428D1qgQK8pZuiKTRIYi9OSl8H4ndqwB0mRzcaYHlfTvLPePtNJpSY9MHEOxziK+P8=
+X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
+ k10-20020a5d66ca000000b00203fb72a223mr7999785wrw.12.1648199517413; Fri, 25
+ Mar 2022 02:11:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324203116.GJ1609613@dread.disaster.area>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
+ <20220324023904.h2qfxzxlznggbsyr@vireshk-i7> <20220324062547.GA15504@9a2d8922b8f1>
+ <20220325015849.sazvlevnvdqj5z42@vireshk-i7>
+In-Reply-To: <20220325015849.sazvlevnvdqj5z42@vireshk-i7>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 25 Mar 2022 10:11:41 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0Q8eOTeRmd5-G8rNCKAcH+4HReCsOAGKd4Vq30C9TaEA@mail.gmail.com>
+Message-ID: <CAK8P3a0Q8eOTeRmd5-G8rNCKAcH+4HReCsOAGKd4Vq30C9TaEA@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: dts: spear13xx: Update SPI dma properties
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:KK521CCvDxK0Z7Twh5nGXKg+ZVj/4+ilIiLkkLJMHPDknwqKe0H
+ JYbuSGtA5NBRsH4PLE25G26CR+0SplfR5HMQ7HX/G8IA1X8Zi5zsgUJB+qGXGC+1Onrxley
+ R/YxbSXEa13Ycdp6qsRKrbf1v+5HjCRQX81gIVA4Dq3u31Gl9GNZotQC7uCOtmWfeBHXU9b
+ efVA89nR/i22IG+azzkuQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:w/+L8lfuVZs=:DCKxVX5SyQJV2SIwGnXTDm
+ /dWBJcS8KIoC92+6wotEEkxV7YqjLg+QBU6wKenhTdnKkOAtt3r4adi2CNEXfhrCQ5PqCpr3Q
+ DXS8/N6nq80zu2A10VFc6gf4puHQC+2Hw+bUd3LaiNtxE2l0ispZqqKFJ/v00t+j23PpjEdlu
+ /xF9u/N5UKEkDuZiDeZjeG7Q+RBqH6pp/hJ0kbmav1tf+9rvERrfr+sTDinLcRQ4VyePkEzKg
+ AtxuWldRGe7iMNdNgOGBQmI7ysTFkCZqMuo+irgWIb6c0VpUUILkEkbViT2RxsLoJ/vfA1b3+
+ 7OEVvJV1lr+1OZD1w+NI0MR4xr3fbt1V/7LXEpyVbllkY/5UNuTavnxZMt+ay0iM/RFBKjR21
+ PcmXylt3Wzg0HPLxd+t6PQYHU/skO9A39VJMHYj4BGzRzispdy+1Kj77msYh/I+8Psg/KlmPU
+ FBtOGaOhDqtPMui+R+mABzRqnZdzf0aPxFuJlV25xkmPBbJvL/ZMeNoHqPsqWIKb5Ccldz7bV
+ rXkXE5xGW+07MzRMlrxENX+h71O0YLWg4eqzkpTk8iJsntjIvRYZMqCLt0q4hLRftPNlMQJxM
+ z+F6d6bDVCMuG3j6mEZ9tgSuJUh3CzB1eGpxp89kMO1kMwVjHGW/xAtVE+Iy7VhA8Qtd0MyiL
+ fhkh7RNO/7wv5AVwLXfxIbHPTWm5C96ASydVmGzq3W6A+fxWxGWg4CNGDyIrwM8xGrAE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 07:31:16AM +1100, Dave Chinner wrote:
-> > What about other objects' attributes, statistics?   Remember this
-> > started out as a way to replace /proc/self/mountinfo with something
-> > that can query individual mount.
-> 
-> For individual mount info, why do we even need to query something in
-> /proc? I mean, every open file in the mount has access to the mount
-> and the underlying superblock, so why not just make the query
-> namespace accessable from any open fd on that mount?
+On Fri, Mar 25, 2022 at 2:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> On 24-03-22, 11:55, Kuldeep Singh wrote:
+> > Fixed order of values is important in case of properties like
+> > compatibles etc. In case of dma-names, yes order shouldn't matter here.
+> >
+> > This patch is more of appeasing dtbs_check warning rather than fixing
+> > something.
+>
+> Exactly my point. We have seen similar type of issues with other tools, like
+> coccinelle, earlier and such patches were rejected as the kernel was just fine
+> and tooling needs to be fixed.
+>
+> > It's safe to go with this patch.
+> > I am not sure if there's a provision to exclude dma-names from fix
+> > ordering checks. Rob can help here in providing better insights.
 
+I think it's a question of the scale of the warnings: my understanding is that
+there are only a handful of dts files that trigger the warning at all, and it
+would be rather hard to change the tooling around this. Since the proposed
+dts change is clearly harmless, I don't mind applying it.
 
-The current most problematic situation is in systemd. We get
-generic notification (poll() on mountinfo) that something has been
-modified in the mount table, and then we need to parse all the file
-to get details.
+Kuldeep, you have probably looked at all dts files in the kernel, can you
+say how many of them are affected by the dma property reordering?
 
-So, the ideal solution would be notification that points to the FS
-and interface to read information (e.g. getvalues()) about the FS.
-
-    Karel
-
-
--- 
- Karel Zak  <kzak@redhat.com>
- http://karelzak.blogspot.com
-
+         Arnd

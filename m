@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327A94E7C54
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B469C4E7C69
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233433AbiCYVdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 17:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
+        id S233480AbiCYVhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 17:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbiCYVdh (ORCPT
+        with ESMTP id S233435AbiCYVhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 17:33:37 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF243615C;
-        Fri, 25 Mar 2022 14:32:03 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id q11so9497997pln.11;
-        Fri, 25 Mar 2022 14:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SJpCuQQmEV2SAoMittH2JJQh8KxyIjkNxtG+z5GWdKo=;
-        b=U9ABznzW1nW5/RMOJE/y66cg5xMG3Xp+dipB/khfIOxxmjD8JYcNFO4Mp95i73nOJf
-         R+HXyLJaXeAvt4F+YXUYpxhi4s4sJJYvGLyT6wtVCjMkQYyAup0ZXKJziRvjTqeELRJp
-         9lv/aGijYhjJBkExcbKsJHwlbO2V+ibz4BFNwemc5+9emApVdM2VN8eK6efKxmBDpg+I
-         EPTOkZCTU+GaIGYXjE6qS2NWawUF9s4n6J8Qd9wodtIxZ+E9ly/HjWLjAbKaiTGVJm+y
-         16yM1ms45xqABLu2mMfgZEo/ZinYBxZiBwKAsxARl7gzBtsZMBCk5pDdHQEk+HFHRgjx
-         lG/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SJpCuQQmEV2SAoMittH2JJQh8KxyIjkNxtG+z5GWdKo=;
-        b=KdplqN6zH2TDjcoLV7A38j0OwEN5BFMg+b8ruHXh3sl0NgajiZJqjc6QwEp2eAq0o6
-         oRm5rbRwHNspoAFvH4It4LcR+8QGFvaH5VLl/bRU7lltwc8SMZA7ZJK5y1ZiDUEjIzio
-         eQOvp3FxDlAL3VWdi6KLqgB2FR52F+Tjll1BuQOoTgKCD0Im6AAV0mEDcGQlswNbMK8u
-         1aKkDh64dLXd5F9Gf9mnK0C83zlg4rtkTgwsI0v5eS9/Z7LdW7G9aKUxij6oQKpd/ZKf
-         bMh8argpR/9iX/Drbqgt3YEBlMpL9ULxYf6L+yUPooDoKAH0hzlxV//5eUFAZ/eSGiDm
-         VjNA==
-X-Gm-Message-State: AOAM531IWbVhC8pZ9OUkOhFATK2YTI/8Qe5BWlAhvNKhC3f0M2mkxzsP
-        O5xqa9gpJgxkPVXaS0DucUFJ72fxcRc=
-X-Google-Smtp-Source: ABdhPJwsXL92fONz/dEfjQ4rEaK4/GNOyEJWWHXCdOdgpdxxZSP0ANna7W3IU35JOL2t5zgBT3itkQ==
-X-Received: by 2002:a17:90b:3b81:b0:1c6:f22c:60f3 with SMTP id pc1-20020a17090b3b8100b001c6f22c60f3mr15082866pjb.109.1648243922717;
-        Fri, 25 Mar 2022 14:32:02 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id mu1-20020a17090b388100b001c77e79531bsm10786563pjb.50.2022.03.25.14.32.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 14:32:02 -0700 (PDT)
-Message-ID: <15268a27-5386-45d8-5c55-1095251331f7@gmail.com>
-Date:   Fri, 25 Mar 2022 14:31:59 -0700
+        Fri, 25 Mar 2022 17:37:04 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370EC49CA0;
+        Fri, 25 Mar 2022 14:35:26 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 58EB022247;
+        Fri, 25 Mar 2022 22:35:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648244125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RBr8QAEuo8HHbbztFI4VB6EfKz9bI4G2lxNCA6d5X+s=;
+        b=jXNr0n2LpUG6EMjEhNvNjTXchnP+C+AQyZkK2EkBwoJcNZlY9W1qnKsZ1KUsG62oUlApzz
+        EGG5tWzz9uNLdUwVxwsJKoNTwWks6KG+f5ESEFh4vN9BPQwDDwuPjQcTEi0kn2RjuKUCUj
+        vF8XU1QtvfFMo8jA7mFkxkcfg5JDR6o=
+From:   Michael Walle <michael@walle.cc>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH RFC net-next v2 0/8] net: phy: C45-over-C22 access
+Date:   Fri, 25 Mar 2022 22:35:10 +0100
+Message-Id: <20220325213518.2668832-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4.9 00/14] 4.9.309-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220325150415.694544076@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220325150415.694544076@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 08:04, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.309 release.
-> There are 14 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.309-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi,
 
-On ARCH_BRCMSTB, using 32-bit and 64-bit ARM kernels:
+This is the result of this discussion:
+https://lore.kernel.org/netdev/240354b0a54b37e8b5764773711b8aa3@walle.cc/
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+The goal here is to get the GYP215 and LAN8814 running on the Microchip
+LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, the
+LAN8814 has a bug which makes it impossible to use C45 on that bus.
+Fortunately, it was the intention of the GPY215 driver to be used on a C22
+bus. But I think this could have never really worked, because the
+phy_get_c45_ids() will always do c45 accesses and thus on MDIO bus drivers
+which will correctly check for the MII_ADDR_C45 flag and return -EOPNOTSUPP
+the function call will fail and thus gpy_probe() will fail. This series
+tries to fix that and will lay the foundation to add a workaround for the
+LAN8814 bug by forcing an MDIO bus to be c22-only.
 
-PS: is there any reason why the Spectre BHB patches from here are not 
-part of linux-stable/linux-4.9.y?
+At the moment, the probe_capabilities is taken into account to decide if
+we have to use C45-over-C22. What is still missing from this series is the
+handling of a device tree property to restrict the probe_capabilities to
+c22-only.
+
+Since net-next is closed, this is marked as RFC to get some early feedback.
+
+Changes since RFC v1:
+ - use __phy_mmd_indirect() in mdiobus_probe_mmd_read()
+ - add new properties has_c45 c45_over_c22 (and remove is_c45)
+ - drop MDIOBUS_NO_CAP handling, Andrew is preparing a series to
+   add probe_capabilities to mark all C45 capable MDIO bus drivers
+
+Michael Walle (8):
+  net: phy: mscc-miim: reject clause 45 register accesses
+  net: phy: mscc-miim: add probe_capabilities
+  net: phy: add error checks in __phy_mmd_indirect() and export it
+  net: phy: add error handling for __phy_{read,write}_mmd
+  net: phy: support indirect c45 access in get_phy_c45_ids()
+  net: phy: add support for C45-over-C22 transfers
+  phy: net: introduce phy_promote_to_c45()
+  net: phy: mxl-gpy: remove unneeded ops
+
+ .../net/ethernet/hisilicon/hns/hns_ethtool.c  |  4 +-
+ drivers/net/mdio/mdio-mscc-miim.c             |  7 ++
+ drivers/net/phy/bcm84881.c                    |  2 +-
+ drivers/net/phy/marvell10g.c                  |  2 +-
+ drivers/net/phy/mxl-gpy.c                     | 31 +------
+ drivers/net/phy/phy-core.c                    | 47 +++++++---
+ drivers/net/phy/phy.c                         |  6 +-
+ drivers/net/phy/phy_device.c                  | 87 ++++++++++++++++---
+ drivers/net/phy/phylink.c                     |  8 +-
+ include/linux/phy.h                           | 12 ++-
+ 10 files changed, 136 insertions(+), 70 deletions(-)
+
 -- 
-Florian
+2.30.2
+

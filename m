@@ -2,113 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C10D4E78D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E78D4E78DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376595AbiCYQZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S1376746AbiCYQZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354899AbiCYQZR (ORCPT
+        with ESMTP id S1354899AbiCYQZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:25:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E27AD5EBF7;
-        Fri, 25 Mar 2022 09:23:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E0F1D6E;
-        Fri, 25 Mar 2022 09:23:40 -0700 (PDT)
-Received: from [10.57.41.19] (unknown [10.57.41.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E48393F73D;
-        Fri, 25 Mar 2022 09:23:37 -0700 (PDT)
-Message-ID: <11d4c863-5bee-aa98-526c-ac7170296485@arm.com>
-Date:   Fri, 25 Mar 2022 16:23:34 +0000
+        Fri, 25 Mar 2022 12:25:44 -0400
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BAF70851;
+        Fri, 25 Mar 2022 09:24:09 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id o10so16432911ejd.1;
+        Fri, 25 Mar 2022 09:24:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=60DYi1ncM2j6YrJ9+xc2tJcVqmdNibjYDu1dqzMc90U=;
+        b=6b+zWG0SPdul3gDL5kbK9ATbvXHjrfPbSn9TMz1h7BmiLU9PEI2utivYeYfEBVgCGI
+         VyWuCxMVIkG08JR0zjny32sOUK7EREu5nXiTzRMmEm5gvezOGeqv5qFYaRrjnby7xzd4
+         NHH1jPhP/0wNjyjf7yY6nvyc5XWT7VHqpRl1HIpclJ053LtLUwM21fw5CjcrBVYRCAMV
+         zI5mrq/DTKfHALjXaZvoeDFEW8MXdsS8KEhVMeUbJURAxB8Tu7wqaieZI9ta6RSGC1hw
+         IXYXnT9+lDWbM31FsiOT/nJwK/v2mSnzZ3tj7/UJngPCByYYU3GoXZ7fCz93I4ixoJ7M
+         rVFA==
+X-Gm-Message-State: AOAM531PQlWO+QvorPZBpf8KI06Pbc7O1Z6cyGlDiONdE+2SgV7cdqH9
+        AnceS866rcZU95RkQtv6mQx9cZ8EiGA=
+X-Google-Smtp-Source: ABdhPJzjldhgEdYua2CoNIuh/dJSlmVw42Q3Lpn4a09I41O1mZibUTcrs4YHyXIE0BApFuhGH4lXMA==
+X-Received: by 2002:a17:907:9621:b0:6d7:355d:6da5 with SMTP id gb33-20020a170907962100b006d7355d6da5mr12540109ejc.195.1648225447869;
+        Fri, 25 Mar 2022 09:24:07 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id d2-20020a1709067a0200b006df8c996b36sm2484988ejo.26.2022.03.25.09.24.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 09:24:07 -0700 (PDT)
+Message-ID: <23160ef7-359e-40a6-847c-7547760f041a@kernel.org>
+Date:   Fri, 25 Mar 2022 17:24:06 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-Content-Language: en-GB
-To:     Halil Pasic <pasic@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-References: <1812355.tdWV9SEqCh@natalenko.name>
- <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
- <27b5a287-7a33-9a8b-ad6d-04746735fb0c@arm.com>
- <CAHk-=wip7TCD_+2STTepuEZvGMg6wcz+o=kyFUvHjuKziTMixw@mail.gmail.com>
- <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324190216.0efa067f.pasic@linux.ibm.com>
- <20220325162508.3273e0db.pasic@linux.ibm.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220325162508.3273e0db.pasic@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: mtd: ti,elm: Convert to yaml
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>, miquel.raynal@bootlin.com,
+        robh+dt@kernel.org
+Cc:     richard@nod.at, vigneshr@ti.com, kishon@ti.com, nm@ti.com,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220325123707.22020-1-rogerq@kernel.org>
+ <20220325123707.22020-2-rogerq@kernel.org>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220325123707.22020-2-rogerq@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-25 15:25, Halil Pasic wrote:
-> On Thu, 24 Mar 2022 19:02:16 +0100
-> Halil Pasic <pasic@linux.ibm.com> wrote:
+On 25/03/2022 13:37, Roger Quadros wrote:
+> Convert elm.txt to ti,elm.yaml.
 > 
->>> I'll admit I still never quite grasped the reason for also adding the
->>> override to swiotlb_sync_single_for_device() in aa6f8dcbab47, but I
->>> think by that point we were increasingly tired and confused and starting
->>> to second-guess ourselves (well, I was, at least).
->>
->> I raised the question, do we need to do the same for
->> swiotlb_sync_single_for_device(). Did that based on my understanding of the
->> DMA API documentation. I had the following scenario in mind
->>
->> SWIOTLB without the snyc_single:
->>                                    Memory      Bounce buffer      Owner
->> --------------------------------------------------------------------------
->> start                             12345678    xxxxxxxx             C
->> dma_map(DMA_FROM_DEVICE)          12345678 -> 12345678             C->D
->> device writes partial data        12345678    12ABC678 <- ABC      D
->> sync_for_cpu(DMA_FROM_DEVICE)     12ABC678 <- 12ABC678             D->C
->> cpu modifies buffer               66666666    12ABC678             C
->> sync_for_device(DMA_FROM_DEVICE)  66666666    12ABC678             C->D
->> device writes partial data        66666666    1EFGC678 <-EFG       D
->> dma_unmap(DMA_FROM_DEVICE)        1EFGC678 <- 1EFGC678             D->C
->>
->> Legend: in Owner column C stands for cpu and D for device.
->>
->> Without swiotlb, I believe we should have arrived at 6EFG6666. To get the
->> same result, IMHO, we need to do a sync in sync_for_device().
->> And aa6f8dcbab47 is an imperfect solution to that (because of size).
->>
+> hwmod framework use is deprecated for new platforms
+> so mark it so.
 > 
-> @Robin, Christoph: Do we consider this a valid scenario?
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/mtd/elm.txt | 16 -------
+>  .../devicetree/bindings/mtd/ti,elm.yaml       | 47 +++++++++++++++++++
+>  2 files changed, 47 insertions(+), 16 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/elm.txt
+>  create mode 100644 Documentation/devicetree/bindings/mtd/ti,elm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/elm.txt b/Documentation/devicetree/bindings/mtd/elm.txt
+> deleted file mode 100644
+> index 59ddc61c1076..000000000000
+> --- a/Documentation/devicetree/bindings/mtd/elm.txt
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -Error location module
+> -
+> -Required properties:
+> -- compatible: Must be "ti,am3352-elm"
+> -- reg: physical base address and size of the registers map.
+> -- interrupts: Interrupt number for the elm.
+> -
+> -Optional properties:
+> -- ti,hwmods: Name of the hwmod associated to the elm
+> -
+> -Example:
+> -elm: elm@0 {
+> -	compatible = "ti,am3352-elm";
+> -	reg = <0x48080000 0x2000>;
+> -	interrupts = <4>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/mtd/ti,elm.yaml b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
+> new file mode 100644
+> index 000000000000..e36452b742c0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/ti,elm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments Error Location Module (ELM).
+> +
+> +maintainers:
+> +  - Roger Quadros <rogerq@kernel.org>
+> +
+> +description:
+> +  ELM module is used together with GPMC and NAND Flash to detect
+> +  errors and the location of the error based on BCH algorithms
+> +  so they can be corrected if possible.
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,am3352-elm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
 
-Aha, I see it now (turns out diagrams really do help!) - so essentially 
-the original situation but with buffer recycling thrown into the mix as 
-well... I think it's technically valid, but do we know if anything's 
-actually doing that in a way which ends up affected? For sure it would 
-be nice to know that we had all bases covered without having to audit 
-whether we need to, but if it's fundamentally incompatible with what 
-other code expects, that we know *is* being widely used, and however 
-questionable it may be we don't have an easy fix for, then we're in a 
-bit of a tough spot :(
+make dtbs complains, but it will be fixed in patch #2, so looks good:
 
-Thanks,
-Robin.
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+
+Best regards,
+Krzysztof

@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D6D4E76EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8FD4E77EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355818AbiCYPVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
+        id S1378015AbiCYPeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376378AbiCYPTB (ORCPT
+        with ESMTP id S1377610AbiCYPYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:19:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9CCDFD72;
-        Fri, 25 Mar 2022 08:15:14 -0700 (PDT)
+        Fri, 25 Mar 2022 11:24:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CA1E7F6F;
+        Fri, 25 Mar 2022 08:18:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 51351CE2A52;
-        Fri, 25 Mar 2022 15:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA2EC340E9;
-        Fri, 25 Mar 2022 15:15:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61F8AB827E0;
+        Fri, 25 Mar 2022 15:18:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1860C340E9;
+        Fri, 25 Mar 2022 15:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221301;
-        bh=NHAaKMt9HrxNA462vkEI8qLSD2LtZZgfaKLsxWUH5UA=;
+        s=korg; t=1648221504;
+        bh=8SAhyuG4jGlA+wi+EXKjrX7dlF5Y3pT/GEqS0lcPxAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fWGQqZZ8dMvbXBrtuE5332sWbFvinIs1jY4gIaqaMnRPQqYlz9vnCCvOXoSPD6cTw
-         SvzWwxdaJfLCTKK+dny2hl3nbKRIJN9B4+lrAQE8zs00dpJMMRxpzUuRBAvA1RKa33
-         iXC73ynFpdX9EyLychIc8330BnHFkTv3dEfV6280=
+        b=iWfEHWargdGxtuWArZzPjj4uX3/8mvcvcIpJ4hoZmd/6ze5pd0xu1UZvIS0M6/c6N
+         JnM9IkUOweNldmg08u6jAIXt5qv2jfxJpJl+W1FE01PVSEl++FBcZ/pdWApMXIbEMW
+         Z+7ssAn89Jfwd3JImPHTgHcCwl4ABzAqmH4Qs/gA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 14/37] ALSA: pcm: Fix races among concurrent read/write and buffer changes
-Date:   Fri, 25 Mar 2022 16:14:15 +0100
-Message-Id: <20220325150420.341990836@linuxfoundation.org>
+        stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, Tadeusz Struk <tstruk@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: [PATCH 5.17 01/39] tpm: Fix error handling in async work
+Date:   Fri, 25 Mar 2022 16:14:16 +0100
+Message-Id: <20220325150420.289936517@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
-References: <20220325150419.931802116@linuxfoundation.org>
+In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
+References: <20220325150420.245733653@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -54,60 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Tadeusz Struk <tstruk@gmail.com>
 
-commit dca947d4d26dbf925a64a6cfb2ddbc035e831a3d upstream.
+commit 2e8e4c8f6673247e22efc7985ce5497accd16f88 upstream.
 
-In the current PCM design, the read/write syscalls (as well as the
-equivalent ioctls) are allowed before the PCM stream is running, that
-is, at PCM PREPARED state.  Meanwhile, we also allow to re-issue
-hw_params and hw_free ioctl calls at the PREPARED state that may
-change or free the buffers, too.  The problem is that there is no
-protection against those mix-ups.
+When an invalid (non existing) handle is used in a TPM command,
+that uses the resource manager interface (/dev/tpmrm0) the resource
+manager tries to load it from its internal cache, but fails and
+the tpm_dev_transmit returns an -EINVAL error to the caller.
+The existing async handler doesn't handle these error cases
+currently and the condition in the poll handler never returns
+mask with EPOLLIN set.
+The result is that the poll call blocks and the application gets stuck
+until the user_read_timer wakes it up after 120 sec.
+Change the tpm_dev_async_work function to handle error conditions
+returned from tpm_dev_transmit they are also reflected in the poll mask
+and a correct error code could passed back to the caller.
 
-This patch applies the previously introduced runtime->buffer_mutex to
-the read/write operations so that the concurrent hw_params or hw_free
-call can no longer interfere during the operation.  The mutex is
-unlocked before scheduling, so we don't take it too long.
-
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: <linux-integrity@vger.kernel.org>
 Cc: <stable@vger.kernel.org>
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Link: https://lore.kernel.org/r/20220322170720.3529-3-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Cc: <linux-kernel@vger.kernel.org>
+
+Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
+Tested-by: Jarkko Sakkinen<jarkko@kernel.org>
+Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/pcm_lib.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/char/tpm/tpm-dev-common.c |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/sound/core/pcm_lib.c
-+++ b/sound/core/pcm_lib.c
-@@ -1905,9 +1905,11 @@ static int wait_for_avail(struct snd_pcm
- 		if (avail >= runtime->twake)
- 			break;
- 		snd_pcm_stream_unlock_irq(substream);
-+		mutex_unlock(&runtime->buffer_mutex);
- 
- 		tout = schedule_timeout(wait_time);
- 
-+		mutex_lock(&runtime->buffer_mutex);
- 		snd_pcm_stream_lock_irq(substream);
- 		set_current_state(TASK_INTERRUPTIBLE);
- 		switch (runtime->status->state) {
-@@ -2201,6 +2203,7 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
- 
- 	nonblock = !!(substream->f_flags & O_NONBLOCK);
- 
-+	mutex_lock(&runtime->buffer_mutex);
- 	snd_pcm_stream_lock_irq(substream);
- 	err = pcm_accessible_state(runtime);
- 	if (err < 0)
-@@ -2288,6 +2291,7 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
- 	if (xfer > 0 && err >= 0)
- 		snd_pcm_update_state(substream, runtime);
- 	snd_pcm_stream_unlock_irq(substream);
-+	mutex_unlock(&runtime->buffer_mutex);
- 	return xfer > 0 ? (snd_pcm_sframes_t)xfer : err;
- }
- EXPORT_SYMBOL(__snd_pcm_lib_xfer);
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -69,7 +69,13 @@ static void tpm_dev_async_work(struct wo
+ 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+ 			       sizeof(priv->data_buffer));
+ 	tpm_put_ops(priv->chip);
+-	if (ret > 0) {
++
++	/*
++	 * If ret is > 0 then tpm_dev_transmit returned the size of the
++	 * response. If ret is < 0 then tpm_dev_transmit failed and
++	 * returned an error code.
++	 */
++	if (ret != 0) {
+ 		priv->response_length = ret;
+ 		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+ 	}
 
 

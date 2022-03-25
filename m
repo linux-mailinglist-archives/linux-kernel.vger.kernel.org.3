@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE334E75EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAD94E7640
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354373AbiCYPJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        id S1359815AbiCYPM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359676AbiCYPHu (ORCPT
+        with ESMTP id S1359673AbiCYPJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:07:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C03DA6D2;
-        Fri, 25 Mar 2022 08:05:58 -0700 (PDT)
+        Fri, 25 Mar 2022 11:09:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03D2DB483;
+        Fri, 25 Mar 2022 08:07:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FD2061BAD;
-        Fri, 25 Mar 2022 15:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65710C340EE;
-        Fri, 25 Mar 2022 15:05:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 799CAB828FF;
+        Fri, 25 Mar 2022 15:07:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6159C340F1;
+        Fri, 25 Mar 2022 15:07:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220757;
-        bh=f4H2JhhW9Loa7LpqKv/YREuv+jY8WMt0ZAla2LtzshI=;
+        s=korg; t=1648220856;
+        bh=rJ0Sf1ZTcFbgQs/i1OJwm6UcbDOkwSYw86FsByXeSiw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FYGrP3lfLuF5cfm55AGZoUhEsWTH/Rggu94Pb2kb8+4433Kl+6MvY5kbaDtmBWuM1
-         +rRttlGT4mHuJ/7ymTqxJQvWVKwRE4u7QhVnGQ5kZ5qvQBMCXdtSa6tj1h+AaM3Z7a
-         DC0TP2wLPOpzOhNUMwKvqFQg8qv/M5BD6DO/swwI=
+        b=eTV+3rNsWS7dOmtOitT5+AMwu35pkXA71XqGLUU3AwB1Dc1e7Izc1GjkVLAJ/CFmf
+         vtEgh8z/Tiec1UNotaYO6LDB6zZWFEFfc6pEFyYLRkgj8ivutzhqHmLJi6IzZDnHkM
+         ZoHo4SqaqgaOP1y0eFBFO2ZmJkynQzmlnVLItgBc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>,
-        =?UTF-8?q?Linus=20L=C3=BCssing?= <ll@simonwunderlich.de>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 4.14 17/17] mac80211: fix potential double free on mesh join
-Date:   Fri, 25 Mar 2022 16:04:51 +0100
-Message-Id: <20220325150417.262035632@linuxfoundation.org>
+        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 12/29] ALSA: pcm: Add stream lock during PCM reset ioctl operations
+Date:   Fri, 25 Mar 2022 16:04:52 +0100
+Message-Id: <20220325150418.940775820@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
-References: <20220325150416.756136126@linuxfoundation.org>
+In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
+References: <20220325150418.585286754@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Lüssing <ll@simonwunderlich.de>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 4a2d4496e15ea5bb5c8e83b94ca8ca7fb045e7d3 upstream.
+commit 1f68915b2efd0d6bfd6e124aa63c94b3c69f127c upstream.
 
-While commit 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving
-mesh") fixed a memory leak on mesh leave / teardown it introduced a
-potential memory corruption caused by a double free when rejoining the
-mesh:
+snd_pcm_reset() is a non-atomic operation, and it's allowed to run
+during the PCM stream running.  It implies that the manipulation of
+hw_ptr and other parameters might be racy.
 
-  ieee80211_leave_mesh()
-  -> kfree(sdata->u.mesh.ie);
-  ...
-  ieee80211_join_mesh()
-  -> copy_mesh_setup()
-     -> old_ie = ifmsh->ie;
-     -> kfree(old_ie);
+This patch adds the PCM stream lock at appropriate places in
+snd_pcm_*_reset() actions for covering that.
 
-This double free / kernel panics can be reproduced by using wpa_supplicant
-with an encrypted mesh (if set up without encryption via "iw" then
-ifmsh->ie is always NULL, which avoids this issue). And then calling:
-
-  $ iw dev mesh0 mesh leave
-  $ iw dev mesh0 mesh join my-mesh
-
-Note that typically these commands are not used / working when using
-wpa_supplicant. And it seems that wpa_supplicant or wpa_cli are going
-through a NETDEV_DOWN/NETDEV_UP cycle between a mesh leave and mesh join
-where the NETDEV_UP resets the mesh.ie to NULL via a memcpy of
-default_mesh_setup in cfg80211_netdev_notifier_call, which then avoids
-the memory corruption, too.
-
-The issue was first observed in an application which was not using
-wpa_supplicant but "Senf" instead, which implements its own calls to
-nl80211.
-
-Fixing the issue by removing the kfree()'ing of the mesh IE in the mesh
-join function and leaving it solely up to the mesh leave to free the
-mesh IE.
-
-Cc: stable@vger.kernel.org
-Fixes: 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving mesh")
-Reported-by: Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
-Signed-off-by: Linus Lüssing <ll@simonwunderlich.de>
-Tested-by: Mathias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
-Link: https://lore.kernel.org/r/20220310183513.28589-1-linus.luessing@c0d3.blue
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220322171325.4355-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/cfg.c |    3 ---
- 1 file changed, 3 deletions(-)
+ sound/core/pcm_native.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/net/mac80211/cfg.c
-+++ b/net/mac80211/cfg.c
-@@ -1811,13 +1811,11 @@ static int copy_mesh_setup(struct ieee80
- 		const struct mesh_setup *setup)
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -1656,21 +1656,25 @@ static int snd_pcm_do_reset(struct snd_p
+ 	int err = substream->ops->ioctl(substream, SNDRV_PCM_IOCTL1_RESET, NULL);
+ 	if (err < 0)
+ 		return err;
++	snd_pcm_stream_lock_irq(substream);
+ 	runtime->hw_ptr_base = 0;
+ 	runtime->hw_ptr_interrupt = runtime->status->hw_ptr -
+ 		runtime->status->hw_ptr % runtime->period_size;
+ 	runtime->silence_start = runtime->status->hw_ptr;
+ 	runtime->silence_filled = 0;
++	snd_pcm_stream_unlock_irq(substream);
+ 	return 0;
+ }
+ 
+ static void snd_pcm_post_reset(struct snd_pcm_substream *substream, int state)
  {
- 	u8 *new_ie;
--	const u8 *old_ie;
- 	struct ieee80211_sub_if_data *sdata = container_of(ifmsh,
- 					struct ieee80211_sub_if_data, u.mesh);
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
++	snd_pcm_stream_lock_irq(substream);
+ 	runtime->control->appl_ptr = runtime->status->hw_ptr;
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
+ 	    runtime->silence_size > 0)
+ 		snd_pcm_playback_silence(substream, ULONG_MAX);
++	snd_pcm_stream_unlock_irq(substream);
+ }
  
- 	/* allocate information elements */
- 	new_ie = NULL;
--	old_ie = ifmsh->ie;
- 
- 	if (setup->ie_len) {
- 		new_ie = kmemdup(setup->ie, setup->ie_len,
-@@ -1827,7 +1825,6 @@ static int copy_mesh_setup(struct ieee80
- 	}
- 	ifmsh->ie_len = setup->ie_len;
- 	ifmsh->ie = new_ie;
--	kfree(old_ie);
- 
- 	/* now copy the rest of the setup parameters */
- 	ifmsh->mesh_id_len = setup->mesh_id_len;
+ static const struct action_ops snd_pcm_action_reset = {
 
 

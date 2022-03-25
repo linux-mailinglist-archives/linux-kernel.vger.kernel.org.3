@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA4D4E710A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B6A4E710D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358791AbiCYKUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 06:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
+        id S1358049AbiCYKUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 06:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356746AbiCYKUi (ORCPT
+        with ESMTP id S1345973AbiCYKUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 06:20:38 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61E279380
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:19:04 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a8so14340888ejc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:19:04 -0700 (PDT)
+        Fri, 25 Mar 2022 06:20:41 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0573B49F8C
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:19:06 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id r13so14382776ejd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=txfMDWQceDbgmOrEc+CTlnZSlzPPay3e29bbmFGpskI=;
-        b=aY/UlNLKFcwQI01npAcjm/L7wOLzS2xJ9Zw+MT1p3HNACImlKg70WPLKtmacFC5gTb
-         Xoc4FrJdHP7PQLoY0UEuhuaX5Vwyqrktj7Wa2sBTQwFhDG6gUhJ3ul8LMrL4sCHZ68sd
-         l+aY4QkwQfvVu5ngmZ70I9/AhkbFbwIkCrLZqSNqZh8notZEpsidKFpSagPFlPM33Qrh
-         MCCSJuO/jpN81ZAdQdvKAvnW8yjUimN2YyiH5G933lvB5D89+1LvRivokfNBdrebDj1/
-         oG1UgkYqp4+32YQtoBGYC7OQstec+bwYQfqoXyQj5uTSkDt7jZ/3mDQzNEahw80oQ6vn
-         pKrQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=N3M5+W9DcdgmrBKDbJ8aNEq3s5AYa8mqWvuLTG/ixbM=;
+        b=mlOaQtqOgRmjRRGO6ru4cXrlGZhVBnvRi9eLSJaKk/kwzbDYqI3CVcPQQaJaUaL0gW
+         sJdtJFluugcdLK68KP1tu/L3OyqigjCvpCv+1/tT4lM5xyYHcwpP6qBWr9PTBvNnfyk8
+         ObS3P7CBWsERMCKSlh6qziPCqTAhiy6wr1ZAWYZStMjm6LTu7jnMbFhuyr44/awFRvhW
+         RIWeGTRiLbr4jj1PS3f4TdpkD6PQgBfyrOZBUhUbzlty2vYewIkkHirar+mAGhbhUFMM
+         aunLqMpcTU6fojBYLjEitSUIkevAlDgLBQTNJPL1C1mw44wwveqyGvpqqlbnhxpQ3WEA
+         dj6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=txfMDWQceDbgmOrEc+CTlnZSlzPPay3e29bbmFGpskI=;
-        b=SnFMW+kZMDAlF9xbISNJB/fFvJVD7wS53yOUVd1EGLrFDQeZjwOP04XCm066w4uUBw
-         laGyhR/3PAKvgGXaHQhVdzX4s0plYG7tOhBhVUnuGbnksKUKfWuYA/xSo+lRoor7sWIv
-         B+HU9fcE/GgNLo/3AktDG4xEybQCIkTfpXORT7Ikj4A6+50V49Tguj3y5TdjAFTyzybk
-         BZuQp4TspfF6VFQIuNHRQew5mVDaw1IYI7Sz1WxraGHPu29FrPC3dNF4vRdYXPrsFriX
-         3w/ajgLXpHwHH823TBZ4QZkeIr74NKfJwwnL13pvmdFkK7hBj7RuDCbDfi1K0QpxKN4x
-         85hA==
-X-Gm-Message-State: AOAM531lrn8WrIW02DCCN1LmNVMBApeUurKfYn7m8S4KyCwG6XKwpbYW
-        3T5BQQLQEV2iLY8tQtrcRXxGHg==
-X-Google-Smtp-Source: ABdhPJyIbsV/hWkQgXdZIzsB8nheQMLmBqixJtiigslgQjtIJpHte/2eaEQGBql+3YZPSHhcRqh45g==
-X-Received: by 2002:a17:906:5245:b0:6b8:78e0:5649 with SMTP id y5-20020a170906524500b006b878e05649mr11152534ejm.520.1648203543499;
-        Fri, 25 Mar 2022 03:19:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=N3M5+W9DcdgmrBKDbJ8aNEq3s5AYa8mqWvuLTG/ixbM=;
+        b=aNVtUSE7m/c/dxRtcukSMaFJs2kvT1TCjrHt64MD9c3ckw0MRFu8c3nCnc1IJyw6dE
+         ZpIXT1e7F8zoXnWzotqCnRRE88kB070vWotpWha5yhHj+Cp18SFBrLQsCp88Z99QWTgv
+         0wsfpHGiGwBSDCd05ffwbOrL7Ty9+NpjRujFzLx+sYRj+CpeJG0yMGsrNUZAw5HBGVrM
+         TlmK3ujCenytggxIk4lwoJr/7yOH9dcaSuOA0Y6LURg7rbmQaY9qm14Ak1TiJgsbRfay
+         7ZH7rOwBCSNTlK6+2DLidT6AdXpSrf2rA6zTHanCVEXzPBYSwZ5fb3Vvr6td9YSp3fmq
+         msCA==
+X-Gm-Message-State: AOAM533sjztYmzQ0GpLJVb0aa45vU+4Aq/WOZm07jvPjh8vk2iWUyQtk
+        bRhVqLOzw1uc9Ahs+iylgVeWpw==
+X-Google-Smtp-Source: ABdhPJzgWy3eAWlPSntRajmZX9Q2zPVQlb7AWXXrMuh1LqWYrdIyn9OR31F+kMW/7kfxfGQ5HtqRRA==
+X-Received: by 2002:a17:907:869f:b0:6da:888b:4258 with SMTP id qa31-20020a170907869f00b006da888b4258mr10872450ejc.720.1648203544495;
+        Fri, 25 Mar 2022 03:19:04 -0700 (PDT)
 Received: from localhost.localdomain (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id hr13-20020a1709073f8d00b006dff3a69572sm2122695ejc.5.2022.03.25.03.19.02
+        by smtp.gmail.com with ESMTPSA id hr13-20020a1709073f8d00b006dff3a69572sm2122695ejc.5.2022.03.25.03.19.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 25 Mar 2022 03:19:03 -0700 (PDT)
 From:   Luca Weiss <luca.weiss@fairphone.com>
@@ -57,15 +57,17 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] arm64: dts: qcom: sm6350: Add wifi node
-Date:   Fri, 25 Mar 2022 11:18:40 +0100
-Message-Id: <20220325101841.172304-1-luca.weiss@fairphone.com>
+Subject: [PATCH 2/2] arm64: dts: qcom: sm7225-fairphone-fp4: Enable wifi
+Date:   Fri, 25 Mar 2022 11:18:41 +0100
+Message-Id: <20220325101841.172304-2-luca.weiss@fairphone.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220325101841.172304-1-luca.weiss@fairphone.com>
+References: <20220325101841.172304-1-luca.weiss@fairphone.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,46 +75,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node describing the wifi hardware found on sm6350.
+Configure regulators used by the wifi hardware and enable it.
 
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- arch/arm64/boot/dts/qcom/sm6350.dtsi | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-index 9ad30086cfcd..1e2810021b30 100644
---- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-@@ -1267,6 +1267,28 @@ frame@17c2d000 {
- 			};
- 		};
- 
-+		wifi: wifi@18800000 {
-+			compatible = "qcom,wcn3990-wifi";
-+			reg = <0 0x18800000 0 0x800000>;
-+			reg-names = "membase";
-+			memory-region = <&wlan_fw_mem>;
-+			interrupts = <GIC_SPI 414 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 415 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 416 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 417 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 420 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 422 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>;
-+			iommus = <&apps_smmu 0x20 0x1>;
-+			qcom,msa-fixed-perm;
-+			status = "disabled";
-+		};
+diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+index 1bb719ef6a02..ea7f2a31399b 100644
+--- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
++++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+@@ -404,3 +404,13 @@ &usb_1_qmpphy {
+ 	vdda-phy-supply = <&vreg_l22a>;
+ 	vdda-pll-supply = <&vreg_l16a>;
+ };
 +
- 		apps_rsc: rsc@18200000 {
- 			compatible = "qcom,rpmh-rsc";
- 			label = "apps_rsc";
++&wifi {
++	status = "okay";
++
++	vdd-0.8-cx-mx-supply = <&vreg_l4a>;
++	vdd-1.8-xo-supply = <&vreg_l7a>;
++	vdd-1.3-rfa-supply = <&vreg_l2e>;
++	vdd-3.3-ch0-supply = <&vreg_l10e>;
++	vdd-3.3-ch1-supply = <&vreg_l11e>;
++};
 -- 
 2.35.1
 

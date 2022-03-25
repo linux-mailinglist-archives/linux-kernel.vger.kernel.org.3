@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F304E77F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6698B4E771E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378604AbiCYPfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S1376397AbiCYP1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377745AbiCYPYc (ORCPT
+        with ESMTP id S1376665AbiCYPXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:24:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF5CE9976;
-        Fri, 25 Mar 2022 08:18:52 -0700 (PDT)
+        Fri, 25 Mar 2022 11:23:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C49DE4399;
+        Fri, 25 Mar 2022 08:16:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E34360C86;
-        Fri, 25 Mar 2022 15:18:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 963E4C340E9;
-        Fri, 25 Mar 2022 15:18:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B88E0CE2A46;
+        Fri, 25 Mar 2022 15:16:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E24C340E9;
+        Fri, 25 Mar 2022 15:16:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221532;
-        bh=cm0RYyJQcXqUnVI7HNk8immc7/DDIPAlvRgVNobGzO0=;
+        s=korg; t=1648221366;
+        bh=bLyHvRHuwpHkVvuattikF0PH4TZTbUXMmVmmup3vp7E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cSWRVqgflFWDcR2w/bUMrZ074JRi+/tl6y0uhxMsgxQhERVm7GRoDUCBzQbT6Bciq
-         mizAyWqS/5UwBvZ+pkS8M2QrgiG1tCGt+ABAaSNZbuvYqc0RGm1YWP8IVB1oj/7kAo
-         ruI4O+i/4QSwxYiNZFdkWOle+khLtZsmCx8KfL9s=
+        b=gN+1at4U7s/QbEyP3y3Tu/+BGdBz9uErtDez56QC+/P5MoXknMu4LB8xP7Rwvu5TY
+         jhvrnSAl07ZB1jZ1pIAp8TcDznIq9D5kpckbanBH0S38GPV4DRNZIm2WZpXEIigal3
+         TzNKfpMtXcCoW2LCpodNbczfWAXoSmd9nE8BTSrQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephane Graber <stgraber@ubuntu.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 19/39] drivers: net: xgene: Fix regression in CRC stripping
-Date:   Fri, 25 Mar 2022 16:14:34 +0100
-Message-Id: <20220325150420.793222251@linuxfoundation.org>
+        stable@vger.kernel.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH 5.15 34/37] tpm: use try_get_ops() in tpm-space.c
+Date:   Fri, 25 Mar 2022 16:14:35 +0100
+Message-Id: <20220325150420.906684399@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
-References: <20220325150420.245733653@linuxfoundation.org>
+In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
+References: <20220325150419.931802116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,57 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephane Graber <stgraber@ubuntu.com>
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-commit e9e6faeafaa00da1851bcf47912b0f1acae666b4 upstream.
+commit fb5abce6b2bb5cb3d628aaa63fa821da8c4600f9 upstream.
 
-All packets on ingress (except for jumbo) are terminated with a 4-bytes
-CRC checksum. It's the responsability of the driver to strip those 4
-bytes. Unfortunately a change dating back to March 2017 re-shuffled some
-code and made the CRC stripping code effectively dead.
+As part of the series conversion to remove nested TPM operations:
 
-This change re-orders that part a bit such that the datalen is
-immediately altered if needed.
+https://lore.kernel.org/all/20190205224723.19671-1-jarkko.sakkinen@linux.intel.com/
 
-Fixes: 4902a92270fb ("drivers: net: xgene: Add workaround for errata 10GE_8/ENET_11")
-Cc: stable@vger.kernel.org
-Signed-off-by: Stephane Graber <stgraber@ubuntu.com>
-Tested-by: Stephane Graber <stgraber@ubuntu.com>
-Link: https://lore.kernel.org/r/20220322224205.752795-1-stgraber@ubuntu.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+exposure of the chip->tpm_mutex was removed from much of the upper
+level code.  In this conversion, tpm2_del_space() was missed.  This
+didn't matter much because it's usually called closely after a
+converted operation, so there's only a very tiny race window where the
+chip can be removed before the space flushing is done which causes a
+NULL deref on the mutex.  However, there are reports of this window
+being hit in practice, so fix this by converting tpm2_del_space() to
+use tpm_try_get_ops(), which performs all the teardown checks before
+acquring the mutex.
+
+Cc: stable@vger.kernel.org # 5.4.x
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/apm/xgene/xgene_enet_main.c |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/char/tpm/tpm2-space.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
-+++ b/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
-@@ -696,6 +696,12 @@ static int xgene_enet_rx_frame(struct xg
- 	buf_pool->rx_skb[skb_index] = NULL;
+--- a/drivers/char/tpm/tpm2-space.c
++++ b/drivers/char/tpm/tpm2-space.c
+@@ -58,12 +58,12 @@ int tpm2_init_space(struct tpm_space *sp
  
- 	datalen = xgene_enet_get_data_len(le64_to_cpu(raw_desc->m1));
+ void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
+ {
+-	mutex_lock(&chip->tpm_mutex);
+-	if (!tpm_chip_start(chip)) {
 +
-+	/* strip off CRC as HW isn't doing this */
-+	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
-+	if (!nv)
-+		datalen -= 4;
-+
- 	skb_put(skb, datalen);
- 	prefetch(skb->data - NET_IP_ALIGN);
- 	skb->protocol = eth_type_trans(skb, ndev);
-@@ -717,12 +723,8 @@ static int xgene_enet_rx_frame(struct xg
- 		}
++	if (tpm_try_get_ops(chip) == 0) {
+ 		tpm2_flush_sessions(chip, space);
+-		tpm_chip_stop(chip);
++		tpm_put_ops(chip);
  	}
- 
--	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
--	if (!nv) {
--		/* strip off CRC as HW isn't doing this */
--		datalen -= 4;
-+	if (!nv)
- 		goto skip_jumbo;
--	}
- 
- 	slots = page_pool->slots - 1;
- 	head = page_pool->head;
+-	mutex_unlock(&chip->tpm_mutex);
++
+ 	kfree(space->context_buf);
+ 	kfree(space->session_buf);
+ }
 
 

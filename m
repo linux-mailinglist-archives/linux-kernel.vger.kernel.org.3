@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496194E77D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82E04E780D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377304AbiCYPdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S1377384AbiCYPd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376701AbiCYPXV (ORCPT
+        with ESMTP id S1376756AbiCYPXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:23:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00E7E43A5;
-        Fri, 25 Mar 2022 08:16:37 -0700 (PDT)
+        Fri, 25 Mar 2022 11:23:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A6E6E296;
+        Fri, 25 Mar 2022 08:16:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FA9A60C86;
-        Fri, 25 Mar 2022 15:16:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD24C340E9;
-        Fri, 25 Mar 2022 15:16:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3BC63B82865;
+        Fri, 25 Mar 2022 15:16:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F905C340E9;
+        Fri, 25 Mar 2022 15:16:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221369;
-        bh=yuUSz68aOhzq2mnbWXAa7CBZWDwyxRgOvpg4peMbCJ4=;
+        s=korg; t=1648221371;
+        bh=2Y7SEJ45GUxU9Jc1FeEiiIgPS7sVZVqp/nNW4EwEPk4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eEofc9IzIPE0SBC8KCN4ChpWnXb1eWlchseL5yrxPoK20ltfCwcQUuHxORakHEG+U
-         RQnwmGOQKqNC83oRJdMxOcji58QdR8TkUSiRMFiRnlJubHRAqHt+5iZoTZ8AKN21UU
-         Yzeom1D8dv7WqmR9um6yp6itVVmaMQEOv9m1s9tw=
+        b=y+WKUlfPbMmwq7xvX0e2xVfwp03JtJUXxntKi1XzCnzhlwfgwMu8tnzMB1xOp9Ayb
+         QEV2Xj67Y5rgbvy/9iuMJ/GHzjXRd6SHra+sDh/bNFgHyRLk4Nyzva0nx2Y9BEybMN
+         igJiqL1lGT0eLSxwsRnjzkJZduZm/WMNc5Mo8k2A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Kalle Valo <quic_kvalo@quicinc.com>
-Subject: [PATCH 5.15 35/37] wcn36xx: Differentiate wcn3660 from wcn3620
-Date:   Fri, 25 Mar 2022 16:14:36 +0100
-Message-Id: <20220325150420.936637650@linuxfoundation.org>
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 5.15 36/37] m68k: fix access_ok for coldfire
+Date:   Fri, 25 Mar 2022 16:14:37 +0100
+Message-Id: <20220325150420.964665740@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
 References: <20220325150419.931802116@linuxfoundation.org>
@@ -56,53 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: Arnd Bergmann <arnd@arndb.de>
 
-commit 98d504a82cc75840bec8e3c6ae0e4f411921962b upstream.
+commit 26509034bef198525d5936c116cbd0c3fa491c0b upstream.
 
-The spread of capability between the three WiFi silicon parts wcn36xx
-supports is:
+While most m68k platforms use separate address spaces for user
+and kernel space, at least coldfire does not, and the other
+ones have a TASK_SIZE that is less than the entire 4GB address
+range.
 
-wcn3620 - 802.11 a/b/g
-wcn3660 - 802.11 a/b/g/n
-wcn3680 - 802.11 a/b/g/n/ac
+Using the default implementation of __access_ok() stops coldfire
+user space from trivially accessing kernel memory.
 
-We currently treat wcn3660 as wcn3620 thus limiting it to 2GHz channels.
-Fix this regression by ensuring we differentiate between all three parts.
-
-Fixes: 8490987bdb9a ("wcn36xx: Hook and identify RF_IRIS_WCN3680")
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 Cc: stable@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220125004046.4058284-1-bryan.odonoghue@linaro.org
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/ath/wcn36xx/main.c    |    3 +++
- drivers/net/wireless/ath/wcn36xx/wcn36xx.h |    1 +
- 2 files changed, 4 insertions(+)
+ arch/m68k/include/asm/uaccess.h |   15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
---- a/drivers/net/wireless/ath/wcn36xx/main.c
-+++ b/drivers/net/wireless/ath/wcn36xx/main.c
-@@ -1474,6 +1474,9 @@ static int wcn36xx_platform_get_resource
- 	if (iris_node) {
- 		if (of_device_is_compatible(iris_node, "qcom,wcn3620"))
- 			wcn->rf_id = RF_IRIS_WCN3620;
-+		if (of_device_is_compatible(iris_node, "qcom,wcn3660") ||
-+		    of_device_is_compatible(iris_node, "qcom,wcn3660b"))
-+			wcn->rf_id = RF_IRIS_WCN3660;
- 		if (of_device_is_compatible(iris_node, "qcom,wcn3680"))
- 			wcn->rf_id = RF_IRIS_WCN3680;
- 		of_node_put(iris_node);
---- a/drivers/net/wireless/ath/wcn36xx/wcn36xx.h
-+++ b/drivers/net/wireless/ath/wcn36xx/wcn36xx.h
-@@ -97,6 +97,7 @@ enum wcn36xx_ampdu_state {
+--- a/arch/m68k/include/asm/uaccess.h
++++ b/arch/m68k/include/asm/uaccess.h
+@@ -12,14 +12,17 @@
+ #include <asm/extable.h>
  
- #define RF_UNKNOWN	0x0000
- #define RF_IRIS_WCN3620	0x3620
-+#define RF_IRIS_WCN3660	0x3660
- #define RF_IRIS_WCN3680	0x3680
+ /* We let the MMU do all checking */
+-static inline int access_ok(const void __user *addr,
++static inline int access_ok(const void __user *ptr,
+ 			    unsigned long size)
+ {
+-	/*
+-	 * XXX: for !CONFIG_CPU_HAS_ADDRESS_SPACES this really needs to check
+-	 * for TASK_SIZE!
+-	 */
+-	return 1;
++	unsigned long limit = TASK_SIZE;
++	unsigned long addr = (unsigned long)ptr;
++
++	if (IS_ENABLED(CONFIG_CPU_HAS_ADDRESS_SPACES) ||
++	    !IS_ENABLED(CONFIG_MMU))
++		return 1;
++
++	return (size <= limit) && (addr <= (limit - size));
+ }
  
- static inline void buff_to_be(u32 *buf, size_t len)
+ /*
 
 

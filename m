@@ -2,84 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F824E7388
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDB04E7395
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358978AbiCYMdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S1359077AbiCYMe2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Mar 2022 08:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355069AbiCYMdi (ORCPT
+        with ESMTP id S1357546AbiCYMe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:33:38 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03A3D082E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:32:03 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id e22so6052520qvf.9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=30XACj7MPd58k847MdVpAvMgBiu+f7RKwoRCwiRj2M0=;
-        b=1/NHMBlMYr4S0tmnHJKQ1f0aW5m7ZbjeTgsJFToM+Np2p06XtO28uIwvqjpeaBwFrc
-         CoxMmjLhXUK3mF/YrXlidIrQ4Cet/DoXiSYLOFSfBT9oOQSrvE8Y6thLB+4eEin7LyWH
-         ChKLuVY1EpJhr8KBvKtkemqI5T9ogjhN34If0J5MqBGG9raCWGRFJzanax9S3ChXS9ln
-         M31syk/lXoBjd8fAjNTNIuDsDHioKLAqRdR5wT0YnCvLrtJKRx1zlrtsvb537R59e+Ir
-         UiOqGIHPEMXkYORMWFSj1QfT5pZ90P31+0yGw2IOATq9Nr6q4Rq//Aamjv2BNohm+qDm
-         2gXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=30XACj7MPd58k847MdVpAvMgBiu+f7RKwoRCwiRj2M0=;
-        b=AKW3wwmoDWP4rgxNW0Lzpf4Dx6eiP+zRr2bOe6rp/oOCgVExurj0LO8bAFnYkp7k7b
-         zhGplI1ihXriUE3COBfuzxVZKjT2hgtkDItXDZhe9zVMAZ8656AAqK3x8uceV1TEivMC
-         XiAok3+XkzNfepNTJi6tQvUxvpAqaRzlYgmzI/rAP5GRnLMd8Sq2fqH6B/oYasv9aY/d
-         3oMLysfs+d1DXDEULPoL2KgRfMJw9gGKgeprK7oPW7b4psT2jzORO2NEMkRtGkSbh7UT
-         9VCs6znmB3iqZJOgmXDfouD6gtqAZHj0xefjYcF8ilcsDfAsk8M0oS03ntNlSGjNowG2
-         IaMg==
-X-Gm-Message-State: AOAM532HYmbq/fReul8/jO55KM9JHMRLzru8itVbvHHWg56mO0gSGemW
-        tcVMxLSfT3Ae5AJ7D+dLKtd0fg==
-X-Google-Smtp-Source: ABdhPJwh60ijI4et7gSBCzSpldFuMn9qAvmRXI4SQhFPJAvcgwyP6HGP6nO3vGEVcXf2E1A3Vb3Wbw==
-X-Received: by 2002:ad4:5de6:0:b0:441:6595:72cd with SMTP id jn6-20020ad45de6000000b00441659572cdmr8431975qvb.73.1648211522828;
-        Fri, 25 Mar 2022 05:32:02 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id c10-20020ac87dca000000b002e1db1b7b10sm4949196qte.25.2022.03.25.05.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 05:32:02 -0700 (PDT)
-Message-ID: <f80128c50d3dacff0af70bd88521abae42476f85.camel@ndufresne.ca>
-Subject: Re: [PATCH v1] media: videobuf2: Allow applications customize data
- offsets of capture buffers
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Boris Brezillon <bbrezillon@collabora.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Laura Nao <laura.nao@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>
-Date:   Fri, 25 Mar 2022 08:32:01 -0400
-In-Reply-To: <fe24d151-6097-aa8e-7691-5e4d81fa42c6@collabora.com>
-References: <20220322132329.6527-1-dmitry.osipenko@collabora.com>
-         <a7c858461b99de2d4afad22d888acc3a74850240.camel@ndufresne.ca>
-         <9ec970d6-ea09-802c-419b-b2ef26800990@collabora.com>
-         <5be83f0b343c04d877a2c2d805fb5f71ca9973b1.camel@ndufresne.ca>
-         <fe24d151-6097-aa8e-7691-5e4d81fa42c6@collabora.com>
+        Fri, 25 Mar 2022 08:34:27 -0400
+Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAF4D0831;
+        Fri, 25 Mar 2022 05:32:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1648211551; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Pk5+Uvs8p6QVi5eNyjlSagCdWEnD9TwaeCCme6sUDPLnKJIa4ttLFieZ4as/aKg4Yx521qsXJkCPOTINvQBPQgIAF/j4sUH53Zaughu37/+A/ucZrkcrhk+N5jkV5PQD49tJ2oXohJOxesz0rMRAmGTNeRDY82fCX1Sm79a1kFw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1648211551; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Ho2LqfXp0ZlNliNHvgVFTeRFQ/nOhiEtZwLLG35jaUE=; 
+        b=YuZOjZc0XLB3tuROzkZHd6cTTeHj5JquhUiaA/JJoqGYOiOjf3lN/8n9smcuxPxUNVUEOZXhfhkjH6X0nq+mLpgrsKRx7B8GxbOv8BNf79LsXmXyj0NLY7Jp3F3WOKrtNOSp/Xgm9xgZIb4Np8A2ZpDlVft1OkrQts7CuQ4OHyo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
+        with SMTPS id 1648211549353131.03759078535404; Fri, 25 Mar 2022 05:32:29 -0700 (PDT)
+Message-ID: <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com, stefanb@linux.ibm.com,
+        James.Bottomley@hansenpartnership.com, keescook@chromium.org,
+        jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org
+In-Reply-To: <Yj0lhqTP1RoedxSc@iki.fi>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
+         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
+         <YJNKs8bUMGOzFre+@kernel.org>
+         <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+         <Yj0lhqTP1RoedxSc@iki.fi>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+Date:   Fri, 25 Mar 2022 13:32:25 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Evolution 3.42.2 
+Content-Transfer-Encoding: 8BIT
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,27 +60,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 24 mars 2022 à 21:20 +0300, Dmitry Osipenko a écrit :
-> The root of the problem is that DRM UAPI is more flexible and allows to
-> customize offsets for both S/MPLANEs, while V4L doesn't allow to do it
-> at all. I'm exploring all the potential options, so far neither of the
-> proposed variants is ideal.
+On Fri, 2022-03-25 at 04:14 +0200, Jarkko Sakkinen wrote:
+> On Thu, Mar 24, 2022 at 06:04:23PM +0100, Michael Niewöhner wrote:
+> > Hi guys,
+> > 
+> > On Thu, 2021-05-06 at 04:47 +0300, Jarkko Sakkinen wrote:
+> > > On Wed, May 05, 2021 at 01:15:29AM +0200, Lino Sanfilippo wrote:
+> > > > Hi,
+> > > > 
+> > > > On 03.05.21 at 17:50, Jarkko Sakkinen wrote:
+> > > > > What the heck is "simplification" and what that has to do with fixing
+> > > > > anything? I don't understand your terminology.
+> > > > 
+> > > > 
+> > > > The intention for this patch is not to fix anything. Please read the
+> > > > cover
+> > > > letter and the commit message.
+> > > > This patch is about making the locality handling easier by not
+> > > > claiming/releasing
+> > > > it multiple times over the driver life time, but claiming it once at
+> > > > driver
+> > > > startup and only releasing it at driver shutdown.
+> > > > 
+> > > > Right now we have locality request/release combos in
+> > > > 
+> > > > - probe_itpm()
+> > > > - tpm_tis_gen_interrupt()
+> > > > - tpm_tis_core_init()
+> > > > - tpm_chip_start()
+> > > > 
+> > > > and there is still one combo missing for
+> > > > 
+> > > > - tpm2_get_timeouts()
+> > > > 
+> > > > which is the reason why we get the "TPM returned invalid status" bug in
+> > > > case
+> > > > of TPM2 (and this is the bug which is _incidentally_ fixed by this
+> > > > patch,
+> > > > see
+> > > > below).
+> > > > 
+> > > > And if we are going to enable interrupts, we have to introduce yet
+> > > > another
+> > > > combo,
+> > > > for accessing the status register in the interrupt handler, since TPM
+> > > > 2.0
+> > > > requires holding the locality for writing to the status register. That
+> > > > makes
+> > > > 6 different code places in which we take and release the locality.
+> > > > 
+> > > > With this patch applied we only take the locality at one place.
+> > > > Furthermore
+> > > > with interrupts enabled we dont have to claim the locality for each
+> > > > handler
+> > > > execution, saving us countless claim/release combinations at runtime.
+> > > > 
+> > > > Hence the term "simplification" which is perfectly justified IMO.
+> > > > 
+> > > > So again, this patch is "only" in preparation for the next patch when
+> > > > interrupts
+> > > > are actually enabled and we would have to take the locality in the
+> > > > interrupt
+> > > > handler without this patch.
+> > > 
+> > > So: what problem this patch does solve?
+> > > 
+> > > /Jarkko
+> > > 
+> > 
+> > first, thank you very much, Lino, for working on this! I've been debugging
+> > issues with the tis driver in the last days and was about to start with the
+> > same
+> > approach as yours when I luckily discovered your patch!
+> > 
+> > Jarkko, while I agree, that the commit message is not optimal, Lino tried
+> > hard
+> > to explain what the problems with the current code are and how they are /
+> > can be
+> > fixed. Further, I too don't see why simplification / optimization is such a
+> > bad
+> > thing. This driver is actually a very good example. I had a hard time, too,
+> > figuring out what's going on there. A clean rewrite is a very valid approach
+> > here IMO. It's not "polishing for nothing", as you described it, but
+> > actually
+> > solving problems.
+> > 
+> > Interrupt detection is broken for years now and finally a volunteer worked
+> > on a
+> > solution. Don't you think this should be valued? Let's get this problem
+> > sorted
+> > out :-)
+> > 
+> > Lino, I'd be happy to test the patches, when you have time and interest to
+> > work
+> > on this again!
+> > 
+> > Thanks, Michael
+> 
+> It's quite easy to test them out. Both fixes are in the mainline GIT tree.
+> E.g. give a shot rc1, and please report if any issues persists to:
+> 
+>   linux-integrity@vger.kernel.org 
+> 
+> BR, Jarkko
 
-In GStreamer kmssink, the way DRM is used, is that if you have 2 planes in your
-pixel format, but only received 1 DMABuf, we will pass this DMABuf twice (well
-GEM handles, but twice), with appropriate offset.
+I don't see Linos patches on mainline. Also, the series included four patches:
+[PATCH v3 0/4] Fixes for TPM interrupt handling
+[PATCH v3 1/4] tpm: Use a threaded interrupt handler
+[PATCH v3 2/4] tpm: Simplify locality handling
+[PATCH v3 3/4] tpm: Fix test for interrupts
+[PATCH v3 4/4] tpm: Only enable supported irqs
 
-With this in mind, the idea for V4L2 could be to always resort to MPLANE for
-this purpose. The tricky part for userland is that it needs to know the dual
-pixel format and map that accordingly. That is a bit difficult and this is
-something Helen was trying to address with the v4l2_buffer_ext (that and
-allowing space to store DRM Modifiers in the future).
+Three of them are relevant for the interrupt problem, which is still present in
+mainline, as these patches were refused:
+[PATCH v3 1/4] tpm: Use a threaded interrupt handler
+[PATCH v3 2/4] tpm: Simplify locality handling
+[PATCH v3 3/4] tpm: Fix test for interrupts
 
-The second challenge is the overhead. In DRM, as we "prime" the DMABuf into
-handles, this gives a kernel object to store any relevant information about the
-buffer. So having it duplicate can be done at no cost. In V4L2, the driver would
-need to handle that more often. Specially that despite the recommendation
-(except for primary buffer decoder, were this is mandatory), we don't force a
-strict DMABuf / Buffer IDX  mapping.
+Michael
 
-Nicolas

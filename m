@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38AA4E7C3B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1603A4E7D82
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiCYTvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S231830AbiCYTwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiCYTvo (ORCPT
+        with ESMTP id S231549AbiCYTvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:51:44 -0400
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3A226B3A0;
-        Fri, 25 Mar 2022 12:35:44 -0700 (PDT)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 41693E4E0DF;
-        Fri, 25 Mar 2022 20:35:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1648236939;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rLBMSUPo6jXDs4paj/eaDyrCRojZ9mFIvvnloZAG8yk=;
-        b=HUri9bxCSlCyLJBpNkF4S2td2orUeRbu4l9z0J7Xc9HyZ3cTxDHCexUPIjSPSVKHAxd0mQ
-        eQqW/2wjFoLwJYc7WDKU32po5DIGbENZn/lgaQvSZ/smVjpzYo1MRMfVsmMNRcsr6NANnJ
-        4ibaaxojQmf/jlSzVt/jSOoWS3lQYjI=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Maxime Bizon <mbizon@freebox.fr>,
-        Toke =?ISO-8859-1?Q?H=F8iland=2DJ=F8rgensen?= <toke@toke.dk>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break ath9k-based AP
-Date:   Fri, 25 Mar 2022 20:35:37 +0100
-Message-ID: <8043549.T7Z3S40VBb@natalenko.name>
-In-Reply-To: <CAHk-=wghZ3c4G2xjy3pR7txmdCnau21z_tidjfU2w0HO-90=sw@mail.gmail.com>
-References: <1812355.tdWV9SEqCh@natalenko.name> <12981608.uLZWGnKmhe@natalenko.name> <CAHk-=wghZ3c4G2xjy3pR7txmdCnau21z_tidjfU2w0HO-90=sw@mail.gmail.com>
+        Fri, 25 Mar 2022 15:51:49 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A8114F11D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:37:22 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id 14so1194700ily.11
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=r+I5kgyO1tHgpBki5iRD8MjPGB+7NsBMCsnuZBuuE14=;
+        b=MqzuSUS0yr/bPjYga/LEvUUNISlNPEafGymcHkHdDo8eBX7GHuzf6g/+kmf1KtFnxZ
+         bTDwiRZWThL8Xi79vFyjF5gbvRgB1jkq42i+mjP3YSVt2Xw310TWdk6Rzk6jKRAdeDfZ
+         aQEhrHQGJCIvIk+EpnbENPp1prNGxCxUVBwzA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=r+I5kgyO1tHgpBki5iRD8MjPGB+7NsBMCsnuZBuuE14=;
+        b=iGEmo1FBA6gyZu9hHrHs+yzFSKj2h+FslHd1ea+EX/lGZk880s3BvyCgxd7vnpk4wD
+         hcYe2pTQQtqtcT+rdFVoBR3g4Tn8FQfCRxEqHJxJ7DrrWMaVz7nkkbfllHKa+3xnub35
+         Zz90llXSQLSI/QNb0FAPmCCygloIeZxQrwuKdulMwSMXc5GsEeTSTwRCZ8DfqcajOXID
+         CVEhKoWz1oKxAkKBPkxGWtuN3OLn1Lt8R7A0fzlA6zZU89RpMdFdjZM2tg4N+vG+lDcb
+         y60tj1Oato+NN0lLPgWZDkGPoStqQ+OziaAASicLpl+rWzG9EX61qpIoaTNp1H0dvQX4
+         Lz1Q==
+X-Gm-Message-State: AOAM53280w+QsSSUvf2UcbszRX7KMlEhS4QshkyHSzIkb/j5NC7FuhlL
+        G0hsmTnuDnLawQh0FsmBxsy6fg==
+X-Google-Smtp-Source: ABdhPJxOiBqtQQ67WxLOxsMZLU4xmrMIRljTj398xq62z9MSAACWfwac6+zmpEx65WXMd4V0g5PdDg==
+X-Received: by 2002:a92:d09:0:b0:2c3:f141:848b with SMTP id 9-20020a920d09000000b002c3f141848bmr137372iln.230.1648237042167;
+        Fri, 25 Mar 2022 12:37:22 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id d14-20020a056602184e00b00649673c175asm3449967ioi.25.2022.03.25.12.37.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 12:37:21 -0700 (PDT)
+Subject: Re: [PATCH 1/2] selftests/harness: Run TEARDOWN for ASSERT failures
+To:     Kees Cook <keescook@chromium.org>, shuah@kernel.org
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220324231907.1363887-1-keescook@chromium.org>
+ <20220324231907.1363887-2-keescook@chromium.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f705c381-cbe6-0862-e10f-44f2afdef24d@linuxfoundation.org>
+Date:   Fri, 25 Mar 2022 13:37:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220324231907.1363887-2-keescook@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On p=C3=A1tek 25. b=C5=99ezna 2022 20:27:43 CET Linus Torvalds wrote:
-> On Fri, Mar 25, 2022 at 12:26 PM Oleksandr Natalenko
-> <oleksandr@natalenko.name> wrote:
-> >
-> > On p=C3=A1tek 25. b=C5=99ezna 2022 19:30:21 CET Linus Torvalds wrote:
-> > > The reason the ath9k issue was found quickly
-> > > is very likely *NOT* because ath9k is the only thing affected. No,
-> > > it's because ath9k is relatively common.
-> >
-> > Indeed. But having a wife who complains about non-working Wi-Fi printer=
- definitely helps in finding the issue too.
->=20
-> Well, maybe we should credit her in the eventual resolution (whatever
-> it ends up being).
->=20
-> Although probably not using that exact wording.
+On 3/24/22 5:19 PM, Kees Cook wrote:
+> The kselftest test harness has traditionally not run the registered
+> TEARDOWN handler when a test encountered an ASSERT. This creates
+> unexpected situations and tests need to be very careful about using
+> ASSERT, which seems a needless hurdle for test writers.
+> 
+> Because of the harness's design for optional failure handlers, the
+> original implementation of ASSERT used an abort() to immediately
+> stop execution, but that meant the context for running teardown was
+> lost. Instead, use setjmp/longjmp so that teardown can be done.
+> 
 
-While Olha has already been Cc'ed here, I can definitely encourage her in p=
-erson to provide Reported-by/Tested-by if needed :).
+Thanks for the patch. The change look good to me.
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
+> Failed SETUP routines continue to not be followed by TEARDOWN, though.
 
+Does this mean failed setup() routines have to handle TEARDOWN? What
+are guidelines to follow for setup() failures?
 
+Can you add a bit more detail on what you meant by " Failed SETUP
+routines continue to not be followed by TEARDOWN, though".
+
+With that:
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

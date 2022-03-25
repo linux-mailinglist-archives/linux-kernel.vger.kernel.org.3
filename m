@@ -2,165 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15F44E7262
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDEC4E7263
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354573AbiCYLmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S1356919AbiCYLmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345552AbiCYLmT (ORCPT
+        with ESMTP id S1345552AbiCYLmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:42:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7D0C559C;
-        Fri, 25 Mar 2022 04:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6Fw+DBOwDSEC8gESfzuRrIW++n1v7Mx6XYIG14G7w/c=; b=tb1PqS+no+XrmjP72Uq03DEj0k
-        u4jpt3oHrj7FIguSxsToaTybpGwFxXxt04e9svRfpzYWiDJ5j/UZ4UN+++gcpWvuLVyG+laUV7/hN
-        ZB25AZzJpP2KUdnpV+xgH6bthMjp1PYiDv5PUwXZOTuTfrAQd44+VCoWaM37lKQo5J+B2Ox7YzOnk
-        CqkYKzE58leAwSA2bh9EoQgsUXBJ7SAzPdLBuG6D3SlvFbNS9iVelorJAf3xjx7Oz8W2ANbm/2Lvw
-        Kt/7lBfskERWcWpimL1wZwPsV6cUdr/ZzlfbIDoq2DNaaDnG952KbxZnVebf7fPhPxnwdPx6MK/DT
-        iRr+8JfA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nXiIh-00EK3j-Ja; Fri, 25 Mar 2022 11:40:15 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 13504987D26; Fri, 25 Mar 2022 12:40:13 +0100 (CET)
-Date:   Fri, 25 Mar 2022 12:40:12 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel-janitors@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 3/2] x86,rethook: Fix arch_rethook_trampoline() to
- generate a complete pt_regs
-Message-ID: <20220325114012.GO8939@worktop.programming.kicks-ass.net>
-References: <164818251899.2252200.7306353689206167903.stgit@devnote2>
+        Fri, 25 Mar 2022 07:42:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95865C55A5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 04:41:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 114FB12FC;
+        Fri, 25 Mar 2022 04:41:03 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 180C93F73B;
+        Fri, 25 Mar 2022 04:41:01 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 11:41:00 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, f.fainelli@gmail.com,
+        souvik.chakravarty@arm.com, nicola.mazzucato@arm.com,
+        cristian.marussi@arm.com
+Subject: Re: [RFC PATCH 0/2] Sensor readings fixes
+Message-ID: <Yj2qTMcW9sfMyvAc@e120937-lin>
+References: <20211220174155.40239-1-cristian.marussi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <164818251899.2252200.7306353689206167903.stgit@devnote2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20211220174155.40239-1-cristian.marussi@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 20, 2021 at 05:41:53PM +0000, Cristian Marussi wrote:
+> Hi,
+> 
+> this was supposed to be an easy fix on how sensor readings are handled
+> across different FW versions while maintaining backward compatibility,
+> but the solution raised for me more questions than the issue itself...
+> ...so I posted as an RFC.
+> 
+> In a nutshell, since SCMI FWv3.0 spec, sensors SCMI_READING_GET command
+> can report axis and timestamps too, beside readings, so a brand new
+> scmi_reading_get_timestamped protocol operation was exposed (used by IIO)
+> while the old scmi_reading_get was kept as it was, already used by HWMON
+> subsystem for other classes of sensors.
+> 
+> Unfortunately, also the flavour of reported values changed from unsigned
+> to signed with v3.0, so if you end-up on a system running against an SCMI
+> v3.0 FW platform you could end up reading a negative value and interpreting
+> it as a big positive since scmi_reading_get reports only u64.
+> 
+> 01/02 simply takes care, when a FW >= 3.0 is detected, to return an error
+> to any scmi_reading_get request if that would result in tryinh to carry
+> a negative value into an u64.
+> 
+> So this should rectify the API exposed by SCMI sensor and make it
+> consistent in general, in such a way that a user calling it won't risk to
+> receive a false big-positive which was indeed a 2-complement negative from
+> the perpective of the SCMI fw.
+> 	
+> So far so good...sort of...since, to make things more dire, the HWMON
+> interface, which is the only current upstream user of scmi_reading_get
+> DOES allow indeed to report to the HWMON core negative values, so it was
+> just that we were silently interpreting u64 as s64 :P ...
+> 
+> ...as a consequence the fix above to the SCMI API will potentially break
+> this undocumented behaviour of our only scmi_reading_get user.
+> 
+> Additionally, while looking at this, I realized that for similar reasons
+> even on systems running the current SCMI stack API and an old FW <=2.0
+> the current HWMON read is potentially broken, since when the FW reports
+> a very big and real positive number we'll report it as a signed long to
+> the HWMON core, so turning it wrongly into a negative report: for this
+> reason 02/02 adds a check inside scmi-hwmon to filter out, reporting
+> errors, any result reported by scmi_reading_get so big as to be considered
+> a negative in 2-complement...
+> 
+> ...and this will probably break even more the undocumented behaviours...
+> 
+> Any feedback welcome !
 
-You lost the regs->ss bit again..
+Hi,
 
-Boot tested on tigerlake with IBT enabled -- passed the boot time
-kretprobe selftests.
+any feedback on this ? (...before I forgot again :D)
 
----
+Thanks,
+Cristian
 
-Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri Mar 25 10:25:56 CET 2022
-
-Currently arch_rethook_trampoline() generates an almost complete
-pt_regs on-stack, everything except regs->ss that is, that currently
-points to the fake return address, which is not a valid segment
-descriptor.
-
-Since interpretation of regs->[sb]p should be done in the context of
-regs->ss, and we have code actually doing that (see
-arch/x86/lib/insn-eval.c for instance), complete the job by also
-pushing ss.
-
-This ensures that anybody who does do look at regs->ss doesn't
-mysteriously malfunction, avoiding much future pain.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/kernel/rethook.c |   24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
-
---- a/arch/x86/kernel/rethook.c
-+++ b/arch/x86/kernel/rethook.c
-@@ -25,29 +25,31 @@ asm(
- 	/* Push a fake return address to tell the unwinder it's a kretprobe. */
- 	"	pushq $arch_rethook_trampoline\n"
- 	UNWIND_HINT_FUNC
--	/* Save the 'sp - 8', this will be fixed later. */
-+	"       pushq $" __stringify(__KERNEL_DS) "\n"
-+	/* Save the 'sp - 16', this will be fixed later. */
- 	"	pushq %rsp\n"
- 	"	pushfq\n"
- 	SAVE_REGS_STRING
- 	"	movq %rsp, %rdi\n"
- 	"	call arch_rethook_trampoline_callback\n"
- 	RESTORE_REGS_STRING
--	/* In the callback function, 'regs->flags' is copied to 'regs->sp'. */
--	"	addq $8, %rsp\n"
-+	/* In the callback function, 'regs->flags' is copied to 'regs->ss'. */
-+	"	addq $16, %rsp\n"
- 	"	popfq\n"
- #else
- 	/* Push a fake return address to tell the unwinder it's a kretprobe. */
- 	"	pushl $arch_rethook_trampoline\n"
- 	UNWIND_HINT_FUNC
--	/* Save the 'sp - 4', this will be fixed later. */
-+	"	pushl %ss\n"
-+	/* Save the 'sp - 8', this will be fixed later. */
- 	"	pushl %esp\n"
- 	"	pushfl\n"
- 	SAVE_REGS_STRING
- 	"	movl %esp, %eax\n"
- 	"	call arch_rethook_trampoline_callback\n"
- 	RESTORE_REGS_STRING
--	/* In the callback function, 'regs->flags' is copied to 'regs->sp'. */
--	"	addl $4, %esp\n"
-+	/* In the callback function, 'regs->flags' is copied to 'regs->ss'. */
-+	"	addl $8, %esp\n"
- 	"	popfl\n"
- #endif
- 	ASM_RET
-@@ -69,8 +71,8 @@ __used __visible void arch_rethook_tramp
- #endif
- 	regs->ip = (unsigned long)&arch_rethook_trampoline;
- 	regs->orig_ax = ~0UL;
--	regs->sp += sizeof(long);
--	frame_pointer = &regs->sp + 1;
-+	regs->sp += 2*sizeof(long);
-+	frame_pointer = (long *)(regs + 1);
- 
- 	/*
- 	 * The return address at 'frame_pointer' is recovered by the
-@@ -80,10 +82,10 @@ __used __visible void arch_rethook_tramp
- 	rethook_trampoline_handler(regs, (unsigned long)frame_pointer);
- 
- 	/*
--	 * Copy FLAGS to 'pt_regs::sp' so that arch_rethook_trapmoline()
-+	 * Copy FLAGS to 'pt_regs::ss' so that arch_rethook_trapmoline()
- 	 * can do RET right after POPF.
- 	 */
--	regs->sp = regs->flags;
-+	*(unsigned long *)&regs->ss = regs->flags;
- }
- NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
- 
-@@ -101,7 +103,7 @@ STACK_FRAME_NON_STANDARD_FP(arch_rethook
- void arch_rethook_fixup_return(struct pt_regs *regs,
- 			       unsigned long correct_ret_addr)
- {
--	unsigned long *frame_pointer = &regs->sp + 1;
-+	unsigned long *frame_pointer = (void *)(regs + 1);
- 
- 	/* Replace fake return address with real one. */
- 	*frame_pointer = correct_ret_addr;

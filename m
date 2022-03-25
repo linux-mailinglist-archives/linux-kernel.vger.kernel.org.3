@@ -2,162 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19ED44E711B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF164E7121
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:25:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358825AbiCYK0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 06:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S1358839AbiCYK1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 06:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238528AbiCYK0F (ORCPT
+        with ESMTP id S1358838AbiCYK1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 06:26:05 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF79A996E;
-        Fri, 25 Mar 2022 03:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648203871; x=1679739871;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=CXURqy5pZMFQks4k5mYSlygBUDaAk/vpOqyC1Kx5R48=;
-  b=io7Sve/p9HvplC1CdHS/T01lLZWPZ77Bm5M02S9+pG0nmJZFjcZ5kwct
-   W1LEMB8wKFRGVbbLgoRhxvcz+gEC0/o+jtn3OnqZ+MofFQUTTjZ5R5QDg
-   YVrDgQ8RWhKUVvkfECieRDSgys8qTkJY59KbkGb72UZSmz2gBLg6V8dY9
-   8ggy9LrDREo6XHUUvMXTLeT/Mf4BwrkJ/Z1pp66r0hTaKXejmPY78JZzv
-   SO9+M8iiU+zsZwNkwrlz3OwwBf3IcgDR0ks88g0EvX4VnVKMM2mB6VY05
-   TqNzkrb/vxIj0vVguAX2g0mJkDDxfrhFNzUUhBFKMFwCWXEesLoQln9Tv
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="246081607"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="246081607"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 03:24:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="648217788"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by fmsmga002.fm.intel.com with ESMTP; 25 Mar 2022 03:24:30 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 25 Mar 2022 03:24:29 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 25 Mar 2022 03:24:29 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 25 Mar 2022 03:24:29 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Fri, 25 Mar 2022 03:24:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ckhfZGBMAehjbpxAy5R8DC7zG82CI0U1nus+/xH6ruReIEnwcBQFr7x1ucuIu6ryLuP95qEJzKwM+zaF8YBGnysFMGE/nvNC2f4njrLlZRQI5/EzCN34zqsnXT/53W2l+etGq7UHsJgybCh0v4Z2suGmEaeLUU26qcvOLXwmQZUhYhaPIHq5Lol7Gq10ee9PcGy7sjqrgtvuWOJJGCP1X4BASSBXTXse6JDSYpCT87kIhS6tpNLzKSo4LQ5j3WaVM6YpSsAqZHk5vz7/S5H5x5eSnOn/mHe6oVEQ4/emajGw9bNCk08taLEaQU2aLezMh9FEQoEX282dBHvFz//Q4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CXURqy5pZMFQks4k5mYSlygBUDaAk/vpOqyC1Kx5R48=;
- b=gCbqHJ1V5bDnusOwJnkPN4IEitRuwJNdYPcGoKMW5bBh+iTL83VBGfCz6RqA17pwu1qzVzTaW3BhMvb5WOCPLIOF479+vDwEJcZXTFa75QsjTM6xgsamPfnPaq1VobRkMgEdsSxVgTXz8FRoyEiaOsJgG/j5ONKEaJ0/fDBX2u7o2wvkHSL12S5kraIECesAye02wLb33mYVmdMzOedLm8gi559EQX0ulPaAb6g6swiQTB77VNyHeFLH4BkHH7hg/Hzzr/xzS4HwHZUODlt4o/wg4v50i0WtLtzb9BA7NhU7NsU4xdO5VLgLGt3o5QzO1WorkCmRQyv0jn61KLpDUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MW3PR11MB4554.namprd11.prod.outlook.com (2603:10b6:303:5d::7)
- by DM4PR11MB5342.namprd11.prod.outlook.com (2603:10b6:5:391::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Fri, 25 Mar
- 2022 10:24:27 +0000
-Received: from MW3PR11MB4554.namprd11.prod.outlook.com
- ([fe80::55b3:8a73:16bc:77df]) by MW3PR11MB4554.namprd11.prod.outlook.com
- ([fe80::55b3:8a73:16bc:77df%7]) with mapi id 15.20.5102.019; Fri, 25 Mar 2022
- 10:24:27 +0000
-From:   "Penigalapati, Sandeep" <sandeep.penigalapati@intel.com>
-To:     "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>
-CC:     "Szapar-Mudlaw, Martyna" <martyna.szapar-mudlaw@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: RE: [Intel-wired-lan] [PATCH v4 net-next 2/5] ice: switch:
- unobscurify bitops loop in ice_fill_adv_dummy_packet()
-Thread-Topic: [Intel-wired-lan] [PATCH v4 net-next 2/5] ice: switch:
- unobscurify bitops loop in ice_fill_adv_dummy_packet()
-Thread-Index: AQHYPRMQkGTQa1VV4kiuVyJ0OBqO7qzP6sfg
-Date:   Fri, 25 Mar 2022 10:24:26 +0000
-Message-ID: <MW3PR11MB4554564C2B9EB60EFD7D4D289C1A9@MW3PR11MB4554.namprd11.prod.outlook.com>
-References: <20220321105954.843154-1-alexandr.lobakin@intel.com>
- <20220321105954.843154-3-alexandr.lobakin@intel.com>
-In-Reply-To: <20220321105954.843154-3-alexandr.lobakin@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-dlp-product: dlpe-windows
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7da4eda9-dbd1-43af-046e-08da0e49a3e1
-x-ms-traffictypediagnostic: DM4PR11MB5342:EE_
-x-microsoft-antispam-prvs: <DM4PR11MB53428B8AEE265A39AF75053D9C1A9@DM4PR11MB5342.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: h28Ust1v+BpgYCEyZIO4Vui2EvVhurZwkb6wMi64ZV7lx+yCI5wwjdVun7a+4IuVUwfxfW2R42uLuXhZp3fp1wDdEHRVs6Dt2aZP+Fn+UvnsET1HJOnSUBLl3YTXQ/bglNwIBfmPndnSQ9/2Xy8us6iMwO/ilBiS+zPN4tCBtXNA3/LAW6k9LrVEsfXX2D1pFq43SKG4TGnkXpo1pHV9YS63nLcUxezpGCh4WbFvzA4bSCH1OfoO/kTvJxgZF8qgLbXBbpINz8nW4/bE8bjZEMtF9KaZljlkFKMOVgQkEL0r0nFe64r3ENTPx6IE3bF0n0b/TpOWKAVM9UvDcxiWEg/1aKUBQF41M9CUGpZRV5nK1gAPrHERVcO3Zt/SM5azqnxuJgUVkhX1YGbGgZM1wOl6aw3mu7bc+AhivGUOdNSgZhwn47nD9G5bmRN1ERhJ8tnafvn6vrsGygMC/39FLjo9j2Rti5J3iXlOiXupBzrN37+hMZcAXH6y64oZahVXAz0Y1goreSAx8H/KbY0wRJCol2HhyhxJEGfhKi/HG33JKAYqbQMHujgHfJ/WhYuLsYe7F69QOBy1qU3AVyAZJAmhmc9sIWq3/N1bW7RcE9mgMfR6Y/rrwXrjKLTJba+n7jUEZnAFcFdpU6injJM9BNOVO/vdW6g9zrtAutU4DiTLrNy3mBJeEdc/vz+eKrVjqROgZZuEkDowLAs/ac1fnQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR11MB4554.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(4744005)(8936002)(82960400001)(6506007)(122000001)(52536014)(26005)(54906003)(316002)(110136005)(186003)(9686003)(508600001)(71200400001)(38100700002)(4326008)(38070700005)(83380400001)(7696005)(8676002)(66556008)(66476007)(64756008)(66446008)(66946007)(76116006)(86362001)(33656002)(2906002)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6uv28mrIrZ/gMSanUHFVCaZZl2cU4RbR2CLvdMY/UG5U81pGb3GgAqX2vMJv?=
- =?us-ascii?Q?yIEUA947RzeXpxL8RENPoGLLwzBblIHlsoJ54KLN1+fIBDgHgunh6g2lF7DY?=
- =?us-ascii?Q?gLFlSbpa03xjCfXgnyi/Q4QgNE/ZltPZVaEQTnLm/vq/f2f1JwMyr3q5njRh?=
- =?us-ascii?Q?LAMWuOVks2z+hK2CVyAMY12Ban21ld0MGOFrxrQQDy09jZpxNWmzNIWjoMJc?=
- =?us-ascii?Q?GT9k6LDU8arICZ+16rc66gB/QqZkpqzJqT7f0GIwKd3lC00jlvtipIMaGQ21?=
- =?us-ascii?Q?bhcRSUB1fXJ5lzesXae6NuUjlg/XAYlKUp9oHXAZaa26Bkzd6BDOHwqHD7BY?=
- =?us-ascii?Q?k3hQha+JDV6TmBdl1hIEG8/khZuqvwTeSjNNXf+X6WzudpgnQhXelHESrObA?=
- =?us-ascii?Q?vMa2vg43uhWfAWWCwYIYjWlUYxhv61+AlkvkWjngErlRW8UymTorsakDaOVR?=
- =?us-ascii?Q?hyb1GEx599TWu5jd4eDgNBRQO/D1bdo6HW+qBz66NN8ZmiJ9PEBNOG5ZZmxk?=
- =?us-ascii?Q?VTn/fsdlWH6VLqunz6CRTmB4NIkbtjSd5hSUKW9iXmV3cfqM1eim0W11/cvk?=
- =?us-ascii?Q?8y+mWrWfr4ZctaKL5j93XjujZgjlBe7tiBx7Sxf2EWwJablf6zH5sET+HKfG?=
- =?us-ascii?Q?htNhxkKGoIcbp6HRuehEPNtkMnafww6YbrSVw8QxoTWdVUaxt3kF7WhtDC9I?=
- =?us-ascii?Q?gSiE81r2nFcctg2Xb5IY3FS35RXzNPyj3A6Z1IN78QAu/NwArmnytArTSg6p?=
- =?us-ascii?Q?sb+kUXHkW1zGR58fH99DdWhqBsdJCkHmFYEPFpW0T/C7huNxfNcnc7YlN/S/?=
- =?us-ascii?Q?5695+sPKZ2u+6Of9+E3ZQXxsvLPioRLnzZfMGlutTW9x3NnKSD81KlOsA0TV?=
- =?us-ascii?Q?irAhmIGySE9sVu2SMKiehggeUX3E18b1JLuhikwCxFfyYLIJcRyCIB64bqVX?=
- =?us-ascii?Q?jn53+w3ejjDSjwkNwaXu5r0ffU1mX6aZqDZkDMl03zeZ4BLW8AOwLIRA1RIm?=
- =?us-ascii?Q?Y+hjNci21X6flpDVfgzo/5/q2/mWGLQrruBdSqlZogajH4xnFFTU342HDd+9?=
- =?us-ascii?Q?rliag5+bsLHDMs6JOHpac3K4C1KyUyGienIoznypLvCkUxuZ2Ze6khWYL6vi?=
- =?us-ascii?Q?ZwkfZA78EMBbkvOgOPFT1X/ZGY4pNjn73EJ4zHaFkopHvsdvMM3Enc+2UZU2?=
- =?us-ascii?Q?0NsDzLBZ26L30OMuAmVmUxfkOrikFWVpD9cQVig/32rmaajk/4qbYPk9tsIR?=
- =?us-ascii?Q?1LXmNgf7GM6BgR5rqWTa7oV3lg77q28M46JueV4i/QOUOd3XnlHTVGYFslsP?=
- =?us-ascii?Q?m9Ns6R5YXrGgko51X3HT+o6LWcamA1mpoUZIqSTp4itmvO9zieAapgpqEq2Q?=
- =?us-ascii?Q?FUnYTZrvRYZmHe6wPwlh2vhcwlfviFDDywAJmPkTSphM2E4ug3MPwPk3wkhN?=
- =?us-ascii?Q?rPsAsGyPYlovhHPY44l/sikc4Isuml6jYXtoTR1CYOgTLPeuks4gUtF2TyaA?=
- =?us-ascii?Q?Pznxs07S/yD3DdPO1IP6Yaooiu15NeT3BQCXkoIGSqfKoiR5KxOPesnjrKq5?=
- =?us-ascii?Q?VIk8scrbaiIwZx9h4B+j2zXvdvjEG6ghfAnzlM7qcLETFnpfFmT+kfQsNcww?=
- =?us-ascii?Q?yaZUYYstoLwQHYw/798ZNjdvzuTPecFoBc4I8Qi3HY7U1ThAyGNua6o8Wn0h?=
- =?us-ascii?Q?/o4e3NRI4fqOUp8HIhOFAg/Ch6gma35Ffv3m6k033QTxh07KBF2agnq3D4XB?=
- =?us-ascii?Q?9VGTDuRt5Ce5O0jsv8TqGZWonEr0B6s=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 25 Mar 2022 06:27:05 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7417CABF53
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:25:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KPys324p3z4xYy;
+        Fri, 25 Mar 2022 21:25:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1648203924;
+        bh=cwdBDBvFf6SFjBMCXyngFofN0HXVDbIPHDkiApcccOQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AAyxLBPLMNQGNWC3RKeD6k0vQhm7wkbRaBBm3EVD1+ysaoNdxsrvSFrfV/wOOqpb/
+         cHuGrZxnIkaLMRDJqjF6NptlcU9f22gwdLod5nEG9SWt1IQZ0QQ5pW8hWiRxFDoA1D
+         8Fm5tbSdzxHs1l/c+9TZ1qUwcDTeL7PzJQ29VKghx4LfgPPTgib9rkGq9pUn5jcROk
+         fY3E2hnCE9iUAmdCmoa/XIRPlpMLv6nB2nMSPvBcp5rZ2dEBckrf3htX/zwzCCuVox
+         OfqaIn8UgDpnGWmikJJQnSk4vrkb1tKL3peFMyeiZtS29bpZboIhggCMZL1jkF3OA3
+         ztEIMcKrTPQAA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Julia.Lawall@inria.fr, aik@ozlabs.ru, anders.roxell@linaro.org,
+        aneesh.kumar@linux.ibm.com, arnd@arndb.de,
+        atrajeev@linux.vnet.ibm.com, bigunclemax@gmail.com,
+        cgel.zte@gmail.com, chenjingwen6@huawei.com,
+        christophe.jaillet@wanadoo.fr, christophe.leroy@csgroup.eu,
+        clabbe@baylibre.com, danielhb413@gmail.com, deller@gmx.de,
+        farosas@linux.ibm.com, ganeshgr@linux.ibm.com, geoff@infradead.org,
+        guozhengkui@vivo.com, haren@linux.ibm.com, hbathini@linux.ibm.com,
+        hbh25y@gmail.com, jakobkoschel@gmail.com, jniethe5@gmail.com,
+        joe.lawrence@redhat.com, keescook@chromium.org,
+        kernel.noureddine@gmail.com, kjain@linux.ibm.com,
+        ldufour@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        mamatha4@linux.vnet.ibm.com, mbenes@suse.cz, mikey@neuling.org,
+        msuchanek@suse.de, nathanl@linux.ibm.com,
+        naveen.n.rao@linux.vnet.ibm.com, npiggin@gmail.com,
+        oss@buserror.net, pmenzel@molgen.mpg.de, pmladek@suse.com,
+        psampat@linux.ibm.com, rdunlap@infradead.org,
+        riteshh@linux.ibm.com, rmclure@linux.ibm.com,
+        sachinp@linux.ibm.com, sourabhjain@linux.ibm.com,
+        tobias@waldekranz.com, treding@nvidia.com, unixbhaskar@gmail.com,
+        vaibhav@linux.ibm.com, wangborong@cdjrlc.com, wedsonaf@google.com,
+        yuehaibing@huawei.com
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.18-1 tag
+Date:   Fri, 25 Mar 2022 21:25:02 +1100
+Message-ID: <87zglefhxd.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR11MB4554.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7da4eda9-dbd1-43af-046e-08da0e49a3e1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2022 10:24:26.9917
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: W8OvlCKvOs7tKu91pqDYtsY8CBS/4fdGbPzLj5RApauxA7VzO27mFfDhMbHZB6NrnENiwcXVpYIvYtwcUD5Rk8NDRHlv6H56+KxlDj0ebvQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5342
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -165,31 +71,1005 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->-----Original Message-----
->From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
->Alexander Lobakin
->Sent: Monday, March 21, 2022 4:30 PM
->To: intel-wired-lan@lists.osuosl.org
->Cc: Szapar-Mudlaw, Martyna <martyna.szapar-mudlaw@intel.com>;
->netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Jakub Kicinski
-><kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; David S. Miller
-><davem@davemloft.net>
->Subject: [Intel-wired-lan] [PATCH v4 net-next 2/5] ice: switch: unobscurif=
-y
->bitops loop in ice_fill_adv_dummy_packet()
->
->A loop performing header modification according to the provided mask in
->ice_fill_adv_dummy_packet() is very cryptic (and error-prone).
->Replace two identical cast-deferences with a variable. Replace three struc=
-t-
->member-array-accesses with a variable. Invert the condition, reduce the
->indentation by one -> eliminate line wraps.
->
->Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
->Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
->Tested-by: Marcin Szycik <marcin.szycik@linux.intel.com>
->---
-> drivers/net/ethernet/intel/ice/ice_switch.c | 16 +++++++++-------
-> 1 file changed, 9 insertions(+), 7 deletions(-)
->
-Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Hi Linus,
+
+Please pull powerpc updates for 5.18.
+
+Livepatch support for 32-bit is probably the standout new feature, otherwis=
+e mostly just
+lots of bits and pieces all over the board.
+
+There's a series of commits cleaning up function descriptor handling, which=
+ touches
+a few other arches as well as LKDTM. It has acks from Arnd, Kees and Helge.
+
+There's no conflicts with your current tree. There are two minor conflicts =
+in linux-next,
+one with the nvdimm tree[1] and the other with the tip tree[2].
+
+cheers
+
+1: https://lore.kernel.org/all/20220315191538.323eefbb@canb.auug.org.au/
+2: https://lore.kernel.org/all/20220315130857.4610e761@canb.auug.org.au/
+
+
+Notable out of area changes:
+
+  a257cacc3871 asm-generic: Define CONFIG_HAVE_FUNCTION_DESCRIPTORS:
+    arch/Kconfig
+    arch/ia64/Kconfig
+    arch/parisc/Kconfig
+    include/linux/kallsyms.h
+
+  41a88b45479d ia64: Rename 'ip' to 'addr' in 'struct fdesc'
+    arch/ia64/include/asm/elf.h
+    arch/ia64/kernel/module.c
+
+  e1478d8eaf27 asm-generic: Refactor dereference_[kernel]_function_descript=
+or()
+    arch/ia64/include/asm/sections.h
+    arch/parisc/include/asm/sections.h
+    arch/parisc/kernel/process.c
+    include/asm-generic/sections.h
+
+  5e5a6c544165 lkdtm: Add a test for function descriptors protection
+    drivers/misc/lkdtm/core.c
+    drivers/misc/lkdtm/lkdtm.h
+    drivers/misc/lkdtm/perms.c
+    tools/testing/selftests/lkdtm/tests.txt
+
+  kernel/extable.c		# b64913394f12 lkdtm: Really write into kernel text in =
+WRITE_KERN
+  kernel/livepatch/core.c	# 2f293651eca3 livepatch: Fix build failure on 32=
+ bits processors
+
+
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/po=
+werpc-5.18-1
+
+for you to fetch changes up to fe2640bd7a62f1f7c3f55fbda31084085075bc30:
+
+  powerpc/pseries: Fix use after free in remove_phb_dynamic() (2022-03-21 1=
+3:17:47 +1100)
+
+- ------------------------------------------------------------------
+powerpc updates for 5.18
+
+ - Enforce kernel RO, and implement STRICT_MODULE_RWX for 603.
+
+ - Add support for livepatch to 32-bit.
+
+ - Implement CONFIG_DYNAMIC_FTRACE_WITH_ARGS.
+
+ - Merge vdso64 and vdso32 into a single directory.
+
+ - Fix build errors with newer binutils.
+
+ - Add support for UADDR64 relocations, which are emitted by some toolchain=
+s. This allows
+   powerpc to build with the latest lld.
+
+ - Fix (another) potential userspace r13 corruption in transactional memory=
+ handling.
+
+ - Cleanups of function descriptor handling & related fixes to LKDTM.
+
+Thanks to: Abdul Haleem, Alexey Kardashevskiy, Anders Roxell, Aneesh Kumar =
+K.V, Anton
+Blanchard, Arnd Bergmann, Athira Rajeev, Bhaskar Chowdhury, C=C3=A9dric Le =
+Goater, Chen
+Jingwen, Christophe JAILLET, Christophe Leroy, Corentin Labbe, Daniel Axten=
+s, Daniel
+Henrique Barboza, David Dai, Fabiano Rosas, Ganesh Goudar, Guo Zhengkui, Ha=
+ngyu Hua, Haren
+Myneni, Hari Bathini, Igor Zhbanov, Jakob Koschel, Jason Wang, Jeremy Kerr,=
+ Joachim
+Wiberg, Jordan Niethe, Julia Lawall, Kajol Jain, Kees Cook, Laurent Dufour,=
+ Madhavan
+Srinivasan, Mamatha Inamdar, Maxime Bizon, Maxim Kiselev, Maxim Kochetkov, =
+Michal
+Suchanek, Nageswara R Sastry, Nathan Lynch, Naveen N. Rao, Nicholas Piggin,=
+ Nour-eddine
+Taleb, Paul Menzel, Ping Fang, Pratik R. Sampat, Randy Dunlap, Ritesh Harja=
+ni, Rohan
+McLure, Russell Currey, Sachin Sant, Segher Boessenkool, Shivaprasad G Bhat=
+, Sourabh Jain,
+Thierry Reding, Tobias Waldekranz, Tyrel Datwyler, Vaibhav Jain, Vladimir O=
+ltean, Wedson
+Almeida Filho, YueHaibing.
+
+- ------------------------------------------------------------------
+Alexey Kardashevskiy (2):
+      KVM: PPC: Merge powerpc's debugfs entry content into generic entry
+      powerpc/64: Add UADDR64 relocation support
+
+Anders Roxell (3):
+      powerpc/lib/sstep: Fix 'sthcx' instruction
+      powerpc: Fix build errors with newer binutils
+      powerpc/lib/sstep: Fix build errors with newer binutils
+
+Aneesh Kumar K.V (1):
+      powerpc/mm: Update default hugetlb size early
+
+Athira Rajeev (11):
+      powerpc/perf: Don't use perf_hw_context for trace IMC PMU
+      selftests/powerpc/pmu: Include mmap_buffer field as part of struct ev=
+ent
+      selftests/powerpc/pmu: Add support for perf sampling tests
+      selftests/powerpc/pmu: Add macro to extract mmcr0/mmcr1 fields
+      selftests/powerpc/pmu/: Add interface test for mmcr0 exception bits
+      selftests/powerpc/pmu/: Add interface test for mmcr0_cc56run field
+      selftests/powerpc/pmu/: Add interface test for mmcr0_pmccext bit
+      selftests/powerpc/pmu/: Add interface test for mmcr0_pmcjce field
+      selftests/powerpc/pmu/: Add interface test for mmcr0_fc56 field using=
+ pmc1
+      selftests/powerpc/pmu/: Add interface test for mmcr0_pmc56 using pmc5
+      selftests/powerpc/pmu/: Add interface test for mmcr1_comb field
+
+Bhaskar Chowdhury (1):
+      powerpc/epapr: Fix parmeters typo
+
+Chen Jingwen (1):
+      powerpc/kasan: Fix early region not updated correctly
+
+Christophe JAILLET (1):
+      powerpc/xive: Add some error handling code to 'xive_spapr_init()'
+
+Christophe Leroy (65):
+      powerpc/603: Remove outdated comment
+      powerpc/603: Clear C bit when PTE is read only
+      powerpc/nohash: Remove pte_same()
+      powerpc/32s: Make pte_update() non atomic on 603 core
+      powerpc/machdep: Remove CONFIG_PPC_HAS_FEATURE_CALLS
+      powerpc/machdep: Move sys_ctrler_t definition into pmac_feature.h
+      powerpc/mpc86xx_hpcn: Remove obsolete statement
+      powerpc/corenet: Change criteria to set MPIC_ENABLE_COREINT
+      powerpc/32: Remove remaining .stabs annotations
+      powerpc/32: Remove _ENTRY() macro
+      livepatch: Fix build failure on 32 bits processors
+      powerpc/module_32: Fix livepatching for RO modules
+      powerpc/ftrace: Add support for livepatch to PPC32
+      powerpc/ftrace: Don't save again LR in ftrace_regs_caller() on PPC32
+      powerpc/ftrace: Simplify PPC32's return_to_handler()
+      powerpc/ftrace: Prepare PPC32's ftrace_caller() for CONFIG_DYNAMIC_FT=
+RACE_WITH_ARGS
+      powerpc/ftrace: Prepare PPC64's ftrace_caller() for CONFIG_DYNAMIC_FT=
+RACE_WITH_ARGS
+      powerpc/ftrace: Implement CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+      powerpc/ftrace: Refactor ftrace_{en/dis}able_ftrace_graph_caller
+      powerpc/ftrace: directly call of function graph tracer by ftrace call=
+er
+      powerpc/ftrace: Prepare ftrace_64_mprofile.S for reuse by PPC32
+      powerpc/ftrace: Remove ftrace_32.S
+      powerpc/set_memory: Avoid spinlock recursion in change_page_attr()
+      powerpc: Add set_memory_{p/np}() and remove set_memory_attr()
+      powerpc/bpf: Always reallocate BPF_REG_5, BPF_REG_AX and TMP_REG when=
+ possible
+      powerpc/32s: Enable STRICT_MODULE_RWX for the 603 core
+      powerpc: Use the newly added is_tsk_32bit_task() macro
+      powerpc/lib/sstep: Use l1_dcache_bytes() instead of opencoding
+      powerpc/lib/sstep: Remove unneeded #ifdef __powerpc64__
+      powerpc/lib/sstep: use truncate_if_32bit()
+      powerpc/vdso: augment VDSO32 functions to support 64 bits build
+      powerpc/vdso: Rework VDSO32 makefile to add a prefix to object files
+      powerpc/vdso: Merge vdso64 and vdso32 into a single directory
+      powerpc/vdso: Remove cvdso_call_time macro
+      powerpc/vdso: Move cvdso_call macro into gettimeofday.S
+      powerpc: Don't allow the use of EMIT_BUG_ENTRY with BUGFLAG_WARNING
+      powerpc/ftrace: Also save r1 in ftrace_caller()
+      powerpc/ftrace: Add recursion protection in prepare_ftrace_return()
+      powerpc/ftrace: Have arch_ftrace_get_regs() return NULL unless FL_SAV=
+E_REGS is set
+      powerpc/ftrace: Style cleanup in ftrace_mprofile.S
+      powerpc: Fix 'sparse' checking on PPC64le
+      powerpc: Move and rename func_descr_t
+      powerpc: Use 'struct func_desc' instead of 'struct ppc64_opd_entry'
+      powerpc: Remove 'struct ppc64_opd_entry'
+      powerpc: Prepare func_desc_t for refactorisation
+      ia64: Rename 'ip' to 'addr' in 'struct fdesc'
+      asm-generic: Define CONFIG_HAVE_FUNCTION_DESCRIPTORS
+      asm-generic: Define 'func_desc_t' to commonly describe function descr=
+iptors
+      asm-generic: Refactor dereference_[kernel]_function_descriptor()
+      lkdtm: Force do_nothing() out of line
+      lkdtm: Really write into kernel text in WRITE_KERN
+      lkdtm: Fix execute_[user]_location()
+      lkdtm: Add a test for function descriptors protection
+      powerpc: Remove remaining stab codes
+      powerpc/interrupt: Remove struct interrupt_state
+      powerpc/ftrace: Don't use lmw/stmw in ftrace_regs_caller()
+      powerpc/ftrace: Refactor ftrace_{regs_}caller
+      powerpc/ftrace: Regroup PPC64 specific operations in ftrace_mprofile.S
+      powerpc/ftrace: Use STK_GOT in ftrace_mprofile.S
+      powerpc: Cleanup asm-prototypes.c
+      powerpc/smp: Declare current_set static
+      powerpc/kexec: Declare kexec_paca static
+      powerpc: Move C prototypes out of asm-prototypes.h
+      powerpc/bitops: Force inlining of fls()
+      powerpc/64: Force inlining of prevent_user_access() and set_kuap()
+
+Corentin Labbe (1):
+      macintosh: macio_asic: remove useless cast for driver.name
+
+Daniel Henrique Barboza (1):
+      powerpc/mm/numa: skip NUMA_NO_NODE onlining in parse_numa_properties()
+
+Fabiano Rosas (10):
+      KVM: PPC: Book3S HV: Stop returning internal values to userspace
+      KVM: PPC: Fix vmx/vsx mixup in mmio emulation
+      KVM: PPC: mmio: Reject instructions that access more than mmio.data s=
+ize
+      KVM: PPC: mmio: Return to guest after emulation failure
+      KVM: PPC: Book3s: mmio: Deliver DSI after emulation failure
+      KVM: PPC: Book3S HV: Check return value of kvmppc_radix_init
+      KVM: PPC: Book3S HV: Delay setting of kvm ops
+      KVM: PPC: Book3S HV: Free allocated memory if module init fails
+      KVM: PPC: Decrement module refcount if init_vm fails
+      powerpc: Fix debug print in smp_setup_cpu_maps
+
+Ganesh Goudar (4):
+      powerpc/pseries: Parse control memory access error
+      selftests/powerpc: Add test for real address error handling
+      powerpc/mce: Modify the real address error logging messages
+      powerpc/mce: Avoid using irq_work_queue() in realmode
+
+Guo Zhengkui (1):
+      powerpc/module_64: fix array_size.cocci warning
+
+Hangyu Hua (2):
+      powerpc/secvar: fix refcount leak in format_show()
+      powerpc: 8xx: fix a return value error in mpc8xx_pic_init
+
+Haren Myneni (12):
+      powerpc/pseries/vas: Use common names in VAS capability structure
+      powerpc/pseries/vas: Save PID in pseries_vas_window struct
+      powerpc/vas: Add paste address mmap fault handler
+      powerpc/vas: Return paste instruction failure if no active window
+      powerpc/vas: Map paste address only if window is active
+      powerpc/pseries/vas: Close windows with DLPAR core removal
+      powerpc/pseries/vas: Reopen windows with DLPAR core add
+      powerpc/pseries/vas: sysfs interface to export capabilities
+      powerpc/pseries/vas: Add 'update_total_credits' entry for QoS capabil=
+ities
+      powerpc/pseries/vas: Define global hv_cop_caps struct
+      powerpc/pseries/vas: Modify reconfig open/close functions for migrati=
+on
+      powerpc/pseries/vas: Add VAS migration handler
+
+Hari Bathini (1):
+      powerpc/fadump: register for fadump as early as possible
+
+Jakob Koschel (1):
+      powerpc/sysdev: fix incorrect use to determine if list is empty
+
+Jason Wang (1):
+      powerpc/kvm: no need to initialise statics to 0
+
+Jordan Niethe (1):
+      powerpc64/bpf: Store temp registers' bpf to ppc mapping
+
+Julia Lawall (1):
+      powerpc/spufs: adjust list element pointer type
+
+Kajol Jain (4):
+      selftests/powerpc/pmu: Add utility functions to post process the mmap=
+ buffer
+      selftests/powerpc/pmu: Add macro to extract mmcr3 and mmcra fields
+      selftests/powerpc/pmu/: Add interface test for mmcr3_src fields
+      selftests/powerpc/pmu: Add interface test for mmcra register fields
+
+Laurent Dufour (1):
+      powerpc/pseries: read the lpar name from the firmware
+
+Madhavan Srinivasan (5):
+      selftests/powerpc/pmu: Add macros to parse event codes
+      selftests/powerpc/pmu: Add event_init_sampling function
+      selftests/powerpc/pmu: Add macros to extract mmcr fields
+      selftests/powerpc/pmu/: Add interface test for mmcr2_l2l3 field
+      selftests/powerpc/pmu/: Add interface test for mmcr2_fcs_fch fields
+
+Mamatha Inamdar (1):
+      PCI: rpaphp: Add MODULE_DESCRIPTION
+
+Maxim Kiselev (2):
+      powerpc: dts: t104xrdb: fix phy type for FMAN 4/5
+      powerpc: dts: t1040rdb: fix ports names for Seville Ethernet switch
+
+Michael Ellerman (10):
+      powerpc/64: Move paca allocation later in boot
+      powerpc/ptdump: Fix sparse warning in hashpagetable.c
+      powerpc: Fix STACKTRACE=3Dn build
+      powerpc/Makefile: Don't pass -mcpu=3Dpowerpc64 when building 32-bit
+      Merge branch 'topic/func-desc-lkdtm' into next
+      Merge branch 'topic/ppc-kvm' into next
+      powerpc/64s: Don't use DSISR for SLB faults
+      powerpc/code-patching: Pre-map patch area
+      powerpc/64e: Tie PPC_BOOK3E_64 to PPC_FSL_BOOK3E
+      powerpc/pseries: Fix use after free in remove_phb_dynamic()
+
+Michal Suchanek (1):
+      powerpc: add link stack flush mitigation status in debugfs.
+
+Nathan Lynch (1):
+      powerpc/pseries: make pseries_devicetree_update() static
+
+Naveen N. Rao (16):
+      powerpc/bpf: Skip branch range validation during first pass
+      powerpc/bpf: Emit a single branch instruction for known short branch =
+ranges
+      powerpc/bpf: Handle large branch ranges with BPF_EXIT
+      powerpc64/bpf: Do not save/restore LR on each call to bpf_stf_barrier=
+()
+      powerpc64/bpf: Use r12 for constant blinding
+      powerpc64: Set PPC64_ELF_ABI_v[1|2] macros to 1
+      powerpc64/bpf elfv2: Setup kernel TOC in r2 on entry
+      powerpc64/bpf elfv1: Do not load TOC before calling functions
+      powerpc64/bpf: Optimize instruction sequence used for function calls
+      powerpc/bpf: Rename PPC_BL_ABS() to PPC_BL()
+      powerpc64/bpf: Convert some of the uses of PPC_BPF_[LL|STL] to PPC_BP=
+F_[LD|STD]
+      powerpc64/bpf: Get rid of PPC_BPF_[LL|STL|STLU] macros
+      powerpc/bpf: Cleanup bpf_jit.h
+      powerpc/bpf: Move bpf_jit64.h into bpf_jit_comp64.c
+      powerpc/bpf: Use _Rn macros for GPRs
+      powerpc/bpf: Simplify bpf_to_ppc() and adopt it for powerpc64
+
+Nicholas Piggin (4):
+      powerpc/64s/hash: Make hash faults work in NMI context
+      powerpc/tm: Fix more userspace r13 corruption
+      powerpc/time: Fix KVM host re-arming a timer beyond decrementer range
+      powerpc/time: improve decrementer clockevent processing
+
+Nour-eddine Taleb (1):
+      KVM: PPC: Book3S HV: remove unnecessary casts
+
+Paul Menzel (1):
+      powerpc/boot: Add `otheros-too-big.bld` to .gitignore
+
+Pratik R. Sampat (2):
+      powerpc/pseries: Interface to represent PAPR firmware attributes
+      selftest/powerpc: Add PAPR sysfs attributes sniff test
+
+Randy Dunlap (1):
+      powerpc/xive: fix return value of __setup handler
+
+Ritesh Harjani (1):
+      selftests/powerpc/copyloops: Add memmove_64 test
+
+Rohan McLure (1):
+      powerpc: declare unmodified attribute_group usages const
+
+Sachin Sant (1):
+      powerpc/xive: Export XIVE IPI information for online-only processors.
+
+Sourabh Jain (1):
+      powerpc: Set crashkernel offset to mid of RMA region
+
+Thierry Reding (1):
+      powerpc: dts: Fix some I2C unit addresses
+
+Tobias Waldekranz (1):
+      powerpc/e500/qemu-e500: allow core to idle without waiting
+
+Vaibhav Jain (1):
+      powerpc/papr_scm: Implement initial support for injecting smart errors
+
+Wedson Almeida Filho (1):
+      powerpc/module_64: use module_init_section instead of patching names
+
+YueHaibing (1):
+      powerpc/spufs: Fix build warning when CONFIG_PROC_FS=3Dn
+
+jing yangyang (1):
+      powerpc/ps3: remove unneeded semicolons
+
+
+ Documentation/ABI/testing/sysfs-bus-papr-pmem                             =
+                 |  12 +
+ Documentation/ABI/testing/sysfs-firmware-papr-energy-scale-info           =
+                 |  29 ++
+ arch/Kconfig                                                              =
+                 |   3 +
+ arch/ia64/Kconfig                                                         =
+                 |   1 +
+ arch/ia64/include/asm/elf.h                                               =
+                 |   2 +-
+ arch/ia64/include/asm/sections.h                                          =
+                 |  24 +-
+ arch/ia64/kernel/module.c                                                 =
+                 |   6 +-
+ arch/parisc/Kconfig                                                       =
+                 |   1 +
+ arch/parisc/include/asm/sections.h                                        =
+                 |  16 +-
+ arch/parisc/kernel/process.c                                              =
+                 |  21 -
+ arch/powerpc/Kconfig                                                      =
+                 |  10 +-
+ arch/powerpc/Makefile                                                     =
+                 |   8 +-
+ arch/powerpc/boot/.gitignore                                              =
+                 |   1 +
+ arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts                              =
+                 |  30 ++
+ arch/powerpc/boot/dts/fsl/t1040rdb.dts                                    =
+                 |   8 +-
+ arch/powerpc/boot/dts/fsl/t104xrdb.dtsi                                   =
+                 |   4 +-
+ arch/powerpc/boot/dts/xpedite5200.dts                                     =
+                 |   2 +-
+ arch/powerpc/boot/dts/xpedite5200_xmon.dts                                =
+                 |   2 +-
+ arch/powerpc/include/asm/asm-compat.h                                     =
+                 |   2 +
+ arch/powerpc/include/asm/asm-prototypes.h                                 =
+                 |  58 ---
+ arch/powerpc/include/asm/bitops.h                                         =
+                 |   4 +-
+ arch/powerpc/include/asm/book3s/32/pgtable.h                              =
+                 |  37 +-
+ arch/powerpc/include/asm/book3s/64/kup.h                                  =
+                 |   4 +-
+ arch/powerpc/include/asm/bug.h                                            =
+                 |  13 +-
+ arch/powerpc/include/asm/code-patching.h                                  =
+                 |   2 +-
+ arch/powerpc/include/asm/elf.h                                            =
+                 |   6 +
+ arch/powerpc/include/asm/epapr_hcalls.h                                   =
+                 |   2 +-
+ arch/powerpc/include/asm/firmware.h                                       =
+                 |   4 +-
+ arch/powerpc/include/asm/ftrace.h                                         =
+                 |  66 ++-
+ arch/powerpc/include/asm/hugetlb.h                                        =
+                 |   5 +-
+ arch/powerpc/include/asm/hvcall.h                                         =
+                 |   8 +-
+ arch/powerpc/include/asm/interrupt.h                                      =
+                 |  45 +-
+ arch/powerpc/include/asm/io.h                                             =
+                 |  40 +-
+ arch/powerpc/include/asm/kexec.h                                          =
+                 |   2 +
+ arch/powerpc/include/asm/kvm_host.h                                       =
+                 |   6 +-
+ arch/powerpc/include/asm/kvm_ppc.h                                        =
+                 |   2 +
+ arch/powerpc/include/asm/livepatch.h                                      =
+                 |  12 +-
+ arch/powerpc/include/asm/machdep.h                                        =
+                 |  22 +-
+ arch/powerpc/include/asm/mce.h                                            =
+                 |  13 +
+ arch/powerpc/include/asm/nohash/32/pgtable.h                              =
+                 |   3 -
+ arch/powerpc/include/asm/nohash/64/pgtable.h                              =
+                 |   3 -
+ arch/powerpc/include/asm/paca.h                                           =
+                 |   1 +
+ arch/powerpc/include/asm/pmac_feature.h                                   =
+                 |  12 +
+ arch/powerpc/include/asm/ppc-opcode.h                                     =
+                 |   2 +
+ arch/powerpc/include/asm/ppc_asm.h                                        =
+                 |  11 -
+ arch/powerpc/include/asm/processor.h                                      =
+                 |   8 +
+ arch/powerpc/include/asm/rtas.h                                           =
+                 |   1 -
+ arch/powerpc/include/asm/sections.h                                       =
+                 |  29 +-
+ arch/powerpc/include/asm/set_memory.h                                     =
+                 |  12 +-
+ arch/powerpc/include/asm/setup.h                                          =
+                 |   7 +
+ arch/powerpc/include/asm/smp.h                                            =
+                 |   3 +
+ arch/powerpc/include/asm/spu.h                                            =
+                 |   4 +-
+ arch/powerpc/include/asm/syscalls.h                                       =
+                 |   4 +
+ arch/powerpc/include/asm/thread_info.h                                    =
+                 |   2 +-
+ arch/powerpc/include/asm/types.h                                          =
+                 |  10 +-
+ arch/powerpc/include/asm/uaccess.h                                        =
+                 |   3 +
+ arch/powerpc/include/asm/vas.h                                            =
+                 |  14 +
+ arch/powerpc/include/asm/vdso/gettimeofday.h                              =
+                 |  69 +--
+ arch/powerpc/include/uapi/asm/elf.h                                       =
+                 |   8 -
+ arch/powerpc/include/uapi/asm/papr_pdsm.h                                 =
+                 |  18 +
+ arch/powerpc/kernel/Makefile                                              =
+                 |   6 +-
+ arch/powerpc/kernel/asm-offsets.c                                         =
+                 |   2 +-
+ arch/powerpc/kernel/early_32.c                                            =
+                 |   1 -
+ arch/powerpc/kernel/fadump.c                                              =
+                 |  13 +-
+ arch/powerpc/kernel/head_40x.S                                            =
+                 |  18 +-
+ arch/powerpc/kernel/head_44x.S                                            =
+                 |   4 +-
+ arch/powerpc/kernel/head_8xx.S                                            =
+                 |   4 +-
+ arch/powerpc/kernel/head_book3s_32.S                                      =
+                 |  21 +-
+ arch/powerpc/kernel/head_fsl_booke.S                                      =
+                 |   6 +-
+ arch/powerpc/kernel/interrupt.c                                           =
+                 |   1 -
+ arch/powerpc/kernel/irq.c                                                 =
+                 |   1 -
+ arch/powerpc/kernel/mce.c                                                 =
+                 |  69 +--
+ arch/powerpc/kernel/module_32.c                                           =
+                 |  44 +-
+ arch/powerpc/kernel/module_64.c                                           =
+                 |  56 +--
+ arch/powerpc/kernel/prom.c                                                =
+                 |  15 +-
+ arch/powerpc/kernel/ptrace/ptrace-view.c                                  =
+                 |   2 +-
+ arch/powerpc/kernel/ptrace/ptrace.c                                       =
+                 |   7 +-
+ arch/powerpc/kernel/reloc_64.S                                            =
+                 |  67 ++-
+ arch/powerpc/kernel/rtas.c                                                =
+                 |   6 +
+ arch/powerpc/kernel/security.c                                            =
+                 |  15 +
+ arch/powerpc/kernel/secvar-sysfs.c                                        =
+                 |   9 +-
+ arch/powerpc/kernel/setup-common.c                                        =
+                 |   4 +-
+ arch/powerpc/kernel/setup_64.c                                            =
+                 |   1 -
+ arch/powerpc/kernel/signal_64.c                                           =
+                 |   8 +-
+ arch/powerpc/kernel/smp.c                                                 =
+                 |   3 +-
+ arch/powerpc/kernel/syscalls.c                                            =
+                 |   1 -
+ arch/powerpc/kernel/tau_6xx.c                                             =
+                 |   1 -
+ arch/powerpc/kernel/time.c                                                =
+                 |  26 +-
+ arch/powerpc/kernel/tm.S                                                  =
+                 |  25 +-
+ arch/powerpc/kernel/trace/Makefile                                        =
+                 |   6 +-
+ arch/powerpc/kernel/trace/ftrace.c                                        =
+                 |  40 +-
+ arch/powerpc/kernel/trace/ftrace_32.S                                     =
+                 | 187 --------
+ arch/powerpc/kernel/trace/{ftrace_64.S =3D> ftrace_low.S}                 =
+                   |  14 +
+ arch/powerpc/kernel/trace/{ftrace_64_mprofile.S =3D> ftrace_mprofile.S}   =
+                   | 228 +++------
+ arch/powerpc/kernel/{vdso64 =3D> vdso}/.gitignore                         =
+                   |   2 +
+ arch/powerpc/kernel/vdso/Makefile                                         =
+                 | 103 ++++
+ arch/powerpc/kernel/{vdso32 =3D> vdso}/cacheflush.S                       =
+                   |   4 +-
+ arch/powerpc/kernel/{vdso32 =3D> vdso}/datapage.S                         =
+                   |  10 +-
+ arch/powerpc/kernel/{vdso32/gen_vdso_offsets.sh =3D> vdso/gen_vdso32_offse=
+ts.sh}             |   0
+ arch/powerpc/kernel/{vdso64/gen_vdso_offsets.sh =3D> vdso/gen_vdso64_offse=
+ts.sh}             |   0
+ arch/powerpc/kernel/{vdso32 =3D> vdso}/getcpu.S                           =
+                   |   4 +-
+ arch/powerpc/kernel/{vdso32 =3D> vdso}/gettimeofday.S                     =
+                   |  54 ++-
+ arch/powerpc/kernel/{vdso32 =3D> vdso}/note.S                             =
+                   |   0
+ arch/powerpc/kernel/{vdso32/sigtramp.S =3D> vdso/sigtramp32.S}            =
+                   |   0
+ arch/powerpc/kernel/{vdso64/sigtramp.S =3D> vdso/sigtramp64.S}            =
+                   |   0
+ arch/powerpc/kernel/{vdso32 =3D> vdso}/vdso32.lds.S                       =
+                   |   0
+ arch/powerpc/kernel/{vdso64 =3D> vdso}/vdso64.lds.S                       =
+                   |   0
+ arch/powerpc/kernel/{vdso32 =3D> vdso}/vgettimeofday.c                    =
+                   |  23 +-
+ arch/powerpc/kernel/vdso32/Makefile                                       =
+                 |  73 ---
+ arch/powerpc/kernel/vdso32_wrapper.S                                      =
+                 |   2 +-
+ arch/powerpc/kernel/vdso64/Makefile                                       =
+                 |  56 ---
+ arch/powerpc/kernel/vdso64/cacheflush.S                                   =
+                 |  75 ---
+ arch/powerpc/kernel/vdso64/datapage.S                                     =
+                 |  59 ---
+ arch/powerpc/kernel/vdso64/getcpu.S                                       =
+                 |  33 --
+ arch/powerpc/kernel/vdso64/gettimeofday.S                                 =
+                 |  58 ---
+ arch/powerpc/kernel/vdso64/note.S                                         =
+                 |   1 -
+ arch/powerpc/kernel/vdso64/vgettimeofday.c                                =
+                 |  29 --
+ arch/powerpc/kernel/vdso64_wrapper.S                                      =
+                 |   2 +-
+ arch/powerpc/kernel/vmlinux.lds.S                                         =
+                 |   2 -
+ arch/powerpc/kexec/core.c                                                 =
+                 |  15 +-
+ arch/powerpc/kexec/core_64.c                                              =
+                 |   3 +-
+ arch/powerpc/kvm/book3s_64_mmu_host.c                                     =
+                 |   2 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c                                       =
+                 |   2 +-
+ arch/powerpc/kvm/book3s_64_mmu_radix.c                                    =
+                 |   2 +-
+ arch/powerpc/kvm/book3s_hv.c                                              =
+                 |  59 +--
+ arch/powerpc/kvm/book3s_hv_builtin.c                                      =
+                 |   1 -
+ arch/powerpc/kvm/book3s_hv_rm_xive.c                                      =
+                 |   1 -
+ arch/powerpc/kvm/book3s_xics.c                                            =
+                 |  15 +-
+ arch/powerpc/kvm/book3s_xive.c                                            =
+                 |  15 +-
+ arch/powerpc/kvm/book3s_xive_native.c                                     =
+                 |  15 +-
+ arch/powerpc/kvm/e500.c                                                   =
+                 |   1 +
+ arch/powerpc/kvm/e500mc.c                                                 =
+                 |   1 +
+ arch/powerpc/kvm/emulate_loadstore.c                                      =
+                 |  10 +-
+ arch/powerpc/kvm/powerpc.c                                                =
+                 |  81 +++-
+ arch/powerpc/kvm/timing.c                                                 =
+                 |  21 +-
+ arch/powerpc/kvm/timing.h                                                 =
+                 |  12 +-
+ arch/powerpc/kvm/trace_hv.h                                               =
+                 |   1 +
+ arch/powerpc/lib/checksum_32.S                                            =
+                 |   3 -
+ arch/powerpc/lib/code-patching.c                                          =
+                 |  14 +
+ arch/powerpc/lib/copy_32.S                                                =
+                 |   3 -
+ arch/powerpc/lib/sstep.c                                                  =
+                 |  30 +-
+ arch/powerpc/lib/vmx-helper.c                                             =
+                 |   1 -
+ arch/powerpc/mm/book3s64/hash_utils.c                                     =
+                 |  54 +--
+ arch/powerpc/mm/book3s64/hugetlbpage.c                                    =
+                 |   2 +-
+ arch/powerpc/mm/book3s64/slb.c                                            =
+                 |   1 -
+ arch/powerpc/mm/fault.c                                                   =
+                 |  15 +-
+ arch/powerpc/mm/hugetlbpage.c                                             =
+                 |   5 +-
+ arch/powerpc/mm/init_64.c                                                 =
+                 |   4 +
+ arch/powerpc/mm/kasan/kasan_init_32.c                                     =
+                 |   3 +-
+ arch/powerpc/mm/numa.c                                                    =
+                 |   4 +-
+ arch/powerpc/mm/pageattr.c                                                =
+                 |  71 +--
+ arch/powerpc/mm/pgtable_32.c                                              =
+                 |  27 +-
+ arch/powerpc/mm/ptdump/hashpagetable.c                                    =
+                 |   5 +-
+ arch/powerpc/net/bpf_jit.h                                                =
+                 |  38 +-
+ arch/powerpc/net/bpf_jit64.h                                              =
+                 |  91 ----
+ arch/powerpc/net/bpf_jit_comp.c                                           =
+                 |  34 +-
+ arch/powerpc/net/bpf_jit_comp32.c                                         =
+                 | 127 ++---
+ arch/powerpc/net/bpf_jit_comp64.c                                         =
+                 | 440 +++++++++--------
+ arch/powerpc/perf/callchain.h                                             =
+                 |   9 +-
+ arch/powerpc/perf/callchain_64.c                                          =
+                 |  27 --
+ arch/powerpc/perf/generic-compat-pmu.c                                    =
+                 |   4 +-
+ arch/powerpc/perf/hv-24x7.c                                               =
+                 |   6 +-
+ arch/powerpc/perf/hv-gpci.c                                               =
+                 |   8 +-
+ arch/powerpc/perf/imc-pmu.c                                               =
+                 |  12 +-
+ arch/powerpc/perf/isa207-common.c                                         =
+                 |   2 +-
+ arch/powerpc/perf/perf_regs.c                                             =
+                 |   8 +-
+ arch/powerpc/perf/power10-pmu.c                                           =
+                 |   6 +-
+ arch/powerpc/perf/power7-pmu.c                                            =
+                 |   4 +-
+ arch/powerpc/perf/power8-pmu.c                                            =
+                 |   4 +-
+ arch/powerpc/perf/power9-pmu.c                                            =
+                 |   6 +-
+ arch/powerpc/platforms/85xx/corenet_generic.c                             =
+                 |   2 +-
+ arch/powerpc/platforms/85xx/qemu_e500.c                                   =
+                 |   5 +
+ arch/powerpc/platforms/86xx/mpc86xx_hpcn.c                                =
+                 |   6 -
+ arch/powerpc/platforms/8xx/pic.c                                          =
+                 |   1 +
+ arch/powerpc/platforms/Kconfig.cputype                                    =
+                 |   3 +-
+ arch/powerpc/platforms/book3s/vas-api.c                                   =
+                 | 145 +++++-
+ arch/powerpc/platforms/cell/cbe_thermal.c                                 =
+                 |   2 +-
+ arch/powerpc/platforms/cell/spu_base.c                                    =
+                 |   4 +-
+ arch/powerpc/platforms/cell/spufs/sched.c                                 =
+                 |   7 +-
+ arch/powerpc/platforms/powermac/pmac.h                                    =
+                 |   2 +
+ arch/powerpc/platforms/powernv/idle.c                                     =
+                 |   1 -
+ arch/powerpc/platforms/powernv/opal-core.c                                =
+                 |   2 +-
+ arch/powerpc/platforms/powernv/opal-dump.c                                =
+                 |   2 +-
+ arch/powerpc/platforms/powernv/opal-flash.c                               =
+                 |   2 +-
+ arch/powerpc/platforms/powernv/opal-tracepoints.c                         =
+                 |   1 -
+ arch/powerpc/platforms/powernv/rng.c                                      =
+                 |   6 +-
+ arch/powerpc/platforms/ps3/system-bus.c                                   =
+                 |   4 +-
+ arch/powerpc/platforms/pseries/Makefile                                   =
+                 |   5 +-
+ arch/powerpc/platforms/pseries/firmware.c                                 =
+                 |   1 +
+ arch/powerpc/platforms/pseries/lpar.c                                     =
+                 |   1 -
+ arch/powerpc/platforms/pseries/lparcfg.c                                  =
+                 |  87 ++++
+ arch/powerpc/platforms/pseries/mobility.c                                 =
+                 |   7 +-
+ arch/powerpc/platforms/pseries/papr_platform_attributes.c                 =
+                 | 361 ++++++++++++++
+ arch/powerpc/platforms/pseries/papr_scm.c                                 =
+                 |  92 +++-
+ arch/powerpc/platforms/pseries/pci_dlpar.c                                =
+                 |   4 +
+ arch/powerpc/platforms/pseries/power.c                                    =
+                 |   2 +-
+ arch/powerpc/platforms/pseries/pseries.h                                  =
+                 |   1 +
+ arch/powerpc/platforms/pseries/ras.c                                      =
+                 |  68 ++-
+ arch/powerpc/platforms/pseries/setup.c                                    =
+                 |   1 +
+ arch/powerpc/platforms/pseries/vas-sysfs.c                                =
+                 | 268 +++++++++++
+ arch/powerpc/platforms/pseries/vas.c                                      =
+                 | 500 ++++++++++++++++++--
+ arch/powerpc/platforms/pseries/vas.h                                      =
+                 |  30 +-
+ arch/powerpc/sysdev/fsl_gtm.c                                             =
+                 |   4 +-
+ arch/powerpc/sysdev/mpic.c                                                =
+                 |   4 +-
+ arch/powerpc/sysdev/xive/common.c                                         =
+                 |   8 +-
+ arch/powerpc/sysdev/xive/spapr.c                                          =
+                 |  36 +-
+ arch/powerpc/tools/relocs_check.sh                                        =
+                 |   7 +-
+ drivers/macintosh/macio_asic.c                                            =
+                 |   2 +-
+ drivers/macintosh/via-cuda.c                                              =
+                 |   1 +
+ drivers/misc/lkdtm/core.c                                                 =
+                 |   1 +
+ drivers/misc/lkdtm/lkdtm.h                                                =
+                 |   1 +
+ drivers/misc/lkdtm/perms.c                                                =
+                 |  71 ++-
+ drivers/pci/hotplug/rpadlpar_core.c                                       =
+                 |   1 +
+ include/asm-generic/sections.h                                            =
+                 |  15 +-
+ include/linux/kallsyms.h                                                  =
+                 |   2 +-
+ kernel/extable.c                                                          =
+                 |  24 +-
+ kernel/livepatch/core.c                                                   =
+                 |   4 +-
+ sound/ppc/pmac.h                                                          =
+                 |   1 +
+ tools/testing/selftests/lkdtm/tests.txt                                   =
+                 |   1 +
+ tools/testing/selftests/powerpc/Makefile                                  =
+                 |   4 +-
+ tools/testing/selftests/powerpc/copyloops/.gitignore                      =
+                 |   1 +
+ tools/testing/selftests/powerpc/copyloops/Makefile                        =
+                 |   9 +-
+ tools/testing/selftests/powerpc/copyloops/asm/ppc_asm.h                   =
+                 |   1 +
+ tools/testing/selftests/powerpc/copyloops/mem_64.S                        =
+                 |   1 +
+ tools/testing/selftests/powerpc/copyloops/memcpy_stubs.S                  =
+                 |   8 +
+ tools/testing/selftests/powerpc/copyloops/memmove_validate.c              =
+                 |  58 +++
+ tools/testing/selftests/powerpc/include/reg.h                             =
+                 |   4 +
+ tools/testing/selftests/powerpc/mce/Makefile                              =
+                 |   7 +
+ tools/testing/selftests/powerpc/mce/inject-ra-err.c                       =
+                 |  65 +++
+ tools/testing/selftests/powerpc/mce/vas-api.h                             =
+                 |   1 +
+ {arch/powerpc/kernel/vdso32 =3D> tools/testing/selftests/powerpc/papr_attr=
+ibutes}/.gitignore |   3 +-
+ tools/testing/selftests/powerpc/papr_attributes/Makefile                  =
+                 |   7 +
+ tools/testing/selftests/powerpc/papr_attributes/attr_test.c               =
+                 | 107 +++++
+ tools/testing/selftests/powerpc/pmu/Makefile                              =
+                 |  11 +-
+ tools/testing/selftests/powerpc/pmu/event.c                               =
+                 |  19 +-
+ tools/testing/selftests/powerpc/pmu/event.h                               =
+                 |   6 +
+ tools/testing/selftests/powerpc/pmu/sampling_tests/.gitignore             =
+                 |  11 +
+ tools/testing/selftests/powerpc/pmu/sampling_tests/Makefile               =
+                 |  12 +
+ tools/testing/selftests/powerpc/pmu/sampling_tests/misc.c                 =
+                 | 412 ++++++++++++++++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/misc.h                 =
+                 | 227 +++++++++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr0_cc56run_test.c   =
+                 |  59 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr0_exceptionbits_tes=
+t.c              |  59 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr0_fc56_pmc1ce_test.=
+c                |  59 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr0_fc56_pmc56_test.c=
+                 |  58 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr0_pmccext_test.c   =
+                 |  59 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr0_pmcjce_test.c    =
+                 |  58 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr1_comb_test.c      =
+                 |  66 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr2_fcs_fch_test.c   =
+                 |  85 ++++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr2_l2l3_test.c      =
+                 |  74 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr3_src_test.c       =
+                 |  67 +++
+ tools/testing/selftests/powerpc/pmu/sampling_tests/mmcra_thresh_marked_sam=
+ple_test.c       |  80 ++++
+ tools/testing/selftests/powerpc/security/spectre_v2.c                     =
+                 |   2 -
+ 252 files changed, 4893 insertions(+), 2196 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-firmware-papr-energy-sc=
+ale-info
+ create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+ delete mode 100644 arch/powerpc/kernel/trace/ftrace_32.S
+ rename arch/powerpc/kernel/trace/{ftrace_64.S =3D> ftrace_low.S} (85%)
+ rename arch/powerpc/kernel/trace/{ftrace_64_mprofile.S =3D> ftrace_mprofil=
+e.S} (62%)
+ rename arch/powerpc/kernel/{vdso64 =3D> vdso}/.gitignore (72%)
+ create mode 100644 arch/powerpc/kernel/vdso/Makefile
+ rename arch/powerpc/kernel/{vdso32 =3D> vdso}/cacheflush.S (95%)
+ rename arch/powerpc/kernel/{vdso32 =3D> vdso}/datapage.S (91%)
+ rename arch/powerpc/kernel/{vdso32/gen_vdso_offsets.sh =3D> vdso/gen_vdso3=
+2_offsets.sh} (100%)
+ rename arch/powerpc/kernel/{vdso64/gen_vdso_offsets.sh =3D> vdso/gen_vdso6=
+4_offsets.sh} (100%)
+ rename arch/powerpc/kernel/{vdso32 =3D> vdso}/getcpu.S (95%)
+ rename arch/powerpc/kernel/{vdso32 =3D> vdso}/gettimeofday.S (60%)
+ rename arch/powerpc/kernel/{vdso32 =3D> vdso}/note.S (100%)
+ rename arch/powerpc/kernel/{vdso32/sigtramp.S =3D> vdso/sigtramp32.S} (100=
+%)
+ rename arch/powerpc/kernel/{vdso64/sigtramp.S =3D> vdso/sigtramp64.S} (100=
+%)
+ rename arch/powerpc/kernel/{vdso32 =3D> vdso}/vdso32.lds.S (100%)
+ rename arch/powerpc/kernel/{vdso64 =3D> vdso}/vdso64.lds.S (100%)
+ rename arch/powerpc/kernel/{vdso32 =3D> vdso}/vgettimeofday.c (70%)
+ delete mode 100644 arch/powerpc/kernel/vdso32/Makefile
+ delete mode 100644 arch/powerpc/kernel/vdso64/Makefile
+ delete mode 100644 arch/powerpc/kernel/vdso64/cacheflush.S
+ delete mode 100644 arch/powerpc/kernel/vdso64/datapage.S
+ delete mode 100644 arch/powerpc/kernel/vdso64/getcpu.S
+ delete mode 100644 arch/powerpc/kernel/vdso64/gettimeofday.S
+ delete mode 100644 arch/powerpc/kernel/vdso64/note.S
+ delete mode 100644 arch/powerpc/kernel/vdso64/vgettimeofday.c
+ delete mode 100644 arch/powerpc/net/bpf_jit64.h
+ create mode 100644 arch/powerpc/platforms/pseries/papr_platform_attributes=
+.c
+ create mode 100644 arch/powerpc/platforms/pseries/vas-sysfs.c
+ create mode 120000 tools/testing/selftests/powerpc/copyloops/mem_64.S
+ create mode 100644 tools/testing/selftests/powerpc/copyloops/memcpy_stubs.S
+ create mode 100644 tools/testing/selftests/powerpc/copyloops/memmove_valid=
+ate.c
+ create mode 100644 tools/testing/selftests/powerpc/mce/Makefile
+ create mode 100644 tools/testing/selftests/powerpc/mce/inject-ra-err.c
+ create mode 120000 tools/testing/selftests/powerpc/mce/vas-api.h
+ rename {arch/powerpc/kernel/vdso32 =3D> tools/testing/selftests/powerpc/pa=
+pr_attributes}/.gitignore (61%)
+ create mode 100644 tools/testing/selftests/powerpc/papr_attributes/Makefile
+ create mode 100644 tools/testing/selftests/powerpc/papr_attributes/attr_te=
+st.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/.git=
+ignore
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/Make=
+file
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/misc=
+.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/misc=
+.h
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+0_cc56run_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+0_exceptionbits_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+0_fc56_pmc1ce_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+0_fc56_pmc56_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+0_pmccext_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+0_pmcjce_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+1_comb_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+2_fcs_fch_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+2_l2l3_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+3_src_test.c
+ create mode 100644 tools/testing/selftests/powerpc/pmu/sampling_tests/mmcr=
+a_thresh_marked_sample_test.c
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmI9jPgACgkQUevqPMjh
+pYCQ0hAAhsP7DmXTFjAc9f9K8ncHfA1WE0uKpYqLl7qncYIFSDaMw/MVJbEzQV/F
+aNYRLCFgXtb9yFN2Hh5hBVZDrEULyjvtgwwItl5ajycvpi0mKU+l39y0fT9G4QSI
+Jw9BuvhGBuHYraQmy3F6VKkQYzeafI7KxV86SsO9SYfRr0ES3NKl0NUYvb45gW6P
+eVW1BqLSRFUndXtJnGXXnBPN36b7hxpgGko3ZG9N03jJ+BrpF2KrEGQVUEQ164r5
+kSWIac3OFWEQQ+aOw7K0ZV6qn+ifAs2/JQCWtlVd27C3RpAKQSLoh9HFJ/PL8BSQ
+kGr6kE5zXEl/r+u9LOPLEdmukK3EuzqNW6WvrtxPbyecrinnlVI3YqvvRtyW01jj
+3P+GuYa2Ea38bAks+oynPrzEtlr0sI9tUDEYkYiE1HL+LJN5M73ZG+9JlctA/vMA
++QZRnc1aYKhSgFAepEonEsBH3SH4ZbTTtjJKMbzEGgnr3panO5HXOT1kQC/gP0zJ
+G5aPwTBVVbQqAQIklMOqOwODaTFqbJfTCj0TJMrKX0h6qezxchAx9uAUAU3dVbac
++E+S+oQIZNrFIAVimNnX83inysN6zqF8RmccIuFXdwJQjZ54mVZjvcG8cS3SxwVR
+j2OtDWjBRH61Bkar6aCZXFDhlVQJ4Wn6RPpvdtJbEsXAPWJz8Cg=3D
+=3D8Kkh
+-----END PGP SIGNATURE-----

@@ -2,214 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E93E4E7CC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5954E7BBD
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbiCYWPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 18:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S233724AbiCYWVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 18:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiCYWPL (ORCPT
+        with ESMTP id S233603AbiCYWVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 18:15:11 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE6D25E87
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 15:13:35 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id v75so9691536oie.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 15:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PAdDbobA7ctOVd3F7wClb6JTLruDj5TFIdtnV7HXuO8=;
-        b=h55V9kQ5U2X286qcrn/XW1bPCCbK5drMiqQedFn46a7iit4ROK+BInCdGuGHQ+vTqd
-         kiNIJGJTdlPf8jdH16R1D7M1ja0XnwWCXX50bLOqZlNy1DqbroREFd2qYtsxRqoGbzKA
-         9oMLzUfr97I+5K83Q7v4WFdfHGcrpN8OS28mw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PAdDbobA7ctOVd3F7wClb6JTLruDj5TFIdtnV7HXuO8=;
-        b=Y5epiq2WztcPk3iEN2Lai9xxEfpiz7VKio+Cws5vfFfVu1rl7RER3qUl4fuhRW/Ktk
-         ebUYtWnU0D4TT4AobTXD/4BPoOok5OnNZpf9p3NeHrERXRQTqciOZQUfNtqL3CoyJNbl
-         Y2hxV8cOTdrPkGw+/YHQhWSSJnj9Hyea7NcprMTZdMgIP3/BzkLw3kBmU8WwvLZqvBO3
-         QV8I0Ztq4d9lw9sCxdjKybI2CDuHsD8btwOSFDl1BlHIh/uj4uWjL3UwecMdQ/rbK8iE
-         1DFUGX41zZQdl1ZMx4phRzjZhlLV8et049bXgR3MhIEfVB7CSo7d4rUJPYiD+OtNSesj
-         EBGA==
-X-Gm-Message-State: AOAM531XOHaioUb9fKq+3gWDnVUbZaLj+wQtdW7SHAvNrekUYIcY2pi1
-        twurs0kxzUM2azr1tYJMCyLy6w==
-X-Google-Smtp-Source: ABdhPJzrh3as6EzSlyV4zCifga3mc8DRKXJ3IcSVHDKxmnRkMthzAmI+Lf4flooxoeGxfZh8tqjnfg==
-X-Received: by 2002:a05:6808:11c4:b0:2d9:c395:f15e with SMTP id p4-20020a05680811c400b002d9c395f15emr11146862oiv.47.1648246415160;
-        Fri, 25 Mar 2022 15:13:35 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05683001c800b005cdadc2a837sm3203525ota.70.2022.03.25.15.13.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 15:13:34 -0700 (PDT)
-Subject: Re: kselftest: net: tls: hangs
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>
-References: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
-Date:   Fri, 25 Mar 2022 16:13:33 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 25 Mar 2022 18:21:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE3219897B;
+        Fri, 25 Mar 2022 15:19:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0C2461425;
+        Fri, 25 Mar 2022 22:19:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4216AC340F0;
+        Fri, 25 Mar 2022 22:19:58 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 5.15.31-rt38
+Date:   Fri, 25 Mar 2022 22:19:01 -0000
+Message-ID: <164824674160.618312.17652860693196499470@puck.lan>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 1:40 AM, Naresh Kamboju wrote:
-> While running kselftest net tls test case on Linux next and mainline kernels
-> the test case fails at following sub test cases and hangs every time.
-> Please investigate this hang issue.
-> 
-> kconfigs are generated from kselftest-merge config.
-> 
-> metadata:
->    git_ref: master
->    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->    git_sha: b61581ae229d8eb9f21f8753be3f4011f7692384
->    git_describe: next-20220323
->    kernel_version: 5.17.0
->    kernel-config: https://builds.tuxbuild.com/26mKij4yB5Q6WUpOyHHEoHLstVJ/config
-> 
-> Test log link,
-> --------------
-> # selftests: net: tls
-> # TAP version 13
-> # 1..502
-> # # Starting 502 tests from 14 test cases.
-> # #  RUN           global.non_established ...
-> # #            OK  global.non_established
-> # ok 1 global.non_established
-> # #  RUN           global.keysizes ...
-> # #            OK  global.keysizes
-> <trim>
-> 
-> # #  RUN           tls.12_aes_gcm.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.12_aes_gcm.splice_cmsg_to_pipe
-> # not ok 21 tls.12_aes_gcm.splice_cmsg_to_pipe
-> # #  RUN           tls.12_aes_gcm.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> # # splice_dec_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.12_aes_gcm.splice_dec_cmsg_to_pipe
-> # not ok 22 tls.12_aes_gcm.splice_dec_cmsg_to_pipe
-> # #  RUN           tls.12_aes_gcm.recv_and_splice ...
-> # #            OK  tls.12_aes_gcm.recv_and_splice
-> 
-> <trim>
-> 
-> # #  RUN           tls.13_aes_gcm.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_aes_gcm.splice_cmsg_to_pipe
-> # not ok 70 tls.13_aes_gcm.splice_cmsg_to_pipe
-> # #  RUN           tls.13_aes_gcm.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> # # splice_dec_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_aes_gcm.splice_dec_cmsg_to_pipe
-> # not ok 71 tls.13_aes_gcm.splice_dec_cmsg_to_pipe
-> 
-> 
-> <trim>
-> 
-> # #  RUN           tls.12_chacha.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.12_chacha.splice_cmsg_to_pipe
-> # not ok 119 tls.12_chacha.splice_cmsg_to_pipe
-> # #  RUN           tls.12_chacha.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> # # splice_dec_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.12_chacha.splice_dec_cmsg_to_pipe
-> # not ok 120 tls.12_chacha.splice_dec_cmsg_to_pipe
-> 
-> <trim>
-> 
-> # #  RUN           tls.13_chacha.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_chacha.splice_cmsg_to_pipe
-> # not ok 168 tls.13_chacha.splice_cmsg_to_pipe
-> # #  RUN           tls.13_chacha.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> # # splice_dec_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_chacha.splice_dec_cmsg_to_pipe
-> # not ok 169 tls.13_chacha.splice_dec_cmsg_to_pipe
-> 
-> <trim>
-> 
-> # #  RUN           tls.13_sm4_gcm.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_sm4_gcm.splice_cmsg_to_pipe
-> # not ok 217 tls.13_sm4_gcm.splice_cmsg_to_pipe
-> # #  RUN           tls.13_sm4_gcm.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> [  661.901558] kworker/dying (49) used greatest stack depth: 10576 bytes left
+Hello RT-list!
 
-This seems to be the problem perhaps.
+I'm pleased to announce the 5.15.31-rt38 stable release.
 
-Jakub, any thoughts. The last change to tls.c was a while back.
+You can get this release via the git tree at:
 
-> 
-> Test case HANG here.
-> 
-> Full test log links [1] including boot log and test run log.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-> 
-> https://lkft.validation.linaro.org/scheduler/job/4770773#L2700
-> 
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-thanks,
--- Shuah
-thanks,
--- Shuah
+  branch: v5.15-rt
+  Head SHA1: 4a5bf82a954ec1e8dbfcaa20f6e60263bfdda64b
+
+Or to build 5.15.31-rt38 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.31.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.31-rt38.patch.xz
+
+
+Enjoy!
+Clark
+
+Changes from v5.15.29-rt37:
+---
+
+Alan Stern (2):
+      usb: gadget: Fix use-after-free bug by not setting udc->dev.driver
+      usb: usbtmc: Fix bug in pipe direction for control transfers
+
+Alexander Lobakin (1):
+      MIPS: smp: fill in sibling and core maps earlier
+
+Arnd Bergmann (1):
+      arm64: fix clang warning about TRAMP_VALIAS
+
+Brian Masney (1):
+      crypto: qcom-rng - ensure buffer for generate is completely filled
+
+Chengming Zhou (1):
+      kselftest/vm: fix tests build with old libc
+
+Christoph Niedermaier (1):
+      drm/imx: parallel-display: Remove bus flags check in imx_pd_bridge_atomic_check()
+
+Christophe JAILLET (1):
+      bnx2: Fix an error message
+
+Clark Williams (3):
+      Merge tag 'v5.15.30' into v5.15-rt
+      Merge tag 'v5.15.31' into v5.15-rt
+      Linux 5.15.31-rt38
+
+Corentin Labbe (1):
+      ARM: dts: rockchip: fix a typo on rk3288 crypto-controller
+
+Dan Carpenter (1):
+      usb: gadget: rndis: prevent integer overflow in rndis_set_response()
+
+Dinh Nguyen (1):
+      arm64: dts: agilex: use the compatible "intel,socfpga-agilex-hsotg"
+
+Doug Berger (1):
+      net: bcmgenet: skip invalid partial checksums
+
+Eric Dumazet (2):
+      tcp: make tcp_read_sock() more robust
+      net/packet: fix slab-out-of-bounds access in packet_recvmsg()
+
+Filipe Manana (1):
+      btrfs: skip reserved bytes warning on unmount after log cleanup failure
+
+Golan Ben Ami (1):
+      iwlwifi: don't advertise TWT support
+
+Greg Kroah-Hartman (2):
+      Linux 5.15.30
+      Linux 5.15.31
+
+Guo Ziliang (1):
+      mm: swap: get rid of livelock in swapin readahead
+
+Ivan Vecera (2):
+      ice: Fix race condition during interface enslave
+      iavf: Fix hang during reboot/shutdown
+
+Jakob Unterwurzacher (1):
+      arm64: dts: rockchip: fix rk3399-puma eMMC HS400 signal integrity
+
+Jia-Ju Bai (1):
+      atm: firestream: check the return value of ioremap() in fs_init()
+
+Jiasheng Jiang (2):
+      atm: eni: Add check for dma_map_single
+      hv_netvsc: Add check for kvmalloc_array
+
+Jiyong Park (1):
+      vsock: each transport cycles only on its own sockets
+
+Jocelyn Falempe (1):
+      drm/mgag200: Fix PLL setup for g200wb and g200ew
+
+Johannes Berg (1):
+      mac80211: refuse aggregations sessions before authorized
+
+Joseph Qi (1):
+      ocfs2: fix crash when initialize filecheck kobj fails
+
+Juerg Haefliger (1):
+      net: phy: mscc: Add MODULE_FIRMWARE macros
+
+Julian Braha (1):
+      ARM: 9178/1: fix unmet dependency on BITREVERSE for HAVE_ARCH_BITREVERSE
+
+Kai Lueke (1):
+      Revert "xfrm: state and policy should fail if XFRMA_IF_ID 0"
+
+Krzysztof Kozlowski (1):
+      arm64: dts: rockchip: align pl330 node name with dtschema
+
+Kurt Cancemi (1):
+      net: phy: marvell: Fix invalid comparison in the resume and suspend functions
+
+Lad Prabhakar (1):
+      can: rcar_canfd: rcar_canfd_channel_probe(): register the CAN device when fully ready
+
+Luiz Augusto von Dentz (1):
+      Bluetooth: hci_core: Fix leaking sent_cmd skb
+
+Manasi Navare (1):
+      drm/vrr: Set VRR capable prop only if it is attached to connector
+
+Manish Chopra (1):
+      bnx2x: fix built-in kernel driver load failure
+
+Marek Vasut (1):
+      drm/panel: simple: Fix Innolux G070Y2-L01 BPP settings
+
+Matt Lupfer (1):
+      scsi: mpt3sas: Page fault in reply q processing
+
+Miaoqian Lin (1):
+      net: dsa: Add missing of_node_put() in dsa_port_parse_of
+
+Michael Petlan (1):
+      perf symbols: Fix symbol size calculation condition
+
+Ming Lei (1):
+      block: release rq qos structures for queue without disk
+
+Nicolas Dichtel (1):
+      net: handle ARPHRD_PIMREG in dev_is_mac_header_xmit()
+
+Niels Dossche (2):
+      sfc: extend the locking on mcdi->seqno
+      alx: acquire mutex for alx_reinit in alx_change_mtu
+
+Pavel Skripkin (1):
+      Input: aiptek - properly check endpoint type
+
+Peter Zijlstra (1):
+      x86/module: Fix the paravirt vs alternative order
+
+Przemyslaw Patynowski (1):
+      iavf: Fix double free in iavf_reset_task
+
+Quentin Schulz (1):
+      arm64: dts: rockchip: fix rk3399-puma-haikou USB OTG mode
+
+Randy Dunlap (1):
+      efi: fix return value of __setup handlers
+
+Sabrina Dubroca (1):
+      esp6: fix check on ipv6_skip_exthdr's return value
+
+Sascha Hauer (2):
+      arm64: dts: rockchip: reorder rk3399 hdmi clocks
+      ARM: dts: rockchip: reorder rk322x hmdi clocks
+
+Sreeramya Soratkal (1):
+      nl80211: Update bss channel on channel switch for P2P_CLIENT
+
+Thomas Zimmermann (1):
+      drm: Don't make DRM_PANEL_BRIDGE dependent on DRM_KMS_HELPERS
+
+Vladimir Oltean (1):
+      net: mscc: ocelot: fix backwards compatibility with single-chain tc-flower offload
+
+Yan Yan (2):
+      xfrm: Check if_id in xfrm_migrate
+      xfrm: Fix xfrm migrate issues when address family changes
+---
+Makefile                                           |  2 +-
+ arch/arm/boot/dts/rk322x.dtsi                      |  4 ++--
+ arch/arm/boot/dts/rk3288.dtsi                      |  2 +-
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  4 ++--
+ arch/arm64/boot/dts/rockchip/px30.dtsi             |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi           |  2 +-
+ .../arm64/boot/dts/rockchip/rk3399-puma-haikou.dts |  1 +
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      | 20 ++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi           |  6 ++---
+ arch/arm64/include/asm/vectors.h                   |  4 ++--
+ arch/mips/kernel/smp.c                             |  6 ++---
+ arch/x86/kernel/module.c                           | 13 ++++++----
+ block/blk-core.c                                   |  4 ++++
+ drivers/atm/eni.c                                  |  2 ++
+ drivers/atm/firestream.c                           |  2 ++
+ drivers/crypto/qcom-rng.c                          | 17 +++++++------
+ drivers/firmware/efi/apple-properties.c            |  2 +-
+ drivers/firmware/efi/efi.c                         |  2 +-
+ drivers/gpu/drm/bridge/Kconfig                     |  2 +-
+ drivers/gpu/drm/drm_connector.c                    |  3 +++
+ drivers/gpu/drm/imx/parallel-display.c             |  8 -------
+ drivers/gpu/drm/mgag200/mgag200_pll.c              |  6 ++---
+ drivers/gpu/drm/panel/Kconfig                      |  1 +
+ drivers/gpu/drm/panel/panel-simple.c               |  2 +-
+ drivers/input/tablet/aiptek.c                      | 10 ++++----
+ drivers/net/can/rcar/rcar_canfd.c                  |  6 ++---
+ drivers/net/ethernet/atheros/alx/main.c            |  5 +++-
+ drivers/net/ethernet/broadcom/bnx2.c               |  2 +-
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x.h        |  2 --
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c    | 28 +++++++++++++---------
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c   | 15 ++----------
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c     |  6 +++--
+ drivers/net/ethernet/intel/iavf/iavf_main.c        | 15 +++++++++++-
+ drivers/net/ethernet/intel/ice/ice.h               | 11 ++++++++-
+ drivers/net/ethernet/intel/ice/ice_main.c          | 12 +++++++++-
+ drivers/net/ethernet/mscc/ocelot_flower.c          | 16 ++++++++++++-
+ drivers/net/ethernet/sfc/mcdi.c                    |  2 +-
+ drivers/net/hyperv/netvsc_drv.c                    |  3 +++
+ drivers/net/phy/marvell.c                          |  8 +++----
+ drivers/net/phy/mscc/mscc_main.c                   |  3 +++
+ drivers/net/wireless/intel/iwlwifi/iwl-nvm-parse.c |  3 +--
+ drivers/net/wireless/intel/iwlwifi/mvm/mac80211.c  |  1 -
+ drivers/scsi/mpt3sas/mpt3sas_base.c                |  5 ++--
+ drivers/usb/class/usbtmc.c                         | 13 +++++++---
+ drivers/usb/gadget/function/rndis.c                |  1 +
+ drivers/usb/gadget/udc/core.c                      |  3 ---
+ drivers/vhost/vsock.c                              |  3 ++-
+ fs/btrfs/block-group.c                             | 26 ++++++++++++++++++--
+ fs/btrfs/ctree.h                                   |  7 ++++++
+ fs/btrfs/tree-log.c                                | 23 ++++++++++++++++++
+ fs/ocfs2/super.c                                   | 22 ++++++++---------
+ include/linux/if_arp.h                             |  1 +
+ include/net/af_vsock.h                             |  3 ++-
+ include/net/xfrm.h                                 |  5 ++--
+ lib/Kconfig                                        |  1 -
+ localversion-rt                                    |  2 +-
+ mm/swap_state.c                                    |  2 +-
+ net/bluetooth/hci_core.c                           |  1 +
+ net/dsa/dsa2.c                                     |  1 +
+ net/ipv4/tcp.c                                     | 10 ++++----
+ net/ipv6/esp6.c                                    |  3 +--
+ net/key/af_key.c                                   |  2 +-
+ net/mac80211/agg-tx.c                              | 10 +++++++-
+ net/packet/af_packet.c                             | 11 ++++++++-
+ net/vmw_vsock/af_vsock.c                           |  9 +++++--
+ net/vmw_vsock/virtio_transport.c                   |  7 ++++--
+ net/vmw_vsock/vmci_transport.c                     |  5 +++-
+ net/wireless/nl80211.c                             |  3 ++-
+ net/xfrm/xfrm_policy.c                             | 14 ++++++-----
+ net/xfrm/xfrm_state.c                              | 15 ++++++++----
+ net/xfrm/xfrm_user.c                               | 27 +++++++--------------
+ tools/perf/util/symbol.c                           |  2 +-
+ tools/testing/selftests/vm/userfaultfd.c           |  1 +
+ 73 files changed, 336 insertions(+), 167 deletions(-)
+---

@@ -2,174 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8234E6CCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 04:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869E34E6CD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 04:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358183AbiCYDRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 23:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S1354688AbiCYDYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 23:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiCYDRC (ORCPT
+        with ESMTP id S231800AbiCYDYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 23:17:02 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDC2A1458
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:15:28 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V87tFIC_1648178124;
-Received: from 30.225.24.51(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0V87tFIC_1648178124)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 25 Mar 2022 11:15:25 +0800
-Message-ID: <9de48770-7dfa-1dd8-5eab-5fc0ac0499d5@linux.alibaba.com>
-Date:   Fri, 25 Mar 2022 11:15:24 +0800
+        Thu, 24 Mar 2022 23:24:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0C3619C09
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648178559;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/vrdVLbvl2FEAzCSgs81TCush7rfFjcGSogkgzqSOFQ=;
+        b=BQWlxb2dLId70aMu+twHHlXYq3xSZuy32F9ijlLOla7IZ609vnk0cvcBd2CJQYIQcRpCrH
+        85Pru2NNdx0hOktBhNQIcyk5d81OsdqWWY6fnG1FPM1E23toUoIRlt4Vgfmv3rxanTT9S+
+        WaG9Df7IHu1s/woudVXOv1F3l9OZBhk=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-131-0ZspwNMKOTajTUfPzusvgQ-1; Thu, 24 Mar 2022 23:22:38 -0400
+X-MC-Unique: 0ZspwNMKOTajTUfPzusvgQ-1
+Received: by mail-lj1-f200.google.com with SMTP id v6-20020a2e9246000000b002497a227e15so2505082ljg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:22:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/vrdVLbvl2FEAzCSgs81TCush7rfFjcGSogkgzqSOFQ=;
+        b=FEeBTVtH1gtkE4qsjG7cCELdnuMLdyKRL7xjIPWnyQbAfKzEYdV5AjwwU8gmVy3uG6
+         9MjFAtRvcfq5BBKCfTxfpBJS8jFC5qJGSDoR9ofacLxJoeMWfVTfvBx52P/LEcHy4993
+         tBoJzR4X81ab8haOlwV3DeTvOH0hW3G0EgxCcyzCI/IoqecnrKy3llPcJHiUuNf9uYs6
+         3MlF9KObQxa4udeQ0IDos1kN4CDPcNhlilTb57IEAPT/EkVUVIzrpo7jAbgbNXbdsqoM
+         OZUIlAtpE4BCwLwlpH4y4RXzLshaH5w1rpZQLAVCyujqPismfQXro4H7ZgxZabufYWZq
+         ndjQ==
+X-Gm-Message-State: AOAM531CFnb3sMBQQ9yb8rQ1XXn+IFI5kGuYVI75bSav0OjAp1fKo8mT
+        muJqYGZDE7FklT3hQYvm9sbJAj5cJzrlXTLx8SVbcF/jFV2t/m/r2E/oyeq+D66Z2tFvOoZymE7
+        wWWmh+RvgrssyZG/h0tjv5Lrub1WhGRoQ2ddiKDx5
+X-Received: by 2002:a2e:54d:0:b0:249:8213:f970 with SMTP id 74-20020a2e054d000000b002498213f970mr6574816ljf.315.1648178556652;
+        Thu, 24 Mar 2022 20:22:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzoJVK7eltqcdR+KmXpacgd9LreAh6Ima8MArEeG8LkLLC6mQ188NZuNbMkJ5BgGWOcV2QOmDDFSOezocc8Xdw=
+X-Received: by 2002:a2e:54d:0:b0:249:8213:f970 with SMTP id
+ 74-20020a2e054d000000b002498213f970mr6574806ljf.315.1648178556380; Thu, 24
+ Mar 2022 20:22:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH] ocfs2: replace usage of found with dedicated list
- iterator variable
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Joel Becker <jlbec@evilplan.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20220324071650.61168-1-jakobkoschel@gmail.com>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <20220324071650.61168-1-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220321060429.10457-1-jasowang@redhat.com> <20220321085317.3148-1-hdanton@sina.com>
+ <CACGkMEvF80FuU0uD+RZMOrySQ0K2RZVh7Pmn4UhNtz_Exs3c2w@mail.gmail.com>
+ <CACGkMEvLqox3QZxpxeQdrjBnM6zRr_wGfddoN45RUSsZEOe=bQ@mail.gmail.com>
+ <20220321123420.3207-1-hdanton@sina.com> <CACGkMEt-PRCsBQ+EJVGeWGikJfLk-0M1dRPMqnp9YC5R4HYAjQ@mail.gmail.com>
+ <20220324005345.3623-1-hdanton@sina.com> <20220324060419.3682-1-hdanton@sina.com>
+ <20220324021428-mutt-send-email-mst@kernel.org> <20220324120217.3746-1-hdanton@sina.com>
+ <DM8PR12MB54004034A8A5DA1D2B6EA8D1AB199@DM8PR12MB5400.namprd12.prod.outlook.com>
+In-Reply-To: <DM8PR12MB54004034A8A5DA1D2B6EA8D1AB199@DM8PR12MB5400.namprd12.prod.outlook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 25 Mar 2022 11:22:25 +0800
+Message-ID: <CACGkMEtVUqJcS1W2p1U9RCjQqQOSREu1J9zjmw37TbPBNqq7tA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] vdpa: mlx5: prevent cvq work from hogging CPU
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 24, 2022 at 8:24 PM Eli Cohen <elic@nvidia.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Hillf Danton <hdanton@sina.com>
+> > Sent: Thursday, March 24, 2022 2:02 PM
+> > To: Jason Wang <jasowang@redhat.com>
+> > Cc: Eli Cohen <elic@nvidia.com>; Michael S. Tsirkin <mst@redhat.com>; virtualization <virtualization@lists.linux-foundation.org>; linux-
+> > kernel <linux-kernel@vger.kernel.org>
+> > Subject: Re: [PATCH 1/2] vdpa: mlx5: prevent cvq work from hogging CPU
+> >
+> > On Thu, 24 Mar 2022 16:20:34 +0800 Jason Wang wrote:
+> > > On Thu, Mar 24, 2022 at 2:17 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > On Thu, Mar 24, 2022 at 02:04:19PM +0800, Hillf Danton wrote:
+> > > > > On Thu, 24 Mar 2022 10:34:09 +0800 Jason Wang wrote:
+> > > > > > On Thu, Mar 24, 2022 at 8:54 AM Hillf Danton <hdanton@sina.com> wrote:
+> > > > > > >
+> > > > > > > On Tue, 22 Mar 2022 09:59:14 +0800 Jason Wang wrote:
+> > > > > > > >
+> > > > > > > > Yes, there will be no "infinite" loop, but since the loop is triggered
+> > > > > > > > by userspace. It looks to me it will delay the flush/drain of the
+> > > > > > > > workqueue forever which is still suboptimal.
+> > > > > > >
+> > > > > > > Usually it is barely possible to shoot two birds using a stone.
+> > > > > > >
+> > > > > > > Given the "forever", I am inclined to not running faster, hehe, though
+> > > > > > > another cobble is to add another line in the loop checking if mvdev is
+> > > > > > > unregistered, and for example make mvdev->cvq unready before destroying
+> > > > > > > workqueue.
+> > > > > > >
+> > > > > > > static void mlx5_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev, struct vdpa_device *dev)
+> > > > > > > {
+> > > > > > >         struct mlx5_vdpa_mgmtdev *mgtdev = container_of(v_mdev, struct mlx5_vdpa_mgmtdev, mgtdev);
+> > > > > > >         struct mlx5_vdpa_dev *mvdev = to_mvdev(dev);
+> > > > > > >         struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+> > > > > > >
+> > > > > > >         mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
+> > > > > > >         destroy_workqueue(mvdev->wq);
+> > > > > > >         _vdpa_unregister_device(dev);
+> > > > > > >         mgtdev->ndev = NULL;
+> > > > > > > }
+> > > > > > >
+> > > > > >
+> > > > > > Yes, so we had
+> > > > > >
+> > > > > > 1) using a quota for re-requeue
+> > > > > > 2) using something like
+> > > > > >
+> > > > > > while (READ_ONCE(cvq->ready)) {
+> > > > > >         ...
+> > > > > >         cond_resched();
+> > > > > > }
+> > > > > >
+> > > > > > There should not be too much difference except we need to use
+> > > > > > cancel_work_sync() instead of flush_work for 1).
+> > > > > >
+> > > > > > I would keep the code as is but if you stick I can change.
+> > > > >
+> > > > > No Sir I would not - I am simply not a fan of work requeue.
+> > > > >
+> > > > > Hillf
+> > > >
+> > > > I think I agree - requeue adds latency spikes under heavy load -
+> > > > unfortunately, not measured by netperf but still important
+> > > > for latency sensitive workloads. Checking a flag is cheaper.
+> > >
+> > > Just spot another possible issue.
+> > >
+> > > The workqueue will be used by another work to update the carrier
+> > > (event_handler()). Using cond_resched() may still have unfair issue
+> > > which blocks the carrier update for infinite time,
+> >
+> > Then would you please specify the reason why mvdev->wq is single
+> > threaded?
 
+I didn't see a reason why it needs to be a single threaded (ordered).
 
-On 3/24/22 3:16 PM, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
-> 
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> Given requeue, the serialization of the two works is not
+> > strong. Otherwise unbound WQ that can process works in parallel is
+> > a cure to the unfairness above.
 
-Looks good.
-Reviewed-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+Yes, and we probably don't want a per device workqueue but a per
+module one. Or simply use the system_wq one.
 
-> ---
->  fs/ocfs2/dlm/dlmunlock.c | 21 ++++++++++-----------
->  fs/ocfs2/quota_local.c   | 10 +++++-----
->  2 files changed, 15 insertions(+), 16 deletions(-)
-> 
-> diff --git a/fs/ocfs2/dlm/dlmunlock.c b/fs/ocfs2/dlm/dlmunlock.c
-> index 61103b2d69fb..7318e4794ef9 100644
-> --- a/fs/ocfs2/dlm/dlmunlock.c
-> +++ b/fs/ocfs2/dlm/dlmunlock.c
-> @@ -392,9 +392,9 @@ int dlm_unlock_lock_handler(struct o2net_msg *msg, u32 len, void *data,
->  	struct dlm_ctxt *dlm = data;
->  	struct dlm_unlock_lock *unlock = (struct dlm_unlock_lock *)msg->buf;
->  	struct dlm_lock_resource *res = NULL;
-> -	struct dlm_lock *lock = NULL;
-> +	struct dlm_lock *lock = NULL, *iter;
->  	enum dlm_status status = DLM_NORMAL;
-> -	int found = 0, i;
-> +	int i;
->  	struct dlm_lockstatus *lksb = NULL;
->  	int ignore;
->  	u32 flags;
-> @@ -437,7 +437,6 @@ int dlm_unlock_lock_handler(struct o2net_msg *msg, u32 len, void *data,
->  	}
->  
->  	queue=&res->granted;
-> -	found = 0;
->  	spin_lock(&res->spinlock);
->  	if (res->state & DLM_LOCK_RES_RECOVERING) {
->  		spin_unlock(&res->spinlock);
-> @@ -461,21 +460,21 @@ int dlm_unlock_lock_handler(struct o2net_msg *msg, u32 len, void *data,
->  	}
->  
->  	for (i=0; i<3; i++) {
-> -		list_for_each_entry(lock, queue, list) {
-> -			if (lock->ml.cookie == unlock->cookie &&
-> -		    	    lock->ml.node == unlock->node_idx) {
-> -				dlm_lock_get(lock);
-> -				found = 1;
-> +		list_for_each_entry(iter, queue, list) {
-> +			if (iter->ml.cookie == unlock->cookie &&
-> +			    iter->ml.node == unlock->node_idx) {
-> +				dlm_lock_get(iter);
-> +				lock = iter;
->  				break;
->  			}
->  		}
-> -		if (found)
-> +		if (lock)
->  			break;
->  		/* scan granted -> converting -> blocked queues */
->  		queue++;
->  	}
->  	spin_unlock(&res->spinlock);
-> -	if (!found) {
-> +	if (!lock) {
->  		status = DLM_IVLOCKID;
->  		goto not_found;
->  	}
-> @@ -505,7 +504,7 @@ int dlm_unlock_lock_handler(struct o2net_msg *msg, u32 len, void *data,
->  	dlm_kick_thread(dlm, res);
->  
->  not_found:
-> -	if (!found)
-> +	if (!lock)
->  		mlog(ML_ERROR, "failed to find lock to unlock! "
->  			       "cookie=%u:%llu\n",
->  		     dlm_get_lock_cookie_node(be64_to_cpu(unlock->cookie)),
-> diff --git a/fs/ocfs2/quota_local.c b/fs/ocfs2/quota_local.c
-> index 0e4b16d4c037..38cc75bd3127 100644
-> --- a/fs/ocfs2/quota_local.c
-> +++ b/fs/ocfs2/quota_local.c
-> @@ -923,19 +923,19 @@ static struct ocfs2_quota_chunk *ocfs2_find_free_entry(struct super_block *sb,
->  {
->  	struct mem_dqinfo *info = sb_dqinfo(sb, type);
->  	struct ocfs2_mem_dqinfo *oinfo = info->dqi_priv;
-> -	struct ocfs2_quota_chunk *chunk;
-> +	struct ocfs2_quota_chunk *chunk = NULL, *iter;
->  	struct ocfs2_local_disk_chunk *dchunk;
->  	int found = 0, len;
->  
-> -	list_for_each_entry(chunk, &oinfo->dqi_chunk, qc_chunk) {
-> +	list_for_each_entry(iter, &oinfo->dqi_chunk, qc_chunk) {
->  		dchunk = (struct ocfs2_local_disk_chunk *)
-> -						chunk->qc_headerbh->b_data;
-> +						iter->qc_headerbh->b_data;
->  		if (le32_to_cpu(dchunk->dqc_free) > 0) {
-> -			found = 1;
-> +			chunk = iter;
->  			break;
->  		}
->  	}
-> -	if (!found)
-> +	if (!chunk)
->  		return NULL;
->  
->  	if (chunk->qc_num < oinfo->dqi_chunks - 1) {
-> 
-> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+> >
+>
+> I think the proposed patch can still be used with quota equal to one.
+> That would guarantee fairness.
+> This is not performance critical and a single workqueue should be enough.
+
+Yes, but both Hillf and Michael don't like requeuing. So my plan is
+
+1) send patch 2 first since it's a hard requirement for the next RHEL release
+2) a series to fix this hogging issue by
+2.1) switch to use a per module workqueue
+2.2) READ_ONCE(cvq->ready) + cond_resched()
+
+Thanks
+
+>
+> > Thanks
+> > Hillf
+>
+

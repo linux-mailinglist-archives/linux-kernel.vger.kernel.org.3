@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8744E727D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3F14E7285
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357713AbiCYL4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S1357689AbiCYMAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357525AbiCYL4b (ORCPT
+        with ESMTP id S1345872AbiCYMAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:56:31 -0400
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36260BCB6;
-        Fri, 25 Mar 2022 04:54:57 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id r13so10520843wrr.9;
-        Fri, 25 Mar 2022 04:54:57 -0700 (PDT)
+        Fri, 25 Mar 2022 08:00:13 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07850E008;
+        Fri, 25 Mar 2022 04:58:37 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id b24so8938009edu.10;
+        Fri, 25 Mar 2022 04:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5HUtOUWp2sZ6TtVf8FyrTatTYVQYhhjB2DEeLm0DIl0=;
+        b=Bg2vRbrg9DC8jGkbN/gbK8JUSHWn8tszqPOOqDcsWhq4S6iO5qxDWltryZiQp8nEWq
+         oW5nGkC4I5+5JNYMYBQ6f7tm2HhCUkbCjBJMOc2UEkMlgcBVIW4gX3jKewoABH5VHC3V
+         fXrFoG7ZigtE6BY/TJizDV/Ah9/91kbNHiJ5hpy1HVK0v2xzhTp+ssVMpdjlcpjrrJN1
+         TcnIFzPiGrFApB0lRhcOUVI20sNlr3OlZ52uKYxUTk2EO6ZqgCBwHE6Z990iJw6x7v78
+         J4XkI3tntZuna9FXg4Lj/u3I3S9nZbWrryfstI7CNGkI/FNND00q+KQlTzXc6qXpBDux
+         NNmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wfO/NgKZ7H/qKA+QCI+ODq0tIwjvgLb32lCfr243Wio=;
-        b=PjQ72ppjZJv71Q7Lsc1DCsD3OBT8iqTJclAni1GB8mJK9rjfbf+zXcupuTU554blja
-         FEKWJw7In4hw4MOVjiUKiWE7gBN3h/X36neZVFv2TZ4rBfePUTsCERymzVc4KajSs2tC
-         /sH5hRGAjQAHOyj4veDG0+0szQOCXKj5U4om4dlPbhs3aQfuZYdxHTIhI8fxXhZ+PM5l
-         us6BJoRoTm+qEXFLdNuQ+vh6zn72RDa7uiX9f3hkaKVVzRT1hlqO7oY6g/IG8SOi7z5J
-         X3dJ6BZfV4i2PFgbEpL1S3kfSOUwslQ9FnOEgCL7Es1x5EUvVdVS34wtZ0Xf7wUXqfTQ
-         0EZA==
-X-Gm-Message-State: AOAM531heWHSszkjgUnWbdohoompHROB41pnU9XaT4/ETFs5WicqncqB
-        TsdNhDvAORr9r4ipe/2NIAk=
-X-Google-Smtp-Source: ABdhPJyqx1hl6cEgGobyDAh7rmlx2h8IO+ILO7En01TltDi+G500EhEPBMZCB2sr6uU1h34LFuv1pw==
-X-Received: by 2002:adf:fc06:0:b0:204:975:acfb with SMTP id i6-20020adffc06000000b002040975acfbmr8958788wrr.486.1648209295383;
-        Fri, 25 Mar 2022 04:54:55 -0700 (PDT)
-Received: from [192.168.0.159] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id p2-20020a1c7402000000b0038159076d30sm8261916wmc.22.2022.03.25.04.54.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 04:54:54 -0700 (PDT)
-Message-ID: <86f96cb1-aca4-2c55-fb34-ed35582af2f9@kernel.org>
-Date:   Fri, 25 Mar 2022 12:54:53 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5HUtOUWp2sZ6TtVf8FyrTatTYVQYhhjB2DEeLm0DIl0=;
+        b=XeFp9PS0snQF9/WCwjq/3Z/vrRGnPNvwIOqFg3P6LYrDJbhF8jPyRVzqh/MtOLVv6j
+         hufwLV1WcHuIggShiY61oWckp4XpBtkN9euq4KkvcnNWfr1bNuF14D9fABQH8JuSwzzB
+         MeCa+L0MkD6cdOglNZh5enSA7W1SEGFieOfRYVYNwqTP7/m8iMJ/VBQJk6tHh70/EBme
+         WZH5qbBdr6HaTq5xhdBHKxTUoD3t8C0bGAnGvVc/Yuxc7ajdAMpX83TwDFTLnbMNpvg0
+         wbj2BddGdmMzE1VZ8u6mxfc1zBkyFxxpF2i2S1Bna8gBY/QJrH7i8PgUINFM3/G5TYDY
+         WWGQ==
+X-Gm-Message-State: AOAM530BQ+RgXY3pSoITXPXwz/8QXk8dZdNnzX7rEzFVvGV+DcuzsH34
+        wltaPwL1iwMbtRlOj72wC42EkPmd2v3YXjRdhuJd0NzP0zg=
+X-Google-Smtp-Source: ABdhPJxxBxQy7rz7v8ypAhFqy/HT7mxKKkNRASnaabG6Xdhji28aPSrvtWzHmfMC2YJPtOaiBFr9jbln0E7ItrEv4Ng=
+X-Received: by 2002:a05:6402:54:b0:419:9b58:e305 with SMTP id
+ f20-20020a056402005400b004199b58e305mr5305571edu.158.1648209515478; Fri, 25
+ Mar 2022 04:58:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: mmc: xenon: Convert to JSON schema
-Content-Language: en-US
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        ulf.hansson@linaro.org, robh+dt@kernel.org, huziji@marvell.com,
-        andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220325000745.1708610-1-chris.packham@alliedtelesis.co.nz>
- <20220325000745.1708610-3-chris.packham@alliedtelesis.co.nz>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220325000745.1708610-3-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220215081216.67706-1-antoniu.miclaus@analog.com> <20220220121414.48d7a3b6@jic23-huawei>
+In-Reply-To: <20220220121414.48d7a3b6@jic23-huawei>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 25 Mar 2022 13:57:26 +0200
+Message-ID: <CAHp75VdWPBNeX4=7ZzozodLR2A9=YxfKLpey=fhKhmW+y2HAPw@mail.gmail.com>
+Subject: Re: [PATCH v8 1/4] iio:frequency:admv1014: add support for ADMV1014
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/2022 01:07, Chris Packham wrote:
-> Convert the marvell,xenon-sdhci binding to JSON schema. Currently the
-> in-tree dts files don't validate because they use sdhci@ instead of mmc@
-> as required by the generic mmc-controller schema.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v3:
->     - Don't accept ap807 without ap806
->     - Add ref: string for pad-type
->     Changes in v2:
->     - Update MAINTAINERS entry
->     - Incorporate feedback from Krzysztof
-> 
->  .../bindings/mmc/marvell,xenon-sdhci.txt      | 173 -----------
->  .../bindings/mmc/marvell,xenon-sdhci.yaml     | 272 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 273 insertions(+), 174 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
->  create mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-> 
+On Sun, Feb 20, 2022 at 11:55 PM Jonathan Cameron <jic23@kernel.org> wrote:
+> On Tue, 15 Feb 2022 10:12:13 +0200
+> Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
+>
+> > The ADMV1014 is a silicon germanium (SiGe), wideband,
+> > microwave downconverter optimized for point to point microwave
+> > radio designs operating in the 24 GHz to 44 GHz frequency range.
+> >
+> > Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADMV1014.pdf
+> > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+>
+> Hi Antoniu.
+>
+> One really trivial point inline that I noticed whilst having 'one last look'.
+>
+> I'll fix it up whilst applying but please check I didn't mess up!
+>
+> Series applied to the togreg branch of iio.git and initially pushed out as
+> testing to let 0-day poke at it an see if it can find anything we missed.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+On v5 I have given a few comments and the author didn't include me
+into the Cc list for the following series. It's not good. Not that I
+care too much about the series, but just to make the point for the
+future reactions on somebody's review.
 
-Best regards,
-Krzysztof
+-- 
+With Best Regards,
+Andy Shevchenko

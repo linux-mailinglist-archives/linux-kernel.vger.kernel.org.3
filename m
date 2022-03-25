@@ -2,276 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD13B4E6E2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B464E6E30
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358440AbiCYG2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 02:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S1358456AbiCYGa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 02:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237515AbiCYG2u (ORCPT
+        with ESMTP id S1358450AbiCYGa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 02:28:50 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E3C4E3E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:27:16 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b13so3830305pfv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:27:16 -0700 (PDT)
+        Fri, 25 Mar 2022 02:30:57 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2128.outbound.protection.outlook.com [40.107.223.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171285F8FF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:29:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ak58RHtT6NutZvHbq0Ua2sp7+51qvJwEi1+cK1VAq/sBuFbEB5bQUGlYx8Bx/58KE5KeZ1KKLnBW7HvY+6eCIiwVL87dvleISrbA9X8TIVI2qIo0WnYtuIDkBp04mhaeEIQupWLPfTCeNbtYIgjQ2b00MzBrkCkiWvgufYSnnIzdU6rPfwl0/WlpBLy3UUhFxW6/EvJpq+xERZ6x1oAILFYefMJsbtulLlgaB35thqsLcWhSEMitNOGgRIBCqUqJxqtQA0xN3SnhiSuHR+YdJ1g/MoA0BbZ4gtIEHI9090J5cZAIHp6lFPHLWZjarERbgWJoNn52HzJSshUof8fijw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r6VFVv/7uRp8NolX6ZrCNXlaX0OPbRBpkwe/7lSAHPk=;
+ b=Nrr9H7Ncbbw4sRW0q7CfzG9igF7QNrrBu6l/Zs1q0VDIxXLyAhuvrBHG5xGLyIMCZWl2dp1o4/lZbOeNEOtfEI/6++3P+tWJKiQ/sW3Lo/uK8WpY3FuwykUo9ie07eRNz5kJgfgojMsCoV2++EsMGpmM2KU5GUnEGo3BeUxWBYM5GSIaavJyeRuMVRpddVj2NXVAvRmmDxIJ9MdPukBKGQlAQMSkSaWHB2+1IbWmM7/yE/1rTbvb/p8V40j0EjjLJC/FyleXmppyfnyvLOV2zCUUz/VWBTc29xMqkPL0bOIZoEox1GNEbUzSYHdUQ1kc8BvEy4yiF099cB+w0rKimw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lCFLvUtOob48lWnfNGsaL3Qq4wYPmGrhLvwUAcO16N0=;
-        b=BMKhi0tOJpf/MFL0mRolgA7GIq0imJvzKjNCFx6bXC60M0LKTypB1DsjTZVvss/9X2
-         Ch+AOsAzkjFK13blAAHzi3ZCmnoVef3rZc+r1T2u3OakqeEEK7UHVCM0ZPz7ueVrIk0v
-         dunjFYW/WpHlA/Io4oBRFZqEhqPVI3XBG9Uvdx4RlvlyeV6p96G2jThNs2OD5FhBLTCg
-         bH/hLFRFlyZ6XBmbLwdjiuVyfecfUVWP2waeOscBEIi1kEj7dZAJUfnowZOnVuQl50Cd
-         bXbWPTND1kJiy/8hr3AGT5bktzqAYjjQvhgUH6v6XfPNS2rKA58IyoxxhAEzR7e0PAUw
-         XGBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lCFLvUtOob48lWnfNGsaL3Qq4wYPmGrhLvwUAcO16N0=;
-        b=MMPhKUdowPXN6Rtq1vDHgWD0gbPiwmp46Ayrm9TMfOyt5jbOwG9zPu2UIrMpa7MxVb
-         zDVJ6sXGJgwTIuWPuMZ5VKHwQy3/gOduK+We1e8Pf+EU7Zm76zBfVRyuw1sF74NwT57h
-         aRtgCKPakBVBqOM2fFYy4Awz5R6jTg0LhsMhC5ehWW4fny+4AiZIVb5oPp7qT0pvFB88
-         JNEeO4DFK5awZUYL8Mee3sNvsquwhauAXcpGzfn3TFyWvfNk3rGXqCXk06NKZBKPiTas
-         s/RGjXvrAVDYroD4hu4HIyBMwg8vz9fRad1oBZzp6arxf1T6RjKq60SfP2q7Xp77E8Je
-         7dIw==
-X-Gm-Message-State: AOAM533IlNtoTUVXeEYY8txfKWiBnaxzsg9uq5IA00jOavjFfU519I5h
-        RnsWsfn7lGz4hKwplO13cevH
-X-Google-Smtp-Source: ABdhPJxsDWPPMnot3dpoxh8fu/VrVpTD0+EeldC2mr4xTMW7o6kkvWmKzsrnueDhfKriCLR43ycOpA==
-X-Received: by 2002:a62:5fc4:0:b0:4fa:7a4b:3853 with SMTP id t187-20020a625fc4000000b004fa7a4b3853mr8908688pfb.77.1648189635878;
-        Thu, 24 Mar 2022 23:27:15 -0700 (PDT)
-Received: from thinkpad ([27.111.75.218])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a199000b001bf4b1b268bsm4555296pji.44.2022.03.24.23.27.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 23:27:15 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 11:57:08 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/25] dmaengine: dw-edma: Simplify the DebugFS context
- CSRs init procedure
-Message-ID: <20220325062708.GB4675@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-17-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r6VFVv/7uRp8NolX6ZrCNXlaX0OPbRBpkwe/7lSAHPk=;
+ b=jxXOnuI78msF+pjXQ5jGY2Yi8dOgm0h7nwpHXb5bX/RVdh1e3VmLCZ3I92KBCRHtJCMRyU7fcWJIuCMku4OTTR9it6Or623IFnG4EyjIDSHWo2TyUi6LjVPJxq69LgTZyrXu+e0ISuDCYCVTM3izi0s2DQm1U4h5Rj+Nk7rAdXY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by BYAPR04MB4246.namprd04.prod.outlook.com (2603:10b6:a02:f3::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Fri, 25 Mar
+ 2022 06:29:20 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5102.016; Fri, 25 Mar 2022
+ 06:29:20 +0000
+Date:   Fri, 25 Mar 2022 14:29:12 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        dri-devel@lists.freedesktop.org, Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        treapking@chromium.org, pihsun@chromium.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>, tzungbi@google.com,
+        bliang@analogixsemi.com
+Subject: Re: [PATCH v2] drm/bridge: anx7625: Set downstream sink into normal
+ status
+Message-ID: <20220325062912.GA1527766@anxtwsw-Precision-3640-Tower>
+References: <20220322080213.1487134-1-xji@analogixsemi.com>
+ <CAJMQK-j+PhB6dZBuKG3NtW94oT0bVkp9G1bXhmyZLgYOmTCgog@mail.gmail.com>
+ <20220322085208.GA1487511@anxtwsw-Precision-3640-Tower>
+ <CAGXv+5Gddu8VU7xjX-r2=u85i7Ut=_6JpQV6py52OyzEkpezTg@mail.gmail.com>
+ <20220322101342.GA1493353@anxtwsw-Precision-3640-Tower>
+ <CAG3jFytYcLP_1JJzoTU8YcwXp8==EpPdad5z02ROu8HtuaqfzQ@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220324014836.19149-17-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAG3jFytYcLP_1JJzoTU8YcwXp8==EpPdad5z02ROu8HtuaqfzQ@mail.gmail.com>
+X-ClientProxiedBy: HKAPR04CA0006.apcprd04.prod.outlook.com
+ (2603:1096:203:d0::16) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c67a0c08-164c-42a4-bf52-08da0e28cb48
+X-MS-TrafficTypeDiagnostic: BYAPR04MB4246:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR04MB424607B2A4327617DC617378C71A9@BYAPR04MB4246.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rPmZyVCUXIzzQDsWgnXkcrK33K5RjIw73zrJ3gR2QWulnpFQ1YIrW12NFaJ2z+0cDL5V25JdZ8oaIc/93yPPVcNo3/bYGCcAfPDrWZPaxO45C+zST69njGYx/E5JB6MNNnQke4xCrbUDd1sZ4Z7bLmzfT9y93ALrFCcLeZvYqxV01esxrPZ3L3ABq23g06ZDAWmqLTvhnarxSk0ebQhXcclL2L/5glgiNOy0GTwURwJIvE04jt759i7zrITnTWxC91d0TrLIsblhalP0Z8iQ0GBgaO+gGXopWAitNCrBafj2TzSr0eSZ2epxZCY1FKnPa8p/DrgV3DuwQO+7lZpeJOqSokXIttorkKxjc5nzJu2Yrzu/8xTaIWcHVUHi8J07DuGLiWUV+HQR+eVnfgpeeeB7l4PuMxGD28lyo/+D3i3LjfkH1B/Q+swyZShP9dKhw2BYbF4pJBTew1gVv+88X26FDyG317d+Yukcyi+jWbnEHLyrMwosf2bcDGWwRaqFktYKr1Lpk6WUmvNyuV7K4LvPSmy2LeMGB1qQc105ZyfZ9Sv5CaW0SQrYnLwFC0AfKErkmKV36qaoufKQGLFlhPdalHBK3GfFwNnsztxLrxWWLGoY99EzrU94ABO816B1hhaD/34xGxtHb9QpIfq9+4bDdBQBOizB9845Fjk7Nt3MRqvFLaIwZ50qoBoE29qx7mb4MgSVl34VRkAsb5povg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(9686003)(86362001)(6512007)(8936002)(6506007)(2906002)(186003)(5660300002)(33656002)(55236004)(33716001)(38350700002)(8676002)(316002)(6666004)(7416002)(66556008)(4326008)(52116002)(26005)(66946007)(107886003)(508600001)(66476007)(6486002)(38100700002)(6916009)(54906003)(1076003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UaYkzOX81GE4yBOYP47hRxoxZ/ShmGrmRncslAWUZ85BY0ohF00QgKDO5L5F?=
+ =?us-ascii?Q?Y4QOVCTLputynsusevzlDfeLvztd1FgmAO+hOMXqDLurR4Q0ZKniyYZVKzlk?=
+ =?us-ascii?Q?NwExYEX7zwRqTWgg7woDqwMH75doFfpsOjA0qGXAsorlU9PIBcvRVPNf2rAk?=
+ =?us-ascii?Q?XNUyKoBTAWawgrxNHXraS6iT9WXqoOmn1+daUkFcq8zk/wfo3TnVec0P2W6J?=
+ =?us-ascii?Q?kcwhleZHR75bDJKdI4SrMsvFq3hLVMZkW86pH4/TOh6FZQmZAYGPyJBZ6O7R?=
+ =?us-ascii?Q?evJDV7TLgLwCZqs/Tza27QNYCNN82QCAMB/irw0GOBLA3Lj9F0ICKUePlgGX?=
+ =?us-ascii?Q?LrRs0Sr4jD1eIPEtrHlk+/Sw5nmRHMLlLU0D8jSUycZZg5oc8bRoAffwtXpg?=
+ =?us-ascii?Q?8kn9JPhxXWzV7ackDdSflpqV9gJofhagwVDtWQry+qtt1V+E4ylf/RM5ZKhk?=
+ =?us-ascii?Q?yl5oCnusKHD7A33X77/17iuEGKwg4H9BpVwV2pvWjfZLxrJ4sRZrx7ucJyQ+?=
+ =?us-ascii?Q?m5y4mDzek7IzoDs/fOvTLvjHiQbtX5fHp6Mcl3Thqtmd8VO0K+0C1vrlUckI?=
+ =?us-ascii?Q?EtixLXgZw2NLcXvboSksMa5UKI1NUBDmtiyBW9sMYaR3KM1fixNxh9qEWgdp?=
+ =?us-ascii?Q?zLBYEfE3RrIpSssY/1MLBxGxOXHS6C9r96CJMm6maOcDVx7kklxfSJy8GFwF?=
+ =?us-ascii?Q?rRwL2sk2ovn8qtdTlAnywrAyjBcQPW3DXdVMZnMF5g+06/P7l+Ra9pV++ZZI?=
+ =?us-ascii?Q?FyygOezuxaEuk8fq2YihepnQfeNiRzPbCki39Y66WPVgZiUlpUUxebAcOEOc?=
+ =?us-ascii?Q?7wEYiNdHYPFr1GtLPhZRs4g8n0aK2Iyvpf/FlS3ee5WGZYjwoFWyfw8391e5?=
+ =?us-ascii?Q?Mg3RAA+x7YQVFv/6nmK8EHxVBS4/zd/FeC6k86Q/uOZLK3ucEzQTWddCQ7TA?=
+ =?us-ascii?Q?gkPU57qeQvgDVEsxSSBuHzAwD1nyGRV0omf+1i65RbRvAesSltd5ZmPd52Qo?=
+ =?us-ascii?Q?9ZNZf/onGdb69FyWirDsjyRTiwwc8qHOfDHORPYbtxJhXTbDxqjcPUbHzS+M?=
+ =?us-ascii?Q?jHh7pEfzCWTYo7fPrzSb+Mu6T5Qr6dTFElyUXKQl+op+0UQR5t5FkQX9xpEl?=
+ =?us-ascii?Q?VntgrMqiJviK8ioHjIrGYgsYtHE1NjoNv7R6AFJPpgp/8tnk/yddWR0pNgdg?=
+ =?us-ascii?Q?uKTVzXT0q/NknzbKsDhF/MGcIiFU3ft2x9sUJ5+Tj+RXquF4qTGm93IrUI7F?=
+ =?us-ascii?Q?M4ZqFTngYznT1mclZ1wbJZ/hbpgCVNl2hNHgI25jYp6f3X0F6N4cY3mEjLUn?=
+ =?us-ascii?Q?+XMpJoB5/pxynITjpDlH9khEkJerYtH9mgF4iI4PReUQCs2S+rjD0hLin+j4?=
+ =?us-ascii?Q?kxwUp1m0TQQ2S249zkxQrA62ibPC3SAtXIVsFDy/uo6bfYnYoX4X7hpxf2K1?=
+ =?us-ascii?Q?o8oB5N1FMZOBjkhrzttzbqXGr13l54eK?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c67a0c08-164c-42a4-bf52-08da0e28cb48
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2022 06:29:20.2588
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5WM77Rsyt8t3qq+uw5IdE6VVdPc3Kzxxtz1fEwE5ORlqIIFzsaBYxaX5OWmop+2cbKS9XzHgYogYAYq2NauOvg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4246
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:48:27AM +0300, Serge Semin wrote:
-> DW eDMA v4.70a and older have the read and write channels context CSRs
-> indirectly accessible. It means the CSRs like Channel Control, Xfer size,
-> SAR, DAR and LLP address are accessed over at a fixed MMIO address, but
-> their reference to the corresponding channel is determined by the Viewport
-> CSR. In order to have a coherent access to these registers the CSR IOs are
-> supposed to be protected with a spin-lock. DW eDMA v4.80a and newer
-> normally have unrolled Read/Write channel context registers. That is all
-> CSRs denoted before are directly mapped in the controller MMIO space.
+On Thu, Mar 24, 2022 at 01:07:56PM +0100, Robert Foss wrote:
+> > > > > The driver uses DRM_DEV_* for logs. Can we use this?
+> > > > Hi Hsin-Yi, as comment in drm/drm_print.h:
+> > > > "NOTE: this is deprecated in favor of drm_dbg". DRM bridge driver not
+> > > > use DRM_DEV_* any more. I'll send a patch to replace all of DRM_DEV_*
+> > > > later.
+> > >
+> > > drm_dbg is better than dev_dbg though. With the former, you still get the
+> > > option to control it with the drm.debug module parameter, unlike the latter
+> > > which normally gets compiled out.
+> > >
+> > > Please use drm_dbg*.
+> > >
+> > > ChenYu
+> >
+> > Hi ChenYu, the parameter of drm_dbg is "drm", if use drm_dbg, it will
+> > change more code, I'll consider to upstream new patch to replace all of
+> > them later.
+> >
 > 
-> Since both normal and viewport-based registers are exposed via the DebugFS
-> nodes, the original code author decided to implement an algorithm based on
-> the unrolled CSRs mapping with the viewport addresses recalculation if
-> it's required. The problem is that such implementation turned to be first
-> unscalable (supports a platform with only single eDMA available since a
-> base address statically preserved) and second needlessly overcomplicated
-> (it loops over all Rd/Wr context addresses and re-calculates the viewport
-> base address on each DebugFS node access). The algorithm can be greatly
-> simplified just by adding the channel ID and it's direction fields in the
-> eDMA DebugFS node descriptor. These new parameters can be used to find a
-> CSR offset within the corresponding channel registers space. The DW eDMA
-> DebugFS node getter afterwards will also use them in order to activate the
-> respective context CSRs viewport before reading data from the specified
-> register. In case of the unrolled version of the CSRs mapping there won't
-> be any spin-lock taken/released, no viewport activation as before this
-> modification.
+> Alright, since the driver already uses these logging functions, let's
+> apply this patch and fix the logging function this driver uses in a
+> separate series.
 > 
-> Note this modification fixes the REGISTER() macros using an externally
-> defined local variable. The same problem with the rest of the macro will
-> be fixed in the next commit.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 84 +++++++++++-------------
->  1 file changed, 38 insertions(+), 46 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> index 7eb0147912fa..b34a68964232 100644
-> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> @@ -15,9 +15,27 @@
->  
->  #define REGS_ADDR(name) \
->  	((void __iomem *)&regs->name)
-> +
-> +#define REGS_CH_ADDR(name, _dir, _ch)						\
-> +	({									\
-> +		struct dw_edma_v0_ch_regs __iomem *__ch_regs;			\
-> +										\
-> +		if ((dw)->chip->mf == EDMA_MF_EDMA_LEGACY)			\
-> +			__ch_regs = &regs->type.legacy.ch;			\
-> +		else if (_dir == EDMA_DIR_READ)					\
-> +			__ch_regs = &regs->type.unroll.ch[_ch].rd;		\
-> +		else								\
-> +			__ch_regs = &regs->type.unroll.ch[_ch].wr;		\
-> +										\
-> +		(void __iomem *)&__ch_regs->name;				\
-> +	})
-> +
->  #define REGISTER(name) \
->  	{ #name, REGS_ADDR(name) }
->  
-> +#define CTX_REGISTER(name, dir, ch) \
-> +	{ #name, REGS_CH_ADDR(name, dir, ch), dir, ch }
-
-What is the need of "dir, ch" at the end?
-
-> +
->  #define WR_REGISTER(name) \
->  	{ #name, REGS_ADDR(wr_##name) }
->  #define RD_REGISTER(name) \
-> @@ -41,14 +59,11 @@
->  static struct dw_edma				*dw;
->  static struct dw_edma_v0_regs			__iomem *regs;
->  
-> -static struct {
-> -	void					__iomem *start;
-> -	void					__iomem *end;
-> -} lim[2][EDMA_V0_MAX_NR_CH];
-> -
->  struct dw_edma_debugfs_entry {
->  	const char				*name;
->  	void __iomem				*reg;
-> +	enum dw_edma_dir			dir;
-> +	u16					ch;
->  };
->  
->  static int dw_edma_debugfs_u32_get(void *data, u64 *val)
-> @@ -58,33 +73,16 @@ static int dw_edma_debugfs_u32_get(void *data, u64 *val)
->  
->  	if (dw->chip->mf == EDMA_MF_EDMA_LEGACY &&
->  	    reg >= (void __iomem *)&regs->type.legacy.ch) {
-> -		void __iomem *ptr = &regs->type.legacy.ch;
-> -		u32 viewport_sel = 0;
->  		unsigned long flags;
-> -		u16 ch;
-> -
-> -		for (ch = 0; ch < dw->wr_ch_cnt; ch++)
-> -			if (lim[0][ch].start >= reg && reg < lim[0][ch].end) {
-> -				ptr += (reg - lim[0][ch].start);
-> -				goto legacy_sel_wr;
-> -			}
-> -
-> -		for (ch = 0; ch < dw->rd_ch_cnt; ch++)
-> -			if (lim[1][ch].start >= reg && reg < lim[1][ch].end) {
-> -				ptr += (reg - lim[1][ch].start);
-> -				goto legacy_sel_rd;
-> -			}
-> -
-> -		return 0;
-> -legacy_sel_rd:
-> -		viewport_sel = BIT(31);
-> -legacy_sel_wr:
-> -		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
-> +		u32 viewport_sel;
-> +
-> +		viewport_sel = entry->dir == EDMA_DIR_READ ? BIT(31) : 0;
-> +		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, entry->ch);
->  
->  		raw_spin_lock_irqsave(&dw->lock, flags);
->  
->  		writel(viewport_sel, &regs->type.legacy.viewport_sel);
-> -		*val = readl(ptr);
-> +		*val = readl(reg);
->  
->  		raw_spin_unlock_irqrestore(&dw->lock, flags);
->  	} else {
-> @@ -114,19 +112,19 @@ static void dw_edma_debugfs_create_x32(const struct dw_edma_debugfs_entry ini[],
->  	}
->  }
->  
-> -static void dw_edma_debugfs_regs_ch(struct dw_edma_v0_ch_regs __iomem *regs,
-> +static void dw_edma_debugfs_regs_ch(enum dw_edma_dir edma_dir, u16 ch,
->  				    struct dentry *dir)
-
-Using "dir" for directory would be confusing since it could also refer
-direction. I'd suggest to use "dentry".
-
+> Xin: Can you submit a patch/series that converts this driver to use
+> drm_dbg* functions instead?
+Hi Robert Foss, OK, I'll submit patch after this patch get merged.
 Thanks,
-Mani
-
->  {
-> -	const struct dw_edma_debugfs_entry debugfs_regs[] = {
-> -		REGISTER(ch_control1),
-> -		REGISTER(ch_control2),
-> -		REGISTER(transfer_size),
-> -		REGISTER(sar.lsb),
-> -		REGISTER(sar.msb),
-> -		REGISTER(dar.lsb),
-> -		REGISTER(dar.msb),
-> -		REGISTER(llp.lsb),
-> -		REGISTER(llp.msb),
-> +	struct dw_edma_debugfs_entry debugfs_regs[] = {
-> +		CTX_REGISTER(ch_control1, edma_dir, ch),
-> +		CTX_REGISTER(ch_control2, edma_dir, ch),
-> +		CTX_REGISTER(transfer_size, edma_dir, ch),
-> +		CTX_REGISTER(sar.lsb, edma_dir, ch),
-> +		CTX_REGISTER(sar.msb, edma_dir, ch),
-> +		CTX_REGISTER(dar.lsb, edma_dir, ch),
-> +		CTX_REGISTER(dar.msb, edma_dir, ch),
-> +		CTX_REGISTER(llp.lsb, edma_dir, ch),
-> +		CTX_REGISTER(llp.msb, edma_dir, ch),
->  	};
->  	int nr_entries;
->  
-> @@ -191,10 +189,7 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dir)
->  
->  		ch_dir = debugfs_create_dir(name, regs_dir);
->  
-> -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].wr, ch_dir);
-> -
-> -		lim[0][i].start = &regs->type.unroll.ch[i].wr;
-> -		lim[0][i].end = &regs->type.unroll.ch[i].padding_1[0];
-> +		dw_edma_debugfs_regs_ch(EDMA_DIR_WRITE, i, ch_dir);
->  	}
->  }
->  
-> @@ -256,10 +251,7 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dir)
->  
->  		ch_dir = debugfs_create_dir(name, regs_dir);
->  
-> -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].rd, ch_dir);
-> -
-> -		lim[1][i].start = &regs->type.unroll.ch[i].rd;
-> -		lim[1][i].end = &regs->type.unroll.ch[i].padding_2[0];
-> +		dw_edma_debugfs_regs_ch(EDMA_DIR_READ, i, ch_dir);
->  	}
->  }
->  
-> -- 
-> 2.35.1
-> 
+Xin

@@ -2,174 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965EC4E6F3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6D14E6F41
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348412AbiCYIE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 04:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        id S1352220AbiCYIF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 04:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbiCYIEy (ORCPT
+        with ESMTP id S234174AbiCYIF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 04:04:54 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15313A76FA
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:03:19 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KPvjL23cSz9sRq;
-        Fri, 25 Mar 2022 09:03:18 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bgz314D1biRI; Fri, 25 Mar 2022 09:03:18 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KPvjL16jBz9sRn;
-        Fri, 25 Mar 2022 09:03:18 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 11A508B780;
-        Fri, 25 Mar 2022 09:03:18 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id W7T8NCjv481w; Fri, 25 Mar 2022 09:03:17 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DCF308B763;
-        Fri, 25 Mar 2022 09:03:17 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22P838xt1938379
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 09:03:09 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22P838rI1938378;
-        Fri, 25 Mar 2022 09:03:08 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2] ftrace: Make ftrace_graph_is_dead() a static branch
-Date:   Fri, 25 Mar 2022 09:03:08 +0100
-Message-Id: <8628338322fa74287ca8d432d5c0c1964acd6f2a.1648195329.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
+        Fri, 25 Mar 2022 04:05:57 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D910C6ED1;
+        Fri, 25 Mar 2022 01:04:24 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id o6-20020a17090a9f8600b001c6562049d9so7578419pjp.3;
+        Fri, 25 Mar 2022 01:04:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:from:cc:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=k5SnJKnSQgGm03pK1Rh/ppKUUZMIIQhJLBgtty0XG1k=;
+        b=ncEX2tduPQxfe666yaF2BPwotrIpqV5jgAfWvQ+PtynqDjyWOG/IGJbkFrWj3zCjUF
+         zj5IBWNMmLY9/94ODSz0/xTRYk7Z7w5HLq/M8l60TigmY4+ze5riZixoXT1LxTrOZf9c
+         UayRztgYOYVkAM8mQsfHI32NuNg+8cBAGRfbBLggjwWgDdhvd8lbc5OJu8adh0f278+m
+         jGFdEXHVFxKL3ReAT//OkWFR4hnqq6wv100e1EvnhW/5EV7/WeaqkvAQDb5eRBa58Bbp
+         bsOWBdzU7GN/hgUKOl0ZRQCa+5ANbXZACUd2PqJCOgcuDdRSzvADmJZ2mLdYfd+/knx4
+         O33A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:cc:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=k5SnJKnSQgGm03pK1Rh/ppKUUZMIIQhJLBgtty0XG1k=;
+        b=WbePkyNoc1PzaxsZ8XiidvUqSJp3lVhUWSm0fq3jzuhmWBgR6IX5Lwmmf/B92esfKU
+         2x7eSpcbbKxij9s+kb+e7AutZOm78s9dSvBYyzBK4FfUrDJwg7AvlJpNKlzvUSwNpp8h
+         DUmw+c8chTFxXg3TwULLgquaSKLz8OeReM5Xud58P6FOOo5B5+tSAbV7z5i3rM1mSSPn
+         KnOY+DRy39BfEkyv2lvPXN6dJnzPm3fdiP2H8VSE7FEN9hGdXLN37RckKaPNO/jkoS2k
+         8PcIfD9xhTDv4etFHY7xJC+yJ5USNGbnHduBc7bsWbA35MhpmnYXxf4M58Uaa/lk3/8w
+         0U5Q==
+X-Gm-Message-State: AOAM5310wkyd3d2qYaw0CdpALNYd3NyQL6GYZYeJoLRzGxhTQjE9RMdu
+        DdyaNWStINuXfkTDgz4BArlSfSQaHW4=
+X-Google-Smtp-Source: ABdhPJx4tjKSGFU3Bu+QExdfCrRJE5x9JE9tK6OSaA5S9dk4p2HIihfkm04FfjJCOshLwFUiiXpxGg==
+X-Received: by 2002:a17:902:f68b:b0:154:76c2:f7cf with SMTP id l11-20020a170902f68b00b0015476c2f7cfmr10432032plg.160.1648195463177;
+        Fri, 25 Mar 2022 01:04:23 -0700 (PDT)
+Received: from [10.110.0.6] ([194.5.48.145])
+        by smtp.gmail.com with ESMTPSA id y4-20020a056a00190400b004fac0896e35sm5478063pfi.42.2022.03.25.01.04.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 01:04:22 -0700 (PDT)
+Subject: Re: [PATCH] fs: btrfs: fix possible use-after-free bug in error
+ handling code of btrfs_get_root_ref()
+To:     dsterba@suse.cz
+References: <20220324134454.15192-1-baijiaju1990@gmail.com>
+ <20220324181940.GK2237@suse.cz>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <84720b1d-831e-4a2e-e2c5-4f20ac7bb778@gmail.com>
+Date:   Fri, 25 Mar 2022 16:04:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648195387; l=3391; s=20211009; h=from:subject:message-id; bh=aDg2tLJ31D9Fssnue1+3mTD1ZvJRLunpzUIjiG3Tp+U=; b=6M11MNmE57VZlDVfkH/7QjX25JLUjqLLvueXJDxGpryW7KJXnECXnaDypvSTvOCukMz4Chc2GdqX pa1MChfWB8xFBthSd6ZauqKLw5XtIKW4i4ynxmv/dTv0m23Lq21x
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+In-Reply-To: <20220324181940.GK2237@suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ftrace_graph_is_dead() is used on hot paths, it just reads a variable
-in memory and is not worth suffering function call constraints.
 
-For instance, at entry of prepare_ftrace_return(), inlining it avoids
-saving prepare_ftrace_return() parameters to stack and restoring them
-after calling ftrace_graph_is_dead().
 
-While at it using a static branch is even more performant and is
-rather well adapted considering that the returned value will almost
-never change.
+On 2022/3/25 2:19, David Sterba wrote:
+> On Thu, Mar 24, 2022 at 06:44:54AM -0700, Jia-Ju Bai wrote:
+>> In btrfs_get_root_ref(), when btrfs_insert_fs_root() fails,
+>> btrfs_put_root() will be called to possibly free the memory area of
+>> the variable root. However, this variable is then used again in error
+>> handling code after "goto fail", when ret is not -EEXIST.
+>>
+>> To fix this possible bug, btrfs_put_root() is only called when ret is
+>> -EEXIST for "goto again".
+>>
+>> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+>> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+>> ---
+>>   fs/btrfs/disk-io.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+>> index b30309f187cf..126f244cdf88 100644
+>> --- a/fs/btrfs/disk-io.c
+>> +++ b/fs/btrfs/disk-io.c
+>> @@ -1850,9 +1850,10 @@ static struct btrfs_root *btrfs_get_root_ref(struct btrfs_fs_info *fs_info,
+>>   
+>>   	ret = btrfs_insert_fs_root(fs_info, root);
+>>   	if (ret) {
+>> -		btrfs_put_root(root);
+>> -		if (ret == -EEXIST)
+>> +		if (ret == -EEXIST) {
+>> +			btrfs_put_root(root);
+> I think this fix is correct, though it's not that clear. If you look how
+> the code changed, there was the unconditional put and then followed by a
+> free:
+>
+> 8c38938c7bb0 ("btrfs: move the root freeing stuff into btrfs_put_root")
+>
+> Here it's putting twice where one will be the final free.
+>
+> And then the whole refcounting gets updated in
+>
+> 4785e24fa5d2 ("btrfs: don't take an extra root ref at allocation time")
+>
+> which could be removing the wrong put, I'm not yet sure.
 
-Inline ftrace_graph_is_dead() and replace 'kill_ftrace_graph' bool
-by a static branch.
+Thanks for the reply!
 
-The performance improvement is noticeable.
+I think the bug should be introduced by this commit:
+bc44d7c4b2b1 ("btrfs: push btrfs_grab_fs_root into btrfs_get_fs_root")
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v2: Use a static branch instead of a global bool var.
----
- include/linux/ftrace.h | 16 +++++++++++++++-
- kernel/trace/fgraph.c  | 17 +++--------------
- 2 files changed, 18 insertions(+), 15 deletions(-)
+This commit has a change:
+      ret = btrfs_insert_fs_root(fs_info, root);
+      if (ret) {
++      btrfs_put_fs_root(root);
+          if (ret == -EEXIST) {
+              btrfs_free_fs_root(root);
+              goto again;
+          }
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 9999e29187de..9e639e05666d 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -18,6 +18,7 @@
- #include <linux/types.h>
- #include <linux/init.h>
- #include <linux/fs.h>
-+#include <linux/jump_label.h>
- 
- #include <asm/ftrace.h>
- 
-@@ -1006,7 +1007,20 @@ unsigned long ftrace_graph_ret_addr(struct task_struct *task, int *idx,
- extern int register_ftrace_graph(struct fgraph_ops *ops);
- extern void unregister_ftrace_graph(struct fgraph_ops *ops);
- 
--extern bool ftrace_graph_is_dead(void);
-+/**
-+ * ftrace_graph_is_dead - returns true if ftrace_graph_stop() was called
-+ *
-+ * ftrace_graph_stop() is called when a severe error is detected in
-+ * the function graph tracing. This function is called by the critical
-+ * paths of function graph to keep those paths from doing any more harm.
-+ */
-+DECLARE_STATIC_KEY_FALSE(kill_ftrace_graph);
-+
-+static inline bool ftrace_graph_is_dead(void)
-+{
-+	return static_branch_unlikely(&kill_ftrace_graph);
-+}
-+
- extern void ftrace_graph_stop(void);
- 
- /* The current handlers in use */
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index 22061d38fc00..15acd48f0718 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -10,6 +10,7 @@
- #include <linux/suspend.h>
- #include <linux/ftrace.h>
- #include <linux/slab.h>
-+#include <linux/jump_label.h>
- 
- #include <trace/events/sched.h>
- 
-@@ -23,24 +24,12 @@
- #define ASSIGN_OPS_HASH(opsname, val)
- #endif
- 
--static bool kill_ftrace_graph;
-+DEFINE_STATIC_KEY_FALSE(kill_ftrace_graph);
- int ftrace_graph_active;
- 
- /* Both enabled by default (can be cleared by function_graph tracer flags */
- static bool fgraph_sleep_time = true;
- 
--/**
-- * ftrace_graph_is_dead - returns true if ftrace_graph_stop() was called
-- *
-- * ftrace_graph_stop() is called when a severe error is detected in
-- * the function graph tracing. This function is called by the critical
-- * paths of function graph to keep those paths from doing any more harm.
-- */
--bool ftrace_graph_is_dead(void)
--{
--	return kill_ftrace_graph;
--}
--
- /**
-  * ftrace_graph_stop - set to permanently disable function graph tracing
-  *
-@@ -51,7 +40,7 @@ bool ftrace_graph_is_dead(void)
-  */
- void ftrace_graph_stop(void)
- {
--	kill_ftrace_graph = true;
-+	static_branch_enable(&kill_ftrace_graph);
- }
- 
- /* Add a function return address to the trace stack on thread info.*/
--- 
-2.35.1
+I could add a Fixes tag of this commit in my V2 patch.
+Is it okay?
 
+
+Best wishes,
+Jia-Ju Bai

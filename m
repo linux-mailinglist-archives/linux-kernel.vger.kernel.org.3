@@ -2,191 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722994E72CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38174E72CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358932AbiCYMQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S1358938AbiCYMRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241971AbiCYMQK (ORCPT
+        with ESMTP id S241971AbiCYMRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:16:10 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04434D624;
-        Fri, 25 Mar 2022 05:14:36 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id pv16so15040595ejb.0;
-        Fri, 25 Mar 2022 05:14:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8V5ivikltya3vIFHgv4xionf1dAlc1QnsjDXk5/7sVU=;
-        b=QXnfFkH2//hgyHFOeUnOd0TCb2aFW+prNJ7T+iukI3pWRWIEc11uYRvPc8uqpuOMYR
-         JeVCv/CvXYANvnOwRuHa976rASHz/MdbAsr/0hM/jo8NyKh5UMdPXgDLeDYOhu7NQJ5z
-         CU3G0QoRJkKeksCUakqFKIz1U/5l4ak4Eu9PYvLhHThxFPfsTBYipFVt6yCYn0fMzl6u
-         IjldXaocbcSw0UM7Xdjuh0wFB+kUm7Z6au1DH7e7ib1tI/0Se3C/Rs4SxJk3oLTbZZYf
-         UVOfphDLlUvnNIvfke/OHWb+6iElc29ISB0sXFSJUNDcd7UK29nj0thhg/C1D6EY3yzg
-         tGQQ==
-X-Gm-Message-State: AOAM533FYzUNmbz7ocxJ7oRgVL3l3+ShzAokbp24JLsJjLZhJUfyN7Wk
-        +ZtOgMJ57F5fHNrYVEmuquY=
-X-Google-Smtp-Source: ABdhPJy8E5ALcm1XcsAwdMWd0q03ak98tgDhZsJLvOPk2ckVlPZmjqfKSCmL+g6/9BY00tyINQ8cGw==
-X-Received: by 2002:a17:907:168a:b0:6da:9167:47dc with SMTP id hc10-20020a170907168a00b006da916747dcmr11130921ejc.126.1648210475303;
-        Fri, 25 Mar 2022 05:14:35 -0700 (PDT)
-Received: from [192.168.0.160] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id p10-20020a17090664ca00b006df8869d58dsm2256573ejn.100.2022.03.25.05.14.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 05:14:34 -0700 (PDT)
-Message-ID: <d9b883d2-8269-8419-3bcd-3761074bea96@kernel.org>
-Date:   Fri, 25 Mar 2022 13:14:33 +0100
+        Fri, 25 Mar 2022 08:17:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7645E4D9FC
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:15:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 375B412FC;
+        Fri, 25 Mar 2022 05:15:35 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22AE33F73B;
+        Fri, 25 Mar 2022 05:15:34 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 12:15:28 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: clang memcpy calls
+Message-ID: <Yj2yYFloadFobRPx@lakrids>
+References: <YjxTt3pFIcV3lt8I@zn.tnic>
+ <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add binding for Richtek
- RT5759 DCDC converter
-Content-Language: en-US
-To:     cy_huang <u0084500@gmail.com>, broonie@kernel.org,
-        robh+dt@kernel.org
-Cc:     lgirdwood@gmail.com, cy_huang@richtek.com, gene_chen@richtek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <1648170401-6351-1-git-send-email-u0084500@gmail.com>
- <1648170401-6351-2-git-send-email-u0084500@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <1648170401-6351-2-git-send-email-u0084500@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/2022 02:06, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On Thu, Mar 24, 2022 at 11:43:46AM -0700, Nick Desaulniers wrote:
+> On Thu, Mar 24, 2022 at 4:19 AM Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > Hi folks,
+> >
+> > so I've been looking at a recent objtool noinstr warning from clang
+> > builds:
+> >
+> > vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves .noinstr.text section
+> >
+> > The issue is that clang generates a memcpy() call when a struct copy
+> > happens:
+> >
+> >         if (regs != eregs)
+> >                 *regs = *eregs;
 > 
-> Add bindings for Richtek RT5759 high-performance DCDC converter.
+> Specifically, this is copying one struct pt_regs to another. It looks
+> like the sizeof struct pt_regs is just large enough to have clang emit
+> the libcall.
+> https://godbolt.org/z/scx6aa8jq
+> Otherwise clang will also use rep; movsq; when -mno-sse -O2 is set and
+> the structs are below ARBITRARY_THRESHOLD.  Should ARBITRARY_THRESHOLD
+> be raised so that we continue to inline the memcpy? *shrug*
 > 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../regulator/richtek,rt5759-regulator.yaml        | 90 ++++++++++++++++++++++
->  1 file changed, 90 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
+> Though, looking at the compiled memcpy (`llvm-objdump -D
+> --disassemble-symbols=memcpy vmlinux`), maybe we *should* try harder.
+> Filed
+> https://github.com/llvm/llvm-project/issues/54535.
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
-> new file mode 100644
-> index 00000000..c24b583
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
-> @@ -0,0 +1,90 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/richtek,rt5759-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Richtek RT5759 High Performance DCDC Concverter
+> > see below for asm output.
+> >
+> > While gcc does simply generate an actual "rep; movsq".
+> >
+> > So, how hard would it be to make clang do that too pls?
+> 
+> As Mark said in the sibling reply; I don't know of general ways to
+> inhibit libcall optimizations on the level you're looking for, short
+> of heavy handy methods of disabling optimizations entirely.  There's
+> games that can be played with -fno-builtin-*, but they're not super
+> portable, and I think there's a handful of *blessed* functions that
+> must exist in any env, freestanding or not: memcpy, memmove, memset,
+> and memcmp for which you cannot yet express "these do not exist."
 
-typo: Converter
+Talking with Peter on IRC, I think there's an oversight on the compiler
+side here w.r.t. the expectations around these blessed functions, since
+either:
 
-> +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  The RT5759 is a high-performance, synchronous step-down DC-DC converter that
-> +  can deliver up to 9A output current from 3V to 6.5V input supply, The output
-> +  voltage can be programmable with I2C controlled 7-Bit VID.
-> +
-> +  Datasheet is available at
-> +  https://www.richtek.com/assets/product_file/RT5759/DS5759-00.pdf
-> +
-> +allOf:
-> +  - $ref: regulator.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - richtek,rt5759
-> +      - richtek,rt5759a
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  regulator-allowed-modes:
-> +    description: |
-> +      buck allowed operating mode
-> +        0: auto mode (PSKIP: pulse skipping)
-> +        1: force pwm mode
-> +    items:
-> +      enum: [0, 1]
-> +
-> +  richtek,watchdog-enable:
-> +    description: enable the external watchdog reset pin listening
-> +    type: boolean
-> +
-> +if:
+a) The compiler expects the out-of-line implementations of functions
+   ARE NOT instrumented by address-sanitizer.
 
-This should be inside allOf. Move allOf here,
+   If this is the case, then it's legitimate for the compiler to call
+   these functions anywhere, and we should NOT instrument the kernel
+   implementations of these. If the compiler wants those instrumented it
+   needs to add the instrumentation in the caller.
 
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: richtek,rt5759
-> +then:
-> +  properties:
-> +    richtek,watchdog-enable: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  # example 1 for RT5759
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      rt5759@62 {
+b) The compiler expects the out-of-line implementations of functions
+   ARE instrumented by address-sanitizer.
 
-Generic node name, so pmic.
+   If this is the case, the compiler MUST NOT generate implicit calls to
+   these "blessed" functions from functions marked with:
 
-> +        compatible = "richtek,rt5759";
-> +        reg = <0x62>;
-> +        regulator-name = "rt5759-buck";
-> +        regulator-min-microvolt = <600000>;
-> +        regulator-max-microvolt = <1500000>;
-> +        regulator-boot-on;
-> +      };
-> +    };
-> +  # example 2 for RT5759A
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      rt5759a@62 {
+     __attribute__((no_sanitize_address)).
 
-Ditto
+   ... or the compiler is violating the premise of that attribute.
 
-> +        compatible = "richtek,rt5759a";
-> +        reg = <0x62>;
-> +        regulator-name = "rt5759a-buck";
-> +        regulator-min-microvolt = <600000>;
-> +        regulator-max-microvolt = <1725000>;
-> +        regulator-boot-on;
-> +        richtek,watchdog-enable;
-> +      };
-> +    };
+   AFAICT The two options for the compiler here are:
+
+   1) Always inline an uninstrumented form of the function in this case
+
+   2) Have distinct instrumented/uninstrumented out-of-line
+      implementations, and call the uninstrumented form in this case.
+
+To see what clang and GCC do today, I hacked the following in:
+
+| diff --git a/init/main.c b/init/main.c
+| index 65fa2e41a9c0..30406c472b5d 100644
+| --- a/init/main.c
+| +++ b/init/main.c
+| @@ -1637,3 +1637,31 @@ static noinline void __init kernel_init_freeable(void)
+|  
+|         integrity_load_keys();
+|  }
+| +
+| +void
+| +test_implicit_memcpy(struct task_struct *dest,
+| +                    const struct task_struct *src)
+| +{
+| +       *dest = *src;
+| +}
+| +
+| +void
+| +test_explicit_memcpy(struct task_struct *dest,
+| +                    const struct task_struct *src)
+| +{
+| +       memcpy(dest, src, sizeof(*dest));
+| +}
+| +
+| +void __no_sanitize_address
+| +test_implicit_memcpy_nokasan(struct task_struct *dest,
+| +                            const struct task_struct *src)
+| +{
+| +       *dest = *src;
+| +}
+| +
+| +void __no_sanitize_address
+| +test_explicit_memcpy_nokasan(struct task_struct *dest,
+| +                            const struct task_struct *src)
+| +{
+| +       memcpy(dest, src, sizeof(*dest));
+| +}
 
 
-Best regards,
-Krzysztof
+For arm64, GCC 11.1.0, KASAN_OUTLINE I see:
+
+| <test_implicit_memcpy>:
+|        d503245f        bti     c
+|        d503233f        paciasp
+|        a9be7bfd        stp     x29, x30, [sp, #-32]!
+|        910003fd        mov     x29, sp
+|        a90153f3        stp     x19, x20, [sp, #16]
+|        aa0103f3        mov     x19, x1
+|        aa0003f4        mov     x20, x0
+|        d281c001        mov     x1, #0xe00                      // #3584
+|        940b9534        bl      ffff8000082f9d90 <__asan_storeN>
+|        aa1303e0        mov     x0, x19
+|        d281c001        mov     x1, #0xe00                      // #3584
+|        940b951e        bl      ffff8000082f9d44 <__asan_loadN>
+|        aa1303e1        mov     x1, x19
+|        aa1403e0        mov     x0, x20
+|        d281c002        mov     x2, #0xe00                      // #3584
+|        940b98c5        bl      ffff8000082fabf0 <memcpy>
+|        a94153f3        ldp     x19, x20, [sp, #16]
+|        a8c27bfd        ldp     x29, x30, [sp], #32
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_explicit_memcpy>:
+|        d503245f        bti     c
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        d281c002        mov     x2, #0xe00                      // #3584
+|        910003fd        mov     x29, sp
+|        940b98bb        bl      ffff8000082fabf0 <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_implicit_memcpy_nokasan>:
+|        d503245f        bti     c
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        d281c002        mov     x2, #0xe00                      // #3584
+|        910003fd        mov     x29, sp
+|        940b98b2        bl      ffff8000082fabf0 <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_explicit_memcpy_nokasan>:
+|        d503245f        bti     c
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        d281c002        mov     x2, #0xe00                      // #3584
+|        910003fd        mov     x29, sp
+|        940b98a7        bl      ffff8000082fabf0 <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+
+For x86_64, GCC 11.1.0, KASAN_OUTLINE I see:
+
+| <test_implicit_memcpy>:
+|        41 54                   push   %r12
+|        49 89 fc                mov    %rdi,%r12
+|        55                      push   %rbp
+|        48 89 f5                mov    %rsi,%rbp
+|        be 40 1c 00 00          mov    $0x1c40,%esi
+|        e8 0d 9a 32 00          call   ffffffff8132b0f0 <__asan_storeN>
+|        48 89 ef                mov    %rbp,%rdi
+|        be 40 1c 00 00          mov    $0x1c40,%esi
+|        e8 f0 99 32 00          call   ffffffff8132b0e0 <__asan_loadN>
+|        4c 89 e7                mov    %r12,%rdi
+|        48 89 ee                mov    %rbp,%rsi
+|        b9 88 03 00 00          mov    $0x388,%ecx
+|        f3 48 a5                rep movsq %ds:(%rsi),%es:(%rdi)
+|        5d                      pop    %rbp
+|        41 5c                   pop    %r12
+|        c3                      ret   
+| 
+| <test_explicit_memcpy>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e9 b6 9f 32 00          jmp    ffffffff8132b6d0 <memcpy>
+| 
+| 
+| <test_implicit_memcpy_nokasan>:
+|        b9 88 03 00 00          mov    $0x388,%ecx
+|        f3 48 a5                rep movsq %ds:(%rsi),%es:(%rdi)
+|        c3                      ret    
+| 
+| <test_explicit_memcpy_nokasan>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e9 96 9f 32 00          jmp    ffffffff8132b6d0 <memcpy>
+
+So from those examples it seems GCC falls into bucket (a), and assumes the
+blessed functions ARE NOT instrumented.
+
+We can make this noinstr-safe AND get instrumentation for the first two cases
+by removing the instrumentation from the out-of-line copies (always using
+noinstr asm implementations) and using ifdeffery to make the explicit calls
+target as distinct kasan_instrumented_memcpy() or similar...
+
+
+For arm64, clang 13.0.0, KASAN_OUTLINE I see:
+
+| <test_implicit_memcpy>:
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        910003fd        mov     x29, sp
+|        5281c002        mov     w2, #0xe00                      // #3584
+|        940c0f66        bl      ffff8000083185fc <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_explicit_memcpy>:
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        910003fd        mov     x29, sp
+|        5281c002        mov     w2, #0xe00                      // #3584
+|        940c0f5e        bl      ffff8000083185fc <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_implicit_memcpy_nokasan>:
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        910003fd        mov     x29, sp
+|        5281c002        mov     w2, #0xe00                      // #3584
+|        940c0f56        bl      ffff8000083185fc <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+| 
+| <test_explicit_memcpy_nokasan>:
+|        d503233f        paciasp
+|        a9bf7bfd        stp     x29, x30, [sp, #-16]!
+|        910003fd        mov     x29, sp
+|        5281c002        mov     w2, #0xe00                      // #3584
+|        940c0f4e        bl      ffff8000083185fc <memcpy>
+|        a8c17bfd        ldp     x29, x30, [sp], #16
+|        d50323bf        autiasp
+|        d65f03c0        ret
+
+For x86_64, clang 13.0.0, KASAN_OUTLINE I see:
+
+| <test_implicit_memcpy>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e8 d6 94 36 00          call   ffffffff8136a830 <memcpy>
+|        c3                      ret  
+| 
+| <test_explicit_memcpy>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e8 c6 94 36 00          call   ffffffff8136a830 <memcpy>
+|        c3                      ret    
+| 
+| 
+| <test_implicit_memcpy_nokasan>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e9 b6 94 36 00          jmp    ffffffff8136a830 <memcpy>
+| 
+| 
+| <test_explicit_memcpy_nokasan>:
+|        ba 40 1c 00 00          mov    $0x1c40,%edx
+|        e9 a6 94 36 00          jmp    ffffffff8136a830 <memcpy>
+
+... for which the first two suggests clang thinks the blessed functions *are*
+instrumented, which means that generating calls to those in the latter two
+cases is a bug.
+
+We can make this noinstr-safe as with the GCC case, but we'll lose the
+desirable instrumentation for the test_implicit_memcpy() case.
+
+I think something has to change on the compiler side here (e.g. as per
+options above), and we should align GCC and clang on the same
+approach...
+
+Thanks,
+Mark.

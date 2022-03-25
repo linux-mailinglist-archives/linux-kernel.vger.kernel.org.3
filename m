@@ -2,172 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8004E7CBC
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FA34E7CA0
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbiCYUj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S232314AbiCYUls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbiCYUjz (ORCPT
+        with ESMTP id S232277AbiCYUlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:39:55 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B1415407A;
-        Fri, 25 Mar 2022 13:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=hew7fHVL6FBQI77veB2hwuoO4Es9nvwsanNbsTy12PY=;
-        t=1648240698; x=1649450298; b=PxFb+cxH1F5Ob9Hh8gOR/XulGWvBkFVKkY3m9WqQpmSS5vP
-        elGgFVntHV8gCpZcR5VigbHYs1weDKVePC/MlY3BCRIN/wr0pXamY/d08p7BioTCsfq9MXy2Q47oA
-        XoUgSGaHIJstcs4oWtaR/Ee+QPhUZSnu1t01HGQfbJwAOPpkGhbPBfUxi8ZR+JTis4WYR5JkGGVI9
-        7kgEoTHBBiwdREorkL6xid1BUJhkQP+23/RiWFKcT4WZqOv/Nq6G6/x575l/Xa34YWcm65domhuyr
-        SwVb8uaxQSfytQKq6x1cMeM4zGmtD/o7g/0BR//NhQnH9zjc9Jfo1lFRZUG+FqcA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nXqgi-000Uby-Lq;
-        Fri, 25 Mar 2022 21:37:36 +0100
-Message-ID: <298f4f9ccad7c3308d3a1fd8b4b4740571305204.camel@sipsolutions.net>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Maxime Bizon <mbizon@freebox.fr>
-Cc:     Toke =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-Date:   Fri, 25 Mar 2022 21:37:35 +0100
-In-Reply-To: <CAHk-=wippum+MksdY7ixMfa3i1sZ+nxYPWLLpVMNyXCgmiHbBQ@mail.gmail.com>
-References: <1812355.tdWV9SEqCh@natalenko.name>
-         <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
-         <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
-         <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
-         <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
-         <20220324163132.GB26098@lst.de>
-         <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com> <871qyr9t4e.fsf@toke.dk>
-         <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
-         <31434708dcad126a8334c99ee056dcce93e507f1.camel@freebox.fr>
-         <CAHk-=wippum+MksdY7ixMfa3i1sZ+nxYPWLLpVMNyXCgmiHbBQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Fri, 25 Mar 2022 16:41:45 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43014171EF9;
+        Fri, 25 Mar 2022 13:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648240810; x=1679776810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/khNg5Ei108i3fhOUlj+7F6wA9Py3hXoiSYOmw59AqM=;
+  b=FNec5TaO6SLl4eVHNIIwfTx+JfcfkR1TIn/dHohym0NYHZvnHLtBl3R6
+   zoNfQgaRgnBPQkZhuE/KMR+aMEC/zvPGZKSZTjAvEMqwF+sHSvDD4YbWm
+   a84V9tFmJaqJNE5+XwUUiiBavD986gufGGWpYH7ysObQ8Ax8MsLE1sDdN
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Mar 2022 13:40:09 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:40:09 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 25 Mar 2022 13:40:09 -0700
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 25 Mar 2022 13:40:08 -0700
+Date:   Fri, 25 Mar 2022 13:39:59 -0700
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>, <kyletso@google.com>,
+        <andy.shevchenko@gmail.com>, <unixbhaskar@gmail.com>,
+        <subbaram@codeaurora.org>, <mrana@codeaurora.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
+ ucsi_handle_connector_change()
+Message-ID: <20220325203959.GA19752@jackp-linux.qualcomm.com>
+References: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
+ <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So I've been watching this from the sidelines mostly, and discussing a
-bit with Toke, but:
+Hi Heikki,
 
-On Fri, 2022-03-25 at 11:30 -0700, Linus Torvalds wrote:
+On Wed, Feb 09, 2022 at 04:30:31PM +0200, Heikki Krogerus wrote:
+> On Wed, Feb 09, 2022 at 11:50:57AM +0800, Jia-Ju Bai wrote:
+> > Hello,
+> > 
+> > My static analysis tool reports a possible deadlock in the ucsi driver in
+> > Linux 5.16:
+> > 
+> > ucsi_pr_swap()
+> >   mutex_lock(&con->lock); --> Line 962 (Lock A)
+> >   wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
+> > 
+> > ucsi_handle_connector_change()
+> >   mutex_lock(&con->lock); --> Line 763 (Lock A)
+> >   complete(&con->complete); --> Line 782 (Wake X)
+> >   complete(&con->complete); --> Line 807 (Wake X)
+> > 
+> > When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock A".
+> > If ucsi_handle_connector_change() is executed at this time, "Wake X" cannot
+> > be performed to wake up "Wait X" in ucsi_handle_connector_change(), because
+> > "Lock A" has been already held by ucsi_handle_connector_change(), causing a
+> > possible deadlock.
+> > I find that "Wait X" is performed with a timeout, to relieve the possible
+> > deadlock; but I think this timeout can cause inefficient execution.
+> > 
+> > I am not quite sure whether this possible problem is real.
+> > Any feedback would be appreciated, thanks :)
 > 
->  (2) The CPU now wants to see any state written by the device since
-> the last sync
+> This is probable a regression from commit ad74b8649bea ("usb: typec:
+> ucsi: Preliminary support for alternate modes"). Can you test does
+> this patch fix the issue (attached)?
+
+We encountered a slightly different twist to this bug.  Instead of
+deadlocking, we see that the dr_swap() / pr_swap() operations actually
+jump out of the wait_for_completion_timeout() immediately, even before
+any partner change occurs.  This is because the con->complete may
+already have its done flag set to true from the first time
+ucsi_handle_connector_change() runs, and is never reset after that.
+
+In addition to the unlocking below, I think we need to also add
+reinit_completion() calls at the start of ucsi_{pr,dr}_swap().
+
+Thanks,
+Jack
+
+> From 2ad06425a3df7be656f8a5b3c202aab45554fd17 Mon Sep 17 00:00:00 2001
+> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Date: Wed, 9 Feb 2022 17:27:19 +0300
+> Subject: [PATCH] usb: typec: ucsi: Test fix
 > 
->     This is "dma_sync_single_for_cpu(DMA_FROM_DEVICE)".
+> Interim.
 > 
->     A bounce-buffer implementation needs to copy *from* the bounce buffer.
+> Not-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
 > 
->     A cache-coherent implementation needs to do nothing.
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index f0c2fa19f3e0f..225104beda8be 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -956,14 +956,18 @@ static int ucsi_dr_swap(struct typec_port *port, enum typec_data_role role)
+>  	if (ret < 0)
+>  		goto out_unlock;
+>  
+> +	mutex_unlock(&con->lock);
+> +
+>  	if (!wait_for_completion_timeout(&con->complete,
+>  					msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
+> -		ret = -ETIMEDOUT;
+> +		return -ETIMEDOUT;
+> +
+> +	return 0;
+>  
+>  out_unlock:
+>  	mutex_unlock(&con->lock);
+>  
+> -	return ret < 0 ? ret : 0;
+> +	return ret;
+>  }
+>  
+>  static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
+> @@ -992,11 +996,13 @@ static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
+>  	if (ret < 0)
+>  		goto out_unlock;
+>  
+> +	mutex_unlock(&con->lock);
+> +
+>  	if (!wait_for_completion_timeout(&con->complete,
+> -				msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS))) {
+> -		ret = -ETIMEDOUT;
+> -		goto out_unlock;
+> -	}
+> +				msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
+> +		return -ETIMEDOUT;
+> +
+> +	mutex_lock(&con->lock);
+>  
+>  	/* Something has gone wrong while swapping the role */
+>  	if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) !=
+> @@ -1372,6 +1378,7 @@ void ucsi_unregister(struct ucsi *ucsi)
+>  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
+>  
+>  	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+> +		complete(&ucsi->connector[i].complete);
+>  		cancel_work_sync(&ucsi->connector[i].work);
+>  		ucsi_unregister_partner(&ucsi->connector[i]);
+>  		ucsi_unregister_altmodes(&ucsi->connector[i],
+> -- 
+> 2.34.1
 > 
->     A non-coherent implementation maybe needs to do nothing (ie it
-> assumes that previous ops have flushed the cache, and just accessing
-> the data will bring the rigth thing back into it). Or it could just
-> flush the cache.
 
-Doesn't that just need to *invalidate* the cache, rather than *flush*
-it? The cache is somewhat similar to the bounce buffer, and here you're
-copying _from_ the bounce buffer (which is where the device is
-accessing), so shouldn't it be the same for the cache, i.e. you
-invalidate it so you read again from the real memory?
-
->  (3) The CPU has seen the state, but wants to leave it to the device
-> 
->    This is "dma_sync_single_for_device(DMA_FROM_DEVICE)".
-> 
->    A bounce buffer implementation needs to NOT DO ANYTHING (this is
-> the current ath9k bug - copying to the bounce buffer is wrong)
-> 
->   A cache coherent implementation needs to do nothing
-> 
->   A non-coherent implementation needs to flush the cache again, bot
-> not necessarily do a writeback-flush if there is some cheaper form
-> (assuming it does nothing in the "CPU now wants to see any state" case
-> because it depends on the data not having been in the caches)
-
-And similarly here, it would seem that the implementation can't _flush_
-the cache as the device might be writing concurrently (which it does in
-fact do in the ath9k case), but it must invalidate the cache?
-
-I'm not sure about the (2) case, but here it seems fairly clear cut that
-if you have a cache, don't expect the CPU to write to the buffer (as
-evidenced by DMA_FROM_DEVICE), you wouldn't want to write out the cache
-to DRAM?
-
-
-I'll also note independently that ath9k actually maps the buffers as
-DMA_BIDIRECTIONAL, but the flush operations happen with DMA_FROM_DEVICE,
-at least after the setup is done. I must admit that I was scratching my
-head about this, I had sort of expected one should be passing the same
-DMA direction to all different APIs for the same buffer, but clearly, as
-we can see in your list of cases here, that's _not_ true.
-
-
-Then, however, we need to define what happens if you pass
-DMA_BIDIRECTIONAL to the sync_for_cpu() and sync_for_device() functions,
-which adds two more cases? Or maybe we eventually just think that's not
-valid at all, since you have to specify how you're (currently?) using
-the buffer, which can't be DMA_BIDIRECTIONAL?
-
-
->  (4) There is a fourth case: dma_sync_single_for_cpu(DMA_TO_DEVICE)
-> which maybe should generate a warning because it seems to make no
-> sense? I can't think of a case where this would be an issue - the data
-> is specifically for the device, but it's synced "for the CPU"?
-
-I'd tend to agree with that, that's fairly much useless, since if only
-the CPU wrote to it, then you wouldn't care about any caching or bounce
-buffers, so no need to sync back.
-
-> In other words, I think commit aa6f8dcbab47 ("swiotlb: rework 'fix
-> info leak with DMA_FROM_DEVICE'") is fundamentally wrong. It doesn't
-> just break ath9k, it fundamentally break that "case 3" above. It's
-> doing a DMA_TO_DEVICE copy, even though it was a DMA_FROM_DEVICE sync.
-> 
-> So I really think that "revert aa6f8dcbab47" is not only inevitable
-> because of practical worries about what it breaks, but because that
-> commit was just entirely and utterly WRONG.
-
-Honestly, I was scratching my head about this too - sadly it just says
-"what was agreed", without a pointer to how that was derived, but it
-seemed that the original issue was:
-
- "we're leaking old bounce buffer data to the device"
-
-or was it not? In which case doing any copies during map should've been
-sufficient, since then later no more data leaks could occur?
-
-johannes

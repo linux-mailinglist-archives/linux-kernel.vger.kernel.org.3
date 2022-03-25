@@ -2,121 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889A84E7E10
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE07E4E7BB5
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbiCYUmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
+        id S232201AbiCYU0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbiCYUmb (ORCPT
+        with ESMTP id S232169AbiCYU0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:42:31 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AAD17F3F5;
-        Fri, 25 Mar 2022 13:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648240856; x=1679776856;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=y0LAZAqsK93XWpNG5nw/oj1tHbeQR9usbzd6pJvOx4I=;
-  b=KUiglmnAl9c7XS+0MpOoemSwrM2rg2dZS8V7XrqWcubgM/WZ/9UtCUXS
-   YqH1kuh0/2V7XEMHM7Bum6zay3154BcHJyM6K2kYLBb+1T2IxCMqWjbJm
-   c7OtLc3pLeLeBFmdSAy1R2Ow69b6X6g/WW9HGlvLLaaFSXFNS8qX1WzN/
-   ApJPcdcMiy+k4sV3HKHMV0lVpuQiChOQEZ1yQVk2ZfFCq715hVZcOiyzk
-   oYDWUE5NRxr9AOEb5A2dyXQ6LqIgmsTJAGsHsJktIT5cBmy4pvpDtsZjP
-   3o4GBN9VEjKsrGU1uFbibZDuM/JoLGskBl6/SJ6JL0IwP44uVfLFSfoyx
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="239311414"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="239311414"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:14:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="617232702"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Mar 2022 13:14:07 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A7E8F11E; Fri, 25 Mar 2022 22:14:27 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 1/1] pinctrl: armada-37xx: Switch to use fwnode instead of of_node
-Date:   Fri, 25 Mar 2022 22:14:25 +0200
-Message-Id: <20220325201425.54847-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 25 Mar 2022 16:26:45 -0400
+X-Greylist: delayed 633 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 13:25:11 PDT
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477176EB1E;
+        Fri, 25 Mar 2022 13:25:10 -0700 (PDT)
+Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1nXqKL-0000sb-7e; Fri, 25 Mar 2022 16:14:29 -0400
+Date:   Fri, 25 Mar 2022 16:14:28 -0400
+From:   Rik van Riel <riel@surriel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, kernel-team@fb.com,
+        Oscar Salvador <osalvador@suse.de>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] mm,hwpoison: unmap poisoned page before invalidation
+Message-ID: <20220325161428.5068d97e@imladris.surriel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO library now accepts fwnode as a firmware node,
-so switch the driver to use it.
+In some cases it appears the invalidation of a hwpoisoned page
+fails because the page is still mapped in another process. This
+can cause a program to be continuously restarted and die when
+it page faults on the page that was not invalidated. Avoid that
+problem by unmapping the hwpoisoned page when we find it.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Another issue is that sometimes we end up oopsing in finish_fault,
+if the code tries to do something with the now-NULL vmf->page.
+I did not hit this error when submitting the previous patch because
+there are several opportunities for alloc_set_pte to bail out before
+accessing vmf->page, and that apparently happened on those systems,
+and most of the time on other systems, too.
+
+However, across several million systems that error does occur a
+handful of times a day. It can be avoided by returning VM_FAULT_NOPAGE
+which will cause do_read_fault to return before calling finish_fault.
+
+Fixes: e53ac7374e64 ("mm: invalidate hwpoison page cache page in fault path")
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: stable@vger.kernel.org
 ---
- drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ mm/memory.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-index ba94125f6566..6c2b25418754 100644
---- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-+++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-@@ -21,6 +21,7 @@
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- #include <linux/string_helpers.h>
-@@ -783,18 +784,13 @@ static int armada_37xx_gpiochip_register(struct platform_device *pdev,
- 					struct armada_37xx_pinctrl *info)
- {
- 	struct device *dev = &pdev->dev;
--	struct device_node *np;
-+	struct fwnode_handle *fwnode;
- 	struct gpio_chip *gc;
--	int ret = -ENODEV;
-+	int ret;
+diff --git a/mm/memory.c b/mm/memory.c
+index be44d0b36b18..76e3af9639d9 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3918,14 +3918,18 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
+ 		return ret;
  
--	for_each_child_of_node(dev->of_node, np) {
--		if (of_find_property(np, "gpio-controller", NULL)) {
--			ret = 0;
--			break;
--		}
--	}
--	if (ret)
--		return ret;
-+	fwnode = device_get_named_child_node(dev, "gpio-controller");
-+	if (!fwnode)
-+		return -ENODEV;
- 
- 	info->gpio_chip = armada_37xx_gpiolib_chip;
- 
-@@ -802,7 +798,7 @@ static int armada_37xx_gpiochip_register(struct platform_device *pdev,
- 	gc->ngpio = info->data->nr_pins;
- 	gc->parent = dev;
- 	gc->base = -1;
--	gc->of_node = np;
-+	gc->fwnode = fwnode;
- 	gc->label = info->data->name;
- 
- 	ret = armada_37xx_irqchip_register(pdev, info);
+ 	if (unlikely(PageHWPoison(vmf->page))) {
++		struct page *page = vmf->page;
+ 		vm_fault_t poisonret = VM_FAULT_HWPOISON;
+ 		if (ret & VM_FAULT_LOCKED) {
++			if (page_mapped(page))
++				unmap_mapping_pages(page_mapping(page),
++						    page->index, 1, false);
+ 			/* Retry if a clean page was removed from the cache. */
+-			if (invalidate_inode_page(vmf->page))
+-				poisonret = 0;
+-			unlock_page(vmf->page);
++			if (invalidate_inode_page(page))
++				poisonret = VM_FAULT_NOPAGE;
++			unlock_page(page);
+ 		}
+-		put_page(vmf->page);
++		put_page(page);
+ 		vmf->page = NULL;
+ 		return poisonret;
+ 	}
 -- 
 2.35.1
+
 

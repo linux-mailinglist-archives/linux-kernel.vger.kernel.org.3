@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F234E7C0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC0D4E7D11
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiCYTdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S231936AbiCYUCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiCYTdX (ORCPT
+        with ESMTP id S231699AbiCYUBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:33:23 -0400
-X-Greylist: delayed 7499 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 12:08:19 PDT
-Received: from 7.mo575.mail-out.ovh.net (7.mo575.mail-out.ovh.net [46.105.63.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F30E165A82
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:08:19 -0700 (PDT)
-Received: from player774.ha.ovh.net (unknown [10.111.208.218])
-        by mo575.mail-out.ovh.net (Postfix) with ESMTP id BF25424DD5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:51:46 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player774.ha.ovh.net (Postfix) with ESMTPSA id 6169E28B1E2F9;
-        Fri, 25 Mar 2022 17:51:41 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G00340880d83-d935-4bde-a67c-27e18a733d59,
-                    1702D5D0C6B5DF16716081994498F990499A02DA) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-Date:   Fri, 25 Mar 2022 18:51:34 +0100
-From:   Stephen Kitt <steve@sk2.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, patches@opensource.cirrus.com,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: wm*: use simple i2c probe function
-Message-ID: <20220325185134.1096bcc6@heffalump.sk2.org>
-In-Reply-To: <Yj3+ILE03nOxbpsT@sirena.org.uk>
-References: <20220325162439.1203870-1-steve@sk2.org>
-        <Yj34gLRxhmXD1Y5B@sirena.org.uk>
-        <20220325182616.6fb6e13e@heffalump.sk2.org>
-        <Yj3+ILE03nOxbpsT@sirena.org.uk>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 25 Mar 2022 16:01:36 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D126F237FC3;
+        Fri, 25 Mar 2022 12:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648237911; x=1679773911;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lrl+aGeTbvJwiVMu8xaP539HJmgEuuOyUPsz3gqZvvs=;
+  b=JM57FRYiBGcwfvjgQFuXwPsE0kYLEryANF2Xq0lZB+3G1QkHV/YgCM8Z
+   lHR2ia1fhKl9A05IkVJ8oXJK9wfSbvr5jrJOYIWZIfxhUuGwAI8lxRgzQ
+   4v+2A4yeyD/FTLdPW3VwOWXgJZD/+w88XXjpXlPgQnsCjM1CKJDMasGJE
+   DiOkHcRSOFrtXSSITlBUFkDrrO9EFnyl0AGbNxG4YIIE5uU8Mav/60ePE
+   myzqb8uV0xbwJdgaZ6AWrnZ4L+evgguBUVTup/mfH8P5rHp9EwJCoCT/a
+   hJ0l6RML67Ao+btb5o7BSImXPcD9rqeAC1Bxr3S/bGxu2PQeoEVMcy6Zc
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="256261523"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="256261523"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 10:52:33 -0700
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="602123064"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 10:52:31 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nXo6N-006Wfs-Po;
+        Fri, 25 Mar 2022 19:51:55 +0200
+Date:   Fri, 25 Mar 2022 19:51:55 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v1 1/1] Makefile.extrawarn: Turn off -Werror when extra
+ warnings are enabled
+Message-ID: <Yj4BO0wW9Lw/+X4O@smile.fi.intel.com>
+References: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
+ <CAHk-=wgLZC4d-JjoDyJ-0_JNX+nOnkTQdTGKvOE3fBVNvAq-xw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EVIM78FD/YHiqgFyoMhIYaW";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Ovh-Tracer-Id: 86131344199747206
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudehuddguddtiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkjghfofggtgesghdtreerredtjeenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepveelvdeufedvieevffdtueegkeevteehffdtffetleehjeekjeejudffieduteeknecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejgedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgLZC4d-JjoDyJ-0_JNX+nOnkTQdTGKvOE3fBVNvAq-xw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/EVIM78FD/YHiqgFyoMhIYaW
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 25, 2022 at 10:18:06AM -0700, Linus Torvalds wrote:
+> On Fri, Mar 25, 2022 at 6:13 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > +#
+> > +# Turn off -Werror when extra warnings are enabled
+> > +#
+> > +ifneq ($(KBUILD_EXTRA_WARN),)
+> > +       KBUILD_CFLAGS += -Wno-error
+> > +endif
+> 
+> NAK.
+> 
+> If you enabled CONFIG_WERROR, then you get CONFIG_WERROR.
+> 
+> If you enabled W=1, then you get extra warnings.
+> 
+> If you enabled both, then you get extra warnings and they are errors.
+> 
+> This patch is just stupid.
 
-On Fri, 25 Mar 2022 17:38:40 +0000, Mark Brown <broonie@kernel.org> wrote:
+Fair enough.
 
-> On Fri, Mar 25, 2022 at 06:26:16PM +0100, Stephen Kitt wrote:
->=20
-> > Which tree should I check for conflicts? I=E2=80=99ve got similar patch=
-es across
-> > all the i2c-using sound/soc/codecs files, I wouldn=E2=80=99t want to wa=
-ste
-> > anyone=E2=80=99s time if I can check beforehand... =20
->=20
-> Since we're in the merge window non-fixes patches just aren't getting
-> applied at the minute, you need to follow what's going on on the list at
-> the minute.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Apologies, please ignore all my patches then, I=E2=80=99ll re-submit them a=
-t a more
-convenient time.
 
-Regards,
-
-Stephen
-
---Sig_/EVIM78FD/YHiqgFyoMhIYaW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmI+ASYACgkQgNMC9Yht
-g5wGWRAAlqQsOLE3vqJsuhfVQzmlktxRpi9LEC/7k33VgDHtQYAE/D89x2LZuEee
-oH6PcmxsExmaFQ5KxhYuvAxjjuaSwzaT3XGkTEQ2B8kXffqf7U1Ox5TmNDIDEoJw
-2bUAFwBrcSpPdpHrzK2Calu7PJr2bpxix8DwBmCVoLvZ0btJGt65luLsOiaLblcR
-yhqZKA8ZL4G55c0SxU5xSj7z+CzJBR0WRAroWrFlTjq8NWVy5FZmPF2w7DrviJ2O
-FuktTYiUz6ZyJU2oodWyPWx2NcGp7apX5vQQ6jOnr3Rxo0cQpPT31QHLx15OqXXV
-8h8N8cxVMquC/StLIwIHt9G5jwLIGRtiWYmEZnTguS99ci9RePLu7vbnoi6XjWLg
-XTbLUPj1XxM7JAQc3yTU73vx87Iqz+8wwStu7pGlkVyOinQpplQHazq1xZEctdqf
-uuFCSrtHZGMqO2oCDLO8PNhCEmKlK5oUUk/owaRmnV/3WZCeP5q7cW04ek3a//pa
-qHXQEOdpK3DTzT+Q46ItfNjFo30an5nJLJnrCoCQbOkR38pfWEvzmxL/cBHRlEUq
-72/LGrXXS/w8tQtXyLgvLXDwsGpgUI/gXAPjhMAxbiBJ5g8w/6cODWlrJABSvAdW
-yIH4ztC4wPr9AtkNwDpt9JeeP86F/8GBs9AL/WKuWTBxfoUyrtY=
-=XGZZ
------END PGP SIGNATURE-----
-
---Sig_/EVIM78FD/YHiqgFyoMhIYaW--

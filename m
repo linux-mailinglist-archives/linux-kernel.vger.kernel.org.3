@@ -2,180 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FA54E7BD2
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06AB4E7D71
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiCYUUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S232142AbiCYUVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbiCYUUM (ORCPT
+        with ESMTP id S232032AbiCYUVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:20:12 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F29158387
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:18:37 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id t5so7362708pfg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+BiLrsol8UooQIBgOwX5PV4NHr4Qkzt2YsBo+6MoPXY=;
-        b=C7dF2Wm/2i36wTwed281ekQrLIxMZdr+6MdijR84uMjQjAJ7ewmU19tDcBy5dR1/Jl
-         ON+2Ft8Sp0zatWxRfpWJtVfULKQfoMAuCkt9ypaGCW5tXqJPrlVlTbDcQ/CxFwmkm1VW
-         ikC7zVMIEfKqVQ93eeNSp3tVBeBNR5Z8zLlML1qMtguVfo+NgYqjAeFfvqsqdvD2yOxQ
-         sW8/RbCg26TuKWs8YghjRgG/jREeztcnK/QYW2SSrV/hBHM+Z2XO5e6FiR28NLW/zBI/
-         bc/xMoDdN7QNjuVOxVlQvUy1WjLpnAYzuqO+ZM8emxchaln3d1cVcen5aiDgXWPMspK3
-         l3pA==
+        Fri, 25 Mar 2022 16:21:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 294665A092
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648239595;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BaVEjwXsaEy7cL7JZ+Za+DImYZdSvwVcJnKXWnRGcmo=;
+        b=N8d6zWPJdkAQANoZdwxtt/kVMxE0vJN4W8B4SlenS0KAE/jEHCruQVgC8T1oZJF7vgObRx
+        bJD+cKAxNd0DDDOsjsqx+/tJtzgDs2uGDMKi55tG68mcPuLFQCCT5dsu6zgS95x2uF4+Nm
+        CaiuBJ5favMqGVzFEBtELYEc8gUM5zg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-VqUDbZcCN5WaV9ZW7ex9LA-1; Fri, 25 Mar 2022 16:19:54 -0400
+X-MC-Unique: VqUDbZcCN5WaV9ZW7ex9LA-1
+Received: by mail-wr1-f72.google.com with SMTP id l19-20020adf9f13000000b00203f7f64c7bso2995918wrf.18
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:19:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+BiLrsol8UooQIBgOwX5PV4NHr4Qkzt2YsBo+6MoPXY=;
-        b=ci3pxr94LCvSi6aXEQnf1bHtyE2hAI1RNnwbFez5FJx9rCl0sbt08Fr2SwsA84nu2D
-         0auh3BUh1EV3y3z3F2y/0BHo6ceAnG0jWnRMbOBvSNhQi3JWs9qyKwqTw9arRa8bPiZ0
-         S9HC9BNRsiNvtJBvmOhZLWdRoEZGJPnCuUX1G4JYdwwKoGhr/2nuRjFcvB9Pl7fB7PxV
-         6ZD1tPn9rrsFm2r982shcmor6Y3hfQO0IHHXMq86nP59yY2lChsa/oULjMmHhbAoknBI
-         miRCnBe/+yiyvPZMpzqSBt+Gp5YUGpsBdryqqmuhGfd01I+p28GDFDDFQGtsgtWZpr6J
-         emqQ==
-X-Gm-Message-State: AOAM531YwEbwmAz6b+QXePyZouxIyAw0FZxvgRUnwJwkgI81zj+EDPf2
-        z/OwR+h5YETT45uH6+7uVTYWxzZHmt50jw==
-X-Google-Smtp-Source: ABdhPJxVK7LN8fN0CxrEFZyc2Ktita/GU1jn9CKCcSGfof8Md3k9iTge7MCfm39/1dTm5ftjtPJdmQ==
-X-Received: by 2002:a63:6c45:0:b0:37c:714a:4ffe with SMTP id h66-20020a636c45000000b0037c714a4ffemr978294pgc.513.1648239516919;
-        Fri, 25 Mar 2022 13:18:36 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056a00114a00b004f784ba5e6asm8074729pfm.17.2022.03.25.13.18.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 13:18:36 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 20:18:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [FYI PATCH] Revert "KVM: x86/mmu: Zap only TDP MMU leafs in
- kvm_zap_gfn_range()"
-Message-ID: <Yj4jmAjj5ZTJodQM@google.com>
-References: <20220318164833.2745138-1-pbonzini@redhat.com>
- <d6367754-7782-7c29-e756-ac02dbd4520b@redhat.com>
- <Yj0FYSC2sT4k/ELl@google.com>
- <87r16qnkgl.fsf@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=BaVEjwXsaEy7cL7JZ+Za+DImYZdSvwVcJnKXWnRGcmo=;
+        b=oOrbUFMAiMrDNDSxTu6BVWDZj14QKxFRtIjqge7ImOxzhbyiPVxpLQsNLENwp1vQUX
+         IXcXtmpa/JHtipHxvhnLrDr693gwnqLHIG0LoXC9qfPeM5XUqqnCGdECxHh71hNPhQHj
+         sib6Dkep7OqlC0Bj4dKBVoOAN7BkfSQEiFSDnusxufZG+kdDKgJRkllLROBbHshZidgZ
+         hI0qxvCXWvRkf09cIH96yfMmrbH5kY+Cg+jLqPL8TmaiNz2pfTiLOThiofqcCGEN8aIg
+         5FWo7czzYAPg2xV7itMokC5C8dLfVrxs0//xh7nJJOVQik0ZIhKF03zGLFOwBTfuoR2/
+         BvAA==
+X-Gm-Message-State: AOAM532QtSjXID1Jca5wVKCh6oHwPU/1FH/WgjJEbcVQO/iGzTNSBg3f
+        3JUks5QAORkujl6X/CRu+kg/hqdojodf09qSz2R04NPX/qmjGptzjdUpJKzWkI3/QRkNuaX0EzB
+        0Kj21foL9shy1Gz60knIWfDZ8
+X-Received: by 2002:a5d:588b:0:b0:204:1c1a:965d with SMTP id n11-20020a5d588b000000b002041c1a965dmr10653936wrf.669.1648239593314;
+        Fri, 25 Mar 2022 13:19:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxyklR57T5x3dRn1ErKGUmoiztN0RoMK7oC4+/r9nKYD6tFd8xCH69JAOhXQJEPU1GHkeTEKQ==
+X-Received: by 2002:a5d:588b:0:b0:204:1c1a:965d with SMTP id n11-20020a5d588b000000b002041c1a965dmr10653911wrf.669.1648239593051;
+        Fri, 25 Mar 2022 13:19:53 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:4200:6374:a71a:a88:a4b? (p200300cbc70542006374a71a0a880a4b.dip0.t-ipconnect.de. [2003:cb:c705:4200:6374:a71a:a88:a4b])
+        by smtp.gmail.com with ESMTPSA id k40-20020a05600c1ca800b0038c6c8b7fa8sm9619012wms.25.2022.03.25.13.19.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 13:19:52 -0700 (PDT)
+Message-ID: <7f3a973f-1f0c-4e50-2528-b0e9dc3e4cac@redhat.com>
+Date:   Fri, 25 Mar 2022 21:19:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r16qnkgl.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3] mm/vmstat: add events for ksm cow
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>, cgel.zte@gmail.com
+Cc:     yang.yang29@zte.com.cn, ran.xiaokai@zte.com.cn,
+        yang.shi@linux.alibaba.com, dave.hansen@linux.intel.com,
+        minchan@kernel.org, saravanand@fb.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        xu xin <xu.xin16@zte.com.cn>
+References: <20220324104332.2350482-1-yang.yang29@zte.com.cn>
+ <20220325130957.171a68dee88118082ab841c5@linux-foundation.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220325130957.171a68dee88118082ab841c5@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > Actually, since this is apparently specific to kvm_zap_gfn_range(), can you add
-> > printk "tracing" in update_mtrr(), kvm_post_set_cr0(), and __kvm_request_apicv_update()
-> > to see what is actually triggering zaps?  Capturing the start and end GFNs would be very
-> > helpful for the MTRR case.
-> >
-> > The APICv update seems unlikely to affect only Hyper-V guests, though there is the auto
-> > EOI crud.  And the other two only come into play with non-coherent DMA.  In other words,
-> > figuring out exactly what sequence leads to failure should be straightforward.
+On 25.03.22 21:09, Andrew Morton wrote:
+> On Thu, 24 Mar 2022 10:43:33 +0000 cgel.zte@gmail.com wrote:
 > 
-> The tricky part here is that Hyper-V doesn't crash immediately, the
-> crash is always different (if you look at the BSOD) and happens at
-> different times. Crashes mention various stuff like trying to execute
-> non-executable memory, ...
+>> From: Yang Yang <yang.yang29@zte.com.cn>
+>>
+>> Users may use ksm by calling madvise(, , MADV_MERGEABLE) when they want
+>> to save memory, it's a tradeoff by suffering delay on ksm cow. Users can
+>> get to know how much memory ksm saved by reading
+>> /sys/kernel/mm/ksm/pages_sharing, but they don't know what's the costs
+>> of ksm cow, and this is important of some delay sensitive tasks.
+>>
+>> So add ksm cow events to help users evaluate whether or how to use ksm.
 > 
-> I've added tracing you've suggested:
-> - __kvm_request_apicv_update() happens only once in the very beginning.
-
-And thinking through this again, APICv changes should never result in a shadow
-page being zapped as they'll only zap a 4k range.
-
-> - update_mtrr() never actually reaches kvm_zap_gfn_range()
+> It's unclear (to me) how anyone will actually use this, how they will
+> interpret the output.
 > 
-> - kvm_post_set_cr0() happen in early boot but the crash happen much much
->   later. E.g.:
-
-Ah rats, I got the sequencing of the revert messed up.  mmu_notifier is also in
-play, via kvm_tdp_mmu_unmap_gfn_range().
-
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 4fa4d8269e5b..db7c5a05e574 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -870,6 +870,8 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
->  
->  void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
->  {
-> +       trace_printk("vCPU %d %lx %lx\n", vcpu->vcpu_id, old_cr0, cr0);
-
-This doesn't guarantee kvm_zap_gfn_range() will be reached.   The guest has to
-have non-coherente DMA and be running with the CD/NW memtyp quirk.  Moving the
-print inside the if statement would show if KVM is actually zapping in those
-cases.
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index d3a9ce07a565..25c7d8fc3287 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -887,8 +887,10 @@ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned lon
-
-        if (((cr0 ^ old_cr0) & X86_CR0_CD) &&
-            kvm_arch_has_noncoherent_dma(vcpu->kvm) &&
--           !kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
-+           !kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED)) {
-+               trace_printk("vCPU %d %lx %lx\n", vcpu->vcpu_id, old_cr0, cr0);
-                kvm_zap_gfn_range(vcpu->kvm, 0, ~0ULL);
-+       }
- }
- EXPORT_SYMBOL_GPL(kvm_post_set_cr0);
-
-> kvm_hv_set_msr_pw() call is when Hyper-V writes to HV_X64_MSR_CRASH_CTL
-> ('hv-crash' QEMU flag is needed to enable the feature). The debug patch
-> is:
+> Some tutorial words added to Documentation/vm/ksm.rst would be helpful.
+> While in there, please check for any other /proc/vmstat fields which
+> we forgot to document.
 > 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index a32f54ab84a2..59a72f6ced99 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1391,6 +1391,7 @@ static int kvm_hv_set_msr_pw(struct kvm_vcpu *vcpu, u32 msr, u64 data,
->  
->                         /* Send notification about crash to user space */
->                         kvm_make_request(KVM_REQ_HV_CRASH, vcpu);
-> +                       trace_printk("%d\n", vcpu->vcpu_id);
->                 }
->                 break;
->         case HV_X64_MSR_RESET:
+>> --- a/include/linux/vm_event_item.h
+>> +++ b/include/linux/vm_event_item.h
+>> @@ -131,6 +131,7 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+>>  		SWAP_RA_HIT,
+>>  #ifdef CONFIG_KSM
+>>  		KSM_SWPIN_COPY,
+>> +		COW_KSM,
 > 
-> So it's 20 seconds (!) between the last kvm_post_set_cr0() call and the
-> crash. My (disappointing) conclusion is: the problem can be anywhere and
-> Hyper-V detects it much much later.
+> I agree that this name looks unpleasingly backwards.  Do we have an
+> expectation that we actually will be adding more COW_* fields?
 
-And reproduced... 'twas indeed the mmu_notifier.  Hyper-V 2019 booted just fine,
-until I turned on KSM and cranked up the scanning.
+As raised previously (also when proposing this), I'd like to have
+COW_ANON, COW_ZERO, COW_OTHER. Ideally, we'd have added all via a single
+patch for them. They would at least be of value to me.
 
-The bug has nothing to do with zapping only leafs, it's a simple goof where the
-TLB flush gets lost.  Not sure why only Hyper-V detects the issue; maybe because
-it maintains a pool of zeroed pages that are KSM-friendly?
+-- 
+Thanks,
 
-I'll send a patch to reintroduce the reverted code.
+David / dhildenb
 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index c71debdbc732..a641737725d1 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -885,7 +885,7 @@ bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
-        struct kvm_mmu_page *root;
-
-        for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
--               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, false);
-+               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, flush);
-
-        return flush;
- }

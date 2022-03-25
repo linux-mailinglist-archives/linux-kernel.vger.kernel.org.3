@@ -2,97 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595764E6FB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A19F4E6FB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356004AbiCYI4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 04:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S1343692AbiCYI6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 04:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354281AbiCYI4B (ORCPT
+        with ESMTP id S229940AbiCYI57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 04:56:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7755F44A2D;
-        Fri, 25 Mar 2022 01:54:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 391C8B824E8;
-        Fri, 25 Mar 2022 08:54:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD4CC340E9;
-        Fri, 25 Mar 2022 08:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648198464;
-        bh=9hytOMtTOBnafBj5UxposoR8sC86nfCae0S2BSIC3hM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wNUhdvTywTFzC542loW+OvSYeepuTylRZfUgMu8VlO4ChLnSkGn6gkQo/+C8uCDPB
-         TtEavdYBU4LpEwsdAhQpYf0Rmw7I7K9YXr62HghI3C87sh1sQCXrbmt9HG9UhWGLwR
-         t/u9tGCkenb16ERR3bQm1rCaAFCPSf6W2F74R9QY=
-Date:   Fri, 25 Mar 2022 09:54:21 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Karel Zak <kzak@redhat.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, Theodore Ts'o <tytso@mit.edu>,
-        Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Message-ID: <Yj2DPRusMAzV/N5U@kroah.com>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
- <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
- <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
- <YjudB7XARLlRtBiR@mit.edu>
- <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
- <20220325084646.7g6oto2ce3vou54x@ws.net.home>
+        Fri, 25 Mar 2022 04:57:59 -0400
+Received: from out203-205-221-205.mail.qq.com (out203-205-221-205.mail.qq.com [203.205.221.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1998CD321
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648198581;
+        bh=DgLAnYgqjoM4AGSmu3Sc6+ngc8WyuI9dDOEV/Xp0GDY=;
+        h=From:To:Cc:Subject:Date;
+        b=Y+jcMMOY3yb/9VPHBubyBshdnPAe+XQmJ1yhT52uEE9Fm7szyoiPl9dMpsu3zDObi
+         tVmA+EHaZcOCuJu/6sEfVmb8i1/G0QxLBpMXY1oygO8Gtp4Bvc16e2x40gTutoGKRz
+         LS70+zv/6EC2zXDXPJYffoKDNwI2gxBhn/yXs+Io=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
+        id E0F8E616; Fri, 25 Mar 2022 16:56:15 +0800
+X-QQ-mid: xmsmtpt1648198575tr71poz2m
+Message-ID: <tencent_1D9E7394538085872BE9FD6780483137E70A@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9+4HHGI5DBsw11FVsz9FqPSQt4NfwIwKTIa/TEmwAEoWffMfTS9
+         6mQPgPCzRKkTXdfKK5A/b5bddX6a/8pLe+oGAO6tgN8xJdbouFE/D3ICYynyVFtVVFHTDNmWAwQF
+         3d9hdo+MzrPNvkGjUyad1+bgEQ0H0jgn/ixA940rReW+kH6V1jRopguw6BmWgummK9Lt5CyEOPOw
+         3IaqVlgP1qQPvFp7PmAnIChv2ChFb/Od9pcTwkso0KPraMqL0z4LtKDpa4gcS9v0dUryZqJp2OkA
+         G8d/rXhEyMdB16SsECYUzVVpC83NHPttTBiDHME81zpGbNelWWyv6Zgwbh5dQpKWkiBh0T8mzBdr
+         wuNERk2CEoQIc1y3dVlc6nOr6/Hik+t+AZ7mfzuage5O4LfHi7Sf9RQMIZRxkY9SjQ0PxJHIm+oy
+         oQjgOacNfpwwin1hBrtO07yaPtt29oY5aqv+mV4rCGz287ymmR7lL9CyEEnOL1XAJDRtBuFSF0vi
+         qOUiEKSFN5E33hwBRpW+zJR1paR1XHGjRpeEjNfw23j0J38NCA7Db7VoaTqkmJoTAkCcmqVvmXYF
+         uPT/j320DYscqlDTA2KcEXyhLSM0te4+oQGWBst4Ky3uTzN+04+PKWP90Y0bp9QdAyS6LIiMQYsI
+         tGKxoucmdbp3XDfzuG3LQardQLf93pWe13HgnAsuxmQ8FttbZwTRidDNJXCb+L6Ux+0YMY5bDCvG
+         MGFUtDqMCp5VAigOEUy/DNbRXDQyR0tPTv1ZMNJKc0B05wmgTtMMyNTpzBcLUM0OhTzN2wV0W77g
+         u09knU6bm6jK+Eok/mKCDHSmoKMQdNv2fRqm7G9TYP375HfyAN2jV9RV65xPmuP6xZUNee0VHAtf
+         BaCXkhSbH/OpvburTa3CYcc8KqiTOYUmil8aDdpBF5r/WxK6/rtulM3HNDsZiCnOr8Mw+qN9iGqp
+         iRRbtAUcA=
+From:   xkernel.wang@foxmail.com
+To:     andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com
+Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] ARM: mvebu: check the validation of memory allocation
+Date:   Fri, 25 Mar 2022 16:55:18 +0800
+X-OQ-MSGID: <20220325085518.4016-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325084646.7g6oto2ce3vou54x@ws.net.home>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 09:46:46AM +0100, Karel Zak wrote:
-> On Thu, Mar 24, 2022 at 09:44:38AM +0100, Miklos Szeredi wrote:
-> > > If so, have you benchmarked lsof using this new interface?
-> > 
-> > Not yet.  Looked yesterday at both lsof and procps source code, and
-> > both are pretty complex and not easy to plug in a new interface.   But
-> > I've not yet given up...
-> 
-> I can imagine something like getvalues(2) in lsblk (based on /sys) or
-> in lsfd (based on /proc; lsof replacement). The tools have defined set
-> of information to read from kernel, so gather all the requests to the
-> one syscall for each process or block device makes sense and it will
-> dramatically reduce number of open+read+close syscalls.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-And do those open+read+close syscalls actually show up in measurements?
+kzalloc() and kstrdup() are memory allocation functions which can return
+NULL when some internal memory errors happen. So it is better to check
+the return value of them to prevent potential wrong memory access or
+memory leak.
 
-Again, I tried to find a real-world application that turning those 3
-into 1 would matter, and I couldn't.  procps had no decreased system
-load that I could notice.  I'll mess with lsof but that's really just a
-stress-test, not anything that is run all the time, right?
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ arch/arm/mach-mvebu/board-v7.c  | 8 ++++++++
+ arch/arm/mach-mvebu/coherency.c | 6 ++++++
+ 2 files changed, 14 insertions(+)
 
-And as others have said, using io_uring() would also solve the 3 syscall
-issue, but no one seems to want to convert these tools to use that,
-which implies that it's not really an issue for anyone :)
-
-thanks,
-
-greg k-h
+diff --git a/arch/arm/mach-mvebu/board-v7.c b/arch/arm/mach-mvebu/board-v7.c
+index d2df5ef..86d1f4e 100644
+--- a/arch/arm/mach-mvebu/board-v7.c
++++ b/arch/arm/mach-mvebu/board-v7.c
+@@ -128,11 +128,19 @@ static void __init i2c_quirk(void)
+ 		struct property *new_compat;
+ 
+ 		new_compat = kzalloc(sizeof(*new_compat), GFP_KERNEL);
++		if (!new_compat)
++			continue;
+ 
+ 		new_compat->name = kstrdup("compatible", GFP_KERNEL);
+ 		new_compat->length = sizeof("marvell,mv78230-a0-i2c");
+ 		new_compat->value = kstrdup("marvell,mv78230-a0-i2c",
+ 						GFP_KERNEL);
++		if (!new_compat->name || !new_compat->value) {
++			kfree(new_compat->name);
++			kfree(new_compat->value);
++			kfree(new_compat);
++			continue;
++		}
+ 
+ 		of_update_property(np, new_compat);
+ 	}
+diff --git a/arch/arm/mach-mvebu/coherency.c b/arch/arm/mach-mvebu/coherency.c
+index 49e3c8d..eb6b349 100644
+--- a/arch/arm/mach-mvebu/coherency.c
++++ b/arch/arm/mach-mvebu/coherency.c
+@@ -194,7 +194,13 @@ static void __init armada_375_380_coherency_init(struct device_node *np)
+ 		struct property *p;
+ 
+ 		p = kzalloc(sizeof(*p), GFP_KERNEL);
++		if (!p)
++			continue;
+ 		p->name = kstrdup("arm,io-coherent", GFP_KERNEL);
++		if (!p->name) {
++			kfree(p);
++			continue;
++		}
+ 		of_add_property(cache_dn, p);
+ 	}
+ }
+-- 

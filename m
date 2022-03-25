@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6409B4E78D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C10D4E78D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357876AbiCYQXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S1376595AbiCYQZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245440AbiCYQXp (ORCPT
+        with ESMTP id S1354899AbiCYQZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:23:45 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9D5D76E7;
-        Fri, 25 Mar 2022 09:22:10 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id z92so9809654ede.13;
-        Fri, 25 Mar 2022 09:22:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=25Sv76S3nsIXclHnSSNKGZRwYOFE+JeCmB/X5ru3160=;
-        b=cLkuJiAdophYt9/XhrRs1UyF50GwzLtMLwCdbpvRl0sAgfgLtHCw593Esu8fTI4+58
-         3UVuLmBGyRvju966qK+TKqlBq740pk2jganHyhtrlDt34q9XVNsDwLH8fazuUoFBtv0Z
-         ODa3NppGfEwFivV4jbv0Y54/dKw0Y+vMzd+8m5Dc3GRuxi2DEJmsXLGUGPIXcQeZXZUL
-         w+w1mTEqwEjuV4Gr3sHQdEZJXCSbl4BTU8Ps7hfr39GH+gjXUp+M9OPvGDt/IW0VXRV6
-         nwV9l+2PqM/zaI3ybshRMZ5G0/vQjw04wFdq47s8my1+di4Zl5Ui9dH7eviMeePm7xGZ
-         DCEA==
-X-Gm-Message-State: AOAM532vwHGa2ep56Nblaw2lRMQLdcO1+QQdiHCpejRS/0OAlJKGGWTw
-        pQ6kGH6ruFKcrMMm5n62+d4=
-X-Google-Smtp-Source: ABdhPJzlWhOcwaAePVg/IepGLB+F80voFv4n8ELMntFLxO0cDY4gE9dISPGaxZrLtJxAP9NILWAwBw==
-X-Received: by 2002:a50:fe81:0:b0:419:16a5:d265 with SMTP id d1-20020a50fe81000000b0041916a5d265mr14211658edt.4.1648225329129;
-        Fri, 25 Mar 2022 09:22:09 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id c14-20020a170906340e00b006ce98f2581asm2449507ejb.205.2022.03.25.09.22.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 09:22:08 -0700 (PDT)
-Message-ID: <ebca0e5d-cc24-af1c-5308-8544682984ec@kernel.org>
-Date:   Fri, 25 Mar 2022 17:22:07 +0100
+        Fri, 25 Mar 2022 12:25:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E27AD5EBF7;
+        Fri, 25 Mar 2022 09:23:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E0F1D6E;
+        Fri, 25 Mar 2022 09:23:40 -0700 (PDT)
+Received: from [10.57.41.19] (unknown [10.57.41.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E48393F73D;
+        Fri, 25 Mar 2022 09:23:37 -0700 (PDT)
+Message-ID: <11d4c863-5bee-aa98-526c-ac7170296485@arm.com>
+Date:   Fri, 25 Mar 2022 16:23:34 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: mtd: ti,elm: Add support for AM64 ELM
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>, miquel.raynal@bootlin.com,
-        robh+dt@kernel.org
-Cc:     richard@nod.at, vigneshr@ti.com, kishon@ti.com, nm@ti.com,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220325123707.22020-1-rogerq@kernel.org>
- <20220325123707.22020-3-rogerq@kernel.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220325123707.22020-3-rogerq@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+Content-Language: en-GB
+To:     Halil Pasic <pasic@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+References: <1812355.tdWV9SEqCh@natalenko.name>
+ <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
+ <27b5a287-7a33-9a8b-ad6d-04746735fb0c@arm.com>
+ <CAHk-=wip7TCD_+2STTepuEZvGMg6wcz+o=kyFUvHjuKziTMixw@mail.gmail.com>
+ <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
+ <20220324190216.0efa067f.pasic@linux.ibm.com>
+ <20220325162508.3273e0db.pasic@linux.ibm.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220325162508.3273e0db.pasic@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/2022 13:37, Roger Quadros wrote:
-> TI's AM64 SoC has the Error Locator Module. Add compatible and
-> related properties to support ELM on AM64 SoC.
+On 2022-03-25 15:25, Halil Pasic wrote:
+> On Thu, 24 Mar 2022 19:02:16 +0100
+> Halil Pasic <pasic@linux.ibm.com> wrote:
 > 
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
->  .../devicetree/bindings/mtd/ti,elm.yaml       | 28 ++++++++++++++++++-
->  1 file changed, 27 insertions(+), 1 deletion(-)
+>>> I'll admit I still never quite grasped the reason for also adding the
+>>> override to swiotlb_sync_single_for_device() in aa6f8dcbab47, but I
+>>> think by that point we were increasingly tired and confused and starting
+>>> to second-guess ourselves (well, I was, at least).
+>>
+>> I raised the question, do we need to do the same for
+>> swiotlb_sync_single_for_device(). Did that based on my understanding of the
+>> DMA API documentation. I had the following scenario in mind
+>>
+>> SWIOTLB without the snyc_single:
+>>                                    Memory      Bounce buffer      Owner
+>> --------------------------------------------------------------------------
+>> start                             12345678    xxxxxxxx             C
+>> dma_map(DMA_FROM_DEVICE)          12345678 -> 12345678             C->D
+>> device writes partial data        12345678    12ABC678 <- ABC      D
+>> sync_for_cpu(DMA_FROM_DEVICE)     12ABC678 <- 12ABC678             D->C
+>> cpu modifies buffer               66666666    12ABC678             C
+>> sync_for_device(DMA_FROM_DEVICE)  66666666    12ABC678             C->D
+>> device writes partial data        66666666    1EFGC678 <-EFG       D
+>> dma_unmap(DMA_FROM_DEVICE)        1EFGC678 <- 1EFGC678             D->C
+>>
+>> Legend: in Owner column C stands for cpu and D for device.
+>>
+>> Without swiotlb, I believe we should have arrived at 6EFG6666. To get the
+>> same result, IMHO, we need to do a sync in sync_for_device().
+>> And aa6f8dcbab47 is an imperfect solution to that (because of size).
+>>
 > 
-> diff --git a/Documentation/devicetree/bindings/mtd/ti,elm.yaml b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
-> index e36452b742c0..967c87f32c71 100644
-> --- a/Documentation/devicetree/bindings/mtd/ti,elm.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
-> @@ -16,7 +16,10 @@ description:
->  
->  properties:
->    compatible:
-> -    const: ti,am3352-elm
-> +    items:
+> @Robin, Christoph: Do we consider this a valid scenario?
 
-Why do the items appeared again?
+Aha, I see it now (turns out diagrams really do help!) - so essentially 
+the original situation but with buffer recycling thrown into the mix as 
+well... I think it's technically valid, but do we know if anything's 
+actually doing that in a way which ends up affected? For sure it would 
+be nice to know that we had all bases covered without having to audit 
+whether we need to, but if it's fundamentally incompatible with what 
+other code expects, that we know *is* being widely used, and however 
+questionable it may be we don't have an easy fix for, then we're in a 
+bit of a tough spot :(
 
-Make it an enum in first patch, without items, with one entry. Now in
-patch #2 you add one more compatible.
-
-
-Best regards,
-Krzysztof
+Thanks,
+Robin.

@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1060B4E7D1B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7174E7B7D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiCYVMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 17:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S233353AbiCYVPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 17:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbiCYVMi (ORCPT
+        with ESMTP id S233331AbiCYVPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 17:12:38 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD731FF412;
-        Fri, 25 Mar 2022 14:11:03 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id w127so9487607oig.10;
-        Fri, 25 Mar 2022 14:11:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wXvBLN2YPI/f+mwgNpVUSPw3vc7vaslW8j6BkDAkPkw=;
-        b=5yVFPYFVS/tIzDi0a9ZxGo5qJfpMOsEpodTqe7HVQb77GpyQCti0jT0NIGDNA6LoHQ
-         dFxli7rK6VXnwjqNRNpg3zv9vACIdfHArhvWNPVqzkmTwQ73au+ylEfD8om8qsbnHK1e
-         cWYXuMzNMn9dIy2kceK1oEKCUrfI3ms9KfHkkERZa/1/jit65VYQxOI6mIgukZYxg4A4
-         m+DFGPEvPpSPDjCf0jwoMdd8ytTrbQ3a2IPgOsifuv+pDSx92qPLZtwlaGVb/v+2gpCm
-         mD/PFOkeUvHKJS5AcwgyA7JL0M92TfScdHrbqUUnkQcBUgjXAsOpot69l1dg80bpHyq9
-         815g==
-X-Gm-Message-State: AOAM533lqbX31IXv5s0k3N2/ktd4BN8dUKh90tQhnh3SkBsWq4XoBLf3
-        u6nz2qIeuer8z7SChl1oow==
-X-Google-Smtp-Source: ABdhPJz/WMdnAOINviqJND5zDMeL1o27zVTXARwz/Cw5GDE6nIi94HXm4B8MMoxqz03bNIsAqu/rNQ==
-X-Received: by 2002:a05:6808:9b9:b0:2ef:7562:1586 with SMTP id e25-20020a05680809b900b002ef75621586mr6372651oig.261.1648242662763;
-        Fri, 25 Mar 2022 14:11:02 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c26-20020a4ae25a000000b0031c268c5436sm3028104oot.16.2022.03.25.14.11.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 14:11:01 -0700 (PDT)
-Received: (nullmailer pid 460214 invoked by uid 1000);
-        Fri, 25 Mar 2022 21:11:01 -0000
-Date:   Fri, 25 Mar 2022 16:11:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Olivier Dautricourt <olivier.dautricourt@orolia.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stefan Roese <sr@denx.de>
-Subject: Re: [PATCH 2/2] dt-bindings: altr,msgdma: update my email address
-Message-ID: <Yj4v5c3nTdOhgyU7@robh.at.kernel.org>
-References: <85c4174fa162bd946ccf3e08dcfc9b83cfe69b5c.1647539776.git.olivier.dautricourt@orolia.com>
- <dc3decf1dae172c688017bd3ada2ad2b7d060c1e.1647539776.git.olivier.dautricourt@orolia.com>
+        Fri, 25 Mar 2022 17:15:07 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839FDD1CE7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 14:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648242812; x=1679778812;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lovmrUvGggLJq+YRgpk98cb7621p8kSPHVa9Cne3B6E=;
+  b=XCMA4OAjODMUsKs/Sy8PxxBQ4DEvFKt6a/jVAcoyR1GmiGnR3lPP1SNl
+   XCOlUFQ5E7psFqFCLgstNQ5Xx587ptLH5RZhdwKwEA7qzi/OaEjoDHFoW
+   8xugSJ6Mclkhkj2BiqrLcoN/9LBKJ5VBv/sZgn86D73IxbS59VGOts/h1
+   yKGErc4oMxWIxU5+K3IMyeoWnwKrWnPbG3apQDEOCIFgMkXVWN0rM0Axj
+   ZqMT5Eh6qWECC2AvweSTwwpQoVWy4vZaQO69BpOaft/UZIyV2EdU5/2X7
+   QksST/9yrkbN6zKDVpRhfkz5icw+2XfD8xEPPAGse+Jt1kHSKGR6bu/9/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="238656077"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="238656077"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 14:13:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="545229140"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 25 Mar 2022 14:13:28 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXrFP-000Mby-V4; Fri, 25 Mar 2022 21:13:27 +0000
+Date:   Sat, 26 Mar 2022 05:12:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Becle Lee <becle.lee@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Hersen Wu <hersenxs.wu@amd.com>, Aric Cyr <Aric.Cyr@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hubp.c:1319:6:
+ warning: no previous prototype for 'hubp1_wait_pipe_read_start'
+Message-ID: <202203260538.PgS6ucUM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dc3decf1dae172c688017bd3ada2ad2b7d060c1e.1647539776.git.olivier.dautricourt@orolia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,13 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 18:56:56 +0100, Olivier Dautricourt wrote:
-> This email should now be used to contact me.
-> 
-> Signed-off-by: Olivier Dautricourt <olivier.dautricourt@orolia.com>
-> ---
->  Documentation/devicetree/bindings/dma/altr,msgdma.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+Hi Becle,
 
-Acked-by: Rob Herring <robh@kernel.org>
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aa5b537b0ecc16992577b013f11112d54c7ce869
+commit: dd15640bcee5a5fa74fc52557dd6220f48b01116 drm/amd/display: Wait for hubp read line for Pollock
+date:   10 days ago
+config: powerpc64-randconfig-r015-20220325 (https://download.01.org/0day-ci/archive/20220326/202203260538.PgS6ucUM-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd15640bcee5a5fa74fc52557dd6220f48b01116
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dd15640bcee5a5fa74fc52557dd6220f48b01116
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hubp.c:1319:6: warning: no previous prototype for 'hubp1_wait_pipe_read_start' [-Wmissing-prototypes]
+    1319 | void hubp1_wait_pipe_read_start(struct hubp *hubp)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/hubp1_wait_pipe_read_start +1319 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hubp.c
+
+  1313	
+  1314	/**
+  1315	 * hubp1_wait_pipe_read_start - wait for hubp ret path starting read.
+  1316	 *
+  1317	 * @hubp: hubp struct reference.
+  1318	 */
+> 1319	void hubp1_wait_pipe_read_start(struct hubp *hubp)
+  1320	{
+  1321		struct dcn10_hubp *hubp1 = TO_DCN10_HUBP(hubp);
+  1322	
+  1323		REG_WAIT(HUBPRET_READ_LINE_STATUS,
+  1324			PIPE_READ_VBLANK, 0,
+  1325			 1, 1000);
+  1326	}
+  1327	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

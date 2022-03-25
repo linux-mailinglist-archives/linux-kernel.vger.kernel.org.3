@@ -2,63 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A71D4E7CD3
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005854E7BBC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiCYUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S232013AbiCYUTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbiCYUR0 (ORCPT
+        with ESMTP id S231962AbiCYUTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:17:26 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C245739154
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:15:51 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2e64a6b20eeso94502427b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vtp7+nDUHbkUKPJ586tHhPQHIGkVxn40OpnwYxUR31I=;
-        b=etfZ2To2AkmbDwdMb4CemT9IGY7lkeRqGgVivTwjfOQJoN9U9bZ5skarGYOO2Oq8I0
-         W85wxZ8MPSLmLidAYZCd3XG0GDfGOSJKpINCippQRZGUf7Nv9cZTqf84DSWa+YPREmgF
-         jJqjj7mlo2YiKvw3yAeMF21Nuy5X7hyehxeuuPotXyAenAXf0nNM4RHRLc8YQTULVjPA
-         FqvoJtQBRtjgVLv8zsO/m3D+DMyKzHyOdMJjXEHhIrWlkoWzla+aDSLA07y0aDgRaEER
-         CNMkNERYLMkcuoRK5l4y2xUCEszmqCFGPSwPFGBQV9Ds1A1YLeewOIjQAM+4kGkM0z4M
-         IPBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vtp7+nDUHbkUKPJ586tHhPQHIGkVxn40OpnwYxUR31I=;
-        b=WoN2/rULwhjqytIlftjAMipov/LRNI/VTdh+I34BKD/Xh8E99R6l2mMfEAKTM15Iqu
-         QKUsPGvdY8nRyKXC37O21et7/XbQzs3atvCl9Kc8wcgAYhfCZrUcapxHa2g0HL5X7dYm
-         +gvOF06dgQkDAKyBMA1qJs4tUlp8oitJf0XQ5FWGoKbj3OLf+Nig8DTK9PNFvd1uWcGM
-         iGRXBC7iCFW1BqLiV4Jn6Y+VkX8h7iTInSV4l1sQ74mpGFpq5Kxl9zlA9AF/HUCCnrmw
-         tNfrSL0qOH2FqDoodaznPCMg8mkx5boK0OOqzzvvrkooGER4MpNhMxqpJMQulbiKs95z
-         tc2A==
-X-Gm-Message-State: AOAM532x9oxhI6XevPm8SlD5nrT982n3vUA4k79W/yZxnqMytIgiPDnj
-        5BUqFMsZcsC6gEzdQ4Z1kEP3V+PpaBinYUurm0Li+A==
-X-Google-Smtp-Source: ABdhPJx9wqjoJz3ZPG5WcmFuaeeOXO7mos5GYyBTpymriLoOeZj41vkwrTWS/8NtQ2pgHGEGQWw5VikpO324lYovgig=
-X-Received: by 2002:a81:1182:0:b0:2dc:4e58:da41 with SMTP id
- 124-20020a811182000000b002dc4e58da41mr12592447ywr.268.1648239351038; Fri, 25
- Mar 2022 13:15:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220325074450.3228840-1-zhengbin13@huawei.com>
-In-Reply-To: <20220325074450.3228840-1-zhengbin13@huawei.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 25 Mar 2022 21:15:39 +0100
-Message-ID: <CACRpkdYHKq+aSHzm6wG3ETwob69gmmjFT5UV7EXL0rDxe4ZQ=Q@mail.gmail.com>
-Subject: Re: [PATCH -next] pinctrl: nuvoton: wpcm450: Fix build error without OF
-To:     Zheng Bin <zhengbin13@huawei.com>
-Cc:     j.neuschaefer@gmx.net, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tangyizhou@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Fri, 25 Mar 2022 16:19:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13FC5716D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:18:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FA1861D01
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 20:18:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3187C2BBE4;
+        Fri, 25 Mar 2022 20:18:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1648239495;
+        bh=A+G3xllm1G1zfdvj667BokkC3bPhF/9IHvB1FulEseM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hQROyjrrSFZoy7Yfh6vgpn5ckS0YJJ0umg72yTYzKGIV1DINoQywfDVHiNAkwRb2h
+         R3JZMNLGflx9UW4nRxfu5ZFNf1dGB550TpLN9NG14YBePZaPbIIt1aigiEf3uY8cK1
+         Mcl6HR9Sr5aVd9DC6aRqUjyWiTC63QM9fTkXJ0Es=
+Date:   Fri, 25 Mar 2022 13:18:14 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Jonathan Lassoff <jof@thejof.com>
+Cc:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] Add FAT messages to printk index
+Message-Id: <20220325131814.7664f1d43c07b091548be2bf@linux-foundation.org>
+In-Reply-To: <20220324021957.20173-1-jof@thejof.com>
+References: <20220324021957.20173-1-jof@thejof.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,20 +52,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 8:30 AM Zheng Bin <zhengbin13@huawei.com> wrote:
+On Thu, 24 Mar 2022 02:19:58 +0000 Jonathan Lassoff <jof@thejof.com> wrote:
 
-> If OF is not set, bulding fails:
->
-> drivers/pinctrl/nuvoton/pinctrl-wpcm450.o: In function `wpcm450_dt_node_to_map':
-> pinctrl-wpcm450.c:(.text+0x404): undefined reference to `pinconf_generic_dt_node_to_map'
->
-> Make PINCTRL_WPCM450 depends on OF to fix this.
->
-> Fixes: a1d1e0e3d80a ("pinctrl: nuvoton: Add driver for WPCM450")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+> In order for end users to quickly react to new issues that come up in
+> production, it is proving useful to leverage the printk indexing system. This
+> printk index enables kernel developers to use calls to printk() with changable
+> ad-hoc format strings, while still enabling end users to detect changes and
+> develop a semi-stable interface for detecting and parsing these messages.
+> 
+> So that detailed FAT messages are captured by this printk index, this patch
+> wraps fat_msg with a macro.
 
-Patch applied, thanks for fixing this so quickly Zheng!
+It would be nice to see some before-and-after sample output to help
+reviewers understand this proposal.
 
-Yours,
-Linus Walleij
+> Reported-by: kernel test robot <lkp@intel.com>
+
+We'll need a Signed-off-by: for this, please. 
+Documentation/process/submitting-patches.rst describes this.
+

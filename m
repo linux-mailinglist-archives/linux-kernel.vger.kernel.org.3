@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FCF4E7B91
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 790414E7BE0
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbiCYRa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 13:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
+        id S231864AbiCYRal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 13:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbiCYRaj (ORCPT
+        with ESMTP id S1344037AbiCYR34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 13:30:39 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C0960D87
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:28:45 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w7so14525455lfd.6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nTY6GWR33LHIYWWg3yO+Y770hJAr0sFM8vC8Hv97/Ho=;
-        b=GTDYFnJ644kX2MgLtEY12KufCCj4yd/pS8r3hmYl3rs0CyI13At6qv069iToU8EJCn
-         SuaIaEQOqSO+6hJN9H72YJVHpZ14Vi6pCeucZweYUhIsb3243hF3vwcX84SXcCZDGsCO
-         5ZHnaXRtLKQgaTtZv/R8DB79i1EpD7Opusb1w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nTY6GWR33LHIYWWg3yO+Y770hJAr0sFM8vC8Hv97/Ho=;
-        b=r5bWxt2xMTgqMdZV3dKZWudZYP0FSSVrDP4KQ6nFysUV86zEEu1P9qHt0aOYgLFUnC
-         wKC5o556IwJIwYUyp/LJpi+S0EuR1Dk6WV8OSBxaZfrlWOn6BTF0tbhsEsdOZKygI3EC
-         yOtNuZxPDt2DcRt9wnqirF4gHN7+lX+FtPMOam9mkCJG6z0xLlXzBEMn92gJO4FvOY93
-         VJFFC7MQ1S5pXhNZ7kigAsX4EvjSc8sshXlYIv0inrtb8hKTHNvg2/7RmoVKMR8ITdYn
-         jIETXv6BnpzVhQX/yiV8dy+6Gda6uF3FioPcFQK8czEha+EBhZExTHMFo4y2A13pUZNX
-         Ui6g==
-X-Gm-Message-State: AOAM533WZQGHxDAlAcrPdaeFH3qk6l1tGwV7Yxd3SQOOL9kHyfMmQ+Os
-        XC8Y4oiBJfJLlxKl++3/AK1/rWLxSw0I/svX1pA=
-X-Google-Smtp-Source: ABdhPJwlA9k8rSgNej3OgmcwYJG0l0KMVNUwXkCt9y5tYOA4c/YC8lwUUH/xv49s5XkcmrB47E/PCg==
-X-Received: by 2002:a2e:bf12:0:b0:249:3a3b:e91a with SMTP id c18-20020a2ebf12000000b002493a3be91amr8967919ljr.343.1648228704836;
-        Fri, 25 Mar 2022 10:18:24 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id h14-20020a056512338e00b0044a1d49f459sm764607lfg.227.2022.03.25.10.18.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 10:18:23 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id g24so11157998lja.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:18:22 -0700 (PDT)
-X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
- u16-20020a2e9b10000000b00247f28cffd3mr8705328lji.152.1648228702287; Fri, 25
- Mar 2022 10:18:22 -0700 (PDT)
+        Fri, 25 Mar 2022 13:29:56 -0400
+X-Greylist: delayed 86401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 10:28:21 PDT
+Received: from 3.mo583.mail-out.ovh.net (3.mo583.mail-out.ovh.net [46.105.40.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACAF13CE9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:28:19 -0700 (PDT)
+Received: from player794.ha.ovh.net (unknown [10.109.138.16])
+        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 2921D24C4E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:19:21 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player794.ha.ovh.net (Postfix) with ESMTPSA id 9D5F9258D1F1A;
+        Fri, 25 Mar 2022 17:19:14 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-99G003659f3854-5bd9-4f7a-9f05-7da53b41d8b6,
+                    1702D5D0C6B5DF16716081994498F990499A02DA) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Support Opensource <support.opensource@diasemi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     patches@opensource.cirrus.com, Wolfram Sang <wsa@kernel.org>,
+        linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] ASoC: da7218: use i2c_match_id and simple i2c probe
+Date:   Fri, 25 Mar 2022 18:19:04 +0100
+Message-Id: <20220325171904.1223539-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 25 Mar 2022 10:18:06 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgLZC4d-JjoDyJ-0_JNX+nOnkTQdTGKvOE3fBVNvAq-xw@mail.gmail.com>
-Message-ID: <CAHk-=wgLZC4d-JjoDyJ-0_JNX+nOnkTQdTGKvOE3fBVNvAq-xw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] Makefile.extrawarn: Turn off -Werror when extra
- warnings are enabled
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 17985406590459610758
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudehuddguddttdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepteegudfgleekieekteeggeetveefueefteeugfduieeitdfhhedtfeefkedvfeefnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeelgedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 6:13 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> +#
-> +# Turn off -Werror when extra warnings are enabled
-> +#
-> +ifneq ($(KBUILD_EXTRA_WARN),)
-> +       KBUILD_CFLAGS += -Wno-error
-> +endif
+As part of the ongoing i2c transition to the simple probe
+("probe_new"), this patch uses i2c_match_id to retrieve the
+driver_data for the probed device. The id parameter is thus no longer
+necessary and the simple probe can be used instead.
 
-NAK.
+This patch follows the model set by da7218_of_get_id().
 
-If you enabled CONFIG_WERROR, then you get CONFIG_WERROR.
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ sound/soc/codecs/da7218.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-If you enabled W=1, then you get extra warnings.
+diff --git a/sound/soc/codecs/da7218.c b/sound/soc/codecs/da7218.c
+index ea426d986d4c..a5d7c350a3de 100644
+--- a/sound/soc/codecs/da7218.c
++++ b/sound/soc/codecs/da7218.c
+@@ -3258,8 +3258,19 @@ static const struct regmap_config da7218_regmap_config = {
+  * I2C layer
+  */
+ 
+-static int da7218_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static const struct i2c_device_id da7218_i2c_id[];
++
++static inline int da7218_i2c_get_id(struct i2c_client *i2c)
++{
++	const struct i2c_device_id *id = i2c_match_id(da7218_i2c_id, i2c);
++
++	if (id)
++		return (uintptr_t)id->driver_data;
++	else
++		return -EINVAL;
++}
++
++static int da7218_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct da7218_priv *da7218;
+ 	int ret;
+@@ -3273,7 +3284,7 @@ static int da7218_i2c_probe(struct i2c_client *i2c,
+ 	if (i2c->dev.of_node)
+ 		da7218->dev_id = da7218_of_get_id(&i2c->dev);
+ 	else
+-		da7218->dev_id = id->driver_data;
++		da7218->dev_id = da7218_i2c_get_id(i2c);
+ 
+ 	if ((da7218->dev_id != DA7217_DEV_ID) &&
+ 	    (da7218->dev_id != DA7218_DEV_ID)) {
+@@ -3311,7 +3322,7 @@ static struct i2c_driver da7218_i2c_driver = {
+ 		.name = "da7218",
+ 		.of_match_table = da7218_of_match,
+ 	},
+-	.probe		= da7218_i2c_probe,
++	.probe_new	= da7218_i2c_probe,
+ 	.id_table	= da7218_i2c_id,
+ };
+ 
+-- 
+2.27.0
 
-If you enabled both, then you get extra warnings and they are errors.
-
-This patch is just stupid.
-
-              Linus

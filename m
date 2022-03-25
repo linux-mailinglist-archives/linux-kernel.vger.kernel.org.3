@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14A74E7162
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C774E7167
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358913AbiCYKhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 06:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S1358413AbiCYKkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 06:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244163AbiCYKhK (ORCPT
+        with ESMTP id S1351631AbiCYKkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 06:37:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87CBBB6D33;
-        Fri, 25 Mar 2022 03:35:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 382B2D6E;
-        Fri, 25 Mar 2022 03:35:36 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA3ED3F73D;
-        Fri, 25 Mar 2022 03:35:34 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 10:35:28 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     David Collins <quic_collinsd@quicinc.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-Subject: Re: [PATCH v2 0/2] regulator: scmi: add support for registering SCMI
- regulators by name
-Message-ID: <Yj2a8OqLxmLYpOGT@e120937-lin>
-References: <cover.1647909090.git.quic_collinsd@quicinc.com>
- <Yjm1wpcMZsZJJCuy@bogus>
- <eb03037b-e7c2-ea23-0bdb-27924ed54fa7@quicinc.com>
- <Yjyo+Xk0txZs4T/Z@sirena.org.uk>
+        Fri, 25 Mar 2022 06:40:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C789666637
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:38:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648204705;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k8Ww1TQL/x1udfrBe7ulqa+UDnc+QUOwf2wvM/b+uX8=;
+        b=VOYIqzgibAQoa7cn6YEyNMjko28wnZo9bPkI/vQlBYwGunGbB2BrmaIbqSbzgC6rHDqLxA
+        0eiBmaKxEuvJ66OwkgUlJHOTtHCUBcOSkqg8GiP7PXOzPMhaBFBRAhBlwqGWd47h2qZFq4
+        XdYf55mZSwSJi8Vp+dw/DOsOIDpi+0k=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-426-N1ENZm-RO_ebOIIvhQ90xw-1; Fri, 25 Mar 2022 06:38:24 -0400
+X-MC-Unique: N1ENZm-RO_ebOIIvhQ90xw-1
+Received: by mail-wm1-f70.google.com with SMTP id v2-20020a05600c214200b0038c7c02deceso2551050wml.8
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:38:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=k8Ww1TQL/x1udfrBe7ulqa+UDnc+QUOwf2wvM/b+uX8=;
+        b=YQNPiXAtPtbwlWPe70bWCZvkCmG3p0ExlC1MEsMA+QcNcyjSBACaaMixd8FGrEqhnj
+         6wC/t0akyvXe3YWWJTHOqo6WLRQFuYxWWdrMKISR+LZGOMf1HsEkSi/cZ8tGnbCiz8FI
+         Np+3LbTm6/Alghc0O8C1uAhFOaI2cHlbe8ZhfIX8IHwH+r9A+izo5TDP6in16FlFyfIk
+         WhpI1tiavbQDNyk9XN6ohoSMZuxc5Zjsz1YJv9nEhKb4+0qswkcsPphvErEEjNhH2RfO
+         arQFiw80VlPLC4WsNxPA5vdSmYhXYAI4FYkiAw+DdaR0A6gzEXLC7GYKrCzbM7qI+WB5
+         A5jQ==
+X-Gm-Message-State: AOAM532X7he8NfZFSAlRv1NDE79guuIkNF81TtWQk/zpRb2v7mbStA6Y
+        LhEE/gCFVgGD8S7Momura0uEBpiQxvkTbtEPCUeYxaqU/vqr46BWNzRZdb9MI1PaVU2MkwK1fXR
+        BH6YR9gn/l5LJd0owwayHbwzz
+X-Received: by 2002:a1c:ed01:0:b0:38b:5a39:220c with SMTP id l1-20020a1ced01000000b0038b5a39220cmr18244095wmh.167.1648204703467;
+        Fri, 25 Mar 2022 03:38:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyMj734PZyhmluPDLs9xmQ6pJD2H5U4RSrOcVOm06J/lWrAktgKtttWoMVSaRs+Ejoq5YeU5A==
+X-Received: by 2002:a1c:ed01:0:b0:38b:5a39:220c with SMTP id l1-20020a1ced01000000b0038b5a39220cmr18244075wmh.167.1648204703249;
+        Fri, 25 Mar 2022 03:38:23 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id q11-20020adfcd8b000000b001e320028660sm4551557wrj.92.2022.03.25.03.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 03:38:22 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [FYI PATCH] Revert "KVM: x86/mmu: Zap only TDP MMU leafs in
+ kvm_zap_gfn_range()"
+In-Reply-To: <Yj0FYSC2sT4k/ELl@google.com>
+References: <20220318164833.2745138-1-pbonzini@redhat.com>
+ <d6367754-7782-7c29-e756-ac02dbd4520b@redhat.com>
+ <Yj0FYSC2sT4k/ELl@google.com>
+Date:   Fri, 25 Mar 2022 11:38:21 +0100
+Message-ID: <87tubmnwpu.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yjyo+Xk0txZs4T/Z@sirena.org.uk>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 05:23:05PM +0000, Mark Brown wrote:
-> On Tue, Mar 22, 2022 at 06:12:33PM -0700, David Collins wrote:
-> 
-> > Another problem is that, as with regulators, ID numbers could
-> > unknowingly get out of sync between the platform and the agent.  Using
-> > clock domain names for referencing fixes both issues.  This can be
-> 
-> This is just saying that the hard coded IDs that the firmware and kernel
-> use to communicate can get out of sync which is true no matter if those
-> IDs are strings or if they're numerical, either way it's an ABI which
-> can be broken.
-> 
-> > > If the IDs are correct like the names, it is guaranteed. I see this
-> > > ID vs name is more for some maintenance convenience because somewhere
-> > > something else needs to changes or moved away from existing way of
-> > > maintenance.
-> 
-> > How do you quantify an ID number to physical regulator mapping as
-> > "correct"?  What happens if the mapping must be changed on the SCMI
-> > platform side (e.g. a PMIC was added or removed, or the order that
-> > regulators are listed in needs to change)?  If the SCMI agent is blindly
-> 
-> The whole point with the numbers being an ABI is that things must never
-> be renumbered, just as if names are used the names can't be changed.  If
-> the numbering is changing that just sounds like bugs on the platform
-> side.  There's an implicit assumption in what you've written above that
-> implementation details of the firmware should affect the IDs presented
-> through SCMI which simply shouldn't be true, and indeed if the firmware
-> can assign fixed strings it can just as well assign fixed numbers.
+Sean Christopherson <seanjc@google.com> writes:
 
-Could not agree more with Mark here...I think all the problem boils down
-really to reduce maintenance burdain on the backend SCMI server as Sudeep
-hinted previusly in this thread, which I am not saying is not a valid
-concern, but maybe this is not the best way to address it.
+> On Mon, Mar 21, 2022, Paolo Bonzini wrote:
+>> On 3/18/22 17:48, Paolo Bonzini wrote:
+>> > This reverts commit cf3e26427c08ad9015956293ab389004ac6a338e.
+>> > 
+>> > Multi-vCPU Hyper-V guests started crashing randomly on boot with the
+>> > latest kvm/queue and the problem can be bisected the problem to this
+>> > particular patch.
 
-My understanding, correct me if I'm wrong, is that the scenario here is one
-of a backend SCMI server fw that indeed potentially manages a greater number
-of resources (regulators,clocks...etc) than the ones effectively assigned to
-a single OSPM agent (real or virtual), so that you have, say, 100 resources
-and you are going to assign a different set of, say, 10 resources (maybe
-overlapping) to each different OSPM SCMI agent running in a guest: as a
-consequence you want to avoid to remap on the backend at build or
-run-time this different set of 10 resources into the 0-9 set, but instead
-serve these 10 different resources IDentified as they are in the backend
-(say Guest1: 0-9 G2:05-14 G3:1,2,20,24-30) and then match by name in
-the guest so that, say, "regulator_MAIN" is the well known regulator
-for all Guests but really it could be ID 0 or 05 or 20 in the real
-physical backend depending on which OSPM is askng (and similar kind of
-issues in a non virtualized platform which instead has to share the same
-FW between different versions of the HW)
+...
 
-Is my understanding correct ?
+>
+> Vitaly, can you provide repro instructions?  A nearly-complete QEMU command line
+> would be wonderful :-)  
 
-Beside these concerns expressed by Sudeep and Mark, talking specifically
-about the series, I see that in V2 you introduce a common binding with
-a very general 'scmi-domain-name' to be used in the above scenario with
-regulators, but then you also talk about the possible need to employ this
-scheme with other resources (clocks), so I was wondering, if this is the
-case and if this can fly despite the above concerns,  if it was not better
-to address this in a more general way at the SCMI core level, introducing
-some sort of common method to be able to query a resource by name from
-any SCMI driver no matter which protocol is used (perf/voltage/clock),
-like as an example:
+The issue was observed with genuine Hyper-V guests, with or without any
+Hyper-V enlightenments (not with Linux using Hyper-V enlightenments)
+The QEMU command line is nothing special, e.g.
 
- void *.get_resource_by_node(struct scmi_protocol_handle *ph,
- 			     struct device_node *np);
+~/qemu/build/qemu-system-x86_64 -machine
+q35,accel=kvm,kernel-irqchip=split -name guest=win2019 -cpu host -smp 16
+-m 16384 -drive
+file=/home/VMs/ws2019_gen1.qcow2,format=qcow2,if=none,id=drive-ide0-0-0
+-device
+ide-hd,bus=ide.0,unit=0,drive=drive-ide0-0-0,id=ide0-0-0,bootindex=1
+-vnc :0 -rtc base=localtime,driftfix=slew --no-hpet -monitor stdio
+--no-reboot
 
-used in scmi-regulators to retrieve a voltage domain info by number OR
-name transparently as:
+I'm also pretty sure I saw this on both AMD and Intel hosts, I can try
+reproducing if needed.
 
-    vinfo = handle->get_resource_by_node(ph, np)
+-- 
+Vitaly
 
-so that all the logic you added in scmi-regulator to search DT and map
-resources can be buried in the core SCMI and shared between all drivers
-that can optionally use it.
-
-...this will require a bit of more work in the SCMI core on my side of
-course :D ...
-
-Thanks,
-Cristian

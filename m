@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0964E76A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69384E7655
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353869AbiCYPQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S1359834AbiCYPMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376615AbiCYPNK (ORCPT
+        with ESMTP id S1359725AbiCYPKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:13:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59578FE75;
-        Fri, 25 Mar 2022 08:10:07 -0700 (PDT)
+        Fri, 25 Mar 2022 11:10:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD79ADAFE7;
+        Fri, 25 Mar 2022 08:07:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9EC161C14;
-        Fri, 25 Mar 2022 15:10:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C67C340E9;
-        Fri, 25 Mar 2022 15:10:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 549BCB828FA;
+        Fri, 25 Mar 2022 15:07:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A279AC340E9;
+        Fri, 25 Mar 2022 15:07:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221004;
-        bh=LKPCukz5mI/F3G1nZIQUuTWPcavXfeND0UrVMW0LUy4=;
+        s=korg; t=1648220859;
+        bh=vW+1X3havOyhOppWOfw882fBaGOHhzVV9mNgfsBydBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s5abQzMLMbUorWySaSZNHnC5r9r5468wHKT5ytvUyJqLNDRtCjMA7W/lagRu4K24W
-         HNo/hSL747h9Tx47j+7Oza0ngIu/Je/GUBTwpZF/9kJ4XVdXnWBJOI9pbtdujSLXl9
-         UmaMV5TyGEkCZQQAsAPnaFe8KHUPhF5MQQQmEg68=
+        b=VSncTzRI72sutIv87FKXfksgW7iEg+HgnkWVAL6xPPgO2+ync0Jj8poXsMVtPOZoJ
+         oNALtgPTcStTv+fLiJdCls85Zhqp3rNBhQDisrfoP1lqBbuJ1NDZbwkekH/bTIGZff
+         KRNl56UAq/FML9a+paLTI9PxxZBqVb/6cu2eDsF0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 5.10 08/38] staging: fbtft: fb_st7789v: reset display before initialization
-Date:   Fri, 25 Mar 2022 16:04:52 +0100
-Message-Id: <20220325150420.000738493@linuxfoundation.org>
+        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 13/29] ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
+Date:   Fri, 25 Mar 2022 16:04:53 +0100
+Message-Id: <20220325150418.968941559@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
-References: <20220325150419.757836392@linuxfoundation.org>
+In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
+References: <20220325150418.585286754@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Graute <oliver.graute@kococonnector.com>
+From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit b6821b0d9b56386d2bf14806f90ec401468c799f upstream.
+commit 0f306cca42fe879694fb5e2382748c43dc9e0196 upstream.
 
-In rare cases the display is flipped or mirrored. This was observed more
-often in a low temperature environment. A clean reset on init_display()
-should help to get registers in a sane state.
+For the RODE NT-USB the lowest Playback mixer volume setting mutes the
+audio output. But it is not reported as such causing e.g. PulseAudio to
+accidentally mute the device when selecting a low volume.
 
-Fixes: ef8f317795da (staging: fbtft: use init function instead of init sequence)
-Cc: stable@vger.kernel.org
-Signed-off-by: Oliver Graute <oliver.graute@kococonnector.com>
-Link: https://lore.kernel.org/r/20220210085322.15676-1-oliver.graute@kococonnector.com
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Fix this by applying the existing quirk for this kind of issue when the
+device is detected.
+
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220311201400.235892-1-lars@metafoo.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/fbtft/fb_st7789v.c |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/usb/mixer_quirks.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/staging/fbtft/fb_st7789v.c
-+++ b/drivers/staging/fbtft/fb_st7789v.c
-@@ -82,6 +82,8 @@ enum st7789v_command {
-  */
- static int init_display(struct fbtft_par *par)
- {
-+	par->fbtftops.reset(par);
-+
- 	/* turn off sleep mode */
- 	write_reg(par, MIPI_DCS_EXIT_SLEEP_MODE);
- 	mdelay(120);
+--- a/sound/usb/mixer_quirks.c
++++ b/sound/usb/mixer_quirks.c
+@@ -2370,9 +2370,10 @@ void snd_usb_mixer_fu_apply_quirk(struct
+ 		if (unitid == 7 && cval->control == UAC_FU_VOLUME)
+ 			snd_dragonfly_quirk_db_scale(mixer, cval, kctl);
+ 		break;
+-	/* lowest playback value is muted on C-Media devices */
+-	case USB_ID(0x0d8c, 0x000c):
+-	case USB_ID(0x0d8c, 0x0014):
++	/* lowest playback value is muted on some devices */
++	case USB_ID(0x0d8c, 0x000c): /* C-Media */
++	case USB_ID(0x0d8c, 0x0014): /* C-Media */
++	case USB_ID(0x19f7, 0x0003): /* RODE NT-USB */
+ 		if (strstr(kctl->id.name, "Playback"))
+ 			cval->min_mute = 1;
+ 		break;
 
 

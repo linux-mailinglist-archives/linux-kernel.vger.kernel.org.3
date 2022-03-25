@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C884E779C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE744E77C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346979AbiCYP3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S1376797AbiCYPc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377465AbiCYPYM (ORCPT
+        with ESMTP id S1376544AbiCYPWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:24:12 -0400
+        Fri, 25 Mar 2022 11:22:00 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D63DEA3;
-        Fri, 25 Mar 2022 08:18:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79626E3880;
+        Fri, 25 Mar 2022 08:16:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE226B827DC;
-        Fri, 25 Mar 2022 15:18:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07766C340EE;
-        Fri, 25 Mar 2022 15:18:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BFF4B827DC;
+        Fri, 25 Mar 2022 15:15:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1600DC340EE;
+        Fri, 25 Mar 2022 15:15:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221481;
-        bh=dlt1A1biLcVDgMxTU/Y7y85mBaY6WRz6rpXrh1D3VB0=;
+        s=korg; t=1648221345;
+        bh=WrWSpHQKs2LWw4pFtyVYqhrUO6MaZemAfI/UgjZvB6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0hhstwjCKrg7Lzh69/uqFyJqudTRbJD0eu8W+Cm6XAvzZ0K4WdS9zQeWxRlo2eyJj
-         4sl6xsJ0M0+gXxJ6xe4L8MB4MGxr/nOaKnx8gpUM6L/SGFP/O4DykFfFr6MMvcR42s
-         3aasYRC+ArXYbvA18EzpzW0TX+B2mICFDVqZR2oA=
+        b=lNlh5JdsaihqtCRNpA8fRRM2eVR5XeNogKENhcDbY4FCE6eudAfa/g8jWYNtwaOxl
+         NUp/WGilMbvoxWxQ3JkK0dVv+OwqnsTlqaa2Mftdbki3PV8eoTq1uE5ywAta9LPYWu
+         idxztWTSVBRscbhOPY8zSk5fqxwmarPvmG+QSulI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.16 19/37] ALSA: cmipci: Restore aux vol on suspend/resume
+        stable@vger.kernel.org, Larry Finger <Larry.Finger@lwfinger.net>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH 5.15 28/37] Bluetooth: btusb: Add one more Bluetooth part for the Realtek RTL8852AE
 Date:   Fri, 25 Mar 2022 16:14:29 +0100
-Message-Id: <20220325150420.595406186@linuxfoundation.org>
+Message-Id: <20220325150420.736013212@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
-References: <20220325150420.046488912@linuxfoundation.org>
+In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
+References: <20220325150419.931802116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Teh <jonathan.teh@outlook.com>
+From: Larry Finger <Larry.Finger@lwfinger.net>
 
-commit c14231cc04337c2c2a937db084af342ce704dbde upstream.
+commit 2e7b4a328ed6ea57d22853939e69bc86c560996d upstream.
 
-Save and restore CM_REG_AUX_VOL instead of register 0x24 twice on
-suspend/resume.
+This Realtek device has both wifi and BT components. The latter reports
+a USB ID of 0bda:2852, which is not in the table.
 
-Tested on CMI8738LX.
+BT device description in /sys/kernel/debug/usb/devices contains the following entries:
 
-Fixes: cb60e5f5b2b1 ("[ALSA] cmipci - Add PM support")
-Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/DBAPR04MB7366CB3EA9C8521C35C56E8B920E9@DBAPR04MB7366.eurprd04.prod.outlook.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+T: Bus=01 Lev=01 Prnt=01 Port=03 Cnt=02 Dev#= 3 Spd=12 MxCh= 0
+D: Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs= 1
+P: Vendor=0bda ProdID=2852 Rev= 0.00
+S: Manufacturer=Realtek
+S: Product=Bluetooth Radio
+S: SerialNumber=00e04c000001
+C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E: Ad=81(I) Atr=03(Int.) MxPS= 16 Ivl=1ms
+E: Ad=02(O) Atr=02(Bulk) MxPS= 64 Ivl=0ms
+E: Ad=82(I) Atr=02(Bulk) MxPS= 64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E: Ad=03(O) Atr=01(Isoc) MxPS= 0 Ivl=1ms
+E: Ad=83(I) Atr=01(Isoc) MxPS= 0 Ivl=1ms
+I: If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E: Ad=03(O) Atr=01(Isoc) MxPS= 9 Ivl=1ms
+E: Ad=83(I) Atr=01(Isoc) MxPS= 9 Ivl=1ms
+I: If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E: Ad=03(O) Atr=01(Isoc) MxPS= 17 Ivl=1ms
+E: Ad=83(I) Atr=01(Isoc) MxPS= 17 Ivl=1ms
+I: If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E: Ad=03(O) Atr=01(Isoc) MxPS= 25 Ivl=1ms
+E: Ad=83(I) Atr=01(Isoc) MxPS= 25 Ivl=1ms
+I: If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E: Ad=03(O) Atr=01(Isoc) MxPS= 33 Ivl=1ms
+E: Ad=83(I) Atr=01(Isoc) MxPS= 33 Ivl=1ms
+I: If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E: Ad=03(O) Atr=01(Isoc) MxPS= 49 Ivl=1ms
+E: Ad=83(I) Atr=01(Isoc) MxPS= 49 Ivl=1ms
+
+The missing USB_ID was reported by user trius65 at https://github.com/lwfinger/rtw89/issues/122
+
+Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
+Cc: stable@vger.kernel.org
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/cmipci.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/bluetooth/btusb.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/sound/pci/cmipci.c
-+++ b/sound/pci/cmipci.c
-@@ -298,7 +298,6 @@ MODULE_PARM_DESC(joystick_port, "Joystic
- #define CM_MICGAINZ		0x01	/* mic boost */
- #define CM_MICGAINZ_SHIFT	0
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -404,6 +404,8 @@ static const struct usb_device_id blackl
+ 						     BTUSB_WIDEBAND_SPEECH },
  
--#define CM_REG_MIXER3		0x24
- #define CM_REG_AUX_VOL		0x26
- #define CM_VAUXL_MASK		0xf0
- #define CM_VAUXR_MASK		0x0f
-@@ -3265,7 +3264,7 @@ static int snd_cmipci_probe(struct pci_d
-  */
- static const unsigned char saved_regs[] = {
- 	CM_REG_FUNCTRL1, CM_REG_CHFORMAT, CM_REG_LEGACY_CTRL, CM_REG_MISC_CTRL,
--	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_MIXER3, CM_REG_PLL,
-+	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_AUX_VOL, CM_REG_PLL,
- 	CM_REG_CH0_FRAME1, CM_REG_CH0_FRAME2,
- 	CM_REG_CH1_FRAME1, CM_REG_CH1_FRAME2, CM_REG_EXT_MISC,
- 	CM_REG_INT_STATUS, CM_REG_INT_HLDCLR, CM_REG_FUNCTRL0,
+ 	/* Realtek 8852AE Bluetooth devices */
++	{ USB_DEVICE(0x0bda, 0x2852), .driver_info = BTUSB_REALTEK |
++						     BTUSB_WIDEBAND_SPEECH },
+ 	{ USB_DEVICE(0x0bda, 0xc852), .driver_info = BTUSB_REALTEK |
+ 						     BTUSB_WIDEBAND_SPEECH },
+ 	{ USB_DEVICE(0x0bda, 0x385a), .driver_info = BTUSB_REALTEK |
 
 

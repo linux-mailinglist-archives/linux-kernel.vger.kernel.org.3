@@ -2,284 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48894E6E33
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D4F4E6E37
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354586AbiCYGdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 02:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S1355278AbiCYGeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 02:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244115AbiCYGdP (ORCPT
+        with ESMTP id S244115AbiCYGeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 02:33:15 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C44C683A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:31:41 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id e5so7083595pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gbWkfWp6J4H3XXyeKe68Z66N6YCdMtgzmMKex+e1KQI=;
-        b=k0iJTCPI3/Q9T3uqUAAEpTXkI1CbOQYZA9PZB0beey9FZseowzuPncHnFdzXZ+KOGs
-         /RYQCmjMkYfsWMqr6MeZHNZS8Ha93qdE5Tawk4NYoYk29cRyVnsjtPA/f3zF59jedHF9
-         1LwWECoevSHw5yGNFLp5j3mvw9rkoo/yTR5jgjFj2KWBGmZcw8ni/1cz4BYxY8dCxhBU
-         RXZ1Q679ievRu78ojmLY29Ob/+6PUmluqbGr/ELW+19QhDBshpB5Q5HWcAWnb8IW3+Eb
-         y0ctrNIaZb4xkhOXHrhTMwE6tRqbqqPwuOz4aQgXVa2hTDqsyVjEFcCu4V/z44+rFIkS
-         yOig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gbWkfWp6J4H3XXyeKe68Z66N6YCdMtgzmMKex+e1KQI=;
-        b=asxyOaqIG+AM8Tg4kq06JnSuGbxGT02/pU531pXe0ChHK77WNhYAtYKsO1XnUcC2dE
-         /LquwWu4QPDxAOJ9PeC/c4M7BdXwkDDHl8q/JKl9vZ+W1SviD5SfWZYz76ITjStL4OBy
-         Ve0cJfRH+wrY7uCgDUWrWR38D3TL/w+QyRx5l7egETDfU1Y+Xj+cBFVGjUgMw+eDqXCG
-         0JtwUEtOo8M1YirjsVcPZ0AwEK9u6wlrMznYV9Nu4DP5UcuReConRU6V9SPoKrz9+pN+
-         1UEgqBUoK12UBVnF2wU1hWPTSNnsXAZ3ibAgDPJAbrgtuBOHahJRzVr7S3okpknueu7Y
-         fhpA==
-X-Gm-Message-State: AOAM531t/b2yq+xQfrBozWG2nTcFhzdQGDtCqCeEP46eM6p3SplVS62e
-        BvGkcbuxtjUCUxUfGInndgE9
-X-Google-Smtp-Source: ABdhPJz3O7K/qRxSRjgYVNbXxuj8AdvhXmK8k93ZkIp7BCn6JLj3whclf3/Av1m7VVs7GSGY4/Rj3w==
-X-Received: by 2002:a17:90b:1d82:b0:1c7:1d3:f4 with SMTP id pf2-20020a17090b1d8200b001c701d300f4mr23103147pjb.223.1648189900916;
-        Thu, 24 Mar 2022 23:31:40 -0700 (PDT)
-Received: from thinkpad ([27.111.75.218])
-        by smtp.gmail.com with ESMTPSA id y20-20020aa78054000000b004f6f267dcc9sm5270651pfm.187.2022.03.24.23.31.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 23:31:40 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 12:01:33 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/25] dmaengine: dw-edma: Simplify the DebugFS context
- CSRs init procedure
-Message-ID: <20220325063133.GC4675@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-17-Sergey.Semin@baikalelectronics.ru>
- <20220325062708.GB4675@thinkpad>
+        Fri, 25 Mar 2022 02:34:08 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA3BC6837
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:32:34 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KPshc6CGzz9sSg;
+        Fri, 25 Mar 2022 07:32:32 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wcJddXA699EP; Fri, 25 Mar 2022 07:32:32 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KPshc58pBz9sSY;
+        Fri, 25 Mar 2022 07:32:32 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 95B578B780;
+        Fri, 25 Mar 2022 07:32:32 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id b2q8qNEYZCZ9; Fri, 25 Mar 2022 07:32:32 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 693648B763;
+        Fri, 25 Mar 2022 07:32:32 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22P6WPw01929871
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 25 Mar 2022 07:32:25 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22P6WOAi1929870;
+        Fri, 25 Mar 2022 07:32:24 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2] MAINTAINERS: Enlarge coverage of TRACING inside architectures
+Date:   Fri, 25 Mar 2022 07:32:21 +0100
+Message-Id: <e8338c0ad0e73991cbd8f31c215b16ea4efe212d.1648189904.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325062708.GB4675@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648189940; l=2471; s=20211009; h=from:subject:message-id; bh=yGp7FFa7HBbJp8rR4opj6dC3eUxH51ufjaS0fMwDaXA=; b=tn1cBoMKwSgWqRA31d1a6NhUAlf4APNizNT1B/nujBxHIRYNT9kz14hfxWscDnYT5g85WT/24Uoj G3b+uJI/Cz5y19M8c+1y+Y/pO1eo7lPcQ1IGcNjLsS+CvDG7RRMI
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 11:57:16AM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Mar 24, 2022 at 04:48:27AM +0300, Serge Semin wrote:
-> > DW eDMA v4.70a and older have the read and write channels context CSRs
-> > indirectly accessible. It means the CSRs like Channel Control, Xfer size,
-> > SAR, DAR and LLP address are accessed over at a fixed MMIO address, but
-> > their reference to the corresponding channel is determined by the Viewport
-> > CSR. In order to have a coherent access to these registers the CSR IOs are
-> > supposed to be protected with a spin-lock. DW eDMA v4.80a and newer
-> > normally have unrolled Read/Write channel context registers. That is all
-> > CSRs denoted before are directly mapped in the controller MMIO space.
-> > 
-> > Since both normal and viewport-based registers are exposed via the DebugFS
-> > nodes, the original code author decided to implement an algorithm based on
-> > the unrolled CSRs mapping with the viewport addresses recalculation if
-> > it's required. The problem is that such implementation turned to be first
-> > unscalable (supports a platform with only single eDMA available since a
-> > base address statically preserved) and second needlessly overcomplicated
-> > (it loops over all Rd/Wr context addresses and re-calculates the viewport
-> > base address on each DebugFS node access). The algorithm can be greatly
-> > simplified just by adding the channel ID and it's direction fields in the
-> > eDMA DebugFS node descriptor. These new parameters can be used to find a
-> > CSR offset within the corresponding channel registers space. The DW eDMA
-> > DebugFS node getter afterwards will also use them in order to activate the
-> > respective context CSRs viewport before reading data from the specified
-> > register. In case of the unrolled version of the CSRs mapping there won't
-> > be any spin-lock taken/released, no viewport activation as before this
-> > modification.
-> > 
-> > Note this modification fixes the REGISTER() macros using an externally
-> > defined local variable. The same problem with the rest of the macro will
-> > be fixed in the next commit.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 84 +++++++++++-------------
-> >  1 file changed, 38 insertions(+), 46 deletions(-)
-> > 
-> > diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> > index 7eb0147912fa..b34a68964232 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> > +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> > @@ -15,9 +15,27 @@
-> >  
-> >  #define REGS_ADDR(name) \
-> >  	((void __iomem *)&regs->name)
-> > +
-> > +#define REGS_CH_ADDR(name, _dir, _ch)						\
-> > +	({									\
-> > +		struct dw_edma_v0_ch_regs __iomem *__ch_regs;			\
-> > +										\
-> > +		if ((dw)->chip->mf == EDMA_MF_EDMA_LEGACY)			\
-> > +			__ch_regs = &regs->type.legacy.ch;			\
-> > +		else if (_dir == EDMA_DIR_READ)					\
-> > +			__ch_regs = &regs->type.unroll.ch[_ch].rd;		\
-> > +		else								\
-> > +			__ch_regs = &regs->type.unroll.ch[_ch].wr;		\
-> > +										\
-> > +		(void __iomem *)&__ch_regs->name;				\
-> > +	})
-> > +
-> >  #define REGISTER(name) \
-> >  	{ #name, REGS_ADDR(name) }
-> >  
-> > +#define CTX_REGISTER(name, dir, ch) \
-> > +	{ #name, REGS_CH_ADDR(name, dir, ch), dir, ch }
-> 
-> What is the need of "dir, ch" at the end?
-> 
+Most architectures have ftrace related stuff in arch/*/kernel/ftrace.c
+but powerpc has it spread in multiple files located in
+arch/powerpc/kernel/trace/
+In several architectures, there are also additional files containing
+'ftrace' as part of the name but with some prefix or suffix.
 
-Ignore this comment. I failed to notice that your addition.
+Use wildcards to enlarge coverage.
 
-Thanks,
-Mani
+With arch/*/*/*/*ftrace*:
+	arch/alpha/include/asm/ftrace.h
+	arch/arm64/include/asm/ftrace.h
+	arch/arm/include/asm/ftrace.h
+	arch/csky/include/asm/ftrace.h
+	arch/csky/kernel/probes/ftrace.c
+	arch/ia64/include/asm/ftrace.h
+	arch/m68k/include/asm/ftrace.h
+	arch/microblaze/include/asm/ftrace.h
+	arch/mips/include/asm/ftrace.h
+	arch/nds32/include/asm/ftrace.h
+	arch/parisc/include/asm/ftrace.h
+	arch/powerpc/include/asm/ftrace.h
+	arch/powerpc/kernel/trace/ftrace_64_pg.S
+	arch/powerpc/kernel/trace/ftrace.c
+	arch/powerpc/kernel/trace/ftrace_low.S
+	arch/powerpc/kernel/trace/ftrace_mprofile.S
+	arch/riscv/include/asm/ftrace.h
+	arch/riscv/kernel/probes/ftrace.c
+	arch/s390/include/asm/ftrace.h
+	arch/s390/include/asm/ftrace.lds.h
+	arch/sh/include/asm/ftrace.h
+	arch/sparc/include/asm/ftrace.h
+	arch/x86/include/asm/ftrace.h
+	arch/x86/kernel/kprobes/ftrace.c
+	arch/xtensa/include/asm/ftrace.h
 
-> > +
-> >  #define WR_REGISTER(name) \
-> >  	{ #name, REGS_ADDR(wr_##name) }
-> >  #define RD_REGISTER(name) \
-> > @@ -41,14 +59,11 @@
-> >  static struct dw_edma				*dw;
-> >  static struct dw_edma_v0_regs			__iomem *regs;
-> >  
-> > -static struct {
-> > -	void					__iomem *start;
-> > -	void					__iomem *end;
-> > -} lim[2][EDMA_V0_MAX_NR_CH];
-> > -
-> >  struct dw_edma_debugfs_entry {
-> >  	const char				*name;
-> >  	void __iomem				*reg;
-> > +	enum dw_edma_dir			dir;
-> > +	u16					ch;
-> >  };
-> >  
-> >  static int dw_edma_debugfs_u32_get(void *data, u64 *val)
-> > @@ -58,33 +73,16 @@ static int dw_edma_debugfs_u32_get(void *data, u64 *val)
-> >  
-> >  	if (dw->chip->mf == EDMA_MF_EDMA_LEGACY &&
-> >  	    reg >= (void __iomem *)&regs->type.legacy.ch) {
-> > -		void __iomem *ptr = &regs->type.legacy.ch;
-> > -		u32 viewport_sel = 0;
-> >  		unsigned long flags;
-> > -		u16 ch;
-> > -
-> > -		for (ch = 0; ch < dw->wr_ch_cnt; ch++)
-> > -			if (lim[0][ch].start >= reg && reg < lim[0][ch].end) {
-> > -				ptr += (reg - lim[0][ch].start);
-> > -				goto legacy_sel_wr;
-> > -			}
-> > -
-> > -		for (ch = 0; ch < dw->rd_ch_cnt; ch++)
-> > -			if (lim[1][ch].start >= reg && reg < lim[1][ch].end) {
-> > -				ptr += (reg - lim[1][ch].start);
-> > -				goto legacy_sel_rd;
-> > -			}
-> > -
-> > -		return 0;
-> > -legacy_sel_rd:
-> > -		viewport_sel = BIT(31);
-> > -legacy_sel_wr:
-> > -		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
-> > +		u32 viewport_sel;
-> > +
-> > +		viewport_sel = entry->dir == EDMA_DIR_READ ? BIT(31) : 0;
-> > +		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, entry->ch);
-> >  
-> >  		raw_spin_lock_irqsave(&dw->lock, flags);
-> >  
-> >  		writel(viewport_sel, &regs->type.legacy.viewport_sel);
-> > -		*val = readl(ptr);
-> > +		*val = readl(reg);
-> >  
-> >  		raw_spin_unlock_irqrestore(&dw->lock, flags);
-> >  	} else {
-> > @@ -114,19 +112,19 @@ static void dw_edma_debugfs_create_x32(const struct dw_edma_debugfs_entry ini[],
-> >  	}
-> >  }
-> >  
-> > -static void dw_edma_debugfs_regs_ch(struct dw_edma_v0_ch_regs __iomem *regs,
-> > +static void dw_edma_debugfs_regs_ch(enum dw_edma_dir edma_dir, u16 ch,
-> >  				    struct dentry *dir)
-> 
-> Using "dir" for directory would be confusing since it could also refer
-> direction. I'd suggest to use "dentry".
-> 
-> Thanks,
-> Mani
-> 
-> >  {
-> > -	const struct dw_edma_debugfs_entry debugfs_regs[] = {
-> > -		REGISTER(ch_control1),
-> > -		REGISTER(ch_control2),
-> > -		REGISTER(transfer_size),
-> > -		REGISTER(sar.lsb),
-> > -		REGISTER(sar.msb),
-> > -		REGISTER(dar.lsb),
-> > -		REGISTER(dar.msb),
-> > -		REGISTER(llp.lsb),
-> > -		REGISTER(llp.msb),
-> > +	struct dw_edma_debugfs_entry debugfs_regs[] = {
-> > +		CTX_REGISTER(ch_control1, edma_dir, ch),
-> > +		CTX_REGISTER(ch_control2, edma_dir, ch),
-> > +		CTX_REGISTER(transfer_size, edma_dir, ch),
-> > +		CTX_REGISTER(sar.lsb, edma_dir, ch),
-> > +		CTX_REGISTER(sar.msb, edma_dir, ch),
-> > +		CTX_REGISTER(dar.lsb, edma_dir, ch),
-> > +		CTX_REGISTER(dar.msb, edma_dir, ch),
-> > +		CTX_REGISTER(llp.lsb, edma_dir, ch),
-> > +		CTX_REGISTER(llp.msb, edma_dir, ch),
-> >  	};
-> >  	int nr_entries;
-> >  
-> > @@ -191,10 +189,7 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dir)
-> >  
-> >  		ch_dir = debugfs_create_dir(name, regs_dir);
-> >  
-> > -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].wr, ch_dir);
-> > -
-> > -		lim[0][i].start = &regs->type.unroll.ch[i].wr;
-> > -		lim[0][i].end = &regs->type.unroll.ch[i].padding_1[0];
-> > +		dw_edma_debugfs_regs_ch(EDMA_DIR_WRITE, i, ch_dir);
-> >  	}
-> >  }
-> >  
-> > @@ -256,10 +251,7 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dir)
-> >  
-> >  		ch_dir = debugfs_create_dir(name, regs_dir);
-> >  
-> > -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].rd, ch_dir);
-> > -
-> > -		lim[1][i].start = &regs->type.unroll.ch[i].rd;
-> > -		lim[1][i].end = &regs->type.unroll.ch[i].padding_2[0];
-> > +		dw_edma_debugfs_regs_ch(EDMA_DIR_READ, i, ch_dir);
-> >  	}
-> >  }
-> >  
-> > -- 
-> > 2.35.1
-> > 
+With arch/*/*/*ftrace*:
+	arch/arm64/kernel/entry-ftrace.S
+	arch/arm64/kernel/ftrace.c
+	arch/arm/kernel/entry-ftrace.S
+	arch/arm/kernel/ftrace.c
+	arch/csky/kernel/ftrace.c
+	arch/ia64/kernel/ftrace.c
+	arch/microblaze/kernel/ftrace.c
+	arch/mips/kernel/ftrace.c
+	arch/nds32/kernel/ftrace.c
+	arch/parisc/kernel/ftrace.c
+	arch/powerpc/kernel/kprobes-ftrace.c
+	arch/riscv/kernel/ftrace.c
+	arch/s390/kernel/ftrace.c
+	arch/s390/kernel/ftrace.h
+	arch/sh/kernel/ftrace.c
+	arch/sparc/kernel/ftrace.c
+	arch/x86/kernel/ftrace_32.S
+	arch/x86/kernel/ftrace_64.S
+	arch/x86/kernel/ftrace.c
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e127c2fb08a7..e03c471fcd73 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19590,8 +19590,8 @@ M:	Ingo Molnar <mingo@redhat.com>
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+ F:	Documentation/trace/ftrace.rst
+-F:	arch/*/*/*/ftrace.h
+-F:	arch/*/kernel/ftrace.c
++F:	arch/*/*/*/*ftrace*
++F:	arch/*/*/*ftrace*
+ F:	fs/tracefs/
+ F:	include/*/ftrace.h
+ F:	include/linux/trace*.h
+-- 
+2.35.1
+

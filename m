@@ -2,74 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11284E6F95
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959824E6FB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355672AbiCYIsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 04:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S1356052AbiCYJAR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Mar 2022 05:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355881AbiCYIsb (ORCPT
+        with ESMTP id S229940AbiCYJAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 04:48:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38E86CA0C4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648198017;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3LAcZ86phd5KooVZZ6Y1mPcr9GXiECGS2GkKBYOKDWE=;
-        b=FgUxekXC8SdjlNmEoQ7YW5X21G4zoBuRk6ucyzMYMx2wpvXEtq57miqZHd0stUCQCYmOxp
-        gvbxIwHe8an22cGbYZmbWldCMjHvbYWec2J4aCFSdRQupqqKCHJVrILswNW4S9a0nn6Ej0
-        xBmP4TkEzMh1onH4bo3frDWvokLrUO0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-159-Obdy5gfrMnOVvgfhwSjOuA-1; Fri, 25 Mar 2022 04:46:52 -0400
-X-MC-Unique: Obdy5gfrMnOVvgfhwSjOuA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5519A1C05151;
-        Fri, 25 Mar 2022 08:46:51 +0000 (UTC)
-Received: from ws.net.home (unknown [10.36.112.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E23D4432703;
-        Fri, 25 Mar 2022 08:46:48 +0000 (UTC)
-Date:   Fri, 25 Mar 2022 09:46:46 +0100
-From:   Karel Zak <kzak@redhat.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Message-ID: <20220325084646.7g6oto2ce3vou54x@ws.net.home>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
- <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
- <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
- <YjudB7XARLlRtBiR@mit.edu>
- <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
+        Fri, 25 Mar 2022 05:00:16 -0400
+X-Greylist: delayed 447 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 01:58:41 PDT
+Received: from mail.sysgo.com (mail.sysgo.com [IPv6:2a01:4f8:fff0:cf:2::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40D3377FE
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:58:41 -0700 (PDT)
+From:   Matthias Welwarsky <matthias.welwarsky@sysgo.com>
+To:     linux-kernel@vger.kernel.org
+Subject: x86, possible bug in __memmove() alternatives patching
+Date:   Fri, 25 Mar 2022 09:51:09 +0100
+Message-ID: <3422754.iIbC2pHGDl@linux-3513>
+Organization: SYSGO GmbH
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,22 +34,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 09:44:38AM +0100, Miklos Szeredi wrote:
-> > If so, have you benchmarked lsof using this new interface?
-> 
-> Not yet.  Looked yesterday at both lsof and procps source code, and
-> both are pretty complex and not easy to plug in a new interface.   But
-> I've not yet given up...
+Hi list,
 
-I can imagine something like getvalues(2) in lsblk (based on /sys) or
-in lsfd (based on /proc; lsof replacement). The tools have defined set
-of information to read from kernel, so gather all the requests to the
-one syscall for each process or block device makes sense and it will
-dramatically reduce number of open+read+close syscalls.
+I've come across an odd behavior that I'm not sure whether it counts as a bug.
+I'm working on an x86 hypervisor at the moment and there was an odd problem 
+with a linux guest system dying during booting, but only on an intel NUC11 
+(i3-1115G4). It booted normally on any other system I tested on.
 
-    Karel
+The guest was usin kernel version 5.10.89.
 
--- 
- Karel Zak  <kzak@redhat.com>
- http://karelzak.blogspot.com
+Now, the reason eventually turned out to be __memmove() getting broken when 
+applying the alternatives. The CPU on the NUC11 has the FSRM feature, which 
+enables a particular alternative in __memmove(). However, the code assumes 
+that the ERMS feature is always present with FSRM, otherwise the function gets 
+broken. Of course this is normally the case, a CPU without ERMS would never 
+advertise FSRM.
+
+However: in the function early_intel_setup(), the ERMS feature might get 
+cleared depending on the IA32_MISC_ENABLE MSR: if fast string operations are 
+disabled through this MSR, X86_FEATURE_ERMS is removed from the available set, 
+but X86_FEATURE_FSRM is not removed.
+
+Now, the hypervisor I'm working on emulates this MSR and in the particular 
+case, fast string ops were reported as disabled, leading to the above 
+mentioned inconsistency in __memmove().
+
+The Intel SDM doesn't go into any details if disabling fast string ops through 
+IA32_MISC_ENABLE will also clear FSRM from cpuid leaf 7, but I think that's 
+not relevant for the linux kernel anyway because cpuid is parsed before MSRs 
+are evaluated.
+
+I know it's is probably a very rare case and Intel recommends having fast 
+string ops enabled, hence the question: would this be considered a bug in the 
+kernel that should be fixed? A potential fix could be to clear FSRM together 
+with ERMS depending on IA32_MISC_ENABLE.
+
+
+Mit freundlichen Grüßen/Best regards,
+
+Matthias Welwarsky
+Project Engineer
+
+SYSGO GmbH
+Office Mainz
+Am Pfaffenstein 8 / D-55270 Klein-Winternheim / Germany
+Phone: +49-6136-9948-0 / Fax: +49-6136-9948-10
+E-mail: matthias.welwarsky@sysgo.com
+_________________________________________________________________________________
+Web: https://www.sysgo.com
+Blog: https://www.sysgo.com/blog
+Events: https://www.sysgo.com/events
+Newsletter: https://www.sysgo.com/newsletter
+_________________________________________________________________________________
+Handelsregister/Commercial Registry: HRB Mainz 90 HRB 48884 
+Geschäftsführung/Managing Directors: Etienne Butery (CEO), Kai Sablotny (COO) 
+USt-Id-Nr./VAT-Id-No.: DE 149062328 
+
+The protection of your personal data is important to us. Under the following 
+link 
+you can see the information in accordance with article 13 GDPR: 
+https://www.sysgo.com/privacy_policy
+
 

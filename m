@@ -2,104 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473504E7D69
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9334E7B2F
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiCYUbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S232242AbiCYUck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiCYUa6 (ORCPT
+        with ESMTP id S232209AbiCYUcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:30:58 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316426334
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:29:23 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id m3so15196737lfj.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:29:23 -0700 (PDT)
+        Fri, 25 Mar 2022 16:32:39 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC902ADD;
+        Fri, 25 Mar 2022 13:31:01 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id c62so10478441edf.5;
+        Fri, 25 Mar 2022 13:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yIkg7/kVfld7G0qCMJQN9ZYf/pDPvw76xmGteFxmM2k=;
-        b=Cb38yqOh7qL3I0Dwu82Zt1vcAQlWlsiIDWjwdLnwR2lDcU+Fo+o3TQ6YrOiQJu9K0x
-         6xj57cjbgkuq1mfYtUIpwxgKM065tt3S3zp5Qx16z9KLj81BJ/WqT32/yZT9WuaW2CVw
-         hP2VJPIzqrQcuBGcm5XrddrK0cv7dz9BqOVxI=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=688sj//6ZYYmXeEOBA9mO+3iA2HUWbMyva2TmireD9U=;
+        b=kB/tVx6DI6Rgd6ixZLqpV4Fomxj2NvOTH7zcKgx4vW3AyK/a5uKj7pBDt7VIJSZcTt
+         yFyfwpI8ZA6TINWZ0ypY4Ul0qmcqdEQLmSIj9sb+p4d1/6p4jbwjtKAtUZxsGLgIXIkH
+         rWTswGSYlZlr797QZICFUjlmaasJ+TmHSOuLwE4eGz0j4u2p1Wl/rwjvZsstXDmRvVGr
+         CbuUEfYoqB4dvOnE8+fYS0vSqQEAx2JTeq0d9BPFkWls0GQWb8CuRsVXeSsh62ETyp3n
+         s1EF9/9+bQE0FCDMT4PcH23ASib0CKeaE8GEehwEn9WLltLeQzexfYF+yWEmoUkADJiD
+         CgNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yIkg7/kVfld7G0qCMJQN9ZYf/pDPvw76xmGteFxmM2k=;
-        b=FgBnNONE/MLl0YQ0v0Pxhkwsjv7ooAv88RBmGBB0Qrj19K2sFNpLGCt/f9jGdvLqI6
-         GGNLTSsCMfFJavbLm/q+Vj96FZi1zQ8Uz6YJb1TSqOvfA7EH46n0OcGEPVL2bBrVn4st
-         KqhSK4TupuwuP1MwOVqMlLoSwK4x72seb21Jk/fkkcZ4/oNRESKgg3Z3/b3fTYtjwPXU
-         cZmMP9B/dPIoPVOcA9+Wj8R+fEB4PT+RISUcpOSXb445GdMSaJPmhdaSXSvw9CUVp6kl
-         TZKA47E+iY2LDftXvppp449S521NtQlac9ysYfjJMDQ+93iboKx8KfzbWUQkHFsLxRoX
-         9AYA==
-X-Gm-Message-State: AOAM532SmSava6Gqt4+4IlotybAIC6ZHRsbNkeg0loNyNRAxJuFzEveE
-        eKlAyPIWPsSCl2LbagrTB2V0nC2sRbgIMQhD6ak=
-X-Google-Smtp-Source: ABdhPJwih3DKjrpUilzj8FmD+1faTWt/ACjlHMH4jcLjsQH/+q8mPyfeq4CushkQ0cytnHvKHh96hQ==
-X-Received: by 2002:ac2:58f0:0:b0:44a:206c:255d with SMTP id v16-20020ac258f0000000b0044a206c255dmr9132710lfo.124.1648240161220;
-        Fri, 25 Mar 2022 13:29:21 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id p8-20020a2ea408000000b00247e5087157sm768623ljn.101.2022.03.25.13.29.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 13:29:19 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id z12so1414290lfu.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:29:19 -0700 (PDT)
-X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
- b21-20020a056512305500b0044a39146603mr9115756lfb.435.1648240159035; Fri, 25
- Mar 2022 13:29:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=688sj//6ZYYmXeEOBA9mO+3iA2HUWbMyva2TmireD9U=;
+        b=rtp/44m11S7TctEv6tmUkq72BKtatCmA28vsOxrMMgOFpuuCGcB1lfgjVQNbnG+OiM
+         NHgAyzJnRa6nbfna83QwKVIaGkO/XwY6zNz50uyxojyfIAx52dCyDWBJKijPB1HpzEA/
+         z1jy/XvE8gmuivmVeHyLMN6nZZqLZE9kNPVoqgWBQVhz7z1akfmumXoDSvju10P1yWKc
+         IRVTabop3rjlXgK36IcKcfj3GoJSRDvC7FV72I1DM5OZpzkkVoX1fKAhgPpltMfGlEOV
+         yXSS+0sJUF9ANilZimXaYO9vfSO52UP3HEdkhw9i5R/ovLSkSDvQjVA+khbq6UJ49MUR
+         eZfg==
+X-Gm-Message-State: AOAM532yZvVaYmSdUojvbKwHWMNzQG99D6Lvk8SZdOr8Uniech7C/XU5
+        XHh8SixqkZnMr3kvDf6b8In5Je5yR64=
+X-Google-Smtp-Source: ABdhPJyyV0hsBOrPNn7eKSgqfeP2ZMo+aiWYXa5UNMoWgR3oUZZRiCP+f6kWAjWOPtrDOU7PIpGRCQ==
+X-Received: by 2002:a05:6402:40d5:b0:419:496b:5ab0 with SMTP id z21-20020a05640240d500b00419496b5ab0mr578673edb.284.1648240259548;
+        Fri, 25 Mar 2022 13:30:59 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id b19-20020aa7dc13000000b00418eef0a019sm3237740edu.34.2022.03.25.13.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 13:30:59 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 22:30:57 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
+ offloading of fdb locked flag
+Message-ID: <20220325203057.vrw5nbwqctluc6u3@skbuf>
+References: <20220323144304.4uqst3hapvzg3ej6@skbuf>
+ <86lewzej4n.fsf@gmail.com>
+ <20220324110959.t4hqale35qbrakdu@skbuf>
+ <86v8w3vbk4.fsf@gmail.com>
+ <20220324142749.la5til4ys6zva4uf@skbuf>
+ <86czia1ned.fsf@gmail.com>
+ <20220325132102.bss26plrk4sifby2@skbuf>
+ <86fsn6uoqz.fsf@gmail.com>
+ <20220325140003.a4w4hysqbzmrcxbq@skbuf>
+ <86tubmt408.fsf@gmail.com>
 MIME-Version: 1.0
-References: <000000000000cabcb505dae9e577@google.com> <CAMZfGtUG9GSRSp6fQ6AD6MFemX9ZS=XYWFceMPjVH7LATamUKg@mail.gmail.com>
-In-Reply-To: <CAMZfGtUG9GSRSp6fQ6AD6MFemX9ZS=XYWFceMPjVH7LATamUKg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 25 Mar 2022 13:29:02 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wii1peDbW+eZipUnLmU_STXx6Vm30PiQnjhfUmgYrSd+Q@mail.gmail.com>
-Message-ID: <CAHk-=wii1peDbW+eZipUnLmU_STXx6Vm30PiQnjhfUmgYrSd+Q@mail.gmail.com>
-Subject: Re: [syzbot] general protection fault in list_lru_add
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     syzbot <syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86tubmt408.fsf@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 2:52 AM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> We can see that we put the dentry (ffff88807ebda0f8) into
-> the list_lru (ffff888011bd47f0). But we do not allocate struct
-> list_lru_one for the memcg (ffff88801c530000).  Then it panics.
+On Fri, Mar 25, 2022 at 05:01:59PM +0100, Hans Schultz wrote:
+> > An attacker sweeping through the 2^47 source MAC address range is a
+> > problem regardless of the implementations proposed so far, no?
+> 
+> The idea is to have a count on the number of locked entries in both the
+> ATU and the FDB, so that a limit on entries can be enforced.
 
-Hmm.
+I can agree with that.
 
-Looking at memcg_slab_pre_alloc_hook(), I note that it will return
-success without doing the LRU checking for several cases.
+Note that as far as I understand regular 802.1X, these locked FDB
+entries are just bloatware if you don't need MAC authentication bypass,
+because the source port is already locked, so it drops all traffic from
+an unknown MAC SA except for the link-local packets necessary to run
+EAPOL, which are trapped to the CPU.
 
-So since you can reproduce the problem, I would suggest you add some
-debug code to __d_alloc() that prints out something big if it gets a
-dentry but you can't look up the list_lru_one() for that dentry.
+So maybe user space should opt into the MAC authentication bypass
+process, really, since that requires secure CPU-assisted learning, and
+regular 802.1X doesn't. It's a real additional burden that shouldn't be
+ignored or enabled by default.
 
-Hmm?
+> > If unlimited growth of the mv88e6xxx locked ATU entry cache is a
+> > concern (which it is), we could limit its size, and when we purge a
+> > cached entry in software is also when we could emit a
+> > SWITCHDEV_FDB_DEL_TO_BRIDGE for it, right?
+> 
+> I think the best would be dynamic entries in both the ATU and the FDB
+> for locked entries.
 
-The only other situation I can think of is if dentry->d_sb were to
-change during the dentry lifetime, but I don't think that can happen.
-The only assignment I can find with "git grep" is that
+Making locked (DPV=0) ATU entries be dynamic (age out) makes sense.
+Since you set the IgnoreWrongData for source ports, you suppress ATU
+interrupts for this MAC SA, which in turn means that a station which is
+unauthorized on port A can never redeem itself when it migrates to port B,
+for which it does have an authorization, since software never receives
+any notice that it has moved to a new port.
 
-        dentry->d_sb = sb;
+But making the locked bridge FDB entry be dynamic, why does it matter?
+I'm not seeing this through. To denote that it can migrate, or to denote
+that it can age out? These locked FDB entries are 'extern_learn', so
+they aren't aged out by the bridge anyway, they are aged out by whomever
+added them => in our case the SWITCHDEV_FDB_DEL_TO_BRIDGE that I mentioned.
 
-in __d_alloc(), and while it's possible my grep pattern was bogus, it
-sounds unlikely.
+> How the two are kept in sync is another question, but if there is a
+> switchcore, it will be the 'master', so I don't think the bridge
+> module will need to tell the switchcore to remove entries in that
+> case. Or?
 
-               Linus
+The bridge will certainly not *need* to tell the switch to delete a
+locked FDB entry, but it certainly *can* (and this is in fact part of
+the authorization process, replace an ATU entry with DPV=0 with an ATU
+entry with DPV=BIT(port)).
+
+I feel as if I'm missing the essence of your reply.

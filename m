@@ -2,131 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A886D4E71C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A3C4E71BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353248AbiCYLCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
+        id S1353142AbiCYLB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245291AbiCYLCr (ORCPT
+        with ESMTP id S243420AbiCYLBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:02:47 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E52CCC527;
-        Fri, 25 Mar 2022 04:01:14 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id a1so10345253wrh.10;
-        Fri, 25 Mar 2022 04:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bOEKS9NzaNyigA185P4is7UM4t5gP2JIN17BW0RY5+s=;
-        b=n8rS3kO8VR+Ix6NtEe5TdIXE91acMYCD3GXOqhjgWrR8mXLaWXqmXBAe1bb+H1Sf0S
-         ISnTEpWb6e+0GQRr+j5o6Q3Hy0YggpZCUG/b8pY1DV8ltR6iGU0Q1nT5dbZ8pdqBNUgd
-         MzUdatrPkqoi7qeUj637BqqU3zlghVeaaZF2UkBMjFpZiFOg2Y9Jd7BBgwMRoXHPyPZY
-         rHEHC8gkgbsNo1LaRSqVa4BEHx2S5jx0yqJwkwILxCgHHQxKGfjVvAMxvj8TCBYM5fUj
-         0wYNeAjqBITMUFoICpbHI4e0+WqH4E+j29+f+OJ4decUT88Du2y6rGrGnFP+PXt7UK44
-         PNVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bOEKS9NzaNyigA185P4is7UM4t5gP2JIN17BW0RY5+s=;
-        b=cj3mGjHJvSTwmBbVFSFURy0xbrBHX/f3QeD4AhFWbBVHPTN36MT2dZQmMWDakXbJJ8
-         1ZN42/NKak7lV4aCwsRiVsc4mfW0rTDNyQgLmxyGjgZJnw7CRoFefsMLr5TtWTxuUyBs
-         jClE+ApL2m+WbtbutGctB3+qvQtVeCguR7BC/D+OmFb1W/uk476ppWIATqb3p8qik2gU
-         4FjZ9ZCBO+KEd362PKymAy+vLa5yodgfctmHFgCghjYFoqQ/mQ2TVPR4k/Z3puDyI8EE
-         J/L83JhZk+3sqGSfO2TROCEkfOMwPvQaQk3YGb5vG3tVNWnGTzjOz/WotQG5yKiT6HLS
-         MDQg==
-X-Gm-Message-State: AOAM532AZL8B+zKQI0lFILTjxSH8zDse+yaFuKQx2b3lBHeMOj7LfCwJ
-        qwQP/Lrn477j/8jDuiXdMr0=
-X-Google-Smtp-Source: ABdhPJzTS0dVAANN0EU58IyzAWEKrax/ymEZPW+QqQX8M5RfJXL9GrTasCi1E0w+5zu0fIfozf9gLQ==
-X-Received: by 2002:a5d:64cc:0:b0:205:a724:9d1a with SMTP id f12-20020a5d64cc000000b00205a7249d1amr1999689wri.177.1648206072586;
-        Fri, 25 Mar 2022 04:01:12 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id v13-20020adfe28d000000b0020375f27a5asm4914906wri.4.2022.03.25.04.01.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 04:01:11 -0700 (PDT)
-Message-ID: <6117f51e-d43a-40da-f5a0-7b59c09ac29e@gmail.com>
-Date:   Fri, 25 Mar 2022 12:01:10 +0100
+        Fri, 25 Mar 2022 07:01:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242C2BF003;
+        Fri, 25 Mar 2022 03:59:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D5B831F7AE;
+        Fri, 25 Mar 2022 10:59:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648205989; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V6tPqgzCb9zg9WADmlRJi4ubhrh85zcKZfitkRteJEc=;
+        b=Fl64pbvzri2ql+VIJYK/EkRry3sifm/+KDJt92c9AHrWo41fW+sr17QEALHzahpeEYcSYX
+        BBb9YhfXp+RUu3ruIsBPFRy5/KymjIzBLkKQdW51/iMJVD6rUKGS6rwlVL47eHW/zdWHaS
+        ikS8rXhvqEsM92gBP5fCR/O7N/Yukt4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648205989;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V6tPqgzCb9zg9WADmlRJi4ubhrh85zcKZfitkRteJEc=;
+        b=feCy0wnHg5d0Am4EuSbi+3Sf4OxxFvX66S2Q5fKwxGWKBMcjIc8eSXpYzr5OoB2HWW9EPx
+        N9K2RDVf9U5OqoCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA71B1332D;
+        Fri, 25 Mar 2022 10:59:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id w2gCLKWgPWKeLgAAMHmgww
+        (envelope-from <chrubis@suse.cz>); Fri, 25 Mar 2022 10:59:49 +0000
+Date:   Fri, 25 Mar 2022 12:02:09 +0100
+From:   Cyril Hrubis <chrubis@suse.cz>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+Message-ID: <Yj2hMRrY7i7OSGqH@yuki>
+References: <20220322192712.709170-1-mszeredi@redhat.com>
+ <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+ <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
+ <YjudB7XARLlRtBiR@mit.edu>
+ <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 15/22] arm64: dts: mt8192: Add H264 venc device node
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-16-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220318144534.17996-16-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegtiRx6jRFUuPeXDxwJpBhYn0ekKkwYbGowUehGZkqVmAw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/03/2022 15:45, Allen-KH Cheng wrote:
-> Adds H264 venc node for mt8192 SoC.
+Hi!
+> > If so, have you benchmarked lsof using this new interface?
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Not yet.  Looked yesterday at both lsof and procps source code, and
+> both are pretty complex and not easy to plug in a new interface.   But
+> I've not yet given up...
 
+Looking at lsof it seems to use fopen() and fgets() to parse various
+proc files. I doubt that we can make the parsing singificantly faster
+without completely rewriting the internals.
 
-Applied thanks
+As for procps the readproc.c has file2str() function that does copy
+whole proc files into a buffer with open() - read() - close(). It may be
+reasonably easy to hook the new systall there and it will probably make
+ps and top slightly faster.
 
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 23 +++++++++++++++++++++++
->   1 file changed, 23 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 4addf6ddd86d..63893779b193 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -1336,6 +1336,29 @@
->   			power-domains = <&spm MT8192_POWER_DOMAIN_VENC>;
->   		};
->   
-> +		vcodec_enc: vcodec@17020000 {
-> +			compatible = "mediatek,mt8192-vcodec-enc";
-> +			reg = <0 0x17020000 0 0x2000>;
-> +			iommus = <&iommu0 M4U_PORT_L7_VENC_RCPU>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_REC>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_BSDMA>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_SV_COMV>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_RD_COMV>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_CUR_LUMA>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_CUR_CHROMA>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_REF_LUMA>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_REF_CHROMA>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_SUB_R_LUMA>,
-> +				 <&iommu0 M4U_PORT_L7_VENC_SUB_W_LUMA>;
-> +			interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			mediatek,scp = <&scp>;
-> +			power-domains = <&spm MT8192_POWER_DOMAIN_VENC>;
-> +			clocks = <&vencsys CLK_VENC_SET1_VENC>;
-> +			clock-names = "venc-set1";
-> +			assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
-> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-> +		};
-> +
->   		camsys: clock-controller@1a000000 {
->   			compatible = "mediatek,mt8192-camsys";
->   			reg = <0 0x1a000000 0 0x1000>;
+-- 
+Cyril Hrubis
+chrubis@suse.cz

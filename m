@@ -2,46 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3603D4E76EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A834E77DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359796AbiCYPV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S1378434AbiCYPek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376371AbiCYPS6 (ORCPT
+        with ESMTP id S1378194AbiCYPZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:18:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6C9DEBAB;
-        Fri, 25 Mar 2022 08:15:08 -0700 (PDT)
+        Fri, 25 Mar 2022 11:25:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2A7ECB37;
+        Fri, 25 Mar 2022 08:19:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 064A560A73;
-        Fri, 25 Mar 2022 15:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C168C340E9;
-        Fri, 25 Mar 2022 15:14:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 402B3B8288D;
+        Fri, 25 Mar 2022 15:19:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 664EEC36AF5;
+        Fri, 25 Mar 2022 15:19:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221298;
-        bh=q4yisZHCankKIcaEBoaOV+QCs/SEnOGaAYxROdpfo3g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jcj7jxuU+qWbyiw+vjDN/DEr0vb9lNqVook5gQvXCIZXLhvi2ZQIZVwizuwt6Z2eG
-         De8O0YtyJhBq+WNRAHNsX6GYBPG+JibqEJA8PgcykTTheeXRxJ+cG1YqR0D9hrecX7
-         vsqIsrsWS1yi6ftxXLFUl8jxd6LzxjsZEBySPtmI=
+        s=korg; t=1648221598;
+        bh=tyJYj+fpxLpvdG2p7A9uxdypB6t8FHWIm7rc35P0H9g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FmVUQLmbfDq7wZURXBgOLBvXsy891qotw8CAXQ4My7RDsOpLwMoAZclUIP8UrRJfQ
+         5pirGVENa32DWJaXWPmS2RozUV/xVBONc84I4HpTvqbm2y//j+p6IWN0IT6RKfDnTR
+         2nbaBboprBwS/faLOSPJ27IUN/F3oLS5hgk2+Gw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hu Jiahui <kirin.say@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 13/37] ALSA: pcm: Fix races among concurrent hw_params and hw_free calls
-Date:   Fri, 25 Mar 2022 16:14:14 +0100
-Message-Id: <20220325150420.313873846@linuxfoundation.org>
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.17 00/39] 5.17.1-rc1 review
+Date:   Fri, 25 Mar 2022 16:14:15 +0100
+Message-Id: <20220325150420.245733653@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
-References: <20220325150419.931802116@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.1-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.17.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.17.1-rc1
+X-KernelTest-Deadline: 2022-03-27T15:04+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -54,179 +63,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+This is the start of the stable review cycle for the 5.17.1 release.
+There are 39 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit 92ee3c60ec9fe64404dc035e7c41277d74aa26cb upstream.
+Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+Anything received after that time might be too late.
 
-Currently we have neither proper check nor protection against the
-concurrent calls of PCM hw_params and hw_free ioctls, which may result
-in a UAF.  Since the existing PCM stream lock can't be used for
-protecting the whole ioctl operations, we need a new mutex to protect
-those racy calls.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.1-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+and the diffstat can be found below.
 
-This patch introduced a new mutex, runtime->buffer_mutex, and applies
-it to both hw_params and hw_free ioctl code paths.  Along with it, the
-both functions are slightly modified (the mmap_count check is moved
-into the state-check block) for code simplicity.
+thanks,
 
-Reported-by: Hu Jiahui <kirin.say@gmail.com>
-Cc: <stable@vger.kernel.org>
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Link: https://lore.kernel.org/r/20220322170720.3529-2-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- include/sound/pcm.h     |    1 
- sound/core/pcm.c        |    2 +
- sound/core/pcm_native.c |   61 ++++++++++++++++++++++++++++++------------------
- 3 files changed, 42 insertions(+), 22 deletions(-)
+greg k-h
 
---- a/include/sound/pcm.h
-+++ b/include/sound/pcm.h
-@@ -398,6 +398,7 @@ struct snd_pcm_runtime {
- 	wait_queue_head_t tsleep;	/* transfer sleep */
- 	struct fasync_struct *fasync;
- 	bool stop_operating;		/* sync_stop will be called */
-+	struct mutex buffer_mutex;	/* protect for buffer changes */
- 
- 	/* -- private section -- */
- 	void *private_data;
---- a/sound/core/pcm.c
-+++ b/sound/core/pcm.c
-@@ -969,6 +969,7 @@ int snd_pcm_attach_substream(struct snd_
- 	init_waitqueue_head(&runtime->tsleep);
- 
- 	runtime->status->state = SNDRV_PCM_STATE_OPEN;
-+	mutex_init(&runtime->buffer_mutex);
- 
- 	substream->runtime = runtime;
- 	substream->private_data = pcm->private_data;
-@@ -1002,6 +1003,7 @@ void snd_pcm_detach_substream(struct snd
- 	} else {
- 		substream->runtime = NULL;
- 	}
-+	mutex_destroy(&runtime->buffer_mutex);
- 	kfree(runtime);
- 	put_pid(substream->pid);
- 	substream->pid = NULL;
---- a/sound/core/pcm_native.c
-+++ b/sound/core/pcm_native.c
-@@ -672,33 +672,40 @@ static int snd_pcm_hw_params_choose(stru
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_SND_PCM_OSS)
-+#define is_oss_stream(substream)	((substream)->oss.oss)
-+#else
-+#define is_oss_stream(substream)	false
-+#endif
-+
- static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
- 			     struct snd_pcm_hw_params *params)
- {
- 	struct snd_pcm_runtime *runtime;
--	int err, usecs;
-+	int err = 0, usecs;
- 	unsigned int bits;
- 	snd_pcm_uframes_t frames;
- 
- 	if (PCM_RUNTIME_CHECK(substream))
- 		return -ENXIO;
- 	runtime = substream->runtime;
-+	mutex_lock(&runtime->buffer_mutex);
- 	snd_pcm_stream_lock_irq(substream);
- 	switch (runtime->status->state) {
- 	case SNDRV_PCM_STATE_OPEN:
- 	case SNDRV_PCM_STATE_SETUP:
- 	case SNDRV_PCM_STATE_PREPARED:
-+		if (!is_oss_stream(substream) &&
-+		    atomic_read(&substream->mmap_count))
-+			err = -EBADFD;
- 		break;
- 	default:
--		snd_pcm_stream_unlock_irq(substream);
--		return -EBADFD;
-+		err = -EBADFD;
-+		break;
- 	}
- 	snd_pcm_stream_unlock_irq(substream);
--#if IS_ENABLED(CONFIG_SND_PCM_OSS)
--	if (!substream->oss.oss)
--#endif
--		if (atomic_read(&substream->mmap_count))
--			return -EBADFD;
-+	if (err)
-+		goto unlock;
- 
- 	snd_pcm_sync_stop(substream, true);
- 
-@@ -786,16 +793,21 @@ static int snd_pcm_hw_params(struct snd_
- 	if (usecs >= 0)
- 		cpu_latency_qos_add_request(&substream->latency_pm_qos_req,
- 					    usecs);
--	return 0;
-+	err = 0;
-  _error:
--	/* hardware might be unusable from this time,
--	   so we force application to retry to set
--	   the correct hardware parameter settings */
--	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
--	if (substream->ops->hw_free != NULL)
--		substream->ops->hw_free(substream);
--	if (substream->managed_buffer_alloc)
--		snd_pcm_lib_free_pages(substream);
-+	if (err) {
-+		/* hardware might be unusable from this time,
-+		 * so we force application to retry to set
-+		 * the correct hardware parameter settings
-+		 */
-+		snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
-+		if (substream->ops->hw_free != NULL)
-+			substream->ops->hw_free(substream);
-+		if (substream->managed_buffer_alloc)
-+			snd_pcm_lib_free_pages(substream);
-+	}
-+ unlock:
-+	mutex_unlock(&runtime->buffer_mutex);
- 	return err;
- }
- 
-@@ -835,26 +847,31 @@ static int do_hw_free(struct snd_pcm_sub
- static int snd_pcm_hw_free(struct snd_pcm_substream *substream)
- {
- 	struct snd_pcm_runtime *runtime;
--	int result;
-+	int result = 0;
- 
- 	if (PCM_RUNTIME_CHECK(substream))
- 		return -ENXIO;
- 	runtime = substream->runtime;
-+	mutex_lock(&runtime->buffer_mutex);
- 	snd_pcm_stream_lock_irq(substream);
- 	switch (runtime->status->state) {
- 	case SNDRV_PCM_STATE_SETUP:
- 	case SNDRV_PCM_STATE_PREPARED:
-+		if (atomic_read(&substream->mmap_count))
-+			result = -EBADFD;
- 		break;
- 	default:
--		snd_pcm_stream_unlock_irq(substream);
--		return -EBADFD;
-+		result = -EBADFD;
-+		break;
- 	}
- 	snd_pcm_stream_unlock_irq(substream);
--	if (atomic_read(&substream->mmap_count))
--		return -EBADFD;
-+	if (result)
-+		goto unlock;
- 	result = do_hw_free(substream);
- 	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
- 	cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
-+ unlock:
-+	mutex_unlock(&runtime->buffer_mutex);
- 	return result;
- }
- 
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.17.1-rc1
+
+Arnd Bergmann <arnd@arndb.de>
+    nds32: fix access_ok() checks in get/put_user
+
+Arnd Bergmann <arnd@arndb.de>
+    m68k: fix access_ok for coldfire
+
+Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+    wcn36xx: Differentiate wcn3660 from wcn3620
+
+James Bottomley <James.Bottomley@HansenPartnership.com>
+    tpm: use try_get_ops() in tpm-space.c
+
+Lino Sanfilippo <LinoSanfilippo@gmx.de>
+    tpm: fix reference counting for struct tpm_chip
+
+Linus Lüssing <ll@simonwunderlich.de>
+    mac80211: fix potential double free on mesh join
+
+Arnd Bergmann <arnd@arndb.de>
+    uaccess: fix integer overflow on access_ok()
+
+Paul E. McKenney <paulmck@kernel.org>
+    rcu: Don't deboost before reporting expedited quiescent state
+
+Ritesh Harjani <riteshh@linux.ibm.com>
+    jbd2: fix use-after-free of transaction_t race
+
+Roberto Sassu <roberto.sassu@huawei.com>
+    drm/virtio: Ensure that objs is not NULL in virtio_gpu_array_put_free()
+
+Brian Norris <briannorris@chromium.org>
+    Revert "ath: add support for special 0x0 regulatory domain"
+
+Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+    Bluetooth: btusb: Use quirk to skip HCI_FLT_CLEAR_ALL on fake CSR controllers
+
+Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+    Bluetooth: hci_sync: Add a new quirk to skip HCI_FLT_CLEAR_ALL
+
+Larry Finger <Larry.Finger@lwfinger.net>
+    Bluetooth: btusb: Add one more Bluetooth part for the Realtek RTL8852AE
+
+Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+    crypto: qat - disable registration of algorithms
+
+Werner Sembach <wse@tuxedocomputers.com>
+    ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
+
+Maximilian Luz <luzmaximilian@gmail.com>
+    ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
+
+Mark Cilissen <mark@yotsuba.nl>
+    ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nf_tables: validate registers coming from userspace.
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nf_tables: initialize registers in nft_do_chain()
+
+Stephane Graber <stgraber@ubuntu.com>
+    drivers: net: xgene: Fix regression in CRC stripping
+
+Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
+    ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
+
+Jonathan Teh <jonathan.teh@outlook.com>
+    ALSA: cmipci: Restore aux vol on suspend/resume
+
+Lars-Peter Clausen <lars@metafoo.de>
+    ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Add stream lock during PCM reset ioctl operations
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent prealloc proc writes
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent read/write and buffer changes
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: pcm: Fix races among concurrent hw_params and hw_free calls
+
+Jason Zheng <jasonzheng2004@gmail.com>
+    ALSA: hda/realtek: Add quirk for ASUS GA402
+
+huangwenhui <huangwenhuia@uniontech.com>
+    ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+
+Tim Crawford <tcrawford@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo NP50PNJ
+
+Tim Crawford <tcrawford@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo NP70PNJ
+
+Reza Jahanbakhshi <reza.jahanbakhshi@gmail.com>
+    ALSA: usb-audio: add mapping for new Corsair Virtuoso SE
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: oss: Fix PCM OSS buffer allocation overflow
+
+Takashi Iwai <tiwai@suse.de>
+    ASoC: sti: Fix deadlock via snd_pcm_stop_xrun() call
+
+Eric Dumazet <edumazet@google.com>
+    llc: fix netdevice reference leaks in llc_ui_bind()
+
+Helmut Grohne <helmut@subdivi.de>
+    Bluetooth: btusb: Add another Realtek 8761BU
+
+Tadeusz Struk <tstruk@gmail.com>
+    tpm: Fix error handling in async work
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                         |  4 +-
+ arch/csky/include/asm/uaccess.h                  |  7 +-
+ arch/hexagon/include/asm/uaccess.h               | 18 ++---
+ arch/m68k/include/asm/uaccess.h                  | 15 ++--
+ arch/microblaze/include/asm/uaccess.h            | 19 +----
+ arch/nds32/include/asm/uaccess.h                 | 22 ++++--
+ arch/x86/kernel/acpi/boot.c                      | 24 ++++++
+ drivers/acpi/battery.c                           | 12 +++
+ drivers/acpi/video_detect.c                      | 75 ++++++++++++++++++
+ drivers/bluetooth/btusb.c                        | 10 ++-
+ drivers/char/tpm/tpm-chip.c                      | 46 ++---------
+ drivers/char/tpm/tpm-dev-common.c                |  8 +-
+ drivers/char/tpm/tpm.h                           |  2 +
+ drivers/char/tpm/tpm2-space.c                    | 73 +++++++++++++++++-
+ drivers/crypto/qat/qat_4xxx/adf_drv.c            |  7 ++
+ drivers/crypto/qat/qat_common/qat_crypto.c       |  7 ++
+ drivers/gpu/drm/virtio/virtgpu_gem.c             |  3 +
+ drivers/net/ethernet/apm/xgene/xgene_enet_main.c | 12 +--
+ drivers/net/wireless/ath/regd.c                  | 10 +--
+ drivers/net/wireless/ath/wcn36xx/main.c          |  3 +
+ drivers/net/wireless/ath/wcn36xx/wcn36xx.h       |  1 +
+ fs/jbd2/transaction.c                            | 41 ++++++----
+ include/net/bluetooth/hci.h                      | 10 +++
+ include/sound/pcm.h                              |  1 +
+ kernel/rcu/tree_plugin.h                         |  8 +-
+ net/bluetooth/hci_sync.c                         | 16 ++++
+ net/llc/af_llc.c                                 |  8 ++
+ net/mac80211/cfg.c                               |  3 -
+ net/netfilter/nf_tables_api.c                    | 22 ++++--
+ net/netfilter/nf_tables_core.c                   |  2 +-
+ sound/core/oss/pcm_oss.c                         | 12 ++-
+ sound/core/oss/pcm_plugin.c                      |  5 +-
+ sound/core/pcm.c                                 |  2 +
+ sound/core/pcm_lib.c                             |  4 +
+ sound/core/pcm_memory.c                          | 11 ++-
+ sound/core/pcm_native.c                          | 97 +++++++++++++++---------
+ sound/pci/ac97/ac97_codec.c                      |  4 +-
+ sound/pci/cmipci.c                               |  3 +-
+ sound/pci/hda/patch_realtek.c                    |  4 +
+ sound/soc/sti/uniperif_player.c                  |  6 +-
+ sound/soc/sti/uniperif_reader.c                  |  2 +-
+ sound/usb/mixer_maps.c                           | 10 +++
+ sound/usb/mixer_quirks.c                         |  7 +-
+ 43 files changed, 475 insertions(+), 181 deletions(-)
 
 

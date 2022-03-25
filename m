@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1ECD4E73C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD524E73C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359176AbiCYMvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
+        id S1359183AbiCYMzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242879AbiCYMvl (ORCPT
+        with ESMTP id S238986AbiCYMzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:51:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F9865820;
-        Fri, 25 Mar 2022 05:50:06 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id BD771210F1;
-        Fri, 25 Mar 2022 12:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648212604; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 25 Mar 2022 08:55:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 290A9931B3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648212847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=A9k72q4nGxTZAjXFEZ3O4X+oiukJzFsmhEYIKREvjY4=;
-        b=Orc9+Oa8vO07QT9vWpudH/xLJRCJV4ACZ1UzXBWsZ075CvmEEv9RklCIYYfU8tpcvGlSfs
-        wQrd7Gr3sORgQ9cdVHZLTMTm7X/EehcTpc8lkeim5gbrdGP7E7qK/Aw61CuJ3rh48/eMjY
-        lopuxx+qN2k8ovkkWyPfVAHjtYQMadg=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        bh=WhhWwWg4FCTKQgANTQEkU3eik+mebp4qX/dh9cAxltc=;
+        b=ivxOqLfL1fB7QrazicwN73nhprJoOxIYrsTW+EyTx5xo7ljOPHUrl75ZHUC2eEB9TgMZFr
+        0oaZZPSwQTKZU4ZY9+tQUk18/emazGhy0YbN8oJFFeR6dU32rWmLsHT7Vft5mDaaPPDW5g
+        NuW5eLQEmAoPxEocWHK0j6xSszWq6Sg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-577-vrMoUzvJN5Kjtvk0lT1KnQ-1; Fri, 25 Mar 2022 08:54:02 -0400
+X-MC-Unique: vrMoUzvJN5Kjtvk0lT1KnQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C50E3A3B82;
-        Fri, 25 Mar 2022 12:50:02 +0000 (UTC)
-Date:   Fri, 25 Mar 2022 13:49:59 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     Chris Down <chris@chrisdown.name>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        ke wang <ke.wang@unisoc.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, cgroups@vger.kernel.org
-Subject: Re: [RFC PATCH] cgroup: introduce proportional protection on memcg
-Message-ID: <Yj26d7eQ2DHXqiE4@dhcp22.suse.cz>
-References: <1648113743-32622-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Yjx/3yi7BfH7wLPz@chrisdown.name>
- <CAGWkznGLO7xpQK7E07dLv7ZfO53nx2fn54tVNw7-b46QnzKwkA@mail.gmail.com>
- <CAGWkznGAmML4XB0t5jOZEoafQrFk=gXvP96Lmgh221Y22bUuyw@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D7DD381D8A9;
+        Fri, 25 Mar 2022 12:53:55 +0000 (UTC)
+Received: from ceranb (unknown [10.40.192.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AE3E42024CD2;
+        Fri, 25 Mar 2022 12:53:39 +0000 (UTC)
+Date:   Fri, 25 Mar 2022 13:53:37 +0100
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     Marcin Szycik <marcin.szycik@linux.intel.com>
+Cc:     netdev@vger.kernel.org, poros@redhat.com, mschmidt@redhat.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Akeem G Abodunrin <akeem.g.abodunrin@intel.com>,
+        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] ice: Fix broken IFF_ALLMULTI handling
+Message-ID: <20220325135337.2091ba08@ceranb>
+In-Reply-To: <eb6538d9-4667-f1f5-492c-e1e113a6da35@linux.intel.com>
+References: <20220321191731.2596414-1-ivecera@redhat.com>
+        <eb6538d9-4667-f1f5-492c-e1e113a6da35@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGWkznGAmML4XB0t5jOZEoafQrFk=gXvP96Lmgh221Y22bUuyw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,31 +73,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 25-03-22 11:08:00, Zhaoyang Huang wrote:
-> On Fri, Mar 25, 2022 at 11:02 AM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
-> >
-> > On Thu, Mar 24, 2022 at 10:27 PM Chris Down <chris@chrisdown.name> wrote:
-> > >
-> > > I'm confused by the aims of this patch. We already have proportional reclaim
-> > > for memory.min and memory.low, and memory.high is already "proportional" by its
-> > > nature to drive memory back down behind the configured threshold.
-> > >
-> > > Could you please be more clear about what you're trying to achieve and in what
-> > > way the existing proportional reclaim mechanisms are insufficient for you?
-> 
-> sorry for the bad formatting of previous reply, resend it in new format
-> 
->  What I am trying to solve is that, the memcg's protection judgment[1]
->  is based on a set of fixed value on current design, while the real
->  scan and reclaim number[2] is based on the proportional min/low on the
->  real memory usage which you mentioned above. Fixed value setting has
->  some constraints as
->  1. It is an experienced value based on observation, which could be inaccurate.
->  2. working load is various from scenarios.
->  3. fixed value from [1] could be against the dynamic cgroup_size in [2].
+On Wed, 23 Mar 2022 21:05:20 +0100
+Marcin Szycik <marcin.szycik@linux.intel.com> wrote:
 
-Could you elaborate some more about those points. I guess providing an
-example how you are using the new interface instead would be helpful.
--- 
-Michal Hocko
-SUSE Labs
+> > @@ -352,29 +359,15 @@ static int ice_vsi_sync_fltr(struct ice_vsi *vsi)
+> >  	/* check for changes in promiscuous modes */
+> >  	if (changed_flags & IFF_ALLMULTI) {
+> >  		if (vsi->current_netdev_flags & IFF_ALLMULTI) {
+> > -			if (vsi->num_vlan > 1)
+> > -				promisc_m = ICE_MCAST_VLAN_PROMISC_BITS;
+> > -			else
+> > -				promisc_m = ICE_MCAST_PROMISC_BITS;  
+> 
+> Because `ice_{set,clear}_promisc()` are now always called with the same second argument (ICE_MCAST_PROMISC_BITS), wouldn't it be better to remove the arg and instead call `ice_fltr_{clear,set}_{vlan,vsi}_vsi_promisc()` with either ICE_MCAST_VLAN_PROMISC_BITS or ICE_MCAST_PROMISC_BITS inside the function?
+
+Because ice_{set,clear}_promisc() then could be used only for set mcast prosmisc mode so I modified them only to automatically insert ICE_PROMISC_VLAN_RX & ICE_PROMISC_VLAN_TX based on vsi->num_vlan value.
+
+Anyway I will fix some objections from Jacob and send v2.
+
+Thanks,
+Ivan
+

@@ -2,141 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498CE4E6B7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 01:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DCB4E6B7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 01:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346370AbiCYAK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 20:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        id S1357037AbiCYAMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 20:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357021AbiCYAKN (ORCPT
+        with ESMTP id S1345328AbiCYAMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 20:10:13 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC43245B6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:08:41 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso10910532pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:08:41 -0700 (PDT)
+        Thu, 24 Mar 2022 20:12:03 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1563460ABF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:10:29 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so6732092pjq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=fbhAasjsFq+DCPOkZ056UEhAK9GneQ3ssLZTa7vJBEY=;
-        b=WBjZU6Ujv4ue++AV8YveRa9jaY7zVtS5fTEy9wBFOzoSXFXQL57wkYaMwyfuT1L+Ni
-         NjPPjW1f3JN/F9XwrDmNXdxHQRRYFKJ8O+dR8ZVJWBmxmB2GLLDVIAShsJ6yNdUSmNkh
-         kzihAv4xPCKD1Lbd28mH3XxHlIsbRZxAPJ+lFN9lXJvElNPTY/o8iJ+eulmAAMhDLpFE
-         vgIGQjWnrHBbo1FR/+j7xuO89WAufPDsS7SX0BWfCRddsz4ONVlbsj8V1GYeI7gYX2je
-         2drgX8beDy0dHTUBvFWdM18sZruWCT/qCDJO9eZW1a6/g+r+Ko90ndYbxrCZANwwo/TP
-         QqPw==
+        bh=rMGZP29VwwjXomMCTf7RGAwUINqnAGDMVSSvjpH9al4=;
+        b=Vym1Xh3qa0ZprnVR1uru2iEVUaw7NyQFjEhcWVWVhDdqaJkuRO2fyK0FbIYLRPH5V+
+         01Cyp2smpovhZd/g8431KXzr9m849gVd/6ZEcitOZq4L6uUuro+ZLE9jg/kuZUK0ejWQ
+         D8pvy+kK1fJAxzZBpXoG+RKQY1bmRBiIKnAdU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fbhAasjsFq+DCPOkZ056UEhAK9GneQ3ssLZTa7vJBEY=;
-        b=sNX3X2aCOUQDlGht83qMAlmGMQi+B97jYv7j0ZigvtMrljxRwguK24qX31IYJ9tw2z
-         AJJSDbR47wHFd7tQ+yjK4SPZJEEqqdqLKIHFI70L5MKBsTIPnHPgJV5dAZt6uLCtwHes
-         MVmU/+m7uPYWiNzzE1ybmKUAKd10TtQrtbSur7H2kD7M2rgd1sKGsiXF3PzM4wHOolal
-         h5W+mdaCr19PnotUoyP9wsibkSz4oLbwwig+16ZFusKBerXWuc+TpsPsqIs8CL71DMtU
-         PwiFf5d7qa9f5+PH5nn8wl03n/bmzg9I3Wjg7KcXFXpTf2oV+8AlE7JyXLLHXl+GNFk8
-         nceg==
-X-Gm-Message-State: AOAM531GLxCh1nhLxSFLPE8Ivf01sAwv//+d+JlcRhyvqBliY39XMa6+
-        rUTVb3pNXMIhcSl+2tqqZt4sMg==
-X-Google-Smtp-Source: ABdhPJzCEXXkG7e5jj//np460GZUktYUf+qmz7V1ij2woHUf+GpcmcX2Io2+wjHWaOVYD+6eptKZIA==
-X-Received: by 2002:a17:902:f70f:b0:153:ebfe:21b3 with SMTP id h15-20020a170902f70f00b00153ebfe21b3mr8572494plo.119.1648166920531;
-        Thu, 24 Mar 2022 17:08:40 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q21-20020a63e215000000b00373efe2cbcbsm3501410pgh.80.2022.03.24.17.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 17:08:39 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 00:08:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     SU Hang <darcy.sh@antgroup.com>
-Cc:     kvm@vger.kernel.org,
-        =?utf-8?B?6LWW5rGf5bGx?= <jiangshan.ljs@antgroup.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] KVM: VMX:  replace 0x180 with EPT_VIOLATION_*
- definition
-Message-ID: <Yj0IBGTu45TZkqGi@google.com>
-References: <20220321094203.109546-1-darcy.sh@antgroup.com>
+        bh=rMGZP29VwwjXomMCTf7RGAwUINqnAGDMVSSvjpH9al4=;
+        b=zpnCYZRZY6up4bdGMKWDrj02NNxTowRC+/AQpjGb3yrqcAOVHNCKXJUwbPhS1ifj7O
+         1NNA6cqftXisd17YtBo1hOkp6zQ2U9tk5RSqFSp6ihm19K38TQwm/yHEq3I5jKN9tYHU
+         UfFV0bhxIlZo7wmLhcxvGF5jZCrp1IRBK3vDWDBOPTpHS/i0OdloeGq+L7yYEwDLPguu
+         JCOBMYiklLnWD/y4Y87JtzJftXpt4DNtgQhIo8c9WWi2LT3i4Vvv5aWLdKcxypm6b5av
+         oLQOenlxhprqw7lmwnwak2GgBfHTiTrajceMjzl0Vj37tbQxQjl9v65JiZmGsMAfAdG6
+         OD+A==
+X-Gm-Message-State: AOAM533B2GHKMEfifWwyNvkq50lvxhkolnFHg3i1qiODcREjfsAUInCP
+        ixzUzyJF4YkTktxf6H13eOcrWw==
+X-Google-Smtp-Source: ABdhPJx7bPQzmPejtWLkEa1qC2B68NiDAIf/YgPQNk+wTLMjw+cO/5oZp/bsBm97IUBY3CFXffARng==
+X-Received: by 2002:a17:90a:6849:b0:1c7:5640:9c0d with SMTP id e9-20020a17090a684900b001c756409c0dmr9252762pjm.188.1648167028665;
+        Thu, 24 Mar 2022 17:10:28 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:690f:642:3ebe:c89d])
+        by smtp.gmail.com with UTF8SMTPSA id t2-20020a63a602000000b0038062a0bc6fsm3423678pge.67.2022.03.24.17.10.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 17:10:28 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 17:10:27 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Fix sar1_irq_odl node name
+Message-ID: <Yj0IcyYn2hvNeBig@google.com>
+References: <20220324223331.876199-1-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220321094203.109546-1-darcy.sh@antgroup.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220324223331.876199-1-swboyd@chromium.org>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022, SU Hang wrote:
-> Using self-expressing macro definition EPT_VIOLATION_GVA_VALIDATION
-> and EPT_VIOLATION_GVA_TRANSLATED instead of 0x180
-> in FNAME(walk_addr_generic)().
+On Thu, Mar 24, 2022 at 03:33:31PM -0700, Stephen Boyd wrote:
+> This node should be named sar1-irq-odl, not sar0-irq-odl. Otherwise
+> we'll overwrite the settings for sar0 with what is intended for sar1,
+> leading to probe failures for sar1 that are quite confusing.
 > 
-> Signed-off-by: SU Hang <darcy.sh@antgroup.com>
-> ---
->  arch/x86/include/asm/vmx.h     | 2 ++
->  arch/x86/kvm/mmu/paging_tmpl.h | 3 ++-
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-> index 0ffaa3156a4e..a6789fe9b56e 100644
-> --- a/arch/x86/include/asm/vmx.h
-> +++ b/arch/x86/include/asm/vmx.h
-> @@ -546,6 +546,7 @@ enum vm_entry_failure_code {
->  #define EPT_VIOLATION_READABLE_BIT	3
->  #define EPT_VIOLATION_WRITABLE_BIT	4
->  #define EPT_VIOLATION_EXECUTABLE_BIT	5
-> +#define EPT_VIOLATION_GVA_VALIDATION_BIT 7
+> Fixes: 116f7cc43d28 ("arm64: dts: qcom: sc7280: Add herobrine-r1")
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-VALIDATION isn't quite right, EPT_VIOLATION_GVA_IS_VALID is more appropriate.
-VALIDATION makes it sound like the CPU has does some form of validation on the GVA.
-
->  #define EPT_VIOLATION_GVA_TRANSLATED_BIT 8
->  #define EPT_VIOLATION_ACC_READ		(1 << EPT_VIOLATION_ACC_READ_BIT)
->  #define EPT_VIOLATION_ACC_WRITE		(1 << EPT_VIOLATION_ACC_WRITE_BIT)
-> @@ -553,6 +554,7 @@ enum vm_entry_failure_code {
->  #define EPT_VIOLATION_READABLE		(1 << EPT_VIOLATION_READABLE_BIT)
->  #define EPT_VIOLATION_WRITABLE		(1 << EPT_VIOLATION_WRITABLE_BIT)
->  #define EPT_VIOLATION_EXECUTABLE	(1 << EPT_VIOLATION_EXECUTABLE_BIT)
-> +#define EPT_VIOLATION_GVA_VALIDATION	(1 << EPT_VIOLATION_GVA_VALIDATION_BIT)
->  #define EPT_VIOLATION_GVA_TRANSLATED	(1 << EPT_VIOLATION_GVA_TRANSLATED_BIT)
->  
->  /*
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 95367f5ca998..7853c7ef13a1 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -523,7 +523,8 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
->  	 * The other bits are set to 0.
->  	 */
->  	if (!(errcode & PFERR_RSVD_MASK)) {
-> -		vcpu->arch.exit_qualification &= 0x180;
-> +		vcpu->arch.exit_qualification &= (EPT_VIOLATION_GVA_VALIDATION
-> +			| EPT_VIOLATION_GVA_TRANSLATED);
-
-Please put the | before the newline, and align the stuff inside the parantheses.
-That makes it must easier to see what the code is doing at a glance.
-
-		vcpu->arch.exit_qualification &= (EPT_VIOLATION_GVA_IS_VALID |
-						  EPT_VIOLATION_GVA_TRANSLATED);
-
->  		if (write_fault)
->  			vcpu->arch.exit_qualification |= EPT_VIOLATION_ACC_WRITE;
->  		if (user_fault)
-> -- 
-> 2.32.0.3.g01195cf9f
-> 
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Tested-by: Matthias Kaehlcke <mka@chromium.org>

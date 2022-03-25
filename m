@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83904E758B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ADD4E759D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359438AbiCYPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
+        id S1359457AbiCYPDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242549AbiCYPBR (ORCPT
+        with ESMTP id S244579AbiCYPD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:01:17 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B78A91AF4;
-        Fri, 25 Mar 2022 07:59:42 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id m3so13810345lfj.11;
-        Fri, 25 Mar 2022 07:59:42 -0700 (PDT)
+        Fri, 25 Mar 2022 11:03:29 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC4A954B8;
+        Fri, 25 Mar 2022 08:01:54 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id b24so9546587edu.10;
+        Fri, 25 Mar 2022 08:01:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GfDVRQr++4pgL3CtgOqQ8G/2FYhyqP1wPtfah4T1XN0=;
-        b=N+/xry+CPssM5sYgR3wuCCIAkukseromAZ2CyTgQDB1W4NG9rZt2S+wu0PeIMTznOL
-         +qYHb2kpENf5FxkQ57Hzwa1T8NfUH13NWLqOsjmI+aR2ijUHx/mxPCdL9l5Fha6B3n0t
-         6vIZ8MRScC33vsyxAHAq57PzZh4FY3tzJARXUKgADXZYBoeIrYw+Kb5oEJGkxF1jbceO
-         Iv/bhRRwS/LR4CUducORXCFNBDGFtQD0QszoFlYyKaKztps3HDeknZ68OAQKGVr8lpNy
-         oDcdyQ0aKU4J3a5Ao9fG6Ysognx8YFsQVeAt8o01pwJPXWVy1hfobJHkrPSft+YyFrh+
-         ibIg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ANMaiNS+tsFPctCqYM7KG7s3uQ7H+7+M41RZf3QmwQw=;
+        b=Zb8YJdLbsmUBPPOglHtnDhCB7mEIlgPslESZhBkCjEeHxAAE1DnFP3KFn/UgPgebDm
+         XaBJbuhCiLkLxG9Rtn1DsE5KnwMx5DeQABb1hV2JqGa0dOadKyVG6IOj4Cb8QsCuLGmP
+         zGa65rlUzK+0gSpiR7COruu8RSHG9a33cLKgX6ihrwehY92naYONPCJHucQwWDv33N8Z
+         OaVi+TMeKwrslLWvRbFipT3j5El/BC6fMY34G2OiYt0iTR9YUXT/rC63H/+yWscmGYqk
+         Eg3Yzxo8+qFWNDt4X+l0CzBn82tPPMgFVj+D7RbXCEz9EezX7KolyPQ0tfM+q7TOSYF9
+         eDVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GfDVRQr++4pgL3CtgOqQ8G/2FYhyqP1wPtfah4T1XN0=;
-        b=2vyYwRUXsY4yKrVjiNu4bkcJPo+Y2KSwU2W+wb0cqc3p/unH6y6oryqnDYMoUWQ8Hk
-         QH+cb4l9F8Us7xGr7KrJ/D3ukx8H9rU4VGWhq9VY6HUZf9VZa9r8wq4fmcF59ZD0OYce
-         JP70mII1IVk4fPBr88GOxPOUeAKxMD69Yqcbwh2bznnAhuLrNVkF85fN5rkcB1Sg6DUo
-         QBFE2LFXft+fH0IMFL/Zp3G43kma/UhY736OlJQ3aM120a5IO0ezfYTKeF/15YZvFrIX
-         9s5s8bPLiy62EvMVGah1vAzFYOkRm3BB0t0WFSWW2l3QsnQcmXanW3uZSSASMw85opod
-         cJKw==
-X-Gm-Message-State: AOAM5307eTe4Un2O18GX51e6BRwnl3/9Q9fzCnOt42P0lXDciGMN6e51
-        bn/WKEo+cSxXP96kCzXledmHqc8/JSrJPw7VH3o=
-X-Google-Smtp-Source: ABdhPJzkdzeTQI21afwaqcQ2TyleAfqBQ22j0/ebxlfj/UXC5RJ8Xza0CX09E/SaH9hROl1HEOoWdWb2qKSiO2cqrF8=
-X-Received: by 2002:a05:6512:e9a:b0:44a:3491:863a with SMTP id
- bi26-20020a0565120e9a00b0044a3491863amr8525691lfb.133.1648220380893; Fri, 25
- Mar 2022 07:59:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ANMaiNS+tsFPctCqYM7KG7s3uQ7H+7+M41RZf3QmwQw=;
+        b=YCJI+R3PJWJyGLqwdZ/gzvCSlHr+8WITBpnezdWGmt0ZaA40+Zm72ieANHkSoR1Fbj
+         GLla0M39Z6rcGxV8ZjrvZ2/dRc4MpRgp9VpfclLLB1o0AZida6bGyZk8kTrKIJw8JNrn
+         xg8fZ8LEHOXtRU+9Tng3fDkiDCiFSVyJ8SdWIyy2gIJA2hmHdWP2yApGxcnPPSiuue/K
+         lUcyOuLq4j1VwV/amg/k3zbYxULseGxpE30hVX9CFa6Z5jMGI49I7NLYYfabxxwc0wVG
+         oilaFoqpg4XPrFJcg9wrhqToWzfCVAPEobku+bMB385zRMee7sO1x69Lzq/aMMcmiL5z
+         3x3w==
+X-Gm-Message-State: AOAM531WHrWVoGdL5BkzoAQKSD0NUFGmtJ7WsTSEbK95IMt09wFWaMH5
+        x5u1OF7/S7jciqLdslK+bfQ=
+X-Google-Smtp-Source: ABdhPJy6yOYyRZlGnUG37FK3ih1/UHdYyPKxA95erpwf4j37GXfNckTUyllGt0WI2IMCepVF43gazw==
+X-Received: by 2002:aa7:cb93:0:b0:415:d57a:4603 with SMTP id r19-20020aa7cb93000000b00415d57a4603mr13503112edt.62.1648220513124;
+        Fri, 25 Mar 2022 08:01:53 -0700 (PDT)
+Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id w14-20020a170906d20e00b006cee22553f7sm2455714ejz.213.2022.03.25.08.01.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 08:01:52 -0700 (PDT)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: clock: convert rockchip,rk3188-cru.txt to YAML
+Date:   Fri, 25 Mar 2022 16:01:45 +0100
+Message-Id: <20220325150146.18638-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <1648170401-6351-1-git-send-email-u0084500@gmail.com>
- <1648170401-6351-3-git-send-email-u0084500@gmail.com> <d2b431f8-9197-4a42-4ee2-4e771e20e0aa@kernel.org>
- <CADiBU39RGQj1-+yK18mZf3MR78KACKqb2kAxkCFKGXKpJ6Nqxw@mail.gmail.com> <e4a15ceb-c013-96be-48d1-e65267400463@kernel.org>
-In-Reply-To: <e4a15ceb-c013-96be-48d1-e65267400463@kernel.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Fri, 25 Mar 2022 22:59:29 +0800
-Message-ID: <CADiBU3-gwsh5v1NLUYr_ovXwpUxQqgR61f-Jpc3G-zHs_yV4uw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] regulator: rt5759: Add support for Richtek RT5759
- DCDC converter
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -74,159 +70,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2022=E5=B9=B43=E6=9C=8825=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:47=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> On 25/03/2022 15:10, ChiYuan Huang wrote:
-> > Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2022=E5=B9=B43=E6=9C=88=
-25=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:17=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> >>
-> >> On 25/03/2022 02:06, cy_huang wrote:
-> >>> From: ChiYuan Huang <cy_huang@richtek.com>
-> >>>
-> >>> Add support for Richtek RT5759 high-performance DCDC converter.
-> >>>
-> >>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> >>> ---
-> >>>  drivers/regulator/Kconfig            |  10 +
-> >>>  drivers/regulator/Makefile           |   1 +
-> >>>  drivers/regulator/rt5759-regulator.c | 372 +++++++++++++++++++++++++=
-++++++++++
-> >>>  3 files changed, 383 insertions(+)
-> >>>  create mode 100644 drivers/regulator/rt5759-regulator.c
-> >>>
-> >>
-> >> (...)
-> >>
-> >>> +static int rt5759_init_device_property(struct rt5759_priv *priv)
-> >>> +{
-> >>> +     unsigned int val =3D 0;
-> >>> +     bool wdt_enable;
-> >>> +
-> >>> +     /*
-> >>> +      * Only RT5759A support external watchdog input
-> >>> +      */
-> >>> +     if (priv->chip_type !=3D CHIP_TYPE_RT5759A)
-> >>> +             return 0;
-> >>> +
-> >>> +     wdt_enable =3D device_property_read_bool(priv->dev,
-> >>> +                                            "richtek,watchdog-enable=
-");
-> >>> +     if (wdt_enable)
-> >>
-> >> No need for separate wdt_enable variable.
-> >>
-> > Ack in next.
-> >>> +             val =3D RT5759A_WDTEN_MASK;
-> >>> +
-> >>> +     return regmap_update_bits(priv->regmap, RT5759A_REG_WDTEN,
-> >>> +                               RT5759A_WDTEN_MASK, val);
-> >>> +}
-> >>> +
-> >>> +static int rt5759_manufacturer_check(struct rt5759_priv *priv)
-> >>> +{
-> >>> +     unsigned int vendor;
-> >>> +     int ret;
-> >>> +
-> >>> +     ret =3D regmap_read(priv->regmap, RT5759_REG_VENDORINFO, &vendo=
-r);
-> >>> +     if (ret)
-> >>> +             return ret;
-> >>> +
-> >>> +     if (vendor !=3D RT5759_MANUFACTURER_ID) {
-> >>> +             dev_err(priv->dev, "vendor info not correct (%d)\n", ve=
-ndor);
-> >>> +             return -EINVAL;
-> >>> +     }
-> >>> +
-> >>> +     return 0;
-> >>> +}
-> >>> +
-> >>> +static bool rt5759_is_accessible_reg(struct device *dev, unsigned in=
-t reg)
-> >>> +{
-> >>> +     struct rt5759_priv *priv =3D dev_get_drvdata(dev);
-> >>> +
-> >>> +     if (reg <=3D RT5759_REG_DCDCSET)
-> >>> +             return true;
-> >>> +
-> >>> +     if (priv->chip_type =3D=3D CHIP_TYPE_RT5759A && reg =3D=3D RT57=
-59A_REG_WDTEN)
-> >>> +             return true;
-> >>> +
-> >>> +     return false;
-> >>> +}
-> >>> +
-> >>> +static const struct regmap_config rt5759_regmap_config =3D {
-> >>> +     .reg_bits =3D 8,
-> >>> +     .val_bits =3D 8,
-> >>> +     .max_register =3D RT5759A_REG_WDTEN,
-> >>> +     .readable_reg =3D rt5759_is_accessible_reg,
-> >>> +     .writeable_reg =3D rt5759_is_accessible_reg,
-> >>> +};
-> >>> +
-> >>> +static int rt5759_probe(struct i2c_client *i2c)
-> >>> +{
-> >>> +     struct rt5759_priv *priv;
-> >>> +     int ret;
-> >>> +
-> >>> +     priv =3D devm_kzalloc(&i2c->dev, sizeof(*priv), GFP_KERNEL);
-> >>> +     if (!priv)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     priv->dev =3D &i2c->dev;
-> >>> +     priv->chip_type =3D (unsigned long)of_device_get_match_data(&i2=
-c->dev);
-> >>> +     i2c_set_clientdata(i2c, priv);
-> >>> +
-> >>> +     priv->regmap =3D devm_regmap_init_i2c(i2c, &rt5759_regmap_confi=
-g);
-> >>> +     if (IS_ERR(priv->regmap)) {
-> >>> +             ret =3D PTR_ERR(priv->regmap);
-> >>> +             dev_err(&i2c->dev, "Failed to allocate regmap (%d)\n", =
-ret);
-> >>> +             return ret;
-> >>> +     }
-> >>> +
-> >>> +     ret =3D rt5759_manufacturer_check(priv);
-> >>> +     if (ret) {
-> >>> +             dev_err(&i2c->dev, "Failed to check device (%d)\n", ret=
-);
-> >>> +             return ret;
-> >>> +     }
-> >>> +
-> >>> +     ret =3D rt5759_init_device_property(priv);
-> >>> +     if (ret) {
-> >>> +             dev_err(&i2c->dev, "Failed to init device (%d)\n", ret)=
-;
-> >>> +             return ret;
-> >>> +     }
-> >>> +
-> >>> +     return rt5759_regulator_register(priv);
-> >>> +}
-> >>> +
-> >>> +static const struct of_device_id __maybe_unused rt5759_device_table[=
-] =3D {
-> >>
-> >> I don't think this can be __maybe_unused. It is always referenced via
-> >> of_match_table, isn't it?
-> >>
-> > I think it can declared as '__maybe_unused'.
-> > If 'of_device_id' is unused, then in probe stage,
-> > 'of_device_get_match_data' will return NULL.
->
-> But your of_device_id cannot be unused. It is always referenced.
->
-I'm not sure, but your assumption is based on 'CONFIG_OF', right?
-Only if 'CONFIG_OF' is not defined, then it'll be really unused.
+Current dts files with RK3188/RK3066 'cru' nodes are manually verified.
+In order to automate this process rockchip,rk3188-cru.txt has to be
+converted to YAML.
 
-> > priv->chip_type will get zero as the return value. And it will be
-> > treated as rt5759, not rt5759a.
-> > The difference between these two are only watchdog function supported o=
-r not.
->
->
-> Best regards,
-> Krzysztof
+Changed:
+  Add properties to fix notifications by clocks.yaml for example:
+    clocks
+    clock-names
+
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+
+Changed V2:
+  change clocks maxItems
+  add clock-names
+  use clock-controller node name
+  remove assigned-xxx
+---
+ .../bindings/clock/rockchip,rk3188-cru.txt    | 61 ---------------
+ .../bindings/clock/rockchip,rk3188-cru.yaml   | 76 +++++++++++++++++++
+ 2 files changed, 76 insertions(+), 61 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.txt
+deleted file mode 100644
+index 7f368530a..000000000
+--- a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.txt
++++ /dev/null
+@@ -1,61 +0,0 @@
+-* Rockchip RK3188/RK3066 Clock and Reset Unit
+-
+-The RK3188/RK3066 clock controller generates and supplies clock to various
+-controllers within the SoC and also implements a reset controller for SoC
+-peripherals.
+-
+-Required Properties:
+-
+-- compatible: should be "rockchip,rk3188-cru", "rockchip,rk3188a-cru" or
+-			"rockchip,rk3066a-cru"
+-- reg: physical base address of the controller and length of memory mapped
+-  region.
+-- #clock-cells: should be 1.
+-- #reset-cells: should be 1.
+-
+-Optional Properties:
+-
+-- rockchip,grf: phandle to the syscon managing the "general register files"
+-  If missing pll rates are not changeable, due to the missing pll lock status.
+-
+-Each clock is assigned an identifier and client nodes can use this identifier
+-to specify the clock which they consume. All available clocks are defined as
+-preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
+-dt-bindings/clock/rk3066-cru.h headers and can be used in device tree sources.
+-Similar macros exist for the reset sources in these files.
+-
+-External clocks:
+-
+-There are several clocks that are generated outside the SoC. It is expected
+-that they are defined using standard clock bindings with following
+-clock-output-names:
+- - "xin24m" - crystal input - required,
+- - "xin32k" - rtc clock - optional,
+- - "xin27m" - 27mhz crystal input on rk3066 - optional,
+- - "ext_hsadc" - external HSADC clock - optional,
+- - "ext_cif0" - external camera clock - optional,
+- - "ext_rmii" - external RMII clock - optional,
+- - "ext_jtag" - externalJTAG clock - optional
+-
+-Example: Clock controller node:
+-
+-	cru: cru@20000000 {
+-		compatible = "rockchip,rk3188-cru";
+-		reg = <0x20000000 0x1000>;
+-		rockchip,grf = <&grf>;
+-
+-		#clock-cells = <1>;
+-		#reset-cells = <1>;
+-	};
+-
+-Example: UART controller node that consumes the clock generated by the clock
+-  controller:
+-
+-	uart0: serial@10124000 {
+-		compatible = "snps,dw-apb-uart";
+-		reg = <0x10124000 0x400>;
+-		interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+-		reg-shift = <2>;
+-		reg-io-width = <1>;
+-		clocks = <&cru SCLK_UART0>;
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+new file mode 100644
+index 000000000..8d2fe7982
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/rockchip,rk3188-cru.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip RK3188/RK3066 Clock and Reset Unit (CRU)
++
++maintainers:
++  - Heiko Stuebner <heiko@sntech.de>
++
++description: |
++  The RK3188/RK3066 clock controller generates and supplies clocks to various
++  controllers within the SoC and also implements a reset controller for SoC
++  peripherals.
++  Each clock is assigned an identifier and client nodes can use this identifier
++  to specify the clock which they consume. All available clocks are defined as
++  preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
++  dt-bindings/clock/rk3066-cru.h headers and can be used in device tree sources.
++  Similar macros exist for the reset sources in these files.
++  There are several clocks that are generated outside the SoC. It is expected
++  that they are defined using standard clock bindings with following
++  clock-output-names:
++    - "xin24m"    - crystal input                 - required
++    - "xin32k"    - RTC clock                     - optional
++    - "xin27m"    - 27mhz crystal input on RK3066 - optional
++    - "ext_hsadc" - external HSADC clock          - optional
++    - "ext_cif0"  - external camera clock         - optional
++    - "ext_rmii"  - external RMII clock           - optional
++    - "ext_jtag"  - external JTAG clock           - optional
++
++properties:
++  compatible:
++    enum:
++      - rockchip,rk3066a-cru
++      - rockchip,rk3188-cru
++      - rockchip,rk3188a-cru
++
++  reg:
++    maxItems: 1
++
++  "#clock-cells":
++    const: 1
++
++  "#reset-cells":
++    const: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: xin24m
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to the syscon managing the "general register files" (GRF),
++      if missing pll rates are not changeable, due to the missing pll lock status.
++
++required:
++  - compatible
++  - reg
++  - "#clock-cells"
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    cru: clock-controller@20000000 {
++      compatible = "rockchip,rk3188-cru";
++      reg = <0x20000000 0x1000>;
++      rockchip,grf = <&grf>;
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++    };
+-- 
+2.20.1
+

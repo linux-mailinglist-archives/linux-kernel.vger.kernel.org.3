@@ -2,77 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1124E73A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 923244E73A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346253AbiCYMjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        id S1359136AbiCYMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359136AbiCYMi7 (ORCPT
+        with ESMTP id S1357600AbiCYMji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:38:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C69D0A89;
-        Fri, 25 Mar 2022 05:37:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99614B8282E;
-        Fri, 25 Mar 2022 12:37:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE87C340E9;
-        Fri, 25 Mar 2022 12:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648211843;
-        bh=aXm+/EMiPGTBOXkMG0o+LiBNARi0puGc3dM/fhCENmI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=digXl3nsnjDGSqWj6NnS6B8sWVQiVorkAFfMwLaFKXPKcBs19SILZwcL0i0h7NyXq
-         dCunTb1FW5T2O+CUmcu8k9FQV7MB3XRrBR70oZL7jh85KVGSzgoEpKpDeQdPZ10R25
-         HRoMUyyVY1kHTOjllhdaQNwOuBbSxnZLzsAz7QcMN/X5zC8vXqx76Y3RZ39eWKgLUh
-         Y6swYLzPaIAPRCor7Gt67B9WgOpo3X9ypIvpw3mqSZdCcDa4WIGR73OSWzBgQThFx4
-         cJP8gVwYdQw6Myso0T1AJn7VFak2kTUqXM7kllG77CxMgMpRtQP5g78Hus+OdJQTY2
-         pjtEwI4jbDjGA==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     miquel.raynal@bootlin.com, robh+dt@kernel.org
-Cc:     richard@nod.at, krzk@kernel.org, vigneshr@ti.com, kishon@ti.com,
-        nm@ti.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH v2 3/3] mtd: rawnand: omap_elm: Add compatible for AM64 ELM
-Date:   Fri, 25 Mar 2022 14:37:07 +0200
-Message-Id: <20220325123707.22020-4-rogerq@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220325123707.22020-1-rogerq@kernel.org>
-References: <20220325123707.22020-1-rogerq@kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 25 Mar 2022 08:39:38 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816B22AD9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:38:02 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id pv16so15162425ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=tfRCxH9/uoNXtWgRWX0fdM2M20zvzSKi6ZQUaCI8/Tw=;
+        b=moZNf82k4PSvCr9JvQF0xyYIXTQ+Mg7iw0IhkDLsNH5P4XX1npD+w81xQ00GaiEzC+
+         1vIo6IJ1nIRX0jh8/fOvYlXU5nAHK7EaBS57eVuzlQnU3Kz4LRykgxXtApWrbrBas5yk
+         m9eIKf1dIdKtwLOsHUvLu7ne7jzHnlxjR0sg4d2UKUK73cgpCJxYsj8FEQxSIZRMxzHB
+         C5VMpAw41BYmz6psWz+cF5itMoq9TJ6zNmWC32Lu4dd3WeD8yubRZFpTKul95gS+gJYV
+         oeA5ytPxEy8QwKeRYii24dheEmnIlyCfrUaih3NW3qXGE3kpey7USWnwiaJp5pxRfWD0
+         1APA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tfRCxH9/uoNXtWgRWX0fdM2M20zvzSKi6ZQUaCI8/Tw=;
+        b=nNo58AIy7aukjkeZzvXp5IyyEXc4tmxh2XN9hFY4cBJrg9ilNc9ktg3LUOLFHN1w9O
+         W+0tD8zWv5hES4cDjI7Ttfsi98Qrfxh9DlSd6O7I+9PcS63/FUxNiB5/tz/m09roe7jG
+         hQL/+MY6itjKxWeRpkRUod0vHI6VvX/9ivIaZfxsmhgi33sKbiRQXZ1pbeMpwUKuFZq6
+         5SByRTl0omUBQ11kbUmTrS7K/CBNHCvSKecPeQw7AhtJAhLMwXN4VM2Bp3koZqATn8BP
+         XsqNJeRIBzEsFUlOeS71CmOu8+axS2KLd8Ug+4Q+3kPTjd0Vrv/L5OiOBnKkX76t70Ja
+         R1LA==
+X-Gm-Message-State: AOAM531yLyfMBgxIsv6Liv3jdT9JPjwj5W/WkLxXvnByfWOUfBkZyEbZ
+        bk0ZcODC6901OkuFPswdC/A=
+X-Google-Smtp-Source: ABdhPJxgPKfxl4xOHxp27VuyTs/QRe8Q5kwMcIBQO1+3mFrvBxcCkah3EqqXiaGGnNY7wo62YGewXA==
+X-Received: by 2002:a17:907:7da6:b0:6e0:5b7c:e3f9 with SMTP id oz38-20020a1709077da600b006e05b7ce3f9mr11872382ejc.239.1648211881003;
+        Fri, 25 Mar 2022 05:38:01 -0700 (PDT)
+Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id 27-20020a17090600db00b006df6b34d9b8sm2270193eji.211.2022.03.25.05.37.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 05:37:59 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Muchun Song <songmuchun@bytedance.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     syzbot <syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] general protection fault in list_lru_add
+Date:   Fri, 25 Mar 2022 13:37:57 +0100
+Message-ID: <5818154.lOV4Wx5bFT@leap>
+In-Reply-To: <12984828.uLZWGnKmhe@leap>
+References: <CAMZfGtUr6V5pTrPhZukD2_KbB7BLPoKvF6H63HP4pykY36Ou9A@mail.gmail.com> <CAHk-=whxaFX4nqnE-SLHTGKyqejvbrhYx5sagcxWd+UWCMf8dg@mail.gmail.com> <12984828.uLZWGnKmhe@leap>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AM64 SoC has the Error Locator Module. Add compatible id for it.
+On venerd=C3=AC 25 marzo 2022 06:47:36 CET Fabio M. De Francesco wrote:
+> On gioved=C3=AC 24 marzo 2022 20:45:00 CET Linus Torvalds wrote:
+> > On Thu, Mar 24, 2022 at 12:41 PM syzbot
+> > <syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com> wrote:
+> > >
+> > > syzbot has tested the proposed patch and the reproducer did not trigg=
+er any issue:
+> >=20
+> > Heh, well that's unfortunate.
+> >=20
+> > I think the issue is that it triggered a new BUG() that didn't match
+> > the previous NULL pointer dereference, so it thinks things are
+> > "fixed".
+> >=20
+> >              Linus
+> >=20
+> > --=20
+> > You received this message because you are subscribed to the Google Grou=
+ps "syzkaller-bugs" group.
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> > To view this discussion on the web visit https://groups.google.com/d/ms=
+gid/syzkaller-bugs/CAHk-%3DwhxaFX4nqnE-SLHTGKyqejvbrhYx5sagcxWd%2BUWCMf8dg%=
+40mail.gmail.com.
+> >=20
+>=20
+> No, not at all, Linus!
+>=20
+> Unless I'm still sleeping with wide open eyes (it's 6.30 AM here), you ar=
+e misunderstanding=20
+> this message from Syzbot :)
 
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/mtd/nand/raw/omap_elm.c | 1 +
- 1 file changed, 1 insertion(+)
+Oh sorry for the noise.
 
-diff --git a/drivers/mtd/nand/raw/omap_elm.c b/drivers/mtd/nand/raw/omap_elm.c
-index db105d9b560c..aa7f49c3f372 100644
---- a/drivers/mtd/nand/raw/omap_elm.c
-+++ b/drivers/mtd/nand/raw/omap_elm.c
-@@ -550,6 +550,7 @@ static SIMPLE_DEV_PM_OPS(elm_pm_ops, elm_suspend, elm_resume);
- #ifdef CONFIG_OF
- static const struct of_device_id elm_of_match[] = {
- 	{ .compatible = "ti,am3352-elm" },
-+	{ .compatible = "ti,am64-elm" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, elm_of_match);
--- 
-2.17.1
+I hadn't read his changes, so I didn't know that they were a no-op patch th=
+at wasn't meant
+to fix the reported issue :(
+
+Regards,
+
+=46abio
+
+
 

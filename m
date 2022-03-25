@@ -2,448 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5D94E7144
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720534E714A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358896AbiCYKdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 06:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
+        id S234269AbiCYKdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 06:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358878AbiCYKcy (ORCPT
+        with ESMTP id S1358907AbiCYKcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 06:32:54 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3ADC6EEE;
-        Fri, 25 Mar 2022 03:31:20 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: shreeya)
-        with ESMTPSA id 5D1341F460ED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648204279;
-        bh=gvP9+LPVXjUEXJQxkzNCynJwZ6ay+Y6rU7nkdF/RRMQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i1sH9ufPyYQ7uBbyFkk3M/FdRAC02x+J7EPultN66+9OClJzIwIiVskn2eGmGuzLa
-         OixPjPt6hDuogsCtB18E+/dv+qn4r4xbYLL15k/myIROpZvvfeplq9OLxSGbpuBFuq
-         18P2AmX3+xiY0boii9rrdubpp3c32XCw/XxxCHq66VSw9drYZ3Vlk6sH3m47qijR/F
-         8+wyxuoYBD8smqAnDrd8KV0rqJT1sJZMOPiR4IpLSxNhbBq98SwOALOhWcvtkGbLrM
-         BB582Rd8qZm0rH0F2WWX0P5hCUZX3KdAFH7QkyqVzaq+KhAWY4sNxzEqNiK8YpGPsL
-         VHJixWSRDRDow==
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        Zhigang.Shi@liteon.com, krisman@collabora.com
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        alvaro.soliverez@collabora.com,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Subject: [PATCH 3/3] iio: light: Add support for ltrf216a sensor
-Date:   Fri, 25 Mar 2022 16:00:14 +0530
-Message-Id: <20220325103014.6597-4-shreeya.patel@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220325103014.6597-1-shreeya.patel@collabora.com>
-References: <20220325103014.6597-1-shreeya.patel@collabora.com>
+        Fri, 25 Mar 2022 06:32:55 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A22CA0D5;
+        Fri, 25 Mar 2022 03:31:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 315BB210DD;
+        Fri, 25 Mar 2022 10:31:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648204280; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h6jomU3pNhNfJYGm9LatF9aqOCiUlgqkCJJ0ZhBuK44=;
+        b=OsMPUua2iforFSm/UO/9WA9UJuZ+xXzZyx7U7SbDGrfPWJ19fd6uUDvHS5HlFiizH8bmb/
+        p2dURGMdjGTgK315FM0aQYhh88yWszyYJUdLrvzWW2gJttjV5HsA9O+13YgiZIiNGIXf9t
+        fn7HnjdhscuOqORQ1tnVhDPzk3vTItA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B7E901332D;
+        Fri, 25 Mar 2022 10:31:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /5V/K/eZPWLFHgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 25 Mar 2022 10:31:19 +0000
+Date:   Fri, 25 Mar 2022 11:31:18 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Tejun Heo <tj@kernel.org>, Chris Down <chris@chrisdown.name>
+Subject: Re: [RFC PATCH] mm: memcg: Do not count memory.low reclaim if it
+ does not happen
+Message-ID: <20220325103118.GC2828@blackbody.suse.cz>
+References: <20220324095157.GA16685@blackbody.suse.cz>
+ <5049EBC3-5BAE-4509-BA63-1F4A7D913517@linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5049EBC3-5BAE-4509-BA63-1F4A7D913517@linux.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhigang Shi <Zhigang.Shi@liteon.com>
+On Thu, Mar 24, 2022 at 11:17:14AM -0700, Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> Ok, so it’s not really about the implementation details of the reclaim
+> mechanism (I mean rounding up to the batch size etc),
 
-Add initial support for ltrf216a ambient light sensor.
+Actually, that was what I deemed more serious first.
+It's the point 2 of RFCness:
 
-Datasheet :-
-https://gitlab.steamos.cloud/shreeya/iio/-/blob/main/LTR-F216A-QT.pdf
+| 2) The observed behavior slightly impacts distribution of parent's memory.low.
+|    Constructed example is a passive protected workload in s1 and active in s2
+|    (active ~ counteracts the reclaim with allocations). It could strip
+|    protection from s1 one by one (one:=SWAP_CLUSTER_MAX/2^sc.priority).
+|    That may be considered both wrong (s1 should have been more protected) or
+|    correct s2 deserves protection due to its activity.
+|    I don't have (didn't collect) data for this, so I think just masking the
+|    false events is sufficient (or independent).
+
+> Idk, I don’t have a strong argument against this change (except that
+> it changes the existing behavior), but I also don’t see why such
+> events are harmful. Do you mind elaborating a bit more?
+
+So I've collected some demo data now.
+
+	systemd-run \
+	        -u precious.service --slice=test-protected.slice \
+	        -p MemoryLow=50M \
+	        /root/memeater 50 # allocates 50M anon, doesn't use it
+	
+	systemd-run \
+	        -u victim.service --slice=test-protected.slice \
+	        -p MemoryLow=0M \
+	        /root/memeater -m 50 50 # allocates 50M anon, uses it
+	
+	echo "Started workloads"
+	
+	systemctl set-property --runtime test.slice MemoryMax=200M
+	systemctl set-property --runtime test-protected.slice MemoryLow=50M
+	
+	sleep 5
+	
+	systemd-run \
+	        -u pressure.service --slice=test.slice \
+	        -p MemorySwapMax=0M \ # to push test-protected.slice to swap
+	        /root/memeater -m 170 170
+	
+	sleep 5
+	systemd-cgtop -b -1 -m test.slice
+
+Result with memory_recursiveprot
+
+> Control Group                                                        Tasks   %CPU   Memory  Input/s Output/s
+> test.slice                                                               3      -   199.9M        -        -
+> test.slice/pressure.service                                              1      -   170.5M        -        -
+> test.slice/test-protected.slice                                          2      -    29.4M        -        -
+> test.slice/test-protected.slice/victim.service                           1      -    29.1M        -        -
+> test.slice/test-protected.slice/precious.service                         1      -   292.0K        -        -
+
+Result without memory_recursiveprot
+
+> Control Group                                                        Tasks   %CPU   Memory  Input/s Output/s
+> test.slice                                                               3      -   199.8M        -        -
+> test.slice/pressure.service                                              1      -   170.5M        -        -
+> test.slice/test-protected.slice                                          2      -    29.3M        -        -
+> test.slice/test-protected.slice/precious.service                         1      -    28.7M        -        -
+> test.slice/test-protected.slice/victim.service                           1      -   560.0K        -        -
+
+(kernel 5.17.0, systemd 249.10)
+
+So with this result, I'd say the event reporting is an independent change
+(admiteddly, thanks to the current implementation (not the proposal of
+mine) I noticed this issue).
+/me scratches head, let me review my other approaches...
 
 
-Co-developed-by: Shreeya Patel <shreeya.patel@collabora.com>
-Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-Signed-off-by: Zhigang Shi <Zhigang.Shi@liteon.com>
----
- drivers/iio/light/Kconfig    |  10 ++
- drivers/iio/light/Makefile   |   1 +
- drivers/iio/light/ltrf216a.c | 334 +++++++++++++++++++++++++++++++++++
- 3 files changed, 345 insertions(+)
- create mode 100644 drivers/iio/light/ltrf216a.c
-
-diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
-index a62c7b4b8678..08fa383a8ca7 100644
---- a/drivers/iio/light/Kconfig
-+++ b/drivers/iio/light/Kconfig
-@@ -318,6 +318,16 @@ config SENSORS_LM3533
- 	  changes. The ALS-control output values can be set per zone for the
- 	  three current output channels.
- 
-+config LTRF216A
-+        tristate "Liteon LTRF216A Light Sensor"
-+        depends on I2C
-+        help
-+          If you say Y or M here, you get support for Liteon LTRF216A
-+          Ambient Light Sensor.
-+
-+          If built as a dynamically linked module, it will be called
-+          ltrf216a.
-+
- config LTR501
- 	tristate "LTR-501ALS-01 light sensor"
- 	depends on I2C
-diff --git a/drivers/iio/light/Makefile b/drivers/iio/light/Makefile
-index d10912faf964..8fa91b9fe5b6 100644
---- a/drivers/iio/light/Makefile
-+++ b/drivers/iio/light/Makefile
-@@ -30,6 +30,7 @@ obj-$(CONFIG_SENSORS_ISL29028)	+= isl29028.o
- obj-$(CONFIG_ISL29125)		+= isl29125.o
- obj-$(CONFIG_JSA1212)		+= jsa1212.o
- obj-$(CONFIG_SENSORS_LM3533)	+= lm3533-als.o
-+obj-$(CONFIG_LTRF216A)		+= ltrf216a.o
- obj-$(CONFIG_LTR501)		+= ltr501.o
- obj-$(CONFIG_LV0104CS)		+= lv0104cs.o
- obj-$(CONFIG_MAX44000)		+= max44000.o
-diff --git a/drivers/iio/light/ltrf216a.c b/drivers/iio/light/ltrf216a.c
-new file mode 100644
-index 000000000000..99295358a7fe
---- /dev/null
-+++ b/drivers/iio/light/ltrf216a.c
-@@ -0,0 +1,334 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * LTRF216A Ambient Light Sensor
-+ *
-+ * Copyright (C) 2021 Lite-On Technology Corp (Singapore)
-+ * Author: Shi Zhigang <Zhigang.Shi@liteon.com>
-+ *
-+ * IIO driver for LTRF216A (7-bit I2C slave address 0x53).
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/i2c.h>
-+#include <linux/mutex.h>
-+#include <linux/iio/iio.h>
-+#include <linux/iio/sysfs.h>
-+#include <linux/pm.h>
-+#include <linux/delay.h>
-+
-+#define LTRF216A_DRV_NAME "ltrf216a"
-+
-+#define LTRF216A_MAIN_CTRL		0x00
-+
-+#define LTRF216A_ALS_MEAS_RATE		0x04
-+#define LTRF216A_MAIN_STATUS		0x07
-+#define LTRF216A_CLEAR_DATA_0		0x0A
-+
-+#define LTRF216A_ALS_DATA_0		0x0D
-+
-+static const int int_time_mapping[] = { 400000, 200000, 100000 };
-+
-+struct ltrf216a_data {
-+	struct i2c_client *client;
-+	u32			int_time;
-+	u8			int_time_fac;
-+	u8			als_gain_fac;
-+	struct mutex mutex;
-+};
-+
-+/* open air. need to update based on TP transmission rate. */
-+#define WIN_FAC	1
-+
-+static const struct iio_chan_spec ltrf216a_channels[] = {
-+	{
-+		.type = IIO_LIGHT,
-+		.info_mask_separate =
-+			BIT(IIO_CHAN_INFO_PROCESSED) |
-+			BIT(IIO_CHAN_INFO_INT_TIME),
-+	}
-+};
-+
-+static IIO_CONST_ATTR_INT_TIME_AVAIL("0.1 0.2 0.4");
-+
-+static struct attribute *ltrf216a_attributes[] = {
-+	&iio_const_attr_integration_time_available.dev_attr.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group ltrf216a_attribute_group = {
-+	.attrs = ltrf216a_attributes,
-+};
-+
-+static int ltrf216a_init(struct iio_dev *indio_dev)
-+{
-+	int ret;
-+	struct ltrf216a_data *data = iio_priv(indio_dev);
-+
-+	ret = i2c_smbus_read_byte_data(data->client, LTRF216A_MAIN_CTRL);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error reading LTRF216A_MAIN_CTRL\n");
-+		return ret;
-+	}
-+
-+	/* enable sensor */
-+	ret |= 0x02;
-+	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, ret);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ltrf216a_disable(struct iio_dev *indio_dev)
-+{
-+	int ret;
-+	struct ltrf216a_data *data = iio_priv(indio_dev);
-+
-+	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, 0);
-+	if (ret < 0)
-+		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
-+
-+	return ret;
-+}
-+
-+static int ltrf216a_set_it_time(struct ltrf216a_data *data, int itime)
-+{
-+	int i, ret, index = -1;
-+	u8 reg;
-+
-+	for (i = 0; i < ARRAY_SIZE(int_time_mapping); i++) {
-+		if (int_time_mapping[i] == itime) {
-+			index = i;
-+			break;
-+		}
-+	}
-+	/* Make sure integration time index is valid */
-+	if (index < 0)
-+		return -EINVAL;
-+
-+	if (index == 0) {
-+		reg = 0x03;
-+		data->int_time_fac = 4;
-+	} else if (index == 1) {
-+		reg = 0x13;
-+		data->int_time_fac = 2;
-+	} else {
-+		reg = (index << 4) | 0x02;
-+		data->int_time_fac = 1;
-+	}
-+
-+	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_ALS_MEAS_RATE, reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	data->int_time = itime;
-+
-+	return 0;
-+}
-+
-+static int ltrf216a_get_it_time(struct ltrf216a_data *data, int *val, int *val2)
-+{
-+	*val = 0;
-+	*val2 = data->int_time;
-+
-+	return IIO_VAL_INT_PLUS_MICRO;
-+}
-+
-+static int ltrf216a_read_data(struct ltrf216a_data *data, u8 addr)
-+{
-+	int ret;
-+	int tries = 25;
-+	int val_0, val_1, val_2;
-+
-+	while (tries--) {
-+		ret = i2c_smbus_read_byte_data(data->client, LTRF216A_MAIN_STATUS);
-+		if (ret < 0)
-+			return ret;
-+		if (ret & 0x08)
-+			break;
-+		msleep(20);
-+	}
-+
-+	val_0 = i2c_smbus_read_byte_data(data->client, addr);
-+	val_1 = i2c_smbus_read_byte_data(data->client, addr + 1);
-+	val_2 = i2c_smbus_read_byte_data(data->client, addr + 2);
-+	ret = (val_2 << 16) + (val_1 << 8) + val_0;
-+
-+	return ret;
-+}
-+
-+static int ltrf216a_get_lux(struct ltrf216a_data *data)
-+{
-+	int greendata, cleardata, lux;
-+
-+	greendata = ltrf216a_read_data(data, LTRF216A_ALS_DATA_0);
-+	cleardata = ltrf216a_read_data(data, LTRF216A_CLEAR_DATA_0);
-+
-+	if (greendata < 0 || cleardata < 0)
-+		lux = 0;
-+	else
-+		lux = greendata * 8 * WIN_FAC / data->als_gain_fac / data->int_time_fac / 10;
-+
-+	return lux;
-+}
-+
-+static int ltrf216a_read_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan, int *val,
-+			     int *val2, long mask)
-+{
-+	int ret;
-+	struct ltrf216a_data *data = iio_priv(indio_dev);
-+
-+	mutex_lock(&data->mutex);
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_PROCESSED:
-+		ret = ltrf216a_get_lux(data);
-+		*val = ret;
-+		ret = IIO_VAL_INT;
-+		break;
-+	case IIO_CHAN_INFO_INT_TIME:
-+		ret = ltrf216a_get_it_time(data, val, val2);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	mutex_unlock(&data->mutex);
-+
-+	return ret;
-+}
-+
-+static int ltrf216a_write_raw(struct iio_dev *indio_dev,
-+			      struct iio_chan_spec const *chan, int val,
-+			      int val2, long mask)
-+{
-+	struct ltrf216a_data *data = iio_priv(indio_dev);
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_INT_TIME:
-+		if (val != 0)
-+			return -EINVAL;
-+		mutex_lock(&data->mutex);
-+		ret = ltrf216a_set_it_time(data, val2);
-+		mutex_unlock(&data->mutex);
-+		return ret;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct iio_info ltrf216a_info = {
-+	.read_raw	= ltrf216a_read_raw,
-+	.write_raw	= ltrf216a_write_raw,
-+	.attrs		= &ltrf216a_attribute_group,
-+};
-+
-+static int ltrf216a_probe(struct i2c_client *client,
-+			  const struct i2c_device_id *id)
-+{
-+	struct ltrf216a_data *data;
-+	struct iio_dev *indio_dev;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	data = iio_priv(indio_dev);
-+	i2c_set_clientdata(client, indio_dev);
-+	data->client = client;
-+
-+	mutex_init(&data->mutex);
-+
-+	indio_dev->info = &ltrf216a_info;
-+	indio_dev->name = LTRF216A_DRV_NAME;
-+	indio_dev->channels = ltrf216a_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(ltrf216a_channels);
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+
-+	ret = ltrf216a_init(indio_dev);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "ltrf216a chip init failed\n");
-+		return ret;
-+	}
-+	data->int_time = 100000;
-+	data->int_time_fac = 1;
-+	data->als_gain_fac = 3;
-+
-+	ret = iio_device_register(indio_dev);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "failed to register iio dev\n");
-+		goto err_init;
-+	}
-+
-+	return 0;
-+err_init:
-+	ltrf216a_disable(indio_dev);
-+	return ret;
-+}
-+
-+static int ltrf216a_remove(struct i2c_client *client)
-+{
-+	struct iio_dev *indio_dev = i2c_get_clientdata(client);
-+
-+	iio_device_unregister(indio_dev);
-+	ltrf216a_disable(indio_dev);
-+
-+	return 0;
-+}
-+
-+#ifdef CONFIG_PM_SLEEP
-+static int ltrf216a_suspend(struct device *dev)
-+{
-+	struct iio_dev *indio_dev = i2c_get_clientdata(to_i2c_client(dev));
-+
-+	return ltrf216a_disable(indio_dev);
-+}
-+
-+static int ltrf216a_resume(struct device *dev)
-+{
-+	struct iio_dev *indio_dev = i2c_get_clientdata(to_i2c_client(dev));
-+
-+	return ltrf216a_init(indio_dev);
-+}
-+
-+static SIMPLE_DEV_PM_OPS(ltrf216a_pm_ops, ltrf216a_suspend, ltrf216a_resume);
-+#define LTRF216A_PM_OPS (&ltrf216a_pm_ops)
-+#else
-+#define LTRF216A_PM_OPS NULL
-+#endif
-+
-+static const struct i2c_device_id ltrf216a_id[] = {
-+	{ LTRF216A_DRV_NAME, 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, ltrf216a_id);
-+
-+static const struct of_device_id ltrf216a_of_match[] = {
-+	{ .compatible = "ltr,ltrf216a", },
-+	{ .compatible = "liteon,ltrf216a", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, ltrf216a_of_match);
-+
-+static struct i2c_driver ltrf216a_driver = {
-+	.driver = {
-+		.name = LTRF216A_DRV_NAME,
-+		.pm = LTRF216A_PM_OPS,
-+		.of_match_table = ltrf216a_of_match,
-+	},
-+	.probe		= ltrf216a_probe,
-+	.remove		= ltrf216a_remove,
-+	.id_table	= ltrf216a_id,
-+};
-+
-+module_i2c_driver(ltrf216a_driver);
-+
-+MODULE_AUTHOR("Shi Zhigang <Zhigang.Shi@liteon.com>");
-+MODULE_DESCRIPTION("LTRF216A ambient light sensor driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.30.2
-
+Michal

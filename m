@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9E84E766C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC994E7610
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376372AbiCYPMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
+        id S1359605AbiCYPK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359819AbiCYPKN (ORCPT
+        with ESMTP id S243762AbiCYPIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:10:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B8DDA09A;
-        Fri, 25 Mar 2022 08:07:53 -0700 (PDT)
+        Fri, 25 Mar 2022 11:08:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C47AD95F6;
+        Fri, 25 Mar 2022 08:06:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78159B828FF;
-        Fri, 25 Mar 2022 15:07:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D64AFC340E9;
-        Fri, 25 Mar 2022 15:07:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A66361C14;
+        Fri, 25 Mar 2022 15:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4926CC340F1;
+        Fri, 25 Mar 2022 15:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220871;
-        bh=bOkJy+mMiLrQcWXHlmJVF/rdsYha53wcln9168+rGTw=;
+        s=korg; t=1648220815;
+        bh=SAzahGRsp/aWnQUtCiuOO8baNIeP1ZA4S3ucmJkdu5Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ktBmv4rS1qIt3366RuBR5GqpowpF/YPir9Si8YG6ipjBLiSJPh9s9NkWbCA9DpUyf
-         TaXzB214bnUGcIDBwJUSiAq6cWsfNtfey5BVRdOc1ttOL4EHhsA+p4lYDZJKHgkDLj
-         GT0L1HK47jWwXSh7XbwpR6whyKWCMVsEl1ovDukI=
+        b=Sqy8qeNH83aRCH+RwMyPYE1oC3J+Z2owug3Cg5yrKAgxV4+3UtjpknO/uV05ZY6RX
+         O144QpLvkMHECxnyDnL9uwZYLdAX6wpmX7GFRAr1mw2/6D298xed9qWADpapzB/gAq
+         yaTqJwdyp1uALXvoJXAhmtmYxsMos8W+DNcx/MXU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Palmer <daniel@0x0f.com>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.4 17/29] ASoC: sti: Fix deadlock via snd_pcm_stop_xrun() call
+        stable@vger.kernel.org,
+        Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>,
+        =?UTF-8?q?Linus=20L=C3=BCssing?= <ll@simonwunderlich.de>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 4.19 19/20] mac80211: fix potential double free on mesh join
 Date:   Fri, 25 Mar 2022 16:04:57 +0100
-Message-Id: <20220325150419.082981181@linuxfoundation.org>
+Message-Id: <20220325150417.565959864@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
+References: <20220325150417.010265747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,74 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Linus Lüssing <ll@simonwunderlich.de>
 
-commit 455c5653f50e10b4f460ef24e99f0044fbe3401c upstream.
+commit 4a2d4496e15ea5bb5c8e83b94ca8ca7fb045e7d3 upstream.
 
-This is essentially a revert of the commit dc865fb9e7c2 ("ASoC: sti:
-Use snd_pcm_stop_xrun() helper"), which converted the manual
-snd_pcm_stop() calls with snd_pcm_stop_xrun().
+While commit 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving
+mesh") fixed a memory leak on mesh leave / teardown it introduced a
+potential memory corruption caused by a double free when rejoining the
+mesh:
 
-The commit above introduced a deadlock as snd_pcm_stop_xrun() itself
-takes the PCM stream lock while the caller already holds it.  Since
-the conversion was done only for consistency reason and the open-call
-with snd_pcm_stop() to the XRUN state is a correct usage, let's revert
-the commit back as the fix.
+  ieee80211_leave_mesh()
+  -> kfree(sdata->u.mesh.ie);
+  ...
+  ieee80211_join_mesh()
+  -> copy_mesh_setup()
+     -> old_ie = ifmsh->ie;
+     -> kfree(old_ie);
 
-Fixes: dc865fb9e7c2 ("ASoC: sti: Use snd_pcm_stop_xrun() helper")
-Reported-by: Daniel Palmer <daniel@0x0f.com>
-Cc: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220315091319.3351522-1-daniel@0x0f.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Link: https://lore.kernel.org/r/20220315164158.19804-1-tiwai@suse.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
+This double free / kernel panics can be reproduced by using wpa_supplicant
+with an encrypted mesh (if set up without encryption via "iw" then
+ifmsh->ie is always NULL, which avoids this issue). And then calling:
+
+  $ iw dev mesh0 mesh leave
+  $ iw dev mesh0 mesh join my-mesh
+
+Note that typically these commands are not used / working when using
+wpa_supplicant. And it seems that wpa_supplicant or wpa_cli are going
+through a NETDEV_DOWN/NETDEV_UP cycle between a mesh leave and mesh join
+where the NETDEV_UP resets the mesh.ie to NULL via a memcpy of
+default_mesh_setup in cfg80211_netdev_notifier_call, which then avoids
+the memory corruption, too.
+
+The issue was first observed in an application which was not using
+wpa_supplicant but "Senf" instead, which implements its own calls to
+nl80211.
+
+Fixing the issue by removing the kfree()'ing of the mesh IE in the mesh
+join function and leaving it solely up to the mesh leave to free the
+mesh IE.
+
+Cc: stable@vger.kernel.org
+Fixes: 6a01afcf8468 ("mac80211: mesh: Free ie data when leaving mesh")
+Reported-by: Matthias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
+Signed-off-by: Linus Lüssing <ll@simonwunderlich.de>
+Tested-by: Mathias Kretschmer <mathias.kretschmer@fit.fraunhofer.de>
+Link: https://lore.kernel.org/r/20220310183513.28589-1-linus.luessing@c0d3.blue
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sti/uniperif_player.c |    6 +++---
- sound/soc/sti/uniperif_reader.c |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ net/mac80211/cfg.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/sound/soc/sti/uniperif_player.c
-+++ b/sound/soc/sti/uniperif_player.c
-@@ -91,7 +91,7 @@ static irqreturn_t uni_player_irq_handle
- 			SET_UNIPERIF_ITM_BCLR_FIFO_ERROR(player);
+--- a/net/mac80211/cfg.c
++++ b/net/mac80211/cfg.c
+@@ -1823,13 +1823,11 @@ static int copy_mesh_setup(struct ieee80
+ 		const struct mesh_setup *setup)
+ {
+ 	u8 *new_ie;
+-	const u8 *old_ie;
+ 	struct ieee80211_sub_if_data *sdata = container_of(ifmsh,
+ 					struct ieee80211_sub_if_data, u.mesh);
  
- 			/* Stop the player */
--			snd_pcm_stop_xrun(player->substream);
-+			snd_pcm_stop(player->substream, SNDRV_PCM_STATE_XRUN);
- 		}
+ 	/* allocate information elements */
+ 	new_ie = NULL;
+-	old_ie = ifmsh->ie;
  
- 		ret = IRQ_HANDLED;
-@@ -105,7 +105,7 @@ static irqreturn_t uni_player_irq_handle
- 		SET_UNIPERIF_ITM_BCLR_DMA_ERROR(player);
- 
- 		/* Stop the player */
--		snd_pcm_stop_xrun(player->substream);
-+		snd_pcm_stop(player->substream, SNDRV_PCM_STATE_XRUN);
- 
- 		ret = IRQ_HANDLED;
+ 	if (setup->ie_len) {
+ 		new_ie = kmemdup(setup->ie, setup->ie_len,
+@@ -1839,7 +1837,6 @@ static int copy_mesh_setup(struct ieee80
  	}
-@@ -138,7 +138,7 @@ static irqreturn_t uni_player_irq_handle
- 		dev_err(player->dev, "Underflow recovery failed\n");
+ 	ifmsh->ie_len = setup->ie_len;
+ 	ifmsh->ie = new_ie;
+-	kfree(old_ie);
  
- 		/* Stop the player */
--		snd_pcm_stop_xrun(player->substream);
-+		snd_pcm_stop(player->substream, SNDRV_PCM_STATE_XRUN);
- 
- 		ret = IRQ_HANDLED;
- 	}
---- a/sound/soc/sti/uniperif_reader.c
-+++ b/sound/soc/sti/uniperif_reader.c
-@@ -65,7 +65,7 @@ static irqreturn_t uni_reader_irq_handle
- 	if (unlikely(status & UNIPERIF_ITS_FIFO_ERROR_MASK(reader))) {
- 		dev_err(reader->dev, "FIFO error detected\n");
- 
--		snd_pcm_stop_xrun(reader->substream);
-+		snd_pcm_stop(reader->substream, SNDRV_PCM_STATE_XRUN);
- 
- 		ret = IRQ_HANDLED;
- 	}
+ 	/* now copy the rest of the setup parameters */
+ 	ifmsh->mesh_id_len = setup->mesh_id_len;
 
 

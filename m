@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582E94E7660
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0B04E76DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377333AbiCYPOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S1376287AbiCYPVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359651AbiCYPL1 (ORCPT
+        with ESMTP id S1376383AbiCYPMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:11:27 -0400
+        Fri, 25 Mar 2022 11:12:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDAD6006E;
-        Fri, 25 Mar 2022 08:08:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5721100;
+        Fri, 25 Mar 2022 08:09:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FA9661C0D;
-        Fri, 25 Mar 2022 15:08:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9106FC340E9;
-        Fri, 25 Mar 2022 15:08:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EB7E61C57;
+        Fri, 25 Mar 2022 15:09:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B4AC340E9;
+        Fri, 25 Mar 2022 15:09:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220917;
-        bh=RuC+1rqugxNuew2WMFrSfKADvorEHXodJr0P7fQnOpU=;
+        s=korg; t=1648220974;
+        bh=S655+/TOkgBq2b+fnss+9CSPFKLgZVxJuqz9Z4XrAR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K2Y62n+G+iGEMJs/mIapaAQXB6jw1HMrr1ARHNg6Iec+rCCmGYZOCPuDqaKofr3Pp
-         +0uzb3rjH0y6bo5d5lTWfiJ5d40sLzfBK9G9LB2gHq2VApo8g6b1sPll6eIhoraBL4
-         6LrmEkz7Rv6RNHrzFzQdVGylDQZIb9mjq4btKXs8=
+        b=KmyS7f4QinrT+BLW6v6U2rXCiVmNokWehassMK6I5XLY0ycXRAr2KR/jO2hgeEdvx
+         spA94ApfvYRRKOYKRNPoEKjZE6Zh1HbecTqV4S8Xm7vK1hTbRfYcqKLbdp6AMRTnlT
+         vkgGjNftGOSSZbTzbRDMPhm+3wtBRDZTCjvfj49k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.4 25/29] crypto: qat - disable registration of algorithms
-Date:   Fri, 25 Mar 2022 16:05:05 +0100
-Message-Id: <20220325150419.309973315@linuxfoundation.org>
+        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 22/38] ALSA: pcm: Fix races among concurrent prealloc proc writes
+Date:   Fri, 25 Mar 2022 16:05:06 +0100
+Message-Id: <20220325150420.390954234@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
+References: <20220325150419.757836392@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 8893d27ffcaf6ec6267038a177cb87bcde4dd3de upstream.
+commit 69534c48ba8ce552ce383b3dfdb271ffe51820c3 upstream.
 
-The implementations of aead and skcipher in the QAT driver do not
-support properly requests with the CRYPTO_TFM_REQ_MAY_BACKLOG flag set.
-If the HW queue is full, the driver returns -EBUSY but does not enqueue
-the request.
-This can result in applications like dm-crypt waiting indefinitely for a
-completion of a request that was never submitted to the hardware.
+We have no protection against concurrent PCM buffer preallocation
+changes via proc files, and it may potentially lead to UAF or some
+weird problem.  This patch applies the PCM open_mutex to the proc
+write operation for avoiding the racy proc writes and the PCM stream
+open (and further operations).
 
-To avoid this problem, disable the registration of all crypto algorithms
-in the QAT driver by setting the number of crypto instances to 0 at
-configuration time.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220322170720.3529-5-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/qat/qat_common/qat_crypto.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ sound/core/pcm_memory.c |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/drivers/crypto/qat/qat_common/qat_crypto.c
-+++ b/drivers/crypto/qat/qat_common/qat_crypto.c
-@@ -170,6 +170,14 @@ int qat_crypto_dev_config(struct adf_acc
- 		goto err;
- 	if (adf_cfg_section_add(accel_dev, "Accelerator0"))
- 		goto err;
-+
-+	/* Temporarily set the number of crypto instances to zero to avoid
-+	 * registering the crypto algorithms.
-+	 * This will be removed when the algorithms will support the
-+	 * CRYPTO_TFM_REQ_MAY_BACKLOG flag
-+	 */
-+	instances = 0;
-+
- 	for (i = 0; i < instances; i++) {
- 		val = i;
- 		snprintf(key, sizeof(key), ADF_CY "%d" ADF_RING_BANK_NUM, i);
+--- a/sound/core/pcm_memory.c
++++ b/sound/core/pcm_memory.c
+@@ -164,19 +164,20 @@ static void snd_pcm_lib_preallocate_proc
+ 	size_t size;
+ 	struct snd_dma_buffer new_dmab;
+ 
++	mutex_lock(&substream->pcm->open_mutex);
+ 	if (substream->runtime) {
+ 		buffer->error = -EBUSY;
+-		return;
++		goto unlock;
+ 	}
+ 	if (!snd_info_get_line(buffer, line, sizeof(line))) {
+ 		snd_info_get_str(str, line, sizeof(str));
+ 		size = simple_strtoul(str, NULL, 10) * 1024;
+ 		if ((size != 0 && size < 8192) || size > substream->dma_max) {
+ 			buffer->error = -EINVAL;
+-			return;
++			goto unlock;
+ 		}
+ 		if (substream->dma_buffer.bytes == size)
+-			return;
++			goto unlock;
+ 		memset(&new_dmab, 0, sizeof(new_dmab));
+ 		new_dmab.dev = substream->dma_buffer.dev;
+ 		if (size > 0) {
+@@ -185,7 +186,7 @@ static void snd_pcm_lib_preallocate_proc
+ 					   substream->dma_buffer.dev.dev,
+ 					   size, &new_dmab) < 0) {
+ 				buffer->error = -ENOMEM;
+-				return;
++				goto unlock;
+ 			}
+ 			substream->buffer_bytes_max = size;
+ 		} else {
+@@ -197,6 +198,8 @@ static void snd_pcm_lib_preallocate_proc
+ 	} else {
+ 		buffer->error = -EINVAL;
+ 	}
++ unlock:
++	mutex_unlock(&substream->pcm->open_mutex);
+ }
+ 
+ static inline void preallocate_info_init(struct snd_pcm_substream *substream)
 
 

@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471854E794C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2BF4E7954
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376592AbiCYQwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S1355088AbiCYQxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377002AbiCYQwB (ORCPT
+        with ESMTP id S241225AbiCYQxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:52:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF51DC12D9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648227025;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tEjq/KiPSXWL3MlMEJXSJIy04cv7r0dUWkKt5cvZ2AM=;
-        b=Q0WcPgGtVyIb26freMtM8HpSfPBhxea9YZiWrOSUUtEMaLAIx5k+UAjsw4uZG/PIXNkDGe
-        trC8kj/4+J0TO85wjiFj2DzC6TdnuAdmcLOF6c8uhbgLJ0Snx+1o5zM+HV7dgZFSlaincC
-        nQphILrC1ULFsf8z88fYO2vF5R25vuw=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-Fcw94tinPSiUbTqCFHsBTw-1; Fri, 25 Mar 2022 12:50:18 -0400
-X-MC-Unique: Fcw94tinPSiUbTqCFHsBTw-1
-Received: by mail-ed1-f69.google.com with SMTP id u13-20020a50a40d000000b00419028f7f96so5244392edb.21
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:50:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tEjq/KiPSXWL3MlMEJXSJIy04cv7r0dUWkKt5cvZ2AM=;
-        b=RImQ5tA3hHNgL/u2m/XbUDbpYaA+54wrq5GFcqYGYqfMzSXyA0+uFnumAflEd04+Xr
-         EI/Q9KLeIc/CFrWg9INYVj618GCXSv6b/1TxaR+FDyMgq1JGWMWSYYjuJbR+sG+hS+VX
-         Yr2Q5cwBifDH2kxIvtWq9+57nTB61a4cdg+VH40cMlVDkcLr05dgiJcxcOVO3nHnY+q4
-         DH2Xd4ia4XGtZYGYHq3J+tBpzviCJ7pq7H/J/d427dDiV08DAUB8WVrrzQelS7qi/ILR
-         b3ZNF8lMOnwAgVD5KsUPRgmB5gOzWtO0YZUjkQ1RQnQGlX0OwWLF+8AM5s7KUCT1ojNK
-         MNLQ==
-X-Gm-Message-State: AOAM531C3cLhaoJQkBatt8h13xS6hLG6xvTMszWUeInqCOpvdrC5Canf
-        b9PY3lVJ1i5BVO5DOW78goxBf5TAWUzG/eRobyzxJ8AKmYXIcMkuwusER3rqEJwwa5YC0guGt9v
-        RFgr8GZ0io16eGYIQZ+uh4cdS
-X-Received: by 2002:aa7:cc96:0:b0:410:b9ac:241 with SMTP id p22-20020aa7cc96000000b00410b9ac0241mr14368991edt.246.1648227017509;
-        Fri, 25 Mar 2022 09:50:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxtI7/PWnIA3ZNXxg4nfFvrZQa1n7rQsKtbxPki/ewcdN3qvWtTFHO7bqVxVhCh9We4XHqzJw==
-X-Received: by 2002:aa7:cc96:0:b0:410:b9ac:241 with SMTP id p22-20020aa7cc96000000b00410b9ac0241mr14368975edt.246.1648227017312;
-        Fri, 25 Mar 2022 09:50:17 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id hs12-20020a1709073e8c00b006dfd8074d27sm2501958ejc.79.2022.03.25.09.50.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 09:50:16 -0700 (PDT)
-Message-ID: <53cc074f-350f-5fa8-1ee4-c33921f17cb1@redhat.com>
-Date:   Fri, 25 Mar 2022 17:50:14 +0100
+        Fri, 25 Mar 2022 12:53:35 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77709C12C2;
+        Fri, 25 Mar 2022 09:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cPXI5QeuTULG9j4cx1a19QqWrwb7jb28krf+MnTbuWc=; b=a7zRRuEeeYE6dBkAWaXIuqwuds
+        U62BNMi+T60gNXHOFW8sWRHaYet9RyMVTwcd1nc/iMUu7jFROexr5T6IquNr3YVoDEnK/r+ZeVFjh
+        os7xKznL35YjNBZwVbkl7mVjtexSluDgO52MrTmk1q7D6njtsSK1VBixCcoQ25Y7VJ7fjUx0SE94p
+        juEctRAcGAaLGVPytek1ib2OU1RYKKr2SR0/XXH5hc57LuYefu3bSAUyft7JHAHXqD6V3ThT4+QvL
+        C76m07bJvIQ9sLKA/N0DiOvtDZjw/ne3vUks1sb20PdKeWKFFFY88VeTAOIWBv6oeZSqhFj4k2MIb
+        we8cTiVA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nXn9l-004S23-Iu; Fri, 25 Mar 2022 16:51:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3A8863002BF;
+        Fri, 25 Mar 2022 17:51:19 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 21A932057F80B; Fri, 25 Mar 2022 17:51:19 +0100 (CET)
+Date:   Fri, 25 Mar 2022 17:51:19 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/4] kprobes: rethook: x86: Replace kretprobe
+ trampoline with rethook
+Message-ID: <Yj3zB2n7Hy0DhkU+@hirez.programming.kicks-ass.net>
+References: <164821817332.2373735.12048266953420821089.stgit@devnote2>
+ <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH] KVM: x86/mmu: fix general protection fault in
- kvm_mmu_uninit_tdp_mmu
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
-References: <20220325163815.3514-1-paskripkin@gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220325163815.3514-1-paskripkin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,25 +68,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 17:38, Pavel Skripkin wrote:
-> Syzbot reported GPF in kvm_mmu_uninit_tdp_mmu(), which is caused by
-> passing NULL pointer to flush_workqueue().
+On Fri, Mar 25, 2022 at 03:43:15PM +0100, Peter Zijlstra wrote:
+> On Fri, Mar 25, 2022 at 11:22:53PM +0900, Masami Hiramatsu wrote:
 > 
-> tdp_mmu_zap_wq is allocated via alloc_workqueue() which may fail. There
-> is no error hanling and kvm_mmu_uninit_tdp_mmu() return value is simply
-> ignored. Even all kvm_*_init_vm() functions are void, so the easiest
-> solution is to check that tdp_mmu_zap_wq is valid pointer before passing
-> it somewhere.
+> > Masami Hiramatsu (3):
+> >       kprobes: Use rethook for kretprobe if possible
+> >       rethook: kprobes: x86: Replace kretprobe with rethook on x86
+> >       x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
+> > 
+> > Peter Zijlstra (1):
+> >       Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
+> 
+> You fat-fingered the subject there ^
+> 
+> Other than that:
+> 
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> Hopefully the ftrace return trampoline can also be switched over..
 
-Thanks for the analysis, but not scheduling the work item in 
-tdp_mmu_schedule_zap_root is broken; you can't just let the roots 
-survive (KVM uses its own workqueue because it needs to work item to 
-complete has to flush it before kvm_mmu_zap_all_fast returns).
+Urgh, allnoconfig doesn't build because..
 
-I'll fix it properly by propagating the error up to kvm_mmu_init_vm and 
-kvm_arch_init_vm,
-
-Thanks,
-
-Paolo
-
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 56f4ee97f328..471d71935e90 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -108,6 +108,7 @@ obj-$(CONFIG_TRACING) += trace/
+ obj-$(CONFIG_TRACE_CLOCK) += trace/
+ obj-$(CONFIG_RING_BUFFER) += trace/
+ obj-$(CONFIG_TRACEPOINTS) += trace/
++obj-$(CONFIG_RETHOOK) += trace/
+ obj-$(CONFIG_IRQ_WORK) += irq_work.o
+ obj-$(CONFIG_CPU_PM) += cpu_pm.o
+ obj-$(CONFIG_BPF) += bpf/

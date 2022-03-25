@@ -2,180 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D90B4E7352
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212D44E734F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359066AbiCYM0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S1359107AbiCYM0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359121AbiCYMYw (ORCPT
+        with ESMTP id S1359108AbiCYMZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:24:52 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D7AD7616;
-        Fri, 25 Mar 2022 05:23:03 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0V89qR2m_1648210978;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V89qR2m_1648210978)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 25 Mar 2022 20:22:59 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com
-Subject: [PATCH v6 22/22] erofs: add 'tag' mount option
-Date:   Fri, 25 Mar 2022 20:22:23 +0800
-Message-Id: <20220325122223.102958-23-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220325122223.102958-1-jefflexu@linux.alibaba.com>
-References: <20220325122223.102958-1-jefflexu@linux.alibaba.com>
+        Fri, 25 Mar 2022 08:25:39 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30145E749;
+        Fri, 25 Mar 2022 05:23:26 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id z134so4092401vsz.8;
+        Fri, 25 Mar 2022 05:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WzJ4RYl/IiDljZ0/e3z9WtJ7iVXmWkFLySTizcuAnwU=;
+        b=ScMDpgxeQrCQ0bpP0YyZ+eCD0lC0NTdpCqiVIaX3+BmHuMX9sOhKmWg0BOfGVZfCTq
+         sWl+VvBgX2cE70YBMlPja1pgQL6TNdORmWegGc1lAbgP7WAWZfjxYAxZaaKmQQi6ZlAZ
+         1/NdssbS6Bv7Cyzqy84HaWYK7U6nntiu6gYycnm1rDjPDBNJrHaqY0/+2+Bc5rKwWFSg
+         Hp9AEOSoNTQs9FZRXwpNfDiI5a/X3CBBj/ykXjGj1+Q15tB7fDN/dcn+QzPqK5HBipJ8
+         24bWJKxG7cwlLhNp/eLLDSC+LsPwPK/KC9kcIbwm7mV2WfSXNwnrg81gnMTZAaKoZsgo
+         E54A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WzJ4RYl/IiDljZ0/e3z9WtJ7iVXmWkFLySTizcuAnwU=;
+        b=weXFBYmeZz9uzL1BNK/nKwBmlgqQYAQuWbsFibQpmVdFcQODCZEF9cnzHVzGWxhlWO
+         7vdcaXmUF1p93SzE4lHPgXb6yrg7ojTCrwT8hVuegHr3EeVDV5W1eXQlOtxHNVshJ6b5
+         dRvoHvARw7t+kubQ0nHcg1IFgiTvbm6xqDx1Y2+E513NGkP1CSsmGHAXA5kty+Dh/dNr
+         2YDcxsOiHAzF+I8Fcs9zsjejidD3Xpee7/Mzt1fFYLYodTPsoSZnyiKb6rQNokDTcI4e
+         l4qAVUCO+S7TO1o6rVhBVuI/Y+5lyjb8a4kFA2K4i+KOfmD5gq/1IP+B19DBR1wtj5wn
+         WTCw==
+X-Gm-Message-State: AOAM530d1/0Ny6aUGdAz7xlbA2YfPeSgVSzWOu0pCgIKCkwSxJn6JY2K
+        7+fsLYuK9ysXSDsCJ/BZ92uGbklMFajo50vQAQs=
+X-Google-Smtp-Source: ABdhPJw3++l05A1j7WSiEEjv3Tjqk8YLk2NsaWWwpdpeQ0iZTJegjo2qhYtGm8uSSYrZ2s8LfjOCqTEkOuEFYHNNSZs=
+X-Received: by 2002:a67:2d8b:0:b0:325:5a6c:819e with SMTP id
+ t133-20020a672d8b000000b003255a6c819emr4744424vst.4.1648211005672; Fri, 25
+ Mar 2022 05:23:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220324124402.3631379-1-daniel@0x0f.com> <20220324124402.3631379-4-daniel@0x0f.com>
+In-Reply-To: <20220324124402.3631379-4-daniel@0x0f.com>
+From:   Romain Perier <romain.perier@gmail.com>
+Date:   Fri, 25 Mar 2022 13:23:14 +0100
+Message-ID: <CABgxDoLg4cf8qGVAhnp4Tj1cWZ0X+vM0ueTy2wp68BbgRLGuNQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] ARM: dts: mstar: Switch pm_uart to mstar,msc313-uart
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-serial@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        andriy.shevchenko@linux.intel.com,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce 'tag' mount option to enable on-demand read sementics. In
-this case, erofs could be mounted from blob files instead of blkdev.
-By then users could specify the name of bootstrap blob file containing
-the complete erofs image.
+Hi Daniel,
 
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/super.c | 44 ++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 38 insertions(+), 6 deletions(-)
-
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 8ac400581784..6ea83f36842c 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -403,6 +403,7 @@ enum {
- 	Opt_dax,
- 	Opt_dax_enum,
- 	Opt_device,
-+	Opt_tag,
- 	Opt_err
- };
- 
-@@ -427,6 +428,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
- 	fsparam_flag("dax",             Opt_dax),
- 	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
- 	fsparam_string("device",	Opt_device),
-+	fsparam_string("tag",		Opt_tag),
- 	{}
- };
- 
-@@ -522,6 +524,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
- 		}
- 		++ctx->devs->extra_devices;
- 		break;
-+	case Opt_tag:
-+#ifdef CONFIG_EROFS_FS_ONDEMAND
-+		kfree(ctx->opt.tag);
-+		ctx->opt.tag = kstrdup(param->string, GFP_KERNEL);
-+		if (!ctx->opt.tag)
-+			return -ENOMEM;
-+#else
-+		errorfc(fc, "tag option not supported");
-+#endif
-+		break;
- 	default:
- 		return -ENOPARAM;
- 	}
-@@ -596,9 +608,14 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sb->s_magic = EROFS_SUPER_MAGIC;
- 
--	if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
--		erofs_err(sb, "failed to set erofs blksize");
--		return -EINVAL;
-+	if (IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) && erofs_is_nodev_mode(sb)) {
-+		sb->s_blocksize = EROFS_BLKSIZ;
-+		sb->s_blocksize_bits = LOG_BLOCK_SIZE;
-+	} else {
-+		if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
-+			erofs_err(sb, "failed to set erofs blksize");
-+			return -EINVAL;
-+		}
- 	}
- 
- 	sbi = kzalloc(sizeof(*sbi), GFP_KERNEL);
-@@ -607,7 +624,6 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sb->s_fs_info = sbi;
- 	sbi->opt = ctx->opt;
--	sbi->dax_dev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->dax_part_off);
- 	sbi->devs = ctx->devs;
- 	ctx->devs = NULL;
- 
-@@ -623,6 +639,10 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 		err = super_setup_bdi(sb);
- 		if (err)
- 			return err;
-+
-+		sbi->dax_dev = NULL;
-+	} else {
-+		sbi->dax_dev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->dax_part_off);
- 	}
- 
- 	err = erofs_read_superblock(sb);
-@@ -685,6 +705,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- static int erofs_fc_get_tree(struct fs_context *fc)
- {
-+	struct erofs_fs_context *ctx = fc->fs_private;
-+
-+	if (IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) && ctx->opt.tag)
-+		return get_tree_nodev(fc, erofs_fc_fill_super);
-+
- 	return get_tree_bdev(fc, erofs_fc_fill_super);
- }
- 
-@@ -734,6 +759,7 @@ static void erofs_fc_free(struct fs_context *fc)
- 	struct erofs_fs_context *ctx = fc->fs_private;
- 
- 	erofs_free_dev_context(ctx->devs);
-+	kfree(ctx->opt.tag);
- 	kfree(ctx);
- }
- 
-@@ -774,7 +800,10 @@ static void erofs_kill_sb(struct super_block *sb)
- 
- 	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
- 
--	kill_block_super(sb);
-+	if (IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) && erofs_is_nodev_mode(sb))
-+		generic_shutdown_super(sb);
-+	else
-+		kill_block_super(sb);
- 
- 	sbi = EROFS_SB(sb);
- 	if (!sbi)
-@@ -896,7 +925,10 @@ static int erofs_statfs(struct dentry *dentry, struct kstatfs *buf)
- {
- 	struct super_block *sb = dentry->d_sb;
- 	struct erofs_sb_info *sbi = EROFS_SB(sb);
--	u64 id = huge_encode_dev(sb->s_bdev->bd_dev);
-+	u64 id = 0;
-+
-+	if (!IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) || !erofs_is_nodev_mode(sb))
-+		id = huge_encode_dev(sb->s_bdev->bd_dev);
- 
- 	buf->f_type = sb->s_magic;
- 	buf->f_bsize = EROFS_BLKSIZ;
--- 
-2.27.0
-
+Le jeu. 24 mars 2022 =C3=A0 13:44, Daniel Palmer <daniel@0x0f.com> a =C3=A9=
+crit :
+>
+> The UART used in these SoCs is actually a variant of the dw apb uart.
+> Now there is a compatible string in that driver to handle the quirks
+> switch the compatible for pm_uart over to mstar,msc313-uart.
+>
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+Reviewed-by: Romain Perier <romain.perier@gmail.com>

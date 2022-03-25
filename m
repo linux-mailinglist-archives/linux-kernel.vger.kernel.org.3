@@ -2,96 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05C74E6FD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED894E6FDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356435AbiCYJNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 05:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
+        id S1356486AbiCYJPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 05:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245149AbiCYJNd (ORCPT
+        with ESMTP id S242463AbiCYJPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 05:13:33 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E02ACF483;
-        Fri, 25 Mar 2022 02:11:59 -0700 (PDT)
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M597q-1nWZWT3NFU-0019g0; Fri, 25 Mar 2022 10:11:57 +0100
-Received: by mail-wr1-f53.google.com with SMTP id r7so8851426wrc.0;
-        Fri, 25 Mar 2022 02:11:57 -0700 (PDT)
-X-Gm-Message-State: AOAM5330E7tVEe7klAHzU35seyNOgkR7kSSWIO9CjV5Wsd5lZF0lu/HA
-        R2j0qLyrt7/v+jWkunZ8i083AyX0gprN4czaYNg=
-X-Google-Smtp-Source: ABdhPJzlSwDWgsgZpeRugVuvy428D1qgQK8pZuiKTRIYi9OSl8H4ndqwB0mRzcaYHlfTvLPePtNJpSY9MHEOxziK+P8=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr7999785wrw.12.1648199517413; Fri, 25
- Mar 2022 02:11:57 -0700 (PDT)
+        Fri, 25 Mar 2022 05:15:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4401ACF48C
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 02:13:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648199624; x=1679735624;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=is3Q+6AucukDtN+moqdin1sAeQpxyJgxCS2KqYtKS7Q=;
+  b=BmnbH2BvHtyhmqyAC4bVEdVGH4Ea1A72mPCQaW74l4GGtL9CH65r+BEN
+   khiVDETzCX0i0v+PGfQbnVeaMh1sySdnhVh9CXbdPbD2G0b/6Z6BMLurT
+   goDYt6swMUXZRCuRRm/H4DmDeUhL4WaLSkTur//Ti8rW3WqTChmHbgkbR
+   Bot35eL9B522RTqm3EDG0kQylmlk7JqST4AonVy4Uhfvwfm21AjDF+O90
+   vmEsSfceNfbVePef+LF3zZxhfmzWVH2evQD7hqoVbWPAt+dZ97qgQWVT6
+   6Y3rf38mSuRQiE2D42WFzQBpziABugvskhQcmlP0KSKrmKhoR9zh3SEZP
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="321787827"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="321787827"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 02:13:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="718151170"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 25 Mar 2022 02:13:24 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXg0a-000Lzt-9o; Fri, 25 Mar 2022 09:13:24 +0000
+Date:   Fri, 25 Mar 2022 17:12:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jinyang He <hejinyang@loongson.cn>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/kernel/relocate.c:41:12: warning: no previous prototype
+ for 'plat_post_relocation'
+Message-ID: <202203251712.kpiEBAwp-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
- <20220324023904.h2qfxzxlznggbsyr@vireshk-i7> <20220324062547.GA15504@9a2d8922b8f1>
- <20220325015849.sazvlevnvdqj5z42@vireshk-i7>
-In-Reply-To: <20220325015849.sazvlevnvdqj5z42@vireshk-i7>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 25 Mar 2022 10:11:41 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0Q8eOTeRmd5-G8rNCKAcH+4HReCsOAGKd4Vq30C9TaEA@mail.gmail.com>
-Message-ID: <CAK8P3a0Q8eOTeRmd5-G8rNCKAcH+4HReCsOAGKd4Vq30C9TaEA@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: dts: spear13xx: Update SPI dma properties
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:KK521CCvDxK0Z7Twh5nGXKg+ZVj/4+ilIiLkkLJMHPDknwqKe0H
- JYbuSGtA5NBRsH4PLE25G26CR+0SplfR5HMQ7HX/G8IA1X8Zi5zsgUJB+qGXGC+1Onrxley
- R/YxbSXEa13Ycdp6qsRKrbf1v+5HjCRQX81gIVA4Dq3u31Gl9GNZotQC7uCOtmWfeBHXU9b
- efVA89nR/i22IG+azzkuQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:w/+L8lfuVZs=:DCKxVX5SyQJV2SIwGnXTDm
- /dWBJcS8KIoC92+6wotEEkxV7YqjLg+QBU6wKenhTdnKkOAtt3r4adi2CNEXfhrCQ5PqCpr3Q
- DXS8/N6nq80zu2A10VFc6gf4puHQC+2Hw+bUd3LaiNtxE2l0ispZqqKFJ/v00t+j23PpjEdlu
- /xF9u/N5UKEkDuZiDeZjeG7Q+RBqH6pp/hJ0kbmav1tf+9rvERrfr+sTDinLcRQ4VyePkEzKg
- AtxuWldRGe7iMNdNgOGBQmI7ysTFkCZqMuo+irgWIb6c0VpUUILkEkbViT2RxsLoJ/vfA1b3+
- 7OEVvJV1lr+1OZD1w+NI0MR4xr3fbt1V/7LXEpyVbllkY/5UNuTavnxZMt+ay0iM/RFBKjR21
- PcmXylt3Wzg0HPLxd+t6PQYHU/skO9A39VJMHYj4BGzRzispdy+1Kj77msYh/I+8Psg/KlmPU
- FBtOGaOhDqtPMui+R+mABzRqnZdzf0aPxFuJlV25xkmPBbJvL/ZMeNoHqPsqWIKb5Ccldz7bV
- rXkXE5xGW+07MzRMlrxENX+h71O0YLWg4eqzkpTk8iJsntjIvRYZMqCLt0q4hLRftPNlMQJxM
- z+F6d6bDVCMuG3j6mEZ9tgSuJUh3CzB1eGpxp89kMO1kMwVjHGW/xAtVE+Iy7VhA8Qtd0MyiL
- fhkh7RNO/7wv5AVwLXfxIbHPTWm5C96ASydVmGzq3W6A+fxWxGWg4CNGDyIrwM8xGrAE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 2:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> On 24-03-22, 11:55, Kuldeep Singh wrote:
-> > Fixed order of values is important in case of properties like
-> > compatibles etc. In case of dma-names, yes order shouldn't matter here.
-> >
-> > This patch is more of appeasing dtbs_check warning rather than fixing
-> > something.
->
-> Exactly my point. We have seen similar type of issues with other tools, like
-> coccinelle, earlier and such patches were rejected as the kernel was just fine
-> and tooling needs to be fixed.
->
-> > It's safe to go with this patch.
-> > I am not sure if there's a provision to exclude dma-names from fix
-> > ordering checks. Rob can help here in providing better insights.
+Hi Jinyang,
 
-I think it's a question of the scale of the warnings: my understanding is that
-there are only a handful of dts files that trigger the warning at all, and it
-would be rather hard to change the tooling around this. Since the proposed
-dts change is clearly harmless, I don't mind applying it.
+FYI, the error/warning still remains.
 
-Kuldeep, you have probably looked at all dts files in the kernel, can you
-say how many of them are affected by the dma property reordering?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   34af78c4e616c359ed428d79fe4758a35d2c5473
+commit: a307a4ce9ecd2e23c71318201330d9d648b3f818 MIPS: Loongson64: Add KASLR support
+date:   1 year, 4 months ago
+config: mips-randconfig-r006-20220325 (https://download.01.org/0day-ci/archive/20220325/202203251712.kpiEBAwp-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a307a4ce9ecd2e23c71318201330d9d648b3f818
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a307a4ce9ecd2e23c71318201330d9d648b3f818
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
 
-         Arnd
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/mips/kernel/relocate.c:41:12: warning: no previous prototype for 'plat_post_relocation' [-Wmissing-prototypes]
+      41 | int __weak plat_post_relocation(long offset)
+         |            ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/relocate.c:135:12: warning: no previous prototype for 'do_relocations' [-Wmissing-prototypes]
+     135 | int __init do_relocations(void *kbase_old, void *kbase_new, long offset)
+         |            ^~~~~~~~~~~~~~
+>> arch/mips/kernel/relocate.c:304:14: warning: no previous prototype for 'relocate_kernel' [-Wmissing-prototypes]
+     304 | void *__init relocate_kernel(void)
+         |              ^~~~~~~~~~~~~~~
+   arch/mips/kernel/relocate.c:415:6: warning: no previous prototype for 'show_kernel_relocation' [-Wmissing-prototypes]
+     415 | void show_kernel_relocation(const char *level)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/plat_post_relocation +41 arch/mips/kernel/relocate.c
+
+4c9fff362261d6 Marcin Nowakowski 2016-11-23  35  
+8cc709d7d4f013 Steven J. Hill    2016-12-09  36  /*
+8cc709d7d4f013 Steven J. Hill    2016-12-09  37   * This function may be defined for a platform to perform any post-relocation
+8cc709d7d4f013 Steven J. Hill    2016-12-09  38   * fixup necessary.
+8cc709d7d4f013 Steven J. Hill    2016-12-09  39   * Return non-zero to abort relocation
+8cc709d7d4f013 Steven J. Hill    2016-12-09  40   */
+8cc709d7d4f013 Steven J. Hill    2016-12-09 @41  int __weak plat_post_relocation(long offset)
+8cc709d7d4f013 Steven J. Hill    2016-12-09  42  {
+8cc709d7d4f013 Steven J. Hill    2016-12-09  43  	return 0;
+8cc709d7d4f013 Steven J. Hill    2016-12-09  44  }
+8cc709d7d4f013 Steven J. Hill    2016-12-09  45  
+
+:::::: The code at line 41 was first introduced by commit
+:::::: 8cc709d7d4f013f51d38ceb2e3c8c82d230cf457 MIPS: Relocatable: Provide plat_post_relocation hook
+
+:::::: TO: Steven J. Hill <Steven.Hill@cavium.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

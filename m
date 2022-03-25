@@ -2,143 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468314E7270
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7FE4E7273
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357290AbiCYLxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
+        id S1357309AbiCYLyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356842AbiCYLxf (ORCPT
+        with ESMTP id S233824AbiCYLya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:53:35 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5DDD444A;
-        Fri, 25 Mar 2022 04:51:59 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b24so8918609edu.10;
-        Fri, 25 Mar 2022 04:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9wI3U2BQFfRaggeAQmJJueKOAWP02S+tWNIFRTVWCtQ=;
-        b=Ve2/EcXK+GE8PfE3jvwOz03/V7oNmd4iL0dl15IPoF8aVVUUBnb/whTBCOssbM58Lf
-         GJtNXtFtm80ee9XfuattJC3F2W7UPNHfiW4rHvxBq05FIS2XqciGWm2UyqtbcCFnKlMd
-         UTYNkopJsMflFjXTv7DxBEXHnrUIHl0ML6ksLp6b6TSEjl/zxHfcZO/zAWqXw24KAl0w
-         H3/X7ZevqGFGTTnjxAwo8QpqT7EI8QD+/IF0Smrsl9MyaR5zTIBFQ7jDnlbWGaEhfTcM
-         4EeMHYCVTFUOR0sHdxze54mCjDRGE5KS1LizhHNh4jaAnw8Fkl67EPI9jQg8xqjx+8Kx
-         oMWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9wI3U2BQFfRaggeAQmJJueKOAWP02S+tWNIFRTVWCtQ=;
-        b=VD3jDGm9aKDMoyxDF132vdxAEJGy8X/kqDQ3NeR/u0JjIbO2ku3wF1/C/0+INvE0rn
-         OvtiM4l8Xgclxod7rE4NpvL51XnEtg4l894gaMh5P6zz0lv5EeGhv9PeVxq6GLF4JuDj
-         a7zOPjD+nnwxhPw2uNBuncXSKM835djdHr/6KreiFXMyQ40et5lzO5JacuNW4SFGPsUd
-         rdXq1JCAovYEnH/DSFzmbUZFSH+6XfV0Y+P8rhbRTEYW3l42HfE2LCQkMikkVv3x7Qob
-         40O3wzH+v9OWzRt5EMwl9Wll3SoywuA8Zq9ecse1/QHp1wR4unSWaTA8o73hNSwKra8w
-         u+Xg==
-X-Gm-Message-State: AOAM532zYK4kZiIXAhNkt2vRPcUoIiez0a7E5rTxf69/4Oi8Lv8W2OE+
-        dT4OuLUuLd6ExuMlHQfV+NE=
-X-Google-Smtp-Source: ABdhPJzr4CiKL3LUBhLOaYyi4c4PSg+Tr+p0g+SWLFgiEvZkhcR/ME2PFy/04g23T5TZDOmAMVZKdg==
-X-Received: by 2002:a50:9b11:0:b0:419:a8f:580c with SMTP id o17-20020a509b11000000b004190a8f580cmr12748888edi.292.1648209118222;
-        Fri, 25 Mar 2022 04:51:58 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id p14-20020a05640210ce00b00413211746d4sm2768361edu.51.2022.03.25.04.51.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 04:51:57 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 12:51:55 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Fri, 25 Mar 2022 07:54:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439CED444D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 04:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648209177; x=1679745177;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I9fdKjDe7c5xOBuEv/szPzFWHRVEWEDrHDMgVrhEe+M=;
+  b=IJ8LXtcVmaYjwRPaa9ljoQAWzSYQ7GBuURHaVJ38521TkxYRQPqOlYnA
+   zwpWaTR4ejFPX/XeGpbaLCmiPRnCLcr6SnlEHbdmNET2h3a3cQZ5sa+nI
+   98VkXKqLxQPRhubAIxoiJMnH3st/85RKZosEuNmoKgKNwkehazsNPLeBO
+   fGjGBZnJqIZBQExIPs2ksf51wv5xTMom4dUoediBlC7u+ayeLESp0tzr2
+   HfivHIz7qAlYFTMsPdMJjLuPWeovs2x+Eb6roam+5inE1dM5/se+Xf1uT
+   bIOuS5WGKxRQL9yrUq/c0Z3h6+8KBrdxTWfQ5JKyUV8uNPziwlCnD0EWk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="258584529"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="258584529"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 04:52:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="718185018"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 04:52:53 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1nXiUL-006MZ1-Ri;
+        Fri, 25 Mar 2022 13:52:17 +0200
+Date:   Fri, 25 Mar 2022 13:52:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel-janitors@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH bpf-next 2/2] rethook: kprobes: x86: Replace kretprobe
- with rethook on x86
-Message-ID: <Yj2s2zVjvfy0c/QA@krava>
-References: <164818251899.2252200.7306353689206167903.stgit@devnote2>
- <164818254148.2252200.5054811796192907193.stgit@devnote2>
- <20220325100940.GM8939@worktop.programming.kicks-ass.net>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH] x86/config: Make the x86 defconfigs a bit more usable
+Message-ID: <Yj2s8WZ4Pv1QuckE@smile.fi.intel.com>
+References: <YjhdcJB4FaLfsoyO@gmail.com>
+ <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
+ <YjpLiKRUIB4TGJm0@zn.tnic>
+ <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
+ <YjsCpoRK7W4l6tSh@zn.tnic>
+ <CAHk-=wi9pLxm+dXoCaiGO+f0EbhyfAR_L510vD0c2=hj6rbMXg@mail.gmail.com>
+ <YjwsUT/6PkRPjnHE@gmail.com>
+ <YjySjys3QZAWFlfo@dev-arch.thelio-3990X>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325100940.GM8939@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YjySjys3QZAWFlfo@dev-arch.thelio-3990X>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 11:09:40AM +0100, Peter Zijlstra wrote:
-> On Fri, Mar 25, 2022 at 01:29:01PM +0900, Masami Hiramatsu wrote:
-> > Replaces the kretprobe code with rethook on x86. With this patch,
-> > kretprobe on x86 uses the rethook instead of kretprobe specific
-> > trampoline code.
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > ---
-> >  arch/x86/Kconfig                 |    1 
-> >  arch/x86/include/asm/unwind.h    |   23 +++----
-> >  arch/x86/kernel/Makefile         |    1 
-> >  arch/x86/kernel/kprobes/common.h |    1 
-> >  arch/x86/kernel/kprobes/core.c   |  107 ----------------------------------
-> >  arch/x86/kernel/rethook.c        |  121 ++++++++++++++++++++++++++++++++++++++
-> >  6 files changed, 135 insertions(+), 119 deletions(-)
-> >  create mode 100644 arch/x86/kernel/rethook.c
+On Thu, Mar 24, 2022 at 08:47:27AM -0700, Nathan Chancellor wrote:
+> On Thu, Mar 24, 2022 at 09:31:13AM +0100, Ingo Molnar wrote:
+
+> > --- a/arch/x86/configs/i386_defconfig
+> > +++ b/arch/x86/configs/i386_defconfig
+
+> > -# CONFIG_64BIT is not set
 > 
-> I'm thinking you'll find it builds much better with this on...
-
-I built it with Peter's fix and ran bpf selftests, looks good
-
-Tested-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
-
+> I don't think this is right, this is repeating the problem that was
+> fixed by commit 76366050eb1b ("x86/defconfigs: Explicitly unset
+> CONFIG_64BIT in i386_defconfig").
 > 
-> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-> index 2de3c8c5eba9..794fdef2501a 100644
-> --- a/arch/x86/kernel/unwind_orc.c
-> +++ b/arch/x86/kernel/unwind_orc.c
-> @@ -550,15 +550,15 @@ bool unwind_next_frame(struct unwind_state *state)
->  		}
->  		/*
->  		 * There is a small chance to interrupt at the entry of
-> -		 * __kretprobe_trampoline() where the ORC info doesn't exist.
-> -		 * That point is right after the RET to __kretprobe_trampoline()
-> +		 * arch_rethook_trampoline() where the ORC info doesn't exist.
-> +		 * That point is right after the RET to arch_rethook_trampoline()
->  		 * which was modified return address.
-> -		 * At that point, the @addr_p of the unwind_recover_kretprobe()
-> +		 * At that point, the @addr_p of the unwind_recover_rethook()
->  		 * (this has to point the address of the stack entry storing
->  		 * the modified return address) must be "SP - (a stack entry)"
->  		 * because SP is incremented by the RET.
->  		 */
-> -		state->ip = unwind_recover_kretprobe(state, state->ip,
-> +		state->ip = unwind_recover_rethook(state, state->ip,
->  				(unsigned long *)(state->sp - sizeof(long)));
->  		state->regs = (struct pt_regs *)sp;
->  		state->prev_regs = NULL;
-> @@ -573,7 +573,7 @@ bool unwind_next_frame(struct unwind_state *state)
->  			goto err;
->  		}
->  		/* See UNWIND_HINT_TYPE_REGS case comment. */
-> -		state->ip = unwind_recover_kretprobe(state, state->ip,
-> +		state->ip = unwind_recover_rethook(state, state->ip,
->  				(unsigned long *)(state->sp - sizeof(long)));
->  
->  		if (state->full_regs)
+> $ make ARCH=i386 savedefconfig
+> 
+> ?
+
++1 here, there are still branches in use that have i386 defconfig as
+as base and making this problem again is not okay.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DB14E736F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318E64E737A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346012AbiCYM25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S1359130AbiCYMaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359357AbiCYM1w (ORCPT
+        with ESMTP id S1359504AbiCYM2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:27:52 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0452AD7602
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:24:45 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 17so10093859lji.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NC5FEpn7a8VjJFMMlD3Yw73JodCAMWSRNlsTSQG4mSI=;
-        b=EokT79tbtTUNj7r/dhQoz7PiUhZvpb6+/cy1JpZFNXKYVM81sy1TjArJlLkY7yBH21
-         1fbDODk6IBWC6SZWk9fFsdhDXqvbt8PYDLkoeSfjcoXfYTuqc7US6YpHKqIN6qORyOnv
-         CCVOnOwwLxEwDarnSXWMEazVLjZGT4bIkGWGtP9rL8/vO94wJ/NkMFXF/5CkYZAtmFq0
-         xJPcsEH+3dfAnEIx/AnOnKc4WGXkRQJJMsU0B3ExWeGogtody4LHjJK/V1uT75pJmm8Y
-         FGLi/PCpKbnMatdboSnh4OJmXBtXitOTv2q7ns50vw/S5qwPs8+2pVM8OhG/06G7EQMG
-         aLvA==
+        Fri, 25 Mar 2022 08:28:08 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF506D9E97;
+        Fri, 25 Mar 2022 05:25:17 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a8so14980891ejc.8;
+        Fri, 25 Mar 2022 05:25:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=NC5FEpn7a8VjJFMMlD3Yw73JodCAMWSRNlsTSQG4mSI=;
-        b=pEpABCLAl82m4d3k9wqSpZKhZeE6PKqPuAJAoGqhec+fctzkyeCP7CbD4hRZn5J/GW
-         zP4OGT+/ZF0buCqFLwuBPa8aDjmAZe11uX+dappv9JyToZkV85tGVkYyxs+TGDsEBqFG
-         gLuxhe7sG/HP/7zMhsa2SFfGYQGu7uTQVE2Wks0zrnq/+Q+z5e6U4CtfQaagcrlz7uod
-         EqZf36e5XDrp0HUN1ADN/59DuU6p9vHEegKD4mBbqeHvYBSdqixA2+DZlsQCaL0nZvnS
-         SBz1S0jH5r6Mu0C2HUFdr4ASARdgEX0KJueYvZT/D0httkTbrF9JFk16IXtEMaYq9if5
-         qcQQ==
-X-Gm-Message-State: AOAM531CapMUBv2eOV7yCe7y/6F1Q7r+ovRmzdFREHylReGEVWvGFjsH
-        gCJgYgUmT9Yc863nXngoikERNA==
-X-Google-Smtp-Source: ABdhPJyhrcYHs1ltBva7k2nFt6SJW3wqd5rwz242B1yPQoB6BUn21i2ue6ir7JTqxmyeq6ltRZaBvQ==
-X-Received: by 2002:a2e:a881:0:b0:249:6f85:d4a4 with SMTP id m1-20020a2ea881000000b002496f85d4a4mr7928099ljq.231.1648211083341;
-        Fri, 25 Mar 2022 05:24:43 -0700 (PDT)
-Received: from [192.168.43.7] ([188.162.64.164])
-        by smtp.gmail.com with ESMTPSA id h16-20020a19ca50000000b0044a25081cf9sm687044lfj.133.2022.03.25.05.24.41
+        bh=olVkiltawHdnXhEXNKbgr8wPBREkH6kj7x4r7geYywk=;
+        b=SahEljtsVCZJCPrMbHnweoTMbhMm2O5FfcN+W0JyBWOrGKu00av5HcXT058dtSH28r
+         qm3e4+GMPeOYxxI7qRVUmI3n0OKCfj2tIFdgZP3yPZiBx60gJthgSgv3Y40wR8AgeNG4
+         q4AHhrdDf3QYEToOWg4S1s0w2LG7Pf0KgG01BwsyV6S/jq3d9aCo9uWCvJNZfrJOQlRm
+         5+uOXCKyptxptHJs52+4s9UXAWkd3MP5WtEeV1VZjzdI4ZiFXjB2wdRzLG1VSzrpqUji
+         72QH7C6QXs+VoNoaFbr7VYzWFHmQJQp84OxNKAdkrHbPlmOHaCort/R3GS8Hi+3/Agym
+         AJ5g==
+X-Gm-Message-State: AOAM532RZdF9Kjlac8vKsp5/Zp0WSg+QVfiRyUWbAYaTTh7Ezpl1m97r
+        JTgHYUHEVTdwqEFeUqAlVVY=
+X-Google-Smtp-Source: ABdhPJyB0tilidYDYhUj7lGBUIeMPp+wfyIKzzBUxxDQR317d3CQMJ72fhfgZnbX66U6HMAhQxxmrw==
+X-Received: by 2002:a17:906:c214:b0:6b3:d0d6:9fe6 with SMTP id d20-20020a170906c21400b006b3d0d69fe6mr11192249ejz.150.1648211116239;
+        Fri, 25 Mar 2022 05:25:16 -0700 (PDT)
+Received: from [192.168.0.160] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id l2-20020a1709060cc200b006d3d91e88c7sm2268157ejh.214.2022.03.25.05.25.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 05:24:42 -0700 (PDT)
-Message-ID: <9bb0ec31-41e4-f9fa-956d-f393e9d6c76b@linaro.org>
-Date:   Fri, 25 Mar 2022 15:24:41 +0300
+        Fri, 25 Mar 2022 05:25:15 -0700 (PDT)
+Message-ID: <6ff0eb26-344d-dd78-9556-a96123b4f056@kernel.org>
+Date:   Fri, 25 Mar 2022 13:25:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 02/13] drm/msm/dsi: Pass DSC params to drm_panel
-Content-Language: en-GB
-To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-References: <20220325110556.275490-1-vkoul@kernel.org>
- <20220325110556.275490-3-vkoul@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220325110556.275490-3-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/3] iio: light: Add support for ltrf216a sensor
+Content-Language: en-US
+To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
+        lars@metafoo.de, robh+dt@kernel.org, Zhigang.Shi@liteon.com,
+        krisman@collabora.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        alvaro.soliverez@collabora.com
+References: <20220325103014.6597-1-shreeya.patel@collabora.com>
+ <20220325103014.6597-4-shreeya.patel@collabora.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220325103014.6597-4-shreeya.patel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,170 +68,347 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/2022 14:05, Vinod Koul wrote:
-> When DSC is enabled, we need to get the DSC parameters from the panel
-> driver, so add a dsc parameter in panel to fetch and pass DSC
-> configuration for DSI panels to DPU encoder, which will enable and
-> then configure DSC hardware blocks accordingly.
+On 25/03/2022 11:30, Shreeya Patel wrote:
+> From: Zhigang Shi <Zhigang.Shi@liteon.com>
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> Add initial support for ltrf216a ambient light sensor.
+> 
+> Datasheet :-
+> https://gitlab.steamos.cloud/shreeya/iio/-/blob/main/LTR-F216A-QT.pdf
+> 
+> 
+> Co-developed-by: Shreeya Patel <shreeya.patel@collabora.com>
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> Signed-off-by: Zhigang Shi <Zhigang.Shi@liteon.com>
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c |  2 ++
->   drivers/gpu/drm/msm/dsi/dsi.c           |  5 +++++
->   drivers/gpu/drm/msm/dsi/dsi.h           |  1 +
->   drivers/gpu/drm/msm/dsi/dsi_host.c      | 22 ++++++++++++++++++++++
->   drivers/gpu/drm/msm/msm_drv.h           |  8 ++++++++
->   include/drm/drm_panel.h                 |  7 +++++++
->   6 files changed, 45 insertions(+)
+>  drivers/iio/light/Kconfig    |  10 ++
+>  drivers/iio/light/Makefile   |   1 +
+>  drivers/iio/light/ltrf216a.c | 334 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 345 insertions(+)
+>  create mode 100644 drivers/iio/light/ltrf216a.c
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 47fe11a84a77..ef6ddac22767 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -578,6 +578,8 @@ static int _dpu_kms_initialize_dsi(struct drm_device *dev,
->   			MSM_DISPLAY_CAP_CMD_MODE :
->   			MSM_DISPLAY_CAP_VID_MODE;
->   
-> +		info.dsc = msm_dsi_get_dsc_config(priv->dsi[i]);
+> diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
+> index a62c7b4b8678..08fa383a8ca7 100644
+> --- a/drivers/iio/light/Kconfig
+> +++ b/drivers/iio/light/Kconfig
+> @@ -318,6 +318,16 @@ config SENSORS_LM3533
+>  	  changes. The ALS-control output values can be set per zone for the
+>  	  three current output channels.
+>  
+> +config LTRF216A
+> +        tristate "Liteon LTRF216A Light Sensor"
+> +        depends on I2C
+> +        help
+> +          If you say Y or M here, you get support for Liteon LTRF216A
+> +          Ambient Light Sensor.
 > +
->   		if (msm_dsi_is_bonded_dsi(priv->dsi[i]) && priv->dsi[other]) {
->   			rc = msm_dsi_modeset_init(priv->dsi[other], dev, encoder);
->   			if (rc) {
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
-> index 052548883d27..3aeac15e7421 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.c
-> @@ -20,6 +20,11 @@ bool msm_dsi_is_cmd_mode(struct msm_dsi *msm_dsi)
->   	return !(host_flags & MIPI_DSI_MODE_VIDEO);
->   }
->   
-> +struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi)
+> +          If built as a dynamically linked module, it will be called
+> +          ltrf216a.
+> +
+>  config LTR501
+>  	tristate "LTR-501ALS-01 light sensor"
+>  	depends on I2C
+> diff --git a/drivers/iio/light/Makefile b/drivers/iio/light/Makefile
+> index d10912faf964..8fa91b9fe5b6 100644
+> --- a/drivers/iio/light/Makefile
+> +++ b/drivers/iio/light/Makefile
+> @@ -30,6 +30,7 @@ obj-$(CONFIG_SENSORS_ISL29028)	+= isl29028.o
+>  obj-$(CONFIG_ISL29125)		+= isl29125.o
+>  obj-$(CONFIG_JSA1212)		+= jsa1212.o
+>  obj-$(CONFIG_SENSORS_LM3533)	+= lm3533-als.o
+> +obj-$(CONFIG_LTRF216A)		+= ltrf216a.o
+>  obj-$(CONFIG_LTR501)		+= ltr501.o
+>  obj-$(CONFIG_LV0104CS)		+= lv0104cs.o
+>  obj-$(CONFIG_MAX44000)		+= max44000.o
+> diff --git a/drivers/iio/light/ltrf216a.c b/drivers/iio/light/ltrf216a.c
+> new file mode 100644
+> index 000000000000..99295358a7fe
+> --- /dev/null
+> +++ b/drivers/iio/light/ltrf216a.c
+> @@ -0,0 +1,334 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * LTRF216A Ambient Light Sensor
+> + *
+> + * Copyright (C) 2021 Lite-On Technology Corp (Singapore)
+> + * Author: Shi Zhigang <Zhigang.Shi@liteon.com>
+> + *
+> + * IIO driver for LTRF216A (7-bit I2C slave address 0x53).
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/i2c.h>
+> +#include <linux/mutex.h>
+> +#include <linux/iio/iio.h>
+> +#include <linux/iio/sysfs.h>
+> +#include <linux/pm.h>
+> +#include <linux/delay.h>
+> +
+> +#define LTRF216A_DRV_NAME "ltrf216a"
+> +
+> +#define LTRF216A_MAIN_CTRL		0x00
+> +
+> +#define LTRF216A_ALS_MEAS_RATE		0x04
+> +#define LTRF216A_MAIN_STATUS		0x07
+> +#define LTRF216A_CLEAR_DATA_0		0x0A
+> +
+> +#define LTRF216A_ALS_DATA_0		0x0D
+> +
+> +static const int int_time_mapping[] = { 400000, 200000, 100000 };
+> +
+> +struct ltrf216a_data {
+> +	struct i2c_client *client;
+> +	u32			int_time;
+> +	u8			int_time_fac;
+> +	u8			als_gain_fac;
+> +	struct mutex mutex;
+> +};
+> +
+> +/* open air. need to update based on TP transmission rate. */
+> +#define WIN_FAC	1
+> +
+> +static const struct iio_chan_spec ltrf216a_channels[] = {
+> +	{
+> +		.type = IIO_LIGHT,
+> +		.info_mask_separate =
+> +			BIT(IIO_CHAN_INFO_PROCESSED) |
+> +			BIT(IIO_CHAN_INFO_INT_TIME),
+> +	}
+> +};
+> +
+> +static IIO_CONST_ATTR_INT_TIME_AVAIL("0.1 0.2 0.4");
+> +
+> +static struct attribute *ltrf216a_attributes[] = {
+> +	&iio_const_attr_integration_time_available.dev_attr.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group ltrf216a_attribute_group = {
+> +	.attrs = ltrf216a_attributes,
+> +};
+> +
+> +static int ltrf216a_init(struct iio_dev *indio_dev)
 > +{
-> +	return msm_dsi_host_get_dsc_config(msm_dsi->host);
-> +}
+> +	int ret;
+> +	struct ltrf216a_data *data = iio_priv(indio_dev);
 > +
->   static int dsi_get_phy(struct msm_dsi *msm_dsi)
->   {
->   	struct platform_device *pdev = msm_dsi->pdev;
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.h b/drivers/gpu/drm/msm/dsi/dsi.h
-> index c8dedc95428c..16cd9b2fce86 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.h
-> @@ -152,6 +152,7 @@ int dsi_calc_clk_rate_v2(struct msm_dsi_host *msm_host, bool is_bonded_dsi);
->   int dsi_calc_clk_rate_6g(struct msm_dsi_host *msm_host, bool is_bonded_dsi);
->   void msm_dsi_host_snapshot(struct msm_disp_state *disp_state, struct mipi_dsi_host *host);
->   void msm_dsi_host_test_pattern_en(struct mipi_dsi_host *host);
-> +struct msm_display_dsc_config *msm_dsi_host_get_dsc_config(struct mipi_dsi_host *host);
->   
->   /* dsi phy */
->   struct msm_dsi_phy;
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 27553194f9fa..7e9913eff724 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -2059,9 +2059,24 @@ int msm_dsi_host_modeset_init(struct mipi_dsi_host *host,
->   {
->   	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
->   	const struct msm_dsi_cfg_handler *cfg_hnd = msm_host->cfg_hnd;
-> +	struct drm_panel *panel;
->   	int ret;
->   
->   	msm_host->dev = dev;
-> +	panel = msm_dsi_host_get_panel(&msm_host->base);
-> +
-> +	if (panel && panel->dsc) {
-> +		struct msm_display_dsc_config *dsc = msm_host->dsc;
-> +
-> +		if (!dsc) {
-> +			dsc = devm_kzalloc(&msm_host->pdev->dev, sizeof(*dsc), GFP_KERNEL);
-> +			if (!dsc)
-> +				return -ENOMEM;
-> +			dsc->drm = panel->dsc;
-> +			msm_host->dsc = dsc;
-> +		}
+> +	ret = i2c_smbus_read_byte_data(data->client, LTRF216A_MAIN_CTRL);
+> +	if (ret < 0) {
+> +		dev_err(&data->client->dev, "Error reading LTRF216A_MAIN_CTRL\n");
+> +		return ret;
 > +	}
 > +
->   	ret = cfg_hnd->ops->tx_buf_alloc(msm_host, SZ_4K);
->   	if (ret) {
->   		pr_err("%s: alloc tx gem obj failed, %d\n", __func__, ret);
-> @@ -2626,3 +2641,10 @@ void msm_dsi_host_test_pattern_en(struct mipi_dsi_host *host)
->   		dsi_write(msm_host, REG_DSI_TEST_PATTERN_GEN_CMD_STREAM0_TRIGGER,
->   				DSI_TEST_PATTERN_GEN_CMD_STREAM0_TRIGGER_SW_TRIGGER);
->   }
+> +	/* enable sensor */
+> +	ret |= 0x02;
+> +	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, ret);
+> +	if (ret < 0) {
+> +		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
+> +		return ret;
+> +	}
 > +
-> +struct msm_display_dsc_config *msm_dsi_host_get_dsc_config(struct mipi_dsi_host *host)
-> +{
-> +	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
-> +
-> +	return msm_host->dsc;
+> +	return 0;
 > +}
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index 384f9bad4760..e7a312edfe67 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -119,6 +119,7 @@ struct msm_display_topology {
->    *                      based on num_of_h_tiles
->    * @is_te_using_watchdog_timer:  Boolean to indicate watchdog TE is
->    *				 used instead of panel TE in cmd mode panels
-> + * @dsc:		DSC configuration data for DSC-enabled displays
->    */
->   struct msm_display_info {
->   	int intf_type;
-
-struct msm_display_info was moved from msm_drv.h to dpu_encoder.h.
-
-Please rebase your patches on top of msm/msm-next branch
-
-> @@ -126,6 +127,7 @@ struct msm_display_info {
->   	uint32_t num_of_h_tiles;
->   	uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
->   	bool is_te_using_watchdog_timer;
-> +	struct msm_display_dsc_config *dsc;
->   };
->   
->   /* Commit/Event thread specific structure */
-> @@ -365,6 +367,7 @@ void msm_dsi_snapshot(struct msm_disp_state *disp_state, struct msm_dsi *msm_dsi
->   bool msm_dsi_is_cmd_mode(struct msm_dsi *msm_dsi);
->   bool msm_dsi_is_bonded_dsi(struct msm_dsi *msm_dsi);
->   bool msm_dsi_is_master_dsi(struct msm_dsi *msm_dsi);
-> +struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi);
->   #else
->   static inline void __init msm_dsi_register(void)
->   {
-> @@ -393,6 +396,11 @@ static inline bool msm_dsi_is_master_dsi(struct msm_dsi *msm_dsi)
->   {
->   	return false;
->   }
 > +
-> +static inline struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi)
+> +static int ltrf216a_disable(struct iio_dev *indio_dev)
 > +{
-> +	return NULL;
-> +}
->   #endif
->   
->   #ifdef CONFIG_DRM_MSM_DP
-> diff --git a/include/drm/drm_panel.h b/include/drm/drm_panel.h
-> index 4602f833eb51..eb8ae9bf32ed 100644
-> --- a/include/drm/drm_panel.h
-> +++ b/include/drm/drm_panel.h
-> @@ -171,6 +171,13 @@ struct drm_panel {
->   	 * Panel entry in registry.
->   	 */
->   	struct list_head list;
+> +	int ret;
+> +	struct ltrf216a_data *data = iio_priv(indio_dev);
 > +
-> +	/**
-> +	 * @dsc:
-> +	 *
-> +	 * Panel DSC pps payload to be sent
-> +	 */
-> +	struct drm_dsc_config *dsc;
->   };
->   
->   void drm_panel_init(struct drm_panel *panel, struct device *dev,
+> +	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, 0);
+> +	if (ret < 0)
+> +		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static int ltrf216a_set_it_time(struct ltrf216a_data *data, int itime)
+> +{
+> +	int i, ret, index = -1;
+> +	u8 reg;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(int_time_mapping); i++) {
+> +		if (int_time_mapping[i] == itime) {
+> +			index = i;
+> +			break;
+> +		}
+> +	}
+> +	/* Make sure integration time index is valid */
+> +	if (index < 0)
+> +		return -EINVAL;
+> +
+> +	if (index == 0) {
+> +		reg = 0x03;
+> +		data->int_time_fac = 4;
+> +	} else if (index == 1) {
+> +		reg = 0x13;
+> +		data->int_time_fac = 2;
+> +	} else {
+> +		reg = (index << 4) | 0x02;
+> +		data->int_time_fac = 1;
+> +	}
+> +
+> +	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_ALS_MEAS_RATE, reg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	data->int_time = itime;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltrf216a_get_it_time(struct ltrf216a_data *data, int *val, int *val2)
+> +{
+> +	*val = 0;
+> +	*val2 = data->int_time;
+> +
+> +	return IIO_VAL_INT_PLUS_MICRO;
+> +}
+> +
+> +static int ltrf216a_read_data(struct ltrf216a_data *data, u8 addr)
+> +{
+> +	int ret;
+> +	int tries = 25;
+> +	int val_0, val_1, val_2;
+> +
+> +	while (tries--) {
+> +		ret = i2c_smbus_read_byte_data(data->client, LTRF216A_MAIN_STATUS);
+> +		if (ret < 0)
+> +			return ret;
+> +		if (ret & 0x08)
+> +			break;
+> +		msleep(20);
+> +	}
+> +
+> +	val_0 = i2c_smbus_read_byte_data(data->client, addr);
+> +	val_1 = i2c_smbus_read_byte_data(data->client, addr + 1);
+> +	val_2 = i2c_smbus_read_byte_data(data->client, addr + 2);
+> +	ret = (val_2 << 16) + (val_1 << 8) + val_0;
+> +
+> +	return ret;
+> +}
+> +
+> +static int ltrf216a_get_lux(struct ltrf216a_data *data)
+> +{
+> +	int greendata, cleardata, lux;
+> +
+> +	greendata = ltrf216a_read_data(data, LTRF216A_ALS_DATA_0);
+> +	cleardata = ltrf216a_read_data(data, LTRF216A_CLEAR_DATA_0);
+> +
+> +	if (greendata < 0 || cleardata < 0)
+> +		lux = 0;
+> +	else
+> +		lux = greendata * 8 * WIN_FAC / data->als_gain_fac / data->int_time_fac / 10;
+> +
+> +	return lux;
+> +}
+> +
+> +static int ltrf216a_read_raw(struct iio_dev *indio_dev,
+> +			     struct iio_chan_spec const *chan, int *val,
+> +			     int *val2, long mask)
+> +{
+> +	int ret;
+> +	struct ltrf216a_data *data = iio_priv(indio_dev);
+> +
+> +	mutex_lock(&data->mutex);
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_PROCESSED:
+> +		ret = ltrf216a_get_lux(data);
+> +		*val = ret;
+> +		ret = IIO_VAL_INT;
+> +		break;
+> +	case IIO_CHAN_INFO_INT_TIME:
+> +		ret = ltrf216a_get_it_time(data, val, val2);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	mutex_unlock(&data->mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ltrf216a_write_raw(struct iio_dev *indio_dev,
+> +			      struct iio_chan_spec const *chan, int val,
+> +			      int val2, long mask)
+> +{
+> +	struct ltrf216a_data *data = iio_priv(indio_dev);
+> +	int ret;
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_INT_TIME:
+> +		if (val != 0)
+> +			return -EINVAL;
+> +		mutex_lock(&data->mutex);
+> +		ret = ltrf216a_set_it_time(data, val2);
+> +		mutex_unlock(&data->mutex);
+> +		return ret;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static const struct iio_info ltrf216a_info = {
+> +	.read_raw	= ltrf216a_read_raw,
+> +	.write_raw	= ltrf216a_write_raw,
+> +	.attrs		= &ltrf216a_attribute_group,
+> +};
+> +
+> +static int ltrf216a_probe(struct i2c_client *client,
+> +			  const struct i2c_device_id *id)
+> +{
+> +	struct ltrf216a_data *data;
+> +	struct iio_dev *indio_dev;
+> +	int ret;
+> +
+> +	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
+> +	if (!indio_dev)
+> +		return -ENOMEM;
+> +
+> +	data = iio_priv(indio_dev);
+> +	i2c_set_clientdata(client, indio_dev);
+> +	data->client = client;
+> +
+> +	mutex_init(&data->mutex);
+> +
+> +	indio_dev->info = &ltrf216a_info;
+> +	indio_dev->name = LTRF216A_DRV_NAME;
+> +	indio_dev->channels = ltrf216a_channels;
+> +	indio_dev->num_channels = ARRAY_SIZE(ltrf216a_channels);
+> +	indio_dev->modes = INDIO_DIRECT_MODE;
+> +
+> +	ret = ltrf216a_init(indio_dev);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev, "ltrf216a chip init failed\n");
+> +		return ret;
+> +	}
+> +	data->int_time = 100000;
+> +	data->int_time_fac = 1;
+> +	data->als_gain_fac = 3;
+> +
+> +	ret = iio_device_register(indio_dev);
+
+Use devm- function, assuming no issues with removal-steps (disable will
+be before iio unregister).
+
+> +	if (ret < 0) {
+> +		dev_err(&client->dev, "failed to register iio dev\n");
+> +		goto err_init;
+> +	}
+> +
+> +	return 0;
+
+Blank line.
+
+> +err_init:
+> +	ltrf216a_disable(indio_dev);
+> +	return ret;
+> +}
+> +
 
 
--- 
-With best wishes
-Dmitry
+
+Best regards,
+Krzysztof

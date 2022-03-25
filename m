@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC834E7BE4
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE574E7B82
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbiCYUyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S232438AbiCYU7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbiCYUyE (ORCPT
+        with ESMTP id S232386AbiCYU7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:54:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17C550E16;
-        Fri, 25 Mar 2022 13:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648241549; x=1679777549;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P3gwNXe0u8BsPFKCZRFA9VltWIcjiuRgNKGEuiruPN4=;
-  b=EpRaQlMnz3FJSTYspef0y0Z+QDbk3Hjm8KhHZVPY4BlRHstE14+DKenD
-   +74Q2LMPMLWmiJIHJuKrD9AjYRkIlY8wTxMrNe9gTwfTGezUfk/ltzlLE
-   9i9lkhaOMJlM0EDXUnT0BEm9r/IgJK8X8ieLtcUihYVaDTMeKCN9dWqVk
-   J9NXQ2dveElqz9hAkdNNC4Wamx6DVGawZwXXW8f1J3pJkYn0TI5jW4AOv
-   3BZd9gMsifVmxCHKI3hOewBBNdXrGO3J2GlgXlPvZl4WSoE2++BtiQ6MO
-   pJAnrGilI2WelGuOfjY73R6/WzYpEZISLR5y033RA0BJlU15J6e6+g4yq
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="238653260"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="238653260"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:52:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="826145419"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2022 13:52:24 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXqv2-000Mad-9K; Fri, 25 Mar 2022 20:52:24 +0000
-Date:   Sat, 26 Mar 2022 04:52:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
-        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org
-Cc:     kbuild-all@lists.01.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, willy@infradead.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
-        tianzichen@kuaishou.com, fannaihao@baidu.com
-Subject: Re: [PATCH v6 03/22] cachefiles: notify user daemon with anon_fd
- when looking up cookie
-Message-ID: <202203260406.Ay5o7T9U-lkp@intel.com>
-References: <20220325122223.102958-4-jefflexu@linux.alibaba.com>
+        Fri, 25 Mar 2022 16:59:17 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6014CB9192;
+        Fri, 25 Mar 2022 13:57:42 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id b188so9437281oia.13;
+        Fri, 25 Mar 2022 13:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uzAuqtwkm46GspJerldWifZpeS2uUUcdgFDDV4iF0Yc=;
+        b=kCPIJahkmzOtz09iL0VBxsl721inkNgOH3ZtvZsKBaopkIMxhCt9wXBCVZYMOlR09o
+         NJPOZusdSDjEUe1v1RHURtfLqkJdx3KH4JphrNnOXpWQEU96pRFb1VqPwVgAvJxtdEpG
+         bopMeVKGXfzygIfBVJOPU5wPvbIk6pW02zSNwJrXOqVnKl17SVYljisZiwRj1uSUCgDu
+         dQ0OCgdtwemBhxEYLAz4q8qK1XAix5DlRTSObG3pXdeNz7Czed057mimeD8qSS8xYrNI
+         qtA0mmZaonjBAf6+nYub+v08IcolTB1yB9z8WdlukM8astVozXDIy9Sva2nvkMUQ8a+j
+         R/+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uzAuqtwkm46GspJerldWifZpeS2uUUcdgFDDV4iF0Yc=;
+        b=5QRPida1CkAgPqKxYDPKyL5AGhpcay0D+8HmNO1SiTxFjHLGzciUSujfDLHosbKlfd
+         zm5SDNDpVkJmbx7jD0C0S9bOIXJQnm2kSnEiLr7l3zdLpsBBgPoOonkLbq8aYh3BJnmg
+         VHr+x8edA+RZsGRc7ln88aUpaD2GJ+rjHu9F4L+kE+OeozN/AbmA0ZVK18Spazjmf9Xx
+         nBgY3BJbW1WtsznTEeGdT0iG3kw7WWgTbRntca7wlEhgNTtJmwcHVi+oNrehikxM9Fn8
+         6lBzI/2Y+QACUDIK9ppyWitE7EfRkl3HDu3cXR598XIj65/1mHZgHhFlz6L5QMPY81ec
+         Ug+g==
+X-Gm-Message-State: AOAM531UEaLP8RW8fgjXG1OS7+xE9CF9wSgX20T8r+CpKsZIV8JvzoV6
+        pvK4jOOaSF4hPHk8SI1k3Qk=
+X-Google-Smtp-Source: ABdhPJy7ZXjFFrHR0aVM76ZkWCenQp0VXu5AZMjydR1p7at00cvcj9FndX4+x8BsGzBlg9+btiJKDA==
+X-Received: by 2002:a05:6808:1485:b0:2dc:d320:ce57 with SMTP id e5-20020a056808148500b002dcd320ce57mr6621661oiw.298.1648241861726;
+        Fri, 25 Mar 2022 13:57:41 -0700 (PDT)
+Received: from t14s.localdomain ([179.232.121.194])
+        by smtp.gmail.com with ESMTPSA id v8-20020a05683018c800b005cb39fc3e15sm3129743ote.13.2022.03.25.13.57.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 13:57:41 -0700 (PDT)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id 2F1001D1F05; Fri, 25 Mar 2022 17:57:39 -0300 (-03)
+Date:   Fri, 25 Mar 2022 17:57:39 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH] sctp: replace usage of found with dedicated list
+ iterator variable
+Message-ID: <Yj4sw30tZ8DRG5qT@t14s.localdomain>
+References: <20220324072257.62674-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325122223.102958-4-jefflexu@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220324072257.62674-1-jakobkoschel@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeffle,
+On Thu, Mar 24, 2022 at 08:22:57AM +0100, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+> 
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
+> 
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
+> 
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on trondmy-nfs/linux-next]
-[also build test ERROR on rostedt-trace/for-next linus/master v5.17]
-[cannot apply to xiang-erofs/dev-test dhowells-fs/fscache-next next-20220325]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220325-203555
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-config: csky-defconfig (https://download.01.org/0day-ci/archive/20220326/202203260406.Ay5o7T9U-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ec8aa2f84eb47244377e4b822dd77d82ee54714a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220325-203555
-        git checkout ec8aa2f84eb47244377e4b822dd77d82ee54714a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   csky-linux-ld: fs/cachefiles/daemon.o: in function `cachefiles_ondemand_daemon_read':
->> daemon.c:(.text+0x97c): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-   csky-linux-ld: fs/cachefiles/interface.o: in function `cachefiles_ondemand_daemon_read':
-   interface.c:(.text+0x1ec): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-   csky-linux-ld: fs/cachefiles/io.o: in function `cachefiles_ondemand_daemon_read':
-   io.c:(.text+0x720): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-   csky-linux-ld: fs/cachefiles/key.o: in function `cachefiles_ondemand_daemon_read':
-   key.c:(.text+0x0): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-   csky-linux-ld: fs/cachefiles/main.o: in function `cachefiles_ondemand_daemon_read':
-   main.c:(.text+0x0): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-   csky-linux-ld: fs/cachefiles/namei.o: in function `cachefiles_ondemand_daemon_read':
-   namei.c:(.text+0xf8): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-   csky-linux-ld: fs/cachefiles/security.o: in function `cachefiles_ondemand_daemon_read':
-   security.c:(.text+0x24): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-   csky-linux-ld: fs/cachefiles/volume.o: in function `cachefiles_ondemand_daemon_read':
-   volume.c:(.text+0x0): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-   csky-linux-ld: fs/cachefiles/xattr.o: in function `cachefiles_ondemand_daemon_read':
-   xattr.c:(.text+0x0): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>

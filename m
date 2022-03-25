@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1C04E765D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFBB4E7656
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376631AbiCYPNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
+        id S1376709AbiCYPNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359766AbiCYPKQ (ORCPT
+        with ESMTP id S1359755AbiCYPKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:10:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26687DA08B;
-        Fri, 25 Mar 2022 08:07:57 -0700 (PDT)
+        Fri, 25 Mar 2022 11:10:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBAF65AF;
+        Fri, 25 Mar 2022 08:08:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79B0C61BE3;
-        Fri, 25 Mar 2022 15:07:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896FEC340F4;
-        Fri, 25 Mar 2022 15:07:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D04B61C12;
+        Fri, 25 Mar 2022 15:08:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1519BC340E9;
+        Fri, 25 Mar 2022 15:08:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220876;
-        bh=30Sq2KHG//5SyVDvego7bQ7JmKwEWuVUMJ9EIg20PUc=;
+        s=korg; t=1648220882;
+        bh=outLncT7N3XRfvkdWvXWmkHr2duV+VqjWJmMM9eA8rw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qEKnOJ/t3vrY0kePbIs81kyM5n6PnWfcA3JqNP3qGY4NCWHOfRyqIV3Iot8ygpPI2
-         km1Y14VTFi7o+2jKKTCQzmsyNZ+lurpS0HLTk3Em2XXepSrpeuasyVXDs03lsBYorE
-         bY0Kp1YGCv+DlV1FGDJ6uJUv1BL9xlG40eK4t84E=
+        b=jZIbwA2SfZX1/uGJLyYFJRU+NIQvOuKRxUhdK0dZbpXBmipQfxLr3Q3eBYDYCibGK
+         lw9zZ1wVznbrlNLeDXAne/wpYFlUej2ELOvF4o5i6ClslCGDQQ+Rn9ZFUkyhjiD2V5
+         034eqRdP6RP9oHbtBfCkCFNq6AjYwaiTk88nKAWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, huangwenhui <huangwenhuia@uniontech.com>,
+        stable@vger.kernel.org, Jason Zheng <jasonzheng2004@gmail.com>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 19/29] ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
-Date:   Fri, 25 Mar 2022 16:04:59 +0100
-Message-Id: <20220325150419.140391558@linuxfoundation.org>
+Subject: [PATCH 5.4 20/29] ALSA: hda/realtek: Add quirk for ASUS GA402
+Date:   Fri, 25 Mar 2022 16:05:00 +0100
+Message-Id: <20220325150419.168648795@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
 References: <20220325150418.585286754@linuxfoundation.org>
@@ -54,17 +54,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huangwenhui <huangwenhuia@uniontech.com>
+From: Jason Zheng <jasonzheng2004@gmail.com>
 
-commit 882bd07f564f97fca6e42ce6ce627ce24ce1ef5a upstream.
+commit b7557267c233b55d8e8d7ba4c68cf944fe2ec02c upstream.
 
-On a HP 288 Pro G8, the front mic could not be detected.In order to
-get it working, the pin configuration needs to be set correctly, and
-the ALC671_FIXUP_HP_HEADSET_MIC2 fixup needs to be applied.
+ASUS GA402 requires a workaround to manage the routing of its 4 speakers
+like the other ASUS models. Add a corresponding quirk entry to fix it.
 
-Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+Signed-off-by: Jason Zheng <jasonzheng2004@gmail.com>
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220311093836.20754-1-huangwenhuia@uniontech.com
+Link: https://lore.kernel.org/r/20220313092216.29858-1-jasonzheng2004@gmail.com
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
@@ -73,13 +72,13 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/sound/pci/hda/patch_realtek.c
 +++ b/sound/pci/hda/patch_realtek.c
-@@ -10201,6 +10201,7 @@ static const struct snd_pci_quirk alc662
- 	SND_PCI_QUIRK(0x1028, 0x069f, "Dell", ALC668_FIXUP_DELL_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x1632, "HP RP5800", ALC662_FIXUP_HP_RP5800),
- 	SND_PCI_QUIRK(0x103c, 0x873e, "HP", ALC671_FIXUP_HP_HEADSET_MIC2),
-+	SND_PCI_QUIRK(0x103c, 0x885f, "HP 288 Pro G8", ALC671_FIXUP_HP_HEADSET_MIC2),
- 	SND_PCI_QUIRK(0x1043, 0x1080, "Asus UX501VW", ALC668_FIXUP_HEADSET_MODE),
- 	SND_PCI_QUIRK(0x1043, 0x11cd, "Asus N550", ALC662_FIXUP_ASUS_Nx50),
- 	SND_PCI_QUIRK(0x1043, 0x129d, "Asus N750", ALC662_FIXUP_ASUS_Nx50),
+@@ -8183,6 +8183,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1043, 0x1e51, "ASUS Zephyrus M15", ALC294_FIXUP_ASUS_GU502_PINS),
+ 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
++	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
+ 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
 
 

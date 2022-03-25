@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1CA4E7D76
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C745D4E7DFF
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiCYTtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S229590AbiCYTbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbiCYTsh (ORCPT
+        with ESMTP id S229843AbiCYTam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:48:37 -0400
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F38B223840;
-        Fri, 25 Mar 2022 12:32:07 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id m3so14989808lfj.11;
-        Fri, 25 Mar 2022 12:32:07 -0700 (PDT)
+        Fri, 25 Mar 2022 15:30:42 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4ABF3DE8D2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:26:40 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id s25so11570440lji.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=SrJbbfaddWfhMen20qeE+m66y7c5UtFQj6CzeAj6OjI=;
+        b=pAIGj8V93uiAJjTlmDfKIrNSPI5B0Swb21IxwxtA2OT1fWA9xoWtkiYuFGd2YtrLzY
+         EjVkBD6B6OmrGKVrwniwjA1oOEDGBS2ZdjYabLeHtK2EfbWaVmShnewTbHkTHXrSSYL+
+         zsslkO+p6tDLQHUkKUSIEvBJmfH8l56kmYFnCYL+37Ra2wHkcGueG3Y1B2ViljRc+EuM
+         LrWrAcCel0AEqINM6IG63ovAPuQyRjmPzK5ZvYVhbdJ8sD2TPyL0OQZO3Ub+DCq6kmvZ
+         RY6L2ECQHMrKu293svlvJKkVFag++e46e2Y2UXlaiZ+38x9wz6VkDlGmuYNZuRiOv7Jz
+         +kNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=fRup0HhTI1fItvOnWgW1apl6hJ+hovK5wDJd4/CJEws=;
-        b=m12DW7F/KxegR9D+RbcCP/FsyoJqn1Q7vDwxkuPbGaUo5off6jkMbcu78TeXgKUBvc
-         nvUePxxPS8Nk1bTnvF5NkmnugZI4gK6EzQhqq9PltfE8PaEA5gZeJTKD39t/bN3qtV3E
-         kAfqnHxiJB69bcbAbwa6JjiSTvA19v/qbggObr+ZPb/qHJp1WsGRp5EGD/KP1vtLNvZS
-         b7VqPKfNVqIrcI7H7s9mPujpfNwUD0d9fsRdBzgJHVHtIjWarnyBePlfcCILlSdIQo0M
-         8Tx1YUiJQX7y8xlWcyg8ke+ssl0B2SbUC5fewGcW2U/cjElpqLs00ljkZPm/FaKmfaX6
-         o3PA==
-X-Gm-Message-State: AOAM530Ka7v6Y+qBNa95EqZ6u1qT273UFhi6g7prrflumBp1YtMB4e9y
-        5UiMyZ9STRGPB1w9hZ8Mp3X9t5l+gdOeDw==
-X-Google-Smtp-Source: ABdhPJxBJl5W6RwFQAyh8otMltwQxLkSdlG8+OGsciwzNPCea5FQXhEojfuAMY1CBRj+1zzaCrkF1w==
-X-Received: by 2002:a50:d84c:0:b0:418:f176:79df with SMTP id v12-20020a50d84c000000b00418f17679dfmr14200983edj.353.1648229500341;
-        Fri, 25 Mar 2022 10:31:40 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id c12-20020a05640227cc00b004192114e521sm3209328ede.60.2022.03.25.10.31.38
+        bh=SrJbbfaddWfhMen20qeE+m66y7c5UtFQj6CzeAj6OjI=;
+        b=YJ1nSYa+Yqyyy6OlFs1+hrbhEpQH8fstbbg8gYVbsNzp4SGSMX+0NUpa2L40hKle49
+         67vK/gXEDbHOrxK4llAF+RaaLoh2vGfQJHa97zmSqq0W/eoXsfMIxRbVC4/f8N1NK0EW
+         /GjHRgKqM4bNgZSqxFsH3a54/996QiLOy8NEdBKlCM/KEtKS1nxtVTVgBXJJRuhep+Ae
+         qKEc/LFH8yTfu6+DVNCpMh5X2D6RMd+IqZfluZ5ao5U52/qDp5MZCWZ4ykL5qUn4UGbC
+         APxICSxomgmxoXd4vkRtn0WlVa00EUfAA9tdIM5y1xy2k9kVjQcIyGbwspX7EURmwfDf
+         zO1w==
+X-Gm-Message-State: AOAM5300remxwixRxh148ZBfMv4e5Wiw39yltCoY5TBWyBe7sSyM4a0P
+        woTloo95j/9eU+Lm2/jZmJMy3MpStaP/iD9f
+X-Google-Smtp-Source: ABdhPJwUgBLSDvNV1NlBzs98fMN9ijZv4koUdOJmoiCaJvLygneQGawLQNsV+XEZue+1J6bM2ic1iw==
+X-Received: by 2002:a05:6000:1a8d:b0:204:39fa:d21c with SMTP id f13-20020a0560001a8d00b0020439fad21cmr9858181wry.9.1648229580850;
+        Fri, 25 Mar 2022 10:33:00 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:d3b0:47bd:8485:31cd? ([2001:861:44c0:66c0:d3b0:47bd:8485:31cd])
+        by smtp.gmail.com with ESMTPSA id 11-20020a05600c26cb00b0037ff53511f2sm8544986wmv.31.2022.03.25.10.32.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 10:31:39 -0700 (PDT)
-Message-ID: <8baedbe6-eb60-02b4-a6b8-fe3abc566335@kernel.org>
-Date:   Fri, 25 Mar 2022 18:31:38 +0100
+        Fri, 25 Mar 2022 10:33:00 -0700 (PDT)
+Message-ID: <e32a02a0-1f09-3038-81cb-54c632329dfa@baylibre.com>
+Date:   Fri, 25 Mar 2022 18:32:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 01/22] dt-bindings: mediatek,dpi: Add DP_INTF compatible
+Subject: Re: [PATCH 1/3] arm64: meson: add dts bluetooth node for JetHub H1
 Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, matthias.bgg@gmail.com,
-        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
-        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        markyacoub@google.com,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-References: <20220325171511.23493-1-granquet@baylibre.com>
- <20220325171511.23493-2-granquet@baylibre.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220325171511.23493-2-granquet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Vyacheslav Bocharov <adeep@lexina.in>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Vyacheslav Bocharov <devel@lexina.in>
+References: <20220325165501.81551-1-adeep@lexina.in>
+ <20220325165501.81551-2-adeep@lexina.in>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220325165501.81551-2-adeep@lexina.in>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,41 +80,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/2022 18:14, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> DP_INTF is similar to DPI but does not have the exact same feature set
-> or register layouts.
-> 
-> DP_INTF is the sink of the display pipeline that is connected to the
-> DisplayPort controller and encoder unit. It takes the same clocks as
-> DPI.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Hi,
 
-This is v1, how did you get Rob's review already?
-
+On 25/03/2022 17:54, Vyacheslav Bocharov wrote:
+> From: Vyacheslav Bocharov <devel@lexina.in>
+> 
+> Add bluetooth node for RTL8822CS uart to JetHub H1 dts file.
+> 
+> Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
 > ---
->  .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+>   .../boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts  | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
-> index dd2896a40ff0..53acf9a84f7f 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
-> @@ -4,16 +4,16 @@
->  $id: http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: mediatek DPI Controller Device Tree Bindings
-> +title: mediatek DPI/DP_INTF Controller Device Tree Bindings
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+> index 6eafb908695f..a5ee7ed17efa 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+> @@ -213,6 +213,11 @@ &uart_A {
+>   	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
+>   	pinctrl-names = "default";
+>   	uart-has-rtscts;
 
-While at it, remove "Device Tree Bindings". It's about hardware.
+Please add a blank here to match other DT files.
 
+> +	bluetooth {
+> +		compatible = "realtek,rtl8822cs-bt";
+> +		enable-gpios  = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
+> +		host-wake-gpios = <&gpio GPIOX_18 GPIO_ACTIVE_HIGH>;
+> +       };
+>   };
+>   
+>   &uart_C {
 
-Please also rebase your tree as you use my old email address.
-
-Best regards,
-Krzysztof

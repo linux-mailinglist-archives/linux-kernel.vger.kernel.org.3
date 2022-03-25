@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D21E4E765F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C8B4E7628
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377127AbiCYPNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
+        id S241341AbiCYPL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359656AbiCYPLW (ORCPT
+        with ESMTP id S1359635AbiCYPHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:11:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9076459A5E;
-        Fri, 25 Mar 2022 08:08:33 -0700 (PDT)
+        Fri, 25 Mar 2022 11:07:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD58DA0AC;
+        Fri, 25 Mar 2022 08:05:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 880A1B828FA;
-        Fri, 25 Mar 2022 15:08:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0776C340E9;
-        Fri, 25 Mar 2022 15:08:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54830B828FA;
+        Fri, 25 Mar 2022 15:05:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A307BC340E9;
+        Fri, 25 Mar 2022 15:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220909;
-        bh=z07Ym30vPFIfvTmZOVqlKvJeB/zNVnz8MLAQPPHI1FQ=;
+        s=korg; t=1648220749;
+        bh=N6vwkSNiAupxcI7UazzCb8LR9f1mJCzrDjlRy+SPIZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z2cqJ9Om36UtjGKNpg5OEFDSeVDh6Jv5Ey3X7SyxggaPZQ9S49fhPxbn0c+Ju1I4F
-         eq2RgM3KWnAk2NX0wIwSzzG9c/nUedXk8kqf3M94TQlgBBgW+O1JjnQPc45XIqaB7B
-         VYsv2rASO86ufixMdDI1WuXBJBDFhoSgZurbxEM4=
+        b=k3XNn44D+tXgA9Z1ZvyMeGoMPJGome2IcCfMz1p5aEsfSUK6Wc+/tt81wGfC2sJSS
+         MbRlVLBe61MCel27CMNbUN/ZkQtUtLcuwzXjw7BXx7twWXGseY/bLJkGfC3gbVCbG/
+         4lNcbnSqfdspDwLjBaZuU7CMGkshN5stxglK6EQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuansheng Liu <chuansheng.liu@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 5.4 08/29] thermal: int340x: fix memory leak in int3400_notify()
+        stable@vger.kernel.org, Maximilian Luz <luzmaximilian@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 4.14 14/17] ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
 Date:   Fri, 25 Mar 2022 16:04:48 +0100
-Message-Id: <20220325150418.827001636@linuxfoundation.org>
+Message-Id: <20220325150417.177656495@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
+References: <20220325150416.756136126@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuansheng Liu <chuansheng.liu@intel.com>
+From: Maximilian Luz <luzmaximilian@gmail.com>
 
-commit 3abea10e6a8f0e7804ed4c124bea2d15aca977c8 upstream.
+commit 7dacee0b9efc8bd061f097b1a8d4daa6591af0c6 upstream.
 
-It is easy to hit the below memory leaks in my TigerLake platform:
+For some reason, the Microsoft Surface Go 3 uses the standard ACPI
+interface for battery information, but does not use the standard PNP0C0A
+HID. Instead it uses MSHW0146 as identifier. Add that ID to the driver
+as this seems to work well.
 
-unreferenced object 0xffff927c8b91dbc0 (size 32):
-  comm "kworker/0:2", pid 112, jiffies 4294893323 (age 83.604s)
-  hex dump (first 32 bytes):
-    4e 41 4d 45 3d 49 4e 54 33 34 30 30 20 54 68 65  NAME=INT3400 The
-    72 6d 61 6c 00 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  rmal.kkkkkkkkkk.
-  backtrace:
-    [<ffffffff9c502c3e>] __kmalloc_track_caller+0x2fe/0x4a0
-    [<ffffffff9c7b7c15>] kvasprintf+0x65/0xd0
-    [<ffffffff9c7b7d6e>] kasprintf+0x4e/0x70
-    [<ffffffffc04cb662>] int3400_notify+0x82/0x120 [int3400_thermal]
-    [<ffffffff9c8b7358>] acpi_ev_notify_dispatch+0x54/0x71
-    [<ffffffff9c88f1a7>] acpi_os_execute_deferred+0x17/0x30
-    [<ffffffff9c2c2c0a>] process_one_work+0x21a/0x3f0
-    [<ffffffff9c2c2e2a>] worker_thread+0x4a/0x3b0
-    [<ffffffff9c2cb4dd>] kthread+0xfd/0x130
-    [<ffffffff9c201c1f>] ret_from_fork+0x1f/0x30
+Additionally, the power state is not updated immediately after the AC
+has been (un-)plugged, so add the respective quirk for that.
 
-Fix it by calling kfree() accordingly.
-
-Fixes: 38e44da59130 ("thermal: int3400_thermal: process "thermal table changed" event")
-Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
-Cc: 4.14+ <stable@vger.kernel.org> # 4.14+
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+Cc: All applicable <stable@vger.kernel.org>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/acpi/battery.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -216,6 +216,10 @@ static void int3400_notify(acpi_handle h
- 		thermal_prop[4] = NULL;
- 		kobject_uevent_env(&priv->thermal->device.kobj, KOBJ_CHANGE,
- 				thermal_prop);
-+		kfree(thermal_prop[0]);
-+		kfree(thermal_prop[1]);
-+		kfree(thermal_prop[2]);
-+		kfree(thermal_prop[3]);
- 		break;
- 	default:
- 		/* Ignore unknown notification codes sent to INT3400 device */
+--- a/drivers/acpi/battery.c
++++ b/drivers/acpi/battery.c
+@@ -89,6 +89,10 @@ enum acpi_battery_files {
+ 
+ static const struct acpi_device_id battery_device_ids[] = {
+ 	{"PNP0C0A", 0},
++
++	/* Microsoft Surface Go 3 */
++	{"MSHW0146", 0},
++
+ 	{"", 0},
+ };
+ 
+@@ -1183,6 +1187,14 @@ static const struct dmi_system_id bat_dm
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire V5-573G"),
+ 		},
+ 	},
++	{
++		/* Microsoft Surface Go 3 */
++		.callback = battery_notification_delay_quirk,
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Go 3"),
++		},
++	},
+ 	{},
+ };
+ 
 
 

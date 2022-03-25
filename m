@@ -2,107 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61E04E6CD7
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 04:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08C44E6CDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 04:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350623AbiCYDaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 23:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S1356257AbiCYDcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 23:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbiCYD35 (ORCPT
+        with ESMTP id S239983AbiCYDcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 23:29:57 -0400
-X-Greylist: delayed 59360 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 20:28:17 PDT
-Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33468167C0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648178890;
-        bh=qpf8RfttfYwh4u1t5tUZIPgLdFSz2GuJZ8d8Lfe+YNY=;
-        h=From:To:Cc:Subject:Date;
-        b=zKp/0cjjj0eFzmVDM+aHIBGSSICVCxE98t3xM7nzlwB80BwL0eQqHxN3zew/lFaPy
-         9AqQWnJTRyXBT8xoK7nxzeLtRL3ygosDV+IbL8O4vEyaaU/aykSYHz+DCsEd5KakCy
-         wbIQ1c6knMXduTD5yld/pZivE8R+TUl12MZuEm10=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id 702A0625; Fri, 25 Mar 2022 11:28:02 +0800
-X-QQ-mid: xmsmtpt1648178882tfv2y9h5u
-Message-ID: <tencent_C028FEC2BF94C0FF5740D298F572B9396C09@qq.com>
-X-QQ-XMAILINFO: NDgMZBR9sMmaCLb8eMJ94f9WWsBOYfM7ZcyG4o9zcfIuXx52HdCTWuIC99mx8T
-         d0C0H1QgCusvlNmtsj0x5aM+Pm0bPHlXsiRhYs3ghpq7gshK2rcIkbNntSDPlE6wlLzrhukdF6G3
-         tjZhJW0m6H17B4V27jAiwltaSh6y6y9ZORXnTa0mBp6MX7/E9ksiu2IOPfIl0KS2+OMVkCeuFV5i
-         paa5vehYt4420Lt2zV5sdn3ZHqignEWJE/4ojTVd3nTwItXssqXF31U4WJNwyLJi9CBY36/LBIUK
-         p1Q1mYyr6f4xx/y8ksF95JtxXN5gfje4H3z+Ebl3yIri+EE+WHp/CicREzKWWBw9K5aiFhYvkCma
-         1U87MFryLRCGC/EbiOMLDqaS3mmLSVXxlB3qbjh3gZ+xI2KItZNFzNTogFBVscHKqspz3cmF71xh
-         keLJVNlgdGf1/Vcy0aDs/l1XNlKWA9E4FqlK0+Wf8o9EVjDpewiM2D2EE4cRAWlJcIP0sFC+1e+r
-         H/6LsEjkjrbX5A8c9KPH/J0NVurprKBo0zeC9gyMu9yx9LYVqczuAStuRsWX+fZvySdIUaIxxvgv
-         umv8gyquYyvewiv07eXST/SidovzlvzjOri9NpHYWcXNNdhXsZzrJcp4wmmF7XW/DeQOJtZa8CcJ
-         tb/+xmxGMoFyA4LSfa7bSVowix1Uj5WQRXACiBo6EYUyqf3RNOJxbNW6pph2tQnqf7l3fRR84s0Y
-         MqgoS/K52Inz7kaV6gsVOi1UIx4NFpGqu7iWhVRrSm7aEPyReswrU7zy0YdhXbCbFjlg4O18AJlV
-         TyMuLu8un/lG0szAqJGhAWHahnQQd9/I8Wt1NuO/GciGUhsfReLi3o0lhpWT1v4kAF4xHanzEOVX
-         PK2O7j+1jxv/l86w48E5ClBcjU+tws72XymAulCUSqQXCol3oVwxhVcUa/lX8iKGedfWEQ4kxLJC
-         WTHOWfzspSeGBRWFekAVFsjdZFzFS/Zdo+nIb51CKblrIGnst9Tw==
-From:   xkernel.wang@foxmail.com
-To:     colyli@suse.de, kent.overstreet@gmail.com
-Cc:     linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] bcache: add a check for the return of kzalloc()
-Date:   Fri, 25 Mar 2022 11:27:36 +0800
-X-OQ-MSGID: <20220325032736.3545-1-xkernel.wang@foxmail.com>
+        Thu, 24 Mar 2022 23:32:33 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8156F9F3B5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:31:00 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id b8so6416546pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 20:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GGiTeRG4IQk7h6C89ytVphusb4+2ymibartIH2Voor0=;
+        b=jSy5FHrMi1uSu+9XPjkA6dqRLZHrwSVVPGi/LShhirbbhIg051NvEtAfXFZQohs/64
+         XIjdKJvuE5u2BblRvrXXkEA1gfUwsaYQvUresbFcxHuNWXxMLwDOT8Ssi7PwdukIYdB4
+         28jFf7mVxW74xbdy+ZKfKxYR6FgRn35qxHdOY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GGiTeRG4IQk7h6C89ytVphusb4+2ymibartIH2Voor0=;
+        b=R1lBTxrQElDmblV7VSdGFhsKHzXl8OrkRK3gHnFJGjl4YUMHgoRBrgWQ46TdSKm6WI
+         vgYGYgHZ2kN676WOuAeTyC1Dn3SGfHVWfo/NBm/W9pgTgaFVEVH+YLqoDdGvfHpzN1gI
+         U49KODcdSBrG1NdIG5efF78W7vxSwXe66ir813l2m2o0dZbNKQ2qr6GT8cgZ7khAl33x
+         +sAmnu9Peq8VuuHxhpgBOsOSfvfOsZfqulO1FwneITDaDc9J/7fLCB7GoJhVkxQ5U0xv
+         qmgVW1aHdbPOIdQeAhcbJqusvBxxi62F4YQC5ipCqfh2jU1QeM1fl2kc5LHBDMBWBdbM
+         bx1Q==
+X-Gm-Message-State: AOAM530pYEdbVwG4RNKxA9eAj1voilDS7Mz0v1EvDDkJ0ZVJiNzCO4hJ
+        FcWKHyBAlzSvoI7Ofwj0ACPIAA==
+X-Google-Smtp-Source: ABdhPJyQm2KDpZRppICe4Wr5sAd4fXOScBA5SeJDI8r3lTjC/qlbZm17yG255aUtuU6tDztFm5IfAw==
+X-Received: by 2002:a17:90b:1809:b0:1c7:28fb:bdd0 with SMTP id lw9-20020a17090b180900b001c728fbbdd0mr10228571pjb.231.1648179060040;
+        Thu, 24 Mar 2022 20:31:00 -0700 (PDT)
+Received: from localhost (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
+        by smtp.gmail.com with UTF8SMTPSA id 21-20020a630115000000b00382a0895661sm3773921pgb.11.2022.03.24.20.30.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 20:30:59 -0700 (PDT)
+From:   Ying Hsu <yinghsu@chromium.org>
+To:     marcel@holtmann.org
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Ying Hsu <yinghsu@chromium.org>,
+        Joseph Hwang <josephsih@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] Bluetooth: fix dangling sco_conn and use-after-free in sco_sock_timeout
+Date:   Fri, 25 Mar 2022 03:30:51 +0000
+Message-Id: <20220325033028.1.I67f8ad854ac2f48701902bfb34d6e2070011b779@changeid>
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Connecting the same socket twice consecutively in sco_sock_connect()
+could lead to a race condition where two sco_conn objects are created
+but only one is associated with the socket. If the socket is closed
+before the SCO connection is established, the timer associated with the
+dangling sco_conn object won't be canceled. As the sock object is being
+freed, the use-after-free problem happens when the timer callback
+function sco_sock_timeout() accesses the socket. Here's the call trace:
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check it to
-prevent potential wrong memory access.
+dump_stack+0x107/0x163
+? refcount_inc+0x1c/
+print_address_description.constprop.0+0x1c/0x47e
+? refcount_inc+0x1c/0x7b
+kasan_report+0x13a/0x173
+? refcount_inc+0x1c/0x7b
+check_memory_region+0x132/0x139
+refcount_inc+0x1c/0x7b
+sco_sock_timeout+0xb2/0x1ba
+process_one_work+0x739/0xbd1
+? cancel_delayed_work+0x13f/0x13f
+? __raw_spin_lock_init+0xf0/0xf0
+? to_kthread+0x59/0x85
+worker_thread+0x593/0x70e
+kthread+0x346/0x35a
+? drain_workqueue+0x31a/0x31a
+? kthread_bind+0x4b/0x4b
+ret_from_fork+0x1f/0x30
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+Reviewed-by: Joseph Hwang <josephsih@chromium.org>
 ---
-Note: I just roughly handled the error and this seems to affect the
-original functionality. If this cannot fail, maybe the tag
-`__GFP_NOFAIL` should be considered.
- drivers/md/bcache/request.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+Tested this commit using a C reproducer on qemu-x86_64 for 8 hours.
 
-diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
-index 6d1de88..1dc9821 100644
---- a/drivers/md/bcache/request.c
-+++ b/drivers/md/bcache/request.c
-@@ -1107,14 +1107,16 @@ static void detached_dev_do_request(struct bcache_device *d, struct bio *bio,
- 	 * which would call closure_get(&dc->disk.cl)
- 	 */
- 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
--	ddip->d = d;
--	/* Count on the bcache device */
--	ddip->orig_bdev = orig_bdev;
--	ddip->start_time = start_time;
--	ddip->bi_end_io = bio->bi_end_io;
--	ddip->bi_private = bio->bi_private;
--	bio->bi_end_io = detached_dev_end_io;
--	bio->bi_private = ddip;
-+	if (ddip) {
-+		ddip->d = d;
-+		/* Count on the bcache device */
-+		ddip->orig_bdev = orig_bdev;
-+		ddip->start_time = start_time;
-+		ddip->bi_end_io = bio->bi_end_io;
-+		ddip->bi_private = bio->bi_private;
-+		bio->bi_end_io = detached_dev_end_io;
-+		bio->bi_private = ddip;
+ net/bluetooth/sco.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/net/bluetooth/sco.c b/net/bluetooth/sco.c
+index 8eabf41b2993..380c63194736 100644
+--- a/net/bluetooth/sco.c
++++ b/net/bluetooth/sco.c
+@@ -574,19 +574,24 @@ static int sco_sock_connect(struct socket *sock, struct sockaddr *addr, int alen
+ 	    addr->sa_family != AF_BLUETOOTH)
+ 		return -EINVAL;
+ 
+-	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND)
+-		return -EBADFD;
++	lock_sock(sk);
++	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
++		err = -EBADFD;
++		goto done;
 +	}
  
- 	if ((bio_op(bio) == REQ_OP_DISCARD) &&
- 	    !blk_queue_discard(bdev_get_queue(dc->bdev)))
+-	if (sk->sk_type != SOCK_SEQPACKET)
+-		return -EINVAL;
++	if (sk->sk_type != SOCK_SEQPACKET) {
++		err = -EINVAL;
++		goto done;
++	}
+ 
+ 	hdev = hci_get_route(&sa->sco_bdaddr, &sco_pi(sk)->src, BDADDR_BREDR);
+-	if (!hdev)
+-		return -EHOSTUNREACH;
++	if (!hdev) {
++		err = -EHOSTUNREACH;
++		goto done;
++	}
+ 	hci_dev_lock(hdev);
+ 
+-	lock_sock(sk);
+-
+ 	/* Set destination address and psm */
+ 	bacpy(&sco_pi(sk)->dst, &sa->sco_bdaddr);
+ 
 -- 
+2.35.1.1021.g381101b075-goog
+

@@ -2,185 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D114E6FFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7754E7005
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357250AbiCYJ2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 05:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
+        id S1356988AbiCYJcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 05:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356988AbiCYJ1u (ORCPT
+        with ESMTP id S1356485AbiCYJcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 05:27:50 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4488CF4B3;
-        Fri, 25 Mar 2022 02:26:14 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 62E076F3;
-        Fri, 25 Mar 2022 10:26:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1648200372;
-        bh=AS/wpaAKWRsKf+WeGQuXkWvU6L94Cr8Qvu0UZw2bIQw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I0YchKv7OTxO2sq7+JzsGV261s5wBNZNmEN5m1dXghJ/cdE76Q5iiysMyDe0dT5wm
-         HrWr2uAD67sgEfyETWkASM+krLyAtITTvVRcJwnColft7DXOscZK+4afRijJpp41gd
-         pe3xZzbJTnHC23swvKqD4Ur1MKG7fjCBCFo9bzq0=
-Date:   Fri, 25 Mar 2022 11:26:10 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "aisheng.dong@nxp.com" <aisheng.dong@nxp.com>,
-        "reinhold.mueller@emtrion.com" <reinhold.mueller@emtrion.com>,
-        "frowand.list@gmail.com" <frowand.list@gmail.com>,
-        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "alexandru.marginean@nxp.com" <alexandru.marginean@nxp.com>
-Subject: Re: [PATCH v2 3/3] arm64: dts: freescale: add initial support for
- verdin imx8m plus
-Message-ID: <Yj2KsmvHgwTChwG6@pendragon.ideasonboard.com>
-References: <20220323143600.170778-1-marcel@ziswiler.com>
- <20220323143600.170778-4-marcel@ziswiler.com>
- <Yjz5fBwxhr0aBNsU@pendragon.ideasonboard.com>
- <bd89bb9bf215484be9894fb0ae4052324c84ab9a.camel@toradex.com>
+        Fri, 25 Mar 2022 05:32:50 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740E2CF4BA;
+        Fri, 25 Mar 2022 02:31:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bxaaJrWJ4daM0+JPzr2jZtpTf4VVysskQZ2lFwGSGDb+aoCmx8jv4vTC8nHKfcc/CmtLfW5DuifGBQmJU/dmxddQ0djRpRELttRvZifE0YzApXsYVlRvf+aiPrIP034he6iNhS+Ho28scPFSPSe2l/1zicxy73X5yEKIGWJ/1l6cG5814/SbwrprQErnOOwzn3ojefhq3XDc3tu6DexxqbsXyOSuqWCQTlPQQKTBSjQQJCXQUqCLVOjYZrnBE9i9XfH6h740JGLnVC+46DzTb/vpmV9lQtH4aTVxspnv3+rjJ6KP1lQSZz5BlUJ790sASF6F8MyL78zD/mdHLlGGtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7pI1GtszXArGthdQRcriIeazRE2oNvGP5QYDkkfDv48=;
+ b=gyD825LCJd8NpnuUMGc+nZJBjv+NdPW7RyUJaNCb3lOdwOiQQlNMQr0MMy64QGkVnwJ0gTOqm9103zOZphrjvJIQqoD2rET1hgudlVHP2zeLZ3x0i7oVAVp4nA5eWaO0lLad8+wbsBeQArHnIVsPt3FTCGzGlCIbSgE0Pk9VSB6aSWETsF8pGdA/SaOKnqFWMSSvp37WlNaUtN4x+2UcP/8759ieh7ksGXJ/SeRIQXrWQHPPHdPDuv4JVscIf89XTtHTiw2i4ZKdR+RSKXxGWZJq5T33fcDC5uU5FC/MT2XVmICRFcJ0EXNEffD27ptc/VUMpeqGdfmAs7vcHtd8Ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7pI1GtszXArGthdQRcriIeazRE2oNvGP5QYDkkfDv48=;
+ b=sBigI58A6rEAHzkjcMMtnA7OjRiMVF08Uf8FZDEvv5cdUFJ1YPaCv3FixK+kI9VXd7piVWqesOz+0KnYWAOS1yU2eX6znkm6+26CoAaNVqnoLY7OaQwN4haVh4F5xcznGLxYfQcHxAmvvCzm1c+XVkbZ2TM6o4YKlrdvLi8n4369OKpao4mvQqp1+v6TGseOQpfiU9EL7Zf+g1IZPdkMrRYyGdTsS95hPhlM/rhdi3dz+ETdRGb7hRxPDQrnDSYEXwK+F3z5KBBH1E2yX1Tck/Z8wcMbObqqWNZL7UHHHxqxPa20zSpYTWDT4LvVy8fsQwesh5pVydhE6CLxlcdCqw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4437.namprd12.prod.outlook.com (2603:10b6:208:26f::17)
+ by BL0PR12MB2529.namprd12.prod.outlook.com (2603:10b6:207:4e::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Fri, 25 Mar
+ 2022 09:31:12 +0000
+Received: from MN2PR12MB4437.namprd12.prod.outlook.com
+ ([fe80::9c66:21b0:b8e8:ea63]) by MN2PR12MB4437.namprd12.prod.outlook.com
+ ([fe80::9c66:21b0:b8e8:ea63%7]) with mapi id 15.20.5102.018; Fri, 25 Mar 2022
+ 09:31:12 +0000
+Message-ID: <32e425be-5d78-e1e0-6ec4-70ea21895e15@nvidia.com>
+Date:   Fri, 25 Mar 2022 15:01:03 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] arm64: tegra: Enable hda node for P3737 + P3701
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+References: <20220325072141.28597-1-mkumard@nvidia.com>
+ <f35537de-6352-e6db-b4a6-17b1ab96deda@kernel.org>
+From:   Mohan Kumar D <mkumard@nvidia.com>
+In-Reply-To: <f35537de-6352-e6db-b4a6-17b1ab96deda@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MAXPR0101CA0021.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:c::31) To MN2PR12MB4437.namprd12.prod.outlook.com
+ (2603:10b6:208:26f::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bd89bb9bf215484be9894fb0ae4052324c84ab9a.camel@toradex.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7e0ab9dc-efe4-4557-8f42-08da0e423390
+X-MS-TrafficTypeDiagnostic: BL0PR12MB2529:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB25296037263891D2AC90E5EFC11A9@BL0PR12MB2529.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6FaBgYPLlCxBbvsz/iuVtnzJrbjm2E20oOwXFR7Pl3tnPCPG/cnaehhDg+ItOKcOlOF7u2eUfrlnVHnkC6ZZKE0HyhraFrfBahP2ekty/XivM6D4Uq25Exzl5nqTZUoBbGZm8hvEBdxuNdKUJdu139LsU+EE5SZU50ajk9Y269Hr1O1nudXcJNhLO9g7ddY8i2go0psBvIx/BpaFBPtzSMayrolEx5jbBw4smThguEBxZvwOggN3Y4+daaV9DR52hy7ccJNR66cLrApi6Muc4+CfIDOEghY9y4INFh0Szq1ht69SitmP2HyG86YFnGIKZVBlpnQG7j3IChB4QF+dSyc5VNkgU8KOuSbApXrZU431V2Kb7NiXUDF3JQecsdmmun+Z9YC1nj26lE5S056kai/2l7uOTDPM7ussH5lOrKedXGMSeasQTZB0/rrjgA+Xtr+Olln6dfXkfRRasub58Xn+genl0c4yZWmBMLECssIBGbMKEWsQE6//HsY3eCt0xoWz3EPh+Fdtq1oFmZH3ylbJ48HqF643A6j6msSRkDuNJsdrQCDbB6ffBq6HjRLN1OYijCQDNltgtZHmdlFHM8snyjfDltEkT3lmWD2ZW/s8Hanjmzzjd6CTOyQ40QPIBE/Ip0mUwx6Sp8HRo4eKZ3JdKFpe7T0+E/Vrhv4j0ayPJPkret/2UgxSAKz4jeq7IQ5YsXTvsXYOX7ISqdhYO3UOJzIgTQpvf+KETqsQ2HzqjBAQOXaJ8GFT/mn6ebvm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4437.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(107886003)(86362001)(2616005)(31696002)(316002)(2906002)(26005)(186003)(6666004)(83380400001)(6512007)(508600001)(6486002)(31686004)(66946007)(66556008)(4326008)(6506007)(66476007)(8676002)(38100700002)(8936002)(5660300002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkxnOVQwblF5cFlBd2x4ek5zRldZOTM0OW40YktjQ1BYeEEvRlhLazVwZG9V?=
+ =?utf-8?B?M0NmRWVVNU9weWN1a0dQaGNzL1NkanJsQjNvTmRRanlPRUhGa3JhYXAvMi96?=
+ =?utf-8?B?NjhXbkM3Tk1FVXZHdHpTNGNJc3BnT1pFRmYvVUZUOVRoOVZMbWgzMGNDVUxh?=
+ =?utf-8?B?WWJqdktHdTJIU0paNjhDRVdlMnJ4elVuRTNlR2VrWDlFSGNTd3RaaXhxLzhj?=
+ =?utf-8?B?cXg4UHp2T1dIVTcxRTdLTE5nemNXVjZhMzRmeWxTOWY4d1U0QkJsVDNaeXNB?=
+ =?utf-8?B?eWhDbWxwL1oyTDRPazdQa1RYVnFqZTlVbnhzbjNYWkF2WmNlR1l5N3VSamhr?=
+ =?utf-8?B?ZFd5dXpxM3FvT0NFMGU2RDEzNE5LUHNXN3VNZW1CR2tFRStnUVI4amx3T3ZW?=
+ =?utf-8?B?cDJ2Z1lzWFFFcmRXWG9lekRPdENGbUFWanZ2OE9rWm9ZNFlIWXp1Z3lsMEhB?=
+ =?utf-8?B?UG9iekRVelpkdjJBamlqbXhpRTduUHlzOStGbFZCZDJOUkhFZ08zWTNoNENm?=
+ =?utf-8?B?dlVmb2xwWm44R0NZcXdhYXZWYVZ1Yk5mcnE0UW0xTHNaTXhEOC9GZkNvRjFp?=
+ =?utf-8?B?TG1XMWxIMUVxUTJ4QmR5U0w3VDVpVlI3MGRHemxwOHR1MWIyZ3hBY3NnRklr?=
+ =?utf-8?B?TVdkczBhUm5jS2NtRW40NVl4MCt0MFV3QmZoQWF3K2h5L21VN1lNaFhSQkxZ?=
+ =?utf-8?B?ZUNoR2plUlFMMDduTjdUUk8wc2o4dFdpVHFaV2tIb2hiNTh4eG15RC83QUJG?=
+ =?utf-8?B?YzZCNjY4cXhKWVJTWDhqQ2NHN2ZyaGFJQWgrY1hEMXQyTDZOMUFOK3JZeHky?=
+ =?utf-8?B?SGlrc0Fra0VGK2k2YWhxem9lVFBuOXNVZzc4c2ZpaDRvdU15ZmJPY3VXU0k3?=
+ =?utf-8?B?Y3NmWTFBdUhuZUlvL2FzTkRyQjNZQUMrOTRRbHMwMEMySWE1b1VLeWU3aTky?=
+ =?utf-8?B?QnVQR2NqdWFyblkwemdxbklMNmp2Z3RJTGVzRWRvNm5oSHljVHZhbUFYWm1s?=
+ =?utf-8?B?bS91ZWZ2YUVqRlRBY2hqalpwWkN5T3JRMEx3Skg5N1QwS0tYemRJeHQ2cnB3?=
+ =?utf-8?B?bk5yZG5JZjFUQW5JSGNKdFpQTjRxRjNqRHFZc3FzUy9tRk5EbXRUOWJuREsy?=
+ =?utf-8?B?dGswOHVtWTRFMmRKQzNWYVZxaGc4VTVtdFBjdWtsb2hwWGxiMUVtMklPWjhx?=
+ =?utf-8?B?aE1NSFU3Z2tBWXFkRFQ1bzBGUHlXaFVVS1p4SlM5Y0Npc2pNY21lbjI2Znp4?=
+ =?utf-8?B?VThHcWV4cFlPT2VIRU9ZbUxZM0tsL3RsNUFuY0NFeEMweGtYNmc4cXZZZTJM?=
+ =?utf-8?B?TXN0Q054ZCtUR0hJKy9ZWU1BMDhXeVhzbFRnUXhBZjUzZDBPS1B6cnVLb1FD?=
+ =?utf-8?B?d081ZlpTelF3V1prNDJXRmM1RitZRVpOdTVuelJFUEpyWkY3Z1ErL2RDNmxH?=
+ =?utf-8?B?Yy9jb28zbWovUXNnWFd6MVdXY29naFhZdFFOVTNjSnQ3dkNjNzhuN2hKVGpm?=
+ =?utf-8?B?ZEZOU2dqdVdqTityNERSWGlzbG1kdEo0MUowZHA2clQ0MHJkRjFmM2h4UkVk?=
+ =?utf-8?B?TXM3Tk5HenVhcmFuaFpjdmRLQkRpM1FPWG9wR2FkMkVFTFFzdFhyRUVmRDVU?=
+ =?utf-8?B?MmJpVTZRR3BBZ29qbG8wMmFML0pTczNnb1FXcWsxWTBkVGxmVG4zY0lXSnZK?=
+ =?utf-8?B?SXJEOVo2bldpakVPSlM5Vi9LQVRBTUR6TmRvMzJvVzk0SEpWQnhQa0l3eDZ0?=
+ =?utf-8?B?Q3c0L2JoWUxzRS9ieGdHaHY5cXN4NDZqTGlhL2Fha3VaVGZoNE5uSWtjOFU2?=
+ =?utf-8?B?dGp1d0J3NWNmNlBGNmZCVElTUkdlZFN5Z0R0TWx1dHhwaVRSQUZJN0xjVllu?=
+ =?utf-8?B?aThWZHVOUjhLV3kwcjFGZFB2N1B1VnVaZ290NHkxK1ZVczRWemU5aHNuczd4?=
+ =?utf-8?Q?nt0ArBwiRPNsPmAQmUUFr3PQjCR1HZne?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e0ab9dc-efe4-4557-8f42-08da0e423390
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4437.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2022 09:31:12.6162
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iq+ALFroEw6M0JhGdD1a+gfRy//yxQpWhE6q1iXyrXm2Pu0wZv61E/R5lNveZT0NU8ZHYUm0jy7rpm5hODmpJQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2529
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcel,
 
-On Fri, Mar 25, 2022 at 08:17:18AM +0000, Marcel Ziswiler wrote:
-> On Fri, 2022-03-25 at 01:06 +0200, Laurent Pinchart wrote:
-> > On Wed, Mar 23, 2022 at 03:36:00PM +0100, Marcel Ziswiler wrote:
-> > > From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> > > 
-> > > This patch adds the device tree to support Toradex Verdin iMX8M Plus [1]
-> > > a computer on module which can be used on different carrier boards.
-> > > 
-> > > The module consists of an NXP i.MX 8M Plus family SoC (either i.MX 8M
-> > > Plus Quad or 8M Plus QuadLite), a PCA9450C PMIC, a Gigabit Ethernet PHY,
-> > > 1, 2, 4 or 8 GB of LPDDR4 RAM, an eMMC, a TLA2024 ADC, an I2C EEPROM, an
-> > > RX8130 RTC, an optional I2C temperature sensor plus an optional
-> > > Bluetooth/Wi-Fi module.
-> > > 
-> > > Anything that is not self-contained on the module is disabled by
-> > > default.
-> > > 
-> > > The device tree for the Dahlia includes the module's device tree and
-> > > enables the supported peripherals of the carrier board.
-> > > 
-> > > The device tree for the Verdin Development Board includes the module's
-> > > device tree as well as the Dahlia one as it is a superset and supports
-> > > almost all peripherals available.
-> > > 
-> > > So far there is no display functionality supported at all but basic
-> > > console UART, USB host, eMMC and Ethernet functionality work fine.
-> > > 
-> > > [1] https://www.toradex.com/computer-on-modules/verdin-arm-family/nxp-imx-8m-plus
-> > > 
-> > > Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > Tested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > 
-> > > ---
-> > > 
-> > > Changes in v2:
-> > > - Fix capitatlisation of verdin in comments as reported by Laurent.
-> > > - Add/modify todo comments as suggested by Laurent.
-> > > - Add Laurent's reviewed- and tested-by tags.
-> > > 
-> > >  arch/arm64/boot/dts/freescale/Makefile        |    4 +
-> > >  .../dts/freescale/imx8mp-verdin-dahlia.dtsi   |  129 ++
-> > >  .../boot/dts/freescale/imx8mp-verdin-dev.dtsi |   44 +
-> > >  .../imx8mp-verdin-nonwifi-dahlia.dts          |   18 +
-> > >  .../freescale/imx8mp-verdin-nonwifi-dev.dts   |   18 +
-> > >  .../dts/freescale/imx8mp-verdin-nonwifi.dtsi  |   54 +
-> > >  .../freescale/imx8mp-verdin-wifi-dahlia.dts   |   18 +
-> > >  .../dts/freescale/imx8mp-verdin-wifi-dev.dts  |   18 +
-> > >  .../dts/freescale/imx8mp-verdin-wifi.dtsi     |   82 +
-> > >  .../boot/dts/freescale/imx8mp-verdin.dtsi     | 1373 +++++++++++++++++
-> > >  10 files changed, 1758 insertions(+)
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dts
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dts
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dts
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dts
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> > 
-> > [snip]
-> > 
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-
-> > > verdin.dtsi
-> > > new file mode 100644
-> > > index 000000000000..8cad1d865720
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> > > @@ -0,0 +1,1373 @@
-> > 
-> > [snip]
-> > 
-> > > +/* Verdin I2C_2_DSI */
-> > > +&i2c2 {
-> > > +       clock-frequency = <10000>;
-> > 
-> > Did you really mean 10kHz here, not 100kHz ?
-> 
-> Yes, we really saw issues with certain displays/screens in the past. I mean, it's not like reading a few bytes
-> off a DDC/EDID at such low-speed makes much of a difference time-wise. So we rather avoid issues. Anyway, could
-> easily be overridden in a custom carrier board device tree should that I2C bus be used for something where
-> speed might matter.
-
-Adding a comment to explain this issue may be useful.
-
-> > > +       pinctrl-names = "default", "gpio";
-> > > +       pinctrl-0 = <&pinctrl_i2c2>;
-> > > +       pinctrl-1 = <&pinctrl_i2c2_gpio>;
-> > 
-> > Shouldn't you also specify scl-gpios and sda-gpios, like for the other
-> > I2C buses ?
-> 
-> Yes, working on the Verdin iMX8M Mini update patch set of late and comparing stuff I also just discovered that
-> one yesterday. Will send a v3 shortly. Thanks!
-> 
-> > > +
-> > > +       atmel_mxt_ts_mezzanine: touch-mezzanine@4a {
-> > > +               compatible = "atmel,maxtouch";
-> > > +               /* Verdin GPIO_3 (SODIMM 210) */
-> > > +               interrupt-parent = <&gpio1>;
-> > > +               interrupts = <5 IRQ_TYPE_EDGE_FALLING>;
-> > > +               reg = <0x4a>;
-> > > +               /* Verdin GPIO_2 (SODIMM 208) */
-> > > +               reset-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-> > > +               status = "disabled";
-> > > +       };
-> > > +};
-> > 
-> > [snip]
-
--- 
-Regards,
-
-Laurent Pinchart
+On 3/25/2022 12:56 PM, Krzysztof Kozlowski wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> On 25/03/2022 08:21, Mohan Kumar wrote:
+>> Add iommus property for hda and enable the node for P3737 + P3701
+>> platform.
+>>
+>> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+>> ---
+>>   arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts | 1 +
+>>   arch/arm64/boot/dts/nvidia/tegra234.dtsi                      | 1 +
+>>   2 files changed, 2 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+>> index 34d6a01ee1c6..156d5d95fde7 100644
+>> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+>> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+>> @@ -1751,6 +1751,7 @@
+>>
+>>                hda@3510000 {
+>>                        nvidia,model = "NVIDIA Jetson AGX Orin HDA";
+>> +                     status = "okay";
+> Nodes are enabled by default. Why do you need this?
+hda node status is set to "disabled" by default in soc dts file 
+tegra234.dtsi. The enable is controlled by platform specific dts files.
+>
+>
+> Best regards,
+> Krzysztof

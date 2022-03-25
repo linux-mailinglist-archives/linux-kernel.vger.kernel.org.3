@@ -2,71 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBD14E7464
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9044E746A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357465AbiCYNpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 09:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S1358031AbiCYNqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 09:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352215AbiCYNpf (ORCPT
+        with ESMTP id S1356987AbiCYNqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:45:35 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A846AA42
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:44:00 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id h11so10378013ljb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:43:59 -0700 (PDT)
+        Fri, 25 Mar 2022 09:46:25 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0242670935
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:44:51 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id j15so15433066eje.9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=M9Tm4YxQwe4aPulFdqEfH8uaxTYzCbz7JGZKqUZvnD4=;
-        b=NBACmQUXkma1m7ugOtDRytdg7Arbv8MOiQLYCet7nEH64kPMgNTPsTtWAfiM9gjdxZ
-         ulEdaqmfGbmR8YoozumfDedYaLYYYk/xefsq1HWcxO86wrItNcdgsFVQYJl4A1G4uoXm
-         8wnIt0Frf4Y1Wj81+gcN7wU+lYGz2JvKl4qrKf1Qn3spm+xSFAJYZuuR8M2nxNJLdDsV
-         VStjXNnoR0YPD1ihAb0eiTNgWSwM0Ntsm2gB2aqBRfPv+6mK8f4Mlj/gIsbHQHk3ynTd
-         L25jHOyim39RgTXj1uTwxBHnB3U1EtC3JM1Mj/8Q53vs4/cL+pyBqPBtgSk/sWTcLQli
-         3rRQ==
+        bh=gOz+6Jxgi4s/aMhrYK7cy8+f432CABX9+S0xakAnHqY=;
+        b=N3uhTkSoAhpdcH0K9ce+7Zd2W0nvWZhX9pG5rSFFU8rLbtBT/XC1CXLSlH+1vk9kzu
+         4mlDtldSOeRHo6HikkOr3+q33eoqytnVuzi8kEmzL6qRHtCfkXWX7sFUeP5bTxxGwvDF
+         1w8JeKXKER0xIkg+HAXcPJZqJCJXg1T2ErHwQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M9Tm4YxQwe4aPulFdqEfH8uaxTYzCbz7JGZKqUZvnD4=;
-        b=ytzSTN2wy/vbpVREsJMmjr1KZu8+5UYwkLxvXiBFV4YyAQjIBfCPgu9102CEmmxnei
-         w5h+tNzYYkf4QGj+vRy1aijUC6/aBKmdZGH8+NMHcRTcxHOVnZ9HgSl0ZE7TFmp5Um57
-         jxnVCqGkHIjwa13Fp+9dQQkg6Ewu+27EtEo5mWUFvD3DxIQWrULLhLEXhPk3LASuIfLO
-         8zDnX+EynMT1KSySw1/oDNTwnBPup4s/GbXIluwiaJsBmgMu2+4KVpYsP5Y30NMCby15
-         LrjJyAotH36bbn4iVGiMbpsUz7tvqb3k07Ir90Af5mTlEdjaImN3ifO+7fsYktd5C38O
-         OhDA==
-X-Gm-Message-State: AOAM530wySJezPWkQgMYNaRi+I1HXqpu5zj2bWEy4+5X+hthQ0BNLIuE
-        rm532hZgtmbdCg2iGT3MY+uEF6sHEkP4IGDoIr/HMA==
-X-Google-Smtp-Source: ABdhPJzMNaUzR2GiYr0TB5pZPwI8Et0pbwjXFfuQyNMJ6j6tcsEE8FLK5s1Y6jip3TvUjzvr+FlZXLwg0GV+RHntrc4=
-X-Received: by 2002:a05:651c:90a:b0:249:5d82:fe9c with SMTP id
- e10-20020a05651c090a00b002495d82fe9cmr8294406ljq.300.1648215838345; Fri, 25
- Mar 2022 06:43:58 -0700 (PDT)
+        bh=gOz+6Jxgi4s/aMhrYK7cy8+f432CABX9+S0xakAnHqY=;
+        b=u87ucjxY6yBWmJpmb5771y8JkSGdY46MaRCl9oPbZBWTBxIICIkgTAJJ7NmExwzlPw
+         hBN3T4d25MrQFiwDjtOtY1onqywACYKSLnLnw6QXwRYr3TLOZcgfkmqmbiPzGGoAHyOX
+         E1i/hhw4l2DxRrTon3oIs6KW+oHpCqZvojMI4a+FAHIRxcWMCAe37B8/tqxUyF47wd9c
+         uscFZgRtZ979Z7VOJXyQRWn8Seo4fcqO6/nAMyNI3bBqgw3XaFeP0O0PNVGyLtTtWhA9
+         gGnXE/Jk7rDax1EatEA1GaphydtOmgbYVW+NfLe0qdYg3ZEwEzJjV0W4zJw3MJ1zmEAY
+         Sz4A==
+X-Gm-Message-State: AOAM5315bsQ7xwI//v4ukN0o/Zz8+PNCGhis4qUjyWMPToQcLB0/qjJn
+        yl+1/t76kbCvlC69EJIXQYxZRlWEotdChvPy
+X-Google-Smtp-Source: ABdhPJznYpEe4YiEhKCtQGJJoqXCxQQWZuhI7X1Sg9xabSoUHTgNexZAv3nlsNsp5+V9z2CAsnAL5g==
+X-Received: by 2002:a17:906:af6b:b0:6df:83a9:67db with SMTP id os11-20020a170906af6b00b006df83a967dbmr11962191ejb.222.1648215889238;
+        Fri, 25 Mar 2022 06:44:49 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm2327514ejc.25.2022.03.25.06.44.46
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 06:44:47 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id b19so10919159wrh.11
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:44:46 -0700 (PDT)
+X-Received: by 2002:adf:fc47:0:b0:203:dda1:4311 with SMTP id
+ e7-20020adffc47000000b00203dda14311mr9264199wrs.301.1648215886319; Fri, 25
+ Mar 2022 06:44:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220317111944.116148-1-yann.gautier@foss.st.com>
- <20220317111944.116148-3-yann.gautier@foss.st.com> <CAPDyKFqzzKgLHWiy26QW0hvM9kZEATS_c2mXkTuGiFpPaW8YKw@mail.gmail.com>
- <668661ca-271b-9a4f-6482-62f1b0190bb2@foss.st.com>
-In-Reply-To: <668661ca-271b-9a4f-6482-62f1b0190bb2@foss.st.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 25 Mar 2022 14:43:21 +0100
-Message-ID: <CAPDyKFr3YGd4mytykFMAtESMg9fsRaAKZo5CHBN4hrUa8ekE8g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mmc: mmci: stm32: use a buffer for unaligned DMA requests
-To:     Yann Gautier <yann.gautier@foss.st.com>
-Cc:     Christophe Kerello <christophe.kerello@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-mmc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1647452154-16361-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1647452154-16361-3-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=XM1njMY63SCC3yNoA9Uvu+_3xLGkC5OWoLjR-0KnmhWg@mail.gmail.com> <MW4PR02MB7186E881ABC0620E0A62154EE11A9@MW4PR02MB7186.namprd02.prod.outlook.com>
+In-Reply-To: <MW4PR02MB7186E881ABC0620E0A62154EE11A9@MW4PR02MB7186.namprd02.prod.outlook.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 25 Mar 2022 06:44:33 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VWaMx9UsXTktjd3Ryo3g0-XY2N9oCNz_kQoJN6gzKAoA@mail.gmail.com>
+Message-ID: <CAD=FV=VWaMx9UsXTktjd3Ryo3g0-XY2N9oCNz_kQoJN6gzKAoA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/9] arm64: dts: qcom: sc7280: Add support for eDP
+ panel on CRD
+To:     "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,216 +95,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 at 17:23, Yann Gautier <yann.gautier@foss.st.com> wrote:
+Hi,
+
+On Fri, Mar 25, 2022 at 6:41 AM Sankeerth Billakanti (QUIC)
+<quic_sbillaka@quicinc.com> wrote:
 >
-> On 3/24/22 12:55, Ulf Hansson wrote:
-> > On Thu, 17 Mar 2022 at 12:19, Yann Gautier <yann.gautier@foss.st.com> wrote:
-> >>
-> >> In SDIO mode, the sg list for requests can be unaligned with what the
-> >> STM32 SDMMC internal DMA can support. In that case, instead of failing,
-> >> use a temporary bounce buffer to copy from/to the sg list.
-> >> This buffer is limited to 1MB. But for that we need to also limit
-> >> max_req_size to 1MB. It has not shown any throughput penalties for
-> >> SD-cards or eMMC.
-> >>
-> >> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
-> >> ---
-> >>   drivers/mmc/host/mmci_stm32_sdmmc.c | 80 +++++++++++++++++++++++------
-> >>   1 file changed, 63 insertions(+), 17 deletions(-)
-> >>
-> >> diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
-> >> index 4566d7fc9055..a4414e32800f 100644
-> >> --- a/drivers/mmc/host/mmci_stm32_sdmmc.c
-> >> +++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
-> >> @@ -43,6 +43,9 @@ struct sdmmc_lli_desc {
-> >>   struct sdmmc_idma {
-> >>          dma_addr_t sg_dma;
-> >>          void *sg_cpu;
-> >> +       dma_addr_t bounce_dma_addr;
-> >> +       void *bounce_buf;
-> >> +       bool use_bounce_buffer;
-> >>   };
-> >>
-> >>   struct sdmmc_dlyb {
-> >> @@ -54,6 +57,7 @@ struct sdmmc_dlyb {
-> >>   static int sdmmc_idma_validate_data(struct mmci_host *host,
-> >>                                      struct mmc_data *data)
-> >>   {
-> >> +       struct sdmmc_idma *idma = host->dma_priv;
-> >>          struct scatterlist *sg;
-> >>          int i;
-> >>
-> >> @@ -61,21 +65,23 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
-> >>           * idma has constraints on idmabase & idmasize for each element
-> >>           * excepted the last element which has no constraint on idmasize
-> >>           */
-> >> +       idma->use_bounce_buffer = false;
-> >>          for_each_sg(data->sg, sg, data->sg_len - 1, i) {
-> >>                  if (!IS_ALIGNED(sg->offset, sizeof(u32)) ||
-> >>                      !IS_ALIGNED(sg->length, SDMMC_IDMA_BURST)) {
-> >> -                       dev_err(mmc_dev(host->mmc),
-> >> +                       dev_dbg(mmc_dev(host->mmc),
-> >>                                  "unaligned scatterlist: ofst:%x length:%d\n",
-> >>                                  data->sg->offset, data->sg->length);
-> >> -                       return -EINVAL;
-> >> +                       idma->use_bounce_buffer = true;
-> >> +                       return 0;
-> >>                  }
-> >>          }
-> >>
-> >>          if (!IS_ALIGNED(sg->offset, sizeof(u32))) {
-> >> -               dev_err(mmc_dev(host->mmc),
-> >> +               dev_dbg(mmc_dev(host->mmc),
-> >>                          "unaligned last scatterlist: ofst:%x length:%d\n",
-> >>                          data->sg->offset, data->sg->length);
-> >> -               return -EINVAL;
-> >> +               idma->use_bounce_buffer = true;
-> >>          }
-> >>
-> >>          return 0;
-> >> @@ -84,18 +90,29 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
-> >>   static int _sdmmc_idma_prep_data(struct mmci_host *host,
-> >>                                   struct mmc_data *data)
-> >>   {
-> >> -       int n_elem;
-> >> +       struct sdmmc_idma *idma = host->dma_priv;
-> >>
-> >> -       n_elem = dma_map_sg(mmc_dev(host->mmc),
-> >> -                           data->sg,
-> >> -                           data->sg_len,
-> >> -                           mmc_get_dma_dir(data));
-> >> +       if (idma->use_bounce_buffer) {
-> >> +               if (data->flags & MMC_DATA_WRITE) {
-> >> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
-> >>
-> >> -       if (!n_elem) {
-> >> -               dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
-> >> -               return -EINVAL;
-> >> -       }
-> >> +                       sg_copy_to_buffer(data->sg, data->sg_len,
-> >> +                                         idma->bounce_buf, xfer_bytes);
-> >> +                       dma_wmb();
-> >> +               }
-> >> +       } else {
-> >> +               int n_elem;
-> >> +
-> >> +               n_elem = dma_map_sg(mmc_dev(host->mmc),
-> >> +                                   data->sg,
-> >> +                                   data->sg_len,
-> >> +                                   mmc_get_dma_dir(data));
-> >>
-> >> +               if (!n_elem) {
-> >> +                       dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
-> >> +                       return -EINVAL;
-> >> +               }
-> >> +       }
-> >>          return 0;
-> >>   }
-> >>
-> >> @@ -112,8 +129,19 @@ static int sdmmc_idma_prep_data(struct mmci_host *host,
-> >>   static void sdmmc_idma_unprep_data(struct mmci_host *host,
-> >>                                     struct mmc_data *data, int err)
-> >>   {
-> >> -       dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
-> >> -                    mmc_get_dma_dir(data));
-> >> +       struct sdmmc_idma *idma = host->dma_priv;
-> >> +
-> >> +       if (idma->use_bounce_buffer) {
-> >> +               if (data->flags & MMC_DATA_READ) {
-> >> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
-> >> +
-> >> +                       sg_copy_from_buffer(data->sg, data->sg_len,
-> >> +                                           idma->bounce_buf, xfer_bytes);
-> >> +               }
-> >> +       } else {
-> >> +               dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
-> >> +                            mmc_get_dma_dir(data));
-> >> +       }
-> >>   }
-> >>
-> >>   static int sdmmc_idma_setup(struct mmci_host *host)
-> >> @@ -137,6 +165,16 @@ static int sdmmc_idma_setup(struct mmci_host *host)
-> >>                  host->mmc->max_segs = SDMMC_LLI_BUF_LEN /
-> >>                          sizeof(struct sdmmc_lli_desc);
-> >>                  host->mmc->max_seg_size = host->variant->stm32_idmabsize_mask;
-> >> +
-> >> +               host->mmc->max_req_size = SZ_1M;
-> >> +               idma->bounce_buf = dmam_alloc_coherent(dev,
-> >> +                                                      host->mmc->max_req_size,
-> >> +                                                      &idma->bounce_dma_addr,
-> >> +                                                      GFP_KERNEL);
-> >> +               if (!idma->bounce_buf) {
-> >> +                       dev_err(dev, "Unable to map allocate DMA bounce buffer.\n");
-> >> +                       return -ENOMEM;
+> > -----Original Message-----
+> > From: Doug Anderson <dianders@chromium.org>
+> > Sent: Friday, March 18, 2022 10:51 PM
+> > To: Sankeerth Billakanti (QUIC) <quic_sbillaka@quicinc.com>
+> > Cc: dri-devel <dri-devel@lists.freedesktop.org>; linux-arm-msm <linux-arm-
+> > msm@vger.kernel.org>; freedreno <freedreno@lists.freedesktop.org>;
+> > LKML <linux-kernel@vger.kernel.org>; open list:OPEN FIRMWARE AND
+> > FLATTENED DEVICE TREE BINDINGS <devicetree@vger.kernel.org>; Rob Clark
+> > <robdclark@gmail.com>; Sean Paul <seanpaul@chromium.org>; Stephen
+> > Boyd <swboyd@chromium.org>; quic_kalyant <quic_kalyant@quicinc.com>;
+> > Abhinav Kumar (QUIC) <quic_abhinavk@quicinc.com>; Kuogee Hsieh (QUIC)
+> > <quic_khsieh@quicinc.com>; Andy Gross <agross@kernel.org>;
+> > bjorn.andersson@linaro.org; Rob Herring <robh+dt@kernel.org>;
+> > krzk+dt@kernel.org; Sean Paul <sean@poorly.run>; David Airlie
+> > <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Thierry Reding
+> > <thierry.reding@gmail.com>; Sam Ravnborg <sam@ravnborg.org>;
+> > dmitry.baryshkov@linaro.org; quic_vproddut <quic_vproddut@quicinc.com>
+> > Subject: Re: [PATCH v5 2/9] arm64: dts: qcom: sc7280: Add support for eDP
+> > panel on CRD
 > >
-> Hi Ulf,
->
-> > If we fail to allocate the 1M bounce buffer, then we end up always
-> > using a PIO based mode, right?
+> > Hi,
 > >
-> > Perhaps we can allow the above allocation to fail, but then limit us
-> > to use DMA only when the buffers are properly aligned? Would that
-> > work?
+> > On Wed, Mar 16, 2022 at 10:36 AM Sankeerth Billakanti
+> > <quic_sbillaka@quicinc.com> wrote:
+> > >
+> > > Enable support for eDP interface via aux_bus on CRD platform.
+> > >
+> > > Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> > > ---
+> > >
+> > > Changes in v5:
+> > >   - Change the order of patches
+> > >   - Remove the backlight nodes
+> > >   - Remove the bias setting
+> > >   - Fix compilation issue
+> > >   - Model VREG_EDP_BP for backlight power
+> > >
+> > > Changes in v4:
+> > >   - Create new patch for name changes
+> > >   - Remove output-low
+> > >
+> > > Changes in v3:
+> > >   - Sort the nodes alphabetically
+> > >   - Use - instead of _ as node names
+> > >   - Place the backlight and panel nodes under root
+> > >   - Change the name of edp_out to mdss_edp_out
+> > >   - Change the names of regulator nodes
+> > >   - Delete unused properties in the board file
+> > >
+> > >
+> > > Changes in v2:
+> > >   - Sort node references alphabetically
+> > >   - Improve readability
+> > >   - Move the pwm pinctrl to pwm node
+> > >   - Move the regulators to root
+> > >   - Define backlight power
+> > >   - Remove dummy regulator node
+> > >   - Cleanup pinctrl definitions
+> > >
+> > >  arch/arm64/boot/dts/qcom/sc7280-crd.dts | 93
+> > > +++++++++++++++++++++++++++++++++
+> > >  1 file changed, 93 insertions(+)
 > >
-> We have never supported PIO mode with STM32 variant.
-> We only support DMA single buffer or DMA LLI.
-> As we cannot have DMA LLI for unaligned access, we'll default to single
-> mode.
-
-Right, I was looking at the legacy variant, which uses PIO as
-fallback. Sorry for my ignorance.
-
-> If allocation fails, it then won't work.
-
-Right, but that's only part of the issue, I think.
-
-> Maybe we shouldn't fail here, and just check idma->bounce_buf in
-> validate data function. If buffer is not allocated, we just return
-> -EINVAL as it was done before.
-
-Yes, something along those lines. However, there is another problem
-too, which is that the allocation will be done for each instance of
-the host that is probed. In all cases but the SDIO case, this would be
-a waste, right?
-
-Perhaps we should manage the allocation in the validate function too
-(de-allocation should be handled at ->remove()). In this way, the
-buffer will only be allocated when it's actually needed. Yes, it would
-add a latency while serving the *first* request that has unaligned
-buffers, but I guess we can live with that?
-
->
-> Best regards,
-> Yann
-
-Kind regards
-Uffe
-
->
-> >> +               }
-> >>          } else {
-> >>                  host->mmc->max_segs = 1;
-> >>                  host->mmc->max_seg_size = host->mmc->max_req_size;
-> >> @@ -154,8 +192,16 @@ static int sdmmc_idma_start(struct mmci_host *host, unsigned int *datactrl)
-> >>          struct scatterlist *sg;
-> >>          int i;
-> >>
-> >> -       if (!host->variant->dma_lli || data->sg_len == 1) {
-> >> -               writel_relaxed(sg_dma_address(data->sg),
-> >> +       if (!host->variant->dma_lli || data->sg_len == 1 ||
-> >> +           idma->use_bounce_buffer) {
-> >> +               u32 dma_addr;
-> >> +
-> >> +               if (idma->use_bounce_buffer)
-> >> +                       dma_addr = idma->bounce_dma_addr;
-> >> +               else
-> >> +                       dma_addr = sg_dma_address(data->sg);
-> >> +
-> >> +               writel_relaxed(dma_addr,
-> >>                                 host->base + MMCI_STM32_IDMABASE0R);
-> >>                  writel_relaxed(MMCI_STM32_IDMAEN,
-> >>                                 host->base + MMCI_STM32_IDMACTRLR);
+> > At a high level, I'd expect your patch to be based upon Matthias's series, AKA
+> > the 4 patches from:
 > >
-> > Kind regards
-> > Uffe
+> > https://lore.kernel.org/r/20220316172814.v1.1.I2deda8f2cd6adfbb525a97d8f
+> > ee008a8477b7b0e@changeid/
+> >
+> > I'll leave it up to you about whether you care to support eDP on the old
+> > CRD1/2 or just on CRD3. Personally I'd think CRD3 would be enough.
+> >
+> > Then, I'd expect your patch to mostly incorporate
+> > <https://crrev.com/c/3379844>, though that patch was written before aux-
+> > bus support so the panel would need to go in a different place.
+> >
+> > Stephen already gave some comments and basing on Matthias's patches will
+> > be a pretty big change, so I probably won't comment lots more.
+> >
+> >
 >
+> I rebased my change on top of Matthias's changes now. We are discussing about the qcard changes internally to understand the way ahead.
+> I believe all my current changes are localized to the crd-r3 files only for the qyalcomm crd3.1
+>
+> I want to have a different series for c and dt changes to expedite review process. May I separate the c changes from this series?
+
+I'd have no problems with that. They go into different trees and if it
+makes it easier to get a new version of the driver out while you're
+figuring out what to do about the dts then I'd say let's do it.
+
+-Doug

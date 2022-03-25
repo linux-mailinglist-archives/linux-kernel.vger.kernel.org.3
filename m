@@ -2,150 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87044E73EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2F94E73EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359225AbiCYNH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 09:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S1359243AbiCYNI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 09:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356447AbiCYNHW (ORCPT
+        with ESMTP id S1345586AbiCYNIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:07:22 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1997B9A9B7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:05:47 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id A222A5C0200;
-        Fri, 25 Mar 2022 09:05:44 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 25 Mar 2022 09:05:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=Idy/YwK8Gz35JVHlk1OJlpdd3YjWzocHKKLo63
-        P4k+M=; b=S+A/SPYoZoZmYkUUHacMFVfp8njh6gNXVmftAtC+yPunyT9oMr74dg
-        TNtdS9U0Jc2X+vrbgHUF+oHln6CGMBn1vZfihOv4cfWFn+ujT8sG/ds48FS3lz0Z
-        1JTxcrUYbZXABMYRK9B5VTpPkTvwyB5edyzA7TGW6AcLxaMEbKDULoeeKYQtN0cs
-        2431QaNMzHx9Ap2uw3rA/zfrNSUzKVLNZlr+EKPcG7Wm6Yp8EvfSsWjALSq5Ofb/
-        mJu6E828lrylR3jdbnzxdZNsk8majbeYdwB27temvRpuflH5eXY/0XYcFqQkX3eJ
-        fEM4NqEjqpVRf+7Z1gN21TlXtIGTfatg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Idy/YwK8Gz35JVHlk
-        1OJlpdd3YjWzocHKKLo63P4k+M=; b=b/2mz8x9Q9REMUu01t2QR67KoMZ0MBhVP
-        rW0QGd+0+GmeAzxTM3mJcgI26HHrms2K/X8i/dkoIrGo9EAh87PvzkCdlzU2qFtv
-        Y5YbLJA3KNUWVs7FgbUtSL/sZE5t/nZg2WRNG1E2BDTyTZz66AoG6+4kX/7Ve/N+
-        cRFPlgae1THL7CdcRJZ/g2Ope5lRRtePDXDdpBOlaEt6HbVAne7iylTpubgsB9hh
-        F5NWH2Jmy4g2M50WjnORppkSo0L6KYyHwUEBQvVnCg5KzXyo+wnD3AfB8l/FEG/T
-        s3R2jns2X1LgZOVy+5eUoUuEDX2n7TsomSjOyCN8FgNDVIBhte6VQ==
-X-ME-Sender: <xms:J749Yufx9XzPE7PtRL2Ck0ZFXZyjvZSU8OxV63tQSxIj1erX7t6hlQ>
-    <xme:J749YoOl98Y4z_XdbLczoA5I5BDNPTBQC8dsBNtFpmTZTXmEdB4nnDYMPriwllp5C
-    mFio7_2q597SNjDrso>
-X-ME-Received: <xmr:J749YviCSVyih9zUDvFf_HdK0OaT7r_eUWcLIg2AhOvH4PDk-4kmJFOb2cjlYMVQe_ee97lubQNe22qCEIR8YG6t-F9BYBRxmiPJFdo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehuddggeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:J749Yr__emgP0n8AOMItzUEQ9hrBuOU-kWA8NVncIKQoDvnjquCVlg>
-    <xmx:J749YqtCfKAS2JclBb13t7f6mT4PJHG4Jf2hbMjNrixFM_VSPFMSaA>
-    <xmx:J749YiGhWDkW-VH0oNqu4LRyu4qIadMM6oNio6ygOj94L1h6eS3pJw>
-    <xmx:KL49YsWUtaL2lnwD5jce_KxEasDOWPqQObGXuaT_JoOj9o_m-t9vmw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Mar 2022 09:05:42 -0400 (EDT)
-Date:   Fri, 25 Mar 2022 14:05:41 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Zheng Bin <zhengbin13@huawei.com>
-Cc:     emma@anholt.net, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        tangyizhou@huawei.com
-Subject: Re: [PATCH v2 -next] drm/vc4: Fix build error when CONFIG_DRM_VC4=y
- && CONFIG_RASPBERRYPI_FIRMWARE=m
-Message-ID: <20220325130541.tjxq4kjgmkaz32en@houat>
-References: <20220325021831.2812735-1-zhengbin13@huawei.com>
+        Fri, 25 Mar 2022 09:08:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF41C627B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:06:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648213612; x=1679749612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L8We6eVZdTbGQo8vbwQx+Aqb89EgG0yv9xaBvTQeVeg=;
+  b=d88QWL4LDooOsEcA2ypZcbfucxLoMbedLfsEnjE4ugml9m7GHx5SExd/
+   6We7+86tW0db9T9X+aUaT+oiYGYquMnqqq+9Mec6onOvIOmiy7LW0FvHK
+   WN6sAAv0rbDG3hpdwosB+5Nb+YRviRgfz5ql5USF1gst/iPWv/4yYpuNF
+   IuJqoxc/kcb2SVQfhIrqWDcyw5k/RVtdgY9fcKr0TG3g5dEzjkMacpBGJ
+   GVmNaZrR0ZivSkdtEXBVfQRkZYDlLytfchVRcNyh1/98qGKJpDKemFY8L
+   xCEVEAsIDnWVODIAESOg7owgU8pKSIMDfvZLkp2cowtxo7CFbWcbVFUUl
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="321823006"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="321823006"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 06:06:51 -0700
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="516539487"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 06:06:48 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1nXjds-006PMQ-K0;
+        Fri, 25 Mar 2022 15:06:12 +0200
+Date:   Fri, 25 Mar 2022 15:06:12 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [GIT PULL] locking changes for v5.18
+Message-ID: <Yj2+RDmBGHto4+e/@smile.fi.intel.com>
+References: <YjhdcJB4FaLfsoyO@gmail.com>
+ <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
+ <YjpLiKRUIB4TGJm0@zn.tnic>
+ <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
+ <Yj2qZT6gdRYpkSIR@smile.fi.intel.com>
+ <20220325122336.GQ8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cktuawm74fajoliw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325021831.2812735-1-zhengbin13@huawei.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220325122336.GQ8939@worktop.programming.kicks-ass.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 25, 2022 at 01:23:36PM +0100, Peter Zijlstra wrote:
+> On Fri, Mar 25, 2022 at 01:41:25PM +0200, Andy Shevchenko wrote:
+> > On Tue, Mar 22, 2022 at 03:58:47PM -0700, Linus Torvalds wrote:
+> > > On Tue, Mar 22, 2022 at 3:20 PM Borislav Petkov <bp@alien8.de> wrote:
+> > > >
+> > > > Ah, you say build error because you have CONFIG_WERROR=y.
+> > > 
+> > > EVERYBODY should have CONFIG_WERROR=y on at least x86-64 and other
+> > > serious architectures, unless you have some completely random
+> > > experimental (and broken) compiler.
+> > > 
+> > > New compiler warnings are not acceptable.
+> > 
+> > What about old one? I have already complained in the early discussion that
+> > `make W=1 ...` is broken by this change. Enabling it without fixing
+> > _existing_ warnings on W=1 is not suitable for somebody. Now, I have to
+> > modify my configs to disable WERROR because of inability to built at all.
+> > 
+> > (Yes, I understand that I may drop W=1, but that's not the point. since I
+> >  want to have clean builds of a new code on level 1 of warnings)
+> 
+> It would be fairly easy to make scripts/Makefile.extrawarn strip out
+> -Werror when W= is used.
 
---cktuawm74fajoliw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hmm... I can't achieve this, because it complains about recursive variable.
+What helped me is to supply in such case -Wno-error which seems overrode
+the previous setting.
 
-Hi,
+I'll send a patch to discuss further if needed.
 
-On Fri, Mar 25, 2022 at 10:18:31AM +0800, Zheng Bin wrote:
-> If CONFIG_DRM_VC4=3Dy, CONFIG_RASPBERRYPI_FIRMWARE=3Dm, CONFIG_COMPILE_TE=
-ST=3Dn,
-> bulding fails:
->=20
-> drivers/gpu/drm/vc4/vc4_drv.o: In function `vc4_drm_bind':
-> vc4_drv.c:(.text+0x320): undefined reference to `rpi_firmware_get'
-> vc4_drv.c:(.text+0x320): relocation truncated to fit: R_AARCH64_CALL26 ag=
-ainst undefined symbol `rpi_firmware_get'
-> vc4_drv.c:(.text+0x34c): undefined reference to `rpi_firmware_property'
-> vc4_drv.c:(.text+0x34c): relocation truncated to fit: R_AARCH64_CALL26 ag=
-ainst undefined symbol `rpi_firmware_property'
-> vc4_drv.c:(.text+0x354): undefined reference to `rpi_firmware_put'
-> vc4_drv.c:(.text+0x354): relocation truncated to fit: R_AARCH64_CALL26 ag=
-ainst undefined symbol `rpi_firmware_put'
->=20
-> Make DRM_VC4 depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST to fix this.
->=20
-> Fixes: c406ad5e4a85 ("drm/vc4: Notify the firmware when DRM is in charge")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-> ---
-> v2: follow Maxime's advise, add RASPBERRYPI_FIRMWARE as an additional dep=
-ends
->  drivers/gpu/drm/vc4/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/gpu/drm/vc4/Kconfig b/drivers/gpu/drm/vc4/Kconfig
-> index de3424fed2fc..92d74ba7c449 100644
-> --- a/drivers/gpu/drm/vc4/Kconfig
-> +++ b/drivers/gpu/drm/vc4/Kconfig
-> @@ -2,6 +2,7 @@
->  config DRM_VC4
->  	tristate "Broadcom VC4 Graphics"
->  	depends on ARCH_BCM || ARCH_BCM2835 || COMPILE_TEST
-> +	depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Why do we need the || COMPILE_TEST here?
 
-The rpi_firmware_get, _property and _put functions aren't define if
-RASPBERRYPI_FIRMWARE, so we need that dependency every time, even if
-COMPILE_TEST is set?
-
-Maxime
-
---cktuawm74fajoliw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYj2+JQAKCRDj7w1vZxhR
-xY08AQDp0dejhhEhJ7JaH2YJjl3qWSNDo+WzUe0l0nhL7tLGwAEAj+WhPDpz4fdF
-WnLgjbtukPwaV0djbTrWfhCssxAFpAE=
-=EW3z
------END PGP SIGNATURE-----
-
---cktuawm74fajoliw--
